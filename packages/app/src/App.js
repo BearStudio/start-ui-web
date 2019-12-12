@@ -10,11 +10,25 @@ function App() {
     <ThemeProvider theme={theme}>
       <CSSReset />
 
-      <ExampleComponent variant="primary">
-        ExampleComponent (primary)
+      <ExampleComponent>
+        ExampleComponent
       </ExampleComponent>
-      <ExampleComponent variant="secondary">
-        ExampleComponent (secondary)
+      <ExampleComponent variant="light">
+        ExampleComponent (light)
+      </ExampleComponent>
+
+      <ExampleComponent variantColor="blue">
+        ExampleComponent
+      </ExampleComponent>
+      <ExampleComponent variant="light" variantColor="blue">
+        ExampleComponent (light)
+      </ExampleComponent>
+
+      <ExampleComponent variantColor="brand">
+        ExampleComponent
+      </ExampleComponent>
+      <ExampleComponent variant="light" variantColor="brand">
+        ExampleComponent (light)
       </ExampleComponent>
     </ThemeProvider>
   );

@@ -1,11 +1,12 @@
-<!-- PROJECT LOGO -->
+⚠️ Work in progress repository
+
 <br />
 <p align="center">
-  <a href="https://github.com/ivan-dalmet/start-ui">
+  <!-- <a href="https://github.com/ivan-dalmet/start-ui">
     <img src="images/logo.png" alt="Start UI logo" width="80" height="80">
-  </a>
+  </a> -->
 
-  <h3 align="center">Start UI</h3>
+  <h1 align="center">Start UI</h1>
 
   <p align="center">
     Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, 🐜 Formiz & 📚 Storybook

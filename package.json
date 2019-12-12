@@ -10,7 +10,7 @@
     "start": "lerna run start --parallel --stream"
   },
   "workspaces": [
-    "./packages/*"
+    "packages/*"
   ],
   "devDependencies": {
     "lerna": "3.19.0"

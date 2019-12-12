@@ -4,23 +4,25 @@ import { Box } from '@chakra-ui/core';
 
 const propTypes = {
   children: PropTypes.node,
-  variant: PropTypes.oneOf(['primary', 'secondary']),
+  variant: PropTypes.oneOf(['light']),
+  variantColor: PropTypes.string,
 };
 
 const defaultProps = {
   children: '',
   variant: null,
+  variantColor: 'gray',
 };
 
-export const ExampleComponent = ({ children, variant, ...props }) => {
+export const ExampleComponent = ({ children, variant, variantColor, ...props }) => {
   const variantStyles = {
-    primary: {
-      backgroundColor: 'brand.500',
-      color: 'brand.50',
+    default: {
+      backgroundColor: `${variantColor}.500`,
+      color: `${variantColor}.50`,
     },
-    secondary:{
-      backgroundColor: 'brand.100',
-      color: 'brand.700',
+    light:{
+      backgroundColor: `${variantColor}.100`,
+      color: `${variantColor}.700`,
     }
   }
 
@@ -28,7 +30,7 @@ export const ExampleComponent = ({ children, variant, ...props }) => {
     <Box
       fontWeight="bold"
       p="4"
-      {...variantStyles[variant]}
+      {...variantStyles[variant || 'default']}
       {...props}
     >
       {children}
