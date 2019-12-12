@@ -2,13 +2,13 @@
 <br />
 <p align="center">
   <a href="https://github.com/ivan-dalmet/start-ui">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Start UI logo" width="80" height="80">
   </a>
 
   <h3 align="center">Start UI</h3>
 
   <p align="center">
-    Bootstrap your next UI library with ⚛️ React, ⚡️ Chakra UI, 🐜 Formiz & 📚 Storybook
+    Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, 🐜 Formiz & 📚 Storybook
     <br />
     <!-- <a href="https://github.com/ivan-dalmet/start-ui"><strong>Explore the docs »</strong></a>
     <br />
@@ -20,3 +20,16 @@
     <a href="https://github.com/ivan-dalmet/start-ui/issues">Request Feature</a> -->
   </p>
 </p>
+
+## Installation
+
+```
+yarn install
+yarn bs
+```
+
+## Development
+
+```
+yarn start
+```
