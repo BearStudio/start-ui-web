@@ -17,16 +17,7 @@ const config = ({ output, format }) => ({
       react: 'React',
     },
   },
-  external: [
-    '@chakra-ui/core',
-    '@emotion/core',
-    '@emotion/styled',
-    'emotion-theming',
-    'prop-types',
-    'react',
-    'react-dom',
-    'react-icons',
-  ],
+  external: Object.keys(pkg.peerDependencies),
   plugins: [
     resolve(),
     babel({

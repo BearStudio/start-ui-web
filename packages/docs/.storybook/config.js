@@ -13,5 +13,4 @@ addDecorator((story) => (
   </ThemeProvider>
 ))
 
-// automatically import all files ending in *.stories.js or *.stories.mdx
-configure(require.context('../stories', true, /\.stories\.(js|mdx)$/), module);
+configure(require.context('../stories', true, /\.(stories\.)?(js|mdx)$/), module);

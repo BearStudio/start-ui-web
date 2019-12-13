@@ -1,0 +1,42 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { Formiz } from '@formiz/core';
+import { FieldInput } from 'lib-ui';
+
+<Meta title="Formiz Fields / Field Input" />
+
+# Field Input
+
+```js
+import { FieldInput } from 'lib-ui'
+```
+
+## Default
+
+<Preview>
+  <Story name="Default">
+    <Formiz>
+      <FieldInput
+        label="Demo"
+        name="demo"
+        helper="This is an helper"
+        required="This is required"
+      />
+    </Formiz>
+  </Story>
+</Preview>
+
+## Disabled
+
+<Preview>
+  <Story name="Disabled">
+    <Formiz>
+      <FieldInput
+        label="Demo"
+        name="demo"
+        helper="This is an helper"
+        required="This is required"
+        isDisabled
+      />
+    </Formiz>
+  </Story>
+</Preview>
