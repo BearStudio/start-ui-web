@@ -15,7 +15,7 @@
     "types:watch": "nodemon --watch src ./types.generate.js "
   },
   "peerDependencies": {
-    "@chakra-ui/core": "0.5.0",
+    "@chakra-ui/core": "0.5.1",
     "@emotion/core": "10.0.22",
     "@emotion/styled": "10.0.23",
     "@formiz/core": "1.0.0-rc.3",
@@ -26,14 +26,14 @@
     "react-icons": "3.8.0"
   },
   "devDependencies": {
-    "@babel/core": "7.7.5",
-    "@babel/preset-env": "7.7.6",
+    "@babel/core": "7.7.7",
+    "@babel/preset-env": "7.7.7",
     "@babel/preset-react": "7.7.4",
     "fs-extra": "8.1.0",
     "glob": "7.1.6",
     "nodemon": "2.0.2",
     "react-to-typescript-definitions": "2.0.0",
-    "rollup": "1.27.11",
+    "rollup": "1.27.13",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
