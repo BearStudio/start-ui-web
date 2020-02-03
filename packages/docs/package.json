@@ -11,12 +11,12 @@
     "lib-ui": "1.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@storybook/addon-actions": "^5.2.8",
+    "@babel/core": "7.7.7",
+    "@storybook/addon-actions": "5.2.8",
     "@storybook/addon-docs": "5.2.8",
-    "@storybook/addon-links": "^5.2.8",
-    "@storybook/addons": "^5.2.8",
-    "@storybook/react": "^5.2.8",
+    "@storybook/addon-links": "5.2.8",
+    "@storybook/addons": "5.2.8",
+    "@storybook/react": "5.2.8",
     "babel-loader": "8.0.6",
     "react": "16.12.0"
   }
