@@ -1,0 +1,10 @@
+.cache
+.next
+.history
+out
+node_modules
+package.json
+package-lock.json
+public
+*.md
+*.mdx

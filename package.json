@@ -2,17 +2,57 @@
   "name": "start-ui",
   "private": true,
   "version": "1.0.0",
-  "repository": "git@github.com:ivan-dalmet/start-ui.git",
-  "author": "Ivan Dalmet <ivan@dalmet.fr>",
-  "license": "MIT",
-  "scripts": {
-    "bs": "lerna bootstrap",
-    "start": "lerna run start --parallel --stream"
+  "description": "⚠️ Work in progress repository",
+  "main": "index.js",
+  "dependencies": {
+    "@chakra-ui/core": "1.0.0-rc.5",
+    "@formiz/core": "1.0.0-rc.24",
+    "@formiz/validations": "1.0.0-rc.24",
+    "axios": "0.20.0",
+    "history": "5.0.0",
+    "next": "9.5.3",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-error-boundary": "3.0.2",
+    "react-icons": "3.11.0",
+    "react-query": "2.23.1",
+    "react-router-dom": "6.0.0-beta.0"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
-    "lerna": "3.19.0"
-  }
+    "@types/node": "14.11.2",
+    "@typescript-eslint/eslint-plugin": "4.2.0",
+    "@typescript-eslint/parser": "4.2.0",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.10.0",
+    "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-react": "7.21.2",
+    "eslint-plugin-react-hooks": "4.1.2",
+    "prettier": "2.1.2",
+    "typescript": "4.0.3"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "serve": "yarn build && npx servor out index.html 5000",
+    "start": "next start",
+    "pretty": "prettier -w .",
+    "lint": "eslint ./src ./pages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivan-dalmet/start-ui.git"
+  },
+  "author": {
+    "name": "Ivan Dalmet",
+    "email": "ivan@dalmet.fr",
+    "url": "https://github.com/ivan-dalmet"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivan-dalmet/start-ui/issues"
+  },
+  "homepage": "https://github.com/ivan-dalmet/start-ui#readme"
 }

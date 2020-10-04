@@ -1,36 +1,25 @@
 ⚠️ Work in progress repository
 
-<br />
-<p align="center">
-  <!-- <a href="https://github.com/ivan-dalmet/start-ui">
-    <img src="images/logo.png" alt="Start UI logo" width="80" height="80">
-  </a> -->
+# Start UI
 
-  <h1 align="center">Start UI</h1>
-
-  <p align="center">
-    Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, 🐜 Formiz & 📚 Storybook
-    <br />
-    <!-- <a href="https://github.com/ivan-dalmet/start-ui"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/ivan-dalmet/start-ui">View Demo</a>
-    ·
-    <a href="https://github.com/ivan-dalmet/start-ui/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/ivan-dalmet/start-ui/issues">Request Feature</a> -->
-  </p>
-</p>
+Opinionated UI starter with
+- ⚛️ [React](https://reactjs.org/)
+- ▲ [NextJS](https://nextjs.org/) with [Static Export](https://nextjs.org/docs/advanced-features/static-html-export)
+- ⚛️ [React Router v6](https://github.com/ReactTraining/react-router/blob/dev/docs/api-reference.md)
+- ⚡️ [Chakra UI v1](https://next.chakra-ui.com/)
+- ⚛️ [React Query](https://react-query.tanstack.com/)
+- 🐜 [Formiz](https://formiz-react.com/)
+- 💥 [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
+- ⭐️ [react-icons](https://react-icons.github.io/react-icons/)
 
 ## Installation
 
 ```
 yarn install
-yarn bs
 ```
 
 ## Development
 
 ```
-yarn start
+yarn dev
 ```
