@@ -6,7 +6,7 @@ interface AuthContextValue {
   updateToken(string): void;
 }
 
-const AUTH_TOKEN_KEY = 'authToken';
+export const AUTH_TOKEN_KEY = 'authToken';
 
 const AuthContext = React.createContext<AuthContextValue>(null);
 
