@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -18,8 +18,10 @@ import { FieldInput } from '@/components';
 export const LoginPage = () => {
   const form = useForm({ subscribe: 'form' });
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams()
   const toast = useToast();
   const { isLogged } = useAuthContext();
+
   const [login, { isLoading, isError }] = useLogin({
     onSuccess: () => {
       toast({
@@ -28,7 +30,7 @@ export const LoginPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate('/');
+      navigate(searchParams.get('redirect') ?? '/');
     },
     onError: () => {
       toast({

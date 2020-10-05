@@ -10,7 +10,7 @@ export const useLogin = (config: MutationConfig<any>) => {
     {
       ...config,
       onSuccess: (data, ...rest) => {
-        updateToken(data);
+        updateToken(data.id_token);
         config.onSuccess(data, ...rest);
       },
     }
