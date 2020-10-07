@@ -1,26 +1,28 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Routes } from 'react-router-dom';
-import { Route, RouteNotFound } from '@/app/router';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { Route } from '@/app/router';
+import { Error404 } from '@/errors';
 import { LoginPage } from '@/app/auth/LoginPage';
 import { LogoutPage } from '@/app/auth/LogoutPage';
-import { AccountRoutes } from '@/app/account/AccountRoutes';
-import { DashboardRoutes } from '@/app/dashboard/DashboardRoutes';
+import { Routes as AccountRoutes } from '@/app/account/Routes';
+import { Routes as DashboardRoutes } from '@/app/dashboard/Routes';
 import { Layout } from '@/app/layout/Layout';
 
 export const App = (props) => {
   return (
     <BrowserRouter {...props}>
       <Layout>
-        <Routes>
-          <RouteNotFound path="*" />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Switch>
+          <Redirect exact from="/" to="/dashboard" />
 
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/logout" component={LogoutPage} />
 
-          <Route path="/account/*" element={<AccountRoutes />} />
-          <Route path="/dashboard/*" element={<DashboardRoutes />} />
-        </Routes>
+          <Route path="/dashboard" component={DashboardRoutes} />
+          <Route path="/account" component={AccountRoutes} />
+
+          <Route component={Error404} />
+        </Switch>
       </Layout>
     </BrowserRouter>
   );

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React from 'react';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -17,8 +17,8 @@ import { FieldInput } from '@/components';
 
 export const LoginPage = () => {
   const form = useForm({ subscribe: 'form' });
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams()
+  const history = useHistory();
+  const location = useLocation();
   const toast = useToast();
   const { isLogged } = useAuthContext();
 
@@ -30,7 +30,7 @@ export const LoginPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate(searchParams.get('redirect') ?? '/');
+      history.push(location?.state?.referrer ?? '/');
     },
     onError: () => {
       toast({
@@ -42,12 +42,9 @@ export const LoginPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (isLogged) {
-      navigate('/');
-    }
-  }, [isLogged, navigate]);
-
+  if (isLogged) {
+    return <Redirect to="/" />;
+  }
   return (
     <Box p="4" maxW="20rem" m="auto">
       <Formiz autoForm onValidSubmit={login} connect={form}>

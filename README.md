@@ -5,7 +5,7 @@
 Opinionated UI starter with
 - ⚛️ [React](https://reactjs.org/)
 - ▲ [NextJS](https://nextjs.org/) with [Static Export](https://nextjs.org/docs/advanced-features/static-html-export)
-- ⚛️ [React Router v6](https://github.com/ReactTraining/react-router/blob/dev/docs/api-reference.md)
+- ⚛️ [React Router](https://github.com/ReactTraining/react-router/)
 - ⚡️ [Chakra UI v1](https://next.chakra-ui.com/)
 - ⚛️ [React Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
