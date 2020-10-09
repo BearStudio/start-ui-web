@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useLocation, Redirect } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -17,7 +17,6 @@ import { FieldInput } from '@/components';
 
 export const LoginPage = () => {
   const form = useForm({ subscribe: 'form' });
-  const history = useHistory();
   const location = useLocation();
   const toast = useToast();
   const { isLogged } = useAuthContext();
@@ -30,7 +29,6 @@ export const LoginPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      history.push(location?.state?.referrer ?? '/');
     },
     onError: () => {
       toast({
@@ -43,7 +41,7 @@ export const LoginPage = () => {
   });
 
   if (isLogged) {
-    return <Redirect to="/" />;
+    return <Redirect to={location?.state?.referrer ? location : '/'} />;
   }
   return (
     <Box p="4" maxW="20rem" m="auto">
