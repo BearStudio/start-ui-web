@@ -21,7 +21,7 @@ export const App = (props) => {
           <Route path="/dashboard/*" element={<DashboardRoutes />} />
           <Route path="/account/*" element={<AccountRoutes />} />
 
-          <Route element={Error404} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </Layout>
     </BrowserRouter>

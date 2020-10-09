@@ -8,7 +8,7 @@ export const DashboardRoutes = () => {
   return (
     <Routes>
       <RouteAuth path="/" element={<DashboardPage />} />
-      <Route element={<Error404 />} />
+      <Route path="*" element={<Error404 />} />
     </Routes>
   );
 };

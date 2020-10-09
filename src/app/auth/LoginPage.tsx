@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -9,16 +8,19 @@ import {
   Box,
   Button,
   Flex,
+  Stack,
   useToast,
 } from '@chakra-ui/core';
+import { useAuthContext } from '@/app/auth/AuthContext';
 import { useLogin } from '@/app/auth/service';
+import { useRedirectFromUrl } from '@/app/router';
 import { FieldInput } from '@/components';
 
 export const LoginPage = () => {
+  const { isLogged } = useAuthContext();
   const form = useForm({ subscribe: 'form' });
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const toast = useToast();
+  const redirect = useRedirectFromUrl();
 
   const [login, { isLoading, isError }] = useLogin({
     onSuccess: () => {
@@ -28,7 +30,7 @@ export const LoginPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      navigate(searchParams.get('redirect') ?? '/');
+      redirect();
     },
     onError: () => {
       toast({
@@ -40,31 +42,39 @@ export const LoginPage = () => {
     },
   });
 
+  useEffect(() => {
+    if (isLogged) {
+      redirect();
+    }
+  }, [isLogged, redirect]);
+
   return (
     <Box p="4" maxW="20rem" m="auto">
       <Formiz autoForm onValidSubmit={login} connect={form}>
-        <FieldInput
-          name="username"
-          label="Username"
-          required="Username is required"
-        />
-        <FieldInput
-          name="password"
-          type="password"
-          label="Password"
-          required="Password is required"
-        />
-        <Flex>
-          <Button
-            isLoading={isLoading}
-            isDisabled={form.isSubmitted && !form.isValid}
-            type="submit"
-            colorScheme="brand"
-            ml="auto"
-          >
-            Submit
-          </Button>
-        </Flex>
+        <Stack spacing="4">
+          <FieldInput
+            name="username"
+            label="Username"
+            required="Username is required"
+          />
+          <FieldInput
+            name="password"
+            type="password"
+            label="Password"
+            required="Password is required"
+          />
+          <Flex>
+            <Button
+              isLoading={isLoading}
+              isDisabled={form.isSubmitted && !form.isValid}
+              type="submit"
+              colorScheme="brand"
+              ml="auto"
+            >
+              Submit
+            </Button>
+          </Flex>
+        </Stack>
 
         {isError && (
           <Alert status="error" my="4">

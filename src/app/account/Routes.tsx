@@ -14,7 +14,7 @@ export const AccountRoutes = () => {
         element={<ResetPasswordConfirmPage />}
       />
 
-      <Route element={<Error404 />} />
+      <Route path="*" element={<Error404 />} />
     </Routes>
   );
 };
