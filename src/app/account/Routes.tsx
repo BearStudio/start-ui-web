@@ -1,25 +1,21 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 import { Error404 } from '@/errors';
 import { Route } from '@/app/router';
 import { ResetPasswordRequestPage } from '@/app/account/ResetPasswordRequestPage';
 import { ResetPasswordConfirmPage } from '@/app/account/ResetPasswordConfirmPage';
 
-export const Routes = ({ match }) => {
+export const AccountRoutes = () => {
   return (
-    <Switch>
+    <Routes>
+      <Route exact path="/reset" component={ResetPasswordRequestPage} />
       <Route
         exact
-        path={`${match.url}/reset`}
-        component={ResetPasswordRequestPage}
-      />
-      <Route
-        exact
-        path={`${match.url}/reset/confirm/:resetKey`}
+        path="/reset/confirm/:resetKey"
         component={ResetPasswordConfirmPage}
       />
 
       <Route component={Error404} />
-    </Switch>
+    </Routes>
   );
 };

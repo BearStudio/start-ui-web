@@ -1,20 +1,16 @@
-import React from 'react';
-import { useLocation, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Route } from '@/app/router';
 import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const RouteAuth = (props) => {
   const { isLogged } = useAuthContext();
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  if (!isLogged) {
-    return <Redirect
-      to={{
-        pathname: '/login',
-        state: { referrer: location }
-      }}
-    />
-  }
+  useEffect(() => {
+    if (!isLogged) navigate(`/login?redirect=${pathname}`);
+  }, [isLogged, navigate, pathname]);
 
   return <Route {...props} />;
 };
