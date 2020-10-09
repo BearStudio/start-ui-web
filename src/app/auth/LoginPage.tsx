@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -11,15 +11,14 @@ import {
   Flex,
   useToast,
 } from '@chakra-ui/core';
-import { useAuthContext } from '@/app/auth/AuthContext';
 import { useLogin } from '@/app/auth/service';
 import { FieldInput } from '@/components';
 
 export const LoginPage = () => {
   const form = useForm({ subscribe: 'form' });
-  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const toast = useToast();
-  const { isLogged } = useAuthContext();
 
   const [login, { isLoading, isError }] = useLogin({
     onSuccess: () => {
@@ -29,6 +28,7 @@ export const LoginPage = () => {
         duration: 3000,
         isClosable: true,
       });
+      navigate(searchParams.get('redirect') ?? '/');
     },
     onError: () => {
       toast({
@@ -40,9 +40,6 @@ export const LoginPage = () => {
     },
   });
 
-  if (isLogged) {
-    return <Redirect to={location?.state?.referrer ? location : '/'} />;
-  }
   return (
     <Box p="4" maxW="20rem" m="auto">
       <Formiz autoForm onValidSubmit={login} connect={form}>
