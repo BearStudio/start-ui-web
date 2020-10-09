@@ -19,10 +19,16 @@
     "react-router-dom": "6.0.0-beta.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@storybook/addon-actions": "^6.0.26",
+    "@storybook/addon-essentials": "^6.0.26",
+    "@storybook/addon-links": "^6.0.26",
+    "@storybook/react": "^6.0.26",
     "@types/node": "14.11.8",
     "@typescript-eslint/eslint-plugin": "4.4.0",
     "@typescript-eslint/parser": "4.4.0",
     "babel-eslint": "10.1.0",
+    "babel-loader": "^8.1.0",
     "eslint": "7.10.0",
     "eslint-config-react-app": "5.2.1",
     "eslint-plugin-flowtype": "5.2.0",
@@ -31,6 +37,8 @@
     "eslint-plugin-react": "7.21.3",
     "eslint-plugin-react-hooks": "4.1.2",
     "prettier": "2.1.2",
+    "react-is": "^16.13.1",
+    "tsconfig-paths-webpack-plugin": "3.3.0",
     "typescript": "4.0.3"
   },
   "scripts": {
@@ -39,7 +47,9 @@
     "serve": "yarn build && npx servor out index.html 5000",
     "start": "next start",
     "pretty": "prettier -w .",
-    "lint": "eslint ./src ./pages"
+    "lint": "eslint ./src ./pages",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook"
   },
   "repository": {
     "type": "git",

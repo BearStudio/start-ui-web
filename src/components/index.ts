@@ -1,2 +1,2 @@
-export { FieldInput } from './Fields/FieldInput';
+export { FieldInput } from './FieldInput';
 export { FormGroup } from './FormGroup';

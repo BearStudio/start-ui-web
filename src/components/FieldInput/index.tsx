@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Input, InputGroup, InputRightElement, Spinner,
-} from '@chakra-ui/core';
+import { Input, InputGroup, InputRightElement, Spinner } from '@chakra-ui/core';
 import { useField } from '@formiz/core';
 import { FormGroup } from '../FormGroup';
 
@@ -17,7 +15,13 @@ export const FieldInput = (props) => {
     value,
   } = useField(props);
   const {
-    children, label, type, required, placeholder, helper, ...otherProps
+    children,
+    label,
+    type,
+    required,
+    placeholder,
+    helper,
+    ...otherProps
   } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);

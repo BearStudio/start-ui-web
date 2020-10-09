@@ -1,0 +1,41 @@
+<!--- Checkbox.stories.mdx -->
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Input } from '@chakra-ui/core';
+import { FormGroup } from './index';
+
+<Meta title="Form Group" component={FormGroup} />
+
+# Form Group
+
+This component is used in all form fields to allow consistency for all fields.
+
+<ArgsTable of={FormGroup} />
+
+<Canvas>
+  <Story name="Default">
+    <FormGroup
+      label="Label"
+      helper="Helper"
+      isRequired
+    >
+      Content
+    </FormGroup>
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Error">
+    <FormGroup
+      label="Label"
+      helper="Helper"
+      errorMessage="Error message"
+      showError
+    >
+      Content
+    </FormGroup>
+  </Story>
+</Canvas>
+
+## Troubleshooting
+
+- Helper will not be shown when the error is displayed (when `showError` is `true`). This comes from the Chakra UI FormControl components.

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Icon,
   FormControl,
@@ -7,6 +7,16 @@ import {
   FormHelperText,
 } from '@chakra-ui/core';
 import { FiAlertTriangle } from 'react-icons/fi';
+
+export interface FormGroupProps {
+  children?: ReactNode;
+  errorMessage?: ReactNode;
+  helper?: ReactNode;
+  id?: string;
+  isRequired?: boolean;
+  label?: ReactNode;
+  showError?: boolean;
+}
 
 export const FormGroup = ({
   children,
@@ -17,15 +27,11 @@ export const FormGroup = ({
   label,
   showError,
   ...props
-}) => (
-  <FormControl mb="6" isInvalid={showError} isRequired={isRequired} {...props}>
+}: FormGroupProps) => (
+  <FormControl isInvalid={showError} isRequired={isRequired} {...props}>
     {!!label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-    {!!helper && (
-      <FormHelperText mt="0" mb="3">
-        {helper}
-      </FormHelperText>
-    )}
     {children}
+    {!!helper && <FormHelperText>{helper}</FormHelperText>}
     <FormErrorMessage id={`${id}-error`}>
       <Icon as={FiAlertTriangle} mr="2" />
       {errorMessage}
