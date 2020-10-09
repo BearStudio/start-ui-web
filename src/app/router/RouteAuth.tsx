@@ -12,5 +12,5 @@ export const RouteAuth = (props) => {
     if (!isLogged) navigate(`/login?redirect=${pathname}`);
   }, [isLogged, navigate, pathname]);
 
-  return <Route {...props} />;
+  return !isLogged ? null : <Route {...props} />;
 };
