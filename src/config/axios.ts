@@ -11,7 +11,7 @@ axios.interceptors.request.use(
       ...config,
       headers: {
         ...authHeaders,
-        ...(config.headers || {}),
+        ...(config.headers || {}),
       },
     };
   },

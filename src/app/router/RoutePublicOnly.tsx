@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate, Route} from 'react-router-dom';
+import { useNavigate, Route } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const RoutePublicOnly = (props) => {

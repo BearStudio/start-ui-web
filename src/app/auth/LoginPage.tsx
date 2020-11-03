@@ -7,10 +7,13 @@ import {
   AlertTitle,
   Box,
   Button,
+  Center,
   Flex,
+  Heading,
   Stack,
   useToast,
 } from '@chakra-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { useLogin } from '@/app/auth/service';
 import { useRedirectFromUrl } from '@/app/router';
 import { FieldInput } from '@/components';
@@ -22,12 +25,6 @@ export const LoginPage = () => {
 
   const [login, { isLoading, isError }] = useLogin({
     onSuccess: () => {
-      toast({
-        title: 'Login success',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
       redirect();
     },
     onError: () => {
@@ -43,6 +40,7 @@ export const LoginPage = () => {
   return (
     <Box p="4" maxW="20rem" m="auto">
       <Formiz autoForm onValidSubmit={login} connect={form}>
+        <Heading my="4">Login</Heading>
         <Stack spacing="4">
           <FieldInput
             name="username"
@@ -79,6 +77,15 @@ export const LoginPage = () => {
             </Box>
           </Alert>
         )}
+
+        <Center mt="8">
+          <Button as={RouterLink} to="/account/register" variant="link">
+            Need an account?{' '}
+            <Box as="strong" color="brand.500" ml="2">
+              Register now!
+            </Box>
+          </Button>
+        </Center>
       </Formiz>
     </Box>
   );

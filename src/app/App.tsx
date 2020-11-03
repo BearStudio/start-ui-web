@@ -14,7 +14,10 @@ export const App = (props) => {
     <BrowserRouter {...props}>
       <Layout>
         <Routes>
-          <RoutePublic path="/" element={<Navigate to="/dashboard" replace />} />
+          <RoutePublic
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
+          />
 
           <RoutePublicOnly path="/login" element={<LoginPage />} />
           <RoutePublic path="/account/*" element={<AccountRoutes />} />

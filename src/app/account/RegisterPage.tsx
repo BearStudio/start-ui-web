@@ -3,14 +3,16 @@ import { Formiz, useForm } from '@formiz/core';
 import {
   Box,
   Button,
+  Center,
   Flex,
+  Heading,
   Stack,
   useToast,
 } from '@chakra-ui/core';
 import { useCreateAccount } from '@/app/account/service';
 import { FieldInput } from '@/components';
 import { isEmail } from '@formiz/validations';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 export const RegisterPage = () => {
   const form = useForm({ subscribe: 'form' });
@@ -40,6 +42,7 @@ export const RegisterPage = () => {
   return (
     <Box p="4" maxW="20rem" m="auto">
       <Formiz autoForm onValidSubmit={createUser} connect={form}>
+        <Heading my="4">Register</Heading>
         <Stack spacing="4">
           <FieldInput
             name="login"
@@ -53,7 +56,7 @@ export const RegisterPage = () => {
               {
                 rule: isEmail(),
                 message: 'Invalid email',
-              }
+              },
             ]}
             required="Email is required"
           />
@@ -75,6 +78,14 @@ export const RegisterPage = () => {
             </Button>
           </Flex>
         </Stack>
+        <Center mt="8">
+          <Button as={RouterLink} to="/login" variant="link">
+            Already have an account?{' '}
+            <Box as="strong" color="brand.500" ml="2">
+              Login
+            </Box>
+          </Button>
+        </Center>
       </Formiz>
     </Box>
   );

@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate, Route as RouterRoute } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  Route as RouterRoute,
+} from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const Route = (props) => {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation, MutationConfig} from 'react-query';
+import { useMutation, MutationConfig } from 'react-query';
 
 export const useCreateAccount = (config: MutationConfig<any> = {}) => {
   return useMutation(
@@ -11,12 +11,8 @@ export const useCreateAccount = (config: MutationConfig<any> = {}) => {
   );
 };
 
-export const useActivateAccount = (config: MutationConfig<any> = {}) => {
-  return useMutation(
-    ({ key }) =>
-      axios.get(`/activate?key=${key}`),
-    {
-      ...config,
-    }
-  );
+export const useActivateAccount = (config: MutationConfig<any> = {}) => {
+  return useMutation(({ key }) => axios.get(`/activate?key=${key}`), {
+    ...config,
+  });
 };
