@@ -4,13 +4,15 @@ import { Error404 } from '@/errors';
 import { Route } from '@/app/router';
 import { ResetPasswordRequestPage } from '@/app/account/ResetPasswordRequestPage';
 import { ResetPasswordConfirmPage } from '@/app/account/ResetPasswordConfirmPage';
-import { Register } from '@/app/account/Register';
+import { RegisterPage } from '@/app/account/RegisterPage';
+import { ActivatePage } from '@/app/account/ActivatePage';
 import { RoutePublicOnly } from '../router/RoutePublicOnly';
 
 export const AccountRoutes = () => {
   return (
     <Routes>
-      <RoutePublicOnly path="/register" element={<Register />} />
+      <RoutePublicOnly path="/register" element={<RegisterPage />} />
+      <RoutePublicOnly path="/activate" element={<ActivatePage />} />
       <RoutePublicOnly path="/reset" element={<ResetPasswordRequestPage />} />
       <RoutePublicOnly
         path="/reset/confirm/:resetKey"

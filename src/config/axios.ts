@@ -7,7 +7,7 @@ axios.interceptors.request.use(
     const token = isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
     return {
-      baseURL: 'http://localhost:8080',
+      baseURL: 'http://localhost:8080/api',
       ...config,
       headers: {
         ...authHeaders,

@@ -18,7 +18,7 @@ export const App = (props) => {
 
           <RoutePublicOnly path="/login" element={<LoginPage />} />
           <RoutePublic path="/account/*" element={<AccountRoutes />} />
-          <Route path="/logout" element={<LogoutPage />} />
+          <RoutePublic path="/logout" element={<LogoutPage />} />
 
           <Route path="/dashboard/*" element={<DashboardRoutes />} />
 
