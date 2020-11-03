@@ -1,3 +1,4 @@
 export { Route } from './Route';
-export { RouteAuth } from './RouteAuth';
+export { RoutePublic } from './RoutePublic';
+export { RoutePublicOnly } from './RoutePublicOnly';
 export { useRedirectFromUrl } from './useRedirectFromUrl';
