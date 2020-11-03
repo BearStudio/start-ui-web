@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Box,
@@ -7,17 +7,15 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/core';
-import { useAuthContext } from '@/app/auth/AuthContext';
 import { useCreateAccount } from '@/app/account/service';
-import { useRedirectFromUrl } from '@/app/router';
 import { FieldInput } from '@/components';
 import { isEmail } from '@formiz/validations';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterPage = () => {
-  const { isLogged } = useAuthContext();
   const form = useForm({ subscribe: 'form' });
   const toast = useToast();
-  const redirect = useRedirectFromUrl();
+  const navigate = useNavigate();
 
   const [createUser, { isLoading }] = useCreateAccount({
     onSuccess: () => {
@@ -27,7 +25,7 @@ export const RegisterPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      redirect();
+      navigate('/login');
     },
     onError: () => {
       toast({
@@ -38,12 +36,6 @@ export const RegisterPage = () => {
       });
     },
   });
-
-  useEffect(() => {
-    if (isLogged) {
-      redirect();
-    }
-  }, [isLogged, redirect]);
 
   return (
     <Box p="4" maxW="20rem" m="auto">

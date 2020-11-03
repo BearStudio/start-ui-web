@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import {
   Alert,
@@ -11,13 +11,11 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/core';
-import { useAuthContext } from '@/app/auth/AuthContext';
 import { useLogin } from '@/app/auth/service';
 import { useRedirectFromUrl } from '@/app/router';
 import { FieldInput } from '@/components';
 
 export const LoginPage = () => {
-  const { isLogged } = useAuthContext();
   const form = useForm({ subscribe: 'form' });
   const toast = useToast();
   const redirect = useRedirectFromUrl();
@@ -41,12 +39,6 @@ export const LoginPage = () => {
       });
     },
   });
-
-  useEffect(() => {
-    if (isLogged) {
-      redirect();
-    }
-  }, [isLogged, redirect]);
 
   return (
     <Box p="4" maxW="20rem" m="auto">
