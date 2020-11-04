@@ -5,6 +5,7 @@ import {
   Route as RouterRoute,
 } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
+import { ErrorBoundary } from '@/errors';
 
 export const Route = (props) => {
   const { isLogged } = useAuthContext();
@@ -17,5 +18,9 @@ export const Route = (props) => {
     }
   }, [isLogged, navigate, pathname, search]);
 
-  return !isLogged ? null : <RouterRoute {...props} />;
+  return !isLogged ? null : (
+    <ErrorBoundary>
+      <RouterRoute {...props} />
+    </ErrorBoundary>
+  );
 };

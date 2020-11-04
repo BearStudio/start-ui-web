@@ -32,8 +32,10 @@ const ErrorFallback = ({ error }: FallbackProps) => {
             >
               Show details
             </Button>
-            <Collapse mt={4} isOpen={show} fontFamily="monospace">
-              {error.message}
+            <Collapse in={show} animateOpacity>
+              <Box mt={4} fontFamily="monospace">
+                {error.message}
+              </Box>
             </Collapse>
           </AlertDescription>
         </Box>
@@ -42,9 +44,12 @@ const ErrorFallback = ({ error }: FallbackProps) => {
   );
 };
 
-export const ErrorBoundary = ({ children }) => {
+export const ErrorBoundary = ({
+  children,
+  FallbackComponent = ErrorFallback,
+}) => {
   return (
-    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
+    <ReactErrorBoundary FallbackComponent={FallbackComponent}>
       {children}
     </ReactErrorBoundary>
   );
