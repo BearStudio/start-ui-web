@@ -22,7 +22,7 @@ export const PageRegister = () => {
   const [createUser, { isLoading }] = useCreateAccount({
     onSuccess: () => {
       toast({
-        title: 'Register success',
+        title: 'Registration success',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -31,7 +31,7 @@ export const PageRegister = () => {
     },
     onError: () => {
       toast({
-        title: 'Register failed',
+        title: 'Registration failed',
         status: 'error',
         duration: 3000,
         isClosable: true,
