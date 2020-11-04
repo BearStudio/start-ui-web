@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
   Box,
   Button,
   Center,
@@ -8,6 +11,7 @@ import {
   Heading,
   Stack,
   useToast,
+  ScaleFade,
 } from '@chakra-ui/core';
 import { useCreateAccount } from '@/app/account/service';
 import { FieldInput } from '@/components';
@@ -17,36 +21,75 @@ import {
   isMinLength,
   isPattern,
 } from '@formiz/validations';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const PageRegister = () => {
   const form = useForm();
   const toast = useToast();
-  const navigate = useNavigate();
+  const [accountEmail, setAccountEmail] = useState('');
 
-  const [createUser, { isLoading }] = useCreateAccount({
-    onSuccess: () => {
-      toast({
-        title: 'Registration success',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      navigate('/login');
+  const [createUser, { isLoading, isSuccess }] = useCreateAccount({
+    onMutate: () => {
+      setAccountEmail(form.values?.email);
     },
-    onError: () => {
+    onError: (error: any) => {
+      const { errorKey, title } = error?.response?.data || {};
+
       toast({
         title: 'Registration failed',
+        description: title,
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
+
+      if (errorKey === 'userexists') {
+        form.invalidateFields({ login: 'Login already used' });
+      }
+
+      if (errorKey === 'emailexists') {
+        form.invalidateFields({ email: 'Email already used' });
+      }
     },
   });
 
+  if (isSuccess) {
+    return (
+      <Center p="4" m="auto">
+        <ScaleFade initialScale={0.9} in>
+          <Alert
+            status="success"
+            variant="solid"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            borderRadius="lg"
+            px="8"
+            py="4"
+          >
+            <Box fontSize="3rem">🎉</Box>
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Account created with success!
+            </AlertTitle>
+            <AlertDescription>
+              Please check your email <strong>{accountEmail}</strong> inbox to
+              activate your account.
+            </AlertDescription>
+          </Alert>
+        </ScaleFade>
+      </Center>
+    );
+  }
+
   return (
     <Box p="4" maxW="20rem" m="auto">
-      <Formiz autoForm onValidSubmit={createUser} connect={form} id="register">
+      <Formiz
+        id="register-form"
+        autoForm
+        onValidSubmit={createUser}
+        connect={form}
+      >
         <Heading my="4">Register</Heading>
         <Stack spacing="4">
           <FieldInput

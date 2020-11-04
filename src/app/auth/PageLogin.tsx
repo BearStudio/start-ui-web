@@ -39,7 +39,7 @@ export const PageLogin = () => {
 
   return (
     <Box p="4" maxW="20rem" m="auto">
-      <Formiz autoForm onValidSubmit={login} connect={form}>
+      <Formiz id="login-form" autoForm onValidSubmit={login} connect={form}>
         <Heading my="4">Login</Heading>
         <Stack spacing="4">
           <FieldInput
