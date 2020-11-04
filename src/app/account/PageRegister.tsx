@@ -11,11 +11,16 @@ import {
 } from '@chakra-ui/core';
 import { useCreateAccount } from '@/app/account/service';
 import { FieldInput } from '@/components';
-import { isEmail } from '@formiz/validations';
+import {
+  isEmail,
+  isMaxLength,
+  isMinLength,
+  isPattern,
+} from '@formiz/validations';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 export const PageRegister = () => {
-  const form = useForm({ subscribe: 'form' });
+  const form = useForm();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -41,30 +46,64 @@ export const PageRegister = () => {
 
   return (
     <Box p="4" maxW="20rem" m="auto">
-      <Formiz autoForm onValidSubmit={createUser} connect={form}>
+      <Formiz autoForm onValidSubmit={createUser} connect={form} id="register">
         <Heading my="4">Register</Heading>
         <Stack spacing="4">
           <FieldInput
             name="login"
             label="Username"
             required="Username is required"
+            validations={[
+              {
+                rule: isMinLength(2),
+                message: 'Username too short (min. 2 characters)',
+              },
+              {
+                rule: isMaxLength(50),
+                message: 'Username too long (max. 50 characters)',
+              },
+              {
+                rule: isPattern(
+                  '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
+                ),
+                message: "Username is invalid, don't use special characters",
+              },
+            ]}
           />
           <FieldInput
             name="email"
             label="Email"
+            required="Email is required"
             validations={[
               {
+                rule: isMinLength(5),
+                message: 'Email too short (min. 5 characters)',
+              },
+              {
+                rule: isMaxLength(254),
+                message: 'Email too long (max. 254 characters)',
+              },
+              {
                 rule: isEmail(),
-                message: 'Invalid email',
+                message: 'Email is invalid',
               },
             ]}
-            required="Email is required"
           />
           <FieldInput
             name="password"
             type="password"
             label="Password"
             required="Password is required"
+            validations={[
+              {
+                rule: isMinLength(4),
+                message: 'Password too short (min. 4 characters)',
+              },
+              {
+                rule: isMaxLength(50),
+                message: 'Password too long (max. 50 characters)',
+              },
+            ]}
           />
           <Flex>
             <Button

@@ -1865,10 +1865,10 @@
     lodash-es "4.17.15"
     rxjs "6.6.3"
 
-"@formiz/validations@1.0.0-rc.24":
-  version "1.0.0-rc.24"
-  resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-1.0.0-rc.24.tgz#fa91cd59cd26a7ce5050f375c0ee98b6de1e892b"
-  integrity sha512-d2zUPX0HODKR2trU1kcU6WZLLjPwfuhOkRvWeX1NQ3MsN/1g37taZYzt4DmJqfgTXrdVuX/JUN9MxipxvOidEQ==
+"@formiz/validations@1.0.0-rc.26":
+  version "1.0.0-rc.26"
+  resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-1.0.0-rc.26.tgz#9c68159cd1eaad9b5087b0090b44413d359d5353"
+  integrity sha512-FR3tflYnLbfKUWaFHXt1SseJfCtc8mt+QEnA25Yysr0xZQxdgp6VlPwpeDN0fv3zm2djkcBYMuJhUZ3i35ueEw==
 
 "@hapi/accept@5.0.1":
   version "5.0.1"
