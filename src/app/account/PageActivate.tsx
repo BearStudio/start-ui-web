@@ -3,7 +3,7 @@ import { Box, Spinner } from '@chakra-ui/core';
 import { useActivateAccount } from '@/app/account/service';
 import { useSearchParams } from 'react-router-dom';
 
-export const ActivatePage = () => {
+export const PageActivate = () => {
   const [
     activateAccount,
     { isError, isSuccess, isLoading },

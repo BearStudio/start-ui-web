@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 
-export const LogoutPage = () => {
+export const PageLogout = () => {
   const { updateToken } = useAuthContext();
   const navigate = useNavigate();
 

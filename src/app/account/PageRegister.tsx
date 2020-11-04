@@ -1,10 +1,6 @@
 import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
   Button,
   Center,
@@ -13,23 +9,29 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
-import { useLogin } from '@/app/auth/service';
-import { useRedirectFromUrl } from '@/app/router';
+import { useCreateAccount } from '@/app/account/service';
 import { FieldInput } from '@/components';
+import { isEmail } from '@formiz/validations';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
-export const LoginPage = () => {
+export const PageRegister = () => {
   const form = useForm({ subscribe: 'form' });
   const toast = useToast();
-  const redirect = useRedirectFromUrl();
+  const navigate = useNavigate();
 
-  const [login, { isLoading, isError }] = useLogin({
+  const [createUser, { isLoading }] = useCreateAccount({
     onSuccess: () => {
-      redirect();
+      toast({
+        title: 'Register success',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate('/login');
     },
     onError: () => {
       toast({
-        title: 'Login failed',
+        title: 'Register failed',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -39,13 +41,24 @@ export const LoginPage = () => {
 
   return (
     <Box p="4" maxW="20rem" m="auto">
-      <Formiz autoForm onValidSubmit={login} connect={form}>
-        <Heading my="4">Login</Heading>
+      <Formiz autoForm onValidSubmit={createUser} connect={form}>
+        <Heading my="4">Register</Heading>
         <Stack spacing="4">
           <FieldInput
-            name="username"
+            name="login"
             label="Username"
             required="Username is required"
+          />
+          <FieldInput
+            name="email"
+            label="Email"
+            validations={[
+              {
+                rule: isEmail(),
+                message: 'Invalid email',
+              },
+            ]}
+            required="Email is required"
           />
           <FieldInput
             name="password"
@@ -61,28 +74,15 @@ export const LoginPage = () => {
               colorScheme="brand"
               ml="auto"
             >
-              Submit
+              Create Account
             </Button>
           </Flex>
         </Stack>
-
-        {isError && (
-          <Alert status="error" my="4">
-            <AlertIcon />
-            <Box flex="1">
-              <AlertTitle>Failed to sign in!</AlertTitle>
-              <AlertDescription d="block" fontSize="sm" lineHeight="1.2">
-                Please check your credentials and try again.
-              </AlertDescription>
-            </Box>
-          </Alert>
-        )}
-
         <Center mt="8">
-          <Button as={RouterLink} to="/account/register" variant="link">
-            Need an account?{' '}
+          <Button as={RouterLink} to="/login" variant="link">
+            Already have an account?{' '}
             <Box as="strong" color="brand.500" ml="2">
-              Register now!
+              Login
             </Box>
           </Button>
         </Center>

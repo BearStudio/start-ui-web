@@ -2,21 +2,21 @@ import React from 'react';
 import { Routes } from 'react-router-dom';
 import { Error404 } from '@/errors';
 import { Route } from '@/app/router';
-import { ResetPasswordRequestPage } from '@/app/account/ResetPasswordRequestPage';
-import { ResetPasswordConfirmPage } from '@/app/account/ResetPasswordConfirmPage';
-import { RegisterPage } from '@/app/account/RegisterPage';
-import { ActivatePage } from '@/app/account/ActivatePage';
+import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
+import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
+import { PageRegister } from '@/app/account/PageRegister';
+import { PageActivate } from '@/app/account/PageActivate';
 import { RoutePublicOnly } from '../router/RoutePublicOnly';
 
 export const AccountRoutes = () => {
   return (
     <Routes>
-      <RoutePublicOnly path="/register" element={<RegisterPage />} />
-      <RoutePublicOnly path="/activate" element={<ActivatePage />} />
-      <RoutePublicOnly path="/reset" element={<ResetPasswordRequestPage />} />
+      <RoutePublicOnly path="/register" element={<PageRegister />} />
+      <RoutePublicOnly path="/activate" element={<PageActivate />} />
+      <RoutePublicOnly path="/reset" element={<PageResetPasswordRequest />} />
       <RoutePublicOnly
         path="/reset/confirm/:resetKey"
-        element={<ResetPasswordConfirmPage />}
+        element={<PageResetPasswordConfirm />}
       />
 
       <Route path="*" element={<Error404 />} />
