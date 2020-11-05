@@ -10,11 +10,10 @@ import {
   Flex,
   Heading,
   Stack,
-  useToast,
   ScaleFade,
 } from '@chakra-ui/core';
 import { useCreateAccount } from '@/app/account/service';
-import { FieldInput } from '@/components';
+import { FieldInput, useToastError } from '@/components';
 import {
   isEmail,
   isMaxLength,
@@ -25,7 +24,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 export const PageRegister = () => {
   const form = useForm();
-  const toast = useToast();
+  const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
 
   const [createUser, { isLoading, isSuccess }] = useCreateAccount({
@@ -35,12 +34,9 @@ export const PageRegister = () => {
     onError: (error: any) => {
       const { errorKey, title } = error?.response?.data || {};
 
-      toast({
+      toastError({
         title: 'Registration failed',
         description: title,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
       });
 
       if (errorKey === 'userexists') {

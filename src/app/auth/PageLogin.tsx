@@ -11,28 +11,25 @@ import {
   Flex,
   Heading,
   Stack,
-  useToast,
 } from '@chakra-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLogin } from '@/app/auth/service';
 import { useRedirectFromUrl } from '@/app/router';
-import { FieldInput } from '@/components';
+import { FieldInput, useToastError } from '@/components';
 
 export const PageLogin = () => {
   const form = useForm({ subscribe: 'form' });
-  const toast = useToast();
+  const toastError = useToastError();
   const redirect = useRedirectFromUrl();
 
   const [login, { isLoading, isError }] = useLogin({
     onSuccess: () => {
       redirect();
     },
-    onError: () => {
-      toast({
+    onError: (error: any) => {
+      toastError({
         title: 'Login failed',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+        description: error?.response?.data?.title,
       });
     },
   });
