@@ -7,7 +7,10 @@ axios.interceptors.request.use(
     const token = isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
     return {
-      baseURL: 'http://localhost:8080/api',
+      baseURL:
+        process.env.NODE_ENV === 'production'
+          ? process.env.API_BASE_URL || '/api'
+          : `http://${window.location.hostname}:8080/api`,
       ...config,
       headers: {
         ...authHeaders,
