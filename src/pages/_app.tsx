@@ -1,10 +1,13 @@
 import React from 'react';
 import { Providers } from '@/Providers';
+import { Viewport } from '@/components/Viewport';
 
 const App = ({ Component, pageProps }) => {
   return (
     <Providers>
-      <Component {...pageProps} />
+      <Viewport>
+        <Component {...pageProps} />
+      </Viewport>
     </Providers>
   );
 };
