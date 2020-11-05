@@ -1,6 +1,6 @@
+import { Box } from '@chakra-ui/core';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 export const PageDashboard = () => {
-  return <>PageDashboard Component</>;
+  return <Box>PageDashboard Component</Box>;
 };

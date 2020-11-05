@@ -35,7 +35,7 @@ export const PageLogin = () => {
   });
 
   return (
-    <Box p="4" maxW="20rem" m="auto">
+    <Box p="6" pb="4rem" w="20rem" maxW="full" m="auto">
       <Formiz id="login-form" autoForm onValidSubmit={login} connect={form}>
         <Heading my="4">Login</Heading>
         <Stack spacing="4">

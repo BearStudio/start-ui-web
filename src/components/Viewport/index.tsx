@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/core';
 
 const updateCssViewportHeight = () => {
   let vh = window.innerHeight * 0.01;
@@ -15,7 +15,8 @@ if (typeof window !== 'undefined') {
 
 export const Viewport = (props) => {
   return (
-    <Box
+    <Flex
+      direction="column"
       minH="100vh"
       maxW="100vw"
       style={{
