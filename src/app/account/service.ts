@@ -7,9 +7,15 @@ import {
 } from 'react-query';
 
 export const useAccount = (config: QueryConfig<any> = {}) => {
-  return useQuery(['account'], () => axios.get('/account'), {
-    ...config,
-  });
+  const { data: account, ...rest } = useQuery(
+    ['account'],
+    () => axios.get('/account'),
+    {
+      ...config,
+    }
+  );
+  const isAdmin = !!account?.authorities?.includes('ROLE_ADMIN');
+  return { account, isAdmin, ...rest };
 };
 
 export const useCreateAccount = (config: MutationConfig<any> = {}) => {

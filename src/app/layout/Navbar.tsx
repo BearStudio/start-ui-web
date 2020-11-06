@@ -21,6 +21,7 @@ import {
   MenuItem,
   MenuGroup,
   MenuDivider,
+  Spinner,
 } from '@chakra-ui/core';
 import { FiLogOut, FiMenu } from 'react-icons/fi';
 import { useAccount } from '../account/service';
@@ -86,21 +87,31 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
 };
 
 const NavbarAccountMenu = (props) => {
-  const { data: account } = useAccount();
+  const { account, isAdmin, isLoading } = useAccount();
   const navigate = useNavigate();
+  console.log(account);
   return (
     <Menu {...props}>
-      <MenuButton
-        as={Avatar}
-        display="block"
-        size="sm"
-        name={`${account?.login}`}
-      />
+      <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
+        <Avatar size="sm" icon={<></>} name={!isLoading && `${account?.login}`}>
+          {isLoading && <Spinner size="xs" />}
+        </Avatar>
+      </MenuButton>
       <MenuList color="gray.800">
         <MenuGroup title={account?.email}>
           <MenuItem onClick={() => navigate('/account')}>My Account</MenuItem>
         </MenuGroup>
         <MenuDivider />
+        {isAdmin && (
+          <>
+            <MenuGroup title="Administration">
+              <MenuItem onClick={() => navigate('/admin/user-management')}>
+                User Management
+              </MenuItem>
+            </MenuGroup>
+            <MenuDivider />
+          </>
+        )}
         <MenuItem icon={<FiLogOut />} onClick={() => navigate('/logout')}>
           Logout
         </MenuItem>
