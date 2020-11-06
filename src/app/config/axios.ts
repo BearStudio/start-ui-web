@@ -21,4 +21,12 @@ Axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-Axios.interceptors.response.use((response) => response?.data);
+Axios.interceptors.response.use((response) => {
+  if(response?.headers?.['x-total-count']){
+    return {
+      content: response?.data,
+      totalItems: response?.headers['x-total-count'],
+    }
+  }
+  return response?.data
+});
