@@ -56,7 +56,7 @@ const NavbarItem = ({ to, ...rest }: any) => {
         opacity: isActive ? 1 : 0,
         content: '""',
         position: 'absolute',
-        left: '50%',
+        left: { base: 8, md: '50%' },
         bottom: '0.2em',
         transform: 'translateX(-50%)',
         transition: '0.2s',
