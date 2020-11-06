@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input, InputGroup, InputRightElement, Spinner } from '@chakra-ui/core';
 import { useField } from '@formiz/core';
-import { FormGroup } from '../FormGroup';
+import { FormGroup } from '@/components/FormGroup';
 
 export const FieldInput = (props) => {
   const {

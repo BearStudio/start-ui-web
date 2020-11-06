@@ -24,7 +24,7 @@ import {
   Spinner,
 } from '@chakra-ui/core';
 import { FiLogOut, FiMenu } from 'react-icons/fi';
-import { useAccount } from '../account/service';
+import { useAccount } from '@/app/account/service';
 
 const NavbarContext = React.createContext(null);
 
