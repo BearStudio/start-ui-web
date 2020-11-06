@@ -73,6 +73,13 @@ export const PageRegister = () => {
               activate your account.
             </AlertDescription>
           </Alert>
+          <Center mt="8">
+            <Button as={RouterLink} to="/login" variant="link">
+              <Box as="strong" color="brand.500" ml="2">
+                Go to Login
+              </Box>
+            </Button>
+          </Center>
         </ScaleFade>
       </Center>
     );
