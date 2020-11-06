@@ -9,10 +9,10 @@ import { AccountRoutes } from '@/app/account/Routes';
 import { DashboardRoutes } from '@/app/dashboard/Routes';
 import { EntityRoutes } from '@/app/entity/Routes';
 
-export const App = (props) => {
+export const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter {...props}>
+      <BrowserRouter>
         <Layout>
           <Routes>
             <RoutePublic

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -32,17 +32,41 @@ const NavbarLogo = (props) => (
   <Box w="8rem" h="1rem" bg="gray.600" borderRadius="full" {...props} />
 );
 
-const NavbarItem = (props) => {
+const NavbarItem = ({ to, ...rest }: any) => {
   const { onClose } = useContext(NavbarContext);
+  const { pathname } = useLocation();
+  const isActive = pathname.startsWith(to);
   return (
     <Button
       as={RouterLink}
+      to={to}
       variant="ghost"
       justifyContent="flex-start"
+      position="relative"
+      opacity={isActive ? 1 : 0.8}
       _active={{ bg: 'gray.700' }}
-      _hover={{ bg: 'gray.900' }}
+      _hover={{
+        bg: 'gray.900',
+        _after: {
+          opacity: 1,
+          w: '2rem',
+        },
+      }}
+      _after={{
+        opacity: isActive ? 1 : 0,
+        content: '""',
+        position: 'absolute',
+        left: '50%',
+        bottom: '0.2em',
+        transform: 'translateX(-50%)',
+        transition: '0.2s',
+        w: isActive ? '2rem' : 0,
+        h: '2px',
+        borderRadius: 'full',
+        bg: 'currentColor',
+      }}
       onClick={onClose}
-      {...props}
+      {...rest}
     />
   );
 };
@@ -89,7 +113,7 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
 const NavbarAccountMenu = (props) => {
   const { account, isAdmin, isLoading } = useAccount();
   const navigate = useNavigate();
-  console.log(account);
+
   return (
     <Menu {...props}>
       <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
