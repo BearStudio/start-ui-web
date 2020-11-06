@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import {
   useMutation,
   MutationConfig,
@@ -9,7 +9,7 @@ import {
 export const useAccount = (config: QueryConfig<any> = {}) => {
   const { data: account, ...rest } = useQuery(
     ['account'],
-    () => axios.get('/account'),
+    () => Axios.get('/account'),
     {
       ...config,
     }
@@ -21,7 +21,7 @@ export const useAccount = (config: QueryConfig<any> = {}) => {
 export const useCreateAccount = (config: MutationConfig<any> = {}) => {
   return useMutation(
     ({ login, email, password, langKey = 'en' }) =>
-      axios.post('/register', { login, email, password, langKey }),
+      Axios.post('/register', { login, email, password, langKey }),
     {
       ...config,
     }
@@ -29,7 +29,7 @@ export const useCreateAccount = (config: MutationConfig<any> = {}) => {
 };
 
 export const useActivateAccount = (config: MutationConfig<any> = {}) => {
-  return useMutation(({ key }) => axios.get(`/activate?key=${key}`), {
+  return useMutation(({ key }) => Axios.get(`/activate?key=${key}`), {
     ...config,
   });
 };

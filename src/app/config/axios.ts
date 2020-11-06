@@ -1,8 +1,8 @@
-import axios from 'axios';
+import Axios from 'axios';
 import { AUTH_TOKEN_KEY } from '@/app/auth/AuthContext';
 import { isBrowser } from '@/utils/ssr';
 
-axios.interceptors.request.use(
+Axios.interceptors.request.use(
   (config = {}) => {
     const token = isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
     const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
@@ -21,4 +21,4 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-axios.interceptors.response.use((response) => response?.data);
+Axios.interceptors.response.use((response) => response?.data);
