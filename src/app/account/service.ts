@@ -1,5 +1,16 @@
 import axios from 'axios';
-import { useMutation, MutationConfig } from 'react-query';
+import {
+  useMutation,
+  MutationConfig,
+  useQuery,
+  QueryConfig,
+} from 'react-query';
+
+export const useAccount = (config: QueryConfig<any> = {}) => {
+  return useQuery(['account'], () => axios.get('/account'), {
+    ...config,
+  });
+};
 
 export const useCreateAccount = (config: MutationConfig<any> = {}) => {
   return useMutation(
