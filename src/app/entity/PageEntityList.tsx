@@ -1,13 +1,14 @@
 import React from 'react';
-import { Box } from '@chakra-ui/core';
 import { Link } from 'react-router-dom';
+import { Page, PageBody, PageHeader } from '@/components';
 
 export const PageEntityList = () => {
   return (
-    <Box>
-      PageEntityList Component
-      <br />
-      <Link to="./create">Create Entity</Link>
-    </Box>
+    <Page>
+      <PageHeader>PageEntityList Component</PageHeader>
+      <PageBody>
+        <Link to="./create">Create Entity</Link>
+      </PageBody>
+    </Page>
   );
 };

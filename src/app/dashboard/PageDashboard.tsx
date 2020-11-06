@@ -1,6 +1,12 @@
-import { Box } from '@chakra-ui/core';
 import React from 'react';
+import { Page, PageHeader, PageBody, PageFooter } from '@/components';
 
 export const PageDashboard = () => {
-  return <Box>PageDashboard Component</Box>;
+  return (
+    <Page>
+      <PageHeader>Dashboard</PageHeader>
+      <PageBody>Body</PageBody>
+      <PageFooter>Footer</PageFooter>
+    </Page>
+  );
 };
