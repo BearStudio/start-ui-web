@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes } from 'react-router-dom';
 import { Error404 } from '@/errors';
-import { Route } from '@/app/router';
+import { Route, RoutePublicOnly } from '@/app/router';
 import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
 import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
 import { PageRegister } from '@/app/account/PageRegister';
 import { PageActivate } from '@/app/account/PageActivate';
-import { RoutePublicOnly } from '../router/RoutePublicOnly';
+import { PageAccount } from '@/app/account/PageAccount';
 
 export const AccountRoutes = () => {
   return (
@@ -18,6 +18,8 @@ export const AccountRoutes = () => {
         path="/reset/confirm/:resetKey"
         element={<PageResetPasswordConfirm />}
       />
+
+      <Route path="/" element={<PageAccount />} />
 
       <Route path="*" element={<Error404 />} />
     </Routes>

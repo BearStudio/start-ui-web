@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useNavigate, Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
-import { ErrorBoundary } from '@/errors';
+import { RoutePublic } from './RoutePublic';
 
 export const RoutePublicOnly = (props) => {
   const { isLogged } = useAuthContext();
@@ -13,9 +13,5 @@ export const RoutePublicOnly = (props) => {
     }
   }, [isLogged, navigate]);
 
-  return isLogged ? null : (
-    <ErrorBoundary>
-      <Route {...props} />
-    </ErrorBoundary>
-  );
+  return isLogged ? null : <RoutePublic {...props} />;
 };
