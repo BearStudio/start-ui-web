@@ -10,7 +10,7 @@ export const AUTH_TOKEN_KEY = 'authToken';
 
 const AuthContext = React.createContext<AuthContextValue>(null);
 
-export const updateToken = (newToken) => {
+const updateToken = (newToken) => {
   if (!isBrowser) {
     return () => {};
   }
@@ -39,7 +39,10 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLogged: !!token, updateToken: handleUpdateToken }}
+      value={{
+        isLogged: !!token,
+        updateToken: handleUpdateToken,
+      }}
     >
       {children}
     </AuthContext.Provider>
