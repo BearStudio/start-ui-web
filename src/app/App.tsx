@@ -15,7 +15,7 @@ import '@/app/config/axios';
 export const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Layout>
           <Switch>
             <RoutePublic

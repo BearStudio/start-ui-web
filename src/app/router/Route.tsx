@@ -14,7 +14,9 @@ export const Route = (props) => {
 
   useEffect(() => {
     if (!isLogged) {
-      history.push(`/login?redirect=${encodeURIComponent(pathname + search)}`);
+      history.replace(
+        `/login?redirect=${encodeURIComponent(pathname + search)}`
+      );
     }
   }, [isLogged, history, pathname, search]);
 
