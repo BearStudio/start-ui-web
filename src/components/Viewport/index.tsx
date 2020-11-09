@@ -17,6 +17,7 @@ export const Viewport = (props) => {
   return (
     <Flex
       direction="column"
+      overflowX="auto"
       minH="100vh"
       maxW="100vw"
       style={{
