@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query-devtools';
 import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
 import { Error404, ErrorBoundary } from '@/errors';
 import { Layout } from '@/app/layout/Layout';
@@ -38,6 +39,7 @@ export const App = () => {
           </Switch>
         </Layout>
       </BrowserRouter>
+      <ReactQueryDevtools />
     </ErrorBoundary>
   );
 };
