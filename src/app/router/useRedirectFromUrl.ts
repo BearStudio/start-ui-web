@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useSearchParams } from './useSearchParams';
 
 export const useRedirectFromUrl = (defaultTo = '/') => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const history = useHistory();
+  const { searchParams } = useSearchParams();
   return useCallback(
     () =>
-      navigate(
+      history.replace(
         searchParams.get('redirect')
           ? decodeURIComponent(searchParams.get('redirect'))
           : defaultTo
       ),
-    [navigate, searchParams, defaultTo]
+    [history, searchParams, defaultTo]
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
 import { Error404, ErrorBoundary } from '@/errors';
 import { Layout } from '@/app/layout/Layout';
@@ -17,24 +17,25 @@ export const App = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <Layout>
-          <Routes>
+          <Switch>
             <RoutePublic
+              exact
               path="/"
-              element={<Navigate to="/dashboard" replace />}
+              render={() => <Redirect to="/dashboard" />}
             />
 
-            <RoutePublicOnly path="/login" element={<PageLogin />} />
-            <RoutePublic path="/logout" element={<PageLogout />} />
+            <RoutePublicOnly exact path="/login" render={() => <PageLogin />} />
+            <RoutePublic exact path="/logout" render={() => <PageLogout />} />
 
-            <RoutePublic path="/account/*" element={<AccountRoutes />} />
+            <RoutePublic path="/account" render={() => <AccountRoutes />} />
 
-            <Route path="/dashboard/*" element={<DashboardRoutes />} />
-            <Route path="/entity/*" element={<EntityRoutes />} />
+            <Route path="/dashboard" render={() => <DashboardRoutes />} />
+            <Route path="/entity" render={() => <EntityRoutes />} />
 
-            <RouteAdmin path="/admin/*" element={<AdminRoutes />} />
+            <RouteAdmin path="/admin" render={() => <AdminRoutes />} />
 
-            <RoutePublic path="*" element={<Error404 />} />
-          </Routes>
+            <RoutePublic path="*" render={() => <Error404 />} />
+          </Switch>
         </Layout>
       </BrowserRouter>
     </ErrorBoundary>

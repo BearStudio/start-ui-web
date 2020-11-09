@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes } from 'react-router-dom';
+import { Switch, useRouteMatch } from 'react-router-dom';
 import { Error404 } from '@/errors';
 import { Route, RoutePublicOnly } from '@/app/router';
 import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
@@ -9,19 +9,33 @@ import { PageActivate } from '@/app/account/PageActivate';
 import { PageAccount } from '@/app/account/PageAccount';
 
 export const AccountRoutes = () => {
+  const { path } = useRouteMatch();
   return (
-    <Routes>
-      <RoutePublicOnly path="/register" element={<PageRegister />} />
-      <RoutePublicOnly path="/activate" element={<PageActivate />} />
-      <RoutePublicOnly path="/reset" element={<PageResetPasswordRequest />} />
+    <Switch>
       <RoutePublicOnly
-        path="/reset/confirm/:resetKey"
-        element={<PageResetPasswordConfirm />}
+        exact
+        path={`${path}/register`}
+        render={() => <PageRegister />}
+      />
+      <RoutePublicOnly
+        exact
+        path={`${path}/activate`}
+        render={() => <PageActivate />}
+      />
+      <RoutePublicOnly
+        exact
+        path={`${path}/reset`}
+        render={() => <PageResetPasswordRequest />}
+      />
+      <RoutePublicOnly
+        exact
+        path={`${path}/reset/confirm/:resetKey`}
+        render={() => <PageResetPasswordConfirm />}
       />
 
-      <Route path="/" element={<PageAccount />} />
+      <Route exact path={path} render={() => <PageAccount />} />
 
-      <Route path="*" element={<Error404 />} />
-    </Routes>
+      <Route path="*" render={() => <Error404 />} />
+    </Switch>
   );
 };

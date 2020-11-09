@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const PageLogout = () => {
   const { updateToken } = useAuthContext();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   useEffect(() => {
     updateToken(null);
-    navigate('/login');
-  }, [updateToken, navigate]);
+    history.push('/login');
+  }, [updateToken, history]);
 
   return <div>Logout</div>;
 };

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {
   useLocation,
-  useNavigate,
+  useHistory,
   Route as RouterRoute,
 } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
@@ -10,13 +10,13 @@ import { ErrorBoundary } from '@/errors';
 export const Route = (props) => {
   const { isLogged } = useAuthContext();
   const { pathname, search } = useLocation();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   useEffect(() => {
     if (!isLogged) {
-      navigate(`/login?redirect=${encodeURIComponent(pathname + search)}`);
+      history.push(`/login?redirect=${encodeURIComponent(pathname + search)}`);
     }
-  }, [isLogged, navigate, pathname, search]);
+  }, [isLogged, history, pathname, search]);
 
   return !isLogged ? null : (
     <ErrorBoundary>

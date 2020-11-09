@@ -14,16 +14,18 @@ export const PageUserManagement = () => {
         <pre>{totalItems}</pre>
         <div>
           {users?.map((user) => (
-            <span>{JSON.stringify(user)}</span>
+            <pre key={user.id}>{JSON.stringify(user, null, 2)}</pre>
           ))}
         </div>
         <span>Current Page: {page + 1}</span>
-        <button onClick={() => setPage((old) => old - 1)} disabled={page < 1}>
-          Previous Page
-        </button>{' '}
-        <button onClick={() => setPage((old) => old + 1)} disabled={!hasMore}>
-          Next Page
-        </button>
+        <div>
+          <button onClick={() => setPage((old) => old - 1)} disabled={page < 1}>
+            Previous Page
+          </button>{' '}
+          <button onClick={() => setPage((old) => old + 1)} disabled={!hasMore}>
+            Next Page
+          </button>
+        </div>
       </PageBody>
     </Page>
   );

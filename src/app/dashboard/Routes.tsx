@@ -1,14 +1,15 @@
 import React from 'react';
-import { Routes } from 'react-router-dom';
+import { Switch, useRouteMatch } from 'react-router-dom';
 import { Error404 } from '@/errors';
 import { Route } from '@/app/router';
 import { PageDashboard } from '@/app/dashboard/PageDashboard';
 
 export const DashboardRoutes = () => {
+  const { path } = useRouteMatch();
   return (
-    <Routes>
-      <Route path="/" element={<PageDashboard />} />
-      <Route path="*" element={<Error404 />} />
-    </Routes>
+    <Switch>
+      <Route path={path} render={() => <PageDashboard />} />
+      <Route path="*" render={() => <Error404 />} />
+    </Switch>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -112,7 +112,7 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
 
 const NavbarAccountMenu = (props) => {
   const { account, isAdmin, isLoading } = useAccount();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   return (
     <Menu {...props}>
@@ -123,20 +123,20 @@ const NavbarAccountMenu = (props) => {
       </MenuButton>
       <MenuList color="gray.800">
         <MenuGroup title={account?.email}>
-          <MenuItem onClick={() => navigate('/account')}>My Account</MenuItem>
+          <MenuItem onClick={() => history.push('/account')}>My Account</MenuItem>
         </MenuGroup>
         <MenuDivider />
         {isAdmin && (
           <>
             <MenuGroup title="Administration">
-              <MenuItem onClick={() => navigate('/admin/user-management')}>
+              <MenuItem onClick={() => history.push('/admin/user-management')}>
                 User Management
               </MenuItem>
             </MenuGroup>
             <MenuDivider />
           </>
         )}
-        <MenuItem icon={<FiLogOut />} onClick={() => navigate('/logout')}>
+        <MenuItem icon={<FiLogOut />} onClick={() => history.push('/logout')}>
           Logout
         </MenuItem>
       </MenuList>

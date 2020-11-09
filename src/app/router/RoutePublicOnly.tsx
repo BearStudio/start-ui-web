@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { RoutePublic } from './RoutePublic';
 
 export const RoutePublicOnly = (props) => {
   const { isLogged } = useAuthContext();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   useEffect(() => {
     if (isLogged) {
-      navigate(`/`);
+      history.replace(`/`);
     }
-  }, [isLogged, navigate]);
+  }, [isLogged, history]);
 
   return isLogged ? null : <RoutePublic {...props} />;
 };

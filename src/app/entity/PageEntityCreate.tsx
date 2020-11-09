@@ -7,7 +7,7 @@ export const PageEntityCreate = () => {
     <Page>
       <PageHeader>PageEntityCreate Component</PageHeader>
       <PageBody>
-        <Link to="../">Go to Entity</Link>
+        <Link to="/entity">Go to Entity</Link>
       </PageBody>
     </Page>
   );

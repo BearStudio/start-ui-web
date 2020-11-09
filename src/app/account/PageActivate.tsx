@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Box, Spinner } from '@chakra-ui/core';
 import { useActivateAccount } from '@/app/account/service';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@/app/router';
 
 export const PageActivate = () => {
   const [
     activateAccount,
     { isError, isSuccess, isLoading },
   ] = useActivateAccount();
-  let [searchParams] = useSearchParams();
+  const { searchParams } = useSearchParams();
 
   useEffect(() => {
     activateAccount({ key: searchParams.get('key') });
