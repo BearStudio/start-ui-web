@@ -11,11 +11,12 @@ import {
   Button,
   Box,
   Collapse,
+  useDisclosure,
 } from '@chakra-ui/core';
 import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
-  const [show, setShow] = React.useState(false);
+  const { isOpen, onToggle } = useDisclosure();
   return (
     <Box p="4" m="auto">
       <Alert status="error" borderRadius="md">
@@ -27,12 +28,12 @@ const ErrorFallback = ({ error }: FallbackProps) => {
               variant="link"
               color="red.800"
               size="sm"
-              rightIcon={show ? <FiChevronUp /> : <FiChevronDown />}
-              onClick={() => setShow((x) => !x)}
+              rightIcon={isOpen ? <FiChevronUp /> : <FiChevronDown />}
+              onClick={onToggle}
             >
               Show details
             </Button>
-            <Collapse in={show} animateOpacity>
+            <Collapse in={isOpen} animateOpacity>
               <Box mt={4} fontFamily="monospace">
                 {error.message}
               </Box>

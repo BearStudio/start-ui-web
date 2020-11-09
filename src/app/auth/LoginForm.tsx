@@ -7,11 +7,9 @@ import {
   AlertTitle,
   Box,
   Button,
-  Center,
   Flex,
   Stack,
 } from '@chakra-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
 import { useLogin } from '@/app/auth/service';
 import { FieldInput, useToastError } from '@/components';
 
@@ -68,15 +66,6 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
             </Box>
           </Alert>
         )}
-
-        <Center mt="8">
-          <Button as={RouterLink} to="/account/register" variant="link">
-            Need an account?{' '}
-            <Box as="strong" color="brand.500" ml="2">
-              Register now!
-            </Box>
-          </Button>
-        </Center>
       </Formiz>
     </Box>
   );
