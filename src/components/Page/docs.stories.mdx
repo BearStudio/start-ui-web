@@ -1,0 +1,63 @@
+<!--- Checkbox.stories.mdx -->
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Flex, Text } from '@chakra-ui/core';
+import { Formiz } from '@formiz/core';
+import { Page, PageHeader, PageBody, PageFooter } from './index';
+
+<Meta title="Layout/Page" component={Page} decorators={[(Story) => <Flex h="50vh"><Story /></Flex>]} />
+
+# Page
+
+Page component with Header and fixed Footer.
+
+<Canvas>
+  <Story name="Default">
+    <Page>
+      <PageHeader bg="gray.100">
+        Page Header
+      </PageHeader>
+      <PageBody bg="gray.200">
+        Page Body
+      </PageBody>
+      <PageHeader bg="gray.300">
+        Page Footer
+      </PageHeader>
+    </Page>
+  </Story>
+</Canvas>
+
+## Container Size
+
+<Canvas>
+  <Story name="Container Size">
+    <Page container={{ maxW: 'sm', bg: 'rgba(255, 255, 255, 0.2)' }}>
+      <PageHeader bg="gray.100">
+        Page Header
+      </PageHeader>
+      <PageBody bg="gray.200">
+        Page Body
+      </PageBody>
+      <PageHeader bg="gray.300">
+        Page Footer
+      </PageHeader>
+    </Page>
+  </Story>
+</Canvas>
+
+## No Container
+
+<Canvas>
+  <Story name="No Container">
+    <Page container={false}>
+      <PageHeader bg="gray.100">
+        Page Header
+      </PageHeader>
+      <PageBody bg="gray.200">
+        Page Body
+      </PageBody>
+      <PageHeader bg="gray.300">
+        Page Footer
+      </PageHeader>
+    </Page>
+  </Story>
+</Canvas>

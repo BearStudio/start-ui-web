@@ -1,8 +1,8 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { Box, BoxProps, Flex } from '@chakra-ui/core';
+import { Box, Flex, FlexProps } from '@chakra-ui/core';
 
-interface PageProps extends BoxProps {
-  container?: false | BoxProps;
+interface PageProps extends FlexProps {
+  container?: false | FlexProps;
 }
 
 const PageContext = React.createContext(null);
@@ -15,6 +15,7 @@ const PageContainer = ({ children, ...rest }) => {
   return (
     <Flex
       direction="column"
+      flex="1"
       w="full"
       px="6"
       mx="auto"
@@ -35,15 +36,15 @@ export const Page = ({ container, ...rest }: PageProps) => {
   );
 };
 
-export const PageHeader = ({ children, ...rest }) => {
+export const PageHeader = ({ children, ...rest }: FlexProps) => {
   return (
-    <Flex direction="column" py="4" {...rest}>
+    <Flex direction="column" {...rest}>
       <PageContainer>{children}</PageContainer>
     </Flex>
   );
 };
 
-export const PageBody = ({ children, ...rest }) => {
+export const PageBody = ({ children, ...rest }: FlexProps) => {
   return (
     <Flex direction="column" flex="1" {...rest}>
       <PageContainer>{children}</PageContainer>
@@ -51,7 +52,7 @@ export const PageBody = ({ children, ...rest }) => {
   );
 };
 
-export const PageFooter = ({ children, ...rest }) => {
+export const PageFooter = ({ children, ...rest }: FlexProps) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
