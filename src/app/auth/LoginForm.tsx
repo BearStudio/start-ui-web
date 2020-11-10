@@ -2,10 +2,6 @@ import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
   Button,
   Flex,
@@ -18,7 +14,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 
-  const [login, { isLoading, isError }] = useLogin({
+  const [login, { isLoading }] = useLogin({
     onSuccess,
     onError: (error: any) => {
       toastError({

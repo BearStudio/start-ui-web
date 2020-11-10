@@ -5,6 +5,7 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  SlideFade,
 } from '@chakra-ui/core';
 import { Warning } from 'phosphor-react';
 
@@ -32,9 +33,12 @@ export const FormGroup = ({
     {!!label && <FormLabel htmlFor={id}>{label}</FormLabel>}
     {children}
     {!!helper && <FormHelperText>{helper}</FormHelperText>}
+
     <FormErrorMessage id={`${id}-error`}>
-      <Icon as={Warning} weight="bold" mr="2" />
-      {errorMessage}
+      <SlideFade in offsetY={-6}>
+        <Icon as={Warning} weight="bold" mr="2" />
+        {errorMessage}
+      </SlideFade>
     </FormErrorMessage>
   </FormControl>
 );
