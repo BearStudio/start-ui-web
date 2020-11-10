@@ -14,7 +14,7 @@ export const PageLogin = () => {
   };
   return (
     <Box p="6" pb="4rem" w="20rem" maxW="full" m="auto">
-      <Heading my="4">Login</Heading>
+      <Heading my="4">Log In</Heading>
       <LoginForm onSuccess={onLogin} />
       <Center mt="8">
         <Button as={RouterLink} to="/account/register" variant="link">

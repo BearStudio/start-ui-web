@@ -59,7 +59,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               colorScheme="brand"
               ml="auto"
             >
-              Submit
+              Log In
             </Button>
           </Flex>
         </Stack>
