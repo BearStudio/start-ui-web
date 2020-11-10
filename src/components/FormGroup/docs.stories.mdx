@@ -1,15 +1,12 @@
 <!--- Checkbox.stories.mdx -->
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
-import { Input } from '@chakra-ui/core';
 import { FormGroup } from './index';
 
 <Meta title="Form Group" component={FormGroup} />
 
 # Form Group
 
-This component is used in all form fields to allow consistency for all fields.
-
-<ArgsTable of={FormGroup} />
+This component is used in by all fields to allow consistency.
 
 <Canvas>
   <Story name="Default">
@@ -18,7 +15,7 @@ This component is used in all form fields to allow consistency for all fields.
       helper="Helper"
       isRequired
     >
-      Content
+      -- input here --
     </FormGroup>
   </Story>
 </Canvas>
@@ -31,7 +28,7 @@ This component is used in all form fields to allow consistency for all fields.
       errorMessage="Error message"
       showError
     >
-      Content
+      -- input here --
     </FormGroup>
   </Story>
 </Canvas>

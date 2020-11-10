@@ -1930,10 +1930,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@formiz/core@1.0.0-rc.25":
-  version "1.0.0-rc.25"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.0.0-rc.25.tgz#5ba0ce38d6373c9f461ecfbe85ce1bb39217cc83"
-  integrity sha512-g0SM0YB6JXr0lRcKH/1zxzrbInfcE3oxGBmxxtl5cC95mVZzvqQUtVjskyBjSuVuoaypnieQ/k0lkLk+7tDpiA==
+"@formiz/core@1.0.0-rc.28":
+  version "1.0.0-rc.28"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.0.0-rc.28.tgz#2ae2541b19a8b7b53215383cf48aea8e8c2cd60f"
+  integrity sha512-fs+phFPQDqcxYj3HPicFaw2f2/ykNcl5txmIxdDfL3dtHMGO6PbMoPJx6cFsfnTqJy0zFdrV/ab/S9rDoKmShQ==
   dependencies:
     lodash "4.17.20"
     lodash-es "4.17.15"

@@ -1,12 +1,7 @@
 import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Flex,
-  Stack,
-} from '@chakra-ui/core';
+import { Box, Button, Flex, Stack } from '@chakra-ui/core';
 import { useLogin } from '@/app/auth/service';
 import { FieldInput, useToastError } from '@/components';
 

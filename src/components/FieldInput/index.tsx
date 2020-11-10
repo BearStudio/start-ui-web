@@ -8,11 +8,16 @@ import {
   IconButton,
   Tooltip,
 } from '@chakra-ui/core';
-import { useField } from '@formiz/core';
+import { FieldProps, useField } from '@formiz/core';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Eye, EyeClosed } from 'phosphor-react';
-import { FormGroup } from '@/components/FormGroup';
 
-export const FieldInput = (props) => {
+export interface FieldInputProps extends FieldProps, FormGroupProps {
+  type?: string;
+  placeholder?: string;
+}
+
+export const FieldInput = (props: FieldInputProps) => {
   const {
     errorMessage,
     id,

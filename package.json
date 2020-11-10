@@ -6,7 +6,7 @@
   "main": "index.js",
   "dependencies": {
     "@chakra-ui/core": "1.0.0-rc.8",
-    "@formiz/core": "1.0.0-rc.25",
+    "@formiz/core": "1.0.0-rc.28",
     "@formiz/validations": "1.0.0-rc.26",
     "axios": "0.21.0",
     "framer-motion": "2.9.4",

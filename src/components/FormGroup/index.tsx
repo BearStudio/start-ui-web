@@ -6,10 +6,12 @@ import {
   FormErrorMessage,
   FormHelperText,
   SlideFade,
+  FormControlProps,
 } from '@chakra-ui/core';
 import { Warning } from 'phosphor-react';
 
-export interface FormGroupProps {
+export interface FormGroupProps
+  extends Omit<FormControlProps, 'onChange' | 'defaultValue' | 'label'> {
   children?: ReactNode;
   errorMessage?: ReactNode;
   helper?: ReactNode;
