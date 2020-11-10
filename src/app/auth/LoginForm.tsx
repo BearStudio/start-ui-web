@@ -63,18 +63,6 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
             </Button>
           </Flex>
         </Stack>
-
-        {isError && (
-          <Alert status="error" my="4">
-            <AlertIcon />
-            <Box flex="1">
-              <AlertTitle>Failed to sign in!</AlertTitle>
-              <AlertDescription d="block" fontSize="sm" lineHeight="1.2">
-                Please check your credentials and try again.
-              </AlertDescription>
-            </Box>
-          </Alert>
-        )}
       </Formiz>
     </Box>
   );

@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Input, InputGroup, InputRightElement, Spinner } from '@chakra-ui/core';
+import {
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Spinner,
+  IconButton,
+  Tooltip,
+} from '@chakra-ui/core';
 import { useField } from '@formiz/core';
+import { Eye, EyeClosed } from 'phosphor-react';
 import { FormGroup } from '@/components/FormGroup';
 
 export const FieldInput = (props) => {
@@ -24,6 +33,7 @@ export const FieldInput = (props) => {
     ...otherProps
   } = props;
   const [isTouched, setIsTouched] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
   useEffect(() => {
@@ -44,7 +54,7 @@ export const FieldInput = (props) => {
     <FormGroup {...formGroupProps}>
       <InputGroup>
         <Input
-          type={type || 'text'}
+          type={showPassword ? 'text' : type || 'text'}
           id={id}
           value={value ?? ''}
           onChange={(e) => setValue(e.target.value)}
@@ -53,6 +63,30 @@ export const FieldInput = (props) => {
           aria-describedby={!isValid ? `${id}-error` : null}
           placeholder={placeholder}
         />
+        {type === 'password' && (
+          <InputLeftElement>
+            <Tooltip
+              label={showPassword ? 'Hide password' : 'Show password'}
+              placement="left"
+            >
+              <IconButton
+                onClick={() => setShowPassword((x) => !x)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                display="flex"
+                size="xs"
+                fontSize="lg"
+                icon={
+                  showPassword ? (
+                    <Eye weight="duotone" />
+                  ) : (
+                    <EyeClosed weight="duotone" />
+                  )
+                }
+                variant="unstyled"
+              />
+            </Tooltip>
+          </InputLeftElement>
+        )}
         {(isTouched || isSubmitted) && isValidating && (
           <InputRightElement>
             <Spinner size="sm" flex="none" />
