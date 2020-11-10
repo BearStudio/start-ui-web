@@ -6,7 +6,7 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/core';
-import { FiAlertTriangle } from 'react-icons/fi';
+import { Warning } from 'phosphor-react';
 
 export interface FormGroupProps {
   children?: ReactNode;
@@ -33,7 +33,7 @@ export const FormGroup = ({
     {children}
     {!!helper && <FormHelperText>{helper}</FormHelperText>}
     <FormErrorMessage id={`${id}-error`}>
-      <Icon as={FiAlertTriangle} mr="2" />
+      <Icon as={Warning} weight="bold" mr="2" />
       {errorMessage}
     </FormErrorMessage>
   </FormControl>

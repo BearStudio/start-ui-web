@@ -10,7 +10,7 @@ Opinionated UI starter with
 - ⚛️ [React Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
 - 💥 [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
-- ⭐️ [react-icons](https://react-icons.github.io/react-icons/)
+- ⭐️ [Phosphor Icons](https://phosphoricons.com/)
 
 ## Installation
 

@@ -13,7 +13,7 @@ import {
   Collapse,
   useDisclosure,
 } from '@chakra-ui/core';
-import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
+import { CaretUp, CaretDown } from 'phosphor-react';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
   const { isOpen, onToggle } = useDisclosure();
@@ -28,7 +28,7 @@ const ErrorFallback = ({ error }: FallbackProps) => {
               variant="link"
               color="red.800"
               size="sm"
-              rightIcon={isOpen ? <FiChevronUp /> : <FiChevronDown />}
+              rightIcon={isOpen ? <CaretUp /> : <CaretDown />}
               onClick={onToggle}
             >
               Show details
