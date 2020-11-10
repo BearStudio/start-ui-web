@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formiz, useForm } from '@formiz/core';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Alert,
   AlertDescription,
@@ -43,6 +44,14 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
             required="Password is required"
           />
           <Flex>
+            <Button
+              as={RouterLink}
+              to="/account/reset"
+              size="sm"
+              variant="link"
+            >
+              Forgot password?
+            </Button>
             <Button
               isLoading={isLoading}
               isDisabled={form.isSubmitted && !form.isValid}

@@ -23,7 +23,6 @@ export const LoginModalInterceptor = () => {
   const { pathname } = useLocation();
   const pathnameRef = useRef(null);
   pathnameRef.current = pathname;
-  const pathnameOn401Ref = useRef(null);
 
   useEffect(() => {
     Axios.interceptors.response.use(
@@ -33,14 +32,25 @@ export const LoginModalInterceptor = () => {
           error?.response?.status === 401 &&
           pathnameRef.current !== '/login'
         ) {
-          pathnameOn401Ref.current = pathnameRef.current;
-          updateToken('401');
+          queryCache.cancelQueries();
           onOpen();
         }
         throw error;
       }
     );
-  }, [onOpen, updateToken]);
+  }, [onOpen, updateToken, queryCache]);
+
+  // On Route Change
+  useEffect(() => {
+    const destroy = history.listen(() => {
+      if (isOpen) {
+        updateToken(null);
+        onClose();
+      }
+    });
+
+    return () => destroy();
+  }, [history, isOpen, updateToken, onClose]);
 
   const handleLogin = () => {
     queryCache.refetchQueries();
