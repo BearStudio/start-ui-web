@@ -1,5 +1,10 @@
 {
   "extends": "react-app",
+  "env": {
+    "node": true,
+    "browser": true,
+    "jest": true
+  },
   "rules": {
     "jsx-a11y/anchor-is-valid": "off"
   }
