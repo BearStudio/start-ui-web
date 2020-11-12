@@ -5,6 +5,10 @@ import { Providers } from '@/Providers';
 import { Viewport } from '@/components/Viewport';
 import { ErrorBoundary } from '@/errors';
 
+if (process.env.NODE_ENV !== 'production') {
+  require('../../mocks');
+}
+
 const AppHead = () => {
   const theme = useTheme();
 
