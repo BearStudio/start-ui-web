@@ -70,26 +70,21 @@ export const FieldInput = (props: FieldInputProps) => {
         />
         {type === 'password' && (
           <InputLeftElement>
-            <Tooltip
-              label={showPassword ? 'Hide password' : 'Show password'}
-              placement="left"
-            >
-              <IconButton
-                onClick={() => setShowPassword((x) => !x)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                display="flex"
-                size="xs"
-                fontSize="lg"
-                icon={
-                  showPassword ? (
-                    <Eye weight="duotone" />
-                  ) : (
-                    <EyeClosed weight="duotone" />
-                  )
-                }
-                variant="unstyled"
-              />
-            </Tooltip>
+            <IconButton
+              onClick={() => setShowPassword((x) => !x)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              display="flex"
+              size="xs"
+              fontSize="lg"
+              icon={
+                showPassword ? (
+                  <Eye weight="duotone" />
+                ) : (
+                  <EyeClosed weight="duotone" />
+                )
+              }
+              variant="unstyled"
+            />
           </InputLeftElement>
         )}
         {(isTouched || isSubmitted) && isValidating && (
