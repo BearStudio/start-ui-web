@@ -6,7 +6,6 @@ import {
   InputRightElement,
   Spinner,
   IconButton,
-  Tooltip,
 } from '@chakra-ui/core';
 import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
