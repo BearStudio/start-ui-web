@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Spinner } from '@chakra-ui/core';
+import { Box, Spinner } from '@chakra-ui/react';
 import { useActivateAccount } from '@/app/account/service';
 import { useSearchParams } from '@/app/router';
 

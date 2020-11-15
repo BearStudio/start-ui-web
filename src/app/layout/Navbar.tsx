@@ -22,7 +22,7 @@ import {
   MenuGroup,
   MenuDivider,
   Spinner,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { SignOut, List, User, Users } from 'phosphor-react';
 import { useAccount } from '@/app/account/service';
 

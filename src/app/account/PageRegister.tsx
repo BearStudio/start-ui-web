@@ -11,7 +11,7 @@ import {
   Heading,
   Stack,
   ScaleFade,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useCreateAccount } from '@/app/account/service';
 import { FieldInput, useToastError } from '@/components';
 import {

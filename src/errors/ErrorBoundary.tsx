@@ -12,7 +12,7 @@ import {
   Box,
   Collapse,
   useDisclosure,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { CaretUp, CaretDown } from 'phosphor-react';
 
 const ErrorFallback = ({ error }: FallbackProps) => {

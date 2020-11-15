@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { useTheme } from '@chakra-ui/core';
+import { useTheme } from '@chakra-ui/react';
 import { Providers } from '@/Providers';
 import { Viewport } from '@/components/Viewport';
 import { ErrorBoundary } from '@/errors';

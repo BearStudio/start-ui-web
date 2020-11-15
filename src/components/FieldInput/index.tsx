@@ -6,7 +6,7 @@ import {
   InputRightElement,
   Spinner,
   IconButton,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Eye, EyeClosed } from 'phosphor-react';

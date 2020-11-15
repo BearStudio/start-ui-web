@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/react';
 
 const updateCssViewportHeight = () => {
   let vh = window.innerHeight * 0.01;

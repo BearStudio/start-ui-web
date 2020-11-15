@@ -9,7 +9,7 @@ import {
   useDisclosure,
   Heading,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useQueryCache } from 'react-query';
 import { LoginForm } from '@/app/auth/LoginForm';

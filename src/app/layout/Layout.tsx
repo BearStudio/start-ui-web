@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { Navbar } from '@/app/layout/Navbar';
-import { Flex, SlideFade } from '@chakra-ui/core';
+import { Flex, SlideFade } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import { Viewport } from '@/components/Viewport';
 import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';

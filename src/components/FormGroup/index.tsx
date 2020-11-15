@@ -7,7 +7,7 @@ import {
   FormHelperText,
   SlideFade,
   FormControlProps,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { Warning } from 'phosphor-react';
 
 export interface FormGroupProps
