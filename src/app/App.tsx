@@ -11,8 +11,6 @@ import { DashboardRoutes } from '@/app/dashboard/Routes';
 import { EntityRoutes } from '@/app/entity/Routes';
 import { AdminRoutes } from '@/app/admin/Routes';
 
-import '@/app/config/axios';
-
 export const App = () => {
   return (
     <ErrorBoundary>

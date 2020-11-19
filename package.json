@@ -11,6 +11,7 @@
     "@formiz/core": "1.0.0-rc.28",
     "@formiz/validations": "1.0.0-rc.26",
     "axios": "0.21.0",
+    "dayjs": "1.9.6",
     "framer-motion": "2.9.4",
     "history": "5.0.0",
     "next": "10.0.1",
@@ -63,7 +64,7 @@
     "serve": "yarn build && npx servor out index.html 5000",
     "start": "next start",
     "pretty": "prettier -w .",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src --fix",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook"
   },

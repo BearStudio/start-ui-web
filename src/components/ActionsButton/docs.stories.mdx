@@ -1,0 +1,48 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import {
+  Flex,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuDivider,
+  MenuItem,
+} from '@chakra-ui/react';
+import { PencilLine, Copy, UserPlus, TrashSimple } from 'phosphor-react'
+import { TextEllipsis } from '../TextEllipsis';
+import { ActionsButton } from './index';
+
+<Meta title="Components/ActionsButton" component={ActionsButton} />
+
+# ActionsButton
+
+<Canvas>
+  <Story name="Default">
+    <ActionsButton  />
+  </Story>
+</Canvas>
+
+## Usage with Menu
+
+<Canvas>
+  <Story name="Menu" decorators={[(Story) => <Flex h="12rem" justify="flex-end"><Story /></Flex>]}>
+    <Menu placement="left-start">
+      <MenuButton as={ActionsButton} />
+      <MenuList>
+        <MenuItem icon={<Icon as={PencilLine} fontSize="1.5em" weight="duotone" color="gray.500" />}>
+          Edit
+        </MenuItem>
+        <MenuItem icon={<Icon as={Copy} fontSize="1.5em" weight="duotone" color="gray.500" />}>
+          Duplicate
+        </MenuItem>
+        <MenuItem icon={<Icon as={UserPlus} fontSize="1.5em" weight="duotone" color="gray.500" />}>
+          Share
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem icon={<Icon as={TrashSimple} fontSize="1.5em" weight="duotone" color="gray.500" />}>
+          Delete
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  </Story>
+</Canvas>

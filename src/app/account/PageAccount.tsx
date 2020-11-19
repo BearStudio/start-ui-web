@@ -8,7 +8,7 @@ export const PageAccount = () => {
   return (
     <Page>
       <PageHeader>
-        <Heading>Account</Heading>
+        <Heading size="md">Account</Heading>
       </PageHeader>
       <PageBody>
         <pre>{JSON.stringify(account, null, 2)}</pre>

@@ -9,6 +9,7 @@ export const AdminRoutes = () => {
   return (
     <Switch>
       <Route
+        exact
         path={`${path}/user-management`}
         render={() => <PageUserManagement />}
       />

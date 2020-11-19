@@ -2,15 +2,24 @@ import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
 interface PageProps extends FlexProps {
-  container?: false | FlexProps;
+  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  hideContainer?: false;
 }
 
 const PageContext = React.createContext(null);
 
 const PageContainer = ({ children, ...rest }) => {
-  const { containerProps } = useContext(PageContext);
+  const { hideContainer, containerSize } = useContext(PageContext);
 
-  if (containerProps === false) return children;
+  const containerSizes = {
+    sm: '60ch',
+    md: '80ch',
+    lg: '100ch',
+    xl: '140ch',
+    full: '100%',
+  };
+
+  if (hideContainer) return children;
 
   return (
     <Flex
@@ -19,8 +28,7 @@ const PageContainer = ({ children, ...rest }) => {
       w="full"
       px="6"
       mx="auto"
-      maxW="65ch"
-      {...containerProps}
+      maxW={containerSizes[containerSize]}
       {...rest}
     >
       {children}
@@ -30,7 +38,7 @@ const PageContainer = ({ children, ...rest }) => {
 
 export const PageHeader = ({ children, ...rest }: FlexProps) => {
   return (
-    <Flex direction="column" {...rest}>
+    <Flex direction="column" py="5" {...rest}>
       <PageContainer>{children}</PageContainer>
     </Flex>
   );
@@ -72,9 +80,13 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
   );
 };
 
-export const Page = ({ container, ...rest }: PageProps) => {
+export const Page = ({
+  hideContainer,
+  containerSize = 'md',
+  ...rest
+}: PageProps) => {
   return (
-    <PageContext.Provider value={{ containerProps: container }}>
+    <PageContext.Provider value={{ hideContainer, containerSize }}>
       <Flex direction="column" flex="1" position="relative" {...rest} />
     </PageContext.Provider>
   );

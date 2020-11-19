@@ -1,7 +1,12 @@
-import { usePaginatedQuery, useQuery } from 'react-query';
+import {
+  useMutation,
+  MutationConfig,
+  usePaginatedQuery,
+  useQueryCache,
+} from 'react-query';
 import Axios from 'axios';
 
-export const useUserList = ({ page = 0, size = 3 } = {}) => {
+export const useUserList = ({ page = 0, size = 10 } = {}) => {
   const result = usePaginatedQuery(
     ['users', { page, size }],
     (): Promise<any> => Axios.get('/users', { params: { page, size } })
@@ -18,4 +23,17 @@ export const useUserList = ({ page = 0, size = 3 } = {}) => {
     totalPages,
     ...result,
   };
+};
+
+export const useUserUpdate = (config: MutationConfig<any> = {}) => {
+  const queryCache = useQueryCache();
+  return useMutation((payload: any) => Axios.put('/users', payload), {
+    ...config,
+    onSuccess: (data, ...rest) => {
+      queryCache.refetchQueries('users');
+      if (config.onSuccess) {
+        config.onSuccess(data, ...rest);
+      }
+    },
+  });
 };

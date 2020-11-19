@@ -1,0 +1,18 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import dayjs from 'dayjs';
+import { Stack } from '@chakra-ui/react';
+import { DateAgo } from './index';
+
+<Meta title="Components/DateAgo" component={DateAgo} />
+
+# DateAgo
+
+<Canvas>
+  <Story name="Default">
+    <Stack direction="row">
+      <DateAgo date={Date().toString()} />
+      <DateAgo date={new Date()} />
+      <DateAgo date={dayjs()} />
+    </Stack>
+  </Story>
+</Canvas>
