@@ -28,14 +28,6 @@ const PageContainer = ({ children, ...rest }) => {
   );
 };
 
-export const Page = ({ container, ...rest }: PageProps) => {
-  return (
-    <PageContext.Provider value={{ containerProps: container }}>
-      <Flex direction="column" flex="1" position="relative" {...rest} />
-    </PageContext.Provider>
-  );
-};
-
 export const PageHeader = ({ children, ...rest }: FlexProps) => {
   return (
     <Flex direction="column" {...rest}>
@@ -77,5 +69,13 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
         <PageContainer>{children}</PageContainer>
       </Flex>
     </>
+  );
+};
+
+export const Page = ({ container, ...rest }: PageProps) => {
+  return (
+    <PageContext.Provider value={{ containerProps: container }}>
+      <Flex direction="column" flex="1" position="relative" {...rest} />
+    </PageContext.Provider>
   );
 };
