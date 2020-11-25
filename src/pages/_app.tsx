@@ -16,6 +16,15 @@ const AppHead = () => {
 
   return (
     <Head>
+      <meta
+        name="viewport"
+        content="initial-scale=1, viewport-fit=cover, user-scalable=no"
+      />
+      <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+      />
+      <meta name="apple-mobile-web-app-capable" content="yes"></meta>
       <link
         rel="apple-touch-icon"
         sizes="180x180"
@@ -37,13 +46,13 @@ const AppHead = () => {
       <link
         rel="mask-icon"
         href="/safari-pinned-tab.svg"
-        color={theme.colors.brand?.['600']}
+        color={theme.colors.gray?.['800']}
       />
       <meta
         name="msapplication-TileColor"
-        content={theme.colors.brand?.['600']}
+        content={theme.colors.gray?.['800']}
       />
-      <meta name="theme-color" content={theme.colors.brand?.['600']} />
+      <meta name="theme-color" content={theme.colors.gray?.['800']} />
     </Head>
   );
 };

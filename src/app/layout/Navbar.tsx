@@ -22,6 +22,7 @@ import {
   MenuGroup,
   MenuDivider,
   Spinner,
+  useTheme,
 } from '@chakra-ui/react';
 import { SignOut, List, User, Users } from 'phosphor-react';
 import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
@@ -100,8 +101,13 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose} {...rest}>
       <DrawerOverlay>
-        <DrawerContent bg="gray.800" color="gray.50">
-          <DrawerCloseButton />
+        <DrawerContent
+          bg="gray.800"
+          color="gray.50"
+          pt="safe-top"
+          pb="safe-bottom"
+        >
+          <DrawerCloseButton mt="safe-top" />
           <DrawerHeader>
             <NavbarLogo />
           </DrawerHeader>
@@ -159,7 +165,8 @@ const NavbarAccountMenu = (props) => {
 
 export const Navbar = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const navbarHeight = '4rem';
+  const theme = useTheme();
+  const navbarHeight = `calc(4rem + ${theme.space['safe-top']})`;
 
   return (
     <NavbarContext.Provider value={{ isOpen, onClose, onOpen }}>
@@ -172,6 +179,7 @@ export const Navbar = () => {
           bg="gray.800"
           color="gray.50"
           align="center"
+          pt="safe-top"
           px="4"
           h={navbarHeight}
         >

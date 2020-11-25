@@ -47,7 +47,7 @@ export const PageHeader = ({ children, ...rest }: FlexProps) => {
 
 export const PageBody = ({ children, ...rest }: FlexProps) => {
   return (
-    <Flex direction="column" flex="1" {...rest}>
+    <Flex direction="column" flex="1" pb="safe-bottom" {...rest}>
       <PageContainer>{children}</PageContainer>
     </Flex>
   );
@@ -72,6 +72,7 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
         bottom="0"
         left="0"
         right="0"
+        pb="safe-bottom"
         boxShadow="0 -4px 10px rgba(0, 0, 0, 0.05)"
         {...rest}
       >

@@ -1,20 +1,14 @@
 import { extendTheme } from '@chakra-ui/react';
 
-import { colors } from './colors';
 import { Badge } from './components/Badge';
 import { Input } from './components/Input';
+import { colors } from './foundations/colors';
+import { spacing } from './foundations/spacing';
+import { styles } from './foundations/styles';
 
 export default extendTheme({
-  styles: {
-    global: {
-      html: {
-        bg: 'gray.800',
-      },
-      body: {
-        bg: 'gray.50',
-      },
-    },
-  },
+  styles,
   colors,
+  space: spacing,
   components: { Badge, Input },
 });
