@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
+
 import { useHistory } from 'react-router-dom';
+
 import { useSearchParams } from './useSearchParams';
 
 export const useRedirectFromUrl = (defaultTo = '/') => {

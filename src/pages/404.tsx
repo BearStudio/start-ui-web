@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Head from 'next/head';
+
 import { Error404 } from '@/errors';
 
 const Page404 = () => {

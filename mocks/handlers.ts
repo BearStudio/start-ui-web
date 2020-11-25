@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+
 import { getUser, getAdmin } from './data/users';
 
 const fakeDelay = 500;

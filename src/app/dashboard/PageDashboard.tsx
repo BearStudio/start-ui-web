@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Heading } from '@chakra-ui/react';
+
 import { Page, PageHeader, PageBody, PageFooter } from '@/components';
 
 export const PageDashboard = () => {

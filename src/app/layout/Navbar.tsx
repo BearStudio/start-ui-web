@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
+
 import {
   Box,
   Flex,
@@ -24,6 +24,8 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { SignOut, List, User, Users } from 'phosphor-react';
+import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
+
 import { useAccount } from '@/app/account/service';
 
 const NavbarContext = React.createContext(null);

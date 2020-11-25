@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+
 import {
   useLocation,
   useHistory,
   Route as RouterRoute,
 } from 'react-router-dom';
+
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { ErrorBoundary } from '@/errors';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Formiz, useForm } from '@formiz/core';
+
 import {
   Alert,
   AlertTitle,
@@ -12,8 +12,7 @@ import {
   Stack,
   ScaleFade,
 } from '@chakra-ui/react';
-import { useCreateAccount } from '@/app/account/service';
-import { FieldInput, useToastError } from '@/components';
+import { Formiz, useForm } from '@formiz/core';
 import {
   isEmail,
   isMaxLength,
@@ -21,6 +20,9 @@ import {
   isPattern,
 } from '@formiz/validations';
 import { Link as RouterLink } from 'react-router-dom';
+
+import { useCreateAccount } from '@/app/account/service';
+import { FieldInput, useToastError } from '@/components';
 
 export const PageRegister = () => {
   const form = useForm();

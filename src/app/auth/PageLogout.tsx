@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useAuthContext } from '@/app/auth/AuthContext';
+
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryCache } from 'react-query';
+import { useHistory } from 'react-router-dom';
+
+import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const PageLogout = () => {
   const { updateToken } = useAuthContext();

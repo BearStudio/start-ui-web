@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+
 import { useLocation, useHistory } from 'react-router-dom';
 
 export const useSearchParams = () => {

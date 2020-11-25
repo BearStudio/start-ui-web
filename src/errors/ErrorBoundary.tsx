@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ErrorBoundary as ReactErrorBoundary,
-  FallbackProps,
-} from 'react-error-boundary';
+
 import {
   Alert,
   AlertIcon,
@@ -14,6 +11,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { CaretUp, CaretDown } from 'phosphor-react';
+import {
+  ErrorBoundary as ReactErrorBoundary,
+  FallbackProps,
+} from 'react-error-boundary';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
   const { isOpen, onToggle } = useDisclosure();

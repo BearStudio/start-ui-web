@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { Box, BoxProps } from '@chakra-ui/react';
 
 export interface HitZoneProps extends BoxProps {}

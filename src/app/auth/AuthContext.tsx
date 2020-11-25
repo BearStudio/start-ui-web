@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
+
 import { isBrowser } from '@/utils/ssr';
 
 interface AuthContextValue {

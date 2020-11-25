@@ -1,10 +1,11 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import theme from '@/theme';
-import { AuthProvider } from '@/app/auth/AuthContext';
 
+import { ChakraProvider } from '@chakra-ui/react';
+
+import { AuthProvider } from '@/app/auth/AuthContext';
 import '@/config/axios';
 import '@/config/dayjs';
+import theme from '@/theme';
 
 export const Providers = ({ children }) => {
   return (

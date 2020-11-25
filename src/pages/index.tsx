@@ -1,7 +1,9 @@
 import React from 'react';
+
 import Head from 'next/head';
-import { isBrowser } from '@/utils/ssr';
+
 import { App } from '@/app/App';
+import { isBrowser } from '@/utils/ssr';
 
 const Index = () => {
   return (

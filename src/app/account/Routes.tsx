@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { Switch, useRouteMatch } from 'react-router-dom';
-import { Error404 } from '@/errors';
-import { Route, RoutePublicOnly } from '@/app/router';
-import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
-import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
-import { PageRegister } from '@/app/account/PageRegister';
-import { PageActivate } from '@/app/account/PageActivate';
+
 import { PageAccount } from '@/app/account/PageAccount';
+import { PageActivate } from '@/app/account/PageActivate';
+import { PageRegister } from '@/app/account/PageRegister';
+import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
+import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
+import { Route, RoutePublicOnly } from '@/app/router';
+import { Error404 } from '@/errors';
 
 export const AccountRoutes = () => {
   const { path } = useRouteMatch();

@@ -1,10 +1,10 @@
+import Axios from 'axios';
 import {
   useMutation,
   MutationConfig,
   usePaginatedQuery,
   useQueryCache,
 } from 'react-query';
-import Axios from 'axios';
 
 export const useUserList = ({ page = 0, size = 10 } = {}) => {
   const result = usePaginatedQuery(

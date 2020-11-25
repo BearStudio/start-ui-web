@@ -1,9 +1,6 @@
 import React, { useContext, useState, useEffect, useRef, FC } from 'react';
-import {
-  Flex,
-  FlexProps,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+
+import { Flex, FlexProps, useBreakpointValue } from '@chakra-ui/react';
 
 export const DataListContext = React.createContext(null);
 export const DataListHeaderContext = React.createContext(null);

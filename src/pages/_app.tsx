@@ -1,8 +1,10 @@
 import React from 'react';
-import Head from 'next/head';
+
 import { useTheme } from '@chakra-ui/react';
+import Head from 'next/head';
+
 import { Providers } from '@/Providers';
-import { Viewport } from '@/components/Viewport';
+import { Viewport } from '@/components';
 import { ErrorBoundary } from '@/errors';
 
 if (process.env.NODE_ENV !== 'production') {

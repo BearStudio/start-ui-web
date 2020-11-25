@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import Axios from 'axios';
+
 import {
   Modal,
   ModalOverlay,
@@ -10,10 +10,12 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import { useLocation, useHistory } from 'react-router-dom';
+import Axios from 'axios';
 import { useQueryCache } from 'react-query';
-import { LoginForm } from '@/app/auth/LoginForm';
+import { useLocation, useHistory } from 'react-router-dom';
+
 import { useAuthContext } from '@/app/auth/AuthContext';
+import { LoginForm } from '@/app/auth/LoginForm';
 
 export const LoginModalInterceptor = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

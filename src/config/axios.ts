@@ -1,4 +1,5 @@
 import Axios from 'axios';
+
 import { AUTH_TOKEN_KEY } from '@/app/auth/AuthContext';
 import { isBrowser } from '@/utils/ssr';
 

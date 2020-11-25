@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import dayjs from 'dayjs';
+
 import { Tooltip, TooltipProps } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 
 export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
   date?: string | Date | dayjs.Dayjs;

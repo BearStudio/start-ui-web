@@ -1,15 +1,17 @@
 import React from 'react';
-import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+
 import { ReactQueryDevtools } from 'react-query-devtools';
-import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
-import { Error404, ErrorBoundary } from '@/errors';
-import { Layout } from '@/app/layout/Layout';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+
+import { AccountRoutes } from '@/app/account/Routes';
+import { AdminRoutes } from '@/app/admin/Routes';
 import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
-import { AccountRoutes } from '@/app/account/Routes';
 import { DashboardRoutes } from '@/app/dashboard/Routes';
 import { EntityRoutes } from '@/app/entity/Routes';
-import { AdminRoutes } from '@/app/admin/Routes';
+import { Layout } from '@/app/layout/Layout';
+import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
+import { Error404, ErrorBoundary } from '@/errors';
 
 export const App = () => {
   return (

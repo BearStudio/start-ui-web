@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import {
   Input,
   InputGroup,
@@ -8,8 +9,9 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
-import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Eye, EyeClosed } from 'phosphor-react';
+
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export interface FieldInputProps extends FieldProps, FormGroupProps {
   type?: string;

@@ -1,5 +1,5 @@
-import { render, screen, act } from '@/test/utils';
 import { App } from '@/app/App';
+import { render, screen, act } from '@/test/utils';
 
 test('Mount App without errors', async () => {
   await act(async () => render(<App />));
