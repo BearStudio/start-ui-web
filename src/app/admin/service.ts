@@ -15,12 +15,14 @@ export const useUserList = ({ page = 0, size = 10 } = {}) => {
   const { content: users, totalItems } = result.resolvedData || {};
   const totalPages = Math.ceil(totalItems / size);
   const hasMore = page + 1 < totalPages;
+  const isLoadingPage = result.isFetching && !result.latestData;
 
   return {
     users,
     totalItems,
     hasMore,
     totalPages,
+    isLoadingPage,
     ...result,
   };
 };

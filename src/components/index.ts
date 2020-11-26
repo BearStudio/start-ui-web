@@ -4,6 +4,16 @@ export { FieldInput } from './FieldInput';
 export { FormGroup } from './FormGroup';
 export { HitZone } from './HitZone';
 export {
+  Pagination,
+  PaginationButtonFirstPage,
+  PaginationButtonNextPage,
+  PaginationButtonLastPage,
+  PaginationButtonPrevPage,
+  PaginationInfo,
+  usePaginationFromUrl,
+  getPaginationInfo,
+} from './Pagination';
+export {
   DataList,
   DataListHeader,
   DataListFooter,

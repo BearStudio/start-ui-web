@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Code,
@@ -9,13 +9,13 @@ import {
   Avatar,
   Box,
   Icon,
-  IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuDivider,
   MenuItem,
   Heading,
+  Portal,
 } from '@chakra-ui/react';
 import {
   Eye,
@@ -25,10 +25,6 @@ import {
   TrashSimple,
   Check,
   X,
-  CaretDoubleLeft,
-  CaretLeft,
-  CaretRight,
-  CaretDoubleRight,
 } from 'phosphor-react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
@@ -48,6 +44,13 @@ import {
   TextEllipsis,
   useToastError,
   useToastSuccess,
+  usePaginationFromUrl,
+  PaginationButtonFirstPage,
+  Pagination,
+  PaginationButtonLastPage,
+  PaginationButtonNextPage,
+  PaginationButtonPrevPage,
+  PaginationInfo,
 } from '@/components';
 
 const UserStatus = ({ isActivated = false, ...rest }) => {
@@ -115,84 +118,90 @@ const UserActions = ({ user, ...rest }) => {
   return (
     <Menu placement="left-start" {...rest}>
       <MenuButton as={ActionsButton} isLoading={isActionsLoading} />
-      <MenuList>
-        <MenuItem
-          as={Link}
-          to={`${path}/${user.id}`}
-          icon={
-            <Icon as={Eye} fontSize="1.5em" weight="duotone" color="gray.500" />
-          }
-        >
-          View
-        </MenuItem>
-        <MenuItem
-          as={Link}
-          to={`${path}/${user.id}/edit`}
-          icon={
-            <Icon
-              as={PencilLine}
-              fontSize="1.5em"
-              weight="duotone"
-              color="gray.500"
-            />
-          }
-        >
-          Edit
-        </MenuItem>
-        {user.activated ? (
+      <Portal>
+        <MenuList>
           <MenuItem
-            onClick={deactivateUser}
+            as={Link}
+            to={`${path}/${user.id}`}
             icon={
               <Icon
-                as={XCircle}
+                as={Eye}
                 fontSize="1.5em"
                 weight="duotone"
                 color="gray.500"
               />
             }
           >
-            Deactivate Account
+            View
           </MenuItem>
-        ) : (
           <MenuItem
-            onClick={activateUser}
+            as={Link}
+            to={`${path}/${user.id}/edit`}
             icon={
               <Icon
-                as={CheckCircle}
+                as={PencilLine}
                 fontSize="1.5em"
                 weight="duotone"
                 color="gray.500"
               />
             }
           >
-            Activate Account
+            Edit
           </MenuItem>
-        )}
-        <MenuDivider />
-        <MenuItem
-          icon={
-            <Icon
-              as={TrashSimple}
-              fontSize="1.5em"
-              weight="duotone"
-              color="gray.500"
-            />
-          }
-        >
-          Delete
-        </MenuItem>
-      </MenuList>
+          {user.activated ? (
+            <MenuItem
+              onClick={deactivateUser}
+              icon={
+                <Icon
+                  as={XCircle}
+                  fontSize="1.5em"
+                  weight="duotone"
+                  color="gray.500"
+                />
+              }
+            >
+              Deactivate Account
+            </MenuItem>
+          ) : (
+            <MenuItem
+              onClick={activateUser}
+              icon={
+                <Icon
+                  as={CheckCircle}
+                  fontSize="1.5em"
+                  weight="duotone"
+                  color="gray.500"
+                />
+              }
+            >
+              Activate Account
+            </MenuItem>
+          )}
+          <MenuDivider />
+          <MenuItem
+            icon={
+              <Icon
+                as={TrashSimple}
+                fontSize="1.5em"
+                weight="duotone"
+                color="gray.500"
+              />
+            }
+          >
+            Delete
+          </MenuItem>
+        </MenuList>
+      </Portal>
     </Menu>
   );
 };
 
 export const PageUserManagement = () => {
   const { path } = useRouteMatch();
-  const [page, setPage] = useState(0);
-  const pageSize = 5;
-
-  const { users, totalItems, hasMore } = useUserList({
-    page,
+  const { page, setPage } = usePaginationFromUrl();
+  const pageSize = 2;
+  const { users, totalItems, isLoadingPage } = useUserList({
+    page: page - 1,
     size: pageSize,
   });
 
@@ -306,49 +315,19 @@ export const PageUserManagement = () => {
             </DataListRow>
           ))}
           <DataListFooter>
-            <IconButton
-              onClick={() => setPage(0)}
-              aria-label="First page"
-              icon={<Icon as={CaretDoubleLeft} fontSize="1.5em" />}
-              size="sm"
-              mr="2"
-              isDisabled={page < 1}
-            />
-            <IconButton
-              onClick={() => setPage((p) => p - 1)}
-              aria-label="Previous page"
-              icon={<Icon as={CaretLeft} fontSize="1.5em" />}
-              size="sm"
-              isDisabled={page < 1}
-            />
-            <Box mx="auto" px="2" textAlign="center">
-              <Box as="span" d={{ base: 'none', sm: 'inline' }}>
-                Showing
-              </Box>{' '}
-              <strong>{page * pageSize + 1}</strong> to{' '}
-              <strong>
-                {totalItems && Math.min(page * pageSize + pageSize, totalItems)}
-              </strong>{' '}
-              of <strong>{totalItems}</strong>{' '}
-              <Box as="span" d={{ base: 'none', sm: 'inline' }}>
-                results
-              </Box>
-            </Box>
-            <IconButton
-              onClick={() => setPage((p) => p + 1)}
-              aria-label="Next page"
-              icon={<Icon as={CaretRight} fontSize="1.5em" />}
-              size="sm"
-              isDisabled={!hasMore}
-            />
-            <IconButton
-              onClick={() => setPage(Math.ceil(totalItems / pageSize) - 1)}
-              aria-label="Last page"
-              icon={<Icon as={CaretDoubleRight} fontSize="1.5em" />}
-              size="sm"
-              ml="2"
-              isDisabled={!hasMore}
-            />
+            <Pagination
+              isLoadingPage={isLoadingPage}
+              setPage={setPage}
+              page={page}
+              pageSize={pageSize}
+              totalItems={totalItems}
+            >
+              <PaginationButtonFirstPage />
+              <PaginationButtonPrevPage />
+              <PaginationInfo flex="1" />
+              <PaginationButtonNextPage />
+              <PaginationButtonLastPage />
+            </Pagination>
           </DataListFooter>
         </DataList>
       </PageBody>
