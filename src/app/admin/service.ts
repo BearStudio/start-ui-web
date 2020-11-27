@@ -32,7 +32,19 @@ export const useUserUpdate = (config: MutationConfig<any> = {}) => {
   return useMutation((payload: any) => Axios.put('/users', payload), {
     ...config,
     onSuccess: (data, ...rest) => {
-      queryCache.refetchQueries('users');
+      queryCache.cancelQueries('users');
+      queryCache.getQueries('users').forEach(({ queryKey }) => {
+        queryCache.setQueryData(queryKey, (cachedData: any) => {
+          if (!cachedData) return;
+          return {
+            ...cachedData,
+            content: (cachedData.content || []).map((user) =>
+              user.id === data.id ? data : user
+            ),
+          };
+        });
+      });
+      queryCache.invalidateQueries('users');
       if (config.onSuccess) {
         config.onSuccess(data, ...rest);
       }
