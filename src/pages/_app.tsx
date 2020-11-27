@@ -7,7 +7,10 @@ import { Providers } from '@/Providers';
 import { Viewport } from '@/components';
 import { ErrorBoundary } from '@/errors';
 
-if (process.env.NODE_ENV !== 'production') {
+if (
+  process.env.NODE_ENV !== 'production' &&
+  !process.env.NEXT_PUBLIC_API_BASE_URL
+) {
   require('../../mocks');
 }
 
