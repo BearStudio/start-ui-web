@@ -16,6 +16,8 @@ import {
   MenuItem,
   Heading,
   Portal,
+  Button,
+  IconButton,
 } from '@chakra-ui/react';
 import {
   Eye,
@@ -23,6 +25,7 @@ import {
   CheckCircle,
   XCircle,
   TrashSimple,
+  Plus,
 } from 'phosphor-react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
@@ -181,7 +184,31 @@ export const PageUsers = () => {
   return (
     <Page containerSize="xl">
       <PageHeader>
-        <Heading size="md">User Management</Heading>
+        <HStack>
+          <Box flex="1">
+            <Heading size="md">User Management</Heading>
+          </Box>
+          <Box>
+            <Button
+              display={{ base: 'none', sm: 'flex' }}
+              as={Link}
+              to={`${path}create`}
+              colorScheme="brand"
+              leftIcon={<Plus weight="bold" />}
+            >
+              Create User
+            </Button>
+            <IconButton
+              display={{ base: 'flex', sm: 'none' }}
+              aria-label="Create User"
+              as={Link}
+              to={`${path}create`}
+              size="sm"
+              colorScheme="brand"
+              icon={<Plus weight="bold" />}
+            />
+          </Box>
+        </HStack>
       </PageHeader>
       <PageBody>
         <DataList>

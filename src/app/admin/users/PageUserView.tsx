@@ -20,7 +20,7 @@ export const PageUserView = () => {
           <Box ml={{ base: 0, lg: '-3.5rem' }}>
             <IconButton
               aria-label="Go Back"
-              icon={<ArrowLeft />}
+              icon={<ArrowLeft fontSize="1.2em" />}
               variant="ghost"
               onClick={() => history.goBack()}
             />

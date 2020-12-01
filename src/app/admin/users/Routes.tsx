@@ -12,6 +12,7 @@ export const AdminUsersRoutes = () => {
   return (
     <Switch>
       <Route exact path={`${path}/`} render={() => <PageUsers />} />
+      <Route exact path={`${path}/create`} render={() => <>Todo</>} />
       <Route
         exact
         path={`${path}/:userLogin`}
