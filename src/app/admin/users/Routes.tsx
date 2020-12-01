@@ -12,7 +12,11 @@ export const AdminUsersRoutes = () => {
   return (
     <Switch>
       <Route exact path={`${path}/`} render={() => <PageUsers />} />
-      <Route exact path={`${path}/:userId`} render={() => <PageUserView />} />
+      <Route
+        exact
+        path={`${path}/:userLogin`}
+        render={() => <PageUserView />}
+      />
       <Route path="*" render={() => <Error404 />} />
     </Switch>
   );

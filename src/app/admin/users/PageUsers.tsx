@@ -23,11 +23,10 @@ import {
   CheckCircle,
   XCircle,
   TrashSimple,
-  Check,
-  X,
 } from 'phosphor-react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
+import { UserStatus } from '@/app/admin/users/UserStatus';
 import { useUserList, useUserUpdate } from '@/app/admin/users/service';
 import {
   ActionsButton,
@@ -52,32 +51,6 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
-
-const UserStatus = ({ isActivated = false, ...rest }) => {
-  return isActivated ? (
-    <Badge size="sm" colorScheme="success" {...rest}>
-      <Box as="span" d={{ base: 'none', md: 'block' }}>
-        Activated
-      </Box>
-      <Icon
-        as={Check}
-        aria-label="Activated"
-        d={{ base: 'inline-flex', md: 'none' }}
-      />
-    </Badge>
-  ) : (
-    <Badge size="sm" colorScheme="warning" {...rest}>
-      <Box as="span" d={{ base: 'none', md: 'block' }}>
-        Not Activated
-      </Box>
-      <Icon
-        as={X}
-        aria-label="Not Activated"
-        d={{ base: 'inline-flex', md: 'none' }}
-      />
-    </Badge>
-  );
-};
 
 const UserActions = ({ user, ...rest }) => {
   const { path } = useRouteMatch();
@@ -122,7 +95,7 @@ const UserActions = ({ user, ...rest }) => {
         <MenuList>
           <MenuItem
             as={Link}
-            to={`${path}${user.id}`}
+            to={`${path}${user.login}`}
             icon={
               <Icon
                 as={Eye}
@@ -136,7 +109,7 @@ const UserActions = ({ user, ...rest }) => {
           </MenuItem>
           <MenuItem
             as={Link}
-            to={`${path}${user.id}/edit`}
+            to={`${path}${user.login}/edit`}
             icon={
               <Icon
                 as={PencilLine}
@@ -254,7 +227,11 @@ export const PageUsers = () => {
           </DataListHeader>
           {users?.map((user) => (
             <DataListRow key={user.id}>
-              <DataListCell colName="login" as={Link} to={`${path}${user.id}`}>
+              <DataListCell
+                colName="login"
+                as={Link}
+                to={`${path}${user.login}`}
+              >
                 <HitZone />
                 <HStack maxW="100%">
                   <Avatar size="sm" name={user.login} mx="1" />

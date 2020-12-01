@@ -1,19 +1,45 @@
 import React from 'react';
 
-import { Heading } from '@chakra-ui/react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Text, Box, IconButton, Heading, HStack } from '@chakra-ui/react';
+import { ArrowLeft } from 'phosphor-react';
+import { useParams, useHistory } from 'react-router-dom';
 
-import { Page, PageBody, PageHeader } from '@/components';
+import { useUser } from '@/app/admin/users/service';
+import { Page, PageBody, PageFooter, PageHeader } from '@/components';
+
+import { UserStatus } from './UserStatus';
 
 export const PageUserView = () => {
-  const { path } = useRouteMatch();
-
+  const { userLogin } = useParams();
+  const history = useHistory();
+  const { user } = useUser(userLogin);
   return (
-    <Page containerSize="xl">
+    <Page containerSize="md" isFocusMode>
       <PageHeader>
-        <Heading size="md">User</Heading>
+        <HStack spacing="4">
+          <Box ml={{ base: 0, lg: '-3.5rem' }}>
+            <IconButton
+              aria-label="Go Back"
+              icon={<ArrowLeft />}
+              variant="ghost"
+              onClick={() => history.goBack()}
+            />
+          </Box>
+          <Box flex="1">
+            <Heading size="sm">User {user?.login}</Heading>
+            <Text fontSize="sm" color="gray.600">
+              {user?.email}
+            </Text>
+          </Box>
+          {!!user && (
+            <Box>
+              <UserStatus isActivated={user?.activated} />
+            </Box>
+          )}
+        </HStack>
       </PageHeader>
-      <PageBody>TODO</PageBody>
+      <PageBody>Body</PageBody>
+      <PageFooter>Footer</PageFooter>
     </Page>
   );
 };

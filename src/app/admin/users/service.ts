@@ -27,6 +27,18 @@ export const useUserList = ({ page = 0, size = 10 } = {}) => {
   };
 };
 
+export const useUser = (userLogin: string) => {
+  const result = usePaginatedQuery(
+    ['user', userLogin],
+    (): Promise<any> => Axios.get(`/users/${userLogin}`)
+  );
+
+  return {
+    user: result.data,
+    ...result,
+  };
+};
+
 export const useUserUpdate = (config: MutationConfig<any> = {}) => {
   const queryCache = useQueryCache();
   return useMutation((payload: any) => Axios.put('/users', payload), {
