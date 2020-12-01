@@ -9,10 +9,10 @@ import { Page, PageBody, PageFooter, PageHeader } from '@/components';
 
 import { UserStatus } from './UserStatus';
 
-export const PageUserView = () => {
-  const { userLogin } = useParams();
+export const PageUser = () => {
+  const { login } = useParams();
   const history = useHistory();
-  const { user } = useUser(userLogin);
+  const { user } = useUser(login);
   return (
     <Page containerSize="md" isFocusMode>
       <PageHeader>

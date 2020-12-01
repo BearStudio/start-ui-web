@@ -101,20 +101,6 @@ const UserActions = ({ user, ...rest }) => {
             to={`${path}${user.login}`}
             icon={
               <Icon
-                as={Eye}
-                fontSize="1.5em"
-                weight="duotone"
-                color="gray.500"
-              />
-            }
-          >
-            View
-          </MenuItem>
-          <MenuItem
-            as={Link}
-            to={`${path}${user.login}/edit`}
-            icon={
-              <Icon
                 as={PencilLine}
                 fontSize="1.5em"
                 weight="duotone"
