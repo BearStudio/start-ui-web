@@ -2070,10 +2070,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@formiz/core@1.0.0-rc.28":
-  version "1.0.0-rc.28"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.0.0-rc.28.tgz#2ae2541b19a8b7b53215383cf48aea8e8c2cd60f"
-  integrity sha512-fs+phFPQDqcxYj3HPicFaw2f2/ykNcl5txmIxdDfL3dtHMGO6PbMoPJx6cFsfnTqJy0zFdrV/ab/S9rDoKmShQ==
+"@formiz/core@1.0.0-rc.29":
+  version "1.0.0-rc.29"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.0.0-rc.29.tgz#8cb391b47d76ab468ad242fc427f6561d40ad7f4"
+  integrity sha512-1GtBFsz3JBLBg1FhXJvrr3/cQAyeNN0Tea++/pob1XRJlbw1EfDbAsxoDmerDf75yUpXfItnV3znxSUlLJESbA==
   dependencies:
     lodash "4.17.20"
     lodash-es "4.17.15"
@@ -9618,7 +9618,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@>=10:
+lint-staged@10.5.2:
   version "10.5.2"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.5.2.tgz#acfaa0093af3262aee3130b2e22438941530bdd1"
   integrity sha512-e8AYR1TDlzwB8VVd38Xu2lXDZf6BcshVqKVuBQThDJRaJLobqKnpbm4dkwJ2puypQNbLr9KF/9mfA649mAGvjA==

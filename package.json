@@ -8,7 +8,7 @@
     "@chakra-ui/react": "1.0.0",
     "@emotion/react": "11.0.0",
     "@emotion/styled": "11.0.0",
-    "@formiz/core": "1.0.0-rc.28",
+    "@formiz/core": "1.0.0-rc.29",
     "@formiz/validations": "1.0.0-rc.26",
     "axios": "0.21.0",
     "dayjs": "1.9.6",
