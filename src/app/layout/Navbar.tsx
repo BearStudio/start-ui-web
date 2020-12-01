@@ -144,7 +144,7 @@ const NavbarAccountMenu = (props) => {
             <MenuGroup title="Administration">
               <MenuItem
                 icon={<Users size="1.2em" />}
-                onClick={() => history.push('/admin/user-management')}
+                onClick={() => history.push('/admin/users')}
               >
                 User Management
               </MenuItem>

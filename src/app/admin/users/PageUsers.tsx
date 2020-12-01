@@ -28,7 +28,7 @@ import {
 } from 'phosphor-react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { useUserList, useUserUpdate } from '@/app/admin/service';
+import { useUserList, useUserUpdate } from '@/app/admin/users/service';
 import {
   ActionsButton,
   DataList,
@@ -122,7 +122,7 @@ const UserActions = ({ user, ...rest }) => {
         <MenuList>
           <MenuItem
             as={Link}
-            to={`${path}/${user.id}`}
+            to={`${path}${user.id}`}
             icon={
               <Icon
                 as={Eye}
@@ -136,7 +136,7 @@ const UserActions = ({ user, ...rest }) => {
           </MenuItem>
           <MenuItem
             as={Link}
-            to={`${path}/${user.id}/edit`}
+            to={`${path}${user.id}/edit`}
             icon={
               <Icon
                 as={PencilLine}
@@ -196,7 +196,7 @@ const UserActions = ({ user, ...rest }) => {
   );
 };
 
-export const PageUserManagement = () => {
+export const PageUsers = () => {
   const { path } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 2;
@@ -254,7 +254,7 @@ export const PageUserManagement = () => {
           </DataListHeader>
           {users?.map((user) => (
             <DataListRow key={user.id}>
-              <DataListCell colName="login" as={Link} to={`${path}/${user.id}`}>
+              <DataListCell colName="login" as={Link} to={`${path}${user.id}`}>
                 <HitZone />
                 <HStack maxW="100%">
                   <Avatar size="sm" name={user.login} mx="1" />
