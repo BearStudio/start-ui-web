@@ -51,6 +51,7 @@ export const PageHeader = ({ children, ...rest }: FlexProps) => {
       bg={isFocusMode ? 'white' : undefined}
       {...rest}
     >
+      {isFocusMode && <Box w="full" h="0" pb="safe-top" />}
       <PageContainer>{children}</PageContainer>
     </Flex>
   );
