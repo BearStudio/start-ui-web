@@ -9,7 +9,7 @@ import {
   SlideFade,
   FormControlProps,
 } from '@chakra-ui/react';
-import { Warning } from 'phosphor-react';
+import { FiAlertCircle } from 'react-icons/fi';
 
 export interface FormGroupProps
   extends Omit<FormControlProps, 'onChange' | 'defaultValue' | 'label'> {
@@ -39,7 +39,7 @@ export const FormGroup = ({
 
     <FormErrorMessage id={`${id}-error`}>
       <SlideFade in offsetY={-6}>
-        <Icon as={Warning} weight="bold" mr="2" />
+        <Icon as={FiAlertCircle} mr="2" />
         {errorMessage}
       </SlideFade>
     </FormErrorMessage>

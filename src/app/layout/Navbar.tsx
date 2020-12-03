@@ -23,8 +23,9 @@ import {
   MenuDivider,
   Spinner,
   useTheme,
+  Icon,
 } from '@chakra-ui/react';
-import { SignOut, List, User, Users } from 'phosphor-react';
+import { FiLogOut, FiMenu, FiUser, FiUsers } from 'react-icons/fi';
 import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/service';
@@ -86,7 +87,7 @@ const NavbarMenuButton = (props) => {
   return (
     <IconButton
       aria-label="Navigation"
-      icon={<List size="1.5em" />}
+      icon={<FiMenu size="1.5em" />}
       onClick={onOpen}
       variant="ghost"
       _active={{ bg: 'gray.700' }}
@@ -132,7 +133,7 @@ const NavbarAccountMenu = (props) => {
       <MenuList color="gray.800">
         <MenuGroup title={account?.email}>
           <MenuItem
-            icon={<User size="1.2em" />}
+            icon={<Icon as={FiUser} fontSize="lg" color="gray.400" />}
             onClick={() => history.push('/account')}
           >
             My Account
@@ -143,7 +144,7 @@ const NavbarAccountMenu = (props) => {
           <>
             <MenuGroup title="Administration">
               <MenuItem
-                icon={<Users size="1.2em" />}
+                icon={<Icon as={FiUsers} fontSize="lg" color="gray.400" />}
                 onClick={() => history.push('/admin/users')}
               >
                 User Management
@@ -153,7 +154,7 @@ const NavbarAccountMenu = (props) => {
           </>
         )}
         <MenuItem
-          icon={<SignOut size="1.2em" />}
+          icon={<Icon as={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
         >
           Logout

@@ -1,22 +1,32 @@
 import React, { FC } from 'react';
 
-import { IconButton, Icon, IconButtonProps } from '@chakra-ui/react';
-import { DotsThreeVertical } from 'phosphor-react';
+import { forwardRef, IconButton, IconButtonProps } from '@chakra-ui/react';
+import { FiMoreVertical } from 'react-icons/fi';
 
-export interface ActionsButtonProps extends IconButtonProps {}
+export interface ActionsButtonProps
+  extends Omit<IconButtonProps, 'aria-label'> {}
 
-export const ActionsButton: FC<ActionsButtonProps> = React.forwardRef(
+export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
   ({ ...rest }, ref: any) => {
     return (
       <IconButton
         ref={ref}
-        aria-label="Actions"
-        icon={<Icon as={DotsThreeVertical} fontSize="1.5em" weight="bold" />}
         d="inline-flex"
         borderRadius="full"
         variant="ghost"
+        color="inherit"
+        colorScheme="gray"
+        bg="transparent"
+        opacity="0.5"
+        _hover={{ opacity: 1, bg: 'rgba(0, 0, 0, 0.05)' }}
+        _focus={{ opacity: 1, boxShadow: 'outline' }}
+        _active={{ bg: 'rgba(0, 0, 0, 0.1)' }}
+        icon={<FiMoreVertical />}
+        aria-label="Actions"
         {...rest}
       />
     );
   }
 );
+
+ActionsButton.displayName = 'ActionsButton';

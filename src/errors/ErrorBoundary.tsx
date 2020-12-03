@@ -10,11 +10,11 @@ import {
   Collapse,
   useDisclosure,
 } from '@chakra-ui/react';
-import { CaretUp, CaretDown } from 'phosphor-react';
 import {
   ErrorBoundary as ReactErrorBoundary,
   FallbackProps,
 } from 'react-error-boundary';
+import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
   const { isOpen, onToggle } = useDisclosure();
@@ -29,7 +29,7 @@ const ErrorFallback = ({ error }: FallbackProps) => {
               variant="link"
               color="red.800"
               size="sm"
-              rightIcon={isOpen ? <CaretUp /> : <CaretDown />}
+              rightIcon={isOpen ? <FiChevronUp /> : <FiChevronDown />}
               onClick={onToggle}
             >
               Show details

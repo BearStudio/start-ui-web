@@ -1,5 +1,5 @@
 import { Badge, Box, Icon } from '@chakra-ui/react';
-import { Check, X } from 'phosphor-react';
+import { FiCheck, FiX } from 'react-icons/fi';
 
 export const UserStatus = ({ isActivated = false, ...rest }) => {
   return isActivated ? (
@@ -8,7 +8,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         Activated
       </Box>
       <Icon
-        as={Check}
+        as={FiCheck}
         aria-label="Activated"
         d={{ base: 'inline-flex', md: 'none' }}
       />
@@ -19,7 +19,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         Not Activated
       </Box>
       <Icon
-        as={X}
+        as={FiX}
         aria-label="Not Activated"
         d={{ base: 'inline-flex', md: 'none' }}
       />

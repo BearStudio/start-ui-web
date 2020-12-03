@@ -5,5 +5,19 @@
     "browser": true,
     "jest": true
   },
-  "rules": {}
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["src/app/*"],
+      "rules": {
+        "import/no-default-export": "error"
+      }
+    },
+    {
+      "files": ["*.stories.tsx"],
+      "rules": {
+        "import/no-anonymous-default-export": "off"
+      }
+    }
+  ]
 }

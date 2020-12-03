@@ -15,13 +15,16 @@ export {
 } from './Pagination';
 export {
   DataList,
+  DataListAccordion,
+  DataListAccordionButton,
+  DataListAccordionIcon,
+  DataListAccordionPanel,
   DataListHeader,
   DataListFooter,
   DataListRow,
   DataListCell,
 } from './DataList';
 export { Page, PageBody, PageFooter, PageHeader } from './Page';
-export { TextEllipsis } from './TextEllipsis';
 export {
   useToastError,
   useToastWarning,

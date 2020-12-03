@@ -9,11 +9,11 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import {
-  CaretDoubleLeft,
-  CaretDoubleRight,
-  CaretLeft,
-  CaretRight,
-} from 'phosphor-react';
+  FiChevronsLeft,
+  FiChevronsRight,
+  FiChevronLeft,
+  FiChevronRight,
+} from 'react-icons/fi';
 
 import { useSearchParams } from '@/app/router';
 
@@ -60,13 +60,13 @@ export const PaginationContext = React.createContext(null);
 export const PaginationButtonFirstPage: FC<Omit<
   IconButtonProps,
   'aria-label'
->> = ({ children, ...rest }) => {
+>> = ({ ...rest }) => {
   const { setPage, firstPage, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(firstPage)}
       aria-label="First page"
-      icon={<Icon as={CaretDoubleLeft} fontSize="1.5em" />}
+      icon={<Icon as={FiChevronsLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -77,13 +77,13 @@ export const PaginationButtonFirstPage: FC<Omit<
 export const PaginationButtonPrevPage: FC<Omit<
   IconButtonProps,
   'aria-label'
->> = ({ children, ...rest }) => {
+>> = ({ ...rest }) => {
   const { setPage, page, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page - 1)}
       aria-label="Next page"
-      icon={<Icon as={CaretLeft} fontSize="1.5em" />}
+      icon={<Icon as={FiChevronLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -94,13 +94,13 @@ export const PaginationButtonPrevPage: FC<Omit<
 export const PaginationButtonLastPage: FC<Omit<
   IconButtonProps,
   'aria-label'
->> = ({ children, ...rest }) => {
+>> = ({ ...rest }) => {
   const { setPage, lastPage, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(lastPage)}
       aria-label="Last page"
-      icon={<Icon as={CaretDoubleRight} fontSize="1.5em" />}
+      icon={<Icon as={FiChevronsRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
       {...rest}
@@ -111,13 +111,13 @@ export const PaginationButtonLastPage: FC<Omit<
 export const PaginationButtonNextPage: FC<Omit<
   IconButtonProps,
   'aria-label'
->> = ({ children, ...rest }) => {
+>> = ({ ...rest }) => {
   const { setPage, page, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page + 1)}
       aria-label="Previous page"
-      icon={<Icon as={CaretRight} fontSize="1.5em" />}
+      icon={<Icon as={FiChevronRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
       {...rest}

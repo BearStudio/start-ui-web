@@ -11,7 +11,7 @@ Opinionated UI starter with
 - ⚛️ [React Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
 - 💥 [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
-- ⭐️ [Phosphor Icons](https://phosphoricons.com/)
+- ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
 
 ℹ️ API calls are mapped on a [jHipster](https://www.jhipster.tech/) backend application.
 

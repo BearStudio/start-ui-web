@@ -9,7 +9,7 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
-import { Eye, EyeClosed } from 'phosphor-react';
+import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
@@ -77,13 +77,7 @@ export const FieldInput = (props: FieldInputProps) => {
               display="flex"
               size="xs"
               fontSize="lg"
-              icon={
-                showPassword ? (
-                  <Eye weight="duotone" />
-                ) : (
-                  <EyeClosed weight="duotone" />
-                )
-              }
+              icon={showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}
               variant="unstyled"
             />
           </InputLeftElement>

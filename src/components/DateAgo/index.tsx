@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Tooltip, TooltipProps } from '@chakra-ui/react';
+import { forwardRef, Tooltip, TooltipProps } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
 export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
@@ -8,7 +8,7 @@ export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
   format?: string;
 }
 
-export const DateAgo: FC<DateAgoProps> = React.forwardRef(
+export const DateAgo: FC<DateAgoProps> = forwardRef(
   (
     { date = new Date(), format = 'dddd, DD MMMM YYYY [at] hh:mm a', ...rest },
     ref: any

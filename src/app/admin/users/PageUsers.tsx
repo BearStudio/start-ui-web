@@ -18,15 +18,15 @@ import {
   Portal,
   Button,
   IconButton,
+  Text,
 } from '@chakra-ui/react';
 import {
-  Eye,
-  PencilLine,
-  CheckCircle,
-  XCircle,
-  TrashSimple,
-  Plus,
-} from 'phosphor-react';
+  FiEdit,
+  FiCheckCircle,
+  FiXCircle,
+  FiTrash2,
+  FiPlus,
+} from 'react-icons/fi';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
@@ -43,7 +43,6 @@ import {
   Page,
   PageBody,
   PageHeader,
-  TextEllipsis,
   useToastError,
   useToastSuccess,
   usePaginationFromUrl,
@@ -99,56 +98,28 @@ const UserActions = ({ user, ...rest }) => {
           <MenuItem
             as={Link}
             to={`${path}${user.login}`}
-            icon={
-              <Icon
-                as={PencilLine}
-                fontSize="1.5em"
-                weight="duotone"
-                color="gray.500"
-              />
-            }
+            icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
           >
             Edit
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
-              icon={
-                <Icon
-                  as={XCircle}
-                  fontSize="1.5em"
-                  weight="duotone"
-                  color="gray.500"
-                />
-              }
+              icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
             >
               Deactivate Account
             </MenuItem>
           ) : (
             <MenuItem
               onClick={activateUser}
-              icon={
-                <Icon
-                  as={CheckCircle}
-                  fontSize="1.5em"
-                  weight="duotone"
-                  color="gray.500"
-                />
-              }
+              icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
             >
               Activate Account
             </MenuItem>
           )}
           <MenuDivider />
           <MenuItem
-            icon={
-              <Icon
-                as={TrashSimple}
-                fontSize="1.5em"
-                weight="duotone"
-                color="gray.500"
-              />
-            }
+            icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
           >
             Delete
           </MenuItem>
@@ -180,7 +151,7 @@ export const PageUsers = () => {
               as={Link}
               to={`${path}create`}
               colorScheme="brand"
-              leftIcon={<Plus weight="bold" />}
+              leftIcon={<FiPlus />}
             >
               Create User
             </Button>
@@ -191,7 +162,7 @@ export const PageUsers = () => {
               to={`${path}create`}
               size="sm"
               colorScheme="brand"
-              icon={<Plus weight="bold" />}
+              icon={<FiPlus />}
             />
           </Box>
         </HStack>
@@ -199,7 +170,7 @@ export const PageUsers = () => {
       <PageBody>
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
-            <DataListCell colName="login" colWidth="200%">
+            <DataListCell colName="login" colWidth="2">
               Login / Email
             </DataListCell>
             <DataListCell
@@ -229,7 +200,7 @@ export const PageUsers = () => {
             </DataListCell>
             <DataListCell
               colName="status"
-              colWidth={{ base: '2rem', md: '50%' }}
+              colWidth={{ base: '2rem', md: '0.5' }}
               align="center"
             >
               <Box as="span" d={{ base: 'none', md: 'block' }}>
@@ -249,17 +220,24 @@ export const PageUsers = () => {
                 <HStack maxW="100%">
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
-                    <TextEllipsis fontWeight="bold">{user.login}</TextEllipsis>
-                    <TextEllipsis fontSize="sm" color="gray.600">
+                    <Text isTruncated maxW="full" fontWeight="bold">
+                      {user.login}
+                    </Text>
+                    <Text
+                      isTruncated
+                      maxW="full"
+                      fontSize="sm"
+                      color="gray.600"
+                    >
                       {user.email}
-                    </TextEllipsis>
+                    </Text>
                   </Box>
                 </HStack>
               </DataListCell>
               <DataListCell colName="id">
-                <TextEllipsis as={Code} fontSize="xs">
+                <Text isTruncated maxW="full" as={Code} fontSize="xs">
                   {user.id}
-                </TextEllipsis>
+                </Text>
               </DataListCell>
               <DataListCell colName="authorities">
                 <Wrap>
@@ -276,11 +254,18 @@ export const PageUsers = () => {
                 position="relative"
                 pointerEvents="none"
               >
-                <TextEllipsis>{user.createdBy}</TextEllipsis>
+                <Text isTruncated maxW="full">
+                  {user.createdBy}
+                </Text>
                 {!!user.createdDate && (
-                  <TextEllipsis color="gray.600" pointerEvents="auto">
+                  <Text
+                    isTruncated
+                    maxW="full"
+                    color="gray.600"
+                    pointerEvents="auto"
+                  >
                     <DateAgo date={user.createdDate} />
-                  </TextEllipsis>
+                  </Text>
                 )}
               </DataListCell>
               <DataListCell
@@ -289,11 +274,18 @@ export const PageUsers = () => {
                 position="relative"
                 pointerEvents="none"
               >
-                <TextEllipsis>{user.lastModifiedBy}</TextEllipsis>
+                <Text isTruncated maxW="full">
+                  {user.lastModifiedBy}
+                </Text>
                 {!!user.lastModifiedDate && (
-                  <TextEllipsis color="gray.600" pointerEvents="auto">
+                  <Text
+                    isTruncated
+                    maxW="full"
+                    color="gray.600"
+                    pointerEvents="auto"
+                  >
                     <DateAgo position="relative" date={user.lastModifiedDate} />
-                  </TextEllipsis>
+                  </Text>
                 )}
               </DataListCell>
               <DataListCell colName="status">

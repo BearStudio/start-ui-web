@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Text, Box, IconButton, Heading, HStack } from '@chakra-ui/react';
-import { ArrowLeft } from 'phosphor-react';
+import { FiArrowLeft } from 'react-icons/fi';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser } from '@/app/admin/users/service';
@@ -20,7 +20,7 @@ export const PageUser = () => {
           <Box ml={{ base: 0, lg: '-3.5rem' }}>
             <IconButton
               aria-label="Go Back"
-              icon={<ArrowLeft fontSize="1.2em" />}
+              icon={<FiArrowLeft fontSize="lg" />}
               variant="ghost"
               onClick={() => history.goBack()}
             />
