@@ -58,7 +58,7 @@ const UserActions = ({ user, ...rest }) => {
   const { path } = useRouteMatch();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
-  const [userUpdate, userUpdateData] = useUserUpdate({
+  const { mutate: userUpdate, ...userUpdateData } = useUserUpdate({
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
@@ -72,7 +72,7 @@ const UserActions = ({ user, ...rest }) => {
         });
       }
     },
-    onError: (_, { activated, login }) => {
+    onError: (_, __, { activated, login }) => {
       if (activated) {
         toastError({
           title: 'Activation Failed',

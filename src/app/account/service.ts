@@ -1,13 +1,13 @@
 import Axios from 'axios';
 import {
   useMutation,
-  MutationConfig,
+  MutationOptions,
   useQuery,
-  QueryConfig,
+  QueryOptions,
 } from 'react-query';
 
-export const useAccount = (config: QueryConfig<any> = {}) => {
-  const { data: account, ...rest } = useQuery(
+export const useAccount = (config: QueryOptions = {}) => {
+  const { data: account, ...rest } = useQuery<any>(
     ['account'],
     () => Axios.get('/account'),
     {
@@ -18,8 +18,8 @@ export const useAccount = (config: QueryConfig<any> = {}) => {
   return { account, isAdmin, ...rest };
 };
 
-export const useCreateAccount = (config: MutationConfig<any> = {}) => {
-  return useMutation(
+export const useCreateAccount = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
     ({ login, email, password, langKey = 'en' }) =>
       Axios.post('/register', { login, email, password, langKey }),
     {
@@ -28,8 +28,11 @@ export const useCreateAccount = (config: MutationConfig<any> = {}) => {
   );
 };
 
-export const useActivateAccount = (config: MutationConfig<any> = {}) => {
-  return useMutation(({ key }) => Axios.get(`/activate?key=${key}`), {
-    ...config,
-  });
+export const useActivateAccount = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    ({ key }) => Axios.get(`/activate?key=${key}`),
+    {
+      ...config,
+    }
+  );
 };

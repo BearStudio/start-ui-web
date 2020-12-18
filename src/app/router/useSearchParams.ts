@@ -8,14 +8,18 @@ export const useSearchParams = () => {
   const searchParams = useMemo(() => new URLSearchParams(search || ''), [
     search,
   ]);
-  const setSearchParams = useCallback(
-    (key: string, value: string = '', { replace = true } = {}) => {
-      searchParams.set(key, value);
+  const setSearchParam = useCallback(
+    (key: string, value: string | number = '', { replace = true } = {}) => {
+      if (value || value === 0) {
+        searchParams.set(key, `${value}`);
+      } else {
+        searchParams.delete(key);
+      }
       history[replace ? 'replace' : 'push'](
         `${pathname}?${searchParams.toString()}`
       );
     },
     [history, pathname, searchParams]
   );
-  return { searchParams, setSearchParams };
+  return { searchParams, setSearchParam };
 };

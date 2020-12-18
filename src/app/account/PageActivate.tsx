@@ -6,10 +6,12 @@ import { useActivateAccount } from '@/app/account/service';
 import { useSearchParams } from '@/app/router';
 
 export const PageActivate = () => {
-  const [
-    activateAccount,
-    { isError, isSuccess, isLoading },
-  ] = useActivateAccount();
+  const {
+    mutate: activateAccount,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useActivateAccount();
   const { searchParams } = useSearchParams();
 
   useEffect(() => {

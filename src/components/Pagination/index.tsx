@@ -18,14 +18,14 @@ import {
 import { useSearchParams } from '@/app/router';
 
 export const usePaginationFromUrl = () => {
-  const { searchParams, setSearchParams } = useSearchParams();
+  const { searchParams, setSearchParam } = useSearchParams();
   const page = +(searchParams.get('page') ?? 1);
   const setPage = useCallback(
     (p) => {
       const newPage = Math.max(1, p);
-      setSearchParams('page', `${newPage}`);
+      setSearchParam('page', `${newPage}`);
     },
-    [setSearchParams]
+    [setSearchParam]
   );
   return { page, setPage };
 };
@@ -57,10 +57,9 @@ export const getPaginationInfo = ({
 
 export const PaginationContext = React.createContext(null);
 
-export const PaginationButtonFirstPage: FC<Omit<
-  IconButtonProps,
-  'aria-label'
->> = ({ ...rest }) => {
+export const PaginationButtonFirstPage: FC<
+  Omit<IconButtonProps, 'aria-label'>
+> = ({ ...rest }) => {
   const { setPage, firstPage, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -74,10 +73,9 @@ export const PaginationButtonFirstPage: FC<Omit<
   );
 };
 
-export const PaginationButtonPrevPage: FC<Omit<
-  IconButtonProps,
-  'aria-label'
->> = ({ ...rest }) => {
+export const PaginationButtonPrevPage: FC<
+  Omit<IconButtonProps, 'aria-label'>
+> = ({ ...rest }) => {
   const { setPage, page, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -91,10 +89,9 @@ export const PaginationButtonPrevPage: FC<Omit<
   );
 };
 
-export const PaginationButtonLastPage: FC<Omit<
-  IconButtonProps,
-  'aria-label'
->> = ({ ...rest }) => {
+export const PaginationButtonLastPage: FC<
+  Omit<IconButtonProps, 'aria-label'>
+> = ({ ...rest }) => {
   const { setPage, lastPage, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -108,10 +105,9 @@ export const PaginationButtonLastPage: FC<Omit<
   );
 };
 
-export const PaginationButtonNextPage: FC<Omit<
-  IconButtonProps,
-  'aria-label'
->> = ({ ...rest }) => {
+export const PaginationButtonNextPage: FC<
+  Omit<IconButtonProps, 'aria-label'>
+> = ({ ...rest }) => {
   const { setPage, page, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton

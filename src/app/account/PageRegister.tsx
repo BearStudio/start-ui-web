@@ -29,7 +29,7 @@ export const PageRegister = () => {
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
 
-  const [createUser, { isLoading, isSuccess }] = useCreateAccount({
+  const { mutate: createUser, isLoading, isSuccess } = useCreateAccount({
     onMutate: () => {
       setAccountEmail(form.values?.email);
     },

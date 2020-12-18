@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Axios from 'axios';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
@@ -20,7 +20,7 @@ import { LoginForm } from '@/app/auth/LoginForm';
 export const LoginModalInterceptor = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLogged, updateToken } = useAuthContext();
-  const queryCache = useQueryCache();
+  const queryCache = useQueryClient();
   const history = useHistory();
   const { pathname } = useLocation();
   const pathnameRef = useRef(null);

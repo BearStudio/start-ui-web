@@ -19,6 +19,7 @@ Opinionated UI starter with
 
 ```
 yarn install
+yarn build
 ```
 
 ## Development
