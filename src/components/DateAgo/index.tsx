@@ -1,7 +1,23 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { forwardRef, Tooltip, TooltipProps } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+
+export const DEFAULT_FORMAT = 'dddd, DD MMMM YYYY, hh:mm a';
+
+const ONE_SECOND = 1000;
+const ONE_MINUTE = ONE_SECOND * 60;
+const ONE_HOUR = ONE_MINUTE * 60;
+
+const getDelay = (diff) => {
+  if (diff < ONE_MINUTE) {
+    return ONE_SECOND * 10;
+  }
+  if (diff < ONE_HOUR) {
+    return ONE_MINUTE;
+  }
+  return ONE_HOUR;
+};
 
 export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
   date?: string | Date | dayjs.Dayjs;
@@ -9,18 +25,27 @@ export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
 }
 
 export const DateAgo: FC<DateAgoProps> = forwardRef(
-  (
-    { date = new Date(), format = 'dddd, DD MMMM YYYY [at] hh:mm a', ...rest },
-    ref: any
-  ) => {
+  ({ date = new Date(), format = DEFAULT_FORMAT, ...rest }, ref) => {
+    const [, setForceUpdate] = useState(0);
+    const dayjsDate = dayjs(date);
+
+    useEffect(() => {
+      const diff = dayjs().diff(dayjsDate);
+
+      const timeout = setTimeout(() => {
+        setForceUpdate((x) => x + 1);
+      }, getDelay(diff));
+      return () => clearTimeout(timeout);
+    }, [dayjsDate]);
+
     return (
       <Tooltip
         ref={ref}
-        label={dayjs(date).format(format)}
+        label={dayjsDate.format(format)}
         placement="top-start"
         {...rest}
       >
-        {dayjs(date).fromNow()}
+        {dayjsDate.fromNow()}
       </Tooltip>
     );
   }
