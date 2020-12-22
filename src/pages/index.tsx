@@ -6,11 +6,11 @@ import { isBrowser } from '@/utils/ssr';
 import { useTranslation } from 'react-i18next';
 
 const Index = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation('common');
   return (
     <>
       <Head>
-        <title>Start UI</title>
+        <title>{t('appTitle')}</title>
       </Head>
       <div suppressHydrationWarning={true}>{isBrowser && <App />}</div>
     </>
