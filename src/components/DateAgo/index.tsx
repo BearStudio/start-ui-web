@@ -8,14 +8,12 @@ export const DEFAULT_FORMAT = 'dddd, DD MMMM YYYY, hh:mm a';
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
 const ONE_HOUR = ONE_MINUTE * 60;
+const ONE_DAY = ONE_HOUR * 24;
 
 const getDelay = (diff) => {
-  if (diff < ONE_MINUTE) {
-    return ONE_SECOND * 10;
-  }
-  if (diff < ONE_HOUR) {
-    return ONE_MINUTE;
-  }
+  if (diff <= ONE_MINUTE) return ONE_SECOND * 10;
+  if (diff <= ONE_HOUR) return ONE_MINUTE;
+  if (diff <= ONE_DAY) return ONE_MINUTE * 15;
   return ONE_HOUR;
 };
 
