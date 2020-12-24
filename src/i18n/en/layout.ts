@@ -1,6 +1,7 @@
 export const layout = {
   navbar: {
     myAccount: 'My Account',
-    userManagement: 'User management'
+    userManagement: 'User management',
+    logout: 'Logout',
   }
 }

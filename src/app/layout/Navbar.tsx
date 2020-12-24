@@ -76,12 +76,15 @@ const NavbarItem = ({ to, ...rest }: any) => {
   );
 };
 
-const NavbarMenu = (props) => (
-  <Stack direction="row" spacing="1" {...props}>
-    <NavbarItem to="/dashboard">Dashboard</NavbarItem>
-    <NavbarItem to="/entity">Entity</NavbarItem>
-  </Stack>
-);
+const NavbarMenu = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Stack direction="row" spacing="1" {...props}>
+      <NavbarItem to="/dashboard">{t('dashboard:title')}</NavbarItem>
+      <NavbarItem to="/entity">{t('entities:title')}</NavbarItem>
+    </Stack>
+  );
+}
 
 const NavbarMenuButton = (props) => {
   const { onOpen } = useContext(NavbarContext);
@@ -159,7 +162,7 @@ const NavbarAccountMenu = (props) => {
           icon={<Icon as={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
         >
-          Logout
+          {t('layout:navbar.logout')}
         </MenuItem>
       </MenuList>
     </Menu>
