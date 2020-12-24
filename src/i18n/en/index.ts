@@ -4,8 +4,10 @@ import { layout } from './layout';
 import { admin } from './admin';
 import { dashboard } from './dashboard';
 import { entities } from './entities';
+import { account } from './account';
 
 const enTranslations = {
+  account,
   auth,
   admin,
   common,

@@ -20,11 +20,13 @@ import {
   isPattern,
 } from '@formiz/validations';
 import { Link as RouterLink } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useCreateAccount } from '@/app/account/service';
 import { FieldInput, useToastError } from '@/components';
 
 export const PageRegister = () => {
+  const { t } = useTranslation();
   const form = useForm();
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
@@ -37,16 +39,16 @@ export const PageRegister = () => {
       const { errorKey, title } = error?.response?.data || {};
 
       toastError({
-        title: 'Registration failed',
+        title: t('account:register.messages.registrationFailed'),
         description: title,
       });
 
       if (errorKey === 'userexists') {
-        form.invalidateFields({ login: 'Login already used' });
+        form.invalidateFields({ login: t('account:register.form.login.userexists') });
       }
 
       if (errorKey === 'emailexists') {
-        form.invalidateFields({ email: 'Email already used' });
+        form.invalidateFields({ email: t('account:register.form.email.emailexists') });
       }
     },
   });
@@ -68,17 +70,23 @@ export const PageRegister = () => {
           >
             <Box fontSize="3rem">🎉</Box>
             <AlertTitle mt={4} mb={1} fontSize="lg">
-              Account created with success!
+              {t('account:register.messages.accountCreatedSuccess.title')}
             </AlertTitle>
             <AlertDescription>
-              Please check your email <strong>{accountEmail}</strong> inbox to
-              activate your account.
+              <Trans
+                t={t}
+                i18nKey="account:register.messages.accountCreatedSuccess.description"
+                tOptions={{ accountEmail }}
+              >
+                Please check your email <strong>{accountEmail}</strong> inbox to
+                activate your account.
+              </Trans>
             </AlertDescription>
           </Alert>
           <Center mt="8">
             <Button as={RouterLink} to="/login" variant="link">
               <Box as="strong" color="brand.500" ml="2">
-                Go to Login
+                {t('account:register.actions.goToLogin')}
               </Box>
             </Button>
           </Center>
@@ -95,61 +103,61 @@ export const PageRegister = () => {
         onValidSubmit={createUser}
         connect={form}
       >
-        <Heading my="4">Register</Heading>
+        <Heading my="4">{t('account:register.title')}</Heading>
         <Stack spacing="4">
           <FieldInput
             name="login"
-            label="Username"
-            required="Username is required"
+            label={t('account:register.form.login.label') as string}
+            required={t('account:register.form.login.required') as string}
             validations={[
               {
                 rule: isMinLength(2),
-                message: 'Username too short (min. 2 characters)',
+                message: t('account:register.form.login.isMinLength', { count: 2 }),
               },
               {
                 rule: isMaxLength(50),
-                message: 'Username too long (max. 50 characters)',
+                message: t('account:register.form.login.isMaxLength', { count: 50 }),
               },
               {
                 rule: isPattern(
                   '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
                 ),
-                message: "Username is invalid, don't use special characters",
+                message: t('account:register.form.login.isPattern'),
               },
             ]}
           />
           <FieldInput
             name="email"
-            label="Email"
-            required="Email is required"
+            label={t('account:register.form.email.label') as string}
+            required={t('account:register.form.email.required') as string}
             validations={[
               {
                 rule: isMinLength(5),
-                message: 'Email too short (min. 5 characters)',
+                message: t('account:register.form.email.isMinLength', { count: 5 }),
               },
               {
                 rule: isMaxLength(254),
-                message: 'Email too long (max. 254 characters)',
+                message: t('account:register.form.email.isMaxLength', { count: 254 }),
               },
               {
                 rule: isEmail(),
-                message: 'Email is invalid',
+                message: t('account:register.form.email.isEmail'),
               },
             ]}
           />
           <FieldInput
             name="password"
             type="password"
-            label="Password"
-            required="Password is required"
+            label={t('account:register.form.password.label') as string}
+            required={t('account:register.form.password.required') as string}
             validations={[
               {
                 rule: isMinLength(4),
-                message: 'Password too short (min. 4 characters)',
+                message: t('account:register.form.password.isMinLength', { count: 4 }),
               },
               {
                 rule: isMaxLength(50),
-                message: 'Password too long (max. 50 characters)',
+                message: t('account:register.form.password.isMaxLength', { count: 50 }),
               },
             ]}
           />
@@ -161,15 +169,15 @@ export const PageRegister = () => {
               colorScheme="brand"
               ml="auto"
             >
-              Create Account
+              {t('account:register.actions.createAccount')}
             </Button>
           </Flex>
         </Stack>
         <Center mt="8">
           <Button as={RouterLink} to="/login" variant="link">
-            Already have an account?{' '}
+            {t('account:register.actions.alreadyHaveAnAccount')}{' '}
             <Box as="strong" color="brand.500" ml="2">
-              Login
+              {t('account:register.actions.login')}
             </Box>
           </Button>
         </Center>
