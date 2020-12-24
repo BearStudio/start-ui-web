@@ -3,11 +3,14 @@ import React from 'react';
 import { Box, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useLogin } from '@/app/auth/service';
 import { FieldInput, useToastError } from '@/components';
 
-export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
+export const LoginForm = ({ onSuccess = () => { }, ...rest }) => {
+  const { t } = useTranslation();
+
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 
@@ -15,7 +18,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
     onSuccess,
     onError: (error: any) => {
       toastError({
-        title: 'Login failed',
+        title: t('form.messages.loginFailed'),
         description: error?.response?.data?.title,
       });
     },
@@ -27,14 +30,14 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
         <Stack spacing="4">
           <FieldInput
             name="username"
-            label="Username"
-            required="Username is required"
+            label={t('auth:form.username.label')}
+            required={t('auth:form.username.required') as string}
           />
           <FieldInput
             name="password"
             type="password"
-            label="Password"
-            required="Password is required"
+            label={t('auth:form.password.label')}
+            required={t('auth:form.password.required') as string}
           />
           <Flex>
             <Button
@@ -43,7 +46,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               size="sm"
               variant="link"
             >
-              Forgot password?
+              {t('auth:forgotPassword')}
             </Button>
             <Button
               isLoading={isLoading}
@@ -52,7 +55,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               colorScheme="brand"
               ml="auto"
             >
-              Log In
+              {t('auth:login')}
             </Button>
           </Flex>
         </Stack>

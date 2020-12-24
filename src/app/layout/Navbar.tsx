@@ -27,6 +27,7 @@ import {
 } from '@chakra-ui/react';
 import { FiLogOut, FiMenu, FiUser, FiUsers } from 'react-icons/fi';
 import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useAccount } from '@/app/account/service';
 
@@ -120,6 +121,7 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
 };
 
 const NavbarAccountMenu = (props) => {
+  const { t } = useTranslation();
   const { account, isAdmin, isLoading } = useAccount();
   const history = useHistory();
 
@@ -136,7 +138,7 @@ const NavbarAccountMenu = (props) => {
             icon={<Icon as={FiUser} fontSize="lg" color="gray.400" />}
             onClick={() => history.push('/account')}
           >
-            My Account
+            {t('layout:navbar.myAccount')}
           </MenuItem>
         </MenuGroup>
         <MenuDivider />

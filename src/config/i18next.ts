@@ -1,24 +1,23 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import enTranslations from '@/i18n/en';
-import frTranslations from '@/i18n/fr';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-const translations = {
-  en: enTranslations,
-  fr: frTranslations,
-}
+import en from '@/i18n/en';
+import fr from '@/i18n/fr';
+
+export const resources = {
+  en,
+  fr,
+} as const;
 
 i18n
-  // .use(httpBackend)
   .use(initReactI18next)
+  .use(LanguageDetector)
   .init({
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
-    },
-    lng: "en",
-    resources: translations,
-
-    keySeparator: false, // we do not use keys in form messages.welcome
+    ns: Object.keys(resources.en),
+    defaultNS: 'common',
+    resources,
+    fallbackLng: 'en',
 
     interpolation: {
       escapeValue: false // react already safes from xss

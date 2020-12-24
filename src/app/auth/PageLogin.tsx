@@ -3,11 +3,13 @@ import React from 'react';
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
 import { useQueryClient } from 'react-query';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/app/auth/LoginForm';
 import { useRedirectFromUrl } from '@/app/router';
 
 export const PageLogin = () => {
+  const { t } = useTranslation();
   const redirect = useRedirectFromUrl();
   const queryCache = useQueryClient();
   const onLogin = () => {
@@ -16,13 +18,13 @@ export const PageLogin = () => {
   };
   return (
     <Box p="6" pb="4rem" w="20rem" maxW="full" m="auto">
-      <Heading my="4">Log In</Heading>
+      <Heading my="4">{t('auth:login')}</Heading>
       <LoginForm onSuccess={onLogin} />
       <Center mt="8">
         <Button as={RouterLink} to="/account/register" variant="link">
-          Need an account?{' '}
+          {t('auth:needAccount')}{' '}
           <Box as="strong" color="brand.500" ml="2">
-            Register now!
+            {t('auth:register')}
           </Box>
         </Button>
       </Center>
