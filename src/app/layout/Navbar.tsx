@@ -149,7 +149,7 @@ const NavbarAccountMenu = (props) => {
                 icon={<Icon as={FiUsers} fontSize="lg" color="gray.400" />}
                 onClick={() => history.push('/admin/users')}
               >
-                User Management
+                {t('layout:navbar.userManagement')}
               </MenuItem>
             </MenuGroup>
             <MenuDivider />

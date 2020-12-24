@@ -18,7 +18,7 @@ export const LoginForm = ({ onSuccess = () => { }, ...rest }) => {
     onSuccess,
     onError: (error: any) => {
       toastError({
-        title: t('form.messages.loginFailed'),
+        title: t('auth:messages.loginFailed'),
         description: error?.response?.data?.title,
       });
     },

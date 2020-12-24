@@ -17,7 +17,7 @@ export const auth = {
     login: 'Connexion'
   },
   messages: {
-    loginFailed: 'La connexion a échouée',
+    loginFailed: 'La connexion a échoué',
     loginNeeded: 'Connexion requise',
     pleaseLoginToContinue: 'Connectez vous pour continuer'
   }

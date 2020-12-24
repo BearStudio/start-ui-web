@@ -28,6 +28,7 @@ import {
   FiPlus,
 } from 'react-icons/fi';
 import { Link, useRouteMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
 import { useUserList, useUserUpdate } from '@/app/admin/users/service';
@@ -55,6 +56,7 @@ import {
 } from '@/components';
 
 const UserActions = ({ user, ...rest }) => {
+  const { t } = useTranslation();
   const { path } = useRouteMatch();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -62,26 +64,26 @@ const UserActions = ({ user, ...rest }) => {
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
-          title: 'Account Activated',
-          description: `Account "${login}" activated with success`,
+          title: t('admin:messages.accountActivated.title'),
+          description: t('admin:messages.accountActivated.description', { login }),
         });
       } else {
         toastSuccess({
-          title: 'Account Deactivated',
-          description: `Account "${login}" deactivated with success`,
+          title: t('admin:messages.accountDeactivated.title'),
+          description: t('admin:messages.accountDeactivated.description', { login }),
         });
       }
     },
     onError: (_, __, { activated, login }) => {
       if (activated) {
         toastError({
-          title: 'Activation Failed',
-          description: `Fail to activate "${login}" account`,
+          title: t('admin:messages.accountActivationFailed.title'),
+          description: t('admin:messages.accountActivationFailed.description', { login }),
         });
       } else {
         toastError({
-          title: 'Deactivation Failed',
-          description: `Fail to deactivate "${login}" account`,
+          title: t('admin:messages.accountDeactivationFailed.title'),
+          description: t('admin:messages.accountDeactivationFailed.description', { login }),
         });
       }
     },
@@ -100,28 +102,28 @@ const UserActions = ({ user, ...rest }) => {
             to={`${path}${user.login}`}
             icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
           >
-            Edit
+            {t('admin:actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
               icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
             >
-              Deactivate Account
+              {t('admin:actions.deactivateAccount')}
             </MenuItem>
           ) : (
             <MenuItem
               onClick={activateUser}
               icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
             >
-              Activate Account
+              {t('admin:actions.activateAccount')}
             </MenuItem>
           )}
           <MenuDivider />
           <MenuItem
             icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
           >
-            Delete
+            {t('admin:actions.delete')}
           </MenuItem>
         </MenuList>
       </Portal>
@@ -130,6 +132,7 @@ const UserActions = ({ user, ...rest }) => {
 };
 
 export const PageUsers = () => {
+  const { t } = useTranslation();
   const { path } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 2;
@@ -143,7 +146,7 @@ export const PageUsers = () => {
       <PageHeader>
         <HStack>
           <Box flex="1">
-            <Heading size="md">User Management</Heading>
+            <Heading size="md">{t('admin:userManagement')}</Heading>
           </Box>
           <Box>
             <Button
@@ -153,11 +156,11 @@ export const PageUsers = () => {
               colorScheme="brand"
               leftIcon={<FiPlus />}
             >
-              Create User
+              {t('admin:actions.createUser')}
             </Button>
             <IconButton
               display={{ base: 'flex', sm: 'none' }}
-              aria-label="Create User"
+              aria-label={t('admin:actions.createUser')}
               as={Link}
               to={`${path}create`}
               size="sm"
@@ -171,32 +174,32 @@ export const PageUsers = () => {
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
-              Login / Email
+              {t('admin:loginEmail')}
             </DataListCell>
             <DataListCell
               colName="id"
               colWidth="4rem"
               isVisible={{ base: false, lg: true }}
             >
-              ID
+              {t('admin:id')}
             </DataListCell>
             <DataListCell
               colName="authorities"
               isVisible={{ base: false, lg: true }}
             >
-              Authorities
+              {t('admin:authorities')}
             </DataListCell>
             <DataListCell
               colName="created"
               isVisible={{ base: false, lg: true }}
             >
-              Created by
+              {t('admin:createdBy')}
             </DataListCell>
             <DataListCell
               colName="lastModified"
               isVisible={{ base: false, md: true }}
             >
-              Modified by
+              {t('admin:modifiedBy')}
             </DataListCell>
             <DataListCell
               colName="status"
@@ -204,7 +207,7 @@ export const PageUsers = () => {
               align="center"
             >
               <Box as="span" d={{ base: 'none', md: 'block' }}>
-                Status
+                {t('admin:status')}
               </Box>
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />

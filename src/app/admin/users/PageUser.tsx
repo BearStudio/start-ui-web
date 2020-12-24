@@ -8,8 +8,10 @@ import { useUser } from '@/app/admin/users/service';
 import { Page, PageBody, PageFooter, PageHeader } from '@/components';
 
 import { UserStatus } from './UserStatus';
+import { useTranslation } from 'react-i18next';
 
 export const PageUser = () => {
+  const { t } = useTranslation();
   const { login } = useParams();
   const history = useHistory();
   const { user } = useUser(login);
@@ -26,7 +28,7 @@ export const PageUser = () => {
             />
           </Box>
           <Box flex="1">
-            <Heading size="sm">User {user?.login}</Heading>
+            <Heading size="sm">{t('admin:user')} {user?.login}</Heading>
             <Text fontSize="sm" color="gray.600">
               {user?.email}
             </Text>
