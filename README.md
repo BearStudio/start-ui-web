@@ -35,3 +35,11 @@ Create a `.env` file at the root of the project with the following content:
 ```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 ```
+
+### i18n
+
+We use [i18next](https://www.i18next.com/) and [react-18next](https://react.i18next.com/) to handle translations in this project
+
+All translation files are stored inside the `src/i18n` folder.
+Each file inside a language folder corresponds to a subfolder of the `app`, `components`, `errors`... folders.
+Each file is mapped by i18next as a **namespace**.
