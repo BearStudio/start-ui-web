@@ -28,7 +28,7 @@ export const PageUser = () => {
             />
           </Box>
           <Box flex="1">
-            <Heading size="sm">{t('admin:user')} {user?.login}</Heading>
+            <Heading size="sm">{t('admin:users.user')} {user?.login}</Heading>
             <Text fontSize="sm" color="gray.600">
               {user?.email}
             </Text>

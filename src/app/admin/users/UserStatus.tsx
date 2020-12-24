@@ -7,22 +7,22 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
   return isActivated ? (
     <Badge size="sm" colorScheme="success" {...rest}>
       <Box as="span" d={{ base: 'none', md: 'block' }}>
-        {t('admin:activated')}
+        {t('admin:users.activated')}
       </Box>
       <Icon
         as={FiCheck}
-        aria-label={t('admin:activated')}
+        aria-label={t('admin:users.activated')}
         d={{ base: 'inline-flex', md: 'none' }}
       />
     </Badge>
   ) : (
     <Badge size="sm" colorScheme="warning" {...rest}>
       <Box as="span" d={{ base: 'none', md: 'block' }}>
-        {t('admin:notActivated')}
+        {t('admin:users.notActivated')}
       </Box>
       <Icon
         as={FiX}
-        aria-label={t('admin:notActivated')}
+        aria-label={t('admin:users.notActivated')}
         d={{ base: 'inline-flex', md: 'none' }}
       />
     </Badge>

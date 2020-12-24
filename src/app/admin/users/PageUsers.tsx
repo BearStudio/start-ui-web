@@ -64,26 +64,26 @@ const UserActions = ({ user, ...rest }) => {
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
-          title: t('admin:messages.accountActivated.title'),
-          description: t('admin:messages.accountActivated.description', { login }),
+          title: t('admin:users.messages.accountActivated.title'),
+          description: t('admin:users.messages.accountActivated.description', { login }),
         });
       } else {
         toastSuccess({
-          title: t('admin:messages.accountDeactivated.title'),
-          description: t('admin:messages.accountDeactivated.description', { login }),
+          title: t('admin:users.messages.accountDeactivated.title'),
+          description: t('admin:users.messages.accountDeactivated.description', { login }),
         });
       }
     },
     onError: (_, __, { activated, login }) => {
       if (activated) {
         toastError({
-          title: t('admin:messages.accountActivationFailed.title'),
-          description: t('admin:messages.accountActivationFailed.description', { login }),
+          title: t('admin:users.messages.accountActivationFailed.title'),
+          description: t('admin:users.messages.accountActivationFailed.description', { login }),
         });
       } else {
         toastError({
-          title: t('admin:messages.accountDeactivationFailed.title'),
-          description: t('admin:messages.accountDeactivationFailed.description', { login }),
+          title: t('admin:users.messages.accountDeactivationFailed.title'),
+          description: t('admin:users.messages.accountDeactivationFailed.description', { login }),
         });
       }
     },
@@ -102,28 +102,28 @@ const UserActions = ({ user, ...rest }) => {
             to={`${path}${user.login}`}
             icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
           >
-            {t('admin:actions.edit')}
+            {t('admin:users.actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
               icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
             >
-              {t('admin:actions.deactivateAccount')}
+              {t('admin:users.actions.deactivateAccount')}
             </MenuItem>
           ) : (
             <MenuItem
               onClick={activateUser}
               icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
             >
-              {t('admin:actions.activateAccount')}
+              {t('admin:users.actions.activateAccount')}
             </MenuItem>
           )}
           <MenuDivider />
           <MenuItem
             icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
           >
-            {t('admin:actions.delete')}
+            {t('admin:users.actions.delete')}
           </MenuItem>
         </MenuList>
       </Portal>
@@ -146,7 +146,7 @@ export const PageUsers = () => {
       <PageHeader>
         <HStack>
           <Box flex="1">
-            <Heading size="md">{t('admin:userManagement')}</Heading>
+            <Heading size="md">{t('admin:users.userManagement')}</Heading>
           </Box>
           <Box>
             <Button
@@ -156,11 +156,11 @@ export const PageUsers = () => {
               colorScheme="brand"
               leftIcon={<FiPlus />}
             >
-              {t('admin:actions.createUser')}
+              {t('admin:users.actions.createUser')}
             </Button>
             <IconButton
               display={{ base: 'flex', sm: 'none' }}
-              aria-label={t('admin:actions.createUser')}
+              aria-label={t('admin:users.actions.createUser')}
               as={Link}
               to={`${path}create`}
               size="sm"
@@ -174,32 +174,32 @@ export const PageUsers = () => {
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
-              {t('admin:loginEmail')}
+              {t('admin:users.loginEmail')}
             </DataListCell>
             <DataListCell
               colName="id"
               colWidth="4rem"
               isVisible={{ base: false, lg: true }}
             >
-              {t('admin:id')}
+              {t('admin:users.id')}
             </DataListCell>
             <DataListCell
               colName="authorities"
               isVisible={{ base: false, lg: true }}
             >
-              {t('admin:authorities')}
+              {t('admin:users.authorities')}
             </DataListCell>
             <DataListCell
               colName="created"
               isVisible={{ base: false, lg: true }}
             >
-              {t('admin:createdBy')}
+              {t('admin:users.createdBy')}
             </DataListCell>
             <DataListCell
               colName="lastModified"
               isVisible={{ base: false, md: true }}
             >
-              {t('admin:modifiedBy')}
+              {t('admin:users.modifiedBy')}
             </DataListCell>
             <DataListCell
               colName="status"
@@ -207,7 +207,7 @@ export const PageUsers = () => {
               align="center"
             >
               <Box as="span" d={{ base: 'none', md: 'block' }}>
-                {t('admin:status')}
+                {t('admin:users.status')}
               </Box>
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
