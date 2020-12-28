@@ -7,7 +7,7 @@ import { PageUsers } from '@/app/admin/users/PageUsers';
 import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
-export const AdminUsersRoutes = () => {
+const AdminUsersRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -18,3 +18,5 @@ export const AdminUsersRoutes = () => {
     </Switch>
   );
 };
+
+export default AdminUsersRoutes;
