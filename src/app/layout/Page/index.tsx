@@ -2,12 +2,12 @@ import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
-import { useFocusMode } from '@/app/layout/useFocusMode';
+import { useFocusMode } from '@/app/layout';
 
 interface PageProps extends FlexProps {
   isFocusMode?: boolean;
   containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  hideContainer?: false;
+  hideContainer?: boolean;
 }
 
 const PageContext = React.createContext(null);

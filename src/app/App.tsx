@@ -9,7 +9,7 @@ import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
 import { DashboardRoutes } from '@/app/dashboard/Routes';
 import { EntityRoutes } from '@/app/entity/Routes';
-import { Layout } from '@/app/layout/Layout';
+import { Layout } from '@/app/layout';
 import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
 import { Error404, ErrorBoundary } from '@/errors';
 

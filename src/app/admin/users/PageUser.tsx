@@ -5,7 +5,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser } from '@/app/admin/users/service';
-import { Page, PageBody, PageFooter, PageHeader } from '@/components';
+import { Page, PageBody, PageFooter, PageHeader } from '@/app/layout';
 
 import { UserStatus } from './UserStatus';
 

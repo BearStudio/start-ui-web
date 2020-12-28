@@ -24,7 +24,6 @@ export {
   DataListRow,
   DataListCell,
 } from './DataList';
-export { Page, PageBody, PageFooter, PageHeader } from './Page';
 export {
   useToastError,
   useToastWarning,

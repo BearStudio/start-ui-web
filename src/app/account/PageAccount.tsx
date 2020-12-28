@@ -3,7 +3,7 @@ import React from 'react';
 import { Heading } from '@chakra-ui/react';
 
 import { useAccount } from '@/app/account/service';
-import { Page, PageBody, PageHeader } from '@/components';
+import { Page, PageBody, PageHeader } from '@/app/layout';
 
 export const PageAccount = () => {
   const { account } = useAccount();

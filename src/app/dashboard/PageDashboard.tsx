@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Heading } from '@chakra-ui/react';
 
-import { Page, PageHeader, PageBody, PageFooter } from '@/components';
+import { Page, PageBody, PageHeader, PageFooter } from '@/app/layout';
 
 export const PageDashboard = () => {
   return (

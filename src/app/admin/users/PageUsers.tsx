@@ -31,6 +31,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
 import { useUserList, useUserUpdate } from '@/app/admin/users/service';
+import { Page, PageBody, PageHeader } from '@/app/layout';
 import {
   ActionsButton,
   DataList,
@@ -40,9 +41,6 @@ import {
   DataListRow,
   DateAgo,
   HitZone,
-  Page,
-  PageBody,
-  PageHeader,
   useToastError,
   useToastSuccess,
   usePaginationFromUrl,
