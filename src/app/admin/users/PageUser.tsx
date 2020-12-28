@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Text, Box, IconButton, Heading, HStack } from '@chakra-ui/react';
-import { FiArrowLeft } from 'react-icons/fi';
+import { Text, Box, Heading, HStack } from '@chakra-ui/react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser } from '@/app/admin/users/service';
@@ -15,16 +14,8 @@ export const PageUser = () => {
   const { user } = useUser(login);
   return (
     <Page containerSize="md" isFocusMode>
-      <PageHeader>
+      <PageHeader showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
-          <Box ml={{ base: 0, lg: '-3.5rem' }}>
-            <IconButton
-              aria-label="Go Back"
-              icon={<FiArrowLeft fontSize="lg" />}
-              variant="ghost"
-              onClick={() => history.goBack()}
-            />
-          </Box>
           <Box flex="1">
             <Heading size="sm">User {user?.login}</Heading>
             <Text fontSize="sm" color="gray.600">

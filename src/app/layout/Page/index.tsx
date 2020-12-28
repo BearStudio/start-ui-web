@@ -1,6 +1,7 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, HStack, IconButton } from '@chakra-ui/react';
+import { FiArrowLeft } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
 
@@ -40,10 +41,21 @@ const PageContainer = ({ children, ...rest }) => {
   );
 };
 
-export const PageHeader = ({ children, ...rest }: FlexProps) => {
+interface PageHeaderProps extends FlexProps {
+  onBack?(): void;
+  showBack?: boolean;
+}
+
+export const PageHeader = ({
+  children,
+  onBack = () => {},
+  showBack = false,
+  ...rest
+}: PageHeaderProps) => {
   const { isFocusMode } = useContext(PageContext);
   return (
     <Flex
+      z="2"
       direction="column"
       pt="4"
       pb={isFocusMode ? 4 : undefined}
@@ -52,14 +64,28 @@ export const PageHeader = ({ children, ...rest }: FlexProps) => {
       {...rest}
     >
       {isFocusMode && <Box w="full" h="0" pb="safe-top" />}
-      <PageContainer>{children}</PageContainer>
+      <PageContainer>
+        <HStack spacing="4">
+          {showBack && (
+            <Box ml={{ base: 0, lg: '-3.5rem' }}>
+              <IconButton
+                aria-label="Go Back"
+                icon={<FiArrowLeft fontSize="lg" />}
+                variant="ghost"
+                onClick={() => onBack()}
+              />
+            </Box>
+          )}
+          <Box flex="1">{children}</Box>
+        </HStack>
+      </PageContainer>
     </Flex>
   );
 };
 
 export const PageBody = ({ children, ...rest }: FlexProps) => {
   return (
-    <Flex direction="column" flex="1" py="4" {...rest}>
+    <Flex z="1" direction="column" flex="1" py="4" {...rest}>
       <PageContainer>{children}</PageContainer>
       <Box w="full" h="0" pb="safe-bottom" />
     </Flex>
@@ -78,6 +104,7 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
     <>
       <Box h={`${height}px`} />
       <Flex
+        z="3"
         ref={footerRef}
         direction="column"
         mt="auto"

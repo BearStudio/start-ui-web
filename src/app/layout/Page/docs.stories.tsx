@@ -17,9 +17,19 @@ export default {
 
 export const Default = () => (
   <Page>
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageHeader>Page Header</PageHeader>
+    <PageBody>Page Body</PageBody>
+    <PageFooter>Page Footer</PageFooter>
+  </Page>
+);
+
+export const FocusAndBackButton = () => (
+  <Page isFocusMode>
+    <PageHeader showBack onBack={() => alert('Back')}>
+      Page Header
+    </PageHeader>
+    <PageBody>Page Body</PageBody>
+    <PageFooter>Page Footer</PageFooter>
   </Page>
 );
 
