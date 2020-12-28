@@ -1,4 +1,11 @@
-import { ForwardedRef, forwardRef, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Box,
@@ -16,6 +23,15 @@ import 'react-day-picker/lib/style.css';
 import { FaCalendar } from 'react-icons/all';
 
 const FORMAT = 'DD/MM/YYYY';
+
+interface IDayPicker {
+  defaultValue?: Date;
+  disabledDays?: any;
+  placeholder?: string;
+  onChange?: any;
+  dayPickerInputProps?: any;
+  dayPickerProps?: Object;
+}
 
 const ReactDayPickerInput = forwardRef(
   ({ isDisabled, ...otherProps }: any, ref: ForwardedRef<any>) => (
@@ -37,15 +53,15 @@ const ReactDayPickerInput = forwardRef(
   )
 );
 
-export const DayPicker = ({
-  disabledDays,
-  defaultValue,
-  placeholder,
-  onChange,
-  dayPickerInputProps,
-  dayPickerProps,
+export const DayPicker: FC<IDayPicker> = ({
+  disabledDays = null,
+  defaultValue = null,
+  placeholder = '',
+  onChange = () => {},
+  dayPickerInputProps = {},
+  dayPickerProps = {},
   ...props
-}) => {
+}: IDayPicker) => {
   const [selectedDay, setSelectedDay] = useState(defaultValue);
   const dayPickerInputRef = useRef(null);
   const isSmartphoneFormat = useBreakpointValue({ base: true, sm: false });
@@ -91,26 +107,4 @@ export const DayPicker = ({
       />
     </Box>
   );
-};
-
-DayPicker.propTypes = {
-  defaultValue: PropTypes.instanceOf(Date),
-  disabledDays: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.arrayOf(PropTypes.object),
-    PropTypes.func,
-  ]),
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
-  dayPickerInputProps: PropTypes.object, // eslint-disable-line
-  dayPickerProps: PropTypes.object, // eslint-disable-line
-};
-
-DayPicker.defaultProps = {
-  defaultValue: null,
-  disabledDays: null,
-  placeholder: '',
-  onChange: () => {},
-  dayPickerInputProps: {},
-  dayPickerProps: {},
 };

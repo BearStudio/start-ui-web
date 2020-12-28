@@ -81,7 +81,7 @@ export const reactDayPicker = {
     verticaAlign: 'middle',
     textAlign: 'center',
     cursor: 'pointer',
-    height: '45px',
-    width: '45px',
+    height: '2.8rem',
+    width: '2.8rem',
   },
 };
