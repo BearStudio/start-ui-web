@@ -36,3 +36,12 @@ export const useActivateAccount = (config: MutationOptions = {}) => {
     }
   );
 };
+
+export const useUpdateAccount = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    (account) => Axios.post('/account', account),
+    {
+      ...config,
+    }
+  );
+};
