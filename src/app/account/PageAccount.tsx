@@ -73,7 +73,6 @@ export const PageAccount = () => {
                 spacing="20px"
                 shadow="md"
               >
-                <Heading size="md">General Informations</Heading>
                 <Stack direction={['column', 'row']} spacing="20px">
                   <FieldInput
                     name="firstName"
@@ -120,8 +119,13 @@ export const PageAccount = () => {
                   />
                 </Box>
                 <Box align="right">
-                  <Button type="submit" colorScheme="brand" ml="auto">
-                    {updateLoading ? <Spinner /> : 'Save'}
+                  <Button
+                    type="submit"
+                    colorScheme="brand"
+                    ml="auto"
+                    isLoading={updateLoading}
+                  >
+                    Save
                   </Button>
                 </Box>
               </Stack>
