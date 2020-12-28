@@ -6,7 +6,7 @@ import { AdminUsersRoutes } from '@/app/admin/users/Routes';
 import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
-export const AdminRoutes = () => {
+const AdminRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -15,3 +15,5 @@ export const AdminRoutes = () => {
     </Switch>
   );
 };
+
+export default AdminRoutes;

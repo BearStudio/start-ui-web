@@ -6,7 +6,7 @@ import { PageDashboard } from '@/app/dashboard/PageDashboard';
 import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
-export const DashboardRoutes = () => {
+const DashboardRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -15,3 +15,5 @@ export const DashboardRoutes = () => {
     </Switch>
   );
 };
+
+export default DashboardRoutes;

@@ -10,7 +10,7 @@ import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest
 import { Route, RoutePublicOnly } from '@/app/router';
 import { Error404 } from '@/errors';
 
-export const AccountRoutes = () => {
+const AccountRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -41,3 +41,5 @@ export const AccountRoutes = () => {
     </Switch>
   );
 };
+
+export default AccountRoutes;
