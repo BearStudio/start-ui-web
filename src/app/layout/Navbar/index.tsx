@@ -189,7 +189,7 @@ export const Navbar = () => {
             ml="-0.5rem"
           />
           <NavbarLogo mx={{ base: 'auto', md: '0' }} />
-          <NavbarMenu ml="auto" mr="4" display={{ base: 'none', md: 'flex' }} />
+          <NavbarMenu mr="auto" ml="4" display={{ base: 'none', md: 'flex' }} />
           <NavbarAccountMenu />
         </Flex>
       </SlideFade>
