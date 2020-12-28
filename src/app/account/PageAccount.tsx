@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Box, Button, Heading, Spinner, Stack } from '@chakra-ui/react';
+import { Box, Button, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail, isRequired } from '@formiz/validations';
+import { useQueryClient } from 'react-query';
 
 import { useAccount, useUpdateAccount } from '@/app/account/service';
 import { Page, PageBody, PageHeader } from '@/app/layout';
@@ -16,22 +17,24 @@ import {
 export const PageAccount = () => {
   const { account } = useAccount();
   const generalInformationForm = useForm();
+  const queryClient = useQueryClient();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
   const { mutate: updateAccount, isLoading: updateLoading } = useUpdateAccount({
     onError: (error: any) => {
-      const { title } = error?.response?.data || {};
+      const { description } = error?.response?.data || {};
       toastError({
-        title: 'Change not applied',
-        description: title,
+        title: 'Update failed',
+        description,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: 'Change applied',
+        title: 'Updated with success',
       });
+      queryClient.invalidateQueries('account');
     },
   });
 
