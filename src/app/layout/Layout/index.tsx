@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';
-import { Navbar } from '@/app/layout/Navbar';
+import { NavBar } from '@/app/layout/NavBar';
 import { Viewport } from '@/components';
 
 export const LayoutContext = React.createContext(null);
@@ -22,7 +22,7 @@ export const Layout = ({ children }) => {
   return (
     <LayoutContext.Provider value={{ isFocusMode, setIsFocusMode }}>
       <Viewport>
-        {isLogged && !isFocusMode && <Navbar />}
+        {isLogged && !isFocusMode && <NavBar />}
         <SlideFade
           in
           offsetY={-20}

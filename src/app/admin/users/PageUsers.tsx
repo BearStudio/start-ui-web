@@ -31,7 +31,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
 import { useUserList, useUserUpdate } from '@/app/admin/users/service';
-import { Page, PageBody, PageHeader } from '@/app/layout';
+import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,
   DataList,
@@ -51,6 +51,8 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
+
+import { AdminNav } from '../AdminNav';
 
 const UserActions = ({ user, ...rest }) => {
   const { path } = useRouteMatch();
@@ -137,9 +139,9 @@ export const PageUsers = () => {
   });
 
   return (
-    <Page containerSize="xl">
-      <PageHeader>
-        <HStack>
+    <Page containerSize="xl" nav={<AdminNav />}>
+      <PageContent>
+        <HStack mb="4">
           <Box flex="1">
             <Heading size="md">User Management</Heading>
           </Box>
@@ -164,8 +166,6 @@ export const PageUsers = () => {
             />
           </Box>
         </HStack>
-      </PageHeader>
-      <PageBody>
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
@@ -310,7 +310,7 @@ export const PageUsers = () => {
             </Pagination>
           </DataListFooter>
         </DataList>
-      </PageBody>
+      </PageContent>
     </Page>
   );
 };

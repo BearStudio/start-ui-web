@@ -25,19 +25,19 @@ import {
   useTheme,
   Icon,
 } from '@chakra-ui/react';
-import { FiLogOut, FiMenu, FiUser, FiUsers } from 'react-icons/fi';
+import { FiLogOut, FiMenu, FiUser } from 'react-icons/fi';
 import { Link as RouterLink, useLocation, useHistory } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/service';
 
-const NavbarContext = React.createContext(null);
+const NavBarContext = React.createContext(null);
 
-const NavbarLogo = (props) => (
+const NavBarLogo = (props) => (
   <Box w="8rem" h="1rem" bg="gray.600" borderRadius="full" {...props} />
 );
 
-const NavbarItem = ({ to, ...rest }: any) => {
-  const { onClose } = useContext(NavbarContext);
+const NavBarItem = ({ to, ...rest }: any) => {
+  const { onClose } = useContext(NavBarContext);
   const { pathname } = useLocation();
   const isActive = pathname.startsWith(to);
   return (
@@ -75,15 +75,19 @@ const NavbarItem = ({ to, ...rest }: any) => {
   );
 };
 
-const NavbarMenu = (props) => (
-  <Stack direction="row" spacing="1" {...props}>
-    <NavbarItem to="/dashboard">Dashboard</NavbarItem>
-    <NavbarItem to="/entity">Entity</NavbarItem>
-  </Stack>
-);
+const NavBarMenu = (props) => {
+  const { isAdmin } = useAccount();
+  return (
+    <Stack direction="row" spacing="1" {...props}>
+      <NavBarItem to="/dashboard">Dashboard</NavBarItem>
+      <NavBarItem to="/entity">Entity</NavBarItem>
+      {isAdmin && <NavBarItem to="/admin">Admin</NavBarItem>}
+    </Stack>
+  );
+};
 
-const NavbarMenuButton = (props) => {
-  const { onOpen } = useContext(NavbarContext);
+const NavBarMenuButton = (props) => {
+  const { onOpen } = useContext(NavBarContext);
   return (
     <IconButton
       aria-label="Navigation"
@@ -97,8 +101,8 @@ const NavbarMenuButton = (props) => {
   );
 };
 
-const NavbarMenuDrawer = ({ children, ...rest }) => {
-  const { isOpen, onClose } = useContext(NavbarContext);
+const NavBarMenuDrawer = ({ children, ...rest }) => {
+  const { isOpen, onClose } = useContext(NavBarContext);
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose} {...rest}>
       <DrawerOverlay>
@@ -110,7 +114,7 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
         >
           <DrawerCloseButton mt="safe-top" />
           <DrawerHeader>
-            <NavbarLogo />
+            <NavBarLogo />
           </DrawerHeader>
           <DrawerBody p="2">{children}</DrawerBody>
         </DrawerContent>
@@ -119,8 +123,8 @@ const NavbarMenuDrawer = ({ children, ...rest }) => {
   );
 };
 
-const NavbarAccountMenu = (props) => {
-  const { account, isAdmin, isLoading } = useAccount();
+const NavBarAccountMenu = (props) => {
+  const { account, isLoading } = useAccount();
   const history = useHistory();
 
   return (
@@ -140,19 +144,6 @@ const NavbarAccountMenu = (props) => {
           </MenuItem>
         </MenuGroup>
         <MenuDivider />
-        {isAdmin && (
-          <>
-            <MenuGroup title="Administration">
-              <MenuItem
-                icon={<Icon as={FiUsers} fontSize="lg" color="gray.400" />}
-                onClick={() => history.push('/admin/users')}
-              >
-                User Management
-              </MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-          </>
-        )}
         <MenuItem
           icon={<Icon as={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
@@ -164,13 +155,13 @@ const NavbarAccountMenu = (props) => {
   );
 };
 
-export const Navbar = () => {
+export const NavBar = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const theme = useTheme();
   const navbarHeight = `calc(4rem + ${theme.space['safe-top']})`;
 
   return (
-    <NavbarContext.Provider value={{ isOpen, onClose, onOpen }}>
+    <NavBarContext.Provider value={{ isOpen, onClose, onOpen }}>
       <SlideFade in offsetY={-40} style={{ zIndex: 2 }}>
         <Flex
           position="fixed"
@@ -184,19 +175,19 @@ export const Navbar = () => {
           px="4"
           h={navbarHeight}
         >
-          <NavbarMenuButton
+          <NavBarMenuButton
             display={{ base: 'flex', md: 'none' }}
             ml="-0.5rem"
           />
-          <NavbarLogo mx={{ base: 'auto', md: '0' }} />
-          <NavbarMenu mr="auto" ml="4" display={{ base: 'none', md: 'flex' }} />
-          <NavbarAccountMenu />
+          <NavBarLogo mx={{ base: 'auto', md: '0' }} />
+          <NavBarMenu mr="auto" ml="4" display={{ base: 'none', md: 'flex' }} />
+          <NavBarAccountMenu />
         </Flex>
       </SlideFade>
       <Box h={navbarHeight} />
-      <NavbarMenuDrawer>
-        <NavbarMenu direction="column" />
-      </NavbarMenuDrawer>
-    </NavbarContext.Provider>
+      <NavBarMenuDrawer>
+        <NavBarMenu direction="column" />
+      </NavBarMenuDrawer>
+    </NavBarContext.Provider>
   );
 };

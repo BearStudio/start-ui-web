@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Flex } from '@chakra-ui/react';
 
-import { Page, PageHeader, PageBody, PageFooter } from './index';
+import { Page, PageTopBar, PageContent, PageBottomBar } from './index';
 
 export default {
   title: 'App Layout/Page',
@@ -17,58 +17,58 @@ export default {
 
 export const Default = () => (
   <Page>
-    <PageHeader>Page Header</PageHeader>
-    <PageBody>Page Body</PageBody>
-    <PageFooter>Page Footer</PageFooter>
+    <PageTopBar>Page Header</PageTopBar>
+    <PageContent>Page Body</PageContent>
+    <PageBottomBar>Page Footer</PageBottomBar>
   </Page>
 );
 
 export const FocusAndBackButton = () => (
   <Page isFocusMode>
-    <PageHeader showBack onBack={() => alert('Back')}>
+    <PageTopBar showBack onBack={() => alert('Back')}>
       Page Header
-    </PageHeader>
-    <PageBody>Page Body</PageBody>
-    <PageFooter>Page Footer</PageFooter>
+    </PageTopBar>
+    <PageContent>Page Body</PageContent>
+    <PageBottomBar>Page Footer</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeSmall = () => (
   <Page containerSize="sm">
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageTopBar bg="gray.100">Page Header</PageTopBar>
+    <PageContent bg="gray.200">Page Body</PageContent>
+    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeMedium = () => (
   <Page containerSize="md">
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageTopBar bg="gray.100">Page Header</PageTopBar>
+    <PageContent bg="gray.200">Page Body</PageContent>
+    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeLarge = () => (
   <Page containerSize="lg">
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageTopBar bg="gray.100">Page Header</PageTopBar>
+    <PageContent bg="gray.200">Page Body</PageContent>
+    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeFull = () => (
   <Page containerSize="full">
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageTopBar bg="gray.100">Page Header</PageTopBar>
+    <PageContent bg="gray.200">Page Body</PageContent>
+    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
   </Page>
 );
 
 export const NoContainer = () => (
   <Page hideContainer>
-    <PageHeader bg="gray.100">Page Header</PageHeader>
-    <PageBody bg="gray.200">Page Body</PageBody>
-    <PageFooter bg="gray.300">Page Footer</PageFooter>
+    <PageTopBar bg="gray.100">Page Header</PageTopBar>
+    <PageContent bg="gray.200">Page Body</PageContent>
+    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
   </Page>
 );

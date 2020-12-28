@@ -6,7 +6,7 @@ import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
 
 import { useAccount, useUpdateAccount } from '@/app/account/service';
-import { Page, PageBody, PageHeader } from '@/app/layout';
+import { Page, PageContent } from '@/app/layout';
 import {
   FieldInput,
   FieldSelect,
@@ -51,10 +51,8 @@ export const PageAccount = () => {
 
   return (
     <Page>
-      <PageHeader>
+      <PageContent>
         <Heading size="md">Account</Heading>
-      </PageHeader>
-      <PageBody>
         {account && (
           <Formiz
             id="account-form"
@@ -110,7 +108,7 @@ export const PageAccount = () => {
             </form>
           </Formiz>
         )}
-      </PageBody>
+      </PageContent>
     </Page>
   );
 };
