@@ -5,8 +5,9 @@ import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
 
+import { AccountNav } from '@/app/account/AccountNav';
 import { useAccount, useUpdateAccount } from '@/app/account/service';
-import { Page, PageBody, PageHeader } from '@/app/layout';
+import { Page, PageContent } from '@/app/layout';
 import {
   FieldInput,
   FieldSelect,
@@ -14,7 +15,7 @@ import {
   useToastError,
 } from '@/components';
 
-export const PageAccount = () => {
+export const PageProfile = () => {
   const { account } = useAccount();
   const generalInformationForm = useForm();
   const queryClient = useQueryClient();
@@ -50,11 +51,11 @@ export const PageAccount = () => {
   };
 
   return (
-    <Page>
-      <PageHeader>
-        <Heading size="md">Account</Heading>
-      </PageHeader>
-      <PageBody>
+    <Page nav={<AccountNav />}>
+      <PageContent>
+        <Heading size="md" mb="4">
+          Profile
+        </Heading>
         {account && (
           <Formiz
             id="account-form"
@@ -68,10 +69,10 @@ export const PageAccount = () => {
                 bg="white"
                 p="6"
                 borderRadius="lg"
-                spacing="8"
+                spacing="6"
                 shadow="md"
               >
-                <Stack direction={{ base: 'column', sm: 'row' }} spacing="8">
+                <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
                   <FieldInput
                     name="firstName"
                     label="First Name"
@@ -110,7 +111,7 @@ export const PageAccount = () => {
             </form>
           </Formiz>
         )}
-      </PageBody>
+      </PageContent>
     </Page>
   );
 };

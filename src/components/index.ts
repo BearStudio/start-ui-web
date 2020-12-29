@@ -25,6 +25,7 @@ export {
   DataListRow,
   DataListCell,
 } from './DataList';
+export { Nav, NavItem, NavGroup } from './Nav';
 export {
   useToastError,
   useToastWarning,

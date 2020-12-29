@@ -4,7 +4,7 @@ import { Text, Box, Heading, HStack } from '@chakra-ui/react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser } from '@/app/admin/users/service';
-import { Page, PageBody, PageFooter, PageHeader } from '@/app/layout';
+import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
 
 import { UserStatus } from './UserStatus';
 
@@ -14,7 +14,7 @@ export const PageUser = () => {
   const { user } = useUser(login);
   return (
     <Page containerSize="md" isFocusMode>
-      <PageHeader showBack onBack={() => history.goBack()}>
+      <PageTopBar showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
           <Box flex="1">
             <Heading size="sm">User {user?.login}</Heading>
@@ -28,9 +28,9 @@ export const PageUser = () => {
             </Box>
           )}
         </HStack>
-      </PageHeader>
-      <PageBody>Body</PageBody>
-      <PageFooter>Footer</PageFooter>
+      </PageTopBar>
+      <PageContent>Body</PageContent>
+      <PageBottomBar>Footer</PageBottomBar>
     </Page>
   );
 };
