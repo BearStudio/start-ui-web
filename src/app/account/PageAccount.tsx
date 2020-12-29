@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Button, Heading, Stack } from '@chakra-ui/react';
+import { Flex, Button, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
@@ -83,24 +83,20 @@ export const PageAccount = () => {
                     required="This field is required"
                   />
                 </Stack>
-                <Box>
-                  <FieldInput
-                    name="email"
-                    label="Email"
-                    required="This field is required"
-                    validations={[
-                      { rule: isEmail(), message: 'Invalid email address' },
-                    ]}
-                  />
-                </Box>
-                <Box>
-                  <FieldSelect
-                    name="langKey"
-                    label="Language"
-                    options={languages}
-                  />
-                </Box>
-                <Box align="right">
+                <FieldInput
+                  name="email"
+                  label="Email"
+                  required="This field is required"
+                  validations={[
+                    { rule: isEmail(), message: 'Invalid email address' },
+                  ]}
+                />
+                <FieldSelect
+                  name="langKey"
+                  label="Language"
+                  options={languages}
+                />
+                <Flex>
                   <Button
                     type="submit"
                     colorScheme="brand"
@@ -109,7 +105,7 @@ export const PageAccount = () => {
                   >
                     Save
                   </Button>
-                </Box>
+                </Flex>
               </Stack>
             </form>
           </Formiz>
