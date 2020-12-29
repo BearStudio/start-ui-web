@@ -1,12 +1,18 @@
-import { Box } from '@chakra-ui/react';
+import { useState } from 'react';
 
-import { DayPicker } from '.';
+import { DayPicker } from './index';
 
 export default {
   title: 'components/Daypicker',
 };
-export const Default = () => (
-  <Box name="Basic" height="400px">
-    <DayPicker />
-  </Box>
-);
+export const Default = () => {
+  const [day, setDay] = useState(new Date());
+  return (
+    <DayPicker
+      value={day}
+      onChange={(day) => {
+        setDay(day);
+      }}
+    />
+  );
+};

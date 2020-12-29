@@ -1,7 +1,9 @@
+import 'react-day-picker/lib/style.css';
+
 export const reactDayPicker = {
   '.DayPickerInput': {
     display: 'inline-block',
-    fontSize: '0.1rem',
+    fontSize: '0.1em',
     width: '100%',
   },
 
@@ -12,16 +14,62 @@ export const reactDayPicker = {
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: '3em',
-    width: { base: '22rem', sm: '100%' },
+    width: '100%',
+    maxWidth: '90vw',
   },
 
   '.DayPickerInput-Overlay': {
     position: 'absolute',
-    left: '0px',
+    left: '0',
     zIndex: 2,
-    borderRadius: '3%',
+    borderRadius: 'md',
+    boxShadow: 'lg',
+  },
 
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+  '.DayPicker': {
+    display: 'inline-block',
+    fontSize: { base: '0.8rem', sm: '1rem' },
+    border: '1px solid',
+    borderColor: 'gray.200',
+    borderRadius: 'md',
+    maxWidth: '90vw',
+  },
+
+  '.DayPicker-Day--disabled': {
+    pointerEvents: 'none',
+  },
+
+  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
+    position: 'relative',
+    backgroundColor: 'brand.500',
+    borderRadius: '100%',
+  },
+
+  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover': {
+    backgroundColor: 'brand.500',
+    borderRadius: '100%',
+    color: 'white',
+  },
+
+  '.DayPicker:not(.DayPicker--interactionDisabled)': {
+    '.DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
+      backgroundColor: 'brand.100',
+      borderRadius: '100%',
+      color: 'black',
+    },
+  },
+
+  '.DayPicker-Day': {
+    borderRadius: 'full',
+    cursor: 'pointer',
+    height: '2.8em',
+    width: '2.8em',
+    transition: '0.2s',
+  },
+
+  '.DayPicker-Day--today': {
+    color: 'black',
+    fontWeight: 'bold',
   },
 
   '.DayPicker-Caption > div': {
@@ -33,55 +81,5 @@ export const reactDayPicker = {
     fontWeight: '350',
     color: 'black',
     fontSize: '0.875em',
-  },
-
-  '.DayPicker': {
-    display: 'inline-block',
-    fontSize: '1rem',
-    border: '1px solid',
-    borderColor: 'gray.200',
-    borderRadius: '2%',
-    width: '22em',
-  },
-
-  '.DayPicker-Day--disabled': {
-    pointerEvents: 'none',
-  },
-
-  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
-    position: 'relative',
-
-    backgroundColor: 'brandSecondary.600',
-    borderRadius: '100%',
-  },
-
-  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover': {
-    backgroundColor: 'brandSecondary.600',
-    borderRadius: '100%',
-    color: 'white',
-  },
-
-  '.DayPicker:not(.DayPicker--interactionDisabled)': {
-    '.DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
-      backgroundColor: 'brandSecondary.100',
-      borderRadius: '100%',
-      color: 'black',
-    },
-  },
-
-  '.DayPicker-Day--today': {
-    color: 'black',
-    fontWeight: 'bold',
-  },
-
-  '.DayPicker-Day': {
-    display: 'table-cell',
-    padding: '0.5em',
-    borderRadius: '50%',
-    verticaAlign: 'middle',
-    textAlign: 'center',
-    cursor: 'pointer',
-    height: '2.8rem',
-    width: '2.8rem',
   },
 };

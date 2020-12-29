@@ -1,101 +1,80 @@
-import {
-  FC,
-  ForwardedRef,
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC } from 'react';
 
 import {
   Box,
   Input,
   InputGroup,
-  InputRightElement,
+  InputProps,
+  InputLeftElement,
   useBreakpointValue,
+  forwardRef,
+  Icon,
+  BoxProps,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import 'dayjs/locale/en';
 import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
-import { FaCalendar } from 'react-icons/all';
+import { FiCalendar } from 'react-icons/fi';
 
 const FORMAT = 'DD/MM/YYYY';
 
-interface IDayPicker {
-  defaultValue?: Date;
-  disabledDays?: any;
-  placeholder?: string;
-  onChange?: any;
-  dayPickerInputProps?: any;
-  dayPickerProps?: Object;
-}
-
-const ReactDayPickerInput = forwardRef(
-  ({ isDisabled, ...otherProps }: any, ref: ForwardedRef<any>) => (
+const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
+  ({ isDisabled, ...rest }, ref) => (
     <InputGroup>
-      <Input ref={ref} pr="2.75rem" {...otherProps} />
-      <InputRightElement
-        color={`gray.${isDisabled ? '300' : '400'}`}
-        width="2.75rem"
-      >
-        <FaCalendar />
-      </InputRightElement>
+      <InputLeftElement pointerEvents="none">
+        <Icon
+          as={FiCalendar}
+          fontSize="lg"
+          color={isDisabled ? 'gray.300' : 'gray.400'}
+        />
+      </InputLeftElement>
+      <Input ref={ref} {...rest} />
     </InputGroup>
   )
 );
 
-export const DayPicker: FC<IDayPicker> = ({
-  disabledDays = null,
-  defaultValue = null,
-  placeholder = 'dd / mm / YY',
+interface DayPickerProps extends BoxProps {
+  placeholder?: string;
+  value?: string | Date;
+  onChange?: any;
+  inputProps?: any;
+  dayPickerProps?: any;
+}
+
+export const DayPicker: FC<DayPickerProps> = ({
+  placeholder = FORMAT,
+  value = null,
   onChange = () => {},
-  dayPickerInputProps = {},
+  inputProps = {},
   dayPickerProps = {},
-  ...props
-}: IDayPicker) => {
-  const [selectedDay, setSelectedDay] = useState(defaultValue);
-  const dayPickerInputRef = useRef(null);
+  ...rest
+}) => {
   const isSmartphoneFormat = useBreakpointValue({ base: true, sm: false });
 
-  useEffect(() => {
-    dayjs.locale('en');
-  }, []);
-  const handleDayChange = (day) => {
-    setSelectedDay(day);
-    onChange(day);
-  };
   const formatDate = (date, format) => dayjs(date).format(format);
 
   const parseDate = (str, format) => {
     const parsed = dayjs(str, format).toDate();
-    if (DateUtils.isDate(parsed)) {
-      return parsed;
-    }
-    return null;
+    return DateUtils.isDate(parsed) ? parsed : null;
   };
 
   return (
-    <Box {...props}>
+    <Box {...rest}>
       <DayPickerInput
-        ref={dayPickerInputRef}
         component={ReactDayPickerInput}
-        onDayChange={handleDayChange}
-        value={selectedDay}
+        onDayChange={onChange}
         formatDate={formatDate}
         format={FORMAT}
-        placeholder={placeholder}
         parseDate={parseDate}
+        placeholder={placeholder}
+        value={value}
         dayPickerProps={{
           firstDayOfWeek: 1,
-          disabledDays,
           ...dayPickerProps,
         }}
-        {...dayPickerInputProps}
         inputProps={{
           readOnly: isSmartphoneFormat,
-          ...dayPickerInputProps.inputProps,
+          ...inputProps,
         }}
       />
     </Box>
