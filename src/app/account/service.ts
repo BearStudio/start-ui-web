@@ -67,3 +67,13 @@ export const useResetPasswordFinish = (config: MutationOptions = {}) => {
     }
   );
 };
+
+export const useChangePassword = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    ({ currentPassword, newPassword }) =>
+      Axios.post('/account/change-password', { currentPassword, newPassword }),    {
+      ...config,
+    }
+  );
+};
+
