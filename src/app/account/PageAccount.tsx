@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Button, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { isEmail, isRequired } from '@formiz/validations';
+import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
 
 import { useAccount, useUpdateAccount } from '@/app/account/service';
@@ -57,59 +57,38 @@ export const PageAccount = () => {
       <PageBody>
         {account && (
           <Formiz
+            id="account-form"
             onValidSubmit={submitGeneralInformation}
             connect={generalInformationForm}
             initialValues={account}
           >
-            <form
-              noValidate
-              onSubmit={generalInformationForm.submit}
-              className="demo-form"
-              style={{ minHeight: '16rem' }}
-            >
+            <form noValidate onSubmit={generalInformationForm.submit}>
               <Stack
                 direction="column"
                 bg="white"
                 p="6"
-                m="2"
                 borderRadius="lg"
-                spacing="20px"
+                spacing="8"
                 shadow="md"
               >
-                <Stack direction={['column', 'row']} spacing="20px">
+                <Stack direction={{ base: 'column', sm: 'row' }} spacing="8">
                   <FieldInput
                     name="firstName"
                     label="First Name"
-                    isRequired
-                    validations={[
-                      {
-                        rule: isRequired(),
-                        message: 'This field is required',
-                      },
-                    ]}
+                    required="This field is required"
                   />
                   <FieldInput
                     name="lastName"
                     label="Last Name"
-                    isRequired
-                    validations={[
-                      {
-                        rule: isRequired(),
-                        message: 'This field is required',
-                      },
-                    ]}
+                    required="This field is required"
                   />
                 </Stack>
                 <Box>
                   <FieldInput
                     name="email"
                     label="Email"
-                    isRequired
+                    required="This field is required"
                     validations={[
-                      {
-                        rule: isRequired(),
-                        message: 'This field is required',
-                      },
                       { rule: isEmail(), message: 'Invalid email address' },
                     ]}
                   />
