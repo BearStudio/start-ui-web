@@ -35,13 +35,7 @@ interface IDayPicker {
 const ReactDayPickerInput = forwardRef(
   ({ isDisabled, ...otherProps }: any, ref: ForwardedRef<any>) => (
     <InputGroup>
-      <Input
-        ref={ref}
-        bg="gray.50"
-        focusBorderColor="brandSecondary.600"
-        pr="2.75rem"
-        {...otherProps}
-      />
+      <Input ref={ref} pr="2.75rem" {...otherProps} />
       <InputRightElement
         color={`gray.${isDisabled ? '300' : '400'}`}
         width="2.75rem"
@@ -55,7 +49,7 @@ const ReactDayPickerInput = forwardRef(
 export const DayPicker: FC<IDayPicker> = ({
   disabledDays = null,
   defaultValue = null,
-  placeholder = '',
+  placeholder = 'dd / mm / YY',
   onChange = () => {},
   dayPickerInputProps = {},
   dayPickerProps = {},
