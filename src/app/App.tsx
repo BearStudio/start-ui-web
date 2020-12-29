@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import { ReactQueryDevtools } from 'react-query-devtools';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 
 import { PageLogin } from '@/app/auth/PageLogin';
