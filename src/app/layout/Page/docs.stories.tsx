@@ -17,58 +17,58 @@ export default {
 
 export const Default = () => (
   <Page>
-    <PageTopBar>Page Header</PageTopBar>
-    <PageContent>Page Body</PageContent>
-    <PageBottomBar>Page Footer</PageBottomBar>
+    <PageTopBar>Page Top Bar</PageTopBar>
+    <PageContent>Page Content</PageContent>
+    <PageBottomBar>Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const FocusAndBackButton = () => (
   <Page isFocusMode>
     <PageTopBar showBack onBack={() => alert('Back')}>
-      Page Header
+      Page Top Bar
     </PageTopBar>
-    <PageContent>Page Body</PageContent>
-    <PageBottomBar>Page Footer</PageBottomBar>
+    <PageContent>Page Content</PageContent>
+    <PageBottomBar>Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeSmall = () => (
   <Page containerSize="sm">
-    <PageTopBar bg="gray.100">Page Header</PageTopBar>
-    <PageContent bg="gray.200">Page Body</PageContent>
-    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
+    <PageTopBar bg="gray.100">Page Top Bar</PageTopBar>
+    <PageContent bg="gray.200">Page Content</PageContent>
+    <PageBottomBar bg="gray.300">Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeMedium = () => (
   <Page containerSize="md">
-    <PageTopBar bg="gray.100">Page Header</PageTopBar>
-    <PageContent bg="gray.200">Page Body</PageContent>
-    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
+    <PageTopBar bg="gray.100">Page Top Bar</PageTopBar>
+    <PageContent bg="gray.200">Page Content</PageContent>
+    <PageBottomBar bg="gray.300">Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeLarge = () => (
   <Page containerSize="lg">
-    <PageTopBar bg="gray.100">Page Header</PageTopBar>
-    <PageContent bg="gray.200">Page Body</PageContent>
-    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
+    <PageTopBar bg="gray.100">Page Top Bar</PageTopBar>
+    <PageContent bg="gray.200">Page Content</PageContent>
+    <PageBottomBar bg="gray.300">Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const ContainerSizeFull = () => (
   <Page containerSize="full">
-    <PageTopBar bg="gray.100">Page Header</PageTopBar>
-    <PageContent bg="gray.200">Page Body</PageContent>
-    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
+    <PageTopBar bg="gray.100">Page Top Bar</PageTopBar>
+    <PageContent bg="gray.200">Page Content</PageContent>
+    <PageBottomBar bg="gray.300">Page Bottom Bar</PageBottomBar>
   </Page>
 );
 
 export const NoContainer = () => (
   <Page hideContainer>
-    <PageTopBar bg="gray.100">Page Header</PageTopBar>
-    <PageContent bg="gray.200">Page Body</PageContent>
-    <PageBottomBar bg="gray.300">Page Footer</PageBottomBar>
+    <PageTopBar bg="gray.100">Page Top Bar</PageTopBar>
+    <PageContent bg="gray.200">Page Content</PageContent>
+    <PageBottomBar bg="gray.300">Page Bottom Bar</PageBottomBar>
   </Page>
 );
