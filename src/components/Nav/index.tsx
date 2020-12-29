@@ -30,7 +30,7 @@ export const Nav: FC<NavProps> = ({ children, breakpoint = 'lg', ...rest }) => {
     <NavContext.Provider value={{ active, setActive }}>
       <Menu {...rest}>
         {!isMenu && (
-          <Stack spacing="0" {...rest}>
+          <Stack spacing="1" {...rest}>
             {children}
           </Stack>
         )}
@@ -44,7 +44,7 @@ export const Nav: FC<NavProps> = ({ children, breakpoint = 'lg', ...rest }) => {
             >
               {active}
             </MenuButton>
-            <MenuList maxW="80vw">{children}</MenuList>
+            <MenuList w="85vw">{children}</MenuList>
           </>
         )}
       </Menu>
@@ -130,7 +130,7 @@ export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
       >
         {title}
       </Flex>
-      {children}
+      <Stack spacing="1">{children}</Stack>
     </Flex>
   );
 };
