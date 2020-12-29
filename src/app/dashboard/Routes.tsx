@@ -10,7 +10,7 @@ const DashboardRoutes = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
-      <Route path={path} render={() => <PageDashboard />} />
+      <Route exact path={path} render={() => <PageDashboard />} />
       <Route path="*" render={() => <Error404 />} />
     </Switch>
   );

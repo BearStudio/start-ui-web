@@ -1,5 +1,7 @@
 import { theme } from '@chakra-ui/react';
 
+import tailwindColors from './tailwindColors';
+
 export const colors = {
   brand: {
     50: '#e0f4ff',
@@ -13,6 +15,7 @@ export const colors = {
     800: '#002946',
     900: '#000f1d',
   },
+  gray: tailwindColors.blueGray,
   success: theme.colors.green,
   error: theme.colors.red,
   warning: theme.colors.yellow,
