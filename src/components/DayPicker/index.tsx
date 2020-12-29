@@ -16,7 +16,6 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
-import PropTypes from 'prop-types';
 import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
