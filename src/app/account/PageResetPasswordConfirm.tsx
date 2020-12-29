@@ -39,8 +39,9 @@ export const PageResetPasswordConfirm = () => {
     onSuccess: () => {
       toastSuccess({
         title: 'Your password have been reset',
+        description: 'You can now login you',
       });
-      history.go('/login');
+      history.push('/login');
     },
   });
 
