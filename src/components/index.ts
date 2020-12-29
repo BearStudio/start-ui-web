@@ -1,6 +1,7 @@
 export { ActionsButton } from './ActionsButton';
 export { DateAgo } from './DateAgo';
 export { FieldInput } from './FieldInput';
+export { FieldSelect } from './FieldSelect';
 export { FormGroup } from './FormGroup';
 export { HitZone } from './HitZone';
 export {
