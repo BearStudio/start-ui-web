@@ -14,6 +14,7 @@ import {
   MenuList,
   MenuItem,
   MenuGroup,
+  ChakraComponent,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -23,17 +24,17 @@ interface NavProps extends StackProps {
   breakpoint?: string;
 }
 
-export const Nav: FC<NavProps> = ({ children, breakpoint = 'lg', ...rest }) => {
+export const Nav: ChakraComponent<'div', NavProps> = ({
+  children,
+  breakpoint = 'lg',
+  ...rest
+}) => {
   const isMenu = useBreakpointValue({ base: true, [breakpoint]: false });
   const [active, setActive] = useState(<>Navigation</>);
   return (
     <NavContext.Provider value={{ active, setActive }}>
       <Menu {...rest}>
-        {!isMenu && (
-          <Stack spacing="1" {...rest}>
-            {children}
-          </Stack>
-        )}
+        {!isMenu && <Stack spacing="1">{children}</Stack>}
         {isMenu && (
           <>
             <MenuButton
@@ -53,12 +54,11 @@ export const Nav: FC<NavProps> = ({ children, breakpoint = 'lg', ...rest }) => {
 };
 
 interface NavItemProps extends FlexProps {
-  to?: any; // Prevent TS error with as={Link}
   icon?: any;
   isActive?: boolean;
 }
 
-export const NavItem: FC<NavItemProps> = ({
+export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   children,
   icon,
   isActive = false,
@@ -115,7 +115,11 @@ export const NavItem: FC<NavItemProps> = ({
 export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
   const isMenu = useBreakpointValue({ base: true, lg: false });
   if (isMenu) {
-    return <MenuGroup title={title}>{children}</MenuGroup>;
+    return (
+      <MenuGroup title={title} {...rest}>
+        {children}
+      </MenuGroup>
+    );
   }
   return (
     <Flex direction="column">
