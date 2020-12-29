@@ -45,3 +45,25 @@ export const useUpdateAccount = (config: MutationOptions = {}) => {
     }
   );
 };
+
+export const useResetPasswordInit = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    (email) =>
+      Axios.post('/account/reset-password/init', email, {
+        headers: { 'Content-Type': 'text/plain' },
+      }),
+    {
+      ...config,
+    }
+  );
+};
+
+export const useResetPasswordFinish = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    ({ key, newPassword }) =>
+      Axios.post('/account/reset-password/finish', { key, newPassword }),
+    {
+      ...config,
+    }
+  );
+};
