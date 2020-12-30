@@ -10,7 +10,6 @@ import {
   Flex,
   Heading,
   ScaleFade,
-  Stack,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
@@ -86,52 +85,48 @@ export const PageResetPasswordRequest = () => {
 
   return (
     <Center p="4" m="auto">
-      <ScaleFade initialScale={0.9} in>
-        <Box>
-          <Heading size="lg">Reset password</Heading>
-          <Formiz
-            id="reset-password-init-form"
-            onValidSubmit={submitResetPasswordInit}
-            connect={resetPasswordInitForm}
-          >
-            <form noValidate onSubmit={resetPasswordInitForm.submit}>
-              <FieldInput
-                name="email"
-                label="Email"
-                my="6"
-                helper="Enter the email address you used to register"
-                required="Email is required"
-                validations={[
-                  {
-                    rule: isEmail(),
-                    message: 'Email is invalid',
-                  },
-                ]}
-              />
-              <Flex>
-                <Stack direction="row" spacing={4}>
-                  <Button
-                    leftIcon={<FiArrowLeft />}
-                    as={RouterLink}
-                    to="/login"
-                    variant="ghost"
-                  >
-                    Back
-                  </Button>
-                </Stack>
-                <Button
-                  type="submit"
-                  colorScheme="brand"
-                  ml="auto"
-                  isLoading={resetPasswordLoading}
-                >
-                  Send email
-                </Button>
-              </Flex>
-            </form>
-          </Formiz>
-        </Box>
-      </ScaleFade>
+      <Box>
+        <Heading size="lg">Reset password</Heading>
+        <Formiz
+          id="reset-password-init-form"
+          onValidSubmit={submitResetPasswordInit}
+          connect={resetPasswordInitForm}
+        >
+          <form noValidate onSubmit={resetPasswordInitForm.submit}>
+            <FieldInput
+              name="email"
+              label="Email"
+              my="6"
+              helper="Enter the email address you used to register"
+              required="Email is required"
+              validations={[
+                {
+                  rule: isEmail(),
+                  message: 'Email is invalid',
+                },
+              ]}
+            />
+            <Flex>
+              <Button
+                leftIcon={<FiArrowLeft />}
+                as={RouterLink}
+                to="/login"
+                variant="link"
+              >
+                Back
+              </Button>
+              <Button
+                type="submit"
+                colorScheme="brand"
+                ml="auto"
+                isLoading={resetPasswordLoading}
+              >
+                Send email
+              </Button>
+            </Flex>
+          </form>
+        </Formiz>
+      </Box>
     </Center>
   );
 };
