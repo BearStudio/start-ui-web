@@ -5,7 +5,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 
 import { AccountNav } from '@/app/account/AccountNav';
-import { useChangePassword } from '@/app/account/service';
+import { useUpdatePassword } from '@/app/account/service';
 import { Page, PageContent } from '@/app/layout';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
 
@@ -18,7 +18,7 @@ export const PagePassword = () => {
   const {
     mutate: changePasswordFinish,
     isLoading: changePasswordLoading,
-  } = useChangePassword({
+  } = useUpdatePassword({
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       if (title === 'Incorrect password') {
@@ -40,7 +40,7 @@ export const PagePassword = () => {
     },
   });
 
-  const submitChangePassword = async (values) => {
+  const submitUpdatePassword = async (values) => {
     const { currentPassword, newPassword } = values;
 
     await changePasswordFinish({ currentPassword, newPassword });
@@ -54,7 +54,7 @@ export const PagePassword = () => {
         </Heading>
         <Formiz
           id="password-form"
-          onValidSubmit={submitChangePassword}
+          onValidSubmit={submitUpdatePassword}
           connect={changePasswordForm}
         >
           <form noValidate onSubmit={changePasswordForm.submit}>
