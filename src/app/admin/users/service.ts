@@ -72,3 +72,29 @@ export const useUserUpdate = (config: MutationOptions = {}) => {
     },
   });
 };
+
+export const useUserCreate = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    ({
+      login,
+      firstName,
+      LastName,
+      email,
+      activated,
+      langKey = 'en',
+      authorities,
+    }) =>
+      Axios.post('/admin/users', {
+        login,
+        firstName,
+        LastName,
+        email,
+        activated,
+        langKey,
+        authorities,
+      }),
+    {
+      ...config,
+    }
+  );
+};

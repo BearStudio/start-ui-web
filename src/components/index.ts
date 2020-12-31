@@ -1,6 +1,8 @@
 export { ActionsButton } from './ActionsButton';
 export { DateAgo } from './DateAgo';
 export { DayPicker } from './DayPicker';
+export { FieldBooleanCheckbox } from './FieldBooleanCheckbox';
+export { FieldGroupCheckbox } from './FieldGroupCheckbox';
 export { FieldInput } from './FieldInput';
 export { FieldSelect } from './FieldSelect';
 export { FormGroup } from './FormGroup';
