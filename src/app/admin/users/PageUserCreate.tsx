@@ -47,10 +47,8 @@ export const PageUserCreate = () => {
     { label: 'English', value: 'en' },
     { label: 'Français', value: 'fr' },
   ];
-  const authorities = [];
-  for (const [key, value] of Object.entries(AUTHORITIES)) {
-    authorities.push({ value: value });
-  }
+
+  const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
 
   const submitCreateUser = async (values) => {
     const newUser = {
