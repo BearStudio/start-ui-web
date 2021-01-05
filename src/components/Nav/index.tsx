@@ -15,6 +15,7 @@ import {
   MenuItem,
   MenuGroup,
   ChakraComponent,
+  Portal,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -45,7 +46,9 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
             >
               {active}
             </MenuButton>
-            <MenuList w="85vw">{children}</MenuList>
+            <Portal>
+              <MenuList w="85vw">{children}</MenuList>
+            </Portal>
           </>
         )}
       </Menu>
