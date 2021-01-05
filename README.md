@@ -35,3 +35,11 @@ Create a `.env` file at the root of the project with the following content:
 ```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 ```
+
+## Show hint on development environments
+
+Setup the `NEXT_PUBLIC_ENV_NAME` env variable with the name of the environment.
+
+```
+NEXT_PUBLIC_ENV_NAME=staging
+```
