@@ -18,8 +18,11 @@ const AppDevHint = () => {
   const envName =
     process.env.NODE_ENV === 'development'
       ? 'Development'
-      : process.env.NEXT_PUBLIC_ENV_NAME;
-  const colorScheme = 'warning';
+      : process.env.NEXT_PUBLIC_DEV_ENV_NAME;
+  const colorScheme =
+    process.env.NODE_ENV === 'development'
+      ? 'warning'
+      : process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'orange';
 
   if (!envName) {
     return null;
