@@ -22,29 +22,36 @@ export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
   format?: string;
 }
 
-export const DateAgo: FC<DateAgoProps> = forwardRef(
-  ({ date = new Date(), format = DEFAULT_FORMAT, ...rest }, ref) => {
-    const [, setForceUpdate] = useState(0);
-    const dayjsDate = dayjs(date);
+export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
+  { date = new Date(), format = DEFAULT_FORMAT, ...rest },
+  ref
+) {
+  const [, setForceUpdate] = useState(0);
+  const dayjsDate = dayjs(date);
 
-    useEffect(() => {
-      const diff = dayjs().diff(dayjsDate);
+  useEffect(() => {
+    if (date) {
+      const diff = dayjs().diff(dayjs(date));
 
       const timeout = setTimeout(() => {
         setForceUpdate((x) => x + 1);
       }, getDelay(diff));
       return () => clearTimeout(timeout);
-    }, [dayjsDate]);
+    }
+  }, [date]);
 
-    return (
-      <Tooltip
-        ref={ref}
-        label={dayjsDate.format(format)}
-        placement="top-start"
-        {...rest}
-      >
-        {dayjsDate.fromNow()}
-      </Tooltip>
-    );
+  if (!date) {
+    return null;
   }
-);
+
+  return (
+    <Tooltip
+      ref={ref}
+      label={dayjsDate.format(format)}
+      placement="top-start"
+      {...rest}
+    >
+      {dayjsDate.fromNow()}
+    </Tooltip>
+  );
+});
