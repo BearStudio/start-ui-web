@@ -34,7 +34,7 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   const [active, setActive] = useState(<>Navigation</>);
   return (
     <NavContext.Provider value={{ active, setActive }}>
-      <Menu matchWidth {...rest}>
+      <Menu isLazy matchWidth {...rest}>
         {!isMenu && <Stack spacing="1">{children}</Stack>}
         {isMenu && (
           <>

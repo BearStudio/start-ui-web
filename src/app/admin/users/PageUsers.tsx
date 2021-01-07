@@ -91,7 +91,7 @@ const UserActions = ({ user, ...rest }) => {
   const deactivateUser = () => userUpdate({ ...user, activated: false });
   const isActionsLoading = userUpdateData.isLoading;
   return (
-    <Menu placement="left-start" {...rest}>
+    <Menu isLazy placement="left-start" {...rest}>
       <MenuButton as={ActionsButton} isLoading={isActionsLoading} />
       <Portal>
         <MenuList>
