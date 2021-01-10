@@ -91,7 +91,7 @@ const UserActions = ({ user, ...rest }) => {
   const deactivateUser = () => userUpdate({ ...user, activated: false });
   const isActionsLoading = userUpdateData.isLoading;
   return (
-    <Menu placement="left-start" {...rest}>
+    <Menu isLazy placement="left-start" {...rest}>
       <MenuButton as={ActionsButton} isLoading={isActionsLoading} />
       <Portal>
         <MenuList>
@@ -132,7 +132,7 @@ const UserActions = ({ user, ...rest }) => {
 export const PageUsers = () => {
   const { path } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
-  const pageSize = 2;
+  const pageSize = 20;
   const { users, totalItems, isLoadingPage } = useUserList({
     page: page - 1,
     size: pageSize,

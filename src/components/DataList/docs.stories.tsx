@@ -269,7 +269,7 @@ export const Complete = () => {
             </Text>
           </DataListCell>
           <DataListCell colName="actions">
-            <Menu placement="left-start">
+            <Menu isLazy placement="left-start">
               <MenuButton
                 as={ActionsButton}
                 isDisabled={item.status === 'Inactive'}

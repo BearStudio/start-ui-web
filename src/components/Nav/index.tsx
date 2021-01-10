@@ -15,6 +15,7 @@ import {
   MenuItem,
   MenuGroup,
   ChakraComponent,
+  Portal,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -33,7 +34,7 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   const [active, setActive] = useState(<>Navigation</>);
   return (
     <NavContext.Provider value={{ active, setActive }}>
-      <Menu {...rest}>
+      <Menu isLazy matchWidth {...rest}>
         {!isMenu && <Stack spacing="1">{children}</Stack>}
         {isMenu && (
           <>
@@ -45,7 +46,9 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
             >
               {active}
             </MenuButton>
-            <MenuList w="85vw">{children}</MenuList>
+            <Portal>
+              <MenuList>{children}</MenuList>
+            </Portal>
           </>
         )}
       </Menu>
