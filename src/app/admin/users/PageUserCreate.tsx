@@ -7,7 +7,6 @@ import { useHistory } from 'react-router-dom';
 import { useUserCreate } from '@/app/admin/users/service';
 import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
 import {
-  FieldBooleanCheckbox,
   FieldGroupCheckbox,
   FieldInput,
   FieldSelect,
@@ -43,10 +42,7 @@ export const PageUserCreate = () => {
     },
   });
 
-  const languages = [
-    { label: 'English', value: 'en' },
-    { label: 'Français', value: 'fr' },
-  ];
+  const languages = [{ label: 'English', value: 'en' }];
 
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
 
@@ -100,17 +96,16 @@ export const PageUserCreate = () => {
                 label="Email"
                 required="This field is required"
               />
-              <FieldBooleanCheckbox name="isActivate" label="Activate" />
               <FieldSelect
                 name="langKey"
                 label="Language"
                 options={languages}
+                defaultValue={'en'}
               />
               <FieldGroupCheckbox
                 name="authorities"
                 label="Authorities"
                 options={authorities}
-                value={'ROLE_USER'}
                 isRequired
                 validations={[
                   {
