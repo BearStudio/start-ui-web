@@ -84,7 +84,7 @@ export const useUserCreate = (config: MutationOptions = {}) => {
       langKey = 'en',
       authorities,
     }) =>
-      Axios.post('/admin/users', {
+      Axios.post('/users', {
         login,
         firstName,
         LastName,
