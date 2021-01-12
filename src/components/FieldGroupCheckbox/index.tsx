@@ -33,22 +33,15 @@ export const FieldGroupCheckbox = (props) => {
   };
 
   const onCheck = (event) => {
-    const changedValue = event.target.value;
-    if (value?.includes(changedValue)) {
-      setValue(value?.filter((item) => item !== changedValue));
-    } else {
-      setValue(value?.concat(changedValue) || [changedValue]);
-    }
+    setValue(event);
   };
 
   return (
     <FormGroup {...formGroupProps}>
-      <CheckboxGroup value={value || []}>
+      <CheckboxGroup value={value || []} onChange={onCheck}>
         <HStack>
           {(options || []).map((item) => (
-            <Checkbox value={item.value} onChange={onCheck}>
-              {item.label || item.value}
-            </Checkbox>
+            <Checkbox value={item.value}>{item.label || item.value}</Checkbox>
           ))}
         </HStack>
       </CheckboxGroup>

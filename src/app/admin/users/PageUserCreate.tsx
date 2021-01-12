@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { isMinLength } from '@formiz/validations';
 import { useHistory } from 'react-router-dom';
 
 import { useUserCreate } from '@/app/admin/users/service';
@@ -50,7 +51,6 @@ export const PageUserCreate = () => {
     const newUser = {
       ...values,
     };
-    console.log(newUser);
     await createUser(newUser);
   };
 
@@ -109,7 +109,7 @@ export const PageUserCreate = () => {
                 isRequired
                 validations={[
                   {
-                    rule: (value) => value?.length >= 1,
+                    rule: isMinLength(1),
                     message: 'Choose at least one role',
                   },
                 ]}
