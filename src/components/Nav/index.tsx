@@ -76,7 +76,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       <Flex as="span" align="flex-start" minW="0">
         {icon && (
           <Icon
-            as={icon as any}
+            as={icon}
             mt="0.05rem"
             mr="2"
             fontSize="lg"
