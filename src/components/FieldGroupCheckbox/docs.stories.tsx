@@ -1,7 +1,5 @@
 import { Formiz } from '@formiz/core';
 
-import { FieldBooleanCheckbox } from '@/components';
-
 import { FieldGroupCheckbox } from './index';
 
 export default {
