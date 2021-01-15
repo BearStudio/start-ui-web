@@ -64,8 +64,9 @@
   "scripts": {
     "test": "jest --roots src --watch",
     "dev": "next dev",
-    "build": "next build && next export",
-    "serve": "yarn build && npx servor out index.html 5000",
+    "build": "next build",
+    "static:build": "next build && next export",
+    "static:serve": "yarn static:build && npx servor out index.html 5000",
     "start": "next start",
     "pretty": "prettier -w .",
     "lint": "eslint ./src --fix",
