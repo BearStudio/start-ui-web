@@ -6,12 +6,12 @@ export default {
   title: 'components/Daypicker',
 };
 export const Default = () => {
-  const [day, setDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(new Date());
   return (
     <DayPicker
-      value={day}
+      value={selectedDay}
       onChange={(day) => {
-        setDay(day);
+        setSelectedDay(day);
       }}
     />
   );
