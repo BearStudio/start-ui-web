@@ -41,7 +41,9 @@ export const FieldGroupCheckbox = (props) => {
       <CheckboxGroup value={value || []} onChange={onCheck}>
         <HStack>
           {(options || []).map((item) => (
-            <Checkbox value={item.value}>{item.label || item.value}</Checkbox>
+            <Checkbox key={item.id || item.value} value={item.value}>
+              {item.label || item.value}
+            </Checkbox>
           ))}
         </HStack>
       </CheckboxGroup>

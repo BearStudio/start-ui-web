@@ -25,10 +25,10 @@ export const PageProfile = () => {
 
   const { mutate: updateAccount, isLoading: updateLoading } = useUpdateAccount({
     onError: (error: any) => {
-      const { description } = error?.response?.data || {};
+      const { title } = error?.response?.data || {};
       toastError({
         title: 'Update failed',
-        description,
+        description: title,
       });
     },
     onSuccess: () => {
