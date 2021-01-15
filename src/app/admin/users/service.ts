@@ -9,7 +9,8 @@ import {
 export const useUserList = ({ page = 0, size = 10 } = {}) => {
   const result = useQuery<any>(
     ['users', { page, size }],
-    (): Promise<any> => Axios.get('/users', { params: { page, size } }),
+    (): Promise<any> =>
+      Axios.get('/users', { params: { page, size, sort: 'id,desc' } }),
     {
       keepPreviousData: true,
     }
