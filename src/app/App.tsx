@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 
+import { useRouter } from 'next/router';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 
@@ -17,9 +18,12 @@ const DashboardRoutes = React.lazy(
 const EntityRoutes = React.lazy(() => import('@/app/entity/EntityRoutes'));
 
 export const App = () => {
+  const { locale, defaultLocale } = useRouter();
   return (
     <ErrorBoundary>
-      <BrowserRouter basename="/">
+      <BrowserRouter
+        basename={`${locale === defaultLocale ? '' : `/${locale}`}/app/`}
+      >
         <Layout>
           <Suspense fallback={<Loader />}>
             <Switch>

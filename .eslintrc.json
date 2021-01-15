@@ -14,7 +14,7 @@
       }
     },
     {
-      "files": ["*.stories.tsx"],
+      "files": ["*.stories.tsx", "src/locales/**/*"],
       "rules": {
         "import/no-anonymous-default-export": "off"
       }
