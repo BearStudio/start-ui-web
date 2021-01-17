@@ -84,16 +84,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivan-dalmet/start-ui.git"
+    "url": "git+https://github.com/bearstudio/start-ui.git"
   },
   "author": {
     "name": "Ivan Dalmet",
     "email": "ivan@dalmet.fr",
     "url": "https://github.com/ivan-dalmet"
   },
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ivan-dalmet/start-ui/issues"
+    "url": "https://github.com/bearstudio/start-ui/issues"
   },
-  "homepage": "https://github.com/ivan-dalmet/start-ui#readme"
+  "homepage": "https://github.com/bearstudio/start-ui#readme"
 }

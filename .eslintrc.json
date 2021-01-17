@@ -5,7 +5,9 @@
     "browser": true,
     "jest": true
   },
-  "rules": {},
+  "rules": {
+    "jsx-a11y/anchor-is-valid": "warn"
+  },
   "overrides": [
     {
       "files": ["src/app/*"],
@@ -14,7 +16,11 @@
       }
     },
     {
-      "files": ["*.stories.tsx", "src/locales/**/*"],
+      "files": [
+        "*.stories.tsx",
+        "src/locales/**/*",
+        "./src/theme/components/**/*.ts"
+      ],
       "rules": {
         "import/no-anonymous-default-export": "off"
       }
