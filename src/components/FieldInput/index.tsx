@@ -11,7 +11,7 @@ import {
 import { FieldProps, useField } from '@formiz/core';
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 
-import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { FormGroup, FormGroupProps } from '../FormGroup';
 
 export interface FieldInputProps extends FieldProps, FormGroupProps {
   type?: string;

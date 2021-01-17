@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@chakra-ui/react';
 import { useField } from '@formiz/core';
 
-import { FormGroup } from '@/components/FormGroup';
+import { FormGroup } from '../FormGroup';
 
 export const FieldBooleanCheckbox = (props) => {
   const {
