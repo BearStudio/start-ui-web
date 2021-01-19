@@ -2,17 +2,17 @@ import React from 'react';
 
 import Head from 'next/head';
 
-import { App } from '@/app/App';
+import { App as AppComponent } from '@/app/App';
 import { isBrowser } from '@/utils/ssr';
 
-const Index = () => {
+const App = () => {
   return (
     <>
       <Head>
         <title>Start UI</title>
       </Head>
-      <div suppressHydrationWarning={true}>{isBrowser && <App />}</div>
+      <div suppressHydrationWarning={true}>{isBrowser && <AppComponent />}</div>
     </>
   );
 };
-export default Index;
+export default App;
