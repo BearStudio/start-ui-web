@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, CheckboxGroup, HStack } from '@chakra-ui/react';
 import { useField } from '@formiz/core';
 
-import { FormGroup } from '../FormGroup';
+import { FormGroup } from '@/components/FormGroup';
 
 export const FieldGroupCheckbox = (props) => {
   const {

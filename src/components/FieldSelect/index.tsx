@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Select } from '@chakra-ui/react';
 import { useField } from '@formiz/core';
 
-import { FormGroup } from '../FormGroup';
+import { FormGroup } from '@/components/FormGroup';
 
 export const FieldSelect = (props) => {
   const {
