@@ -1,6 +1,4 @@
-const nextTranslate = require('next-translate');
-
-module.exports = nextTranslate({
+module.exports = {
   async rewrites() {
     return [
       // Do not rewrite API routes
@@ -15,4 +13,4 @@ module.exports = nextTranslate({
       },
     ];
   },
-});
+};
