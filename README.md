@@ -12,6 +12,7 @@ Opinionated UI starter with
 - 🐜 [Formiz](https://formiz-react.com/)
 - 💥 [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
 - ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
+- 🌍 [Next Translate](https://github.com/vinissimus/next-translate)
 
 ℹ️ API calls are mapped on a [jHipster](https://www.jhipster.tech/) backend application.
 
