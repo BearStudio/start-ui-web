@@ -1,7 +1,5 @@
 import { common } from './common';
 
-const enTranslations = {
+export default {
   common,
 };
-
-export default enTranslations;
