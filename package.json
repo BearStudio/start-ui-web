@@ -14,12 +14,13 @@
     "dayjs": "1.10.3",
     "framer-motion": "3.2.1",
     "history": "5.0.0",
+    "i18next": "19.8.4",
     "next": "10.0.5",
-    "next-translate": "1.0.1",
     "react": "17.0.1",
     "react-day-picker": "7.4.8",
     "react-dom": "17.0.1",
     "react-error-boundary": "3.1.0",
+    "react-i18next": "11.8.5",
     "react-icons": "4.1.0",
     "react-query": "3.5.16",
     "react-router-dom": "5.2.0"
@@ -70,7 +71,9 @@
     "pretty": "prettier -w .",
     "lint": "eslint ./src --fix",
     "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook"
+    "storybook:build": "build-storybook",
+    "static:build": "next build && next export",
+    "static:serve": "yarn static:build && npx servor out app.html 5000"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json}": "prettier --write",
