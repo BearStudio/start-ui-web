@@ -29,10 +29,10 @@ export const PageUserCreate = () => {
 
   const { mutate: createUser, isLoading: createUserLoading } = useUserCreate({
     onError: (error: any) => {
-      const { description } = error?.response?.data || {};
+      const { title } = error?.response?.data || {};
       toastError({
         title: 'Creation failed',
-        description,
+        description: title,
       });
     },
     onSuccess: () => {
