@@ -29,11 +29,23 @@ export const PageUserCreate = () => {
 
   const { mutate: createUser, isLoading: createUserLoading } = useUserCreate({
     onError: (error: any) => {
-      const { title } = error?.response?.data || {};
+      const { title, errorKey } = error?.response?.data || {};
       toastError({
         title: 'Creation failed',
         description: title,
       });
+      switch (errorKey) {
+        case 'userexists':
+          createUserForm.invalidateFields({
+            login: title,
+          });
+          break;
+        case 'emailexists':
+          createUserForm.invalidateFields({
+            email: title,
+          });
+          break;
+      }
     },
     onSuccess: () => {
       toastSuccess({
