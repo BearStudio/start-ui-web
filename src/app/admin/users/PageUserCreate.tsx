@@ -37,12 +37,12 @@ export const PageUserCreate = () => {
       switch (errorKey) {
         case 'userexists':
           createUserForm.invalidateFields({
-            login: title,
+            login: 'Login already used',
           });
           break;
         case 'emailexists':
           createUserForm.invalidateFields({
-            email: title,
+            email: 'Email already used',
           });
           break;
       }
