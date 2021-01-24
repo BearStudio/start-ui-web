@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Code,
@@ -9,8 +9,6 @@ import {
   Avatar,
   Box,
   Icon,
-  Menu,
-  MenuButton,
   MenuList,
   MenuDivider,
   MenuItem,
@@ -19,6 +17,7 @@ import {
   Button,
   IconButton,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   FiEdit,
@@ -29,8 +28,13 @@ import {
 } from 'react-icons/fi';
 import { Link, useRouteMatch } from 'react-router-dom';
 
+import { useAccount } from '@/app/account/service';
 import { UserStatus } from '@/app/admin/users/UserStatus';
-import { useUserList, useUserUpdate } from '@/app/admin/users/service';
+import {
+  useUserDelete,
+  useUserList,
+  useUserUpdate,
+} from '@/app/admin/users/service';
 import { Page, PageBody, PageHeader } from '@/app/layout';
 import {
   ActionsButton,
@@ -50,9 +54,41 @@ import {
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
+  MenuItemAction,
+  MenuAction,
 } from '@/components';
 
+const useMenuAction = (menuActions) => {
+  const {
+    isOpen: isOpenMenu,
+    onToggle: onToggleMenu,
+    onClose,
+  } = useDisclosure();
+
+  const callBackConfirmButton = (element: string) => {
+    onClose();
+    menuActions[element]?.action();
+    menuActions[element]?.state?.onClose();
+  };
+
+  const onCloseMenu = () => {
+    onClose();
+    Object.values(menuActions || []).map((menuItemElement: any) => {
+      menuItemElement?.state?.onClose();
+    });
+  };
+
+  return [
+    menuActions,
+    callBackConfirmButton,
+    onCloseMenu,
+    onToggleMenu,
+    isOpenMenu,
+  ];
+};
+
 const UserActions = ({ user, ...rest }) => {
+  const { account } = useAccount();
   const { path } = useRouteMatch();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -84,13 +120,58 @@ const UserActions = ({ user, ...rest }) => {
       }
     },
   });
-
+  const { mutate: userDelete, ...userDeletionData } = useUserDelete({
+    variables: user.login,
+    onSuccess: ({ activated, login }) => {
+      toastSuccess({
+        title: 'Account Deleted',
+        description: `Account deleted with success`,
+      });
+    },
+    onError: (_, __, { activated, login }) => {
+      toastError({
+        title: 'Deletion Failed',
+        description: `Fail to delete "${login}" account`,
+      });
+    },
+  });
   const activateUser = () => userUpdate({ ...user, activated: true });
   const deactivateUser = () => userUpdate({ ...user, activated: false });
+  const deleteUser = () => {
+    userDelete({ ...user });
+  };
+
+  const updateUser = (props) => {
+    console.log('dumb methode to test');
+  };
+
+  const [
+    menuActions,
+    callBackConfirmButton,
+    onCloseMenu,
+    onToggleMenu,
+    isOpenMenu,
+  ]: any = useMenuAction({
+    update: {
+      state: useDisclosure(),
+      action: updateUser,
+    },
+    delete: {
+      state: useDisclosure(),
+      action: deleteUser,
+    },
+  });
+
   const isActionsLoading = userUpdateData.isLoading;
+  const isDeletionLoading = userDeletionData.isLoading;
   return (
-    <Menu placement="left-start" {...rest}>
-      <MenuButton as={ActionsButton} isLoading={isActionsLoading} />
+    <MenuAction
+      ActionsButton={ActionsButton}
+      isOpen={isOpenMenu}
+      callBackCloseMenu={onCloseMenu}
+      isActionsLoading={isActionsLoading}
+      onToggle={onToggleMenu}
+    >
       <Portal>
         <MenuList>
           <MenuItem
@@ -102,28 +183,84 @@ const UserActions = ({ user, ...rest }) => {
           </MenuItem>
           {user.activated ? (
             <MenuItem
-              onClick={deactivateUser}
+              onClick={() => {
+                onCloseMenu();
+                deactivateUser();
+              }}
               icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
             >
               Deactivate Account
             </MenuItem>
           ) : (
             <MenuItem
-              onClick={activateUser}
+              onClick={() => {
+                onCloseMenu();
+                activateUser();
+              }}
               icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
             >
               Activate Account
             </MenuItem>
           )}
-          <MenuDivider />
-          <MenuItem
-            icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
-          >
-            Delete
-          </MenuItem>
+          {account.login !== user.login && (
+            <>
+              <MenuDivider />
+              <MenuItemAction
+                propsActionHeader={{
+                  size: 'xs',
+                  mb: '2',
+                }}
+                menuAction={menuActions.delete}
+                propsConfirmButton={{
+                  text: 'Confirm',
+                  ml: 'auto',
+                  size: 'sm',
+                  colorScheme: 'red',
+                }}
+                propsCancelButton={{
+                  text: 'Cancel',
+                  size: 'sm',
+                  variant: 'link',
+                }}
+                confirmationText="Are your sure?"
+                actionCallBack={() => {
+                  callBackConfirmButton('delete');
+                }}
+                text="Delete"
+                icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+              />
+            </>
+          )}
+          <>
+            <MenuDivider />
+            <MenuItemAction
+              propsActionHeader={{
+                size: 'xs',
+                mb: '2',
+              }}
+              menuAction={menuActions.update}
+              propsConfirmButton={{
+                text: 'Confirm',
+                ml: 'auto',
+                size: 'sm',
+                colorScheme: 'red',
+              }}
+              propsCancelButton={{
+                text: 'Cancel',
+                size: 'sm',
+                variant: 'link',
+              }}
+              confirmationText="Are your sure ?"
+              actionCallBack={() => {
+                callBackConfirmButton('update');
+              }}
+              text="update"
+              icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+            />
+          </>
         </MenuList>
       </Portal>
-    </Menu>
+    </MenuAction>
   );
 };
 

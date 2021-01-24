@@ -32,3 +32,5 @@ export {
   useToastInfo,
 } from './Toast';
 export { Viewport } from './Viewport';
+export { MenuAction } from './MenuAction';
+export { MenuItemAction } from './MenuItemAction';
