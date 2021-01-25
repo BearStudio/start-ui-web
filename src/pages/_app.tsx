@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTheme } from '@chakra-ui/react';
+import { Box, Text, useTheme } from '@chakra-ui/react';
 import Head from 'next/head';
 
 import { Providers } from '@/Providers';
@@ -13,6 +13,49 @@ if (
 ) {
   require('../../mocks');
 }
+
+const AppDevHint = () => {
+  const envName =
+    process.env.NODE_ENV === 'development'
+      ? 'Development'
+      : process.env.NEXT_PUBLIC_DEV_ENV_NAME;
+  const colorScheme =
+    process.env.NODE_ENV === 'development'
+      ? 'warning'
+      : process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'orange';
+
+  if (!envName) {
+    return null;
+  }
+
+  return (
+    <Box
+      zIndex="100"
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      h="2px"
+      bg={`${colorScheme}.400`}
+    >
+      <Text
+        position="fixed"
+        top="0"
+        left="4"
+        bg={`${colorScheme}.400`}
+        color={`${colorScheme}.900`}
+        fontSize="0.6rem"
+        fontWeight="bold"
+        px="1"
+        borderBottomLeftRadius="sm"
+        borderBottomRightRadius="sm"
+        textTransform="uppercase"
+      >
+        {envName}
+      </Text>
+    </Box>
+  );
+};
 
 const AppHead = () => {
   const theme = useTheme();
@@ -68,6 +111,7 @@ const App = ({ Component, pageProps }) => {
         <Viewport>
           <Component {...pageProps} />
         </Viewport>
+        <AppDevHint />
       </ErrorBoundary>
     </Providers>
   );

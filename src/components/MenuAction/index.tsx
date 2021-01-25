@@ -13,6 +13,35 @@ import { ActionsButton } from '@/components';
 
 export interface MenuActionProps extends MenuProps {}
 
+export const useMenuAction = (menuActions) => {
+  const {
+    isOpen: isOpenMenu,
+    onToggle: onToggleMenu,
+    onClose,
+  } = useDisclosure();
+
+  const callBackConfirmButton = (element: string) => {
+    onClose();
+    menuActions[element]?.action();
+    menuActions[element]?.state?.onClose();
+  };
+
+  const onCloseMenu = () => {
+    onClose();
+    Object.values(menuActions || []).map((menuItemElement: any) => {
+      menuItemElement?.state?.onClose();
+    });
+  };
+
+  return [
+    menuActions,
+    callBackConfirmButton,
+    onCloseMenu,
+    onToggleMenu,
+    isOpenMenu,
+  ];
+};
+
 export const MenuAction: FC<any> = forwardRef(
   (
     {

@@ -11,19 +11,19 @@ import {
   useBreakpointValue,
   FlexProps,
   AccordionProps,
+  ChakraComponent,
 } from '@chakra-ui/react';
 
 export const DataListContext = React.createContext(null);
 export const DataListHeaderContext = React.createContext(null);
 
 export interface DataListCellProps extends FlexProps {
-  to?: any; // Prevent TS error with as={Link}
   colName?: string;
   colWidth?: string | number | Record<string, string | number>;
   isVisible?: boolean | boolean[] | Record<string, boolean>;
 }
 
-export const DataListCell: FC<DataListCellProps> = ({
+export const DataListCell: ChakraComponent<'div', DataListCellProps> = ({
   children,
   colName = null,
   colWidth = 1,

@@ -1,15 +1,16 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
-import { Box, Flex, FlexProps, HStack, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  FlexProps,
+  HStack,
+  IconButton,
+  Stack,
+} from '@chakra-ui/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
-
-interface PageProps extends FlexProps {
-  isFocusMode?: boolean;
-  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  hideContainer?: boolean;
-}
 
 const PageContext = React.createContext(null);
 
@@ -41,29 +42,28 @@ const PageContainer = ({ children, ...rest }) => {
   );
 };
 
-interface PageHeaderProps extends FlexProps {
+interface PageTopBarProps extends FlexProps {
   onBack?(): void;
   showBack?: boolean;
 }
 
-export const PageHeader = ({
+export const PageTopBar = ({
   children,
   onBack = () => {},
   showBack = false,
   ...rest
-}: PageHeaderProps) => {
-  const { isFocusMode } = useContext(PageContext);
+}: PageTopBarProps) => {
   return (
     <Flex
-      z="2"
+      zIndex="2"
       direction="column"
       pt="4"
-      pb={isFocusMode ? 4 : undefined}
-      boxShadow={isFocusMode ? '0 4px 20px rgba(0, 0, 0, 0.05)' : undefined}
-      bg={isFocusMode ? 'white' : undefined}
+      pb="4"
+      boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
+      bg="white"
       {...rest}
     >
-      {isFocusMode && <Box w="full" h="0" pb="safe-top" />}
+      <Box w="full" h="0" pb="safe-top" />
       <PageContainer>
         <HStack spacing="4">
           {showBack && (
@@ -83,16 +83,37 @@ export const PageHeader = ({
   );
 };
 
-export const PageBody = ({ children, ...rest }: FlexProps) => {
+interface PageContentProps extends FlexProps {
+  onBack?(): void;
+  showBack?: boolean;
+}
+
+export const PageContent = ({ children, ...rest }: PageContentProps) => {
+  const { nav } = useContext(PageContext);
   return (
-    <Flex z="1" direction="column" flex="1" py="4" {...rest}>
-      <PageContainer>{children}</PageContainer>
+    <Flex zIndex="1" direction="column" flex="1" py="4" {...rest}>
+      <PageContainer>
+        <Stack
+          direction={{ base: 'column', lg: 'row' }}
+          spacing={{ base: '4', lg: '8' }}
+          flex="1"
+        >
+          {nav && (
+            <Flex direction="column" w={{ base: 'full', lg: '12rem' }}>
+              {nav}
+            </Flex>
+          )}
+          <Flex direction="column" flex="1">
+            {children}
+          </Flex>
+        </Stack>
+      </PageContainer>
       <Box w="full" h="0" pb="safe-bottom" />
     </Flex>
   );
 };
 
-export const PageFooter = ({ children, ...rest }: FlexProps) => {
+export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
@@ -104,7 +125,7 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
     <>
       <Box h={`${height}px`} />
       <Flex
-        z="3"
+        zIndex="3"
         ref={footerRef}
         direction="column"
         mt="auto"
@@ -124,16 +145,25 @@ export const PageFooter = ({ children, ...rest }: FlexProps) => {
   );
 };
 
+interface PageProps extends FlexProps {
+  isFocusMode?: boolean;
+  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  hideContainer?: boolean;
+  nav?: React.ReactNode;
+}
+
 export const Page = ({
   isFocusMode = false,
   hideContainer,
   containerSize = 'md',
+  nav = null,
   ...rest
 }: PageProps) => {
   useFocusMode(isFocusMode);
   return (
     <PageContext.Provider
       value={{
+        nav,
         isFocusMode,
         hideContainer,
         containerSize,

@@ -9,7 +9,8 @@ import {
 export const useUserList = ({ page = 0, size = 10 } = {}) => {
   const result = useQuery<any>(
     ['users', { page, size }],
-    (): Promise<any> => Axios.get('/users', { params: { page, size } }),
+    (): Promise<any> =>
+      Axios.get('/users', { params: { page, size, sort: 'id,desc' } }),
     {
       keepPreviousData: true,
     }
@@ -82,14 +83,29 @@ export const useUserDelete = (config: MutationOptions = {}) => {
     {
       ...config,
       onSuccess: (deletedUser: any, ...rest) => {
-        console.log({ deletedUser });
-        console.log({ variables: config?.variables });
         queryCache.invalidateQueries('users');
         if (config.onSuccess) {
           // @ts-ignore
           config.onSuccess(deletedUser, ...rest);
         }
       },
+    }
+  );
+};
+
+export const useUserCreate = (config: MutationOptions = {}) => {
+  return useMutation<any, any, any>(
+    ({ login, firstName, lastName, email, langKey = 'en', authorities }) =>
+      Axios.post('/users', {
+        login,
+        firstName,
+        lastName,
+        email,
+        langKey,
+        authorities,
+      }),
+    {
+      ...config,
     }
   );
 };

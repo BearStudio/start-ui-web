@@ -34,7 +34,7 @@ DarkBackground.parameters = {
 };
 
 export const UsageWithMenu = () => (
-  <Menu placement="left-start">
+  <Menu isLazy placement="left-start">
     <MenuButton as={ActionsButton} />
     <MenuList>
       <MenuItem icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}>

@@ -1,5 +1,6 @@
 .cache
 .next
+.db
 .history
 out
 node_modules

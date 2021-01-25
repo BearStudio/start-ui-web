@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import {
   Code,
@@ -35,7 +35,7 @@ import {
   useUserList,
   useUserUpdate,
 } from '@/app/admin/users/service';
-import { Page, PageBody, PageHeader } from '@/app/layout';
+import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,
   DataList,
@@ -57,35 +57,9 @@ import {
   MenuItemAction,
   MenuAction,
 } from '@/components';
+import { useMenuAction } from '@/components/MenuAction';
 
-const useMenuAction = (menuActions) => {
-  const {
-    isOpen: isOpenMenu,
-    onToggle: onToggleMenu,
-    onClose,
-  } = useDisclosure();
-
-  const callBackConfirmButton = (element: string) => {
-    onClose();
-    menuActions[element]?.action();
-    menuActions[element]?.state?.onClose();
-  };
-
-  const onCloseMenu = () => {
-    onClose();
-    Object.values(menuActions || []).map((menuItemElement: any) => {
-      menuItemElement?.state?.onClose();
-    });
-  };
-
-  return [
-    menuActions,
-    callBackConfirmButton,
-    onCloseMenu,
-    onToggleMenu,
-    isOpenMenu,
-  ];
-};
+import { AdminNav } from '../AdminNav';
 
 const UserActions = ({ user, ...rest }) => {
   const { account } = useAccount();
@@ -166,6 +140,7 @@ const UserActions = ({ user, ...rest }) => {
   const isDeletionLoading = userDeletionData.isLoading;
   return (
     <MenuAction
+      isLazy
       ActionsButton={ActionsButton}
       isOpen={isOpenMenu}
       callBackCloseMenu={onCloseMenu}
@@ -267,16 +242,16 @@ const UserActions = ({ user, ...rest }) => {
 export const PageUsers = () => {
   const { path } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
-  const pageSize = 2;
+  const pageSize = 20;
   const { users, totalItems, isLoadingPage } = useUserList({
     page: page - 1,
     size: pageSize,
   });
 
   return (
-    <Page containerSize="xl">
-      <PageHeader>
-        <HStack>
+    <Page containerSize="xl" nav={<AdminNav />}>
+      <PageContent>
+        <HStack mb="4">
           <Box flex="1">
             <Heading size="md">User Management</Heading>
           </Box>
@@ -301,8 +276,6 @@ export const PageUsers = () => {
             />
           </Box>
         </HStack>
-      </PageHeader>
-      <PageBody>
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
@@ -447,7 +420,7 @@ export const PageUsers = () => {
             </Pagination>
           </DataListFooter>
         </DataList>
-      </PageBody>
+      </PageContent>
     </Page>
   );
 };

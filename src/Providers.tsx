@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider } from '@/app/auth/AuthContext';
 import '@/config/axios';
 import '@/config/dayjs';
+import '@/config/i18next';
 import theme from '@/theme';
 
 const queryClient = new QueryClient();
