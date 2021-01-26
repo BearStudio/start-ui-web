@@ -92,16 +92,8 @@ export const PageUserCreate = () => {
                 required="This field is required"
               />
               <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-                <FieldInput
-                  name="firstName"
-                  label="First Name"
-                  required="This field is required"
-                />
-                <FieldInput
-                  name="lastName"
-                  label="Last Name"
-                  required="This field is required"
-                />
+                <FieldInput name="firstName" label="First Name" />
+                <FieldInput name="lastName" label="Last Name" />
               </Stack>
               <FieldInput
                 name="email"
