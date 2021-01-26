@@ -136,8 +136,9 @@ const UserActions = ({ user, ...rest }) => {
     },
   });
 
-  const isActionsLoading = userUpdateData.isLoading;
-  const isDeletionLoading = userDeletionData.isLoading;
+  const isActionsLoading =
+    userUpdateData.isLoading || userDeletionData.isLoading;
+
   return (
     <MenuAction
       isLazy

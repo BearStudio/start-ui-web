@@ -1,6 +1,17 @@
 export { ActionsButton } from './ActionsButton';
 export { DateAgo } from './DateAgo';
 export { DayPicker } from './DayPicker';
+export {
+  DataList,
+  DataListAccordion,
+  DataListAccordionButton,
+  DataListAccordionIcon,
+  DataListAccordionPanel,
+  DataListHeader,
+  DataListFooter,
+  DataListRow,
+  DataListCell,
+} from './DataList';
 export { FieldBooleanCheckbox } from './FieldBooleanCheckbox';
 export { FieldGroupCheckbox } from './FieldGroupCheckbox';
 export { FieldInput } from './FieldInput';
@@ -17,17 +28,8 @@ export {
   usePaginationFromUrl,
   getPaginationInfo,
 } from './Pagination';
-export {
-  DataList,
-  DataListAccordion,
-  DataListAccordionButton,
-  DataListAccordionIcon,
-  DataListAccordionPanel,
-  DataListHeader,
-  DataListFooter,
-  DataListRow,
-  DataListCell,
-} from './DataList';
+export { MenuAction } from './MenuAction';
+export { MenuItemAction } from './MenuItemAction';
 export { Nav, NavItem, NavGroup } from './Nav';
 export {
   useToastError,
@@ -36,5 +38,3 @@ export {
   useToastInfo,
 } from './Toast';
 export { Viewport } from './Viewport';
-export { MenuAction } from './MenuAction';
-export { MenuItemAction } from './MenuItemAction';

@@ -1,19 +1,10 @@
-import React, { FC, useImperativeHandle } from 'react';
+import React, { FC } from 'react';
 
-import {
-  forwardRef,
-  Box,
-  MenuProps,
-  useDisclosure,
-  Menu,
-  MenuButton,
-} from '@chakra-ui/react';
-
-import { ActionsButton } from '@/components';
+import { MenuProps, useDisclosure, Menu, MenuButton } from '@chakra-ui/react';
 
 export interface MenuActionProps extends MenuProps {}
 
-export const useMenuAction = (menuActions) => {
+export const useMenuAction = (menuActions: any) => {
   const {
     isOpen: isOpenMenu,
     onToggle: onToggleMenu,
@@ -33,43 +24,32 @@ export const useMenuAction = (menuActions) => {
     });
   };
 
-  return [
-    menuActions,
-    callBackConfirmButton,
-    onCloseMenu,
-    onToggleMenu,
-    isOpenMenu,
-  ];
+  return [callBackConfirmButton, onCloseMenu, onToggleMenu, isOpenMenu];
 };
 
-export const MenuAction: FC<any> = forwardRef(
-  (
-    {
-      children,
-      ActionsButton,
-      isActionsLoading,
-      callBackCloseMenu,
-      isOpen,
-      onToggle,
-      ...rest
-    },
-    ref: any
-  ) => {
-    return (
-      <Menu
-        placement="left-start"
-        isOpen={isOpen}
-        onClose={callBackCloseMenu}
-        closeOnSelect={false}
-        {...rest}
-      >
-        <MenuButton
-          as={ActionsButton}
-          isLoading={isActionsLoading}
-          onClick={onToggle}
-        />
-        {children}
-      </Menu>
-    );
-  }
-);
+export const MenuAction: FC<any> = ({
+  children,
+  ActionsButton,
+  isActionsLoading,
+  callBackCloseMenu,
+  isOpen,
+  onToggle,
+  ...rest
+}) => {
+  return (
+    <Menu
+      placement="left-start"
+      isOpen={isOpen}
+      onClose={callBackCloseMenu}
+      closeOnSelect={false}
+      {...rest}
+    >
+      <MenuButton
+        as={ActionsButton}
+        isLoading={isActionsLoading}
+        onClick={onToggle}
+      />
+      {children}
+    </Menu>
+  );
+};

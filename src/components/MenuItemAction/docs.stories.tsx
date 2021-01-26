@@ -1,9 +1,20 @@
 import React from 'react';
 
-import { Box, Heading, Link, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Icon,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Portal,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { FiEdit, FiUserPlus, FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-import { ActionsButton } from '../ActionsButton';
-import { HitZone } from '../HitZone';
+import { ActionsButton } from '@/components';
+import { MenuAction, MenuItemAction } from '@/components';
+import { useMenuAction } from '@/components/MenuAction';
 
 export default {
   title: 'components/MenuItemAction',
@@ -16,4 +27,94 @@ export default {
   },
 };
 
-export const Default = () => <Box></Box>;
+export const Default = () => {
+  const menuActions = {
+    firstAction: {
+      state: useDisclosure(),
+      action: () => console.info('Fired firstAction'),
+    },
+    secondAction: {
+      state: useDisclosure(),
+      action: () => console.info('Fired secondAction'),
+    },
+  };
+
+  const [
+    callBackConfirmButton,
+    onCloseMenu,
+    onToggleMenu,
+    isOpenMenu,
+  ]: any = useMenuAction(menuActions);
+
+  const { firstAction, secondAction } = menuActions;
+
+  return (
+    <MenuAction
+      isLazy
+      ActionsButton={ActionsButton}
+      isOpen={isOpenMenu}
+      callBackCloseMenu={onCloseMenu}
+      onToggle={onToggleMenu}
+    >
+      <Portal>
+        <MenuList>
+          <MenuItem icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}>
+            Menu item
+          </MenuItem>
+          <>
+            <MenuDivider />
+            <MenuItemAction
+              propsActionHeader={{
+                size: 'xs',
+                mb: '2',
+              }}
+              menuAction={firstAction}
+              propsConfirmButton={{
+                text: 'Confirm',
+                ml: 'auto',
+                size: 'sm',
+                colorScheme: 'red',
+              }}
+              propsCancelButton={{
+                text: 'Cancel',
+                size: 'sm',
+                variant: 'link',
+              }}
+              confirmationText="Are your sure?"
+              actionCallBack={() => {
+                callBackConfirmButton('firstAction');
+              }}
+              text="First action"
+              icon={<Icon as={FiUserPlus} fontSize="lg" color="gray.400" />}
+            />
+            <MenuDivider />
+            <MenuItemAction
+              propsActionHeader={{
+                size: 'xs',
+                mb: '2',
+              }}
+              menuAction={secondAction}
+              propsConfirmButton={{
+                text: 'Confirm',
+                ml: 'auto',
+                size: 'sm',
+                colorScheme: 'red',
+              }}
+              propsCancelButton={{
+                text: 'Cancel',
+                size: 'sm',
+                variant: 'link',
+              }}
+              confirmationText="Are your sure?"
+              actionCallBack={() => {
+                callBackConfirmButton('secondAction');
+              }}
+              text="Second action"
+              icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+            />
+          </>
+        </MenuList>
+      </Portal>
+    </MenuAction>
+  );
+};
