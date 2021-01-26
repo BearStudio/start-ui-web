@@ -30,10 +30,10 @@ export const PageResetPasswordConfirm = () => {
     isLoading: resetPasswordLoading,
   } = useResetPasswordFinish({
     onError: (error: any) => {
-      const { description } = error?.response?.data || {};
+      const { title } = error?.response?.data || {};
       toastError({
         title: 'Reset password failed',
-        description,
+        description: title,
       });
     },
     onSuccess: () => {
