@@ -60,11 +60,14 @@ export const reactDayPicker = {
   },
 
   '.DayPicker-Day': {
+    display: 'block',
     borderRadius: 'full',
     cursor: 'pointer',
     height: '2.8em',
     width: '2.8em',
     transition: '0.2s',
+    padding: 0,
+    lineHeight: '2.8em',
   },
 
   '.DayPicker-Day--today': {
@@ -72,14 +75,37 @@ export const reactDayPicker = {
     fontWeight: 'bold',
   },
 
+  '.DayPicker-Caption': {
+    display: 'block',
+  },
+
   '.DayPicker-Caption > div': {
     fontWeight: '400',
     fontSize: '1em',
   },
 
+  '.DayPicker-Weekdays': {
+    display: 'block',
+  },
+
+  '.DayPicker-WeekdaysRow': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(7, 1fr)',
+  },
+
   '.DayPicker-Weekday': {
+    display: 'block',
     fontWeight: '350',
     color: 'black',
     fontSize: '0.875em',
+  },
+
+  '.DayPicker-Body': {
+    display: 'grid',
+  },
+
+  '.DayPicker-Week': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(7, 1fr)',
   },
 };
