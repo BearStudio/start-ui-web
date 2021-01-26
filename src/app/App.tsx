@@ -19,7 +19,7 @@ const EntityRoutes = React.lazy(() => import('@/app/entity/EntityRoutes'));
 export const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/app/">
         <Layout>
           <Suspense fallback={<Loader />}>
             <Switch>

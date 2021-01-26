@@ -1,5 +1,4 @@
 module.exports = {
-  target: 'serverless',
   async rewrites() {
     return [
       // Do not rewrite API routes
@@ -7,10 +6,10 @@ module.exports = {
         source: '/api/:any*',
         destination: '/api/:any*',
       },
-      // Rewrite everything else to use `pages/index`
+      // Rewrite everything else to use `pages/app`
       {
-        source: '/:any*',
-        destination: '/',
+        source: '/app/:any*',
+        destination: '/app/',
       },
     ];
   },

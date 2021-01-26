@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { Center } from '@chakra-ui/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-import { App } from '@/app/App';
-import { isBrowser } from '@/utils/ssr';
+import { Loader } from '@/app/layout';
 
 const Index = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/app');
+  }, [router]);
+
   return (
     <>
       <Head>
         <title>Start UI</title>
       </Head>
-      <div suppressHydrationWarning={true}>{isBrowser && <App />}</div>
+      <Center flex="1">
+        <Loader />
+      </Center>
     </>
   );
 };

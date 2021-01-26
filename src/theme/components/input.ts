@@ -1,4 +1,4 @@
-export const Input = {
+export default {
   variants: {
     outline: {
       field: {

@@ -1,4 +1,4 @@
-export const Badge = {
+export default {
   sizes: {
     xs: {
       fontSize: '0.6em',
