@@ -21,6 +21,7 @@ export const useMenuAction = (menuActions: any) => {
     onClose();
     Object.values(menuActions || []).map((menuItemElement: any) => {
       menuItemElement?.state?.onClose();
+      return menuItemElement;
     });
   };
 

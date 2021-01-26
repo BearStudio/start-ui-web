@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Box,
   Icon,
   MenuDivider,
   MenuItem,
@@ -10,7 +9,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FiEdit, FiUserPlus, FiTrash2 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components';
 import { MenuAction, MenuItemAction } from '@/components';
