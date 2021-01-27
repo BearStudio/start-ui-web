@@ -8,7 +8,7 @@ import {
   Stack,
   Button,
   ButtonGroup,
-  useDisclosure,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMinLength } from '@formiz/validations';
@@ -16,7 +16,13 @@ import { useQueryClient } from 'react-query';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser, useUserUpdate } from '@/app/admin/users/service';
-import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
+import {
+  Page,
+  PageContent,
+  PageBottomBar,
+  PageTopBar,
+  Loader,
+} from '@/app/layout';
 import {
   FieldBooleanCheckbox,
   FieldGroupCheckbox,
@@ -25,7 +31,6 @@ import {
   useToastError,
   useToastSuccess,
 } from '@/components';
-import { BackConformationModal } from '@/components/BackConfirmationModal';
 
 import { UserStatus } from './UserStatus';
 
@@ -37,9 +42,10 @@ export const AUTHORITIES = {
 export const PageUser = () => {
   const { login } = useParams();
   const history = useHistory();
-  const { user } = useUser(login);
+  const { user, isSuccess: userSuccess, isLoading: userIsLoading } = useUser(
+    login
+  );
   const queryClient = useQueryClient();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -74,23 +80,29 @@ export const PageUser = () => {
     editUser(userToSend);
   };
 
-  const goBack = () => {
-    if (!editUserForm.isPristine && !editUserForm.isSubmitted) {
-      onOpen();
-    } else {
-      history.goBack();
-    }
-  };
-
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={goBack}>
+      <PageTopBar showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
           <Box flex="1">
-            <Heading size="sm">{user?.login}</Heading>
-            <Text fontSize="xs" color="gray.600">
-              {'ID : ' + user?.id}
-            </Text>
+            <Stack spacing={userSuccess ? '0rem' : '0.5rem'}>
+              <SkeletonText
+                isLoaded={userSuccess}
+                maxW={userSuccess ? undefined : '6rem'}
+                noOfLines={1}
+              >
+                <Heading size="sm">{user?.login}</Heading>
+              </SkeletonText>
+              <SkeletonText
+                isLoaded={userSuccess}
+                maxW={userSuccess ? undefined : '6rem'}
+                noOfLines={1}
+              >
+                <Text fontSize="xs" color="gray.600">
+                  {'ID : ' + user?.id}
+                </Text>
+              </SkeletonText>
+            </Stack>
           </Box>
           {!!user && (
             <Box>
@@ -99,7 +111,9 @@ export const PageUser = () => {
           )}
         </HStack>
       </PageTopBar>
-      {!!user && (
+      {userIsLoading ? (
+        <Loader />
+      ) : (
         <Formiz
           id="create-user-form"
           onValidSubmit={submitEditUser}
@@ -156,7 +170,7 @@ export const PageUser = () => {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={goBack}>Cancel</Button>
+                <Button onClick={() => history.goBack()}>Cancel</Button>
                 <Button
                   type="submit"
                   colorScheme="brand"
@@ -169,7 +183,6 @@ export const PageUser = () => {
           </form>
         </Formiz>
       )}
-      <BackConformationModal isOpen={isOpen} onClose={onClose} />
     </Page>
   );
 };
