@@ -74,18 +74,18 @@ export const useUserUpdate = (config: MutationOptions = {}) => {
   });
 };
 
-export const useUserDelete = (config: MutationOptions = {}) => {
+export const useUserDelete = (
+  userLogin: string,
+  config: MutationOptions = {}
+) => {
   const queryCache = useQueryClient();
-  // @ts-ignore
   return useMutation<any>(
-    (payload: any) =>
-      Axios.delete(`/admin/users/${config?.variables}`, payload),
+    (payload: any) => Axios.delete(`/users/${userLogin}`, payload),
     {
       ...config,
       onSuccess: (deletedUser: any, ...rest) => {
         queryCache.invalidateQueries('users');
         if (config.onSuccess) {
-          // @ts-ignore
           config.onSuccess(deletedUser, ...rest);
         }
       },

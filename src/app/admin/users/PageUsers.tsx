@@ -94,21 +94,23 @@ const UserActions = ({ user, ...rest }) => {
       }
     },
   });
-  const { mutate: userDelete, ...userDeletionData } = useUserDelete({
-    variables: user.login,
-    onSuccess: ({ activated, login }) => {
-      toastSuccess({
-        title: 'Account Deleted',
-        description: `Account deleted with success`,
-      });
-    },
-    onError: (_, __, { activated, login }) => {
-      toastError({
-        title: 'Deletion Failed',
-        description: `Fail to delete "${login}" account`,
-      });
-    },
-  });
+  const { mutate: userDelete, ...userDeletionData } = useUserDelete(
+    user.login,
+    {
+      onSuccess: ({ activated, login }) => {
+        toastSuccess({
+          title: 'Account Deleted',
+          description: `Account deleted with success`,
+        });
+      },
+      onError: (_, __, { activated, login }) => {
+        toastError({
+          title: 'Deletion Failed',
+          description: `Fail to delete "${login}" account`,
+        });
+      },
+    }
+  );
   const activateUser = () => userUpdate({ ...user, activated: true });
   const deactivateUser = () => userUpdate({ ...user, activated: false });
   const deleteUser = () => {
