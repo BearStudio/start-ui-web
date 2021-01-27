@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Code,
@@ -115,26 +115,19 @@ const UserActions = ({ user, ...rest }) => {
     userDelete({ ...user });
   };
 
-  const updateUser = (props) => {
-    console.log('dumb methode to test');
-  };
-
-  const [
-    menuActions,
-    callBackConfirmButton,
-    onCloseMenu,
-    onToggleMenu,
-    isOpenMenu,
-  ]: any = useMenuAction({
-    update: {
-      state: useDisclosure(),
-      action: updateUser,
-    },
+  const menuActions = {
     delete: {
       state: useDisclosure(),
       action: deleteUser,
     },
-  });
+  };
+
+  const [
+    callBackConfirmButton,
+    onCloseMenu,
+    onToggleMenu,
+    isOpenMenu,
+  ]: any = useMenuAction(menuActions);
 
   const isActionsLoading =
     userUpdateData.isLoading || userDeletionData.isLoading;
@@ -207,33 +200,6 @@ const UserActions = ({ user, ...rest }) => {
               />
             </>
           )}
-          <>
-            <MenuDivider />
-            <MenuItemAction
-              propsActionHeader={{
-                size: 'xs',
-                mb: '2',
-              }}
-              menuAction={menuActions.update}
-              propsConfirmButton={{
-                text: 'Confirm',
-                ml: 'auto',
-                size: 'sm',
-                colorScheme: 'red',
-              }}
-              propsCancelButton={{
-                text: 'Cancel',
-                size: 'sm',
-                variant: 'link',
-              }}
-              confirmationText="Are your sure ?"
-              actionCallBack={() => {
-                callBackConfirmButton('update');
-              }}
-              text="update"
-              icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
-            />
-          </>
         </MenuList>
       </Portal>
     </MenuAction>
@@ -243,11 +209,17 @@ const UserActions = ({ user, ...rest }) => {
 export const PageUsers = () => {
   const { path } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
-  const pageSize = 20;
+  const pageSize = 5;
   const { users, totalItems, isLoadingPage } = useUserList({
     page: page - 1,
     size: pageSize,
   });
+
+  useEffect(() => {
+    if (!users?.length && page != 0) {
+      setPage(page - 1);
+    }
+  }, [users, page]);
 
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
