@@ -110,7 +110,6 @@ export const PageUserCreate = () => {
                 name="authorities"
                 label="Authorities"
                 options={authorities}
-                defaultValue={'ROLE_USER'}
                 isRequired
                 validations={[
                   {
