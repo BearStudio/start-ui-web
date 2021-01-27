@@ -19,9 +19,8 @@ export const useMenuAction = (menuActions: any) => {
 
   const onCloseMenu = () => {
     onClose();
-    Object.values(menuActions || []).map((menuItemElement: any) => {
+    Object.values(menuActions || []).forEach((menuItemElement: any) => {
       menuItemElement?.state?.onClose();
-      return menuItemElement;
     });
   };
 
