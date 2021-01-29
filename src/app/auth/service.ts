@@ -19,3 +19,25 @@ export const useLogin = (config: MutationOptions = {}) => {
     }
   );
 };
+
+export const useFacebookLogin = (config: MutationOptions = {}) => {
+  const { updateToken } = useAuthContext();
+  return useMutation<any, any, any>(
+    ({ email, facebookId, facebookToken }) =>
+      Axios.post('/v1/authenticate-with-facebook', {
+        login: email,
+        email,
+        facebookId,
+        facebookToken,
+      }),
+    {
+      ...config,
+      onSuccess: (data, ...rest) => {
+        updateToken(data.id_token);
+        if (config.onSuccess) {
+          config.onSuccess(data, ...rest);
+        }
+      },
+    }
+  );
+};

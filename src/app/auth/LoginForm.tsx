@@ -1,15 +1,21 @@
 import React from 'react';
 
-import { Box, Button, Flex, Stack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { FaFacebook } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { useLogin } from '@/app/auth/service';
+import { useLogin, useFacebookLogin } from '@/app/auth/service';
 import { FieldInput, useToastError } from '@/components';
 
 export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
+  const {
+    mutate: handleFacebookLogin,
+    isLoading: facebookLoginLoading,
+  } = useFacebookLogin();
 
   const { mutate: login, isLoading } = useLogin({
     onSuccess,
@@ -20,6 +26,11 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
       });
     },
   });
+
+  const loginUserFromFacebook = (response) => {
+    const { email, id: facebookId, accessToken: facebookToken } = response;
+    handleFacebookLogin({ email, facebookId, facebookToken });
+  };
 
   return (
     <Box {...rest}>
@@ -55,6 +66,24 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               Log In
             </Button>
           </Flex>
+          <Divider />
+          {process.env.NEXT_PUBLIC_FACEBOOK_APP_ID && (
+            <FacebookLogin
+              appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}
+              fields="name,email"
+              callback={loginUserFromFacebook}
+              render={(props) => (
+                <Button
+                  leftIcon={<FaFacebook />}
+                  colorScheme="blue"
+                  {...props}
+                  isLoading={props.isProcessing || facebookLoginLoading}
+                >
+                  Login with Facebook
+                </Button>
+              )}
+            />
+          )}
         </Stack>
       </Formiz>
     </Box>

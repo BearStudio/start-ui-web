@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
+import { Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 
@@ -14,6 +14,8 @@ export const PagePassword = () => {
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
+
+  const isConnectedFromSocial = true;
 
   const {
     mutate: changePasswordFinish,
@@ -52,69 +54,75 @@ export const PagePassword = () => {
         <Heading size="md" mb="4">
           Password
         </Heading>
-        <Formiz
-          id="password-form"
-          onValidSubmit={submitUpdatePassword}
-          connect={changePasswordForm}
-        >
-          <form noValidate onSubmit={changePasswordForm.submit}>
-            <Stack
-              direction="column"
-              bg="white"
-              p="6"
-              borderRadius="lg"
-              spacing="6"
-              shadow="md"
-            >
-              <FieldInput
-                name="currentPassword"
-                label="Current password"
-                type="password"
-                required="This field is required"
-                validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
-                ]}
-              />
-              <FieldInput
-                name="newPassword"
-                label="New password"
-                type="password"
-                required="This field is required"
-                validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
-                ]}
-              />
-              <FieldInput
-                name="confirmNewPassword"
-                label="New password confirmation"
-                type="password"
-                required="This field is required"
-                validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
-                  {
-                    rule: (value) =>
-                      value === changePasswordForm?.values?.newPassword,
-                    message: 'Passwords must be equal',
-                    deps: [changePasswordForm?.values?.newPassword],
-                  },
-                ]}
-              />
-              <Flex>
-                <Button
-                  type="submit"
-                  colorScheme="brand"
-                  ml="auto"
-                  isLoading={changePasswordLoading}
-                >
-                  Change password
-                </Button>
-              </Flex>
-            </Stack>
-          </form>
-        </Formiz>
+        {!isConnectedFromSocial ? (
+          <Formiz
+            id="password-form"
+            onValidSubmit={submitUpdatePassword}
+            connect={changePasswordForm}
+          >
+            <form noValidate onSubmit={changePasswordForm.submit}>
+              <Stack
+                direction="column"
+                bg="white"
+                p="6"
+                borderRadius="lg"
+                spacing="6"
+                shadow="md"
+              >
+                <FieldInput
+                  name="currentPassword"
+                  label="Current password"
+                  type="password"
+                  required="This field is required"
+                  validations={[
+                    { rule: isMinLength(4), message: 'Password is too short' },
+                    { rule: isMaxLength(50), message: 'Password is too long' },
+                  ]}
+                />
+                <FieldInput
+                  name="newPassword"
+                  label="New password"
+                  type="password"
+                  required="This field is required"
+                  validations={[
+                    { rule: isMinLength(4), message: 'Password is too short' },
+                    { rule: isMaxLength(50), message: 'Password is too long' },
+                  ]}
+                />
+                <FieldInput
+                  name="confirmNewPassword"
+                  label="New password confirmation"
+                  type="password"
+                  required="This field is required"
+                  validations={[
+                    { rule: isMinLength(4), message: 'Password is too short' },
+                    { rule: isMaxLength(50), message: 'Password is too long' },
+                    {
+                      rule: (value) =>
+                        value === changePasswordForm?.values?.newPassword,
+                      message: 'Passwords must be equal',
+                      deps: [changePasswordForm?.values?.newPassword],
+                    },
+                  ]}
+                />
+                <Flex>
+                  <Button
+                    type="submit"
+                    colorScheme="brand"
+                    ml="auto"
+                    isLoading={changePasswordLoading}
+                  >
+                    Change password
+                  </Button>
+                </Flex>
+              </Stack>
+            </form>
+          </Formiz>
+        ) : (
+          <Center bg="white" p="6" borderRadius="lg" spacing="6" shadow="md">
+            Login with Facebook
+          </Center>
+        )}
       </PageContent>
     </Page>
   );

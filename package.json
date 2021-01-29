@@ -20,6 +20,7 @@
     "react-day-picker": "7.4.8",
     "react-dom": "17.0.1",
     "react-error-boundary": "3.1.0",
+    "react-facebook-login": "^4.1.1",
     "react-i18next": "11.8.5",
     "react-icons": "4.1.0",
     "react-query": "3.5.16",
