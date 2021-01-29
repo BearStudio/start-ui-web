@@ -15,6 +15,7 @@ Opinionated UI starter with
 - 🌍 [React i18next](https://react.i18next.com/)
 
 ℹ️ API calls are mapped on a [jHipster](https://www.jhipster.tech/) backend application.
+- [API Contract](API_CONTRACT.md)
 
 ## Installation
 
