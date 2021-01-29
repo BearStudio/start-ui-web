@@ -96,7 +96,7 @@ export const useUserDelete = (
 export const useUserCreate = (config: MutationOptions = {}) => {
   return useMutation<any, any, any>(
     ({ login, firstName, lastName, email, langKey = 'en', authorities }) =>
-      Axios.post('/admin/users', {
+      Axios.post('/users', {
         login,
         firstName,
         lastName,
