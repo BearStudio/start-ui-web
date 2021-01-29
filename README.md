@@ -45,3 +45,21 @@ Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environme
 NEXT_PUBLIC_DEV_ENV_NAME=staging
 NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
 ```
+
+## Production
+
+### NodeJS (recommended)
+
+```
+yarn build
+yarn start
+```
+
+### Static
+
+```
+yarn static:build
+```
+
+Then expose the `/out` folder.
+
