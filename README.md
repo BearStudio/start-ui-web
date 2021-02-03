@@ -63,3 +63,4 @@ yarn static:build
 
 Then expose the `/out` folder.
 
+💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
