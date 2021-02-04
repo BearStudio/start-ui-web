@@ -12,6 +12,7 @@
     "@formiz/validations": "1.0.0",
     "axios": "0.21.1",
     "dayjs": "1.10.3",
+    "faker": "5.3.1",
     "framer-motion": "3.2.1",
     "history": "5.0.0",
     "i18next": "19.8.4",

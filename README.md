@@ -29,6 +29,10 @@ yarn build
 yarn dev
 ```
 
+### Development with Mirage and fakerjs
+
+In `.env` file at the root of the project, do not set `NEXT_PUBLIC_API_BASE_URL` variable.
+
 ### Development with a jHipster backend
 
 Create a `.env` file at the root of the project with the following content:
