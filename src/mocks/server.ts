@@ -1,7 +1,7 @@
 import { createServer, Model, Serializer } from 'miragejs';
 
 import { AccountRoutes } from './account';
-import { AuthRoutes } from './authentication';
+import { AuthRoutes } from './auth';
 import { UsersRoutes } from './users';
 import { UserFactory } from './users/factory';
 

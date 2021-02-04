@@ -8,19 +8,12 @@ export const AccountRoutes = (server) => {
   server.post('/account/reset-password/finish', finishResetPassword);
 };
 
-export const isAuthorizedRequest = (schema, request) => {
-  if (getCurrent(schema, request).code === 401) {
-    return false;
-  }
-  return true;
-};
-
-const getCurrent = (schema, request) => {
+export const getCurrent = (schema, request) => {
   const authToken = request.requestHeaders.Authorization;
-  if (authToken) {
-    return schema.users.find(authToken.split('Bearer ')[1]);
+  if (!authToken) {
+    return new Response(401);
   }
-  return new Response(401);
+  return schema.users.find(authToken.split('Bearer ')[1]);
 };
 
 const update = (schema, request) => {
@@ -44,7 +37,6 @@ const finishResetPassword = (schema, request) => {
 
 const changePassword = (schema, request) => {
   const attrs = JSON.parse(request.requestBody);
-  console.log(attrs);
   const authToken = request.requestHeaders.Authorization;
   const userId = authToken.split('Bearer ')[1];
 

@@ -1,5 +1,7 @@
 import { Response } from 'miragejs';
 
+import { getCurrent } from '../account';
+
 export const AuthRoutes = (server) => {
   server.post('/authenticate', authenticate);
   server.post('/register', register);
@@ -8,19 +10,27 @@ export const AuthRoutes = (server) => {
 const authenticate = (schema, request) => {
   const attrs = JSON.parse(request.requestBody);
   const user = schema.users.findBy({ login: attrs.username });
-  if (user) {
-    // Hack to identify current user
-    return new Response(200, {}, { id_token: user.id });
-  } else {
+  if (!user) {
     return new Response(401);
+  } else {
+    // Hack to identify current user
+    return { id_token: user.id };
   }
 };
 
 const register = (schema, request) => {
   const attrs = JSON.parse(request.requestBody);
-  console.log({ attrs });
   schema.create('user', {
     ...attrs,
     activated: false,
   });
+};
+
+export const withAuth = (callback) => {
+  return (schema, request) => {
+    if (getCurrent(schema, request).code === 401) {
+      return new Response(401);
+    }
+    return callback(schema, request);
+  };
 };
