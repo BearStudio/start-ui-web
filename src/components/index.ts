@@ -28,8 +28,7 @@ export {
   usePaginationFromUrl,
   getPaginationInfo,
 } from './Pagination';
-export { MenuAction } from './MenuAction';
-export { MenuItemAction } from './MenuItemAction';
+export { MenuAction, MenuActionItem } from './MenuAction';
 export { Nav, NavItem, NavGroup } from './Nav';
 export {
   useToastError,

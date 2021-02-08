@@ -54,7 +54,7 @@ import {
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
-  MenuItemAction,
+  MenuActionItem,
   MenuAction,
 } from '@/components';
 import { useMenuAction } from '@/components/MenuAction';
@@ -95,19 +95,19 @@ const UserActions = ({ user, ...rest }) => {
     },
   });
   const { mutate: userDelete, ...userDeletionData } = useUserDelete({
-    variables: user.login,
     onSuccess: ({ activated, login }) => {
       toastSuccess({
         title: 'Account Deleted',
         description: `Account deleted with success`,
       });
     },
-    onError: (_, __, { activated, login }) => {
+    onError: (__, { login }: any) => {
       toastError({
         title: 'Deletion Failed',
         description: `Fail to delete "${login}" account`,
       });
     },
+    variables: user.login,
   });
   const activateUser = () => userUpdate({ ...user, activated: true });
   const deactivateUser = () => userUpdate({ ...user, activated: false });
@@ -122,12 +122,12 @@ const UserActions = ({ user, ...rest }) => {
     },
   };
 
-  const [
+  const {
     callBackConfirmButton,
     onCloseMenu,
     onToggleMenu,
     isOpenMenu,
-  ]: any = useMenuAction(menuActions);
+  }: any = useMenuAction(menuActions);
 
   const isActionsLoading =
     userUpdateData.isLoading || userDeletionData.isLoading;
@@ -174,7 +174,7 @@ const UserActions = ({ user, ...rest }) => {
           {account.login !== user.login && (
             <>
               <MenuDivider />
-              <MenuItemAction
+              <MenuActionItem
                 propsActionHeader={{
                   size: 'xs',
                   mb: '2',

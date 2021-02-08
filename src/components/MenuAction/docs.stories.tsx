@@ -11,8 +11,8 @@ import {
 import { FiEdit, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 
 import { ActionsButton } from '@/components';
-import { MenuAction, MenuItemAction } from '@/components';
-import { useMenuAction } from '@/components/MenuAction';
+import { MenuAction, MenuActionItem } from '@/components';
+import { useMenuAction } from '@/components/MenuAction/index';
 
 export default {
   title: 'components/MenuItemAction',
@@ -37,12 +37,12 @@ export const Default = () => {
     },
   };
 
-  const [
+  const {
     callBackConfirmButton,
     onCloseMenu,
     onToggleMenu,
     isOpenMenu,
-  ]: any = useMenuAction(menuActions);
+  }: any = useMenuAction(menuActions);
 
   const { firstAction, secondAction } = menuActions;
 
@@ -61,7 +61,7 @@ export const Default = () => {
           </MenuItem>
           <>
             <MenuDivider />
-            <MenuItemAction
+            <MenuActionItem
               propsActionHeader={{
                 size: 'xs',
                 mb: '2',
@@ -86,7 +86,7 @@ export const Default = () => {
               icon={<Icon as={FiUserPlus} fontSize="lg" color="gray.400" />}
             />
             <MenuDivider />
-            <MenuItemAction
+            <MenuActionItem
               propsActionHeader={{
                 size: 'xs',
                 mb: '2',

@@ -16,7 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 
-import { ActionsButton } from '../ActionsButton';
+import { ActionsButton } from '@/components';
+
 import { HitZone } from '../HitZone';
 import {
   Pagination,
