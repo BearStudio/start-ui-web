@@ -15,7 +15,7 @@ export const FieldBooleanCheckbox = (props) => {
     setValue,
     value,
   } = useField(props);
-  const { required } = props;
+  const { required, description } = props;
   const { children, label, helper, ...otherProps } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
@@ -36,7 +36,13 @@ export const FieldBooleanCheckbox = (props) => {
 
   return (
     <FormGroup {...formGroupProps}>
-      <Checkbox value={value ?? false} onChange={() => setValue(!value)} />
+      <Checkbox
+        value={value ?? false}
+        onChange={() => setValue(!value)}
+        defaultChecked={value ?? false}
+      >
+        {description}
+      </Checkbox>
       {children}
     </FormGroup>
   );

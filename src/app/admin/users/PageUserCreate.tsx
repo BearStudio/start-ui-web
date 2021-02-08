@@ -29,11 +29,23 @@ export const PageUserCreate = () => {
 
   const { mutate: createUser, isLoading: createUserLoading } = useUserCreate({
     onError: (error: any) => {
-      const { description } = error?.response?.data || {};
+      const { title, errorKey } = error?.response?.data || {};
       toastError({
         title: 'Creation failed',
-        description,
+        description: title,
       });
+      switch (errorKey) {
+        case 'userexists':
+          createUserForm.invalidateFields({
+            login: 'Login already used',
+          });
+          break;
+        case 'emailexists':
+          createUserForm.invalidateFields({
+            email: 'Email already used',
+          });
+          break;
+      }
     },
     onSuccess: () => {
       toastSuccess({
@@ -80,16 +92,8 @@ export const PageUserCreate = () => {
                 required="This field is required"
               />
               <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-                <FieldInput
-                  name="firstName"
-                  label="First Name"
-                  required="This field is required"
-                />
-                <FieldInput
-                  name="lastName"
-                  label="Last Name"
-                  required="This field is required"
-                />
+                <FieldInput name="firstName" label="First Name" />
+                <FieldInput name="lastName" label="Last Name" />
               </Stack>
               <FieldInput
                 name="email"
