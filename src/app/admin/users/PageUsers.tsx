@@ -216,10 +216,10 @@ export const PageUsers = () => {
   });
 
   useEffect(() => {
-    if (!users?.length && page != 0) {
+    if (!users?.length && page !== 0) {
       setPage(page - 1);
     }
-  }, [users, page]);
+  }, [setPage, users, page]);
 
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
