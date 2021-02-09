@@ -52,11 +52,11 @@ NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
 
 ## API Documentation
 
-The API documentation is integrated in the application with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react), and accessible by administrators via the navigation of the administration page. 
+API documentation is accessible by admins in the app with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react). 
 ```
 yarn docs:build
 ```
-for build json documentation from main file `/src/mocks/openapi/openapi.yaml`.
+This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
 
 ## Production
 
