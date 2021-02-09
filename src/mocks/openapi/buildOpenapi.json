@@ -6,6 +6,10 @@
   },
   "tags": [
     {
+      "name": "Authentication",
+      "description": "Endpoints to manage authentication"
+    },
+    {
       "name": "Account",
       "description": "Endpoints to manage account"
     },
@@ -18,7 +22,7 @@
     "/authenticate": {
       "post": {
         "summary": "Authenticate account",
-        "tags": ["Account"],
+        "tags": ["Authentication"],
         "requestBody": {
           "description": "Account identifiers",
           "required": true,
@@ -45,10 +49,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -86,20 +87,11 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Ok"
-          },
           "201": {
             "description": "Created"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -120,13 +112,7 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       },
@@ -139,26 +125,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDTO"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Ok"
-          },
           "201": {
             "description": "Created"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -193,13 +170,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -230,7 +201,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -264,7 +235,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -305,19 +276,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       },
@@ -330,7 +306,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDTO"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -340,13 +316,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/error"
           }
         }
       },
@@ -359,7 +329,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDTO"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -369,16 +339,7 @@
             "description": "Ok"
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -410,16 +371,7 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/error"
           }
         }
       }
@@ -430,7 +382,48 @@
       "User": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/UserDTO"
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "login": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "activated": {
+                "type": "boolean"
+              },
+              "langKey": {
+                "type": "string"
+              },
+              "authorities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "id": 1,
+              "login": "admin",
+              "firstName": "admin",
+              "lastName": "admin",
+              "email": "admin@test.com",
+              "activated": true,
+              "langKey": "en",
+              "authorities": ["ROLE_USER", "ROLE_ADMIN"]
+            }
           },
           {
             "type": "object",
@@ -456,106 +449,26 @@
             }
           }
         ]
-      },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "login": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "activated": {
-            "type": "boolean"
-          },
-          "langKey": {
-            "type": "string"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "example": {
-          "id": 1,
-          "login": "admin",
-          "firstName": "admin",
-          "lastName": "admin",
-          "email": "admin@test.com",
-          "activated": true,
-          "langKey": "en",
-          "authorities": ["ROLE_USER", "ROLE_ADMIN"]
-        }
-      },
-      "ErrorResponse": {
-        "$ref": "#/components/responses/ErrorResponse"
       }
     },
     "responses": {
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "errorKey": {
-            "type": "string"
-          }
-        }
-      },
-      "BadRequest": {
-        "description": "Bad request",
+      "error": {
+        "description": "40x errors schema",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/responses/ErrorResponse"
-            }
-          }
-        }
-      },
-      "Unauthorized": {
-        "description": "Unauthorized",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/responses/ErrorResponse"
-            }
-          }
-        }
-      },
-      "Forbidden": {
-        "description": "Forbidden",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/responses/ErrorResponse"
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/responses/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "errorKey": {
+                  "type": "string"
+                }
+              }
             }
           }
         }

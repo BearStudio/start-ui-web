@@ -1,4 +1,6 @@
-User:
+# /user
+user:
+  # ---
   get:
     summary: Get user
     tags:
@@ -17,16 +19,12 @@ User:
           application/json:
             schema:
               $ref: './user.yaml#/User'
-
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/openapi.yaml#/components/responses/Unauthorized'
-      '403':
-        $ref: '../openapi/openapi.yaml#/components/responses/Forbidden'
-      '404':
-        $ref: '../openapi/openapi.yaml#/components/responses/NotFound'
-Users:
+        $ref: '../openapi/errors.yaml#/error'
+
+# /users
+users:
+  # ---
   get:
     summary: Get all users with pagination
     tags:
@@ -53,13 +51,18 @@ Users:
         content:
           application/json:
             schema:
-              $ref: './user.yaml#/User'
+              type: object
+              properties:
+                content:
+                  type: array
+                  items:
+                    $ref: './user.yaml#/User'
+                totalItems:
+                  type: integer
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
+        $ref: '../openapi/errors.yaml#/error'
+
+  # ---
   post:
     summary: Create user
     tags:
@@ -70,16 +73,14 @@ Users:
       content:
         application/json:
           schema:
-            $ref: './user.yaml#/UserDTO'
+            $ref: './user.yaml#/User'
     responses:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
+        $ref: '../openapi/errors.yaml#/error'
+
+  # ---
   put:
     summary: Edit user
     tags:
@@ -90,15 +91,9 @@ Users:
       content:
         application/json:
           schema:
-            $ref: './user.yaml#/UserDTO'
+            $ref: './user.yaml#/User'
     responses:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
-      '404':
-        $ref: '../openapi/errors.yaml#/NotFound'
+        $ref: '../openapi/errors.yaml#/error'

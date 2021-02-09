@@ -1,8 +1,10 @@
-Authenticate:
+# /authenticate
+authenticate:
+  # ---
   post:
     summary: Authenticate account
     tags:
-      - Account
+      - Authentication
     requestBody:
       description: Account identifiers
       required: true
@@ -21,6 +23,4 @@ Authenticate:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '404':
-        $ref: '../openapi/errors.yaml#/NotFound'
+        $ref: '../openapi/errors.yaml#/error'

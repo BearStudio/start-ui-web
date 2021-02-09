@@ -1,4 +1,6 @@
-Account:
+# /account
+account:
+  # ---
   get:
     summary: Get account's information
     tags:
@@ -11,11 +13,8 @@ Account:
             schema:
               $ref: '../users/user.yaml#/User'
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
+        $ref: '../openapi/errors.yaml#/error'
+  # ---
   post:
     summary: Edit account
     tags:
@@ -26,19 +25,16 @@ Account:
       content:
         application/json:
           schema:
-            $ref: '../users/user.yaml#/UserDTO'
+            $ref: '../users/user.yaml#/User'
     responses:
-      '200':
-        description: Ok
       '201':
         description: Created
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
-ChangePassword:
+        $ref: '../openapi/errors.yaml#/error'
+
+# /change-password
+change-password:
+  # ---
   post:
     summary: Change account's password
     tags:
@@ -61,12 +57,11 @@ ChangePassword:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
-Register:
+        $ref: '../openapi/errors.yaml#/error'
+
+# /register
+register:
+  # ---
   post:
     summary: Create account
     tags:
@@ -91,17 +86,14 @@ Register:
                 type: string
                 default: 'en'
     responses:
-      '200':
-        description: Ok
       '201':
         description: Created
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-      '401':
-        $ref: '../openapi/errors.yaml#/Unauthorized'
-      '403':
-        $ref: '../openapi/errors.yaml#/Forbidden'
-ResetPasswordInit:
+        $ref: '../openapi/errors.yaml#/error'
+
+# reset-password/init
+reset-password-init:
+  # ---
   post:
     summary: Request reset password
     tags:
@@ -121,8 +113,11 @@ ResetPasswordInit:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
-ResetPasswordFinish:
+        $ref: '../openapi/errors.yaml#/error'
+
+# /reset-password/finish
+reset-password-finish:
+  # ---
   post:
     summary: Conclude reset password
     tags:
@@ -144,4 +139,4 @@ ResetPasswordFinish:
       '200':
         description: Ok
       '400':
-        $ref: '../openapi/errors.yaml#/BadRequest'
+        $ref: '../openapi/errors.yaml#/error'
