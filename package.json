@@ -2,7 +2,7 @@
   "name": "start-ui",
   "private": true,
   "version": "1.0.0",
-  "description": "⚠️ Work in progress repository",
+  "description": "⚠️ Work in progress repository _",
   "main": "index.js",
   "dependencies": {
     "@chakra-ui/react": "1.1.5",
