@@ -1,0 +1,26 @@
+Authenticate:
+  post:
+    summary: Authenticate account
+    tags:
+      - Account
+    requestBody:
+      description: Account identifiers
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+                format: password
+    responses:
+      '200':
+        description: Ok
+      '400':
+        $ref: '../openapi/errors.yaml#/BadRequest'
+      '404':
+        $ref: '../openapi/errors.yaml#/NotFound'

@@ -1,15 +1,5 @@
 {
-  "openapi": "3.0.2",
-  "servers": [
-    {
-      "description": "SwaggerHub API Auto Mocking",
-      "url": "https://virtserver.swaggerhub.com/B4984/POC/1.0.0"
-    },
-    {
-      "description": "Mettre la configuration quand une api de test sera disponible",
-      "url": "https://api.de.test"
-    }
-  ],
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0",
     "title": "Start-UI API Contract"
@@ -54,8 +44,11 @@
           "200": {
             "description": "Ok"
           },
-          "401": {
-            "description": "Unauthorized"
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -99,8 +92,14 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
@@ -120,8 +119,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       },
@@ -146,8 +151,14 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
@@ -182,10 +193,13 @@
             "description": "Ok"
           },
           "400": {
-            "description": "Incorrect password"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
@@ -214,6 +228,9 @@
         "responses": {
           "200": {
             "description": "Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -245,6 +262,9 @@
         "responses": {
           "200": {
             "description": "Ok"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -290,8 +310,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       },
@@ -313,8 +339,14 @@
           "200": {
             "description": "Ok"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       },
@@ -336,8 +368,17 @@
           "200": {
             "description": "Ok"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -368,8 +409,17 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "401": {
-            "description": "Unauthorized"
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -378,64 +428,34 @@
   "components": {
     "schemas": {
       "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserDTO"
           },
-          "login": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "activated": {
-            "type": "boolean"
-          },
-          "langKey": {
-            "type": "string"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "createdDate": {
-            "type": "string"
-          },
-          "lastModifiedBy": {
-            "type": "string"
-          },
-          "lastModifiedDate": {
-            "type": "string"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "type": "string"
+          {
+            "type": "object",
+            "properties": {
+              "createdBy": {
+                "type": "string"
+              },
+              "createdDate": {
+                "type": "string"
+              },
+              "lastModifiedBy": {
+                "type": "string"
+              },
+              "lastModifiedDate": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "createdBy": "system",
+              "createdDate": "2000-01-01",
+              "lastModifiedBy": "system",
+              "lastModifiedDate": "2000-01-01"
             }
           }
-        },
-        "example": {
-          "id": 1,
-          "login": "admin",
-          "firstName": "admin",
-          "lastName": "admin",
-          "email": "admin@test.com",
-          "activated": true,
-          "langKey": "en",
-          "createdBy": "system",
-          "createdDate": "2000-01-01",
-          "lastModifiedBy": "system",
-          "lastModifiedDate": "2000-01-01",
-          "authorities": ["ROLE_USER", "ROLE_ADMIN"]
-        }
+        ]
       },
       "UserDTO": {
         "type": "object",
@@ -482,6 +502,11 @@
         }
       },
       "ErrorResponse": {
+        "$ref": "#/components/responses/ErrorResponse"
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
         "type": "object",
         "properties": {
           "status": {
@@ -493,11 +518,46 @@
           "errorKey": {
             "type": "string"
           }
-        },
-        "example": {
-          "status": 400,
-          "title": "Creation failed",
-          "errorKey": "userexists"
+        }
+      },
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/responses/ErrorResponse"
+            }
+          }
         }
       }
     }

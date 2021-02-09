@@ -8,10 +8,7 @@ import { Viewport } from '@/components';
 import { ErrorBoundary } from '@/errors';
 import { mockServer } from '@/mocks/server';
 
-if (
-  process.env.NODE_ENV !== 'production' &&
-  !process.env.NEXT_PUBLIC_API_BASE_URL
-) {
+if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
   mockServer();
 }
 

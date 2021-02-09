@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Box, Heading } from '@chakra-ui/react';
 import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
@@ -13,12 +12,7 @@ export const PageApiContract = () => {
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
-        <Box flex="1">
-          <Heading size="md">API</Heading>
-        </Box>
-        <Box>
-          <SwaggerUI spec={jsonAPI} />
-        </Box>
+        <SwaggerUI spec={jsonAPI} />
       </PageContent>
     </Page>
   );

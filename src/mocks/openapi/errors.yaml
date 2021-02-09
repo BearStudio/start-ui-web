@@ -1,0 +1,33 @@
+ErrorResponse:
+  type: object
+  properties:
+    status:
+      type: integer
+    title:
+      type: string
+    errorKey:
+      type: string
+BadRequest:
+  description: Bad request
+  content:
+    application/json:
+      schema:
+        $ref: '#/ErrorResponse'
+Unauthorized:
+  description: Unauthorized
+  content:
+    application/json:
+      schema:
+        $ref: '#/ErrorResponse'
+Forbidden:
+  description: Forbidden
+  content:
+    application/json:
+      schema:
+        $ref: '#/ErrorResponse'
+NotFound:
+  description: Not found
+  content:
+    application/json:
+      schema:
+        $ref: '#/ErrorResponse'
