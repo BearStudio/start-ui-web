@@ -4,7 +4,6 @@ import { getCurrent } from '../account';
 
 export const AuthRoutes = (server) => {
   server.post('/authenticate', authenticate);
-  server.post('/register', register);
 };
 
 const authenticate = (schema, request) => {
@@ -16,14 +15,6 @@ const authenticate = (schema, request) => {
     // Hack to identify current user
     return { id_token: user.id };
   }
-};
-
-const register = (schema, request) => {
-  const attrs = JSON.parse(request.requestBody);
-  schema.create('user', {
-    ...attrs,
-    activated: false,
-  });
 };
 
 export const withAuth = (callback) => {

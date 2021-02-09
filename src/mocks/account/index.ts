@@ -6,6 +6,7 @@ export const AccountRoutes = (server) => {
   server.post('/account/change-password', changePassword);
   server.post('/account/reset-password/init', initResetPassword);
   server.post('/account/reset-password/finish', finishResetPassword);
+  server.post('/register', register);
 };
 
 export const getCurrent = (schema, request) => {
@@ -14,6 +15,14 @@ export const getCurrent = (schema, request) => {
     return new Response(401);
   }
   return schema.users.find(authToken.split('Bearer ')[1]);
+};
+
+const register = (schema, request) => {
+  const attrs = JSON.parse(request.requestBody);
+  schema.create('user', {
+    ...attrs,
+    activated: false,
+  });
 };
 
 const update = (schema, request) => {

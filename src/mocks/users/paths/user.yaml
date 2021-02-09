@@ -1,0 +1,20 @@
+get:
+  summary: Get user
+  tags:
+    - Users
+  parameters:
+    - in: path
+      name: userLogin
+      schema:
+        type: string
+      required: true
+      description: Login of the user to get
+  responses:
+    '200':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: '../user.yaml'
+    '401':
+      description: Unauthorized

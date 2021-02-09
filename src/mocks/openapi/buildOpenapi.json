@@ -1,0 +1,505 @@
+{
+  "openapi": "3.0.2",
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/B4984/POC/1.0.0"
+    },
+    {
+      "description": "Mettre la configuration quand une api de test sera disponible",
+      "url": "https://api.de.test"
+    }
+  ],
+  "info": {
+    "version": "1.0",
+    "title": "Start-UI API Contract"
+  },
+  "tags": [
+    {
+      "name": "Account",
+      "description": "Endpoints to manage account"
+    },
+    {
+      "name": "Users",
+      "description": "Endpoints to manage users"
+    }
+  ],
+  "paths": {
+    "/authenticate": {
+      "post": {
+        "summary": "Authenticate account",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "Account identifiers",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Create account",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "New account's information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "langKey": {
+                    "type": "string",
+                    "default": "en"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/account": {
+      "get": {
+        "summary": "Get account's information",
+        "tags": ["Account"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Edit account",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "Account's new value to replace by old account with same id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/account/change-password": {
+      "post": {
+        "summary": "Change account's password",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "Current and new password for check and apply new password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Incorrect password"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/account/reset-password/init": {
+      "post": {
+        "summary": "Request reset password",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "Email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/account/reset-password/finish": {
+      "post": {
+        "summary": "Conclude reset password",
+        "tags": ["Account"],
+        "requestBody": {
+          "description": "Reset key and new password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users with pagination",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Page to display"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of element on a page"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Explicits string to explain elements's order (ex 'id,desc')"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create user",
+        "tags": ["Users"],
+        "requestBody": {
+          "description": "New user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "summary": "Edit user",
+        "tags": ["Users"],
+        "requestBody": {
+          "description": "New user to replace by old user with same id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/{userLogin}": {
+      "get": {
+        "summary": "Get user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userLogin",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Login of the user to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "login": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "activated": {
+            "type": "boolean"
+          },
+          "langKey": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdDate": {
+            "type": "string"
+          },
+          "lastModifiedBy": {
+            "type": "string"
+          },
+          "lastModifiedDate": {
+            "type": "string"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "id": 1,
+          "login": "admin",
+          "firstName": "admin",
+          "lastName": "admin",
+          "email": "admin@test.com",
+          "activated": true,
+          "langKey": "en",
+          "createdBy": "system",
+          "createdDate": "2000-01-01",
+          "lastModifiedBy": "system",
+          "lastModifiedDate": "2000-01-01",
+          "authorities": ["ROLE_USER", "ROLE_ADMIN"]
+        }
+      },
+      "UserDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "login": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "activated": {
+            "type": "boolean"
+          },
+          "langKey": {
+            "type": "string"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "id": 1,
+          "login": "admin",
+          "firstName": "admin",
+          "lastName": "admin",
+          "email": "admin@test.com",
+          "activated": true,
+          "langKey": "en",
+          "authorities": ["ROLE_USER", "ROLE_ADMIN"]
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "errorKey": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "status": 400,
+          "title": "Creation failed",
+          "errorKey": "userexists"
+        }
+      }
+    }
+  }
+}

@@ -19,6 +19,14 @@ export const AdminNav = () => {
         >
           User Management
         </NavItem>
+        <NavItem
+          as={Link}
+          to="/admin/api"
+          isActive={isActive('/admin/api')}
+          icon={FiUsers}
+        >
+          API Contract
+        </NavItem>
       </NavGroup>
     </Nav>
   );

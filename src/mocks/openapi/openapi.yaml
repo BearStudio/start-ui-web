@@ -1,0 +1,40 @@
+openapi: '3.0.2'
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/B4984/POC/1.0.0
+  - description: Mettre la configuration quand une api de test sera disponible
+    url: https://api.de.test
+info:
+  version: '1.0'
+  title: Start-UI API Contract
+tags:
+  - name: Account
+    description: Endpoints to manage account
+  - name: Users
+    description: Endpoints to manage users
+paths:
+  /authenticate:
+    $ref: '../auth/paths/authenticate.yaml'
+  /register:
+    $ref: '../account/paths/register.yaml'
+  /account:
+    $ref: '../account/paths/account.yaml'
+  /account/change-password:
+    $ref: '../account/paths/changePassword.yaml'
+  /account/reset-password/init:
+    $ref: '../account/paths/resetPasswordInit.yaml'
+  /account/reset-password/finish:
+    $ref: '../account/paths/resetPasswordFinish.yaml'
+  /users:
+    $ref: '../users/paths/users.yaml'
+  /user/{userLogin}:
+    $ref: '../users/paths/user.yaml'
+components:
+  schemas:
+    User:
+      $ref: '../users/user.yaml'
+    UserDTO:
+      $ref: '../users/userDTO.yaml'
+    ErrorResponse:
+      $ref: './errorResponse.yaml'
