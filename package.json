@@ -84,11 +84,12 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json}": "prettier --write",
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
-    "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
+    "src/mocks/**/*.{yaml,yml}": "yarn docs:build",
+    "public/open-api.json": "git add public/open-api.json"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && git add public/open-api.json",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn lint"
     }
   },
