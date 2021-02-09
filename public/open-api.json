@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0",
-    "title": "Start-UI API Contract"
+    "version": "1.5",
+    "title": "Start-UI API Documentation"
   },
   "tags": [
     {
@@ -22,7 +22,9 @@
     "/authenticate": {
       "post": {
         "summary": "Authenticate account",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "requestBody": {
           "description": "Account identifiers",
           "required": true,
@@ -57,7 +59,9 @@
     "/register": {
       "post": {
         "summary": "Create account",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "description": "New account's information",
           "required": true,
@@ -99,7 +103,9 @@
     "/account": {
       "get": {
         "summary": "Get account's information",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "responses": {
           "200": {
             "description": "Ok",
@@ -118,7 +124,9 @@
       },
       "post": {
         "summary": "Edit account",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "description": "Account's new value to replace by old account with same id",
           "required": true,
@@ -143,7 +151,9 @@
     "/account/change-password": {
       "post": {
         "summary": "Change account's password",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "description": "Current and new password for check and apply new password",
           "required": true,
@@ -178,7 +188,9 @@
     "/account/reset-password/init": {
       "post": {
         "summary": "Request reset password",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "description": "Email",
           "required": true,
@@ -209,7 +221,9 @@
     "/account/reset-password/finish": {
       "post": {
         "summary": "Conclude reset password",
-        "tags": ["Account"],
+        "tags": [
+          "Account"
+        ],
         "requestBody": {
           "description": "Reset key and new password",
           "required": true,
@@ -243,7 +257,9 @@
     "/users": {
       "get": {
         "summary": "Get all users with pagination",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "in": "query",
@@ -299,7 +315,9 @@
       },
       "post": {
         "summary": "Create user",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "requestBody": {
           "description": "New user",
           "required": true,
@@ -322,7 +340,9 @@
       },
       "put": {
         "summary": "Edit user",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "requestBody": {
           "description": "New user to replace by old user with same id",
           "required": true,
@@ -347,7 +367,9 @@
     "/user/{userLogin}": {
       "get": {
         "summary": "Get user",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -422,7 +444,10 @@
               "email": "admin@test.com",
               "activated": true,
               "langKey": "en",
-              "authorities": ["ROLE_USER", "ROLE_ADMIN"]
+              "authorities": [
+                "ROLE_USER",
+                "ROLE_ADMIN"
+              ]
             }
           },
           {

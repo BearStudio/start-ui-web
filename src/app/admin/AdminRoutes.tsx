@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Switch, Redirect, useRouteMatch } from 'react-router-dom';
 
-import { PageApiContract } from '@/app/admin/api/PageApiContract';
+import { PageApiDocumentation } from '@/app/admin/api/PageApiDocumentation';
 import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
@@ -20,7 +20,7 @@ const AdminRoutes = () => {
         render={() => <Redirect to={`${path}/users`} />}
       />
       <Route path={`${path}/users`} render={() => <AdminUsersRoutes />} />
-      <Route path={`${path}/api`} render={() => <PageApiContract />} />
+      <Route path={`${path}/api`} render={() => <PageApiDocumentation />} />
       <Route path="*" render={() => <Error404 />} />
     </Switch>
   );

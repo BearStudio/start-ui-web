@@ -1,7 +1,7 @@
 openapi: '3.0.0'
 info:
-  version: '1.0'
-  title: Start-UI API Contract
+  version: '1.5'
+  title: Start-UI API Documentation
 tags:
   - name: Authentication
     description: Endpoints to manage authentication
