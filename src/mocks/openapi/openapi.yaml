@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: '1.5'
+  version: '1.6'
   title: Start-UI API Documentation
 tags:
   - name: Authentication
