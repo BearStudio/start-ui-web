@@ -11,7 +11,6 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { isMinLength } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -23,28 +22,19 @@ import {
   PageTopBar,
   Loader,
 } from '@/app/layout';
-import {
-  FieldBooleanCheckbox,
-  FieldGroupCheckbox,
-  FieldInput,
-  FieldSelect,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
+import { useToastError, useToastSuccess } from '@/components';
 
+import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
-
-export const AUTHORITIES = {
-  ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
-};
 
 export const PageUser = () => {
   const { login } = useParams();
   const history = useHistory();
-  const { user, isSuccess: userSuccess, isLoading: userIsLoading } = useUser(
-    login
-  );
+  const {
+    user,
+    isLoading: userIsLoading,
+    isFetching: userIsFetching,
+  } = useUser(login, { refetchOnWindowFocus: false });
   const queryClient = useQueryClient();
 
   const toastSuccess = useToastSuccess();
@@ -67,11 +57,6 @@ export const PageUser = () => {
     },
   });
   const editUserForm = useForm();
-
-  const languages = [{ label: 'English', value: 'en' }];
-
-  const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
-
   const submitEditUser = (values) => {
     const userToSend = {
       id: user?.id,
@@ -85,17 +70,17 @@ export const PageUser = () => {
       <PageTopBar showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
           <Box flex="1">
-            <Stack spacing={userSuccess ? '0rem' : '0.5rem'}>
+            <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
               <SkeletonText
-                isLoaded={userSuccess}
-                maxW={userSuccess ? undefined : '6rem'}
+                isLoaded={!userIsLoading}
+                maxW={!userIsLoading ? undefined : '6rem'}
                 noOfLines={1}
               >
                 <Heading size="sm">{user?.login}</Heading>
               </SkeletonText>
               <SkeletonText
-                isLoaded={userSuccess}
-                maxW={userSuccess ? undefined : '6rem'}
+                isLoaded={!userIsLoading}
+                maxW={!userIsLoading ? undefined : '6rem'}
                 noOfLines={1}
               >
                 <Text fontSize="xs" color="gray.600">
@@ -111,7 +96,7 @@ export const PageUser = () => {
           )}
         </HStack>
       </PageTopBar>
-      {userIsLoading ? (
+      {userIsFetching ? (
         <Loader />
       ) : (
         <Formiz
@@ -122,51 +107,7 @@ export const PageUser = () => {
         >
           <form noValidate onSubmit={editUserForm.submit}>
             <PageContent>
-              <Stack
-                direction="column"
-                bg="white"
-                p="6"
-                borderRadius="lg"
-                spacing="6"
-                shadow="md"
-              >
-                <FieldInput
-                  name="login"
-                  label="Login"
-                  required="This field is required"
-                />
-                <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-                  <FieldInput name="firstName" label="First Name" />
-                  <FieldInput name="lastName" label="Last Name" />
-                </Stack>
-                <FieldInput
-                  name="email"
-                  label="Email"
-                  required="This field is required"
-                />
-                <FieldBooleanCheckbox
-                  name="activated"
-                  label="Account activation"
-                  description="Activated"
-                />
-                <FieldSelect
-                  name="langKey"
-                  label="Language"
-                  options={languages}
-                />
-                <FieldGroupCheckbox
-                  name="authorities"
-                  label="Authorities"
-                  options={authorities}
-                  isRequired
-                  validations={[
-                    {
-                      rule: isMinLength(1),
-                      message: 'Choose at least one role',
-                    },
-                  ]}
-                />
-              </Stack>
+              <UserForm />
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">

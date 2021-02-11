@@ -31,12 +31,12 @@ export const useUserList = ({ page = 0, size = 10 } = {}) => {
   };
 };
 
-export const useUser = (userLogin: string) => {
-  const result = useQuery<any>(
+export const useUser = (userLogin: string, config: any = {}) => {
+  const result = useQuery<any, any, any>(
     ['user', userLogin],
     (): Promise<any> => Axios.get(`/users/${userLogin}`),
     {
-      keepPreviousData: true,
+      ...config,
     }
   );
 

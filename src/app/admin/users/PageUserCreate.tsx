@@ -1,24 +1,13 @@
 import React from 'react';
 
-import { Button, ButtonGroup, Heading, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { isMinLength } from '@formiz/validations';
 import { useHistory } from 'react-router-dom';
 
+import { UserForm } from '@/app/admin/users/UserForm';
 import { useUserCreate } from '@/app/admin/users/service';
 import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
-import {
-  FieldGroupCheckbox,
-  FieldInput,
-  FieldSelect,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
-
-export const AUTHORITIES = {
-  ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
-};
+import { useToastError, useToastSuccess } from '@/components';
 
 export const PageUserCreate = () => {
   const history = useHistory();
@@ -55,10 +44,6 @@ export const PageUserCreate = () => {
     },
   });
 
-  const languages = [{ label: 'English', value: 'en' }];
-
-  const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
-
   const submitCreateUser = async (values) => {
     const newUser = {
       ...values,
@@ -78,47 +63,7 @@ export const PageUserCreate = () => {
             <Heading size="md">Create a new user</Heading>
           </PageTopBar>
           <PageContent>
-            <Stack
-              direction="column"
-              bg="white"
-              p="6"
-              borderRadius="lg"
-              spacing="6"
-              shadow="md"
-            >
-              <FieldInput
-                name="login"
-                label="Login"
-                required="This field is required"
-              />
-              <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-                <FieldInput name="firstName" label="First Name" />
-                <FieldInput name="lastName" label="Last Name" />
-              </Stack>
-              <FieldInput
-                name="email"
-                label="Email"
-                required="This field is required"
-              />
-              <FieldSelect
-                name="langKey"
-                label="Language"
-                options={languages}
-                defaultValue={'en'}
-              />
-              <FieldGroupCheckbox
-                name="authorities"
-                label="Authorities"
-                options={authorities}
-                isRequired
-                validations={[
-                  {
-                    rule: isMinLength(1),
-                    message: 'Choose at least one role',
-                  },
-                ]}
-              />
-            </Stack>
+            <UserForm />
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
