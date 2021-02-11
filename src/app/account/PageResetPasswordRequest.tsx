@@ -84,8 +84,8 @@ export const PageResetPasswordRequest = () => {
   }
 
   return (
-    <Center p="4" m="auto">
-      <Box>
+    <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+      <Box p="6" bg="white" borderRadius="md" boxShadow="md">
         <Heading size="lg">Reset password</Heading>
         <Formiz
           id="reset-password-init-form"
@@ -127,6 +127,6 @@ export const PageResetPasswordRequest = () => {
           </form>
         </Formiz>
       </Box>
-    </Center>
+    </Box>
   );
 };

@@ -15,9 +15,13 @@ export const PageLogin = () => {
     redirect();
   };
   return (
-    <Box p="6" pb="4rem" w="20rem" maxW="full" m="auto">
-      <Heading my="4">Log In</Heading>
-      <LoginForm onSuccess={onLogin} />
+    <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+      <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+        <Heading size="lg" mb="4">
+          Log In
+        </Heading>
+        <LoginForm onSuccess={onLogin} />
+      </Box>
       <Center mt="8">
         <Button as={RouterLink} to="/account/register" variant="link">
           Need an account?{' '}
