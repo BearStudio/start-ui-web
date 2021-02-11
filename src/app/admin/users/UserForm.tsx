@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Stack } from '@chakra-ui/react';
-import { isEmail, isMinLength } from '@formiz/validations';
+import { isEmail } from '@formiz/validations';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
 
@@ -52,12 +52,6 @@ export const UserForm = () => {
         label="Authorities"
         options={authorities}
         required="This field is required"
-        validations={[
-          {
-            rule: isMinLength(1),
-            message: 'Choose at least one role',
-          },
-        ]}
       />
     </Stack>
   );
