@@ -28,16 +28,10 @@ export const FieldInput = (props: FieldInputProps) => {
     resetKey,
     setValue,
     value,
+    otherProps,
   } = useField(props);
-  const {
-    children,
-    label,
-    type,
-    required,
-    placeholder,
-    helper,
-    ...otherProps
-  } = props;
+  const { children, label, type, placeholder, helper, ...rest } = otherProps;
+  const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
@@ -53,7 +47,7 @@ export const FieldInput = (props: FieldInputProps) => {
     isRequired: !!required,
     label,
     showError,
-    ...otherProps,
+    ...rest,
   };
 
   return (

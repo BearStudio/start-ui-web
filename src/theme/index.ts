@@ -2,6 +2,8 @@ import { extendTheme } from '@chakra-ui/react';
 
 import Badge from './components/badge';
 import Input from './components/input';
+import Select from './components/select';
+import Textarea from './components/textarea';
 import { colors } from './foundations/colors';
 import { shadows } from './foundations/shadows';
 import { spacing } from './foundations/spacing';
@@ -12,5 +14,5 @@ export default extendTheme({
   colors,
   shadows,
   space: spacing,
-  components: { Badge, Input },
+  components: { Badge, Input, Select, Textarea },
 });

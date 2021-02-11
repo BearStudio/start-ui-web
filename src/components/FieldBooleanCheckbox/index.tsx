@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { Checkbox } from '@chakra-ui/react';
-import { useField } from '@formiz/core';
+import { useField, FieldProps } from '@formiz/core';
 
-import { FormGroup } from '@/components/FormGroup';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export const FieldBooleanCheckbox = (props) => {
+export interface FieldBooleanCheckboxProps extends FieldProps, FormGroupProps {}
+
+export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
   const {
     errorMessage,
     id,
@@ -15,7 +17,7 @@ export const FieldBooleanCheckbox = (props) => {
     setValue,
     value,
   } = useField(props);
-  const { required, description } = props;
+  const { required } = props;
   const { children, label, helper, ...otherProps } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
@@ -36,13 +38,7 @@ export const FieldBooleanCheckbox = (props) => {
 
   return (
     <FormGroup {...formGroupProps}>
-      <Checkbox
-        value={value ?? false}
-        onChange={() => setValue(!value)}
-        defaultChecked={value ?? false}
-      >
-        {description}
-      </Checkbox>
+      <Checkbox value={value ?? false} onChange={() => setValue(!value)} />
       {children}
     </FormGroup>
   );

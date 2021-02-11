@@ -5,7 +5,7 @@ import { Providers } from '../src/Providers';
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {
-    default: 'Gray',
+    default: 'Light',
     values: [
       {
         name: 'Gray',

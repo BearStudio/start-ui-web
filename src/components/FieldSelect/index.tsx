@@ -16,7 +16,7 @@ export const FieldSelect = (props) => {
     value,
     otherProps,
   } = useField(props);
-  const { required, name } = props;
+  const { required } = props;
   const {
     children,
     label,
@@ -39,7 +39,6 @@ export const FieldSelect = (props) => {
     isRequired: !!required,
     label,
     showError,
-    name,
     ...rest,
   };
 

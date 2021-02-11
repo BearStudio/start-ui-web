@@ -1,9 +1,7 @@
 export default {
   variants: {
     outline: {
-      field: {
-        bg: 'gray.50',
-      },
+      bg: 'gray.50',
     },
   },
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Stack } from '@chakra-ui/react';
-import { isMinLength } from '@formiz/validations';
+import { isEmail, isMinLength } from '@formiz/validations';
 
-import { FieldGroupCheckbox, FieldInput, FieldSelect } from '@/components';
+import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
 
 const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -34,6 +34,12 @@ export const UserForm = () => {
         name="email"
         label="Email"
         required="This field is required"
+        validations={[
+          {
+            rule: isEmail(),
+            message: 'Email invalid',
+          },
+        ]}
       />
       <FieldSelect
         name="langKey"
@@ -41,11 +47,11 @@ export const UserForm = () => {
         options={[{ label: 'English', value: 'en' }]}
         defaultValue={'en'}
       />
-      <FieldGroupCheckbox
+      <FieldCheckboxes
         name="authorities"
         label="Authorities"
         options={authorities}
-        isRequired
+        required="This field is required"
         validations={[
           {
             rule: isMinLength(1),

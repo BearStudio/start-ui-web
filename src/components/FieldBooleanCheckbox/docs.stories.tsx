@@ -1,11 +1,9 @@
-import React from 'react';
-
 import { Formiz } from '@formiz/core';
 
 import { FieldBooleanCheckbox } from './index';
 
 export default {
-  title: 'components/FieldBooleanCheckbox',
+  title: 'Fields/FieldBooleanCheckbox',
 };
 export const Default = () => {
   return (
@@ -14,7 +12,6 @@ export const Default = () => {
         name="FieldBooleanCheckbox"
         label="Label"
         helper="Helper"
-        description="Description"
       />
     </Formiz>
   );
