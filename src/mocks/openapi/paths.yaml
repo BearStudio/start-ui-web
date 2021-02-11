@@ -17,5 +17,5 @@
 # Users
 /users:
   $ref: '../users/paths.yaml#/users'
-/user/{userLogin}:
-  $ref: '../users/paths.yaml#/user'
+/users/{userLogin}:
+  $ref: '../users/paths.yaml#/users-login'

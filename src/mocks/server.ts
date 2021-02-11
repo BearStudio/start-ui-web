@@ -4,6 +4,7 @@ import { AccountRoutes } from './account';
 import { AuthRoutes } from './auth';
 import { UsersRoutes } from './users';
 import { UserFactory } from './users/factory';
+import { userSeeds } from './users/seeds';
 
 const AppSerializer = Serializer.extend({
   embed: true,
@@ -25,12 +26,7 @@ export const mockServer = () => {
     },
 
     seeds(server) {
-      server.create('user', {
-        login: 'admin',
-        authorities: ['ROLE_ADMIN', 'ROLE_USER'],
-      });
-      server.create('user', { login: 'user', authorities: ['ROLE_USER'] });
-      server.createList('user', 10);
+      userSeeds(server);
     },
 
     routes() {

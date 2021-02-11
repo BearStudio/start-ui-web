@@ -364,7 +364,7 @@
         }
       }
     },
-    "/user/{userLogin}": {
+    "/users/{userLogin}": {
       "get": {
         "summary": "Get user",
         "tags": [
