@@ -17,7 +17,7 @@ import {
 import axios from 'axios';
 import { FiCheck, FiCopy, FiLogOut, FiUser } from 'react-icons/fi';
 import { useQuery } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/service';
 
@@ -95,8 +95,9 @@ export const NavBarAccountMenu = ({ ...rest }) => {
       <MenuList color="gray.800" maxW="12rem" overflow="hidden">
         <MenuGroup title={account?.email}>
           <MenuItem
+            as={Link}
+            to="/account"
             icon={<Icon as={FiUser} fontSize="lg" color="gray.400" />}
-            onClick={() => history.push('/account')}
           >
             My Account
           </MenuItem>
