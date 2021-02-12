@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Editable } from '.';
 
 export default {
@@ -27,7 +25,7 @@ export const UsageWithTriggeredEvents = () => {
     <Editable
       onCancel={handleCancel}
       onSubmit={handleSubmit}
-      onChange={handleChange}
+      onChange={(event) => handleChange(event)}
     />
   );
 };

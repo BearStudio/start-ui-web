@@ -6,17 +6,16 @@ import {
   FlexProps,
   IconButton,
   Text,
-  Textarea,
 } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import { HiCheck, HiPencilAlt, HiX } from 'react-icons/hi';
-import TextareaAutosize from 'react-textarea-autosize';
+
+import { TextareaAutosize } from '../TextareaAutosize';
 
 export interface EditableProps extends FlexProps {
   value?: string;
-  onSubmit?: any;
-  onChange?: any;
-  onCancel?: any;
+  onSubmit?: (string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCancel?: (string) => void;
   isSubmitDisabled?: boolean;
 }
 
@@ -28,8 +27,6 @@ export const Editable: FC<EditableProps> = ({
   isSubmitDisabled = false,
   ...rest
 }) => {
-  const { t } = useTranslation();
-
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(value);
 
@@ -59,19 +56,7 @@ export const Editable: FC<EditableProps> = ({
   return (
     <Flex {...rest}>
       {isEditing ? (
-        <Textarea
-          as={TextareaAutosize}
-          value={content}
-          transition="none"
-          ml="-0.5rem"
-          mr={3}
-          px={2}
-          py={1}
-          minH={4}
-          autoFocus
-          maxRows={10}
-          onChange={handleChange}
-        />
+        <TextareaAutosize value={content} onChange={handleChange} />
       ) : (
         <Text
           flexGrow={1}
@@ -91,17 +76,13 @@ export const Editable: FC<EditableProps> = ({
       <ButtonGroup size="sm">
         {isEditing && (
           <IconButton
-            aria-label={t('components.editable.cancel')}
+            aria-label="cancel"
             onClick={handleCancel}
             icon={<HiX />}
           />
         )}
         <IconButton
-          aria-label={
-            isEditing
-              ? t('components.editable.submit')
-              : t('components.editable.edit')
-          }
+          aria-label={isEditing ? 'submit' : 'edit'}
           isDisabled={isSubmitDisabled}
           onClick={handleEdit}
           icon={isEditing ? <HiCheck /> : <HiPencilAlt />}
