@@ -33,7 +33,7 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
   )
 );
 
-interface DayPickerProps extends BoxProps {
+export interface DayPickerProps extends BoxProps {
   placeholder?: string;
   value?: string | Date;
   onChange?: any;
