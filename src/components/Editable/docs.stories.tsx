@@ -1,20 +1,21 @@
+import { useState } from 'react';
+
 import { Editable } from '.';
 
 export default {
   title: 'components/Editable',
-  component: Editable,
 };
-export const Default = () => <Editable />;
 
-export const UsageWithValue = () => <Editable value=" Start ui" />;
+export const Default = () => {
+  const [text, setText] = useState('');
 
-export const UsageWithTriggeredEvents = () => {
   const handleCancel = (value) => {
     console.log('Cancel', { value });
   };
 
   const handleSubmit = (value) => {
     console.log('Submit', { value });
+    setText(value);
   };
 
   const handleChange = (e) => {
@@ -23,9 +24,12 @@ export const UsageWithTriggeredEvents = () => {
 
   return (
     <Editable
+      value={text}
       onCancel={handleCancel}
       onSubmit={handleSubmit}
-      onChange={(event) => handleChange(event)}
+      onChange={handleChange}
     />
   );
 };
+
+export const UsageWithValue = () => <Editable value=" Start ui" />;

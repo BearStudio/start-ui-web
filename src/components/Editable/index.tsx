@@ -56,7 +56,16 @@ export const Editable: FC<EditableProps> = ({
   return (
     <Flex {...rest}>
       {isEditing ? (
-        <TextareaAutosize value={content} onChange={handleChange} />
+        <TextareaAutosize
+          value={content}
+          onChange={handleChange}
+          transition="none"
+          ml="-0.5rem"
+          mr={3}
+          px={2}
+          py={1}
+          autoFocus
+        />
       ) : (
         <Text
           flexGrow={1}
