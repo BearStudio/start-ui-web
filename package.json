@@ -10,6 +10,7 @@
     "@emotion/styled": "11.0.0",
     "@formiz/core": "1.0.1",
     "@formiz/validations": "1.0.0",
+    "@types/react-select": "4.0.13",
     "axios": "0.21.1",
     "dayjs": "1.10.3",
     "framer-motion": "3.2.1",

@@ -1,12 +1,14 @@
-import React, { useRef } from 'react';
+import React, { FC, useRef } from 'react';
 
-import { Box, ChakraComponent, SelectProps } from '@chakra-ui/react';
-import ReactSelect from 'react-select';
+import { Box } from '@chakra-ui/react';
+import ReactSelect, { IndicatorProps } from 'react-select';
 import AsyncReactSelect from 'react-select/async';
 import AsyncCreatableReactSelect from 'react-select/async-creatable';
 import CreatableReactSelect from 'react-select/creatable';
 
-interface CustomSelectProps extends SelectProps {
+import extendTheme from '@/theme/index';
+
+interface SelectProps extends IndicatorProps<any, any, any> {
   focusBorderColor: string;
   errorBorderColor: string;
   optionsColor: {
@@ -27,7 +29,7 @@ interface CustomSelectProps extends SelectProps {
   containerProps: object;
 }
 
-export const Select: ChakraComponent<'select', CustomSelectProps> = ({
+export const Select: FC<SelectProps> = ({
   errorBorderColor,
   focusBorderColor,
   optionsColor,
@@ -76,7 +78,7 @@ export const Select: ChakraComponent<'select', CustomSelectProps> = ({
 
   const selectStyle = {
     control: (provided, { isFocused }) => {
-      const borderColor = 'blue.500'; // to have the same border colors than the inputs
+      const borderColor = extendTheme.colors.brand['500']; // to have the same border colors than the inputs
 
       if (isFocused) {
         return {
@@ -97,10 +99,10 @@ export const Select: ChakraComponent<'select', CustomSelectProps> = ({
       let backgroundColor = null;
       let color = null;
       if (isFocused) {
-        backgroundColor = 'info.100';
+        backgroundColor = extendTheme.colors.gray['100'];
         color = 'black';
       } else if (isSelected) {
-        backgroundColor = 'info.500';
+        backgroundColor = extendTheme.colors.gray['500'];
         color = 'white';
       }
 
@@ -111,7 +113,7 @@ export const Select: ChakraComponent<'select', CustomSelectProps> = ({
               backgroundColor,
               color,
               ':active': {
-                backgroundColor: 'info.500',
+                backgroundColor: extendTheme.colors.gray['500'],
                 color: 'white',
               },
             }
@@ -124,7 +126,7 @@ export const Select: ChakraComponent<'select', CustomSelectProps> = ({
   const selectErrorStyle = {
     control: (provided, state) => {
       if (isError) {
-        const borderColor = 'danger.500';
+        const borderColor = extendTheme.colors.error['500'];
 
         return {
           ...provided,
