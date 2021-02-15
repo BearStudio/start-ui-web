@@ -26,20 +26,22 @@ export const Default = () => {
 
 export const DayPickerRangeWithCommonAndSpecificProps = () => {
   return (
-    <DayPickerRange
-      fromDayPickerProps={{
-        dayPickerProps: {
-          disabledDays: { daysOfWeek: [0, 1, 2] },
-          numberOfMonths: 1,
-        },
-      }}
-      toDayPickerProps={{
-        dayPickerProps: {
-          disabledDays: { daysOfWeek: [3, 4, 5, 6] },
-          numberOfMonths: 2,
-        },
-      }}
-    />
+    <Box h="400px">
+      <DayPickerRange
+        fromDayPickerProps={{
+          dayPickerProps: {
+            disabledDays: { daysOfWeek: [0, 1, 2] },
+            numberOfMonths: 1,
+          },
+        }}
+        toDayPickerProps={{
+          dayPickerProps: {
+            disabledDays: { daysOfWeek: [3, 4, 5, 6] },
+            numberOfMonths: 2,
+          },
+        }}
+      />
+    </Box>
   );
 };
 
