@@ -5,7 +5,7 @@ import { FiHexagon, FiLock, FiUser } from 'react-icons/fi';
 import { Nav, NavGroup, NavItem } from './index';
 
 export default {
-  title: 'components/Nav',
+  title: 'Components/Nav',
 };
 
 export const Default = () => {

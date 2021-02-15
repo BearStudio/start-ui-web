@@ -39,7 +39,7 @@ import {
 } from './index';
 
 export default {
-  title: 'components/DataList',
+  title: 'Components/DataList',
 };
 
 export const Default = () => (

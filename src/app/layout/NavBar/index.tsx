@@ -16,13 +16,11 @@ import {
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 
+import { Logo } from '@/components';
+
 import { NavBarAccountMenu } from './NavBarAccountMenu';
 import { NavBarContext } from './NavBarContext';
 import { NavBarMenu } from './NavBarMenu';
-
-const NavBarLogo = (props) => (
-  <Box w="8rem" h="1rem" bg="gray.600" borderRadius="full" {...props} />
-);
 
 const NavBarMenuButton = (props) => {
   const { onOpen } = useContext(NavBarContext);
@@ -52,7 +50,7 @@ const NavBarMenuDrawer = ({ children, ...rest }) => {
         >
           <DrawerCloseButton mt="safe-top" />
           <DrawerHeader>
-            <NavBarLogo />
+            <Logo color="gray.500" h="1rem" />
           </DrawerHeader>
           <DrawerBody p="2">{children}</DrawerBody>
         </DrawerContent>
@@ -85,7 +83,7 @@ export const NavBar = () => {
             display={{ base: 'flex', md: 'none' }}
             ml="-0.5rem"
           />
-          <NavBarLogo mx={{ base: 'auto', md: '0' }} />
+          <Logo color="gray.500" h="1rem" mx={{ base: 'auto', md: '0' }} />
           <NavBarMenu mr="auto" ml="4" display={{ base: 'none', md: 'flex' }} />
           <NavBarAccountMenu />
         </Flex>

@@ -15,7 +15,7 @@ import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { ActionsButton } from './index';
 
 export default {
-  title: 'components/ActionsButton',
+  title: 'Components/ActionsButton',
 };
 
 export const Default = () => <ActionsButton />;

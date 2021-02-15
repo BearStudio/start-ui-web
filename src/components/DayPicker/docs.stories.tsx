@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { DayPicker } from './index';
 
 export default {
-  title: 'components/Daypicker',
+  title: 'Components/Daypicker',
 };
 export const Default = () => {
   const [selectedDay, setSelectedDay] = useState(new Date());

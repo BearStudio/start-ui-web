@@ -3,7 +3,7 @@ import React from 'react';
 import { FormGroup } from './index';
 
 export default {
-  title: 'components/FormGroup',
+  title: 'Components/FormGroup',
 };
 
 export const Default = () => (

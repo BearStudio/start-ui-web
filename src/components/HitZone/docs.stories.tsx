@@ -6,7 +6,7 @@ import { ActionsButton } from '../ActionsButton';
 import { HitZone } from '../HitZone';
 
 export default {
-  title: 'components/HitZone',
+  title: 'Components/HitZone',
   parameters: {
     docs: {
       description: {
