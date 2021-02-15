@@ -9,7 +9,6 @@ import {
   MenuGroup,
   MenuDivider,
   Spinner,
-  Icon,
   Flex,
   Text,
   useClipboard,
@@ -20,6 +19,7 @@ import { useQuery } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/account.service';
+import { Icon } from '@/components';
 
 const AppVersion = ({ ...rest }) => {
   const { data } = useQuery<any>(
@@ -70,7 +70,7 @@ const AppVersion = ({ ...rest }) => {
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
-          <Icon as={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
+          <Icon icon={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
           {hasCopied ? 'Copied' : 'Copy version'}
         </Flex>
         <Text as="span" noOfLines={2}>
@@ -97,14 +97,14 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuItem
             as={Link}
             to="/account"
-            icon={<Icon as={FiUser} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
           >
             My Account
           </MenuItem>
         </MenuGroup>
         <MenuDivider />
         <MenuItem
-          icon={<Icon as={FiLogOut} fontSize="lg" color="gray.400" />}
+          icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
         >
           Logout

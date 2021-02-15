@@ -8,7 +8,6 @@ import {
   HStack,
   Avatar,
   Box,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -41,6 +40,7 @@ import {
   DataListRow,
   DateAgo,
   HitZone,
+  Icon,
   useToastError,
   useToastSuccess,
   usePaginationFromUrl,
@@ -98,28 +98,30 @@ const UserActions = ({ user, ...rest }) => {
           <MenuItem
             as={Link}
             to={`${path}${user.login}`}
-            icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             Edit
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
-              icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
             >
               Deactivate Account
             </MenuItem>
           ) : (
             <MenuItem
               onClick={activateUser}
-              icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
+              icon={
+                <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
+              }
             >
               Activate Account
             </MenuItem>
           )}
           <MenuDivider />
           <MenuItem
-            icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
           >
             Delete
           </MenuItem>

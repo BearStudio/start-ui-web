@@ -3,7 +3,6 @@ import React, { useCallback, useContext, FC } from 'react';
 import {
   Box,
   HStack,
-  Icon,
   IconButton,
   IconButtonProps,
   Spinner,
@@ -16,6 +15,7 @@ import {
 } from 'react-icons/fi';
 
 import { useSearchParams } from '@/app/router';
+import { Icon } from '@/components';
 
 export const usePaginationFromUrl = () => {
   const { searchParams, setSearchParam } = useSearchParams();
@@ -65,7 +65,7 @@ export const PaginationButtonFirstPage: FC<
     <IconButton
       onClick={() => setPage(firstPage)}
       aria-label="First page"
-      icon={<Icon as={FiChevronsLeft} fontSize="lg" />}
+      icon={<Icon icon={FiChevronsLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -81,7 +81,7 @@ export const PaginationButtonPrevPage: FC<
     <IconButton
       onClick={() => setPage(page - 1)}
       aria-label="Next page"
-      icon={<Icon as={FiChevronLeft} fontSize="lg" />}
+      icon={<Icon icon={FiChevronLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -97,7 +97,7 @@ export const PaginationButtonLastPage: FC<
     <IconButton
       onClick={() => setPage(lastPage)}
       aria-label="Last page"
-      icon={<Icon as={FiChevronsRight} fontSize="lg" />}
+      icon={<Icon icon={FiChevronsRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
       {...rest}
@@ -113,7 +113,7 @@ export const PaginationButtonNextPage: FC<
     <IconButton
       onClick={() => setPage(page + 1)}
       aria-label="Previous page"
-      icon={<Icon as={FiChevronRight} fontSize="lg" />}
+      icon={<Icon icon={FiChevronRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
       {...rest}

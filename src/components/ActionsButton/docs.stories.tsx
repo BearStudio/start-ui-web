@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Flex,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -11,6 +10,8 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
+
+import { Icon } from '@/components';
 
 import { ActionsButton } from './index';
 
@@ -37,17 +38,19 @@ export const UsageWithMenu = () => (
   <Menu isLazy placement="left-start">
     <MenuButton as={ActionsButton} />
     <MenuList>
-      <MenuItem icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}>
+      <MenuItem icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}>
         Edit
       </MenuItem>
-      <MenuItem icon={<Icon as={FiCopy} fontSize="lg" color="gray.400" />}>
+      <MenuItem icon={<Icon icon={FiCopy} fontSize="lg" color="gray.400" />}>
         Duplicate
       </MenuItem>
-      <MenuItem icon={<Icon as={FiUserPlus} fontSize="lg" color="gray.400" />}>
+      <MenuItem
+        icon={<Icon icon={FiUserPlus} fontSize="lg" color="gray.400" />}
+      >
         Share
       </MenuItem>
       <MenuDivider />
-      <MenuItem icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}>
+      <MenuItem icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}>
         Delete
       </MenuItem>
     </MenuList>

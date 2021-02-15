@@ -8,13 +8,14 @@ import {
   InputLeftElement,
   useBreakpointValue,
   forwardRef,
-  Icon,
   BoxProps,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { FiCalendar } from 'react-icons/fi';
+
+import { Icon } from '@/components';
 
 const FORMAT = 'DD/MM/YYYY';
 
@@ -23,7 +24,7 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
     <InputGroup>
       <InputLeftElement pointerEvents="none">
         <Icon
-          as={FiCalendar}
+          icon={FiCalendar}
           fontSize="lg"
           color={isDisabled ? 'gray.300' : 'gray.400'}
         />

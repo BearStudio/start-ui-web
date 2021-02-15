@@ -4,7 +4,6 @@ import {
   Badge,
   Text,
   HStack,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -16,16 +15,18 @@ import {
 } from '@chakra-ui/react';
 import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 
-import { ActionsButton } from '../ActionsButton';
-import { HitZone } from '../HitZone';
 import {
+  ActionsButton,
+  HitZone,
+  Icon,
   Pagination,
   PaginationButtonFirstPage,
   PaginationButtonLastPage,
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
-} from '../Pagination';
+} from '@/components';
+
 import {
   DataList,
   DataListHeader,
@@ -276,23 +277,25 @@ export const Complete = () => {
               />
               <MenuList>
                 <MenuItem
-                  icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
                 >
                   Edit
                 </MenuItem>
                 <MenuItem
-                  icon={<Icon as={FiCopy} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiCopy} fontSize="lg" color="gray.400" />}
                 >
                   Duplicate
                 </MenuItem>
                 <MenuItem
-                  icon={<Icon as={FiUserPlus} fontSize="lg" color="gray.400" />}
+                  icon={
+                    <Icon icon={FiUserPlus} fontSize="lg" color="gray.400" />
+                  }
                 >
                   Share
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
-                  icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
                 >
                   Delete
                 </MenuItem>

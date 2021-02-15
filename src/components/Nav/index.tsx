@@ -3,7 +3,6 @@ import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import {
   Text,
   Flex,
-  Icon,
   Stack,
   StackProps,
   FlexProps,
@@ -18,6 +17,8 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
+
+import { Icon } from '@/components';
 
 const NavContext = React.createContext(null);
 
@@ -73,10 +74,10 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
 
   const itemContent = useMemo(
     () => (
-      <Flex as="span" align="flex-start" minW="0">
+      <Flex as="span" align="center" minW="0">
         {icon && (
           <Icon
-            as={icon}
+            icon={icon}
             mt="0.05rem"
             mr="2"
             fontSize="lg"

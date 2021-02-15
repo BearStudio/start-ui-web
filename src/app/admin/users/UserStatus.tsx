@@ -1,5 +1,7 @@
-import { Badge, Box, Icon } from '@chakra-ui/react';
+import { Badge, Box } from '@chakra-ui/react';
 import { FiCheck, FiX } from 'react-icons/fi';
+
+import { Icon } from '@/components';
 
 export const UserStatus = ({ isActivated = false, ...rest }) => {
   return isActivated ? (
@@ -8,7 +10,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         Activated
       </Box>
       <Icon
-        as={FiCheck}
+        icon={FiCheck}
         aria-label="Activated"
         d={{ base: 'inline-flex', md: 'none' }}
       />
@@ -19,7 +21,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         Not Activated
       </Box>
       <Icon
-        as={FiX}
+        icon={FiX}
         aria-label="Not Activated"
         d={{ base: 'inline-flex', md: 'none' }}
       />
