@@ -30,7 +30,7 @@ import {
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
-import { useUserList, useUserUpdate } from '@/app/admin/users/service';
+import { useUserList, useUserUpdate } from '@/app/admin/users/users.service';
 import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,

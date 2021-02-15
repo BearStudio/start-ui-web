@@ -5,7 +5,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { useHistory } from 'react-router-dom';
 
 import { UserForm } from '@/app/admin/users/UserForm';
-import { useUserCreate } from '@/app/admin/users/service';
+import { useUserCreate } from '@/app/admin/users/users.service';
 import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
 

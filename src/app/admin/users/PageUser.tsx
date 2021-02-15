@@ -14,7 +14,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { useQueryClient } from 'react-query';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { useUser, useUserUpdate } from '@/app/admin/users/service';
+import { useUser, useUserUpdate } from '@/app/admin/users/users.service';
 import {
   Page,
   PageContent,

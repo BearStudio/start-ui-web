@@ -19,7 +19,7 @@ import { FiCheck, FiCopy, FiLogOut, FiUser } from 'react-icons/fi';
 import { useQuery } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 
-import { useAccount } from '@/app/account/service';
+import { useAccount } from '@/app/account/account.service';
 
 const AppVersion = ({ ...rest }) => {
   const { data } = useQuery<any>(

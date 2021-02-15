@@ -6,7 +6,7 @@ import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
 
 import { AccountNav } from '@/app/account/AccountNav';
-import { useAccount, useUpdateAccount } from '@/app/account/service';
+import { useAccount, useUpdateAccount } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
 import {
   FieldInput,

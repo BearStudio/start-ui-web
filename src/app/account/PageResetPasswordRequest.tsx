@@ -16,7 +16,7 @@ import { isEmail } from '@formiz/validations';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { useResetPasswordInit } from '@/app/account/service';
+import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, useToastError } from '@/components';
 
 export const PageResetPasswordRequest = () => {

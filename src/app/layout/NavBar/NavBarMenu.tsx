@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Stack, Button } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
-import { useAccount } from '@/app/account/service';
+import { useAccount } from '@/app/account/account.service';
 
 import { NavBarContext } from './NavBarContext';
 

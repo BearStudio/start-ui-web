@@ -12,7 +12,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useHistory } from 'react-router-dom';
 
-import { useResetPasswordFinish } from '@/app/account/service';
+import { useResetPasswordFinish } from '@/app/account/account.service';
 import { useSearchParams } from '@/app/router';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
 

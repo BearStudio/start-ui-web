@@ -21,7 +21,7 @@ import {
 } from '@formiz/validations';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { useCreateAccount } from '@/app/account/service';
+import { useCreateAccount } from '@/app/account/account.service';
 import { FieldInput, useToastError } from '@/components';
 
 export const PageRegister = () => {

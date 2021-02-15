@@ -1,3 +1,3 @@
-export { Error403 } from './Error403';
-export { Error404 } from './Error404';
-export { ErrorBoundary } from './ErrorBoundary';
+export * from './Error403';
+export * from './Error404';
+export * from './ErrorBoundary';

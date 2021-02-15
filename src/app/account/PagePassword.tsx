@@ -5,7 +5,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 
 import { AccountNav } from '@/app/account/AccountNav';
-import { useUpdatePassword } from '@/app/account/service';
+import { useUpdatePassword } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
 
