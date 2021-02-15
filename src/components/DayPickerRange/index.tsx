@@ -2,37 +2,31 @@ import React, { useState, useRef, FC } from 'react';
 
 import {
   Flex,
-  Icon,
   Input,
   InputGroup,
-  InputLeftElement,
-  InputProps,
   InputRightElement,
   Text,
   forwardRef,
   BoxProps,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
 import { FaCalendar } from 'react-icons/fa';
-import { FiCalendar } from 'react-icons/fi';
 
-import { DayPicker, DayPickerProps } from '../DayPicker';
+import { DayPicker } from '../DayPicker';
 
-const InputComponent = forwardRef<InputProps, 'input'>(
-  ({ isDisabled, ...rest }, ref) => (
-    <InputGroup>
-      <InputLeftElement pointerEvents="none">
-        <Icon
-          as={FiCalendar}
-          fontSize="lg"
-          color={isDisabled ? 'gray.300' : 'gray.400'}
-        />
-      </InputLeftElement>
-      <Input ref={ref} {...rest} />
-    </InputGroup>
-  )
-);
+const InputComponent = forwardRef(({ isDisabled, ...otherProps }, ref) => (
+  <InputGroup>
+    <Input
+      ref={ref}
+      border="none"
+      borderRadius="0"
+      focusBorderColor="0"
+      backgroundColor="inherit"
+      isDisabled={isDisabled}
+      {...otherProps}
+    />
+  </InputGroup>
+));
 
 interface DayPickerRangeProps extends BoxProps {
   placeholder?: string;
@@ -40,11 +34,11 @@ interface DayPickerRangeProps extends BoxProps {
   onChange?: any;
   inputProps?: any;
   dayPickerProps?: any;
-  onRangeChange: any;
-  fromDayPickerProps: any;
-  toDayPickerProps: any;
-  containerProps: any;
-  isDisabled: boolean;
+  onRangeChange?: any;
+  fromDayPickerProps?: any;
+  toDayPickerProps?: any;
+  containerProps?: any;
+  isDisabled?: boolean;
 }
 
 export const DayPickerRange: FC<DayPickerRangeProps> = ({
@@ -123,7 +117,6 @@ export const DayPickerRange: FC<DayPickerRangeProps> = ({
     defaultProps: {
       placeholder: '',
       component: InputComponent,
-      isDisabled,
     },
     dayPickerProps: {
       selectedDays: [from, { from, to }, to],
@@ -136,6 +129,7 @@ export const DayPickerRange: FC<DayPickerRangeProps> = ({
       width: '100%',
     },
     inputProps: {
+      isDisabled,
       textAlign: 'center',
       p: 0,
     },
@@ -154,35 +148,36 @@ export const DayPickerRange: FC<DayPickerRangeProps> = ({
       >
         <DayPicker
           value={from}
-          onDayChange={handleDayFromClick}
-          isDisabled={isDisabled}
-          {...commonProps.defaultProps}
+          onChange={handleDayFromClick}
+          dayPickerInputProps={{
+            ...commonProps.defaultProps,
+            ...fromDayPickerProps,
+          }}
           {...props}
-          {...fromDayPickerProps}
           dayPickerProps={{
             onDayClick: () => toDayPickerRef?.current?.getInput()?.focus(),
             ...commonProps.dayPickerProps,
             ...(dayPickerProps || {}),
             ...(fromDayPickerProps.dayPickerProps || {}),
           }}
-          containerProps={{
-            ...commonProps.containerProps,
-            ...(fromDayPickerProps.containerProps || {}),
-          }}
           inputProps={{
             ...commonProps.inputProps,
             ...(inputProps || {}),
             ...(fromDayPickerProps.inputProps || {}),
           }}
+          {...commonProps.containerProps}
+          {...(fromDayPickerProps.containerProps || {})}
         />
         <Text {...(isDisabled ? { color: 'gray.300' } : {})}>{' - '}</Text>
         <DayPicker
           ref={toDayPickerRef}
           value={to}
-          onDayChange={handleDayToClick}
+          onChange={handleDayToClick}
           onDayPickerShow={showFromMonth}
-          isDisabled={isDisabled}
-          {...commonProps.defaultProps}
+          dayPickerInputProps={{
+            ...commonProps.defaultProps,
+            ...toDayPickerProps,
+          }}
           {...props}
           {...toDayPickerProps}
           dayPickerProps={{
@@ -193,15 +188,13 @@ export const DayPickerRange: FC<DayPickerRangeProps> = ({
             ...(dayPickerProps || {}),
             ...(toDayPickerProps.dayPickerProps || {}),
           }}
-          containerProps={{
-            ...commonProps.containerProps,
-            ...(toDayPickerProps.containerProps || {}),
-          }}
           inputProps={{
             ...commonProps.inputProps,
             ...(inputProps || {}),
             ...(toDayPickerProps.inputProps || {}),
           }}
+          {...commonProps.containerProps}
+          {...(fromDayPickerProps.containerProps || {})}
         />
       </Input>
       <InputRightElement
@@ -213,26 +206,4 @@ export const DayPickerRange: FC<DayPickerRangeProps> = ({
       </InputRightElement>
     </InputGroup>
   );
-};
-
-DayPickerRange.propTypes = {
-  onChange: PropTypes.func,
-  onRangeChange: PropTypes.func,
-  fromDayPickerProps: PropTypes.object,
-  toDayPickerProps: PropTypes.object,
-  dayPickerProps: PropTypes.object,
-  containerProps: PropTypes.object,
-  inputProps: PropTypes.object,
-  isDisabled: PropTypes.bool,
-};
-
-DayPickerRange.defaultProps = {
-  onChange: () => {},
-  onRangeChange: () => {},
-  fromDayPickerProps: {},
-  toDayPickerProps: {},
-  dayPickerProps: {},
-  containerProps: { inputGroup: {}, input: {} },
-  inputProps: {},
-  isDisabled: false,
 };

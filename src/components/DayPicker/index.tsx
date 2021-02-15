@@ -39,6 +39,7 @@ export interface DayPickerProps extends BoxProps {
   onChange?: any;
   inputProps?: any;
   dayPickerProps?: any;
+  dayPickerInputProps?: any;
 }
 
 export const DayPicker: FC<DayPickerProps> = ({
@@ -47,6 +48,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   onChange = () => {},
   inputProps = {},
   dayPickerProps = {},
+  dayPickerInputProps = {},
   ...rest
 }) => {
   const isSmartphoneFormat = useBreakpointValue({ base: true, sm: false });
@@ -76,6 +78,7 @@ export const DayPicker: FC<DayPickerProps> = ({
           readOnly: isSmartphoneFormat,
           ...inputProps,
         }}
+        {...dayPickerInputProps}
       />
     </Box>
   );
