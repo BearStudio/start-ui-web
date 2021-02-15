@@ -81,7 +81,7 @@ const AppVersion = ({ ...rest }) => {
   );
 };
 
-export const NavBarAccountMenu = ({ ...rest }) => {
+export const AccountMenu = ({ ...rest }) => {
   const { account, isLoading } = useAccount();
   const history = useHistory();
 

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { BrowserRouter } from 'react-router-dom';
+
 import { Providers } from '../src/Providers';
 
 export const parameters = {
@@ -26,7 +28,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <Providers>
-      <Story />
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
     </Providers>
   ),
 ];

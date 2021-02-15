@@ -33,6 +33,7 @@ export const Viewport = (props) => {
       direction="column"
       overflowX="auto"
       minH="100vh"
+      w="full"
       maxW="100vw"
       style={
         !isStandalone

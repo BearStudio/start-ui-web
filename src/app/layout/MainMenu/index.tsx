@@ -4,11 +4,10 @@ import { Stack, Button } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/account.service';
+import { LayoutContext } from '@/app/layout';
 
-import { NavBarContext } from './NavBarContext';
-
-const NavBarMenuItem = ({ to, ...rest }: any) => {
-  const { onClose } = useContext(NavBarContext);
+const MainMenuItem = ({ to, ...rest }: any) => {
+  const { navOnClose } = useContext(LayoutContext);
   const { pathname } = useLocation();
   const isActive = pathname.startsWith(to);
   return (
@@ -40,19 +39,19 @@ const NavBarMenuItem = ({ to, ...rest }: any) => {
         borderRadius: 'full',
         bg: 'currentColor',
       }}
-      onClick={onClose}
+      onClick={navOnClose}
       {...rest}
     />
   );
 };
 
-export const NavBarMenu = (props) => {
+export const MainMenu = ({ ...rest }) => {
   const { isAdmin } = useAccount();
   return (
-    <Stack direction="row" spacing="1" {...props}>
-      <NavBarMenuItem to="/dashboard">Dashboard</NavBarMenuItem>
-      <NavBarMenuItem to="/entity">Entity</NavBarMenuItem>
-      {isAdmin && <NavBarMenuItem to="/admin">Admin</NavBarMenuItem>}
+    <Stack direction="row" spacing="1" {...rest}>
+      <MainMenuItem to="/dashboard">Dashboard</MainMenuItem>
+      <MainMenuItem to="/entity">Entity</MainMenuItem>
+      {isAdmin && <MainMenuItem to="/admin">Admin</MainMenuItem>}
     </Stack>
   );
 };

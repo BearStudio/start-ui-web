@@ -2,14 +2,18 @@ import React from 'react';
 
 import { Flex } from '@chakra-ui/react';
 
+import { Layout } from '@/app/layout';
+
 import { Page, PageTopBar, PageContent, PageBottomBar } from './index';
 
 export default {
   title: 'App Layout/Page',
   decorators: [
     (Story) => (
-      <Flex h="50vh" transform="scale(1)">
-        <Story />
+      <Flex h="100vh" transform="scale(1)">
+        <Layout>
+          <Story />
+        </Layout>
       </Flex>
     ),
   ],
