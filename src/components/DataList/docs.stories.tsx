@@ -12,12 +12,13 @@ import {
   SimpleGrid,
   Code,
   Stack,
+  LinkBox,
+  LinkOverlay,
 } from '@chakra-ui/react';
 import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 
 import {
   ActionsButton,
-  HitZone,
   Icon,
   Pagination,
   PaginationButtonFirstPage,
@@ -230,17 +231,23 @@ export const Complete = () => {
         <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
       </DataListHeader>
       {users.map((item, index) => (
-        <DataListRow key={index} isDisabled={item.status === 'Inactive'}>
-          <DataListCell
-            colName="name"
-            {...(item.status !== 'Inactive' ? { as: 'a', href: '#' } : {})}
-          >
-            <HitZone />
+        <DataListRow
+          as={LinkBox}
+          key={index}
+          isDisabled={item.status === 'Inactive'}
+        >
+          <DataListCell colName="name">
             <HStack maxW="100%">
               <Avatar size="sm" name={item.name} mx="2" />
               <Box minW="0">
                 <Text isTruncated maxW="full" fontWeight="bold">
-                  {item.name}
+                  <Box
+                    {...(item.status !== 'Inactive'
+                      ? { as: LinkOverlay, href: '#' }
+                      : {})}
+                  >
+                    {item.name}
+                  </Box>
                 </Text>
                 <Text isTruncated maxW="full" fontSize="sm" color="gray.600">
                   {item.email}

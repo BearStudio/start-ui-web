@@ -18,6 +18,8 @@ import {
   Button,
   IconButton,
   Text,
+  LinkBox,
+  LinkOverlay,
 } from '@chakra-ui/react';
 import {
   FiEdit,
@@ -39,7 +41,6 @@ import {
   DataListFooter,
   DataListRow,
   DateAgo,
-  HitZone,
   Icon,
   useToastError,
   useToastSuccess,
@@ -210,18 +211,15 @@ export const PageUsers = () => {
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
           {users?.map((user) => (
-            <DataListRow key={user.id}>
-              <DataListCell
-                colName="login"
-                as={Link}
-                to={`${path}${user.login}`}
-              >
-                <HitZone />
+            <DataListRow as={LinkBox} key={user.id}>
+              <DataListCell colName="login">
                 <HStack maxW="100%">
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
                     <Text isTruncated maxW="full" fontWeight="bold">
-                      {user.login}
+                      <LinkOverlay as={Link} to={`${path}${user.login}`}>
+                        {user.login}
+                      </LinkOverlay>
                     </Text>
                     <Text
                       isTruncated

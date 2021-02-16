@@ -7,7 +7,6 @@ export * from './FieldRadios';
 export * from './FieldInput';
 export * from './FieldSelect';
 export * from './FormGroup';
-export * from './HitZone';
 export * from './Icons';
 export * from './Logo';
 export * from './Pagination';
