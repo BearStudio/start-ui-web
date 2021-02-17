@@ -14,7 +14,7 @@ const MainMenuItem = ({ to, ...rest }: any) => {
     <Button
       as={RouterLink}
       to={to}
-      variant="ghost"
+      bg="transparent"
       justifyContent="flex-start"
       position="relative"
       opacity={isActive ? 1 : 0.8}

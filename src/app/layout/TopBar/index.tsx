@@ -16,14 +16,14 @@ import { Logo } from '@/components';
 
 import { NavDrawer } from '../NavDrawer';
 
-const TopBarMenuButton = (props) => {
+const MenuButton = (props) => {
   const { navOnOpen } = useContext(LayoutContext);
   return (
     <IconButton
       aria-label="Navigation"
       icon={<FiMenu size="1.5em" />}
       onClick={navOnOpen}
-      variant="ghost"
+      bg="transparent"
       _active={{ bg: 'gray.700' }}
       _hover={{ bg: 'gray.900' }}
       {...props}
@@ -53,10 +53,7 @@ export const TopBar = () => {
           px="4"
           h={theme.layout.topBar.height}
         >
-          <TopBarMenuButton
-            display={{ base: 'flex', md: 'none' }}
-            ml="-0.5rem"
-          />
+          <MenuButton display={{ base: 'flex', md: 'none' }} ml="-0.5rem" />
           <Box
             as={RouterLink}
             to="/"
