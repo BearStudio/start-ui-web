@@ -5,6 +5,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { Providers } from '../src/Providers';
 
 export const parameters = {
+  options: {
+    storySort: {
+      order: ['StyleGuide', 'Components', 'Fields', 'App Layout'],
+    },
+  },
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {
     default: 'Light',
