@@ -86,7 +86,7 @@ export const AccountMenu = ({ ...rest }) => {
   const history = useHistory();
 
   return (
-    <Menu {...rest}>
+    <Menu placement="bottom-end" {...rest}>
       <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
         <Avatar size="sm" icon={<></>} name={!isLoading && `${account?.login}`}>
           {isLoading && <Spinner size="xs" />}
