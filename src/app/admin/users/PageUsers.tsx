@@ -153,7 +153,7 @@ export const PageUsers = () => {
               display={{ base: 'none', sm: 'flex' }}
               as={Link}
               to={`${path}create`}
-              colorScheme="brand"
+              variant="@primary"
               leftIcon={<FiPlus />}
             >
               Create User
@@ -164,7 +164,7 @@ export const PageUsers = () => {
               as={Link}
               to={`${path}create`}
               size="sm"
-              colorScheme="brand"
+              variant="@primary"
               icon={<FiPlus />}
             />
           </Box>

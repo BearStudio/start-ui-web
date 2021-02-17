@@ -49,7 +49,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               isLoading={isLoading}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
-              colorScheme="brand"
+              variant="@primary"
               ml="auto"
             >
               Log In

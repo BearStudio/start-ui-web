@@ -114,7 +114,7 @@ export const PageUser = () => {
                 <Button onClick={() => history.goBack()}>Cancel</Button>
                 <Button
                   type="submit"
-                  colorScheme="brand"
+                  variant="@primary"
                   isLoading={editUserIsLoading}
                 >
                   Edit User

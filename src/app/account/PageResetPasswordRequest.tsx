@@ -117,7 +117,7 @@ export const PageResetPasswordRequest = () => {
               </Button>
               <Button
                 type="submit"
-                colorScheme="brand"
+                variant="@primary"
                 ml="auto"
                 isLoading={resetPasswordLoading}
               >

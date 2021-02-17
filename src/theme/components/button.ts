@@ -3,9 +3,9 @@ export default {
     // Custom variants
     '@primary': () => ({
       color: 'white',
-      bg: 'brand.600',
+      bg: 'brand.500',
       _hover: {
-        bg: 'brand.700',
+        bg: 'brand.600',
       },
     }),
     '@secondary': () => ({

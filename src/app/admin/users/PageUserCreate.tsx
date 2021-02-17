@@ -70,7 +70,7 @@ export const PageUserCreate = () => {
               <Button onClick={() => history.goBack()}>Cancel</Button>
               <Button
                 type="submit"
-                colorScheme="brand"
+                variant="@primary"
                 isLoading={createUserLoading}
               >
                 Create User

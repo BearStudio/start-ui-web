@@ -105,7 +105,7 @@ export const PagePassword = () => {
               <Flex>
                 <Button
                   type="submit"
-                  colorScheme="brand"
+                  variant="@primary"
                   ml="auto"
                   isLoading={changePasswordLoading}
                 >

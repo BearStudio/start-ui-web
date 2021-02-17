@@ -161,7 +161,7 @@ export const PageRegister = () => {
                 isLoading={isLoading}
                 isDisabled={form.isSubmitted && !form.isValid}
                 type="submit"
-                colorScheme="brand"
+                variant="@primary"
                 ml="auto"
               >
                 Create Account

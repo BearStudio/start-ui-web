@@ -100,7 +100,7 @@ export const PageProfile = () => {
                 <Flex>
                   <Button
                     type="submit"
-                    colorScheme="brand"
+                    variant="@primary"
                     ml="auto"
                     isLoading={updateLoading}
                   >
