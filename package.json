@@ -71,8 +71,8 @@
     "start": "next start",
     "pretty": "prettier -w .",
     "lint": "eslint ./src --fix",
-    "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook",
+    "storybook": "start-storybook -p 6006 -s ./public",
+    "storybook:build": "build-storybook -s ./public",
     "static:build": "next build && next export",
     "static:serve": "yarn static:build && npx servor out app.html 5000"
   },
