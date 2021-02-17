@@ -1,0 +1,55 @@
+import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import { HiPlus, HiMinus } from 'react-icons/hi'
+
+<Meta title="Styleguide/Buttons" />
+
+# Buttons
+
+```jsx
+import { Button, IconButton } from '@chakra-ui/react'
+```
+
+## Default Button
+
+<Canvas>
+  <Story name="Default">
+    <ButtonGroup>
+      <Button>Default Button</Button>
+      <IconButton icon={<HiPlus />} aria-label="Add" />
+    </ButtonGroup>
+  </Story>
+</Canvas>
+
+## Primary Button
+
+<Canvas>
+  <Story name="Primary">
+    <ButtonGroup>
+      <Button variant="primary">Primary Button</Button>
+      <IconButton variant="primary" icon={<HiPlus />} aria-label="Add" />
+    </ButtonGroup>
+  </Story>
+</Canvas>
+
+## Secondary Button
+
+<Canvas>
+  <Story name="Secondary">
+    <ButtonGroup>
+      <Button variant="secondary">Secondary Button</Button>
+      <IconButton variant="secondary" icon={<HiPlus />} aria-label="Add" />
+    </ButtonGroup>
+  </Story>
+</Canvas>
+
+## Danger Button
+
+<Canvas>
+  <Story name="Danger">
+    <ButtonGroup>
+      <Button variant="danger">Danger Button</Button>
+      <IconButton variant="danger" icon={<HiMinus />} aria-label="Remove" />
+    </ButtonGroup>
+  </Story>
+</Canvas>

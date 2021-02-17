@@ -1,0 +1,45 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import { Box, HStack } from '@chakra-ui/react';
+
+<Meta title="Styleguide/Colors" />
+
+export const Color = ({ ...rest }) => <Box flex="1" h="16" {...rest} />;
+
+export const Colors = ({ colorScheme = 'gray', ...rest }) => (
+  <HStack p="4" spacing="0" boxShadow="md" bg="white" borderRadius="md" {...rest}>
+    <Color bg={`${colorScheme}.50`} />
+    <Color bg={`${colorScheme}.100`} />
+    <Color bg={`${colorScheme}.200`} />
+    <Color bg={`${colorScheme}.300`} />
+    <Color bg={`${colorScheme}.400`} />
+    <Color bg={`${colorScheme}.500`} />
+    <Color bg={`${colorScheme}.600`} />
+    <Color bg={`${colorScheme}.700`} />
+    <Color bg={`${colorScheme}.800`} />
+    <Color bg={`${colorScheme}.900`} />
+  </HStack>
+);
+
+## Brand Color
+
+<Story name="Brand">
+  <Colors colorScheme="brand" />
+</Story>
+
+## Error Color
+
+<Story name="Error">
+  <Colors colorScheme="error" />
+</Story>
+
+## Warning Color
+
+<Story name="Warning">
+  <Colors colorScheme="warning" />
+</Story>
+
+## Success Color
+
+<Story name="Success">
+  <Colors colorScheme="success" />
+</Story>
