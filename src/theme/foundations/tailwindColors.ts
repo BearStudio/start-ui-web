@@ -1,5 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-export default {
+const tailwindColors = {
   rose: {
     50: '#fff1f2',
     100: '#ffe4e6',
@@ -265,3 +264,5 @@ export default {
     900: '#0f172a',
   },
 };
+
+export default tailwindColors;
