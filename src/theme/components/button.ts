@@ -1,14 +1,14 @@
 export default {
   variants: {
     // Custom variants
-    primary: () => ({
+    '@primary': () => ({
       color: 'white',
       bg: 'brand.600',
       _hover: {
         bg: 'brand.700',
       },
     }),
-    secondary: () => ({
+    '@secondary': () => ({
       color: 'brand.600',
       bg: 'brand.50',
       _hover: {
@@ -16,7 +16,7 @@ export default {
         color: 'brand.700',
       },
     }),
-    danger: () => ({
+    '@danger': () => ({
       color: 'error.600',
       bg: 'error.50',
       _hover: {
