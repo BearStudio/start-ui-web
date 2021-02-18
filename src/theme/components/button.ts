@@ -1,28 +1,50 @@
+const customVariant = ({
+  bg,
+  bgHover = bg,
+  bgActive = bgHover,
+  color,
+  colorHover = color,
+  boxShadowFocus = 'outline',
+}) => {
+  return {
+    bg,
+    color: color,
+    _focus: {
+      boxShadow: boxShadowFocus,
+    },
+    _hover: {
+      bg: bgHover,
+      color: colorHover,
+      _disabled: {
+        bg,
+      },
+    },
+    _active: { bg: bgActive },
+  };
+};
+
 export default {
   variants: {
     // Custom variants
-    '@primary': () => ({
-      color: 'white',
+    '@primary': customVariant({
       bg: 'brand.500',
-      _hover: {
-        bg: 'brand.600',
-      },
+      bgHover: 'brand.600',
+      bgActive: 'brand.700',
+      color: 'white',
     }),
-    '@secondary': () => ({
-      color: 'brand.600',
+    '@secondary': customVariant({
       bg: 'brand.50',
-      _hover: {
-        bg: 'brand.100',
-        color: 'brand.700',
-      },
+      bgHover: 'brand.100',
+      bgActive: 'brand.200',
+      color: 'brand.600',
+      colorHover: 'brand.700',
     }),
-    '@danger': () => ({
-      color: 'error.600',
+    '@danger': customVariant({
       bg: 'error.50',
-      _hover: {
-        bg: 'error.100',
-        color: 'error.700',
-      },
+      bgHover: 'error.100',
+      bgActive: 'error.200',
+      color: 'error.600',
+      colorHover: 'error.700',
     }),
 
     // Default variants
