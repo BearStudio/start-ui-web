@@ -1,16 +1,11 @@
 import { extendTheme } from '@chakra-ui/react';
 
-import Badge from './components/badge';
-import Input from './components/input';
-import { colors } from './foundations/colors';
-import { shadows } from './foundations/shadows';
-import { spacing } from './foundations/spacing';
-import { styles } from './foundations/styles';
+import * as components from './components';
+import * as foundations from './foundations';
+import { styles } from './styles';
 
 export default extendTheme({
   styles,
-  colors,
-  shadows,
-  space: spacing,
-  components: { Badge, Input },
+  ...foundations,
+  components: { ...(components as any) },
 });

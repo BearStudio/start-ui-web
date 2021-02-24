@@ -16,6 +16,7 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 export interface FieldInputProps extends FieldProps, FormGroupProps {
   type?: string;
   placeholder?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const FieldInput = (props: FieldInputProps) => {
@@ -28,16 +29,18 @@ export const FieldInput = (props: FieldInputProps) => {
     resetKey,
     setValue,
     value,
+    otherProps,
   } = useField(props);
   const {
     children,
     label,
     type,
-    required,
     placeholder,
     helper,
-    ...otherProps
-  } = props;
+    size = 'md',
+    ...rest
+  } = otherProps;
+  const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
@@ -53,12 +56,12 @@ export const FieldInput = (props: FieldInputProps) => {
     isRequired: !!required,
     label,
     showError,
-    ...otherProps,
+    ...rest,
   };
 
   return (
     <FormGroup {...formGroupProps}>
-      <InputGroup>
+      <InputGroup size={size}>
         <Input
           type={showPassword ? 'text' : type || 'text'}
           id={id}

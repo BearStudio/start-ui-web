@@ -9,7 +9,6 @@ import {
   MenuGroup,
   MenuDivider,
   Spinner,
-  Icon,
   Flex,
   Text,
   useClipboard,
@@ -17,9 +16,10 @@ import {
 import axios from 'axios';
 import { FiCheck, FiCopy, FiLogOut, FiUser } from 'react-icons/fi';
 import { useQuery } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
-import { useAccount } from '@/app/account/service';
+import { useAccount } from '@/app/account/account.service';
+import { Icon } from '@/components';
 
 const AppVersion = ({ ...rest }) => {
   const { data } = useQuery<any>(
@@ -70,7 +70,7 @@ const AppVersion = ({ ...rest }) => {
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
-          <Icon as={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
+          <Icon icon={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
           {hasCopied ? 'Copied' : 'Copy version'}
         </Flex>
         <Text as="span" noOfLines={2}>
@@ -81,12 +81,12 @@ const AppVersion = ({ ...rest }) => {
   );
 };
 
-export const NavBarAccountMenu = ({ ...rest }) => {
+export const AccountMenu = ({ ...rest }) => {
   const { account, isLoading } = useAccount();
   const history = useHistory();
 
   return (
-    <Menu {...rest}>
+    <Menu placement="bottom-end" {...rest}>
       <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
         <Avatar size="sm" icon={<></>} name={!isLoading && `${account?.login}`}>
           {isLoading && <Spinner size="xs" />}
@@ -95,15 +95,16 @@ export const NavBarAccountMenu = ({ ...rest }) => {
       <MenuList color="gray.800" maxW="12rem" overflow="hidden">
         <MenuGroup title={account?.email}>
           <MenuItem
-            icon={<Icon as={FiUser} fontSize="lg" color="gray.400" />}
-            onClick={() => history.push('/account')}
+            as={Link}
+            to="/account"
+            icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
           >
             My Account
           </MenuItem>
         </MenuGroup>
         <MenuDivider />
         <MenuItem
-          icon={<Icon as={FiLogOut} fontSize="lg" color="gray.400" />}
+          icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
         >
           Logout

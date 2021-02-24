@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 
 import {
-  Icon,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -10,6 +9,8 @@ import {
   FormControlProps,
 } from '@chakra-ui/react';
 import { FiAlertCircle } from 'react-icons/fi';
+
+import { Icon } from '@/components';
 
 export interface FormGroupProps
   extends Omit<FormControlProps, 'onChange' | 'defaultValue' | 'label'> {
@@ -39,7 +40,7 @@ export const FormGroup = ({
 
     <FormErrorMessage id={`${id}-error`}>
       <SlideFade in offsetY={-6}>
-        <Icon as={FiAlertCircle} mr="2" />
+        <Icon icon={FiAlertCircle} mr="2" />
         {errorMessage}
       </SlideFade>
     </FormErrorMessage>

@@ -4,7 +4,6 @@ import {
   Badge,
   Text,
   HStack,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -13,19 +12,22 @@ import {
   SimpleGrid,
   Code,
   Stack,
+  LinkBox,
+  LinkOverlay,
 } from '@chakra-ui/react';
 import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
 
-import { ActionsButton } from '../ActionsButton';
-import { HitZone } from '../HitZone';
 import {
+  ActionsButton,
+  Icon,
   Pagination,
   PaginationButtonFirstPage,
   PaginationButtonLastPage,
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
-} from '../Pagination';
+} from '@/components';
+
 import {
   DataList,
   DataListHeader,
@@ -39,7 +41,7 @@ import {
 } from './index';
 
 export default {
-  title: 'components/DataList',
+  title: 'Components/DataList',
 };
 
 export const Default = () => (
@@ -229,16 +231,23 @@ export const Complete = () => {
         <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
       </DataListHeader>
       {users.map((item, index) => (
-        <DataListRow key={index} isDisabled={item.status === 'Inactive'}>
-          <DataListCell
-            colName="name"
-            {...(item.status !== 'Inactive' ? { as: 'a', href: '#' } : {})}
-          >
-            <HitZone />
+        <DataListRow
+          as={LinkBox}
+          key={index}
+          isDisabled={item.status === 'Inactive'}
+        >
+          <DataListCell colName="name">
             <HStack maxW="100%">
               <Avatar size="sm" name={item.name} mx="2" />
               <Box minW="0">
-                <Text isTruncated maxW="full" fontWeight="bold">
+                <Text
+                  isTruncated
+                  maxW="full"
+                  fontWeight="bold"
+                  {...(item.status !== 'Inactive'
+                    ? { as: LinkOverlay, href: '#' }
+                    : {})}
+                >
                   {item.name}
                 </Text>
                 <Text isTruncated maxW="full" fontSize="sm" color="gray.600">
@@ -276,23 +285,25 @@ export const Complete = () => {
               />
               <MenuList>
                 <MenuItem
-                  icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
                 >
                   Edit
                 </MenuItem>
                 <MenuItem
-                  icon={<Icon as={FiCopy} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiCopy} fontSize="lg" color="gray.400" />}
                 >
                   Duplicate
                 </MenuItem>
                 <MenuItem
-                  icon={<Icon as={FiUserPlus} fontSize="lg" color="gray.400" />}
+                  icon={
+                    <Icon icon={FiUserPlus} fontSize="lg" color="gray.400" />
+                  }
                 >
                   Share
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
-                  icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
                 >
                   Delete
                 </MenuItem>

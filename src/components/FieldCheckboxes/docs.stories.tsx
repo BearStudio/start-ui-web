@@ -1,16 +1,16 @@
 import { Formiz } from '@formiz/core';
 
-import { FieldGroupCheckbox } from './index';
+import { FieldCheckboxes } from './index';
 
 export default {
-  title: 'components/FieldGroupCheckbox',
+  title: 'Fields/FieldCheckboxes',
 };
 export const Default = () => {
   const options = [{ value: 'One' }, { value: 'Two' }, { value: 'Three' }];
   return (
     <Formiz>
-      <FieldGroupCheckbox
-        name="FieldGroupCheckbox"
+      <FieldCheckboxes
+        name="FieldCheckboxes"
         label="Label"
         helper="Helper"
         options={options}

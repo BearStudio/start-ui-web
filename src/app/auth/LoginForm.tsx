@@ -4,7 +4,7 @@ import { Box, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { useLogin } from '@/app/auth/service';
+import { useLogin } from '@/app/auth/auth.service';
 import { FieldInput, useToastError } from '@/components';
 
 export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
@@ -49,7 +49,7 @@ export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
               isLoading={isLoading}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
-              colorScheme="brand"
+              variant="@primary"
               ml="auto"
             >
               Log In

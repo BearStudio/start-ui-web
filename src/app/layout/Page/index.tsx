@@ -114,11 +114,11 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
 };
 
 export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
-  const footerRef = useRef<HTMLDivElement>(null);
+  const bottomBarRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
   useLayoutEffect(() => {
-    setHeight(footerRef.current?.offsetHeight || 0);
+    setHeight(bottomBarRef.current?.offsetHeight || 0);
   }, [setHeight]);
 
   return (
@@ -126,7 +126,7 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
       <Box h={`${height}px`} />
       <Flex
         zIndex="3"
-        ref={footerRef}
+        ref={bottomBarRef}
         direction="column"
         mt="auto"
         position="fixed"
@@ -164,7 +164,6 @@ export const Page = ({
     <PageContext.Provider
       value={{
         nav,
-        isFocusMode,
         hideContainer,
         containerSize,
       }}

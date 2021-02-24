@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAccount } from '@/app/account/service';
+import { useAccount } from '@/app/account/account.service';
 import { Error403 } from '@/errors';
 
 import { Route } from './Route';

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Box, Spinner } from '@chakra-ui/react';
 
-import { useActivateAccount } from '@/app/account/service';
+import { useActivateAccount } from '@/app/account/account.service';
 import { useSearchParams } from '@/app/router';
 
 export const PageActivate = () => {

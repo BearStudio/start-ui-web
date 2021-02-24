@@ -8,7 +8,6 @@ import {
   HStack,
   Avatar,
   Box,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -19,6 +18,8 @@ import {
   Button,
   IconButton,
   Text,
+  LinkBox,
+  LinkOverlay,
 } from '@chakra-ui/react';
 import {
   FiEdit,
@@ -30,7 +31,7 @@ import {
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
-import { useUserList, useUserUpdate } from '@/app/admin/users/service';
+import { useUserList, useUserUpdate } from '@/app/admin/users/users.service';
 import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,
@@ -40,7 +41,7 @@ import {
   DataListFooter,
   DataListRow,
   DateAgo,
-  HitZone,
+  Icon,
   useToastError,
   useToastSuccess,
   usePaginationFromUrl,
@@ -98,28 +99,30 @@ const UserActions = ({ user, ...rest }) => {
           <MenuItem
             as={Link}
             to={`${path}${user.login}`}
-            icon={<Icon as={FiEdit} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             Edit
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
-              icon={<Icon as={FiXCircle} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
             >
               Deactivate Account
             </MenuItem>
           ) : (
             <MenuItem
               onClick={activateUser}
-              icon={<Icon as={FiCheckCircle} fontSize="lg" color="gray.400" />}
+              icon={
+                <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
+              }
             >
               Activate Account
             </MenuItem>
           )}
           <MenuDivider />
           <MenuItem
-            icon={<Icon as={FiTrash2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
           >
             Delete
           </MenuItem>
@@ -150,7 +153,7 @@ export const PageUsers = () => {
               display={{ base: 'none', sm: 'flex' }}
               as={Link}
               to={`${path}create`}
-              colorScheme="brand"
+              variant="@primary"
               leftIcon={<FiPlus />}
             >
               Create User
@@ -161,7 +164,7 @@ export const PageUsers = () => {
               as={Link}
               to={`${path}create`}
               size="sm"
-              colorScheme="brand"
+              variant="@primary"
               icon={<FiPlus />}
             />
           </Box>
@@ -208,18 +211,15 @@ export const PageUsers = () => {
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
           {users?.map((user) => (
-            <DataListRow key={user.id}>
-              <DataListCell
-                colName="login"
-                as={Link}
-                to={`${path}${user.login}`}
-              >
-                <HitZone />
+            <DataListRow as={LinkBox} key={user.id}>
+              <DataListCell colName="login">
                 <HStack maxW="100%">
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
                     <Text isTruncated maxW="full" fontWeight="bold">
-                      {user.login}
+                      <LinkOverlay as={Link} to={`${path}${user.login}`}>
+                        {user.login}
+                      </LinkOverlay>
                     </Text>
                     <Text
                       isTruncated

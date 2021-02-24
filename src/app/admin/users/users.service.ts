@@ -1,18 +1,25 @@
 import Axios from 'axios';
 import {
   useMutation,
-  MutationOptions,
+  UseMutationOptions,
   useQuery,
   useQueryClient,
+  UseQueryOptions,
 } from 'react-query';
 
-export const useUserList = ({ page = 0, size = 10 } = {}) => {
-  const result = useQuery<any>(
+import { User, UserList } from '@/app/admin/users/users.types';
+
+export const useUserList = (
+  { page = 0, size = 10 } = {},
+  config: UseQueryOptions<UserList> = {}
+) => {
+  const result = useQuery(
     ['users', { page, size }],
-    (): Promise<any> =>
+    (): Promise<UserList> =>
       Axios.get('/users', { params: { page, size, sort: 'id,desc' } }),
     {
       keepPreviousData: true,
+      ...config,
     }
   );
 
@@ -31,12 +38,15 @@ export const useUserList = ({ page = 0, size = 10 } = {}) => {
   };
 };
 
-export const useUser = (userLogin: string) => {
-  const result = useQuery<any>(
+export const useUser = (
+  userLogin: string,
+  config: UseQueryOptions<User> = {}
+) => {
+  const result = useQuery(
     ['user', userLogin],
-    (): Promise<any> => Axios.get(`/users/${userLogin}`),
+    (): Promise<User> => Axios.get(`/users/${userLogin}`),
     {
-      keepPreviousData: true,
+      ...config,
     }
   );
 
@@ -46,17 +56,19 @@ export const useUser = (userLogin: string) => {
   };
 };
 
-export const useUserUpdate = (config: MutationOptions = {}) => {
+export const useUserUpdate = (
+  config: UseMutationOptions<User, unknown, User> = {}
+) => {
   const queryCache = useQueryClient();
-  return useMutation<any>((payload: any) => Axios.put('/users', payload), {
+  return useMutation((payload) => Axios.put('/users', payload), {
     ...config,
-    onSuccess: (data: any, ...rest) => {
+    onSuccess: (data, ...rest) => {
       queryCache.cancelQueries('users');
       queryCache
         .getQueryCache()
         .findAll('users')
         .forEach(({ queryKey }) => {
-          queryCache.setQueryData(queryKey, (cachedData: any) => {
+          queryCache.setQueryData(queryKey, (cachedData: UserList) => {
             if (!cachedData) return;
             return {
               ...cachedData,
@@ -74,16 +86,21 @@ export const useUserUpdate = (config: MutationOptions = {}) => {
   });
 };
 
-export const useUserCreate = (config: MutationOptions = {}) => {
-  return useMutation<any, any, any>(
-    ({ login, firstName, lastName, email, langKey = 'en', authorities }) =>
+export const useUserCreate = (
+  config: UseMutationOptions<
+    User,
+    unknown,
+    Pick<
+      User,
+      'login' | 'email' | 'firstName' | 'lastName' | 'langKey' | 'authorities'
+    >
+  > = {}
+) => {
+  return useMutation(
+    ({ langKey = 'en', ...payload }) =>
       Axios.post('/users', {
-        login,
-        firstName,
-        lastName,
-        email,
         langKey,
-        authorities,
+        ...payload,
       }),
     {
       ...config,

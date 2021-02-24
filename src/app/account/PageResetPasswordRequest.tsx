@@ -16,7 +16,7 @@ import { isEmail } from '@formiz/validations';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { useResetPasswordInit } from '@/app/account/service';
+import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, useToastError } from '@/components';
 
 export const PageResetPasswordRequest = () => {
@@ -84,8 +84,8 @@ export const PageResetPasswordRequest = () => {
   }
 
   return (
-    <Center p="4" m="auto">
-      <Box>
+    <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+      <Box p="6" bg="white" borderRadius="md" boxShadow="md">
         <Heading size="lg">Reset password</Heading>
         <Formiz
           id="reset-password-init-form"
@@ -117,7 +117,7 @@ export const PageResetPasswordRequest = () => {
               </Button>
               <Button
                 type="submit"
-                colorScheme="brand"
+                variant="@primary"
                 ml="auto"
                 isLoading={resetPasswordLoading}
               >
@@ -127,6 +127,6 @@ export const PageResetPasswordRequest = () => {
           </form>
         </Formiz>
       </Box>
-    </Center>
+    </Box>
   );
 };

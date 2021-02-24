@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { DateAgo } from './index';
 
 export default {
-  title: 'components/DateAgo',
+  title: 'Components/DateAgo',
 };
 
 export const Default = () => (

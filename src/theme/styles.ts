@@ -1,4 +1,4 @@
-import { reactDayPicker } from '@/theme/externals/reactDayPicker';
+import * as externals from './externals';
 
 export const styles = {
   global: {
@@ -15,6 +15,6 @@ export const styles = {
       pr: 'safe-right',
       pb: 'safe-bottom',
     },
-    ...reactDayPicker,
+    ...externals,
   },
 };
