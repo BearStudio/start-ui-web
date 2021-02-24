@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FiUsers } from 'react-icons/fi';
+import { GoBook } from 'react-icons/go';
 import { Link, useLocation } from 'react-router-dom';
 
 import { Nav, NavItem, NavGroup } from '@/components';
@@ -18,6 +19,14 @@ export const AdminNav = () => {
           icon={FiUsers}
         >
           User Management
+        </NavItem>
+        <NavItem
+          as={Link}
+          to="/admin/api"
+          isActive={isActive('/admin/api')}
+          icon={GoBook}
+        >
+          API Documentation
         </NavItem>
       </NavGroup>
     </Nav>

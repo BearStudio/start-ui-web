@@ -6,12 +6,10 @@ import Head from 'next/head';
 import { Providers } from '@/Providers';
 import { Viewport } from '@/components';
 import { ErrorBoundary } from '@/errors';
+import { mockServer } from '@/mocks/server';
 
-if (
-  process.env.NODE_ENV !== 'production' &&
-  !process.env.NEXT_PUBLIC_API_BASE_URL
-) {
-  require('../../mocks');
+if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
+  mockServer();
 }
 
 const AppDevHint = () => {

@@ -1,0 +1,21 @@
+# Auth
+/authenticate:
+  $ref: '../auth/paths.yaml#/authenticate'
+
+# Account
+/register:
+  $ref: '../account/paths.yaml#/register'
+/account:
+  $ref: '../account/paths.yaml#/account'
+/account/change-password:
+  $ref: '../account/paths.yaml#/change-password'
+/account/reset-password/init:
+  $ref: '../account/paths.yaml#/reset-password-init'
+/account/reset-password/finish:
+  $ref: '../account/paths.yaml#/reset-password-finish'
+
+# Users
+/users:
+  $ref: '../users/paths.yaml#/users'
+/users/{userLogin}:
+  $ref: '../users/paths.yaml#/users-login'

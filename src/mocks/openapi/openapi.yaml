@@ -1,0 +1,19 @@
+openapi: '3.0.0'
+info:
+  version: '1.0'
+  title: Start-UI API Documentation
+tags:
+  - name: Authentication
+    description: Endpoints to manage authentication
+  - name: Account
+    description: Endpoints to manage account
+  - name: Users
+    description: Endpoints to manage users
+paths:
+  $ref: './paths.yaml'
+components:
+  schemas:
+    User:
+      $ref: '../users/user.yaml#/User'
+  responses:
+    $ref: './errors.yaml'

@@ -1,0 +1,99 @@
+# /users/{userLogin}
+users-login:
+  # ---
+  get:
+    summary: Get user
+    tags:
+      - Users
+    parameters:
+      - in: path
+        name: userLogin
+        schema:
+          type: string
+        required: true
+        description: Login of the user to get
+    responses:
+      '200':
+        description: Ok
+        content:
+          application/json:
+            schema:
+              $ref: './user.yaml#/User'
+      '400':
+        $ref: '../openapi/errors.yaml#/error'
+
+# /users
+users:
+  # ---
+  get:
+    summary: Get all users with pagination
+    tags:
+      - Users
+    parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page to display
+      - in: query
+        name: size
+        schema:
+          type: integer
+        description: Number of element on a page
+      - in: query
+        name: sort
+        schema:
+          type: string
+        description: Explicits string to explain elements's order (ex 'id,desc')
+    responses:
+      '200':
+        description: Ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: array
+                  items:
+                    $ref: './user.yaml#/User'
+                totalItems:
+                  type: integer
+      '400':
+        $ref: '../openapi/errors.yaml#/error'
+
+  # ---
+  post:
+    summary: Create user
+    tags:
+      - Users
+    requestBody:
+      description: New user
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './user.yaml#/User'
+    responses:
+      '200':
+        description: Ok
+      '400':
+        $ref: '../openapi/errors.yaml#/error'
+
+  # ---
+  put:
+    summary: Edit user
+    tags:
+      - Users
+    requestBody:
+      description: New user to replace by old user with same id
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './user.yaml#/User'
+    responses:
+      '200':
+        description: Ok
+      '400':
+        $ref: '../openapi/errors.yaml#/error'

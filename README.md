@@ -39,6 +39,10 @@ yarn dev
 }
 ```
 
+### Development with Mirage and fakerjs
+
+In `.env` file at the root of the project, do not set `NEXT_PUBLIC_API_BASE_URL` variable.
+
 ### Development with a jHipster backend
 
 Create a `.env` file at the root of the project with the following content:
@@ -55,6 +59,14 @@ Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environme
 NEXT_PUBLIC_DEV_ENV_NAME=staging
 NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
 ```
+
+## API Documentation
+
+API documentation is accessible by admins in the app with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react). 
+```
+yarn docs:build
+```
+This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
 
 ## Production
 

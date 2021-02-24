@@ -38,7 +38,7 @@ const AccountRoutes = () => {
       />
       <RoutePublicOnly
         exact
-        path={`${path}/reset/finish/:key?`}
+        path={`${path}/reset/finish`}
         render={() => <PageResetPasswordConfirm />}
       />
 

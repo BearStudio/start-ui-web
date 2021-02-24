@@ -1,0 +1,26 @@
+# /authenticate
+authenticate:
+  # ---
+  post:
+    summary: Authenticate account
+    tags:
+      - Authentication
+    requestBody:
+      description: Account identifiers
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+                format: password
+    responses:
+      '200':
+        description: Ok
+      '400':
+        $ref: '../openapi/errors.yaml#/error'

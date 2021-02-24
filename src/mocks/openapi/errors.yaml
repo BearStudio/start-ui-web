@@ -1,0 +1,13 @@
+error:
+  description: 40x errors schema
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+          title:
+            type: string
+          errorKey:
+            type: string
