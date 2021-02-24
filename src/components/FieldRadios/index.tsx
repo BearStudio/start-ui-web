@@ -11,6 +11,7 @@ interface Option {
 }
 
 export interface FieldRadiosProps extends FieldProps, FormGroupProps {
+  size?: 'sm' | 'md' | 'lg';
   options?: Option[];
 }
 
@@ -31,6 +32,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     options = [],
     required,
     helper,
+    size = 'md',
     ...rest
   } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
@@ -52,7 +54,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
 
   return (
     <FormGroup {...formGroupProps}>
-      <RadioGroup id={id} value={value || []} onChange={setValue}>
+      <RadioGroup size={size} id={id} value={value || []} onChange={setValue}>
         <Wrap spacing="4">
           {options.map((option) => (
             <WrapItem key={option.value}>

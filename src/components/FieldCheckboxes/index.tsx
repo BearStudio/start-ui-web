@@ -11,6 +11,7 @@ interface Option {
 }
 
 export interface FieldCheckboxesProps extends FieldProps, FormGroupProps {
+  size?: 'sm' | 'md' | 'lg';
   options?: Option[];
 }
 
@@ -25,7 +26,14 @@ export const FieldCheckboxes = (props: FieldCheckboxesProps) => {
     value,
     otherProps,
   } = useField(props);
-  const { children, label, options = [], helper, ...rest } = otherProps;
+  const {
+    children,
+    label,
+    options = [],
+    helper,
+    size = 'md',
+    ...rest
+  } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
@@ -47,6 +55,7 @@ export const FieldCheckboxes = (props: FieldCheckboxesProps) => {
   return (
     <FormGroup {...formGroupProps}>
       <CheckboxGroup
+        size={size}
         value={value || []}
         onChange={(v) => setValue(v?.length ? v : null)}
       >

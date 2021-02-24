@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Select } from '@chakra-ui/react';
-import { useField } from '@formiz/core';
+import { FieldProps, useField } from '@formiz/core';
 
-import { FormGroup } from '@/components/FormGroup';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export const FieldSelect = (props) => {
+interface Option {
+  value: any;
+  label?: ReactNode;
+}
+
+export interface FieldSelectProps extends FieldProps, FormGroupProps {
+  placeholder?: string;
+  size?: 'sm' | 'md' | 'lg';
+  options?: Option[];
+}
+
+export const FieldSelect = (props: FieldSelectProps) => {
   const {
     errorMessage,
     id,
@@ -23,6 +34,7 @@ export const FieldSelect = (props) => {
     options = [],
     placeholder,
     helper,
+    size = 'md',
     ...rest
   } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
@@ -48,10 +60,9 @@ export const FieldSelect = (props) => {
         id={id}
         value={value || ''}
         onBlur={() => setIsTouched(true)}
-        aria-invalid={showError}
-        aria-describedby={!isValid ? `${id}-error` : undefined}
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
+        size={size}
       >
         {(options || []).map((item) => (
           <option key={item.value} value={item.value}>

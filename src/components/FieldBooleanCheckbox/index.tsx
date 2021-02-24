@@ -5,7 +5,10 @@ import { useField, FieldProps } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export interface FieldBooleanCheckboxProps extends FieldProps, FormGroupProps {}
+export interface FieldBooleanCheckboxProps extends FieldProps, FormGroupProps {
+  optionLabel?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
 export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
   const {
@@ -18,7 +21,14 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     value,
   } = useField(props);
   const { required } = props;
-  const { children, label, helper, ...otherProps } = props;
+  const {
+    children,
+    label,
+    helper,
+    optionLabel,
+    size = 'md',
+    ...otherProps
+  } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
@@ -38,7 +48,14 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
 
   return (
     <FormGroup {...formGroupProps}>
-      <Checkbox value={value ?? false} onChange={() => setValue(!value)} />
+      <Checkbox
+        id={id}
+        size={size}
+        value={value ?? false}
+        onChange={() => setValue(!value)}
+      >
+        {optionLabel || <>&nbsp;</>}
+      </Checkbox>
       {children}
     </FormGroup>
   );
