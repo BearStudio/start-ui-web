@@ -36,9 +36,7 @@ const update = (schema, request) => {
 };
 
 const initResetPassword = (_, request) => {
-  const email = request.requestBody;
-
-  return email;
+  return request.requestBody;
 };
 
 const finishResetPassword = (schema, request) => {
