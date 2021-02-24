@@ -12,5 +12,6 @@ export * from './Logo';
 export * from './Pagination';
 export * from './DataList';
 export * from './Nav';
+export * from './SlideIn';
 export * from './Toast';
 export * from './Viewport';

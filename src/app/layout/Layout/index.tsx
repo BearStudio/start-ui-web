@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Flex, SlideFade, useDisclosure } from '@chakra-ui/react';
+import { Flex, useDisclosure } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
@@ -28,16 +28,9 @@ export const Layout = ({ children }) => {
     >
       <Viewport>
         {isLogged && !isFocusMode && <TopBar />}
-        <SlideFade
-          in
-          offsetY={-20}
-          key={pathname}
-          style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
-        >
-          <Flex flex="1" direction="column">
-            {children}
-          </Flex>
-        </SlideFade>
+        <Flex flex="1" direction="column">
+          {children}
+        </Flex>
         <LoginModalInterceptor />
       </Viewport>
     </LayoutContext.Provider>

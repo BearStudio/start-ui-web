@@ -17,7 +17,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useResetPasswordInit } from '@/app/account/account.service';
-import { FieldInput, useToastError } from '@/components';
+import { FieldInput, SlideIn, useToastError } from '@/components';
 
 export const PageResetPasswordRequest = () => {
   const resetPasswordInitForm = useForm();
@@ -84,49 +84,51 @@ export const PageResetPasswordRequest = () => {
   }
 
   return (
-    <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
-      <Box p="6" bg="white" borderRadius="md" boxShadow="md">
-        <Heading size="lg">Reset password</Heading>
-        <Formiz
-          id="reset-password-init-form"
-          onValidSubmit={submitResetPasswordInit}
-          connect={resetPasswordInitForm}
-        >
-          <form noValidate onSubmit={resetPasswordInitForm.submit}>
-            <FieldInput
-              name="email"
-              label="Email"
-              my="6"
-              helper="Enter the email address you used to register"
-              required="Email is required"
-              validations={[
-                {
-                  rule: isEmail(),
-                  message: 'Email is invalid',
-                },
-              ]}
-            />
-            <Flex>
-              <Button
-                leftIcon={<FiArrowLeft />}
-                as={RouterLink}
-                to="/login"
-                variant="link"
-              >
-                Back
-              </Button>
-              <Button
-                type="submit"
-                variant="@primary"
-                ml="auto"
-                isLoading={resetPasswordLoading}
-              >
-                Send email
-              </Button>
-            </Flex>
-          </form>
-        </Formiz>
+    <SlideIn>
+      <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+        <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+          <Heading size="lg">Reset password</Heading>
+          <Formiz
+            id="reset-password-init-form"
+            onValidSubmit={submitResetPasswordInit}
+            connect={resetPasswordInitForm}
+          >
+            <form noValidate onSubmit={resetPasswordInitForm.submit}>
+              <FieldInput
+                name="email"
+                label="Email"
+                my="6"
+                helper="Enter the email address you used to register"
+                required="Email is required"
+                validations={[
+                  {
+                    rule: isEmail(),
+                    message: 'Email is invalid',
+                  },
+                ]}
+              />
+              <Flex>
+                <Button
+                  leftIcon={<FiArrowLeft />}
+                  as={RouterLink}
+                  to="/login"
+                  variant="link"
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  variant="@primary"
+                  ml="auto"
+                  isLoading={resetPasswordLoading}
+                >
+                  Send email
+                </Button>
+              </Flex>
+            </form>
+          </Formiz>
+        </Box>
       </Box>
-    </Box>
+    </SlideIn>
   );
 };
