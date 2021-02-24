@@ -1,6 +1,6 @@
 import { Response } from 'miragejs';
 
-import { getCurrent } from '../account';
+import { getCurrent } from '@/mocks/account';
 
 export const AuthRoutes = (server) => {
   server.post('/authenticate', authenticate);
@@ -8,7 +8,7 @@ export const AuthRoutes = (server) => {
 
 const authenticate = (schema, request) => {
   const attrs = JSON.parse(request.requestBody);
-  const user = schema.users.findBy({ login: attrs.username });
+  const user = schema.users.findBy({ login: attrs.username.toLowerCase() });
   if (!user) {
     return new Response(401);
   } else {

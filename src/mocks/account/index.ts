@@ -11,10 +11,12 @@ export const AccountRoutes = (server) => {
 
 export const getCurrent = (schema, request) => {
   const authToken = request.requestHeaders.Authorization;
-  if (!authToken) {
+  const userIdFromToken = authToken?.split('Bearer ')[1];
+
+  if (!userIdFromToken || !['1', '2'].includes(userIdFromToken)) {
     return new Response(401);
   }
-  return schema.users.find(authToken.split('Bearer ')[1]);
+  return schema.users.find(userIdFromToken);
 };
 
 const register = (schema, request) => {
