@@ -3,7 +3,25 @@
   "private": true,
   "version": "1.0.0",
   "description": "⚠️ Work in progress repository",
-  "main": "index.js",
+  "scripts": {
+    "postinstall": "husky install",
+    "test": "jest --roots src --watch",
+    "dev": "yarn docs:build && next dev",
+    "build": "yarn docs:build && next build",
+    "start": "next start",
+    "pretty": "prettier -w .",
+    "lint": "eslint ./src --fix",
+    "storybook": "start-storybook -p 6006 -s ./public",
+    "storybook:build": "build-storybook -s ./public && mv ./storybook-static ./public/storybook",
+    "static:build": "yarn build && next export",
+    "static:serve": "yarn static:build && npx servor out app.html 5000",
+    "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json}": "prettier --write",
+    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
+    "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
+  },
   "dependencies": {
     "@chakra-ui/react": "1.3.3",
     "@emotion/react": "11.1.5",
@@ -65,25 +83,6 @@
     "react-is": "17.0.1",
     "tsconfig-paths-webpack-plugin": "3.3.0",
     "typescript": "4.2.2"
-  },
-  "scripts": {
-    "postinstall": "husky install",
-    "test": "jest --roots src --watch",
-    "dev": "yarn docs:build && next dev",
-    "build": "yarn docs:build && next build",
-    "start": "next start",
-    "pretty": "prettier -w .",
-    "lint": "eslint ./src --fix",
-    "storybook": "start-storybook -p 6006 -s ./public",
-    "storybook:build": "build-storybook -s ./public && mv ./storybook-static ./public/storybook",
-    "static:build": "yarn build && next export",
-    "static:serve": "yarn static:build && npx servor out app.html 5000",
-    "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
-    "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
   },
   "repository": {
     "type": "git",
