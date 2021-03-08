@@ -12,38 +12,38 @@ import { Route, RoutePublicOnly } from '@/app/router';
 import { Error404 } from '@/errors';
 
 const AccountRoutes = () => {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   return (
     <Switch>
       <Route
         exact
-        path={`${path}/`}
-        render={() => <Redirect to={`${path}/profile`} />}
+        path={`${url}/`}
+        render={() => <Redirect to={`${url}/profile`} />}
       />
 
       <RoutePublicOnly
         exact
-        path={`${path}/register`}
+        path={`${url}/register`}
         render={() => <PageRegister />}
       />
       <RoutePublicOnly
         exact
-        path={`${path}/activate`}
+        path={`${url}/activate`}
         render={() => <PageActivate />}
       />
       <RoutePublicOnly
         exact
-        path={`${path}/reset`}
+        path={`${url}/reset`}
         render={() => <PageResetPasswordRequest />}
       />
       <RoutePublicOnly
         exact
-        path={`${path}/reset/finish`}
+        path={`${url}/reset/finish`}
         render={() => <PageResetPasswordConfirm />}
       />
 
-      <Route exact path={`${path}/profile`} render={() => <PageProfile />} />
-      <Route exact path={`${path}/password`} render={() => <PagePassword />} />
+      <Route exact path={`${url}/profile`} render={() => <PageProfile />} />
+      <Route exact path={`${url}/password`} render={() => <PagePassword />} />
 
       <Route path="*" render={() => <Error404 />} />
     </Switch>

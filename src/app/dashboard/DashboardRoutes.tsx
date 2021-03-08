@@ -7,10 +7,10 @@ import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
 const DashboardRoutes = () => {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   return (
     <Switch>
-      <Route exact path={path} render={() => <PageDashboard />} />
+      <Route exact path={url} render={() => <PageDashboard />} />
       <Route path="*" render={() => <Error404 />} />
     </Switch>
   );

@@ -11,16 +11,16 @@ const AdminUsersRoutes = React.lazy(
 );
 
 const AdminRoutes = () => {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   return (
     <Switch>
       <Route
         exact
-        path={`${path}/`}
-        render={() => <Redirect to={`${path}/users`} />}
+        path={`${url}/`}
+        render={() => <Redirect to={`${url}/users`} />}
       />
-      <Route path={`${path}/users`} render={() => <AdminUsersRoutes />} />
-      <Route path={`${path}/api`} render={() => <PageApiDocumentation />} />
+      <Route path={`${url}/users`} render={() => <AdminUsersRoutes />} />
+      <Route path={`${url}/api`} render={() => <PageApiDocumentation />} />
       <Route path="*" render={() => <Error404 />} />
     </Switch>
   );

@@ -56,7 +56,7 @@ import {
 import { AdminNav } from '../AdminNav';
 
 const UserActions = ({ user, ...rest }) => {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const { mutate: userUpdate, ...userUpdateData } = useUserUpdate({
@@ -98,7 +98,7 @@ const UserActions = ({ user, ...rest }) => {
         <MenuList>
           <MenuItem
             as={Link}
-            to={`${path}${user.login}`}
+            to={`${url}${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             Edit
@@ -133,7 +133,7 @@ const UserActions = ({ user, ...rest }) => {
 };
 
 export const PageUsers = () => {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
   const { users, totalItems, isLoadingPage } = useUserList({
@@ -152,7 +152,7 @@ export const PageUsers = () => {
             <Button
               display={{ base: 'none', sm: 'flex' }}
               as={Link}
-              to={`${path}create`}
+              to={`${url}/create`}
               variant="@primary"
               leftIcon={<FiPlus />}
             >
@@ -162,7 +162,7 @@ export const PageUsers = () => {
               display={{ base: 'flex', sm: 'none' }}
               aria-label="Create User"
               as={Link}
-              to={`${path}create`}
+              to={`${url}/create`}
               size="sm"
               variant="@primary"
               icon={<FiPlus />}
@@ -217,7 +217,7 @@ export const PageUsers = () => {
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
                     <Text isTruncated maxW="full" fontWeight="bold">
-                      <LinkOverlay as={Link} to={`${path}${user.login}`}>
+                      <LinkOverlay as={Link} to={`${url}/${user.login}`}>
                         {user.login}
                       </LinkOverlay>
                     </Text>
