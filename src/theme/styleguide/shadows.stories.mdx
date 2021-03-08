@@ -1,0 +1,48 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import { Box, HStack } from '@chakra-ui/react';
+
+<Meta title="StyleGuide/Shadows" />
+
+export const Shadow = ({ boxShadow, ...rest }) => (
+  <Box px="4" py="2" bg="white" borderRadius="md" boxShadow={boxShadow} {...rest}>
+    {boxShadow}
+  </Box>
+);
+
+# Shadows
+
+## Levels
+
+<Story name="Levels">
+  <HStack borderRadius="md" bg="gray.50" p="4" spacing="4">
+    <Shadow boxShadow="xs" />
+    <Shadow boxShadow="sm" />
+    <Shadow boxShadow="base" />
+    <Shadow boxShadow="md" />
+    <Shadow boxShadow="lg" />
+    <Shadow boxShadow="xl" />
+    <Shadow boxShadow="2xl" />
+    <Shadow boxShadow="dark-lg" />
+  </HStack>
+</Story>
+
+## Inner
+
+<Story name="Inner">
+  <HStack borderRadius="md" bg="gray.50" p="4" spacing="4">
+    <Shadow boxShadow="inner" />
+  </HStack>
+</Story>
+
+## Outline
+
+<Story name="Outline">
+  <HStack borderRadius="md" bg="gray.50" p="4" spacing="4">
+    <Shadow boxShadow="outline" />
+    <Shadow boxShadow="outline-brand" />
+    <Shadow boxShadow="outline-gray" />
+    <Shadow boxShadow="outline-success" />
+    <Shadow boxShadow="outline-warning" />
+    <Shadow boxShadow="outline-error" />
+  </HStack>
+</Story>

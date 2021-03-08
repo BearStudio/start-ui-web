@@ -31,6 +31,7 @@ export default {
       bgHover: 'brand.600',
       bgActive: 'brand.700',
       color: 'white',
+      boxShadowFocus: 'outline-brand',
     }),
     '@secondary': customVariant({
       bg: 'brand.50',
@@ -38,6 +39,7 @@ export default {
       bgActive: 'brand.200',
       color: 'brand.600',
       colorHover: 'brand.700',
+      boxShadowFocus: 'outline-brand',
     }),
     '@danger': customVariant({
       bg: 'error.50',
@@ -45,6 +47,15 @@ export default {
       bgActive: 'error.200',
       color: 'error.600',
       colorHover: 'error.700',
+      boxShadowFocus: 'outline-error',
+    }),
+    '@warning': customVariant({
+      bg: 'warning.50',
+      bgHover: 'warning.100',
+      bgActive: 'warning.200',
+      color: 'warning.600',
+      colorHover: 'warning.700',
+      boxShadowFocus: 'outline-warning',
     }),
 
     // Default variants

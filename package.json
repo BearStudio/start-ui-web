@@ -24,13 +24,14 @@
   },
   "dependencies": {
     "@chakra-ui/react": "1.3.3",
+    "@chakra-ui/theme-tools": "1.1.0",
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
     "@formiz/core": "1.0.1",
     "@formiz/validations": "1.0.0",
     "axios": "0.21.1",
     "dayjs": "1.10.4",
-	  "faker": "5.4.0",
+    "faker": "5.4.0",
     "framer-motion": "3.6.7",
     "history": "5.0.0",
     "i18next": "19.9.0",
@@ -43,7 +44,7 @@
     "react-icons": "4.2.0",
     "react-query": "3.12.0",
     "react-router-dom": "5.2.0",
- 	  "swagger-cli": "4.0.4",
+    "swagger-cli": "4.0.4",
     "swagger-ui-react": "3.43.0"
   },
   "devDependencies": {
