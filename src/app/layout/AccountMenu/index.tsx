@@ -13,23 +13,17 @@ import {
   Text,
   useClipboard,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { FiCheck, FiCopy, FiLogOut, FiUser } from 'react-icons/fi';
-import { useQuery } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 
+import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components';
 
 const AppVersion = ({ ...rest }) => {
-  const { data } = useQuery<any>(
-    'appBuild',
-    () => axios.get('/app-build.json', { baseURL: '/' }),
-    { retry: 0, staleTime: Infinity }
-  );
-  const { hasCopied, onCopy } = useClipboard(data?.version);
+  const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
 
-  if (!data?.version) {
+  if (!appBuild?.version) {
     return null;
   }
 
@@ -58,6 +52,7 @@ const AppVersion = ({ ...rest }) => {
         <Flex
           d={hasCopied ? 'flex' : 'none'}
           position="absolute"
+          align="center"
           top="0"
           left="0"
           right="0"
@@ -71,10 +66,10 @@ const AppVersion = ({ ...rest }) => {
           _groupHover={{ d: 'flex' }}
         >
           <Icon icon={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
-          {hasCopied ? 'Copied' : 'Copy version'}
+          {hasCopied ? 'Version copiée' : 'Copier la version'}
         </Flex>
         <Text as="span" noOfLines={2}>
-          Version <strong>{data?.version}</strong>
+          Version <strong>{appBuild?.display ?? appBuild?.version}</strong>
         </Text>
       </Flex>
     </>
