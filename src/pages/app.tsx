@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Head from 'next/head';
+import { Flex, Progress } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 
-import { App as AppComponent } from '@/app/App';
-import { isBrowser } from '@/utils/ssr';
+import { Viewport } from '@/components';
+
+const Loading = () => (
+  <Viewport>
+    <Flex flex="1" align="flex-start">
+      <Progress
+        w="full"
+        h="0.4rem"
+        bg="gray.100"
+        colorScheme="brand"
+        isIndeterminate
+      />
+    </Flex>
+  </Viewport>
+);
+
+const AppComponent = dynamic(() => import('@/app/App').then((mod) => mod.App), {
+  ssr: false,
+  loading: () => <Loading />,
+});
 
 const App = () => {
-  return (
-    <>
-      <Head>
-        <title>Start UI</title>
-      </Head>
-      <div suppressHydrationWarning={true}>{isBrowser && <AppComponent />}</div>
-    </>
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  return isLoading ? <Loading /> : <AppComponent />;
 };
 export default App;
