@@ -50,7 +50,6 @@ export const MainMenu = ({ ...rest }) => {
   return (
     <Stack direction="row" spacing="1" {...rest}>
       <MainMenuItem to="/dashboard">Dashboard</MainMenuItem>
-      <MainMenuItem to="/entity">Entity</MainMenuItem>
       {isAdmin && <MainMenuItem to="/admin">Admin</MainMenuItem>}
     </Stack>
   );

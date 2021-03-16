@@ -14,7 +14,6 @@ const AccountRoutes = React.lazy(() => import('@/app/account/AccountRoutes'));
 const DashboardRoutes = React.lazy(
   () => import('@/app/dashboard/DashboardRoutes')
 );
-const EntityRoutes = React.lazy(() => import('@/app/entity/EntityRoutes'));
 
 export const App = () => {
   return (
@@ -39,7 +38,6 @@ export const App = () => {
               <RoutePublic path="/account" render={() => <AccountRoutes />} />
 
               <Route path="/dashboard" render={() => <DashboardRoutes />} />
-              <Route path="/entity" render={() => <EntityRoutes />} />
 
               <RouteAdmin path="/admin" render={() => <AdminRoutes />} />
 
