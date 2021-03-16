@@ -16,6 +16,7 @@ import mergeRefs from '@/utils/mergeRefs';
 interface SearchInputProps extends Omit<InputProps, 'onChange'> {
   onChange?(value?: string): void;
   delay?: number;
+  clearLabel?: string;
 }
 
 export const SearchInput = forwardRef<SearchInputProps, 'input'>(
@@ -25,7 +26,8 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       defaultValue,
       onChange,
       delay = 500,
-      placeholder = 'Rechercher...',
+      placeholder = 'Search...',
+      clearLabel = 'Clear Search',
       isDisabled = false,
       ...rest
     },
@@ -92,7 +94,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
               onClick={handleClear}
               variant="@secondary"
               size="xs"
-              aria-label="Supprimer la recherche en cours"
+              aria-label={clearLabel}
             >
               <FiX />
             </IconButton>
