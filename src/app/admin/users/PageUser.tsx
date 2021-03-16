@@ -70,24 +70,16 @@ export const PageUser = () => {
       <PageTopBar showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
           <Box flex="1">
-            <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
-              <SkeletonText
-                isLoaded={!userIsLoading}
-                maxW={!userIsLoading ? undefined : '6rem'}
-                noOfLines={1}
-              >
+            {userIsLoading ? (
+              <SkeletonText maxW="6rem" noOfLines={2} />
+            ) : (
+              <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
                 <Heading size="sm">{user?.login}</Heading>
-              </SkeletonText>
-              <SkeletonText
-                isLoaded={!userIsLoading}
-                maxW={!userIsLoading ? undefined : '6rem'}
-                noOfLines={1}
-              >
                 <Text fontSize="xs" color="gray.600">
                   {'ID : ' + user?.id}
                 </Text>
-              </SkeletonText>
-            </Stack>
+              </Stack>
+            )}
           </Box>
           {!!user && (
             <Box>
