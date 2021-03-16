@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Heading } from '@chakra-ui/react';
 
-import { Page, PageContent, PageBottomBar } from '@/app/layout';
+import { Page, PageContent } from '@/app/layout';
 
 export const PageDashboard = () => {
   return (
@@ -11,7 +11,6 @@ export const PageDashboard = () => {
         <Heading size="md">Dashboard</Heading>
         Body
       </PageContent>
-      <PageBottomBar>Footer</PageBottomBar>
     </Page>
   );
 };
