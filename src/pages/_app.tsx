@@ -6,11 +6,6 @@ import Head from 'next/head';
 import { Providers } from '@/Providers';
 import { Viewport } from '@/components';
 import { ErrorBoundary } from '@/errors';
-import { mockServer } from '@/mocks/server';
-
-if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
-  mockServer();
-}
 
 const AppDevHint = () => {
   const envName =
