@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Stack, Button } from '@chakra-ui/react';
+import { Stack, Box } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/account.service';
@@ -11,15 +11,27 @@ const MainMenuItem = ({ to, ...rest }: any) => {
   const { pathname } = useLocation();
   const isActive = pathname.startsWith(to);
   return (
-    <Button
+    <Box
       as={RouterLink}
       to={to}
       bg="transparent"
       justifyContent="flex-start"
       position="relative"
       opacity={isActive ? 1 : 0.8}
+      fontWeight="bold"
+      borderRadius="md"
+      px="4"
+      py="2"
       _active={{ bg: 'gray.700' }}
       _hover={{
+        bg: 'gray.900',
+        _after: {
+          opacity: 1,
+          w: '2rem',
+        },
+      }}
+      _focus={{
+        outline: 'none',
         bg: 'gray.900',
         _after: {
           opacity: 1,
