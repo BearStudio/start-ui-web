@@ -147,19 +147,16 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       };
     }, [isConfirmActive, confirmDelay]);
 
-    const confirm50 = `${confirmColorScheme}.50`;
-    const confirm100 = `${confirmColorScheme}.100`;
-    const confirm500 = `${confirmColorScheme}.500`;
-
     const stylingProps = isConfirmActive
       ? {
-          bg: confirm50,
+          bg: `${confirmColorScheme}.100`,
           color: 'transparent',
+          transition: '0.2s',
           _hover: {
-            bg: confirm100,
+            bg: `${confirmColorScheme}.50`,
           },
           _focus: {
-            bg: confirm100,
+            bg: `${confirmColorScheme}.50`,
           },
         }
       : {};
@@ -189,7 +186,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
             bottom={0}
             px={3}
             as="span"
-            color={confirm500}
+            color={`${confirmColorScheme}.500`}
             fontSize="sm"
             alignItems="center"
           >

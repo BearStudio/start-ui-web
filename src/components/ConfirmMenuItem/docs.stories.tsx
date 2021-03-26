@@ -1,15 +1,17 @@
 import React from 'react';
 
 import {
+  Box,
   Button,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   Portal,
-  Text,
+  Badge,
+  HStack,
 } from '@chakra-ui/react';
-import { FiChevronDown, FiAlertTriangle } from 'react-icons/fi';
+import { FiChevronDown, FiActivity } from 'react-icons/fi';
 
 import { Icon } from '@/components';
 
@@ -27,89 +29,22 @@ export const Default = () => {
       </MenuButton>
       <Portal>
         <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create</MenuItem>
-          <MenuItem>Mark</MenuItem>
-          <ConfirmMenuItem>Delete</ConfirmMenuItem>
-          <MenuItem>Attend</MenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
-  );
-};
-
-export const LongTextInMenuItem = () => {
-  return (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
-        Actions
-      </MenuButton>
-      <Portal>
-        <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create</MenuItem>
-          <MenuItem>Mark</MenuItem>
-          <ConfirmMenuItem>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed
-            pellentesque lorem, id dictum odio.
-          </ConfirmMenuItem>
-          <MenuItem>Attend</MenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
-  );
-};
-
-export const LongTextInConfirmText = () => {
-  return (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
-        Actions
-      </MenuButton>
-      <Portal>
-        <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create</MenuItem>
-          <MenuItem>Mark</MenuItem>
-          <ConfirmMenuItem
-            confirmText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed
-            pellentesque lorem, id dictum odio."
-          >
-            Delete
-          </ConfirmMenuItem>
-          <MenuItem>Attend</MenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
-  );
-};
-
-export const ConfirmAction = () => {
-  return (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
-        Actions
-      </MenuButton>
-      <Portal>
-        <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-          <MenuItem>Mark as Draft</MenuItem>
+          <MenuItem>Action</MenuItem>
           <ConfirmMenuItem
             onClick={() => {
               alert('Action');
             }}
           >
-            Delete
+            Confirm Action
           </ConfirmMenuItem>
-          <MenuItem>Attend a Workshop</MenuItem>
+          <MenuItem>Action</MenuItem>
         </MenuList>
       </Portal>
     </Menu>
   );
 };
 
-export const ConfirmColorScheme = () => {
+export const MenuItemLongText = () => {
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
@@ -117,11 +52,73 @@ export const ConfirmColorScheme = () => {
       </MenuButton>
       <Portal>
         <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-          <MenuItem>Mark as Draft</MenuItem>
-          <ConfirmMenuItem confirmColorScheme="green">Delete</ConfirmMenuItem>
-          <MenuItem>Attend a Workshop</MenuItem>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem>
+            Confirm Action with long texts, lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Nunc sed pellentesque lorem, id dictum
+            odio.
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
+        </MenuList>
+      </Portal>
+    </Menu>
+  );
+};
+
+export const ConfirmText = () => {
+  return (
+    <Menu>
+      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+        Actions
+      </MenuButton>
+      <Portal>
+        <MenuList>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem confirmText="Custom Confirm">
+            Confirm Action
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
+        </MenuList>
+      </Portal>
+    </Menu>
+  );
+};
+
+export const ConfirmTextLong = () => {
+  return (
+    <Menu>
+      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+        Actions
+      </MenuButton>
+      <Portal>
+        <MenuList>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem
+            confirmText="Confirm with long texts, lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed
+            pellentesque lorem, id dictum odio."
+          >
+            Confirm Action
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
+        </MenuList>
+      </Portal>
+    </Menu>
+  );
+};
+
+export const ConfirmIcon = () => {
+  return (
+    <Menu>
+      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+        Actions
+      </MenuButton>
+      <Portal>
+        <MenuList>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem confirmIcon={FiActivity}>
+            Confirm Action
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
         </MenuList>
       </Portal>
     </Menu>
@@ -136,20 +133,37 @@ export const ConfirmContent = () => {
       </MenuButton>
       <Portal>
         <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-          <MenuItem>Mark as Draft</MenuItem>
+          <MenuItem>Action</MenuItem>
           <ConfirmMenuItem
             confirmContent={
-              <>
-                <Icon icon={FiAlertTriangle} mr={1} />{' '}
-                <Text>Confirmation content</Text>
-              </>
+              <HStack>
+                <Box>Confirmation</Box>
+                <Badge>Something</Badge>
+              </HStack>
             }
           >
-            Delete
+            Confirm Action
           </ConfirmMenuItem>
-          <MenuItem>Attend a Workshop</MenuItem>
+          <MenuItem>Action</MenuItem>
+        </MenuList>
+      </Portal>
+    </Menu>
+  );
+};
+
+export const ConfirmColorScheme = () => {
+  return (
+    <Menu>
+      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+        Actions
+      </MenuButton>
+      <Portal>
+        <MenuList>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem confirmColorScheme="green">
+            Confirm Action
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
         </MenuList>
       </Portal>
     </Menu>
@@ -164,11 +178,9 @@ export const ConfirmDelay = () => {
       </MenuButton>
       <Portal>
         <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-          <MenuItem>Mark as Draft</MenuItem>
-          <ConfirmMenuItem confirmDelay={5000}>Delete</ConfirmMenuItem>
-          <MenuItem>Attend a Workshop</MenuItem>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem confirmDelay={5000}>Confirm Action</ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
         </MenuList>
       </Portal>
     </Menu>
