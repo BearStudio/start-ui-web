@@ -1,11 +1,17 @@
 import Axios from 'axios';
-import { useMutation, MutationOptions } from 'react-query';
+import { useMutation, UseMutationOptions } from 'react-query';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 
-export const useLogin = (config: MutationOptions = {}) => {
+export const useLogin = (
+  config: UseMutationOptions<
+    any,
+    unknown,
+    { username: string; password: string }
+  > = {}
+) => {
   const { updateToken } = useAuthContext();
-  return useMutation<any, any, any>(
+  return useMutation(
     ({ username, password }) =>
       Axios.post('/authenticate', { username, password }),
     {
