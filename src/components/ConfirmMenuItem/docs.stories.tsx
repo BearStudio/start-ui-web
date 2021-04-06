@@ -11,7 +11,7 @@ import {
   Badge,
   HStack,
 } from '@chakra-ui/react';
-import { FiChevronDown, FiActivity } from 'react-icons/fi';
+import { FiChevronDown, FiActivity, FiTrash2 } from 'react-icons/fi';
 
 import { Icon } from '@/components';
 
@@ -96,6 +96,27 @@ export const ConfirmTextLong = () => {
           <ConfirmMenuItem
             confirmText="Confirm with long texts, lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed
             pellentesque lorem, id dictum odio."
+          >
+            Confirm Action
+          </ConfirmMenuItem>
+          <MenuItem>Action</MenuItem>
+        </MenuList>
+      </Portal>
+    </Menu>
+  );
+};
+
+export const ConfirmMenuItemIcon = () => {
+  return (
+    <Menu>
+      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+        Actions
+      </MenuButton>
+      <Portal>
+        <MenuList>
+          <MenuItem>Action</MenuItem>
+          <ConfirmMenuItem
+            icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
           >
             Confirm Action
           </ConfirmMenuItem>
