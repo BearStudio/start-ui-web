@@ -34,5 +34,6 @@ const update = withAuth((schema, request) => {
 });
 
 const deleteOne = withAuth((schema, request) => {
-  return schema.users.find(request.params.id).destroy();
+  const login = request.params.userLogin;
+  return schema.users.findBy({ login }).destroy();
 });

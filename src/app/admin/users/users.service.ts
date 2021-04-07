@@ -107,3 +107,15 @@ export const useUserCreate = (
     }
   );
 };
+
+type UserWithLogin = Pick<User, 'login'>;
+
+export const useUserRemove = (
+  config: UseMutationOptions<void, unknown, UserWithLogin> = {}
+) => {
+  return useMutation(
+    (user: UserWithLogin): Promise<void> =>
+      Axios.delete(`/users/${user.login}`),
+    { ...config }
+  );
+};
