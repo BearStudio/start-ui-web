@@ -40,6 +40,7 @@ import {
 import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,
+  ConfirmMenuItem,
   DataList,
   DataListCell,
   DataListHeader,
@@ -57,7 +58,6 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
-import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 
 import { AdminNav } from '../AdminNav';
 
@@ -103,14 +103,14 @@ const UserActions = ({ user, ...rest }) => {
     onSuccess: (_, { login }) => {
       toastSuccess({
         title: 'Account deleted',
-        description: `Account ${login} deleted with success`,
+        description: `Account "${login}" deleted with success`,
       });
       queryClient.invalidateQueries('users');
     },
     onError: (_, { login }) => {
       toastError({
         title: 'Deletion Failed',
-        description: `Fail to remove ${login} account`,
+        description: `Fail to remove "${login}" account`,
       });
     },
   });
