@@ -109,6 +109,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       confirmIcon = FiAlertCircle,
       confirmText = 'Click to confirm',
       confirmDelay = 2000,
+      icon,
       onClick,
       ...rest
     },
@@ -147,7 +148,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       };
     }, [isConfirmActive, confirmDelay]);
 
-    const stylingProps = isConfirmActive
+    const confirmActiveProps = isConfirmActive
       ? {
           bg: `${confirmColorScheme}.100`,
           color: 'transparent',
@@ -158,6 +159,9 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
           _focus: {
             bg: `${confirmColorScheme}.50`,
           },
+          icon: icon
+            ? React.cloneElement(icon, { color: 'transparent' })
+            : icon,
         }
       : {};
 
@@ -166,8 +170,9 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
         position="relative"
         onClick={handleClickConfirm}
         ref={ref}
-        {...stylingProps}
+        icon={icon}
         {...rest}
+        {...confirmActiveProps}
       >
         <Flex
           as="span"

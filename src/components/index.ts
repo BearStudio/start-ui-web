@@ -1,4 +1,5 @@
 export * from './ActionsButton';
+export * from './ConfirmMenuItem';
 export * from './DateAgo';
 export * from './DayPicker';
 export * from './FieldBooleanCheckbox';

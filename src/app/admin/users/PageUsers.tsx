@@ -28,13 +28,19 @@ import {
   FiTrash2,
   FiPlus,
 } from 'react-icons/fi';
+import { useQueryClient } from 'react-query';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import { UserStatus } from '@/app/admin/users/UserStatus';
-import { useUserList, useUserUpdate } from '@/app/admin/users/users.service';
+import {
+  useUserList,
+  useUserRemove,
+  useUserUpdate,
+} from '@/app/admin/users/users.service';
 import { Page, PageContent } from '@/app/layout';
 import {
   ActionsButton,
+  ConfirmMenuItem,
   DataList,
   DataListCell,
   DataListHeader,
@@ -91,9 +97,32 @@ const UserActions = ({ user, ...rest }) => {
   const activateUser = () => userUpdate({ ...user, activated: true });
   const deactivateUser = () => userUpdate({ ...user, activated: false });
   const isActionsLoading = userUpdateData.isLoading;
+
+  const queryClient = useQueryClient();
+  const { mutate: userRemove, ...userRemoveData } = useUserRemove({
+    onSuccess: (_, { login }) => {
+      toastSuccess({
+        title: 'Account deleted',
+        description: `Account "${login}" deleted with success`,
+      });
+      queryClient.invalidateQueries('users');
+    },
+    onError: (_, { login }) => {
+      toastError({
+        title: 'Deletion Failed',
+        description: `Fail to remove "${login}" account`,
+      });
+    },
+  });
+  const removeUser = () => userRemove(user);
+  const isRemovalLoading = userRemoveData.isLoading;
+
   return (
     <Menu isLazy placement="left-start" {...rest}>
-      <MenuButton as={ActionsButton} isLoading={isActionsLoading} />
+      <MenuButton
+        as={ActionsButton}
+        isLoading={isActionsLoading || isRemovalLoading}
+      />
       <Portal>
         <MenuList>
           <MenuItem
@@ -121,11 +150,12 @@ const UserActions = ({ user, ...rest }) => {
             </MenuItem>
           )}
           <MenuDivider />
-          <MenuItem
+          <ConfirmMenuItem
             icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
+            onClick={removeUser}
           >
             Delete
-          </MenuItem>
+          </ConfirmMenuItem>
         </MenuList>
       </Portal>
     </Menu>
