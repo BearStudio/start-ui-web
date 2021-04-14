@@ -127,7 +127,7 @@ const UserActions = ({ user, ...rest }) => {
         <MenuList>
           <MenuItem
             as={Link}
-            to={`${url}${user.login}`}
+            to={`${url}/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             Edit
