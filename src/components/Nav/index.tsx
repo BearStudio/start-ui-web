@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import {
   Text,
@@ -21,6 +21,7 @@ import { FiChevronDown } from 'react-icons/fi';
 import { Icon } from '@/components';
 
 const NavContext = React.createContext(null);
+const useNavContext = () => React.useContext(NavContext);
 
 interface NavProps extends StackProps {
   breakpoint?: string;
@@ -34,7 +35,7 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   const isMenu = useBreakpointValue({ base: true, [breakpoint]: false });
   const [active, setActive] = useState(<>Navigation</>);
   return (
-    <NavContext.Provider value={{ active, setActive }}>
+    <NavContext.Provider value={{ active, setActive, isMenu }}>
       <Menu matchWidth {...rest}>
         {!isMenu && <Stack spacing="1">{children}</Stack>}
         {isMenu && (
@@ -68,8 +69,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   isActive = false,
   ...rest
 }) => {
-  const { setActive } = useContext(NavContext);
-  const isMenu = useBreakpointValue({ base: true, lg: false });
+  const { setActive, isMenu } = useNavContext();
   const Item: any = isMenu ? MenuItem : Flex;
 
   const itemContent = useMemo(
@@ -117,7 +117,8 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
 };
 
 export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
-  const isMenu = useBreakpointValue({ base: true, lg: false });
+  const { isMenu } = useNavContext();
+
   if (isMenu) {
     return (
       <MenuGroup title={title} {...rest}>
