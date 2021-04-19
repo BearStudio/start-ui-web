@@ -26,11 +26,11 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     value,
     otherProps,
   } = useField(props);
+  const { required } = props;
   const {
     children,
     label,
     options = [],
-    required,
     helper,
     size = 'md',
     ...rest
