@@ -68,7 +68,9 @@ export const FieldSelect = (props: FieldSelectProps) => {
         value={options?.find((option) => option.value === value) || ''}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
-        onChange={(value) => setValue(value ? value.value : null)}
+        onChange={(fieldValue) =>
+          setValue(fieldValue ? fieldValue.value : null)
+        }
         size={size}
         options={options}
         noOptionsMessage={noOptionsMessage || 'No option'}

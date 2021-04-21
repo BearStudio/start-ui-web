@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-import { Box, useToken } from '@chakra-ui/react';
-import { useTheme, useStyleConfig } from '@chakra-ui/react';
+import { Box, useToken, useTheme, useStyleConfig } from '@chakra-ui/react';
 import ReactSelect, { CommonProps } from 'react-select';
 import AsyncReactSelect from 'react-select/async';
 import AsyncCreatableReactSelect from 'react-select/async-creatable';
@@ -11,8 +10,9 @@ export const Select: React.FC<CommonProps> = (props) => {
   const {
     isAsync,
     isCreatable,
+    isDisabled,
     isError,
-    size = 'sm',
+    size = 'md',
     noOptionsMessage,
     loadingMessage,
     formatCreateLabel,
@@ -45,14 +45,20 @@ export const Select: React.FC<CommonProps> = (props) => {
   ]);
   const [fieldHeight] = useToken('sizes', [stylesFromTheme.field.h]);
 
-  const Element =
-    isAsync && isCreatable
-      ? AsyncCreatableReactSelect
-      : isAsync
-      ? AsyncReactSelect
-      : isCreatable
-      ? CreatableReactSelect
-      : ReactSelect;
+  const getSelectType = () => {
+    if (isAsync && isCreatable) {
+      return AsyncCreatableReactSelect;
+    }
+    if (isAsync) {
+      return AsyncReactSelect;
+    }
+    if (isCreatable) {
+      return CreatableReactSelect;
+    }
+    return ReactSelect;
+  };
+
+  const Element = getSelectType();
 
   let debounceTimeout = useRef<any>();
 
@@ -103,6 +109,11 @@ export const Select: React.FC<CommonProps> = (props) => {
               '&:hover': {
                 borderColor: theme.colors.error[600],
               },
+            }
+          : {}),
+        ...(isDisabled
+          ? {
+              backgroundColor: 'white',
             }
           : {}),
       };
@@ -212,6 +223,7 @@ export const Select: React.FC<CommonProps> = (props) => {
     <Box
       as={Element}
       styles={selectStyle}
+      isDisabled={isDisabled}
       {...(noOptionsMessage
         ? { noOptionsMessage: () => noOptionsMessage }
         : {})}

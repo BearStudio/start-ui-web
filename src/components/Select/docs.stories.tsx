@@ -8,6 +8,14 @@ export default {
   title: 'components/Select',
 };
 
+const decorators = [
+  (Story) => (
+    <Box h="24rem">
+      <Story />
+    </Box>
+  ),
+];
+
 export const Default = () => {
   return (
     <Stack spacing={2}>
@@ -46,13 +54,7 @@ export const Default = () => {
     </Stack>
   );
 };
-Default.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+Default.decorators = decorators;
 
 export const SelectWithDefaultValue = () => {
   return (
@@ -66,13 +68,7 @@ export const SelectWithDefaultValue = () => {
     />
   );
 };
-SelectWithDefaultValue.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+SelectWithDefaultValue.decorators = decorators;
 
 export const SelectWithPlaceholder = () => {
   return (
@@ -82,35 +78,17 @@ export const SelectWithPlaceholder = () => {
     />
   );
 };
-SelectWithPlaceholder.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+SelectWithPlaceholder.decorators = decorators;
 
 export const DisabledSelect = () => {
   return <Select isDisabled />;
 };
-DisabledSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+DisabledSelect.decorators = decorators;
 
 export const IsErrorSelect = () => {
   return <Select isError />;
 };
-IsErrorSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+IsErrorSelect.decorators = decorators;
 
 export const MultiSelect = () => {
   return (
@@ -123,13 +101,7 @@ export const MultiSelect = () => {
     />
   );
 };
-MultiSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+MultiSelect.decorators = decorators;
 
 export const CreatableSelect = () => {
   return (
@@ -143,13 +115,7 @@ export const CreatableSelect = () => {
     />
   );
 };
-CreatableSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+CreatableSelect.decorators = decorators;
 
 export const NotSearchableSelect = () => {
   return (
@@ -162,45 +128,39 @@ export const NotSearchableSelect = () => {
     />
   );
 };
-NotSearchableSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
+NotSearchableSelect.decorators = decorators;
+
+const options = [
+  'red',
+  'blue',
+  'green',
+  'orange',
+  'purple',
+  'lightgreen',
+  'lightblue',
+  'darkgreen',
+  'darkblue',
+  'yellow',
+  'black',
+  'white',
 ];
 
+const handleLoadOptions = async (inputValue) => {
+  // Fake API call
+  return new Promise((resolve) =>
+    setTimeout(
+      () =>
+        resolve(
+          options
+            .filter((option) => option.startsWith(inputValue))
+            .map((option) => ({ label: option, value: option }))
+        ),
+      300
+    )
+  );
+};
+
 export const AsyncSelect = () => {
-  const options = [
-    'red',
-    'blue',
-    'green',
-    'orange',
-    'purple',
-    'lightgreen',
-    'lightblue',
-    'darkgreen',
-    'darkblue',
-    'yellow',
-    'black',
-    'white',
-  ];
-
-  const handleLoadOptions = async (inputValue) => {
-    // Fake API call
-    return await new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve(
-            options
-              .filter((option) => option.startsWith(inputValue))
-              .map((option) => ({ label: option, value: option }))
-          ),
-        300
-      )
-    );
-  };
-
   return (
     <Select
       isAsync
@@ -214,45 +174,9 @@ export const AsyncSelect = () => {
     />
   );
 };
-AsyncSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+AsyncSelect.decorators = decorators;
 
 export const AsyncCreatableSelect = () => {
-  const options = [
-    'red',
-    'blue',
-    'green',
-    'orange',
-    'purple',
-    'lightgreen',
-    'lightblue',
-    'darkgreen',
-    'darkblue',
-    'yellow',
-    'black',
-    'white',
-  ];
-
-  const handleLoadOptions = async (inputValue) => {
-    // Fake API call
-    return await new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve(
-            options
-              .filter((option) => option.startsWith(inputValue))
-              .map((option) => ({ label: option, value: option }))
-          ),
-        300
-      )
-    );
-  };
-
   return (
     <Select
       isAsync
@@ -267,13 +191,7 @@ export const AsyncCreatableSelect = () => {
     />
   );
 };
-AsyncCreatableSelect.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+AsyncCreatableSelect.decorators = decorators;
 
 export const SelectWithSomeDisabledOptions = () => {
   return (
@@ -286,10 +204,4 @@ export const SelectWithSomeDisabledOptions = () => {
     />
   );
 };
-SelectWithSomeDisabledOptions.decorators = [
-  (Story) => (
-    <Box h="24rem">
-      <Story />
-    </Box>
-  ),
-];
+SelectWithSomeDisabledOptions.decorators = decorators;
