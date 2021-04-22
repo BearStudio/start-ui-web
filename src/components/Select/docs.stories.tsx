@@ -16,57 +16,26 @@ const decorators = [
   ),
 ];
 
+const selectOptions = [
+  { value: 1, label: 'Option 1' },
+  { value: 2, label: 'Option 2' },
+  { value: 3, label: 'Option 3' },
+];
+
 export const Default = () => {
   return (
     <Stack spacing={2}>
-      <Select
-        size="xs"
-        options={[
-          { value: 1, label: 'Option 1' },
-          { value: 2, label: 'Option 2' },
-          { value: 3, label: 'Option 3' },
-        ]}
-      />
-      <Select
-        size="sm"
-        options={[
-          { value: 1, label: 'Option 1' },
-          { value: 2, label: 'Option 2' },
-          { value: 3, label: 'Option 3' },
-        ]}
-      />
-      <Select
-        size="md"
-        options={[
-          { value: 1, label: 'Option 1' },
-          { value: 2, label: 'Option 2' },
-          { value: 3, label: 'Option 3' },
-        ]}
-      />
-      <Select
-        size="lg"
-        options={[
-          { value: 1, label: 'Option 1' },
-          { value: 2, label: 'Option 2' },
-          { value: 3, label: 'Option 3' },
-        ]}
-      />
+      <Select size="xs" options={selectOptions} />
+      <Select size="sm" options={selectOptions} />
+      <Select size="md" options={selectOptions} />
+      <Select size="lg" options={selectOptions} />
     </Stack>
   );
 };
 Default.decorators = decorators;
 
 export const SelectWithDefaultValue = () => {
-  return (
-    <Select
-      options={[
-        { value: 1, label: 'Option 1' },
-        { value: 2, label: 'Option 2' },
-        { value: 3, label: 'Option 3' },
-      ]}
-      defaultValue={{ value: 2, label: 'Option 2' }}
-    />
-  );
+  return <Select options={selectOptions} defaultValue={selectOptions[1]} />;
 };
 SelectWithDefaultValue.decorators = decorators;
 
@@ -91,15 +60,7 @@ export const IsErrorSelect = () => {
 IsErrorSelect.decorators = decorators;
 
 export const MultiSelect = () => {
-  return (
-    <Select
-      isMulti
-      options={[
-        { value: 1, label: 'Option 1' },
-        { value: 2, label: 'Option 2' },
-      ]}
-    />
-  );
+  return <Select isMulti options={selectOptions.slice(0, 2)} />;
 };
 MultiSelect.decorators = decorators;
 
@@ -108,25 +69,14 @@ export const CreatableSelect = () => {
     <Select
       isCreatable
       formatCreateLabel={(input) => `Add other option : "${input}"`}
-      options={[
-        { value: 1, label: 'Option 1' },
-        { value: 2, label: 'Option 2' },
-      ]}
+      options={selectOptions.slice(0, 2)}
     />
   );
 };
 CreatableSelect.decorators = decorators;
 
 export const NotSearchableSelect = () => {
-  return (
-    <Select
-      isSearchable={false}
-      options={[
-        { value: 1, label: 'Option 1' },
-        { value: 2, label: 'Option 2' },
-      ]}
-    />
-  );
+  return <Select isSearchable={false} options={selectOptions.slice(0, 2)} />;
 };
 NotSearchableSelect.decorators = decorators;
 
