@@ -34,7 +34,6 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     ref
   ) => {
     const [externalValue, setExternalValue]: any = useControllableState({
-      name: 'SearchInput',
       value,
       defaultValue,
       onChange,
