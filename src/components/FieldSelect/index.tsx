@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { Select } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { Select } from '@/components/Select';
 
 interface Option {
   value: any;
@@ -14,6 +14,9 @@ export interface FieldSelectProps extends FieldProps, FormGroupProps {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   options?: Option[];
+  noOptionsMessage?: string;
+  isClearable?: boolean;
+  isSearchable?: boolean;
 }
 
 export const FieldSelect = (props: FieldSelectProps) => {
@@ -34,6 +37,10 @@ export const FieldSelect = (props: FieldSelectProps) => {
     options = [],
     placeholder,
     helper,
+    noOptionsMessage,
+    isDisabled,
+    isClearable,
+    isSearchable,
     size = 'md',
     ...rest
   } = otherProps;
@@ -58,18 +65,20 @@ export const FieldSelect = (props: FieldSelectProps) => {
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={value || ''}
+        value={options?.find((option) => option.value === value) || ''}
         onBlur={() => setIsTouched(true)}
-        placeholder={placeholder}
-        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder || 'Select...'}
+        onChange={(fieldValue) =>
+          setValue(fieldValue ? fieldValue.value : null)
+        }
         size={size}
-      >
-        {(options || []).map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label || item.value}
-          </option>
-        ))}
-      </Select>
+        options={options}
+        noOptionsMessage={noOptionsMessage || 'No option'}
+        isDisabled={isDisabled}
+        isClearable={isClearable}
+        isSearchable={isSearchable}
+        isError={showError}
+      />
       {children}
     </FormGroup>
   );

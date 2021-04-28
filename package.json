@@ -44,6 +44,7 @@
     "react-icons": "4.2.0",
     "react-query": "3.13.0",
     "react-router-dom": "5.2.0",
+    "react-select": "4.3.0",
     "swagger-cli": "4.0.4",
     "swagger-ui-react": "3.45.1"
   },
