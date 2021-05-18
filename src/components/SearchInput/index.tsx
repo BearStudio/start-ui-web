@@ -8,10 +8,9 @@ import {
   InputRightElement,
   IconButton,
   useControllableState,
+  useMergeRefs,
 } from '@chakra-ui/react';
 import { FiSearch, FiX } from 'react-icons/fi';
-
-import mergeRefs from '@/utils/mergeRefs';
 
 interface SearchInputProps extends Omit<InputProps, 'onChange'> {
   onChange?(value?: string): void;
@@ -39,6 +38,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       onChange,
     });
     const inputRef = useRef<HTMLInputElement>();
+    const refs = useMergeRefs(inputRef, ref);
 
     const [search, setSearch] = useState<string>(externalValue as string);
 
@@ -80,7 +80,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     return (
       <InputGroup {...rest}>
         <Input
-          ref={mergeRefs([inputRef, ref])}
+          ref={refs}
           onChange={handleChange}
           value={search}
           placeholder={placeholder}
