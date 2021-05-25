@@ -11666,6 +11666,11 @@ react-copy-to-clipboard@5.0.3:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
+react-currency-input-field@3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/react-currency-input-field/-/react-currency-input-field-3.4.1.tgz#128e7322b52d093716c2c47f7592903de19e79f4"
+  integrity sha512-2DD0nE+pClg/UkQi/FGBdi/53P+KH06CjifBdH4u3rreGj5MYpOY7ViZewtOEA53yZNfWZ2mjwR12nJAXpp3Qw==
+
 react-day-picker@7.4.10:
   version "7.4.10"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.10.tgz#d3928fa65c04379ad28c76de22aa85374a8361e1"

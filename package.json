@@ -37,6 +37,7 @@
     "i18next": "20.3.0",
     "next": "10.2.0",
     "react": "17.0.2",
+    "react-currency-input-field": "3.4.1",
     "react-day-picker": "7.4.10",
     "react-dom": "17.0.2",
     "react-error-boundary": "3.1.3",
