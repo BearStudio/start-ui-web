@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '@chakra-ui/react';
+import { Stack, Button } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 
 import { FieldInput } from './index';
@@ -10,17 +10,26 @@ export default {
 };
 
 export const Default = () => (
-  <Formiz>
+  <Formiz onSubmit={console.log} autoForm>
     <Stack spacing={6}>
       <FieldInput
-        name="username"
+        name="demo-username"
         label="Username"
         placeholder="Placeholder"
         helper="This is an helper"
         required="Username is required"
       />
       <FieldInput
-        name="password"
+        name="demo-currency"
+        type="currency"
+        label="Currency"
+        placeholder={100}
+        helper="This is an helper"
+        required="Currency is required"
+        currency="EUR"
+      />
+      <FieldInput
+        name="demo-password"
         type="password"
         label="Password"
         placeholder="Placeholder"
@@ -43,6 +52,7 @@ export const Default = () => (
         helper="This is an helper"
         isDisabled
       />
+      <Button type="submit">Submit</Button>
     </Stack>
   </Formiz>
 );

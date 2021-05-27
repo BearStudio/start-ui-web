@@ -12,10 +12,14 @@ import { FieldProps, useField } from '@formiz/core';
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
-export interface FieldInputProps extends FieldProps, FormGroupProps {
+export interface FieldInputProps
+  extends FieldProps,
+    Omit<FormGroupProps, 'placeholder'>,
+    Pick<InputCurrencyProps, 'currency' | 'locale'> {
   type?: string;
-  placeholder?: string;
+  placeholder?: string | number;
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -38,6 +42,8 @@ export const FieldInput = (props: FieldInputProps) => {
     placeholder,
     helper,
     size = 'md',
+    currency,
+    locale,
     ...rest
   } = otherProps;
   const { required } = props;
@@ -62,16 +68,27 @@ export const FieldInput = (props: FieldInputProps) => {
   return (
     <FormGroup {...formGroupProps}>
       <InputGroup size={size}>
-        <Input
-          type={showPassword ? 'text' : type || 'text'}
-          id={id}
-          value={value ?? ''}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={() => setIsTouched(true)}
-          aria-invalid={showError}
-          aria-describedby={!isValid ? `${id}-error` : null}
-          placeholder={placeholder}
-        />
+        {type === 'currency' ? (
+          <InputCurrency
+            id={id}
+            value={value ?? null}
+            onChange={setValue}
+            onBlur={() => setIsTouched(true)}
+            placeholder={Number(placeholder)}
+            currency={currency}
+            locale={locale}
+          />
+        ) : (
+          <Input
+            type={showPassword ? 'text' : type || 'text'}
+            id={id}
+            value={value ?? ''}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={() => setIsTouched(true)}
+            placeholder={String(placeholder)}
+          />
+        )}
+
         {type === 'password' && (
           <InputLeftElement>
             <IconButton
@@ -85,6 +102,7 @@ export const FieldInput = (props: FieldInputProps) => {
             />
           </InputLeftElement>
         )}
+
         {(isTouched || isSubmitted) && isValidating && (
           <InputRightElement>
             <Spinner size="sm" flex="none" />

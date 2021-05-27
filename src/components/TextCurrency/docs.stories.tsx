@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack, Code } from '@chakra-ui/layout';
+import { Stack, Code } from '@chakra-ui/react';
 
 import { TextCurrency } from '.';
 

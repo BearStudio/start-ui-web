@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stack, Code } from '@chakra-ui/layout';
+import { Stack, Code } from '@chakra-ui/react';
 
 import { InputCurrency } from '.';
 
@@ -13,6 +13,7 @@ export const Default = () => {
   return (
     <Stack>
       <InputCurrency value={value} onChange={setValue} />
+      <InputCurrency value={value} onChange={setValue} currency={null} />
       <Code>{value}</Code>
     </Stack>
   );
@@ -57,3 +58,19 @@ export const LocaleFR = () => {
     </Stack>
   );
 };
+
+export const defaultValue = () => (
+  <Stack>
+    <InputCurrency defaultValue={10} />
+    <InputCurrency defaultValue={10} currency="USD" />
+    <InputCurrency defaultValue={10} currency={null} />
+  </Stack>
+);
+
+export const Placeholder = () => (
+  <Stack>
+    <InputCurrency placeholder={10} />
+    <InputCurrency placeholder={10} currency="USD" />
+    <InputCurrency placeholder="Text placeholder" />
+  </Stack>
+);

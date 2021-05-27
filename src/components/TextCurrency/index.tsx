@@ -4,7 +4,7 @@ import { forwardRef, TextProps, Text } from '@chakra-ui/react';
 import { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 
-interface TextCurrencyProps extends TextProps {
+export interface TextCurrencyProps extends TextProps {
   value: number;
   locale?: string;
   currency?: string;
