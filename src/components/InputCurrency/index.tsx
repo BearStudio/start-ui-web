@@ -49,6 +49,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
     const config = {
       intlConfig: { locale: locale || i18n.language, currency },
       decimalScale: decimals,
+      disableAbbreviations: true,
     };
 
     return (
