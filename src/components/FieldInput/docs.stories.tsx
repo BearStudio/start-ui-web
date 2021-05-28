@@ -20,15 +20,6 @@ export const Default = () => (
         required="Username is required"
       />
       <FieldInput
-        name="demo-currency"
-        type="currency"
-        label="Currency"
-        placeholder={100}
-        helper="This is an helper"
-        required="Currency is required"
-        currency="EUR"
-      />
-      <FieldInput
         name="demo-password"
         type="password"
         label="Password"
