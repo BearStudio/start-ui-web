@@ -9,7 +9,10 @@ import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 export interface FieldCurrencyProps
   extends Omit<FieldProps, 'value'>,
     Omit<FormGroupProps, 'placeholder'>,
-    Pick<InputCurrencyProps, 'currency' | 'locale' | 'placeholder'> {
+    Pick<
+      InputCurrencyProps,
+      'currency' | 'locale' | 'decimals' | 'placeholder'
+    > {
   size?: 'sm' | 'md' | 'lg';
   value?: number;
 }
@@ -34,6 +37,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
     size = 'md',
     currency,
     locale,
+    decimals,
     ...rest
   } = otherProps;
   const { required } = props;
@@ -65,6 +69,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
           placeholder={placeholder}
           currency={currency}
           locale={locale}
+          decimals={decimals}
         />
         {(isTouched || isSubmitted) && isValidating && (
           <InputRightElement>

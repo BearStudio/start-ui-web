@@ -24,7 +24,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
       currency = 'EUR',
       decimals = 2,
       groupSpace = 2,
-      onChange,
+      onChange = () => undefined,
       placeholder,
       ...rest
     },
@@ -61,9 +61,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
         value={internalValue}
         onValueChange={(val: string) => {
           setInternalValue(val);
-          if (onChange) {
-            onChange(val ? Number(val?.replace(',', '.')) : null);
-          }
+          onChange(val ? Number(val?.replace(',', '.')) : null);
         }}
         placeholder={
           typeof placeholder === 'number'

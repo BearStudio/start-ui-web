@@ -37,6 +37,14 @@ export const Default = () => (
         currency="EUR"
         locale="fr"
       />
+      <FieldCurrency
+        name="demo-currency-decimals-0"
+        label="0 Decimals"
+        placeholder={100}
+        decimals={0}
+        helper="This is an helper"
+        required="Currency is required"
+      />
       <Button type="submit">Submit</Button>
     </Stack>
   </Formiz>
