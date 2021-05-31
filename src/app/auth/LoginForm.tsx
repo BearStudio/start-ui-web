@@ -7,7 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useLogin } from '@/app/auth/auth.service';
 import { FieldInput, useToastError } from '@/components';
 
-export const LoginForm = ({ onSuccess = () => {}, ...rest }) => {
+export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 

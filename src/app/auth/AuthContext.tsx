@@ -13,7 +13,7 @@ const AuthContext = React.createContext<AuthContextValue>(null);
 
 const updateToken = (newToken) => {
   if (!isBrowser) {
-    return () => {};
+    return () => undefined;
   }
 
   if (!newToken) {

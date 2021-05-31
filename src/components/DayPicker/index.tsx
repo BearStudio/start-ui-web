@@ -45,7 +45,7 @@ interface DayPickerProps extends BoxProps {
 export const DayPicker: FC<DayPickerProps> = ({
   placeholder = FORMAT,
   value = null,
-  onChange = () => {},
+  onChange = () => undefined,
   inputProps = {},
   dayPickerProps = {},
   ...rest
