@@ -1,9 +1,9 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import { LayoutContext } from '@/app/layout';
+import { useLayoutContext } from '@/app/layout';
 
 export const useFocusMode = (enabled = true) => {
-  const ctx = useContext(LayoutContext);
+  const ctx = useLayoutContext();
   const { setIsFocusMode } = ctx || {};
 
   useEffect(() => {

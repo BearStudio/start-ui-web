@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import {
   Drawer,
@@ -9,13 +9,18 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 
-import { LayoutContext, MainMenu } from '@/app/layout';
+import { MainMenu, useLayoutContext } from '@/app/layout';
 import { Logo } from '@/components';
 
 export const NavDrawer = ({ ...rest }) => {
-  const { navIsOpen, navOnClose } = useContext(LayoutContext);
+  const { navIsOpen, navOnClose } = useLayoutContext();
   return (
-    <Drawer isOpen={navIsOpen} placement="left" onClose={navOnClose} {...rest}>
+    <Drawer
+      isOpen={navIsOpen}
+      placement="left"
+      onClose={() => navOnClose?.()}
+      {...rest}
+    >
       <DrawerOverlay>
         <DrawerContent
           bg="gray.800"
