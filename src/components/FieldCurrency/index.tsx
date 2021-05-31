@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  Input,
-  InputGroup,
-  InputProps,
-  InputLeftElement,
-  InputRightElement,
-  Spinner,
-  IconButton,
-} from '@chakra-ui/react';
+import { InputGroup, InputRightElement, Spinner } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
-import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
-export interface FieldInputProps
-  extends FieldProps,
+export interface FieldCurrencyProps
+  extends Omit<FieldProps, 'value'>,
     Omit<FormGroupProps, 'placeholder'>,
-    Pick<InputProps, 'type' | 'placeholder'> {
+    Pick<
+      InputCurrencyProps,
+      'currency' | 'locale' | 'decimals' | 'placeholder'
+    > {
   size?: 'sm' | 'md' | 'lg';
+  value?: number;
 }
 
-export const FieldInput = (props: FieldInputProps) => {
+export const FieldCurrency = (props: FieldCurrencyProps) => {
   const {
     errorMessage,
     id,
@@ -36,15 +32,16 @@ export const FieldInput = (props: FieldInputProps) => {
   const {
     children,
     label,
-    type,
     placeholder,
     helper,
     size = 'md',
+    currency,
+    locale,
+    decimals,
     ...rest
   } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
   useEffect(() => {
@@ -64,29 +61,16 @@ export const FieldInput = (props: FieldInputProps) => {
   return (
     <FormGroup {...formGroupProps}>
       <InputGroup size={size}>
-        <Input
-          type={showPassword ? 'text' : type || 'text'}
+        <InputCurrency
           id={id}
-          value={value ?? ''}
-          onChange={(e) => setValue(e.target.value)}
+          value={value ?? null}
+          onChange={setValue}
           onBlur={() => setIsTouched(true)}
-          placeholder={String(placeholder)}
+          placeholder={placeholder}
+          currency={currency}
+          locale={locale}
+          decimals={decimals}
         />
-
-        {type === 'password' && (
-          <InputLeftElement>
-            <IconButton
-              onClick={() => setShowPassword((x) => !x)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-              display="flex"
-              size="xs"
-              fontSize="lg"
-              icon={showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}
-              variant="unstyled"
-            />
-          </InputLeftElement>
-        )}
-
         {(isTouched || isSubmitted) && isValidating && (
           <InputRightElement>
             <Spinner size="sm" flex="none" />

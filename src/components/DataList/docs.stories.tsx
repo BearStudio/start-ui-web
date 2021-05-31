@@ -315,7 +315,7 @@ export const Complete = () => {
       <DataListFooter>
         <Pagination
           isLoadingPage={false}
-          setPage={() => {}}
+          setPage={() => undefined}
           page={1}
           pageSize={10}
           totalItems={89}

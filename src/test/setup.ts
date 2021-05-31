@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import mediaQuery from 'css-mediaquery';
 
-window.scrollTo = () => {};
+window.scrollTo = () => undefined;
 
 global.matchMedia =
   global.matchMedia ||

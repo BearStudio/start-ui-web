@@ -1,5 +1,3 @@
-⚠️ Work in progress repository
-
 # Start UI
 
 Opinionated UI starter with
@@ -10,11 +8,15 @@ Opinionated UI starter with
 - ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
 - ⚛️ [React Query](https://react-query.tanstack.com/)
-- ↔ [Axios](https://github.com/axios/axios)
 - 🐜 [Formiz](https://formiz-react.com/)
 - 💥 [React Error Boundary](https://github.com/bvaughn/react-error-boundary)
 - ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
 - 🌍 [React i18next](https://react.i18next.com/)
+- 🔽 [React Select](https://react-select.com/)
+- 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
+- ↔ [Axios](https://github.com/axios/axios)
+- 📅 [Day.js](https://day.js.org/)
+- 🏜 [MirageJS](https://miragejs.com/)
 
 👉 [Technology Choices](#technology-choices)
 

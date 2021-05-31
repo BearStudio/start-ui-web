@@ -49,7 +49,7 @@ interface PageTopBarProps extends FlexProps {
 
 export const PageTopBar = ({
   children,
-  onBack = () => {},
+  onBack = () => undefined,
   showBack = false,
   ...rest
 }: PageTopBarProps) => {
