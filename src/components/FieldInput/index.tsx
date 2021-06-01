@@ -70,7 +70,7 @@ export const FieldInput = (props: FieldInputProps) => {
           value={value ?? ''}
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => setIsTouched(true)}
-          placeholder={String(placeholder)}
+          placeholder={placeholder ? String(placeholder) : ''}
         />
 
         {type === 'password' && (
