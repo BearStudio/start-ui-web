@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import {
   Box,
@@ -11,13 +11,12 @@ import {
 import { FiMenu } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { AccountMenu, LayoutContext, MainMenu } from '@/app/layout';
+import { AccountMenu, MainMenu, useLayoutContext } from '@/app/layout';
+import { NavDrawer } from '@/app/layout/NavDrawer';
 import { Logo } from '@/components';
 
-import { NavDrawer } from '../NavDrawer';
-
 const MenuButton = (props) => {
-  const { navOnOpen } = useContext(LayoutContext);
+  const { navOnOpen } = useLayoutContext();
   return (
     <IconButton
       aria-label="Navigation"

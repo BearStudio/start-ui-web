@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { Stack, Box } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/account.service';
-import { LayoutContext } from '@/app/layout';
+import { useLayoutContext } from '@/app/layout';
 
 const MainMenuItem = ({ to, ...rest }: any) => {
-  const { navOnClose } = useContext(LayoutContext);
+  const { navOnClose } = useLayoutContext();
   const { pathname } = useLocation();
   const isActive = pathname.startsWith(to);
   return (
