@@ -240,15 +240,12 @@ export const Complete = () => {
             <HStack maxW="100%">
               <Avatar size="sm" name={item.name} mx="2" />
               <Box minW="0">
-                <Text
-                  isTruncated
-                  maxW="full"
-                  fontWeight="bold"
-                  {...(item.status !== 'Inactive'
-                    ? { as: LinkOverlay, href: '#' }
-                    : {})}
-                >
-                  {item.name}
+                <Text isTruncated maxW="full" fontWeight="bold">
+                  {item.status !== 'Inactive' ? (
+                    <LinkOverlay href="#">{item.name}</LinkOverlay>
+                  ) : (
+                    item.name
+                  )}
                 </Text>
                 <Text isTruncated maxW="full" fontSize="sm" color="gray.600">
                   {item.email}
