@@ -144,8 +144,8 @@ practice to do so to avoid bugs in the future.
 
 ### React Query
 
-[React Query](https://github.com/tannerlinsley/react-query)  is a powerful tool
-to do derformant and powerful data synchronization for React. No need of Redux
+[React Query](https://github.com/tannerlinsley/react-query) is a powerful tool
+to do efficient data synchronization for React. No need of Redux
 or another global state manager anymore. Usable with [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API),
 [`axios`](https://github.com/axios/axios), or [`graphql-request`](https://github.com/prisma-labs/graphql-request),
 React Query will do the work and is agnostic of the method you will use.
