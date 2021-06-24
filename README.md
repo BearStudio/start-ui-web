@@ -1,6 +1,10 @@
-# Start UI
+<h1 align="center">📦 Start UI</h1>
 
-Opinionated UI starter with
+Start UI is a opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.  
+It represents our team's up-to-date stack that we use when creating web apps for our clients.
+
+## Technology
+
 - 🟦 [TypeScript](https://www.typescriptlang.org/)
 - ⚛️ [React](https://reactjs.org/)
 - ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/advanced-features/static-html-export))
