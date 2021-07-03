@@ -7,6 +7,7 @@ export * from './FieldCheckboxes';
 export * from './FieldRadios';
 export * from './FieldInput';
 export * from './FieldSelect';
+export * from './FieldTextarea';
 export * from './FormGroup';
 export * from './Icons';
 export * from './Logo';
