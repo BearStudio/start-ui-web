@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '@chakra-ui/react';
+import { Stack, useColorModeValue } from '@chakra-ui/react';
 import { isEmail } from '@formiz/validations';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
@@ -11,11 +11,12 @@ const AUTHORITIES = {
 };
 
 export const UserForm = () => {
+  const bgColor = useColorModeValue('white', 'gray.900');
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
   return (
     <Stack
       direction="column"
-      bg="white"
+      bg={bgColor}
       p="6"
       borderRadius="lg"
       spacing="6"

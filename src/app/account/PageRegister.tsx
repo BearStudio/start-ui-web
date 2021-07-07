@@ -11,6 +11,7 @@ import {
   Heading,
   Stack,
   ScaleFade,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import {
@@ -25,6 +26,8 @@ import { useCreateAccount } from '@/app/account/account.service';
 import { FieldInput, SlideIn, useToastError } from '@/components';
 
 export const PageRegister = () => {
+  const bgColor = useColorModeValue('white', 'blackAlpha.400');
+  const linkColor = useColorModeValue('brand.500', 'brand.300');
   const form = useForm();
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
@@ -76,10 +79,13 @@ export const PageRegister = () => {
             </AlertDescription>
           </Alert>
           <Center mt="8">
-            <Button as={RouterLink} to="/login" variant="link">
-              <Box as="strong" color="brand.500" ml="2">
-                Go to Login
-              </Box>
+            <Button
+              as={RouterLink}
+              to="/login"
+              variant="link"
+              color={linkColor}
+            >
+              Go to Login
             </Button>
           </Center>
         </ScaleFade>
@@ -96,7 +102,7 @@ export const PageRegister = () => {
           onValidSubmit={createUser}
           connect={form}
         >
-          <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+          <Box p="6" bg={bgColor} borderRadius="md" boxShadow="md">
             <Heading size="lg" mb="4">
               Register
             </Heading>
@@ -174,7 +180,7 @@ export const PageRegister = () => {
           <Center mt="8">
             <Button as={RouterLink} to="/login" variant="link">
               Already have an account?{' '}
-              <Box as="strong" color="brand.500" ml="2">
+              <Box as="strong" color={linkColor} ml="2">
                 Login
               </Box>
             </Button>

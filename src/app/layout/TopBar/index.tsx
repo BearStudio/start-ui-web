@@ -7,6 +7,7 @@ import {
   IconButton,
   useTheme,
   useBreakpointValue,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
@@ -32,6 +33,7 @@ const MenuButton = (props) => {
 
 export const TopBar = () => {
   const theme = useTheme();
+  const bgColor = useColorModeValue('gray.800', 'gray.900');
   const showDrawer = useBreakpointValue({
     base: true,
     [theme.layout.breakpoints.desktop]: false,
@@ -45,7 +47,7 @@ export const TopBar = () => {
           top="0"
           left="0"
           right="0"
-          bg="gray.800"
+          bg={bgColor}
           color="gray.50"
           align="center"
           pt="safe-top"

@@ -15,6 +15,7 @@ import {
   MenuGroup,
   ChakraComponent,
   Portal,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -69,6 +70,11 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   isActive = false,
   ...rest
 }) => {
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const textColorActive = useColorModeValue('gray.700', 'gray.100');
+  const iconColorActive = useColorModeValue('brand.500', 'brand.300');
+  const bgColorActive = useColorModeValue('white', 'gray.900');
+
   const { setActive, isMenu } = useNavContext();
   const Item: any = isMenu ? MenuItem : Flex;
 
@@ -81,7 +87,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
             mt="0.05rem"
             mr="2"
             fontSize="lg"
-            color={isActive ? 'brand.500' : 'gray.400'}
+            color={isActive ? iconColorActive : 'gray.400'}
           />
         )}
         <Text as="span" noOfLines={isMenu ? 1 : 2}>
@@ -89,7 +95,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
         </Text>
       </Flex>
     ),
-    [icon, children, isActive, isMenu]
+    [icon, children, isActive, isMenu, iconColorActive]
   );
 
   useEffect(() => {
@@ -104,11 +110,15 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       py="2"
       borderRadius={isMenu ? undefined : 'md'}
       transition="0.2s"
-      color={isActive ? 'gray.700' : 'gray.600'}
+      color={isActive ? textColorActive : textColor}
       fontSize="sm"
       fontWeight="bold"
-      bg={isActive ? 'white' : undefined}
-      _hover={!isActive && !isMenu ? { bg: 'white', color: 'gray.700' } : {}}
+      bg={isActive ? bgColorActive : undefined}
+      _hover={
+        !isActive && !isMenu
+          ? { bg: bgColorActive, color: textColorActive }
+          : {}
+      }
       {...rest}
     >
       {itemContent}
@@ -117,6 +127,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
 };
 
 export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
+  const textColor = useColorModeValue('gray.500', 'gray.300');
   const { isMenu } = useNavContext();
 
   if (isMenu) {
@@ -131,7 +142,7 @@ export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
       <Flex
         fontSize="xs"
         fontWeight="bold"
-        color="gray.500"
+        color={textColor}
         px="3"
         pt="6"
         pb="2"

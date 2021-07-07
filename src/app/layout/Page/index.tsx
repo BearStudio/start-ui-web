@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -53,6 +54,7 @@ export const PageTopBar = ({
   showBack = false,
   ...rest
 }: PageTopBarProps) => {
+  const bgColor = useColorModeValue('white', 'gray.900');
   return (
     <Flex
       zIndex="2"
@@ -60,7 +62,7 @@ export const PageTopBar = ({
       pt="4"
       pb="4"
       boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
-      bg="white"
+      bg={bgColor}
       {...rest}
     >
       <Box w="full" h="0" pb="safe-top" />
@@ -114,6 +116,7 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
 };
 
 export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
+  const bgColor = useColorModeValue('white', 'gray.900');
   const bottomBarRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
@@ -130,7 +133,7 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
         direction="column"
         mt="auto"
         position="fixed"
-        bg="white"
+        bg={bgColor}
         bottom="0"
         left="0"
         right="0"

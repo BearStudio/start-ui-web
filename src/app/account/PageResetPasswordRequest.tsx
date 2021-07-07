@@ -10,6 +10,7 @@ import {
   Flex,
   Heading,
   ScaleFade,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
@@ -20,6 +21,8 @@ import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, SlideIn, useToastError } from '@/components';
 
 export const PageResetPasswordRequest = () => {
+  const bgColor = useColorModeValue('white', 'blackAlpha.400');
+  const linkColor = useColorModeValue('brand.500', 'brand.300');
   const resetPasswordInitForm = useForm();
 
   const toastError = useToastError();
@@ -72,10 +75,13 @@ export const PageResetPasswordRequest = () => {
             </AlertDescription>
           </Alert>
           <Center mt="8">
-            <Button as={RouterLink} to="/login" variant="link">
-              <Box as="strong" color="brand.500" ml="2">
-                Go to Login
-              </Box>
+            <Button
+              as={RouterLink}
+              to="/login"
+              variant="link"
+              color={linkColor}
+            >
+              Go to Login
             </Button>
           </Center>
         </ScaleFade>
@@ -86,7 +92,7 @@ export const PageResetPasswordRequest = () => {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
-        <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+        <Box p="6" bg={bgColor} borderRadius="md" boxShadow="md">
           <Heading size="lg">Reset password</Heading>
           <Formiz
             id="reset-password-init-form"

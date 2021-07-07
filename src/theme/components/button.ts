@@ -1,3 +1,5 @@
+import { mode, transparentize } from '@chakra-ui/theme-tools';
+
 const customVariant = ({
   bg,
   bgHover = bg,
@@ -26,13 +28,14 @@ const customVariant = ({
 export default {
   variants: {
     // Custom variants
-    '@primary': customVariant({
-      bg: 'brand.500',
-      bgHover: 'brand.600',
-      bgActive: 'brand.700',
-      color: 'white',
-      boxShadowFocus: 'outline-brand',
-    }),
+    '@primary': (props) =>
+      customVariant({
+        bg: mode('brand.500', 'brand.300')(props),
+        bgHover: mode('brand.600', 'brand.400')(props),
+        bgActive: mode('brand.700', 'brand.500')(props),
+        color: mode('white', 'brand.900')(props),
+        boxShadowFocus: 'outline-brand',
+      }),
     '@secondary': customVariant({
       bg: 'brand.50',
       bgHover: 'brand.100',
@@ -59,17 +62,22 @@ export default {
     }),
 
     // Default variants
-    solid: ({ colorScheme }) => ({
-      bg: colorScheme === 'gray' ? `${colorScheme}.100` : `${colorScheme}.600`,
+    solid: (props) => ({
+      bg:
+        props.colorScheme === 'gray'
+          ? mode('gray.100', 'whiteAlpha.100')(props)
+          : `${props.colorScheme}.600`,
       _hover: {
         bg:
-          colorScheme === 'gray' ? `${colorScheme}.200` : `${colorScheme}.700`,
+          props.colorScheme === 'gray'
+            ? mode('gray.200', 'whiteAlpha.200')(props)
+            : `${props.colorScheme}.700`,
       },
     }),
-    ghost: ({ colorScheme }) => ({
-      bg: `${colorScheme}.50`,
+    ghost: (props) => ({
+      bg: transparentize(`${props.colorScheme}.50`, 0.05)(props.theme),
       _hover: {
-        bg: `${colorScheme}.100`,
+        bg: transparentize(`${props.colorScheme}.50`, 0.15)(props.theme),
       },
     }),
   },

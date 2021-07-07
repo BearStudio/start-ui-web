@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Flex, Button, Heading, Stack } from '@chakra-ui/react';
+import {
+  Flex,
+  Button,
+  Heading,
+  Stack,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from 'react-query';
@@ -16,6 +22,7 @@ import {
 } from '@/components';
 
 export const PageProfile = () => {
+  const bgColor = useColorModeValue('white', 'blackAlpha.400');
   const { account } = useAccount();
   const generalInformationForm = useForm();
   const queryClient = useQueryClient();
@@ -66,7 +73,7 @@ export const PageProfile = () => {
             <form noValidate onSubmit={generalInformationForm.submit}>
               <Stack
                 direction="column"
-                bg="white"
+                bg={bgColor}
                 p="6"
                 borderRadius="lg"
                 spacing="6"

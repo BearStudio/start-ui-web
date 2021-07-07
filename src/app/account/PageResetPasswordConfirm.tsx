@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useHistory } from 'react-router-dom';
@@ -15,6 +21,7 @@ import {
 } from '@/components';
 
 export const PageResetPasswordConfirm = () => {
+  const bgColor = useColorModeValue('white', 'blackAlpha.400');
   const { searchParams } = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
@@ -53,7 +60,7 @@ export const PageResetPasswordConfirm = () => {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
-        <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+        <Box p="6" bg={bgColor} borderRadius="md" boxShadow="md">
           <Heading size="lg">Reset password</Heading>
           <Formiz
             id="reset-password-finish-form"
