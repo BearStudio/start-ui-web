@@ -21,7 +21,7 @@ export const Color = ({ children, ...rest }) => (
 );
 
 export const Colors = ({ colorScheme = 'gray', ...rest }) => (
-  <HStack spacing="0" overflow="hidden" boxShadow="lg" bg="white" color={`${colorScheme}.700`} borderRadius="md" {...rest}>
+  <HStack spacing="0" overflow="hidden" boxShadow="lg" color={`${colorScheme}.700`} borderRadius="md" {...rest}>
     <Color bg={`${colorScheme}.50`}>50</Color>
     <Color bg={`${colorScheme}.100`}>100</Color>
     <Color bg={`${colorScheme}.200`}>200</Color>
