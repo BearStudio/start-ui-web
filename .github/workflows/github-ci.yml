@@ -1,0 +1,44 @@
+name: Starter UI
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+
+jobs:
+    build-and-test:
+        name: Build and Test
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Cache node modules
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-node-modules
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-build-${{ env.cache-name }}-
+                  ${{ runner.os }}-build-
+                  ${{ runner.os }}-
+
+            - name: Install local dependencies
+              run: yarn install
+
+            - name: Check format code EsLint
+              run: yarn eslint .
+
+            - name: Check types
+              run: yarn tsc --noEmit
+
+            - name: Run unit tests
+              run: yarn test
+
+            - name: Building
+              run: yarn build
+
+
