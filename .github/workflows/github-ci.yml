@@ -36,7 +36,7 @@ jobs:
               run: yarn tsc --noEmit
 
             - name: Run unit tests
-              run: yarn test
+              run: yarn jest --roots src
 
             - name: Building
               run: yarn build
