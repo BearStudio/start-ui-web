@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/Providers';
+import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';
 
 export const parameters = {
@@ -19,10 +20,13 @@ export const parameters = {
     current: 'dark',
     dark: {
       ...themes.dark,
-      brandImage: logo,
+      brandImage: logoReversed,
+      brandTitle: 'Start UI',
     },
     light: {
       ...themes.light,
+      brandImage: logo,
+      brandTitle: 'Start UI',
     },
   },
   layout: 'fullscreen',
