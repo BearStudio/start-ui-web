@@ -12,7 +12,6 @@ import {
   Flex,
   Text,
   useClipboard,
-  useColorModeValue,
   useColorMode,
 } from '@chakra-ui/react';
 import {
@@ -28,10 +27,10 @@ import { Link, useHistory } from 'react-router-dom';
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components';
+import { useDarkMode } from '@/utils/darkMode';
 
 const AppVersion = ({ ...rest }) => {
-  const bgColorHover = useColorModeValue('gray.50', 'gray.800');
-  const textColor = useColorModeValue('gray.400', 'gray.200');
+  const { colorModeValue } = useDarkMode();
   const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
 
   if (!appBuild?.version) {
@@ -52,10 +51,10 @@ const AppVersion = ({ ...rest }) => {
         my="-2"
         fontSize="0.7rem"
         fontWeight="medium"
-        color={textColor}
+        color={colorModeValue('gray.400', 'gray.200')}
         outline="none"
-        _hover={{ bg: bgColorHover }}
-        _focus={{ bg: bgColorHover }}
+        _hover={{ bg: colorModeValue('gray.50', 'gray.800') }}
+        _focus={{ bg: colorModeValue('gray.50', 'gray.800') }}
         onClick={onCopy}
         {...rest}
       >
@@ -70,7 +69,7 @@ const AppVersion = ({ ...rest }) => {
           py="2"
           px="3"
           fontWeight="bold"
-          bg={bgColorHover}
+          bg={colorModeValue('gray.50', 'gray.800')}
           color={hasCopied ? 'success.500' : undefined}
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
@@ -87,7 +86,7 @@ const AppVersion = ({ ...rest }) => {
 };
 
 export const AccountMenu = ({ ...rest }) => {
-  const textColor = useColorModeValue('gray.700', 'white');
+  const { colorModeValue } = useDarkMode();
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
   const history = useHistory();
@@ -99,7 +98,11 @@ export const AccountMenu = ({ ...rest }) => {
           {isLoading && <Spinner size="xs" />}
         </Avatar>
       </MenuButton>
-      <MenuList color={textColor} maxW="12rem" overflow="hidden">
+      <MenuList
+        color={colorModeValue('gray.400', 'gray.200')}
+        maxW="12rem"
+        overflow="hidden"
+      >
         <MenuGroup title={account?.email}>
           <MenuItem
             as={Link}

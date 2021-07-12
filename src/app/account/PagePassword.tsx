@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  Button,
-  Flex,
-  Heading,
-  Stack,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 
@@ -14,9 +8,10 @@ import { AccountNav } from '@/app/account/AccountNav';
 import { useUpdatePassword } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
+import { useDarkMode } from '@/utils/darkMode';
 
 export const PagePassword = () => {
-  const bgColor = useColorModeValue('white', 'blackAlpha.400');
+  const { colorModeValue } = useDarkMode();
   const changePasswordForm = useForm();
 
   const toastSuccess = useToastSuccess();
@@ -67,7 +62,7 @@ export const PagePassword = () => {
           <form noValidate onSubmit={changePasswordForm.submit}>
             <Stack
               direction="column"
-              bg={bgColor}
+              bg={colorModeValue('white', 'blackAlpha.400')}
               p="6"
               borderRadius="lg"
               spacing="6"

@@ -12,8 +12,9 @@ import {
   FlexProps,
   AccordionProps,
   ChakraComponent,
-  useColorModeValue,
 } from '@chakra-ui/react';
+
+import { useDarkMode } from '@/utils/darkMode';
 
 export const DataListContext = React.createContext(null);
 export const DataListHeaderContext = React.createContext(null);
@@ -128,8 +129,7 @@ export const DataListRow: FC<DataListRowProps> = ({
   isDisabled = false,
   ...rest
 }) => {
-  const bgColorHover = useColorModeValue('gray.50', 'blackAlpha.200');
-  const borderColor = useColorModeValue('gray.100', 'gray.900');
+  const { colorModeValue } = useDarkMode();
   const { isHover } = useContext(DataListContext);
   const showRow = useBreakpointValue(
     typeof isVisible === 'object' ? isVisible : { base: isVisible }
@@ -154,9 +154,11 @@ export const DataListRow: FC<DataListRowProps> = ({
       d={!showRow ? 'none' : null}
       position="relative"
       borderBottom="1px solid"
-      borderBottomColor={borderColor}
+      borderBottomColor={colorModeValue('gray.100', 'gray.900')}
       transition="0.2s"
-      _hover={isHover ? { bg: bgColorHover } : null}
+      _hover={
+        isHover ? { bg: colorModeValue('gray.50', 'blackAlpha.200') } : null
+      }
       {...disabledProps}
       {...rest}
     />
@@ -166,11 +168,11 @@ export const DataListRow: FC<DataListRowProps> = ({
 export interface DataListHeaderProps extends DataListRowProps {}
 
 export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
-  const bgColor = useColorModeValue('gray.100', 'blackAlpha.400');
+  const { colorModeValue } = useDarkMode();
   return (
     <DataListHeaderContext.Provider value={true}>
       <DataListRow
-        bg={bgColor}
+        bg={colorModeValue('gray.100', 'blackAlpha.400')}
         fontSize="sm"
         fontWeight="bold"
         color="gray.600"
@@ -185,17 +187,16 @@ export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
 export interface DataListFooterProps extends DataListRowProps {}
 
 export const DataListFooter: FC<DataListFooterProps> = ({ ...rest }) => {
-  const bgColor = useColorModeValue('white', 'blackAlpha.50');
-  const borderColor = useColorModeValue('gray.100', 'gray.900');
+  const { colorModeValue } = useDarkMode();
   return (
     <Box mt="auto">
       <Flex
-        bg={bgColor}
+        bg={colorModeValue('white', 'blackAlpha.50')}
         fontSize="sm"
         color="gray.600"
         mt="-1px"
         borderTop="1px solid"
-        borderTopColor={borderColor}
+        borderTopColor={colorModeValue('gray.100', 'gray.900')}
         p="2"
         align="center"
         {...rest}
@@ -214,7 +215,7 @@ export const DataList: FC<DataListProps> = ({
   isHover = true,
   ...rest
 }) => {
-  const bgColor = useColorModeValue('white', 'blackAlpha.400');
+  const { colorModeValue } = useDarkMode();
   const [columns, setColumns] = useState({});
   return (
     <DataListContext.Provider
@@ -227,7 +228,7 @@ export const DataList: FC<DataListProps> = ({
       <Accordion
         display="flex"
         flexDirection="column"
-        bg={bgColor}
+        bg={colorModeValue('white', 'blackAlpha.400')}
         position="relative"
         boxShadow="md"
         borderRadius="md"

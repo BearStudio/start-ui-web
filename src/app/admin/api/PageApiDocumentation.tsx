@@ -1,19 +1,20 @@
 import React from 'react';
 
-import { Box, useColorModeValue } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
 import { Page, PageContent } from '@/app/layout';
+import { useDarkMode } from '@/utils/darkMode';
 
 import { AdminNav } from '../AdminNav';
 
 export const PageApiDocumentation = () => {
-  const bg = useColorModeValue('transparent', 'gray.200');
+  const { colorModeValue } = useDarkMode();
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
-        <Box bg={bg} borderRadius="md">
+        <Box bg={colorModeValue('transparent', 'gray.200')} borderRadius="md">
           <SwaggerUI url="/open-api.json" />
         </Box>
       </PageContent>
