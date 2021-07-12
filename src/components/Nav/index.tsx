@@ -116,11 +116,11 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       }
       fontSize="sm"
       fontWeight="bold"
-      bg={isActive ? colorModeValue('white', 'gray.900') : undefined}
+      bg={isActive ? colorModeValue('white', 'blackAlpha.300') : undefined}
       _hover={
         !isActive && !isMenu
           ? {
-              bg: colorModeValue('white', 'gray.900'),
+              bg: colorModeValue('white', 'blackAlpha.300'),
               color: colorModeValue('gray.700', 'gray.100'),
             }
           : {}
