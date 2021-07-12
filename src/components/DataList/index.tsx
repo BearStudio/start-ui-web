@@ -114,8 +114,15 @@ export const DataListAccordionIcon = ({ ...rest }) => {
 };
 
 export const DataListAccordionPanel = ({ ...rest }) => {
+  const { colorModeValue } = useDarkMode();
   return (
-    <AccordionPanel boxShadow="inner" px="4" py="3" bg="gray.50" {...rest} />
+    <AccordionPanel
+      boxShadow="inner"
+      px="4"
+      py="3"
+      bg={colorModeValue('gray.50', 'blackAlpha.400')}
+      {...rest}
+    />
   );
 };
 
@@ -136,7 +143,7 @@ export const DataListRow: FC<DataListRowProps> = ({
   );
   const disabledProps: any = isDisabled
     ? {
-        bg: 'gray.50',
+        bg: colorModeValue('gray.50', 'whiteAlpha.50'),
         pointerEvents: 'none',
         _hover: {},
         _focus: {},
@@ -144,7 +151,7 @@ export const DataListRow: FC<DataListRowProps> = ({
         opacity: '1 !important',
         css: {
           '> *': {
-            opacity: 0.5,
+            opacity: 0.3,
           },
         },
       }
@@ -175,7 +182,7 @@ export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
         bg={colorModeValue('gray.100', 'blackAlpha.400')}
         fontSize="sm"
         fontWeight="bold"
-        color="gray.600"
+        color={colorModeValue('gray.600', 'gray.300')}
         border="none"
         _hover={{}}
         {...rest}
@@ -193,7 +200,7 @@ export const DataListFooter: FC<DataListFooterProps> = ({ ...rest }) => {
       <Flex
         bg={colorModeValue('white', 'blackAlpha.50')}
         fontSize="sm"
-        color="gray.600"
+        color={colorModeValue('gray.600', 'gray.300')}
         mt="-1px"
         borderTop="1px solid"
         borderTopColor={colorModeValue('gray.100', 'gray.900')}
