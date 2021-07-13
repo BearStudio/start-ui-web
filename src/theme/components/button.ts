@@ -36,14 +36,15 @@ export default {
         color: mode('white', 'brand.900')(props),
         boxShadowFocus: 'outline-brand',
       }),
-    '@secondary': customVariant({
-      bg: 'brand.50',
-      bgHover: 'brand.100',
-      bgActive: 'brand.200',
-      color: 'brand.600',
-      colorHover: 'brand.700',
-      boxShadowFocus: 'outline-brand',
-    }),
+    '@secondary': (props) =>
+      customVariant({
+        bg: mode('brand.50', 'brand.700')(props),
+        bgHover: mode('brand.100', 'brand.800')(props),
+        bgActive: mode('brand.200', 'brand.900')(props),
+        color: mode('brand.600', 'brand.100')(props),
+        colorHover: mode('brand.700', 'brand.200')(props),
+        boxShadowFocus: 'outline-brand',
+      }),
     '@danger': customVariant({
       bg: 'error.50',
       bgHover: 'error.100',
