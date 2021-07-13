@@ -152,14 +152,14 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
 
     const confirmActiveProps = isConfirmActive
       ? {
-          bg: `${confirmColorScheme}.${colorModeValue('100', '600')}`,
+          bg: `${confirmColorScheme}.${colorModeValue('100', '800')}`,
           color: 'transparent',
           transition: '0.2s',
           _hover: {
-            bg: `${confirmColorScheme}.${colorModeValue('50', '700')}`,
+            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
           },
           _focus: {
-            bg: `${confirmColorScheme}.${colorModeValue('50', '700')}`,
+            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
           },
           icon: icon
             ? React.cloneElement(icon, { color: 'transparent' })
