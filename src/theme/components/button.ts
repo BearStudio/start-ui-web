@@ -38,29 +38,31 @@ export default {
       }),
     '@secondary': (props) =>
       customVariant({
-        bg: mode('brand.50', 'brand.700')(props),
-        bgHover: mode('brand.100', 'brand.800')(props),
-        bgActive: mode('brand.200', 'brand.900')(props),
-        color: mode('brand.600', 'brand.100')(props),
-        colorHover: mode('brand.700', 'brand.200')(props),
+        bg: mode('brand.50', 'brand.800')(props),
+        bgHover: mode('brand.100', 'brand.700')(props),
+        bgActive: mode('brand.200', 'brand.600')(props),
+        color: mode('brand.600', 'brand.50')(props),
+        colorHover: mode('brand.700', 'brand.100')(props),
         boxShadowFocus: 'outline-brand',
       }),
-    '@danger': customVariant({
-      bg: 'error.50',
-      bgHover: 'error.100',
-      bgActive: 'error.200',
-      color: 'error.600',
-      colorHover: 'error.700',
-      boxShadowFocus: 'outline-error',
-    }),
-    '@warning': customVariant({
-      bg: 'warning.50',
-      bgHover: 'warning.100',
-      bgActive: 'warning.200',
-      color: 'warning.600',
-      colorHover: 'warning.700',
-      boxShadowFocus: 'outline-warning',
-    }),
+    '@danger': (props) =>
+      customVariant({
+        bg: mode('error.50', 'error.900')(props),
+        bgHover: mode('error.100', 'error.800')(props),
+        bgActive: mode('error.200', 'error.700')(props),
+        color: mode('error.600', 'error.50')(props),
+        colorHover: mode('error.700', 'error.100')(props),
+        boxShadowFocus: 'outline-error',
+      }),
+    '@warning': (props) =>
+      customVariant({
+        bg: mode('warning.50', 'warning.900')(props),
+        bgHover: mode('warning.100', 'warning.800')(props),
+        bgActive: mode('warning.200', 'warning.700')(props),
+        color: mode('warning.600', 'warning.50')(props),
+        colorHover: mode('warning.700', 'warning.100')(props),
+        boxShadowFocus: 'outline-warning',
+      }),
 
     // Default variants
     solid: (props) => ({
