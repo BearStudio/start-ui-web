@@ -51,6 +51,7 @@ const DarkModeWrapper = ({ children }) => {
     <Box
       id="start-ui-storybook-wrapper"
       p="4"
+      pb="8"
       bg={colorMode === 'dark' ? 'gray.900' : 'white'}
       flex="1"
     >
