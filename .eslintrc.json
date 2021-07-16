@@ -5,8 +5,10 @@
     "browser": true,
     "jest": true
   },
+  "plugins": ["prettier"],
   "rules": {
-    "jsx-a11y/anchor-is-valid": "warn"
+    "jsx-a11y/anchor-is-valid": "warn",
+    "prettier/prettier": "error"
   },
   "overrides": [
     {
