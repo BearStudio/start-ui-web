@@ -18,7 +18,6 @@
     "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json}": "prettier --write",
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
     "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
   },
