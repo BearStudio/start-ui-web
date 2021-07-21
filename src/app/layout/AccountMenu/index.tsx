@@ -51,7 +51,7 @@ const AppVersion = ({ ...rest }) => {
         my="-2"
         fontSize="0.7rem"
         fontWeight="medium"
-        color={colorModeValue('gray.400', 'gray.200')}
+        color={colorModeValue('gray.500', 'gray.200')}
         outline="none"
         _hover={{ bg: colorModeValue('gray.50', 'gray.800') }}
         _focus={{ bg: colorModeValue('gray.50', 'gray.800') }}
@@ -70,7 +70,9 @@ const AppVersion = ({ ...rest }) => {
           px="3"
           fontWeight="bold"
           bg={colorModeValue('gray.50', 'gray.800')}
-          color={hasCopied ? 'success.500' : undefined}
+          color={
+            hasCopied ? colorModeValue('success.500', 'success.300') : undefined
+          }
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
@@ -99,7 +101,7 @@ export const AccountMenu = ({ ...rest }) => {
         </Avatar>
       </MenuButton>
       <MenuList
-        color={colorModeValue('gray.700', 'gray.200')}
+        color={colorModeValue('gray.800', 'white')}
         maxW="12rem"
         overflow="hidden"
       >
