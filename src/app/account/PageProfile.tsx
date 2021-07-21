@@ -14,7 +14,7 @@ import {
   useToastSuccess,
   useToastError,
 } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageProfile = () => {
   const { colorModeValue } = useDarkMode();

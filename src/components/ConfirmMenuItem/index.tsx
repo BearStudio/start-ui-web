@@ -16,7 +16,7 @@ import {
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export interface StyledMenuItemProps extends HTMLChakraProps<'button'> {}
 

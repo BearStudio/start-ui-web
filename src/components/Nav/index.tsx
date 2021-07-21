@@ -19,7 +19,7 @@ import {
 import { FiChevronDown } from 'react-icons/fi';
 
 import { Icon } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const NavContext = React.createContext(null);
 const useNavContext = () => React.useContext(NavContext);

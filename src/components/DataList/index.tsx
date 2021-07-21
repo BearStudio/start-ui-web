@@ -14,7 +14,7 @@ import {
   ChakraComponent,
 } from '@chakra-ui/react';
 
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const DataListContext = React.createContext(null);
 export const DataListHeaderContext = React.createContext(null);

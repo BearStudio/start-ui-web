@@ -18,7 +18,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, SlideIn, useToastError } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageResetPasswordRequest = () => {
   const { colorModeValue } = useDarkMode();

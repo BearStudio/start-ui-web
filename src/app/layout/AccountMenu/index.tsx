@@ -27,7 +27,7 @@ import { Link, useHistory } from 'react-router-dom';
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AppVersion = ({ ...rest }) => {
   const { colorModeValue } = useDarkMode();

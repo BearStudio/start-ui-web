@@ -11,7 +11,7 @@ import {
 import { FiArrowLeft } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const PageContext = React.createContext(null);
 

@@ -7,7 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { LoginForm } from '@/app/auth/LoginForm';
 import { useRedirectFromUrl } from '@/app/router';
 import { SlideIn } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageLogin = () => {
   const { colorModeValue } = useDarkMode();

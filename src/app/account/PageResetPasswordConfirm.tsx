@@ -13,7 +13,7 @@ import {
   useToastError,
   useToastSuccess,
 } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageResetPasswordConfirm = () => {
   const { colorModeValue } = useDarkMode();

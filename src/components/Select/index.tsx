@@ -15,7 +15,7 @@ import AsyncReactSelect from 'react-select/async';
 import AsyncCreatableReactSelect from 'react-select/async-creatable';
 import CreatableReactSelect from 'react-select/creatable';
 
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const BoxAny: any = Box;
 

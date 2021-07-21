@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { FiSearch, FiX } from 'react-icons/fi';
 
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 interface SearchInputProps extends Omit<InputProps, 'onChange'> {
   onChange?(value?: string): void;

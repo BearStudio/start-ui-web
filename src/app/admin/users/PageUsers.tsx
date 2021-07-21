@@ -58,7 +58,7 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { AdminNav } from '../AdminNav';
 

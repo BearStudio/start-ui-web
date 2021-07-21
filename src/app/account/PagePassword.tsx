@@ -8,7 +8,7 @@ import { AccountNav } from '@/app/account/AccountNav';
 import { useUpdatePassword } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PagePassword = () => {
   const { colorModeValue } = useDarkMode();

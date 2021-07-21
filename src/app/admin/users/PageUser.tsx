@@ -23,7 +23,7 @@ import {
   Loader,
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';

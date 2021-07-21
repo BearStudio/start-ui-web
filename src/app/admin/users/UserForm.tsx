@@ -4,7 +4,7 @@ import { Stack } from '@chakra-ui/react';
 import { isEmail } from '@formiz/validations';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',

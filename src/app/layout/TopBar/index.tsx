@@ -14,7 +14,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AccountMenu, MainMenu, useLayoutContext } from '@/app/layout';
 import { NavDrawer } from '@/app/layout/NavDrawer';
 import { Logo } from '@/components';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const MenuButton = (props) => {
   const { navOnOpen } = useLayoutContext();

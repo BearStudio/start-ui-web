@@ -5,7 +5,7 @@ import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
 import { Page, PageContent } from '@/app/layout';
-import { useDarkMode } from '@/utils/darkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { AdminNav } from '../AdminNav';
 
