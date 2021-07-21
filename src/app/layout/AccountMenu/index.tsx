@@ -99,7 +99,7 @@ export const AccountMenu = ({ ...rest }) => {
         </Avatar>
       </MenuButton>
       <MenuList
-        color={colorModeValue('gray.400', 'gray.200')}
+        color={colorModeValue('gray.700', 'gray.200')}
         maxW="12rem"
         overflow="hidden"
       >
