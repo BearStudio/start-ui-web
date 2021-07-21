@@ -1,6 +1,7 @@
+import { mode } from '@chakra-ui/theme-tools';
 import 'react-day-picker/lib/style.css';
 
-export const reactDayPicker = {
+export const reactDayPicker = (props) => ({
   '.DayPickerInput': {
     display: 'inline-block',
     fontSize: '0.1em',
@@ -24,13 +25,14 @@ export const reactDayPicker = {
     zIndex: 2,
     borderRadius: 'md',
     boxShadow: 'lg',
+    bg: mode('white', 'gray.700')(props),
   },
 
   '.DayPicker': {
     display: 'inline-block',
     fontSize: { base: '0.8rem', sm: '1rem' },
     border: '1px solid',
-    borderColor: 'gray.200',
+    borderColor: mode('gray.200', 'gray.900')(props),
     borderRadius: 'md',
     maxWidth: '90vw',
   },
@@ -41,21 +43,21 @@ export const reactDayPicker = {
 
   '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
     position: 'relative',
-    backgroundColor: 'brand.500',
+    backgroundColor: mode('brand.500', 'brand.600')(props),
     borderRadius: '100%',
   },
 
   '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover': {
-    backgroundColor: 'brand.500',
+    backgroundColor: mode('brand.400', 'brand.500')(props),
     borderRadius: '100%',
     color: 'white',
   },
 
   '.DayPicker:not(.DayPicker--interactionDisabled)': {
     '.DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
-      backgroundColor: 'brand.100',
+      backgroundColor: mode('blackAlpha.200', 'whiteAlpha.200')(props),
       borderRadius: '100%',
-      color: 'black',
+      color: mode('black', 'white')(props),
     },
   },
 
@@ -68,7 +70,7 @@ export const reactDayPicker = {
   },
 
   '.DayPicker-Day--today': {
-    color: 'black',
+    color: mode('black', 'white')(props),
     fontWeight: 'bold',
   },
 
@@ -79,7 +81,7 @@ export const reactDayPicker = {
 
   '.DayPicker-Weekday': {
     fontWeight: '350',
-    color: 'black',
+    color: mode('black', 'white')(props),
     fontSize: '0.875em',
   },
-};
+});
