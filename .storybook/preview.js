@@ -30,7 +30,7 @@ export const parameters = {
     },
   },
   layout: 'fullscreen',
-  backgrounds: { disable: true },
+  backgrounds: { disable: true, grid: { disable: true } },
 };
 
 const DarkModeWrapper = ({ children }) => {
