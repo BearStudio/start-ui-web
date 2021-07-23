@@ -4,6 +4,7 @@ import { Stack } from '@chakra-ui/react';
 import { isEmail } from '@formiz/validations';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -11,11 +12,12 @@ const AUTHORITIES = {
 };
 
 export const UserForm = () => {
+  const { colorModeValue } = useDarkMode();
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
   return (
     <Stack
       direction="column"
-      bg="white"
+      bg={colorModeValue('white', 'gray.900')}
       p="6"
       borderRadius="lg"
       spacing="6"

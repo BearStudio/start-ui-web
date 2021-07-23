@@ -27,6 +27,7 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import {
   DataList,
@@ -179,6 +180,7 @@ export const NoHover = () => (
 );
 
 export const Complete = () => {
+  const { colorModeValue } = useDarkMode();
   const users = [
     {
       name: 'Jane Cooper',
@@ -247,7 +249,12 @@ export const Complete = () => {
                     item.name
                   )}
                 </Text>
-                <Text isTruncated maxW="full" fontSize="sm" color="gray.600">
+                <Text
+                  isTruncated
+                  maxW="full"
+                  fontSize="sm"
+                  color={colorModeValue('gray.600', 'gray.300')}
+                >
                   {item.email}
                 </Text>
               </Box>
@@ -257,7 +264,11 @@ export const Complete = () => {
             <Text isTruncated maxW="full">
               {item.job}
             </Text>
-            <Text isTruncated maxW="full" color="gray.600">
+            <Text
+              isTruncated
+              maxW="full"
+              color={colorModeValue('gray.600', 'gray.300')}
+            >
               {item.department}
             </Text>
           </DataListCell>
@@ -270,7 +281,11 @@ export const Complete = () => {
             </Badge>
           </DataListCell>
           <DataListCell colName="role" fontSize="sm">
-            <Text isTruncated maxW="full" color="gray.600">
+            <Text
+              isTruncated
+              maxW="full"
+              color={colorModeValue('gray.600', 'gray.300')}
+            >
               {item.role}
             </Text>
           </DataListCell>
@@ -329,6 +344,7 @@ export const Complete = () => {
 };
 
 export const CompleteWithCollapse = () => {
+  const { colorModeValue } = useDarkMode();
   const users = [
     {
       name: 'Jane Cooper',
@@ -383,7 +399,12 @@ export const CompleteWithCollapse = () => {
                   <Text isTruncated maxW="full" fontWeight="bold">
                     {item.name}
                   </Text>
-                  <Text isTruncated maxW="full" fontSize="sm" color="gray.600">
+                  <Text
+                    isTruncated
+                    maxW="full"
+                    fontSize="sm"
+                    color={colorModeValue('gray.600', 'gray.300')}
+                  >
                     {item.email}
                   </Text>
                 </Box>
@@ -404,23 +425,33 @@ export const CompleteWithCollapse = () => {
           <DataListAccordionPanel>
             <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={4}>
               <Box fontSize="sm">
-                <Text color="gray.600">Label</Text>
+                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                  Label
+                </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color="gray.600">Label</Text>
+                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                  Label
+                </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color="gray.600">Label</Text>
+                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                  Label
+                </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color="gray.600">Label</Text>
+                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                  Label
+                </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm" gridColumn="1/-1">
-                <Text color="gray.600">Comment</Text>
+                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                  Comment
+                </Text>
                 <Text>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Distinctio atque cupiditate dicta sed est nesciunt dignissimos

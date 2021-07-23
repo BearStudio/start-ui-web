@@ -58,6 +58,7 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { AdminNav } from '../AdminNav';
 
@@ -163,6 +164,7 @@ const UserActions = ({ user, ...rest }) => {
 };
 
 export const PageUsers = () => {
+  const { colorModeValue } = useDarkMode();
   const { url } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
@@ -255,7 +257,7 @@ export const PageUsers = () => {
                       isTruncated
                       maxW="full"
                       fontSize="sm"
-                      color="gray.600"
+                      color={colorModeValue('gray.600', 'gray.300')}
                     >
                       {user.email}
                     </Text>
@@ -289,7 +291,7 @@ export const PageUsers = () => {
                   <Text
                     isTruncated
                     maxW="full"
-                    color="gray.600"
+                    color={colorModeValue('gray.600', 'gray.300')}
                     pointerEvents="auto"
                   >
                     <DateAgo date={user.createdDate} />
@@ -309,7 +311,7 @@ export const PageUsers = () => {
                   <Text
                     isTruncated
                     maxW="full"
-                    color="gray.600"
+                    color={colorModeValue('gray.600', 'gray.300')}
                     pointerEvents="auto"
                   >
                     <DateAgo position="relative" date={user.lastModifiedDate} />

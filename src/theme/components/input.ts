@@ -1,9 +1,12 @@
+import { mode } from '@chakra-ui/theme-tools';
+
 export default {
   variants: {
-    outline: {
+    outline: (props) => ({
       field: {
-        bg: 'gray.50',
+        bg: mode('blackAlpha.50', 'whiteAlpha.50')(props),
+        borderColor: mode('blackAlpha.100', 'whiteAlpha.100')(props),
       },
-    },
+    }),
   },
 };

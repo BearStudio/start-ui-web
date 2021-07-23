@@ -14,8 +14,10 @@ import {
   useToastSuccess,
   useToastError,
 } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageProfile = () => {
+  const { colorModeValue } = useDarkMode();
   const { account } = useAccount();
   const generalInformationForm = useForm();
   const queryClient = useQueryClient();
@@ -66,7 +68,7 @@ export const PageProfile = () => {
             <form noValidate onSubmit={generalInformationForm.submit}>
               <Stack
                 direction="column"
-                bg="white"
+                bg={colorModeValue('white', 'blackAlpha.400')}
                 p="6"
                 borderRadius="lg"
                 spacing="6"

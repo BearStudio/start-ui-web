@@ -16,6 +16,7 @@ import {
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export interface StyledMenuItemProps extends HTMLChakraProps<'button'> {}
 
@@ -115,6 +116,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     },
     ref
   ) => {
+    const { colorModeValue } = useDarkMode();
     const [isConfirmActive, setIsConfirmActive] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -150,14 +152,14 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
 
     const confirmActiveProps = isConfirmActive
       ? {
-          bg: `${confirmColorScheme}.100`,
+          bg: `${confirmColorScheme}.${colorModeValue('100', '800')}`,
           color: 'transparent',
           transition: '0.2s',
           _hover: {
-            bg: `${confirmColorScheme}.50`,
+            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
           },
           _focus: {
-            bg: `${confirmColorScheme}.50`,
+            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
           },
           icon: icon
             ? React.cloneElement(icon, { color: 'transparent' })
@@ -191,7 +193,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
             bottom={0}
             px={3}
             as="span"
-            color={`${confirmColorScheme}.500`}
+            color={colorModeValue(`${confirmColorScheme}.500`, 'white')}
             fontSize="sm"
             alignItems="center"
           >

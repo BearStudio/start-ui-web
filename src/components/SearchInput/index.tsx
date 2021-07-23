@@ -12,6 +12,8 @@ import {
 } from '@chakra-ui/react';
 import { FiSearch, FiX } from 'react-icons/fi';
 
+import { useDarkMode } from '@/hooks/useDarkMode';
+
 interface SearchInputProps extends Omit<InputProps, 'onChange'> {
   onChange?(value?: string): void;
   delay?: number;
@@ -32,6 +34,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     },
     ref
   ) => {
+    const { colorModeValue } = useDarkMode();
     const [externalValue, setExternalValue]: any = useControllableState({
       value,
       defaultValue,
@@ -82,12 +85,18 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
         <Input
           ref={refs}
           onChange={handleChange}
-          value={search}
+          value={search || ''}
           placeholder={placeholder}
           isDisabled={isDisabled}
           onKeyDown={handleEscape}
         />
-        <InputRightElement color={isDisabled ? 'gray.300' : 'brand.600'}>
+        <InputRightElement
+          color={
+            isDisabled
+              ? colorModeValue('gray.300', 'gray.600')
+              : colorModeValue('brand.600', 'brand.300')
+          }
+        >
           {!isDisabled && search ? (
             <IconButton
               onClick={handleClear}

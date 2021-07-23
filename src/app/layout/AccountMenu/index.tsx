@@ -12,15 +12,25 @@ import {
   Flex,
   Text,
   useClipboard,
+  useColorMode,
 } from '@chakra-ui/react';
-import { FiCheck, FiCopy, FiLogOut, FiUser } from 'react-icons/fi';
+import {
+  FiCheck,
+  FiCopy,
+  FiLogOut,
+  FiMoon,
+  FiSun,
+  FiUser,
+} from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AppVersion = ({ ...rest }) => {
+  const { colorModeValue } = useDarkMode();
   const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
 
   if (!appBuild?.version) {
@@ -41,11 +51,10 @@ const AppVersion = ({ ...rest }) => {
         my="-2"
         fontSize="0.7rem"
         fontWeight="medium"
-        bg="white"
-        color="gray.400"
+        color={colorModeValue('gray.500', 'gray.200')}
         outline="none"
-        _hover={{ bg: 'gray.50', color: 'gray.500' }}
-        _focus={{ bg: 'gray.50', color: 'gray.500' }}
+        _hover={{ bg: colorModeValue('gray.50', 'gray.800') }}
+        _focus={{ bg: colorModeValue('gray.50', 'gray.800') }}
         onClick={onCopy}
         {...rest}
       >
@@ -60,8 +69,10 @@ const AppVersion = ({ ...rest }) => {
           py="2"
           px="3"
           fontWeight="bold"
-          bg="white"
-          color={hasCopied ? 'success.500' : undefined}
+          bg={colorModeValue('gray.50', 'gray.800')}
+          color={
+            hasCopied ? colorModeValue('success.500', 'success.300') : undefined
+          }
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
@@ -77,6 +88,8 @@ const AppVersion = ({ ...rest }) => {
 };
 
 export const AccountMenu = ({ ...rest }) => {
+  const { colorModeValue } = useDarkMode();
+  const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
   const history = useHistory();
 
@@ -87,7 +100,11 @@ export const AccountMenu = ({ ...rest }) => {
           {isLoading && <Spinner size="xs" />}
         </Avatar>
       </MenuButton>
-      <MenuList color="gray.800" maxW="12rem" overflow="hidden">
+      <MenuList
+        color={colorModeValue('gray.800', 'white')}
+        maxW="12rem"
+        overflow="hidden"
+      >
         <MenuGroup title={account?.email}>
           <MenuItem
             as={Link}
@@ -97,6 +114,19 @@ export const AccountMenu = ({ ...rest }) => {
             My Account
           </MenuItem>
         </MenuGroup>
+        <MenuDivider />
+        <MenuItem
+          icon={
+            <Icon
+              icon={colorMode === 'dark' ? FiSun : FiMoon}
+              fontSize="lg"
+              color="gray.400"
+            />
+          }
+          onClick={() => toggleColorMode()}
+        >
+          Switch to {colorMode === 'dark' ? 'Light' : 'Dark'} mode
+        </MenuItem>
         <MenuDivider />
         <MenuItem
           icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}

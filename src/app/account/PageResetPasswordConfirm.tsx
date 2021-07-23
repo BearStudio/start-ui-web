@@ -13,8 +13,10 @@ import {
   useToastError,
   useToastSuccess,
 } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageResetPasswordConfirm = () => {
+  const { colorModeValue } = useDarkMode();
   const { searchParams } = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
@@ -53,7 +55,12 @@ export const PageResetPasswordConfirm = () => {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
-        <Box p="6" bg="white" borderRadius="md" boxShadow="md">
+        <Box
+          p="6"
+          bg={colorModeValue('white', 'blackAlpha.400')}
+          borderRadius="md"
+          boxShadow="md"
+        >
           <Heading size="lg">Reset password</Heading>
           <Formiz
             id="reset-password-finish-form"

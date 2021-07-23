@@ -23,11 +23,13 @@ import {
   Loader,
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
 
 export const PageUser = () => {
+  const { colorModeValue } = useDarkMode();
   const { login } = useParams();
   const history = useHistory();
   const {
@@ -75,7 +77,10 @@ export const PageUser = () => {
             ) : (
               <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
                 <Heading size="sm">{user?.login}</Heading>
-                <Text fontSize="xs" color="gray.600">
+                <Text
+                  fontSize="xs"
+                  color={colorModeValue('gray.600', 'gray.300')}
+                >
                   {'ID : ' + user?.id}
                 </Text>
               </Stack>

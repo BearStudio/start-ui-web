@@ -15,6 +15,8 @@ import AsyncReactSelect from 'react-select/async';
 import AsyncCreatableReactSelect from 'react-select/async-creatable';
 import CreatableReactSelect from 'react-select/creatable';
 
+import { useDarkMode } from '@/hooks/useDarkMode';
+
 const BoxAny: any = Box;
 
 const MenuWithChakraPortal = ({ innerProps }: { innerProps: BoxProps }) => (
@@ -41,20 +43,24 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
   } = props;
 
   const theme = useTheme();
+  const { colorModeValue } = useDarkMode();
   const stylesFromTheme: any = useStyleConfig('Select', {
     size,
   });
   const [fieldFontSize] = useToken('fontSizes', [
     stylesFromTheme.field.fontSize,
   ]);
-  const [fieldBg, fieldBorderColor, fieldFocusBorderColor] = useToken(
-    'colors',
-    [
-      stylesFromTheme.field.bg,
-      stylesFromTheme.field.borderColor,
-      stylesFromTheme.field._focus.borderColor,
-    ]
-  );
+  const [
+    fieldTextColor,
+    fieldBg,
+    fieldBorderColor,
+    fieldFocusBorderColor,
+  ] = useToken('colors', [
+    stylesFromTheme.field.color,
+    stylesFromTheme.field.bg,
+    stylesFromTheme.field.borderColor,
+    stylesFromTheme.field._focus.borderColor,
+  ]);
   const [fieldBorderRadius] = useToken('radii', [
     stylesFromTheme.field.borderRadius,
   ]);
@@ -114,7 +120,58 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
 
   const selectStyle = {
     ...styles,
+    ...getComponentStyles('input', () => ({
+      color: fieldTextColor,
+    })),
+    ...getComponentStyles('singleValue', () => ({
+      color: fieldTextColor,
+    })),
+    ...getComponentStyles('valueContainer', () => ({
+      minHeight: `calc(${fieldHeight} - 2px)`,
+      padding: '0',
+      paddingLeft: '8px',
+      paddingRight: '8px',
+    })),
+    ...getComponentStyles('indicatorsContainer', () => ({
+      height: `calc(${fieldHeight} - 2px)`,
+    })),
+    ...getComponentStyles('multiValue', () => ({
+      backgroundColor: colorModeValue(
+        theme.colors.brand['100'],
+        theme.colors.brand['300']
+      ),
+    })),
+    ...getComponentStyles('multiValueLabel', () => ({
+      fontWeight: 'bold',
+      color: colorModeValue(
+        theme.colors.brand['800'],
+        theme.colors.brand['900']
+      ),
+    })),
+    ...getComponentStyles('multiValueRemove', () => ({
+      color: colorModeValue(
+        theme.colors.brand['800'],
+        theme.colors.brand['900']
+      ),
+      opacity: 0.5,
+      '&:hover': {
+        background: 'transparent',
+        color: colorModeValue(
+          theme.colors.brand['800'],
+          theme.colors.brand['900']
+        ),
+        opacity: 1,
+      },
+    })),
+    ...getComponentStyles('dropdownIndicator', () => ({
+      paddingLeft: '0',
+      paddingRight: '0.2rem',
+    })),
+    ...getComponentStyles('indicatorSeparator', () => ({
+      display: 'none',
+    })),
     ...getComponentStyles('control', ({ isFocused, isDisabled }) => ({
+      color: fieldTextColor,
       fontSize: fieldFontSize,
       height: 'fit-content',
       minHeight: fieldHeight,
@@ -139,58 +196,52 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
         opacity: 0.6,
       }),
     })),
-    ...getComponentStyles('option', ({ isFocused, isSelected }) => ({
-      fontSize: fieldFontSize,
-      ':active': {
-        backgroundColor: theme.colors.brand['100'],
-      },
-      ...getConditionalStyles(isFocused, {
-        backgroundColor: theme.colors.gray['100'],
-        color: theme.colors.gray['600'],
-      }),
-      ...getConditionalStyles(isSelected, {
-        backgroundColor: theme.colors.brand['50'],
-        color: theme.colors.gray['700'],
-        borderLeft: `2px solid ${theme.colors.brand['600']}`,
-      }),
-      ...getConditionalStyles(isFocused && isSelected, {
-        backgroundColor: theme.colors.gray['100'],
-      }),
-    })),
+    ...getComponentStyles(
+      'option',
+      ({ isFocused, isDisabled, isSelected }) => ({
+        fontSize: fieldFontSize,
+        ':active': {
+          backgroundColor: colorModeValue(
+            theme.colors.gray['100'],
+            theme.colors.blackAlpha['500']
+          ),
+        },
+        ...getConditionalStyles(isFocused, {
+          backgroundColor: colorModeValue(
+            theme.colors.gray['100'],
+            theme.colors.blackAlpha['400']
+          ),
+          color: colorModeValue(
+            theme.colors.gray['600'],
+            theme.colors.gray['100']
+          ),
+        }),
+        ...getConditionalStyles(isSelected, {
+          backgroundColor: colorModeValue(
+            theme.colors.gray['50'],
+            theme.colors.blackAlpha['500']
+          ),
+          color: colorModeValue(theme.colors.gray['700'], 'white'),
+          borderLeft: `2px solid ${theme.colors.brand['500']}`,
+        }),
+        ...getConditionalStyles(isFocused && isSelected, {
+          backgroundColor: colorModeValue(
+            theme.colors.gray['100'],
+            theme.colors.blackAlpha['400']
+          ),
+          color: colorModeValue(
+            theme.colors.gray['600'],
+            theme.colors.gray['100']
+          ),
+        }),
+        ...getConditionalStyles(isDisabled, {
+          opacity: 0.4,
+        }),
+      })
+    ),
     ...getComponentStyles('menu', () => ({
       zIndex: 10,
-    })),
-    ...getComponentStyles('valueContainer', () => ({
-      minHeight: `calc(${fieldHeight} - 2px)`,
-      padding: '0',
-      paddingLeft: '8px',
-      paddingRight: '8px',
-    })),
-    ...getComponentStyles('indicatorsContainer', () => ({
-      height: `calc(${fieldHeight} - 2px)`,
-    })),
-    ...getComponentStyles('multiValue', () => ({
-      backgroundColor: theme.colors.brand['100'],
-    })),
-    ...getComponentStyles('multiValueLabel', () => ({
-      color: theme.colors.brand['800'],
-      fontWeight: 'bold',
-    })),
-    ...getComponentStyles('multiValueRemove', () => ({
-      color: 'inherit',
-      opacity: 0.5,
-      '&:hover': {
-        background: 'transparent',
-        color: 'inherit',
-        opacity: 1,
-      },
-    })),
-    ...getComponentStyles('dropdownIndicator', () => ({
-      paddingLeft: '0',
-      paddingRight: '0.2rem',
-    })),
-    ...getComponentStyles('indicatorSeparator', () => ({
-      display: 'none',
+      backgroundColor: colorModeValue('white', theme.colors.gray['700']),
     })),
   };
 

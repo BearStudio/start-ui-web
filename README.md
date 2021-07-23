@@ -1,6 +1,6 @@
 <h1 align="center">📦 Start UI</h1>
 
-Start UI is a opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.  
+Start UI is a opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
 ## Technology
@@ -20,11 +20,25 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
 - ↔ [Axios](https://github.com/axios/axios)
 - 📅 [Day.js](https://day.js.org/)
-- 🏜 [MirageJS](https://miragejs.com/)
 
 👉 [Technology Choices](#technology-choices)
 
 ℹ️ API calls are mapped on a [JHipster](https://www.jhipster.tech/) backend application.
+
+## Features
+
+- Reponsive layout / navigation.
+- Sign / Sign Up / Password recovery screens.
+- Account profile / Change Password screens.
+- Users management admin screens (CRUD).
+- Multi-languages (🚧 Translation strings in progress).
+- Custom Chakra UI theme with preview of customized components in Storybook.
+- Extra UI components with Storybook documentation.
+- Fields components for Formiz.
+- Dark mode support with Storybook toggle.
+- App version & Environment name in the UI.
+- API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
+- API Mocking with persisting state via [MirageJS](https://miragejs.com/).
 
 ## Installation
 
