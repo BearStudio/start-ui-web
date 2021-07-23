@@ -11,6 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { useLocation, useHistory } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginForm } from '@/app/auth/LoginForm';
 
 export const LoginModalInterceptor = () => {
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLogged, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
@@ -75,8 +77,8 @@ export const LoginModalInterceptor = () => {
       <ModalContent>
         <ModalCloseButton />
         <ModalBody p="6">
-          <Heading size="lg">Login needed</Heading>
-          <Text mb="2">Please, login to continue</Text>
+          <Heading size="lg">{t('auth:interceptor.title')}</Heading>
+          <Text mb="2">{t('auth:interceptor.description')}</Text>
           <LoginForm onSuccess={handleLogin} />
         </ModalBody>
       </ModalContent>

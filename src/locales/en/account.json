@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "profile": "Profile",
+    "password": "Password",
+    "myAccount": "My Account"
+  },
+  "profile": {
+    "title": "Profile",
+    "feedbacks": {
+      "udpateSuccess": "Udpated with success",
+      "udpateError": "Udpate failed"
+    },
+    "actions": {
+      "save": "Save"
+    }
+  },
+  "password": {
+    "title": "Password",
+    "feedbacks": {
+      "udpateSuccess": "Your password has been updated with success",
+      "udpateError": "Password update failed"
+    },
+    "actions": {
+      "changePassword": "Change Password"
+    }
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "actions": {
+      "cancel": "Back",
+      "send": "Send Email",
+      "goToLogin": "Go to Login",
+      "reset": "Reset Password"
+    },
+    "feedbacks": {
+      "initSuccess": {
+        "title": "Reset password email sent with success!",
+        "description": "If an account exist with email <strong>{{email}}</strong> you should have received an email."
+      },
+      "initError": "Reset password failed",
+      "confirmSuccess": {
+        "title": "Your password has been reset",
+        "description": "You can now login"
+      },
+      "confirmError": "Reset password failed"
+    }
+  },
+  "activate": {
+    "feedbacks": {
+      "activationLoading": "Account activation...",
+      "activationSuccess": "Account activation successfully",
+      "activationError": "Failed to activate account"
+    }
+  },
+  "data": {
+    "firstname": {
+      "label": "Last Name",
+      "required": "Last name is required"
+    },
+    "lastname": {
+      "label": "First Name",
+      "required": "First name is required"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email is required",
+      "invalid": "Email is invalid",
+      "resetHelper": "Enter the email address you used to register"
+    },
+    "language": {
+      "label": "Language"
+    },
+    "password": {
+      "tooShort": "Password too short (min. {min} characters)",
+      "tooLong": "Password too long (max. {max} characters)"
+    },
+    "currentPassword": {
+      "label": "Current Password",
+      "incorrect": "Invalid current password",
+      "required": "Current Password is required"
+    },
+    "newPassword": {
+      "label": "New Password",
+      "required": "New Password is required"
+    },
+    "confirmNewPassword": {
+      "label": "Confirm New Password",
+      "required": "New Password confirmation is required",
+      "notEqual": "New passwords must be equal"
+    }
+  }
+}

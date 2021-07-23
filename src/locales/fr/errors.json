@@ -1,0 +1,13 @@
+{
+  "403": {
+    "title": "Erreur 403 ",
+    "description": "Désolé, vous ne pouvez pas accéder à cette page. ",
+    "actions": {
+      "goBack": "Retour"
+    }
+  },
+  "404": {
+    "title": "Erreur 404",
+    "description": "La page n'existe pas ou l'URL a changé."
+  }
+}

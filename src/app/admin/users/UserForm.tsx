@@ -4,6 +4,7 @@ import { Stack } from '@chakra-ui/react';
 import { isEmail } from '@formiz/validations';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
+import { DEFAULT_LANGUAGE } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
@@ -46,8 +47,11 @@ export const UserForm = () => {
       <FieldSelect
         name="langKey"
         label="Language"
-        options={[{ label: 'English', value: 'en' }]}
-        defaultValue={'en'}
+        options={[
+          { label: 'English', value: 'en' },
+          { label: 'French', value: 'fr' },
+        ]}
+        defaultValue={DEFAULT_LANGUAGE}
       />
       <FieldCheckboxes
         name="authorities"

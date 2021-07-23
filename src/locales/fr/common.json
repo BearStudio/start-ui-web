@@ -1,3 +1,6 @@
 {
-  "test": "Test FR"
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français"
+  }
 }

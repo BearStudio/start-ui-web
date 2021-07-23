@@ -1,0 +1,63 @@
+{
+  "list": {
+    "title": "Users Management",
+    "actions": {
+      "createUser": "Create User"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "description": "Account \"{{login}}\" activated with success",
+      "title": "Account Activated"
+    },
+    "deactivateUserSuccess": {
+      "title": "Account Deactivated",
+      "description": "Account \"{{login}}\" deactivated with success"
+    },
+    "activateUserError": {
+      "title": "Activation Failed",
+      "description": "Fail to activate \"{{login}}\" account"
+    },
+    "deactivateUserError": {
+      "title": "Deactivation Failed",
+      "description": "Fail to deactivate \"{{login}}\" account"
+    },
+    "deleteUserSuccess": {
+      "title": "Account deleted",
+      "description": "Account \"{{login}}\" deleted with success"
+    },
+    "deleteUserError": {
+      "title": "Deletion Failed",
+      "description": "Fail to remove \"{{login}}\" account"
+    }
+  },
+  "actions": {
+    "editUser": "Edit",
+    "deactivateUser": "Deactivate Account",
+    "activateUser": "Activate Account",
+    "deleteUser": "Delete"
+  },
+  "data": {
+    "login": {
+      "label": "Login"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "id": {
+      "label": "ID"
+    },
+    "authorities": {
+      "label": "Authorities"
+    },
+    "createdBy": {
+      "label": "Created By"
+    },
+    "modifiedBy": {
+      "label": "Modified By"
+    },
+    "status": {
+      "label": "Status"
+    }
+  }
+}

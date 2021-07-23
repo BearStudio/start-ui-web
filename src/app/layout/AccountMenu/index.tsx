@@ -14,6 +14,7 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import {
   FiCheck,
   FiCopy,
@@ -30,6 +31,7 @@ import { Icon } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AppVersion = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
 
@@ -77,10 +79,13 @@ const AppVersion = ({ ...rest }) => {
           _groupHover={{ d: 'flex' }}
         >
           <Icon icon={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
-          {hasCopied ? 'Version copiée' : 'Copier la version'}
+          {hasCopied
+            ? t('layout:accountMenu.version.copied')
+            : t('layout:accountMenu.version.copy')}
         </Flex>
         <Text as="span" noOfLines={2}>
-          Version <strong>{appBuild?.display ?? appBuild?.version}</strong>
+          {t('layout:accountMenu.version.label')}{' '}
+          <strong>{appBuild?.display ?? appBuild?.version}</strong>
         </Text>
       </Flex>
     </>
@@ -88,6 +93,7 @@ const AppVersion = ({ ...rest }) => {
 };
 
 export const AccountMenu = ({ ...rest }) => {
+  const { t } = useTranslation('layout');
   const { colorModeValue } = useDarkMode();
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
@@ -111,7 +117,7 @@ export const AccountMenu = ({ ...rest }) => {
             to="/account"
             icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
           >
-            My Account
+            {t('layout:accountMenu.myAccount')}
           </MenuItem>
         </MenuGroup>
         <MenuDivider />
@@ -125,14 +131,16 @@ export const AccountMenu = ({ ...rest }) => {
           }
           onClick={() => toggleColorMode()}
         >
-          Switch to {colorMode === 'dark' ? 'Light' : 'Dark'} mode
+          {colorMode === 'dark'
+            ? t('layout:accountMenu.switchColorModeDark')
+            : t('layout:accountMenu.switchColorModeLight')}
         </MenuItem>
         <MenuDivider />
         <MenuItem
           icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
           onClick={() => history.push('/logout')}
         >
-          Logout
+          {t('layout:accountMenu.logout')}
         </MenuItem>
         <AppVersion />
       </MenuList>

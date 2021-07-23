@@ -100,6 +100,21 @@ yarn docs:build
 ```
 This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
 
+## Translations
+
+We recommended using the [i18n Ally](https://marketplace.visualstudio.com/items?itemName=lokalise.i18n-ally) plugin for VS Code for translations management.
+
+Create or edit the `.vscode/settings.json` file with the following settings:
+
+```json
+{
+  "i18n-ally.localesPaths": ["src/locales"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.enabledFrameworks": ["react", "i18next"],
+  "i18n-ally.namespace": true
+}
+```
+
 ## Production
 
 ### NodeJS (recommended)

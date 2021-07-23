@@ -1,0 +1,63 @@
+{
+  "feedbacks": {
+    "activateUserSuccess": {
+      "description": "Compte \"{{login}}\" activé avec succès",
+      "title": "Compte activé"
+    },
+    "deactivateUserSuccess": {
+      "title": "Compte désactivé",
+      "description": "Compte \"{{login}}\" désactivé avec succès"
+    },
+    "activateUserError": {
+      "title": "Échec de l'activation",
+      "description": "Échec de l'activation du compte \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "Échec de la désactivation",
+      "description": "Échec de la désactivation du compte \"{{login}}\""
+    },
+    "deleteUserSuccess": {
+      "title": "Compte supprimé",
+      "description": "Compte \"{{login}}\" supprimé avec succès"
+    },
+    "deleteUserError": {
+      "title": "Échec de la suppression",
+      "description": "Échec de la suppression du compte \"{{login}}\""
+    }
+  },
+  "actions": {
+    "editUser": "Modifier",
+    "deactivateUser": "Désactiver le compte",
+    "activateUser": "Activer le compte",
+    "deleteUser": "Supprimer"
+  },
+  "list": {
+    "actions": {
+      "createUser": "Créer un utilisateur"
+    },
+    "title": "Gestion des utilisateurs"
+  },
+  "data": {
+    "login": {
+      "label": "Login"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "id": {
+      "label": "ID"
+    },
+    "authorities": {
+      "label": "Rôles"
+    },
+    "createdBy": {
+      "label": "Créé par"
+    },
+    "modifiedBy": {
+      "label": "Modifié par"
+    },
+    "status": {
+      "label": "Statut"
+    }
+  }
+}

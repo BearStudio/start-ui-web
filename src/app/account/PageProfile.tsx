@@ -3,6 +3,7 @@ import React from 'react';
 import { Flex, Button, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
+import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 
 import { AccountNav } from '@/app/account/AccountNav';
@@ -17,6 +18,7 @@ import {
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageProfile = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const { account } = useAccount();
   const generalInformationForm = useForm();
@@ -29,19 +31,17 @@ export const PageProfile = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: 'Update failed',
+        title: t('account:profile.feedbacks.udpateError'),
         description: title,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: 'Updated with success',
+        title: t('account:profile.feedbacks.udpateSuccess'),
       });
       queryClient.invalidateQueries('account');
     },
   });
-
-  const languages = [{ label: 'English', value: 'en' }];
 
   const submitGeneralInformation = async (values) => {
     const newAccount = {
@@ -56,7 +56,7 @@ export const PageProfile = () => {
     <Page nav={<AccountNav />}>
       <PageContent>
         <Heading size="md" mb="4">
-          Profile
+          {t('account:profile.title')}
         </Heading>
         {account && (
           <Formiz
@@ -77,27 +77,33 @@ export const PageProfile = () => {
                 <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
                   <FieldInput
                     name="firstName"
-                    label="First Name"
-                    required="This field is required"
+                    label={t('account:data.firstname.label')}
+                    required={t('account:data.firstname.required') as string}
                   />
                   <FieldInput
                     name="lastName"
-                    label="Last Name"
-                    required="This field is required"
+                    label={t('account:data.lastname.label')}
+                    required={t('account:data.lastname.required') as string}
                   />
                 </Stack>
                 <FieldInput
                   name="email"
-                  label="Email"
-                  required="This field is required"
+                  label={t('account:data.email.label')}
+                  required={t('account:data.email.required') as string}
                   validations={[
-                    { rule: isEmail(), message: 'Invalid email address' },
+                    {
+                      rule: isEmail(),
+                      message: t('account:data.email.invalid'),
+                    },
                   ]}
                 />
                 <FieldSelect
                   name="langKey"
-                  label="Language"
-                  options={languages}
+                  label={t('account:data.language.label')}
+                  options={[
+                    { label: t('languages.en'), value: 'en' },
+                    { label: t('languages.fr'), value: 'fr' },
+                  ]}
                 />
                 <Flex>
                   <Button
@@ -106,7 +112,7 @@ export const PageProfile = () => {
                     ml="auto"
                     isLoading={updateLoading}
                   >
-                    Save
+                    {t('account:profile.actions.save')}
                   </Button>
                 </Flex>
               </Stack>

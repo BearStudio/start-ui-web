@@ -94,7 +94,7 @@ export const PageRegister = () => {
 
   return (
     <SlideIn>
-      <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+      <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
         <Formiz
           id="register-form"
           autoForm

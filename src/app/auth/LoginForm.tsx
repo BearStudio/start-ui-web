@@ -2,12 +2,14 @@ import React from 'react';
 
 import { Box, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useLogin } from '@/app/auth/auth.service';
 import { FieldInput, useToastError } from '@/components';
 
 export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
+  const { t } = useTranslation();
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 
@@ -15,7 +17,7 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
     onSuccess,
     onError: (error: any) => {
       toastError({
-        title: 'Login failed',
+        title: t('auth:login.feedbacks.loginError'),
         description: error?.response?.data?.title,
       });
     },
@@ -27,14 +29,14 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
         <Stack spacing="4">
           <FieldInput
             name="username"
-            label="Username"
-            required="Username is required"
+            label={t('auth:data.username.label')}
+            required={t('auth:data.username.required') as string}
           />
           <FieldInput
             name="password"
             type="password"
-            label="Password"
-            required="Password is required"
+            label={t('auth:data.password.label')}
+            required={t('auth:data.password.required') as string}
           />
           <Flex>
             <Button
@@ -42,8 +44,9 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
               to="/account/reset"
               size="sm"
               variant="link"
+              whiteSpace="initial"
             >
-              Forgot password?
+              {t('auth:login.actions.forgotPassword')}
             </Button>
             <Button
               isLoading={isLoading}
@@ -52,7 +55,7 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
               variant="@primary"
               ml="auto"
             >
-              Log In
+              {t('auth:login.actions.login')}
             </Button>
           </Flex>
         </Stack>
