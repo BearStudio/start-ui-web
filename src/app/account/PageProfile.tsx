@@ -15,6 +15,7 @@ import {
   useToastSuccess,
   useToastError,
 } from '@/components';
+import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageProfile = () => {
@@ -31,13 +32,13 @@ export const PageProfile = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: t('account:profile.feedbacks.udpateError'),
+        title: t('account:profile.feedbacks.updateError'),
         description: title,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: t('account:profile.feedbacks.udpateSuccess'),
+        title: t('account:profile.feedbacks.updateSuccess'),
       });
       queryClient.invalidateQueries('account');
     },
@@ -100,10 +101,10 @@ export const PageProfile = () => {
                 <FieldSelect
                   name="langKey"
                   label={t('account:data.language.label')}
-                  options={[
-                    { label: t('languages.en'), value: 'en' },
-                    { label: t('languages.fr'), value: 'fr' },
-                  ]}
+                  options={AVAILABLE_LANGUAGES.map((langKey) => ({
+                    label: t(`languages.${langKey}`),
+                    value: langKey,
+                  }))}
                 />
                 <Flex>
                   <Button

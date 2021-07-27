@@ -1,35 +1,29 @@
 {
   "feedbacks": {
     "activateUserSuccess": {
-      "description": "Compte \"{{login}}\" activé avec succès",
-      "title": "Compte activé"
+      "description": "Utilisateur \"{{login}}\" activé avec succès",
+      "title": "Utilisateur activé"
     },
     "deactivateUserSuccess": {
-      "title": "Compte désactivé",
-      "description": "Compte \"{{login}}\" désactivé avec succès"
+      "title": "Utilisateur désactivé",
+      "description": "Utilisateur \"{{login}}\" désactivé avec succès"
     },
     "activateUserError": {
       "title": "Échec de l'activation",
-      "description": "Échec de l'activation du compte \"{{login}}\""
+      "description": "Échec de l'activation de l'utilisateur \"{{login}}\""
     },
     "deactivateUserError": {
       "title": "Échec de la désactivation",
-      "description": "Échec de la désactivation du compte \"{{login}}\""
+      "description": "Échec de la désactivation de l'utilisateur \"{{login}}\""
     },
     "deleteUserSuccess": {
-      "title": "Compte supprimé",
-      "description": "Compte \"{{login}}\" supprimé avec succès"
+      "title": "Utilisateur supprimé",
+      "description": "Utilisateur \"{{login}}\" supprimé avec succès"
     },
     "deleteUserError": {
       "title": "Échec de la suppression",
-      "description": "Échec de la suppression du compte \"{{login}}\""
+      "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
     }
-  },
-  "actions": {
-    "editUser": "Modifier",
-    "deactivateUser": "Désactiver le compte",
-    "activateUser": "Activer le compte",
-    "deleteUser": "Supprimer"
   },
   "list": {
     "actions": {
@@ -39,16 +33,27 @@
   },
   "data": {
     "login": {
-      "label": "Login"
+      "label": "Nom d'utilisateur",
+      "required": "Le nom d'utilisateur est requis",
+      "alreadyUsed": "Nom d'utilisateur déjà utilisé",
+      "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
+      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
+      "tooShort": "Le nom d'utilisateur est trop court (min. {min} caractères)"
     },
     "email": {
-      "label": "Email"
+      "label": "Email",
+      "required": "L'email est requis",
+      "invalid": "L'email est invalide",
+      "alreadyUsed": "Adresse email déjà utilisée",
+      "tooLong": "L'email est trop long (max. {max} caractères)",
+      "tooShort": "L'email est trop court (min. {min} caractères)"
     },
     "id": {
       "label": "ID"
     },
     "authorities": {
-      "label": "Rôles"
+      "label": "Authorisations",
+      "required": "Les autorisations sont requises"
     },
     "createdBy": {
       "label": "Créé par"
@@ -57,7 +62,45 @@
       "label": "Modifié par"
     },
     "status": {
-      "label": "Statut"
+      "label": "Statut",
+      "activated": "Activé",
+      "deactivated": "Non activé"
+    },
+    "firstname": {
+      "label": "Prénom"
+    },
+    "lastname": {
+      "label": "Nom"
+    },
+    "language": {
+      "label": "Langue"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Mettre à jour"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      },
+      "updateSuccess": {
+        "title": "Mis à jour avec succès"
+      }
+    }
+  },
+  "create": {
+    "title": "Créer un nouvel utilisateur",
+    "action": {
+      "save": "Créer l'utilisateur"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la création"
+      },
+      "updateSuccess": {
+        "title": "Utilisateur créé avec succès"
+      }
     }
   }
 }

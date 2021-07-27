@@ -145,14 +145,14 @@ const UserActions = ({ user, ...rest }) => {
             to={`${url}/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
-            {t('users:actions.editUser')}
+            {t('actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
               icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
             >
-              {t('users:actions.deactivateUser')}
+              {t('actions.deactivate')}
             </MenuItem>
           ) : (
             <MenuItem
@@ -161,7 +161,7 @@ const UserActions = ({ user, ...rest }) => {
                 <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
               }
             >
-              {t('users:actions.activateUser')}
+              {t('actions.activate')}
             </MenuItem>
           )}
           <MenuDivider />
@@ -169,7 +169,7 @@ const UserActions = ({ user, ...rest }) => {
             icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
             onClick={removeUser}
           >
-            {t('users:actions.deleteUser')}
+            {t('actions.delete')}
           </ConfirmMenuItem>
         </MenuList>
       </Portal>

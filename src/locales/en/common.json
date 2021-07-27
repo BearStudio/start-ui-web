@@ -1,6 +1,14 @@
 {
   "languages": {
     "en": "English",
-    "fr": "French"
+    "fr": "French",
+    "es": "Spanish"
+  },
+  "actions": {
+    "activate": "Activate",
+    "cancel": "Cancel",
+    "deactivate": "Deactivate",
+    "delete": "Delete",
+    "edit": "Edit"
   }
 }

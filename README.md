@@ -110,8 +110,11 @@ Create or edit the `.vscode/settings.json` file with the following settings:
 {
   "i18n-ally.localesPaths": ["src/locales"],
   "i18n-ally.keystyle": "nested",
-  "i18n-ally.enabledFrameworks": ["react", "i18next"],
-  "i18n-ally.namespace": true
+  "i18n-ally.enabledFrameworks": ["general", "react", "i18next"],
+  "i18n-ally.namespace": true,
+  "i18n-ally.defaultNamespace": "common",
+  "i18n-ally.extract.autoDetect": true,
+  "i18n-ally.keysInUse": ["common.languages.*"]
 }
 ```
 

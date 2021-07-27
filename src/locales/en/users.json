@@ -7,48 +7,53 @@
   },
   "feedbacks": {
     "activateUserSuccess": {
-      "description": "Account \"{{login}}\" activated with success",
-      "title": "Account Activated"
+      "description": "User \"{{login}}\" activated with success",
+      "title": "User Activated"
     },
     "deactivateUserSuccess": {
-      "title": "Account Deactivated",
-      "description": "Account \"{{login}}\" deactivated with success"
+      "title": "User Deactivated",
+      "description": "User \"{{login}}\" deactivated with success"
     },
     "activateUserError": {
       "title": "Activation Failed",
-      "description": "Fail to activate \"{{login}}\" account"
+      "description": "Fail to activate \"{{login}}\" user"
     },
     "deactivateUserError": {
       "title": "Deactivation Failed",
-      "description": "Fail to deactivate \"{{login}}\" account"
+      "description": "Fail to deactivate \"{{login}}\" user"
     },
     "deleteUserSuccess": {
-      "title": "Account deleted",
-      "description": "Account \"{{login}}\" deleted with success"
+      "title": "User deleted",
+      "description": "User \"{{login}}\" deleted with success"
     },
     "deleteUserError": {
       "title": "Deletion Failed",
-      "description": "Fail to remove \"{{login}}\" account"
+      "description": "Fail to remove \"{{login}}\" user"
     }
-  },
-  "actions": {
-    "editUser": "Edit",
-    "deactivateUser": "Deactivate Account",
-    "activateUser": "Activate Account",
-    "deleteUser": "Delete"
   },
   "data": {
     "login": {
-      "label": "Login"
+      "alreadyUsed": "Username already used",
+      "label": "Username",
+      "required": "Username is required",
+      "tooShort": "Username is too short (min. {min} characters)",
+      "tooLong": "Username is too long (max. {max} characters)",
+      "invalid": "Username is invalid, don't use special characters"
     },
     "email": {
-      "label": "Email"
+      "label": "Email",
+      "alreadyUsed": "Email already used",
+      "required": "Email is required",
+      "invalid": "Email is invalid",
+      "tooShort": "Email is too short (min. {min} characters)",
+      "tooLong": "Email is too long (max. {max} characters)"
     },
     "id": {
       "label": "ID"
     },
     "authorities": {
-      "label": "Authorities"
+      "label": "Authorities",
+      "required": "Authorities are required"
     },
     "createdBy": {
       "label": "Created By"
@@ -57,7 +62,45 @@
       "label": "Modified By"
     },
     "status": {
-      "label": "Status"
+      "label": "Status",
+      "activated": "Activated",
+      "deactivated": "Not Activated"
+    },
+    "firstname": {
+      "label": "First Name"
+    },
+    "lastname": {
+      "label": "Last Name"
+    },
+    "language": {
+      "label": "Language"
     }
+  },
+  "update": {
+    "action": {
+      "save": "Update User"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Update failed"
+      },
+      "updateSuccess": {
+        "title": "Updated with success"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Creation failed"
+      },
+      "updateSuccess": {
+        "title": "User created with success"
+      }
+    },
+    "action": {
+      "save": "Create User"
+    },
+    "title": "Create New User"
   }
 }

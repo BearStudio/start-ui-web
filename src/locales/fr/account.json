@@ -7,8 +7,8 @@
   "profile": {
     "title": "Profil",
     "feedbacks": {
-      "udpateSuccess": "Mis à jour avec succès",
-      "udpateError": "Échec de la mise à jour"
+      "updateSuccess": "Mis à jour avec succès",
+      "updateError": "Échec de la mise à jour"
     },
     "actions": {
       "save": "Sauvegarder"
@@ -17,8 +17,8 @@
   "password": {
     "title": "Mot de passe",
     "feedbacks": {
-      "udpateSuccess": "Votre mot de passe a été mis à jour avec succès",
-      "udpateError": "Échec de la mise à jour du mot de passe"
+      "updateSuccess": "Votre mot de passe a été mis à jour avec succès",
+      "updateError": "Échec de la mise à jour du mot de passe"
     },
     "actions": {
       "changePassword": "Changer le mot de passe"
@@ -65,14 +65,19 @@
       "label": "Email",
       "required": "Email est requis",
       "invalid": "L'email est invalide",
-      "resetHelper": "Entrez l'adresse email que vous avez utilisée pour vous inscrire"
+      "resetHelper": "Entrez l'adresse email que vous avez utilisée pour vous inscrire",
+      "alreadyUsed": "Adresse email déjà utilisée",
+      "tooLong": "L'email est trop long (max. {max} caractères)",
+      "tooShort": "L'email est trop court (min. {min} caractères)"
     },
     "language": {
       "label": "Langue"
     },
     "password": {
+      "label": "Mot de passe",
       "tooShort": "Le mot de passe est trop court",
-      "tooLong": "Le mot de passe est trop long ({max} caractères max.)"
+      "tooLong": "Le mot de passe est trop long ({max} caractères max.)",
+      "required": "Mot de passe requis"
     },
     "currentPassword": {
       "incorrect": "Mot de passe actuel non valide",
@@ -87,6 +92,32 @@
       "label": "Confirmer le nouveau mot de passe",
       "required": "La confirmation du mot de passe est requise",
       "notEqual": "Les nouveaux mots de passe doivent être égaux"
+    },
+    "login": {
+      "alreadyUsed": "Nom d'utilisateur déjà utilisé",
+      "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
+      "label": "Nom d'utilisateur",
+      "required": "Le nom d'utilisateur est requis",
+      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
+      "tooShort": "Le nom d'utilisateur est trop court (min. {min} caractères)"
     }
+  },
+  "register": {
+    "actions": {
+      "alreadyHaveAnAccount": "Vous avez déjà un compte ?",
+      "create": "Créer un compte",
+      "goToLogin": "Aller à la connexion",
+      "login": "Connexion"
+    },
+    "feedbacks": {
+      "registrationError": {
+        "title": "Échec de l'enregistrement"
+      },
+      "registrationSuccess": {
+        "description": "Veuillez vérifier votre boîte de réception email <strong>{{email}}</strong> pour activer votre compte.",
+        "title": "Compte créé avec succès !"
+      }
+    },
+    "title": "S'inscrire"
   }
 }
