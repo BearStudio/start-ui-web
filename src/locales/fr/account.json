@@ -99,7 +99,7 @@
       "label": "Nom d'utilisateur",
       "required": "Le nom d'utilisateur est requis",
       "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
-      "tooShort": "Le nom d'utilisateur est trop court (min. {min} caractères)"
+      "tooShort": "Le nom d'utilisateur est trop court (min. {{min}} caractères)"
     }
   },
   "register": {

@@ -36,8 +36,8 @@
       "alreadyUsed": "Username already used",
       "label": "Username",
       "required": "Username is required",
-      "tooShort": "Username is too short (min. {min} characters)",
-      "tooLong": "Username is too long (max. {max} characters)",
+      "tooShort": "Username is too short (min. {{min}} characters)",
+      "tooLong": "Username is too long (max. {{max}} characters)",
       "invalid": "Username is invalid, don't use special characters"
     },
     "email": {
@@ -45,8 +45,8 @@
       "alreadyUsed": "Email already used",
       "required": "Email is required",
       "invalid": "Email is invalid",
-      "tooShort": "Email is too short (min. {min} characters)",
-      "tooLong": "Email is too long (max. {max} characters)"
+      "tooShort": "Email is too short (min. {{min}} characters)",
+      "tooLong": "Email is too long (max. {{max}} characters)"
     },
     "id": {
       "label": "ID"

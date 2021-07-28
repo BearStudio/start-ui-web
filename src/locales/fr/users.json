@@ -38,7 +38,7 @@
       "alreadyUsed": "Nom d'utilisateur déjà utilisé",
       "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
       "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
-      "tooShort": "Le nom d'utilisateur est trop court (min. {min} caractères)"
+      "tooShort": "Le nom d'utilisateur est trop court (min. {{min}} caractères)"
     },
     "email": {
       "label": "Email",
@@ -52,7 +52,7 @@
       "label": "ID"
     },
     "authorities": {
-      "label": "Authorisations",
+      "label": "Autorisations",
       "required": "Les autorisations sont requises"
     },
     "createdBy": {
