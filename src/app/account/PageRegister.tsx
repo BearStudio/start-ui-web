@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   Alert,
@@ -23,19 +23,27 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useCreateAccount } from '@/app/account/account.service';
-import { FieldInput, SlideIn, useToastError } from '@/components';
+import { FieldInput, FieldSelect, SlideIn, useToastError } from '@/components';
+import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageRegister = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { colorModeValue } = useDarkMode();
-  const form = useForm();
+  const form = useForm({
+    subscribe: { form: true, fields: ['langKey'] },
+  });
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
 
+  // Change language based on form
+  useEffect(() => {
+    i18n.changeLanguage(form.values?.langKey);
+  }, [i18n, form.values?.langKey]);
+
   const { mutate: createUser, isLoading, isSuccess } = useCreateAccount({
-    onMutate: () => {
-      setAccountEmail(form.values?.email);
+    onMutate: ({ email }) => {
+      setAccountEmail(email);
     },
     onError: (error: any) => {
       const { errorKey, title } = error?.response?.data || {};
@@ -117,6 +125,15 @@ export const PageRegister = () => {
               {t('account:register.title')}
             </Heading>
             <Stack spacing="4">
+              <FieldSelect
+                name="langKey"
+                label={t('account:data.language.label')}
+                options={AVAILABLE_LANGUAGES.map((langKey) => ({
+                  label: t(`languages.${langKey}`),
+                  value: langKey,
+                }))}
+                defaultValue={i18n.language}
+              />
               <FieldInput
                 name="login"
                 label={t('account:data.login.label')}
