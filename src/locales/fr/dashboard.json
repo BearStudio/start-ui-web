@@ -1,0 +1,12 @@
+{
+  "title": "Tableau de bord",
+  "welcome": {
+    "author": "— <strong>L'équipe BearStudio</strong>",
+    "description": "Un starter UI dogmatique avec React, Chakra UI, React Query & Formiz",
+    "title": "Bienvenue dans Start UI"
+  },
+  "links": {
+    "github": "Dépôt GitHub",
+    "openIssue": "Ouvrir une issue"
+  }
+}
