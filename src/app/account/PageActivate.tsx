@@ -25,11 +25,11 @@ export const PageActivate = () => {
       {isLoading && (
         <HStack>
           <Spinner size="sm" mr="2" />
-          <Text>{t('account:activate.feedbacks.activationLoading')}</Text>
+          <Text>{t('account:activate.feedbacks.activationLoading.title')}</Text>
         </HStack>
       )}
-      {isSuccess && t('account:activate.feedbacks.activationSuccess')}
-      {isError && t('account:activate.feedbacks.activationError')}
+      {isSuccess && t('account:activate.feedbacks.activationSuccess.title')}
+      {isError && t('account:activate.feedbacks.activationError.title')}
     </Box>
   );
 };

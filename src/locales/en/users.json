@@ -7,8 +7,8 @@
   },
   "feedbacks": {
     "activateUserSuccess": {
-      "description": "User \"{{login}}\" activated with success",
-      "title": "User Activated"
+      "title": "User Activated",
+      "description": "User \"{{login}}\" activated with success"
     },
     "deactivateUserSuccess": {
       "title": "User Deactivated",

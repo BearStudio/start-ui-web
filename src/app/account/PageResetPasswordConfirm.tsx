@@ -34,7 +34,7 @@ export const PageResetPasswordConfirm = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: t('account:resetPassword.feedbacks.confirmError'),
+        title: t('account:resetPassword.feedbacks.confirmError.title'),
         description: title,
       });
     },

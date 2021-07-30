@@ -7,8 +7,12 @@
   "profile": {
     "title": "Profile",
     "feedbacks": {
-      "updateSuccess": "Updated with success",
-      "updateError": "Update failed"
+      "updateSuccess": {
+        "title": "Updated with success"
+      },
+      "updateError": {
+        "title": "Update failed"
+      }
     },
     "actions": {
       "save": "Save"
@@ -17,8 +21,12 @@
   "password": {
     "title": "Password",
     "feedbacks": {
-      "updateSuccess": "Your password has been updated with success",
-      "updateError": "Password update failed"
+      "updateSuccess": {
+        "title": "Your password has been updated with success"
+      },
+      "updateError": {
+        "title": "Password update failed"
+      }
     },
     "actions": {
       "changePassword": "Change Password"
@@ -37,19 +45,29 @@
         "title": "Reset password email sent with success!",
         "description": "If an account exist with email <strong>{{email}}</strong> you should have received an email."
       },
-      "initError": "Reset password failed",
+      "initError": {
+        "title": "Reset password failed"
+      },
       "confirmSuccess": {
         "title": "Your password has been reset",
         "description": "You can now login"
       },
-      "confirmError": "Reset password failed"
+      "confirmError": {
+        "title": "Reset password failed"
+      }
     }
   },
   "activate": {
     "feedbacks": {
-      "activationLoading": "Account activation...",
-      "activationSuccess": "Account activation successfully",
-      "activationError": "Failed to activate account"
+      "activationLoading": {
+        "title": "Account activation..."
+      },
+      "activationSuccess": {
+        "title": "Account activation successfully"
+      },
+      "activationError": {
+        "title": "Failed to activate account"
+      }
     }
   },
   "data": {

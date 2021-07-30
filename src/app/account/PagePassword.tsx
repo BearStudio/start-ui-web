@@ -32,13 +32,13 @@ export const PagePassword = () => {
         return;
       }
       toastError({
-        title: t('account:password.feedbacks.updateError'),
+        title: t('account:password.feedbacks.updateError.title'),
         description: title,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: t('account:password.feedbacks.updateSuccess'),
+        title: t('account:password.feedbacks.updateSuccess.title'),
       });
       changePasswordForm.reset();
     },

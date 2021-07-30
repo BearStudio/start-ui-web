@@ -32,13 +32,13 @@ export const PageProfile = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: t('account:profile.feedbacks.updateError'),
+        title: t('account:profile.feedbacks.updateError.title'),
         description: title,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: t('account:profile.feedbacks.updateSuccess'),
+        title: t('account:profile.feedbacks.updateSuccess.title'),
       });
       queryClient.invalidateQueries('account');
     },

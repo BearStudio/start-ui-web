@@ -1,8 +1,8 @@
 {
   "feedbacks": {
     "activateUserSuccess": {
-      "description": "Utilisateur \"{{login}}\" activé avec succès",
-      "title": "Utilisateur activé"
+      "title": "Utilisateur activé",
+      "description": "Utilisateur \"{{login}}\" activé avec succès"
     },
     "deactivateUserSuccess": {
       "title": "Utilisateur désactivé",
@@ -26,10 +26,10 @@
     }
   },
   "list": {
+    "title": "Gestion des utilisateurs",
     "actions": {
       "createUser": "Créer un utilisateur"
-    },
-    "title": "Gestion des utilisateurs"
+    }
   },
   "data": {
     "login": {

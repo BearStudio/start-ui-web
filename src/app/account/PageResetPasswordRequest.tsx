@@ -41,7 +41,7 @@ export const PageResetPasswordRequest = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: t('account:resetPassword.feedbacks.initError'),
+        title: t('account:resetPassword.feedbacks.initError.title'),
         description: title,
       });
     },

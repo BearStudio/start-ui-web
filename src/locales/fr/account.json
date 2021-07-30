@@ -7,8 +7,12 @@
   "profile": {
     "title": "Profil",
     "feedbacks": {
-      "updateSuccess": "Mis à jour avec succès",
-      "updateError": "Échec de la mise à jour"
+      "updateSuccess": {
+        "title": "Mis à jour avec succès"
+      },
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      }
     },
     "actions": {
       "save": "Sauvegarder"
@@ -17,8 +21,12 @@
   "password": {
     "title": "Mot de passe",
     "feedbacks": {
-      "updateSuccess": "Votre mot de passe a été mis à jour avec succès",
-      "updateError": "Échec de la mise à jour du mot de passe"
+      "updateSuccess": {
+        "title": "Votre mot de passe a été mis à jour avec succès"
+      },
+      "updateError": {
+        "title": "Échec de la mise à jour du mot de passe"
+      }
     },
     "actions": {
       "changePassword": "Changer le mot de passe"
@@ -37,19 +45,29 @@
         "title": "Email de réinitialisation envoyé avec succès !",
         "description": "Si un compte existe avec l'adresse <strong>{{email}}</strong> vous allez recevoir un email pour mettre à jour votre mot de passe."
       },
-      "initError": "Échec de la réinitialisation du mot de passe",
+      "initError": {
+        "title": "Échec de la réinitialisation du mot de passe"
+      },
       "confirmSuccess": {
         "title": "Votre mot de passe a été réinitialisé",
         "description": "Vous pouvez maintenant vous connecter"
       },
-      "confirmError": "Échec de la réinitalisation du mot de passe"
+      "confirmError": {
+        "title": "Échec de la réinitalisation du mot de passe"
+      }
     }
   },
   "activate": {
     "feedbacks": {
-      "activationLoading": "Activation de compte...",
-      "activationSuccess": "Activation du compte avec succès",
-      "activationError": "Échec de l'activation du compte"
+      "activationLoading": {
+        "title": "Activation de compte..."
+      },
+      "activationSuccess": {
+        "title": "Activation du compte avec succès"
+      },
+      "activationError": {
+        "title": "Échec de l'activation du compte"
+      }
     }
   },
   "data": {
@@ -114,8 +132,8 @@
         "title": "Échec de l'enregistrement"
       },
       "registrationSuccess": {
-        "description": "Veuillez vérifier votre boîte de réception email <strong>{{email}}</strong> pour activer votre compte.",
-        "title": "Compte créé avec succès !"
+        "title": "Compte créé avec succès !",
+        "description": "Veuillez vérifier votre boîte de réception email <strong>{{email}}</strong> pour activer votre compte."
       }
     },
     "title": "S'inscrire"
