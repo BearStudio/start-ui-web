@@ -39,6 +39,7 @@ import {
   useUserUpdate,
 } from '@/app/admin/users/users.service';
 import { Page, PageContent } from '@/app/layout';
+import { usePaginationFromUrl } from '@/app/router';
 import {
   ActionsButton,
   ConfirmMenuItem,
@@ -51,7 +52,6 @@ import {
   Icon,
   useToastError,
   useToastSuccess,
-  usePaginationFromUrl,
   PaginationButtonFirstPage,
   Pagination,
   PaginationButtonLastPage,
