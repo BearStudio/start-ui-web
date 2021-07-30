@@ -132,8 +132,8 @@ export const AccountMenu = ({ ...rest }) => {
           onClick={() => toggleColorMode()}
         >
           {colorMode === 'dark'
-            ? t('layout:accountMenu.switchColorModeDark')
-            : t('layout:accountMenu.switchColorModeLight')}
+            ? t('layout:accountMenu.switchColorModeLight')
+            : t('layout:accountMenu.switchColorModeDark')}
         </MenuItem>
         <MenuDivider />
         <MenuItem
