@@ -1,0 +1,11 @@
+{
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "Actions"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Click to confirm"
+  }
+}

@@ -34,7 +34,7 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   ...rest
 }) => {
   const isMenu = useBreakpointValue({ base: true, [breakpoint]: false });
-  const [active, setActive] = useState(<>Navigation</>);
+  const [active, setActive] = useState(<>-</>);
   return (
     <NavContext.Provider value={{ active, setActive, isMenu }}>
       <Menu matchWidth {...rest}>
