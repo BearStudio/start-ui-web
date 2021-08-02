@@ -15,5 +15,9 @@
     "prevPage": "Previous Page",
     "lastPage": "Last Page",
     "nextPage": "Next Page"
+  },
+  "searchInput": {
+    "placeholder": "Search...",
+    "clear": "Clear Search"
   }
 }
