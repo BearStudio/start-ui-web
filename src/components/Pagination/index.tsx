@@ -113,6 +113,7 @@ export const PaginationButtonNextPage: FC<
 };
 
 export const PaginationInfo = ({ ...rest }) => {
+  const { t } = useTranslation();
   const {
     firstItemOnPage,
     lastItemOnPage,
@@ -120,6 +121,7 @@ export const PaginationInfo = ({ ...rest }) => {
     isLoadingPage,
   } = useContext(PaginationContext);
   const translationProps = {
+    t,
     values: {
       firstItemOnPage,
       lastItemOnPage,

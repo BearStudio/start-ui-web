@@ -86,6 +86,7 @@ export const PageRegister = () => {
             </AlertTitle>
             <AlertDescription>
               <Trans
+                t={t}
                 i18nKey="account:register.feedbacks.registrationSuccess.description"
                 values={{ email: accountEmail }}
               />

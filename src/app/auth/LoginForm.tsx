@@ -16,6 +16,7 @@ import { useLogin } from '@/app/auth/auth.service';
 import { FieldInput, useToastError } from '@/components';
 
 const MockedApiHint = () => {
+  const { t } = useTranslation();
   const form = useForm({ subscribe: 'form' });
   const mockedUsername = 'admin';
   const mockedPassword = 'admin';
@@ -26,6 +27,7 @@ const MockedApiHint = () => {
     <Alert mt="4" borderRadius="md" textAlign="center" colorScheme="brand">
       <AlertDescription>
         <Trans
+          t={t}
           i18nKey="auth:mockedApi.loginHint"
           values={{ credentials: `${mockedUsername}/${mockedPassword}` }}
           components={{

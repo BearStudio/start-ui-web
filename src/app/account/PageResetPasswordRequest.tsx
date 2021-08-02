@@ -73,6 +73,7 @@ export const PageResetPasswordRequest = () => {
             </AlertTitle>
             <AlertDescription>
               <Trans
+                t={t}
                 i18nKey="account:resetPassword.feedbacks.initSuccess.description"
                 values={{ email: accountEmail }}
               />

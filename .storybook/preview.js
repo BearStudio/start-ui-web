@@ -2,12 +2,32 @@ import React, { useEffect } from 'react';
 
 import { useColorMode, Box } from '@chakra-ui/react';
 import { themes } from '@storybook/theming';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/Providers';
+import i18nGlobal from '../src/config/i18next';
+import { DEFAULT_LANGUAGE, AVAILABLE_LANGUAGES } from '../src/constants/i18n';
 import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';
+
+// .storybook/preview.js
+
+export const globalTypes = {
+  locale: {
+    name: 'Locale',
+    description: 'Internationalization locale',
+    defaultValue: DEFAULT_LANGUAGE,
+    toolbar: {
+      icon: 'globe',
+      items: AVAILABLE_LANGUAGES.map((langKey) => ({
+        value: langKey,
+        title: i18nGlobal.t(`languages.${langKey}`),
+      })),
+    },
+  },
+};
 
 export const parameters = {
   options: {
@@ -32,9 +52,12 @@ export const parameters = {
   backgrounds: { disable: true, grid: { disable: true } },
 };
 
-const DarkModeWrapper = ({ children }) => {
+const DocumentationWrapper = ({ children, context }) => {
+  const { i18n } = useTranslation();
   const isDarkMode = useDarkMode();
   const { colorMode, setColorMode } = useColorMode();
+
+  // Update color mode
   useEffect(() => {
     // Add timeout to prevent unsync color mode between docs and classic modes
     const timer = setTimeout(() => {
@@ -46,6 +69,12 @@ const DarkModeWrapper = ({ children }) => {
     });
     return () => clearTimeout(timer);
   }, [isDarkMode]);
+
+  // Update language
+  useEffect(() => {
+    i18n.changeLanguage(context.globals.locale);
+  }, [context.globals.locale]);
+
   return (
     <Box
       id="start-ui-storybook-wrapper"
@@ -60,13 +89,13 @@ const DarkModeWrapper = ({ children }) => {
 };
 
 export const decorators = [
-  (Story) => (
+  (Story, context) => (
     <Providers>
-      <DarkModeWrapper>
-        <BrowserRouter>
-          <Story />
-        </BrowserRouter>
-      </DarkModeWrapper>
+      <BrowserRouter>
+        <DocumentationWrapper context={context}>
+          <Story {...context} />
+        </DocumentationWrapper>
+      </BrowserRouter>
     </Providers>
   ),
 ];

@@ -36,7 +36,7 @@ export const PageDashboard = () => {
               {t('dashboard:welcome.description')}
               <br />
               <Text as="a" href="https://www.bearstudio.fr">
-                <Trans i18nKey="dashboard:welcome.author" />
+                <Trans t={t} i18nKey="dashboard:welcome.author" />
               </Text>
             </AlertDescription>
           </Box>
