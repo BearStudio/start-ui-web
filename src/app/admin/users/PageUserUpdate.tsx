@@ -88,7 +88,7 @@ export const PageUserUpdate = () => {
             {userIsLoading ? (
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
-              <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
+              <Stack spacing="0">
                 <Heading size="sm">{user?.login}</Heading>
                 <Text
                   fontSize="xs"
