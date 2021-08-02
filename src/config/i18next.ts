@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 
 import { DEFAULT_LANGUAGE } from '@/constants/i18n';
 import * as locales from '@/locales';
+import { isBrowser } from '@/utils/ssr';
 
 i18n.use(initReactI18next).init({
   defaultNS: 'common',
@@ -19,6 +20,9 @@ i18n.use(initReactI18next).init({
 
 i18n.on('languageChanged', (langKey) => {
   dayjs.locale(langKey);
+  if (isBrowser) {
+    document.documentElement.lang = langKey;
+  }
 });
 
 export default i18n;
