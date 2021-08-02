@@ -1,6 +1,6 @@
 {
   "dateAgo": {
-    "format": "dddd, DD MMMM YYYY, hh:mm a"
+    "format": "dddd DD MMMM YYYY, HH:mm"
   },
   "actionsButton": {
     "label": "Actions"
