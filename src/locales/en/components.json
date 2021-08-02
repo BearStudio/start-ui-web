@@ -1,0 +1,23 @@
+{
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "Actions"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Click to confirm"
+  },
+  "pagination": {
+    "showing": "<box>Showing</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
+    "loading": "<spinner></spinner> <box>Loading</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
+    "firstPage": "First Page",
+    "prevPage": "Previous Page",
+    "lastPage": "Last Page",
+    "nextPage": "Next Page"
+  },
+  "searchInput": {
+    "placeholder": "Search...",
+    "clear": "Clear Search"
+  }
+}

@@ -1,9 +1,16 @@
 import React from 'react';
 
 import { Stack } from '@chakra-ui/react';
-import { isEmail } from '@formiz/validations';
+import {
+  isEmail,
+  isMaxLength,
+  isMinLength,
+  isPattern,
+} from '@formiz/validations';
+import { useTranslation } from 'react-i18next';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
+import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
@@ -12,6 +19,7 @@ const AUTHORITIES = {
 };
 
 export const UserForm = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
   return (
@@ -25,35 +33,62 @@ export const UserForm = () => {
     >
       <FieldInput
         name="login"
-        label="Login"
-        required="This field is required"
+        label={t('users:data.login.label')}
+        required={t('users:data.login.required') as string}
+        validations={[
+          {
+            rule: isMinLength(2),
+            message: t('users:data.login.tooShort', { min: 2 }),
+          },
+          {
+            rule: isMaxLength(50),
+            message: t('users:data.login.tooLong', { max: 50 }),
+          },
+          {
+            rule: isPattern(
+              '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
+            ),
+            message: t('users:data.login.invalid'),
+          },
+        ]}
       />
       <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-        <FieldInput name="firstName" label="First Name" />
-        <FieldInput name="lastName" label="Last Name" />
+        <FieldInput name="firstName" label={t('users:data.firstname.label')} />
+        <FieldInput name="lastName" label={t('users:data.lastname.label')} />
       </Stack>
       <FieldInput
         name="email"
-        label="Email"
-        required="This field is required"
+        label={t('users:data.email.label')}
+        required={t('users:data.email.required') as string}
         validations={[
           {
+            rule: isMinLength(5),
+            message: t('users:data.email.tooShort', { min: 5 }),
+          },
+          {
+            rule: isMaxLength(254),
+            message: t('users:data.email.tooLong', { min: 254 }),
+          },
+          {
             rule: isEmail(),
-            message: 'Email invalid',
+            message: t('users:data.email.invalid'),
           },
         ]}
       />
       <FieldSelect
         name="langKey"
-        label="Language"
-        options={[{ label: 'English', value: 'en' }]}
-        defaultValue={'en'}
+        label={t('users:data.language.label')}
+        options={AVAILABLE_LANGUAGES.map((langKey) => ({
+          label: t(`languages.${langKey}`),
+          value: langKey,
+        }))}
+        defaultValue={DEFAULT_LANGUAGE}
       />
       <FieldCheckboxes
         name="authorities"
-        label="Authorities"
+        label={t('users:data.authorities.label')}
         options={authorities}
-        required="This field is required"
+        required={t('users:data.authorities.required') as string}
       />
     </Stack>
   );

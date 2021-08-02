@@ -45,8 +45,8 @@ export const TopBar = () => {
         <Flex
           position="fixed"
           top="0"
-          left="0"
-          right="0"
+          insetStart="0"
+          insetEnd="0"
           bg={colorModeValue('gray.800', 'gray.900')}
           color="gray.50"
           align="center"
@@ -54,7 +54,7 @@ export const TopBar = () => {
           px="4"
           h={theme.layout.topBar.height}
         >
-          <MenuButton display={{ base: 'flex', md: 'none' }} ml="-0.5rem" />
+          <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
           <Box
             as={RouterLink}
             to="/"
@@ -62,7 +62,7 @@ export const TopBar = () => {
           >
             <Logo color="gray.500" h="1rem" />
           </Box>
-          <MainMenu mr="auto" ml="4" display={{ base: 'none', md: 'flex' }} />
+          <MainMenu me="auto" ms="4" display={{ base: 'none', md: 'flex' }} />
           <AccountMenu />
         </Flex>
       </SlideFade>

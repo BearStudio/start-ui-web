@@ -11,7 +11,8 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useQueryClient } from 'react-query';
+import { AxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useUser, useUserUpdate } from '@/app/admin/users/users.service';
@@ -28,7 +29,8 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
 
-export const PageUser = () => {
+export const PageUserUpdate = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const { login } = useParams();
   const history = useHistory();
@@ -37,28 +39,39 @@ export const PageUser = () => {
     isLoading: userIsLoading,
     isFetching: userIsFetching,
   } = useUser(login, { refetchOnWindowFocus: false });
-  const queryClient = useQueryClient();
+
+  const form = useForm({ subscribe: false });
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
   const { mutate: editUser, isLoading: editUserIsLoading } = useUserUpdate({
-    onError: (error: any) => {
-      const { title } = error?.response?.data || {};
+    onError: (error: AxiosError) => {
+      const { title, errorKey } = error.response.data;
       toastError({
-        title: 'Update failed',
+        title: t('users:update.feedbacks.updateError.title'),
         description: title,
       });
+      switch (errorKey) {
+        case 'userexists':
+          form.invalidateFields({
+            login: t('users:data.login.alreadyUsed'),
+          });
+          break;
+        case 'emailexists':
+          form.invalidateFields({
+            email: t('users:data.email.alreadyUsed'),
+          });
+          break;
+      }
     },
     onSuccess: () => {
       toastSuccess({
-        title: 'Updated with success',
+        title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      queryClient.invalidateQueries('user');
       history.goBack();
     },
   });
-  const editUserForm = useForm();
   const submitEditUser = (values) => {
     const userToSend = {
       id: user?.id,
@@ -75,13 +88,13 @@ export const PageUser = () => {
             {userIsLoading ? (
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
-              <Stack spacing={!userIsLoading ? '0rem' : '0.5rem'}>
+              <Stack spacing="0">
                 <Heading size="sm">{user?.login}</Heading>
                 <Text
                   fontSize="xs"
                   color={colorModeValue('gray.600', 'gray.300')}
                 >
-                  {'ID : ' + user?.id}
+                  {t('users:data.id.label')}: {user?.id}
                 </Text>
               </Stack>
             )}
@@ -99,22 +112,24 @@ export const PageUser = () => {
         <Formiz
           id="create-user-form"
           onValidSubmit={submitEditUser}
-          connect={editUserForm}
+          connect={form}
           initialValues={user}
         >
-          <form noValidate onSubmit={editUserForm.submit}>
+          <form noValidate onSubmit={form.submit}>
             <PageContent>
               <UserForm />
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => history.goBack()}>Cancel</Button>
+                <Button onClick={() => history.goBack()}>
+                  {t('actions.cancel')}
+                </Button>
                 <Button
                   type="submit"
                   variant="@primary"
                   isLoading={editUserIsLoading}
                 >
-                  Edit User
+                  {t('users:update.action.save')}
                 </Button>
               </ButtonGroup>
             </PageBottomBar>

@@ -1,12 +1,15 @@
 import React from 'react';
 
 import { Stack, Box } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/app/account/account.service';
 import { useLayoutContext } from '@/app/layout';
+import { useRtl } from '@/hooks/useRtl';
 
 const MainMenuItem = ({ to, ...rest }: any) => {
+  const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
   const { pathname } = useLocation();
   const isActive = pathname.startsWith(to);
@@ -42,9 +45,9 @@ const MainMenuItem = ({ to, ...rest }: any) => {
         opacity: isActive ? 1 : 0,
         content: '""',
         position: 'absolute',
-        left: { base: 8, md: '50%' },
+        insetStart: { base: 8, md: '50%' },
         bottom: '0.2em',
-        transform: 'translateX(-50%)',
+        transform: rtlValue('translateX(-50%)', 'translateX(50%)'),
         transition: '0.2s',
         w: isActive ? '2rem' : 0,
         h: '2px',
@@ -58,11 +61,16 @@ const MainMenuItem = ({ to, ...rest }: any) => {
 };
 
 export const MainMenu = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { isAdmin } = useAccount();
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <MainMenuItem to="/dashboard">Dashboard</MainMenuItem>
-      {isAdmin && <MainMenuItem to="/admin">Admin</MainMenuItem>}
+      <MainMenuItem to="/dashboard">
+        {t('layout:mainMenu.dashboard')}
+      </MainMenuItem>
+      {isAdmin && (
+        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
+      )}
     </Stack>
   );
 };

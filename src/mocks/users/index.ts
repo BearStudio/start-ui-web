@@ -1,5 +1,7 @@
 import { Response } from 'miragejs';
 
+import { sortByKey } from '@/utils/arrays';
+
 import { withAuth } from '../auth';
 
 export const UsersRoutes = (server) => {
@@ -11,8 +13,16 @@ export const UsersRoutes = (server) => {
 };
 
 const getAll = withAuth((schema, request) => {
+  const { page = 1, size = 10, sort = '' } = request.queryParams;
+  const start = page * size;
+  const end = start + parseInt(size, 10);
   const users = schema.all('user');
-  return new Response(200, { 'x-total-count': users.length.toString() }, users);
+
+  return new Response(
+    200,
+    { 'x-total-count': users.length.toString() },
+    users.sort(sortByKey(sort.split(','))).slice(start, end)
+  );
 });
 
 const getOneByLogin = withAuth((schema, request) => {

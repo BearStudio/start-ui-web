@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "profile": "Profil",
+    "password": "Mot de passe",
+    "myAccount": "Mon compte"
+  },
+  "profile": {
+    "title": "Profil",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Mis à jour avec succès"
+      },
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      }
+    },
+    "actions": {
+      "save": "Sauvegarder"
+    }
+  },
+  "password": {
+    "title": "Mot de passe",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Votre mot de passe a été mis à jour avec succès"
+      },
+      "updateError": {
+        "title": "Échec de la mise à jour du mot de passe"
+      }
+    },
+    "actions": {
+      "changePassword": "Changer le mot de passe"
+    }
+  },
+  "resetPassword": {
+    "title": "Réinitialiser le mot de passe",
+    "actions": {
+      "cancel": "Retour",
+      "goToLogin": "Aller à la connexion",
+      "reset": "Réinitialiser",
+      "send": "Envoyer l'email"
+    },
+    "feedbacks": {
+      "initSuccess": {
+        "title": "Email de réinitialisation envoyé avec succès !",
+        "description": "Si un compte existe avec l'adresse <strong>{{email}}</strong> vous allez recevoir un email pour mettre à jour votre mot de passe."
+      },
+      "initError": {
+        "title": "Échec de la réinitialisation du mot de passe"
+      },
+      "confirmSuccess": {
+        "title": "Votre mot de passe a été réinitialisé",
+        "description": "Vous pouvez maintenant vous connecter"
+      },
+      "confirmError": {
+        "title": "Échec de la réinitalisation du mot de passe"
+      }
+    }
+  },
+  "activate": {
+    "feedbacks": {
+      "activationLoading": {
+        "title": "Activation de compte..."
+      },
+      "activationSuccess": {
+        "title": "Activation du compte avec succès"
+      },
+      "activationError": {
+        "title": "Échec de l'activation du compte"
+      }
+    }
+  },
+  "data": {
+    "firstname": {
+      "label": "Nom",
+      "required": "Le nom est requis"
+    },
+    "lastname": {
+      "label": "Prénom",
+      "required": "Le prénom est requis"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email est requis",
+      "invalid": "L'email est invalide",
+      "resetHelper": "Entrez l'adresse email que vous avez utilisée pour vous inscrire",
+      "alreadyUsed": "Adresse email déjà utilisée",
+      "tooLong": "L'email est trop long (max. {max} caractères)",
+      "tooShort": "L'email est trop court (min. {min} caractères)"
+    },
+    "language": {
+      "label": "Langue"
+    },
+    "password": {
+      "label": "Mot de passe",
+      "tooShort": "Le mot de passe est trop court",
+      "tooLong": "Le mot de passe est trop long ({max} caractères max.)",
+      "required": "Mot de passe requis"
+    },
+    "currentPassword": {
+      "incorrect": "Mot de passe actuel non valide",
+      "label": "Mot de passe actuel",
+      "required": "Le mot de passe actuel est requis"
+    },
+    "newPassword": {
+      "label": "Nouveau mot de passe",
+      "required": "Le nouveau mot de passe est requis"
+    },
+    "confirmNewPassword": {
+      "label": "Confirmer le nouveau mot de passe",
+      "required": "La confirmation du mot de passe est requise",
+      "notEqual": "Les nouveaux mots de passe doivent être égaux"
+    },
+    "login": {
+      "alreadyUsed": "Nom d'utilisateur déjà utilisé",
+      "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
+      "label": "Nom d'utilisateur",
+      "required": "Le nom d'utilisateur est requis",
+      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
+      "tooShort": "Le nom d'utilisateur est trop court (min. {{min}} caractères)"
+    }
+  },
+  "register": {
+    "actions": {
+      "alreadyHaveAnAccount": "Vous avez déjà un compte ?",
+      "create": "Créer un compte",
+      "goToLogin": "Aller à la connexion",
+      "login": "Connexion"
+    },
+    "feedbacks": {
+      "registrationError": {
+        "title": "Échec de l'enregistrement"
+      },
+      "registrationSuccess": {
+        "title": "Compte créé avec succès !",
+        "description": "Veuillez vérifier votre boîte de réception email <strong>{{email}}</strong> pour activer votre compte."
+      }
+    },
+    "title": "S'inscrire"
+  }
+}

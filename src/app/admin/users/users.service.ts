@@ -8,6 +8,7 @@ import {
 } from 'react-query';
 
 import { User, UserList } from '@/app/admin/users/users.types';
+import { DEFAULT_LANGUAGE } from '@/constants/i18n';
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
@@ -59,16 +60,16 @@ export const useUser = (
 export const useUserUpdate = (
   config: UseMutationOptions<User, unknown, User> = {}
 ) => {
-  const queryCache = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation((payload) => Axios.put('/users', payload), {
     ...config,
-    onSuccess: (data, ...rest) => {
-      queryCache.cancelQueries('users');
-      queryCache
+    onSuccess: (data, payload, ...rest) => {
+      queryClient.cancelQueries('users');
+      queryClient
         .getQueryCache()
         .findAll('users')
         .forEach(({ queryKey }) => {
-          queryCache.setQueryData(queryKey, (cachedData: UserList) => {
+          queryClient.setQueryData(queryKey, (cachedData: UserList) => {
             if (!cachedData) return;
             return {
               ...cachedData,
@@ -78,9 +79,10 @@ export const useUserUpdate = (
             };
           });
         });
-      queryCache.invalidateQueries('users');
+      queryClient.invalidateQueries('users');
+      queryClient.invalidateQueries(['user', payload.login]);
       if (config.onSuccess) {
-        config.onSuccess(data, ...rest);
+        config.onSuccess(data, payload, ...rest);
       }
     },
   });
@@ -97,7 +99,7 @@ export const useUserCreate = (
   > = {}
 ) => {
   return useMutation(
-    ({ langKey = 'en', ...payload }) =>
+    ({ langKey = DEFAULT_LANGUAGE, ...payload }) =>
       Axios.post('/users', {
         langKey,
         ...payload,

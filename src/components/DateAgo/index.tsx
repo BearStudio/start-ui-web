@@ -2,8 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 
 import { forwardRef, Tooltip, TooltipProps } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-
-export const DEFAULT_FORMAT = 'dddd, DD MMMM YYYY, hh:mm a';
+import { useTranslation } from 'react-i18next';
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
@@ -23,9 +22,10 @@ export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
 }
 
 export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
-  { date = new Date(), format = DEFAULT_FORMAT, ...rest },
+  { date = new Date(), format, ...rest },
   ref
 ) {
+  const { t } = useTranslation();
   const [, setForceUpdate] = useState(0);
   const dayjsDate = dayjs(date);
 
@@ -47,7 +47,7 @@ export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
   return (
     <Tooltip
       ref={ref}
-      label={dayjsDate.format(format)}
+      label={dayjsDate.format(format ?? t('components:dateAgo.format'))}
       placement="top-start"
       {...rest}
     >

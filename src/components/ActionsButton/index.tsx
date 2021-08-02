@@ -1,13 +1,17 @@
 import React, { FC } from 'react';
 
 import { forwardRef, IconButton, IconButtonProps } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FiMoreVertical } from 'react-icons/fi';
 
 export interface ActionsButtonProps
-  extends Omit<IconButtonProps, 'aria-label'> {}
+  extends Omit<IconButtonProps, 'aria-label'> {
+  label?: string;
+}
 
 export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
-  ({ ...rest }, ref: any) => {
+  ({ label, ...rest }, ref: any) => {
+    const { t } = useTranslation();
     return (
       <IconButton
         ref={ref}
@@ -22,7 +26,7 @@ export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
         _focus={{ opacity: 1, boxShadow: 'outline' }}
         _active={{ bg: 'rgba(0, 0, 0, 0.1)' }}
         icon={<FiMoreVertical />}
-        aria-label="Actions"
+        aria-label={label ?? t('components:actionsButton.label')}
         {...rest}
       />
     );

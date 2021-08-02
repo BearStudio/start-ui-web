@@ -1,0 +1,106 @@
+{
+  "list": {
+    "title": "Users Management",
+    "actions": {
+      "createUser": "Create User"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "User Activated",
+      "description": "User \"{{login}}\" activated with success"
+    },
+    "deactivateUserSuccess": {
+      "title": "User Deactivated",
+      "description": "User \"{{login}}\" deactivated with success"
+    },
+    "activateUserError": {
+      "title": "Activation Failed",
+      "description": "Fail to activate \"{{login}}\" user"
+    },
+    "deactivateUserError": {
+      "title": "Deactivation Failed",
+      "description": "Fail to deactivate \"{{login}}\" user"
+    },
+    "deleteUserSuccess": {
+      "title": "User deleted",
+      "description": "User \"{{login}}\" deleted with success"
+    },
+    "deleteUserError": {
+      "title": "Deletion Failed",
+      "description": "Fail to remove \"{{login}}\" user"
+    }
+  },
+  "data": {
+    "login": {
+      "alreadyUsed": "Username already used",
+      "label": "Username",
+      "required": "Username is required",
+      "tooShort": "Username is too short (min. {{min}} characters)",
+      "tooLong": "Username is too long (max. {{max}} characters)",
+      "invalid": "Username is invalid, don't use special characters"
+    },
+    "email": {
+      "label": "Email",
+      "alreadyUsed": "Email already used",
+      "required": "Email is required",
+      "invalid": "Email is invalid",
+      "tooShort": "Email is too short (min. {{min}} characters)",
+      "tooLong": "Email is too long (max. {{max}} characters)"
+    },
+    "id": {
+      "label": "ID"
+    },
+    "authorities": {
+      "label": "Authorities",
+      "required": "Authorities are required"
+    },
+    "createdBy": {
+      "label": "Created By"
+    },
+    "modifiedBy": {
+      "label": "Modified By"
+    },
+    "status": {
+      "label": "Status",
+      "activated": "Activated",
+      "deactivated": "Not Activated"
+    },
+    "firstname": {
+      "label": "First Name"
+    },
+    "lastname": {
+      "label": "Last Name"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Update User"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Update failed"
+      },
+      "updateSuccess": {
+        "title": "Updated with success"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Creation failed"
+      },
+      "updateSuccess": {
+        "title": "User created with success"
+      }
+    },
+    "action": {
+      "save": "Create User"
+    },
+    "title": "Create New User"
+  }
+}

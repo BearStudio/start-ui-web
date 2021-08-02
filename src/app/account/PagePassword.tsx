@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
+import { useTranslation } from 'react-i18next';
 
 import { AccountNav } from '@/app/account/AccountNav';
 import { useUpdatePassword } from '@/app/account/account.service';
@@ -11,6 +12,7 @@ import { FieldInput, useToastError, useToastSuccess } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PagePassword = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const changePasswordForm = useForm();
 
@@ -25,18 +27,18 @@ export const PagePassword = () => {
       const { title } = error?.response?.data || {};
       if (title === 'Incorrect password') {
         changePasswordForm.invalidateFields({
-          currentPassword: 'Invalid current password',
+          currentPassword: t('account:data.currentPassword.incorrect'),
         });
         return;
       }
       toastError({
-        title: 'Change password failed',
+        title: t('account:password.feedbacks.updateError.title'),
         description: title,
       });
     },
     onSuccess: () => {
       toastSuccess({
-        title: 'Your password changed with success',
+        title: t('account:password.feedbacks.updateSuccess.title'),
       });
       changePasswordForm.reset();
     },
@@ -48,11 +50,22 @@ export const PagePassword = () => {
     await changePasswordFinish({ currentPassword, newPassword });
   };
 
+  const passwordValidations = [
+    {
+      rule: isMinLength(4),
+      message: t('account:data.password.tooShort', { min: 4 }),
+    },
+    {
+      rule: isMaxLength(50),
+      message: t('account:data.password.tooLong', { max: 50 }),
+    },
+  ];
+
   return (
     <Page nav={<AccountNav />}>
       <PageContent>
         <Heading size="md" mb="4">
-          Password
+          {t('account:password.title')}
         </Heading>
         <Formiz
           id="password-form"
@@ -70,36 +83,31 @@ export const PagePassword = () => {
             >
               <FieldInput
                 name="currentPassword"
-                label="Current password"
                 type="password"
-                required="This field is required"
-                validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
-                ]}
+                label={t('account:data.currentPassword.label')}
+                required={t('account:data.currentPassword.required') as string}
+                validations={passwordValidations}
               />
               <FieldInput
                 name="newPassword"
-                label="New password"
                 type="password"
-                required="This field is required"
-                validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
-                ]}
+                label={t('account:data.newPassword.label')}
+                required={t('account:data.newPassword.required') as string}
+                validations={passwordValidations}
               />
               <FieldInput
                 name="confirmNewPassword"
-                label="New password confirmation"
                 type="password"
-                required="This field is required"
+                label={t('account:data.confirmNewPassword.label')}
+                required={
+                  t('account:data.confirmNewPassword.required') as string
+                }
                 validations={[
-                  { rule: isMinLength(4), message: 'Password is too short' },
-                  { rule: isMaxLength(50), message: 'Password is too long' },
+                  ...passwordValidations,
                   {
                     rule: (value) =>
                       value === changePasswordForm?.values?.newPassword,
-                    message: 'Passwords must be equal',
+                    message: t('account:data.confirmNewPassword.notEqual'),
                     deps: [changePasswordForm?.values?.newPassword],
                   },
                 ]}
@@ -108,10 +116,10 @@ export const PagePassword = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  ml="auto"
+                  ms="auto"
                   isLoading={changePasswordLoading}
                 >
-                  Change password
+                  {t('account:password.actions.changePassword')}
                 </Button>
               </Flex>
             </Stack>

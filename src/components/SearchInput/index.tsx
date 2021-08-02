@@ -10,6 +10,7 @@ import {
   useControllableState,
   useMergeRefs,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FiSearch, FiX } from 'react-icons/fi';
 
 import { useDarkMode } from '@/hooks/useDarkMode';
@@ -27,13 +28,14 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       defaultValue,
       onChange,
       delay = 500,
-      placeholder = 'Search...',
-      clearLabel = 'Clear Search',
+      placeholder,
+      clearLabel,
       isDisabled = false,
       ...rest
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const { colorModeValue } = useDarkMode();
     const [externalValue, setExternalValue]: any = useControllableState({
       value,
@@ -86,7 +88,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           ref={refs}
           onChange={handleChange}
           value={search || ''}
-          placeholder={placeholder}
+          placeholder={placeholder ?? t('components:searchInput.placeholder')}
           isDisabled={isDisabled}
           onKeyDown={handleEscape}
         />
@@ -102,7 +104,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
               onClick={handleClear}
               variant="@secondary"
               size="xs"
-              aria-label={clearLabel}
+              aria-label={clearLabel ?? t('components:searchInput.clear')}
             >
               <FiX />
             </IconButton>

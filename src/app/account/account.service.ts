@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import {
   useMutation,
   UseMutationOptions,
@@ -7,12 +8,21 @@ import {
 } from 'react-query';
 
 import { Account } from '@/app/account/account.types';
+import { DEFAULT_LANGUAGE } from '@/constants/i18n';
 
 export const useAccount = (config: UseQueryOptions<Account> = {}) => {
+  const { i18n } = useTranslation();
   const { data: account, ...rest } = useQuery(
     ['account'],
     (): Promise<Account> => Axios.get('/account'),
     {
+      onSuccess: (data) => {
+        i18n.changeLanguage(data?.langKey);
+
+        if (config?.onSuccess) {
+          config?.onSuccess(data);
+        }
+      },
       ...config,
     }
   );
@@ -28,7 +38,12 @@ export const useCreateAccount = (
   > = {}
 ) => {
   return useMutation(
-    ({ login, email, password, langKey = 'en' }): Promise<Account> =>
+    ({
+      login,
+      email,
+      password,
+      langKey = DEFAULT_LANGUAGE,
+    }): Promise<Account> =>
       Axios.post('/register', { login, email, password, langKey }),
     {
       ...config,
@@ -50,9 +65,17 @@ export const useActivateAccount = (
 export const useUpdateAccount = (
   config: UseMutationOptions<Account, unknown, Account> = {}
 ) => {
+  const { i18n } = useTranslation();
   return useMutation(
     (account): Promise<Account> => Axios.post('/account', account),
     {
+      onMutate: (data) => {
+        i18n.changeLanguage(data?.langKey);
+
+        if (config?.onMutate) {
+          config.onMutate(data);
+        }
+      },
       ...config,
     }
   );

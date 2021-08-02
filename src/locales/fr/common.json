@@ -1,3 +1,14 @@
 {
-  "test": "Test FR"
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français",
+    "es": "Espagnol"
+  },
+  "actions": {
+    "activate": "Activer",
+    "cancel": "Annuler",
+    "deactivate": "Désactiver",
+    "delete": "Supprimer",
+    "edit": "Modifier"
+  }
 }

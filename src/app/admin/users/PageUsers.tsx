@@ -21,6 +21,7 @@ import {
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import {
   FiEdit,
   FiCheckCircle,
@@ -38,6 +39,7 @@ import {
   useUserUpdate,
 } from '@/app/admin/users/users.service';
 import { Page, PageContent } from '@/app/layout';
+import { usePaginationFromUrl } from '@/app/router';
 import {
   ActionsButton,
   ConfirmMenuItem,
@@ -50,7 +52,6 @@ import {
   Icon,
   useToastError,
   useToastSuccess,
-  usePaginationFromUrl,
   PaginationButtonFirstPage,
   Pagination,
   PaginationButtonLastPage,
@@ -63,6 +64,7 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 import { AdminNav } from '../AdminNav';
 
 const UserActions = ({ user, ...rest }) => {
+  const { t } = useTranslation();
   const { url } = useRouteMatch();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -70,26 +72,34 @@ const UserActions = ({ user, ...rest }) => {
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
-          title: 'Account Activated',
-          description: `Account "${login}" activated with success`,
+          title: t('users:feedbacks.activateUserSuccess.title'),
+          description: t('users:feedbacks.activateUserSuccess.description', {
+            login,
+          }),
         });
       } else {
         toastSuccess({
-          title: 'Account Deactivated',
-          description: `Account "${login}" deactivated with success`,
+          title: t('users:feedbacks.deactivateUserSuccess.title'),
+          description: t('users:feedbacks.deactivateUserSuccess.description', {
+            login,
+          }),
         });
       }
     },
     onError: (_, __, { activated, login }) => {
       if (activated) {
         toastError({
-          title: 'Activation Failed',
-          description: `Fail to activate "${login}" account`,
+          title: t('users:feedbacks.activateUserError.title'),
+          description: t('users:feedbacks.activateUserError.description', {
+            login,
+          }),
         });
       } else {
         toastError({
-          title: 'Deactivation Failed',
-          description: `Fail to deactivate "${login}" account`,
+          title: t('users:feedbacks.deactivateUserError.title'),
+          description: t('users:feedbacks.deactivateUserError.description', {
+            login,
+          }),
         });
       }
     },
@@ -103,15 +113,19 @@ const UserActions = ({ user, ...rest }) => {
   const { mutate: userRemove, ...userRemoveData } = useUserRemove({
     onSuccess: (_, { login }) => {
       toastSuccess({
-        title: 'Account deleted',
-        description: `Account "${login}" deleted with success`,
+        title: t('users:feedbacks.deleteUserSuccess.title'),
+        description: t('users:feedbacks.deleteUserSuccess.description', {
+          login,
+        }),
       });
       queryClient.invalidateQueries('users');
     },
     onError: (_, { login }) => {
       toastError({
-        title: 'Deletion Failed',
-        description: `Fail to remove "${login}" account`,
+        title: t('users:feedbacks.deleteUserError.title'),
+        description: t('users:feedbacks.deleteUserError.description', {
+          login,
+        }),
       });
     },
   });
@@ -131,14 +145,14 @@ const UserActions = ({ user, ...rest }) => {
             to={`${url}/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
-            Edit
+            {t('actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
               icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
             >
-              Deactivate Account
+              {t('actions.deactivate')}
             </MenuItem>
           ) : (
             <MenuItem
@@ -147,7 +161,7 @@ const UserActions = ({ user, ...rest }) => {
                 <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
               }
             >
-              Activate Account
+              {t('actions.activate')}
             </MenuItem>
           )}
           <MenuDivider />
@@ -155,7 +169,7 @@ const UserActions = ({ user, ...rest }) => {
             icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
             onClick={removeUser}
           >
-            Delete
+            {t('actions.delete')}
           </ConfirmMenuItem>
         </MenuList>
       </Portal>
@@ -164,6 +178,7 @@ const UserActions = ({ user, ...rest }) => {
 };
 
 export const PageUsers = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const { url } = useRouteMatch();
   const { page, setPage } = usePaginationFromUrl();
@@ -178,7 +193,7 @@ export const PageUsers = () => {
       <PageContent>
         <HStack mb="4">
           <Box flex="1">
-            <Heading size="md">User Management</Heading>
+            <Heading size="md">{t('users:list.title')}</Heading>
           </Box>
           <Box>
             <Button
@@ -188,11 +203,11 @@ export const PageUsers = () => {
               variant="@primary"
               leftIcon={<FiPlus />}
             >
-              Create User
+              {t('users:list.actions.createUser')}
             </Button>
             <IconButton
               display={{ base: 'flex', sm: 'none' }}
-              aria-label="Create User"
+              aria-label={t('users:list.actions.createUser')}
               as={Link}
               to={`${url}/create`}
               size="sm"
@@ -204,32 +219,32 @@ export const PageUsers = () => {
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
-              Login / Email
+              {t('users:data.login.label')} / {t('users:data.email.label')}
             </DataListCell>
             <DataListCell
               colName="id"
               colWidth="4rem"
               isVisible={{ base: false, lg: true }}
             >
-              ID
+              {t('users:data.id.label')}
             </DataListCell>
             <DataListCell
               colName="authorities"
               isVisible={{ base: false, lg: true }}
             >
-              Authorities
+              {t('users:data.authorities.label')}
             </DataListCell>
             <DataListCell
               colName="created"
               isVisible={{ base: false, lg: true }}
             >
-              Created by
+              {t('users:data.createdBy.label')}
             </DataListCell>
             <DataListCell
               colName="lastModified"
               isVisible={{ base: false, md: true }}
             >
-              Modified by
+              {t('users:data.modifiedBy.label')}
             </DataListCell>
             <DataListCell
               colName="status"
@@ -237,7 +252,7 @@ export const PageUsers = () => {
               align="center"
             >
               <Box as="span" d={{ base: 'none', md: 'block' }}>
-                Status
+                {t('users:data.status.label')}
               </Box>
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />

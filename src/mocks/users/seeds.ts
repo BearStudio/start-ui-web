@@ -4,5 +4,5 @@ export const userSeeds = (server) => {
     authorities: ['ROLE_ADMIN', 'ROLE_USER'],
   });
   server.create('user', { login: 'user', authorities: ['ROLE_USER'] });
-  server.createList('user', 10);
+  server.createList('user', 40);
 };

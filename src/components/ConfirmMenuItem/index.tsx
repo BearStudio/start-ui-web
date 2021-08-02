@@ -13,6 +13,7 @@ import {
   Text,
   Flex,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components';
@@ -108,7 +109,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       confirmColorScheme = 'error',
       confirmContent = '',
       confirmIcon = FiAlertCircle,
-      confirmText = 'Click to confirm',
+      confirmText,
       confirmDelay = 2000,
       icon,
       onClick,
@@ -116,6 +117,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const { colorModeValue } = useDarkMode();
     const [isConfirmActive, setIsConfirmActive] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
@@ -188,8 +190,8 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
           <Flex
             position="absolute"
             top={0}
-            left={0}
-            right={0}
+            insetStart={0}
+            insetEnd={0}
             bottom={0}
             px={3}
             as="span"
@@ -201,9 +203,9 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
               confirmContent
             ) : (
               <>
-                <Icon icon={confirmIcon} mr={1} />{' '}
+                <Icon icon={confirmIcon} me={1} />{' '}
                 <Text isTruncated as="span">
-                  {confirmText}
+                  {confirmText ?? t('components:confirmMenuItem.confirmText')}
                 </Text>
               </>
             )}

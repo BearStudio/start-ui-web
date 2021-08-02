@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Stack, Center, useTheme, Heading, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 const Illustration = ({ colorScheme = 'gray', ...rest }) => {
   const theme = useTheme();
@@ -84,6 +85,7 @@ const Illustration = ({ colorScheme = 'gray', ...rest }) => {
 };
 
 export const Error404 = () => {
+  const { t } = useTranslation();
   return (
     <Center flex="1" p="8">
       <Stack
@@ -93,10 +95,8 @@ export const Error404 = () => {
       >
         <Illustration />
         <Box textAlign={{ base: 'center', md: 'left' }}>
-          <Heading>Error 404</Heading>
-          <Text color="gray.600">
-            The page does not exist or the url has changed.
-          </Text>
+          <Heading>{t('errors:404.title')}</Heading>
+          <Text color="gray.600">{t('errors:404.description')}</Text>
         </Box>
       </Stack>
     </Center>

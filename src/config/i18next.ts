@@ -1,19 +1,28 @@
+import dayjs from 'dayjs';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import en from '@/locales/en';
-import fr from '@/locales/fr';
+import { DEFAULT_LANGUAGE } from '@/constants/i18n';
+import * as locales from '@/locales';
+import { isBrowser } from '@/utils/ssr';
 
 i18n.use(initReactI18next).init({
-  ns: Object.keys(en),
   defaultNS: 'common',
-  resources: { en, fr },
-  lng: 'en',
-  fallbackLng: 'en',
+  ns: Object.keys(locales[DEFAULT_LANGUAGE]),
+  resources: locales,
+  lng: DEFAULT_LANGUAGE,
+  fallbackLng: DEFAULT_LANGUAGE,
 
   interpolation: {
     escapeValue: false, // react already safes from xss
   },
+});
+
+i18n.on('languageChanged', (langKey) => {
+  dayjs.locale(langKey);
+  if (isBrowser) {
+    document.documentElement.lang = langKey;
+  }
 });
 
 export default i18n;

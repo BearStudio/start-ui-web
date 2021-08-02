@@ -1,0 +1,12 @@
+{
+  "title": "Dashboard",
+  "welcome": {
+    "title": "Welcome to Start UI",
+    "description": "An opinionated UI starter with React, Chakra UI, React Query & Formiz",
+    "author": "— From the <strong>BearStudio Team</strong>"
+  },
+  "links": {
+    "github": "GitHub Repository",
+    "openIssue": "Open Issue"
+  }
+}

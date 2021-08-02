@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
+import { Trans, useTranslation } from 'react-i18next';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ import { FieldInput, SlideIn, useToastError } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageResetPasswordRequest = () => {
+  const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const resetPasswordInitForm = useForm();
 
@@ -39,7 +41,7 @@ export const PageResetPasswordRequest = () => {
     onError: (error: any) => {
       const { title } = error?.response?.data || {};
       toastError({
-        title: 'Reset password failed',
+        title: t('account:resetPassword.feedbacks.initError.title'),
         description: title,
       });
     },
@@ -63,14 +65,18 @@ export const PageResetPasswordRequest = () => {
             borderRadius="lg"
             px="8"
             py="4"
+            maxW="xl"
           >
             <Box fontSize="3rem">✉️</Box>
             <AlertTitle mt={4} mb={1} fontSize="lg">
-              Reset password email sent with success!
+              {t('account:resetPassword.feedbacks.initSuccess.title')}
             </AlertTitle>
             <AlertDescription>
-              If an account exist with email <strong>{accountEmail}</strong>,
-              you should have received an email.
+              <Trans
+                t={t}
+                i18nKey="account:resetPassword.feedbacks.initSuccess.description"
+                values={{ email: accountEmail }}
+              />
             </AlertDescription>
           </Alert>
           <Center mt="8">
@@ -80,7 +86,7 @@ export const PageResetPasswordRequest = () => {
               variant="link"
               color={colorModeValue('brand.500', 'brand.300')}
             >
-              Go to Login
+              {t('account:resetPassword.actions.goToLogin')}
             </Button>
           </Center>
         </ScaleFade>
@@ -90,14 +96,14 @@ export const PageResetPasswordRequest = () => {
 
   return (
     <SlideIn>
-      <Box p="2" pb="4rem" w="20rem" maxW="full" m="auto">
+      <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
         <Box
           p="6"
           bg={colorModeValue('white', 'blackAlpha.400')}
           borderRadius="md"
           boxShadow="md"
         >
-          <Heading size="lg">Reset password</Heading>
+          <Heading size="lg">{t('account:resetPassword.title')}</Heading>
           <Formiz
             id="reset-password-init-form"
             onValidSubmit={submitResetPasswordInit}
@@ -106,14 +112,14 @@ export const PageResetPasswordRequest = () => {
             <form noValidate onSubmit={resetPasswordInitForm.submit}>
               <FieldInput
                 name="email"
-                label="Email"
+                label={t('account:data.email.label')}
                 my="6"
-                helper="Enter the email address you used to register"
-                required="Email is required"
+                helper={t('account:data.email.resetHelper')}
+                required={t('account:data.email.required') as string}
                 validations={[
                   {
                     rule: isEmail(),
-                    message: 'Email is invalid',
+                    message: t('account:data.email.invalid'),
                   },
                 ]}
               />
@@ -124,15 +130,15 @@ export const PageResetPasswordRequest = () => {
                   to="/login"
                   variant="link"
                 >
-                  Back
+                  {t('account:resetPassword.actions.cancel')}
                 </Button>
                 <Button
                   type="submit"
                   variant="@primary"
-                  ml="auto"
+                  ms="auto"
                   isLoading={resetPasswordLoading}
                 >
-                  Send email
+                  {t('account:resetPassword.actions.send')}
                 </Button>
               </Flex>
             </form>
