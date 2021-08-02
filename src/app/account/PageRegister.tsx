@@ -196,7 +196,7 @@ export const PageRegister = () => {
                   isDisabled={form.isSubmitted && !form.isValid}
                   type="submit"
                   variant="@primary"
-                  ml="auto"
+                  ms="auto"
                 >
                   {t('account:register.actions.create')}
                 </Button>
@@ -209,7 +209,7 @@ export const PageRegister = () => {
               <Box
                 as="strong"
                 color={colorModeValue('brand.500', 'brand.300')}
-                ml="2"
+                ms="2"
               >
                 {t('account:register.actions.login')}
               </Box>

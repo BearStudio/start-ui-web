@@ -24,7 +24,7 @@ export const PageActivate = () => {
     <Box p="4" maxW="20rem" m="auto">
       {isLoading && (
         <HStack>
-          <Spinner size="sm" mr="2" />
+          <Spinner size="sm" me="2" />
           <Text>{t('account:activate.feedbacks.activationLoading.title')}</Text>
         </HStack>
       )}

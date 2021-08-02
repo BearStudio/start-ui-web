@@ -47,14 +47,14 @@ export const PageDashboard = () => {
             as="a"
             href="https://github.com/BearStudio/start-ui"
           >
-            <Icon icon={FaGithub} mr="1" /> {t('dashboard:links.github')}
+            <Icon icon={FaGithub} me="1" /> {t('dashboard:links.github')}
           </Button>
           <Button
             variant="link"
             as="a"
             href="https://github.com/BearStudio/start-ui/issues/new"
           >
-            <Icon icon={FiAlertCircle} mr="1" />{' '}
+            <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
         </ButtonGroup>

@@ -110,7 +110,7 @@ export const PageProfile = () => {
                   <Button
                     type="submit"
                     variant="@primary"
-                    ml="auto"
+                    ms="auto"
                     isLoading={updateLoading}
                   >
                     {t('account:profile.actions.save')}

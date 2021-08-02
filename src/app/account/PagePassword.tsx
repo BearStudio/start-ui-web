@@ -116,7 +116,7 @@ export const PagePassword = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  ml="auto"
+                  ms="auto"
                   isLoading={changePasswordLoading}
                 >
                   {t('account:password.actions.changePassword')}

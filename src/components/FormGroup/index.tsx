@@ -40,7 +40,7 @@ export const FormGroup = ({
 
     <FormErrorMessage id={`${id}-error`}>
       <SlideFade in offsetY={-6}>
-        <Icon icon={FiAlertCircle} mr="2" />
+        <Icon icon={FiAlertCircle} me="2" />
         {errorMessage}
       </SlideFade>
     </FormErrorMessage>

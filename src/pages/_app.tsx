@@ -26,22 +26,22 @@ const AppDevHint = () => {
       zIndex="100"
       position="fixed"
       top="0"
-      left="0"
-      right="0"
+      insetStart="0"
+      insetEnd="0"
       h="2px"
       bg={`${colorScheme}.400`}
     >
       <Text
         position="fixed"
         top="0"
-        left="4"
+        insetStart="4"
         bg={`${colorScheme}.400`}
         color={`${colorScheme}.900`}
         fontSize="0.6rem"
         fontWeight="bold"
         px="1"
-        borderBottomLeftRadius="sm"
-        borderBottomRightRadius="sm"
+        borderBottomStartRadius="sm"
+        borderBottomEndRadius="sm"
         textTransform="uppercase"
       >
         {envName}

@@ -39,7 +39,7 @@ export const PageLogin = () => {
             <Box
               as="strong"
               color={colorModeValue('brand.500', 'brand.300')}
-              ml="2"
+              ms="2"
             >
               {t('auth:login.actions.register')}
             </Box>

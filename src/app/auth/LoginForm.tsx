@@ -93,7 +93,7 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant="@primary"
-              ml="auto"
+              ms="auto"
             >
               {t('auth:login.actions.login')}
             </Button>

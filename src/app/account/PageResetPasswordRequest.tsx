@@ -134,7 +134,7 @@ export const PageResetPasswordRequest = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  ml="auto"
+                  ms="auto"
                   isLoading={resetPasswordLoading}
                 >
                   {t('account:resetPassword.actions.send')}

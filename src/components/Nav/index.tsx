@@ -82,7 +82,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
           <Icon
             icon={icon}
             mt="0.05rem"
-            mr="2"
+            me="2"
             fontSize="lg"
             color={
               isActive ? colorModeValue('brand.500', 'brand.300') : 'gray.400'

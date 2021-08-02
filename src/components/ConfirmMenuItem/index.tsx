@@ -190,8 +190,8 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
           <Flex
             position="absolute"
             top={0}
-            left={0}
-            right={0}
+            insetStart={0}
+            insetEnd={0}
             bottom={0}
             px={3}
             as="span"
@@ -203,7 +203,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
               confirmContent
             ) : (
               <>
-                <Icon icon={confirmIcon} mr={1} />{' '}
+                <Icon icon={confirmIcon} me={1} />{' '}
                 <Text isTruncated as="span">
                   {confirmText ?? t('components:confirmMenuItem.confirmText')}
                 </Text>

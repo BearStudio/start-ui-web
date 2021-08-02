@@ -65,8 +65,8 @@ const AppVersion = ({ ...rest }) => {
           position="absolute"
           align="center"
           top="0"
-          left="0"
-          right="0"
+          insetStart="0"
+          insetEnd="0"
           bottom="0"
           py="2"
           px="3"
@@ -78,7 +78,7 @@ const AppVersion = ({ ...rest }) => {
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
-          <Icon icon={hasCopied ? FiCheck : FiCopy} mr="2" fontSize="sm" />
+          <Icon icon={hasCopied ? FiCheck : FiCopy} me="2" fontSize="sm" />
           {hasCopied
             ? t('layout:accountMenu.version.copied')
             : t('layout:accountMenu.version.copy')}

@@ -69,7 +69,7 @@ export const PageTopBar = ({
       <PageContainer>
         <HStack spacing="4">
           {showBack && (
-            <Box ml={{ base: 0, lg: '-3.5rem' }}>
+            <Box ms={{ base: 0, lg: '-3.5rem' }}>
               <IconButton
                 aria-label="Go Back"
                 icon={<FiArrowLeft fontSize="lg" />}
@@ -135,8 +135,8 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
         position="fixed"
         bg={colorModeValue('white', 'gray.900')}
         bottom="0"
-        left="0"
-        right="0"
+        insetStart="0"
+        insetEnd="0"
         py="2"
         boxShadow="0 -4px 20px rgba(0, 0, 0, 0.05)"
         {...rest}
