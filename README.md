@@ -31,7 +31,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - Sign / Sign Up / Password recovery screens.
 - Account profile / Change Password screens.
 - Users management admin screens (CRUD).
-- Multi-languages (🚧 Translation strings in progress).
+- Multi-languages (English & French built-in).
 - Custom Chakra UI theme with preview of customized components in Storybook.
 - Extra UI components with Storybook documentation.
 - Fields components for Formiz.
