@@ -7,6 +7,7 @@ import {
   IconButtonProps,
   Spinner,
 } from '@chakra-ui/react';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   FiChevronsLeft,
   FiChevronsRight,
@@ -46,11 +47,12 @@ export const PaginationContext = React.createContext(null);
 export const PaginationButtonFirstPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { setPage, firstPage, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(firstPage)}
-      aria-label="First page"
+      aria-label={t('components:pagination.firstPage')}
       icon={<Icon icon={FiChevronsLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
@@ -62,11 +64,12 @@ export const PaginationButtonFirstPage: FC<
 export const PaginationButtonPrevPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { setPage, page, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page - 1)}
-      aria-label="Next page"
+      aria-label={t('components:pagination.prevPage')}
       icon={<Icon icon={FiChevronLeft} fontSize="lg" />}
       size="sm"
       isDisabled={isFirstPage}
@@ -78,11 +81,12 @@ export const PaginationButtonPrevPage: FC<
 export const PaginationButtonLastPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { setPage, lastPage, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(lastPage)}
-      aria-label="Last page"
+      aria-label={t('components:pagination.lastPage')}
       icon={<Icon icon={FiChevronsRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
@@ -94,11 +98,12 @@ export const PaginationButtonLastPage: FC<
 export const PaginationButtonNextPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { t } = useTranslation();
   const { setPage, page, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page + 1)}
-      aria-label="Previous page"
+      aria-label={t('components:pagination.nextPage')}
       icon={<Icon icon={FiChevronRight} fontSize="lg" />}
       size="sm"
       isDisabled={isLastPage}
@@ -114,6 +119,18 @@ export const PaginationInfo = ({ ...rest }) => {
     totalItems,
     isLoadingPage,
   } = useContext(PaginationContext);
+  const translationProps = {
+    values: {
+      firstItemOnPage,
+      lastItemOnPage,
+      totalItems,
+    },
+    components: {
+      span: <span />,
+      box: <Box as="span" d={{ base: 'none', sm: 'inline' }} />,
+      spinner: <Spinner size="xs" mr="1" />,
+    },
+  };
   return (
     <HStack
       spacing="1"
@@ -123,25 +140,10 @@ export const PaginationInfo = ({ ...rest }) => {
       {...rest}
     >
       {isLoadingPage ? (
-        <>
-          <Spinner size="xs" mr="1" />
-          <Box as="span" d={{ base: 'none', sm: 'inline' }}>
-            Loading
-          </Box>
-        </>
+        <Trans i18nKey="components:pagination.loading" {...translationProps} />
       ) : (
-        <Box as="span" d={{ base: 'none', sm: 'inline' }}>
-          Showing
-        </Box>
+        <Trans i18nKey="components:pagination.showing" {...translationProps} />
       )}
-      <strong>{firstItemOnPage}</strong>
-      <span>to</span>
-      <strong>{lastItemOnPage}</strong>
-      <span>of</span>
-      <strong>{totalItems}</strong>
-      <Box as="span" d={{ base: 'none', sm: 'inline' }}>
-        results
-      </Box>
     </HStack>
   );
 };
