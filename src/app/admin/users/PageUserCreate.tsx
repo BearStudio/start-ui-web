@@ -10,6 +10,7 @@ import { UserForm } from '@/app/admin/users/UserForm';
 import { useUserCreate } from '@/app/admin/users/users.service';
 import { Page, PageContent, PageBottomBar, PageTopBar } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
+import { PageUserState } from '@/utils/constants';
 
 export const PageUserCreate = () => {
   const { t } = useTranslation();
@@ -27,12 +28,12 @@ export const PageUserCreate = () => {
         description: title,
       });
       switch (errorKey) {
-        case 'userexists':
+        case PageUserState.userexists:
           form.invalidateFields({
             login: t('users:data.login.alreadyUsed'),
           });
           break;
-        case 'emailexists':
+        case PageUserState.emailexists:
           form.invalidateFields({
             email: t('users:data.email.alreadyUsed'),
           });

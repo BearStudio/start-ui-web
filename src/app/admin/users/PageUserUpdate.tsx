@@ -25,6 +25,7 @@ import {
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { PageUserState } from '@/utils/constants';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
@@ -53,12 +54,12 @@ export const PageUserUpdate = () => {
         description: title,
       });
       switch (errorKey) {
-        case 'userexists':
+        case PageUserState.userexists:
           form.invalidateFields({
             login: t('users:data.login.alreadyUsed'),
           });
           break;
-        case 'emailexists':
+        case PageUserState.emailexists:
           form.invalidateFields({
             email: t('users:data.email.alreadyUsed'),
           });

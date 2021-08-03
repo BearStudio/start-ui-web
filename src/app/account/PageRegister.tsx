@@ -26,6 +26,7 @@ import { useCreateAccount } from '@/app/account/account.service';
 import { FieldInput, FieldSelect, SlideIn, useToastError } from '@/components';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { PageUserState } from '@/utils/constants';
 
 export const PageRegister = () => {
   const { t, i18n } = useTranslation();
@@ -53,13 +54,13 @@ export const PageRegister = () => {
         description: title,
       });
 
-      if (errorKey === 'userexists') {
+      if (errorKey === PageUserState.userexists) {
         form.invalidateFields({
           login: t('account:data.login.alreadyUsed'),
         });
       }
 
-      if (errorKey === 'emailexists') {
+      if (errorKey === PageUserState.emailexists) {
         form.invalidateFields({ email: t('account:data.email.alreadyUsed') });
       }
     },
