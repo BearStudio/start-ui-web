@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "profile": "حساب تعريفي",
+    "password": "كلمة المرور",
+    "myAccount": "حسابي"
+  },
+  "profile": {
+    "title": "حساب تعريفي",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "تحديث مع النجاح"
+      },
+      "updateError": {
+        "title": "فشل التحديث"
+      }
+    },
+    "actions": {
+      "save": "يحفظ"
+    }
+  },
+  "password": {
+    "title": "كلمة المرور",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "تم تحديث كلمة مرورك بنجاح"
+      },
+      "updateError": {
+        "title": "فشل تحديث كلمة المرور"
+      }
+    },
+    "actions": {
+      "changePassword": "تغيير كلمة السر"
+    }
+  },
+  "resetPassword": {
+    "title": "إعادة تعيين كلمة المرور",
+    "actions": {
+      "cancel": "عودة",
+      "send": "ارسل بريد الكتروني",
+      "goToLogin": "انتقل إلى تسجيل الدخول",
+      "reset": "إعادة تعيين كلمة المرور"
+    },
+    "feedbacks": {
+      "initSuccess": {
+        "title": "إعادة تعيين كلمة المرور البريد الإلكتروني المرسلة بالنجاح!",
+        "description": "إذا كان هناك حساب موجود عبر البريد الإلكتروني <strong> {{email}} </ strong> يجب أن تكون قد تلقيت رسالة بريد إلكتروني."
+      },
+      "initError": {
+        "title": "إعادة تعيين كلمة المرور فشلت"
+      },
+      "confirmSuccess": {
+        "title": "تم إعادة تعيين كلمة المرور الخاصة بك",
+        "description": "يمكنك الآن تسجيل الدخول"
+      },
+      "confirmError": {
+        "title": "إعادة تعيين كلمة المرور فشلت"
+      }
+    }
+  },
+  "activate": {
+    "feedbacks": {
+      "activationLoading": {
+        "title": "تفعيل الحساب..."
+      },
+      "activationSuccess": {
+        "title": "تفعيل الحساب بنجاح"
+      },
+      "activationError": {
+        "title": "فشل تفعيل الحساب"
+      }
+    }
+  },
+  "data": {
+    "firstname": {
+      "label": "الكنية",
+      "required": "إسم العائلة مطلوب"
+    },
+    "lastname": {
+      "label": "الاسم الاول",
+      "required": "الإسم الأول مطلوب"
+    },
+    "email": {
+      "label": "بريد إلكتروني",
+      "required": "البريد الالكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صالح",
+      "resetHelper": "أدخل عنوان البريد الإلكتروني الذي استخدمته للتسجيل",
+      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل",
+      "tooShort": "البريد الإلكتروني قصير جدًا (الحد الأدنى {{min}} حرفًا)",
+      "tooLong": "البريد الإلكتروني طويل جدًا (الحد الأقصى {{max}} حرفًا)"
+    },
+    "language": {
+      "label": "لغة"
+    },
+    "password": {
+      "label": "كلمة المرور",
+      "tooShort": "كلمة المرور أقصر مما يجب ({{min}} حرف على الأقل)",
+      "tooLong": "كلمة المرور طويلة جدًا (الحد الأقصى {{max}} حرفًا)",
+      "required": "كلمة المرور مطلوبة"
+    },
+    "currentPassword": {
+      "label": "كلمة المرور الحالي",
+      "incorrect": "كلمة مرور غير صحيحة",
+      "required": "كلمة المرور الحالية مطلوبة"
+    },
+    "newPassword": {
+      "label": "كلمة المرور الجديدة",
+      "required": "New Password is required"
+    },
+    "confirmNewPassword": {
+      "label": "تأكيد كلمة المرور الجديدة",
+      "required": "مطلوب تأكيد كلمة المرور الجديدة",
+      "notEqual": "يجب أن تكون كلمات المرور الجديدة متساوية"
+    },
+    "login": {
+      "alreadyUsed": "اسم المستخدم مستخدم بالفعل",
+      "label": "اسم المستخدم",
+      "required": "اسم المستخدم مطلوب",
+      "tooShort": "اسم المستخدم قصير جدًا (الحد الأدنى {{min}} حرفًا)",
+      "tooLong": "اسم المستخدم طويل جدًا (الحد الأقصى {{max}} حرفًا)",
+      "invalid": "اسم المستخدم غير صالح ، لا تستخدم أحرفًا خاصة"
+    }
+  },
+  "register": {
+    "feedbacks": {
+      "registrationError": {
+        "title": "فشل في التسجيل"
+      },
+      "registrationSuccess": {
+        "title": "حساب تم إنشاؤه بنجاح!",
+        "description": "يرجى التحقق من بريدك الإلكتروني <strong> {{email}} </ strong> علبة الوارد لتنشيط حسابك."
+      }
+    },
+    "actions": {
+      "goToLogin": "انتقل إلى تسجيل الدخول",
+      "create": "إنشاء حساب",
+      "alreadyHaveAnAccount": "هل لديك حساب؟",
+      "login": "تسجيل الدخول"
+    },
+    "title": "يسجل"
+  }
+}

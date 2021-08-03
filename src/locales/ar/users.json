@@ -1,0 +1,106 @@
+{
+  "list": {
+    "title": "إدارة المستخدمين ",
+    "actions": {
+      "createUser": "إنشاء مستخدم"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "تنشيط المستخدم ",
+      "description": "المستخدم \"{{login}}\" تنشيط بنجاح"
+    },
+    "deactivateUserSuccess": {
+      "title": "إلغاء تنشيط المستخدم ",
+      "description": "المستخدم \"{{login}}\" مع النجاح"
+    },
+    "activateUserError": {
+      "title": "فشل التفعيل",
+      "description": "فشل تنشيط مستخدم \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "فشل إلغاء تنشيط ",
+      "description": "فشل إلغاء تنشيط مستخدم \"{{login}}\""
+    },
+    "deleteUserSuccess": {
+      "title": "تم حذف المستخدم ",
+      "description": "تم حذف المستخدم \"{{login}}\" بنجاح"
+    },
+    "deleteUserError": {
+      "title": "فشل الحذف ",
+      "description": "فشل إزالة المستخدم \"{{login}}\""
+    }
+  },
+  "data": {
+    "login": {
+      "alreadyUsed": "اسم المستخدم مستخدم بالفعل",
+      "label": "اسم المستخدم",
+      "required": "اسم المستخدم مطلوب",
+      "tooShort": "اسم المستخدم قصير جدا (دقيقة. {{min}}) ",
+      "tooLong": "اسم المستخدم طويل جدا (بحد أقصى. {{{max}}) ",
+      "invalid": "اسم المستخدم غير صالح، لا تستخدم أحرف خاصة"
+    },
+    "email": {
+      "label": "بريد إلكتروني",
+      "alreadyUsed": "البريد الإلكتروني المستخدمة بالفعل ",
+      "required": "البريد الالكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صالح ",
+      "tooShort": "البريد الإلكتروني قصير جدا (دقيقة {{{min}}) ",
+      "tooLong": "البريد الإلكتروني طويل جدا (كحد أقصى. {{{{max}})"
+    },
+    "id": {
+      "label": "بطاقة تعريف"
+    },
+    "authorities": {
+      "label": "سلطات",
+      "required": "السلطات مطلوبة"
+    },
+    "createdBy": {
+      "label": "انشأ من قبل"
+    },
+    "modifiedBy": {
+      "label": "تعديل من قبل"
+    },
+    "status": {
+      "label": "حالة",
+      "activated": "مفعل",
+      "deactivated": "لم يتم تفعيلها"
+    },
+    "firstname": {
+      "label": "الاسم الاول"
+    },
+    "lastname": {
+      "label": "الكنية"
+    },
+    "language": {
+      "label": "لغة"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "تحديث المستخدم"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل التحديث"
+      },
+      "updateSuccess": {
+        "title": "تحديث مع النجاح"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل الخلق"
+      },
+      "updateSuccess": {
+        "title": "تم إنشاء المستخدم بنجاح"
+      }
+    },
+    "action": {
+      "save": "إنشاء مستخدم"
+    },
+    "title": "إنشاء مستخدم جديد"
+  }
+}

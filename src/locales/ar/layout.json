@@ -1,0 +1,17 @@
+{
+  "mainMenu": {
+    "dashboard": "لوحة القيادة",
+    "admin": "مشرف"
+  },
+  "accountMenu": {
+    "version": {
+      "copied": "النسخة المنسوخة ",
+      "copy": "نسخة النسخة ",
+      "label": "إصدار"
+    },
+    "switchColorModeDark": "التبديل إلى وضع الظلام ",
+    "switchColorModeLight": "التبديل إلى وضع الإضاءة ",
+    "myAccount": "حسابي",
+    "logout": "تسجيل خروج"
+  }
+}

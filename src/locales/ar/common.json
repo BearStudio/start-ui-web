@@ -1,0 +1,14 @@
+{
+  "languages": {
+    "en": "إنجليزي",
+    "fr": "فرنسي",
+    "ar": "عربى"
+  },
+  "actions": {
+    "activate": "تفعيل",
+    "cancel": "يلغي",
+    "deactivate": "تعطيل",
+    "delete": "حذف",
+    "edit": "يحرر"
+  }
+}
