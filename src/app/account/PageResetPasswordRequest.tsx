@@ -14,14 +14,16 @@ import {
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { Trans, useTranslation } from 'react-i18next';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, SlideIn, useToastError } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { useRtl } from '@/hooks/useRtl';
 
 export const PageResetPasswordRequest = () => {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const resetPasswordInitForm = useForm();
@@ -125,7 +127,7 @@ export const PageResetPasswordRequest = () => {
               />
               <Flex>
                 <Button
-                  leftIcon={<FiArrowLeft />}
+                  leftIcon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
                   as={RouterLink}
                   to="/login"
                   variant="link"

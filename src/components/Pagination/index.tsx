@@ -16,6 +16,7 @@ import {
 } from 'react-icons/fi';
 
 import { Icon } from '@/components';
+import { useRtl } from '@/hooks/useRtl';
 
 export const getPaginationInfo = ({
   page = 1,
@@ -47,13 +48,16 @@ export const PaginationContext = React.createContext(null);
 export const PaginationButtonFirstPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation();
   const { setPage, firstPage, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(firstPage)}
       aria-label={t('components:pagination.firstPage')}
-      icon={<Icon icon={FiChevronsLeft} fontSize="lg" />}
+      icon={
+        <Icon icon={rtlValue(FiChevronsLeft, FiChevronsRight)} fontSize="lg" />
+      }
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -64,13 +68,16 @@ export const PaginationButtonFirstPage: FC<
 export const PaginationButtonPrevPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation();
   const { setPage, page, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page - 1)}
       aria-label={t('components:pagination.prevPage')}
-      icon={<Icon icon={FiChevronLeft} fontSize="lg" />}
+      icon={
+        <Icon icon={rtlValue(FiChevronLeft, FiChevronRight)} fontSize="lg" />
+      }
       size="sm"
       isDisabled={isFirstPage}
       {...rest}
@@ -81,13 +88,16 @@ export const PaginationButtonPrevPage: FC<
 export const PaginationButtonLastPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation();
   const { setPage, lastPage, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(lastPage)}
       aria-label={t('components:pagination.lastPage')}
-      icon={<Icon icon={FiChevronsRight} fontSize="lg" />}
+      icon={
+        <Icon icon={rtlValue(FiChevronsRight, FiChevronsLeft)} fontSize="lg" />
+      }
       size="sm"
       isDisabled={isLastPage}
       {...rest}
@@ -98,13 +108,16 @@ export const PaginationButtonLastPage: FC<
 export const PaginationButtonNextPage: FC<
   Omit<IconButtonProps, 'aria-label'>
 > = ({ ...rest }) => {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation();
   const { setPage, page, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
       onClick={() => setPage(page + 1)}
       aria-label={t('components:pagination.nextPage')}
-      icon={<Icon icon={FiChevronRight} fontSize="lg" />}
+      icon={
+        <Icon icon={rtlValue(FiChevronRight, FiChevronLeft)} fontSize="lg" />
+      }
       size="sm"
       isDisabled={isLastPage}
       {...rest}

@@ -8,10 +8,11 @@ import {
   IconButton,
   Stack,
 } from '@chakra-ui/react';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { useRtl } from '@/hooks/useRtl';
 
 const PageContext = React.createContext(null);
 
@@ -54,6 +55,7 @@ export const PageTopBar = ({
   showBack = false,
   ...rest
 }: PageTopBarProps) => {
+  const { rtlValue } = useRtl();
   const { colorModeValue } = useDarkMode();
   return (
     <Flex
@@ -72,7 +74,7 @@ export const PageTopBar = ({
             <Box ms={{ base: 0, lg: '-3.5rem' }}>
               <IconButton
                 aria-label="Go Back"
-                icon={<FiArrowLeft fontSize="lg" />}
+                icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
                 variant="ghost"
                 onClick={() => onBack()}
               />
