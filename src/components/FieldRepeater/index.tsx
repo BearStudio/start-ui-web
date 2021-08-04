@@ -1,12 +1,18 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, {
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
-  Center,
   Text,
   Button,
-  Divider,
   Stack,
   IconButton,
+  ButtonProps,
+  IconButtonProps,
 } from '@chakra-ui/react';
 import { createContext } from '@chakra-ui/react-utils';
 import { FieldProps, Formiz, useField, useForm } from '@formiz/core';
@@ -17,16 +23,47 @@ import { FieldHidden } from '@/components';
 
 import { FormGroup, FormGroupProps } from '../FormGroup';
 
+interface RepeaterContext {
+  name: string;
+  internalValue: any;
+  setInternalValue(internalValue: any): void;
+  onAdd(): void;
+}
+
+const [
+  RepeaterContextProvider,
+  useRepeaterContext,
+] = createContext<RepeaterContext>({
+  strict: true,
+  name: 'RepeaterContext',
+  errorMessage:
+    'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
+});
+
+interface RepeaterItemContext {
+  onRemove(): void;
+}
+
+const [
+  RepeaterItemContextProvider,
+  useRepeaterItemContext,
+] = createContext<RepeaterItemContext>({
+  strict: true,
+  name: 'RepeaterItemContext',
+  errorMessage:
+    'useRepeaterItemContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
+});
+
 interface ItemFormValues {
   _internalId: string;
 }
 
-interface FieldInternalProps extends FieldProps {
+interface FieldRepeaterItemProps extends FieldProps {
   onRemove?: (internalId: string) => void;
 }
 
 // This component is a field, which uses a Formiz form to manage its own value.
-const FieldInternal: React.FC<FieldInternalProps> = ({
+const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
   children,
   onRemove = () => {},
   ...props
@@ -53,7 +90,7 @@ const FieldInternal: React.FC<FieldInternalProps> = ({
     validations: [
       {
         rule: () => internalForm.isValid,
-        message: "L'élément n'est pas valide",
+        message: 'Element is invalid',
         deps: [internalForm.isValid],
       },
       ...(props?.validations || []),
@@ -65,7 +102,7 @@ const FieldInternal: React.FC<FieldInternalProps> = ({
   };
 
   return (
-    <RepeaterContextProvider
+    <RepeaterItemContextProvider
       value={{ onRemove: () => onRemove(value?._internalId) }}
     >
       <Formiz
@@ -82,34 +119,17 @@ const FieldInternal: React.FC<FieldInternalProps> = ({
           {children}
         </Stack>
       </Formiz>
-    </RepeaterContextProvider>
+    </RepeaterItemContextProvider>
   );
 };
 
-interface FieldRepeaterProps extends FieldProps, FormGroupProps {
-  buttonAdd?: ReactElement;
-}
+interface FieldRepeaterProps extends FieldProps, FormGroupProps {}
 
 // This component is a field, which uses a Formiz form to manage its own value.
 // This component adapts the repeater pattern to manage a variable amount of the
 // same field.
 export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   children,
-  buttonAdd = (
-    <Button bg="white" _hover={{ bg: false }} role="group" fontWeight="medium">
-      <Center color="brand.600">
-        <FiPlus />
-        <Text
-          fontSize="sm"
-          ml="1"
-          textDecoration="underline"
-          _groupHover={{ textDecoration: 'none' }}
-        >
-          Ajouter un élément
-        </Text>
-      </Center>
-    </Button>
-  ),
   required,
   ...rest
 }) => {
@@ -143,7 +163,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
     validations: [
       {
         rule: () => internalForm.isValid,
-        message: "Au moins un élément n'est pas valide",
+        message: 'At least one element is invalid',
         deps: [internalForm.isValid],
       },
       ...(rest.validations || []),
@@ -169,22 +189,9 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
     });
   };
 
-  const handleCreateItem = (): void => {
+  const handleAddItem = (): void => {
     setInternalValue([...internalValue, { _internalId: uuid() }]);
   };
-
-  const handleRemoveItem = (internalId: string): void => {
-    setInternalValue(
-      internalValue.filter(
-        (item: ItemFormValues) => item._internalId !== internalId
-      )
-    );
-  };
-
-  const ButtonAdd = () =>
-    React.cloneElement(buttonAdd, {
-      onClick: handleCreateItem,
-    });
 
   const showError = !isValid && isSubmitted;
 
@@ -199,42 +206,64 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   };
 
   return (
-    <FormGroup {...formGroupProps}>
-      <Formiz
-        connect={internalForm}
-        initialValues={{
-          [rest.name]: internalValue,
-        }}
-        onChange={(value) => {
-          setInternalValue(value?.[rest.name] ?? []);
-        }}
-      >
-        <Stack
-          layerStyle="formBox"
-          padding={0}
-          spacing={0}
-          divider={<Divider />}
+    <RepeaterContextProvider
+      value={{
+        name: rest?.name,
+        internalValue,
+        setInternalValue,
+        onAdd: () => handleAddItem(),
+      }}
+    >
+      <FormGroup {...formGroupProps}>
+        <Formiz
+          connect={internalForm}
+          initialValues={{
+            [rest.name]: internalValue,
+          }}
+          onChange={(value) => {
+            setInternalValue(value?.[rest.name] ?? []);
+          }}
         >
-          {internalValue?.map((item, index: number) => (
-            <FieldInternal
-              key={item._internalId}
-              name={`${rest.name}[${index}]`}
-              defaultValue={item}
-              onRemove={handleRemoveItem}
-            >
-              {children}
-            </FieldInternal>
-          ))}
-          <ButtonAdd />
-        </Stack>
-      </Formiz>
-    </FormGroup>
+          {children}
+        </Formiz>
+      </FormGroup>
+    </RepeaterContextProvider>
   );
 };
 
-export const RepeaterCloseButton = (props) => {
-  const { onClick, ...rest } = props;
-  const { onRemove } = useRepeaterContext();
+interface RepeaterItemProps {
+  children: ReactNode;
+}
+
+export const RepeaterItem: React.FC<RepeaterItemProps> = ({ children }) => {
+  const { name, internalValue, setInternalValue } = useRepeaterContext();
+
+  const handleRemoveItem = (internalId: string): void => {
+    setInternalValue(
+      internalValue.filter(
+        (item: ItemFormValues) => item._internalId !== internalId
+      )
+    );
+  };
+
+  return internalValue?.map((item, index: number) => (
+    <FieldRepeaterItem
+      key={item._internalId}
+      name={`${name}[${index}]`}
+      defaultValue={item}
+      onRemove={handleRemoveItem}
+    >
+      {children}
+    </FieldRepeaterItem>
+  ));
+};
+
+interface RepeaterCloseButtonProps extends Partial<IconButtonProps> {}
+
+export const RepeaterCloseButton: React.FC<RepeaterCloseButtonProps> = (
+  props
+) => {
+  const { onRemove } = useRepeaterItemContext();
 
   return (
     <IconButton
@@ -246,21 +275,48 @@ export const RepeaterCloseButton = (props) => {
         e.stopPropagation();
         onRemove();
       }}
-      {...rest}
+      {...props}
     />
   );
 };
 
-interface RepeaterContext {
-  onRemove(): void;
+interface RepeaterAddButtonProps extends Omit<ButtonProps, 'children'> {
+  children?: ReactElement;
 }
 
-const [
-  RepeaterContextProvider,
-  useRepeaterContext,
-] = createContext<RepeaterContext>({
-  strict: true,
-  name: 'RepeaterContext',
-  errorMessage:
-    'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
-});
+export const RepeaterAddButton: React.FC<RepeaterAddButtonProps> = ({
+  children,
+  ...rest
+}) => {
+  const { onAdd } = useRepeaterContext();
+
+  if (!children) {
+    return (
+      <Button
+        variant="@primary"
+        onClick={(e) => {
+          e.stopPropagation();
+          onAdd();
+        }}
+        {...rest}
+      >
+        <FiPlus />
+        <Text
+          fontSize="sm"
+          ml="1"
+          textDecoration="underline"
+          _groupHover={{ textDecoration: 'none' }}
+        >
+          Add an element
+        </Text>
+      </Button>
+    );
+  }
+
+  const AddButton = () =>
+    React.cloneElement(children, {
+      onClick: onAdd,
+    });
+
+  return <AddButton />;
+};

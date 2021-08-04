@@ -6,7 +6,12 @@ import { Formiz } from '@formiz/core';
 import { FieldInput } from '../FieldInput';
 import { FieldSelect } from '../FieldSelect';
 import { FieldTextarea } from '../FieldTextarea';
-import { FieldRepeater, RepeaterCloseButton } from './index';
+import {
+  FieldRepeater,
+  RepeaterAddButton,
+  RepeaterCloseButton,
+  RepeaterItem,
+} from './index';
 
 export default {
   title: 'Fields/FieldRepeater',
@@ -14,74 +19,78 @@ export default {
 
 export const Default = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
-      <FieldRepeater
-        name="demo-repeater"
-        label="Username"
-        placeholder="Placeholder"
-        helper="This is an helper"
-        required="Username is required"
-      >
-        <Stack direction="row" flex={4} alignItems="center">
-          <FieldInput name="username" required="Username is required" />
-          <RepeaterCloseButton />
-        </Stack>
-      </FieldRepeater>
-      <Button type="submit">Submit</Button>
-    </Stack>
+    <FieldRepeater
+      name="usernames"
+      label="Usernames"
+      helper="This is an helper"
+      required="Username is required"
+    >
+      <Stack>
+        <RepeaterItem>
+          <Stack direction="row" alignItems="center" p={0}>
+            <FieldInput name="username" required="Username is required" />
+            <RepeaterCloseButton />
+          </Stack>
+        </RepeaterItem>
+        <RepeaterAddButton />
+      </Stack>
+    </FieldRepeater>
+    <Button type="submit">Submit</Button>
   </Formiz>
 );
 
 export const WithCustomButtonAdd = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
-      <FieldRepeater
-        name="demo-repeater"
-        label="Usernames"
-        placeholder="Placeholder"
-        helper="This is an helper"
-        buttonAdd={<Button>Nouvel élément</Button>}
-      >
+    <FieldRepeater
+      name="usernames"
+      label="Usernames"
+      helper="This is an helper"
+    >
+      <RepeaterItem>
         <Stack direction="row" flex={4} alignItems="center">
           <FieldInput name="input" required="Field is required" />
           <RepeaterCloseButton />
         </Stack>
-      </FieldRepeater>
-      <Button type="submit" variant="@secondary">
-        Submit
-      </Button>
-    </Stack>
+      </RepeaterItem>
+      <RepeaterAddButton>
+        <Button>Custom Add Button</Button>
+      </RepeaterAddButton>
+    </FieldRepeater>
+    <Button type="submit" variant="@secondary">
+      Submit
+    </Button>
   </Formiz>
 );
 
 export const OtherExample = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
-      <FieldRepeater
-        name="demo-repeater"
-        label="Usernames"
-        placeholder="Placeholder"
-        helper="This is an helper"
-        buttonAdd={<Button>Nouvel élément</Button>}
-      >
-        <Stack direction="row" flex={4} alignItems="center">
-          <RepeaterCloseButton />
-          <FieldSelect
-            name="color"
-            options={[
-              { label: 'Red', value: 'red' },
-              { label: 'Yellow', value: 'yellow' },
-              { label: 'Blue', value: 'blue' },
-            ]}
-            required="Color is required"
-          />
-          <FieldTextarea name="text" />
-        </Stack>
-      </FieldRepeater>
-      <Button type="submit" variant="@secondary">
-        Submit
-      </Button>
-    </Stack>
+    <FieldRepeater
+      name="colorText"
+      label="Usernames"
+      helper="This is an helper"
+    >
+      <RepeaterAddButton />
+      <Stack direction="row">
+        <RepeaterItem>
+          <Stack flex={4} alignItems="center">
+            <RepeaterCloseButton />
+            <FieldSelect
+              name="color"
+              options={[
+                { label: 'Red', value: 'red' },
+                { label: 'Yellow', value: 'yellow' },
+                { label: 'Blue', value: 'blue' },
+              ]}
+              required="Color is required"
+            />
+            <FieldTextarea name="text" />
+          </Stack>
+        </RepeaterItem>
+      </Stack>
+    </FieldRepeater>
+    <Button type="submit" variant="@secondary">
+      Submit
+    </Button>
   </Formiz>
 );
 
@@ -90,20 +99,15 @@ export const WithInitialValues = () => (
     onSubmit={console.log}
     autoForm
     initialValues={{
-      'demo-repeater': [
-        { color: 'red', text: 'fsojfiqjfs' },
-        { color: 'blue' },
-      ],
+      colorText: [{ color: 'red', text: 'fsojfiqjfs' }, { color: 'blue' }],
     }}
   >
-    <Stack spacing={6}>
-      <FieldRepeater
-        name="demo-repeater"
-        label="Usernames"
-        placeholder="Placeholder"
-        helper="This is an helper"
-        buttonAdd={<Button>Nouvel élément</Button>}
-      >
+    <FieldRepeater
+      name="colorText"
+      label="Usernames"
+      helper="This is an helper"
+    >
+      <RepeaterItem>
         <Stack direction="row" flex={4} alignItems="center">
           <RepeaterCloseButton />
           <FieldSelect
@@ -117,10 +121,11 @@ export const WithInitialValues = () => (
           />
           <FieldTextarea name="text" />
         </Stack>
-      </FieldRepeater>
-      <Button type="submit" variant="@secondary">
-        Submit
-      </Button>
-    </Stack>
+      </RepeaterItem>
+      <RepeaterAddButton />
+    </FieldRepeater>
+    <Button type="submit" variant="@secondary">
+      Submit
+    </Button>
   </Formiz>
 );
