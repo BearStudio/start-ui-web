@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 
 import {
   Center,
@@ -151,13 +151,33 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   });
   const { label, helper } = otherProps;
 
+  const [internalValue, setInternalValue] = useState(
+    value?.map((v) => ({ ...v, _internalId: uuid() }))
+  );
+
+  const setValueRef = useRef(setValue);
+  setValueRef.current = setValue;
+
+  useEffect(() => {
+    setValueRef.current(removeInternalIds(internalValue));
+  }, [internalValue]);
+
+  const removeInternalIds = (value) => {
+    return value?.map((v) => {
+      const { _internalId, ...valueRest } = v;
+      return valueRest;
+    });
+  };
+
   const handleCreateItem = (): void => {
-    setValue([...value, { _internalId: uuid() }]);
+    setInternalValue([...internalValue, { _internalId: uuid() }]);
   };
 
   const handleRemoveItem = (internalId: string): void => {
-    setValue(
-      value.filter((item: ItemFormValues) => item._internalId !== internalId)
+    setInternalValue(
+      internalValue.filter(
+        (item: ItemFormValues) => item._internalId !== internalId
+      )
     );
   };
 
@@ -183,10 +203,10 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
       <Formiz
         connect={internalForm}
         initialValues={{
-          [rest.name]: value,
+          [rest.name]: internalValue,
         }}
         onChange={(value) => {
-          setValue(value?.[rest.name] ?? []);
+          setInternalValue(value?.[rest.name] ?? []);
         }}
       >
         <Stack
@@ -195,7 +215,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
           spacing={0}
           divider={<Divider />}
         >
-          {value?.map((item, index: number) => (
+          {internalValue?.map((item, index: number) => (
             <FieldInternal
               key={item._internalId}
               name={`${rest.name}[${index}]`}
@@ -218,12 +238,10 @@ export const RepeaterCloseButton = (props) => {
 
   return (
     <IconButton
+      variant="@primary"
       size="sm"
       aria-label="Supprimer"
       icon={<FiTrash2 />}
-      fontSize="md"
-      color="gray.500"
-      bgColor="gray.100"
       onClick={(e) => {
         e.stopPropagation();
         onRemove();
@@ -244,5 +262,5 @@ const [
   strict: true,
   name: 'RepeaterContext',
   errorMessage:
-    'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<Repeater />`',
+    'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
 });

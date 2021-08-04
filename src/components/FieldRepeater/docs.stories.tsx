@@ -22,8 +22,8 @@ export const Default = () => (
         helper="This is an helper"
         required="Username is required"
       >
-        <Stack direction="row" flex={4}>
-          <FieldInput name="coordinates" required="L'adresse est requise" />
+        <Stack direction="row" flex={4} alignItems="center">
+          <FieldInput name="username" required="Username is required" />
           <RepeaterCloseButton />
         </Stack>
       </FieldRepeater>
@@ -73,8 +73,49 @@ export const OtherExample = () => (
               { label: 'Yellow', value: 'yellow' },
               { label: 'Blue', value: 'blue' },
             ]}
+            required="Color is required"
           />
-          <FieldTextarea name="text" required="Text is required" />
+          <FieldTextarea name="text" />
+        </Stack>
+      </FieldRepeater>
+      <Button type="submit" variant="@secondary">
+        Submit
+      </Button>
+    </Stack>
+  </Formiz>
+);
+
+export const WithInitialValues = () => (
+  <Formiz
+    onSubmit={console.log}
+    autoForm
+    initialValues={{
+      'demo-repeater': [
+        { color: 'red', text: 'fsojfiqjfs' },
+        { color: 'blue' },
+      ],
+    }}
+  >
+    <Stack spacing={6}>
+      <FieldRepeater
+        name="demo-repeater"
+        label="Usernames"
+        placeholder="Placeholder"
+        helper="This is an helper"
+        buttonAdd={<Button>Nouvel élément</Button>}
+      >
+        <Stack direction="row" flex={4} alignItems="center">
+          <RepeaterCloseButton />
+          <FieldSelect
+            name="color"
+            options={[
+              { label: 'Red', value: 'red' },
+              { label: 'Yellow', value: 'yellow' },
+              { label: 'Blue', value: 'blue' },
+            ]}
+            required="Color is required"
+          />
+          <FieldTextarea name="text" />
         </Stack>
       </FieldRepeater>
       <Button type="submit" variant="@secondary">
