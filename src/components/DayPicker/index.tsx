@@ -9,10 +9,12 @@ import {
   useBreakpointValue,
   forwardRef,
   BoxProps,
+  useTheme,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { useTranslation } from 'react-i18next';
 import { FiCalendar } from 'react-icons/fi';
 
 import { Icon } from '@/components';
@@ -50,6 +52,8 @@ export const DayPicker: FC<DayPickerProps> = ({
   dayPickerProps = {},
   ...rest
 }) => {
+  const theme = useTheme();
+  const { i18n } = useTranslation();
   const isSmartphoneFormat = useBreakpointValue({ base: true, sm: false });
 
   const formatDate = (date, format) => dayjs(date).format(format);
@@ -70,6 +74,21 @@ export const DayPicker: FC<DayPickerProps> = ({
         placeholder={placeholder}
         value={value}
         dayPickerProps={{
+          dir: theme.direction,
+          locale: i18n.language,
+          months: Array.from({ length: 12 }).map((_, i) =>
+            dayjs().month(i).format('MMMM')
+          ),
+          weekdaysLong: Array.from({ length: 7 }).map((_, i) =>
+            dayjs()
+              .day(i + 1)
+              .format('dddd')
+          ),
+          weekdaysShort: Array.from({ length: 7 }).map((_, i) =>
+            dayjs()
+              .day(i + 1)
+              .format('dd')
+          ),
           firstDayOfWeek: 1,
           ...dayPickerProps,
         }}
