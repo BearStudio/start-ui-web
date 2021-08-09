@@ -6,7 +6,11 @@ import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
 import { FieldInput, FieldSelect, FieldTextarea } from '@/components';
 
-import { FieldRepeater, FieldRepeaterAddButton, RepeaterItem } from './index';
+import {
+  FieldRepeater,
+  FieldRepeaterAddButton,
+  FieldRepeaterItem,
+} from './index';
 
 export default {
   title: 'Fields/FieldRepeater',
@@ -21,8 +25,8 @@ export const Default = () => (
       required="Username is required"
     >
       <Stack>
-        <RepeaterItem>
-          {({ onRemove }) => (
+        <FieldRepeaterItem>
+          {({ removeProps }) => (
             <Stack direction="row" alignItems="center" p={0}>
               <FieldInput name="username" required="Username is required" />
               <IconButton
@@ -30,11 +34,73 @@ export const Default = () => (
                 size="sm"
                 aria-label="Supprimer"
                 icon={<FiTrash2 />}
-                onClick={onRemove}
+                {...removeProps}
               />
             </Stack>
           )}
-        </RepeaterItem>
+        </FieldRepeaterItem>
+        <FieldRepeaterAddButton />
+      </Stack>
+    </FieldRepeater>
+    <Button type="submit">Submit</Button>
+  </Formiz>
+);
+
+export const WithMinLength = () => (
+  <Formiz onSubmit={console.log} autoForm>
+    <FieldRepeater
+      name="usernamesMinLength"
+      label="Usernames"
+      helper="This is an helper"
+      required="Username is required"
+      minLength={2}
+    >
+      <Stack>
+        <FieldRepeaterItem>
+          {({ removeProps }) => (
+            <Stack direction="row" alignItems="center" p={0}>
+              <FieldInput name="username" required="Username is required" />
+              <IconButton
+                variant="@primary"
+                size="sm"
+                aria-label="Supprimer"
+                icon={<FiTrash2 />}
+                {...removeProps}
+              />
+            </Stack>
+          )}
+        </FieldRepeaterItem>
+        <FieldRepeaterAddButton />
+      </Stack>
+    </FieldRepeater>
+    <Button type="submit">Submit</Button>
+  </Formiz>
+);
+
+export const WithMaxLength = () => (
+  <Formiz onSubmit={console.log} autoForm>
+    <FieldRepeater
+      name="usernames"
+      label="Usernames"
+      helper="This is an helper"
+      required="Username is required"
+      maxLength={2}
+    >
+      <Stack>
+        <FieldRepeaterItem>
+          {({ removeProps }) => (
+            <Stack direction="row" alignItems="center" p={0}>
+              <FieldInput name="username" required="Username is required" />
+              <IconButton
+                variant="@primary"
+                size="sm"
+                aria-label="Supprimer"
+                icon={<FiTrash2 />}
+                {...removeProps}
+              />
+            </Stack>
+          )}
+        </FieldRepeaterItem>
         <FieldRepeaterAddButton />
       </Stack>
     </FieldRepeater>
@@ -51,8 +117,8 @@ export const OtherExample = () => (
     >
       <FieldRepeaterAddButton />
       <Stack direction="row">
-        <RepeaterItem>
-          {({ index, onRemove, onAddBefore, onAddAfter }) => (
+        <FieldRepeaterItem>
+          {({ index, removeProps, onAddBefore, onAddAfter }) => (
             <Stack direction="row">
               <IconButton
                 aria-label="Add before"
@@ -66,7 +132,7 @@ export const OtherExample = () => (
                   size="sm"
                   aria-label="Supprimer"
                   leftIcon={<FiTrash2 />}
-                  onClick={onRemove}
+                  {...removeProps}
                 >
                   Delete {index}
                 </Button>
@@ -90,7 +156,7 @@ export const OtherExample = () => (
               />
             </Stack>
           )}
-        </RepeaterItem>
+        </FieldRepeaterItem>
       </Stack>
     </FieldRepeater>
     <Button type="submit" variant="@secondary">
@@ -112,15 +178,15 @@ export const WithInitialValues = () => (
       label="Usernames"
       helper="This is an helper"
     >
-      <RepeaterItem>
-        {({ onRemove }) => (
+      <FieldRepeaterItem>
+        {({ removeProps }) => (
           <Stack direction="row" flex={4} alignItems="center">
             <IconButton
               variant="@primary"
               size="sm"
               aria-label="Supprimer"
               icon={<FiTrash2 />}
-              onClick={onRemove}
+              {...removeProps}
             />
             <FieldSelect
               name="color"
@@ -134,7 +200,7 @@ export const WithInitialValues = () => (
             <FieldTextarea name="text" />
           </Stack>
         )}
-      </RepeaterItem>
+      </FieldRepeaterItem>
       <FieldRepeaterAddButton />
     </FieldRepeater>
     <Button type="submit" variant="@secondary">

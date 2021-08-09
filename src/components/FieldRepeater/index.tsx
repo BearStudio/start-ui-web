@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import { Button, ButtonProps, Stack, Text } from '@chakra-ui/react';
+import { Button, ButtonProps, Text } from '@chakra-ui/react';
 import { createContext } from '@chakra-ui/react-utils';
 import { FieldProps, Formiz, useField, useForm } from '@formiz/core';
 import { FiPlus } from 'react-icons/fi';
@@ -22,10 +22,12 @@ interface RepeaterContext {
   onAdd(): void;
   onRemove(_internalId: string): void;
   onInsertAtIndex(index: number): void;
+  minLength: number;
+  maxLength: number;
 }
 
 const [
-  RepeaterContextProvider,
+  FieldRepeaterContextProvider,
   useRepeaterContext,
 ] = createContext<RepeaterContext>({
   strict: true,
@@ -34,11 +36,16 @@ const [
     'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
 });
 
-interface FieldRepeaterProps extends FieldProps, FormGroupProps {}
+interface FieldRepeaterProps extends FieldProps, FormGroupProps {
+  minLength?: number;
+  maxLength?: number;
+}
 
 export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   children,
   required,
+  minLength = 0,
+  maxLength,
   ...rest
 }) => {
   const externalForm = useForm({ subscribe: { form: true } });
@@ -66,7 +73,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
     isSubmitted,
     otherProps,
   } = useField({
-    defaultValue: [],
+    defaultValue: minLength ? [minLength, null] : [],
     ...rest,
     validations: [
       {
@@ -123,7 +130,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   };
 
   return (
-    <RepeaterContextProvider
+    <FieldRepeaterContextProvider
       value={{
         name: rest?.name,
         internalValue,
@@ -131,6 +138,8 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
         onAdd: () => insertAtIndex(internalValue?.length),
         onRemove: (_internalId) => handleRemoveItem(_internalId),
         onInsertAtIndex: (index) => insertAtIndex(index),
+        minLength,
+        maxLength,
       }}
     >
       <FormGroup {...formGroupProps}>
@@ -146,28 +155,36 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
           {children}
         </Formiz>
       </FormGroup>
-    </RepeaterContextProvider>
+    </FieldRepeaterContextProvider>
   );
 };
 
-interface RepeaterItemChildrenProps {
+interface FieldRepeaterItemRemoveProps {
+  onClick(): void;
+  isDisabled: boolean;
+}
+
+interface FieldRepeaterItemChildrenProps {
   data: any;
   index: number;
-  onRemove: () => void;
+  removeProps: FieldRepeaterItemRemoveProps;
   onAddBefore: () => void;
   onAddAfter: () => void;
 }
 
-interface RepeaterItemProps extends Omit<FieldProps, 'name'> {
-  children(props: RepeaterItemChildrenProps): ReactNode;
+interface FieldRepeaterItemProps extends Omit<FieldProps, 'name'> {
+  children(props: FieldRepeaterItemChildrenProps): ReactNode;
 }
 
-export const RepeaterItem: React.FC<RepeaterItemProps> = ({ children }) => {
+export const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
+  children,
+}) => {
   const {
     name,
     internalValue,
     onRemove,
     onInsertAtIndex,
+    minLength,
   } = useRepeaterContext();
 
   return internalValue?.map((item, index: number) => (
@@ -179,7 +196,10 @@ export const RepeaterItem: React.FC<RepeaterItemProps> = ({ children }) => {
       {children({
         data: item,
         index,
-        onRemove: () => onRemove(item?._internalId),
+        removeProps: {
+          onClick: () => onRemove(item?._internalId),
+          isDisabled: internalValue?.length <= minLength,
+        },
         onAddBefore: () => onInsertAtIndex(index),
         onAddAfter: () => onInsertAtIndex(index + 1),
       })}
@@ -187,50 +207,8 @@ export const RepeaterItem: React.FC<RepeaterItemProps> = ({ children }) => {
   ));
 };
 
-interface FieldRepeaterAddButtonProps extends Omit<ButtonProps, 'children'> {
-  children?: ReactElement;
-}
-
-export const FieldRepeaterAddButton: React.FC<FieldRepeaterAddButtonProps> = ({
-  children,
-  ...rest
-}) => {
-  const { onAdd } = useRepeaterContext();
-
-  if (!children) {
-    return (
-      <Button
-        variant="@primary"
-        onClick={(e) => {
-          e.stopPropagation();
-          onAdd();
-        }}
-        {...rest}
-      >
-        <Icon icon={FiPlus} mr="1" />
-        <Text
-          fontSize="sm"
-          textDecoration="underline"
-          _groupHover={{ textDecoration: 'none' }}
-        >
-          Add an element
-        </Text>
-      </Button>
-    );
-  }
-
-  const AddButton = () =>
-    React.cloneElement(children, {
-      onClick: onAdd,
-    });
-
-  return <AddButton />;
-};
-
-interface FieldInternalRepeaterItemProps extends FieldProps {}
-
 // This component is a field, which uses a Formiz form to manage its own value.
-const FieldInternalRepeaterItem: React.FC<FieldInternalRepeaterItemProps> = ({
+const FieldInternalRepeaterItem: React.FC<FieldProps> = ({
   children,
   ...props
 }) => {
@@ -273,14 +251,52 @@ const FieldInternalRepeaterItem: React.FC<FieldInternalRepeaterItemProps> = ({
       onChange={handleChange}
       initialValues={value}
     >
-      <Stack
-        direction={{ base: 'column', md: 'row' }}
-        spacing={{ base: 2, xl: 4 }}
-        p={4}
-      >
-        <FieldHidden name="_internalId" />
-        {children}
-      </Stack>
+      <FieldHidden name="_internalId" />
+      {children}
     </Formiz>
   );
+};
+
+interface FieldRepeaterAddButtonProps extends Omit<ButtonProps, 'children'> {
+  children?: ReactElement;
+}
+
+export const FieldRepeaterAddButton: React.FC<FieldRepeaterAddButtonProps> = ({
+  children,
+  ...rest
+}) => {
+  const { onAdd, internalValue, maxLength } = useRepeaterContext();
+
+  if (internalValue?.length >= maxLength) {
+    return null;
+  }
+
+  if (!children) {
+    return (
+      <Button
+        variant="@primary"
+        onClick={(e) => {
+          e.stopPropagation();
+          onAdd();
+        }}
+        {...rest}
+      >
+        <Icon icon={FiPlus} mr="1" />
+        <Text
+          fontSize="sm"
+          textDecoration="underline"
+          _groupHover={{ textDecoration: 'none' }}
+        >
+          Add an element
+        </Text>
+      </Button>
+    );
+  }
+
+  const AddButton = () =>
+    React.cloneElement(children, {
+      onClick: onAdd,
+    });
+
+  return <AddButton />;
 };
