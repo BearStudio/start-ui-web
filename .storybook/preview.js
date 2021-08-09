@@ -8,7 +8,10 @@ import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/Providers';
 import i18nGlobal from '../src/config/i18next';
-import { DEFAULT_LANGUAGE, AVAILABLE_LANGUAGES } from '../src/constants/i18n';
+import {
+  DEFAULT_LANGUAGE_KEY,
+  AVAILABLE_LANGUAGES,
+} from '../src/constants/i18n';
 import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';
 
@@ -18,12 +21,12 @@ export const globalTypes = {
   locale: {
     name: 'Locale',
     description: 'Internationalization locale',
-    defaultValue: DEFAULT_LANGUAGE,
+    defaultValue: DEFAULT_LANGUAGE_KEY,
     toolbar: {
       icon: 'globe',
-      items: AVAILABLE_LANGUAGES.map((langKey) => ({
-        value: langKey,
-        title: i18nGlobal.t(`languages.${langKey}`),
+      items: AVAILABLE_LANGUAGES.map(({ key }) => ({
+        value: key,
+        title: i18nGlobal.t(`languages.${key}`),
       })),
     },
   },

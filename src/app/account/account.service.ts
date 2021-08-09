@@ -8,7 +8,7 @@ import {
 } from 'react-query';
 
 import { Account } from '@/app/account/account.types';
-import { DEFAULT_LANGUAGE } from '@/constants/i18n';
+import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
 export const useAccount = (config: UseQueryOptions<Account> = {}) => {
   const { i18n } = useTranslation();
@@ -42,7 +42,7 @@ export const useCreateAccount = (
       login,
       email,
       password,
-      langKey = DEFAULT_LANGUAGE,
+      langKey = DEFAULT_LANGUAGE_KEY,
     }): Promise<Account> =>
       Axios.post('/register', { login, email, password, langKey }),
     {

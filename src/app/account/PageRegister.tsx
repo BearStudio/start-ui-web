@@ -129,9 +129,9 @@ export const PageRegister = () => {
               <FieldSelect
                 name="langKey"
                 label={t('account:data.language.label')}
-                options={AVAILABLE_LANGUAGES.map((langKey) => ({
-                  label: t(`languages.${langKey}`),
-                  value: langKey,
+                options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                  label: t(`languages.${key}`),
+                  value: key,
                 }))}
                 defaultValue={i18n.language}
               />
