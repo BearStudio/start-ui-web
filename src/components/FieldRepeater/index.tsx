@@ -6,28 +6,22 @@ import React, {
   useState,
 } from 'react';
 
-import {
-  Text,
-  Button,
-  Stack,
-  IconButton,
-  ButtonProps,
-  IconButtonProps,
-} from '@chakra-ui/react';
+import { Button, ButtonProps, Stack, Text } from '@chakra-ui/react';
 import { createContext } from '@chakra-ui/react-utils';
 import { FieldProps, Formiz, useField, useForm } from '@formiz/core';
-import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import { v4 as uuid } from 'uuid';
 
-import { FieldHidden } from '@/components';
-
-import { FormGroup, FormGroupProps } from '../FormGroup';
+import { FieldHidden, Icon } from '@/components';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 interface RepeaterContext {
   name: string;
   internalValue: any;
   setInternalValue(internalValue: any): void;
   onAdd(): void;
+  onRemove(_internalId: string): void;
+  onInsertAtIndex(index: number): void;
 }
 
 const [
@@ -40,94 +34,8 @@ const [
     'useRepeaterContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
 });
 
-interface RepeaterItemContext {
-  onRemove(): void;
-}
-
-const [
-  RepeaterItemContextProvider,
-  useRepeaterItemContext,
-] = createContext<RepeaterItemContext>({
-  strict: true,
-  name: 'RepeaterItemContext',
-  errorMessage:
-    'useRepeaterItemContext: `context` is undefined. Seems you forgot to wrap modal components in `<FieldRepeater />`',
-});
-
-interface ItemFormValues {
-  _internalId: string;
-}
-
-interface FieldRepeaterItemProps extends FieldProps {
-  onRemove?: (internalId: string) => void;
-}
-
-// This component is a field, which uses a Formiz form to manage its own value.
-const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
-  children,
-  onRemove = () => {},
-  ...props
-}) => {
-  const externalForm = useForm({ subscribe: { form: true } });
-
-  // Destructure the submit to use it in the dependency array.
-  const { submit: internalFormSubmit, ...internalForm } = useForm({
-    subscribe: {
-      form: true,
-      fields: ['_internalId'],
-    },
-  });
-
-  // Submit the internalForm when the extenalForm is submitted
-  useEffect(() => {
-    if (externalForm.isSubmitted) {
-      internalFormSubmit();
-    }
-  }, [internalFormSubmit, externalForm.isSubmitted]);
-
-  const { value, setValue } = useField({
-    ...props,
-    validations: [
-      {
-        rule: () => internalForm.isValid,
-        message: 'Element is invalid',
-        deps: [internalForm.isValid],
-      },
-      ...(props?.validations || []),
-    ],
-  });
-
-  const handleChange = (values) => {
-    setValue(values);
-  };
-
-  return (
-    <RepeaterItemContextProvider
-      value={{ onRemove: () => onRemove(value?._internalId) }}
-    >
-      <Formiz
-        connect={internalForm}
-        onChange={handleChange}
-        initialValues={value}
-      >
-        <Stack
-          direction={{ base: 'column', md: 'row' }}
-          spacing={{ base: 2, xl: 4 }}
-          p={4}
-        >
-          <FieldHidden name="_internalId" />
-          {children}
-        </Stack>
-      </Formiz>
-    </RepeaterItemContextProvider>
-  );
-};
-
 interface FieldRepeaterProps extends FieldProps, FormGroupProps {}
 
-// This component is a field, which uses a Formiz form to manage its own value.
-// This component adapts the repeater pattern to manage a variable amount of the
-// same field.
 export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   children,
   required,
@@ -189,8 +97,17 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
     });
   };
 
-  const handleAddItem = (): void => {
-    setInternalValue([...internalValue, { _internalId: uuid() }]);
+  const insertAtIndex = (index) =>
+    setInternalValue([
+      ...internalValue.slice(0, index),
+      { _internalId: uuid() },
+      ...internalValue.slice(index),
+    ]);
+
+  const handleRemoveItem = (internalId: string): void => {
+    setInternalValue(
+      internalValue.filter((item) => item._internalId !== internalId)
+    );
   };
 
   const showError = !isValid && isSubmitted;
@@ -211,7 +128,9 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
         name: rest?.name,
         internalValue,
         setInternalValue,
-        onAdd: () => handleAddItem(),
+        onAdd: () => insertAtIndex(internalValue?.length),
+        onRemove: (_internalId) => handleRemoveItem(_internalId),
+        onInsertAtIndex: (index) => insertAtIndex(index),
       }}
     >
       <FormGroup {...formGroupProps}>
@@ -231,60 +150,48 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = ({
   );
 };
 
-interface RepeaterItemProps {
-  children: ReactNode;
+interface RepeaterItemChildrenProps {
+  data: any;
+  index: number;
+  onRemove: () => void;
+  onAddBefore: () => void;
+  onAddAfter: () => void;
+}
+
+interface RepeaterItemProps extends Omit<FieldProps, 'name'> {
+  children(props: RepeaterItemChildrenProps): ReactNode;
 }
 
 export const RepeaterItem: React.FC<RepeaterItemProps> = ({ children }) => {
-  const { name, internalValue, setInternalValue } = useRepeaterContext();
-
-  const handleRemoveItem = (internalId: string): void => {
-    setInternalValue(
-      internalValue.filter(
-        (item: ItemFormValues) => item._internalId !== internalId
-      )
-    );
-  };
+  const {
+    name,
+    internalValue,
+    onRemove,
+    onInsertAtIndex,
+  } = useRepeaterContext();
 
   return internalValue?.map((item, index: number) => (
-    <FieldRepeaterItem
+    <FieldInternalRepeaterItem
       key={item._internalId}
       name={`${name}[${index}]`}
       defaultValue={item}
-      onRemove={handleRemoveItem}
     >
-      {children}
-    </FieldRepeaterItem>
+      {children({
+        data: item,
+        index,
+        onRemove: () => onRemove(item?._internalId),
+        onAddBefore: () => onInsertAtIndex(index),
+        onAddAfter: () => onInsertAtIndex(index + 1),
+      })}
+    </FieldInternalRepeaterItem>
   ));
 };
 
-interface RepeaterCloseButtonProps extends Partial<IconButtonProps> {}
-
-export const RepeaterCloseButton: React.FC<RepeaterCloseButtonProps> = (
-  props
-) => {
-  const { onRemove } = useRepeaterItemContext();
-
-  return (
-    <IconButton
-      variant="@primary"
-      size="sm"
-      aria-label="Supprimer"
-      icon={<FiTrash2 />}
-      onClick={(e) => {
-        e.stopPropagation();
-        onRemove();
-      }}
-      {...props}
-    />
-  );
-};
-
-interface RepeaterAddButtonProps extends Omit<ButtonProps, 'children'> {
+interface FieldRepeaterAddButtonProps extends Omit<ButtonProps, 'children'> {
   children?: ReactElement;
 }
 
-export const RepeaterAddButton: React.FC<RepeaterAddButtonProps> = ({
+export const FieldRepeaterAddButton: React.FC<FieldRepeaterAddButtonProps> = ({
   children,
   ...rest
 }) => {
@@ -300,10 +207,9 @@ export const RepeaterAddButton: React.FC<RepeaterAddButtonProps> = ({
         }}
         {...rest}
       >
-        <FiPlus />
+        <Icon icon={FiPlus} mr="1" />
         <Text
           fontSize="sm"
-          ml="1"
           textDecoration="underline"
           _groupHover={{ textDecoration: 'none' }}
         >
@@ -319,4 +225,62 @@ export const RepeaterAddButton: React.FC<RepeaterAddButtonProps> = ({
     });
 
   return <AddButton />;
+};
+
+interface FieldInternalRepeaterItemProps extends FieldProps {}
+
+// This component is a field, which uses a Formiz form to manage its own value.
+const FieldInternalRepeaterItem: React.FC<FieldInternalRepeaterItemProps> = ({
+  children,
+  ...props
+}) => {
+  const externalForm = useForm({ subscribe: { form: true } });
+
+  // Destructure the submit to use it in the dependency array.
+  const { submit: internalFormSubmit, ...internalForm } = useForm({
+    subscribe: {
+      form: true,
+      fields: ['_internalId'],
+    },
+  });
+
+  // Submit the internalForm when the extenalForm is submitted
+  useEffect(() => {
+    if (externalForm.isSubmitted) {
+      internalFormSubmit();
+    }
+  }, [internalFormSubmit, externalForm.isSubmitted]);
+
+  const { value, setValue } = useField({
+    ...props,
+    validations: [
+      {
+        rule: () => internalForm.isValid,
+        message: 'Element is invalid',
+        deps: [internalForm.isValid],
+      },
+      ...(props?.validations || []),
+    ],
+  });
+
+  const handleChange = (values) => {
+    setValue(values);
+  };
+
+  return (
+    <Formiz
+      connect={internalForm}
+      onChange={handleChange}
+      initialValues={value}
+    >
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        spacing={{ base: 2, xl: 4 }}
+        p={4}
+      >
+        <FieldHidden name="_internalId" />
+        {children}
+      </Stack>
+    </Formiz>
+  );
 };

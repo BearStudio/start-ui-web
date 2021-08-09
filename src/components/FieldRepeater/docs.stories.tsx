@@ -1,17 +1,12 @@
 import React from 'react';
 
-import { Stack, Button } from '@chakra-ui/react';
+import { Stack, Button, IconButton } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
+import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
-import { FieldInput } from '../FieldInput';
-import { FieldSelect } from '../FieldSelect';
-import { FieldTextarea } from '../FieldTextarea';
-import {
-  FieldRepeater,
-  RepeaterAddButton,
-  RepeaterCloseButton,
-  RepeaterItem,
-} from './index';
+import { FieldInput, FieldSelect, FieldTextarea } from '@/components';
+
+import { FieldRepeater, FieldRepeaterAddButton, RepeaterItem } from './index';
 
 export default {
   title: 'Fields/FieldRepeater',
@@ -27,38 +22,23 @@ export const Default = () => (
     >
       <Stack>
         <RepeaterItem>
-          <Stack direction="row" alignItems="center" p={0}>
-            <FieldInput name="username" required="Username is required" />
-            <RepeaterCloseButton />
-          </Stack>
+          {({ onRemove }) => (
+            <Stack direction="row" alignItems="center" p={0}>
+              <FieldInput name="username" required="Username is required" />
+              <IconButton
+                variant="@primary"
+                size="sm"
+                aria-label="Supprimer"
+                icon={<FiTrash2 />}
+                onClick={onRemove}
+              />
+            </Stack>
+          )}
         </RepeaterItem>
-        <RepeaterAddButton />
+        <FieldRepeaterAddButton />
       </Stack>
     </FieldRepeater>
     <Button type="submit">Submit</Button>
-  </Formiz>
-);
-
-export const WithCustomButtonAdd = () => (
-  <Formiz onSubmit={console.log} autoForm>
-    <FieldRepeater
-      name="usernames"
-      label="Usernames"
-      helper="This is an helper"
-    >
-      <RepeaterItem>
-        <Stack direction="row" flex={4} alignItems="center">
-          <FieldInput name="input" required="Field is required" />
-          <RepeaterCloseButton />
-        </Stack>
-      </RepeaterItem>
-      <RepeaterAddButton>
-        <Button>Custom Add Button</Button>
-      </RepeaterAddButton>
-    </FieldRepeater>
-    <Button type="submit" variant="@secondary">
-      Submit
-    </Button>
   </Formiz>
 );
 
@@ -69,22 +49,47 @@ export const OtherExample = () => (
       label="Usernames"
       helper="This is an helper"
     >
-      <RepeaterAddButton />
+      <FieldRepeaterAddButton />
       <Stack direction="row">
         <RepeaterItem>
-          <Stack flex={4} alignItems="center">
-            <RepeaterCloseButton />
-            <FieldSelect
-              name="color"
-              options={[
-                { label: 'Red', value: 'red' },
-                { label: 'Yellow', value: 'yellow' },
-                { label: 'Blue', value: 'blue' },
-              ]}
-              required="Color is required"
-            />
-            <FieldTextarea name="text" />
-          </Stack>
+          {({ index, onRemove, onAddBefore, onAddAfter }) => (
+            <Stack direction="row">
+              <IconButton
+                aria-label="Add before"
+                icon={<FiPlus />}
+                onClick={onAddBefore}
+                size="sm"
+              />
+              <Stack flex={4} alignItems="center">
+                <Button
+                  variant="@primary"
+                  size="sm"
+                  aria-label="Supprimer"
+                  leftIcon={<FiTrash2 />}
+                  onClick={onRemove}
+                >
+                  Delete {index}
+                </Button>
+                <FieldSelect
+                  name="color"
+                  options={[
+                    { label: 'Red', value: 'red' },
+                    { label: 'Yellow', value: 'yellow' },
+                    { label: 'Blue', value: 'blue' },
+                  ]}
+                  required="Color is required"
+                />
+                <FieldTextarea name="text" />
+              </Stack>
+
+              <IconButton
+                aria-label="Add before"
+                icon={<FiPlus />}
+                onClick={onAddAfter}
+                size="sm"
+              />
+            </Stack>
+          )}
         </RepeaterItem>
       </Stack>
     </FieldRepeater>
@@ -108,21 +113,29 @@ export const WithInitialValues = () => (
       helper="This is an helper"
     >
       <RepeaterItem>
-        <Stack direction="row" flex={4} alignItems="center">
-          <RepeaterCloseButton />
-          <FieldSelect
-            name="color"
-            options={[
-              { label: 'Red', value: 'red' },
-              { label: 'Yellow', value: 'yellow' },
-              { label: 'Blue', value: 'blue' },
-            ]}
-            required="Color is required"
-          />
-          <FieldTextarea name="text" />
-        </Stack>
+        {({ onRemove }) => (
+          <Stack direction="row" flex={4} alignItems="center">
+            <IconButton
+              variant="@primary"
+              size="sm"
+              aria-label="Supprimer"
+              icon={<FiTrash2 />}
+              onClick={onRemove}
+            />
+            <FieldSelect
+              name="color"
+              options={[
+                { label: 'Red', value: 'red' },
+                { label: 'Yellow', value: 'yellow' },
+                { label: 'Blue', value: 'blue' },
+              ]}
+              required="Color is required"
+            />
+            <FieldTextarea name="text" />
+          </Stack>
+        )}
       </RepeaterItem>
-      <RepeaterAddButton />
+      <FieldRepeaterAddButton />
     </FieldRepeater>
     <Button type="submit" variant="@secondary">
       Submit
