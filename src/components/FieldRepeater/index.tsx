@@ -127,7 +127,12 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   };
 
   const remove = (index: number = internalValue?.length): void => {
-    setInternalValue((internalValue || []).filter((_, i) => index !== i));
+    const filteredInternalValue = (internalValue || []).filter(
+      (_, i) => index !== i
+    );
+    setInternalValue(
+      filteredInternalValue?.length > 0 ? filteredInternalValue : null
+    );
   };
 
   const showError = !isValid && isSubmitted;

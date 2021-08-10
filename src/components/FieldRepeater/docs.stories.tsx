@@ -15,7 +15,7 @@ export default {
 export const Default = () => {
   const form = useForm();
   return (
-    <Formiz onSubmit={console.log} autoForm connect={form}>
+    <Formiz onValidSubmit={console.log} autoForm connect={form}>
       <FieldRepeater
         name="usernames"
         label="Usernames"
@@ -52,7 +52,7 @@ export const Default = () => {
 export const AddWithData = () => {
   const form = useForm();
   return (
-    <Formiz onSubmit={console.log} autoForm connect={form}>
+    <Formiz onValidSubmit={console.log} autoForm connect={form}>
       <FieldRepeater
         name="usernames"
         label="Usernames"
@@ -90,7 +90,7 @@ export const AddWithData = () => {
 };
 
 export const WithDefaultValue = () => (
-  <Formiz onSubmit={console.log} autoForm>
+  <Formiz onValidSubmit={console.log} autoForm>
     <FieldRepeater
       name="usernames"
       label="Usernames"
@@ -131,7 +131,7 @@ export const WithDefaultValue = () => (
 
 export const WithInitialValues = () => (
   <Formiz
-    onSubmit={console.log}
+    onValidSubmit={console.log}
     autoForm
     initialValues={{
       colorText: [{ color: 'red', text: 'Julie' }, { color: 'blue' }],
@@ -182,7 +182,7 @@ export const WithInitialValues = () => (
 export const SetFieldsValues = () => {
   const form = useForm();
   return (
-    <Formiz onSubmit={console.log} autoForm connect={form}>
+    <Formiz onValidSubmit={console.log} autoForm connect={form}>
       <FieldRepeater
         name="usernames"
         label="Usernames"
