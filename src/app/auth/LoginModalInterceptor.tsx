@@ -72,6 +72,7 @@ export const LoginModalInterceptor = () => {
       isOpen={isOpen && isLogged}
       onClose={handleClose}
       closeOnOverlayClick={false}
+      trapFocus={false}
     >
       <ModalOverlay style={{ backdropFilter: 'blur(6px)' }} />
       <ModalContent>
