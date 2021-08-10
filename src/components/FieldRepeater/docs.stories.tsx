@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack, Button, IconButton } from '@chakra-ui/react';
+import { Stack, Button, IconButton, Flex } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
@@ -18,29 +18,31 @@ export const Default = () => (
       name="usernames"
       label="Usernames"
       helper="This is an helper"
-      required="Username is required"
+      required="Usernames are required"
     >
       {({ add, remove, collection }) => (
-        <Stack>
-          {collection?.map((item, index: number) => (
-            <FieldRepeaterItem key={item?.key} index={index}>
-              <Stack direction="row" alignItems="center" p={0}>
+        <Stack spacing="4">
+          {collection?.map(({ key }, index: number) => (
+            <FieldRepeaterItem key={key} index={index}>
+              <Stack direction="row" alignItems="flex-start">
                 <FieldInput name="username" required="Username is required" />
                 <IconButton
-                  variant="@primary"
-                  size="sm"
-                  aria-label="Supprimer"
+                  aria-label="Delete"
                   icon={<FiTrash2 />}
                   onClick={() => remove(index)}
                 />
               </Stack>
             </FieldRepeaterItem>
           ))}
-          <Button onClick={() => add()}>Add</Button>
+          <Flex justifyContent="space-between">
+            <Button variant="@primary" onClick={() => add()}>
+              Add
+            </Button>
+            <Button type="submit">Submit</Button>
+          </Flex>
         </Stack>
       )}
     </FieldRepeater>
-    <Button type="submit">Submit</Button>
   </Formiz>
 );
 
@@ -58,8 +60,8 @@ export const WithDefaultValue = () => (
     >
       {({ add, remove, collection }) => (
         <Stack>
-          {collection?.map((item, index: number) => (
-            <FieldRepeaterItem key={item?.key} index={index}>
+          {collection?.map(({ key }, index: number) => (
+            <FieldRepeaterItem key={key} index={index}>
               <Stack direction="row" alignItems="center" p={0}>
                 <FieldInput name="username" required="Username is required" />
                 <IconButton
@@ -95,30 +97,28 @@ export const WithInitialValues = () => (
     >
       {({ add, remove, collection }) => (
         <Stack>
-          {collection?.map((item, index: number) => (
-            <>
-              <FieldRepeaterItem key={item?.key} index={index}>
-                <Stack direction="row" flex={4} alignItems="center">
-                  <IconButton
-                    variant="@primary"
-                    size="sm"
-                    aria-label="Supprimer"
-                    icon={<FiTrash2 />}
-                    onClick={() => remove(index)}
-                  />
-                  <FieldSelect
-                    name="color"
-                    options={[
-                      { label: 'Red', value: 'red' },
-                      { label: 'Yellow', value: 'yellow' },
-                      { label: 'Blue', value: 'blue' },
-                    ]}
-                    required="Color is required"
-                  />
-                  <FieldTextarea name="text" />
-                </Stack>
-              </FieldRepeaterItem>
-            </>
+          {collection?.map(({ key }, index: number) => (
+            <FieldRepeaterItem key={key} index={index}>
+              <Stack direction="row" flex={4} alignItems="center">
+                <IconButton
+                  variant="@primary"
+                  size="sm"
+                  aria-label="Supprimer"
+                  icon={<FiTrash2 />}
+                  onClick={() => remove(index)}
+                />
+                <FieldSelect
+                  name="color"
+                  options={[
+                    { label: 'Red', value: 'red' },
+                    { label: 'Yellow', value: 'yellow' },
+                    { label: 'Blue', value: 'blue' },
+                  ]}
+                  required="Color is required"
+                />
+                <FieldTextarea name="text" />
+              </Stack>
+            </FieldRepeaterItem>
           ))}
           <Button onClick={() => add()}>Add an element</Button>
         </Stack>
@@ -141,8 +141,8 @@ export const OtherExample = () => (
         <Stack>
           <Button onClick={() => add()}>Add an element</Button>
           <Stack direction="row">
-            {collection?.map((item, index: number) => (
-              <FieldRepeaterItem key={item?.key} index={index}>
+            {collection?.map(({ key }, index: number) => (
+              <FieldRepeaterItem key={key} index={index}>
                 <Stack direction="row">
                   <IconButton
                     aria-label="Add before"
