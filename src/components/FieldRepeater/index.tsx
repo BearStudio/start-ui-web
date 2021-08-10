@@ -95,8 +95,8 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   const internalValueRef = useRef(internalValue);
   internalValueRef.current = internalValue;
 
-  const removeInternalIds = (value) =>
-    value?.map(({ __repeaterKey, ...valueRest }) => valueRest);
+  const removeInternalIds = (values: any[]) =>
+    values?.map(({ __repeaterKey, ...valueRest }) => valueRest);
 
   useEffect(() => {
     if (
@@ -171,8 +171,8 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
           initialValues={{
             [rest.name]: internalValue,
           }}
-          onChange={(value) => {
-            setInternalValue(value?.[rest.name] ?? null);
+          onChange={(values) => {
+            setInternalValue(values?.[rest.name] ?? null);
           }}
         >
           {children({
