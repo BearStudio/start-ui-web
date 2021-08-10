@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Stack, Button, IconButton, Flex } from '@chakra-ui/react';
-import { Formiz } from '@formiz/core';
+import { Stack, Button, IconButton, Flex, ButtonGroup } from '@chakra-ui/react';
+import { Formiz, useForm } from '@formiz/core';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
 import { FieldInput, FieldSelect, FieldTextarea } from '@/components';
@@ -12,39 +12,68 @@ export default {
   title: 'Fields/FieldRepeater',
 };
 
-export const Default = () => (
-  <Formiz onSubmit={console.log} autoForm>
-    <FieldRepeater
-      name="usernames"
-      label="Usernames"
-      helper="This is an helper"
-      required="Usernames are required"
-    >
-      {({ add, remove, collection }) => (
-        <Stack spacing="4">
-          {collection?.map(({ key }, index: number) => (
-            <FieldRepeaterItem key={key} index={index}>
-              <Stack direction="row" alignItems="flex-start">
-                <FieldInput name="username" required="Username is required" />
-                <IconButton
-                  aria-label="Delete"
-                  icon={<FiTrash2 />}
-                  onClick={() => remove(index)}
-                />
-              </Stack>
-            </FieldRepeaterItem>
-          ))}
-          <Flex justifyContent="space-between">
-            <Button variant="@primary" onClick={() => add()}>
-              Add
-            </Button>
-            <Button type="submit">Submit</Button>
-          </Flex>
-        </Stack>
-      )}
-    </FieldRepeater>
-  </Formiz>
-);
+export const Default = () => {
+  const form = useForm();
+  return (
+    <Formiz onSubmit={console.log} autoForm connect={form}>
+      <FieldRepeater
+        name="usernames"
+        label="Usernames"
+        helper="This is an helper"
+        required="Usernames are required"
+      >
+        {({ add, remove, collection }) => (
+          <Stack spacing="4">
+            {collection?.map(({ key }, index: number) => (
+              <FieldRepeaterItem key={key} index={index}>
+                <Stack direction="row" alignItems="flex-start">
+                  <FieldInput name="username" required="Username is required" />
+                  <IconButton
+                    aria-label="Delete"
+                    icon={<FiTrash2 />}
+                    onClick={() => remove(index)}
+                  />
+                </Stack>
+              </FieldRepeaterItem>
+            ))}
+            <Flex justifyContent="space-between">
+              <ButtonGroup>
+                <Button variant="@primary" onClick={() => add()}>
+                  Add
+                </Button>
+                <Button
+                  variant="@primary"
+                  onClick={() => add(undefined, { username: 'Julie' })}
+                >
+                  Add Julie
+                </Button>
+                <Button
+                  onClick={() =>
+                    form.setFieldsValues({
+                      usernames: [{ username: 'Lea' }, { username: 'Luke' }],
+                    })
+                  }
+                >
+                  Set Fields Values
+                </Button>
+                <Button
+                  onClick={() =>
+                    form.setFieldsValues({
+                      usernames: null,
+                    })
+                  }
+                >
+                  Clear
+                </Button>
+              </ButtonGroup>
+              <Button type="submit">Submit</Button>
+            </Flex>
+          </Stack>
+        )}
+      </FieldRepeater>
+    </Formiz>
+  );
+};
 
 export const WithDefaultValue = () => (
   <Formiz onSubmit={console.log} autoForm>

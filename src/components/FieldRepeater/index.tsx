@@ -86,20 +86,42 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
     value?.map((v) => ({ ...v, __repeaterKey: uuid() }))
   );
 
+  const valueRef = useRef(value);
+  valueRef.current = value;
+
   const setValueRef = useRef(setValue);
   setValueRef.current = setValue;
 
-  useEffect(() => {
-    setValueRef.current(removeInternalIds(internalValue));
-  }, [internalValue]);
+  const internalValueRef = useRef(internalValue);
+  internalValueRef.current = internalValue;
 
   const removeInternalIds = (value) =>
     value?.map(({ __repeaterKey, ...valueRest }) => valueRest);
 
-  const add = (index: number = internalValue?.length, data): void => {
+  useEffect(() => {
+    if (
+      value !== undefined &&
+      JSON.stringify(value) !==
+        JSON.stringify(removeInternalIds(internalValueRef.current))
+    ) {
+      setInternalValue(value?.map((v) => ({ ...v, __repeaterKey: uuid() })));
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (
+      internalValue !== undefined &&
+      JSON.stringify(valueRef.current) !==
+        JSON.stringify(removeInternalIds(internalValue))
+    ) {
+      setValueRef.current(removeInternalIds(internalValue));
+    }
+  }, [internalValue]);
+
+  const add = (index: number = internalValue?.length, data = {}): void => {
     setInternalValue([
       ...(internalValue || []).slice(0, index),
-      { ...(data || {}), __repeaterKey: uuid() },
+      { ...data, __repeaterKey: uuid() },
       ...(internalValue || []).slice(index),
     ]);
   };
