@@ -19,5 +19,8 @@
   "searchInput": {
     "placeholder": "Search...",
     "clear": "Clear Search"
+  },
+  "fieldRepeater": {
+    "invalidMessage": "At least one element is invalid"
   }
 }
