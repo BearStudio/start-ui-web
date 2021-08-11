@@ -20,7 +20,6 @@ export const Default = () => {
         name="usernames"
         label="Usernames"
         helper="This is an helper"
-        required="Usernames are required"
       >
         {({ add, remove, collection }) => (
           <Stack spacing="4">
@@ -76,9 +75,47 @@ export const AddWithData = () => {
             <Flex justifyContent="space-between">
               <Button
                 variant="@primary"
-                onClick={() => add(undefined, { username: 'Julie' })}
+                onClick={() => add(null, { username: 'Julie' })}
               >
                 Add Julie
+              </Button>
+              <Button type="submit">Submit</Button>
+            </Flex>
+          </Stack>
+        )}
+      </FieldRepeater>
+    </Formiz>
+  );
+};
+
+export const CustomInvalidMessage = () => {
+  const form = useForm();
+  return (
+    <Formiz onValidSubmit={console.log} autoForm connect={form}>
+      <FieldRepeater
+        name="usernames"
+        label="Usernames"
+        helper="This is an helper"
+        required="Usernames are required"
+        invalidMessage="One element or more is invalid"
+      >
+        {({ add, remove, collection }) => (
+          <Stack spacing="4">
+            {collection?.map(({ key }, index: number) => (
+              <FieldRepeaterItem key={key} index={index}>
+                <Stack direction="row" alignItems="flex-start">
+                  <FieldInput name="username" required="Username is required" />
+                  <IconButton
+                    aria-label="Delete"
+                    icon={<FiTrash2 />}
+                    onClick={() => remove(index)}
+                  />
+                </Stack>
+              </FieldRepeaterItem>
+            ))}
+            <Flex justifyContent="space-between">
+              <Button variant="@primary" onClick={() => add()}>
+                Add
               </Button>
               <Button type="submit">Submit</Button>
             </Flex>
@@ -105,12 +142,10 @@ export const WithDefaultValue = () => (
         <Stack>
           {collection?.map(({ key }, index: number) => (
             <FieldRepeaterItem key={key} index={index}>
-              <Stack direction="row" alignItems="center" p={0}>
+              <Stack direction="row" alignItems="flex-start">
                 <FieldInput name="username" required="Username is required" />
                 <IconButton
-                  variant="@primary"
-                  size="sm"
-                  aria-label="Supprimer"
+                  aria-label="Delete"
                   icon={<FiTrash2 />}
                   onClick={() => remove(index)}
                 />
@@ -146,11 +181,9 @@ export const WithInitialValues = () => (
         <Stack>
           {collection?.map(({ key }, index: number) => (
             <FieldRepeaterItem key={key} index={index}>
-              <Stack direction="row" flex={4} alignItems="center">
+              <Stack direction="row" alignItems="flex-start">
                 <IconButton
-                  variant="@primary"
-                  size="sm"
-                  aria-label="Supprimer"
+                  aria-label="Delete"
                   icon={<FiTrash2 />}
                   onClick={() => remove(index)}
                 />

@@ -41,10 +41,12 @@ interface FieldRepeaterProps extends FieldProps {
   children(props: FieldRepeaterChildrenProps): ReactNode;
   helper?: ReactNode;
   label?: ReactNode;
+  invalidMessage?: string;
 }
 
 export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
-  const { children, required, ...rest } = props;
+  const { invalidMessage, ...fieldProps } = props;
+  const { children, required, ...rest } = fieldProps;
   const externalForm = useForm({ subscribe: { form: true } });
 
   // Destructure the submit to use it in the dependency array.
@@ -70,16 +72,17 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
     isSubmitted,
     otherProps,
   } = useField({
-    ...props,
+    ...fieldProps,
     validations: [
       {
         rule: () => internalForm.isValid,
-        message: 'At least one element is invalid',
+        message: props?.invalidMessage || 'At least one element is invalid',
         deps: [internalForm.isValid],
       },
-      ...(props.validations || []),
+      ...(props?.validations || []),
     ],
   });
+
   const { label, helper } = otherProps;
 
   const [internalValue, setInternalValue] = useState(
@@ -118,15 +121,21 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
     }
   }, [internalValue]);
 
-  const add = (index: number = internalValue?.length, data = {}): void => {
+  const add = (index: number, data = {}): void => {
+    if (index === undefined || index === null) {
+      index = internalValue?.length;
+    }
     setInternalValue([
-      ...(internalValue || []).slice(0, index),
+      ...(internalValue || []).slice(0, index ?? internalValue?.length),
       { ...data, __repeaterKey: uuid() },
       ...(internalValue || []).slice(index),
     ]);
   };
 
-  const remove = (index: number = internalValue?.length): void => {
+  const remove = (index: number): void => {
+    if (index === undefined || index === null) {
+      index = internalValue?.length;
+    }
     const filteredInternalValue = (internalValue || []).filter(
       (_, i) => index !== i
     );
