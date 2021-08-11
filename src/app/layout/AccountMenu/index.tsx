@@ -111,7 +111,7 @@ export const AccountMenu = ({ ...rest }) => {
         maxW="12rem"
         overflow="hidden"
       >
-        <MenuGroup title={account?.email}>
+        <MenuGroup title={account?.email} isTruncated>
           <MenuItem
             as={Link}
             to="/account"
