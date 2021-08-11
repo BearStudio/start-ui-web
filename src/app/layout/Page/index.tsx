@@ -103,11 +103,11 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
           flex="1"
         >
           {nav && (
-            <Flex direction="column" w={{ base: 'full', lg: '12rem' }}>
+            <Flex direction="column" minW="0" w={{ base: 'full', lg: '12rem' }}>
               {nav}
             </Flex>
           )}
-          <Flex direction="column" flex="1">
+          <Flex direction="column" flex="1" minW="0">
             {children}
           </Flex>
         </Stack>
