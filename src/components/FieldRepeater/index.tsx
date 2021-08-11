@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { createContext } from '@chakra-ui/react-utils';
 import { FieldProps, Formiz, useField, useForm } from '@formiz/core';
+import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 import { v4 as uuid } from 'uuid';
 
@@ -45,8 +46,8 @@ interface FieldRepeaterProps extends FieldProps {
 }
 
 export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
-  const { invalidMessage, ...fieldProps } = props;
-  const { children, required, ...rest } = fieldProps;
+  const { t } = useTranslation();
+  const { children, required } = props;
   const externalForm = useForm({ subscribe: { form: true } });
 
   // Destructure the submit to use it in the dependency array.
@@ -72,18 +73,24 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
     isSubmitted,
     otherProps,
   } = useField({
-    ...fieldProps,
+    ...props,
     validations: [
       {
         rule: () => internalForm.isValid,
-        message: props?.invalidMessage || 'At least one element is invalid',
+        message:
+          props?.invalidMessage || t('components:fieldRepeater.invalidMessage'),
         deps: [internalForm.isValid],
       },
       ...(props?.validations || []),
     ],
   });
 
-  const { label, helper } = otherProps;
+  const {
+    label,
+    helper,
+    invalidMessage: _invalidMessage,
+    ...rest
+  } = otherProps;
 
   const [internalValue, setInternalValue] = useState(
     value?.map((v) => ({ ...v, __repeaterKey: uuid() }))
@@ -146,11 +153,11 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
 
   const showError = !isValid && isSubmitted;
 
-  const formGroupProps = {
+  const formControlProps = {
     id,
     isRequired: !!required,
     isInvalid: showError,
-    ...otherProps,
+    ...rest,
   };
 
   return (
@@ -161,7 +168,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
         setInternalValue,
       }}
     >
-      <FormControl {...formGroupProps}>
+      <FormControl {...formControlProps}>
         {!!label && <FormLabel htmlFor={id}>{label}</FormLabel>}
         {!!helper && (
           <FormHelperText mt="-2" mb="2">
@@ -234,7 +241,6 @@ export const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
     validations: [
       {
         rule: () => internalForm.isValid,
-        message: 'Element is invalid',
         deps: [internalForm.isValid],
       },
       ...(props?.validations || []),
