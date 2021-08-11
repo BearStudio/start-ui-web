@@ -15,6 +15,8 @@ import { v4 as uuid } from 'uuid';
 
 import { FieldHidden, Icon } from '@/components';
 
+const INTERNAL_KEY = '__repeaterKey';
+
 interface RepeaterContext {
   name: string;
   internalValue: any;
@@ -93,7 +95,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   } = otherProps;
 
   const [internalValue, setInternalValue] = useState(
-    value?.map((v) => ({ ...v, __repeaterKey: uuid() }))
+    value?.map((v) => ({ ...v, [INTERNAL_KEY]: uuid() }))
   );
 
   const valueRef = useRef(value);
@@ -106,7 +108,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   internalValueRef.current = internalValue;
 
   const removeInternalIds = (values: any[]) =>
-    values?.map(({ __repeaterKey, ...valueRest }) => valueRest);
+    values?.map(({ [INTERNAL_KEY]: key, ...valueRest }) => valueRest);
 
   useEffect(() => {
     if (
@@ -114,7 +116,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
       JSON.stringify(value) !==
         JSON.stringify(removeInternalIds(internalValueRef.current))
     ) {
-      setInternalValue(value?.map((v) => ({ ...v, __repeaterKey: uuid() })));
+      setInternalValue(value?.map((v) => ({ ...v, [INTERNAL_KEY]: uuid() })));
     }
   }, [value]);
 
@@ -134,7 +136,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
     }
     setInternalValue([
       ...(internalValue || []).slice(0, index ?? internalValue?.length),
-      { ...data, __repeaterKey: uuid() },
+      { ...data, [INTERNAL_KEY]: uuid() },
       ...(internalValue || []).slice(index),
     ]);
   };
@@ -195,10 +197,12 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
             isValid: !!internalForm?.isValid,
             add,
             remove,
-            collection: internalValue?.map(({ __repeaterKey, ...data }) => ({
-              key: __repeaterKey,
-              data,
-            })),
+            collection: internalValue?.map(
+              ({ [INTERNAL_KEY]: key, ...data }) => ({
+                key,
+                data,
+              })
+            ),
           })}
         </Formiz>
       </FormControl>
@@ -222,7 +226,7 @@ export const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
   const { submit: internalFormSubmit, ...internalForm } = useForm({
     subscribe: {
       form: true,
-      fields: ['__repeaterKey'],
+      fields: [INTERNAL_KEY],
     },
   });
 
@@ -258,7 +262,7 @@ export const FieldRepeaterItem: React.FC<FieldRepeaterItemProps> = ({
       onChange={handleChange}
       initialValues={value}
     >
-      <FieldHidden name="__repeaterKey" />
+      <FieldHidden name={INTERNAL_KEY} />
       {children}
     </Formiz>
   );
