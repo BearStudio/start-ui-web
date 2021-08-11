@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { createContext } from '@chakra-ui/react-utils';
 import { FieldProps, Formiz, useField, useForm } from '@formiz/core';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 import { v4 as uuid } from 'uuid';
@@ -113,8 +114,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   useEffect(() => {
     if (
       value !== undefined &&
-      JSON.stringify(value) !==
-        JSON.stringify(removeInternalIds(internalValueRef.current))
+      !isEqual(value, removeInternalIds(internalValueRef.current))
     ) {
       setInternalValue(value?.map((v) => ({ ...v, [INTERNAL_KEY]: uuid() })));
     }
@@ -123,8 +123,7 @@ export const FieldRepeater: React.FC<FieldRepeaterProps> = (props) => {
   useEffect(() => {
     if (
       internalValue !== undefined &&
-      JSON.stringify(valueRef.current) !==
-        JSON.stringify(removeInternalIds(internalValue))
+      !isEqual(valueRef.current, removeInternalIds(internalValue))
     ) {
       setValueRef.current(removeInternalIds(internalValue));
     }
