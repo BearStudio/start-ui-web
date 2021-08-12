@@ -35,6 +35,8 @@
     "framer-motion": "4.1.17",
     "history": "5.0.0",
     "i18next": "20.3.0",
+    "isomorphic-form-data": "2.0.0",
+    "lodash": "4.17.21",
     "next": "10.2.0",
     "react": "17.0.2",
     "react-currency-input-field": "3.4.1",
