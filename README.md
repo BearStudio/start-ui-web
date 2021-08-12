@@ -53,16 +53,6 @@ yarn build
 yarn dev
 ```
 
-### Setup VS code
-
-**Create or edit your `.vscode/settings.json` file with the following code**
-
-```json
-{
-  "i18n-ally.localesPaths": "src/locales"
-}
-```
-
 ### Storybook
 
 ```bash
