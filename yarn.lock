@@ -2023,12 +2023,12 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@formiz/core@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.0.3.tgz#dea98995b63a793525c22d62c8eddcba1865aaf1"
-  integrity sha512-Ci7RKolSh9w6SPpz/nvlCBpoeGzn+3CzAQkLVEFVKNJqknWA4w84mkWLLeTCYNaJhllxV58w3dwOvYboyDfQ+w==
+"@formiz/core@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.3.0.tgz#14ecf3664d6a712ae64c430af559fbd7ad450e11"
+  integrity sha512-U+csewWBJ18CTTnK2BoR1gB381RzPIhMrfSTLsEFEfdwC1l5pBXED5oRKiislPyAfrJZucr8EgJIl3jcBqBHvA==
   dependencies:
-    lodash "4.17.20"
+    lodash "4.17.21"
     lodash-es "4.17.15"
     rxjs "6.6.3"
 
@@ -9725,11 +9725,6 @@ lodash.values@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.values/-/lodash.values-4.3.0.tgz#a3a6c2b0ebecc5c2cba1c17e6e620fe81b53d347"
   integrity sha1-o6bCsOvsxcLLocF+bmIP6BtT00c=
-
-lodash@4.17.20:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 lodash@4.17.21, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.2.1, lodash@^4.7.0:
   version "4.17.21"
