@@ -2,6 +2,10 @@ openapi: '3.0.0'
 info:
   version: '1.0'
   title: Start-UI API Documentation
+
+servers:
+  - url: /api
+
 tags:
   - name: Authentication
     description: Endpoints to manage authentication
@@ -9,11 +13,20 @@ tags:
     description: Endpoints to manage account
   - name: Users
     description: Endpoints to manage users
-paths:
-  $ref: './paths.yaml'
+
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     User:
       $ref: '../users/user.yaml#/User'
   responses:
     $ref: './errors.yaml'
+
+security:
+  - BearerAuth: []
+
+paths:
+  $ref: './paths.yaml'

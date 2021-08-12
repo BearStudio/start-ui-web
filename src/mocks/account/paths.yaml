@@ -64,6 +64,7 @@ register:
   # ---
   post:
     summary: Create account
+    security: []
     tags:
       - Account
     requestBody:
@@ -96,6 +97,7 @@ reset-password-init:
   # ---
   post:
     summary: Request reset password
+    security: []
     tags:
       - Account
     requestBody:
@@ -120,6 +122,7 @@ reset-password-finish:
   # ---
   post:
     summary: Conclude reset password
+    security: []
     tags:
       - Account
     requestBody:

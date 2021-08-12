@@ -1,5 +1,5 @@
 {
-  "extends": "react-app",
+  "extends": ["react-app", "plugin:@next/next/recommended"],
   "env": {
     "node": true,
     "browser": true,
