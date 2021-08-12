@@ -3,6 +3,7 @@ authenticate:
   # ---
   post:
     summary: Authenticate account
+    security: []
     tags:
       - Authentication
     requestBody:
@@ -13,12 +14,13 @@ authenticate:
           schema:
             type: object
             properties:
-              email:
+              username:
                 type: string
-                format: email
+                default: admin
               password:
                 type: string
                 format: password
+                default: admin
     responses:
       '200':
         description: Ok

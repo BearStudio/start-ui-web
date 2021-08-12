@@ -4,6 +4,11 @@
     "version": "1.0",
     "title": "Start-UI API Documentation"
   },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
   "tags": [
     {
       "name": "Authentication",
@@ -18,10 +23,123 @@
       "description": "Endpoints to manage users"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "User": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "login": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "activated": {
+                "type": "boolean"
+              },
+              "langKey": {
+                "type": "string"
+              },
+              "authorities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "id": 1,
+              "login": "admin",
+              "firstName": "admin",
+              "lastName": "admin",
+              "email": "admin@test.com",
+              "activated": true,
+              "langKey": "en",
+              "authorities": [
+                "ROLE_USER",
+                "ROLE_ADMIN"
+              ]
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "createdBy": {
+                "type": "string"
+              },
+              "createdDate": {
+                "type": "string"
+              },
+              "lastModifiedBy": {
+                "type": "string"
+              },
+              "lastModifiedDate": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "createdBy": "system",
+              "createdDate": "2000-01-01",
+              "lastModifiedBy": "system",
+              "lastModifiedDate": "2000-01-01"
+            }
+          }
+        ]
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "40x errors schema",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "errorKey": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "paths": {
     "/authenticate": {
       "post": {
         "summary": "Authenticate account",
+        "security": [],
         "tags": [
           "Authentication"
         ],
@@ -33,13 +151,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
+                  "username": {
                     "type": "string",
-                    "format": "email"
+                    "default": "admin"
                   },
                   "password": {
                     "type": "string",
-                    "format": "password"
+                    "format": "password",
+                    "default": "admin"
                   }
                 }
               }
@@ -59,6 +178,7 @@
     "/register": {
       "post": {
         "summary": "Create account",
+        "security": [],
         "tags": [
           "Account"
         ],
@@ -188,6 +308,7 @@
     "/account/reset-password/init": {
       "post": {
         "summary": "Request reset password",
+        "security": [],
         "tags": [
           "Account"
         ],
@@ -221,6 +342,7 @@
     "/account/reset-password/finish": {
       "post": {
         "summary": "Conclude reset password",
+        "security": [],
         "tags": [
           "Account"
         ],
@@ -394,107 +516,6 @@
           },
           "400": {
             "$ref": "#/components/responses/error"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "User": {
-        "allOf": [
-          {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer",
-                "format": "int64"
-              },
-              "login": {
-                "type": "string"
-              },
-              "firstName": {
-                "type": "string"
-              },
-              "lastName": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string",
-                "format": "email"
-              },
-              "activated": {
-                "type": "boolean"
-              },
-              "langKey": {
-                "type": "string"
-              },
-              "authorities": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "example": {
-              "id": 1,
-              "login": "admin",
-              "firstName": "admin",
-              "lastName": "admin",
-              "email": "admin@test.com",
-              "activated": true,
-              "langKey": "en",
-              "authorities": [
-                "ROLE_USER",
-                "ROLE_ADMIN"
-              ]
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "createdBy": {
-                "type": "string"
-              },
-              "createdDate": {
-                "type": "string"
-              },
-              "lastModifiedBy": {
-                "type": "string"
-              },
-              "lastModifiedDate": {
-                "type": "string"
-              }
-            },
-            "example": {
-              "createdBy": "system",
-              "createdDate": "2000-01-01",
-              "lastModifiedBy": "system",
-              "lastModifiedDate": "2000-01-01"
-            }
-          }
-        ]
-      }
-    },
-    "responses": {
-      "error": {
-        "description": "40x errors schema",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "errorKey": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
