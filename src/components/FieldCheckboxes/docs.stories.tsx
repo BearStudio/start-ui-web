@@ -47,6 +47,7 @@ export const IsDisabled = () => {
   );
 };
 
+// TODO: make this work
 export const WithDefaultValues = () => {
   const options = [
     { label: 'Red', value: 'red' },
@@ -166,6 +167,34 @@ export const WithNestedCheckboxGroup = () => {
             </Flex>
           </Flex>
         </Flex>
+      </FieldCheckboxes>
+    </Formiz>
+  );
+};
+
+const Test = () => {
+  console.log('render test');
+  return null;
+};
+
+export const LargeTest = () => {
+  const options = Array.from({ length: 800 }).map((_, index) => ({
+    value: index + 1,
+  }));
+
+  return (
+    <Formiz onChange={console.log}>
+      <FieldCheckboxes name="colors" label="Colors">
+        <Stack>
+          <FieldCheckboxesCheckAll>All</FieldCheckboxesCheckAll>
+          <Divider />
+          {options.map(({ value }) => (
+            <FieldCheckboxesItem key={value} value={value}>
+              {value}
+            </FieldCheckboxesItem>
+          ))}
+          <Test />
+        </Stack>
       </FieldCheckboxes>
     </Formiz>
   );
