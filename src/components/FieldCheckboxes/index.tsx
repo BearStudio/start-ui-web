@@ -127,21 +127,27 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   if (!useStoreRef.current) {
     useStoreRef.current = create<FieldCheckboxesState>((set, get) => ({
       options: [],
-      registerOption: (option: InternalOption, isChecked: boolean) => {
-        set((state) => ({ options: [...state.options, option] }));
-        setValue((s) => (isChecked ? [...s, option.value] : s));
+      registerOption: (
+        optionToRegister: InternalOption,
+        isChecked: boolean
+      ) => {
+        set((state) => ({ options: [...state.options, optionToRegister] }));
+        setValue((prevValue) =>
+          isChecked ? [...prevValue, optionToRegister.value] : prevValue
+        );
       },
-      unregisterOption: (option: InternalOption) => {
+      unregisterOption: (optionToUnregister: InternalOption) => {
         set((state) => ({
           options: state.options.filter(
-            (o) => !checkValuesEqual(o.value, option.value)
+            (option) =>
+              !checkValuesEqual(option.value, optionToUnregister.value)
           ),
         }));
-        setValue((s) =>
-          s.filter((x) =>
+        setValue((prevValue) =>
+          prevValue.filter((localValue) =>
             get()
-              .options.map(({ value: v }) => v)
-              .includes(x)
+              .options.map(({ value: optionValue }) => optionValue)
+              .includes(localValue)
           )
         );
       },
@@ -151,10 +157,12 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
           values,
         })),
       toggleValue: (valueToUpdate) => {
-        setValue((s) => {
-          const previousValue = s ?? [];
+        setValue((prevValue) => {
+          const previousValue = prevValue ?? [];
           return previousValue.includes(valueToUpdate)
-            ? previousValue.filter((x) => !checkValuesEqual(x, valueToUpdate))
+            ? previousValue.filter(
+                (localValue) => !checkValuesEqual(localValue, valueToUpdate)
+              )
             : [...previousValue, valueToUpdate];
         });
       },
