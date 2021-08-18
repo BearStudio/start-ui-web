@@ -6,7 +6,6 @@ export * from './FieldBooleanCheckbox';
 export * from './FieldCheckboxes';
 export * from './FieldHidden';
 export * from './FieldRadios';
-export * from './FieldRepeater';
 export * from './FieldInput';
 export * from './FieldSelect';
 export * from './FieldTextarea';
