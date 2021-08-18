@@ -21,13 +21,14 @@ export const Default = () => {
   ];
 
   return (
-    <Formiz onChange={console.log}>
+    <Formiz onChange={console.log} autoForm>
       <FieldCheckboxes
         name="colors"
         label="Colors"
         required="You need to check at least one color"
         options={options}
       />
+      <Button type="submit">Submit</Button>
     </Formiz>
   );
 };
@@ -174,7 +175,7 @@ export const WithNestedCheckboxGroup = () => {
 };
 
 export const LargeTest = () => {
-  const options = Array.from({ length: 800 }).map((_, index) => ({
+  const options = Array.from({ length: 100 }).map((_, index) => ({
     value: index + 1,
   }));
 

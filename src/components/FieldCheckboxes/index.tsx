@@ -90,7 +90,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
     setValue,
     value,
     otherProps,
-  } = useField({ defaultValue: [], ...props });
+  } = useField(props);
   const {
     itemKey,
     children,
@@ -133,7 +133,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
       ) => {
         set((state) => ({ options: [...state.options, optionToRegister] }));
         setValue((prevValue) =>
-          isChecked ? [...prevValue, optionToRegister.value] : prevValue
+          isChecked ? [...(prevValue ?? []), optionToRegister.value] : prevValue
         );
       },
       unregisterOption: (optionToUnregister: InternalOption) => {
@@ -143,13 +143,14 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
               !checkValuesEqual(option.value, optionToUnregister.value)
           ),
         }));
-        setValue((prevValue) =>
-          prevValue.filter((localValue) =>
+        setValue((prevValue) => {
+          const newValue = (prevValue ?? []).filter((localValue) =>
             get()
               .options.map(({ value: optionValue }) => optionValue)
               .includes(localValue)
-          )
-        );
+          );
+          return newValue.length ? newValue : null;
+        });
       },
       values: value,
       setValues: (values) =>
@@ -159,11 +160,12 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
       toggleValue: (valueToUpdate) => {
         setValue((prevValue) => {
           const previousValue = prevValue ?? [];
-          return previousValue.includes(valueToUpdate)
+          const newValue = previousValue.includes(valueToUpdate)
             ? previousValue.filter(
                 (localValue) => !checkValuesEqual(localValue, valueToUpdate)
               )
             : [...previousValue, valueToUpdate];
+          return newValue.length ? newValue : null;
         });
       },
       toggleGroups: (groups: string[]) => {
@@ -173,20 +175,21 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
         ] = splitValuesByGroupsFromOptions(get().options, groups);
         setValue((previousValue) => {
           const allOtherValuesChecked = allOtherValues.filter((otherValue) =>
-            verifyValueIsInValues(previousValue, otherValue)
+            verifyValueIsInValues(previousValue ?? [], otherValue)
           );
           const areAllValuesInGroupCheck = allValuesInGroups.every(
             (valueInGroups) =>
-              verifyValueIsInValues(previousValue, valueInGroups)
+              verifyValueIsInValues(previousValue ?? [], valueInGroups)
           );
 
-          return areAllValuesInGroupCheck
+          const newValue = areAllValuesInGroupCheck
             ? allOtherValuesChecked
             : [...allOtherValuesChecked, ...allValuesInGroups];
+          return newValue.length ? newValue : null;
         });
       },
       verifyIsValueChecked: (valueToVerify: Value): boolean =>
-        !!verifyValueIsInValues(get().values, valueToVerify),
+        !!verifyValueIsInValues(get().values ?? [], valueToVerify),
     }));
   }
 
@@ -267,7 +270,7 @@ export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
   const registerOption = useStore((state) => state.registerOption);
   const unregisterOption = useStore((state) => state.unregisterOption);
   const toggleValue = useStore((state) => state.toggleValue);
-  const isChecked = useStore((state) => state.values.includes(value));
+  const isChecked = useStore((state) => (state.values ?? []).includes(value));
 
   useEffect(() => {
     const option = { value, groups: formatGroupsToArray(groups) };
