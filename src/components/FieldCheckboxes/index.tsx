@@ -51,7 +51,7 @@ const splitValuesByGroupsFromOptions = (
 
 interface FieldCheckboxesState {
   options: InternalOption[];
-  registerOption: (option: InternalOption) => void;
+  registerOption: (option: InternalOption, isChecked: boolean) => void;
   unregisterOption: (option: InternalOption) => void;
   values: Value[];
   setValues: (values: Value[]) => void;
@@ -127,8 +127,9 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   if (!useStoreRef.current) {
     useStoreRef.current = create<FieldCheckboxesState>((set, get) => ({
       options: [],
-      registerOption: (option: InternalOption) => {
+      registerOption: (option: InternalOption, isChecked: boolean) => {
         set((state) => ({ options: [...state.options, option] }));
+        setValue((s) => (isChecked ? [...s, option.value] : s));
       },
       unregisterOption: (option: InternalOption) => {
         set((state) => ({
@@ -244,12 +245,16 @@ export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
   groups,
   onChange = () => undefined,
   children,
+  defaultChecked,
   ...checkboxProps
 }) => {
   const { useStoreRef, checkboxGroupProps } = useContext(
     FieldCheckboxesContext
   );
   const useStore = useStoreRef.current;
+
+  const defaultCheckedRef = useRef(defaultChecked);
+  defaultCheckedRef.current = defaultChecked;
 
   const registerOption = useStore((state) => state.registerOption);
   const unregisterOption = useStore((state) => state.unregisterOption);
@@ -259,7 +264,7 @@ export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
   useEffect(() => {
     const option = { value, groups: formatGroupsToArray(groups) };
 
-    registerOption(option);
+    registerOption(option, defaultCheckedRef.current);
     return () => unregisterOption(option);
   }, [value, groups, registerOption, unregisterOption]);
 

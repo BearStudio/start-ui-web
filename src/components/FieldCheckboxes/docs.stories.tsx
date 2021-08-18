@@ -77,7 +77,9 @@ export const WithCustomRender = () => {
         <Stack>
           <FieldCheckboxesCheckAll>All colors</FieldCheckboxesCheckAll>
           <Divider />
-          <FieldCheckboxesItem value="red">Red</FieldCheckboxesItem>
+          <FieldCheckboxesItem value="red" defaultChecked>
+            Red
+          </FieldCheckboxesItem>
           <FieldCheckboxesItem value="green">Green</FieldCheckboxesItem>
           <FieldCheckboxesItem value="blue">Blue</FieldCheckboxesItem>
         </Stack>
