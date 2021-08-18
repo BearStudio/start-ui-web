@@ -47,7 +47,6 @@ export const IsDisabled = () => {
   );
 };
 
-// TODO: make this work
 export const WithDefaultValues = () => {
   const options = [
     { label: 'Red', value: 'red' },

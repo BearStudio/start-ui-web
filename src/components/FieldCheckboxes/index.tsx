@@ -127,14 +127,23 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   if (!useStoreRef.current) {
     useStoreRef.current = create<FieldCheckboxesState>((set, get) => ({
       options: [],
-      registerOption: (option: InternalOption) =>
-        set((state) => ({ options: [...state.options, option] })),
-      unregisterOption: (option: InternalOption) =>
+      registerOption: (option: InternalOption) => {
+        set((state) => ({ options: [...state.options, option] }));
+      },
+      unregisterOption: (option: InternalOption) => {
         set((state) => ({
           options: state.options.filter(
             (o) => !checkValuesEqual(o.value, option.value)
           ),
-        })),
+        }));
+        setValue((s) =>
+          s.filter((x) =>
+            get()
+              .options.map(({ value: v }) => v)
+              .includes(x)
+          )
+        );
+      },
       values: value,
       setValues: (values) =>
         set(() => ({
@@ -173,14 +182,6 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   }
 
   const setStoreValues = useStoreRef.current((state) => state.setValues);
-
-  const internalOptions = useStoreRef.current((state) => state.options);
-  // Filter value without associated options.
-  useEffect(() => {
-    setValue((s) =>
-      s.filter((x) => internalOptions.map(({ value: v }) => v).includes(x))
-    );
-  }, [internalOptions, setValue]);
 
   useEffect(() => {
     setStoreValues(value);
