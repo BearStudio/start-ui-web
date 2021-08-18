@@ -111,9 +111,9 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   }
 
   const checkValuesEqual = useCallback((a: Value, b: Value): boolean => {
-    const itemKey = itemKeyRef.current;
-    if (itemKey) {
-      return a?.[itemKey] === b?.[itemKey];
+    const itemKeyValue = itemKeyRef.current;
+    if (itemKeyValue) {
+      return a?.[itemKeyValue] === b?.[itemKeyValue];
     }
     return JSON.stringify(a) === JSON.stringify(b);
   }, []);
@@ -318,16 +318,16 @@ export const FieldCheckboxesCheckAll: React.FC<FieldCheckboxItemCheckAllProps> =
     );
     const hasValuesInGroups = groupsValues.length > 0;
 
-    const isChecked =
+    const areAllValuesChecked =
       hasValuesInGroups && groupsValues.every(state.verifyIsValueChecked);
-    const isIndeterminate =
+    const areSomeValuesChecked =
       hasValuesInGroups &&
-      !isChecked &&
+      !areAllValuesChecked &&
       groupsValues.some(state.verifyIsValueChecked);
 
     return {
-      isChecked,
-      isIndeterminate,
+      isChecked: areAllValuesChecked,
+      isIndeterminate: areSomeValuesChecked,
       isDisabled: !hasValuesInGroups,
     };
   });
