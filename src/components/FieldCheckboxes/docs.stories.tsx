@@ -173,11 +173,6 @@ export const WithNestedCheckboxGroup = () => {
   );
 };
 
-const Test = () => {
-  console.log('render test');
-  return null;
-};
-
 export const LargeTest = () => {
   const options = Array.from({ length: 800 }).map((_, index) => ({
     value: index + 1,
@@ -194,7 +189,6 @@ export const LargeTest = () => {
               {value}
             </FieldCheckboxesItem>
           ))}
-          <Test />
         </Stack>
       </FieldCheckboxes>
     </Formiz>
