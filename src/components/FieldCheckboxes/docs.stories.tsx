@@ -60,7 +60,7 @@ export const WithDefaultValues = () => {
       <FieldCheckboxes
         name="colors"
         label="Colors"
-        defaultValue={[options[0].value]}
+        defaultValue={['red']}
         options={options}
       />
     </Formiz>
