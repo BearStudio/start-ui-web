@@ -27,7 +27,7 @@
     "@chakra-ui/theme-tools": "1.1.9",
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
-    "@formiz/core": "1.3.0",
+    "@formiz/core": "1.4.0",
     "@formiz/validations": "1.0.0",
     "axios": "0.21.1",
     "dayjs": "1.10.6",

@@ -1966,10 +1966,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@formiz/core@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.3.0.tgz#14ecf3664d6a712ae64c430af559fbd7ad450e11"
-  integrity sha512-U+csewWBJ18CTTnK2BoR1gB381RzPIhMrfSTLsEFEfdwC1l5pBXED5oRKiislPyAfrJZucr8EgJIl3jcBqBHvA==
+"@formiz/core@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.4.0.tgz#d363a38172176d30e3649dbefa7502f2c459dc7d"
+  integrity sha512-rNPelxAkmfHPF0zHfE3tpEnNCueOT8jnmR/zA0nqibzemlr0z3CXk6l7CI3KVRQCYJpfARBnexHiogqALqSJRA==
   dependencies:
     lodash "4.17.21"
     lodash-es "4.17.15"
