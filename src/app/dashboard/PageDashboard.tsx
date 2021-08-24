@@ -26,7 +26,7 @@ export const PageDashboard = () => {
         <Heading size="md" mb="4">
           {t('dashboard:title')}
         </Heading>
-        <Alert status="success" borderRadius="md">
+        <Alert status="success" colorScheme="brand" borderRadius="md">
           <AlertIcon />
           <Box flex="1">
             <AlertTitle fontSize="lg">

@@ -83,7 +83,7 @@ const tailwindColors = {
     800: '#1e40af',
     900: '#1e3a8a',
   },
-  lightBlue: {
+  sky: {
     50: '#f0f9ff',
     100: '#e0f2fe',
     200: '#bae6fd',

@@ -1,4 +1,6 @@
-import { mode, transparentize } from '@chakra-ui/theme-tools';
+import { mode, transparentize, isAccessible } from '@chakra-ui/theme-tools';
+
+import { colors } from '@/theme/foundations/colors';
 
 const customVariant = ({
   bg,
@@ -8,15 +10,20 @@ const customVariant = ({
   colorHover = color,
   boxShadowFocus = 'outline',
 }) => {
+  const isColorAccessible = isAccessible(color, bg, {
+    size: 'large',
+    level: 'AA',
+  })({ colors });
+
   return {
     bg,
-    color: color,
+    color: isColorAccessible ? color : 'black',
     _focus: {
       boxShadow: boxShadowFocus,
     },
     _hover: {
       bg: bgHover,
-      color: colorHover,
+      color: isColorAccessible ? colorHover : 'black',
       _disabled: {
         bg,
       },
@@ -38,30 +45,21 @@ export default {
       }),
     '@secondary': (props) =>
       customVariant({
-        bg: mode('brand.50', 'brand.800')(props),
-        bgHover: mode('brand.100', 'brand.700')(props),
-        bgActive: mode('brand.200', 'brand.600')(props),
-        color: mode('brand.600', 'brand.50')(props),
-        colorHover: mode('brand.700', 'brand.100')(props),
+        bg: mode('brand.100', 'brand.900')(props),
+        bgHover: mode('brand.200', 'brand.800')(props),
+        bgActive: mode('brand.300', 'brand.700')(props),
+        color: mode('brand.700', 'brand.50')(props),
+        colorHover: mode('brand.800', 'brand.100')(props),
         boxShadowFocus: 'outline-brand',
       }),
     '@danger': (props) =>
       customVariant({
-        bg: mode('error.50', 'error.900')(props),
-        bgHover: mode('error.100', 'error.800')(props),
-        bgActive: mode('error.200', 'error.700')(props),
-        color: mode('error.600', 'error.50')(props),
-        colorHover: mode('error.700', 'error.100')(props),
+        bg: mode('error.100', 'error.900')(props),
+        bgHover: mode('error.200', 'error.800')(props),
+        bgActive: mode('error.300', 'error.700')(props),
+        color: mode('error.700', 'error.50')(props),
+        colorHover: mode('error.800', 'error.100')(props),
         boxShadowFocus: 'outline-error',
-      }),
-    '@warning': (props) =>
-      customVariant({
-        bg: mode('warning.50', 'warning.900')(props),
-        bgHover: mode('warning.100', 'warning.800')(props),
-        bgActive: mode('warning.200', 'warning.700')(props),
-        color: mode('warning.600', 'warning.50')(props),
-        colorHover: mode('warning.700', 'warning.100')(props),
-        boxShadowFocus: 'outline-warning',
       }),
 
     // Default variants
