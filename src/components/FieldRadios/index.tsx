@@ -62,7 +62,6 @@ export const FieldRadios = (props: FieldRadiosProps) => {
                 id={`${id}-${option.value}`}
                 name={option.value}
                 value={option.value}
-                colorScheme="brand"
               >
                 {option.label ?? option.value}
               </Radio>

@@ -1,8 +1,7 @@
 import { mode, transparentize, isAccessible } from '@chakra-ui/theme-tools';
 
-import { colors } from '@/theme/foundations/colors';
-
 const customVariant = ({
+  theme,
   bg,
   bgHover = bg,
   bgActive = bgHover,
@@ -13,7 +12,7 @@ const customVariant = ({
   const isColorAccessible = isAccessible(color, bg, {
     size: 'large',
     level: 'AA',
-  })({ colors });
+  })(theme);
 
   return {
     bg,
@@ -37,6 +36,7 @@ export default {
     // Custom variants
     '@primary': (props) =>
       customVariant({
+        theme: props.theme,
         bg: mode('brand.500', 'brand.300')(props),
         bgHover: mode('brand.600', 'brand.400')(props),
         bgActive: mode('brand.700', 'brand.500')(props),
@@ -45,6 +45,7 @@ export default {
       }),
     '@secondary': (props) =>
       customVariant({
+        theme: props.theme,
         bg: mode('brand.100', 'brand.900')(props),
         bgHover: mode('brand.200', 'brand.800')(props),
         bgActive: mode('brand.300', 'brand.700')(props),
@@ -54,6 +55,7 @@ export default {
       }),
     '@danger': (props) =>
       customVariant({
+        theme: props.theme,
         bg: mode('error.100', 'error.900')(props),
         bgHover: mode('error.200', 'error.800')(props),
         bgActive: mode('error.300', 'error.700')(props),
