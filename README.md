@@ -1,6 +1,6 @@
 <h1 align="center">📦 Start UI</h1>
 
-Start UI is a opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
+Start UI is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
 ## Technology
