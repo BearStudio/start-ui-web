@@ -55,11 +55,13 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
     fieldBg,
     fieldBorderColor,
     fieldFocusBorderColor,
+    fieldErrorBorderColor,
   ] = useToken('colors', [
     stylesFromTheme.field.color,
     stylesFromTheme.field.bg,
     stylesFromTheme.field.borderColor,
     stylesFromTheme.field._focus.borderColor,
+    stylesFromTheme.field._invalid.borderColor,
   ]);
   const [fieldBorderRadius] = useToken('radii', [
     stylesFromTheme.field.borderRadius,
@@ -186,10 +188,10 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
         },
       }),
       ...getConditionalStyles(isError, {
-        borderColor: theme.colors.error[600],
-        boxShadow: `0 0 0 1px ${theme.colors.error[600]}`,
+        borderColor: fieldErrorBorderColor,
+        boxShadow: `0 0 0 1px ${fieldErrorBorderColor}`,
         '&:hover': {
-          borderColor: theme.colors.error[600],
+          borderColor: fieldErrorBorderColor,
         },
       }),
       ...getConditionalStyles(isDisabled, {

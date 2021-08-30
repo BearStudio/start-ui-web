@@ -24,6 +24,7 @@ import {
   Loader,
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
+import { Error404 } from '@/errors';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { UserForm } from './UserForm';
@@ -38,6 +39,7 @@ export const PageUserUpdate = () => {
     user,
     isLoading: userIsLoading,
     isFetching: userIsFetching,
+    isError: userIsError,
   } = useUser(login, { refetchOnWindowFocus: false });
 
   const form = useForm({ subscribe: false });
@@ -85,7 +87,7 @@ export const PageUserUpdate = () => {
       <PageTopBar showBack onBack={() => history.goBack()}>
         <HStack spacing="4">
           <Box flex="1">
-            {userIsLoading ? (
+            {userIsLoading || userIsError ? (
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
               <Stack spacing="0">
@@ -106,9 +108,9 @@ export const PageUserUpdate = () => {
           )}
         </HStack>
       </PageTopBar>
-      {userIsFetching ? (
-        <Loader />
-      ) : (
+      {userIsFetching && <Loader />}
+      {userIsError && !userIsFetching && <Error404 />}
+      {!userIsError && !userIsFetching && (
         <Formiz
           id="create-user-form"
           onValidSubmit={submitEditUser}

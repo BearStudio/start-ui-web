@@ -11,10 +11,9 @@ const authenticate = (schema, request) => {
   const user = schema.users.findBy({ login: attrs.username.toLowerCase() });
   if (!user) {
     return new Response(401);
-  } else {
-    // Hack to identify current user
-    return { id_token: user.id };
   }
+  // Hack to identify current user
+  return { id_token: user.id };
 };
 
 export const withAuth = (callback) => {

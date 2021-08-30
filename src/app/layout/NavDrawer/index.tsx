@@ -30,7 +30,7 @@ export const NavDrawer = ({ ...rest }) => {
         >
           <DrawerCloseButton mt="safe-top" />
           <DrawerHeader>
-            <Logo h="1rem" color="gray.500" />
+            <Logo />
           </DrawerHeader>
           <DrawerBody p="2">
             <MainMenu direction="column" />

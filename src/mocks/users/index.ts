@@ -27,7 +27,11 @@ const getAll = withAuth((schema, request) => {
 
 const getOneByLogin = withAuth((schema, request) => {
   const login = request.params.userLogin;
-  return schema.where('user', { login }).models[0];
+  const user = schema.where('user', { login }).models[0];
+  if (!user) {
+    return new Response(404);
+  }
+  return user;
 });
 
 const create = withAuth((schema, request) => {
