@@ -5,6 +5,6 @@ export const colors = {
   brand: tailwindColors.amber,
   gray: tailwindColors.blueGray,
   success: tailwindColors.green,
-  error: tailwindColors.rose,
-  warning: tailwindColors.yellow,
+  error: tailwindColors.red,
+  warning: tailwindColors.orange,
 };
