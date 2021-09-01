@@ -15,7 +15,7 @@ const AppDevHint = () => {
   const colorScheme =
     process.env.NODE_ENV === 'development'
       ? 'warning'
-      : process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'orange';
+      : process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'success';
 
   if (!envName) {
     return null;

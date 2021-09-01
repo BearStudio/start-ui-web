@@ -1,4 +1,4 @@
-<h1 align="center"><img src="assets/logo-web.svg" alt="Start UI Web" width="300" /></h1>
+<h1 align="center"><img src="assets/start-ui-web.svg" alt="Start UI Web" width="300" /></h1>
 
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
