@@ -3,6 +3,20 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
+## Getting Started
+
+```bash
+npx create-start-ui myApp
+```
+That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
+
+Then just go to the created folder and run the dev server.
+
+```bash
+cd myApp
+yarn dev
+```
+
 ## Technology
 
 - 🟦 [TypeScript](https://www.typescriptlang.org/)
