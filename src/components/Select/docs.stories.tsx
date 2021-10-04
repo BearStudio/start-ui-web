@@ -43,7 +43,7 @@ export const SelectWithPlaceholder = () => {
   return (
     <Select
       placeholder="Please select an option"
-      noOptionsMessage="There is no options"
+      noOptionsMessage={() => 'There is no options'}
     />
   );
 };

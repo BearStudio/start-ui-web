@@ -1,25 +1,32 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
+import { GroupBase } from 'react-select';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
-import { Select } from '@/components/Select';
+import { Select, SelectProps } from '@/components/Select';
 
-interface Option {
-  value: any;
-  label?: ReactNode;
-}
-
-export interface FieldSelectProps extends FieldProps, FormGroupProps {
+export interface FieldSelectProps<
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+> extends FieldProps,
+    FormGroupProps {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   options?: Option[];
-  noOptionsMessage?: string;
   isClearable?: boolean;
   isSearchable?: boolean;
+  selectProps?: SelectProps<Option, IsMulti, Group>;
 }
 
-export const FieldSelect = (props: FieldSelectProps) => {
+export const FieldSelect = <
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+>(
+  props: FieldSelectProps<Option, IsMulti, Group>
+) => {
   const {
     errorMessage,
     id,
@@ -37,11 +44,11 @@ export const FieldSelect = (props: FieldSelectProps) => {
     options = [],
     placeholder,
     helper,
-    noOptionsMessage,
     isDisabled,
     isClearable,
     isSearchable,
     size = 'md',
+    selectProps,
     ...rest
   } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
@@ -73,11 +80,11 @@ export const FieldSelect = (props: FieldSelectProps) => {
         }
         size={size}
         options={options}
-        noOptionsMessage={noOptionsMessage || 'No option'}
         isDisabled={isDisabled}
         isClearable={isClearable}
         isSearchable={isSearchable}
         isError={showError}
+        {...selectProps}
       />
       {children}
     </FormGroup>
