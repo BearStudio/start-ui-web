@@ -2,9 +2,9 @@ import React from 'react';
 
 import { chakra, useTheme } from '@chakra-ui/react';
 
-export const Logo = ({ colorScheme = 'brand', ...rest }) => {
+export const Logo = ({ ...rest }) => {
   const theme = useTheme();
-  const gradientId = `logo-brand-gradient-${colorScheme}`;
+  const gradientId = 'logo-brand-gradient';
   return (
     <chakra.svg h="1.8rem" fill="none" viewBox="0 0 673 116" {...rest}>
       <title>Start UI</title>
@@ -39,8 +39,8 @@ export const Logo = ({ colorScheme = 'brand', ...rest }) => {
           y2={116}
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={theme.colors[colorScheme]?.['400']} />
-          <stop offset={1} stopColor={theme.colors[colorScheme]?.['500']} />
+          <stop stopColor="#FCD34D" />
+          <stop offset={1} stopColor="#F59E0B" />
         </linearGradient>
       </defs>
     </chakra.svg>

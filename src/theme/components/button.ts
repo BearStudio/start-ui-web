@@ -37,9 +37,9 @@ export default {
     '@primary': (props) =>
       customVariant({
         theme: props.theme,
-        bg: mode('brand.500', 'brand.300')(props),
-        bgHover: mode('brand.600', 'brand.400')(props),
-        bgActive: mode('brand.700', 'brand.500')(props),
+        bg: mode('brand.600', 'brand.300')(props),
+        bgHover: mode('brand.700', 'brand.400')(props),
+        bgActive: mode('brand.800', 'brand.500')(props),
         color: mode('white', 'brand.900')(props),
         boxShadowFocus: 'outline-brand',
       }),
