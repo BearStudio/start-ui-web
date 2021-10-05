@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { ReactNode, useRef } from 'react';
 
 import {
   Box,
@@ -9,8 +9,7 @@ import {
   useStyleConfig,
 } from '@chakra-ui/react';
 import type { CSSObject } from '@emotion/react';
-import ReactSelect from 'react-select';
-import type { Props } from 'react-select';
+import ReactSelect, { GroupBase, Props } from 'react-select';
 import AsyncReactSelect from 'react-select/async';
 import AsyncCreatableReactSelect from 'react-select/async-creatable';
 import CreatableReactSelect from 'react-select/creatable';
@@ -19,19 +18,51 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 
 const BoxAny: any = Box;
 
+// Tricks for generic forwardRef. Do not move this declaration elsewhere as we
+// do not want to apply it everywhere. The duplication is not a problem itself
+// as this code won't be in the final bundle.
+// https://fettblog.eu/typescript-react-generic-forward-refs/#option-3%3A-augment-forwardref
+declare module 'react' {
+  function forwardRef<T, P = {}>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+}
+
 const MenuWithChakraPortal = ({ innerProps }: { innerProps: BoxProps }) => (
   <Portal>
     <Box {...innerProps} />
   </Portal>
 );
 
-export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
+export type SelectProps<
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+> = {
+  isAsync?: boolean;
+  isCreatable?: boolean;
+  isError?: boolean;
+  size?: string;
+  formatCreateLabel?: (inputValue: string) => ReactNode;
+  loadOptions?: (input: unknown) => any;
+  defaultOptions?: unknown | boolean;
+  debounceDelay?: number;
+} & Props<Option, IsMulti, Group> &
+  Omit<BoxProps, 'defaultValue'>;
+
+const SelectInner = <
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+>(
+  props: SelectProps<Option, IsMulti, Group>,
+  ref: React.ForwardedRef<HTMLElement>
+) => {
   const {
     isAsync,
     isCreatable,
     isError,
     size = 'md',
-    noOptionsMessage,
     loadingMessage,
     formatCreateLabel,
     placeholder,
@@ -252,9 +283,6 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
       as={Element}
       styles={selectStyle}
       components={{ MenuPortal: MenuWithChakraPortal }}
-      {...(noOptionsMessage
-        ? { noOptionsMessage: () => noOptionsMessage }
-        : {})}
       {...(loadingMessage ? { loadingMessage: () => loadingMessage } : {})}
       {...(formatCreateLabel ? { formatCreateLabel } : {})}
       placeholder={placeholder ? String(placeholder) : 'Select...'}
@@ -264,4 +292,6 @@ export const Select = forwardRef<HTMLElement, Props>((props, ref) => {
       {...otherProps}
     />
   );
-});
+};
+
+export const Select = React.forwardRef(SelectInner);
