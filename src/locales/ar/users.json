@@ -7,23 +7,23 @@
   },
   "feedbacks": {
     "activateUserSuccess": {
-      "title": "تنشيط المستخدم ",
-      "description": "المستخدم \"{{login}}\" تنشيط بنجاح"
+      "title": "تم تفعيل المستخدم",
+      "description": "تم  تفعيل المستخدم \"{{login}}\" بنجاح"
     },
     "deactivateUserSuccess": {
-      "title": "إلغاء تنشيط المستخدم ",
-      "description": "المستخدم \"{{login}}\" مع النجاح"
+      "title": "تم إلغاء تفعيل المستخدم",
+      "description": "تم  إلغاء  تفعيل المستخدم  \"{{login}}\" بنجاح"
     },
     "activateUserError": {
       "title": "فشل التفعيل",
-      "description": "فشل تنشيط مستخدم \"{{login}}\""
+      "description": "فشل تفعيل المستخدم \"{{login}}\""
     },
     "deactivateUserError": {
-      "title": "فشل إلغاء تنشيط ",
-      "description": "فشل إلغاء تنشيط مستخدم \"{{login}}\""
+      "title": "فشل إلغاء التفعيل",
+      "description": "فشل إلغاء تفعيل المستخدم \"{{login}}\""
     },
     "deleteUserSuccess": {
-      "title": "تم حذف المستخدم ",
+      "title": "تم حذف المستخدم",
       "description": "تم حذف المستخدم \"{{login}}\" بنجاح"
     },
     "deleteUserError": {
@@ -33,47 +33,47 @@
   },
   "data": {
     "login": {
-      "alreadyUsed": "اسم المستخدم مستخدم بالفعل",
-      "label": "اسم المستخدم",
-      "required": "اسم المستخدم مطلوب",
-      "tooShort": "اسم المستخدم قصير جدا (دقيقة. {{min}}) ",
-      "tooLong": "اسم المستخدم طويل جدا (بحد أقصى. {{{max}}) ",
-      "invalid": "اسم المستخدم غير صالح، لا تستخدم أحرف خاصة"
+      "alreadyUsed": "إسم المستخدم مستخدم بالفعل",
+      "label": "إسم المستخدم",
+      "required": "إسم المستخدم مطلوب",
+      "tooShort": "إسم المستخدم قصير جدا (على الأقل  {{min}} حرف)",
+      "tooLong": "إسم المستخدم طويل جدا (كحد أقصى {{{max}} حرف)",
+      "invalid": "إسم المستخدم غير صالح، لا تستخدم أحرف خاصة"
     },
     "email": {
-      "label": "بريد إلكتروني",
-      "alreadyUsed": "البريد الإلكتروني المستخدمة بالفعل ",
-      "required": "البريد الالكتروني مطلوب",
+      "label": "البريد الإلكتروني",
+      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل ",
+      "required": "البريد الإلكتروني مطلوب",
       "invalid": "البريد الإلكتروني غير صالح ",
-      "tooShort": "البريد الإلكتروني قصير جدا (دقيقة {{{min}}) ",
-      "tooLong": "البريد الإلكتروني طويل جدا (كحد أقصى. {{{{max}})"
+      "tooShort": "البريد الإلكتروني قصير جدا (على الأقل  {{min}} حرف) ",
+      "tooLong": "البريد الإلكتروني طويل جدا (كحد أقصى {{{max}} حرف)"
     },
     "id": {
-      "label": "بطاقة تعريف"
+      "label": "المعرف"
     },
     "authorities": {
-      "label": "سلطات",
-      "required": "السلطات مطلوبة"
+      "label": "الصلاحيات",
+      "required": "الصلاحيات مطلوبة"
     },
     "createdBy": {
-      "label": "انشأ من قبل"
+      "label": "انشأ بواسطة"
     },
     "modifiedBy": {
-      "label": "تعديل من قبل"
+      "label": "معدل بواسطة"
     },
     "status": {
-      "label": "حالة",
+      "label": "الحالة",
       "activated": "مفعل",
-      "deactivated": "لم يتم تفعيلها"
+      "deactivated": "لم يتم تفعيله"
     },
     "firstname": {
-      "label": "الاسم الاول"
+      "label": "الإسم الاول"
     },
     "lastname": {
-      "label": "الكنية"
+      "label": "إسم العائلة"
     },
     "language": {
-      "label": "لغة"
+      "label": "اللغة"
     }
   },
   "update": {
@@ -85,14 +85,14 @@
         "title": "فشل التحديث"
       },
       "updateSuccess": {
-        "title": "تحديث مع النجاح"
+        "title": "تم التحديث بنجاح"
       }
     }
   },
   "create": {
     "feedbacks": {
       "updateError": {
-        "title": "فشل الخلق"
+        "title": "فشل الإنشاء"
       },
       "updateSuccess": {
         "title": "تم إنشاء المستخدم بنجاح"

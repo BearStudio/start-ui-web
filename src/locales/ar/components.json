@@ -3,21 +3,21 @@
     "format": "dddd, DD MMMM YYYY, hh:mm a"
   },
   "actionsButton": {
-    "label": "أجراءات"
+    "label": "إجراءات"
   },
   "confirmMenuItem": {
-    "confirmText": "انقر لتأكيد"
+    "confirmText": "انقر للتأكيد"
   },
   "pagination": {
     "firstPage": "الصفحة الأولى",
     "prevPage": "الصفحة السابقة",
-    "lastPage": "آخر صفحة",
+    "lastPage": "الصفحة الأخيرة",
     "nextPage": "الصفحة التالية",
-    "loading": "<spinner></spinner> <box> تحميل </box> <strong> {{firstItemOnPage}} </strong> <span> إلى </span> <strong> {{lastItemOnPage}} </strong> <span> \nمن </ span> <strong> {{totalItems}} </strong> <box> من النتائج </box>",
-    "showing": "<box> إظهار </box> <strong> {{firstItemOnPage}} </strong> <span> إلى </span> <strong> {{lastItemOnPage}} </strong> <span> من </ span> <strong \n> {{totalItems}} </strong> <box> النتائج </box>"
+    "loading": "<spinner></spinner> <box>تحميل</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>",
+    "showing": "<box>يتم إظهار</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>"
   },
   "searchInput": {
     "placeholder": "بحث...",
-    "clear": "مسح البحث"
+    "clear": "إمسح البحث"
   }
 }
