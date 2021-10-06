@@ -29,7 +29,7 @@ export const LoginModalInterceptor = () => {
   pathnameRef.current = pathname;
 
   useEffect(() => {
-    Axios.interceptors.response.use(
+    const interceptor = Axios.interceptors.response.use(
       (r) => r,
       (error) => {
         if (
@@ -42,6 +42,8 @@ export const LoginModalInterceptor = () => {
         throw error;
       }
     );
+
+    return () => Axios.interceptors.response.eject(interceptor);
   }, [onOpen, updateToken, queryCache]);
 
   // On Route Change
