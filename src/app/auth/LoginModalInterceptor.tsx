@@ -21,7 +21,7 @@ import { LoginForm } from '@/app/auth/LoginForm';
 export const LoginModalInterceptor = () => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLogged, updateToken } = useAuthContext();
+  const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -71,7 +71,7 @@ export const LoginModalInterceptor = () => {
 
   return (
     <Modal
-      isOpen={isOpen && isLogged}
+      isOpen={isOpen && isAuthenticated}
       onClose={handleClose}
       closeOnOverlayClick={false}
       trapFocus={false}

@@ -7,14 +7,14 @@ import { useAuthContext } from '@/app/auth/AuthContext';
 import { RoutePublic } from './RoutePublic';
 
 export const RoutePublicOnly = (props) => {
-  const { isLogged } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const history = useHistory();
 
   useEffect(() => {
-    if (isLogged) {
+    if (isAuthenticated) {
       history.replace(`/`);
     }
-  }, [isLogged, history]);
+  }, [isAuthenticated, history]);
 
-  return isLogged ? null : <RoutePublic {...props} />;
+  return isAuthenticated ? null : <RoutePublic {...props} />;
 };
