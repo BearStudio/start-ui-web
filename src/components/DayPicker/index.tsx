@@ -70,6 +70,7 @@ const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
           ref={setPopperElement}
           className={classNames.overlay}
           style={styles.popper}
+          zIndex="dayPicker"
           {...attributes.popper}
         >
           {children}
