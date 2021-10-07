@@ -72,12 +72,12 @@
   },
   "data": {
     "firstname": {
-      "label": "Nom",
-      "required": "Le nom est requis"
-    },
-    "lastname": {
       "label": "Prénom",
       "required": "Le prénom est requis"
+    },
+    "lastname": {
+      "label": "Nom",
+      "required": "Le nom est requis"
     },
     "email": {
       "label": "Email",
