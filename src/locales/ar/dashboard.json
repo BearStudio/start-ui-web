@@ -1,12 +1,12 @@
 {
   "links": {
-    "github": "مستودع جيثب",
-    "openIssue": "العدد المفتوح"
+    "github": "مستودع Github",
+    "openIssue": "إفتح مشكلة"
   },
-  "title": "لوحة القيادة",
+  "title": "اللوحة الرئيسية",
   "welcome": {
-    "author": "- من <strong> فريق BearStudio </strong>",
-    "description": "بداية واجهة مستخدم برأيك مع React و Chakra UI و React Query و Formiz",
+    "author": "- من <strong>فريق BearStudio</strong>",
+    "description": "منشئ واجهات المستخدم غير الموضوعي بإستخدام React، Chakra UI، React Query و Formiz",
     "title": "مرحبًا بك في Start UI"
   }
 }
