@@ -8,7 +8,7 @@ import {
 } from 'react-query';
 
 import { User, UserList } from '@/app/admin/users/users.types';
-import { DEFAULT_LANGUAGE } from '@/constants/i18n';
+import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
@@ -99,7 +99,7 @@ export const useUserCreate = (
   > = {}
 ) => {
   return useMutation(
-    ({ langKey = DEFAULT_LANGUAGE, ...payload }) =>
+    ({ langKey = DEFAULT_LANGUAGE_KEY, ...payload }) =>
       Axios.post('/users', {
         langKey,
         ...payload,

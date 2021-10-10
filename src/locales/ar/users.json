@@ -1,0 +1,106 @@
+{
+  "list": {
+    "title": "إدارة المستخدمين ",
+    "actions": {
+      "createUser": "إنشاء مستخدم"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "تم تفعيل المستخدم",
+      "description": "تم  تفعيل المستخدم \"{{login}}\" بنجاح"
+    },
+    "deactivateUserSuccess": {
+      "title": "تم إلغاء تفعيل المستخدم",
+      "description": "تم  إلغاء  تفعيل المستخدم  \"{{login}}\" بنجاح"
+    },
+    "activateUserError": {
+      "title": "فشل التفعيل",
+      "description": "فشل تفعيل المستخدم \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "فشل إلغاء التفعيل",
+      "description": "فشل إلغاء تفعيل المستخدم \"{{login}}\""
+    },
+    "deleteUserSuccess": {
+      "title": "تم حذف المستخدم",
+      "description": "تم حذف المستخدم \"{{login}}\" بنجاح"
+    },
+    "deleteUserError": {
+      "title": "فشل الحذف ",
+      "description": "فشل إزالة المستخدم \"{{login}}\""
+    }
+  },
+  "data": {
+    "login": {
+      "alreadyUsed": "إسم المستخدم مستخدم بالفعل",
+      "label": "إسم المستخدم",
+      "required": "إسم المستخدم مطلوب",
+      "tooShort": "إسم المستخدم قصير جدا (على الأقل {{min}} أحرف)",
+      "tooLong": "إسم المستخدم طويل جدا (الحد الأقصى {{max}} حرف)",
+      "invalid": "إسم المستخدم غير صالح، لا تستخدم أحرف خاصة"
+    },
+    "email": {
+      "label": "البريد الإلكتروني",
+      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل ",
+      "required": "البريد الإلكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صالح ",
+      "tooShort": "البريد الإلكتروني قصير جدا (على الأقل {{min}} أحرف)",
+      "tooLong": "البريد الإلكتروني طويل جدا (الحد الأقصى {{max}} حرف)"
+    },
+    "id": {
+      "label": "المعرف"
+    },
+    "authorities": {
+      "label": "الصلاحيات",
+      "required": "الصلاحيات مطلوبة"
+    },
+    "createdBy": {
+      "label": "انشأ بواسطة"
+    },
+    "modifiedBy": {
+      "label": "معدل بواسطة"
+    },
+    "status": {
+      "label": "الحالة",
+      "activated": "مفعل",
+      "deactivated": "لم يتم تفعيله"
+    },
+    "firstname": {
+      "label": "الإسم الاول"
+    },
+    "lastname": {
+      "label": "إسم العائلة"
+    },
+    "language": {
+      "label": "اللغة"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "تحديث المستخدم"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل التحديث"
+      },
+      "updateSuccess": {
+        "title": "تم التحديث بنجاح"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل الإنشاء"
+      },
+      "updateSuccess": {
+        "title": "تم إنشاء المستخدم بنجاح"
+      }
+    },
+    "action": {
+      "save": "إنشاء مستخدم"
+    },
+    "title": "إنشاء مستخدم جديد"
+  }
+}

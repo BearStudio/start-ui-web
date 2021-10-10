@@ -1,0 +1,23 @@
+{
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "إجراءات"
+  },
+  "confirmMenuItem": {
+    "confirmText": "انقر للتأكيد"
+  },
+  "pagination": {
+    "firstPage": "الصفحة الأولى",
+    "prevPage": "الصفحة السابقة",
+    "lastPage": "الصفحة الأخيرة",
+    "nextPage": "الصفحة التالية",
+    "loading": "<spinner></spinner> <box>تحميل</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>",
+    "showing": "<box>يتم إظهار</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>"
+  },
+  "searchInput": {
+    "placeholder": "بحث...",
+    "clear": "إمسح البحث"
+  }
+}

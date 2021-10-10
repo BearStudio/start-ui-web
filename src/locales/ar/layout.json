@@ -1,0 +1,17 @@
+{
+  "mainMenu": {
+    "dashboard": "اللوحة الرئيسية",
+    "admin": "المسؤول"
+  },
+  "accountMenu": {
+    "version": {
+      "copied": "تم نسخ الإصدار",
+      "copy": "نسخ الإصدار",
+      "label": "إصدار"
+    },
+    "switchColorModeDark": "التحويل إلى وضع الظلام ",
+    "switchColorModeLight": "التحويل إلى وضع الإضاءة ",
+    "myAccount": "حسابي",
+    "logout": "تسجيل خروج"
+  }
+}

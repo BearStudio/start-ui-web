@@ -9,7 +9,7 @@ import '@/config';
 import { mockServer } from '@/mocks/server';
 import theme from '@/theme';
 
-import { RTL_LANGUAGES } from './constants/i18n';
+import { AVAILABLE_LANGUAGES } from './constants/i18n';
 
 if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
   mockServer();
@@ -25,7 +25,9 @@ export const Providers = ({ children }) => {
         <ChakraProvider
           theme={{
             ...theme,
-            direction: RTL_LANGUAGES.includes(i18n.language) ? 'rtl' : 'ltr',
+            direction:
+              AVAILABLE_LANGUAGES.find(({ key }) => key === i18n.language)
+                ?.dir ?? 'ltr',
           }}
         >
           {children}

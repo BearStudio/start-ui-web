@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
-import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@/constants/i18n';
+import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
@@ -78,11 +78,11 @@ export const UserForm = () => {
       <FieldSelect
         name="langKey"
         label={t('users:data.language.label')}
-        options={AVAILABLE_LANGUAGES.map((langKey) => ({
-          label: t(`languages.${langKey}`),
-          value: langKey,
+        options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+          label: t(`languages.${key}`),
+          value: key,
         }))}
-        defaultValue={DEFAULT_LANGUAGE}
+        defaultValue={DEFAULT_LANGUAGE_KEY}
       />
       <FieldCheckboxes
         name="authorities"

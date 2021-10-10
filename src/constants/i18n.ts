@@ -1,5 +1,21 @@
-export const DEFAULT_LANGUAGE = 'en';
+type Language = {
+  key: string;
+  dir?: 'ltr' | 'rtl';
+  fontScale?: number;
+};
 
-export const AVAILABLE_LANGUAGES = ['en', 'fr'];
+export const DEFAULT_LANGUAGE_KEY: Language['key'] = 'en';
 
-export const RTL_LANGUAGES = [];
+export const AVAILABLE_LANGUAGES: Language[] = [
+  {
+    key: 'en',
+  },
+  {
+    key: 'fr',
+  },
+  {
+    key: 'ar',
+    dir: 'rtl',
+    fontScale: 1.2,
+  },
+];
