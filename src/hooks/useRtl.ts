@@ -6,7 +6,7 @@ export const useRtl = () => {
   const { direction } = useTheme();
 
   const rtlValue = useCallback(
-    (ltr, rtl) => (direction === 'rtl' ? rtl : ltr),
+    <T>(ltr: T, rtl: T) => (direction === 'rtl' ? rtl : ltr),
     [direction]
   );
 

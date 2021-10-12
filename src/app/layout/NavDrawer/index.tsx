@@ -11,13 +11,15 @@ import {
 
 import { MainMenu, useLayoutContext } from '@/app/layout';
 import { Logo } from '@/components';
+import { useRtl } from '@/hooks/useRtl';
 
 export const NavDrawer = ({ ...rest }) => {
   const { navIsOpen, navOnClose } = useLayoutContext();
+  const { rtlValue } = useRtl();
   return (
     <Drawer
       isOpen={navIsOpen}
-      placement="left"
+      placement={rtlValue('left', 'right')}
       onClose={() => navOnClose?.()}
       {...rest}
     >
