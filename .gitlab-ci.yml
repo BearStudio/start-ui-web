@@ -10,6 +10,8 @@ stages:
   - test
 
 build:
+  only:
+    - master
   stage: build
   script:
     - echo "Installing dependancies"
@@ -23,6 +25,8 @@ build:
     - yarn build
 
 test:
+  only:
+    - master
   stage: test
   script:
     - yarn install
