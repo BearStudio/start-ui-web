@@ -3,16 +3,21 @@ import { useState } from 'react';
 import { DayPicker } from './index';
 
 export default {
-  title: 'Components/Daypicker',
+  title: 'Components/DayPicker',
 };
 export const Default = () => {
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null | undefined>(
+    new Date()
+  );
   return (
-    <DayPicker
-      value={selectedDay}
-      onChange={(day) => {
-        setSelectedDay(day);
-      }}
-    />
+    <>
+      <DayPicker
+        value={selectedDay}
+        onChange={(day) => {
+          setSelectedDay(day);
+        }}
+      />
+      {JSON.stringify(selectedDay)}
+    </>
   );
 };
