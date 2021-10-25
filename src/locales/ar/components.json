@@ -19,5 +19,11 @@
   "searchInput": {
     "placeholder": "بحث...",
     "clear": "إمسح البحث"
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "تاريخ غير صالح"
+  },
+  "fieldRepeater": {
+    "invalidMessage": "عنصر واحد على الأقل غير صالح"
   }
 }

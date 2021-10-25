@@ -20,6 +20,9 @@
     "clear": "Effacer la recherche",
     "placeholder": "Rechercher..."
   },
+  "fieldDayPicker": {
+    "invalidMessage": "Date invalide"
+  },
   "fieldRepeater": {
     "invalidMessage": "Au moins un élément est invalide"
   }

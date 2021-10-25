@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import { DateUtils } from 'react-day-picker';
+import { DayModifiers } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { useTranslation } from 'react-i18next';
 import { FiCalendar } from 'react-icons/fi';
@@ -36,12 +36,12 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
   )
 );
 
-interface DayPickerProps extends BoxProps {
+interface DayPickerProps extends Omit<BoxProps, 'onChange'> {
   placeholder?: string;
-  value?: string | Date;
-  onChange?: any;
-  inputProps?: any;
-  dayPickerProps?: any;
+  value?: string | Date | null;
+  onChange?: (date: Date | null | undefined) => void;
+  inputProps?: InputProps;
+  dayPickerProps?: DayPickerProps;
 }
 
 export const DayPicker: FC<DayPickerProps> = ({
@@ -59,15 +59,29 @@ export const DayPicker: FC<DayPickerProps> = ({
   const formatDate = (date, format) => dayjs(date).format(format);
 
   const parseDate = (str, format) => {
-    const parsed = dayjs(str, format).toDate();
-    return DateUtils.isDate(parsed) ? parsed : null;
+    const parsed = dayjs(str, format);
+    return parsed.isValid() ? parsed.toDate() : null;
+  };
+
+  const handleChange = (
+    day: Date,
+    dayModifiers: DayModifiers,
+    dayPickerInput: DayPickerInput
+  ) => {
+    const inputValue = dayPickerInput?.getInput?.()?.value;
+    if (!inputValue) {
+      onChange(undefined);
+      return;
+    }
+    const date = dayjs(inputValue, FORMAT);
+    onChange(date.isValid() ? date.toDate() : null);
   };
 
   return (
     <Box {...rest}>
       <DayPickerInput
         component={ReactDayPickerInput}
-        onDayChange={onChange}
+        onDayChange={handleChange}
         formatDate={formatDate}
         format={FORMAT}
         parseDate={parseDate}
