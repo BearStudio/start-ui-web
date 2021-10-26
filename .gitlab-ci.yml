@@ -10,8 +10,6 @@ stages:
   - test
 
 build:
-  only:
-    - master
   stage: build
   script:
     - echo "Installing dependencies"
@@ -25,8 +23,6 @@ build:
     - yarn build
 
 test:
-  only:
-    - master
   stage: test
   script:
     - yarn install
@@ -35,4 +31,4 @@ test:
     - echo "Checking types"
     - yarn tsc --noEmit
     - echo "Running unit tests"
-    - yarn jest --roots src
+    - yarn jest --roots src --passWithNoTests
