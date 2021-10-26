@@ -1,0 +1,34 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules
+    - .yarn
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - echo "Installing dependencies"
+    - yarn install
+    - echo "Building application version"
+    - sed -i "s/__DEVELOPMENT__/$CI_PIPELINE_ID ($(date +"%Y-%m-%d"))/g" app-build.json
+    - sed -i "s/__VERSION__/PIPELINE $CI_PIPELINE_ID - JOB $CI_JOB_ID/g" app-build.json
+    - sed -i "s/__COMMIT__/$CI_COMMIT_SHORT_SHA/g" app-build.json
+    - sed -i "s/__DATE__/$(date +"%Y-%m-%d %T")/g" app-build.json
+    - echo "Building application"
+    - yarn build
+
+test:
+  stage: test
+  script:
+    - yarn install
+    - echo "Checking format code eslint"
+    - yarn eslint .
+    - echo "Checking types"
+    - yarn tsc --noEmit
+    - echo "Running unit tests"
+    - yarn jest --roots src --passWithNoTests

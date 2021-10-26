@@ -7,38 +7,43 @@ on:
     pull_request:
 
 jobs:
-    build-and-test:
-        name: Build and Test
-        runs-on: ubuntu-latest
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-            - name: Cache node modules
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-node-modules
-              with:
-                path: ~/.npm
-                key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-build-${{ env.cache-name }}-
-                  ${{ runner.os }}-build-
-                  ${{ runner.os }}-
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
-            - name: Install local dependencies
-              run: yarn install
+      - name: Install local dependencies
+        run: yarn install
 
-            - name: Check format code EsLint
-              run: yarn eslint .
+      - name: Build the build version
+        run: |
+          sed -i "s/__DEVELOPMENT__/$GITHUB_RUN_ID ($(date +"%Y-%m-%d"))/g" app-build.json
+          sed -i "s/__VERSION__/PIPELINE $GITHUB_RUN_ID/g" app-build.json
+          sed -i "s/__COMMIT__/$GITHUB_SHA/g" app-build.json
+          sed -i "s/__DATE__/$(date +"%Y-%m-%d %T")/g" app-build.json
 
-            - name: Check types
-              run: yarn tsc --noEmit
+      - name: Check format code EsLint
+        run: yarn eslint .
 
-            - name: Run unit tests
-              run: yarn jest --roots src
+      - name: Check types
+        run: yarn tsc --noEmit
 
-            - name: Building
-              run: yarn build
+      - name: Run unit tests
+        run: yarn jest --roots src
 
-
+      - name: Building
+        run: yarn build
