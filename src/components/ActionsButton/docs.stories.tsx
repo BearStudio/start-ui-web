@@ -26,13 +26,6 @@ export const DarkBackground = () => (
     <ActionsButton />
   </Box>
 );
-DarkBackground.parameters = {
-  docs: {
-    description: {
-      story: 'some story **markdown**',
-    },
-  },
-};
 
 export const UsageWithMenu = () => (
   <Menu isLazy placement="left-start">
