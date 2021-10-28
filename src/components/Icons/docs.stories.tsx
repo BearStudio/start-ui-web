@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid, Text } from '@chakra-ui/react';
 import { HiUser } from 'react-icons/hi';
 
 import { Icon, IconExample } from './';

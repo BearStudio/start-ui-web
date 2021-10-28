@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';
-import { TopBar, LayoutContext } from '@/app/layout';
+import { LayoutContext, TopBar } from '@/app/layout';
 import { Viewport } from '@/components';
 
 export const Layout = ({ children }) => {

@@ -3,10 +3,10 @@ import React from 'react';
 import {
   Box,
   Flex,
-  SlideFade,
   IconButton,
-  useTheme,
+  SlideFade,
   useBreakpointValue,
+  useTheme,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';

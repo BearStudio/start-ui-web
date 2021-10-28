@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Switch, Redirect, useRouteMatch } from 'react-router-dom';
+import { Redirect, Switch, useRouteMatch } from 'react-router-dom';
 
 import { PageApiDocumentation } from '@/app/admin/api/PageApiDocumentation';
 import { Route } from '@/app/router';

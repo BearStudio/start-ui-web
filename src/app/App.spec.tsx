@@ -1,5 +1,5 @@
 import { App } from '@/app/App';
-import { render, screen, act } from '@/test/utils';
+import { act, render, screen } from '@/test/utils';
 
 beforeEach(() => {
   window.history.pushState({}, '', '/app');

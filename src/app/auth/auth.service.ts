@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { useMutation, UseMutationOptions } from 'react-query';
+import { UseMutationOptions, useMutation } from 'react-query';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 

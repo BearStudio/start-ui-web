@@ -2,11 +2,11 @@ import React, { ReactNode, useRef } from 'react';
 
 import {
   Box,
-  Portal,
-  useToken,
   BoxProps,
-  useTheme,
+  Portal,
   useStyleConfig,
+  useTheme,
+  useToken,
 } from '@chakra-ui/react';
 import type { CSSObject } from '@emotion/react';
 import ReactSelect, { GroupBase, Props } from 'react-select';

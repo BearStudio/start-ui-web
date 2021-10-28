@@ -1,21 +1,21 @@
 import {
   Avatar,
-  Box,
   Badge,
-  Text,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuDivider,
-  MenuItem,
-  SimpleGrid,
+  Box,
   Code,
-  Stack,
+  HStack,
   LinkBox,
   LinkOverlay,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  SimpleGrid,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
-import { FiEdit, FiCopy, FiUserPlus, FiTrash2 } from 'react-icons/fi';
+import { FiCopy, FiEdit, FiTrash2, FiUserPlus } from 'react-icons/fi';
 
 import {
   ActionsButton,
@@ -31,14 +31,14 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 
 import {
   DataList,
-  DataListHeader,
-  DataListFooter,
   DataListAccordion,
   DataListAccordionButton,
   DataListAccordionIcon,
   DataListAccordionPanel,
-  DataListRow,
   DataListCell,
+  DataListFooter,
+  DataListHeader,
+  DataListRow,
 } from './index';
 
 export default {

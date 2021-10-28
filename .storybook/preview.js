@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useColorMode, Box } from '@chakra-ui/react';
+import { Box, useColorMode } from '@chakra-ui/react';
 import { themes } from '@storybook/theming';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,8 +9,8 @@ import { useDarkMode } from 'storybook-dark-mode';
 import { Providers } from '../src/Providers';
 import i18nGlobal from '../src/config/i18next';
 import {
-  DEFAULT_LANGUAGE_KEY,
   AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE_KEY,
 } from '../src/constants/i18n';
 import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';

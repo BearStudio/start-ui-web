@@ -1,20 +1,20 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import {
-  Text,
+  Button,
+  ChakraComponent,
   Flex,
+  FlexProps,
+  Menu,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Portal,
   Stack,
   StackProps,
-  FlexProps,
+  Text,
   useBreakpointValue,
-  Menu,
-  Button,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuGroup,
-  ChakraComponent,
-  Portal,
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 

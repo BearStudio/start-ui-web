@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { forwardRef, IconButton, IconButtonProps } from '@chakra-ui/react';
+import { IconButton, IconButtonProps, forwardRef } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiMoreVertical } from 'react-icons/fi';
 

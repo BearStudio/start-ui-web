@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack, Box } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 

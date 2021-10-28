@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stack, Code } from '@chakra-ui/react';
+import { Code, Stack } from '@chakra-ui/react';
 
 import { InputCurrency } from '.';
 

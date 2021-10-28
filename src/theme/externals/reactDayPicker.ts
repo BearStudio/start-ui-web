@@ -41,24 +41,27 @@ export const reactDayPicker = (props) => ({
     pointerEvents: 'none',
   },
 
-  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
-    position: 'relative',
-    backgroundColor: mode('brand.500', 'brand.600')(props),
-    borderRadius: '100%',
-  },
+  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)':
+    {
+      position: 'relative',
+      backgroundColor: mode('brand.500', 'brand.600')(props),
+      borderRadius: '100%',
+    },
 
-  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover': {
-    backgroundColor: mode('brand.400', 'brand.500')(props),
-    borderRadius: '100%',
-    color: 'white',
-  },
+  '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover':
+    {
+      backgroundColor: mode('brand.400', 'brand.500')(props),
+      borderRadius: '100%',
+      color: 'white',
+    },
 
   '.DayPicker:not(.DayPicker--interactionDisabled)': {
-    '.DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover': {
-      backgroundColor: mode('blackAlpha.200', 'whiteAlpha.200')(props),
-      borderRadius: '100%',
-      color: mode('black', 'white')(props),
-    },
+    '.DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover':
+      {
+        backgroundColor: mode('blackAlpha.200', 'whiteAlpha.200')(props),
+        borderRadius: '100%',
+        color: mode('black', 'white')(props),
+      },
   },
 
   '.DayPicker-Day': {

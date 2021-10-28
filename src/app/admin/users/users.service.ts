@@ -1,10 +1,10 @@
 import Axios from 'axios';
 import {
-  useMutation,
   UseMutationOptions,
+  UseQueryOptions,
+  useMutation,
   useQuery,
   useQueryClient,
-  UseQueryOptions,
 } from 'react-query';
 
 import { User, UserList } from '@/app/admin/users/users.types';

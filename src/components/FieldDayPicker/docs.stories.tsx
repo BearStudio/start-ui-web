@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack, Button } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 
 import { FieldDayPicker } from './index';

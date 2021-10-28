@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Stack, Center, Heading, Text } from '@chakra-ui/react';
+import { Button, Center, Heading, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 

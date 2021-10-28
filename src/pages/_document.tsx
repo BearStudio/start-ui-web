@@ -1,5 +1,5 @@
 import { ColorModeScript } from '@chakra-ui/react';
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
+import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
 
 import i18n from '@/config/i18next';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';

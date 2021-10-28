@@ -1,27 +1,27 @@
 import React from 'react';
 
 import {
-  Text,
   Box,
-  Heading,
-  HStack,
-  Stack,
   Button,
   ButtonGroup,
+  HStack,
+  Heading,
   SkeletonText,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { useUser, useUserUpdate } from '@/app/admin/users/users.service';
 import {
-  Page,
-  PageContent,
-  PageBottomBar,
-  PageTopBar,
   Loader,
+  Page,
+  PageBottomBar,
+  PageContent,
+  PageTopBar,
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
 import { Error404 } from '@/errors';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Switch, Redirect, useRouteMatch } from 'react-router-dom';
+import { Redirect, Switch, useRouteMatch } from 'react-router-dom';
 
 import { PageActivate } from '@/app/account/PageActivate';
 import { PagePassword } from '@/app/account/PagePassword';

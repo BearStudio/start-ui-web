@@ -1,13 +1,14 @@
 import { useCallback, useMemo } from 'react';
 
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export const useSearchParams = () => {
   const { pathname, search } = useLocation();
   const history = useHistory();
-  const searchParams = useMemo(() => new URLSearchParams(search || ''), [
-    search,
-  ]);
+  const searchParams = useMemo(
+    () => new URLSearchParams(search || ''),
+    [search]
+  );
   const setSearchParam = useCallback(
     (key: string, value: string | number = '', { replace = true } = {}) => {
       if (value || value === 0) {

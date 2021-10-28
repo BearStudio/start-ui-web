@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
 import {
-  useLocation,
-  useHistory,
   Route as RouterRoute,
+  useHistory,
+  useLocation,
 } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';

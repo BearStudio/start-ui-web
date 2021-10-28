@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/react';
 import { Layout } from '@/app/layout';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-import { Page, PageTopBar, PageContent, PageBottomBar } from './index';
+import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 
 export default {
   title: 'App Layout/Page',

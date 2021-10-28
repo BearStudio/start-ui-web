@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
-  forwardRef,
+  IconButton,
   Input,
   InputGroup,
   InputProps,
   InputRightElement,
-  IconButton,
+  forwardRef,
   useControllableState,
   useMergeRefs,
 } from '@chakra-ui/react';

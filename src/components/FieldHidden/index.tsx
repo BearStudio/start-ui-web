@@ -7,9 +7,12 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 interface FieldHiddenProps extends FieldProps, FormGroupProps {}
 
 export const FieldHidden: React.FC<FieldHiddenProps> = (props) => {
-  const { isValid, isSubmitted, errorMessage, otherProps: rest } = useField(
-    props
-  );
+  const {
+    isValid,
+    isSubmitted,
+    errorMessage,
+    otherProps: rest,
+  } = useField(props);
   const showError = !isValid && isSubmitted;
   const formGroupProps = {
     errorMessage,

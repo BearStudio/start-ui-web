@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { internet, name, date } from 'faker';
+import { date, internet, name } from 'faker';
 import { Factory } from 'miragejs';
 
 type Authority = 'ROLE_ADMIN' | 'ROLE_USER';

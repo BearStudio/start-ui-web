@@ -1,17 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
-  chakra,
-  useMenuItem,
-  MenuItemProps,
-  MenuIcon,
-  MenuCommand,
-  forwardRef,
+  Flex,
   HTMLChakraProps,
+  MenuCommand,
+  MenuIcon,
+  MenuItemProps,
+  Text,
+  chakra,
+  forwardRef,
+  useMenuItem,
   useMenuState,
   useStyles,
-  Text,
-  Flex,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';

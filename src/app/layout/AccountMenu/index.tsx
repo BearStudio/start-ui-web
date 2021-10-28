@@ -2,14 +2,14 @@ import React from 'react';
 
 import {
   Avatar,
+  Flex,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
-  MenuGroup,
   MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
   Spinner,
-  Flex,
   Text,
   useClipboard,
   useColorMode,
