@@ -1,4 +1,4 @@
-import { createServer, Model, Serializer } from 'miragejs';
+import { Model, Serializer, createServer } from 'miragejs';
 
 import { AccountRoutes } from './account';
 import { AuthRoutes } from './auth';

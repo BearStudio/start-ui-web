@@ -1,19 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  useDisclosure,
   Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import Axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginForm } from '@/app/auth/LoginForm';

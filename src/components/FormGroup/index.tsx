@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 
 import {
   FormControl,
-  FormLabel,
+  FormControlProps,
   FormErrorMessage,
   FormHelperText,
+  FormLabel,
   SlideFade,
-  FormControlProps,
 } from '@chakra-ui/react';
 import { FiAlertCircle } from 'react-icons/fi';
 

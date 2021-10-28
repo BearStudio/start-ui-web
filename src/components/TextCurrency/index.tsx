@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { forwardRef, TextProps, Text } from '@chakra-ui/react';
+import { Text, TextProps, forwardRef } from '@chakra-ui/react';
 import { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 

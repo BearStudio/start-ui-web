@@ -1,10 +1,10 @@
 import Axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import {
-  useMutation,
   UseMutationOptions,
-  useQuery,
   UseQueryOptions,
+  useMutation,
+  useQuery,
 } from 'react-query';
 
 import { Account } from '@/app/account/account.types';

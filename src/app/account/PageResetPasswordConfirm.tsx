@@ -27,27 +27,25 @@ export const PageResetPasswordConfirm = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const {
-    mutate: resetPasswordFinish,
-    isLoading: resetPasswordLoading,
-  } = useResetPasswordFinish({
-    onError: (error: any) => {
-      const { title } = error?.response?.data || {};
-      toastError({
-        title: t('account:resetPassword.feedbacks.confirmError.title'),
-        description: title,
-      });
-    },
-    onSuccess: () => {
-      toastSuccess({
-        title: t('account:resetPassword.feedbacks.confirmSuccess.title'),
-        description: t(
-          'account:resetPassword.feedbacks.confirmSuccess.description'
-        ),
-      });
-      history.push('/login');
-    },
-  });
+  const { mutate: resetPasswordFinish, isLoading: resetPasswordLoading } =
+    useResetPasswordFinish({
+      onError: (error: any) => {
+        const { title } = error?.response?.data || {};
+        toastError({
+          title: t('account:resetPassword.feedbacks.confirmError.title'),
+          description: title,
+        });
+      },
+      onSuccess: () => {
+        toastSuccess({
+          title: t('account:resetPassword.feedbacks.confirmSuccess.title'),
+          description: t(
+            'account:resetPassword.feedbacks.confirmSuccess.description'
+          ),
+        });
+        history.push('/login');
+      },
+    });
 
   const submitResetPasswordFinish = async (values) => {
     await resetPasswordFinish({

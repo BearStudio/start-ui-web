@@ -1,4 +1,4 @@
-import { useToast, UseToastOptions } from '@chakra-ui/react';
+import { UseToastOptions, useToast } from '@chakra-ui/react';
 
 export const toastDefaultConfig: UseToastOptions = {
   duration: 3000,

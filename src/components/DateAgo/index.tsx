@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { forwardRef, Tooltip, TooltipProps } from '@chakra-ui/react';
+import { Tooltip, TooltipProps, forwardRef } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 

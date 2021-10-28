@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import {
   Box,
+  BoxProps,
   Input,
   InputGroup,
-  InputProps,
   InputLeftElement,
-  useBreakpointValue,
+  InputProps,
   forwardRef,
-  BoxProps,
+  useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';

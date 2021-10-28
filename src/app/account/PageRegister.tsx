@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Alert,
-  AlertTitle,
   AlertDescription,
+  AlertTitle,
   Box,
   Button,
   Center,
   Flex,
   Heading,
-  Stack,
   ScaleFade,
+  Stack,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import {
@@ -41,7 +41,11 @@ export const PageRegister = () => {
     i18n.changeLanguage(form.values?.langKey);
   }, [i18n, form.values?.langKey]);
 
-  const { mutate: createUser, isLoading, isSuccess } = useCreateAccount({
+  const {
+    mutate: createUser,
+    isLoading,
+    isSuccess,
+  } = useCreateAccount({
     onMutate: ({ email }) => {
       setAccountEmail(email);
     },

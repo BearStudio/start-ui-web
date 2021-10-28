@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, Button, Heading, Stack } from '@chakra-ui/react';
+import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
@@ -12,8 +12,8 @@ import { Page, PageContent } from '@/app/layout';
 import {
   FieldInput,
   FieldSelect,
-  useToastSuccess,
   useToastError,
+  useToastSuccess,
 } from '@/components';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { useDarkMode } from '@/hooks/useDarkMode';

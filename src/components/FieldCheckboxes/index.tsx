@@ -1,7 +1,7 @@
 import React, {
-  createContext,
   MutableRefObject,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -68,9 +68,8 @@ interface FieldCheckboxesContextProps {
   >;
 }
 
-const FieldCheckboxesContext = createContext<FieldCheckboxesContextProps>(
-  undefined
-);
+const FieldCheckboxesContext =
+  createContext<FieldCheckboxesContextProps>(undefined);
 
 interface FieldCheckboxesProps
   extends FieldProps,
@@ -174,10 +173,8 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
         });
       },
       toggleGroups: (groups: string[]) => {
-        const [
-          allValuesInGroups,
-          allOtherValues,
-        ] = splitValuesByGroupsFromOptions(get().options, groups);
+        const [allValuesInGroups, allOtherValues] =
+          splitValuesByGroupsFromOptions(get().options, groups);
         setValue((previousValue) => {
           const allOtherValuesChecked = allOtherValues.filter((otherValue) =>
             verifyValueIsInValues(previousValue ?? [], otherValue)
@@ -305,56 +302,52 @@ interface FieldCheckboxItemCheckAllProps extends CheckboxProps {
   groups?: string[] | string;
 }
 
-export const FieldCheckboxesCheckAll: React.FC<FieldCheckboxItemCheckAllProps> = ({
-  groups = [],
-  onChange = () => undefined,
-  children,
-  ...checkboxProps
-}) => {
-  const { checkboxGroupProps, useStoreRef } = useContext(
-    FieldCheckboxesContext
-  );
-  const groupsArray = formatGroupsToArray(groups);
-
-  const useStore = useStoreRef.current;
-
-  const toggleGroups = useStore((state) => state.toggleGroups);
-  const { isChecked, isIndeterminate, isDisabled } = useStore((state) => {
-    const [groupsValues] = splitValuesByGroupsFromOptions(
-      state.options,
-      groupsArray
+export const FieldCheckboxesCheckAll: React.FC<FieldCheckboxItemCheckAllProps> =
+  ({ groups = [], onChange = () => undefined, children, ...checkboxProps }) => {
+    const { checkboxGroupProps, useStoreRef } = useContext(
+      FieldCheckboxesContext
     );
-    const hasValuesInGroups = groupsValues.length > 0;
+    const groupsArray = formatGroupsToArray(groups);
 
-    const areAllValuesChecked =
-      hasValuesInGroups && groupsValues.every(state.verifyIsValueChecked);
-    const areSomeValuesChecked =
-      hasValuesInGroups &&
-      !areAllValuesChecked &&
-      groupsValues.some(state.verifyIsValueChecked);
+    const useStore = useStoreRef.current;
 
-    return {
-      isChecked: areAllValuesChecked,
-      isIndeterminate: areSomeValuesChecked,
-      isDisabled: !hasValuesInGroups,
+    const toggleGroups = useStore((state) => state.toggleGroups);
+    const { isChecked, isIndeterminate, isDisabled } = useStore((state) => {
+      const [groupsValues] = splitValuesByGroupsFromOptions(
+        state.options,
+        groupsArray
+      );
+      const hasValuesInGroups = groupsValues.length > 0;
+
+      const areAllValuesChecked =
+        hasValuesInGroups && groupsValues.every(state.verifyIsValueChecked);
+      const areSomeValuesChecked =
+        hasValuesInGroups &&
+        !areAllValuesChecked &&
+        groupsValues.some(state.verifyIsValueChecked);
+
+      return {
+        isChecked: areAllValuesChecked,
+        isIndeterminate: areSomeValuesChecked,
+        isDisabled: !hasValuesInGroups,
+      };
+    });
+
+    const handleChange = (event) => {
+      onChange(event);
+      toggleGroups(groupsArray);
     };
-  });
 
-  const handleChange = (event) => {
-    onChange(event);
-    toggleGroups(groupsArray);
+    return (
+      <Checkbox
+        {...checkboxGroupProps}
+        {...checkboxProps}
+        onChange={handleChange}
+        isChecked={isChecked}
+        isIndeterminate={isIndeterminate}
+        isDisabled={isDisabled}
+      >
+        {children}
+      </Checkbox>
+    );
   };
-
-  return (
-    <Checkbox
-      {...checkboxGroupProps}
-      {...checkboxProps}
-      onChange={handleChange}
-      isChecked={isChecked}
-      isIndeterminate={isIndeterminate}
-      isDisabled={isDisabled}
-    >
-      {children}
-    </Checkbox>
-  );
-};

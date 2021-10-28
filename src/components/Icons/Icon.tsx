@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import {
   Box,
+  BoxProps,
   Icon as ChakraIcon,
   IconProps as ChakraIconProps,
-  BoxProps,
 } from '@chakra-ui/react';
 
 export interface IconProps extends BoxProps {

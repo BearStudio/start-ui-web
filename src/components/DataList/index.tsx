@@ -1,17 +1,17 @@
-import React, { useContext, useState, useEffect, useRef, FC } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 
 import {
   Accordion,
-  AccordionItem,
   AccordionButton,
-  AccordionPanel,
   AccordionIcon,
-  Box,
-  Flex,
-  useBreakpointValue,
-  FlexProps,
+  AccordionItem,
+  AccordionPanel,
   AccordionProps,
+  Box,
   ChakraComponent,
+  Flex,
+  FlexProps,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 import { useDarkMode } from '@/hooks/useDarkMode';

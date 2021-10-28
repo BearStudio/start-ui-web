@@ -3,10 +3,10 @@ import React from 'react';
 import {
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
 } from '@chakra-ui/react';
 
 import { MainMenu, useLayoutContext } from '@/app/layout';

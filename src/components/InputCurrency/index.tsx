@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { forwardRef, InputProps, Input } from '@chakra-ui/react';
+import { Input, InputProps, forwardRef } from '@chakra-ui/react';
 import CurrencyInput, { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 

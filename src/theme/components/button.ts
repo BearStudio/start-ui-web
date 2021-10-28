@@ -1,4 +1,4 @@
-import { mode, transparentize, isAccessible } from '@chakra-ui/theme-tools';
+import { isAccessible, mode, transparentize } from '@chakra-ui/theme-tools';
 
 const customVariant = ({
   theme,

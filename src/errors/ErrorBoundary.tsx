@@ -2,19 +2,19 @@ import React from 'react';
 
 import {
   Alert,
+  AlertDescription,
   AlertIcon,
   AlertTitle,
-  AlertDescription,
-  Button,
   Box,
+  Button,
   Collapse,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
-  ErrorBoundary as ReactErrorBoundary,
   FallbackProps,
+  ErrorBoundary as ReactErrorBoundary,
 } from 'react-error-boundary';
-import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
   const { isOpen, onToggle } = useDisclosure();

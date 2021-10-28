@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { RadioGroup, Radio, Wrap, WrapItem } from '@chakra-ui/react';
+import { Radio, RadioGroup, Wrap, WrapItem } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';

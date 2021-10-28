@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Stack, Center, useTheme, Heading, Text } from '@chakra-ui/react';
+import { Box, Center, Heading, Stack, Text, useTheme } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { useDarkMode } from '@/hooks/useDarkMode';

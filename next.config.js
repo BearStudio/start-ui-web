@@ -1,4 +1,7 @@
 module.exports = {
+  experimental: {
+    esmExternals: false,
+  },
   async redirects() {
     return [
       {

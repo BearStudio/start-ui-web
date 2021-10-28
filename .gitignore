@@ -25,6 +25,7 @@
 .idea/
 .eslintcache
 .db
+tsconfig.tsbuildinfo
 
 # debug
 npm-debug.log*

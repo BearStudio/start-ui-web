@@ -19,30 +19,28 @@ export const PagePassword = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const {
-    mutate: changePasswordFinish,
-    isLoading: changePasswordLoading,
-  } = useUpdatePassword({
-    onError: (error: any) => {
-      const { title } = error?.response?.data || {};
-      if (title === 'Incorrect password') {
-        changePasswordForm.invalidateFields({
-          currentPassword: t('account:data.currentPassword.incorrect'),
+  const { mutate: changePasswordFinish, isLoading: changePasswordLoading } =
+    useUpdatePassword({
+      onError: (error: any) => {
+        const { title } = error?.response?.data || {};
+        if (title === 'Incorrect password') {
+          changePasswordForm.invalidateFields({
+            currentPassword: t('account:data.currentPassword.incorrect'),
+          });
+          return;
+        }
+        toastError({
+          title: t('account:password.feedbacks.updateError.title'),
+          description: title,
         });
-        return;
-      }
-      toastError({
-        title: t('account:password.feedbacks.updateError.title'),
-        description: title,
-      });
-    },
-    onSuccess: () => {
-      toastSuccess({
-        title: t('account:password.feedbacks.updateSuccess.title'),
-      });
-      changePasswordForm.reset();
-    },
-  });
+      },
+      onSuccess: () => {
+        toastSuccess({
+          title: t('account:password.feedbacks.updateSuccess.title'),
+        });
+        changePasswordForm.reset();
+      },
+    });
 
   const submitUpdatePassword = async (values) => {
     const { currentPassword, newPassword } = values;
