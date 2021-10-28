@@ -7,5 +7,6 @@
   "arrowParens": "always",
   "importOrder": ["^react$", "^(?!^react$|^@/|^[./]).*", "^@/(.*)$", "^[./]"],
   "importOrderSeparation": true,
-  "experimentalBabelParserPluginsList": ["jsx", "typescript"]
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["jsx", "typescript"]
 }
