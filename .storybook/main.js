@@ -12,6 +12,10 @@ module.exports = {
   typescript: {
     reactDocgen: false,
   },
+  babel: async (options) => ({
+    ...options,
+    presets: [...(options.presets || []), 'next/babel'],
+  }),
   webpackFinal: (config) => {
     config.resolve.plugins.push(new TsconfigPathsPlugin());
     config.resolve.alias = {
