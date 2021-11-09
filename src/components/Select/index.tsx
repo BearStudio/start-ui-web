@@ -3,7 +3,6 @@ import React, { ReactNode, useRef } from 'react';
 import {
   Box,
   BoxProps,
-  Portal,
   useStyleConfig,
   useTheme,
   useToken,
@@ -27,12 +26,6 @@ declare module 'react' {
     render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
   ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 }
-
-const MenuWithChakraPortal = ({ innerProps }: { innerProps: BoxProps }) => (
-  <Portal>
-    <Box {...innerProps} />
-  </Portal>
-);
 
 export type SelectProps<
   Option,
@@ -276,13 +269,16 @@ const SelectInner = <
       zIndex: 10,
       backgroundColor: colorModeValue('white', theme.colors.gray['700']),
     })),
+    ...getComponentStyles('menuPortal', () => ({
+      zIndex: theme.zIndices.select,
+    })),
   };
 
   return (
     <BoxAny
       as={Element}
       styles={selectStyle}
-      components={{ MenuPortal: MenuWithChakraPortal }}
+      menuPortalTarget={document.body}
       {...(loadingMessage ? { loadingMessage: () => loadingMessage } : {})}
       {...(formatCreateLabel ? { formatCreateLabel } : {})}
       placeholder={placeholder ? String(placeholder) : 'Select...'}
