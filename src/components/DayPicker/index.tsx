@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import {
+  chakra,
   Box,
   BoxProps,
   Input,
@@ -16,6 +17,7 @@ import { DayModifiers } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { useTranslation } from 'react-i18next';
 import { FiCalendar } from 'react-icons/fi';
+import { usePopper } from 'react-popper';
 
 import { Icon } from '@/components';
 
@@ -34,6 +36,48 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
       <Input ref={ref} {...rest} />
     </InputGroup>
   )
+);
+
+// DISCLAIMER: This code is written using v7 of react-day-picker. Here are some
+// code comments containing permalinks to the v7 documentation as the website
+// will move in a near future.
+
+// On v7, react-day-picker doesn't provide typings. Following typings are based
+// on the proptypes in the source code.
+// https://github.com/gpbl/react-day-picker/blob/v7/src/DayPickerInput.js#L32
+interface CustomDayPickerOverlayProps {
+  selectedDay?: Date;
+  month?: Date;
+  input?: any;
+  classNames?: Record<string, string>;
+}
+
+// The CustomOverlay to control the way the day picker is displayed
+// https://github.com/gpbl/react-day-picker/blob/v7/docs/src/code-samples/examples/input-custom-overlay.js
+// Check the following permalink for v7 props documentation
+// https://github.com/gpbl/react-day-picker/blob/750f6cd808b2ac29772c8df5c497a66e818080e8/docs/src/pages/api/DayPickerInput.js#L163
+const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
+  ({ children, input, classNames, selectedDay, month, ...props }, ref) => {
+    const [popperElement, setPopperElement] = useState(null);
+
+    const { styles, attributes } = usePopper(input, popperElement, {
+      placement: 'bottom-start',
+    });
+
+    return (
+      <chakra.div className={classNames.overlayWrapper} {...props} ref={ref}>
+        <chakra.div
+          ref={setPopperElement}
+          className={classNames.overlay}
+          style={styles.popper}
+          zIndex="dayPicker"
+          {...attributes.popper}
+        >
+          {children}
+        </chakra.div>
+      </chakra.div>
+    );
+  }
 );
 
 interface DayPickerProps extends Omit<BoxProps, 'onChange'> {
@@ -103,13 +147,14 @@ export const DayPicker: FC<DayPickerProps> = ({
               .day(i + 1)
               .format('dd')
           ),
-          firstDayOfWeek: 1,
+          firstDayOfWeek: 0,
           ...dayPickerProps,
         }}
         inputProps={{
           readOnly: isSmartphoneFormat,
           ...inputProps,
         }}
+        overlayComponent={CustomDayPickerOverlay}
       />
     </Box>
   );

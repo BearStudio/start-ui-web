@@ -2,6 +2,10 @@ import { mode } from '@chakra-ui/theme-tools';
 import 'react-day-picker/lib/style.css';
 
 export const reactDayPicker = (props) => ({
+  '.DayPicker *': {
+    outline: 'none',
+  },
+
   '.DayPickerInput': {
     display: 'inline-block',
     fontSize: '0.1em',
@@ -14,7 +18,7 @@ export const reactDayPicker = (props) => ({
     right: { base: 0, sm: 'auto' },
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: '3em',
+    top: '3em',
     width: '100%',
     maxWidth: '90vw',
   },
@@ -34,11 +38,28 @@ export const reactDayPicker = (props) => ({
     border: '1px solid',
     borderColor: mode('gray.200', 'gray.900')(props),
     borderRadius: 'md',
-    maxWidth: '90vw',
+    width: 'min-content',
   },
 
-  '.DayPicker-Day--disabled': {
+  '.DayPicker-Months': {
+    display: 'grid',
+    gridTemplateColumns: {
+      base: 'repeat(1, 1fr)',
+      md: 'repeat(2, 1fr)',
+      xl: 'repeat(4, 1fr)',
+    },
+  },
+
+  '.DayPicker-Day--outside': {
+    backgroundColor: 'transparent!important',
+  },
+
+  '.DayPicker-Day--disabled, .DayPicker-Day--today.DayPicker-Day--disabled': {
     pointerEvents: 'none',
+  },
+
+  '.DayPicker-Day--today.DayPicker-Day--disabled': {
+    color: 'gray.300',
   },
 
   '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)':
@@ -64,12 +85,23 @@ export const reactDayPicker = (props) => ({
       },
   },
 
+  '.DayPicker-Day--weekend:.DayPicker-Day--selected': {
+    color: 'white',
+  },
+
+  '.DayPicker-Day--weekend': {
+    color: 'gray.400',
+  },
+
   '.DayPicker-Day': {
+    display: 'block',
     borderRadius: 'full',
     cursor: 'pointer',
-    height: '2.8em',
-    width: '2.8em',
+    height: '2rem',
+    minWidth: '2rem',
     transition: '0.2s',
+    padding: 0,
+    lineHeight: '2rem',
   },
 
   '.DayPicker-Day--today': {
@@ -77,14 +109,38 @@ export const reactDayPicker = (props) => ({
     fontWeight: 'bold',
   },
 
+  '.DayPicker-Caption': {
+    display: 'block',
+  },
+
   '.DayPicker-Caption > div': {
     fontWeight: '400',
     fontSize: '1em',
   },
 
+  '.DayPicker-Weekdays': {
+    display: 'block',
+  },
+
+  '.DayPicker-WeekdaysRow': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(7, 1fr)',
+  },
+
   '.DayPicker-Weekday': {
+    display: 'block',
     fontWeight: '350',
     color: mode('black', 'white')(props),
     fontSize: '0.875em',
+  },
+
+  '.DayPicker-Body': {
+    display: 'grid',
+  },
+
+  '.DayPicker-Week': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(7, 1fr)',
+    gridGap: '0.1rem',
   },
 });

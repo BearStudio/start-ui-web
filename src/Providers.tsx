@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -6,19 +6,34 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { AuthProvider } from '@/app/auth/AuthContext';
 import '@/config';
-import { mockServer } from '@/mocks/server';
 import theme from '@/theme';
 
 import { AVAILABLE_LANGUAGES } from './constants/i18n';
 
-if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
-  mockServer();
-}
-
 const queryClient = new QueryClient();
+
+const useMocksServer = () => {
+  const [isLoadingMocks, setIsLoadingMocks] = useState(
+    !process.env.NEXT_PUBLIC_API_BASE_URL
+  );
+
+  useEffect(() => {
+    (async () => {
+      if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
+        const { mockServer } = await import('@/mocks/server');
+        mockServer();
+        setIsLoadingMocks(false);
+      }
+    })();
+  }, []);
+
+  return { isLoadingMocks };
+};
 
 export const Providers = ({ children }) => {
   const { i18n } = useTranslation();
+  const { isLoadingMocks } = useMocksServer();
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -30,7 +45,7 @@ export const Providers = ({ children }) => {
                 ?.dir ?? 'ltr',
           }}
         >
-          {children}
+          {!isLoadingMocks && children}
         </ChakraProvider>
       </AuthProvider>
     </QueryClientProvider>
