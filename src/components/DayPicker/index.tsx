@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 
 import {
-  chakra,
   Box,
   BoxProps,
   Input,
   InputGroup,
   InputLeftElement,
   InputProps,
+  chakra,
   forwardRef,
   useBreakpointValue,
   useTheme,
@@ -83,7 +83,7 @@ const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
 interface DayPickerProps extends Omit<BoxProps, 'onChange'> {
   placeholder?: string;
   value?: string | Date | null;
-  onChange?: (date: Date | null | undefined) => void;
+  onChange?: (date: Date | null | undefined, isValid: boolean) => void;
   inputProps?: InputProps;
   dayPickerProps?: DayPickerProps;
 }
@@ -104,7 +104,7 @@ export const DayPicker: FC<DayPickerProps> = ({
 
   const parseDate = (str, format) => {
     const parsed = dayjs(str, format);
-    return parsed.isValid() ? parsed.toDate() : null;
+    return parsed.isValid() ? parsed.toDate() : undefined;
   };
 
   const handleChange = (
@@ -114,11 +114,12 @@ export const DayPicker: FC<DayPickerProps> = ({
   ) => {
     const inputValue = dayPickerInput?.getInput?.()?.value;
     if (!inputValue) {
-      onChange(undefined);
+      onChange(null, true);
       return;
     }
     const date = dayjs(inputValue, FORMAT);
-    onChange(date.isValid() ? date.toDate() : null);
+    const isValid = date.isValid();
+    onChange(isValid ? date.toDate() : null, isValid);
   };
 
   return (
