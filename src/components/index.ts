@@ -1,6 +1,7 @@
 export * from './ActionsButton';
 export * from './ConfirmMenuItem';
 export * from './DateAgo';
+export * from './DateSelector';
 export * from './DayPicker';
 export * from './FieldBooleanCheckbox';
 export * from './FieldCheckboxes';
