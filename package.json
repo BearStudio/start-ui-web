@@ -33,7 +33,7 @@
     "axios": "0.24.0",
     "dayjs": "1.10.7",
     "faker": "5.5.3",
-    "framer-motion": "4.1.17",
+    "framer-motion": "5.3.0",
     "history": "5.1.0",
     "i18next": "21.4.2",
     "isomorphic-form-data": "2.0.0",
