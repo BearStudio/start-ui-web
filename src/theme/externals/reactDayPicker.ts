@@ -35,8 +35,6 @@ export const reactDayPicker = (props) => ({
   '.DayPicker': {
     display: 'inline-block',
     fontSize: { base: '0.8rem', sm: '1rem' },
-    border: '1px solid',
-    borderColor: mode('gray.200', 'gray.900')(props),
     borderRadius: 'md',
     width: 'min-content',
   },
