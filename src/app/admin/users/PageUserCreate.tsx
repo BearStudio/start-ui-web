@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,23 +19,25 @@ export const PageUserCreate = () => {
   const toastSuccess = useToastSuccess();
 
   const { mutate: createUser, isLoading: createUserLoading } = useUserCreate({
-    onError: (error: AxiosError) => {
-      const { title, errorKey } = error.response.data;
-      toastError({
-        title: t('users:create.feedbacks.updateError.title'),
-        description: title,
-      });
-      switch (errorKey) {
-        case 'userexists':
-          form.invalidateFields({
-            login: t('users:data.login.alreadyUsed'),
-          });
-          break;
-        case 'emailexists':
-          form.invalidateFields({
-            email: t('users:data.email.alreadyUsed'),
-          });
-          break;
+    onError: (error) => {
+      if (error.response) {
+        const { title, errorKey } = error.response.data;
+        toastError({
+          title: t('users:create.feedbacks.updateError.title'),
+          description: title,
+        });
+        switch (errorKey) {
+          case 'userexists':
+            form.invalidateFields({
+              login: t('users:data.login.alreadyUsed'),
+            });
+            break;
+          case 'emailexists':
+            form.invalidateFields({
+              email: t('users:data.email.alreadyUsed'),
+            });
+            break;
+        }
       }
     },
     onSuccess: () => {

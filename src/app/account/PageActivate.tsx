@@ -17,7 +17,7 @@ export const PageActivate = () => {
   const { searchParams } = useSearchParams();
 
   useEffect(() => {
-    activateAccount({ key: searchParams.get('key') });
+    activateAccount({ key: searchParams.get('key') ?? 'KEY_NOT_DEFINED' });
   }, [activateAccount, searchParams]);
 
   return (

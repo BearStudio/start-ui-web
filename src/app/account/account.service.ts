@@ -51,8 +51,12 @@ export const useCreateAccount = (
   );
 };
 
+type UseActiveAccountVariables = {
+  key: string;
+};
+
 export const useActivateAccount = (
-  config: UseMutationOptions<void, unknown, { key: string }> = {}
+  config: UseMutationOptions<void, unknown, UseActiveAccountVariables> = {}
 ) => {
   return useMutation(
     ({ key }): Promise<void> => Axios.get(`/activate?key=${key}`),
@@ -95,11 +99,16 @@ export const useResetPasswordInit = (
   );
 };
 
+type UseResetPasswordFinishVariables = {
+  key: string;
+  newPassword: string;
+};
+
 export const useResetPasswordFinish = (
   config: UseMutationOptions<
     void,
     unknown,
-    { key: string; newPassword: string }
+    UseResetPasswordFinishVariables
   > = {}
 ) => {
   return useMutation(

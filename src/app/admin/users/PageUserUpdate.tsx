@@ -11,7 +11,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -48,23 +47,25 @@ export const PageUserUpdate = () => {
   const toastError = useToastError();
 
   const { mutate: editUser, isLoading: editUserIsLoading } = useUserUpdate({
-    onError: (error: AxiosError) => {
-      const { title, errorKey } = error.response.data;
-      toastError({
-        title: t('users:update.feedbacks.updateError.title'),
-        description: title,
-      });
-      switch (errorKey) {
-        case 'userexists':
-          form.invalidateFields({
-            login: t('users:data.login.alreadyUsed'),
-          });
-          break;
-        case 'emailexists':
-          form.invalidateFields({
-            email: t('users:data.email.alreadyUsed'),
-          });
-          break;
+    onError: (error) => {
+      if (error.response) {
+        const { title, errorKey } = error.response.data;
+        toastError({
+          title: t('users:update.feedbacks.updateError.title'),
+          description: title,
+        });
+        switch (errorKey) {
+          case 'userexists':
+            form.invalidateFields({
+              login: t('users:data.login.alreadyUsed'),
+            });
+            break;
+          case 'emailexists':
+            form.invalidateFields({
+              email: t('users:data.email.alreadyUsed'),
+            });
+            break;
+        }
       }
     },
     onSuccess: () => {

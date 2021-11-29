@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -10,9 +10,14 @@ import {
 import { User, UserList } from '@/app/admin/users/users.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
+type UserMutateError = {
+  title: string;
+  errorKey: string;
+};
+
 export const useUserList = (
   { page = 0, size = 10 } = {},
-  config: UseQueryOptions<UserList> = {}
+  config: UseQueryOptions<UserList, AxiosError> = {}
 ) => {
   const result = useQuery(
     ['users', { page, size }],
@@ -58,7 +63,7 @@ export const useUser = (
 };
 
 export const useUserUpdate = (
-  config: UseMutationOptions<User, unknown, User> = {}
+  config: UseMutationOptions<User, AxiosError<UserMutateError>, User> = {}
 ) => {
   const queryClient = useQueryClient();
   return useMutation((payload) => Axios.put('/users', payload), {
@@ -91,7 +96,7 @@ export const useUserUpdate = (
 export const useUserCreate = (
   config: UseMutationOptions<
     User,
-    unknown,
+    AxiosError<UserMutateError>,
     Pick<
       User,
       'login' | 'email' | 'firstName' | 'lastName' | 'langKey' | 'authorities'
