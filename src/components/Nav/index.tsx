@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
   Button,
@@ -21,7 +21,17 @@ import { FiChevronDown } from 'react-icons/fi';
 import { Icon } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-const NavContext = React.createContext(null);
+type NavContextValue = {
+  active: ReactNode;
+  setActive: (active: ReactNode) => void;
+  isMenu: boolean;
+};
+
+const NavContext = React.createContext<NavContextValue>({
+  active: '',
+  setActive: () => undefined,
+  isMenu: false,
+});
 const useNavContext = () => React.useContext(NavContext);
 
 interface NavProps extends StackProps {
@@ -33,7 +43,12 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   breakpoint = 'lg',
   ...rest
 }) => {
-  const isMenu = useBreakpointValue({ base: true, [breakpoint]: false });
+  const isMenu =
+    useBreakpointValue({
+      base: true,
+      [breakpoint]: false,
+    }) || true;
+
   const [active, setActive] = useState(<>-</>);
   return (
     <NavContext.Provider value={{ active, setActive, isMenu }}>

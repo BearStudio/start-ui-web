@@ -55,7 +55,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
 
     useEffect(() => {
       const handler = setTimeout(() => {
-        setExternalValueRef.current(search);
+        setExternalValueRef.current?.(search);
       }, delay);
 
       return () => clearTimeout(handler);

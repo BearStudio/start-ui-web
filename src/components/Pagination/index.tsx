@@ -43,7 +43,33 @@ export const getPaginationInfo = ({
   };
 };
 
-export const PaginationContext = React.createContext(null);
+export type PaginationContextValue<PageType = number> = {
+  page: PageType;
+  setPage: (page: PageType) => void;
+  firstPage: PageType;
+  isFirstPage: boolean;
+  lastPage: PageType;
+  isLastPage: boolean;
+  totalItems: number;
+  isLoadingPage: boolean;
+  pageSize: number;
+  firstItemOnPage: number;
+  lastItemOnPage: number;
+};
+
+export const PaginationContext = React.createContext<PaginationContextValue>({
+  page: 0,
+  setPage: () => undefined,
+  firstPage: 0,
+  isFirstPage: false,
+  lastPage: 0,
+  isLastPage: false,
+  totalItems: 0,
+  isLoadingPage: false,
+  pageSize: 0,
+  firstItemOnPage: 0,
+  lastItemOnPage: 0,
+});
 
 export const PaginationButtonFirstPage: FC<
   Omit<IconButtonProps, 'aria-label'>

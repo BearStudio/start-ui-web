@@ -13,7 +13,8 @@ export const Uncontrolled = () => {
 };
 
 export const Controlled = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<string | undefined>('');
+
   return (
     <Stack spacing={4}>
       <SearchInput value={value} onChange={setValue} />
@@ -23,12 +24,13 @@ export const Controlled = () => {
 };
 
 export const Disabled = () => {
-  const [value, setValue] = useState('Search term');
+  const [value, setValue] = useState<string | undefined>('Search term');
+
   return <SearchInput value={value} onChange={setValue} isDisabled />;
 };
 
 export const DebounceDelay = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<string | undefined>('');
   return (
     <Stack spacing={4}>
       <SearchInput value={value} onChange={setValue} delay={1000} />

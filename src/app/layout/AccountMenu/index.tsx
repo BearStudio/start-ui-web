@@ -102,7 +102,7 @@ export const AccountMenu = ({ ...rest }) => {
   return (
     <Menu placement="bottom-end" {...rest}>
       <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
-        <Avatar size="sm" icon={<></>} name={!isLoading && `${account?.login}`}>
+        <Avatar size="sm" icon={<></>} name={account?.login}>
           {isLoading && <Spinner size="xs" />}
         </Avatar>
       </MenuButton>
