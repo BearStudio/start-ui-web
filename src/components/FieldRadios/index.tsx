@@ -60,7 +60,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
             <WrapItem key={option.value}>
               <Radio
                 id={`${id}-${option.value}`}
-                name={option.value}
+                name={id}
                 value={option.value}
               >
                 {option.label ?? option.value}
