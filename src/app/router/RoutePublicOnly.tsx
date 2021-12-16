@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
-
-import { RoutePublic } from './RoutePublic';
 
 export const RoutePublicOnly = (props) => {
   const { isAuthenticated } = useAuthContext();
@@ -16,5 +14,5 @@ export const RoutePublicOnly = (props) => {
     }
   }, [isAuthenticated, history]);
 
-  return isAuthenticated ? null : <RoutePublic {...props} />;
+  return isAuthenticated ? null : <Route {...props} />;
 };

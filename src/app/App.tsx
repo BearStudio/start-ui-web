@@ -1,12 +1,16 @@
 import React, { Suspense } from 'react';
 
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
 import { Layout, Loader } from '@/app/layout';
-import { Route, RouteAdmin, RoutePublic, RoutePublicOnly } from '@/app/router';
+import {
+  Route as CustomRoute,
+  RouteAdmin,
+  RoutePublicOnly,
+} from '@/app/router';
 import { Error404, ErrorBoundary } from '@/errors';
 
 const AdminRoutes = React.lazy(() => import('@/app/admin/AdminRoutes'));
@@ -22,7 +26,7 @@ export const App = () => {
         <Layout>
           <Suspense fallback={<Loader />}>
             <Switch>
-              <RoutePublic
+              <Route
                 exact
                 path="/"
                 render={() => <Redirect to="/dashboard" />}
@@ -33,15 +37,33 @@ export const App = () => {
                 path="/login"
                 render={() => <PageLogin />}
               />
-              <RoutePublic exact path="/logout" render={() => <PageLogout />} />
+              <Route
+                exact
+                path="/logout"
+                render={() => (
+                  <ErrorBoundary>
+                    <PageLogout />
+                  </ErrorBoundary>
+                )}
+              />
 
-              <RoutePublic path="/account" render={() => <AccountRoutes />} />
+              <Route
+                path="/account"
+                render={() => (
+                  <ErrorBoundary>
+                    <AccountRoutes />
+                  </ErrorBoundary>
+                )}
+              />
 
-              <Route path="/dashboard" render={() => <DashboardRoutes />} />
+              <CustomRoute
+                path="/dashboard"
+                render={() => <DashboardRoutes />}
+              />
 
               <RouteAdmin path="/admin" render={() => <AdminRoutes />} />
 
-              <RoutePublic path="*" render={() => <Error404 />} />
+              <Route path="*" render={() => <Error404 />} />
             </Switch>
           </Suspense>
         </Layout>
