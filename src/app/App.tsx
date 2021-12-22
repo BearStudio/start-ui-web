@@ -6,11 +6,8 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
 import { Layout, Loader } from '@/app/layout';
-import {
-  Route as CustomRoute,
-  RouteAdmin,
-  RoutePublicOnly,
-} from '@/app/router';
+import { Route as CustomRoute, RouteAdmin } from '@/app/router';
+import { PublicOnlyRouteGuard } from '@/app/router/guards';
 import { Error404, ErrorBoundary } from '@/errors';
 
 const AdminRoutes = React.lazy(() => import('@/app/admin/AdminRoutes'));
@@ -32,10 +29,16 @@ export const App = () => {
                 render={() => <Redirect to="/dashboard" />}
               />
 
-              <RoutePublicOnly
+              <Route
                 exact
                 path="/login"
-                render={() => <PageLogin />}
+                render={() => (
+                  <PublicOnlyRouteGuard>
+                    <ErrorBoundary>
+                      <PageLogin />
+                    </ErrorBoundary>
+                  </PublicOnlyRouteGuard>
+                )}
               />
               <Route
                 exact

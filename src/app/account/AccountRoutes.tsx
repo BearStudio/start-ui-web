@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Redirect, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { PageActivate } from '@/app/account/PageActivate';
 import { PagePassword } from '@/app/account/PagePassword';
@@ -8,44 +8,69 @@ import { PageProfile } from '@/app/account/PageProfile';
 import { PageRegister } from '@/app/account/PageRegister';
 import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
 import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
-import { Route, RoutePublicOnly } from '@/app/router';
+import { Route as CustomRoute } from '@/app/router';
+import { PublicOnlyRouteGuard } from '@/app/router/guards';
 import { Error404 } from '@/errors';
 
 const AccountRoutes = () => {
   const { url } = useRouteMatch();
   return (
     <Switch>
-      <Route
+      <CustomRoute
         exact
         path={`${url}/`}
         render={() => <Redirect to={`${url}/profile`} />}
       />
 
-      <RoutePublicOnly
+      <Route
         exact
         path={`${url}/register`}
-        render={() => <PageRegister />}
+        render={() => (
+          <PublicOnlyRouteGuard>
+            <PageRegister />
+          </PublicOnlyRouteGuard>
+        )}
       />
-      <RoutePublicOnly
+      <Route
         exact
         path={`${url}/activate`}
-        render={() => <PageActivate />}
+        render={() => (
+          <PublicOnlyRouteGuard>
+            <PageActivate />
+          </PublicOnlyRouteGuard>
+        )}
       />
-      <RoutePublicOnly
+      <Route
         exact
         path={`${url}/reset`}
-        render={() => <PageResetPasswordRequest />}
+        render={() => (
+          <PublicOnlyRouteGuard>
+            <PageResetPasswordRequest />
+          </PublicOnlyRouteGuard>
+        )}
       />
-      <RoutePublicOnly
+      <Route
         exact
         path={`${url}/reset/finish`}
-        render={() => <PageResetPasswordConfirm />}
+        render={() => (
+          <PublicOnlyRouteGuard>
+            <PageResetPasswordConfirm />
+          </PublicOnlyRouteGuard>
+        )}
       />
 
-      <Route exact path={`${url}/profile`} render={() => <PageProfile />} />
-      <Route exact path={`${url}/password`} render={() => <PagePassword />} />
+      <CustomRoute
+        exact
+        path={`${url}/profile`}
+        render={() => <PageProfile />}
+      />
+      <CustomRoute
+        exact
+        path={`${url}/password`}
+        render={() => <PagePassword />}
+      />
 
-      <Route path="*" render={() => <Error404 />} />
+      <CustomRoute path="*" render={() => <Error404 />} />
     </Switch>
   );
 };
