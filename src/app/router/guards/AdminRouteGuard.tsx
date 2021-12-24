@@ -1,11 +1,7 @@
-import React from 'react';
-
 import { useAccount } from '@/app/account/account.service';
 import { Error403 } from '@/errors';
 
-import { Route } from './Route';
-
-export const RouteAdmin = (props) => {
+export const AdminRouteGuard = ({ children }) => {
   const { isAdmin, isLoading } = useAccount();
 
   if (isLoading) {
@@ -16,5 +12,5 @@ export const RouteAdmin = (props) => {
     return <Error403 />;
   }
 
-  return <Route {...props} />;
+  return children;
 };
