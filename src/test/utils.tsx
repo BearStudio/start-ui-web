@@ -1,14 +1,9 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 
 import { Providers } from '../Providers';
 
 const CustomWrapper = ({ children }) => {
-  return (
-    <Providers>
-      <BrowserRouter>{children}</BrowserRouter>
-    </Providers>
-  );
+  return <Providers>{children}</Providers>;
 };
 
 const customRender = (ui, options?: any) =>
