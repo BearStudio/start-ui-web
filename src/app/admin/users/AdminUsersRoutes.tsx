@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { PageUserCreate } from '@/app/admin/users/PageUserCreate';
 import { PageUserUpdate } from '@/app/admin/users/PageUserUpdate';
 import { PageUsers } from '@/app/admin/users/PageUsers';
-import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
 const AdminUsersRoutes = () => {

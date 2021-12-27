@@ -8,18 +8,24 @@ import { PageProfile } from '@/app/account/PageProfile';
 import { PageRegister } from '@/app/account/PageRegister';
 import { PageResetPasswordConfirm } from '@/app/account/PageResetPasswordConfirm';
 import { PageResetPasswordRequest } from '@/app/account/PageResetPasswordRequest';
-import { Route as CustomRoute } from '@/app/router';
-import { PublicOnlyRouteGuard } from '@/app/router/guards';
+import {
+  AuthenticatedRouteGuard,
+  PublicOnlyRouteGuard,
+} from '@/app/router/guards';
 import { Error404 } from '@/errors';
 
 const AccountRoutes = () => {
   const { url } = useRouteMatch();
   return (
     <Switch>
-      <CustomRoute
+      <Route
         exact
         path={`${url}/`}
-        render={() => <Redirect to={`${url}/profile`} />}
+        render={() => (
+          <AuthenticatedRouteGuard>
+            <Redirect to={`${url}/profile`} />
+          </AuthenticatedRouteGuard>
+        )}
       />
 
       <Route
@@ -59,18 +65,26 @@ const AccountRoutes = () => {
         )}
       />
 
-      <CustomRoute
+      <Route
         exact
         path={`${url}/profile`}
-        render={() => <PageProfile />}
+        render={() => (
+          <AuthenticatedRouteGuard>
+            <PageProfile />
+          </AuthenticatedRouteGuard>
+        )}
       />
-      <CustomRoute
+      <Route
         exact
         path={`${url}/password`}
-        render={() => <PagePassword />}
+        render={() => (
+          <AuthenticatedRouteGuard>
+            <PagePassword />
+          </AuthenticatedRouteGuard>
+        )}
       />
 
-      <CustomRoute path="*" render={() => <Error404 />} />
+      <Route path="*" render={() => <Error404 />} />
     </Switch>
   );
 };

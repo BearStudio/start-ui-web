@@ -6,8 +6,11 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
 import { Layout, Loader } from '@/app/layout';
-import { Route as CustomRoute } from '@/app/router';
-import { AdminRouteGuard, PublicOnlyRouteGuard } from '@/app/router/guards';
+import {
+  AdminRouteGuard,
+  AuthenticatedRouteGuard,
+  PublicOnlyRouteGuard,
+} from '@/app/router/guards';
 import { Error404, ErrorBoundary } from '@/errors';
 
 const AdminRoutes = React.lazy(() => import('@/app/admin/AdminRoutes'));
@@ -59,9 +62,13 @@ export const App = () => {
                 )}
               />
 
-              <CustomRoute
+              <Route
                 path="/dashboard"
-                render={() => <DashboardRoutes />}
+                render={() => (
+                  <AuthenticatedRouteGuard>
+                    <DashboardRoutes />
+                  </AuthenticatedRouteGuard>
+                )}
               />
 
               <Route

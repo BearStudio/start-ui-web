@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-import {
-  Route as RouterRoute,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
-import { ErrorBoundary } from '@/errors';
 
-export const Route = (props) => {
+export const AuthenticatedRouteGuard = ({ children }) => {
   const { isAuthenticated } = useAuthContext();
   const { pathname, search } = useLocation();
   const history = useHistory();
@@ -22,9 +17,5 @@ export const Route = (props) => {
     }
   }, [isAuthenticated, history, pathname, search]);
 
-  return !isAuthenticated ? null : (
-    <ErrorBoundary>
-      <RouterRoute {...props} />
-    </ErrorBoundary>
-  );
+  return !isAuthenticated ? null : children;
 };
