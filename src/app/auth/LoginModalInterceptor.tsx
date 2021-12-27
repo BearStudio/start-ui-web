@@ -13,7 +13,7 @@ import {
 import Axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginForm } from '@/app/auth/LoginForm';
@@ -23,7 +23,7 @@ export const LoginModalInterceptor = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const pathnameRef = useRef(null);
   pathnameRef.current = pathname;
@@ -48,15 +48,11 @@ export const LoginModalInterceptor = () => {
 
   // On Route Change
   useEffect(() => {
-    const destroy = history.listen(() => {
-      if (isOpen) {
-        updateToken(null);
-        onClose();
-      }
-    });
-
-    return () => destroy();
-  }, [history, isOpen, updateToken, onClose]);
+    if (isOpen && pathname !== pathnameRef.current) {
+      updateToken(null);
+      onClose();
+    }
+  }, [isOpen, updateToken, onClose, pathname]);
 
   const handleLogin = () => {
     queryCache.refetchQueries();
@@ -66,7 +62,7 @@ export const LoginModalInterceptor = () => {
   const handleClose = () => {
     updateToken(null);
     onClose();
-    history.push('/login');
+    navigate('/login');
   };
 
   return (

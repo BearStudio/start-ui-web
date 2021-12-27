@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { PageLogin } from '@/app/auth/PageLogin';
 import { PageLogout } from '@/app/auth/PageLogout';
@@ -22,68 +22,62 @@ const DashboardRoutes = React.lazy(
 export const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter basename="/app/">
+      <BrowserRouter basename="/app">
         <Layout>
           <Suspense fallback={<Loader />}>
-            <Switch>
-              <Route
-                exact
-                path="/"
-                render={() => <Redirect to="/dashboard" />}
-              />
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
               <Route
-                exact
-                path="/login"
-                render={() => (
+                path="login"
+                element={
                   <PublicOnlyRouteGuard>
                     <ErrorBoundary>
                       <PageLogin />
                     </ErrorBoundary>
                   </PublicOnlyRouteGuard>
-                )}
+                }
               />
               <Route
-                exact
-                path="/logout"
-                render={() => (
+                path="logout"
+                element={
                   <ErrorBoundary>
                     <PageLogout />
                   </ErrorBoundary>
-                )}
+                }
               />
 
               <Route
-                path="/account"
-                render={() => (
+                path="account/*"
+                element={
                   <ErrorBoundary>
                     <AccountRoutes />
                   </ErrorBoundary>
-                )}
+                }
               />
 
               <Route
-                path="/dashboard"
-                render={() => (
+                path="dashboard/*"
+                element={
                   <AuthenticatedRouteGuard>
                     <DashboardRoutes />
                   </AuthenticatedRouteGuard>
-                )}
+                }
               />
 
               <Route
-                path="/admin"
-                render={() => (
+                path="admin/*"
+                element={
                   <AdminRouteGuard>
                     <ErrorBoundary>
                       <AdminRoutes />
                     </ErrorBoundary>
                   </AdminRouteGuard>
-                )}
+                }
               />
 
-              <Route path="*" render={() => <Error404 />} />
-            </Switch>
+              <Route path="*" element={<Error404 />} />
+            </Routes>
           </Suspense>
         </Layout>
       </BrowserRouter>

@@ -13,7 +13,7 @@ import {
 import { Formiz, useForm } from '@formiz/core';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useUser, useUserUpdate } from '@/app/admin/users/users.service';
 import {
@@ -34,7 +34,7 @@ export const PageUserUpdate = () => {
   const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
   const { login } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     user,
     isLoading: userIsLoading,
@@ -71,7 +71,7 @@ export const PageUserUpdate = () => {
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      history.goBack();
+      navigate(-1);
     },
   });
   const submitEditUser = (values) => {
@@ -84,7 +84,7 @@ export const PageUserUpdate = () => {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => history.goBack()}>
+      <PageTopBar showBack onBack={() => navigate(-1)}>
         <HStack spacing="4">
           <Box flex="1">
             {userIsLoading || userIsError ? (
@@ -123,7 +123,7 @@ export const PageUserUpdate = () => {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => history.goBack()}>
+                <Button onClick={() => navigate(-1)}>
                   {t('actions.cancel')}
                 </Button>
                 <Button

@@ -84,7 +84,7 @@ export const PageResetPasswordRequest = () => {
           <Center mt="8">
             <Button
               as={RouterLink}
-              to="/login"
+              to="login"
               variant="link"
               color={colorModeValue('brand.500', 'brand.300')}
             >

@@ -23,7 +23,7 @@ import {
   FiSun,
   FiUser,
 } from 'react-icons/fi';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
@@ -97,7 +97,7 @@ export const AccountMenu = ({ ...rest }) => {
   const { colorModeValue } = useDarkMode();
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Menu placement="bottom-end" {...rest}>
@@ -138,7 +138,7 @@ export const AccountMenu = ({ ...rest }) => {
         <MenuDivider />
         <MenuItem
           icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
-          onClick={() => history.push('/logout')}
+          onClick={() => navigate('/logout')}
         >
           {t('layout:accountMenu.logout')}
         </MenuItem>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { PageApiDocumentation } from '@/app/admin/api/PageApiDocumentation';
 import { Error404 } from '@/errors';
@@ -10,18 +10,13 @@ const AdminUsersRoutes = React.lazy(
 );
 
 const AdminRoutes = () => {
-  const { url } = useRouteMatch();
   return (
-    <Switch>
-      <Route
-        exact
-        path={`${url}/`}
-        render={() => <Redirect to={`${url}/users`} />}
-      />
-      <Route path={`${url}/users`} render={() => <AdminUsersRoutes />} />
-      <Route path={`${url}/api`} render={() => <PageApiDocumentation />} />
-      <Route path="*" render={() => <Error404 />} />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Navigate to="users" replace />} />
+      <Route path="users/*" element={<AdminUsersRoutes />} />
+      <Route path="api/*" element={<PageApiDocumentation />} />
+      <Route path="*" element={<Error404 />} />
+    </Routes>
   );
 };
 
