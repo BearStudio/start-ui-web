@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { Redirect, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { PageApiDocumentation } from '@/app/admin/api/PageApiDocumentation';
-import { Route } from '@/app/router';
 import { Error404 } from '@/errors';
 
 const AdminUsersRoutes = React.lazy(
