@@ -4,7 +4,7 @@ import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useResetPasswordFinish } from '@/app/account/account.service';
 import { useSearchParams } from '@/app/router';
@@ -22,7 +22,7 @@ export const PageResetPasswordConfirm = () => {
   const { searchParams } = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -43,7 +43,7 @@ export const PageResetPasswordConfirm = () => {
             'account:resetPassword.feedbacks.confirmSuccess.description'
           ),
         });
-        history.push('/login');
+        navigate('/login');
       },
     });
 

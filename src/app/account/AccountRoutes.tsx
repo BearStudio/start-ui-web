@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { PageActivate } from '@/app/account/PageActivate';
 import { PagePassword } from '@/app/account/PagePassword';
@@ -15,77 +15,69 @@ import {
 import { Error404 } from '@/errors';
 
 const AccountRoutes = () => {
-  const { url } = useRouteMatch();
   return (
-    <Switch>
+    <Routes>
       <Route
-        exact
-        path={`${url}/`}
-        render={() => (
+        path="/"
+        element={
           <AuthenticatedRouteGuard>
-            <Redirect to={`${url}/profile`} />
+            <Navigate to="profile" replace />
           </AuthenticatedRouteGuard>
-        )}
+        }
       />
 
       <Route
-        exact
-        path={`${url}/register`}
-        render={() => (
+        path="register"
+        element={
           <PublicOnlyRouteGuard>
             <PageRegister />
           </PublicOnlyRouteGuard>
-        )}
+        }
       />
       <Route
-        exact
-        path={`${url}/activate`}
-        render={() => (
+        path="activate"
+        element={
           <PublicOnlyRouteGuard>
             <PageActivate />
           </PublicOnlyRouteGuard>
-        )}
+        }
       />
       <Route
-        exact
-        path={`${url}/reset`}
-        render={() => (
+        path="reset"
+        element={
           <PublicOnlyRouteGuard>
             <PageResetPasswordRequest />
           </PublicOnlyRouteGuard>
-        )}
+        }
       />
       <Route
-        exact
-        path={`${url}/reset/finish`}
-        render={() => (
+        path="reset/finish"
+        element={
           <PublicOnlyRouteGuard>
             <PageResetPasswordConfirm />
           </PublicOnlyRouteGuard>
-        )}
+        }
       />
 
       <Route
-        exact
-        path={`${url}/profile`}
-        render={() => (
+        path="profile"
+        element={
           <AuthenticatedRouteGuard>
             <PageProfile />
           </AuthenticatedRouteGuard>
-        )}
+        }
       />
       <Route
-        exact
-        path={`${url}/password`}
-        render={() => (
+        path="password"
+        element={
           <AuthenticatedRouteGuard>
             <PagePassword />
           </AuthenticatedRouteGuard>
-        )}
+        }
       />
 
-      <Route path="*" render={() => <Error404 />} />
-    </Switch>
+      <Route path="*" element={<Error404 />} />
+    </Routes>
   );
 };
 

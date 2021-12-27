@@ -65,11 +65,11 @@ export const MainMenu = ({ ...rest }) => {
   const { isAdmin } = useAccount();
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <MainMenuItem to="/dashboard">
+      <MainMenuItem to="dashboard">
         {t('layout:mainMenu.dashboard')}
       </MainMenuItem>
       {isAdmin && (
-        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
+        <MainMenuItem to="admin">{t('layout:mainMenu.admin')}</MainMenuItem>
       )}
     </Stack>
   );
