@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
+import { ErrorBoundary } from '@/errors';
 
 export const AuthenticatedRouteGuard = ({ children }) => {
   const { isAuthenticated } = useAuthContext();
@@ -17,5 +18,5 @@ export const AuthenticatedRouteGuard = ({ children }) => {
     }
   }, [isAuthenticated, navigate, pathname, search]);
 
-  return !isAuthenticated ? null : children;
+  return !isAuthenticated ? null : <ErrorBoundary>{children}</ErrorBoundary>;
 };
