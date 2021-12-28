@@ -32,9 +32,7 @@ export const App = () => {
                 path="login"
                 element={
                   <PublicOnlyRouteGuard>
-                    <ErrorBoundary>
-                      <PageLogin />
-                    </ErrorBoundary>
+                    <PageLogin />
                   </PublicOnlyRouteGuard>
                 }
               />
@@ -69,9 +67,7 @@ export const App = () => {
                 path="admin/*"
                 element={
                   <AdminRouteGuard>
-                    <ErrorBoundary>
-                      <AdminRoutes />
-                    </ErrorBoundary>
+                    <AdminRoutes />
                   </AdminRouteGuard>
                 }
               />

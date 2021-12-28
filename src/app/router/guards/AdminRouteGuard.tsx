@@ -1,5 +1,5 @@
 import { useAccount } from '@/app/account/account.service';
-import { Error403 } from '@/errors';
+import { Error403, ErrorBoundary } from '@/errors';
 
 export const AdminRouteGuard = ({ children }) => {
   const { isAdmin, isLoading } = useAccount();
@@ -12,5 +12,5 @@ export const AdminRouteGuard = ({ children }) => {
     return <Error403 />;
   }
 
-  return children;
+  return <ErrorBoundary>{children}</ErrorBoundary>;
 };
