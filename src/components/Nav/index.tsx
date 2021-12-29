@@ -43,11 +43,10 @@ export const Nav: ChakraComponent<'div', NavProps> = ({
   breakpoint = 'lg',
   ...rest
 }) => {
-  const isMenu =
-    useBreakpointValue({
-      base: true,
-      [breakpoint]: false,
-    }) || true;
+  const isMenu = useBreakpointValue({
+    base: true,
+    [breakpoint]: false,
+  });
 
   const [active, setActive] = useState(<>-</>);
   return (
