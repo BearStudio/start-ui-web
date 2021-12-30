@@ -9,6 +9,7 @@ module.exports = {
     '@storybook/addon-essentials',
     'storybook-dark-mode/register',
   ],
+  staticDir: ['../public'],
   typescript: {
     reactDocgen: false,
   },
