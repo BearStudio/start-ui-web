@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 🐜 Formiz — From the 🐻 BearStudio Team",
   "scripts": {
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "test": "jest --roots src --watch",
     "dev": "yarn docs:build && next dev",
     "build": "yarn docs:build && next build",
