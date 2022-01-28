@@ -37,7 +37,7 @@
     "i18next": "21.6.4",
     "isomorphic-form-data": "2.0.0",
     "lodash": "4.17.21",
-    "next": "12.0.7",
+    "next": "12.0.9",
     "react": "17.0.2",
     "react-currency-input-field": "3.6.0",
     "react-day-picker": "7.4.10",
