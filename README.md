@@ -214,7 +214,7 @@ docker build -t start-ui-web .
 
 2. Run the Docker image (replace `start-ui-web` with your project name)
 ```
-docker run -p 80:3000 -n start-ui-web
+docker run -p 80:3000 start-ui-web
 ```
 Application will be exposed on port 80 ([http://localhost](http://localhost))
 
