@@ -1,4 +1,10 @@
 # Install dependencies only when needed
+# You may want to fix the issue using a better tag
+# to avoid some cache on your machine. If you pulled the
+# LTS in 2020/2021, you may have the 14.X.X version and
+# have unexepected results. You can also use the
+# `--force-pull` flag to pull the latest image and avoid
+# cache.
 FROM node:lts-alpine AS deps
 
 WORKDIR /opt/app
