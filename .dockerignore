@@ -39,3 +39,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+Dockerfile
+.dockerignore
+README.md

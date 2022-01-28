@@ -199,10 +199,24 @@ t('account:resetPassword.actions.reset')
 ### NodeJS (recommended)
 
 ```bash
+yarn install
 yarn storybook:build # Optional: Will expose the Storybook at `/storybook`
 yarn build
 yarn start
 ```
+
+### Docker
+
+1. Build the Docker image (replace `start-ui-web` with your project name)
+```
+docker build -t start-ui-web .
+```
+
+2. Run the Docker image (replace `start-ui-web` with your project name)
+```
+docker run -p 80:3000 -n start-ui-web
+```
+Application will be exposed on port 80 ([http://localhost](http://localhost))
 
 ### Static files
 
