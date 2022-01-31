@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { Providers } from '../Providers';
+import { Providers } from '@/Providers';
 
 const CustomWrapper = ({ children }) => {
   return <Providers>{children}</Providers>;
