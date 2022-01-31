@@ -16,6 +16,7 @@
     "start": "next start",
     "pretty": "prettier -w .",
     "lint": "eslint ./src --fix && tsc --noEmit",
+    "lint-staged": "eslint --cache --fix  && tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook && mv ./storybook-static ./public/storybook",
     "static:build": "yarn build && next export",
@@ -24,7 +25,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "eslint --cache --fix && tsc --noEmit",
+    "*.{ts,tsx,js,jsx}": "yarn lint-staged",
     "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
   },
   "dependencies": {
