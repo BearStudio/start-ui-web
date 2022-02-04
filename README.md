@@ -87,6 +87,21 @@ Create a `.env` file at the root of the project with the following content:
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 ```
 
+## Change the app basename
+
+Udpate the `startUI.appBasename` in the `next.config.js` to change the url where the `app` (folder) is serve.
+
+ℹ️ Only accept first level path like ✅ `admin` (❌ `sub/path` will not work)
+
+```js
+// next.config.js
+module.exports = {
+  startUI: {
+    appBasename: 'app',
+  },
+}
+```
+
 ## Show hint on development environments
 
 Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
@@ -228,6 +243,8 @@ yarn static:build
 Then expose the `/out` folder.
 
 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+
+⚠️ If you changed the `startUI.appBasename` You will need to setup your server to rewrite all `/your-basename/*` urls to serve the `your-basename.html` file.
 
 #### Using Apache as your web server
 

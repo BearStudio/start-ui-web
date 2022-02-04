@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { Flex, Progress } from '@chakra-ui/react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
 import { Viewport } from '@/components';
+import { APP_BASENAME } from '@/constants/routing';
 
 const Loading = () => (
   <Viewport>
@@ -36,3 +38,22 @@ const App = () => {
   return isLoading ? <Loading /> : <AppComponent />;
 };
 export default App;
+
+// Allows easy url change within the next.config.js
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [
+      {
+        params: {
+          app: APP_BASENAME,
+        },
+      },
+    ],
+    fallback: false,
+  };
+};
+
+// Needed for getStaticPaths
+export const getStaticProps: GetStaticProps = () => ({
+  props: {},
+});

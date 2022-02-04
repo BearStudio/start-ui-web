@@ -1,8 +1,9 @@
 import { App } from '@/app/App';
+import { APP_BASENAME } from '@/constants/routing';
 import { act, render, screen } from '@/test/utils';
 
 beforeEach(() => {
-  window.history.pushState({}, '', '/app');
+  window.history.pushState({}, '', `/${APP_BASENAME}`);
 });
 
 test('Mount App without errors', async () => {

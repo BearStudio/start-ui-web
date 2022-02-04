@@ -1,4 +1,7 @@
 module.exports = {
+  startUI: {
+    appBasename: 'app',
+  },
   experimental: {
     outputStandalone: true,
   },
@@ -20,8 +23,8 @@ module.exports = {
       },
       // Rewrite everything else to use `pages/app`
       {
-        source: '/app/:any*',
-        destination: '/app/',
+        source: `/${this.startUI.appBasename}/:any*`,
+        destination: `/${this.startUI.appBasename}/`,
       },
     ];
   },

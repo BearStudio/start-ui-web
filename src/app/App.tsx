@@ -11,6 +11,7 @@ import {
   AuthenticatedRouteGuard,
   PublicOnlyRouteGuard,
 } from '@/app/router/guards';
+import { APP_BASENAME } from '@/constants/routing';
 import { Error404, ErrorBoundary } from '@/errors';
 
 const AdminRoutes = React.lazy(() => import('@/app/admin/AdminRoutes'));
@@ -22,7 +23,7 @@ const DashboardRoutes = React.lazy(
 export const App = () => {
   return (
     <ErrorBoundary>
-      <BrowserRouter basename="/app">
+      <BrowserRouter basename={`/${APP_BASENAME}`}>
         <Layout>
           <Suspense fallback={<Loader />}>
             <Routes>
