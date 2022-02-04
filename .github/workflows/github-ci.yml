@@ -1,4 +1,4 @@
-name: Start UI
+name: 🚀 Start UI [web]
 
 on:
   push:
@@ -11,8 +11,16 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node: [14, 16, 'lts/*']
+
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -36,14 +44,11 @@ jobs:
           sed -i "s/__COMMIT__/$GITHUB_SHA/g" app-build.json
           sed -i "s/__DATE__/$(date +"%Y-%m-%d %T")/g" app-build.json
 
-      - name: Check format code EsLint
-        run: yarn eslint .
-
-      - name: Check types
-        run: yarn tsc --noEmit
+      - name: Check coding rules and types
+        run: yarn lint
 
       - name: Run unit tests
-        run: yarn jest --roots src
+        run: yarn test:ci
 
       - name: Building
         run: yarn build
