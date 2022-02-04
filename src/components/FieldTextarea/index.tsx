@@ -16,6 +16,7 @@ export interface FieldTextareaProps extends FieldProps, FormGroupProps {
     | 'onBlur'
     | 'placeholder'
   >;
+  autoFocus?: boolean;
 }
 
 export const FieldTextarea = (props: FieldTextareaProps) => {
@@ -30,7 +31,8 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
     otherProps,
   } = useField(props);
 
-  const { helper, label, placeholder, textareaProps, ...rest } = otherProps;
+  const { helper, label, placeholder, textareaProps, autoFocus, ...rest } =
+    otherProps;
 
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
@@ -59,6 +61,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
         onChange={(e) => setValue(e.target.value)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder}
+        autoFocus={autoFocus}
         {...textareaProps}
       />
     </FormGroup>
