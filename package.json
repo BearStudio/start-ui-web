@@ -11,6 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest --roots src --watch",
+    "test:ci": "jest --roots src",
     "dev": "yarn docs:build && next dev",
     "build": "yarn docs:build && next build",
     "start": "next start",
