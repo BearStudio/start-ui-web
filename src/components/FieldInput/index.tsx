@@ -19,6 +19,7 @@ export interface FieldInputProps
     Omit<FormGroupProps, 'placeholder'>,
     Pick<InputProps, 'type' | 'placeholder'> {
   size?: 'sm' | 'md' | 'lg';
+  autoFocus?: boolean;
 }
 
 export const FieldInput = (props: FieldInputProps) => {
@@ -40,6 +41,7 @@ export const FieldInput = (props: FieldInputProps) => {
     placeholder,
     helper,
     size = 'md',
+    autoFocus,
     ...rest
   } = otherProps;
   const { required } = props;
@@ -71,6 +73,7 @@ export const FieldInput = (props: FieldInputProps) => {
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => setIsTouched(true)}
           placeholder={placeholder ? String(placeholder) : ''}
+          autoFocus={autoFocus}
         />
 
         {type === 'password' && (
