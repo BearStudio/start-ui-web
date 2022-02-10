@@ -180,11 +180,11 @@ t('account:data.firstname.required')
 {
   "resetPassword": {
     "feedbacks": {
-      "confirmSuccess": {
+      "updateSuccess": {
         "title": "Your password has been reset",
         "description": "You can now login"
       },
-      "confirmError": {
+      "updateError": {
         "title": "Reset password failed"
       }
     }
