@@ -19,10 +19,13 @@ const Loading = () => (
   </Viewport>
 );
 
-const AppComponent = dynamic(() => import('@/app/App').then((mod) => mod.App), {
-  ssr: false,
-  loading: () => <Loading />,
-});
+const AppComponent = dynamic<React.ReactNode>(
+  () => import('@/app/App').then((mod) => mod.App),
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
+);
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
