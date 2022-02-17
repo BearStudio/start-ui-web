@@ -10,9 +10,9 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  MenuProps,
   Portal,
   Stack,
-  StackProps,
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
@@ -34,23 +34,19 @@ const NavContext = React.createContext<NavContextValue>({
 });
 const useNavContext = () => React.useContext(NavContext);
 
-interface NavProps extends StackProps {
+interface NavProps extends MenuProps {
   breakpoint?: string;
 }
 
-export const Nav: ChakraComponent<'div', NavProps> = ({
-  children,
-  breakpoint = 'lg',
-  ...rest
-}) => {
+export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   const isMenu = useBreakpointValue({
     base: true,
     [breakpoint]: false,
   });
 
-  const [active, setActive] = useState(<>-</>);
+  const [active, setActive] = useState<ReactNode>(<>-</>);
   return (
-    <NavContext.Provider value={{ active, setActive, isMenu }}>
+    <NavContext.Provider value={{ active, setActive, isMenu: !!isMenu }}>
       <Menu matchWidth {...rest}>
         {!isMenu && <Stack spacing="1">{children}</Stack>}
         {isMenu && (
