@@ -8,7 +8,6 @@ import {
   AccordionPanel,
   AccordionProps,
   Box,
-  ChakraComponent,
   Flex,
   FlexProps,
   useBreakpointValue,
@@ -16,8 +15,19 @@ import {
 
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-export const DataListContext = React.createContext(null);
-export const DataListHeaderContext = React.createContext(null);
+type DataListColumns = Record<string, DataListCellProps>;
+type DataListContextValue = {
+  setColumns: React.Dispatch<React.SetStateAction<DataListColumns>>;
+  columns: DataListColumns;
+  isHover;
+};
+type DataListHeaderContextValue = boolean;
+
+export const DataListContext = React.createContext<DataListContextValue>(
+  {} as any
+);
+export const DataListHeaderContext =
+  React.createContext<DataListHeaderContextValue>(false);
 
 export interface DataListCellProps extends FlexProps {
   colName?: string;
@@ -25,13 +35,13 @@ export interface DataListCellProps extends FlexProps {
   isVisible?: boolean | boolean[] | Record<string, boolean>;
 }
 
-export const DataListCell: ChakraComponent<'div', DataListCellProps> = ({
+export const DataListCell = ({
   children,
-  colName = null,
+  colName,
   colWidth = 1,
   isVisible = true,
   ...rest
-}) => {
+}: DataListCellProps) => {
   const { columns, setColumns } = useContext(DataListContext);
   const isInHeader = useContext(DataListHeaderContext);
   const restRef = useRef<any>();
@@ -46,7 +56,7 @@ export const DataListCell: ChakraComponent<'div', DataListCellProps> = ({
     }
   }, [isInHeader, colName, colWidth, isVisible, setColumns]);
 
-  const headerProps = !isInHeader ? columns?.[colName] || {} : {};
+  const headerProps = !isInHeader ? columns?.[colName ?? ''] ?? {} : {};
   const {
     isVisible: _isVisible = true,
     colWidth: _colWidth = true,
@@ -62,19 +72,22 @@ export const DataListCell: ChakraComponent<'div', DataListCellProps> = ({
     typeof _isVisible === 'object' ? _isVisible : { base: _isVisible }
   );
 
-  const cellWidth = useBreakpointValue(
-    typeof _colWidth === 'object' ? _colWidth : { base: _colWidth }
-  );
+  const cellWidth =
+    useBreakpointValue(
+      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth }
+    ) ?? 0;
 
   if (!showCell) return null;
 
-  const isWidthUnitless = /^[0-9.]+$/.test(cellWidth);
+  const isWidthUnitless = /^[0-9.]+$/.test(String(cellWidth));
 
   return (
     <Flex
       direction="column"
-      minW={!isWidthUnitless ? cellWidth : 0}
-      flexBasis={isWidthUnitless ? `${+cellWidth * 100}%` : cellWidth}
+      minW={!isWidthUnitless ? String(cellWidth) : 0}
+      flexBasis={
+        isWidthUnitless ? `${Number(cellWidth) * 100}%` : String(cellWidth)
+      }
       py="2"
       px="3"
       align="flex-start"
@@ -223,7 +236,7 @@ export const DataList: FC<DataListProps> = ({
   ...rest
 }) => {
   const { colorModeValue } = useDarkMode();
-  const [columns, setColumns] = useState({});
+  const [columns, setColumns] = useState<DataListColumns>({});
   return (
     <DataListContext.Provider
       value={{
