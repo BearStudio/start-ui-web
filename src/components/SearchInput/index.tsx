@@ -16,6 +16,8 @@ import { FiSearch, FiX } from 'react-icons/fi';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 interface SearchInputProps extends Omit<InputProps, 'onChange'> {
+  value?: string;
+  defaultValue?: string;
   onChange?(value?: string): void;
   delay?: number;
   clearLabel?: string;
@@ -37,7 +39,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
   ) => {
     const { t } = useTranslation();
     const { colorModeValue } = useDarkMode();
-    const [externalValue, setExternalValue]: any = useControllableState({
+    const [externalValue, setExternalValue] = useControllableState({
       value,
       defaultValue,
       onChange,
@@ -50,7 +52,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     const searchRef = useRef(search);
     searchRef.current = search;
 
-    const setExternalValueRef = useRef<SearchInputProps['onChange']>();
+    const setExternalValueRef = useRef<typeof setExternalValue>();
     setExternalValueRef.current = setExternalValue;
 
     useEffect(() => {
