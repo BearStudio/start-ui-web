@@ -229,6 +229,20 @@ Then expose the `/out` folder.
 
 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
 
+#### Using Apache as your web server
+
+If you are using [apache](https://httpd.apache.org/) to statically deploy your app, you can use the following configuration for `public/.htaccess` :
+
+```bash
+# public/.htaccess
+Options -MultiViews
+RewriteEngine On
+
+# Rewrite /app/* to app.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule "^app/" "app.html" [QSA,L]
+```
+
 ---
 
 ## Technology Choices
