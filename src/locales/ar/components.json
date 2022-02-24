@@ -25,5 +25,8 @@
   },
   "fieldRepeater": {
     "invalidMessage": "عنصر واحد على الأقل غير صالح"
+  },
+  "fieldMultiSelect": {
+    "noOption": "لا يوجد خيار"
   }
 }
