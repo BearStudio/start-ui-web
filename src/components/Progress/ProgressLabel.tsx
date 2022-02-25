@@ -1,8 +1,10 @@
-import { FC, ReactChild, useContext } from 'react';
+import { FC, ReactChild } from 'react';
 
 import { Text, TextProps } from '@chakra-ui/react';
 
-import { ProgressContext, ProgressValues } from '.';
+import { useProgressContext } from '@/components';
+
+import { ProgressValues } from '.';
 
 export interface ProgressLabelProps extends TextProps {
   children(data: ProgressValues): ReactChild;
@@ -10,12 +12,13 @@ export interface ProgressLabelProps extends TextProps {
 
 export const ProgressLabel: FC<ProgressLabelProps> = ({
   children,
-  ...others
+  ...rest
 }) => {
-  const progressData = useContext(ProgressContext);
+  const progressValues = useProgressContext();
+
   return (
-    <Text fontWeight="medium" {...others}>
-      {children(progressData)}
+    <Text fontWeight="medium" {...rest}>
+      {children(progressValues)}
     </Text>
   );
 };

@@ -1,11 +1,11 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 
 import { Progress, ProgressProps } from '@chakra-ui/react';
 
-import { ProgressContext } from '.';
+import { useProgressContext } from '@/components';
 
 export const ProgressBar: FC<ProgressProps> = (props) => {
-  const { completed, total, isLoading } = useContext(ProgressContext);
+  const { completed, total, isLoading } = useProgressContext();
   return (
     <Progress
       value={(completed / total ?? Infinity) * 100}

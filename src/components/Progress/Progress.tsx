@@ -1,14 +1,14 @@
-import React, { FC, createContext } from 'react';
+import React, { FC, createContext, useContext } from 'react';
 
 import { Stack, StackProps } from '@chakra-ui/react';
-
-export const ProgressContext = createContext<ProgressValues>(null);
 
 export interface ProgressValues {
   completed: number;
   total: number;
   isLoading?: boolean;
 }
+
+export const ProgressContext = createContext<ProgressValues>(null);
 
 export interface ProgressProps extends StackProps, ProgressValues {}
 
@@ -26,7 +26,9 @@ export const Progress: FC<ProgressProps> = ({
         isLoading,
       }}
     >
-      <Stack spacing={1} {...rest} />
+      <Stack {...rest} />
     </ProgressContext.Provider>
   );
 };
+
+export const useProgressContext = () => useContext(ProgressContext);
