@@ -19,6 +19,7 @@ export * from './Icons';
 export * from './InputCurrency';
 export * from './Logo';
 export * from './Nav';
+export * from './ResponsiveIconButton';
 export * from './Pagination';
 export * from './SearchInput';
 export * from './Select';
