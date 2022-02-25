@@ -1,19 +1,16 @@
-import { Button, ButtonProps, IconButton } from '@chakra-ui/button';
 import { useBreakpointValue } from '@chakra-ui/media-query';
+import {
+  Button,
+  ButtonProps,
+  IconButton,
+  ResponsiveValue,
+} from '@chakra-ui/react';
 
-interface BreakpointsProps {
-  base?: boolean;
-  sm?: boolean;
-  md?: boolean;
-  lg?: boolean;
-  xl?: boolean;
-}
 interface ResponsiveIconButtonProps extends ButtonProps {
-  hideTextBreakpoints?: BreakpointsProps;
+  hideTextBreakpoints?: Omit<ResponsiveValue<boolean>, 'boolean'>;
   icon: React.ReactElement;
   children?: string;
   iconPosition?: 'left' | 'right';
-  to?: string;
 }
 
 export const ResponsiveIconButton: React.FC<ResponsiveIconButtonProps> = ({
