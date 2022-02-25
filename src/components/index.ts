@@ -14,6 +14,7 @@ export * from './FormGroup';
 export * from './Icons';
 export * from './Logo';
 export * from './Pagination';
+export * from './Progress';
 export * from './DataList';
 export * from './Nav';
 export * from './Select';
