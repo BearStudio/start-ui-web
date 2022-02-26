@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Stack } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
 
 import { ResponsiveIconButton } from '.';
