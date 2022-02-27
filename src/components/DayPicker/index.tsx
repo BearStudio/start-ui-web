@@ -80,13 +80,15 @@ const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
   }
 );
 
-interface DayPickerProps extends Omit<BoxProps, 'onChange'> {
+type CustomProps = {
   placeholder?: string;
   value?: string | Date | null;
   onChange?: (date: Date | null | undefined, isValid: boolean) => void;
   inputProps?: InputProps;
   dayPickerProps?: DayPickerProps;
-}
+};
+
+interface DayPickerProps extends Overwrite<BoxProps, CustomProps> {}
 
 export const DayPicker: FC<DayPickerProps> = ({
   placeholder = FORMAT,
