@@ -5,8 +5,9 @@ import { isBrowser } from '@/utils/ssr';
 
 Axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    const isExternal = !!config?.url?.startsWith('http');
     const token = isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
-    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+    const authHeaders = token && !isExternal ? { Authorization: `Bearer ${token}` } : {};
     return {
       baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
       ...config,
