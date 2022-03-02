@@ -109,11 +109,13 @@
     "email": "ivan@dalmet.fr",
     "url": "https://github.com/ivan-dalmet"
   },
-  "contributors": [{
-    "name": "Yoann Fleury",
-    "email": "yoannfleurydev@gmail.com",
-    "url": "https://github.com/yoannfleurydev"
-  }],
+  "contributors": [
+    {
+      "name": "Yoann Fleury",
+      "email": "yoannfleurydev@gmail.com",
+      "url": "https://github.com/yoannfleurydev"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bearstudio/start-ui/issues"
