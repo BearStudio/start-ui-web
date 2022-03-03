@@ -9,7 +9,7 @@ export default {
 };
 
 export const Default = () => {
-  const [value, setValue] = useState(1020.2);
+  const [value, setValue] = useState<number | undefined>(1020.2);
   return (
     <Stack>
       <InputCurrency value={value} onChange={setValue} />
@@ -20,37 +20,49 @@ export const Default = () => {
 };
 
 export const Currency = () => {
-  const [value, setValue] = useState(1020.2);
+  const [value, setValue] = useState<number | undefined>(1020.2);
   return (
     <Stack>
-      <InputCurrency value={value} onChange={setValue} currency="EUR" />
-      <InputCurrency value={value} onChange={setValue} currency="USD" />
-      <InputCurrency value={value} onChange={setValue} currency="GBP" />
+      <InputCurrency
+        value={value}
+        onChange={(v) => setValue(v)}
+        currency="EUR"
+      />
+      <InputCurrency
+        value={value}
+        onChange={(v) => setValue(v)}
+        currency="USD"
+      />
+      <InputCurrency
+        value={value}
+        onChange={(v) => setValue(v)}
+        currency="GBP"
+      />
       <Code>{value}</Code>
     </Stack>
   );
 };
 
 export const LocaleFR = () => {
-  const [value, setValue] = useState(1020.2);
+  const [value, setValue] = useState<number | undefined>(1020.2);
   return (
     <Stack>
-      <InputCurrency value={value} onChange={setValue} locale="fr" />
+      <InputCurrency value={value} onChange={(v) => setValue(v)} locale="fr" />
       <InputCurrency
         value={value}
-        onChange={setValue}
+        onChange={(v) => setValue(v)}
         locale="fr"
         currency="EUR"
       />
       <InputCurrency
         value={value}
-        onChange={setValue}
+        onChange={(v) => setValue(v)}
         locale="fr"
         currency="USD"
       />
       <InputCurrency
         value={value}
-        onChange={setValue}
+        onChange={(v) => setValue(v)}
         locale="fr"
         currency="GBP"
       />
