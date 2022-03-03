@@ -9,5 +9,5 @@ export default extendTheme({
   config,
   styles,
   ...foundations,
-  components,
+  components: { ...components },
 });
