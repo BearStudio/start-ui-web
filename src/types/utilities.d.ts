@@ -5,7 +5,7 @@
 type TODO = any;
 
 /**
- * Use this type to use explicite any
+ * Use this type to use an explicit `any`
  */
 type ExplicitAny = any;
 
