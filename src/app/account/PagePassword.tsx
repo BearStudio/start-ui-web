@@ -21,7 +21,7 @@ export const PagePassword = () => {
 
   const { mutate: changePasswordFinish, isLoading: changePasswordLoading } =
     useUpdatePassword({
-      onError: (error: any) => {
+      onError: (error) => {
         const { title } = error?.response?.data || {};
         if (title === 'Incorrect password') {
           changePasswordForm.invalidateFields({

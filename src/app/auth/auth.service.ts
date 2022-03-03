@@ -1,12 +1,12 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import { UseMutationOptions, useMutation } from 'react-query';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 
 export const useLogin = (
   config: UseMutationOptions<
-    any,
-    unknown,
+    { id_token: string },
+    AxiosError,
     { username: string; password: string }
   > = {}
 ) => {

@@ -40,7 +40,7 @@ export const PageResetPasswordRequest = () => {
     onMutate: () => {
       setAccountEmail(resetPasswordInitForm.values?.email);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       const { title } = error?.response?.data || {};
       toastError({
         title: t('account:resetPassword.feedbacks.initError.title'),

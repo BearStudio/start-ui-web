@@ -33,7 +33,7 @@ const StyledMenuItem = forwardRef<StyledMenuItemProps, 'button'>(
      */
     const btnType = rest.as ? type ?? undefined : 'button';
 
-    const buttonStyles: any = {
+    const buttonStyles = {
       textDecoration: 'none',
       color: 'inherit',
       userSelect: 'none',
@@ -120,7 +120,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     const { t } = useTranslation();
     const { colorModeValue } = useDarkMode();
     const [isConfirmActive, setIsConfirmActive] = useState(false);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const timeoutRef = useRef<NodeJS.Timeout>();
 
     const { onClose: onCloseMenu } = useMenuState();
 
@@ -148,7 +148,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       }
 
       return () => {
-        clearTimeout(timeoutRef.current);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
       };
     }, [isConfirmActive, confirmDelay]);
 

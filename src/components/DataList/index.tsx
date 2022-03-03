@@ -24,7 +24,7 @@ type DataListContextValue = {
 type DataListHeaderContextValue = boolean;
 
 export const DataListContext = React.createContext<DataListContextValue>(
-  {} as any
+  {} as TODO
 );
 export const DataListHeaderContext =
   React.createContext<DataListHeaderContextValue>(false);
@@ -44,7 +44,7 @@ export const DataListCell = ({
 }: DataListCellProps) => {
   const { columns, setColumns } = useContext(DataListContext);
   const isInHeader = useContext(DataListHeaderContext);
-  const restRef = useRef<any>();
+  const restRef = useRef(rest);
   restRef.current = rest;
 
   useEffect(() => {
@@ -154,10 +154,9 @@ export const DataListRow: FC<DataListRowProps> = ({
   const showRow = useBreakpointValue(
     typeof isVisible === 'object' ? isVisible : { base: isVisible }
   );
-  const disabledProps: any = isDisabled
+  const disabledProps = isDisabled
     ? {
         bg: colorModeValue('gray.50', 'whiteAlpha.50'),
-        pointerEvents: 'none',
         _hover: {},
         _focus: {},
         'aria-disabled': true,
@@ -171,13 +170,15 @@ export const DataListRow: FC<DataListRowProps> = ({
     : {};
   return (
     <Flex
-      d={!showRow ? 'none' : null}
+      d={!showRow ? 'none' : undefined}
       position="relative"
       borderBottom="1px solid"
       borderBottomColor={colorModeValue('gray.100', 'gray.900')}
       transition="0.2s"
       _hover={
-        isHover ? { bg: colorModeValue('gray.50', 'blackAlpha.200') } : null
+        isHover
+          ? { bg: colorModeValue('gray.50', 'blackAlpha.200') }
+          : undefined
       }
       {...disabledProps}
       {...rest}

@@ -10,7 +10,7 @@ export interface ActionsButtonProps
 }
 
 export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
-  ({ label, ...rest }, ref: any) => {
+  ({ label, ...rest }, ref) => {
     const { t } = useTranslation();
     return (
       <IconButton

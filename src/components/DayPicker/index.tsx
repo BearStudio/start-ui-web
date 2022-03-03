@@ -48,7 +48,7 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
 interface CustomDayPickerOverlayProps {
   selectedDay?: Date;
   month?: Date;
-  input?: any;
+  input?: TODO;
   classNames?: Record<string, string>;
 }
 
@@ -58,17 +58,17 @@ interface CustomDayPickerOverlayProps {
 // https://github.com/gpbl/react-day-picker/blob/750f6cd808b2ac29772c8df5c497a66e818080e8/docs/src/pages/api/DayPickerInput.js#L163
 const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
   ({ children, input, classNames, selectedDay, month, ...props }, ref) => {
-    const [popperElement, setPopperElement] = useState(null);
+    const [popperElement, setPopperElement] = useState<TODO>(null);
 
     const { styles, attributes } = usePopper(input, popperElement, {
       placement: 'bottom-start',
     });
 
     return (
-      <chakra.div className={classNames.overlayWrapper} {...props} ref={ref}>
+      <chakra.div className={classNames?.overlayWrapper} {...props} ref={ref}>
         <chakra.div
           ref={setPopperElement}
-          className={classNames.overlay}
+          className={classNames?.overlay}
           style={styles.popper}
           zIndex="dayPicker"
           {...attributes.popper}
@@ -133,7 +133,7 @@ export const DayPicker: FC<DayPickerProps> = ({
         format={FORMAT}
         parseDate={parseDate}
         placeholder={placeholder}
-        value={value}
+        value={value ?? undefined}
         dayPickerProps={{
           dir: theme.direction,
           locale: i18n.language,

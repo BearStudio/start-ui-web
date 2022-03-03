@@ -6,7 +6,7 @@ const CustomWrapper = ({ children }) => {
   return <Providers>{children}</Providers>;
 };
 
-const customRender = (ui, options?: any) =>
+const customRender = (ui, options?: TODO) =>
   render(ui, {
     wrapper: CustomWrapper,
     ...options,
