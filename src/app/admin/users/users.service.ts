@@ -50,13 +50,19 @@ export const useUserList = (
 };
 
 export const useUser = (
-  userLogin: string,
-  config: UseQueryOptions<User, AxiosError, User, ['user', string]> = {}
+  userLogin?: string,
+  config: UseQueryOptions<
+    User,
+    AxiosError,
+    User,
+    ['user', string | undefined]
+  > = {}
 ) => {
   const result = useQuery(
     ['user', userLogin],
     (): Promise<User> => Axios.get(`/users/${userLogin}`),
     {
+      enabled: !!userLogin,
       ...config,
     }
   );
