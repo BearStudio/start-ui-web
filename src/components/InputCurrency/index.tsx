@@ -13,7 +13,7 @@ export interface InputCurrencyProps
   currency?: string;
   decimals?: number;
   groupSpace?: number;
-  onChange?(value: number): void;
+  onChange?(value?: number): void;
 }
 export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
   (
@@ -61,7 +61,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
         value={internalValue}
         onValueChange={(val: string) => {
           setInternalValue(val);
-          onChange(val ? Number(val?.replace(',', '.')) : null);
+          onChange(val ? Number(val?.replace(',', '.')) : undefined);
         }}
         placeholder={
           typeof placeholder === 'number'

@@ -1,4 +1,4 @@
-const isNumber = (value: any): boolean =>
+const isNumber = (value: ExplicitAny): boolean =>
   typeof parseFloat(value) === 'number' &&
   !isNaN(parseFloat(value)) &&
   !isNaN(value);

@@ -17,7 +17,12 @@ type UserMutateError = {
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
-  config: UseQueryOptions<UserList, AxiosError> = {}
+  config: UseQueryOptions<
+    UserList,
+    AxiosError,
+    UserList,
+    ['users', { page: number; size: number }]
+  > = {}
 ) => {
   const result = useQuery(
     ['users', { page, size }],
@@ -30,7 +35,7 @@ export const useUserList = (
   );
 
   const { content: users, totalItems } = result.data || {};
-  const totalPages = Math.ceil(totalItems / size);
+  const totalPages = Math.ceil((totalItems ?? 0) / size);
   const hasMore = page + 1 < totalPages;
   const isLoadingPage = result.isFetching;
 
@@ -46,7 +51,7 @@ export const useUserList = (
 
 export const useUser = (
   userLogin: string,
-  config: UseQueryOptions<User> = {}
+  config: UseQueryOptions<User, AxiosError, User, ['user', string]> = {}
 ) => {
   const result = useQuery(
     ['user', userLogin],
@@ -74,7 +79,7 @@ export const useUserUpdate = (
         .getQueryCache()
         .findAll('users')
         .forEach(({ queryKey }) => {
-          queryClient.setQueryData(queryKey, (cachedData: UserList) => {
+          queryClient.setQueryData<UserList>(queryKey, (cachedData: TODO) => {
             if (!cachedData) return;
             return {
               ...cachedData,

@@ -49,7 +49,7 @@ export const PageRegister = () => {
     onMutate: ({ email }) => {
       setAccountEmail(email);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       const { errorKey, title } = error?.response?.data || {};
 
       toastError({

@@ -57,7 +57,7 @@ export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
 
   const { mutate: login, isLoading } = useLogin({
     onSuccess,
-    onError: (error: any) => {
+    onError: (error) => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),
         description: error?.response?.data?.title,

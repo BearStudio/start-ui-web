@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Stack } from '@chakra-ui/react';
+import { Box, BoxProps, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { useAccount } from '@/app/account/account.service';
 import { useLayoutContext } from '@/app/layout';
 import { useRtl } from '@/hooks/useRtl';
 
-const MainMenuItem = ({ to, ...rest }: any) => {
+const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
   const { pathname } = useLocation();

@@ -29,7 +29,7 @@ export const PageProfile = () => {
   const toastError = useToastError();
 
   const { mutate: updateAccount, isLoading: updateLoading } = useUpdateAccount({
-    onError: (error: any) => {
+    onError: (error) => {
       const { title } = error?.response?.data || {};
       toastError({
         title: t('account:profile.feedbacks.updateError.title'),

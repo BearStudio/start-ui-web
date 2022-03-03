@@ -15,7 +15,7 @@ import CreatableReactSelect from 'react-select/creatable';
 
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-const BoxAny: any = Box;
+const BoxAny: ExplicitAny = Box;
 
 // Tricks for generic forwardRef. Do not move this declaration elsewhere as we
 // do not want to apply it everywhere. The duplication is not a problem itself
@@ -37,7 +37,7 @@ export type SelectProps<
   isError?: boolean;
   size?: string;
   formatCreateLabel?: (inputValue: string) => ReactNode;
-  loadOptions?: (input: unknown) => any;
+  loadOptions?: (input: unknown) => TODO;
   defaultOptions?: unknown | boolean;
   debounceDelay?: number;
 } & Props<Option, IsMulti, Group> &
@@ -99,10 +99,12 @@ const SelectInner = <
     return ReactSelect;
   })();
 
-  let debounceTimeout = useRef<any>();
+  let debounceTimeout = useRef<NodeJS.Timeout>();
 
   const debounce = (func: () => unknown, delay: number) => {
-    clearTimeout(debounceTimeout.current);
+    if (debounceTimeout?.current) {
+      clearTimeout(debounceTimeout.current);
+    }
     return new Promise((resolve) => {
       debounceTimeout.current = setTimeout(async () => {
         resolve(func());
@@ -211,7 +213,7 @@ const SelectInner = <
           borderColor: fieldFocusBorderColor,
         },
       }),
-      ...getConditionalStyles(isError, {
+      ...getConditionalStyles(!!isError, {
         borderColor: fieldErrorBorderColor,
         boxShadow: `0 0 0 1px ${fieldErrorBorderColor}`,
         '&:hover': {

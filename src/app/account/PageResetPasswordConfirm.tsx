@@ -29,7 +29,7 @@ export const PageResetPasswordConfirm = () => {
 
   const { mutate: resetPasswordFinish, isLoading: resetPasswordLoading } =
     useResetPasswordFinish({
-      onError: (error: any) => {
+      onError: (error) => {
         const { title } = error?.response?.data || {};
         toastError({
           title: t('account:resetPassword.feedbacks.confirmError.title'),

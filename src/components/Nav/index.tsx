@@ -70,7 +70,7 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
 };
 
 interface NavItemProps extends FlexProps {
-  icon?: any;
+  icon?: React.FC;
   isActive?: boolean;
 }
 
@@ -83,7 +83,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   const { colorModeValue } = useDarkMode();
 
   const { setActive, isMenu } = useNavContext();
-  const Item: any = isMenu ? MenuItem : Flex;
+  const Item = isMenu ? MenuItem : Flex;
 
   const itemContent = useMemo(
     () => (

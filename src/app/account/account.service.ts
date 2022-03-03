@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import {
   UseMutationOptions,
@@ -10,7 +10,9 @@ import {
 import { Account } from '@/app/account/account.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
-export const useAccount = (config: UseQueryOptions<Account> = {}) => {
+export const useAccount = (
+  config: UseQueryOptions<Account, AxiosError, Account, ['account']> = {}
+) => {
   const { i18n } = useTranslation();
   const { data: account, ...rest } = useQuery(
     ['account'],
@@ -33,7 +35,7 @@ export const useAccount = (config: UseQueryOptions<Account> = {}) => {
 export const useCreateAccount = (
   config: UseMutationOptions<
     Account,
-    unknown,
+    AxiosError,
     Pick<Account, 'login' | 'email' | 'langKey'> & { password: string }
   > = {}
 ) => {
@@ -56,7 +58,7 @@ type UseActiveAccountVariables = {
 };
 
 export const useActivateAccount = (
-  config: UseMutationOptions<void, unknown, UseActiveAccountVariables> = {}
+  config: UseMutationOptions<void, AxiosError, UseActiveAccountVariables> = {}
 ) => {
   return useMutation(
     ({ key }): Promise<void> => Axios.get(`/activate?key=${key}`),
@@ -67,7 +69,7 @@ export const useActivateAccount = (
 };
 
 export const useUpdateAccount = (
-  config: UseMutationOptions<Account, unknown, Account> = {}
+  config: UseMutationOptions<Account, AxiosError, Account> = {}
 ) => {
   const { i18n } = useTranslation();
   return useMutation(
@@ -86,7 +88,7 @@ export const useUpdateAccount = (
 };
 
 export const useResetPasswordInit = (
-  config: UseMutationOptions<void, unknown, string> = {}
+  config: UseMutationOptions<void, AxiosError, string> = {}
 ) => {
   return useMutation(
     (email): Promise<void> =>
@@ -107,7 +109,7 @@ type UseResetPasswordFinishVariables = {
 export const useResetPasswordFinish = (
   config: UseMutationOptions<
     void,
-    unknown,
+    AxiosError,
     UseResetPasswordFinishVariables
   > = {}
 ) => {
@@ -123,7 +125,7 @@ export const useResetPasswordFinish = (
 export const useUpdatePassword = (
   config: UseMutationOptions<
     void,
-    unknown,
+    AxiosError,
     { currentPassword: string; newPassword: string }
   > = {}
 ) => {
