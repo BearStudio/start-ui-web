@@ -9,7 +9,7 @@ interface AuthContextValue {
 
 export const AUTH_TOKEN_KEY = 'authToken';
 
-const AuthContext = React.createContext<AuthContextValue>(null);
+const AuthContext = React.createContext<AuthContextValue>(null as TODO);
 
 const updateToken = (newToken) => {
   if (!isBrowser) {
