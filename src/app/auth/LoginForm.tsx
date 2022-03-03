@@ -4,6 +4,7 @@ import {
   Alert,
   AlertDescription,
   Box,
+  BoxProps,
   Button,
   Flex,
   Stack,
@@ -50,7 +51,12 @@ const MockedApiHint = () => {
   );
 };
 
-export const LoginForm = ({ onSuccess = () => undefined, ...rest }) => {
+type LoginFormProps = BoxProps & { onSuccess: () => void };
+
+export const LoginForm = ({
+  onSuccess = () => undefined,
+  ...rest
+}: LoginFormProps) => {
   const { t } = useTranslation();
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
