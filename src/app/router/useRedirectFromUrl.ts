@@ -11,7 +11,7 @@ export const useRedirectFromUrl = (defaultTo = '/') => {
     () =>
       navigate(
         searchParams.get('redirect')
-          ? decodeURIComponent(searchParams.get('redirect'))
+          ? decodeURIComponent(searchParams.get('redirect') ?? '')
           : defaultTo,
         { replace: true }
       ),
