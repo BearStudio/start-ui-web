@@ -25,7 +25,7 @@ export const LoginModalInterceptor = () => {
   const queryCache = useQueryClient();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const pathnameRef = useRef(null);
+  const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
 
   useEffect(() => {
