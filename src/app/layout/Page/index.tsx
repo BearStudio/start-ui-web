@@ -14,7 +14,7 @@ import { useFocusMode } from '@/app/layout';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useRtl } from '@/hooks/useRtl';
 
-const PageContext = React.createContext(null);
+const PageContext = React.createContext<TODO>(null);
 
 const PageContainer = ({ children, ...rest }) => {
   const { hideContainer, containerSize } = useContext(PageContext);
