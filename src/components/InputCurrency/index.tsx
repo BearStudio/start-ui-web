@@ -10,7 +10,7 @@ export interface InputCurrencyProps
   defaultValue?: number;
   placeholder?: string | number;
   locale?: string;
-  currency?: string;
+  currency?: string | null;
   decimals?: number;
   groupSpace?: number;
   onChange?(value?: number): void;
@@ -47,7 +47,10 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
     }, [value]);
 
     const config = {
-      intlConfig: { locale: locale || i18n.language, currency },
+      intlConfig: {
+        locale: locale || i18n.language,
+        currency: currency ?? undefined,
+      },
       decimalScale: decimals,
       disableAbbreviations: true,
     };
