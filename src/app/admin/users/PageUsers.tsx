@@ -85,7 +85,7 @@ const UserActions = ({ user, ...rest }) => {
         });
       }
     },
-    onError: (_, __, { activated, login }) => {
+    onError: (_, { activated, login }) => {
       if (activated) {
         toastError({
           title: t('users:feedbacks.activateUserError.title'),
