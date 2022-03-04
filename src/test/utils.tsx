@@ -1,12 +1,14 @@
-import { render } from '@testing-library/react';
+import { FC, ReactElement } from 'react';
+
+import { RenderOptions, render } from '@testing-library/react';
 
 import { Providers } from '@/Providers';
 
-const CustomWrapper = ({ children }) => {
+const CustomWrapper: FC<{}> = ({ children }) => {
   return <Providers>{children}</Providers>;
 };
 
-const customRender = (ui, options?: TODO) =>
+const customRender = (ui: ReactElement, options: RenderOptions = {}) =>
   render(ui, {
     wrapper: CustomWrapper,
     ...options,
