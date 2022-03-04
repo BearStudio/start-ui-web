@@ -15,17 +15,35 @@ type UserMutateError = {
   errorKey: string;
 };
 
+namespace UsersQueryKeys {
+  export namespace all {
+    export const keys = () => [] as const;
+    export type type = ReturnType<typeof keys>;
+  }
+  export namespace users {
+    export const keys = (page: number, size: number) =>
+      [...all.keys(), 'users', { page, size }] as const;
+    export type type = ReturnType<typeof keys>;
+  }
+
+  export namespace user {
+    export const keys = (login: string | undefined) =>
+      [...all.keys(), 'users', login] as const;
+    export type type = ReturnType<typeof keys>;
+  }
+}
+
 export const useUserList = (
   { page = 0, size = 10 } = {},
   config: UseQueryOptions<
     UserList,
     AxiosError,
     UserList,
-    ['users', { page: number; size: number }]
+    UsersQueryKeys.users.type
   > = {}
 ) => {
   const result = useQuery(
-    ['users', { page, size }],
+    UsersQueryKeys.users.keys(page, size),
     (): Promise<UserList> =>
       Axios.get('/admin/users', { params: { page, size, sort: 'id,desc' } }),
     {
@@ -51,15 +69,10 @@ export const useUserList = (
 
 export const useUser = (
   userLogin?: string,
-  config: UseQueryOptions<
-    User,
-    AxiosError,
-    User,
-    ['user', string | undefined]
-  > = {}
+  config: UseQueryOptions<User, AxiosError, User, UsersQueryKeys.user.type> = {}
 ) => {
   const result = useQuery(
-    ['user', userLogin],
+    UsersQueryKeys.user.keys(userLogin),
     (): Promise<User> => Axios.get(`/admin/users/${userLogin}`),
     {
       enabled: !!userLogin,

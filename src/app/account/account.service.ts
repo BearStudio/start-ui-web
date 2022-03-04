@@ -10,12 +10,28 @@ import {
 import { Account } from '@/app/account/account.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
+namespace AccountQueryKeys {
+  export namespace all {
+    export const key = () => [] as const;
+    export type type = ReturnType<typeof key>;
+  }
+  export namespace account {
+    export const key = () => [...all.key(), 'account'] as const;
+    export type type = ReturnType<typeof key>;
+  }
+}
+
 export const useAccount = (
-  config: UseQueryOptions<Account, AxiosError, Account, ['account']> = {}
+  config: UseQueryOptions<
+    Account,
+    AxiosError,
+    Account,
+    AccountQueryKeys.account.type
+  > = {}
 ) => {
   const { i18n } = useTranslation();
   const { data: account, ...rest } = useQuery(
-    ['account'],
+    AccountQueryKeys.account.key(),
     (): Promise<Account> => Axios.get('/account'),
     {
       onSuccess: (data) => {
