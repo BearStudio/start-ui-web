@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Text, useTheme } from '@chakra-ui/react';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { Providers } from '@/Providers';
@@ -97,7 +98,7 @@ const AppHead = () => {
   );
 };
 
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <Providers>
       <AppHead />
