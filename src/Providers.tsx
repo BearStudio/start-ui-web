@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +30,7 @@ const useMocksServer = () => {
   return { isLoadingMocks };
 };
 
-export const Providers = ({ children }) => {
+export const Providers: FC = ({ children }) => {
   const { i18n } = useTranslation();
   const { isLoadingMocks } = useMocksServer();
 
