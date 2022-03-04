@@ -1,9 +1,7 @@
-import React from 'react';
-
 import { SimpleGrid, Text } from '@chakra-ui/react';
 import { HiUser } from 'react-icons/hi';
 
-import { Icon, IconExample } from './';
+import { Icon, IconExample, IconSortAsc, IconSortDesc } from '@/components';
 
 export default {
   title: 'Components/Icons',
@@ -27,6 +25,8 @@ export const AllCustomIcons = () => (
   <>
     <SimpleGrid minChildWidth="2rem" fontSize="2rem">
       <IconExample />
+      <IconSortAsc />
+      <IconSortDesc />
     </SimpleGrid>
   </>
 );

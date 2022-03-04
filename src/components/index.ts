@@ -23,6 +23,7 @@ export * from './Pagination';
 export * from './SearchInput';
 export * from './Select';
 export * from './SlideIn';
+export * from './Sort';
 export * from './TextCurrency';
 export * from './Toast';
 export * from './Viewport';
