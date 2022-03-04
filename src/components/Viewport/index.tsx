@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Flex, useMediaQuery } from '@chakra-ui/react';
+import { Flex, FlexProps, useMediaQuery } from '@chakra-ui/react';
 
 import { isBrowser } from '@/utils/ssr';
 
@@ -24,7 +24,7 @@ const useFixViewport = () => {
   }, []);
 };
 
-export const Viewport = (props) => {
+export const Viewport = (props: FlexProps) => {
   const [isStandalone] = useMediaQuery('(display-mode: standalone)');
   useFixViewport();
 
