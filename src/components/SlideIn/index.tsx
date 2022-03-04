@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { SlideFade } from '@chakra-ui/react';
+import { SlideFade, SlideFadeProps } from '@chakra-ui/react';
 
-export const SlideIn = ({ children, ...rest }) => {
+export const SlideIn = ({ children, ...rest }: SlideFadeProps) => {
   return (
     <SlideFade
       in
