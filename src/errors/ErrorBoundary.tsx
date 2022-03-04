@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import {
   Alert,
@@ -46,6 +46,6 @@ const ErrorFallback = ({ error }: FallbackProps) => {
   );
 };
 
-export const ErrorBoundary = (props) => {
+export const ErrorBoundary: FC = (props) => {
   return <ReactErrorBoundary FallbackComponent={ErrorFallback} {...props} />;
 };
