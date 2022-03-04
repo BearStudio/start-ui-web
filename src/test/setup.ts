@@ -39,7 +39,7 @@ global.matchMedia =
 
 // Mock window.resizeTo's impl.
 Object.defineProperty(window, 'resizeTo', {
-  value: (width, height) => {
+  value: (width: unknown, height: unknown) => {
     Object.defineProperty(window, 'innerWidth', {
       configurable: true,
       writable: true,
