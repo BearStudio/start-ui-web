@@ -1,8 +1,8 @@
-import { mode } from '@chakra-ui/theme-tools';
+import { Styles, mode } from '@chakra-ui/theme-tools';
 
 import * as externals from './externals';
 
-const externalsStyles = (props) =>
+const externalsStyles = (props: TODO) =>
   Object.values(externals).reduce(
     (acc, cur) => ({
       ...acc,
@@ -11,7 +11,7 @@ const externalsStyles = (props) =>
     {}
   );
 
-export const styles = {
+export const styles: Styles = {
   global: (props) => ({
     html: {
       bg: 'gray.800',
