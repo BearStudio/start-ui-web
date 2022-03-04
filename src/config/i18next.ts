@@ -8,7 +8,7 @@ import { isBrowser } from '@/utils/ssr';
 
 i18n.use(initReactI18next).init({
   defaultNS: 'common',
-  ns: Object.keys(locales[DEFAULT_LANGUAGE_KEY]),
+  ns: Object.keys((locales as ExplicitAny)[DEFAULT_LANGUAGE_KEY]),
   resources: locales,
   lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
