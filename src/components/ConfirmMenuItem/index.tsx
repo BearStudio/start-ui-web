@@ -120,7 +120,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     const { t } = useTranslation();
     const { colorModeValue } = useDarkMode();
     const [isConfirmActive, setIsConfirmActive] = useState(false);
-    const timeoutRef = useRef<NodeJS.Timeout>();
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const { onClose: onCloseMenu } = useMenuState();
 

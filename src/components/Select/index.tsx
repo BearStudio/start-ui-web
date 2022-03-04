@@ -99,7 +99,7 @@ const SelectInner = <
     return ReactSelect;
   })();
 
-  let debounceTimeout = useRef<NodeJS.Timeout>();
+  let debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const debounce = (func: () => unknown, delay: number) => {
     if (debounceTimeout?.current) {
