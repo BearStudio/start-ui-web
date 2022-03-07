@@ -27,13 +27,13 @@ export const ResponsiveIconButton: FC<ResponsiveIconButtonProps> = ({
 }) => {
   const responsiveStates = useBreakpointValue(hideTextBreakpoints);
 
+  const buttonProps =
+    iconPosition === 'right' ? { rightIcon: icon } : { leftIcon: icon };
+
   return responsiveStates ? (
     <IconButton aria-label={children} icon={icon} {...rest} />
   ) : (
-    <Button
-      {...(iconPosition === 'right' ? { rightIcon: icon } : { leftIcon: icon })}
-      {...rest}
-    >
+    <Button {...buttonProps} {...rest}>
       {children}
     </Button>
   );
