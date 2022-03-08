@@ -20,6 +20,7 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     helper,
     optionLabel,
     size = 'md',
+    isDisabled,
     ...otherProps
   } = props;
   const [isTouched, setIsTouched] = useState(false);
@@ -34,6 +35,7 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     helper,
     id,
     isRequired: !!required,
+    isDisabled,
     label,
     showError,
     ...otherProps,
@@ -45,6 +47,7 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
         id={id}
         size={size}
         value={value ?? false}
+        isDisabled={isDisabled}
         onChange={() => setValue(!value)}
       >
         {optionLabel || <>&nbsp;</>}
