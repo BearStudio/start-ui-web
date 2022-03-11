@@ -28,5 +28,11 @@
   },
   "fieldMultiSelect": {
     "noOption": "لا يوجد خيار"
+  },
+  "sort": {
+    "sortAscending": "تصاعدي",
+    "sortDescending": "تنازلي",
+    "sortBy": "الترتيب حسب",
+    "order": "أمر"
   }
 }

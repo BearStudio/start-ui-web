@@ -28,5 +28,11 @@
   },
   "fieldMultiSelect": {
     "noOption": "Aucune option"
+  },
+  "sort": {
+    "sortAscending": "Ascendant",
+    "sortDescending": "Descendant",
+    "sortBy": "Trier par",
+    "order": "Ordre"
   }
 }
