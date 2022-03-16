@@ -15,23 +15,12 @@ type UserMutateError = {
   errorKey: string;
 };
 
-namespace UsersQueryKeys {
-  export namespace all {
-    export const keys = () => [] as const;
-    export type type = ReturnType<typeof keys>;
-  }
-  export namespace users {
-    export const keys = (page: number, size: number) =>
-      [...all.keys(), 'users', { page, size }] as const;
-    export type type = ReturnType<typeof keys>;
-  }
-
-  export namespace user {
-    export const keys = (login: string | undefined) =>
-      [...all.keys(), 'users', login] as const;
-    export type type = ReturnType<typeof keys>;
-  }
-}
+const usersKeys = {
+  all: () => [] as const,
+  users: ({ page, size }) =>
+    [...usersKeys.all(), 'users', { page, size }] as const,
+  user: ({ login }) => [...usersKeys.all(), 'user', { login }] as const,
+};
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
@@ -39,11 +28,11 @@ export const useUserList = (
     UserList,
     AxiosError,
     UserList,
-    UsersQueryKeys.users.type
+    InferQueryKey<typeof usersKeys.users>
   > = {}
 ) => {
   const result = useQuery(
-    UsersQueryKeys.users.keys(page, size),
+    usersKeys.users({ page, size }),
     (): Promise<UserList> =>
       Axios.get('/admin/users', { params: { page, size, sort: 'id,desc' } }),
     {
@@ -69,10 +58,15 @@ export const useUserList = (
 
 export const useUser = (
   userLogin?: string,
-  config: UseQueryOptions<User, AxiosError, User, UsersQueryKeys.user.type> = {}
+  config: UseQueryOptions<
+    User,
+    AxiosError,
+    User,
+    InferQueryKey<typeof usersKeys.user>
+  > = {}
 ) => {
   const result = useQuery(
-    UsersQueryKeys.user.keys(userLogin),
+    usersKeys.user({ login: userLogin }),
     (): Promise<User> => Axios.get(`/admin/users/${userLogin}`),
     {
       enabled: !!userLogin,

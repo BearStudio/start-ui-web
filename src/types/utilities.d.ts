@@ -15,3 +15,8 @@ type ExplicitAny = any;
  * with the `as` props.
  */
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+
+/**
+ * Use this type to type react-query QueryKeys
+ */
+type InferQueryKey<T extends (...args: any) => readonly any[]> = ReturnType<T>;
