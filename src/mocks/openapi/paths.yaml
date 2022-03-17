@@ -15,7 +15,7 @@
   $ref: '../account/paths.yaml#/reset-password-finish'
 
 # Users
-/users:
+/admin/users:
   $ref: '../users/paths.yaml#/users'
-/users/{userLogin}:
+/admin/users/{userLogin}:
   $ref: '../users/paths.yaml#/users-login'

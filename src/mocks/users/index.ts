@@ -5,11 +5,11 @@ import { sortByKey } from '@/utils/arrays';
 import { withAuth } from '../auth';
 
 export const UsersRoutes = (server) => {
-  server.get('/users', getAll);
-  server.get('/users/:userLogin', getOneByLogin);
-  server.post('/users', create);
-  server.put('/users', update);
-  server.delete('/users/:userLogin', deleteOne);
+  server.get('/admin/users', getAll);
+  server.get('/admin/users/:userLogin', getOneByLogin);
+  server.post('/admin/users', create);
+  server.put('/admin/users', update);
+  server.delete('/admin/users/:userLogin', deleteOne);
 };
 
 const getAll = withAuth((schema, request) => {

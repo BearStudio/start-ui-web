@@ -376,7 +376,7 @@
         }
       }
     },
-    "/users": {
+    "/admin/users": {
       "get": {
         "summary": "Get all users with pagination",
         "tags": [
@@ -486,7 +486,7 @@
         }
       }
     },
-    "/users/{userLogin}": {
+    "/admin/users/{userLogin}": {
       "get": {
         "summary": "Get user",
         "tags": [
