@@ -6,6 +6,7 @@ import {
   ButtonProps,
   IconButton,
   ResponsiveValue,
+  forwardRef,
 } from '@chakra-ui/react';
 
 interface ResponsiveIconButtonProps extends ButtonProps {
@@ -15,26 +16,31 @@ interface ResponsiveIconButtonProps extends ButtonProps {
   iconPosition?: 'left' | 'right';
 }
 
-export const ResponsiveIconButton: FC<ResponsiveIconButtonProps> = ({
-  hideTextBreakpoints = {
-    base: true,
-    md: false,
-  },
-  children,
-  icon,
-  iconPosition = 'left',
-  ...rest
-}) => {
-  const responsiveStates = useBreakpointValue(hideTextBreakpoints);
+export const ResponsiveIconButton: FC<ResponsiveIconButtonProps> = forwardRef(
+  (
+    {
+      hideTextBreakpoints = {
+        base: true,
+        md: false,
+      },
+      children,
+      icon,
+      iconPosition = 'left',
+      ...rest
+    },
+    ref
+  ) => {
+    const responsiveStates = useBreakpointValue(hideTextBreakpoints);
 
-  const buttonProps =
-    iconPosition === 'right' ? { rightIcon: icon } : { leftIcon: icon };
+    const buttonProps =
+      iconPosition === 'right' ? { rightIcon: icon } : { leftIcon: icon };
 
-  return responsiveStates ? (
-    <IconButton aria-label={children} icon={icon} {...rest} />
-  ) : (
-    <Button {...buttonProps} {...rest}>
-      {children}
-    </Button>
-  );
-};
+    return responsiveStates ? (
+      <IconButton aria-label={children} icon={icon} ref={ref} {...rest} />
+    ) : (
+      <Button ref={ref} {...buttonProps} {...rest}>
+        {children}
+      </Button>
+    );
+  }
+);
