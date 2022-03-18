@@ -8,6 +8,10 @@
   "confirmMenuItem": {
     "confirmText": "انقر للتأكيد"
   },
+  "confirmPopover": {
+    "confirmText": "أكد",
+    "heading": "اهل انت متأكد ؟"
+  },
   "pagination": {
     "firstPage": "الصفحة الأولى",
     "prevPage": "الصفحة السابقة",

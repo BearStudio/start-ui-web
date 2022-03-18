@@ -8,6 +8,10 @@
   "confirmMenuItem": {
     "confirmText": "Cliquer pour confirmer"
   },
+  "confirmPopover": {
+    "confirmText": "Confirmer",
+    "heading": "Etes-vous sûr ?"
+  },
   "pagination": {
     "firstPage": "Première page",
     "lastPage": "Dernière page",
