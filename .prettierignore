@@ -10,3 +10,4 @@ yarn.lock
 public
 *.md
 *.mdx
+.env*
