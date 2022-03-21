@@ -10,26 +10,22 @@ export default {
 
 export const Default = () => {
   return (
-    <>
-      <ConfirmPopover onConfirm={() => alert('Custom Action')}>
-        <Button>Trigger Popover</Button>
-      </ConfirmPopover>
-    </>
+    <ConfirmPopover onConfirm={() => alert('Custom Action')}>
+      <Button>Trigger Popover</Button>
+    </ConfirmPopover>
   );
 };
 
 export const WithCustomParameters = () => {
   return (
-    <>
-      <ConfirmPopover
-        title="Popover Title"
-        message={'Custom message'}
-        onConfirm={() => alert('Custom Action')}
-        confirmText="Custom Text"
-        confirmVariant="@danger"
-      >
-        <Button>Trigger Popover</Button>
-      </ConfirmPopover>
-    </>
+    <ConfirmPopover
+      title="Popover Title"
+      message="Custom message"
+      onConfirm={() => alert('Custom Action')}
+      confirmText="Custom Text"
+      confirmVariant="@danger"
+    >
+      <Button>Trigger Popover</Button>
+    </ConfirmPopover>
   );
 };
