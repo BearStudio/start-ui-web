@@ -10,7 +10,7 @@
   },
   "confirmPopover": {
     "confirmText": "Confirm",
-    "heading": "Are you sure ?"
+    "heading": "Are you sure?"
   },
   "pagination": {
     "showing": "<box>Showing</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
