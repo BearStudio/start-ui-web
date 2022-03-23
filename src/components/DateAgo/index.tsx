@@ -16,10 +16,10 @@ const getDelay = (diff) => {
   return ONE_HOUR;
 };
 
-export interface DateAgoProps extends Omit<TooltipProps, 'children'> {
+export type DateAgoProps = Omit<TooltipProps, 'children'> & {
   date?: string | Date | dayjs.Dayjs;
   format?: string;
-}
+};
 
 export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
   { date = new Date(), format, ...rest },

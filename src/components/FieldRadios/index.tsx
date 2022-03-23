@@ -5,15 +5,16 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-interface Option {
+type Option = {
   value: unknown;
   label?: ReactNode;
-}
+};
 
-export interface FieldRadiosProps extends FieldProps, FormGroupProps {
-  size?: 'sm' | 'md' | 'lg';
-  options?: Option[];
-}
+export type FieldRadiosProps = FieldProps &
+  FormGroupProps & {
+    size?: 'sm' | 'md' | 'lg';
+    options?: Option[];
+  };
 
 export const FieldRadios = (props: FieldRadiosProps) => {
   const {

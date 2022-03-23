@@ -44,10 +44,10 @@ const PageContainer = ({ children, ...rest }) => {
   );
 };
 
-interface PageTopBarProps extends FlexProps {
+type PageTopBarProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
-}
+};
 
 export const PageTopBar = ({
   children,
@@ -87,10 +87,10 @@ export const PageTopBar = ({
   );
 };
 
-interface PageContentProps extends FlexProps {
+type PageContentProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
-}
+};
 
 export const PageContent = ({ children, ...rest }: PageContentProps) => {
   const { nav } = useContext(PageContext);
@@ -150,12 +150,12 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
   );
 };
 
-interface PageProps extends FlexProps {
+type PageProps = FlexProps & {
   isFocusMode?: boolean;
   containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   hideContainer?: boolean;
   nav?: React.ReactNode;
-}
+};
 
 export const Page = ({
   isFocusMode = false,

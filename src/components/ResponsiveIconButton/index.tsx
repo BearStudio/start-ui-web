@@ -9,12 +9,12 @@ import {
   forwardRef,
 } from '@chakra-ui/react';
 
-interface ResponsiveIconButtonProps extends ButtonProps {
+type ResponsiveIconButtonProps = ButtonProps & {
   hideTextBreakpoints?: Omit<ResponsiveValue<boolean>, 'boolean'>;
   icon: React.ReactElement;
   children: string;
   iconPosition?: 'left' | 'right';
-}
+};
 
 export const ResponsiveIconButton: FC<ResponsiveIconButtonProps> = forwardRef(
   (

@@ -6,13 +6,13 @@ import { GroupBase } from 'react-select';
 
 import { FieldSelectProps, FormGroup, Select } from '@/components';
 
-export interface FieldMultiSelectProps<
+export type FieldMultiSelectProps<
   Option,
   IsMulti extends boolean = true,
   Group extends GroupBase<Option> = GroupBase<Option>
-> extends FieldSelectProps<Option, IsMulti, Group> {
+> = FieldSelectProps<Option, IsMulti, Group> & {
   isNotClearable?: boolean;
-}
+};
 
 export const FieldMultiSelect = <
   Option,

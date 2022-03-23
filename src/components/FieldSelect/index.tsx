@@ -6,19 +6,19 @@ import { GroupBase } from 'react-select';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
-export interface FieldSelectProps<
+export type FieldSelectProps<
   Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
-> extends FieldProps,
-    FormGroupProps {
-  placeholder?: string;
-  size?: 'sm' | 'md' | 'lg';
-  options?: Option[];
-  isClearable?: boolean;
-  isSearchable?: boolean;
-  selectProps?: SelectProps<Option, IsMulti, Group>;
-}
+> = FieldProps &
+  FormGroupProps & {
+    placeholder?: string;
+    size?: 'sm' | 'md' | 'lg';
+    options?: Option[];
+    isClearable?: boolean;
+    isSearchable?: boolean;
+    selectProps?: SelectProps<Option, IsMulti, Group>;
+  };
 
 export const FieldSelect = <
   Option,

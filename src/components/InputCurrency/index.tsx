@@ -4,8 +4,7 @@ import { Input, InputProps, forwardRef } from '@chakra-ui/react';
 import CurrencyInput, { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 
-export interface InputCurrencyProps
-  extends Omit<InputProps, 'onChange' | 'placeholder'> {
+type CustomProps = {
   value?: number;
   defaultValue?: number;
   placeholder?: string | number;
@@ -14,7 +13,10 @@ export interface InputCurrencyProps
   decimals?: number;
   groupSpace?: number;
   onChange?(value?: number): void;
-}
+};
+
+export type InputCurrencyProps = Overwrite<InputProps, CustomProps>;
+
 export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
   (
     {

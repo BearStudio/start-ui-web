@@ -19,7 +19,7 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { Icon } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-export interface StyledMenuItemProps extends HTMLChakraProps<'button'> {}
+export type StyledMenuItemProps = HTMLChakraProps<'button'>;
 
 const StyledMenuItem = forwardRef<StyledMenuItemProps, 'button'>(
   (props, ref) => {
@@ -94,13 +94,13 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
   );
 });
 
-interface ConfirmMenuItemProps extends MenuItemProps {
+type ConfirmMenuItemProps = MenuItemProps & {
   confirmDelay?: number;
   confirmColorScheme?: string;
   confirmContent?: React.ReactNode;
   confirmText?: React.ReactNode;
   confirmIcon?: React.FC;
-}
+};
 
 export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
   (

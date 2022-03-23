@@ -6,16 +6,15 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
-export interface FieldCurrencyProps
-  extends Omit<FieldProps, 'value'>,
-    Omit<FormGroupProps, 'placeholder'>,
-    Pick<
-      InputCurrencyProps,
-      'currency' | 'locale' | 'decimals' | 'placeholder'
-    > {
-  size?: 'sm' | 'md' | 'lg';
-  value?: number;
-}
+export type FieldCurrencyProps = Omit<FieldProps, 'value'> &
+  Omit<FormGroupProps, 'placeholder'> &
+  Pick<
+    InputCurrencyProps,
+    'currency' | 'locale' | 'decimals' | 'placeholder'
+  > & {
+    size?: 'sm' | 'md' | 'lg';
+    value?: number;
+  };
 
 export const FieldCurrency = (props: FieldCurrencyProps) => {
   const {

@@ -2,10 +2,10 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { isBrowser } from '@/utils/ssr';
 
-interface AuthContextValue {
+type AuthContextValue = {
   isAuthenticated: boolean;
   updateToken(string): void;
-}
+};
 
 export const AUTH_TOKEN_KEY = 'authToken';
 

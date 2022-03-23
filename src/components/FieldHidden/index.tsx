@@ -4,7 +4,7 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-interface FieldHiddenProps extends FieldProps, FormGroupProps {}
+type FieldHiddenProps = FieldProps & FormGroupProps;
 
 export const FieldHidden: React.FC<FieldHiddenProps> = (props) => {
   const {

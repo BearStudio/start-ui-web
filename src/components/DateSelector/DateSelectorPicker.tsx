@@ -21,9 +21,9 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 import { useDateSelectorContext } from './DateSelector';
 
 type ChildrenFunctionParams = { date: Dayjs; onOpen: () => void };
-interface DateSelectorPickerProps extends Omit<DayPickerProps, 'children'> {
+type DateSelectorPickerProps = Omit<DayPickerProps, 'children'> & {
   children?: ({ date, onOpen }: ChildrenFunctionParams) => ReactNode;
-}
+};
 
 const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   <chakra.button onClick={onOpen} px="2" type="button">

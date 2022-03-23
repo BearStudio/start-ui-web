@@ -4,13 +4,14 @@ import { Text, TextProps, forwardRef } from '@chakra-ui/react';
 import { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 
-export interface TextCurrencyProps extends TextProps {
+export type TextCurrencyProps = TextProps & {
   value: number;
   locale?: string;
   currency?: string;
   decimals?: number;
   groupSpace?: number;
-}
+};
+
 export const TextCurrency = forwardRef<TextCurrencyProps, 'span'>(
   (
     { value, locale, currency = 'EUR', decimals = 2, groupSpace = 2, ...rest },

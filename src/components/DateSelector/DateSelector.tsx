@@ -20,10 +20,10 @@ const DateSelectorContext = createContext<DateSelectorContextType>({
 });
 export const useDateSelectorContext = () => useContext(DateSelectorContext);
 
-interface DateSelectorProps {
+type DateSelectorProps = {
   date: Dayjs;
   onChange: (date: Dayjs) => void;
-}
+};
 
 export const DateSelector: FC<DateSelectorProps> = ({
   date,

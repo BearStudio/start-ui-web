@@ -12,21 +12,21 @@ import React, {
 
 import { Checkbox, CheckboxProps, Wrap, WrapItem } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
-import create, { UseStore } from 'zustand';
+import create, { UseBoundStore, UseStore } from 'zustand';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Value = unknown;
 
-interface InternalOption {
+type InternalOption = {
   value: Value;
   groups: string[];
-}
+};
 
-interface Option {
+type Option = {
   value: Value;
   label?: ReactNode;
-}
+};
 
 const formatGroupsToArray = (groups?: string[] | string): string[] => {
   if (!groups) return [];
@@ -49,7 +49,7 @@ const splitValuesByGroupsFromOptions = (
     [[], []] as TODO
   );
 
-interface FieldCheckboxesState {
+type FieldCheckboxesState = {
   options: InternalOption[];
   registerOption: (option: InternalOption, isChecked: boolean) => void;
   unregisterOption: (option: InternalOption) => void;
@@ -58,27 +58,26 @@ interface FieldCheckboxesState {
   toggleValue: (value: Value) => void;
   toggleGroups: (groups: string[]) => void;
   verifyIsValueChecked: (value: Value) => boolean;
-}
+};
 
-interface FieldCheckboxesContextProps {
-  useStoreRef: MutableRefObject<UseStore<FieldCheckboxesState>>;
+type FieldCheckboxesContextProps = {
+  useStoreRef: MutableRefObject<UseBoundStore<FieldCheckboxesState>>;
   checkboxGroupProps?: Pick<
     CheckboxProps,
     'size' | 'colorScheme' | 'isDisabled'
   >;
-}
+};
 
 const FieldCheckboxesContext = createContext<FieldCheckboxesContextProps>(
   {} as TODO
 );
 
-interface FieldCheckboxesProps
-  extends FieldProps,
-    Omit<FormGroupProps, 'size'>,
-    Pick<CheckboxProps, 'size' | 'colorScheme'> {
-  itemKey?: string;
-  options?: Option[];
-}
+type FieldCheckboxesProps = FieldProps &
+  Omit<FormGroupProps, 'size'> &
+  Pick<CheckboxProps, 'size' | 'colorScheme'> & {
+    itemKey?: string;
+    options?: Option[];
+  };
 
 export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   const {
@@ -249,10 +248,10 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
   );
 };
 
-interface FieldCheckboxItemProps extends Omit<CheckboxProps, 'value'> {
+type FieldCheckboxItemProps = Omit<CheckboxProps, 'value'> & {
   value: Value;
   groups?: string[] | string;
-}
+};
 
 export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
   value,
@@ -299,9 +298,9 @@ export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
   );
 };
 
-interface FieldCheckboxItemCheckAllProps extends CheckboxProps {
+type FieldCheckboxItemCheckAllProps = CheckboxProps & {
   groups?: string[] | string;
-}
+};
 
 export const FieldCheckboxesCheckAll: React.FC<
   FieldCheckboxItemCheckAllProps

@@ -1,6 +1,6 @@
 export type UserRole = 'ROLE_ADMIN' | 'ROLE_USER';
 
-export interface User {
+export type User = {
   id: number;
   login: string;
   firstName?: string;
@@ -13,9 +13,9 @@ export interface User {
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
-}
+};
 
-export interface UserList {
+export type UserList = {
   content: User[];
   totalItems: number;
-}
+};
