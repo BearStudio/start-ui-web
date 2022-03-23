@@ -15,13 +15,15 @@ import { FiSearch, FiX } from 'react-icons/fi';
 
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-interface SearchInputProps extends Omit<InputProps, 'onChange'> {
+type CustomProps = {
   value?: string;
   defaultValue?: string;
   onChange?(value?: string): void;
   delay?: number;
   clearLabel?: string;
-}
+};
+
+type SearchInputProps = Overwrite<InputProps, CustomProps>;
 
 export const SearchInput = forwardRef<SearchInputProps, 'input'>(
   (

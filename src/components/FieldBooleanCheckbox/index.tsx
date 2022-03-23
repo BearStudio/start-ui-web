@@ -5,10 +5,11 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export interface FieldBooleanCheckboxProps extends FieldProps, FormGroupProps {
-  optionLabel?: string;
-  size?: 'sm' | 'md' | 'lg';
-}
+export type FieldBooleanCheckboxProps = FieldProps &
+  FormGroupProps & {
+    optionLabel?: string;
+    size?: 'sm' | 'md' | 'lg';
+  };
 
 export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
   const { errorMessage, id, isValid, isSubmitted, resetKey, setValue, value } =

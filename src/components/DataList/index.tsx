@@ -29,11 +29,11 @@ export const DataListContext = React.createContext<DataListContextValue>(
 export const DataListHeaderContext =
   React.createContext<DataListHeaderContextValue>(false);
 
-export interface DataListCellProps extends FlexProps {
+export type DataListCellProps = FlexProps & {
   colName?: string;
   colWidth?: string | number | Record<string, string | number>;
   isVisible?: boolean | boolean[] | Record<string, boolean>;
-}
+};
 
 export const DataListCell = ({
   children,
@@ -139,10 +139,10 @@ export const DataListAccordionPanel = ({ ...rest }) => {
   );
 };
 
-export interface DataListRowProps extends FlexProps {
+export type DataListRowProps = FlexProps & {
   isVisible?: boolean | boolean[] | Record<string, boolean>;
   isDisabled?: boolean;
-}
+};
 
 export const DataListRow: FC<DataListRowProps> = ({
   isVisible = true,
@@ -186,7 +186,7 @@ export const DataListRow: FC<DataListRowProps> = ({
   );
 };
 
-export interface DataListHeaderProps extends DataListRowProps {}
+export type DataListHeaderProps = DataListRowProps;
 
 export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
   const { colorModeValue } = useDarkMode();
@@ -205,7 +205,7 @@ export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
   );
 };
 
-export interface DataListFooterProps extends DataListRowProps {}
+export type DataListFooterProps = DataListRowProps;
 
 export const DataListFooter: FC<DataListFooterProps> = ({ ...rest }) => {
   const { colorModeValue } = useDarkMode();
@@ -226,9 +226,9 @@ export const DataListFooter: FC<DataListFooterProps> = ({ ...rest }) => {
   );
 };
 
-export interface DataListProps extends AccordionProps {
+export type DataListProps = AccordionProps & {
   isHover?: boolean;
-}
+};
 
 export const DataList: FC<DataListProps> = ({
   allowMultiple = true,

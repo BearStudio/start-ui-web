@@ -34,9 +34,9 @@ const NavContext = React.createContext<NavContextValue>({
 });
 const useNavContext = () => React.useContext(NavContext);
 
-interface NavProps extends MenuProps {
+type NavProps = MenuProps & {
   breakpoint?: string;
-}
+};
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   const isMenu = useBreakpointValue({
@@ -69,10 +69,10 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   );
 };
 
-interface NavItemProps extends FlexProps {
+type NavItemProps = FlexProps & {
   icon?: React.FC;
   isActive?: boolean;
-}
+};
 
 export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   children,

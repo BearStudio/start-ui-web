@@ -14,13 +14,12 @@ import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export interface FieldInputProps
-  extends FieldProps,
-    Omit<FormGroupProps, 'placeholder'>,
-    Pick<InputProps, 'type' | 'placeholder'> {
-  size?: 'sm' | 'md' | 'lg';
-  autoFocus?: boolean;
-}
+export type FieldInputProps = FieldProps &
+  Omit<FormGroupProps, 'placeholder'> &
+  Pick<InputProps, 'type' | 'placeholder'> & {
+    size?: 'sm' | 'md' | 'lg';
+    autoFocus?: boolean;
+  };
 
 export const FieldInput = (props: FieldInputProps) => {
   const {

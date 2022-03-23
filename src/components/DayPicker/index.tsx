@@ -45,12 +45,12 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
 // On v7, react-day-picker doesn't provide typings. Following typings are based
 // on the proptypes in the source code.
 // https://github.com/gpbl/react-day-picker/blob/v7/src/DayPickerInput.js#L32
-interface CustomDayPickerOverlayProps {
+type CustomDayPickerOverlayProps = {
   selectedDay?: Date;
   month?: Date;
   input?: TODO;
   classNames?: Record<string, string>;
-}
+};
 
 // The CustomOverlay to control the way the day picker is displayed
 // https://github.com/gpbl/react-day-picker/blob/v7/docs/src/code-samples/examples/input-custom-overlay.js
@@ -88,7 +88,7 @@ type CustomProps = {
   dayPickerProps?: DayPickerProps;
 };
 
-interface DayPickerProps extends Overwrite<BoxProps, CustomProps> {}
+type DayPickerProps = Overwrite<BoxProps, CustomProps>;
 
 export const DayPicker: FC<DayPickerProps> = ({
   placeholder = FORMAT,

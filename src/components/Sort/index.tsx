@@ -17,24 +17,26 @@ import { useTranslation } from 'react-i18next';
 import { IconSortAsc, IconSortDesc } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-interface OptionProps {
+type OptionProps = {
   value: string;
   label: string;
-}
+};
 
-export interface SortValue {
+export type SortValue = {
   by: string;
   order: 'asc' | 'desc';
-}
+};
 
-interface SortProps extends Omit<ButtonProps, 'onChange'> {
+type CustomProps = {
   sort: SortValue;
   size?: 'xs' | 'sm' | 'md';
   options?: Array<OptionProps>;
   onChange?(sort: SortValue): void;
   ascIcon?: FC;
   descIcon?: FC;
-}
+};
+
+type SortProps = Overwrite<ButtonProps, CustomProps>;
 
 export const Sort: FC<SortProps> = ({
   sort = { by: '', order: 'asc' },

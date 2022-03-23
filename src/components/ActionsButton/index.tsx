@@ -4,10 +4,9 @@ import { IconButton, IconButtonProps, forwardRef } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiMoreVertical } from 'react-icons/fi';
 
-export interface ActionsButtonProps
-  extends Omit<IconButtonProps, 'aria-label'> {
+export type ActionsButtonProps = Omit<IconButtonProps, 'aria-label'> & {
   label?: string;
-}
+};
 
 export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
   ({ label, ...rest }, ref) => {

@@ -12,8 +12,10 @@ import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components';
 
-export interface FormGroupProps
-  extends Omit<FormControlProps, 'onChange' | 'defaultValue' | 'label'> {
+export type FormGroupProps = Omit<
+  FormControlProps,
+  'onChange' | 'defaultValue' | 'label'
+> & {
   children?: ReactNode;
   errorMessage?: ReactNode;
   helper?: ReactNode;
@@ -21,7 +23,7 @@ export interface FormGroupProps
   isRequired?: boolean;
   label?: ReactNode;
   showError?: boolean;
-}
+};
 
 export const FormGroup = ({
   children,

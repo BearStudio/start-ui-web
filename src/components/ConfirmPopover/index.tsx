@@ -18,14 +18,14 @@ import {
 import FocusLock from 'react-focus-lock';
 import { useTranslation } from 'react-i18next';
 
-interface ConfirmPopoverProps extends PopoverProps {
+type ConfirmPopoverProps = PopoverProps & {
   children: ReactNode;
   title?: ReactNode;
   message?: ReactNode;
   onConfirm(): void;
   confirmText?: ReactNode;
   confirmVariant?: string;
-}
+};
 
 export const ConfirmPopover: React.FC<ConfirmPopoverProps> = ({
   children,

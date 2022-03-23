@@ -5,19 +5,20 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components';
 
-export interface FieldTextareaProps extends FieldProps, FormGroupProps {
-  textareaProps?: Omit<
-    TextareaProps,
-    | 'id'
-    | 'value'
-    | 'name'
-    | 'defaultValue'
-    | 'onChange'
-    | 'onBlur'
-    | 'placeholder'
-  >;
-  autoFocus?: boolean;
-}
+export type FieldTextareaProps = FieldProps &
+  FormGroupProps & {
+    textareaProps?: Omit<
+      TextareaProps,
+      | 'id'
+      | 'value'
+      | 'name'
+      | 'defaultValue'
+      | 'onChange'
+      | 'onBlur'
+      | 'placeholder'
+    >;
+    autoFocus?: boolean;
+  };
 
 export const FieldTextarea = (props: FieldTextareaProps) => {
   const {

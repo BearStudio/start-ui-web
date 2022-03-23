@@ -8,10 +8,10 @@ import {
   forwardRef,
 } from '@chakra-ui/react';
 
-export interface IconProps extends BoxProps {
+export type IconProps = BoxProps & {
   icon: FC;
   iconProps?: ChakraIconProps;
-}
+};
 
 export const Icon = forwardRef<IconProps, 'span'>(
   ({ icon: IconEl, iconProps, ...rest }, ref) => {
