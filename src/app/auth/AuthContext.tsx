@@ -4,14 +4,14 @@ import { isBrowser } from '@/utils/ssr';
 
 type AuthContextValue = {
   isAuthenticated: boolean;
-  updateToken(token?: string): void;
+  updateToken(token?: string | null): void;
 };
 
 export const AUTH_TOKEN_KEY = 'authToken';
 
 const AuthContext = React.createContext<AuthContextValue>(null as TODO);
 
-const updateToken = (newToken?: string) => {
+const updateToken = (newToken?: string | null) => {
   if (!isBrowser) {
     return () => undefined;
   }
