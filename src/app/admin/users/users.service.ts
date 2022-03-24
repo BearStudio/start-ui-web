@@ -96,7 +96,7 @@ export const useUserUpdate = (
             if (!cachedData) return;
             return {
               ...cachedData,
-              content: (cachedData.content || []).map((user) =>
+              content: (cachedData.content || []).map((user: User) =>
                 user.id === data.id ? data : user
               ),
             };
