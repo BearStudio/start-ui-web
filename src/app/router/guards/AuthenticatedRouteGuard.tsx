@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { ErrorBoundary } from '@/errors';
 
-export const AuthenticatedRouteGuard = ({ children }) => {
+export const AuthenticatedRouteGuard: FC = ({ children }) => {
   const { isAuthenticated } = useAuthContext();
   const { pathname, search } = useLocation();
   const navigate = useNavigate();

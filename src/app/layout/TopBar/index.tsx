@@ -4,6 +4,7 @@ import {
   Box,
   Flex,
   IconButton,
+  IconButtonProps,
   SlideFade,
   useBreakpointValue,
   useTheme,
@@ -16,7 +17,7 @@ import { NavDrawer } from '@/app/layout/NavDrawer';
 import { Logo } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-const MenuButton = (props) => {
+const MenuButton = (props: Partial<IconButtonProps>) => {
   const { navOnOpen } = useLayoutContext();
   return (
     <IconButton

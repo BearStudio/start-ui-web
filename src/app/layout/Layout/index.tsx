@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';
 import { LayoutContext, TopBar } from '@/app/layout';
 import { Viewport } from '@/components';
 
-export const Layout = ({ children }) => {
+export const Layout: FC = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const {
     isOpen: navIsOpen,

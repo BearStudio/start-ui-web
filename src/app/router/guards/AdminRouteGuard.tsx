@@ -1,7 +1,9 @@
+import { FC } from 'react';
+
 import { useAccount } from '@/app/account/account.service';
 import { Error403, ErrorBoundary } from '@/errors';
 
-export const AdminRouteGuard = ({ children }) => {
+export const AdminRouteGuard: FC = ({ children }) => {
   const { isAdmin, isLoading } = useAccount();
 
   if (isLoading) {
