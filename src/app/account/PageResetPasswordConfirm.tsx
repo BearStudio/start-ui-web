@@ -4,10 +4,9 @@ import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useResetPasswordFinish } from '@/app/account/account.service';
-import { useSearchParams } from '@/app/router';
 import {
   FieldInput,
   SlideIn,
@@ -19,7 +18,7 @@ import { useDarkMode } from '@/hooks/useDarkMode';
 export const PageResetPasswordConfirm = () => {
   const { t } = useTranslation();
   const { colorModeValue } = useDarkMode();
-  const { searchParams } = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
   const navigate = useNavigate();
