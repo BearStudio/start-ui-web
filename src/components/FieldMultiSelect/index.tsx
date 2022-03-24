@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useField } from '@formiz/core';
+import { FieldProps, useField } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 import { GroupBase } from 'react-select';
 
@@ -12,6 +12,7 @@ export type FieldMultiSelectProps<
   Group extends GroupBase<Option> = GroupBase<Option>
 > = FieldSelectProps<Option, IsMulti, Group> & {
   isNotClearable?: boolean;
+  noOptionsMessage?: string;
 };
 
 export const FieldMultiSelect = <
@@ -45,7 +46,10 @@ export const FieldMultiSelect = <
     size,
     selectProps = {},
     ...rest
-  } = otherProps;
+  } = otherProps as Omit<
+    FieldMultiSelectProps<Option, IsMulti, Group>,
+    keyof FieldProps
+  >;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
@@ -77,10 +81,12 @@ export const FieldMultiSelect = <
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={options?.filter((option) => value?.includes(option.value)) || []}
+        value={
+          options?.filter((option: TODO) => value?.includes(option.value)) || []
+        }
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder}
-        onChange={handleChange}
+        onChange={handleChange as TODO}
         options={options}
         isDisabled={isDisabled}
         isClearable={!isNotClearable}

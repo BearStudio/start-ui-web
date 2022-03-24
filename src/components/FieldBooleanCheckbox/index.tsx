@@ -12,8 +12,16 @@ export type FieldBooleanCheckboxProps = FieldProps &
   };
 
 export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
-  const { errorMessage, id, isValid, isSubmitted, resetKey, setValue, value } =
-    useField(props);
+  const {
+    errorMessage,
+    id,
+    isValid,
+    isSubmitted,
+    resetKey,
+    setValue,
+    value,
+    otherProps,
+  } = useField(props);
   const { required } = props;
   const {
     children,
@@ -22,8 +30,8 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     optionLabel,
     size = 'md',
     isDisabled,
-    ...otherProps
-  } = props;
+    ...rest
+  } = otherProps as Omit<FieldBooleanCheckboxProps, keyof FieldProps>;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
@@ -39,7 +47,7 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     isDisabled,
     label,
     showError,
-    ...otherProps,
+    ...rest,
   };
 
   return (

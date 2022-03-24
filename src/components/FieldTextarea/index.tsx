@@ -33,7 +33,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
   } = useField(props);
 
   const { helper, label, placeholder, textareaProps, autoFocus, ...rest } =
-    otherProps;
+    otherProps as Omit<FieldTextareaProps, keyof FieldProps>;
 
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);

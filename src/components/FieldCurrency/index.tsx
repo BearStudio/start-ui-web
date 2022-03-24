@@ -38,7 +38,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
     locale,
     decimals,
     ...rest
-  } = otherProps;
+  } = otherProps as Omit<FieldCurrencyProps, keyof FieldProps>;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
