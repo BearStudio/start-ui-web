@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 
-import { useSearchParams } from '@/app/router';
+import { useSearchParams } from 'react-router-dom';
 
 export const usePaginationFromUrl = () => {
-  const { searchParams, setSearchParam } = useSearchParams();
+  const [searchParams, setSearchParam] = useSearchParams();
   const page = +(searchParams.get('page') ?? 1);
   const setPage = useCallback(
     (p) => {
       const newPage = Math.max(1, p);
-      setSearchParam('page', `${newPage}`);
+      setSearchParam({ page: newPage.toString() });
     },
     [setSearchParam]
   );

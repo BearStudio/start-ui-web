@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 import { Box, HStack, Spinner, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { useActivateAccount } from '@/app/account/account.service';
-import { useSearchParams } from '@/app/router';
 
 export const PageActivate = () => {
   const { t } = useTranslation();
@@ -14,7 +14,8 @@ export const PageActivate = () => {
     isSuccess,
     isLoading,
   } = useActivateAccount();
-  const { searchParams } = useSearchParams();
+
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     activateAccount({ key: searchParams.get('key') ?? 'KEY_NOT_DEFINED' });
