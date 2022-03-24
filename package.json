@@ -39,7 +39,7 @@
     "@formiz/validations": "1.0.0",
     "axios": "0.25.0",
     "dayjs": "1.10.7",
-    "faker": "5.5.3",
+    "@faker-js/faker": "6.0.0",
     "framer-motion": "5.6.0",
     "i18next": "21.6.10",
     "isomorphic-form-data": "2.0.0",
