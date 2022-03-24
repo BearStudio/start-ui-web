@@ -106,14 +106,14 @@ const options = [
   'white',
 ];
 
-const handleLoadOptions = async (inputValue) => {
+const handleLoadOptions = async (inputValue: unknown) => {
   // Fake API call
   return new Promise((resolve) =>
     setTimeout(
       () =>
         resolve(
           options
-            .filter((option) => option.startsWith(inputValue))
+            .filter((option) => option.startsWith(String(inputValue)))
             .map((option) => ({ label: option, value: option }))
         ),
       300
