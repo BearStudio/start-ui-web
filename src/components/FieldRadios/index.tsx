@@ -6,7 +6,7 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Option = {
-  value: unknown;
+  value: string | number | undefined;
   label?: ReactNode;
 };
 
@@ -35,7 +35,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     helper,
     size = 'md',
     ...rest
-  } = otherProps;
+  } = otherProps as Omit<FieldRadiosProps, keyof FieldProps>;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 

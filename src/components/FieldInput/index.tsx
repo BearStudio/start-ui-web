@@ -42,7 +42,7 @@ export const FieldInput = (props: FieldInputProps) => {
     size = 'md',
     autoFocus,
     ...rest
-  } = otherProps;
+  } = otherProps as Omit<FieldInputProps, keyof FieldProps>;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

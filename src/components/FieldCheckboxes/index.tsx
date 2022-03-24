@@ -100,11 +100,11 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
     colorScheme,
     isDisabled,
     ...rest
-  } = otherProps;
+  } = otherProps as Omit<FieldCheckboxesProps, keyof FieldProps>;
 
   const valueRef = useRef(value);
   valueRef.current = value;
-  const itemKeyRef = useRef<string>(itemKey);
+  const itemKeyRef = useRef<string | undefined>(itemKey);
   if (itemKey) {
     itemKeyRef.current = itemKey;
   }
@@ -234,7 +234,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
           children
         ) : (
           <Wrap spacing="4">
-            {options.map((option: Option) => (
+            {options?.map((option) => (
               <WrapItem key={String(option.value)}>
                 <FieldCheckboxesItem value={option.value}>
                   {option.label ?? (option.value as ReactNode)}
