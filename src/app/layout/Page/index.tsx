@@ -14,20 +14,26 @@ import { useFocusMode } from '@/app/layout';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useRtl } from '@/hooks/useRtl';
 
-const PageContext = React.createContext<TODO>(null);
+type PageContextValue = {
+  nav: React.ReactNode;
+  hideContainer: boolean;
+  containerSize: keyof typeof containerSizes;
+};
 
-const PageContainer = ({ children, ...rest }) => {
+const PageContext = React.createContext<PageContextValue>(null as TODO);
+
+const containerSizes = {
+  sm: '60ch',
+  md: '80ch',
+  lg: '100ch',
+  xl: '140ch',
+  full: '100%',
+} as const;
+
+const PageContainer = ({ children, ...rest }: FlexProps) => {
   const { hideContainer, containerSize } = useContext(PageContext);
 
-  const containerSizes = {
-    sm: '60ch',
-    md: '80ch',
-    lg: '100ch',
-    xl: '140ch',
-    full: '100%',
-  };
-
-  if (hideContainer) return children;
+  if (hideContainer) return <>children</>;
 
   return (
     <Flex
@@ -159,7 +165,7 @@ type PageProps = FlexProps & {
 
 export const Page = ({
   isFocusMode = false,
-  hideContainer,
+  hideContainer = false,
   containerSize = 'md',
   nav = null,
   ...rest
