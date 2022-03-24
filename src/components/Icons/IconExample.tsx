@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createIcon } from '@chakra-ui/react';
 
-import { Icon } from './Icon';
+import { Icon, IconProps } from './Icon';
 
 const SvgIcon = createIcon({
   displayName: 'Example',
@@ -17,6 +17,6 @@ const SvgIcon = createIcon({
   ),
 });
 
-export const IconExample = (props) => {
+export const IconExample = (props: Omit<IconProps, 'icon'>) => {
   return <Icon icon={SvgIcon} {...props} />;
 };

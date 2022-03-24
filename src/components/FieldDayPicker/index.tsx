@@ -41,7 +41,10 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     ...rest,
   };
 
-  const handleChange = (date, isValidDate) => {
+  const handleChange = (
+    date: Date | null | undefined,
+    isValidDate: boolean
+  ) => {
     setValue(date);
     if (!isValidDate) {
       invalidateFields({

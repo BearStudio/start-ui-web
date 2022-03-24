@@ -188,10 +188,10 @@ export const PaginationInfo = ({ ...rest }) => {
 
 export type PaginationProps = StackProps & {
   setPage: (page: number) => void;
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  isLoadingPage: boolean;
+  page?: number;
+  pageSize?: number;
+  totalItems?: number;
+  isLoadingPage?: boolean;
 };
 
 export const Pagination = ({
