@@ -131,7 +131,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
         isChecked: boolean
       ) => {
         set((state) => ({ options: [...state.options, optionToRegister] }));
-        setValue((prevValue) =>
+        setValue((prevValue: Value[]) =>
           isChecked ? [...(prevValue ?? []), optionToRegister.value] : prevValue
         );
       },
@@ -142,7 +142,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
               !checkValuesEqual(option.value, optionToUnregister.value)
           ),
         }));
-        setValue((prevValue) => {
+        setValue((prevValue: Value[]) => {
           const newValue = (prevValue ?? []).filter((localValue) =>
             verifyValueIsInValues(
               get().options.map(({ value: optionValue }) => optionValue) ?? [],
@@ -158,7 +158,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
           values,
         })),
       toggleValue: (valueToUpdate) => {
-        setValue((prevValue) => {
+        setValue((prevValue: Value[]) => {
           const previousValue = prevValue ?? [];
           const hasValue = verifyValueIsInValues(
             prevValue ?? [],
@@ -175,7 +175,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
       toggleGroups: (groups: string[]) => {
         const [allValuesInGroups, allOtherValues] =
           splitValuesByGroupsFromOptions(get().options, groups);
-        setValue((previousValue) => {
+        setValue((previousValue: Value[]) => {
           const allOtherValuesChecked = allOtherValues.filter((otherValue) =>
             verifyValueIsInValues(previousValue ?? [], otherValue)
           );
@@ -234,10 +234,10 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
           children
         ) : (
           <Wrap spacing="4">
-            {options.map((option) => (
-              <WrapItem key={option.value}>
+            {options.map((option: Option) => (
+              <WrapItem key={String(option.value)}>
                 <FieldCheckboxesItem value={option.value}>
-                  {option.label ?? option.value}
+                  {option.label ?? (option.value as ReactNode)}
                 </FieldCheckboxesItem>
               </WrapItem>
             ))}
@@ -281,7 +281,7 @@ export const FieldCheckboxesItem: React.FC<FieldCheckboxItemProps> = ({
     return () => unregisterOption(option);
   }, [value, groups, registerOption, unregisterOption]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event);
     toggleValue(value);
   };
@@ -339,7 +339,7 @@ export const FieldCheckboxesCheckAll: React.FC<
     };
   });
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event);
     toggleGroups(groupsArray);
   };
