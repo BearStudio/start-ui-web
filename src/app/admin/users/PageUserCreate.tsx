@@ -48,7 +48,7 @@ export const PageUserCreate = () => {
     },
   });
 
-  const submitCreateUser = async (values) => {
+  const submitCreateUser = async (values: TODO) => {
     const newUser = {
       ...values,
     };

@@ -44,7 +44,7 @@ export const PageProfile = () => {
     },
   });
 
-  const submitGeneralInformation = async (values) => {
+  const submitGeneralInformation = async (values: TODO) => {
     const newAccount = {
       ...account,
       ...values,
