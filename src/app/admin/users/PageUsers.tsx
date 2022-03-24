@@ -16,6 +16,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  MenuProps,
   Portal,
   Text,
   Wrap,
@@ -32,12 +33,14 @@ import {
 import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 
+import { AdminNav } from '@/app/admin/AdminNav';
 import { UserStatus } from '@/app/admin/users/UserStatus';
 import {
   useUserList,
   useUserRemove,
   useUserUpdate,
 } from '@/app/admin/users/users.service';
+import { User } from '@/app/admin/users/users.types';
 import { Page, PageContent } from '@/app/layout';
 import { usePaginationFromUrl } from '@/app/router';
 import {
@@ -61,9 +64,11 @@ import {
 } from '@/components';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
-import { AdminNav } from '../AdminNav';
+type UserActionProps = Omit<MenuProps, 'children'> & {
+  user: User;
+};
 
-const UserActions = ({ user, ...rest }) => {
+const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();

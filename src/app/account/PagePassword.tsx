@@ -42,9 +42,8 @@ export const PagePassword = () => {
       },
     });
 
-  const submitUpdatePassword = async (values) => {
+  const submitUpdatePassword = async (values: TODO) => {
     const { currentPassword, newPassword } = values;
-
     await changePasswordFinish({ currentPassword, newPassword });
   };
 
