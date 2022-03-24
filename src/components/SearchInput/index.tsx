@@ -71,7 +71,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       }
     }, [externalValue]);
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(event.target.value);
     };
 
@@ -80,7 +80,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       inputRef?.current?.focus();
     };
 
-    const handleEscape = (event) => {
+    const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event?.key?.toLowerCase() === 'escape') {
         handleClear();
       }
