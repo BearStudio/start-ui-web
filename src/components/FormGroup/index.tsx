@@ -40,11 +40,13 @@ export const FormGroup = ({
     {children}
     {!!helper && <FormHelperText>{helper}</FormHelperText>}
 
-    <FormErrorMessage id={`${id}-error`}>
-      <SlideFade in offsetY={-6}>
-        <Icon icon={FiAlertCircle} me="2" />
-        {errorMessage}
-      </SlideFade>
-    </FormErrorMessage>
+    {!!errorMessage && (
+      <FormErrorMessage id={`${id}-error`}>
+        <SlideFade in offsetY={-6}>
+          <Icon icon={FiAlertCircle} me="2" />
+          {errorMessage}
+        </SlideFade>
+      </FormErrorMessage>
+    )}
   </FormControl>
 );
