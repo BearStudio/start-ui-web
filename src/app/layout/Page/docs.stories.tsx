@@ -10,7 +10,7 @@ import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 export default {
   title: 'App Layout/Page',
   decorators: [
-    (Story) => {
+    (Story: TODO) => {
       const { colorModeValue } = useDarkMode();
       return (
         <Flex
