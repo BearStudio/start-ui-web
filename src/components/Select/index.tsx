@@ -48,10 +48,7 @@ const SelectInner = <
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: SelectProps<Option, IsMulti, Group>,
-  ref: React.ForwardedRef<HTMLElement>
-) => {
-  const {
+  {
     isAsync,
     isCreatable,
     isError,
@@ -63,9 +60,11 @@ const SelectInner = <
     defaultOptions = true,
     debounceDelay = 500,
     styles = {},
+    id,
     ...otherProps
-  } = props;
-
+  }: SelectProps<Option, IsMulti, Group>,
+  ref: React.ForwardedRef<HTMLElement>
+) => {
   const theme = useTheme();
   const { colorModeValue } = useDarkMode();
   const stylesFromTheme: any = useStyleConfig('Select', {
@@ -279,6 +278,7 @@ const SelectInner = <
   return (
     <BoxAny
       as={Element}
+      inputId={id}
       styles={selectStyle}
       menuPortalTarget={document.body}
       {...(loadingMessage ? { loadingMessage: () => loadingMessage } : {})}
