@@ -17,9 +17,10 @@ type UserMutateError = {
 
 const usersKeys = {
   all: () => ['usersService'] as const,
-  users: ({ page, size }) =>
+  users: ({ page, size }: { page?: number; size?: number }) =>
     [...usersKeys.all(), 'users', { page, size }] as const,
-  user: ({ login }) => [...usersKeys.all(), 'user', { login }] as const,
+  user: ({ login }: { login?: string }) =>
+    [...usersKeys.all(), 'user', { login }] as const,
 };
 
 export const useUserList = (
