@@ -11,7 +11,7 @@ import { Account } from '@/app/account/account.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
 const accountKeys = {
-  all: () => [] as const,
+  all: () => ['accountService'] as const,
   account: () => [...accountKeys.all(), 'account'] as const,
 };
 
