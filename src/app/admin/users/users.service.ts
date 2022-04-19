@@ -16,7 +16,7 @@ type UserMutateError = {
 };
 
 const usersKeys = {
-  all: () => [] as const,
+  all: () => ['usersService'] as const,
   users: ({ page, size }) =>
     [...usersKeys.all(), 'users', { page, size }] as const,
   user: ({ login }) => [...usersKeys.all(), 'user', { login }] as const,
