@@ -26,3 +26,17 @@ export const Default = () => (
     />
   </Formiz>
 );
+
+export const Disabled = () => (
+  <Formiz>
+    <FieldSelect
+      name="colors"
+      label="Colors"
+      placeholder="Placeholder"
+      helper="This is an helper"
+      required="Color is required"
+      options={colors}
+      isDisabled
+    />
+  </Formiz>
+);
