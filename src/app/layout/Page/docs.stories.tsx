@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex } from '@chakra-ui/react';
+import { Center, Flex } from '@chakra-ui/react';
 
 import { Layout } from '@/app/layout';
 
@@ -40,6 +40,20 @@ export const FocusAndBackButton = () => (
       Page Top Bar
     </PageTopBar>
     <PageContent>Page Content</PageContent>
+    <PageBottomBar>Page Bottom Bar</PageBottomBar>
+  </Page>
+);
+
+export const FocusFixedPageTopBar = () => (
+  <Page isFocusMode>
+    <PageTopBar showBack isFixed onBack={() => alert('Back')}>
+      Page Top Bar
+    </PageTopBar>
+    <PageContent>
+      <Center h={800} borderWidth={1}>
+        Page Content
+      </Center>
+    </PageContent>
     <PageBottomBar>Page Bottom Bar</PageBottomBar>
   </Page>
 );

@@ -7,11 +7,14 @@ import {
   HStack,
   IconButton,
   Stack,
+  useTheme,
 } from '@chakra-ui/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
 import { useRtl } from '@/hooks/useRtl';
+
+import { useLayoutContext } from '../LayoutContext';
 
 type PageContextValue = {
   nav: React.ReactNode;
@@ -52,44 +55,67 @@ const PageContainer = ({ children, ...rest }: FlexProps) => {
 type PageTopBarProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
+  isFixed?: boolean;
 };
 
 export const PageTopBar = ({
   children,
   onBack = () => undefined,
   showBack = false,
+  isFixed = false,
   ...rest
 }: PageTopBarProps) => {
+  const topBarRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+  const { isFocusMode } = useLayoutContext();
+  const theme = useTheme();
+
+  useLayoutEffect(() => {
+    const onResize = () => {
+      setHeight(topBarRef.current?.offsetHeight || 0);
+    };
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
   const { rtlValue } = useRtl();
 
   return (
-    <Flex
-      zIndex="2"
-      direction="column"
-      pt="4"
-      pb="4"
-      boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
-      bg="white"
-      _dark={{ bg: 'gray.900' }}
-      {...rest}
-    >
-      <Box w="full" h="0" pb="safe-top" />
-      <PageContainer>
-        <HStack spacing="4">
-          {showBack && (
-            <Box ms={{ base: 0, lg: '-3.5rem' }}>
-              <IconButton
-                aria-label="Go Back"
-                icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
-                variant="ghost"
-                onClick={() => onBack()}
-              />
-            </Box>
-          )}
-          <Box flex="1">{children}</Box>
-        </HStack>
-      </PageContainer>
-    </Flex>
+    <>
+      {isFixed && <Box h={`${height}px`} />}
+      <Flex
+        zIndex="2"
+        direction="column"
+        pt="4"
+        pb="4"
+        boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
+        bg="white"
+        ref={topBarRef}
+        top={isFocusMode ? 0 : theme.layout.topBar.height}
+        style={isFixed ? { position: 'fixed', right: '0', left: '0' } : {}}
+        {...rest}
+      >
+        <Box w="full" h="0" pb="safe-top" />
+        <PageContainer>
+          <HStack spacing="4">
+            {showBack && (
+              <Box ms={{ base: 0, lg: '-3.5rem' }}>
+                <IconButton
+                  aria-label="Go Back"
+                  icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
+                  variant="ghost"
+                  onClick={() => onBack()}
+                />
+              </Box>
+            )}
+            <Box flex="1">{children}</Box>
+          </HStack>
+        </PageContainer>
+      </Flex>
+    </>
   );
 };
 
