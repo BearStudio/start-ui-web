@@ -1,6 +1,6 @@
-import { Response } from 'miragejs';
+import { Request, Response, Server } from 'miragejs';
 
-export const AccountRoutes = (server) => {
+export const AccountRoutes = (server: Server) => {
   server.get('/account', getCurrent);
   server.post('/account', update);
   server.post('/account/change-password', changePassword);
@@ -9,7 +9,7 @@ export const AccountRoutes = (server) => {
   server.post('/register', register);
 };
 
-export const getCurrent = (schema, request) => {
+export const getCurrent = (schema: any, request: Request) => {
   const authToken = request.requestHeaders.Authorization;
   const userIdFromToken = authToken?.split('Bearer ')[1];
 
@@ -19,15 +19,16 @@ export const getCurrent = (schema, request) => {
   return schema.users.find(userIdFromToken);
 };
 
-const register = (schema, request) => {
+const register = (schema: any, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   schema.create('user', {
     ...attrs,
     activated: false,
   });
+  return '';
 };
 
-const update = (schema, request) => {
+const update = (schema: any, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
   const userId = authToken.split('Bearer ')[1];
@@ -35,16 +36,16 @@ const update = (schema, request) => {
   return schema.users.find(userId).update(attrs);
 };
 
-const initResetPassword = (_, request) => {
+const initResetPassword = (_: any, request: Request) => {
   return request.requestBody;
 };
 
-const finishResetPassword = (schema, request) => {
+const finishResetPassword = (schema: any, request: Request) => {
   const { key, newPassword } = JSON.parse(request.requestBody);
   return schema.users.find(key).update({ password: newPassword });
 };
 
-const changePassword = (schema, request) => {
+const changePassword = (schema: any, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
   const userId = authToken.split('Bearer ')[1];
