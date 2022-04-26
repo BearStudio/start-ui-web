@@ -120,24 +120,24 @@ const SelectInner = <
       }
     : {};
 
-  type state = {
+  type State = {
     isDisabled: boolean;
     isFocused: boolean;
     isSelected: boolean;
   };
 
   const getComponentStyles = (
-    componentName: string,
-    callback: (state: state) => CSSObject
+    componentName: keyof typeof styles,
+    callback: (state: State) => CSSObject
   ) => ({
-    [componentName]: (provided: CSSObject, state: state) => {
+    [componentName]: (provided: CSSObject, state: State) => {
       const componentsStyles = callback(state);
       const combinedStyles = {
         ...provided,
         ...componentsStyles,
       };
       return (
-        (styles as TODO)?.[componentName]?.(combinedStyles, state) ??
+        styles?.[componentName]?.(combinedStyles, state as any) ??
         combinedStyles
       );
     },
