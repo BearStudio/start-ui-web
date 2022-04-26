@@ -91,7 +91,7 @@ export const useUserUpdate = (
       queryClient.cancelQueries('users');
       queryClient
         .getQueryCache()
-        .findAll('users')
+        .findAll([...usersKeys.all(), 'users'])
         .forEach(({ queryKey }) => {
           queryClient.setQueryData<UserList>(queryKey, (cachedData) => {
             if (!cachedData) return { content: [], totalItems: 0 };
@@ -122,6 +122,7 @@ export const useUserCreate = (
     >
   > = {}
 ) => {
+  const queryClient = useQueryClient();
   return useMutation(
     ({ langKey = DEFAULT_LANGUAGE_KEY, ...payload }) =>
       Axios.post('/admin/users', {
@@ -130,6 +131,10 @@ export const useUserCreate = (
       }),
     {
       ...config,
+      onSuccess: (...args) => {
+        queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+        config?.onSuccess?.(...args);
+      },
     }
   );
 };
@@ -139,9 +144,16 @@ type UserWithLoginOnly = Pick<User, 'login'>;
 export const useUserRemove = (
   config: UseMutationOptions<void, unknown, UserWithLoginOnly> = {}
 ) => {
+  const queryClient = useQueryClient();
   return useMutation(
     (user: UserWithLoginOnly): Promise<void> =>
       Axios.delete(`/admin/users/${user.login}`),
-    { ...config }
+    {
+      ...config,
+      onSuccess: (...args) => {
+        queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+        config?.onSuccess?.(...args);
+      },
+    }
   );
 };

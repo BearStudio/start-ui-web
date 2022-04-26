@@ -113,7 +113,6 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
   const deactivateUser = () => userUpdate({ ...user, activated: false });
   const isActionsLoading = userUpdateData.isLoading;
 
-  const queryClient = useQueryClient();
   const { mutate: userRemove, ...userRemoveData } = useUserRemove({
     onSuccess: (_, { login }) => {
       toastSuccess({
@@ -122,7 +121,6 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
           login,
         }),
       });
-      queryClient.invalidateQueries('users');
     },
     onError: (_, { login }) => {
       toastError({
