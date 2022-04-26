@@ -30,7 +30,6 @@ import {
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
-import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 
 import { AdminNav } from '@/app/admin/AdminNav';
