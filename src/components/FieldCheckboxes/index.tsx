@@ -237,7 +237,7 @@ export const FieldCheckboxes: React.FC<FieldCheckboxesProps> = (props) => {
             {options?.map((option) => (
               <WrapItem key={String(option.value)}>
                 <FieldCheckboxesItem value={option.value}>
-                  {option.label ?? (option.value as ReactNode)}
+                  {option.label ?? JSON.stringify(option.value)}
                 </FieldCheckboxesItem>
               </WrapItem>
             ))}
