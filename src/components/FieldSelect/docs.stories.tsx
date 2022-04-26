@@ -37,7 +37,7 @@ export const Disabled = () => (
       required="Color is required"
       options={colors}
       isDisabled
-	/>
+    />
   </Formiz>
 );
 
