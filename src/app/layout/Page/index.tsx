@@ -11,7 +11,6 @@ import {
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 import { useFocusMode } from '@/app/layout';
-import { useDarkMode } from '@/hooks/useDarkMode';
 import { useRtl } from '@/hooks/useRtl';
 
 type PageContextValue = {
@@ -62,7 +61,7 @@ export const PageTopBar = ({
   ...rest
 }: PageTopBarProps) => {
   const { rtlValue } = useRtl();
-  const { colorModeValue } = useDarkMode();
+
   return (
     <Flex
       zIndex="2"
@@ -70,7 +69,8 @@ export const PageTopBar = ({
       pt="4"
       pb="4"
       boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
-      bg={colorModeValue('white', 'gray.900')}
+      bg="white"
+      _dark={{ bg: 'gray.900' }}
       {...rest}
     >
       <Box w="full" h="0" pb="safe-top" />
@@ -124,7 +124,6 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
 };
 
 export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
-  const { colorModeValue } = useDarkMode();
   const bottomBarRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
@@ -141,12 +140,13 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
         direction="column"
         mt="auto"
         position="fixed"
-        bg={colorModeValue('white', 'gray.900')}
         bottom="0"
         insetStart="0"
         insetEnd="0"
         py="2"
         boxShadow="0 -4px 20px rgba(0, 0, 0, 0.05)"
+        bg="white"
+        _dark={{ bg: 'gray.900' }}
         {...rest}
       >
         <PageContainer>{children}</PageContainer>

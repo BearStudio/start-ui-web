@@ -16,8 +16,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import DayPicker, { DayPickerProps } from 'react-day-picker';
 import ReactFocusLock from 'react-focus-lock';
 
-import { useDarkMode } from '@/hooks/useDarkMode';
-
 import { useDateSelectorContext } from './DateSelector';
 
 type ChildrenFunctionParams = { date: Dayjs; onOpen: () => void };
@@ -36,7 +34,6 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
   ...rest
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const { colorModeValue } = useDarkMode();
 
   const { date, onDayClick, isOpen, onOpen, onClose } =
     useDateSelectorContext();
@@ -79,8 +76,9 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
           <PopoverBody
             p="0"
             border="1px solid"
-            borderColor={colorModeValue('gray.200', 'gray.900')}
             borderRadius="md"
+            borderColor="gray.200"
+            _dark={{ borderColor: 'gray.900' }}
           >
             {dayPicker}
           </PopoverBody>

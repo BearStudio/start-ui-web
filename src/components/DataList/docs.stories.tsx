@@ -27,7 +27,6 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 import {
   DataList,
@@ -180,7 +179,6 @@ export const NoHover = () => (
 );
 
 export const Complete = () => {
-  const { colorModeValue } = useDarkMode();
   const users = [
     {
       name: 'Jane Cooper',
@@ -253,7 +251,8 @@ export const Complete = () => {
                   isTruncated
                   maxW="full"
                   fontSize="sm"
-                  color={colorModeValue('gray.600', 'gray.300')}
+                  color="gray.600"
+                  _dark={{ color: 'gray.300' }}
                 >
                   {item.email}
                 </Text>
@@ -267,7 +266,8 @@ export const Complete = () => {
             <Text
               isTruncated
               maxW="full"
-              color={colorModeValue('gray.600', 'gray.300')}
+              color="gray.600"
+              _dark={{ color: 'gray.300' }}
             >
               {item.department}
             </Text>
@@ -284,7 +284,8 @@ export const Complete = () => {
             <Text
               isTruncated
               maxW="full"
-              color={colorModeValue('gray.600', 'gray.300')}
+              color="gray.600"
+              _dark={{ color: 'gray.300' }}
             >
               {item.role}
             </Text>
@@ -344,7 +345,6 @@ export const Complete = () => {
 };
 
 export const CompleteWithCollapse = () => {
-  const { colorModeValue } = useDarkMode();
   const users = [
     {
       name: 'Jane Cooper',
@@ -403,7 +403,8 @@ export const CompleteWithCollapse = () => {
                     isTruncated
                     maxW="full"
                     fontSize="sm"
-                    color={colorModeValue('gray.600', 'gray.300')}
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
                   >
                     {item.email}
                   </Text>
@@ -425,31 +426,31 @@ export const CompleteWithCollapse = () => {
           <DataListAccordionPanel>
             <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={4}>
               <Box fontSize="sm">
-                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                <Text color="gray.600" _dark={{ color: 'gray.300' }}>
                   Label
                 </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                <Text color="gray.600" _dark={{ color: 'gray.300' }}>
                   Label
                 </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                <Text color="gray.600" _dark={{ color: 'gray.300' }}>
                   Label
                 </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm">
-                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                <Text color="gray.600" _dark={{ color: 'gray.300' }}>
                   Label
                 </Text>
                 <Text>Value</Text>
               </Box>
               <Box fontSize="sm" gridColumn="1/-1">
-                <Text color={colorModeValue('gray.600', 'gray.300')}>
+                <Text color="gray.600" _dark={{ color: 'gray.300' }}>
                   Comment
                 </Text>
                 <Text>

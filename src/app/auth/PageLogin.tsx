@@ -8,11 +8,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { LoginForm } from '@/app/auth/LoginForm';
 import { useRedirectFromUrl } from '@/app/router';
 import { Logo, SlideIn } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageLogin = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
   const redirect = useRedirectFromUrl();
   const queryCache = useQueryClient();
   const onLogin = () => {
@@ -25,9 +23,10 @@ export const PageLogin = () => {
         <Logo h="3rem" mb="8" mx="auto" />
         <Box
           p="6"
-          bg={colorModeValue('white', 'blackAlpha.400')}
           borderRadius="md"
           boxShadow="md"
+          bg="white"
+          _dark={{ bg: 'blackAlpha.400' }}
         >
           <Heading size="md" mb="4">
             {t('auth:login.title')}
@@ -39,8 +38,9 @@ export const PageLogin = () => {
             {t('auth:login.actions.needAccount')}{' '}
             <Box
               as="strong"
-              color={colorModeValue('brand.500', 'brand.300')}
               ms="2"
+              color="gray.600"
+              _dark={{ color: 'gray.300' }}
             >
               {t('auth:login.actions.register')}
             </Box>

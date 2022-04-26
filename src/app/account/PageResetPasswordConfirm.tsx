@@ -13,11 +13,10 @@ import {
   useToastError,
   useToastSuccess,
 } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageResetPasswordConfirm = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const [searchParams] = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
@@ -69,9 +68,10 @@ export const PageResetPasswordConfirm = () => {
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
         <Box
           p="6"
-          bg={colorModeValue('white', 'blackAlpha.400')}
           borderRadius="md"
           boxShadow="md"
+          bg="white"
+          _dark={{ bg: 'blackAlpha.400' }}
         >
           <Heading size="lg" mb="4">
             {t('account:resetPassword.title')}

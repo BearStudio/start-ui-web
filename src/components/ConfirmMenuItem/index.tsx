@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 export type StyledMenuItemProps = HTMLChakraProps<'button'>;
 
@@ -118,7 +117,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     ref
   ) => {
     const { t } = useTranslation();
-    const { colorModeValue } = useDarkMode();
+
     const [isConfirmActive, setIsConfirmActive] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -154,14 +153,23 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
 
     const confirmActiveProps = isConfirmActive
       ? {
-          bg: `${confirmColorScheme}.${colorModeValue('100', '800')}`,
+          bg: `${confirmColorScheme}.100`,
           color: 'transparent',
           transition: '0.2s',
+          _dark: {
+            bg: `${confirmColorScheme}.800`,
+          },
           _hover: {
-            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
+            bg: `${confirmColorScheme}.50`,
+            _dark: {
+              bg: `${confirmColorScheme}.900`,
+            },
           },
           _focus: {
-            bg: `${confirmColorScheme}.${colorModeValue('50', '900')}`,
+            bg: `${confirmColorScheme}.50`,
+            _dark: {
+              bg: `${confirmColorScheme}.900`,
+            },
           },
           icon: icon
             ? React.cloneElement(icon, { color: 'transparent' })
@@ -195,9 +203,10 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
             bottom={0}
             px={3}
             as="span"
-            color={colorModeValue(`${confirmColorScheme}.500`, 'white')}
             fontSize="sm"
             alignItems="center"
+            color={`${confirmColorScheme}.500`}
+            _dark={{ color: 'white' }}
           >
             {confirmContent ? (
               confirmContent

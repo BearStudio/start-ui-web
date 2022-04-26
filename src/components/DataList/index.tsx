@@ -13,8 +13,6 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 
-import { useDarkMode } from '@/hooks/useDarkMode';
-
 type DataListColumns = Record<string, DataListCellProps>;
 type DataListContextValue = {
   setColumns: React.Dispatch<React.SetStateAction<DataListColumns>>;
@@ -127,13 +125,13 @@ export const DataListAccordionIcon = ({ ...rest }) => {
 };
 
 export const DataListAccordionPanel = ({ ...rest }) => {
-  const { colorModeValue } = useDarkMode();
   return (
     <AccordionPanel
       boxShadow="inner"
       px="4"
       py="3"
-      bg={colorModeValue('gray.50', 'blackAlpha.400')}
+      bg="gray.50"
+      _dark={{ bg: 'blackAlpha.400' }}
       {...rest}
     />
   );
@@ -149,14 +147,14 @@ export const DataListRow: FC<DataListRowProps> = ({
   isDisabled = false,
   ...rest
 }) => {
-  const { colorModeValue } = useDarkMode();
   const { isHover } = useContext(DataListContext);
   const showRow = useBreakpointValue(
     typeof isVisible === 'object' ? isVisible : { base: isVisible }
   );
   const disabledProps = isDisabled
     ? {
-        bg: colorModeValue('gray.50', 'whiteAlpha.50'),
+        bg: 'gray.50',
+        _dark: { borderBottomColor: 'gray.900', bg: 'whiteAlpha.50' },
         _hover: {},
         _focus: {},
         'aria-disabled': true,
@@ -173,13 +171,13 @@ export const DataListRow: FC<DataListRowProps> = ({
       d={!showRow ? 'none' : undefined}
       position="relative"
       borderBottom="1px solid"
-      borderBottomColor={colorModeValue('gray.100', 'gray.900')}
+      borderBottomColor="gray.100"
       transition="0.2s"
-      _hover={
-        isHover
-          ? { bg: colorModeValue('gray.50', 'blackAlpha.200') }
-          : undefined
-      }
+      _dark={{
+        borderBottomColor: 'gray.900',
+        _hover: isHover ? { bg: 'blackAlpha.200' } : undefined,
+      }}
+      _hover={isHover ? { bg: 'gray.50' } : undefined}
       {...disabledProps}
       {...rest}
     />
@@ -189,16 +187,16 @@ export const DataListRow: FC<DataListRowProps> = ({
 export type DataListHeaderProps = DataListRowProps;
 
 export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
-  const { colorModeValue } = useDarkMode();
   return (
     <DataListHeaderContext.Provider value={true}>
       <DataListRow
-        bg={colorModeValue('gray.100', 'blackAlpha.400')}
         fontSize="sm"
         fontWeight="bold"
-        color={colorModeValue('gray.600', 'gray.300')}
         border="none"
         _hover={{}}
+        bg="gray.100"
+        color="gray.600"
+        _dark={{ bg: 'blackAlpha.400', color: 'gray.300' }}
         {...rest}
       />
     </DataListHeaderContext.Provider>
@@ -208,18 +206,22 @@ export const DataListHeader: FC<DataListHeaderProps> = ({ ...rest }) => {
 export type DataListFooterProps = DataListRowProps;
 
 export const DataListFooter: FC<DataListFooterProps> = ({ ...rest }) => {
-  const { colorModeValue } = useDarkMode();
   return (
     <Box mt="auto">
       <Flex
-        bg={colorModeValue('white', 'blackAlpha.50')}
         fontSize="sm"
-        color={colorModeValue('gray.600', 'gray.300')}
         mt="-1px"
         borderTop="1px solid"
-        borderTopColor={colorModeValue('gray.100', 'gray.900')}
         p="2"
         align="center"
+        bg="white"
+        borderTopColor="gray.100"
+        color="gray.600"
+        _dark={{
+          bg: 'blackAlpha.50',
+          color: 'gray.300',
+          borderTopColor: 'gray.900',
+        }}
         {...rest}
       />
     </Box>
@@ -236,7 +238,6 @@ export const DataList: FC<DataListProps> = ({
   isHover = true,
   ...rest
 }) => {
-  const { colorModeValue } = useDarkMode();
   const [columns, setColumns] = useState<DataListColumns>({});
   return (
     <DataListContext.Provider
@@ -249,7 +250,6 @@ export const DataList: FC<DataListProps> = ({
       <Accordion
         display="flex"
         flexDirection="column"
-        bg={colorModeValue('white', 'blackAlpha.400')}
         position="relative"
         boxShadow="md"
         borderRadius="md"
@@ -258,6 +258,10 @@ export const DataList: FC<DataListProps> = ({
         minH="10rem"
         allowMultiple={allowMultiple && !allowToggle}
         allowToggle={allowToggle}
+        bg="white"
+        _dark={{
+          bg: 'blackAlpha.400',
+        }}
         {...rest}
       />
     </DataListContext.Provider>

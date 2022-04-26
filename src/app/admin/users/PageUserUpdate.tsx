@@ -24,14 +24,13 @@ import {
 } from '@/app/layout';
 import { useToastError, useToastSuccess } from '@/components';
 import { Error404 } from '@/errors';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
 
 export const PageUserUpdate = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const { login } = useParams();
   const navigate = useNavigate();
   const {
@@ -95,7 +94,8 @@ export const PageUserUpdate = () => {
                 <Heading size="sm">{user?.login}</Heading>
                 <Text
                   fontSize="xs"
-                  color={colorModeValue('gray.600', 'gray.300')}
+                  color="gray.600"
+                  _dark={{ color: 'gray.300' }}
                 >
                   {t('users:data.id.label')}: {user?.id}
                 </Text>

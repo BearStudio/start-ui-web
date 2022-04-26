@@ -19,7 +19,6 @@ import {
 import { FiChevronDown } from 'react-icons/fi';
 
 import { Icon } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 type NavContextValue = {
   active: ReactNode;
@@ -80,8 +79,6 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   isActive = false,
   ...rest
 }) => {
-  const { colorModeValue } = useDarkMode();
-
   const { setActive, isMenu } = useNavContext();
   const Item = isMenu ? MenuItem : Flex;
 
@@ -94,9 +91,8 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
             mt="0.05rem"
             me="2"
             fontSize="lg"
-            color={
-              isActive ? colorModeValue('brand.500', 'brand.300') : 'gray.400'
-            }
+            color={isActive ? 'brand.500' : 'gray.400'}
+            _dark={{ color: isActive ? 'brand.300' : 'gray.400' }}
           />
         )}
         <Text as="span" noOfLines={isMenu ? 1 : 2}>
@@ -104,7 +100,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
         </Text>
       </Flex>
     ),
-    [icon, children, isActive, isMenu, colorModeValue]
+    [icon, children, isActive, isMenu]
   );
 
   useEffect(() => {
@@ -119,19 +115,23 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       py="2"
       borderRadius={isMenu ? undefined : 'md'}
       transition="0.2s"
-      color={
-        isActive
-          ? colorModeValue('gray.700', 'gray.100')
-          : colorModeValue('gray.600', 'gray.300')
-      }
       fontSize="sm"
       fontWeight="bold"
-      bg={isActive ? colorModeValue('white', 'blackAlpha.300') : undefined}
+      bg={isActive ? 'white' : 'transparent'}
+      color={isActive ? 'gray.700' : 'gray.600'}
+      _dark={{
+        color: isActive ? 'white' : 'gray.300',
+        bg: isActive ? 'blackAlpha.300' : 'transparent',
+      }}
       _hover={
         !isActive && !isMenu
           ? {
-              bg: colorModeValue('white', 'blackAlpha.300'),
-              color: colorModeValue('gray.700', 'gray.100'),
+              bg: 'white',
+              color: 'gray.700',
+              _dark: {
+                bg: 'blackAlpha.300',
+                color: 'gray.100',
+              },
             }
           : {}
       }
@@ -143,7 +143,6 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
 };
 
 export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
-  const { colorModeValue } = useDarkMode();
   const { isMenu } = useNavContext();
 
   if (isMenu) {
@@ -158,10 +157,11 @@ export const NavGroup: FC<FlexProps> = ({ children, title, ...rest }) => {
       <Flex
         fontSize="xs"
         fontWeight="bold"
-        color={colorModeValue('gray.500', 'gray.300')}
         px="3"
         pt="6"
         pb="2"
+        color="gray.500"
+        _dark={{ color: 'gray.300' }}
         {...rest}
       >
         {title}

@@ -61,7 +61,6 @@ import {
   useToastError,
   useToastSuccess,
 } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;
@@ -180,7 +179,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 
 export const PageUsers = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
   const { users, totalItems, isLoadingPage } = useUserList({
@@ -272,7 +271,8 @@ export const PageUsers = () => {
                       isTruncated
                       maxW="full"
                       fontSize="sm"
-                      color={colorModeValue('gray.600', 'gray.300')}
+                      color="gray.600"
+                      _dark={{ color: 'gray.300' }}
                     >
                       {user.email}
                     </Text>
@@ -306,8 +306,9 @@ export const PageUsers = () => {
                   <Text
                     isTruncated
                     maxW="full"
-                    color={colorModeValue('gray.600', 'gray.300')}
                     pointerEvents="auto"
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
                   >
                     <DateAgo date={user.createdDate} />
                   </Text>
@@ -326,8 +327,9 @@ export const PageUsers = () => {
                   <Text
                     isTruncated
                     maxW="full"
-                    color={colorModeValue('gray.600', 'gray.300')}
                     pointerEvents="auto"
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
                   >
                     <DateAgo position="relative" date={user.lastModifiedDate} />
                   </Text>

@@ -15,7 +15,6 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { IconSortAsc, IconSortDesc } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 type OptionProps = {
   value: string;
@@ -48,7 +47,6 @@ export const Sort: FC<SortProps> = ({
   ...rest
 }) => {
   const { t } = useTranslation();
-  const { colorMode } = useDarkMode();
 
   const { by, order } = sort;
 
@@ -72,7 +70,10 @@ export const Sort: FC<SortProps> = ({
         overflow="hidden"
         textAlign="left"
         p="1"
-        color={colorMode === 'light' ? 'gray.600' : 'gray.100'}
+        color="gray.600"
+        _dark={{
+          color: 'gray.100',
+        }}
         sx={{ '> span': { d: 'flex', maxW: 'full' } }}
         {...rest}
       >
@@ -86,9 +87,10 @@ export const Sort: FC<SortProps> = ({
           <MenuOptionGroup
             title={t('components:sort.sortBy')}
             type="radio"
-            color={colorMode === 'light' ? 'gray.500' : 'gray.50'}
             fontWeight="medium"
             fontSize="xs"
+            color="gray.500"
+            _dark={{ color: 'gray.50' }}
             value={by}
             onChange={
               (value: string | string[]) => handleByChange(value as string) // type === radio, so value always be string
@@ -98,8 +100,9 @@ export const Sort: FC<SortProps> = ({
               <MenuItemOption
                 key={option?.value}
                 value={option?.value}
-                color={colorMode === 'light' ? 'gray.600' : 'gray.100'}
                 fontSize="sm"
+                color="gray.600"
+                _dark={{ color: 'gray.100' }}
               >
                 {option?.label}
               </MenuItemOption>
@@ -110,9 +113,10 @@ export const Sort: FC<SortProps> = ({
             value={order}
             title={t('components:sort.order')}
             type="radio"
-            color={colorMode === 'light' ? 'gray.500' : 'gray.50'}
             fontWeight="medium"
             fontSize="xs"
+            color="gray.500"
+            _dark={{ color: 'gray.50' }}
             onChange={
               (value: string | string[]) =>
                 handleOrderChange(value as SortValue['order']) // type === radio, so value always be "asc" or "desc"
@@ -120,15 +124,17 @@ export const Sort: FC<SortProps> = ({
           >
             <MenuItemOption
               value="asc"
-              color={colorMode === 'light' ? 'gray.600' : 'gray.100'}
               fontSize="sm"
+              color="gray.600"
+              _dark={{ color: 'gray.100' }}
             >
               {t('components:sort.sortAscending')}
             </MenuItemOption>
             <MenuItemOption
               value="desc"
-              color={colorMode === 'light' ? 'gray.600' : 'gray.100'}
               fontSize="sm"
+              color="gray.600"
+              _dark={{ color: 'gray.100' }}
             >
               {t('components:sort.sortDescending')}
             </MenuItemOption>
