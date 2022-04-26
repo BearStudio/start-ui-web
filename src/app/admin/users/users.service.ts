@@ -93,15 +93,18 @@ export const useUserUpdate = (
         .getQueryCache()
         .findAll([...usersKeys.all(), 'users'])
         .forEach(({ queryKey }) => {
-          queryClient.setQueryData<UserList>(queryKey, (cachedData) => {
-            if (!cachedData) return { content: [], totalItems: 0 };
-            return {
-              ...cachedData,
-              content: (cachedData.content || []).map((user: User) =>
-                user.id === data.id ? data : user
-              ),
-            };
-          });
+          queryClient.setQueryData<UserList | undefined>(
+            queryKey,
+            (cachedData) => {
+              if (!cachedData) return;
+              return {
+                ...cachedData,
+                content: (cachedData.content || []).map((user) =>
+                  user.id === data.id ? data : user
+                ),
+              };
+            }
+          );
         });
       queryClient.invalidateQueries('users');
       queryClient.invalidateQueries(['user', payload.login]);
