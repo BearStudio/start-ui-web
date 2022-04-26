@@ -69,12 +69,12 @@ export const FieldMultiSelect = <
     ...rest,
   };
 
-  const handleChange = (optionsSelected) => {
+  const handleChange = (optionsSelected: Option[]) => {
     if (!optionsSelected || !optionsSelected.length) {
       setValue(null);
       return;
     }
-    setValue(optionsSelected?.map((option) => option.value));
+    setValue(optionsSelected?.map((option: TODO) => option?.value));
   };
 
   return (

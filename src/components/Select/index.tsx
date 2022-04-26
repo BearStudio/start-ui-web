@@ -136,7 +136,10 @@ const SelectInner = <
         ...provided,
         ...componentsStyles,
       };
-      return styles?.[componentName]?.(combinedStyles, state) ?? combinedStyles;
+      return (
+        (styles as TODO)?.[componentName]?.(combinedStyles, state) ??
+        combinedStyles
+      );
     },
   });
 
