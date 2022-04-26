@@ -81,7 +81,7 @@ export const FieldSelect = <
         }
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
-        onChange={(fieldValue) =>
+        onChange={(fieldValue: TODO) =>
           setValue(fieldValue ? fieldValue.value : null)
         }
         size={size}

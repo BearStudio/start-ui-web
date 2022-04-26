@@ -27,7 +27,7 @@ import { Select } from '.';
 export default {
   title: 'components/Select',
   decorators: [
-    (Story) => (
+    (Story: TODO) => (
       <Box h="24rem">
         <Story />
       </Box>
