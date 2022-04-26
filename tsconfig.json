@@ -5,7 +5,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": false,
@@ -19,7 +19,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "incremental": true,
+    "incremental": false,
     "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
