@@ -88,7 +88,7 @@ export const useUserUpdate = (
   return useMutation((payload) => Axios.put('/admin/users', payload), {
     ...config,
     onSuccess: (data, payload, ...rest) => {
-      queryClient.cancelQueries('users');
+      queryClient.cancelQueries([...usersKeys.all(), 'users']);
       queryClient
         .getQueryCache()
         .findAll([...usersKeys.all(), 'users'])
@@ -106,8 +106,8 @@ export const useUserUpdate = (
             }
           );
         });
-      queryClient.invalidateQueries('users');
-      queryClient.invalidateQueries(['user', payload.login]);
+      queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+      queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
       if (config.onSuccess) {
         config.onSuccess(data, payload, ...rest);
       }
