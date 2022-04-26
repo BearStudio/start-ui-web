@@ -93,8 +93,8 @@ export const useUserUpdate = (
         .getQueryCache()
         .findAll('users')
         .forEach(({ queryKey }) => {
-          queryClient.setQueryData<UserList>(queryKey, (cachedData: TODO) => {
-            if (!cachedData) return;
+          queryClient.setQueryData<UserList>(queryKey, (cachedData) => {
+            if (!cachedData) return { content: [], totalItems: 0 };
             return {
               ...cachedData,
               content: (cachedData.content || []).map((user: User) =>

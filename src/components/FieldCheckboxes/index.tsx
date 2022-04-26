@@ -46,7 +46,7 @@ const splitValuesByGroupsFromOptions = (
         ? [[...inGroups, option.value], others]
         : [inGroups, [...others, option.value]];
     },
-    [[], []] as TODO
+    [[], []] as ExplicitAny
   );
 
 type FieldCheckboxesState = {

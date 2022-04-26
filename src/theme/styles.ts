@@ -1,8 +1,8 @@
-import { Styles, mode } from '@chakra-ui/theme-tools';
+import { StyleFunctionProps, Styles, mode } from '@chakra-ui/theme-tools';
 
 import * as externals from './externals';
 
-const externalsStyles = (props: TODO) =>
+const externalsStyles = (props: StyleFunctionProps) =>
   Object.values(externals).reduce(
     (acc, cur) => ({
       ...acc,

@@ -42,7 +42,7 @@ export const ConfirmPopover: React.FC<ConfirmPopoverProps> = ({
   const displayHeading =
     !title && !message ? t('components:confirmPopover.heading') : title;
 
-  const initialFocusRef = useRef<TODO>();
+  const initialFocusRef = useRef<ExplicitAny>();
 
   return (
     <>
