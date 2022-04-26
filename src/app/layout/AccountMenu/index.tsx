@@ -28,11 +28,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
 
   if (!appBuild?.version) {
@@ -53,10 +52,14 @@ const AppVersion = ({ ...rest }) => {
         my="-2"
         fontSize="0.7rem"
         fontWeight="medium"
-        color={colorModeValue('gray.500', 'gray.200')}
         outline="none"
-        _hover={{ bg: colorModeValue('gray.50', 'gray.800') }}
-        _focus={{ bg: colorModeValue('gray.50', 'gray.800') }}
+        color="gray.500"
+        _hover={{ bg: 'gray.50' }}
+        _focus={{ bg: 'gray.50' }}
+        _dark={{
+          color: 'gray.200',
+          _focus: { bg: 'gray.800' },
+        }}
         onClick={onCopy}
         {...rest}
       >
@@ -71,10 +74,12 @@ const AppVersion = ({ ...rest }) => {
           py="2"
           px="3"
           fontWeight="bold"
-          bg={colorModeValue('gray.50', 'gray.800')}
-          color={
-            hasCopied ? colorModeValue('success.500', 'success.300') : undefined
-          }
+          bg="gray.50"
+          color={hasCopied ? 'success.500' : undefined}
+          _dark={{
+            bg: 'gray.800',
+            color: hasCopied ? 'success.300' : undefined,
+          }}
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
@@ -94,7 +99,7 @@ const AppVersion = ({ ...rest }) => {
 
 export const AccountMenu = ({ ...rest }) => {
   const { t } = useTranslation('layout');
-  const { colorModeValue } = useDarkMode();
+
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
   const navigate = useNavigate();
@@ -107,9 +112,10 @@ export const AccountMenu = ({ ...rest }) => {
         </Avatar>
       </MenuButton>
       <MenuList
-        color={colorModeValue('gray.800', 'white')}
         maxW="12rem"
         overflow="hidden"
+        color="gray.800"
+        _dark={{ color: 'white' }}
       >
         <MenuGroup title={account?.email} isTruncated>
           <MenuItem

@@ -9,11 +9,9 @@ import { AccountNav } from '@/app/account/AccountNav';
 import { useUpdatePassword } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
 import { FieldInput, useToastError, useToastSuccess } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PagePassword = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
   const changePasswordForm = useForm();
 
   const toastSuccess = useToastSuccess();
@@ -72,11 +70,12 @@ export const PagePassword = () => {
           <form noValidate onSubmit={changePasswordForm.submit}>
             <Stack
               direction="column"
-              bg={colorModeValue('white', 'blackAlpha.400')}
               p="6"
               borderRadius="lg"
               spacing="6"
               shadow="md"
+              bg="white"
+              _dark={{ bg: 'blackAlpha.400' }}
             >
               <FieldInput
                 name="currentPassword"

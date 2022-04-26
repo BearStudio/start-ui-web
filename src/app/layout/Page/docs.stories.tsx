@@ -3,7 +3,6 @@ import React from 'react';
 import { Flex } from '@chakra-ui/react';
 
 import { Layout } from '@/app/layout';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 
@@ -11,12 +10,12 @@ export default {
   title: 'App Layout/Page',
   decorators: [
     (Story: any) => {
-      const { colorModeValue } = useDarkMode();
       return (
         <Flex
-          bg={colorModeValue('white', 'gray.800')}
           h="100vh"
           transform="scale(1)"
+          bg="white"
+          _dark={{ bg: 'gray.800' }}
         >
           <Layout>
             <Story />

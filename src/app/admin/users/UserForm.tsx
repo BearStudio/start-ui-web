@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 
 import { FieldCheckboxes, FieldInput, FieldSelect } from '@/components';
 import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -20,16 +19,17 @@ const AUTHORITIES = {
 
 export const UserForm = () => {
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
   return (
     <Stack
       direction="column"
-      bg={colorModeValue('white', 'gray.900')}
-      p="6"
       borderRadius="lg"
       spacing="6"
       shadow="md"
+      bg="white"
+      _dark={{ bg: 'gray.900' }}
+      p="6"
     >
       <FieldInput
         name="login"

@@ -13,8 +13,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FiSearch, FiX } from 'react-icons/fi';
 
-import { useDarkMode } from '@/hooks/useDarkMode';
-
 type CustomProps = {
   value?: string;
   defaultValue?: string;
@@ -40,7 +38,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     ref
   ) => {
     const { t } = useTranslation();
-    const { colorModeValue } = useDarkMode();
+
     const [externalValue, setExternalValue] = useControllableState({
       value,
       defaultValue,
@@ -97,11 +95,10 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           onKeyDown={handleEscape}
         />
         <InputRightElement
-          color={
-            isDisabled
-              ? colorModeValue('gray.300', 'gray.600')
-              : colorModeValue('brand.600', 'brand.300')
-          }
+          color={isDisabled ? 'gray.300' : 'brand.600'}
+          _dark={{
+            color: isDisabled ? 'gray.600' : 'brand.300',
+          }}
         >
           {!isDisabled && search ? (
             <IconButton

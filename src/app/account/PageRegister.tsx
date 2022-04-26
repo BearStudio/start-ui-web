@@ -25,11 +25,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useCreateAccount } from '@/app/account/account.service';
 import { FieldInput, FieldSelect, SlideIn, useToastError } from '@/components';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const PageRegister = () => {
   const { t, i18n } = useTranslation();
-  const { colorModeValue } = useDarkMode();
   const form = useForm({
     subscribe: { form: true, fields: ['langKey'] },
   });
@@ -101,7 +99,8 @@ export const PageRegister = () => {
               as={RouterLink}
               to="/login"
               variant="link"
-              color={colorModeValue('brand.500', 'brand.300')}
+              color="brand.500"
+              _dark={{ color: 'brand.300' }}
             >
               {t('account:register.actions.goToLogin')}
             </Button>
@@ -122,9 +121,10 @@ export const PageRegister = () => {
         >
           <Box
             p="6"
-            bg={colorModeValue('white', 'blackAlpha.400')}
             borderRadius="md"
             boxShadow="md"
+            bg="white"
+            _dark={{ bg: 'blackAlpha.400' }}
           >
             <Heading size="lg" mb="4">
               {t('account:register.title')}
@@ -213,8 +213,9 @@ export const PageRegister = () => {
               {t('account:register.actions.alreadyHaveAnAccount')}{' '}
               <Box
                 as="strong"
-                color={colorModeValue('brand.500', 'brand.300')}
                 ms="2"
+                color="brand.500"
+                _dark={{ color: 'brand.300' }}
               >
                 {t('account:register.actions.login')}
               </Box>

@@ -15,7 +15,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AccountMenu, MainMenu, useLayoutContext } from '@/app/layout';
 import { NavDrawer } from '@/app/layout/NavDrawer';
 import { Logo } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 
 const MenuButton = (props: Partial<IconButtonProps>) => {
   const { navOnOpen } = useLayoutContext();
@@ -34,7 +33,7 @@ const MenuButton = (props: Partial<IconButtonProps>) => {
 
 export const TopBar = () => {
   const theme = useTheme();
-  const { colorModeValue } = useDarkMode();
+
   const showDrawer = useBreakpointValue({
     base: true,
     [theme.layout.breakpoints.desktop]: false,
@@ -48,12 +47,13 @@ export const TopBar = () => {
           top="0"
           insetStart="0"
           insetEnd="0"
-          bg={colorModeValue('gray.800', 'gray.900')}
           color="gray.50"
           align="center"
           pt="safe-top"
           px="4"
           h={theme.layout.topBar.height}
+          bg="gray.800"
+          _dark={{ bg: 'gray.900' }}
         >
           <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
           <Box

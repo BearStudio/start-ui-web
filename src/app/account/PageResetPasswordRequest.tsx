@@ -19,13 +19,12 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { useResetPasswordInit } from '@/app/account/account.service';
 import { FieldInput, SlideIn, useToastError } from '@/components';
-import { useDarkMode } from '@/hooks/useDarkMode';
 import { useRtl } from '@/hooks/useRtl';
 
 export const PageResetPasswordRequest = () => {
   const { rtlValue } = useRtl();
   const { t } = useTranslation();
-  const { colorModeValue } = useDarkMode();
+
   const resetPasswordInitForm = useForm();
 
   const toastError = useToastError();
@@ -86,7 +85,8 @@ export const PageResetPasswordRequest = () => {
               as={RouterLink}
               to="/login"
               variant="link"
-              color={colorModeValue('brand.500', 'brand.300')}
+              color="brand.500"
+              _dark={{ color: 'brand.300' }}
             >
               {t('account:resetPassword.actions.goToLogin')}
             </Button>
@@ -101,9 +101,10 @@ export const PageResetPasswordRequest = () => {
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
         <Box
           p="6"
-          bg={colorModeValue('white', 'blackAlpha.400')}
           borderRadius="md"
           boxShadow="md"
+          bg="white"
+          _dark={{ bg: 'blackAlpha.400' }}
         >
           <Heading size="lg">{t('account:resetPassword.title')}</Heading>
           <Formiz
