@@ -42,7 +42,7 @@ export const PagePassword = () => {
       },
     });
 
-  const submitUpdatePassword = async (values: TODO) => {
+  const submitUpdatePassword = async (values: any) => {
     const { currentPassword, newPassword } = values;
     await changePasswordFinish({ currentPassword, newPassword });
   };

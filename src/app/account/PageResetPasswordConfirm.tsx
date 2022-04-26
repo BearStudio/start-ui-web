@@ -46,7 +46,7 @@ export const PageResetPasswordConfirm = () => {
       },
     });
 
-  const submitResetPasswordFinish = async (values: TODO) => {
+  const submitResetPasswordFinish = async (values: any) => {
     await resetPasswordFinish({
       key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
       newPassword: values.password,

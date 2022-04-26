@@ -48,7 +48,7 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
 type CustomDayPickerOverlayProps = {
   selectedDay?: Date;
   month?: Date;
-  input?: TODO;
+  input?: Element | null;
   classNames?: Record<string, string>;
 };
 
@@ -58,7 +58,7 @@ type CustomDayPickerOverlayProps = {
 // https://github.com/gpbl/react-day-picker/blob/750f6cd808b2ac29772c8df5c497a66e818080e8/docs/src/pages/api/DayPickerInput.js#L163
 const CustomDayPickerOverlay = forwardRef<CustomDayPickerOverlayProps, 'div'>(
   ({ children, input, classNames, selectedDay, month, ...props }, ref) => {
-    const [popperElement, setPopperElement] = useState<TODO>(null);
+    const [popperElement, setPopperElement] = useState<ExplicitAny>(null);
 
     const { styles, attributes } = usePopper(input, popperElement, {
       placement: 'bottom-start',
