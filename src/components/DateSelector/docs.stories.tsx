@@ -46,11 +46,17 @@ export const DateRendering = () => {
               fontSize="sm"
               textTransform="capitalize"
               color="gray.800"
+              _dark={{ color: 'gray.100' }}
               fontWeight="bold"
             >
               {date.format('DD MMM YYYY')}
             </Text>
-            <Text fontSize="xs" textTransform="capitalize" color="gray.600">
+            <Text
+              fontSize="xs"
+              textTransform="capitalize"
+              color="gray.600"
+              _dark={{ color: 'gray.300' }}
+            >
               {date.format(`dddd`)}
             </Text>
           </chakra.button>
