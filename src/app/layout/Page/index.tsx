@@ -11,10 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
-import { useFocusMode } from '@/app/layout';
+import { useFocusMode, useLayoutContext } from '@/app/layout';
 import { useRtl } from '@/hooks/useRtl';
-
-import { useLayoutContext } from '../LayoutContext';
 
 type PageContextValue = {
   nav: React.ReactNode;
@@ -71,15 +69,17 @@ export const PageTopBar = ({
   const theme = useTheme();
 
   useLayoutEffect(() => {
-    const onResize = () => {
-      setHeight(topBarRef.current?.offsetHeight || 0);
-    };
-    onResize();
-    window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
-  }, []);
+    if (isFixed) {
+      const onResize = () => {
+        setHeight(topBarRef.current?.offsetHeight || 0);
+      };
+      onResize();
+      window.addEventListener('resize', onResize);
+      return () => {
+        window.removeEventListener('resize', onResize);
+      };
+    }
+  }, [isFixed]);
 
   const { rtlValue } = useRtl();
 
@@ -93,9 +93,11 @@ export const PageTopBar = ({
         pb="4"
         boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
-        ref={topBarRef}
-        top={isFocusMode ? 0 : theme.layout.topBar.height}
-        style={isFixed ? { position: 'fixed', right: '0', left: '0' } : {}}
+        top={!isFocusMode && isFixed ? theme.layout.topBar.height : 0}
+        ref={isFixed ? topBarRef : null}
+        position={isFixed ? 'fixed' : {}}
+        right={isFixed ? '0' : {}}
+        left={isFixed ? '0' : {}}
         {...rest}
       >
         <Box w="full" h="0" pb="safe-top" />
