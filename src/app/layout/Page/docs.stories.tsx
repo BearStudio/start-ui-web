@@ -58,22 +58,6 @@ export const FocusFixedPageTopBar = () => (
   </Page>
 );
 
-export const FixedPageTopBar = () => (
-  <Layout>
-    <Page>
-      <PageTopBar showBack isFixed onBack={() => alert('Back')}>
-        Page Top Bar
-      </PageTopBar>
-      <PageContent>
-        <Center h={800} borderWidth={1}>
-          Page Content
-        </Center>
-      </PageContent>
-      <PageBottomBar>Page Bottom Bar</PageBottomBar>
-    </Page>
-  </Layout>
-);
-
 export const ContainerSizeSmall = () => (
   <Page containerSize="sm">
     <PageTopBar>Page Top Bar</PageTopBar>
