@@ -58,7 +58,7 @@
     "react-select": "5.2.2",
     "sharp": "0.30.3",
     "swagger-cli": "4.0.4",
-    "swagger-ui-react": "4.9.0",
+    "swagger-ui-react": "4.11.1",
     "zustand": "3.7.1"
   },
   "devDependencies": {

@@ -142,7 +142,11 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   );
 };
 
-export const NavGroup: FC<React.PropsWithChildren<FlexProps>> = ({ children, title, ...rest }) => {
+export const NavGroup: FC<React.PropsWithChildren<FlexProps>> = ({
+  children,
+  title,
+  ...rest
+}) => {
   const { isMenu } = useNavContext();
 
   if (isMenu) {

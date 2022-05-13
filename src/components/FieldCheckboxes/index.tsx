@@ -79,7 +79,9 @@ type FieldCheckboxesProps = FieldProps &
     options?: Option[];
   };
 
-export const FieldCheckboxes: React.FC<React.PropsWithChildren<FieldCheckboxesProps>> = (props) => {
+export const FieldCheckboxes: React.FC<
+  React.PropsWithChildren<FieldCheckboxesProps>
+> = (props) => {
   const {
     errorMessage,
     id,
@@ -253,7 +255,9 @@ type FieldCheckboxItemProps = Omit<CheckboxProps, 'value'> & {
   groups?: string[] | string;
 };
 
-export const FieldCheckboxesItem: React.FC<React.PropsWithChildren<FieldCheckboxItemProps>> = ({
+export const FieldCheckboxesItem: React.FC<
+  React.PropsWithChildren<FieldCheckboxItemProps>
+> = ({
   value,
   groups,
   onChange = () => undefined,
@@ -302,7 +306,9 @@ type FieldCheckboxItemCheckAllProps = CheckboxProps & {
   groups?: string[] | string;
 };
 
-export const FieldCheckboxesCheckAll: React.FC<React.PropsWithChildren<FieldCheckboxItemCheckAllProps>> = ({
+export const FieldCheckboxesCheckAll: React.FC<
+  React.PropsWithChildren<FieldCheckboxItemCheckAllProps>
+> = ({
   groups = [],
   onChange = () => undefined,
   children,

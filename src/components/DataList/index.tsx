@@ -186,7 +186,9 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
 
 export type DataListHeaderProps = DataListRowProps;
 
-export const DataListHeader: FC<React.PropsWithChildren<DataListHeaderProps>> = ({ ...rest }) => {
+export const DataListHeader: FC<
+  React.PropsWithChildren<DataListHeaderProps>
+> = ({ ...rest }) => {
   return (
     <DataListHeaderContext.Provider value={true}>
       <DataListRow
@@ -205,7 +207,9 @@ export const DataListHeader: FC<React.PropsWithChildren<DataListHeaderProps>> = 
 
 export type DataListFooterProps = DataListRowProps;
 
-export const DataListFooter: FC<React.PropsWithChildren<DataListFooterProps>> = ({ ...rest }) => {
+export const DataListFooter: FC<
+  React.PropsWithChildren<DataListFooterProps>
+> = ({ ...rest }) => {
   return (
     <Box mt="auto">
       <Flex

@@ -29,10 +29,9 @@ const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   </chakra.button>
 );
 
-export const DateSelectorPicker: FC<React.PropsWithChildren<DateSelectorPickerProps>> = ({
-  children = defaultChildren,
-  ...rest
-}) => {
+export const DateSelectorPicker: FC<
+  React.PropsWithChildren<DateSelectorPickerProps>
+> = ({ children = defaultChildren, ...rest }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const { date, onDayClick, isOpen, onOpen, onClose } =

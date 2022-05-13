@@ -6,7 +6,7 @@ export const usePaginationFromUrl = () => {
   const [searchParams, setSearchParam] = useSearchParams();
   const page = +(searchParams.get('page') ?? 1);
   const setPage = useCallback(
-    (p) => {
+    (p: number) => {
       const newPage = Math.max(1, p);
       setSearchParam({ page: newPage.toString() });
     },

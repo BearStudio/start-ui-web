@@ -5,7 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { ErrorBoundary } from '@/errors';
 
-export const AuthenticatedRouteGuard: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const AuthenticatedRouteGuard: FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const { isAuthenticated } = useAuthContext();
   const { pathname, search } = useLocation();
   const navigate = useNavigate();

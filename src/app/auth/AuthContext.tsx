@@ -25,13 +25,15 @@ const updateToken = (newToken?: string | null) => {
 
 export const useAuthContext = () => useContext(AuthContext);
 
-export const AuthProvider: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const AuthProvider: FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const [token, setToken] = useState(
     (isBrowser && localStorage.getItem(AUTH_TOKEN_KEY)) ?? null
   );
 
   const handleUpdateToken = useCallback(
-    (newToken) => {
+    (newToken: string) => {
       setToken(newToken);
       updateToken(newToken);
     },
