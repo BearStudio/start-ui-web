@@ -4,7 +4,7 @@ import { RenderOptions, render } from '@testing-library/react';
 
 import { Providers } from '@/Providers';
 
-const CustomWrapper: FC = ({ children }) => {
+const CustomWrapper: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   return <Providers>{children}</Providers>;
 };
 

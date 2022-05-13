@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 export type IconProps = BoxProps & {
-  icon: FC;
+  icon: FC<React.PropsWithChildren<unknown>>;
   iconProps?: ChakraIconProps;
 };
 

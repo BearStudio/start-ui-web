@@ -27,7 +27,7 @@ type ConfirmPopoverProps = PopoverProps & {
   confirmVariant?: string;
 };
 
-export const ConfirmPopover: React.FC<ConfirmPopoverProps> = ({
+export const ConfirmPopover: React.FC<React.PropsWithChildren<ConfirmPopoverProps>> = ({
   children,
   title,
   message,

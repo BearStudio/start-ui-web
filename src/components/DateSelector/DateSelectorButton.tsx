@@ -11,9 +11,7 @@ import { useDateSelectorContext } from './DateSelector';
 
 type DateSelectorPreviousDayButtonProps = IconButtonProps;
 
-export const DateSelectorPreviousDayButton: FC<
-  DateSelectorPreviousDayButtonProps
-> = ({ ...rest }) => {
+export const DateSelectorPreviousDayButton: FC<React.PropsWithChildren<DateSelectorPreviousDayButtonProps>> = ({ ...rest }) => {
   const { date, onDayClick } = useDateSelectorContext();
 
   useEventListener('keydown', (event) => {
@@ -32,9 +30,7 @@ export const DateSelectorPreviousDayButton: FC<
   );
 };
 
-export const DateSelectorNextDayButton: FC<
-  DateSelectorPreviousDayButtonProps
-> = ({ ...rest }) => {
+export const DateSelectorNextDayButton: FC<React.PropsWithChildren<DateSelectorPreviousDayButtonProps>> = ({ ...rest }) => {
   const { date, onDayClick } = useDateSelectorContext();
 
   useEventListener('keydown', (event) => {

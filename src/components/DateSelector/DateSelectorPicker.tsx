@@ -29,7 +29,7 @@ const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   </chakra.button>
 );
 
-export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
+export const DateSelectorPicker: FC<React.PropsWithChildren<DateSelectorPickerProps>> = ({
   children = defaultChildren,
   ...rest
 }) => {

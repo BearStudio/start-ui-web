@@ -21,7 +21,7 @@ export type DateAgoProps = Omit<TooltipProps, 'children'> & {
   format?: string;
 };
 
-export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
+export const DateAgo: FC<React.PropsWithChildren<DateAgoProps>> = forwardRef(function DateAgo(
   { date = new Date(), format, ...rest },
   ref
 ) {
