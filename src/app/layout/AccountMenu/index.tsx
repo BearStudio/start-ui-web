@@ -64,7 +64,7 @@ const AppVersion = ({ ...rest }) => {
         {...rest}
       >
         <Flex
-          d={hasCopied ? 'flex' : 'none'}
+          display={hasCopied ? 'flex' : 'none'}
           position="absolute"
           align="center"
           top="0"
@@ -117,7 +117,7 @@ export const AccountMenu = ({ ...rest }) => {
         color="gray.800"
         _dark={{ color: 'white' }}
       >
-        <MenuGroup title={account?.email} isTruncated>
+        <MenuGroup title={account?.email} noOfLines={1}>
           <MenuItem
             as={Link}
             to="/account"

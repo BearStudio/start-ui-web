@@ -8,15 +8,13 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
+  PopoverTrigger,
   chakra,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import dayjs, { Dayjs } from 'dayjs';
 import DayPicker, { DayPickerProps } from 'react-day-picker';
 import ReactFocusLock from 'react-focus-lock';
-
-// Temp patch to remove after chakra ui V2 upgrade
-import { PopoverTrigger } from '@/components/ConfirmPopover';
 
 import { useDateSelectorContext } from './DateSelector';
 

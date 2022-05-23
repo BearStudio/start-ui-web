@@ -78,7 +78,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
         {...rest}
       >
         <Icon mr="0.5" />
-        <Text as="span" d="block" fontSize={size} isTruncated>
+        <Text as="span" display="block" fontSize={size} noOfLines={1}>
           {options.find((option) => option?.value === by)?.label}
         </Text>
       </MenuButton>

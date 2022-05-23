@@ -213,7 +213,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
             ) : (
               <>
                 <Icon icon={confirmIcon} me={1} />{' '}
-                <Text isTruncated as="span">
+                <Text noOfLines={1} as="span">
                   {confirmText ?? t('components:confirmMenuItem.confirmText')}
                 </Text>
               </>
