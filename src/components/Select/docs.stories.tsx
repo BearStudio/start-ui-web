@@ -16,13 +16,11 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
+  PopoverTrigger,
   Portal,
   Stack,
   useDisclosure,
 } from '@chakra-ui/react';
-
-// Temp patch to remove after chakra ui V2 upgrade
-import { PopoverTrigger } from '@/components/ConfirmPopover';
 
 import { Select } from '.';
 

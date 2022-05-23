@@ -165,7 +165,7 @@ export const PaginationInfo = ({ ...rest }) => {
     },
     components: {
       span: <span />,
-      box: <Box as="span" d={{ base: 'none', sm: 'inline' }} />,
+      box: <Box as="span" display={{ base: 'none', sm: 'inline' }} />,
       spinner: <Spinner size="xs" me="1" />,
     },
   };
