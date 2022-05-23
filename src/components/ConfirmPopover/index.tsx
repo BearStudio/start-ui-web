@@ -11,12 +11,17 @@ import {
   PopoverContent,
   PopoverFooter,
   PopoverProps,
-  PopoverTrigger,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
+// Temp patch to remove after chakra ui V2 upgrade
+import { PopoverTrigger as OrigPopoverTrigger } from '@chakra-ui/react';
 import FocusLock from 'react-focus-lock';
 import { useTranslation } from 'react-i18next';
+
+// Temp patch to remove after chakra ui V2 upgrade
+export const PopoverTrigger: React.FC<{ children: React.ReactNode }> =
+  OrigPopoverTrigger;
 
 type ConfirmPopoverProps = PopoverProps & {
   children: ReactNode;

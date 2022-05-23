@@ -8,7 +8,6 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverTrigger,
   chakra,
   useBreakpointValue,
 } from '@chakra-ui/react';
@@ -16,22 +15,25 @@ import dayjs, { Dayjs } from 'dayjs';
 import DayPicker, { DayPickerProps } from 'react-day-picker';
 import ReactFocusLock from 'react-focus-lock';
 
+// Temp patch to remove after chakra ui V2 upgrade
+import { PopoverTrigger } from '@/components/ConfirmPopover';
+
 import { useDateSelectorContext } from './DateSelector';
 
 type ChildrenFunctionParams = { date: Dayjs; onOpen: () => void };
 type DateSelectorPickerProps = Omit<DayPickerProps, 'children'> & {
-  children?: ({ date, onOpen }: ChildrenFunctionParams) => ReactNode;
+  children?({ date, onOpen }: ChildrenFunctionParams): ReactNode;
 };
-
 const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   <chakra.button onClick={onOpen} px="2" type="button">
     {date.format('DD MMM YYYY')}
   </chakra.button>
 );
 
-export const DateSelectorPicker: FC<
-  React.PropsWithChildren<DateSelectorPickerProps>
-> = ({ children = defaultChildren, ...rest }) => {
+export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
+  children = defaultChildren,
+  ...rest
+}) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const { date, onDayClick, isOpen, onOpen, onClose } =

@@ -33,7 +33,7 @@ const NavContext = React.createContext<NavContextValue>({
 });
 const useNavContext = () => React.useContext(NavContext);
 
-type NavProps = MenuProps & {
+type NavProps = React.PropsWithChildren<MenuProps> & {
   breakpoint?: string;
 };
 
