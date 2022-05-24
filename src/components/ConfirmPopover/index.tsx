@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   HStack,
   Heading,
+  PopoverTrigger as OrigPopoverTrigger, // Temp patch to remove after chakra ui V2 upgrade
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -14,8 +15,6 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
-// Temp patch to remove after chakra ui V2 upgrade
-import { PopoverTrigger as OrigPopoverTrigger } from '@chakra-ui/react';
 import FocusLock from 'react-focus-lock';
 import { useTranslation } from 'react-i18next';
 
