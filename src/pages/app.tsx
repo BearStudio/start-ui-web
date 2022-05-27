@@ -19,7 +19,7 @@ const Loading = () => (
   </Viewport>
 );
 
-const AppComponent = dynamic<React.ReactNode>(
+const AppComponent = dynamic<{}>(
   () => import('@/app/App').then((mod) => mod.App),
   {
     ssr: false,

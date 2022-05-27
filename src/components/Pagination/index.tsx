@@ -73,7 +73,7 @@ export const PaginationContext = React.createContext<PaginationContextValue>({
 });
 
 export const PaginationButtonFirstPage: FC<
-  Omit<IconButtonProps, 'aria-label'>
+  React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
   const { t } = useTranslation();
@@ -93,7 +93,7 @@ export const PaginationButtonFirstPage: FC<
 };
 
 export const PaginationButtonPrevPage: FC<
-  Omit<IconButtonProps, 'aria-label'>
+  React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
   const { t } = useTranslation();
@@ -113,7 +113,7 @@ export const PaginationButtonPrevPage: FC<
 };
 
 export const PaginationButtonLastPage: FC<
-  Omit<IconButtonProps, 'aria-label'>
+  React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
   const { t } = useTranslation();
@@ -133,7 +133,7 @@ export const PaginationButtonLastPage: FC<
 };
 
 export const PaginationButtonNextPage: FC<
-  Omit<IconButtonProps, 'aria-label'>
+  React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
   const { t } = useTranslation();

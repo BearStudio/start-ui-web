@@ -8,7 +8,7 @@ import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';
 import { LayoutContext, TopBar } from '@/app/layout';
 import { Viewport } from '@/components';
 
-export const Layout: FC = ({ children }) => {
+export const Layout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const {
     isOpen: navIsOpen,

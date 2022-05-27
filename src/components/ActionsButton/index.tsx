@@ -8,8 +8,8 @@ export type ActionsButtonProps = Omit<IconButtonProps, 'aria-label'> & {
   label?: string;
 };
 
-export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
-  ({ label, ...rest }, ref) => {
+export const ActionsButton: FC<React.PropsWithChildren<ActionsButtonProps>> =
+  forwardRef(({ label, ...rest }, ref) => {
     const { t } = useTranslation();
     return (
       <IconButton
@@ -29,7 +29,6 @@ export const ActionsButton: FC<ActionsButtonProps> = forwardRef(
         {...rest}
       />
     );
-  }
-);
+  });
 
 ActionsButton.displayName = 'ActionsButton';

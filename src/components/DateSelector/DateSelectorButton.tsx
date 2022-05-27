@@ -12,7 +12,7 @@ import { useDateSelectorContext } from './DateSelector';
 type DateSelectorPreviousDayButtonProps = IconButtonProps;
 
 export const DateSelectorPreviousDayButton: FC<
-  DateSelectorPreviousDayButtonProps
+  React.PropsWithChildren<DateSelectorPreviousDayButtonProps>
 > = ({ ...rest }) => {
   const { date, onDayClick } = useDateSelectorContext();
 
@@ -33,7 +33,7 @@ export const DateSelectorPreviousDayButton: FC<
 };
 
 export const DateSelectorNextDayButton: FC<
-  DateSelectorPreviousDayButtonProps
+  React.PropsWithChildren<DateSelectorPreviousDayButtonProps>
 > = ({ ...rest }) => {
   const { date, onDayClick } = useDateSelectorContext();
 

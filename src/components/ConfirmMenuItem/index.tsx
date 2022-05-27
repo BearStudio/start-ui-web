@@ -98,7 +98,7 @@ type ConfirmMenuItemProps = MenuItemProps & {
   confirmColorScheme?: string;
   confirmContent?: React.ReactNode;
   confirmText?: React.ReactNode;
-  confirmIcon?: React.FC;
+  confirmIcon?: React.FC<React.PropsWithChildren<unknown>>;
 };
 
 export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(

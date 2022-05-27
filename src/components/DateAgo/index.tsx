@@ -21,37 +21,36 @@ export type DateAgoProps = Omit<TooltipProps, 'children'> & {
   format?: string;
 };
 
-export const DateAgo: FC<DateAgoProps> = forwardRef(function DateAgo(
-  { date = new Date(), format, ...rest },
-  ref
-) {
-  const { t } = useTranslation();
-  const [, setForceUpdate] = useState(0);
-  const dayjsDate = dayjs(date);
+export const DateAgo: FC<React.PropsWithChildren<DateAgoProps>> = forwardRef(
+  function DateAgo({ date = new Date(), format, ...rest }, ref) {
+    const { t } = useTranslation();
+    const [, setForceUpdate] = useState(0);
+    const dayjsDate = dayjs(date);
 
-  useEffect(() => {
-    if (date) {
-      const diff = dayjs().diff(dayjs(date));
+    useEffect(() => {
+      if (date) {
+        const diff = dayjs().diff(dayjs(date));
 
-      const timeout = setTimeout(() => {
-        setForceUpdate((x) => x + 1);
-      }, getDelay(diff));
-      return () => clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+          setForceUpdate((x) => x + 1);
+        }, getDelay(diff));
+        return () => clearTimeout(timeout);
+      }
+    }, [date]);
+
+    if (!date) {
+      return null;
     }
-  }, [date]);
 
-  if (!date) {
-    return null;
+    return (
+      <Tooltip
+        ref={ref}
+        label={dayjsDate.format(format ?? t('components:dateAgo.format'))}
+        placement="top-start"
+        {...rest}
+      >
+        {dayjsDate.fromNow()}
+      </Tooltip>
+    );
   }
-
-  return (
-    <Tooltip
-      ref={ref}
-      label={dayjsDate.format(format ?? t('components:dateAgo.format'))}
-      placement="top-start"
-      {...rest}
-    >
-      {dayjsDate.fromNow()}
-    </Tooltip>
-  );
-});
+);

@@ -30,7 +30,9 @@ const useMocksServer = () => {
   return { isLoadingMocks };
 };
 
-export const Providers: FC = ({ children }) => {
+export const Providers: FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const { i18n } = useTranslation();
   const { isLoadingMocks } = useMocksServer();
 

@@ -25,7 +25,7 @@ type DateSelectorProps = {
   onChange: (date: Dayjs) => void;
 };
 
-export const DateSelector: FC<DateSelectorProps> = ({
+export const DateSelector: FC<React.PropsWithChildren<DateSelectorProps>> = ({
   date,
   onChange,
   ...rest

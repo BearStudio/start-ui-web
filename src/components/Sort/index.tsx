@@ -31,13 +31,13 @@ type CustomProps = {
   size?: 'xs' | 'sm' | 'md';
   options?: Array<OptionProps>;
   onChange?(sort: SortValue): void;
-  ascIcon?: FC;
-  descIcon?: FC;
+  ascIcon?: FC<React.PropsWithChildren<unknown>>;
+  descIcon?: FC<React.PropsWithChildren<unknown>>;
 };
 
 type SortProps = Overwrite<ButtonProps, CustomProps>;
 
-export const Sort: FC<SortProps> = ({
+export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
   sort = { by: '', order: 'asc' },
   size = 'xs',
   options = [],

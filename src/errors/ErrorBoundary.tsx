@@ -46,6 +46,6 @@ const ErrorFallback = ({ error }: FallbackProps) => {
   );
 };
 
-export const ErrorBoundary: FC = (props) => {
+export const ErrorBoundary: FC<React.PropsWithChildren<unknown>> = (props) => {
   return <ReactErrorBoundary FallbackComponent={ErrorFallback} {...props} />;
 };
