@@ -1,10 +1,10 @@
 const dayjs = require('dayjs');
-const fs = require('fs');
+const fs = require('node:fs');
 
 const generateAppBuild = () => {
   const getCommitHash = () => {
     try {
-      return require('child_process')
+      return require('node:child_process')
         .execSync('git rev-parse HEAD')
         .toString()
         .trim();
