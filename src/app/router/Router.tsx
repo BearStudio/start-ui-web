@@ -41,7 +41,7 @@ export const Router = ({
               ...(ctx.location.state instanceof Object
                 ? ctx.location.state
                 : {}),
-              from: currentLocationRef.current,
+              __goBack: currentLocationRef.current,
             },
           },
         });

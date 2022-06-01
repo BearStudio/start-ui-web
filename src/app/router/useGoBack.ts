@@ -5,8 +5,8 @@ export const useGoBack = () => {
   const navigate = useNavigate();
 
   return (fallbackRoute?: string) => {
-    if (state instanceof Object && (state as ExplicitAny)?.from) {
-      navigate((state as ExplicitAny)?.from);
+    if (state instanceof Object && (state as ExplicitAny)?.__goBack) {
+      navigate((state as ExplicitAny)?.__goBack);
       return;
     }
     fallbackRoute ? navigate(fallbackRoute) : navigate(-1);
