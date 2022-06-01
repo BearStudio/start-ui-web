@@ -3,10 +3,10 @@ import React, { useEffect } from 'react';
 import { Box, useColorMode } from '@chakra-ui/react';
 import { themes } from '@storybook/theming';
 import { useTranslation } from 'react-i18next';
-import { MemoryRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/Providers';
+import { MemoryRouter } from '../src/app/router/Router';
 import i18nGlobal from '../src/config/i18next';
 import {
   AVAILABLE_LANGUAGES,
