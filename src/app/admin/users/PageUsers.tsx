@@ -280,9 +280,9 @@ export const PageUsers = () => {
                 </HStack>
               </DataListCell>
               <DataListCell colName="id">
-                <Text isTruncated maxW="full" as={Code} fontSize="xs">
+                <Code maxW="full" fontSize="xs">
                   {user.id}
-                </Text>
+                </Code>
               </DataListCell>
               <DataListCell colName="authorities">
                 <Wrap>
