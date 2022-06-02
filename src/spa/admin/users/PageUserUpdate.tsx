@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { useToastError, useToastSuccess } from '@/components/Toast';
@@ -23,7 +23,10 @@ import {
   PageBottomBar,
   PageContent,
   PageTopBar,
-} from '@/spa/layout';
+} from '@/app/layout';
+import { useGoBack } from '@/app/router';
+import { useToastError, useToastSuccess } from '@/components/Toast';
+import { ErrorPage } from '@/components/ErrorPage';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
@@ -32,11 +35,13 @@ export const PageUserUpdate = () => {
   const { t } = useTranslation(['common', 'users']);
 
   const { login } = useParams();
-  const navigate = useNavigate();
+
   const user = useUser(login, {
     refetchOnWindowFocus: false,
     enabled: !!login,
   });
+
+  const goBack = useGoBack('/admin/users');
 
   const form = useForm({ subscribe: false });
 
@@ -69,7 +74,7 @@ export const PageUserUpdate = () => {
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      navigate(-1);
+      goBack();
     },
   });
   const submitEditUser = (values: TODO) => {
@@ -82,7 +87,7 @@ export const PageUserUpdate = () => {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => navigate(-1)}>
+      <PageTopBar showBack onBack={() => goBack()}>
         <HStack spacing="4">
           <Box flex="1">
             {user.isLoading || user.isError ? (
@@ -122,9 +127,7 @@ export const PageUserUpdate = () => {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => navigate(-1)}>
-                  {t('common:actions.cancel')}
-                </Button>
+                <Button onClick={() => goBack()}>{t('common:actions.cancel')}</Button>
                 <Button
                   type="submit"
                   variant="@primary"

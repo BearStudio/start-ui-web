@@ -5,6 +5,10 @@ import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { UserForm } from '@/app/admin/users/UserForm';
+import { useUserCreate } from '@/app/admin/users/users.service';
+import { Page, PageBottomBar, PageContent, PageTopBar } from '@/app/layout';
+import { useGoBack } from '@/app/router';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/spa/admin/users/UserForm';
 import { useUserCreate } from '@/spa/admin/users/users.service';
@@ -17,6 +21,8 @@ export const PageUserCreate = () => {
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
+
+  const goBack = useGoBack('/admin/users');
 
   const createUser = useUserCreate({
     onError: (error) => {
@@ -63,7 +69,7 @@ export const PageUserCreate = () => {
         connect={form}
       >
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => navigate(-1)}>
+          <PageTopBar showBack onBack={() => goBack()}>
             <Heading size="md">{t('users:create.title')}</Heading>
           </PageTopBar>
           <PageContent>
@@ -71,9 +77,7 @@ export const PageUserCreate = () => {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => navigate(-1)}>
-                {t('common:actions.cancel')}
-              </Button>
+              <Button onClick={() => goBack()}>{t('common:actions.cancel')}</Button>
               <Button
                 type="submit"
                 variant="@primary"

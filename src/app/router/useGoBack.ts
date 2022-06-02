@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export const useGoBack = () => {
+export const useGoBack = (defaultFallback?: string) => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -9,6 +9,7 @@ export const useGoBack = () => {
       navigate((state as ExplicitAny)?.__goBack);
       return;
     }
-    fallbackRoute ? navigate(fallbackRoute) : navigate(-1);
+    const fallback = fallbackRoute ?? defaultFallback;
+    fallback ? navigate(fallback) : navigate(-1);
   };
 };
