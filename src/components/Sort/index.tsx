@@ -64,7 +64,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
     <Menu closeOnSelect={false} size={size}>
       <MenuButton
         as={Button}
-        d="inline-block"
+        display="inline-block"
         variant="link"
         size={size}
         overflow="hidden"

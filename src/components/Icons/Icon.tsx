@@ -18,7 +18,7 @@ export const Icon = forwardRef<IconProps, 'span'>(
     return (
       <Box
         as="span"
-        d="inline-block"
+        display="inline-block"
         position="relative"
         w="1em"
         flex="none"

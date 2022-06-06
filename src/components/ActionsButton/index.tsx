@@ -14,7 +14,7 @@ export const ActionsButton: FC<React.PropsWithChildren<ActionsButtonProps>> =
     return (
       <IconButton
         ref={ref}
-        d="inline-flex"
+        display="inline-flex"
         borderRadius="full"
         variant="ghost"
         color="inherit"
