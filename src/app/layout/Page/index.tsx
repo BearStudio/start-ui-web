@@ -93,11 +93,16 @@ export const PageTopBar = ({
         pb="4"
         boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
-        top={!isFocusMode && isFixed ? theme.layout.topBar.height : 0}
-        ref={isFixed ? topBarRef : null}
-        position={isFixed ? 'fixed' : {}}
-        right={isFixed ? '0' : {}}
-        left={isFixed ? '0' : {}}
+        ref={topBarRef}
+        _dark={{ bg: 'gray.900' }}
+        {...(isFixed
+          ? {
+              top: !isFocusMode ? theme.layout.topBar.height : '0',
+              position: 'fixed',
+              right: '0',
+              left: '0',
+            }
+          : {})}
         {...rest}
       >
         <Box w="full" h="0" pb="safe-top" />
