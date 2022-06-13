@@ -34,6 +34,7 @@ yarn dev
 - 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
 - ↔ [Axios](https://github.com/axios/axios)
 - 📅 [Day.js](https://day.js.org/)
+- 👮 [Cypress](https://www.cypress.io/)
 
 👉 [Technology Choices](#technology-choices)
 
@@ -314,3 +315,9 @@ To create React forms, there is a lot of libraries out there.
 Composable, headless & with built-in multi steps.
 
 [GitHub](https://github.com/ivan-dalmet/formiz) · [License MIT](https://github.com/ivan-dalmet/formiz/blob/master/LICENSE)
+
+### Cypress
+
+[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test 
+
+[Cypress](https://github.com/cypress-io/cypress) · [License MIT](https://github.com/cypress-io/cypress/blob/develop/LICENSE)

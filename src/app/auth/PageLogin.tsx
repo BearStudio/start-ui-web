@@ -28,7 +28,7 @@ export const PageLogin = () => {
           bg="white"
           _dark={{ bg: 'blackAlpha.400' }}
         >
-          <Heading size="md" mb="4">
+          <Heading size="md" mb="4" data-test="login-page-heading">
             {t('auth:login.title')}
           </Heading>
           <LoginForm onSuccess={onLogin} />
