@@ -6,7 +6,7 @@ describe('ActionsButton', () => {
   const actionsButtonSelector = '[data-test="actions-button"]';
   const menuListSelector = '[data-test="menu-list"]';
 
-  it('should display an accecible clickable icon', () => {
+  it('should display an accessible clickable icon', () => {
     cy.mount(
       <Menu>
         <MenuButton as={ActionsButton} />
