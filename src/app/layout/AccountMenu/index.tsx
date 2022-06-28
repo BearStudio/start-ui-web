@@ -59,6 +59,7 @@ const AppVersion = ({ ...rest }) => {
         _dark={{
           color: 'gray.200',
           _focus: { bg: 'gray.800' },
+          _hover: { bg: 'gray.600' },
         }}
         onClick={onCopy}
         {...rest}
