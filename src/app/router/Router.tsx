@@ -12,6 +12,11 @@ const removeBasenameFromPathname = (basename: string, pathname: string) => {
   return pathname.replace(new RegExp(`^${basename}`, 'g'), '');
 };
 
+/**
+ *
+ * @description Router with smart goBack in use with useGoBack hook
+ * @returns Router component with automatic __goBack value in state
+ */
 export const Router = ({
   basename,
   history,
