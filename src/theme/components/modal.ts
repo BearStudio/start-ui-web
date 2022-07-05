@@ -5,13 +5,15 @@ import type {
   SystemStyleFunction,
   SystemStyleObject,
 } from '@chakra-ui/theme-tools';
+import { mode } from '@chakra-ui/theme-tools';
 
 const baseStyleOverlay: SystemStyleObject = {
   backdropFilter: 'blur(4px)',
 };
 
-const baseStyleDialog: SystemStyleFunction = () => {
+const baseStyleDialog: SystemStyleFunction = (props) => {
   return {
+    bg: mode('white', 'gray.800')(props),
     mx: 4,
     py: 0,
   };
