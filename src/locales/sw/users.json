@@ -1,0 +1,106 @@
+{
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "Mtumiaji aliyeamilishwa",
+      "description": "Mtumiaji \"{{login}}\" imewezeshwa"
+    },
+    "deactivateUserSuccess": {
+      "title": "Mtumiaji aliyezimwa",
+      "description": "Mtumiaji \"{{login}}\" imezimwa"
+    },
+    "activateUserError": {
+      "title": "Imeshindwa kuwezesha",
+      "description": "Imeshindwa kuwezesha mtumiaji \"{{ingia}}\""
+    },
+    "deactivateUserError": {
+      "title": "Imeshindwa kuzima",
+      "description": "Imeshindwa kulemaza mtumiaji \"{{ingia}}\""
+    },
+    "deleteUserSuccess": {
+      "title": "Mtumiaji amefutwa",
+      "description": "Mtumiaji \"{{ingia}}\" amefutwa kwa mafanikio"
+    },
+    "deleteUserError": {
+      "title": "Imeshindwa kufuta",
+      "description": "Imeshindwa kufuta mtumiaji \"{{ingia}}\""
+    }
+  },
+  "list": {
+    "title": "Usimamizi wa Mtumiaji",
+    "actions": {
+      "createUser": "Unda mtumiaji"
+    }
+  },
+  "data": {
+    "login": {
+      "label": "jina la mtumiaji",
+      "required": "Jina la mtumiaji linahitajika",
+      "alreadyUsed": "Jina la mtumiaji tayari linatumika",
+      "invalid": "Jina la mtumiaji ni batili, usitumie herufi maalum",
+      "tooLong": "Jina la mtumiaji ni refu sana (upeo wa herufi {max})",
+      "tooShort": "Jina la mtumiaji ni fupi mno (dakika za herufi {{min}})"
+    },
+    "email": {
+      "label": "Barua pepe",
+      "required": "Barua pepe inahitajika",
+      "invalid": "Barua pepe ni batili",
+      "alreadyUsed": "Anwani ya barua pepe tayari inatumika",
+      "tooLong": "Barua pepe ni ndefu mno (isizidi herufi {max})",
+      "tooShort": "Barua pepe ni fupi mno (dakika. {min} herufi)"
+    },
+    "id": {
+      "label": "ID"
+    },
+    "authorities": {
+      "label": "Ruhusa",
+      "required": "Ruhusa zinahitajika"
+    },
+    "createdBy": {
+      "label": "Imetengenezwa na"
+    },
+    "modifiedBy": {
+      "label": "Imehaririwa na"
+    },
+    "status": {
+      "label": "Hali",
+      "activated": "Imewashwa",
+      "deactivated": "Isiyotumika"
+    },
+    "firstname": {
+      "label": "Jina la kwanza"
+    },
+    "lastname": {
+      "label": "Jina la familia"
+    },
+    "language": {
+      "label": "Lugha"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Sasisha"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Imesasishwa"
+      }
+    }
+  },
+  "create": {
+    "title": "Unda mtumiaji mpya",
+    "action": {
+      "save": "Unda mtumiaji"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Uundaji umeshindwa"
+      },
+      "updateSuccess": {
+        "title": "Utilisateur créé avec succès"
+      }
+    }
+  }
+}

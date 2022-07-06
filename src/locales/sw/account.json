@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "profile": "Wasifu",
+    "password": "Nenosiri",
+    "myAccount": "Akaunti yangu"
+  },
+  "profile": {
+    "title": "Wasifu",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Imesasishwa"
+      },
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      }
+    },
+    "actions": {
+      "save": "Kulinda"
+    }
+  },
+  "password": {
+    "title": "Nenosiri",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Nenosiri lako limesasishwa"
+      },
+      "updateError": {
+        "title": "Imeshindwa kusasisha nenosiri"
+      }
+    },
+    "actions": {
+      "changePassword": "Badilisha neno la siri"
+    }
+  },
+  "resetPassword": {
+    "title": "Weka upya nenosiri",
+    "actions": {
+      "cancel": "kurudi",
+      "goToLogin": "Nenda kwa kuingia",
+      "reset": "weka upya",
+      "send": "Kutuma barua pepe"
+    },
+    "feedbacks": {
+      "initSuccess": {
+        "title": "Weka upya barua pepe iliyotumwa kwa mafanikio!",
+        "description": "Ikiwa kuna akaunti iliyo na anwani <strong>{{email}}</strong> utapokea barua pepe ya kusasisha nenosiri lako."
+      },
+      "initError": {
+        "title": "Kuweka upya nenosiri kumeshindwa"
+      },
+      "confirmSuccess": {
+        "title": "Nenosiri lako limewekwa upya",
+        "description": "Sasa unaweza kuunganisha"
+      },
+      "confirmError": {
+        "title": "Kuweka upya nenosiri kumeshindwa"
+      }
+    }
+  },
+  "activate": {
+    "feedbacks": {
+      "activationLoading": {
+        "title": "Uanzishaji wa Akaunti..."
+      },
+      "activationSuccess": {
+        "title": "Uwezeshaji wa akaunti umefaulu"
+      },
+      "activationError": {
+        "title": "Imeshindwa kuwezesha akaunti"
+      }
+    }
+  },
+  "data": {
+    "firstname": {
+      "label": "Jina la kwanza",
+      "required": "Jina la kwanza linahitajika"
+    },
+    "lastname": {
+      "label": "Jina la familia",
+      "required": "Jina la familia linahitajika"
+    },
+    "email": {
+      "label": "Barua pepe",
+      "required": " Barua pepe inahitajika",
+      "invalid": "Barua pepe ni batili",
+      "resetHelper": "Weka barua pepe uliyotumia kujiandikisha",
+      "alreadyUsed": "Anwani ya barua pepe tayari inatumika",
+      "tooLong": "Barua pepe ni ndefu mno (isizidi herufi {max})",
+      "tooShort": "Barua pepe ni fupi mno (dakika. {min} herufi)"
+    },
+    "language": {
+      "label": "Lugha"
+    },
+    "password": {
+      "label": "Nenosiri",
+      "tooShort": "Nenosiri ni fupi mno",
+      "tooLong": "Nenosiri ni refu sana (herufi {max} isizidi.)",
+      "required": "Nenosiri linahitajika"
+    },
+    "currentPassword": {
+      "incorrect": "Nenosiri batili la sasa",
+      "label": "Nenosiri la sasa",
+      "required": "Nenosiri la sasa linahitajika"
+    },
+    "newPassword": {
+      "label": "Nenosiri Mpya",
+      "required": "Nenosiri jipya linahitajika"
+    },
+    "confirmNewPassword": {
+      "label": "Thibitisha nenosiri jipya",
+      "required": "Uthibitishaji wa nenosiri unahitajika",
+      "notEqual": "Nywila mpya lazima ziwe sawa"
+    },
+    "login": {
+      "alreadyUsed": "Jina la mtumiaji tayari linatumika",
+      "invalid": "Jina la mtumiaji ni batili, usitumie herufi maalum",
+      "label": "jina la mtumiaji",
+      "required": "Jina la mtumiaji linahitajika",
+      "tooLong": "Jina la mtumiaji ni refu sana (isizidi herufi {max})",
+      "tooShort": "Jina la mtumiaji ni fupi mno (dakika za herufi {{min}})"
+    }
+  },
+  "register": {
+    "actions": {
+      "alreadyHaveAnAccount": "Je, tayari una akaunti?",
+      "create": "Fungua akaunti",
+      "goToLogin": "Nenda kwa kuingia",
+      "login": "Ingia"
+    },
+    "feedbacks": {
+      "registrationError": {
+        "title": "Usajili umeshindwa"
+      },
+      "registrationSuccess": {
+        "title": "Akaunti imeundwa !",
+        "description": "Tafadhali angalia kisanduku pokezi chako cha barua pepe <strong>{{email}}</strong> ili kuamilisha akaunti yako"
+      }
+    },
+    "title": "Sajili"
+  }
+}
