@@ -8,10 +8,11 @@ import {
   MenuItemProps,
   Text,
   chakra,
+  createStylesContext,
   forwardRef,
   useMenuItem,
   useMenuState,
-  useStyles,
+  useMultiStyleConfig,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
@@ -19,6 +20,8 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { Icon } from '@/components';
 
 export type StyledMenuItemProps = HTMLChakraProps<'button'>;
+
+const [StylesProvider, useStyles] = createStylesContext('Menu');
 
 const StyledMenuItem = forwardRef<StyledMenuItemProps, 'button'>(
   (props, ref) => {
@@ -122,6 +125,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const { onClose: onCloseMenu } = useMenuState();
+    const styles = useMultiStyleConfig('Menu');
 
     const handleClickConfirm = (
       event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -178,49 +182,51 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       : {};
 
     return (
-      <MenuItem
-        position="relative"
-        onClick={handleClickConfirm}
-        ref={ref}
-        icon={icon}
-        {...rest}
-        {...confirmActiveProps}
-      >
-        <Flex
-          as="span"
-          alignItems="center"
-          opacity={isConfirmActive ? 0 : undefined}
+      <StylesProvider value={styles}>
+        <MenuItem
+          position="relative"
+          onClick={handleClickConfirm}
+          ref={ref}
+          icon={icon}
+          {...rest}
+          {...confirmActiveProps}
         >
-          {children}
-        </Flex>
-
-        {isConfirmActive && (
           <Flex
-            position="absolute"
-            top={0}
-            insetStart={0}
-            insetEnd={0}
-            bottom={0}
-            px={3}
             as="span"
-            fontSize="sm"
             alignItems="center"
-            color={`${confirmColorScheme}.500`}
-            _dark={{ color: 'white' }}
+            opacity={isConfirmActive ? 0 : undefined}
           >
-            {confirmContent ? (
-              confirmContent
-            ) : (
-              <>
-                <Icon icon={confirmIcon} me={1} />{' '}
-                <Text noOfLines={1} as="span">
-                  {confirmText ?? t('components:confirmMenuItem.confirmText')}
-                </Text>
-              </>
-            )}
+            {children}
           </Flex>
-        )}
-      </MenuItem>
+
+          {isConfirmActive && (
+            <Flex
+              position="absolute"
+              top={0}
+              insetStart={0}
+              insetEnd={0}
+              bottom={0}
+              px={3}
+              as="span"
+              fontSize="sm"
+              alignItems="center"
+              color={`${confirmColorScheme}.500`}
+              _dark={{ color: 'white' }}
+            >
+              {confirmContent ? (
+                confirmContent
+              ) : (
+                <>
+                  <Icon icon={confirmIcon} me={1} />{' '}
+                  <Text noOfLines={1} as="span">
+                    {confirmText ?? t('components:confirmMenuItem.confirmText')}
+                  </Text>
+                </>
+              )}
+            </Flex>
+          )}
+        </MenuItem>
+      </StylesProvider>
     );
   }
 );
