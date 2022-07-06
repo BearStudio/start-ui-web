@@ -1,0 +1,208 @@
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  ButtonGroup,
+  useDisclosure,
+ } from '@chakra-ui/react'
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="StyleGuide/Modals" />
+
+# Modals
+
+```jsx
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+```
+
+## Default Modal
+
+<Canvas>
+  <Story name="Default">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis ullam esse aperiam, vitae aliquam ipsum sapiente possimus nostrum, temporibus facere consequuntur magnam error dicta consectetur asperiores tempore omnis quasi aliquid.
+              </ModalBody>
+              <ModalFooter>
+                <ButtonGroup justifyContent="space-between" w="full">
+                  <Button onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                </ButtonGroup>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>
+
+## Without Header
+
+<Canvas>
+  <Story name="WithoutHeader">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalBody>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis ullam esse aperiam, vitae aliquam ipsum sapiente possimus nostrum, temporibus facere consequuntur magnam error dicta consectetur asperiores tempore omnis quasi aliquid.
+              </ModalBody>
+              <ModalFooter>
+                <ButtonGroup justifyContent="space-between" w="full">
+                  <Button onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                </ButtonGroup>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>
+
+
+## Without Body
+
+<Canvas>
+  <Story name="WithoutBody">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalFooter>
+                <ButtonGroup justifyContent="space-between" w="full">
+                  <Button onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                </ButtonGroup>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>
+
+## Without Footer
+
+<Canvas>
+  <Story name="WithoutFooter">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis ullam esse aperiam, vitae aliquam ipsum sapiente possimus nostrum, temporibus facere consequuntur magnam error dicta consectetur asperiores tempore omnis quasi aliquid.
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>
+
+
+## Body Only
+
+<Canvas>
+  <Story name="BodyOnly">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis ullam esse aperiam, vitae aliquam ipsum sapiente possimus nostrum, temporibus facere consequuntur magnam error dicta consectetur asperiores tempore omnis quasi aliquid.
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>
+
+
+## Modal Full
+
+<Canvas>
+  <Story name="Full">
+    {(() => {
+      const { isOpen, onOpen, onClose } = useDisclosure()
+      return (
+        <>
+          <Button onClick={onOpen}>Open Modal</Button>
+          <Modal isOpen={isOpen} onClose={onClose} size="full">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis ullam esse aperiam, vitae aliquam ipsum sapiente possimus nostrum, temporibus facere consequuntur magnam error dicta consectetur asperiores tempore omnis quasi aliquid.
+              </ModalBody>
+              <ModalFooter>
+                <ButtonGroup justifyContent="space-between" w="full">
+                  <Button onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                </ButtonGroup>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </>
+      )
+    })()}
+  </Story>
+</Canvas>

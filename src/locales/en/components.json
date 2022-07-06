@@ -8,6 +8,10 @@
   "confirmMenuItem": {
     "confirmText": "Click to confirm"
   },
+  "confirmModal": {
+    "confirmText": "Confirm",
+    "heading": "Are you sure?"
+  },
   "confirmPopover": {
     "confirmText": "Confirm",
     "heading": "Are you sure?"

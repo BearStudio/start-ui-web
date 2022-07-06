@@ -8,6 +8,10 @@
   "confirmMenuItem": {
     "confirmText": "انقر للتأكيد"
   },
+  "confirmModal": {
+    "confirmText": "أكد",
+    "heading": "اهل انت متأكد ؟"
+  },
   "confirmPopover": {
     "confirmText": "أكد",
     "heading": "اهل انت متأكد ؟"

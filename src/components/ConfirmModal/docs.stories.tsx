@@ -2,38 +2,38 @@ import React from 'react';
 
 import { Button } from '@chakra-ui/react';
 
-import { ConfirmPopover } from '.';
+import { ConfirmModal } from '.';
 
 export default {
-  title: 'Components/ConfirmPopover',
+  title: 'Components/ConfirmModal',
 };
 
 export const Default = () => {
   return (
-    <ConfirmPopover onConfirm={() => alert('Custom Action')}>
-      <Button>Trigger Popover</Button>
-    </ConfirmPopover>
+    <ConfirmModal onConfirm={() => alert('Custom Action')}>
+      <Button>Trigger Modal</Button>
+    </ConfirmModal>
   );
 };
 
 export const WithCustomParameters = () => {
   return (
-    <ConfirmPopover
-      title="Popover Title"
+    <ConfirmModal
+      title="ConfirmModal Title"
       message="Custom message"
       onConfirm={() => alert('Custom Action')}
       confirmText="Custom Text"
       confirmVariant="@danger"
     >
-      <Button>Trigger Popover</Button>
-    </ConfirmPopover>
+      <Button>Trigger Modal</Button>
+    </ConfirmModal>
   );
 };
 
 export const EnabledFalse = () => {
   return (
-    <ConfirmPopover onConfirm={() => alert('Custom Action')} isEnabled={false}>
+    <ConfirmModal onConfirm={() => alert('Custom Action')} isEnabled={false}>
       <Button>Trigger Action</Button>
-    </ConfirmPopover>
+    </ConfirmModal>
   );
 };

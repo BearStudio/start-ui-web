@@ -1,0 +1,105 @@
+import { Alert, AlertTitle, AlertDescription, AlertIcon, Stack, Box} from '@chakra-ui/react'
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="StyleGuide/Alerts" />
+
+# Alerts
+
+```jsx
+import { Alert, AlertTitle, AlertDescription, AlertIcon } from '@chakra-ui/react'
+```
+
+## Default Alert
+
+<Canvas>
+  <Story name="Default">
+    <Stack>
+      <Alert>
+        <AlertDescription>Description</AlertDescription>
+      </Alert>
+      <Alert>
+        <AlertTitle>Title</AlertTitle>
+      </Alert>
+      <Alert>
+        <AlertTitle>Title</AlertTitle>
+        <AlertDescription>Description</AlertDescription>
+      </Alert>
+      <Alert>
+        <AlertTitle>Title</AlertTitle>
+        <AlertDescription>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae odio distinctio eos sequi, voluptates sit voluptas fuga perspiciatis nostrum excepturi cum expedita itaque in assumenda, sed voluptatum non accusantium enim.</AlertDescription>
+      </Alert>
+      <Alert>
+        <AlertIcon />
+        <AlertTitle>Title</AlertTitle>
+        <AlertDescription>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae odio distinctio eos sequi, voluptates sit voluptas fuga perspiciatis nostrum excepturi cum expedita itaque in assumenda, sed voluptatum non accusantium enim.</AlertDescription>
+      </Alert>
+      <Alert>
+        <AlertIcon />
+        <AlertTitle>Title</AlertTitle>
+      </Alert>
+    </Stack>
+  </Story>
+</Canvas>
+
+
+## Success Alert
+
+<Canvas>
+  <Story name="Success">
+    <Alert status="success">
+      <AlertIcon />
+      <AlertTitle>Success!</AlertTitle>
+      <AlertDescription>Data uploaded to the server. Fire on!</AlertDescription>
+    </Alert>
+  </Story>
+</Canvas>
+
+## Warning Alert
+
+<Canvas>
+  <Story name="Warning">
+    <Alert status="warning">
+      <AlertIcon />
+      <AlertTitle>Warning!</AlertTitle>
+      <AlertDescription>Seems your account is about expire, upgrade now.</AlertDescription>
+    </Alert>
+  </Story>
+</Canvas>
+
+## Error Alert
+
+<Canvas>
+  <Story name="Error">
+    <Alert status="error">
+      <AlertIcon />
+      <AlertTitle>Your browser is outdated!</AlertTitle>
+      <AlertDescription>Your Chakra experience may be degraded.</AlertDescription>
+    </Alert>
+  </Story>
+</Canvas>
+
+
+## Info Alert
+
+<Canvas>
+  <Story name="Info">
+    <Alert status="info">
+      <AlertIcon />
+      <AlertTitle>Info</AlertTitle>
+      <AlertDescription>Chakra is going live on August 30th. Get ready!</AlertDescription>
+    </Alert>
+  </Story>
+</Canvas>
+
+
+## Loading Alert
+
+<Canvas>
+  <Story name="Loading">
+    <Alert status="loading">
+      <AlertIcon />
+      <AlertTitle>Processing</AlertTitle>
+      <AlertDescription>We are validating your order...</AlertDescription>
+    </Alert>
+  </Story>
+</Canvas>

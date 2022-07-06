@@ -1,5 +1,6 @@
 export * from './ActionsButton';
 export * from './ConfirmMenuItem';
+export * from './ConfirmModal';
 export * from './ConfirmPopover';
 export * from './DataList';
 export * from './DateAgo';

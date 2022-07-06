@@ -1,0 +1,153 @@
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+  Portal,
+  Button,
+  ButtonGroup,
+  useDisclosure,
+ } from '@chakra-ui/react'
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="StyleGuide/Popovers" />
+
+# Popovers
+
+```jsx
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from '@chakra-ui/react'
+```
+
+## Default Popover
+
+<Canvas>
+  <Story name="Default">
+    <Popover>
+      <PopoverTrigger>
+        <Button>Trigger</Button>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Confirmation!</PopoverHeader>
+          <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+          <PopoverFooter>
+            <ButtonGroup size="sm" justifyContent="space-between" w="full">
+              <Button>Cancel</Button>
+              <Button variant="@primary">Action</Button>
+            </ButtonGroup>
+          </PopoverFooter>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  </Story>
+</Canvas>
+
+
+
+## Without header
+
+<Canvas>
+  <Story name="WithoutHeader">
+    <Popover>
+      <PopoverTrigger>
+        <Button>Trigger</Button>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+          <PopoverFooter>
+            <ButtonGroup size="sm" justifyContent="space-between" w="full">
+              <Button>Cancel</Button>
+              <Button variant="@primary">Action</Button>
+            </ButtonGroup>
+          </PopoverFooter>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  </Story>
+</Canvas>
+
+
+## Without Body
+
+<Canvas>
+  <Story name="WithoutBody">
+    <Popover>
+      <PopoverTrigger>
+        <Button>Trigger</Button>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Confirmation!</PopoverHeader>
+          <PopoverFooter>
+            <ButtonGroup size="sm" justifyContent="space-between" w="full">
+              <Button>Cancel</Button>
+              <Button variant="@primary">Action</Button>
+            </ButtonGroup>
+          </PopoverFooter>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  </Story>
+</Canvas>
+
+
+## Without Footer
+
+<Canvas>
+  <Story name="WithoutFooter">
+    <Popover>
+      <PopoverTrigger>
+        <Button>Trigger</Button>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Confirmation!</PopoverHeader>
+          <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  </Story>
+</Canvas>
+
+
+## Body Only
+
+<Canvas>
+  <Story name="BodyOnly">
+    <Popover>
+      <PopoverTrigger>
+        <Button>Trigger</Button>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  </Story>
+</Canvas>
