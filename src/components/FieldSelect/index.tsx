@@ -32,11 +32,12 @@ export const FieldSelect = <
     id,
     isValid,
     isSubmitted,
+    isPristine,
     resetKey,
     setValue,
     value,
     otherProps,
-  } = useField(props);
+  } = useField({ debounce: 0, ...props });
   const { required } = props;
   const {
     children,
@@ -55,7 +56,7 @@ export const FieldSelect = <
     keyof FieldProps
   >;
   const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
   useEffect(() => {
     setIsTouched(false);
@@ -79,6 +80,7 @@ export const FieldSelect = <
         value={
           options?.find((option: TODO) => option.value === value) ?? undefined
         }
+        onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
         onChange={(fieldValue: TODO) =>

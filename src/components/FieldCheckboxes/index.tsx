@@ -91,7 +91,7 @@ export const FieldCheckboxes: React.FC<
     setValue,
     value,
     otherProps,
-  } = useField(props);
+  } = useField({ debounce: 0, ...props });
   const {
     itemKey,
     children,
@@ -235,7 +235,7 @@ export const FieldCheckboxes: React.FC<
         {!!children ? (
           children
         ) : (
-          <Wrap spacing="4">
+          <Wrap spacing="4" overflow="visible">
             {options?.map((option) => (
               <WrapItem key={String(option.value)}>
                 <FieldCheckboxesItem value={option.value}>

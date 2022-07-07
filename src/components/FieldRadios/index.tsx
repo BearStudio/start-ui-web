@@ -26,7 +26,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     setValue,
     value,
     otherProps,
-  } = useField(props);
+  } = useField({ debounce: 0, ...props });
   const { required } = props;
   const {
     children,
@@ -56,7 +56,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
   return (
     <FormGroup {...formGroupProps}>
       <RadioGroup size={size} id={id} value={value || []} onChange={setValue}>
-        <Wrap spacing="4">
+        <Wrap spacing="4" overflow="visible">
           {options.map((option) => (
             <WrapItem key={option.value}>
               <Radio

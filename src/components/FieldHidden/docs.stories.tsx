@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Stack } from '@chakra-ui/react';
+import { Box, Button, Stack } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 import { isRequired } from '@formiz/validations';
 
@@ -12,12 +12,14 @@ export default {
 
 export const Default = () => (
   <Formiz autoForm>
-    <Stack spacing={6}>
+    <Stack spacing={4}>
       <FieldHidden
         name="error"
         validations={[{ rule: isRequired(), message: 'Field required' }]}
       />
-      <Button type="submit">Submit</Button>
+      <Box>
+        <Button type="submit">Submit</Button>
+      </Box>
     </Stack>
   </Formiz>
 );

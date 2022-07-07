@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FieldProps, useField, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +19,10 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     id,
     isValid,
     isSubmitted,
+    isPristine,
     setValue,
     value,
+    resetKey,
     otherProps,
   } = useField({
     debounce: 0,
@@ -29,7 +31,12 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
   const { children, label, placeholder, helper, size, ...rest } =
     otherProps as Omit<FieldDayPickerProps, keyof FieldProps>;
   const { required } = props;
-  const showError = !isValid && isSubmitted;
+  const [isTouched, setIsTouched] = useState(false);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
+
+  useEffect(() => {
+    setIsTouched(false);
+  }, [resetKey]);
 
   const formGroupProps = {
     errorMessage,
@@ -60,6 +67,8 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
         id={id}
         value={value ?? ''}
         onChange={handleChange}
+        onFocus={() => setIsTouched(false)}
+        onBlur={() => setIsTouched(true)}
         placeholder={placeholder ? String(placeholder) : ''}
       />
       {children}

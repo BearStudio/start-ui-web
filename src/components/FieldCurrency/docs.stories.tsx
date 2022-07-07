@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Stack } from '@chakra-ui/react';
+import { Box, Button, Stack } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 
 import { FieldCurrency } from './index';
@@ -11,7 +11,7 @@ export default {
 
 export const Default = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
+    <Stack spacing={4}>
       <FieldCurrency
         name="demo-currency"
         label="Currency"
@@ -45,7 +45,9 @@ export const Default = () => (
         helper="This is an helper"
         required="Currency is required"
       />
-      <Button type="submit">Submit</Button>
+      <Box>
+        <Button type="submit">Submit</Button>
+      </Box>
     </Stack>
   </Formiz>
 );

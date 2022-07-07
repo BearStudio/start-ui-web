@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Stack } from '@chakra-ui/react';
+import { Box, Button, Stack } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 
 import { FieldDayPicker } from './index';
@@ -11,7 +11,7 @@ export default {
 
 export const Default = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
+    <Stack spacing={4}>
       <FieldDayPicker
         name="demo"
         label="Date"
@@ -19,7 +19,9 @@ export const Default = () => (
         helper="This is an helper"
         required="Date is required"
       />
-      <Button type="submit">Submit</Button>
+      <Box>
+        <Button type="submit">Submit</Button>
+      </Box>
     </Stack>
   </Formiz>
 );
