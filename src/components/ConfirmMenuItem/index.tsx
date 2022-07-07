@@ -64,6 +64,8 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
     ...rest
   } = props;
 
+  const styles = useMultiStyleConfig('Menu', props);
+
   const menuItemProps = useMenuItem(rest, ref) as MenuItemProps;
 
   const shouldWrap = icon || command;
@@ -77,22 +79,24 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
   );
 
   return (
-    <StyledMenuItem
-      {...menuItemProps}
-      onClick={(e) => {
-        rest?.onClick?.(e);
-      }}
-    >
-      {icon && (
-        <MenuIcon fontSize="0.8em" marginEnd={iconSpacing}>
-          {icon}
-        </MenuIcon>
-      )}
-      {_children}
-      {command && (
-        <MenuCommand marginStart={commandSpacing}>{command}</MenuCommand>
-      )}
-    </StyledMenuItem>
+    <StylesProvider value={styles}>
+      <StyledMenuItem
+        {...menuItemProps}
+        onClick={(e: any) => {
+          rest?.onClick?.(e);
+        }}
+      >
+        {icon && (
+          <MenuIcon fontSize="0.8em" marginEnd={iconSpacing}>
+            {icon}
+          </MenuIcon>
+        )}
+        {_children}
+        {command && (
+          <MenuCommand marginStart={commandSpacing}>{command}</MenuCommand>
+        )}
+      </StyledMenuItem>
+    </StylesProvider>
   );
 });
 
@@ -125,7 +129,6 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const { onClose: onCloseMenu } = useMenuState();
-    const styles = useMultiStyleConfig('Menu');
 
     const handleClickConfirm = (
       event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -182,51 +185,49 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       : {};
 
     return (
-      <StylesProvider value={styles}>
-        <MenuItem
-          position="relative"
-          onClick={handleClickConfirm}
-          ref={ref}
-          icon={icon}
-          {...rest}
-          {...confirmActiveProps}
+      <MenuItem
+        position="relative"
+        onClick={handleClickConfirm}
+        ref={ref}
+        icon={icon}
+        {...rest}
+        {...confirmActiveProps}
+      >
+        <Flex
+          as="span"
+          alignItems="center"
+          opacity={isConfirmActive ? 0 : undefined}
         >
-          <Flex
-            as="span"
-            alignItems="center"
-            opacity={isConfirmActive ? 0 : undefined}
-          >
-            {children}
-          </Flex>
+          {children}
+        </Flex>
 
-          {isConfirmActive && (
-            <Flex
-              position="absolute"
-              top={0}
-              insetStart={0}
-              insetEnd={0}
-              bottom={0}
-              px={3}
-              as="span"
-              fontSize="sm"
-              alignItems="center"
-              color={`${confirmColorScheme}.500`}
-              _dark={{ color: 'white' }}
-            >
-              {confirmContent ? (
-                confirmContent
-              ) : (
-                <>
-                  <Icon icon={confirmIcon} me={1} />{' '}
-                  <Text noOfLines={1} as="span">
-                    {confirmText ?? t('components:confirmMenuItem.confirmText')}
-                  </Text>
-                </>
-              )}
-            </Flex>
-          )}
-        </MenuItem>
-      </StylesProvider>
+        {isConfirmActive && (
+          <Flex
+            position="absolute"
+            top={0}
+            insetStart={0}
+            insetEnd={0}
+            bottom={0}
+            px={3}
+            as="span"
+            fontSize="sm"
+            alignItems="center"
+            color={`${confirmColorScheme}.500`}
+            _dark={{ color: 'white' }}
+          >
+            {confirmContent ? (
+              confirmContent
+            ) : (
+              <>
+                <Icon icon={confirmIcon} me={1} />{' '}
+                <Text noOfLines={1} as="span">
+                  {confirmText ?? t('components:confirmMenuItem.confirmText')}
+                </Text>
+              </>
+            )}
+          </Flex>
+        )}
+      </MenuItem>
     );
   }
 );
