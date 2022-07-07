@@ -26,17 +26,18 @@ export const DateAgo: FC<React.PropsWithChildren<DateAgoProps>> = forwardRef(
     const { t } = useTranslation();
     const [, setForceUpdate] = useState(0);
     const dayjsDate = dayjs(date);
+    const dateFormatted = dayjsDate.format();
 
     useEffect(() => {
-      if (date) {
-        const diff = dayjs().diff(dayjs(date));
+      if (dateFormatted) {
+        const diff = dayjs().diff(dayjs(dateFormatted));
 
         const timeout = setTimeout(() => {
           setForceUpdate((x) => x + 1);
         }, getDelay(diff));
         return () => clearTimeout(timeout);
       }
-    }, [date]);
+    }, [dateFormatted]);
 
     if (!date) {
       return null;
