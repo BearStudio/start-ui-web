@@ -26,6 +26,7 @@ export const FieldInput = (props: FieldInputProps) => {
     errorMessage,
     id,
     isValid,
+    isPristine,
     isSubmitted,
     isValidating,
     resetKey,
@@ -46,7 +47,7 @@ export const FieldInput = (props: FieldInputProps) => {
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
   useEffect(() => {
     setIsTouched(false);
@@ -70,6 +71,7 @@ export const FieldInput = (props: FieldInputProps) => {
           id={id}
           value={value ?? ''}
           onChange={(e) => setValue(e.target.value)}
+          onFocus={() => setIsTouched(false)}
           onBlur={() => setIsTouched(true)}
           placeholder={placeholder ? String(placeholder) : ''}
           autoFocus={autoFocus}

@@ -23,6 +23,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
     isValid,
     isSubmitted,
     isValidating,
+    isPristine,
     resetKey,
     setValue,
     value,
@@ -41,7 +42,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
   } = otherProps as Omit<FieldCurrencyProps, keyof FieldProps>;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
   useEffect(() => {
     setIsTouched(false);
@@ -64,6 +65,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
           id={id}
           value={value ?? null}
           onChange={setValue}
+          onFocus={() => setIsTouched(false)}
           onBlur={() => setIsTouched(true)}
           placeholder={placeholder}
           currency={currency}

@@ -21,7 +21,7 @@ export const FieldBooleanCheckbox = (props: FieldBooleanCheckboxProps) => {
     setValue,
     value,
     otherProps,
-  } = useField(props);
+  } = useField({ debounce: 0, ...props });
   const { required } = props;
   const {
     children,
