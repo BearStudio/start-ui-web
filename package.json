@@ -10,6 +10,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "postinstall": "yarn theme:generate-typing",
     "test": "cypress open",
     "test:ci": "cypress run --component",
     "dev": "yarn docs:build && next dev",
@@ -22,6 +23,7 @@
     "storybook:build": "build-storybook && mv ./storybook-static ./public/storybook",
     "static:build": "yarn build && next export",
     "static:serve": "yarn static:build && npx servor out app.html 5000",
+    "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
   },
   "lint-staged": {
@@ -64,6 +66,7 @@
     "zustand": "3.7.1"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "2.1.0",
     "@babel/core": "7.17.8",
     "@babel/parser": "7.17.8",
     "@next/eslint-plugin-next": "12.1.0",
