@@ -74,6 +74,16 @@ yarn dev
 yarn storybook
 ```
 
+### Update theme typing
+
+When adding or updating theme components, component variations, sizes, colors and other theme foundations, you can extend the internal theme typings to provide nice autocomplete.
+
+Just run the following commmand after updating the theme:
+
+```bash
+yarn theme:generate-typing
+```
+
 ### Development with [MirageJS](https://miragejs.com/) (mock)
 
 **This is the default behavior.**
@@ -318,6 +328,6 @@ Composable, headless & with built-in multi steps.
 
 ### Cypress
 
-[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test 
+[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test
 
 [Cypress](https://github.com/cypress-io/cypress) · [License MIT](https://github.com/cypress-io/cypress/blob/develop/LICENSE)
