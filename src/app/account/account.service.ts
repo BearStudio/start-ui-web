@@ -42,10 +42,15 @@ export const useAccount = (
   return { account, isAdmin, ...rest };
 };
 
+type AccountError = {
+  title: string;
+  errorKey: 'userexists' | 'emailexists';
+};
+
 export const useCreateAccount = (
   config: UseMutationOptions<
     Account,
-    AxiosError,
+    AxiosError<AccountError>,
     Pick<Account, 'login' | 'email' | 'langKey'> & { password: string }
   > = {}
 ) => {
