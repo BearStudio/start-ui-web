@@ -24,6 +24,7 @@
     "static:build": "yarn build && next export",
     "static:serve": "yarn static:build && npx servor out app.html 5000",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
+    "theme:generate-icons": "svgr src/components/Icons/svg-sources",
     "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
   },
   "lint-staged": {
@@ -75,6 +76,7 @@
     "@storybook/addon-links": "6.4.19",
     "@storybook/react": "6.4.19",
     "@storybook/theming": "6.4.19",
+    "@svgr/cli": "6.2.1",
     "@trivago/prettier-plugin-sort-imports": "3.2.0",
     "@types/css-mediaquery": "0.1.1",
     "@types/jest": "27.4.1",
