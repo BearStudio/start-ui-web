@@ -12,7 +12,7 @@ import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 
 type UserMutateError = {
   title: string;
-  errorKey: string;
+  errorKey: 'userexists' | 'emailexists';
 };
 
 const usersKeys = {
