@@ -52,7 +52,6 @@ const SelectInner = <
     isCreatable,
     isError,
     size = 'md',
-    loadingMessage,
     formatCreateLabel,
     placeholder,
     loadOptions = () => new Promise<void>((resolve) => resolve()),
@@ -274,7 +273,6 @@ const SelectInner = <
       inputId={id}
       styles={selectStyle}
       menuPortalTarget={document.body}
-      {...(loadingMessage ? { loadingMessage: () => loadingMessage } : {})}
       {...(formatCreateLabel ? { formatCreateLabel } : {})}
       placeholder={placeholder ? String(placeholder) : 'Select...'}
       menuPlacement="auto"
