@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/app/auth/AuthContext';
 import { LoginModalInterceptor } from '@/app/auth/LoginModalInterceptor';
 import { LayoutContext, TopBar } from '@/app/layout';
-import { Viewport } from '@/components';
+import { Viewport } from '@/components/Viewport';
 
 export const Layout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState(false);

@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 import { MainMenu, useLayoutContext } from '@/app/layout';
-import { Logo } from '@/components';
+import { Logo } from '@/components/Logo';
 import { useRtl } from '@/hooks/useRtl';
 
 export const NavDrawer = ({ ...rest }) => {

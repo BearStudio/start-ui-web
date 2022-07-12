@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { FiCalendar } from 'react-icons/fi';
 import { usePopper } from 'react-popper';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 const FORMAT = 'DD/MM/YYYY';
 
