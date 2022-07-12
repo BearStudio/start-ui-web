@@ -132,6 +132,7 @@ export const AsyncSelect = () => {
         label: option,
         value: option,
       }))}
+      loadingMessage={({ inputValue }) => `Loading ${inputValue}...`}
     />
   );
 };
