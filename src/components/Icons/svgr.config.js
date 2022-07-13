@@ -1,4 +1,4 @@
-const template = require('./src/components/Icons/svgr-template');
+const template = require('./svgr.template');
 
 module.exports = {
   icon: true,
