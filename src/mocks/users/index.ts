@@ -13,6 +13,9 @@ export const UsersRoutes = (server: Server) => {
 };
 
 const getAll = withAuth((schema: any, request: Request) => {
+  if (!request.queryParams) {
+    throw new Error('Missing queryParams');
+  }
   const { page = 1, size = 10, sort = '' } = request.queryParams;
   const start = Number(page) * Number(size);
   const end = start + Number(size);
