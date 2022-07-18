@@ -6,7 +6,7 @@ import { useAuthContext } from '@/app/auth/AuthContext';
 export const useLogin = (
   config: UseMutationOptions<
     { id_token: string },
-    AxiosError,
+    AxiosError<any>,
     { username: string; password: string }
   > = {}
 ) => {

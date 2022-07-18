@@ -30,5 +30,5 @@ test:
     - yarn eslint .
     - echo "Checking types"
     - yarn tsc --noEmit
-    - echo "Running unit tests"
-    - yarn jest --roots src --passWithNoTests
+    - echo "Running tests"
+    - yarn test:ci
