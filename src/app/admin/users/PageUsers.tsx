@@ -1,9 +1,6 @@
 import React from 'react';
 
 import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
   Avatar,
   Badge,
   Box,
@@ -12,7 +9,6 @@ import {
   HStack,
   Heading,
   IconButton,
-  Image,
   LinkBox,
   LinkOverlay,
   Menu,
@@ -23,11 +19,9 @@ import {
   MenuProps,
   Portal,
   Text,
-  VStack,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { link } from 'fs';
 import { useTranslation } from 'react-i18next';
 import {
   FiAlertCircle,

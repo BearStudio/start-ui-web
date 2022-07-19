@@ -19,7 +19,7 @@ const getAll = withAuth((schema: any, request: Request) => {
   const users = schema.all('user');
 
   return new Response(
-    500,
+    200,
     { 'x-total-count': users.length.toString() },
     users.sort(sortByKey(sort)).slice(start, end)
   );
