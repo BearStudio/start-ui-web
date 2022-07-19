@@ -29,6 +29,10 @@
     "deleteUserError": {
       "title": "Deletion Failed",
       "description": "Fail to remove \"{{login}}\" user"
+    },
+    "loadingUserError": {
+      "title": "It seems that we have a problem ",
+      "description": "Failed to load users"
     }
   },
   "data": {

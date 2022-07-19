@@ -27,11 +27,14 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
+import { link } from 'fs';
 import { useTranslation } from 'react-i18next';
 import {
+  FiAlertCircle,
   FiCheckCircle,
   FiEdit,
   FiPlus,
+  FiRefreshCw,
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
@@ -195,97 +198,102 @@ export const PageUsers = () => {
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
-        {isError && (
-          <VStack spacing={400} align="stretch">
-            <Heading>
-              <Box pos="fixed" w="100%" left={600}>
-                <Image
-                  width={300}
-                  height={300}
-                  src="https://www.cjoint.com/doc/22_07/LGsoN6E2YqI_fusee.png"
-                />
+        <HStack mb="4">
+          <Box flex="1">
+            <Heading size="md">{t('users:list.title')}</Heading>
+          </Box>
+          <Box>
+            <Button
+              display={{ base: 'none', sm: 'flex' }}
+              as={Link}
+              to="create"
+              variant="@primary"
+              leftIcon={<FiPlus />}
+            >
+              {t('users:list.actions.createUser')}
+            </Button>
+            <IconButton
+              display={{ base: 'flex', sm: 'none' }}
+              aria-label={t('users:list.actions.createUser')}
+              as={Link}
+              to="create"
+              size="sm"
+              variant="@primary"
+              icon={<FiPlus />}
+            />
+          </Box>
+        </HStack>
+
+        <DataList>
+          <DataListHeader isVisible={{ base: false, md: true }}>
+            <DataListCell colName="login" colWidth="2">
+              {t('users:data.login.label')} / {t('users:data.email.label')}
+            </DataListCell>
+            <DataListCell
+              colName="id"
+              colWidth="4rem"
+              isVisible={{ base: false, lg: true }}
+            >
+              {t('users:data.id.label')}
+            </DataListCell>
+            <DataListCell
+              colName="authorities"
+              isVisible={{ base: false, lg: true }}
+            >
+              {t('users:data.authorities.label')}
+            </DataListCell>
+            <DataListCell
+              colName="created"
+              isVisible={{ base: false, lg: true }}
+            >
+              {t('users:data.createdBy.label')}
+            </DataListCell>
+            <DataListCell
+              colName="lastModified"
+              isVisible={{ base: false, md: true }}
+            >
+              {t('users:data.modifiedBy.label')}
+            </DataListCell>
+            <DataListCell
+              colName="status"
+              colWidth={{ base: '2rem', md: '0.5' }}
+              align="center"
+            >
+              <Box as="span" display={{ base: 'none', md: 'block' }}>
+                {t('users:data.status.label')}
               </Box>
-            </Heading>
-            <Box pos="fixed" w="100%" left={600}>
-              <Alert status="error" width={300}>
-                <AlertIcon />
-                <AlertTitle>houston we have a problem!</AlertTitle>
-              </Alert>
-            </Box>
-          </VStack>
-        )}
-        {!isLoadingPage && !isError && (
-          <>
-            <HStack mb="4">
-              <Box flex="1">
-                <Heading size="md">{t('users:list.title')}</Heading>
-              </Box>
-              <Box>
-                <Button
-                  display={{ base: 'none', sm: 'flex' }}
-                  as={Link}
-                  to="create"
-                  variant="@primary"
-                  leftIcon={<FiPlus />}
+            </DataListCell>
+            <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
+          </DataListHeader>
+          {isError && (
+            <DataListRow>
+              <DataListCell gap={4}>
+                <Box m="auto" color="gray.300">
+                  <FiAlertCircle size="4rem" />
+                </Box>
+                <Text
+                  m="auto"
+                  color="gray.500"
+                  fontSize="lg"
+                  fontWeight="medium"
                 >
-                  {t('users:list.actions.createUser')}
-                </Button>
-                <IconButton
-                  display={{ base: 'flex', sm: 'none' }}
-                  aria-label={t('users:list.actions.createUser')}
-                  as={Link}
-                  to="create"
-                  size="sm"
-                  variant="@primary"
-                  icon={<FiPlus />}
-                />
-              </Box>
-            </HStack>
-            <DataList>
-              <DataListHeader isVisible={{ base: false, md: true }}>
-                <DataListCell colName="login" colWidth="2">
-                  {t('users:data.login.label')} / {t('users:data.email.label')}
-                </DataListCell>
-                <DataListCell
-                  colName="id"
-                  colWidth="4rem"
-                  isVisible={{ base: false, lg: true }}
-                >
-                  {t('users:data.id.label')}
-                </DataListCell>
-                <DataListCell
-                  colName="authorities"
-                  isVisible={{ base: false, lg: true }}
-                >
-                  {t('users:data.authorities.label')}
-                </DataListCell>
-                <DataListCell
-                  colName="created"
-                  isVisible={{ base: false, lg: true }}
-                >
-                  {t('users:data.createdBy.label')}
-                </DataListCell>
-                <DataListCell
-                  colName="lastModified"
-                  isVisible={{ base: false, md: true }}
-                >
-                  {t('users:data.modifiedBy.label')}
-                </DataListCell>
-                <DataListCell
-                  colName="status"
-                  colWidth={{ base: '2rem', md: '0.5' }}
-                  align="center"
-                >
-                  <Box as="span" display={{ base: 'none', md: 'block' }}>
-                    {t('users:data.status.label')}
-                  </Box>
-                </DataListCell>
-                <DataListCell
-                  colName="actions"
-                  colWidth="4rem"
-                  align="flex-end"
-                />
-              </DataListHeader>
+                  {t('users:feedbacks.loadingUserError.title')}
+                </Text>
+                <Box m="auto">
+                  <Button
+                    variant="@secondary"
+                    size="sm"
+                    leftIcon={<FiRefreshCw />}
+                    onClick={() => window.location.reload()}
+                  >
+                    Recharger la page
+                  </Button>
+                </Box>
+              </DataListCell>
+            </DataListRow>
+          )}
+          {!isLoadingPage && (
+            <>
               {users?.map((user) => (
                 <DataListRow as={LinkBox} key={user.id}>
                   <DataListCell colName="login">
@@ -376,24 +384,24 @@ export const PageUsers = () => {
                   </DataListCell>
                 </DataListRow>
               ))}
-              <DataListFooter>
-                <Pagination
-                  isLoadingPage={isLoadingPage}
-                  setPage={setPage}
-                  page={page}
-                  pageSize={pageSize}
-                  totalItems={totalItems}
-                >
-                  <PaginationButtonFirstPage />
-                  <PaginationButtonPrevPage />
-                  <PaginationInfo flex="1" />
-                  <PaginationButtonNextPage />
-                  <PaginationButtonLastPage />
-                </Pagination>
-              </DataListFooter>
-            </DataList>
-          </>
-        )}
+            </>
+          )}
+          <DataListFooter>
+            <Pagination
+              isLoadingPage={isLoadingPage}
+              setPage={setPage}
+              page={page}
+              pageSize={pageSize}
+              totalItems={totalItems}
+            >
+              <PaginationButtonFirstPage />
+              <PaginationButtonPrevPage />
+              <PaginationInfo flex="1" />
+              <PaginationButtonNextPage />
+              <PaginationButtonLastPage />
+            </Pagination>
+          </DataListFooter>
+        </DataList>
       </PageContent>
     </Page>
   );
