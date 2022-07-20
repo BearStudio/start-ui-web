@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';
-import { ErrorBoundary } from '@/errors';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const PublicOnlyRouteGuard: FC<React.PropsWithChildren<unknown>> = ({
   children,
