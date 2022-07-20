@@ -9,12 +9,9 @@ import { useQueryClient } from 'react-query';
 import { AccountNav } from '@/app/account/AccountNav';
 import { useAccount, useUpdateAccount } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
-import {
-  FieldInput,
-  FieldSelect,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
+import { FieldInput } from '@/components/FieldInput';
+import { FieldSelect } from '@/components/FieldSelect';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 
 export const PageProfile = () => {

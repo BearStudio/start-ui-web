@@ -7,7 +7,8 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { LoginForm } from '@/app/auth/LoginForm';
 import { useRedirectFromUrl } from '@/app/router';
-import { Logo, SlideIn } from '@/components';
+import { Logo } from '@/components/Logo';
+import { SlideIn } from '@/components/SlideIn';
 
 export const PageLogin = () => {
   const { t } = useTranslation();

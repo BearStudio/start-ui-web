@@ -14,7 +14,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useLogin } from '@/app/auth/auth.service';
-import { FieldInput, useToastError } from '@/components';
+import { FieldInput } from '@/components/FieldInput';
+import { useToastError } from '@/components/Toast';
 
 const MockedApiHint = () => {
   const { t } = useTranslation();

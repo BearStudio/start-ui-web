@@ -17,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export type StyledMenuItemProps = HTMLChakraProps<'button'>;
 

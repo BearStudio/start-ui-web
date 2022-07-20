@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { IconSortAsc, IconSortDesc } from '@/components';
+import { IconSortAsc, IconSortDesc } from '@/components/Icons';
 
 type OptionProps = {
   value: string;
