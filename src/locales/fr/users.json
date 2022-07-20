@@ -32,7 +32,8 @@
   "list": {
     "title": "Gestion des utilisateurs",
     "actions": {
-      "createUser": "Créer un utilisateur"
+      "createUser": "Créer un utilisateur",
+      "ReloadPage": "Recharger la page"
     }
   },
   "data": {
@@ -106,6 +107,5 @@
         "title": "Utilisateur créé avec succès"
       }
     }
-  },
-  "houston-we-have-a-problem": "oupss! nous avons un problème"
+  }
 }

@@ -32,6 +32,7 @@ import {
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { AdminNav } from '@/app/admin/AdminNav';
@@ -188,6 +189,7 @@ export const PageUsers = () => {
     page: page - 1,
     size: pageSize,
   });
+  const navigate = useNavigate();
 
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
@@ -278,9 +280,9 @@ export const PageUsers = () => {
                     variant="@secondary"
                     size="sm"
                     leftIcon={<FiRefreshCw />}
-                    onClick={() => window.location.reload()}
+                    onClick={() => navigate(0)}
                   >
-                    Recharger la page
+                    {t('users:list.actions.ReloadPage')}
                   </Button>
                 </Box>
               </DataListCell>

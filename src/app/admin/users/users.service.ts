@@ -36,7 +36,7 @@ export const useUserList = (
     usersKeys.users({ page, size }),
     (): Promise<UserList> =>
       Axios.get('/admin/users', { params: { page, size, sort: 'id,desc' } }),
-    { retry: 1, keepPreviousData: true, ...config }
+    { keepPreviousData: true, ...config }
   );
 
   const { content: users, totalItems } = result.data || {};

@@ -2,7 +2,8 @@
   "list": {
     "title": "إدارة المستخدمين ",
     "actions": {
-      "createUser": "إنشاء مستخدم"
+      "createUser": "إنشاء مستخدم",
+      "ReloadPage": "إعادة تحميل الصفحة"
     }
   },
   "feedbacks": {
