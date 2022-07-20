@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserForm } from '@/app/admin/users/UserForm';
 import { useUserCreate } from '@/app/admin/users/users.service';
 import { Page, PageBottomBar, PageContent, PageTopBar } from '@/app/layout';
-import { useToastError, useToastSuccess } from '@/components';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 
 export const PageUserCreate = () => {
   const { t } = useTranslation();

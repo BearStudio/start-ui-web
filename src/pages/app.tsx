@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Progress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
-import { Viewport } from '@/components';
+import { Viewport } from '@/components/Viewport';
 
 const Loading = () => (
   <Viewport>

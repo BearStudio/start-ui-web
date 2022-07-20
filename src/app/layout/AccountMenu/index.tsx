@@ -27,7 +27,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import appBuild from '@/../app-build.json';
 import { useAccount } from '@/app/account/account.service';
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation();

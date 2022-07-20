@@ -17,16 +17,16 @@ import {
 } from '@chakra-ui/react';
 import { FiCopy, FiEdit, FiTrash2, FiUserPlus } from 'react-icons/fi';
 
+import { ActionsButton } from '@/components/ActionsButton';
+import { Icon } from '@/components/Icons';
 import {
-  ActionsButton,
-  Icon,
   Pagination,
   PaginationButtonFirstPage,
   PaginationButtonLastPage,
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
-} from '@/components';
+} from '@/components/Pagination';
 
 import {
   DataList,

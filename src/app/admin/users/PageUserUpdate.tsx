@@ -22,7 +22,7 @@ import {
   PageContent,
   PageTopBar,
 } from '@/app/layout';
-import { useToastError, useToastSuccess } from '@/components';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 import { Error404 } from '@/errors';
 
 import { UserForm } from './UserForm';

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Textarea, TextareaProps } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
-import { FormGroup, FormGroupProps } from '@/components';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export type FieldTextareaProps = FieldProps &
   FormGroupProps & {

@@ -23,7 +23,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { useCreateAccount } from '@/app/account/account.service';
-import { FieldInput, FieldSelect, SlideIn, useToastError } from '@/components';
+import { FieldInput } from '@/components/FieldInput';
+import { FieldSelect } from '@/components/FieldSelect';
+import { SlideIn } from '@/components/SlideIn';
+import { useToastError } from '@/components/Toast';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 
 export const PageRegister = () => {

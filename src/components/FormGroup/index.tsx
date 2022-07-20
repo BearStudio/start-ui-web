@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { FiAlertCircle } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export type FormGroupProps = Omit<
   FormControlProps,

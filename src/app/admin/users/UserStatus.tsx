@@ -2,7 +2,7 @@ import { Badge, Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiCheck, FiX } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export const UserStatus = ({ isActivated = false, ...rest }) => {
   const { t } = useTranslation();
