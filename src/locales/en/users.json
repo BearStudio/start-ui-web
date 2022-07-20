@@ -3,7 +3,7 @@
     "title": "Users Management",
     "actions": {
       "createUser": "Create User",
-      "ReloadPage": "Reload page"
+      "reloadPage": "Reload page"
     }
   },
   "feedbacks": {

@@ -282,7 +282,7 @@ export const PageUsers = () => {
                     leftIcon={<FiRefreshCw />}
                     onClick={() => navigate(0)}
                   >
-                    {t('users:list.actions.ReloadPage')}
+                    {t('users:list.actions.reloadPage')}
                   </Button>
                 </Box>
               </DataListCell>

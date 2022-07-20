@@ -33,7 +33,7 @@
     "title": "Gestion des utilisateurs",
     "actions": {
       "createUser": "Créer un utilisateur",
-      "ReloadPage": "Recharger la page"
+      "reloadPage": "Recharger la page"
     }
   },
   "data": {
