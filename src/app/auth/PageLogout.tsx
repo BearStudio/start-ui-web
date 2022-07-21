@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/app/auth/AuthContext';

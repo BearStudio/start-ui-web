@@ -5,7 +5,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { User, UserList } from '@/app/admin/users/users.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
