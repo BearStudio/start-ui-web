@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 
-const Page404 = () => {
+const Page500 = () => {
   const { t } = useTranslation();
   return (
     <>
       <Head>
-        <title>{t('components:errorPage.404.title')}</title>
+        <title>{t('components:errorPage.default.title')}</title>
       </Head>
-      <ErrorPage errorCode={404} />
+      <ErrorPage errorCode={500} />
     </>
   );
 };
-export default Page404;
+export default Page500;

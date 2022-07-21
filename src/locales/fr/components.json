@@ -16,6 +16,27 @@
     "confirmText": "Confirmer",
     "heading": "Etes-vous sûr ?"
   },
+  "errorBoundary": {
+    "title": "Une erreur inattendue est survenue.",
+    "actions": {
+      "expand": "Afficher les détails"
+    }
+  },
+  "errorPage": {
+    "errorCode": "Erreur {{code}}",
+    "403": {
+      "title": "Page non autorisée",
+      "description": "Désolé, vous ne pouvez pas accéder à cette page."
+    },
+    "404": {
+      "title": "Page introuvable",
+      "description": "La page n'existe pas ou l'URL a changé."
+    },
+    "default": {
+      "title": "Erreur",
+      "description": "Une erreur est survenue 😞"
+    }
+  },
   "pagination": {
     "firstPage": "Première page",
     "lastPage": "Dernière page",

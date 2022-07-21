@@ -11,7 +11,8 @@ import {
   AuthenticatedRouteGuard,
   PublicOnlyRouteGuard,
 } from '@/app/router/guards';
-import { Error404, ErrorBoundary } from '@/errors';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorPage } from '@/components/ErrorPage';
 
 const AdminRoutes = React.lazy(() => import('@/app/admin/AdminRoutes'));
 const AccountRoutes = React.lazy(() => import('@/app/account/AccountRoutes'));
@@ -72,7 +73,7 @@ export const App = () => {
                 }
               />
 
-              <Route path="*" element={<Error404 />} />
+              <Route path="*" element={<ErrorPage errorCode={404} />} />
             </Routes>
           </Suspense>
         </Layout>
