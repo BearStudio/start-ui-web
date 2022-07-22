@@ -42,6 +42,16 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
       initialMonth={date.toDate()}
       selectedDays={[date.toDate()]}
       onDayClick={(d) => onDayClick(dayjs(d))}
+      months={Array.from({ length: 12 }).map((_, i) =>
+        dayjs().month(i).format('MMMM')
+      )}
+      weekdaysLong={Array.from({ length: 7 }).map((_, i) =>
+        dayjs().day(i).format('dddd')
+      )}
+      weekdaysShort={Array.from({ length: 7 }).map((_, i) =>
+        dayjs().day(i).format('dd')
+      )}
+      firstDayOfWeek={1}
       {...rest}
     />
   );
