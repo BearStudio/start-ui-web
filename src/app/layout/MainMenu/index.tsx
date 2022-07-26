@@ -33,7 +33,7 @@ const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
           w: '2rem',
         },
       }}
-      _focus={{
+      _focusVisible={{
         outline: 'none',
         bg: 'gray.900',
         _after: {

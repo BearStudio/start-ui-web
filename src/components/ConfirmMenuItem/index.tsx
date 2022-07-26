@@ -172,7 +172,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
               bg: `${confirmColorScheme}.900`,
             },
           },
-          _focus: {
+          _focusVisible: {
             bg: `${confirmColorScheme}.50`,
             _dark: {
               bg: `${confirmColorScheme}.900`,
