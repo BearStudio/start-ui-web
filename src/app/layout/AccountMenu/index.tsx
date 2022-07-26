@@ -55,10 +55,10 @@ const AppVersion = ({ ...rest }) => {
         outline="none"
         color="gray.500"
         _hover={{ bg: 'gray.50' }}
-        _focus={{ bg: 'gray.50' }}
+        _focusVisible={{ bg: 'gray.50' }}
         _dark={{
           color: 'gray.200',
-          _focus: { bg: 'gray.800' },
+          _focusVisible: { bg: 'gray.800' },
           _hover: { bg: 'gray.600' },
         }}
         onClick={onCopy}
@@ -107,7 +107,7 @@ export const AccountMenu = ({ ...rest }) => {
 
   return (
     <Menu placement="bottom-end" {...rest}>
-      <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
+      <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
         <Avatar size="sm" icon={<></>} name={account?.login}>
           {isLoading && <Spinner size="xs" />}
         </Avatar>

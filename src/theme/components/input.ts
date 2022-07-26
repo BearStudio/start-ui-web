@@ -16,7 +16,7 @@ const variants: Record<string, SystemStyleInterpolation> = {
       field: {
         bg: mode('blackAlpha.50', 'whiteAlpha.50')(props),
         borderColor: mode('blackAlpha.100', 'whiteAlpha.100')(props),
-        _focus: {
+        _focusVisible: {
           borderColor: focusBorderColor,
           boxShadow: `0 0 0 1px ${focusBorderColor}`,
         },
