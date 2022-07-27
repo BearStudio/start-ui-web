@@ -82,7 +82,7 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
     <StylesProvider value={styles}>
       <StyledMenuItem
         {...menuItemProps}
-        onClick={(e: any) => {
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           rest?.onClick?.(e);
         }}
       >
