@@ -26,18 +26,14 @@ export const Router = ({
     action: history.action,
     location: history.location,
   });
-
-  const currentLocation = {
+  const currentLocationRef = useRef<Partial<Location> & { state: unknown }>();
+  currentLocationRef.current = {
     ...state.location,
     pathname: removeBasenameFromPathname(
       basename ?? '',
       state.location.pathname
     ),
   };
-  const currentLocationRef = useRef<Partial<Location> & { state: unknown }>(
-    currentLocation
-  );
-  currentLocationRef.current = currentLocation;
 
   useLayoutEffect(
     () =>
@@ -53,7 +49,8 @@ export const Router = ({
               __goBack:
                 ctx.action === 'PUSH'
                   ? currentLocationRef.current
-                  : (currentLocationRef.current.state as ExplicitAny)?.__goBack,
+                  : (currentLocationRef.current?.state as ExplicitAny)
+                      ?.__goBack,
             },
           },
         });
