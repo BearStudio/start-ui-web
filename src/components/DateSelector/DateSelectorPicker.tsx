@@ -16,6 +16,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import DayPicker, { DayPickerProps } from 'react-day-picker';
 import ReactFocusLock from 'react-focus-lock';
 
+import i18n from '@/config/i18next';
+
 import { useDateSelectorContext } from './DateSelector';
 
 type ChildrenFunctionParams = { date: Dayjs; onOpen: () => void };
@@ -24,7 +26,7 @@ type DateSelectorPickerProps = Omit<DayPickerProps, 'children'> & {
 };
 const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   <chakra.button onClick={onOpen} px="2" type="button">
-    {date.format('DD MMM YYYY')}
+    {date.locale(i18n.language).format('DD MMM YYYY')}
   </chakra.button>
 );
 
@@ -39,6 +41,7 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
 
   const dayPicker = (
     <DayPicker
+      locale={i18n.language}
       initialMonth={date.toDate()}
       selectedDays={[date.toDate()]}
       onDayClick={(d) => onDayClick(dayjs(d))}
