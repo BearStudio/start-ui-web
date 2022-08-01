@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import {
+  Box,
   Button,
   ButtonProps,
   Menu,
@@ -31,8 +32,8 @@ type CustomProps = {
   size?: 'xs' | 'sm' | 'md';
   options?: Array<OptionProps>;
   onChange?(sort: SortValue): void;
-  ascIcon?: FC<React.PropsWithChildren<unknown>>;
-  descIcon?: FC<React.PropsWithChildren<unknown>>;
+  ascIcon?: ReactNode;
+  descIcon?: ReactNode;
 };
 
 type SortProps = Overwrite<ButtonProps, CustomProps>;
@@ -42,15 +43,13 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
   size = 'xs',
   options = [],
   onChange = () => undefined,
-  ascIcon: AscIcon = IconSortAsc,
-  descIcon: DescIcon = IconSortDesc,
+  ascIcon = <IconSortAsc />,
+  descIcon = <IconSortDesc />,
   ...rest
 }) => {
   const { t } = useTranslation();
 
   const { by, order } = sort;
-
-  const Icon = order === 'asc' ? AscIcon : DescIcon;
 
   const handleByChange = (value: SortValue['by']) => {
     onChange({ ...sort, by: value });
@@ -74,11 +73,19 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
         _dark={{
           color: 'gray.100',
         }}
-        sx={{ '> span': { d: 'flex', maxW: 'full' } }}
+        sx={{ '> span': { display: 'flex', maxW: 'full' } }}
         {...rest}
       >
-        <Icon mr="0.5" />
-        <Text as="span" display="block" fontSize={size} noOfLines={1}>
+        <Box as="span" mr="0.5">
+          {order === 'asc' ? ascIcon : descIcon}
+        </Box>
+        <Text
+          as="span"
+          display="block"
+          sx={{ '&': { display: 'block !important' } }} // Fix: text-ellipsis issue
+          fontSize={size}
+          noOfLines={1}
+        >
           {options.find((option) => option?.value === by)?.label}
         </Text>
       </MenuButton>
