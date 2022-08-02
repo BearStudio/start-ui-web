@@ -25,7 +25,7 @@ import {
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 
-import appBuild from '@/../app-build.json';
+import appBuild from '@/../.app-build.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components/Icons';
 

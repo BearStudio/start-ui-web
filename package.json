@@ -10,7 +10,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "yarn theme:generate-typing",
+    "postinstall": "node .app-build.generate.js && yarn theme:generate-typing",
     "test": "cypress open",
     "test:ci": "cypress run --component",
     "dev": "yarn docs:build && next dev",
