@@ -45,5 +45,5 @@ yarn-error.log*
 # cypress
 /cypress/videos
 
-# App build
-.app-build.json
+# Build info
+.build-info.json

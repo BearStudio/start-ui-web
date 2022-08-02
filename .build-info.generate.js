@@ -20,8 +20,16 @@ const getContent = () => {
 };
 
 const generateAppBuild = () => {
-  console.log('✅ Generate `.app-build.json`');
-  fs.writeFileSync('./.app-build.json', JSON.stringify(getContent(), null, 2));
+  try {
+    fs.writeFileSync(
+      './.build-info.json',
+      JSON.stringify(getContent(), null, 2)
+    );
+    console.log('✅ Generate `.build-info.json`');
+  } catch (error) {
+    console.error(error);
+    throw new Error('❌ Failed to generate `.build-info.json`');
+  }
 };
 
 generateAppBuild();
