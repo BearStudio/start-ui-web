@@ -25,16 +25,18 @@ import {
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 
-import appBuild from '@/../app-build.json';
+import buildInfo from '@/../.build-info.json';
 import { useAccount } from '@/app/account/account.service';
 import { Icon } from '@/components/Icons';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation();
 
-  const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
+  const { hasCopied, onCopy } = useClipboard(
+    JSON.stringify(buildInfo, null, 2)
+  );
 
-  if (!appBuild?.version) {
+  if (!buildInfo?.version) {
     return null;
   }
 
@@ -91,7 +93,7 @@ const AppVersion = ({ ...rest }) => {
         </Flex>
         <Text as="span" noOfLines={2}>
           {t('layout:accountMenu.version.label')}{' '}
-          <strong>{appBuild?.display ?? appBuild?.version}</strong>
+          <strong>{buildInfo?.display ?? buildInfo?.version}</strong>
         </Text>
       </Flex>
     </>

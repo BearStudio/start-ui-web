@@ -14,11 +14,6 @@ build:
   script:
     - echo "Installing dependencies"
     - yarn install
-    - echo "Building application version"
-    - sed -i "s/__DEVELOPMENT__/$CI_PIPELINE_ID ($(date +"%Y-%m-%d"))/g" app-build.json
-    - sed -i "s/__VERSION__/PIPELINE $CI_PIPELINE_ID - JOB $CI_JOB_ID/g" app-build.json
-    - sed -i "s/__COMMIT__/$CI_COMMIT_SHORT_SHA/g" app-build.json
-    - sed -i "s/__DATE__/$(date +"%Y-%m-%d %T")/g" app-build.json
     - echo "Building application"
     - yarn build
 
