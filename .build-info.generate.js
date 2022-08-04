@@ -2,19 +2,32 @@ const dayjs = require('dayjs');
 const fs = require('fs');
 
 const getContent = () => {
-  const getCommitHashShort = () =>
-    require('child_process')
-      .execSync('git rev-parse --short HEAD')
-      .toString()
-      .trim();
+  const getCommitHashShort = () => {
+    try {
+      return require('child_process')
+        .execSync('git rev-parse --short HEAD')
+        .toString()
+        .trim();
+    } catch (error) {
+      return null;
+    }
+  };
 
-  const getCommitHash = () =>
-    require('child_process').execSync('git rev-parse HEAD').toString().trim();
+  const getCommitHash = () => {
+    try {
+      return require('child_process')
+        .execSync('git rev-parse HEAD')
+        .toString()
+        .trim();
+    } catch (error) {
+      return null;
+    }
+  };
 
   return {
-    display: getCommitHashShort(),
-    version: `${getCommitHashShort()} - ${dayjs().format()}`,
-    commit: getCommitHash(),
+    display: getCommitHashShort() ?? dayjs().format('YYYY-MM-DD'),
+    version: `${getCommitHashShort() ?? 'No commit'} - ${dayjs().format()}`,
+    commit: getCommitHash() ?? 'No commit',
     date: dayjs().format(),
   };
 };
