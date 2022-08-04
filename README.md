@@ -6,7 +6,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 ## Getting Started
 
 ```bash
-npx create-start-ui --web myApp
+npx create-start-ui@latest --web myApp
 ```
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
