@@ -26,7 +26,7 @@ type DateSelectorPickerProps = Omit<DayPickerProps, 'children'> & {
 };
 const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
   <chakra.button onClick={onOpen} px="2" type="button">
-    {/* // we use locale to update date language as changing the global locale doesn't affect existing instances. */}
+    {/* we use locale to update date language as changing the global locale doesn't affect existing instances. */}
     {date.locale(i18n.language).format('DD MMM YYYY')}
   </chakra.button>
 );
