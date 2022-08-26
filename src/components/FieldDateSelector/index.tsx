@@ -9,14 +9,12 @@ import {
   DateSelectorPreviousDayButton,
 } from '@/components/DateSelector';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import dayjs, { Dayjs } from 'dayjs';
 
-export type FieldDateSelectorProps = FieldProps &
-  FormGroupProps & {
-    invalidMessage?: string;
-  };
+export type FieldDateSelectorProps = FieldProps & FormGroupProps;
 
 export const FieldDateSelector = (props: FieldDateSelectorProps) => {
-  const { invalidMessage, ...fieldProps } = props;
+  const { ...fieldProps } = props;
   const {
     errorMessage,
     id,
@@ -45,9 +43,17 @@ export const FieldDateSelector = (props: FieldDateSelectorProps) => {
     ...rest,
   };
 
+  function dayjsToDate(dayjsValue : Dayjs){
+    setValue(dayjs(dayjsValue)) 
+  }
+
+  function dateToDayjsValue(date : Date){
+    return dayjs(date); 
+  }
+
   return (
     <FormGroup {...formGroupProps}>
-      <DateSelector date={value} onChange={setValue}>
+      <DateSelector date={dateToDayjsValue(value)} onChange={(date : Dayjs) => dayjsToDate(date)}>
         <DateSelectorPreviousDayButton aria-label="Previous day" />
         <DateSelectorPicker />
         <DateSelectorNextDayButton aria-label="Next day" />
