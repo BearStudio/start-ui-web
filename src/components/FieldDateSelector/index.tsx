@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { FieldProps, useField, useForm } from '@formiz/core';
-import { useTranslation } from 'react-i18next';
+import { FieldProps, useField } from '@formiz/core';
 
 import {
   DateSelector,
