@@ -261,28 +261,19 @@ export const PageUsers = () => {
           </DataListHeader>
           {isError && (
             <DataListRow>
-              <DataListCell gap={4}>
-                <Box m="auto" color="gray.300">
-                  <FiAlertCircle size="4rem" />
-                </Box>
-                <Text
-                  m="auto"
-                  color="gray.500"
-                  fontSize="lg"
-                  fontWeight="medium"
-                >
+              <DataListCell gap={4} alignItems="center">
+                <FiAlertCircle size="4rem" />
+                <Text color="gray.500" fontSize="lg" fontWeight="medium">
                   {t('users:feedbacks.loadingUserError.title')}
                 </Text>
-                <Box m="auto">
-                  <Button
-                    variant="@secondary"
-                    size="sm"
-                    leftIcon={<FiRefreshCw />}
-                    onClick={() => refetch()}
-                  >
-                    {t('users:list.actions.reloadPage')}
-                  </Button>
-                </Box>
+                <Button
+                  variant="@secondary"
+                  size="sm"
+                  leftIcon={<FiRefreshCw />}
+                  onClick={() => refetch()}
+                >
+                  {t('users:list.actions.reloadPage')}
+                </Button>
               </DataListCell>
             </DataListRow>
           )}
