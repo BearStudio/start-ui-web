@@ -39,7 +39,7 @@ export const PageProfile = () => {
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
-      queryClient.invalidateQueries(accountKeys.account());
+      queryClient.invalidateQueries(accountKeys.account);
     },
   });
 

@@ -17,13 +17,13 @@ type UserMutateError = {
 
 const USERS_BASE_URL = '/admin/users';
 
-const usersKeys = {
-  all: () => ['usersService'] as const,
-  users: ({ page, size }: { page?: number; size?: number }) =>
-    [...usersKeys.all(), 'users', { page, size }] as const,
-  user: ({ login }: { login?: string }) =>
-    [...usersKeys.all(), 'user', { login }] as const,
-};
+const usersKeys = createQueryKeys('usersService', {
+  users: ({ page, size }: { page?: number; size?: number }) => ({
+    page,
+    size,
+  }),
+  user: ({ login }: { login?: string }) => ({ login }),
+});
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
@@ -87,10 +87,10 @@ export const useUserUpdate = (
   return useMutation((payload) => Axios.put(USERS_BASE_URL, payload), {
     ...config,
     onSuccess: (data, payload, ...rest) => {
-      queryClient.cancelQueries([...usersKeys.all(), 'users']);
+      queryClient.cancelQueries(usersKeys.users.toScope());
       queryClient
         .getQueryCache()
-        .findAll([...usersKeys.all(), 'users'])
+        .findAll(usersKeys.users.toScope())
         .forEach(({ queryKey }) => {
           queryClient.setQueryData<UserList | undefined>(
             queryKey,
@@ -105,7 +105,7 @@ export const useUserUpdate = (
             }
           );
         });
-      queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+      queryClient.invalidateQueries(usersKeys.users.toScope());
       queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
       if (config.onSuccess) {
         config.onSuccess(data, payload, ...rest);
@@ -134,7 +134,7 @@ export const useUserCreate = (
     {
       ...config,
       onSuccess: (...args) => {
-        queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+        queryClient.invalidateQueries(usersKeys.users.toScope());
         config?.onSuccess?.(...args);
       },
     }
@@ -153,7 +153,7 @@ export const useUserRemove = (
     {
       ...config,
       onSuccess: (...args) => {
-        queryClient.invalidateQueries([...usersKeys.all(), 'users']);
+        queryClient.invalidateQueries(usersKeys.users.toScope());
         config?.onSuccess?.(...args);
       },
     }
