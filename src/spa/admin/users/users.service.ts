@@ -1,3 +1,4 @@
+import { createQueryKeys } from '@lukemorales/query-key-factory';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -18,11 +19,8 @@ type UserMutateError = {
 const USERS_BASE_URL = '/admin/users';
 
 const usersKeys = createQueryKeys('usersService', {
-  users: ({ page, size }: { page?: number; size?: number }) => ({
-    page,
-    size,
-  }),
-  user: ({ login }: { login?: string }) => ({ login }),
+  users: (params: { page?: number; size?: number }) => params,
+  user: (params: { login?: string }) => params,
 });
 
 export const useUserList = (

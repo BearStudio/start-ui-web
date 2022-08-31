@@ -38,7 +38,7 @@ export const PageUserUpdate = () => {
     isLoading: userIsLoading,
     isFetching: userIsFetching,
     isError: userIsError,
-  } = useUser(login, { refetchOnWindowFocus: false });
+  } = useUser(login, { refetchOnWindowFocus: false, enabled: !!login });
 
   const form = useForm({ subscribe: false });
 
