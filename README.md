@@ -94,6 +94,13 @@ yarn theme:generate-icons
 
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
+### Generate Storybook documentation for components
+
+Using fuzzy finding, you can search for components and generate the stories for it.
+
+```bash
+yarn plop
+```
 
 ### Development with [MirageJS](https://miragejs.com/) (mock)
 

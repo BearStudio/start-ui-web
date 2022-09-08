@@ -22,6 +22,12 @@
     "incremental": false,
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "generators/story.js",
+    "plopfile.js"
+  ],
+  "exclude": ["node_modules", "generators/**/*", "plopfile.js"]
 }

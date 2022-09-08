@@ -1,0 +1,12 @@
+import React from 'react';
+import { ComponentMeta } from '@storybook/react';
+
+import { {{ properCase ( getName path ) }} } from '@/{{ getFolder path }}';
+
+export default {
+  title: '{{ directoryCase ( getFolder path ) }}',
+} as ComponentMeta<typeof {{ properCase ( getName path ) }}>;
+
+export const Default = () => (
+  <{{ properCase ( getName path ) }} />
+)
