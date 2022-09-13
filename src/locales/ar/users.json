@@ -3,7 +3,7 @@
     "title": "إدارة المستخدمين ",
     "actions": {
       "createUser": "إنشاء مستخدم",
-      "reloadPage": "إعادة تحميل الصفحة"
+      "refetch": "إعادة تحميل الصفحة"
     }
   },
   "feedbacks": {

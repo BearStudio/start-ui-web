@@ -1,4 +1,3 @@
-import Axios, { AxiosError } from 'axios';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -6,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import Axios, { AxiosError } from 'axios';
 
 import { User, UserList } from '@/app/admin/users/users.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
