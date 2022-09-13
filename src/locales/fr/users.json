@@ -23,12 +23,17 @@
     "deleteUserError": {
       "title": "Échec de la suppression",
       "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
+    },
+    "loadingUserError": {
+      "title": "Il semblerait qu’il y est un problème. ",
+      "description": "Échec du chargement des utilisateurs"
     }
   },
   "list": {
     "title": "Gestion des utilisateurs",
     "actions": {
-      "createUser": "Créer un utilisateur"
+      "createUser": "Créer un utilisateur",
+      "reloadPage": "Recharger la page"
     }
   },
   "data": {

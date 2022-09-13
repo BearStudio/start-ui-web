@@ -2,7 +2,8 @@
   "list": {
     "title": "إدارة المستخدمين ",
     "actions": {
-      "createUser": "إنشاء مستخدم"
+      "createUser": "إنشاء مستخدم",
+      "reloadPage": "إعادة تحميل الصفحة"
     }
   },
   "feedbacks": {
@@ -29,6 +30,10 @@
     "deleteUserError": {
       "title": "فشل الحذف ",
       "description": "فشل إزالة المستخدم \"{{login}}\""
+    },
+    "loadingUserError": {
+      "title": "يبدو أن هناك مشكلة ",
+      "description": "فشل تحميل المستخدمين"
     }
   },
   "data": {

@@ -24,9 +24,11 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
+  FiAlertCircle,
   FiCheckCircle,
   FiEdit,
   FiPlus,
+  FiRefreshCw,
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
@@ -183,7 +185,7 @@ export const PageUsers = () => {
 
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
-  const { users, totalItems, isLoadingPage } = useUserList({
+  const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({
     page: page - 1,
     size: pageSize,
   });
@@ -216,6 +218,7 @@ export const PageUsers = () => {
             />
           </Box>
         </HStack>
+
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
@@ -257,6 +260,25 @@ export const PageUsers = () => {
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
+          {isError && (
+            <DataListRow>
+              <DataListCell gap={4} alignItems="center">
+                <FiAlertCircle size="4rem" />
+                <Text color="gray.500" fontSize="lg" fontWeight="medium">
+                  {t('users:feedbacks.loadingUserError.title')}
+                </Text>
+                <Button
+                  variant="@secondary"
+                  size="sm"
+                  leftIcon={<FiRefreshCw />}
+                  onClick={() => refetch()}
+                >
+                  {t('users:list.actions.reloadPage')}
+                </Button>
+              </DataListCell>
+            </DataListRow>
+          )}
+
           {users?.map((user) => (
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
@@ -344,6 +366,7 @@ export const PageUsers = () => {
               </DataListCell>
             </DataListRow>
           ))}
+
           <DataListFooter>
             <Pagination
               isLoadingPage={isLoadingPage}
