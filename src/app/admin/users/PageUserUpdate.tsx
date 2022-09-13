@@ -22,8 +22,8 @@ import {
   PageContent,
   PageTopBar,
 } from '@/app/layout';
-import { useToastError, useToastSuccess } from '@/components';
-import { Error404 } from '@/errors';
+import { useToastError, useToastSuccess } from '@/components/Toast';
+import { ErrorPage } from '@/components/ErrorPage';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
@@ -110,7 +110,7 @@ export const PageUserUpdate = () => {
         </HStack>
       </PageTopBar>
       {userIsFetching && <Loader />}
-      {userIsError && !userIsFetching && <Error404 />}
+      {userIsError && !userIsFetching && <ErrorPage errorCode={404} />}
       {!userIsError && !userIsFetching && (
         <Formiz
           id="create-user-form"

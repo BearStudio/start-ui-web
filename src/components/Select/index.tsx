@@ -82,7 +82,7 @@ const SelectInner = <
     stylesFromTheme.field.color,
     stylesFromTheme.field.bg,
     stylesFromTheme.field.borderColor,
-    stylesFromTheme.field._focus.borderColor,
+    stylesFromTheme.field._focusVisible.borderColor,
     stylesFromTheme.field._invalid.borderColor,
   ]);
   const [fieldBorderRadius] = useToken('radii', [

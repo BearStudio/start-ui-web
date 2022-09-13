@@ -2,7 +2,8 @@
   "languages": {
     "en": "English",
     "fr": "French",
-    "ar": "Arabic"
+    "ar": "Arabic",
+    "sw": "Swahili"
   },
   "actions": {
     "activate": "Activate",

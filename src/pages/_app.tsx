@@ -5,8 +5,8 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { Providers } from '@/Providers';
-import { Viewport } from '@/components';
-import { ErrorBoundary } from '@/errors';
+import { Viewport } from '@/components/Viewport';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 const AppDevHint = () => {
   const envName =

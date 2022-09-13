@@ -1,16 +1,18 @@
 import React from 'react';
 
 import Head from 'next/head';
+import { useTranslation } from 'react-i18next';
 
-import { Error404 } from '@/errors';
+import { ErrorPage } from '@/components/ErrorPage';
 
 const Page404 = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Head>
-        <title>Page Not Found</title>
+        <title>{t('components:errorPage.404.title')}</title>
       </Head>
-      <Error404 />
+      <ErrorPage errorCode={404} />
     </>
   );
 };

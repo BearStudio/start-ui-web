@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { FieldProps, useField, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 
-import { DayPicker, FormGroup, FormGroupProps } from '@/components';
+import { DayPicker } from '@/components/DayPicker';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export type FieldDayPickerProps = FieldProps &
   FormGroupProps & {

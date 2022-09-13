@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { FiActivity, FiChevronDown, FiTrash2 } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 import { ConfirmMenuItem } from './';
 

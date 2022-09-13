@@ -14,3 +14,8 @@ Thank you for considering contributing to this repository!
 > 💡 Please make sure your PR is readable for the most.
 > Write a good commit message.
 > Also, make sure that the linting is correct.
+
+## Translations
+
+You only need to maintain the english and french translations for you PR. 
+Other language translations are not required to submit a PR 😉

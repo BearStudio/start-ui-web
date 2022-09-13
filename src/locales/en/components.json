@@ -16,6 +16,27 @@
     "confirmText": "Confirm",
     "heading": "Are you sure?"
   },
+  "errorBoundary": {
+    "title": "An unexpected error has occurred.",
+    "actions": {
+      "expand": "Show details"
+    }
+  },
+  "errorPage": {
+    "403": {
+      "title": "Unauthorized",
+      "description": "Sorry, you can't access this page."
+    },
+    "404": {
+      "title": "Page not found",
+      "description": "The page does not exist or the url has changed."
+    },
+    "errorCode": "Error {{code}}",
+    "default": {
+      "title": "Error",
+      "description": "Something went wrong 😞"
+    }
+  },
   "pagination": {
     "showing": "<box>Showing</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
     "loading": "<spinner></spinner> <box>Loading</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { FiCopy, FiEdit, FiTrash2, FiUserPlus } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 import { ActionsButton } from './index';
 

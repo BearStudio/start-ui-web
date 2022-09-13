@@ -17,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export type StyledMenuItemProps = HTMLChakraProps<'button'>;
 
@@ -82,7 +82,7 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
     <StylesProvider value={styles}>
       <StyledMenuItem
         {...menuItemProps}
-        onClick={(e: any) => {
+        onClick={(e) => {
           rest?.onClick?.(e);
         }}
       >
@@ -172,7 +172,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
               bg: `${confirmColorScheme}.900`,
             },
           },
-          _focus: {
+          _focusVisible: {
             bg: `${confirmColorScheme}.50`,
             _dark: {
               bg: `${confirmColorScheme}.900`,

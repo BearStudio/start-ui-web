@@ -8,7 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { AccountNav } from '@/app/account/AccountNav';
 import { useUpdatePassword } from '@/app/account/account.service';
 import { Page, PageContent } from '@/app/layout';
-import { FieldInput, useToastError, useToastSuccess } from '@/components';
+import { FieldInput } from '@/components/FieldInput';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 
 export const PagePassword = () => {
   const { t } = useTranslation();

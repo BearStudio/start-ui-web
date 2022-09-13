@@ -14,7 +14,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { AccountMenu, MainMenu, useLayoutContext } from '@/app/layout';
 import { NavDrawer } from '@/app/layout/NavDrawer';
-import { Logo } from '@/components';
+import { Logo } from '@/components/Logo';
 
 const MenuButton = (props: Partial<IconButtonProps>) => {
   const { navOnOpen } = useLayoutContext();

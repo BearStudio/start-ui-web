@@ -37,13 +37,6 @@ jobs:
       - name: Install local dependencies
         run: yarn install
 
-      - name: Build the build version
-        run: |
-          sed -i "s/__DEVELOPMENT__/$GITHUB_RUN_ID ($(date +"%Y-%m-%d"))/g" app-build.json
-          sed -i "s/__VERSION__/PIPELINE $GITHUB_RUN_ID/g" app-build.json
-          sed -i "s/__COMMIT__/$GITHUB_SHA/g" app-build.json
-          sed -i "s/__DATE__/$(date +"%Y-%m-%d %T")/g" app-build.json
-
       - name: Check coding rules and types
         run: yarn lint
 

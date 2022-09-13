@@ -1,0 +1,17 @@
+{
+  "mainMenu": {
+    "dashboard": "Dashibodi",
+    "admin": "Admin"
+  },
+  "accountMenu": {
+    "version": {
+      "copied": "Toleo lililonakiwa",
+      "copy": "Toleo la Nakili",
+      "label": "Toleo"
+    },
+    "switchColorModeDark": "Badili hadi ya giza",
+    "switchColorModeLight": "Badilisha kwa hali ya mwanga",
+    "myAccount": "Akauti yangu",
+    "logout": "Ondoka"
+  }
+}

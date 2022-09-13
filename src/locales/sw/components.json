@@ -1,0 +1,46 @@
+{
+  "dateAgo": {
+    "format": "siku DD MMMM YYYY, HH:mm"
+  },
+  "actionsButton": {
+    "label": "Hisa"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Bofya ili kuthibitisha"
+  },
+  "confirmModal": {
+    "confirmText": "Ili kuthibitisha",
+    "heading": "Una uhakika ?"
+  },
+  "confirmPopover": {
+    "confirmText": "Ili kuthibitisha",
+    "heading": "Una uhakika ?"
+  },
+  "pagination": {
+    "firstPage": "Ukurasa wa kawanza",
+    "lastPage": "Ukurasa wa mwisho",
+    "loading": "<spinner></spinner> <box>Chargement...</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span> \nsur</span> <strong>{{totalItems}}</strong> <box>résultats</box>",
+    "nextPage": "Ukurasa unaofuata",
+    "prevPage": "Ukurasa uliotangulia",
+    "showing": "<box>Affichage de</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span>sur</span> <strong \n>{{totalItems}}</strong> <box>résultats</box>"
+  },
+  "searchInput": {
+    "clear": "Futa utfutaji",
+    "placeholder": "Kuchunguza..."
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "Tarehe batili"
+  },
+  "fieldRepeater": {
+    "invalidMessage": "Angalau kipengele kimoja ni batili"
+  },
+  "fieldMultiSelect": {
+    "noOption": "Hakuna chaguo"
+  },
+  "sort": {
+    "sortAscending": "Kupanda",
+    "sortDescending": "Descendant",
+    "sortBy": "panga kwa",
+    "order": "Agizo"
+  }
+}
