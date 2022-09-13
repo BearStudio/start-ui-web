@@ -3,7 +3,7 @@ const inquirerFuzzyPath = require('inquirer-fuzzy-path');
 const storyGenerator = require('./generators/story');
 
 module.exports = function (plop) {
-  plop.setGenerator('stories', storyGenerator);
+  plop.setGenerator('story', storyGenerator);
 
   //#region  //*=========== Handlebars Helper ===========
   /**

@@ -7,13 +7,15 @@ module.exports = {
       name: 'path',
       rootPath: 'src',
       itemType: 'file',
+      excludeFilter: (nodePath) =>
+        !nodePath.endsWith('.tsx') || nodePath.endsWith('.stories.tsx'),
     },
   ],
   actions: [
     {
       type: 'add',
       path: 'src/{{getFolder path}}/docs.stories.tsx',
-      templateFile: 'generators/docs.stories.tsx.hbs',
+      templateFile: 'generators/story/docs.stories.tsx.hbs',
     },
   ],
 };

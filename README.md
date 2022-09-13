@@ -3,6 +3,8 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
+---
+
 ## Getting Started
 
 ```bash
@@ -16,6 +18,8 @@ Then just go to the created folder and start the dev server.
 cd myApp
 yarn dev
 ```
+
+---
 
 ## Technology
 
@@ -40,6 +44,8 @@ yarn dev
 
 ℹ️ API calls are mapped on a [JHipster](https://www.jhipster.tech/) backend application.
 
+---
+
 ## Features
 
 - Reponsive layout / navigation.
@@ -55,12 +61,16 @@ yarn dev
 - API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
 - API Mocking with persisting state via [MirageJS](https://miragejs.com/).
 
+---
+
 ## Installation
 
 ```bash
 yarn install
 yarn build
 ```
+
+---
 
 ## Development
 
@@ -94,13 +104,6 @@ yarn theme:generate-icons
 
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
-### Generate Storybook documentation for components
-
-Using fuzzy finding, you can search for components and generate the stories for it.
-
-```bash
-yarn plop
-```
 
 ### Development with [MirageJS](https://miragejs.com/) (mock)
 
@@ -125,6 +128,20 @@ NEXT_PUBLIC_DEV_ENV_NAME=staging
 NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
 ```
 
+---
+
+## Generators
+
+### Generate Storybook documentation for components
+
+Using fuzzy finding, you can search for components and generate the stories for it.
+
+```bash
+yarn new:story
+```
+
+---
+
 ## API Documentation
 
 API documentation is accessible by admins in the app with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react).
@@ -132,6 +149,8 @@ API documentation is accessible by admins in the app with [Swagger-UI](https://w
 yarn docs:build
 ```
 This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
+
+---
 
 ## Translations
 
@@ -222,6 +241,8 @@ t('account:resetPassword.actions.reset')
 ```
 
 - Use the common workspace only for VERY generic translations. By default, use specific namespaces to allow easy update on large code base without unwanted side-effects.
+
+---
 
 ## Production
 
