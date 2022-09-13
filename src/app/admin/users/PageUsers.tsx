@@ -1,10 +1,15 @@
 import React from 'react';
 
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Avatar,
   Badge,
   Box,
   Button,
+  Center,
   Code,
   HStack,
   Heading,
@@ -24,7 +29,6 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
-  FiAlertCircle,
   FiCheckCircle,
   FiEdit,
   FiPlus,
@@ -261,22 +265,27 @@ export const PageUsers = () => {
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
           {isError && (
-            <DataListRow>
-              <DataListCell gap={4} alignItems="center">
-                <FiAlertCircle size="4rem" />
-                <Text color="gray.500" fontSize="lg" fontWeight="medium">
+            <Center p={4}>
+              <Alert status="error">
+                <AlertIcon />
+                <AlertTitle>
                   {t('users:feedbacks.loadingUserError.title')}
-                </Text>
-                <Button
-                  variant="@secondary"
-                  size="sm"
-                  leftIcon={<FiRefreshCw />}
-                  onClick={() => refetch()}
-                >
-                  {t('users:list.actions.reloadPage')}
-                </Button>
-              </DataListCell>
-            </DataListRow>
+                </AlertTitle>
+                <AlertDescription>
+                  {t('users:feedbacks.loadingUserError.description')}
+                  <Button
+                    colorScheme="error"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={<FiRefreshCw />}
+                    isLoading={isLoadingPage}
+                    onClick={() => refetch()}
+                  >
+                    {t('users:list.actions.refetch')}
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            </Center>
           )}
 
           {users?.map((user) => (
