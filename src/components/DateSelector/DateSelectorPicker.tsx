@@ -13,18 +13,19 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import dayjs, { Dayjs } from 'dayjs';
+import { i18n } from 'i18next';
 import DayPicker, { DayPickerProps } from 'react-day-picker';
 import ReactFocusLock from 'react-focus-lock';
-
-import i18n from '@/config/i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useDateSelectorContext } from './DateSelector';
 
-type ChildrenFunctionParams = { date: Dayjs; onOpen: () => void };
+type ChildrenFunctionParams = { date: Dayjs; i18n: i18n; onOpen: () => void };
 type DateSelectorPickerProps = Omit<DayPickerProps, 'children'> & {
-  children?({ date, onOpen }: ChildrenFunctionParams): ReactNode;
+  children?({ date, i18n, onOpen }: ChildrenFunctionParams): ReactNode;
 };
-const defaultChildren = ({ date, onOpen }: ChildrenFunctionParams) => (
+
+const defaultChildren = ({ date, i18n, onOpen }: ChildrenFunctionParams) => (
   <chakra.button onClick={onOpen} px="2" type="button">
     {/* we use locale to update date language as changing the global locale doesn't affect existing instances. */}
     {date.locale(i18n.language).format('DD MMM YYYY')}
@@ -39,6 +40,7 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
 
   const { date, onDayClick, isOpen, onOpen, onClose } =
     useDateSelectorContext();
+  const { i18n } = useTranslation();
 
   const dayPicker = (
     <DayPicker
@@ -63,7 +65,7 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
   if (isMobile) {
     return (
       <>
-        {children({ date, onOpen })}
+        {children({ date, i18n, onOpen })}
         <Modal isOpen={isOpen} onClose={onClose} size="xs">
           <ModalOverlay />
           <ModalContent>
@@ -76,7 +78,7 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
 
   return (
     <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <PopoverTrigger>{children({ date, onOpen })}</PopoverTrigger>
+      <PopoverTrigger>{children({ date, i18n, onOpen })}</PopoverTrigger>
       <PopoverContent
         minW="0"
         p="0"
