@@ -1,0 +1,15 @@
+{
+  "languages": {
+    "en": "Anglais",
+    "fr": "Français",
+    "ar": "Arabe",
+    "sw": "Swahili"
+  },
+  "actions": {
+    "activate": "Wezesha",
+    "cancel": "Kughairi",
+    "deactivate": "Zima",
+    "delete": "Ili kufuta",
+    "edit": "Hariri"
+  }
+}

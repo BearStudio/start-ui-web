@@ -1,0 +1,13 @@
+{
+  "403": {
+    "title": "Kosa 403 ",
+    "description": "Samahani, huwezi kufikia ukurasa huu. ",
+    "actions": {
+      "goBack": "Rudi"
+    }
+  },
+  "404": {
+    "title": "Kosa 404",
+    "description": "Ukurasa haupo au URL imebadilika"
+  }
+}

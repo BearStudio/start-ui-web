@@ -8,17 +8,20 @@ import {
   MenuItemProps,
   Text,
   chakra,
+  createStylesContext,
   forwardRef,
   useMenuItem,
   useMenuState,
-  useStyles,
+  useMultiStyleConfig,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiAlertCircle } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export type StyledMenuItemProps = HTMLChakraProps<'button'>;
+
+const [StylesProvider, useStyles] = createStylesContext('Menu');
 
 const StyledMenuItem = forwardRef<StyledMenuItemProps, 'button'>(
   (props, ref) => {
@@ -61,6 +64,8 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
     ...rest
   } = props;
 
+  const styles = useMultiStyleConfig('Menu', props);
+
   const menuItemProps = useMenuItem(rest, ref) as MenuItemProps;
 
   const shouldWrap = icon || command;
@@ -74,22 +79,24 @@ export const MenuItem = forwardRef<MenuItemProps, 'button'>((props, ref) => {
   );
 
   return (
-    <StyledMenuItem
-      {...menuItemProps}
-      onClick={(e) => {
-        rest?.onClick?.(e);
-      }}
-    >
-      {icon && (
-        <MenuIcon fontSize="0.8em" marginEnd={iconSpacing}>
-          {icon}
-        </MenuIcon>
-      )}
-      {_children}
-      {command && (
-        <MenuCommand marginStart={commandSpacing}>{command}</MenuCommand>
-      )}
-    </StyledMenuItem>
+    <StylesProvider value={styles}>
+      <StyledMenuItem
+        {...menuItemProps}
+        onClick={(e) => {
+          rest?.onClick?.(e);
+        }}
+      >
+        {icon && (
+          <MenuIcon fontSize="0.8em" marginEnd={iconSpacing}>
+            {icon}
+          </MenuIcon>
+        )}
+        {_children}
+        {command && (
+          <MenuCommand marginStart={commandSpacing}>{command}</MenuCommand>
+        )}
+      </StyledMenuItem>
+    </StylesProvider>
   );
 });
 
@@ -165,7 +172,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
               bg: `${confirmColorScheme}.900`,
             },
           },
-          _focus: {
+          _focusVisible: {
             bg: `${confirmColorScheme}.50`,
             _dark: {
               bg: `${confirmColorScheme}.900`,

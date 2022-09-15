@@ -1,0 +1,12 @@
+{
+  "title": "Dashibodi",
+  "welcome": {
+    "author": "— <strong>L'équipe BearStudio</strong>",
+    "description": "Start UI cha kweli chenye React, Chakra UI, React Query & Formiz",
+    "title": "Karibu kwenye Start UI"
+  },
+  "links": {
+    "github": "Github hazina",
+    "openIssue": "Fungua njia ya kutoka"
+  }
+}

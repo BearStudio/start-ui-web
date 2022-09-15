@@ -3,18 +3,19 @@ import React from 'react';
 import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 
 import { AccountNav } from '@/app/account/AccountNav';
-import { useAccount, useUpdateAccount } from '@/app/account/account.service';
-import { Page, PageContent } from '@/app/layout';
 import {
-  FieldInput,
-  FieldSelect,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
+  accountKeys,
+  useAccount,
+  useUpdateAccount,
+} from '@/app/account/account.service';
+import { Page, PageContent } from '@/app/layout';
+import { FieldInput } from '@/components/FieldInput';
+import { FieldSelect } from '@/components/FieldSelect';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 
 export const PageProfile = () => {
@@ -38,7 +39,7 @@ export const PageProfile = () => {
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
-      queryClient.invalidateQueries('account');
+      queryClient.invalidateQueries(accountKeys.account());
     },
   });
 

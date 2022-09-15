@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import { useAccount } from '@/app/account/account.service';
-import { Error403, ErrorBoundary } from '@/errors';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorPage } from '@/components/ErrorPage';
 
 export const AdminRouteGuard: FC<React.PropsWithChildren<unknown>> = ({
   children,
@@ -13,7 +14,7 @@ export const AdminRouteGuard: FC<React.PropsWithChildren<unknown>> = ({
   }
 
   if (!isAdmin) {
-    return <Error403 />;
+    return <ErrorPage errorCode={403} />;
   }
 
   return <ErrorBoundary>{children}</ErrorBoundary>;

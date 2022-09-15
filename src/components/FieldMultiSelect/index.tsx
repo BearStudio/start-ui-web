@@ -4,7 +4,9 @@ import { FieldProps, useField } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 import { GroupBase } from 'react-select';
 
-import { FieldSelectProps, FormGroup, Select } from '@/components';
+import { FieldSelectProps } from '@/components/FieldSelect';
+import { FormGroup } from '@/components/FormGroup';
+import { Select } from '@/components/Select';
 
 export type FieldMultiSelectProps<
   Option,
@@ -27,11 +29,12 @@ export const FieldMultiSelect = <
     id,
     isValid,
     isSubmitted,
+    isPristine,
     resetKey,
     setValue,
     value,
     otherProps,
-  } = useField(props);
+  } = useField({ debounce: 0, ...props });
   const { required } = props;
   const {
     children,
@@ -51,7 +54,7 @@ export const FieldMultiSelect = <
     keyof FieldProps
   >;
   const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
   useEffect(() => {
     setIsTouched(false);
@@ -84,6 +87,7 @@ export const FieldMultiSelect = <
         value={
           options?.filter((option: TODO) => value?.includes(option.value)) || []
         }
+        onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder}
         onChange={handleChange as TODO}

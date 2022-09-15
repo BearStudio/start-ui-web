@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Stack } from '@chakra-ui/react';
+import { Box, Button, Stack } from '@chakra-ui/react';
 import { Formiz } from '@formiz/core';
 
 import { FieldTextarea } from './index';
@@ -11,7 +11,7 @@ export default {
 
 export const Default = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
+    <Stack spacing={4}>
       <FieldTextarea
         name="demo-description"
         label="Description"
@@ -35,14 +35,16 @@ export const Default = () => (
         helper="This is an helper"
         isDisabled
       />
-      <Button type="submit">Submit</Button>
+      <Box>
+        <Button type="submit">Submit</Button>
+      </Box>
     </Stack>
   </Formiz>
 );
 
 export const TextareaProps = () => (
   <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
+    <Stack spacing={4}>
       <FieldTextarea
         name="demo-description"
         label="Resize is horizontal"
@@ -62,7 +64,9 @@ export const TextareaProps = () => (
           resize: 'none',
         }}
       />
-      <Button type="submit">Submit</Button>
+      <Box>
+        <Button type="submit">Submit</Button>
+      </Box>
     </Stack>
   </Formiz>
 );

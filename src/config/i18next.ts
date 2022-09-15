@@ -6,6 +6,8 @@ import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 import * as locales from '@/locales';
 import { isBrowser } from '@/utils/ssr';
 
+dayjs.locale(DEFAULT_LANGUAGE_KEY);
+
 i18n.use(initReactI18next).init({
   defaultNS: 'common',
   ns: Object.keys((locales as ExplicitAny)[DEFAULT_LANGUAGE_KEY]),

@@ -2,8 +2,7 @@
   "extends": ["react-app", "plugin:@next/next/recommended"],
   "env": {
     "node": true,
-    "browser": true,
-    "jest": true
+    "browser": true
   },
   "rules": {
     "jsx-a11y/anchor-is-valid": "warn"

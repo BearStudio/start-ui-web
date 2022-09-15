@@ -6,7 +6,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 ## Getting Started
 
 ```bash
-npx create-start-ui --web myApp
+npx create-start-ui@latest --web myApp
 ```
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
@@ -73,6 +73,27 @@ yarn dev
 ```bash
 yarn storybook
 ```
+
+### Update theme typing
+
+When adding or updating theme components, component variations, sizes, colors and other theme foundations, you can extend the internal theme typings to provide nice autocomplete.
+
+Just run the following command after updating the theme:
+
+```bash
+yarn theme:generate-typing
+```
+
+### Generate custom icons components from svg files
+
+Put the custom svg files into the `src/components/Icons/svg-sources` folder and then run the following command:
+
+```bash
+yarn theme:generate-icons
+```
+
+> ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
+
 
 ### Development with [MirageJS](https://miragejs.com/) (mock)
 
@@ -318,6 +339,6 @@ Composable, headless & with built-in multi steps.
 
 ### Cypress
 
-[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test 
+[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test
 
 [Cypress](https://github.com/cypress-io/cypress) · [License MIT](https://github.com/cypress-io/cypress/blob/develop/LICENSE)

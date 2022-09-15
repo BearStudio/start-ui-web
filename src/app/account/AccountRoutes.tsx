@@ -12,7 +12,7 @@ import {
   AuthenticatedRouteGuard,
   PublicOnlyRouteGuard,
 } from '@/app/router/guards';
-import { Error404 } from '@/errors';
+import { ErrorPage } from '@/components/ErrorPage';
 
 const AccountRoutes = () => {
   return (
@@ -76,7 +76,7 @@ const AccountRoutes = () => {
         }
       />
 
-      <Route path="*" element={<Error404 />} />
+      <Route path="*" element={<ErrorPage errorCode={404} />} />
     </Routes>
   );
 };

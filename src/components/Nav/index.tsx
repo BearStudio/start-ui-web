@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 type NavContextValue = {
   active: ReactNode;

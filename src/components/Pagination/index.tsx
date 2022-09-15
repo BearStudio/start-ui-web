@@ -16,7 +16,7 @@ import {
   FiChevronsRight,
 } from 'react-icons/fi';
 
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 import { useRtl } from '@/hooks/useRtl';
 
 export const getPaginationInfo = ({

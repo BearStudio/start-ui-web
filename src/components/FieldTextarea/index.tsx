@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Textarea, TextareaProps } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
-import { FormGroup, FormGroupProps } from '@/components';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export type FieldTextareaProps = FieldProps &
   FormGroupProps & {
@@ -26,6 +26,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
     id,
     isValid,
     isSubmitted,
+    isPristine,
     resetKey,
     setValue,
     value,
@@ -38,7 +39,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
 
-  const showError = !isValid && (isTouched || isSubmitted);
+  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
   useEffect(() => {
     setIsTouched(false);
@@ -60,6 +61,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
         id={id}
         value={value ?? ''}
         onChange={(e) => setValue(e.target.value)}
+        onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder}
         autoFocus={autoFocus}

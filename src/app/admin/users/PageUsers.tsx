@@ -42,25 +42,26 @@ import {
 import { User } from '@/app/admin/users/users.types';
 import { Page, PageContent } from '@/app/layout';
 import { usePaginationFromUrl } from '@/app/router';
+import { ActionsButton } from '@/components/ActionsButton';
+import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import {
-  ActionsButton,
-  ConfirmMenuItem,
   DataList,
   DataListCell,
   DataListFooter,
   DataListHeader,
   DataListRow,
-  DateAgo,
-  Icon,
+} from '@/components/DataList';
+import { DateAgo } from '@/components/DateAgo';
+import { Icon } from '@/components/Icons';
+import {
   Pagination,
   PaginationButtonFirstPage,
   PaginationButtonLastPage,
   PaginationButtonNextPage,
   PaginationButtonPrevPage,
   PaginationInfo,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
+} from '@/components/Pagination';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 
 type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;

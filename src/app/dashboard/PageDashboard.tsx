@@ -16,7 +16,7 @@ import { FaGithub } from 'react-icons/fa';
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Page, PageContent } from '@/app/layout';
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 export const PageDashboard = () => {
   const { t } = useTranslation();

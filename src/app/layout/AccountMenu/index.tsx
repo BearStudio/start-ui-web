@@ -25,16 +25,18 @@ import {
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 
-import appBuild from '@/../app-build.json';
+import buildInfo from '@/../.build-info.json';
 import { useAccount } from '@/app/account/account.service';
-import { Icon } from '@/components';
+import { Icon } from '@/components/Icons';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation();
 
-  const { hasCopied, onCopy } = useClipboard(JSON.stringify(appBuild, null, 2));
+  const { hasCopied, onCopy } = useClipboard(
+    JSON.stringify(buildInfo, null, 2)
+  );
 
-  if (!appBuild?.version) {
+  if (!buildInfo?.version) {
     return null;
   }
 
@@ -55,10 +57,11 @@ const AppVersion = ({ ...rest }) => {
         outline="none"
         color="gray.500"
         _hover={{ bg: 'gray.50' }}
-        _focus={{ bg: 'gray.50' }}
+        _focusVisible={{ bg: 'gray.50' }}
         _dark={{
           color: 'gray.200',
-          _focus: { bg: 'gray.800' },
+          _focusVisible: { bg: 'gray.800' },
+          _hover: { bg: 'gray.600' },
         }}
         onClick={onCopy}
         {...rest}
@@ -90,7 +93,7 @@ const AppVersion = ({ ...rest }) => {
         </Flex>
         <Text as="span" noOfLines={2}>
           {t('layout:accountMenu.version.label')}{' '}
-          <strong>{appBuild?.display ?? appBuild?.version}</strong>
+          <strong>{buildInfo?.display ?? buildInfo?.version}</strong>
         </Text>
       </Flex>
     </>
@@ -106,7 +109,7 @@ export const AccountMenu = ({ ...rest }) => {
 
   return (
     <Menu placement="bottom-end" {...rest}>
-      <MenuButton borderRadius="full" _focus={{ shadow: 'outline' }}>
+      <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
         <Avatar size="sm" icon={<></>} name={account?.login}>
           {isLoading && <Spinner size="xs" />}
         </Avatar>

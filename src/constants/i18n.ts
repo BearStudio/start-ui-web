@@ -18,4 +18,7 @@ export const AVAILABLE_LANGUAGES: Language[] = [
     dir: 'rtl',
     fontScale: 1.2,
   },
+  {
+    key: 'sw',
+  },
 ];

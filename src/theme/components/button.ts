@@ -32,7 +32,7 @@ const customVariant = ({
   return {
     bg,
     color: isColorAccessible ? color : 'black',
-    _focus: {
+    _focusVisible: {
       boxShadow: boxShadowFocus,
     },
     _hover: {

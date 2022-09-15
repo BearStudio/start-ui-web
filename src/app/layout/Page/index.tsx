@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   useTheme,
 } from '@chakra-ui/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import useMeasure from 'react-use-measure';
 
 import { useFocusMode, useLayoutContext } from '@/app/layout';
 import { useRtl } from '@/hooks/useRtl';
@@ -63,23 +64,9 @@ export const PageTopBar = ({
   isFixed = false,
   ...rest
 }: PageTopBarProps) => {
-  const topBarRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
   const { isFocusMode } = useLayoutContext();
   const theme = useTheme();
-
-  useLayoutEffect(() => {
-    if (isFixed) {
-      const onResize = () => {
-        setHeight(topBarRef.current?.offsetHeight || 0);
-      };
-      onResize();
-      window.addEventListener('resize', onResize);
-      return () => {
-        window.removeEventListener('resize', onResize);
-      };
-    }
-  }, [isFixed]);
+  const [ref, { height }] = useMeasure();
 
   const { rtlValue } = useRtl();
 
@@ -93,7 +80,7 @@ export const PageTopBar = ({
         pb="4"
         boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
-        ref={topBarRef}
+        ref={ref}
         _dark={{ bg: 'gray.900' }}
         {...(isFixed
           ? {
@@ -157,19 +144,14 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
 };
 
 export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
-  const bottomBarRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-
-  useLayoutEffect(() => {
-    setHeight(bottomBarRef.current?.offsetHeight || 0);
-  }, [setHeight]);
+  const [ref, { height }] = useMeasure();
 
   return (
     <>
       <Box h={`${height}px`} />
       <Flex
         zIndex="3"
-        ref={bottomBarRef}
+        ref={ref}
         direction="column"
         mt="auto"
         position="fixed"

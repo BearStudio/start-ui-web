@@ -29,3 +29,11 @@ export const WithCustomParameters = () => {
     </ConfirmPopover>
   );
 };
+
+export const EnabledFalse = () => {
+  return (
+    <ConfirmPopover onConfirm={() => alert('Custom Action')} isEnabled={false}>
+      <Button>Trigger Action</Button>
+    </ConfirmPopover>
+  );
+};

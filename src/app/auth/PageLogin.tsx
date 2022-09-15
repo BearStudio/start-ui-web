@@ -2,12 +2,13 @@ import React from 'react';
 
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { LoginForm } from '@/app/auth/LoginForm';
 import { useRedirectFromUrl } from '@/app/router';
-import { Logo, SlideIn } from '@/components';
+import { Logo } from '@/components/Logo';
+import { SlideIn } from '@/components/SlideIn';
 
 export const PageLogin = () => {
   const { t } = useTranslation();

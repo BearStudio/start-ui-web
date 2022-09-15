@@ -52,7 +52,6 @@ const SelectInner = <
     isCreatable,
     isError,
     size = 'md',
-    loadingMessage,
     formatCreateLabel,
     placeholder,
     loadOptions = () => new Promise<void>((resolve) => resolve()),
@@ -83,7 +82,7 @@ const SelectInner = <
     stylesFromTheme.field.color,
     stylesFromTheme.field.bg,
     stylesFromTheme.field.borderColor,
-    stylesFromTheme.field._focus.borderColor,
+    stylesFromTheme.field._focusVisible.borderColor,
     stylesFromTheme.field._invalid.borderColor,
   ]);
   const [fieldBorderRadius] = useToken('radii', [
@@ -274,7 +273,6 @@ const SelectInner = <
       inputId={id}
       styles={selectStyle}
       menuPortalTarget={document.body}
-      {...(loadingMessage ? { loadingMessage: () => loadingMessage } : {})}
       {...(formatCreateLabel ? { formatCreateLabel } : {})}
       placeholder={placeholder ? String(placeholder) : 'Select...'}
       menuPlacement="auto"

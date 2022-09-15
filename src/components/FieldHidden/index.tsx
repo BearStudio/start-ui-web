@@ -9,7 +9,10 @@ type FieldHiddenProps = FieldProps & FormGroupProps;
 export const FieldHidden: React.FC<
   React.PropsWithChildren<FieldHiddenProps>
 > = (props) => {
-  const { isValid, isSubmitted, errorMessage, otherProps } = useField(props);
+  const { isValid, isSubmitted, errorMessage, otherProps } = useField({
+    debounce: 0,
+    ...props,
+  });
   const { ...rest } = otherProps as Omit<FieldHiddenProps, keyof FieldProps>;
   const showError = !isValid && isSubmitted;
   const formGroupProps = {

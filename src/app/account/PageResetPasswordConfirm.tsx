@@ -7,12 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useResetPasswordFinish } from '@/app/account/account.service';
-import {
-  FieldInput,
-  SlideIn,
-  useToastError,
-  useToastSuccess,
-} from '@/components';
+import { FieldInput } from '@/components/FieldInput';
+import { SlideIn } from '@/components/SlideIn';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 
 export const PageResetPasswordConfirm = () => {
   const { t } = useTranslation();

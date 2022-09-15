@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { PageUserCreate } from '@/app/admin/users/PageUserCreate';
 import { PageUserUpdate } from '@/app/admin/users/PageUserUpdate';
 import { PageUsers } from '@/app/admin/users/PageUsers';
-import { Error404 } from '@/errors';
+import { ErrorPage } from '@/components/ErrorPage';
 
 const AdminUsersRoutes = () => {
   return (
@@ -13,7 +13,7 @@ const AdminUsersRoutes = () => {
       <Route path="/" element={<PageUsers />} />
       <Route path="create" element={<PageUserCreate />} />
       <Route path=":login" element={<PageUserUpdate />} />
-      <Route path="*" element={<Error404 />} />
+      <Route path="*" element={<ErrorPage errorCode={404} />} />
     </Routes>
   );
 };
