@@ -34,7 +34,7 @@ const containerSizes = {
 const PageContainer = ({ children, ...rest }: FlexProps) => {
   const { hideContainer, containerSize } = useContext(PageContext);
 
-  if (hideContainer) return <>children</>;
+  if (hideContainer) return <>{children}</>;
 
   return (
     <Flex
