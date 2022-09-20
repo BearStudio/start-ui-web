@@ -1,10 +1,15 @@
 import React from 'react';
 
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Avatar,
   Badge,
   Box,
   Button,
+  Center,
   Code,
   HStack,
   Heading,
@@ -27,6 +32,7 @@ import {
   FiCheckCircle,
   FiEdit,
   FiPlus,
+  FiRefreshCw,
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
@@ -183,7 +189,7 @@ export const PageUsers = () => {
 
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
-  const { users, totalItems, isLoadingPage } = useUserList({
+  const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({
     page: page - 1,
     size: pageSize,
   });
@@ -216,6 +222,7 @@ export const PageUsers = () => {
             />
           </Box>
         </HStack>
+
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
             <DataListCell colName="login" colWidth="2">
@@ -257,6 +264,30 @@ export const PageUsers = () => {
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
+          {isError && (
+            <Center p={4}>
+              <Alert status="error">
+                <AlertIcon />
+                <AlertTitle>
+                  {t('users:feedbacks.loadingUserError.title')}
+                </AlertTitle>
+                <AlertDescription>
+                  {t('users:feedbacks.loadingUserError.description')}
+                  <Button
+                    colorScheme="error"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={<FiRefreshCw />}
+                    isLoading={isLoadingPage}
+                    onClick={() => refetch()}
+                  >
+                    {t('users:list.actions.refetch')}
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            </Center>
+          )}
+
           {users?.map((user) => (
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
@@ -344,6 +375,7 @@ export const PageUsers = () => {
               </DataListCell>
             </DataListRow>
           ))}
+
           <DataListFooter>
             <Pagination
               isLoadingPage={isLoadingPage}

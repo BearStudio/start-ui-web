@@ -1,4 +1,3 @@
-import Axios, { AxiosError } from 'axios';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -6,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import Axios, { AxiosError } from 'axios';
 
 import { User, UserList } from '@/app/admin/users/users.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
@@ -36,10 +36,7 @@ export const useUserList = (
     usersKeys.users({ page, size }),
     (): Promise<UserList> =>
       Axios.get('/admin/users', { params: { page, size, sort: 'id,desc' } }),
-    {
-      keepPreviousData: true,
-      ...config,
-    }
+    { keepPreviousData: true, ...config }
   );
 
   const { content: users, totalItems } = result.data || {};
