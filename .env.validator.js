@@ -31,7 +31,7 @@ const formatErrors = (
 
 if (!_env.success) {
   console.error(
-    "❌ Invalid environment variables\n👇 Fix the following environment variables or update the `.env.validator.mjs` file.\n",
+    "❌ Invalid environment variables\n👇 Fix the following environment variables or update the `.env.validator.js` file.\n",
     ...formatErrors(_env.error.format()),
   );
   process.exit(1);
