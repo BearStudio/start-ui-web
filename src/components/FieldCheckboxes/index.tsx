@@ -12,7 +12,7 @@ import React, {
 
 import { Checkbox, CheckboxProps, Wrap, WrapItem } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
-import create, { UseBoundStore, UseStore } from 'zustand';
+import create, { StoreApi, UseBoundStore } from 'zustand';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
@@ -61,7 +61,7 @@ type FieldCheckboxesState = {
 };
 
 type FieldCheckboxesContextProps = {
-  useStoreRef: MutableRefObject<UseBoundStore<FieldCheckboxesState>>;
+  useStoreRef: MutableRefObject<UseBoundStore<StoreApi<FieldCheckboxesState>>>;
   checkboxGroupProps?: Pick<
     CheckboxProps,
     'size' | 'colorScheme' | 'isDisabled'
@@ -124,9 +124,9 @@ export const FieldCheckboxes: React.FC<
     valueToVerify: Value
   ): boolean => !!values.find((item) => checkValuesEqual(item, valueToVerify));
 
-  const useStoreRef = useRef<UseStore<FieldCheckboxesState>>();
+  const useStoreRef = useRef<UseBoundStore<StoreApi<FieldCheckboxesState>>>();
   if (!useStoreRef.current) {
-    useStoreRef.current = create<FieldCheckboxesState>((set, get) => ({
+    const store = create<FieldCheckboxesState>((set, get) => ({
       options: [],
       registerOption: (
         optionToRegister: InternalOption,
@@ -195,6 +195,7 @@ export const FieldCheckboxes: React.FC<
       verifyIsValueChecked: (valueToVerify: Value): boolean =>
         !!verifyValueIsInValues(get().values ?? [], valueToVerify),
     }));
+    useStoreRef.current = store;
   }
 
   const setStoreValues = useStoreRef.current((state) => state.setValues);
