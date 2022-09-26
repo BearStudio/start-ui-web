@@ -1,5 +1,5 @@
 {
-  "name": "start-ui",
+  "name": "start-ui-web",
   "private": true,
   "version": "1.0.0",
   "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 🐜 Formiz — From the 🐻 BearStudio Team",
@@ -109,7 +109,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bearstudio/start-ui.git"
+    "url": "git+https://github.com/bearstudio/start-ui-web.git"
   },
   "author": {
     "name": "Ivan Dalmet",
@@ -125,7 +125,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bearstudio/start-ui/issues"
+    "url": "https://github.com/bearstudio/start-ui-web/issues"
   },
-  "homepage": "https://github.com/bearstudio/start-ui#readme"
+  "homepage": "https://github.com/bearstudio/start-ui-web#readme"
 }
