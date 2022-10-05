@@ -2653,10 +2653,10 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@lukemorales/query-key-factory@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@lukemorales/query-key-factory/-/query-key-factory-0.2.1.tgz#48cb13d737c66490886f55304ce976946663e65b"
-  integrity sha512-BmIamm4JooL6rlCF/Q7A1ZKxzUP23qGWHzlKskMA8n8dyEPWPVGjnMtxX3LugJu2YdAZeCmyCPFXZ8dvOBfH6g==
+"@lukemorales/query-key-factory@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@lukemorales/query-key-factory/-/query-key-factory-0.6.1.tgz#19f9bae9f1b83554e52d9884b60f7049736c7406"
+  integrity sha512-VgqEQFSvihTSDDNdzWXnfogfz8IWURBdFRxXjUBiF3R0cK7WsAz8m3pFJZLWj4o0l2WiCN9vCAcj8cZPp9x0Jg==
 
 "@mdx-js/mdx@^1.6.22":
   version "1.6.22"

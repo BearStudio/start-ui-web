@@ -85,10 +85,10 @@ export const useUserUpdate = (
   return useMutation((payload) => Axios.put(USERS_BASE_URL, payload), {
     ...config,
     onSuccess: (data, payload, ...rest) => {
-      queryClient.cancelQueries(usersKeys.users.toScope());
+      queryClient.cancelQueries(usersKeys.users._def);
       queryClient
         .getQueryCache()
-        .findAll(usersKeys.users.toScope())
+        .findAll(usersKeys.users._def)
         .forEach(({ queryKey }) => {
           queryClient.setQueryData<UserList | undefined>(
             queryKey,
@@ -103,7 +103,7 @@ export const useUserUpdate = (
             }
           );
         });
-      queryClient.invalidateQueries(usersKeys.users.toScope());
+      queryClient.invalidateQueries(usersKeys.users._def);
       queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
       if (config.onSuccess) {
         config.onSuccess(data, payload, ...rest);
@@ -132,7 +132,7 @@ export const useUserCreate = (
     {
       ...config,
       onSuccess: (...args) => {
-        queryClient.invalidateQueries(usersKeys.users.toScope());
+        queryClient.invalidateQueries(usersKeys.users._def);
         config?.onSuccess?.(...args);
       },
     }
@@ -151,7 +151,7 @@ export const useUserRemove = (
     {
       ...config,
       onSuccess: (...args) => {
-        queryClient.invalidateQueries(usersKeys.users.toScope());
+        queryClient.invalidateQueries(usersKeys.users._def);
         config?.onSuccess?.(...args);
       },
     }

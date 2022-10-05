@@ -1,4 +1,7 @@
-import { createQueryKeys } from '@lukemorales/query-key-factory';
+import {
+  createQueryKeys,
+  inferQueryKeys,
+} from '@lukemorales/query-key-factory';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -14,13 +17,14 @@ import { Account } from '@/spa/account/account.types';
 export const accountKeys = createQueryKeys('accountService', {
   account: null,
 });
+type AccountKeys = inferQueryKeys<typeof accountKeys>;
 
 export const useAccount = (
   config: UseQueryOptions<
     Account,
     AxiosError,
     Account,
-    typeof accountKeys.account
+    AccountKeys['account']
   > = {}
 ) => {
   const { i18n } = useTranslation();
