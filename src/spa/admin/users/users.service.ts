@@ -1,4 +1,7 @@
-import { createQueryKeys } from '@lukemorales/query-key-factory';
+import {
+  createQueryKeys,
+  inferQueryKeys,
+} from '@lukemorales/query-key-factory';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -22,6 +25,7 @@ const usersKeys = createQueryKeys('usersService', {
   users: (params: { page?: number; size?: number }) => params,
   user: (params: { login?: string }) => params,
 });
+type UsersKeys = inferQueryKeys<typeof usersKeys>;
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
@@ -29,7 +33,7 @@ export const useUserList = (
     UserList,
     AxiosError,
     UserList,
-    InferQueryKey<typeof usersKeys.users>
+    UsersKeys['users']
   > = {}
 ) => {
   const result = useQuery(
@@ -56,12 +60,7 @@ export const useUserList = (
 
 export const useUser = (
   userLogin?: string,
-  config: UseQueryOptions<
-    User,
-    AxiosError,
-    User,
-    InferQueryKey<typeof usersKeys.user>
-  > = {}
+  config: UseQueryOptions<User, AxiosError, User, UsersKeys['user']> = {}
 ) => {
   const result = useQuery(
     usersKeys.user({ login: userLogin }),
