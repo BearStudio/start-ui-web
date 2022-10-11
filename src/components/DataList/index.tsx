@@ -12,6 +12,7 @@ import {
   FlexProps,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 type DataListColumns = Record<string, DataListCellProps>;
 type DataListContextValue = {
@@ -243,6 +244,8 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
   ...rest
 }) => {
   const [columns, setColumns] = useState<DataListColumns>({});
+  const [listRef]: any = useAutoAnimate<HTMLDivElement>();
+
   return (
     <DataListContext.Provider
       value={{
@@ -266,6 +269,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         _dark={{
           bg: 'blackAlpha.400',
         }}
+        ref={listRef}
         {...rest}
       />
     </DataListContext.Provider>

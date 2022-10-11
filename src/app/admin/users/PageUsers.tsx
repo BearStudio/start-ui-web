@@ -27,7 +27,6 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useTranslation } from 'react-i18next';
 import {
   FiCheckCircle,
@@ -187,14 +186,13 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 
 export const PageUsers = () => {
   const { t } = useTranslation();
-
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
   const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({
     page: page - 1,
     size: pageSize,
   });
-  const [parent]: any = useAutoAnimate();
+
   return (
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
@@ -288,100 +286,93 @@ export const PageUsers = () => {
               </Alert>
             </Center>
           )}
-          <ul ref={parent}>
-            {users?.map((user) => (
-              <li key={user.id}>
-                <DataListRow as={LinkBox} key={user.id}>
-                  <DataListCell colName="login">
-                    <HStack maxW="100%">
-                      <Avatar size="sm" name={user.login} mx="1" />
-                      <Box minW="0">
-                        <Text noOfLines={1} maxW="full" fontWeight="bold">
-                          <LinkOverlay as={Link} to={user.login}>
-                            {user.login}
-                          </LinkOverlay>
-                        </Text>
-                        <Text
-                          noOfLines={1}
-                          maxW="full"
-                          fontSize="sm"
-                          color="gray.600"
-                          _dark={{ color: 'gray.300' }}
-                        >
-                          {user.email}
-                        </Text>
-                      </Box>
-                    </HStack>
-                  </DataListCell>
-                  <DataListCell colName="id">
-                    <Code maxW="full" fontSize="xs">
-                      {user.id}
-                    </Code>
-                  </DataListCell>
-                  <DataListCell colName="authorities">
-                    <Wrap>
-                      {user.authorities?.map((authority) => (
-                        <WrapItem key={authority}>
-                          <Badge size="sm">{authority}</Badge>
-                        </WrapItem>
-                      ))}
-                    </Wrap>
-                  </DataListCell>
-                  <DataListCell
-                    colName="created"
-                    fontSize="sm"
-                    position="relative"
-                    pointerEvents="none"
-                  >
-                    <Text noOfLines={1} maxW="full">
-                      {user.createdBy}
+          {users?.map((user) => (
+            <DataListRow as={LinkBox} key={user.id}>
+              <DataListCell colName="login">
+                <HStack maxW="100%">
+                  <Avatar size="sm" name={user.login} mx="1" />
+                  <Box minW="0">
+                    <Text noOfLines={1} maxW="full" fontWeight="bold">
+                      <LinkOverlay as={Link} to={user.login}>
+                        {user.login}
+                      </LinkOverlay>
                     </Text>
-                    {!!user.createdDate && (
-                      <Text
-                        noOfLines={1}
-                        maxW="full"
-                        pointerEvents="auto"
-                        color="gray.600"
-                        _dark={{ color: 'gray.300' }}
-                      >
-                        <DateAgo date={user.createdDate} />
-                      </Text>
-                    )}
-                  </DataListCell>
-                  <DataListCell
-                    colName="lastModified"
-                    fontSize="sm"
-                    position="relative"
-                    pointerEvents="none"
-                  >
-                    <Text noOfLines={1} maxW="full">
-                      {user.lastModifiedBy}
+                    <Text
+                      noOfLines={1}
+                      maxW="full"
+                      fontSize="sm"
+                      color="gray.600"
+                      _dark={{ color: 'gray.300' }}
+                    >
+                      {user.email}
                     </Text>
-                    {!!user.lastModifiedDate && (
-                      <Text
-                        noOfLines={1}
-                        maxW="full"
-                        pointerEvents="auto"
-                        color="gray.600"
-                        _dark={{ color: 'gray.300' }}
-                      >
-                        <DateAgo
-                          position="relative"
-                          date={user.lastModifiedDate}
-                        />
-                      </Text>
-                    )}
-                  </DataListCell>
-                  <DataListCell colName="status">
-                    <UserStatus isActivated={user.activated} />
-                  </DataListCell>
-                  <DataListCell colName="actions">
-                    <UserActions user={user} />
-                  </DataListCell>
-                </DataListRow>
-              </li>
-            ))}
-          </ul>
+                  </Box>
+                </HStack>
+              </DataListCell>
+              <DataListCell colName="id">
+                <Code maxW="full" fontSize="xs">
+                  {user.id}
+                </Code>
+              </DataListCell>
+              <DataListCell colName="authorities">
+                <Wrap>
+                  {user.authorities?.map((authority) => (
+                    <WrapItem key={authority}>
+                      <Badge size="sm">{authority}</Badge>
+                    </WrapItem>
+                  ))}
+                </Wrap>
+              </DataListCell>
+              <DataListCell
+                colName="created"
+                fontSize="sm"
+                position="relative"
+                pointerEvents="none"
+              >
+                <Text noOfLines={1} maxW="full">
+                  {user.createdBy}
+                </Text>
+                {!!user.createdDate && (
+                  <Text
+                    noOfLines={1}
+                    maxW="full"
+                    pointerEvents="auto"
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
+                  >
+                    <DateAgo date={user.createdDate} />
+                  </Text>
+                )}
+              </DataListCell>
+              <DataListCell
+                colName="lastModified"
+                fontSize="sm"
+                position="relative"
+                pointerEvents="none"
+              >
+                <Text noOfLines={1} maxW="full">
+                  {user.lastModifiedBy}
+                </Text>
+                {!!user.lastModifiedDate && (
+                  <Text
+                    noOfLines={1}
+                    maxW="full"
+                    pointerEvents="auto"
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
+                  >
+                    <DateAgo position="relative" date={user.lastModifiedDate} />
+                  </Text>
+                )}
+              </DataListCell>
+              <DataListCell colName="status">
+                <UserStatus isActivated={user.activated} />
+              </DataListCell>
+              <DataListCell colName="actions">
+                <UserActions user={user} />
+              </DataListCell>
+            </DataListRow>
+          ))}
           <DataListFooter>
             <Pagination
               isLoadingPage={isLoadingPage}
