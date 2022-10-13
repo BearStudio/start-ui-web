@@ -42,6 +42,7 @@
     "@fontsource/inter": "4.5.11",
     "@formiz/core": "1.8.1",
     "@formiz/validations": "1.0.0",
+    "@formkit/auto-animate": "1.0.0-beta.3",
     "@tanstack/react-query": "4.0.10",
     "@tanstack/react-query-devtools": "4.0.10",
     "axios": "0.27.2",

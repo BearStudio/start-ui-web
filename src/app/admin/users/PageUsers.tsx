@@ -186,7 +186,6 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 
 export const PageUsers = () => {
   const { t } = useTranslation();
-
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
   const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({
@@ -287,7 +286,6 @@ export const PageUsers = () => {
               </Alert>
             </Center>
           )}
-
           {users?.map((user) => (
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
@@ -375,7 +373,6 @@ export const PageUsers = () => {
               </DataListCell>
             </DataListRow>
           ))}
-
           <DataListFooter>
             <Pagination
               isLoadingPage={isLoadingPage}
