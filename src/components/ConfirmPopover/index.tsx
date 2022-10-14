@@ -68,7 +68,7 @@ export const ConfirmPopover: React.FC<
       >
         <PopoverTrigger>{children}</PopoverTrigger>
         <Portal>
-          <PopoverContent>
+          <PopoverContent aria-label={t('components:confirmPopover.heading')}>
             <FocusLock returnFocus persistentFocus={false}>
               <PopoverArrow />
               <PopoverBody fontSize="sm">

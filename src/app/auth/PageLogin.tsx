@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { LoginForm } from '@/app/auth/LoginForm';
@@ -29,7 +29,7 @@ export const PageLogin = () => {
           bg="white"
           _dark={{ bg: 'blackAlpha.400' }}
         >
-          <Heading size="md" mb="4" data-test="login-page-heading">
+          <Heading size="md" mb="4" data-testid="login-page-heading">
             {t('auth:login.title')}
           </Heading>
           <LoginForm onSuccess={onLogin} />

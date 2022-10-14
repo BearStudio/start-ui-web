@@ -41,10 +41,15 @@ jobs:
         run: yarn lint
 
       - name: Run component tests
-        run: yarn test:ci
+        uses: cypress-io/github-action@v4
+        with:
+          component: true
 
-      - name: Generate coverage report
-        run: npx nyc report --reporter=lcov
+      - name: Report test coverage
+        uses: PoorlyDefinedBehaviour/nyc-reporter@v1
+        with:
+          command: 'npx nyc report'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Building
         run: yarn build

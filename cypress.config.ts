@@ -13,7 +13,7 @@ export default defineConfig({
             // application and Cypress files are bundled like React components
             // and instrumented using the babel-plugin-istanbul
             {
-              test: /\.tsx$/,
+              test: /\.(tsx|ts)$/,
               exclude: /node_modules/,
               use: {
                 loader: 'babel-loader',
