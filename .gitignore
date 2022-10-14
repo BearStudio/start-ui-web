@@ -44,6 +44,11 @@ yarn-error.log*
 
 # cypress
 /cypress/videos
+/cypress/screenshots
+/cypress/reports
 
 # Build info
 .build-info.json
+
+#nyc
+.nyc_output

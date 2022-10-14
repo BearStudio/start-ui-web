@@ -1,5 +1,9 @@
 {
-  "extends": ["react-app", "plugin:@next/next/recommended"],
+  "extends": [
+    "react-app",
+    "plugin:@next/next/recommended",
+    "plugin:cypress/recommended"
+  ],
   "env": {
     "node": true,
     "browser": true

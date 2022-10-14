@@ -40,7 +40,7 @@ jobs:
       - name: Check coding rules and types
         run: yarn lint
 
-      - name: Run unit tests
+      - name: Run component tests
         run: yarn test:ci
 
       - name: Building
