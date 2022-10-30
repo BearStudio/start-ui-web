@@ -8,11 +8,9 @@ export default {
     },
     md: {
       fontSize: '0.8em',
-      textTransform: 'none',
     },
     lg: {
       fontSize: '0.9em',
-      textTransform: 'none',
     },
   },
   defaultProps: {
