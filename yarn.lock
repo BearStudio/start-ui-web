@@ -2032,7 +2032,7 @@
   resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-1.0.0.tgz#d61041076b8423d6f439a6b7acb0581caca37d9d"
   integrity sha512-pGTf0IQmSDhK7+4oTYjwtkn5TXqts33URSFXcUBMidDJgd1bSUzTQMNftg7YCeRPY8ROSsaJNWP7bFwtwHQeSA==
 
-"@formkit/auto-animate@1.0.0":
+"@formkit/auto-animate@1.0.0-beta.3":
   version "1.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/@formkit/auto-animate/-/auto-animate-1.0.0-beta.3.tgz#d5eb724ccb44afba9348df32ce0b8bb10037a7ee"
   integrity sha512-glsi+ytwQpxT/Ctr9GtcIfVr4dO6mJ04mQbNU8MFSdCdqMopHtyfU5Fib0+9lNFIeR0luY4/0NW95/2R5pKsag==
