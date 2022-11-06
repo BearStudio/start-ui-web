@@ -5,7 +5,7 @@
 ## Backend
 - 💛 [Cartesi](https://www.cartesi.com)
 - 🖤 [0x Labs](https://www.0x.org)
-- 💚 [Gnosis](https://www.gnosis.com)
+- 💚 [Gnosis](https://www.gnosis.io)
 - 💜 [Polygon](https://www.polygonscan.com)
 - 💙 [Alluo](https://www.alluo.com)
 
