@@ -65,11 +65,14 @@ export const MainMenu = ({ ...rest }) => {
   const { isAdmin } = useAccount();
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <MainMenuItem to="/dashboard">
-        {t('layout:mainMenu.dashboard')}
-      </MainMenuItem>
+      <MainMenuItem to="/">How it works </MainMenuItem>
+      <MainMenuItem to="/admin">Use cases </MainMenuItem>
+      <MainMenuItem to="/admin">Tech Stack </MainMenuItem>
+      <MainMenuItem to="/admin">API Docs </MainMenuItem>
       {isAdmin && (
-        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
+        <MainMenuItem to="/admin" backgroundColor="blue">
+          ➕ Add Triggers
+        </MainMenuItem>
       )}
     </Stack>
   );

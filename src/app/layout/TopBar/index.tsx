@@ -64,6 +64,7 @@ export const TopBar = () => {
             <Logo />
           </Box>
           <MainMenu me="auto" ms="4" display={{ base: 'none', md: 'flex' }} />
+          💘 ETHGlobalSF 2022 . . . . .
           <AccountMenu />
         </Flex>
       </SlideFade>

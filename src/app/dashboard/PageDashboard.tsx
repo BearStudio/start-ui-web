@@ -23,41 +23,69 @@ export const PageDashboard = () => {
   return (
     <Page>
       <PageContent>
-        <Heading size="md" mb="4">
-          {t('dashboard:title')}
-        </Heading>
-        <Alert status="success" colorScheme="brand" borderRadius="md">
-          <AlertIcon />
+        <Alert status="success" colorScheme="orange" borderRadius="100">
           <Box flex="1">
-            <AlertTitle fontSize="lg">
-              {t('dashboard:welcome.title')}
-            </AlertTitle>
-            <AlertDescription display="block">
-              {t('dashboard:welcome.description')}
+            <AlertTitle fontSize="xl">
               <br />
-              <Text as="a" href="https://www.bearstudio.fr">
-                <Trans t={t} i18nKey="dashboard:welcome.author" />
-              </Text>
+              <br />
+            </AlertTitle>{' '}
+            <Heading size="xl" mb="4">
+              . . . . . 🫠 Zero Awareness Protocol{' '}
+            </Heading>
+            <br />
+          </Box>
+          <br />
+          <br />
+        </Alert>
+        <br />☞ <i>ANON:</i> Nostalgic for the wacky Web3 days of yore? Make
+        blockchain fun again and drive attention to your protocol with obscured
+        Easter eggs and more! <br />
+        <br />
+        <Alert status="success" colorScheme="brand" borderRadius="md">
+          {/* <AlertIcon /> */}
+          <Box flex="1">
+            {/* <AlertTitle fontSize="lg"><br/>
+            <br/>
+
+"Putting the WTF back in web3"            </AlertTitle> */}
+            <AlertDescription display="block">
+              <ButtonGroup mt="4" spacing="4">
+                <Button colorScheme="teal" as="a" href="/app/admin/users">
+                  + An on-chain Time-bomb 💣
+                </Button>
+                <Button colorScheme="orange" as="a" href="/app/admin/users">
+                  + Refund double gas fee 🧧
+                </Button>
+              </ButtonGroup>
+
+              <ButtonGroup mt="4" spacing="4">
+                <Button colorScheme="purple" as="a" href="/app/admin/users">
+                  + Unlock from real-world events 🔮
+                </Button>
+                <Button colorScheme="pink" as="a" href="/app/admin/users">
+                  + A birthday surprise 🎂
+                </Button>
+              </ButtonGroup>
             </AlertDescription>
+
+            <br />
           </Box>
         </Alert>
+        <br />
+        <br />
+        Built with Cartesi
+        <br />
         <ButtonGroup mt="4" spacing="4">
-          <Button
-            variant="link"
-            as="a"
-            href="https://github.com/BearStudio/start-ui"
-          >
+          <Button variant="link" as="a" href="https://github.com/">
             <Icon icon={FaGithub} me="1" /> {t('dashboard:links.github')}
           </Button>
-          <Button
-            variant="link"
-            as="a"
-            href="https://github.com/BearStudio/start-ui/issues/new"
-          >
+          <Button variant="link" as="a" href="https://github.com/issues/new">
             <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
         </ButtonGroup>
+        <br />
+        <img src="https://media.discordapp.net/attachments/1038522692996956210/1038693844054724718/zaP_main_function.drawio.png" />
       </PageContent>
     </Page>
   );

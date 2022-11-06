@@ -12,11 +12,39 @@ import { useTranslation } from 'react-i18next';
 import { FieldCheckboxes } from '@/components/FieldCheckboxes';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
-import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
+
+// import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
+
+export const AVAILABLE_LANGUAGES = [
+  {
+    key: 'drop ERC20 in wallet',
+  },
+  {
+    key: 'drop ERC721 PFP NFT',
+  },
+  {
+    key: 'drop POAP in wallet',
+  },
+  {
+    key: 'send XMTP message to wallet',
+  },
+  {
+    key: 'time bomb',
+  },
+  {
+    key: 'gas fee refund',
+  },
+  {
+    key: 'oracle unlock',
+  },
+  {
+    key: 'birthday surprise',
+  },
+];
 
 const AUTHORITIES = {
-  ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
+  refund: 'refund gas',
+  store: 'multi-chain',
 };
 
 export const UserForm = () => {
@@ -35,62 +63,64 @@ export const UserForm = () => {
     >
       <FieldInput
         name="login"
-        label={t('users:data.login.label')}
-        required={t('users:data.login.required') as string}
+        label="Symbol"
+        required="try an emoji!"
+        placeholder="try an emoji!"
         validations={[
           {
             rule: isMinLength(2),
-            message: t('users:data.login.tooShort', { min: 2 }),
           },
           {
             rule: isMaxLength(50),
-            message: t('users:data.login.tooLong', { max: 50 }),
-          },
-          {
-            rule: isPattern(
-              '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
-            ),
-            message: t('users:data.login.invalid'),
           },
         ]}
       />
-      <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
-        <FieldInput name="firstName" label={t('users:data.firstname.label')} />
-        <FieldInput name="lastName" label={t('users:data.lastname.label')} />
-      </Stack>
+
       <FieldInput
         name="email"
-        label={t('users:data.email.label')}
-        required={t('users:data.email.required') as string}
-        validations={[
-          {
-            rule: isMinLength(5),
-            message: t('users:data.email.tooShort', { min: 5 }),
-          },
-          {
-            rule: isMaxLength(254),
-            message: t('users:data.email.tooLong', { min: 254 }),
-          },
-          {
-            rule: isEmail(),
-            message: t('users:data.email.invalid'),
-          },
-        ]}
+        label="Conditions"
+        placeholder="Rules to trigger"
+        // required={t('users:data.email.required') as string}
+        // validations={[
+        //   {
+        //     rule: isMinLength(5),
+        //     message: t('users:data.email.tooShort', { min: 5 }),
+        //   },
+        //   {
+        //     rule: isMaxLength(254),
+        //     message: t('users:data.email.tooLong', { min: 254 }),
+        //   },
+        //   {
+        //     rule: isEmail(),
+        //     message: t('users:data.email.invalid'),
+        //   },
+        // ]}
       />
+      <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
+        <FieldInput
+          name="firstName"
+          label="➡️ To"
+          placeholder="Wallet address"
+        />
+        <FieldInput
+          name="lastName"
+          label="⬅️ From"
+          placeholder="Wallet address"
+        />
+      </Stack>
       <FieldSelect
         name="langKey"
-        label={t('users:data.language.label')}
+        label="Reward"
         options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-          label: t(`languages.${key}`),
+          label: key,
           value: key,
         }))}
-        defaultValue={DEFAULT_LANGUAGE_KEY}
       />
       <FieldCheckboxes
         name="authorities"
-        label={t('users:data.authorities.label')}
+        label="⚡️Actions"
         options={authorities}
-        required={t('users:data.authorities.required') as string}
+        required="choose an action!"
       />
     </Stack>
   );

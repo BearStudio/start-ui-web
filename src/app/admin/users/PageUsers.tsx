@@ -81,17 +81,13 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
-          title: t('users:feedbacks.activateUserSuccess.title'),
-          description: t('users:feedbacks.activateUserSuccess.description', {
-            login,
-          }),
+          title: 'activate',
+          description: '😮 you turned me on',
         });
       } else {
         toastSuccess({
-          title: t('users:feedbacks.deactivateUserSuccess.title'),
-          description: t('users:feedbacks.deactivateUserSuccess.description', {
-            login,
-          }),
+          title: 'inactivate',
+          description: '🙄 you turned me off',
         });
       }
     },
@@ -121,18 +117,14 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { mutate: userRemove, ...userRemoveData } = useUserRemove({
     onSuccess: (_, { login }) => {
       toastSuccess({
-        title: t('users:feedbacks.deleteUserSuccess.title'),
-        description: t('users:feedbacks.deleteUserSuccess.description', {
-          login,
-        }),
+        title: 'deleted',
+        description: 'yep',
       });
     },
     onError: (_, { login }) => {
       toastError({
-        title: t('users:feedbacks.deleteUserError.title'),
-        description: t('users:feedbacks.deleteUserError.description', {
-          login,
-        }),
+        title: 'err',
+        description: 'ok',
       });
     },
   });
@@ -197,8 +189,10 @@ export const PageUsers = () => {
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
         <HStack mb="4">
-          <Box flex="1">
-            <Heading size="md">{t('users:list.title')}</Heading>
+          <Box flex="1" padding="lg">
+            <Heading size="md">
+              ▶️ Multi-chain rules to unlock encrypted channel / action
+            </Heading>
           </Box>
           <Box>
             <Button
@@ -208,7 +202,7 @@ export const PageUsers = () => {
               variant="@primary"
               leftIcon={<FiPlus />}
             >
-              {t('users:list.actions.createUser')}
+              Create Trigger
             </Button>
             <IconButton
               display={{ base: 'flex', sm: 'none' }}
@@ -224,42 +218,43 @@ export const PageUsers = () => {
 
         <DataList>
           <DataListHeader isVisible={{ base: false, md: true }}>
-            <DataListCell colName="login" colWidth="2">
-              {t('users:data.login.label')} / {t('users:data.email.label')}
+            <DataListCell colName="login" colWidth="2"></DataListCell>
+            <DataListCell
+              colName="id"
+              colWidth="4rem"
+              isVisible={{ base: false, lg: true }}
+            >
+              #TID{' '}
             </DataListCell>
             <DataListCell
               colName="id"
               colWidth="4rem"
               isVisible={{ base: false, lg: true }}
             >
-              {t('users:data.id.label')}
+              ⏱{' '}
             </DataListCell>
             <DataListCell
               colName="authorities"
               isVisible={{ base: false, lg: true }}
-            >
-              {t('users:data.authorities.label')}
-            </DataListCell>
+            ></DataListCell>
             <DataListCell
-              colName="created"
+              colName="firstName"
               isVisible={{ base: false, lg: true }}
             >
-              {t('users:data.createdBy.label')}
+              To{' '}
             </DataListCell>
             <DataListCell
               colName="lastModified"
               isVisible={{ base: false, md: true }}
             >
-              {t('users:data.modifiedBy.label')}
+              From
             </DataListCell>
             <DataListCell
               colName="status"
               colWidth={{ base: '2rem', md: '0.5' }}
               align="center"
             >
-              <Box as="span" display={{ base: 'none', md: 'block' }}>
-                {t('users:data.status.label')}
-              </Box>
+              <Box as="span" display={{ base: 'none', md: 'block' }}></Box>
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
@@ -290,15 +285,15 @@ export const PageUsers = () => {
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
                 <HStack maxW="100%">
-                  <Avatar size="sm" name={user.login} mx="1" />
+                  <Box minW="0">{user.login}</Box>
                   <Box minW="0">
                     <Text noOfLines={1} maxW="full" fontWeight="bold">
                       <LinkOverlay as={Link} to={user.login}>
-                        {user.login}
+                        {user.langKey}
                       </LinkOverlay>
                     </Text>
                     <Text
-                      noOfLines={1}
+                      noOfLines={10}
                       maxW="full"
                       fontSize="sm"
                       color="gray.600"
@@ -314,6 +309,19 @@ export const PageUsers = () => {
                   {user.id}
                 </Code>
               </DataListCell>
+
+              <DataListCell colName="isd">
+                <Text
+                  noOfLines={1}
+                  maxW="full"
+                  pointerEvents="auto"
+                  color="gray.600"
+                  _dark={{ color: 'gray.300' }}
+                >
+                  <DateAgo position="relative" date={user.lastModifiedDate} />
+                </Text>
+              </DataListCell>
+
               <DataListCell colName="authorities">
                 <Wrap>
                   {user.authorities?.map((authority) => (
@@ -324,13 +332,13 @@ export const PageUsers = () => {
                 </Wrap>
               </DataListCell>
               <DataListCell
-                colName="created"
+                colName="firstName"
                 fontSize="sm"
                 position="relative"
                 pointerEvents="none"
               >
                 <Text noOfLines={1} maxW="full">
-                  {user.createdBy}
+                  {user.firstName}
                 </Text>
                 {!!user.createdDate && (
                   <Text
@@ -351,19 +359,12 @@ export const PageUsers = () => {
                 pointerEvents="none"
               >
                 <Text noOfLines={1} maxW="full">
-                  {user.lastModifiedBy}
+                  {user.lastName}
                 </Text>
-                {!!user.lastModifiedDate && (
-                  <Text
-                    noOfLines={1}
-                    maxW="full"
-                    pointerEvents="auto"
-                    color="gray.600"
-                    _dark={{ color: 'gray.300' }}
-                  >
-                    <DateAgo position="relative" date={user.lastModifiedDate} />
-                  </Text>
-                )}
+                <Text noOfLines={1} maxW="full"></Text>
+                {/* {!!user.lastModifiedDate && ( */}
+
+                {/* )} */}
               </DataListCell>
               <DataListCell colName="status">
                 <UserStatus isActivated={user.activated} />

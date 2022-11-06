@@ -42,7 +42,7 @@ export const PageUserCreate = () => {
     },
     onSuccess: () => {
       toastSuccess({
-        title: t('users:create.feedbacks.updateSuccess.title'),
+        title: 'Made a motherfucking trigger',
       });
       navigate('/admin/users');
     },
@@ -64,7 +64,7 @@ export const PageUserCreate = () => {
       >
         <form noValidate onSubmit={form.submit}>
           <PageTopBar showBack onBack={() => navigate(-1)}>
-            <Heading size="md">{t('users:create.title')}</Heading>
+            <Heading size="md">Create new Trigger</Heading>
           </PageTopBar>
           <PageContent>
             <UserForm />
@@ -79,7 +79,7 @@ export const PageUserCreate = () => {
                 variant="@primary"
                 isLoading={createUserLoading}
               >
-                {t('users:create.action.save')}
+                Add
               </Button>
             </ButtonGroup>
           </PageBottomBar>

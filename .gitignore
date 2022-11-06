@@ -47,3 +47,6 @@ yarn-error.log*
 
 # Build info
 .build-info.json
+
+# Local Netlify folder
+.netlify

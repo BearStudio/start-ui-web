@@ -1,10 +1,10 @@
 import { UseToastOptions, useToast } from '@chakra-ui/react';
 
 export const toastDefaultConfig: UseToastOptions = {
-  duration: 3000,
+  duration: 10000,
   isClosable: true,
-  position: 'top-right',
-  variant: 'solid',
+  position: 'top',
+  variant: 'left-accent',
 };
 
 export const useToastError = () =>

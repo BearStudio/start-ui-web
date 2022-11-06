@@ -22,8 +22,8 @@ import {
   PageContent,
   PageTopBar,
 } from '@/app/layout';
-import { useToastError, useToastSuccess } from '@/components/Toast';
 import { ErrorPage } from '@/components/ErrorPage';
+import { useToastError, useToastSuccess } from '@/components/Toast';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
@@ -132,7 +132,7 @@ export const PageUserUpdate = () => {
                   variant="@primary"
                   isLoading={editUserIsLoading}
                 >
-                  {t('users:update.action.save')}
+                  Update{' '}
                 </Button>
               </ButtonGroup>
             </PageBottomBar>

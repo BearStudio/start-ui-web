@@ -13,14 +13,38 @@ export const AdminNav = () => {
   const isActive = (to: string) => pathname.startsWith(to);
   return (
     <Nav>
-      <NavGroup title={t('admin:nav.administration')}>
+      <NavGroup title="⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩">
         <NavItem
           as={Link}
           to="/admin/users"
           isActive={isActive('/admin/users')}
           icon={FiUsers}
         >
-          {t('admin:nav.users')}
+          Gnosis
+        </NavItem>
+        <NavItem
+          as={Link}
+          to="/admin/users"
+          isActive={isActive('/admin/users')}
+          icon={FiUsers}
+        >
+          Polygon
+        </NavItem>
+        <NavItem
+          as={Link}
+          to="/admin/users"
+          isActive={isActive('/admin/users')}
+          icon={FiUsers}
+        >
+          0x
+        </NavItem>
+        <NavItem
+          as={Link}
+          to="/admin/users"
+          isActive={isActive('/admin/users')}
+          icon={FiUsers}
+        >
+          Alluo
         </NavItem>
         <NavItem
           as={Link}
@@ -28,7 +52,7 @@ export const AdminNav = () => {
           isActive={isActive('/admin/api')}
           icon={GoBook}
         >
-          {t('admin:nav.apiDocumentation')}
+          ZAP 🫠 API
         </NavItem>
       </NavGroup>
     </Nav>

@@ -13,6 +13,8 @@ const AdminRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="users" replace />} />
+      <Route path="/gnosis" element={<Navigate to="gnosis" replace />} />
+
       <Route path="users/*" element={<AdminUsersRoutes />} />
       <Route path="api/*" element={<PageApiDocumentation />} />
       <Route path="*" element={<ErrorPage errorCode={404} />} />

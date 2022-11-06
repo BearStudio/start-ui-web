@@ -1,18 +1,18 @@
 openapi: '3.0.0'
 info:
   version: '1.0'
-  title: Start-UI API Documentation
+  title: zaP! 🫠 API Documentation
 
 servers:
   - url: /api
 
 tags:
-  - name: Authentication
-    description: Endpoints to manage authentication
-  - name: Account
-    description: Endpoints to manage account
-  - name: Users
-    description: Endpoints to manage users
+  - name: Triggers
+    description: Endpoints to manage triggers
+  - name: Oracles
+    description: Endpoints to manage oracles
+  - name: Rollup
+    description: Endpoints to manage Cartesi RISC-V
 
 components:
   securitySchemes:

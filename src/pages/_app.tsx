@@ -5,8 +5,8 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { Providers } from '@/Providers';
-import { Viewport } from '@/components/Viewport';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Viewport } from '@/components/Viewport';
 
 const AppDevHint = () => {
   const envName =
@@ -56,7 +56,7 @@ const AppHead = () => {
 
   return (
     <Head>
-      <title>Start UI</title>
+      <title> Zero Awareness Protocol 🫠 ETHglobal SF 2022</title>
       <meta
         name="viewport"
         content="width=device-width,initial-scale=1,viewport-fit=cover"
