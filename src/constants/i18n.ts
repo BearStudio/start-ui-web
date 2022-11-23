@@ -1,5 +1,7 @@
+import * as locales from '@/locales';
+
 type Language = {
-  key: string;
+  key: keyof typeof locales;
   dir?: 'ltr' | 'rtl';
   fontScale?: number;
 };
