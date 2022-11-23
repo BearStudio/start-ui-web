@@ -14,7 +14,7 @@ import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldInputProps = FieldProps &
+export type FieldInputProps = FieldProps<string> &
   Omit<FormGroupProps, 'placeholder'> &
   Pick<InputProps, 'type' | 'placeholder'> & {
     size?: 'sm' | 'md' | 'lg';
@@ -43,7 +43,7 @@ export const FieldInput = (props: FieldInputProps) => {
     size = 'md',
     autoFocus,
     ...rest
-  } = otherProps as Omit<FieldInputProps, keyof FieldProps>;
+  } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

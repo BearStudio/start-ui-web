@@ -6,14 +6,13 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
-export type FieldCurrencyProps = Omit<FieldProps, 'value'> &
+export type FieldCurrencyProps = FieldProps<number> &
   Omit<FormGroupProps, 'placeholder'> &
   Pick<
     InputCurrencyProps,
     'currency' | 'locale' | 'decimals' | 'placeholder'
   > & {
     size?: 'sm' | 'md' | 'lg';
-    value?: number;
   };
 
 export const FieldCurrency = (props: FieldCurrencyProps) => {
@@ -39,7 +38,7 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
     locale,
     decimals,
     ...rest
-  } = otherProps as Omit<FieldCurrencyProps, keyof FieldProps>;
+  } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
@@ -63,8 +62,8 @@ export const FieldCurrency = (props: FieldCurrencyProps) => {
       <InputGroup size={size}>
         <InputCurrency
           id={id}
-          value={value ?? null}
-          onChange={setValue}
+          value={value ?? undefined}
+          onChange={(value) => setValue(value ?? null)}
           onFocus={() => setIsTouched(false)}
           onBlur={() => setIsTouched(true)}
           placeholder={placeholder}

@@ -4,7 +4,7 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-type FieldHiddenProps = FieldProps & FormGroupProps;
+type FieldHiddenProps = FieldProps<unknown> & FormGroupProps;
 
 export const FieldHidden: React.FC<
   React.PropsWithChildren<FieldHiddenProps>
@@ -13,7 +13,7 @@ export const FieldHidden: React.FC<
     debounce: 0,
     ...props,
   });
-  const { ...rest } = otherProps as Omit<FieldHiddenProps, keyof FieldProps>;
+  const { ...rest } = otherProps;
   const showError = !isValid && isSubmitted;
   const formGroupProps = {
     errorMessage,

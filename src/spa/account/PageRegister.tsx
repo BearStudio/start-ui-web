@@ -140,7 +140,9 @@ export const PageRegister = () => {
                   label: t(`common:languages.${key}`),
                   value: key,
                 }))}
-                defaultValue={i18n.language}
+                defaultValue={
+                  i18n.language as typeof AVAILABLE_LANGUAGES[number]['key']
+                }
               />
               <FieldInput
                 name="login"

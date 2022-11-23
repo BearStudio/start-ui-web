@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DayPicker } from '@/components/DayPicker';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldDayPickerProps = FieldProps &
+export type FieldDayPickerProps = FieldProps<Date> &
   FormGroupProps & {
     invalidMessage?: string;
   };
@@ -29,10 +29,7 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     debounce: 0,
     ...fieldProps,
   });
-  const { children, label, placeholder, helper, ...rest } = otherProps as Omit<
-    FieldDayPickerProps,
-    keyof FieldProps
-  >;
+  const { children, label, placeholder, helper, ...rest } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
@@ -55,7 +52,7 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     date: Date | null | undefined,
     isValidDate: boolean
   ) => {
-    setValue(date);
+    setValue(date ?? null);
     if (!isValidDate) {
       invalidateFields({
         [props.name]:

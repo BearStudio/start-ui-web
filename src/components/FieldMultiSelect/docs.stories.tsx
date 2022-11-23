@@ -7,7 +7,7 @@ export default {
   title: 'Fields/FieldMultiSelect',
 };
 
-const options = [
+const options: Array<{ label: string; value: string }> = [
   { label: 'One', value: 'One' },
   { label: 'Two', value: 'Two' },
   { label: 'Three', value: 'Three' },

@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
-import { GroupBase } from 'react-select';
+import { GroupBase, SingleValue } from 'react-select';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
+type MinimumOption = { value: unknown; label: ReactNode };
+
 export type FieldSelectProps<
-  Option,
+  Option extends MinimumOption,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
-> = FieldProps &
+> = FieldProps<SingleValue<Option['value']>> &
   FormGroupProps & {
     placeholder?: string;
     size?: 'sm' | 'md' | 'lg';
@@ -21,7 +23,7 @@ export type FieldSelectProps<
   };
 
 export const FieldSelect = <
-  Option,
+  Option extends MinimumOption,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
@@ -51,10 +53,7 @@ export const FieldSelect = <
     size = 'md',
     selectProps,
     ...rest
-  } = otherProps as Omit<
-    FieldSelectProps<Option, IsMulti, Group>,
-    keyof FieldProps
-  >;
+  } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
@@ -73,19 +72,19 @@ export const FieldSelect = <
     ...rest,
   };
 
+  const handleChange = (optionSelected: Option) => {
+    setValue(optionSelected ? optionSelected.value : null);
+  };
+
   return (
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={
-          options?.find((option: TODO) => option.value === value) ?? undefined
-        }
+        value={options?.find((option) => option.value === value) ?? undefined}
         onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
-        onChange={(fieldValue: TODO) =>
-          setValue(fieldValue ? fieldValue.value : null)
-        }
+        onChange={handleChange as TODO}
         size={size}
         options={options}
         isDisabled={isDisabled}

@@ -1,24 +1,32 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
-import { GroupBase } from 'react-select';
+import { GroupBase, MultiValue } from 'react-select';
 
-import { FieldSelectProps } from '@/components/FieldSelect';
-import { FormGroup } from '@/components/FormGroup';
-import { Select } from '@/components/Select';
+import { FormGroup, FormGroupProps } from '@/components/FormGroup';
+import { Select, SelectProps } from '@/components/Select';
+
+type MinimumOption = { value: unknown; label: ReactNode };
 
 export type FieldMultiSelectProps<
-  Option,
+  Option extends MinimumOption,
   IsMulti extends boolean = true,
   Group extends GroupBase<Option> = GroupBase<Option>
-> = FieldSelectProps<Option, IsMulti, Group> & {
+> = FieldProps<MultiValue<Option['value']>> & {
   isNotClearable?: boolean;
   noOptionsMessage?: string;
-};
+} & FormGroupProps & {
+    placeholder?: string;
+    size?: 'sm' | 'md' | 'lg';
+    options?: Option[];
+    isClearable?: boolean;
+    isSearchable?: boolean;
+    selectProps?: SelectProps<Option, IsMulti, Group>;
+  };
 
 export const FieldMultiSelect = <
-  Option,
+  Option extends MinimumOption,
   IsMulti extends boolean = true,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
@@ -49,10 +57,7 @@ export const FieldMultiSelect = <
     size,
     selectProps = {},
     ...rest
-  } = otherProps as Omit<
-    FieldMultiSelectProps<Option, IsMulti, Group>,
-    keyof FieldProps
-  >;
+  } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
@@ -77,16 +82,14 @@ export const FieldMultiSelect = <
       setValue(null);
       return;
     }
-    setValue(optionsSelected?.map((option: TODO) => option?.value));
+    setValue(optionsSelected?.map((option) => option?.value));
   };
 
   return (
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={
-          options?.filter((option: TODO) => value?.includes(option.value)) || []
-        }
+        value={options?.filter((option) => value?.includes(option.value)) || []}
         onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder}

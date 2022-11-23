@@ -8,7 +8,7 @@ export default {
 };
 export const Default = () => {
   return (
-    <Formiz autoForm>
+    <Formiz autoForm onChange={console.log}>
       <Stack spacing={4}>
         <FieldBooleanCheckbox
           name="FieldBooleanCheckbox"
