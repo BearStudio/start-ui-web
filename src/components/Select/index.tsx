@@ -270,7 +270,8 @@ const SelectInner = <
   return (
     <BoxAny
       as={Element}
-      inputId={id}
+      inputId={`select-input-${id}`}
+      instanceId={`select-instance-${id}`}
       styles={selectStyle}
       menuPortalTarget={document.body}
       {...(formatCreateLabel ? { formatCreateLabel } : {})}
