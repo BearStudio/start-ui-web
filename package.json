@@ -21,7 +21,7 @@
     "lint": "eslint ./src --fix && tsc --noEmit",
     "lint:staged": "tsc --noEmit && eslint --cache --fix",
     "storybook": "start-storybook -p 6006",
-    "storybook:build": "NODE_OPTIONS=--openssl-legacy-provider build-storybook && mv ./storybook-static ./public/storybook",
+    "storybook:build": "build-storybook && mv ./storybook-static ./public/storybook",
     "static:build": "yarn build && next export",
     "static:serve": "yarn static:build && npx servor out app.html 5000",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",

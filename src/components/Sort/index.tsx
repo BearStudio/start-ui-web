@@ -92,7 +92,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
       <Portal>
         <MenuList>
           <MenuOptionGroup
-            title={t('components:sort.sortBy')}
+            title={String(t('components:sort.sortBy'))}
             type="radio"
             fontWeight="medium"
             fontSize="xs"
@@ -118,7 +118,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
           <MenuDivider />
           <MenuOptionGroup
             value={order}
-            title={t('components:sort.order')}
+            title={String(t('components:sort.order'))}
             type="radio"
             fontWeight="medium"
             fontSize="xs"

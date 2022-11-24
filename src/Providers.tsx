@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
-import { AuthProvider } from '@/app/auth/AuthContext';
 import '@/config';
+import { AuthProvider } from '@/spa/auth/AuthContext';
 import theme from '@/theme';
 
 import { AVAILABLE_LANGUAGES } from './constants/i18n';
