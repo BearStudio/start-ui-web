@@ -7,10 +7,10 @@ import { GroupBase, MultiValue } from 'react-select';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
-type MinimumOption = { value: unknown; label: ReactNode };
+type BaseOption = { value: unknown; label: ReactNode };
 
 export type FieldMultiSelectProps<
-  Option extends MinimumOption,
+  Option extends BaseOption,
   IsMulti extends boolean = true,
   Group extends GroupBase<Option> = GroupBase<Option>
 > = FieldProps<MultiValue<Option['value']>> & {
@@ -26,7 +26,7 @@ export type FieldMultiSelectProps<
   };
 
 export const FieldMultiSelect = <
-  Option extends MinimumOption,
+  Option extends BaseOption,
   IsMulti extends boolean = true,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(

@@ -6,10 +6,10 @@ import { GroupBase, SingleValue } from 'react-select';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
-type MinimumOption = { value: unknown; label: ReactNode };
+type BaseOption = { value: unknown; label: ReactNode };
 
 export type FieldSelectProps<
-  Option extends MinimumOption,
+  Option extends BaseOption,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 > = FieldProps<SingleValue<Option['value']>> &
@@ -23,7 +23,7 @@ export type FieldSelectProps<
   };
 
 export const FieldSelect = <
-  Option extends MinimumOption,
+  Option extends BaseOption,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
