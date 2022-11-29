@@ -6,7 +6,7 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Option = {
-  value: string | number | undefined;
+  value: string | undefined;
   label?: ReactNode;
 };
 
