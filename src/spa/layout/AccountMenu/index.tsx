@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Avatar,
+  Box,
   Flex,
   Menu,
   MenuButton,
@@ -108,51 +109,48 @@ export const AccountMenu = ({ ...rest }) => {
   const navigate = useNavigate();
 
   return (
-    <Menu placement="bottom-end" {...rest}>
-      <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
-        <Avatar size="sm" icon={<></>} name={account?.login}>
-          {isLoading && <Spinner size="xs" />}
-        </Avatar>
-      </MenuButton>
-      <MenuList
-        maxW="12rem"
-        overflow="hidden"
-        color="gray.800"
-        _dark={{ color: 'white' }}
-      >
-        <MenuGroup title={account?.email} noOfLines={1}>
+    <Box color="gray.800" _dark={{ color: 'white' }}>
+      <Menu placement="bottom-end" {...rest}>
+        <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
+          <Avatar size="sm" icon={<></>} name={account?.login}>
+            {isLoading && <Spinner size="xs" />}
+          </Avatar>
+        </MenuButton>
+        <MenuList maxW="12rem" overflow="hidden">
+          <MenuGroup title={account?.email} noOfLines={1}>
+            <MenuItem
+              as={Link}
+              to="/account"
+              icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
+            >
+              {t('layout:accountMenu.myAccount')}
+            </MenuItem>
+          </MenuGroup>
+          <MenuDivider />
           <MenuItem
-            as={Link}
-            to="/account"
-            icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
+            icon={
+              <Icon
+                icon={colorMode === 'dark' ? FiSun : FiMoon}
+                fontSize="lg"
+                color="gray.400"
+              />
+            }
+            onClick={() => toggleColorMode()}
           >
-            {t('layout:accountMenu.myAccount')}
+            {colorMode === 'dark'
+              ? t('layout:accountMenu.switchColorModeLight')
+              : t('layout:accountMenu.switchColorModeDark')}
           </MenuItem>
-        </MenuGroup>
-        <MenuDivider />
-        <MenuItem
-          icon={
-            <Icon
-              icon={colorMode === 'dark' ? FiSun : FiMoon}
-              fontSize="lg"
-              color="gray.400"
-            />
-          }
-          onClick={() => toggleColorMode()}
-        >
-          {colorMode === 'dark'
-            ? t('layout:accountMenu.switchColorModeLight')
-            : t('layout:accountMenu.switchColorModeDark')}
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem
-          icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
-          onClick={() => navigate('/logout')}
-        >
-          {t('layout:accountMenu.logout')}
-        </MenuItem>
-        <AppVersion />
-      </MenuList>
-    </Menu>
+          <MenuDivider />
+          <MenuItem
+            icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
+            onClick={() => navigate('/logout')}
+          >
+            {t('layout:accountMenu.logout')}
+          </MenuItem>
+          <AppVersion />
+        </MenuList>
+      </Menu>
+    </Box>
   );
 };
