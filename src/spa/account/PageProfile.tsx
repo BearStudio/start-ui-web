@@ -94,7 +94,7 @@ export const PageProfile = () => {
                   validations={[
                     {
                       rule: isEmail(),
-                      message: String(t('account:data.email.invalid')),
+                      message: t('account:data.email.invalid'),
                     },
                   ]}
                 />

@@ -12,7 +12,7 @@ export const AccountNav = () => {
   const isActive = (to: string) => pathname.startsWith(to);
   return (
     <Nav>
-      <NavGroup title={String(t('account:nav.myAccount'))}>
+      <NavGroup title={t('account:nav.myAccount')}>
         <NavItem
           as={Link}
           to="/account/profile"

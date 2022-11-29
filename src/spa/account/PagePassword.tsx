@@ -49,11 +49,11 @@ export const PagePassword = () => {
   const passwordValidations = [
     {
       rule: isMinLength(4),
-      message: String(t('account:data.password.tooShort', { min: 4 })),
+      message: t('account:data.password.tooShort', { min: 4 }),
     },
     {
       rule: isMaxLength(50),
-      message: String(t('account:data.password.tooLong', { max: 50 })),
+      message: t('account:data.password.tooLong', { max: 50 }),
     },
   ];
 

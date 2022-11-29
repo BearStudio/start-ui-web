@@ -13,7 +13,7 @@ export const AdminNav = () => {
   const isActive = (to: string) => pathname.startsWith(to);
   return (
     <Nav>
-      <NavGroup title={String(t('admin:nav.administration'))}>
+      <NavGroup title={t('admin:nav.administration')}>
         <NavItem
           as={Link}
           to="/admin/users"

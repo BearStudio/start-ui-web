@@ -14,6 +14,7 @@ i18n.use(initReactI18next).init({
   resources: locales,
   lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
+  returnNull: false,
 
   interpolation: {
     escapeValue: false, // react already safes from xss

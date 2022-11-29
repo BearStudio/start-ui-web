@@ -149,21 +149,17 @@ export const PageRegister = () => {
                 validations={[
                   {
                     rule: isMinLength(2),
-                    message: String(
-                      t('account:data.login.tooShort', { min: 2 })
-                    ),
+                    message: t('account:data.login.tooShort', { min: 2 }),
                   },
                   {
                     rule: isMaxLength(50),
-                    message: String(
-                      t('account:data.login.tooLong', { max: 50 })
-                    ),
+                    message: t('account:data.login.tooLong', { max: 50 }),
                   },
                   {
                     rule: isPattern(
                       '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
                     ),
-                    message: String(t('account:data.login.invalid')),
+                    message: t('account:data.login.invalid'),
                   },
                 ]}
               />
@@ -174,19 +170,15 @@ export const PageRegister = () => {
                 validations={[
                   {
                     rule: isMinLength(5),
-                    message: String(
-                      t('account:data.email.tooShort', { min: 5 })
-                    ),
+                    message: t('account:data.email.tooShort', { min: 5 }),
                   },
                   {
                     rule: isMaxLength(254),
-                    message: String(
-                      t('account:data.email.tooLong', { min: 254 })
-                    ),
+                    message: t('account:data.email.tooLong', { min: 254 }),
                   },
                   {
                     rule: isEmail(),
-                    message: String(t('account:data.email.invalid')),
+                    message: t('account:data.email.invalid'),
                   },
                 ]}
               />

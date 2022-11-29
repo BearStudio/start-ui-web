@@ -13,7 +13,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
       </Box>
       <Icon
         icon={FiCheck}
-        aria-label={String(t('users:data.status.activated'))}
+        aria-label={t('users:data.status.activated')}
         display={{ base: 'inline-flex', md: 'none' }}
       />
     </Badge>
@@ -24,7 +24,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
       </Box>
       <Icon
         icon={FiX}
-        aria-label={String(t('users:data.status.deactivated'))}
+        aria-label={t('users:data.status.deactivated')}
         display={{ base: 'inline-flex', md: 'none' }}
       />
     </Badge>

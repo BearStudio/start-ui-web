@@ -90,9 +90,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           ref={refs}
           onChange={handleChange}
           value={search || ''}
-          placeholder={
-            placeholder ?? String(t('components:searchInput.placeholder'))
-          }
+          placeholder={placeholder ?? t('components:searchInput.placeholder')}
           isDisabled={isDisabled}
           onKeyDown={handleEscape}
         />
