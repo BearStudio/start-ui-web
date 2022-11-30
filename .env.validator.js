@@ -38,3 +38,7 @@ if (!_env.success) {
 }
 
 console.log('✅ Environment variables validation')
+
+module.exports = {
+  envSchema
+}
