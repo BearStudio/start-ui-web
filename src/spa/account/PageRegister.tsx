@@ -190,15 +190,11 @@ export const PageRegister = () => {
                 validations={[
                   {
                     rule: isMinLength(4),
-                    message: String(
-                      t('account:data.password.tooShort', { min: 4 })
-                    ),
+                    message: t('account:data.password.tooShort', { min: 4 }),
                   },
                   {
                     rule: isMaxLength(50),
-                    message: String(
-                      t('account:data.password.tooLong', { min: 50 })
-                    ),
+                    message: t('account:data.password.tooLong', { min: 50 }),
                   },
                 ]}
               />

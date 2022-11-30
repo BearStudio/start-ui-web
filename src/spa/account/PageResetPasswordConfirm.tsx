@@ -99,9 +99,7 @@ export const PageResetPasswordConfirm = () => {
                     {
                       rule: (value) =>
                         value === resetPasswordFinishForm?.values?.password,
-                      message: String(
-                        t('account:data.confirmNewPassword.notEqual')
-                      ),
+                      message: t('account:data.confirmNewPassword.notEqual'),
                       deps: [resetPasswordFinishForm?.values?.password],
                     },
                   ]}

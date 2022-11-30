@@ -104,9 +104,7 @@ export const PagePassword = () => {
                   {
                     rule: (value) =>
                       value === changePasswordForm?.values?.newPassword,
-                    message: String(
-                      t('account:data.confirmNewPassword.notEqual')
-                    ),
+                    message: t('account:data.confirmNewPassword.notEqual'),
                     deps: [changePasswordForm?.values?.newPassword],
                   },
                 ]}
