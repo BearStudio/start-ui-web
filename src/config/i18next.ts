@@ -14,6 +14,9 @@ i18n.use(initReactI18next).init({
   resources: locales,
   lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
+
+  // Fix issue with i18next types
+  // https://www.i18next.com/overview/typescript#argument-of-type-defaulttfuncreturn-is-not-assignable-to-parameter-of-type-xyz
   returnNull: false,
 
   interpolation: {
