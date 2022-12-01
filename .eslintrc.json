@@ -9,7 +9,7 @@
   },
   "overrides": [
     {
-      "files": ["src/app/*"],
+      "files": ["src/spa/*"],
       "rules": {
         "import/no-default-export": "error"
       }

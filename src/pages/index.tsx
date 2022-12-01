@@ -4,7 +4,7 @@ import { Center } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { Loader } from '@/app/layout';
+import { Loader } from '@/spa/layout';
 
 const Index = () => {
   const router = useRouter();

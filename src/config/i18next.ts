@@ -15,6 +15,10 @@ i18n.use(initReactI18next).init({
   lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
 
+  // Fix issue with i18next types
+  // https://www.i18next.com/overview/typescript#argument-of-type-defaulttfuncreturn-is-not-assignable-to-parameter-of-type-xyz
+  returnNull: false,
+
   interpolation: {
     escapeValue: false, // react already safes from xss
   },
