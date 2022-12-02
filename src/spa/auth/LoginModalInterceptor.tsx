@@ -19,7 +19,7 @@ import { useAuthContext } from '@/spa/auth/AuthContext';
 import { LoginForm } from '@/spa/auth/LoginForm';
 
 export const LoginModalInterceptor = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth']);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();

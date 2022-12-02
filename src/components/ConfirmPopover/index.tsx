@@ -41,7 +41,7 @@ export const ConfirmPopover: React.FC<
   cancelText,
   ...rest
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'components']);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const displayHeading =

@@ -60,7 +60,7 @@ export const FieldMultiSelect = <
     setIsTouched(false);
   }, [resetKey]);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
 
   const formGroupProps = {
     errorMessage,

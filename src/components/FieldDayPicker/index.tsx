@@ -12,7 +12,7 @@ export type FieldDayPickerProps = FieldProps &
   };
 
 export const FieldDayPicker = (props: FieldDayPickerProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { invalidMessage, ...fieldProps } = props;
   const { invalidateFields } = useForm({ subscribe: false });
   const {

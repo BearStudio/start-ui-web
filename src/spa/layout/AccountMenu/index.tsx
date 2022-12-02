@@ -31,7 +31,7 @@ import { Icon } from '@/components/Icons';
 import { useAccount } from '@/spa/account/account.service';
 
 const AppVersion = ({ ...rest }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['layout']);
 
   const { hasCopied, onCopy } = useClipboard(
     JSON.stringify(buildInfo, null, 2)
@@ -102,7 +102,7 @@ const AppVersion = ({ ...rest }) => {
 };
 
 export const AccountMenu = ({ ...rest }) => {
-  const { t } = useTranslation('layout');
+  const { t } = useTranslation(['layout']);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();

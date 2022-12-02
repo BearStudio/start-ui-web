@@ -12,7 +12,7 @@ import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useResetPasswordFinish } from '@/spa/account/account.service';
 
 export const PageResetPasswordConfirm = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['account']);
 
   const [searchParams] = useSearchParams();
 

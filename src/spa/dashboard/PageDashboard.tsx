@@ -19,7 +19,7 @@ import { Icon } from '@/components/Icons';
 import { Page, PageContent } from '@/spa/layout';
 
 export const PageDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['dashboard']);
   return (
     <Page>
       <PageContent>

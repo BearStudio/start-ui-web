@@ -11,7 +11,7 @@ import { Illustration404 } from './Illustration404';
 import { IllustrationDefault } from './IllustrationDefault';
 
 const SupportedErrors: Record<
-  'default' | number,
+  'default' | 403 | 404,
   { illustration?: ReactElement }
 > = {
   default: { illustration: <IllustrationDefault /> },
@@ -20,11 +20,10 @@ const SupportedErrors: Record<
 };
 
 export const ErrorPage = ({ errorCode }: { errorCode?: number }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const errorType =
-    errorCode &&
-    Object.keys(SupportedErrors).some((c) => c === String(errorCode))
-      ? errorCode
+    errorCode && errorCode in SupportedErrors
+      ? (errorCode as keyof typeof SupportedErrors)
       : 'default';
   const illustration =
     SupportedErrors[errorType].illustration ??

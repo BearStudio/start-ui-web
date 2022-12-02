@@ -23,7 +23,7 @@ export type DateAgoProps = Omit<TooltipProps, 'children'> & {
 
 export const DateAgo: FC<React.PropsWithChildren<DateAgoProps>> = forwardRef(
   function DateAgo({ date = new Date(), format, ...rest }, ref) {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components']);
     const [, setForceUpdate] = useState(0);
     const dayjsDate = dayjs(date);
     const dateFormatted = dayjsDate.format();

@@ -18,7 +18,7 @@ import { useToastError } from '@/components/Toast';
 import { useLogin } from '@/spa/auth/auth.service';
 
 const MockedApiHint = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth']);
   const form = useForm({ subscribe: 'form' });
   const mockedUsername = 'admin';
   const mockedPassword = 'admin';
@@ -58,7 +58,7 @@ export const LoginForm = ({
   onSuccess = () => undefined,
   ...rest
 }: LoginFormProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth']);
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 

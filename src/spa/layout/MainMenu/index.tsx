@@ -61,7 +61,7 @@ const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
 };
 
 export const MainMenu = ({ ...rest }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['layout']);
   const { isAdmin } = useAccount();
   return (
     <Stack direction="row" spacing="1" {...rest}>
