@@ -25,7 +25,7 @@ declare module '@formiz/core' {
   ) => Omit<UseFieldValues, 'otherProps' | 'value' | 'setValue'> & {
     otherProps: Omit<Props, keyof FieldProps>;
     value: Value;
-    setValue(value: Value | ((prevValue: Value) => Value)): void;
+    setValue: React.Dispatch<React.SetStateAction<Value>>;
   };
 
   import {
