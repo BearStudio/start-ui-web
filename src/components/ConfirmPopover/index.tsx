@@ -47,7 +47,7 @@ export const ConfirmPopover: React.FC<
   const displayHeading =
     !title && !message ? t('components:confirmPopover.heading') : title;
 
-  const initialFocusRef = useRef<ExplicitAny>();
+  const initialFocusRef = useRef<HTMLButtonElement>(null);
 
   if (!isEnabled) {
     const childrenWithOnClick = React.cloneElement(children, {
