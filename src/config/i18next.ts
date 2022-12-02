@@ -2,14 +2,18 @@ import dayjs from 'dayjs';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
-import * as locales from '@/locales';
+import {
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE_KEY,
+  DEFAULT_NAMESPACE,
+} from '@/constants/i18n';
+import locales from '@/locales';
 import { isBrowser } from '@/utils/ssr';
 
 dayjs.locale(DEFAULT_LANGUAGE_KEY);
 
 i18n.use(initReactI18next).init({
-  defaultNS: 'common',
+  defaultNS: DEFAULT_NAMESPACE,
   ns: Object.keys(locales[DEFAULT_LANGUAGE_KEY]),
   resources: locales,
   lng: DEFAULT_LANGUAGE_KEY,

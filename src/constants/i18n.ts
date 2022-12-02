@@ -1,10 +1,12 @@
-import * as locales from '@/locales';
+import locales from '@/locales';
 
-type Language = {
+export type Language = {
   key: keyof typeof locales;
   dir?: 'ltr' | 'rtl';
   fontScale?: number;
 };
+
+export const DEFAULT_NAMESPACE = 'common';
 
 export const DEFAULT_LANGUAGE_KEY: Language['key'] = 'en';
 
