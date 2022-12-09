@@ -47,7 +47,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
   descIcon = <IconSortDesc />,
   ...rest
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
 
   const { by, order } = sort;
 

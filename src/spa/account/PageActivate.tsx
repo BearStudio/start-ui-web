@@ -7,7 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useActivateAccount } from '@/spa/account/account.service';
 
 export const PageActivate = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['account']);
   const {
     mutate: activateAccount,
     isError,

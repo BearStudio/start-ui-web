@@ -25,7 +25,7 @@ import { useResetPasswordInit } from '@/spa/account/account.service';
 
 export const PageResetPasswordRequest = () => {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['account']);
 
   const resetPasswordInitForm = useForm();
 

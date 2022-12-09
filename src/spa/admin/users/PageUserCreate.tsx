@@ -11,7 +11,7 @@ import { useUserCreate } from '@/spa/admin/users/users.service';
 import { Page, PageBottomBar, PageContent, PageTopBar } from '@/spa/layout';
 
 export const PageUserCreate = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'users']);
   const navigate = useNavigate();
   const form = useForm({ subscribe: false });
 
@@ -72,7 +72,7 @@ export const PageUserCreate = () => {
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
               <Button onClick={() => navigate(-1)}>
-                {t('actions.cancel')}
+                {t('common:actions.cancel')}
               </Button>
               <Button
                 type="submit"

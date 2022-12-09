@@ -5,7 +5,7 @@ import { FiCheck, FiX } from 'react-icons/fi';
 import { Icon } from '@/components/Icons';
 
 export const UserStatus = ({ isActivated = false, ...rest }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['users']);
   return isActivated ? (
     <Badge size="sm" colorScheme="success" {...rest}>
       <Box as="span" display={{ base: 'none', md: 'block' }}>

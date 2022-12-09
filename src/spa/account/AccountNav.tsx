@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 
 export const AccountNav = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['account']);
   const { pathname } = useLocation();
   const isActive = (to: string) => pathname.startsWith(to);
   return (

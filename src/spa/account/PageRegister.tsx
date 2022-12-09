@@ -30,7 +30,7 @@ import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { useCreateAccount } from '@/spa/account/account.service';
 
 export const PageRegister = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['common', 'account']);
   const form = useForm({
     subscribe: { form: true, fields: ['langKey'] },
   });
@@ -137,7 +137,7 @@ export const PageRegister = () => {
                 name="langKey"
                 label={t('account:data.language.label')}
                 options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                  label: t(`languages.${key}`),
+                  label: t(`common:languages.${key}`),
                   value: key,
                 }))}
                 defaultValue={i18n.language}

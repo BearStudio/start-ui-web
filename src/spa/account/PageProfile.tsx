@@ -19,7 +19,7 @@ import {
 import { Page, PageContent } from '@/spa/layout';
 
 export const PageProfile = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'account']);
   const { account } = useAccount();
   const generalInformationForm = useForm();
   const queryClient = useQueryClient();
@@ -102,7 +102,7 @@ export const PageProfile = () => {
                   name="langKey"
                   label={t('account:data.language.label')}
                   options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                    label: t(`languages.${key}`),
+                    label: t(`common:languages.${key}`),
                     value: key,
                   }))}
                 />

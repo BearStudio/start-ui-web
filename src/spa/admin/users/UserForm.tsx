@@ -20,7 +20,7 @@ const AUTHORITIES = {
 };
 
 export const UserForm = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'users']);
 
   const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
   return (
@@ -81,7 +81,7 @@ export const UserForm = () => {
         name="langKey"
         label={t('users:data.language.label')}
         options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-          label: t(`languages.${key}`),
+          label: t(`common:languages.${key}`),
           value: key,
         }))}
         defaultValue={DEFAULT_LANGUAGE_KEY}

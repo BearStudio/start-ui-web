@@ -123,7 +123,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
     },
     ref
   ) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components']);
 
     const [isConfirmActive, setIsConfirmActive] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>();

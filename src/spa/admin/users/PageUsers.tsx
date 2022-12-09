@@ -74,7 +74,7 @@ type UserActionProps = Omit<MenuProps, 'children'> & {
 };
 
 const UserActions = ({ user, ...rest }: UserActionProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'users']);
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const { mutate: userUpdate, ...userUpdateData } = useUserUpdate({
@@ -152,14 +152,14 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
             to={user.login}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
-            {t('actions.edit')}
+            {t('common:actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
               icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
             >
-              {t('actions.deactivate')}
+              {t('common:actions.deactivate')}
             </MenuItem>
           ) : (
             <MenuItem
@@ -168,7 +168,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
                 <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
               }
             >
-              {t('actions.activate')}
+              {t('common:actions.activate')}
             </MenuItem>
           )}
           <MenuDivider />
@@ -176,7 +176,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
             icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
             onClick={removeUser}
           >
-            {t('actions.delete')}
+            {t('common:actions.delete')}
           </ConfirmMenuItem>
         </MenuList>
       </Portal>
@@ -185,7 +185,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 };
 
 export const PageUsers = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['users']);
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
   const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({

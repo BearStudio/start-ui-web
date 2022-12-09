@@ -29,7 +29,7 @@ import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
 
 export const PageUserUpdate = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'users']);
 
   const { login } = useParams();
   const navigate = useNavigate();
@@ -125,7 +125,7 @@ export const PageUserUpdate = () => {
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
                 <Button onClick={() => navigate(-1)}>
-                  {t('actions.cancel')}
+                  {t('common:actions.cancel')}
                 </Button>
                 <Button
                   type="submit"

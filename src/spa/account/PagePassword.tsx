@@ -12,7 +12,7 @@ import { useUpdatePassword } from '@/spa/account/account.service';
 import { Page, PageContent } from '@/spa/layout';
 
 export const PagePassword = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['account']);
   const changePasswordForm = useForm();
 
   const toastSuccess = useToastSuccess();

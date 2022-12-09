@@ -76,7 +76,7 @@ export const PaginationButtonFirstPage: FC<
   React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { setPage, firstPage, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -96,7 +96,7 @@ export const PaginationButtonPrevPage: FC<
   React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { setPage, page, isFirstPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -116,7 +116,7 @@ export const PaginationButtonLastPage: FC<
   React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { setPage, lastPage, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -136,7 +136,7 @@ export const PaginationButtonNextPage: FC<
   React.PropsWithChildren<Omit<IconButtonProps, 'aria-label'>>
 > = ({ ...rest }) => {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { setPage, page, isLastPage } = useContext(PaginationContext);
   return (
     <IconButton
@@ -153,7 +153,7 @@ export const PaginationButtonNextPage: FC<
 };
 
 export const PaginationInfo = ({ ...rest }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   const { firstItemOnPage, lastItemOnPage, totalItems, isLoadingPage } =
     useContext(PaginationContext);
   const translationProps = {

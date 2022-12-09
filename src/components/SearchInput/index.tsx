@@ -37,7 +37,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     },
     ref
   ) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components']);
 
     const [externalValue, setExternalValue] = useControllableState({
       value,

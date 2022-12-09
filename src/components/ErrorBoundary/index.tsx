@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 const ErrorFallback = ({ error }: FallbackProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components']);
   return (
     <Box p="4" m="auto">
       <Alert status="error" borderRadius="md">

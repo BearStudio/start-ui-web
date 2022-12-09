@@ -11,7 +11,7 @@ import { LoginForm } from '@/spa/auth/LoginForm';
 import { useRedirectFromUrl } from '@/spa/router';
 
 export const PageLogin = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth']);
   const redirect = useRedirectFromUrl();
   const queryCache = useQueryClient();
   const onLogin = () => {
