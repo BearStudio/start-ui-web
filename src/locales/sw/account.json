@@ -48,11 +48,11 @@
       "initError": {
         "title": "Kuweka upya nenosiri kumeshindwa"
       },
-      "confirmSuccess": {
+      "resetSuccess": {
         "title": "Nenosiri lako limewekwa upya",
         "description": "Sasa unaweza kuunganisha"
       },
-      "confirmError": {
+      "resetError": {
         "title": "Kuweka upya nenosiri kumeshindwa"
       }
     }

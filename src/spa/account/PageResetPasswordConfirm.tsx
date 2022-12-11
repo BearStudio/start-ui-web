@@ -27,15 +27,15 @@ export const PageResetPasswordConfirm = () => {
       onError: (error) => {
         const { title } = error?.response?.data || {};
         toastError({
-          title: t('account:resetPassword.feedbacks.confirmError.title'),
+          title: t('account:resetPassword.feedbacks.resetError.title'),
           description: title,
         });
       },
       onSuccess: () => {
         toastSuccess({
-          title: t('account:resetPassword.feedbacks.confirmSuccess.title'),
+          title: t('account:resetPassword.feedbacks.resetSuccess.title'),
           description: t(
-            'account:resetPassword.feedbacks.confirmSuccess.description'
+            'account:resetPassword.feedbacks.resetSuccess.description'
           ),
         });
         navigate('/login');

@@ -48,11 +48,11 @@
       "initError": {
         "title": "إعادة تعيين كلمة المرور فشلت"
       },
-      "confirmSuccess": {
+      "resetSuccess": {
         "title": "تم إعادة تعيين كلمة المرور الخاصة بك",
         "description": "يمكنك الآن تسجيل الدخول"
       },
-      "confirmError": {
+      "resetError": {
         "title": "إعادة تعيين كلمة المرور فشلت"
       }
     }
