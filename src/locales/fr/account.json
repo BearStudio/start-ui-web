@@ -48,11 +48,11 @@
       "initError": {
         "title": "Échec de la réinitialisation du mot de passe"
       },
-      "confirmSuccess": {
+      "resetSuccess": {
         "title": "Votre mot de passe a été réinitialisé",
         "description": "Vous pouvez maintenant vous connecter"
       },
-      "confirmError": {
+      "resetError": {
         "title": "Échec de la réinitalisation du mot de passe"
       }
     }
