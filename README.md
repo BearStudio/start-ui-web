@@ -1,4 +1,4 @@
-<h1 align="center"><img src="assets/start-ui-web.svg" alt="Start UI Web" width="300" /></h1>
+<h1 align="center"><img src="assets/thumbnail.png" alt="Start UI Web" /></h1>
 
 [![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
 
@@ -27,7 +27,7 @@ yarn dev
 - 📕 [Storybook](https://storybook.js.org/)
 - ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
-- ⚛️ [React Query](https://react-query.tanstack.com/)
+- ⚛️ [TanStack Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
 - 💥 [React Error Boundary](https://github.com/bvaughn/react-error-boundary)
 - ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
@@ -307,9 +307,9 @@ practice to do so to avoid bugs in the future.
 
 [GitHub](https://github.com/microsoft/TypeScript) · [License Apache 2.0](https://github.com/microsoft/TypeScript/blob/master/LICENSE.txt)
 
-### React Query
+### TanStack Query
 
-[React Query](https://github.com/tannerlinsley/react-query) is a powerful tool
+[TanStack Query](https://github.com/tannerlinsley/react-query) is a powerful tool
 to do efficient data synchronization for React. No need of Redux
 or another global state manager anymore. Usable with [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API),
 [`axios`](https://github.com/axios/axios), or [`graphql-request`](https://github.com/prisma-labs/graphql-request),
