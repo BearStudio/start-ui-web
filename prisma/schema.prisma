@@ -13,12 +13,13 @@ datasource db {
 model User {
   id          Int     @id @default(autoincrement())
   email       String  @unique
-  login       String  @unique
+  login       String? @unique
+  password    String?
   firstName   String?
   lastName    String?
   activated   Boolean @default(false)
   langKey     String  @default("en")
-  authorities String  @default("USER")
+  authorities String  @default("ROLE_USER")
 
   createdAt       DateTime @default(now())
   createdByUserId Int?

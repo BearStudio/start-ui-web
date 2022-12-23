@@ -3,7 +3,7 @@ import { apiMethods, badRequest } from '@/server/utils/api';
 
 export default apiMethods({
   GET: {
-    handler: async (req, res) => {
+    handler: async ({ req, res }) => {
       if (typeof req.query.id !== 'string') {
         return badRequest(res);
       }
