@@ -48,3 +48,6 @@ yarn-error.log*
 
 # Build info
 .build-info.json
+
+# Prisma
+prisma/dev.db

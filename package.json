@@ -10,11 +10,11 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "yarn build:info && yarn theme:generate-typing",
+    "postinstall": "prisma generate && yarn build:info && yarn theme:generate-typing",
     "test": "cypress open",
     "test:ci": "cypress run --component",
-    "dev": "yarn docs:build && next dev",
-    "build": "yarn build:info && yarn docs:build && next build",
+    "dev": "next dev",
+    "build": "yarn build:info && next build",
     "build:info": "node .build-info.generate.js",
     "start": "next start",
     "pretty": "prettier -w .",
@@ -26,12 +26,12 @@
     "static:serve": "yarn static:build && npx serve out -c ../static.serve.json",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
-    "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"
+    "db:push": "prisma db push",
+    "db:ui": "prisma studio"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "yarn lint:staged",
-    "src/mocks/**/*.{yaml,yml}": "yarn docs:build"
+    "*.{ts,tsx,js,jsx}": "yarn lint:staged"
   },
   "dependencies": {
     "@chakra-ui/react": "2.6.0",
@@ -44,6 +44,7 @@
     "@formiz/validations": "1.0.0",
     "@formkit/auto-animate": "1.0.0-beta.6",
     "@lukemorales/query-key-factory": "1.2.0",
+	"@prisma/client": "4.8.0",
     "@tanstack/react-query": "4.29.5",
     "@tanstack/react-query-devtools": "4.29.6",
     "axios": "1.4.0",
@@ -101,6 +102,7 @@
     "lint-staged": "13.2.2",
     "miragejs": "0.1.47",
     "prettier": "2.8.8",
+	"prisma": "4.8.0",
     "react-is": "18.2.0",
     "storybook": "7.0.7",
     "storybook-dark-mode": "3.0.0",
