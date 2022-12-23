@@ -31,7 +31,7 @@ const register = (schema: any, request: Request) => {
 const update = (schema: any, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
-  const userId = authToken.split('Bearer ')[1];
+  const userId = authToken?.split('Bearer ')[1];
 
   return schema.users.find(userId).update(attrs);
 };
@@ -48,7 +48,7 @@ const finishResetPassword = (schema: any, request: Request) => {
 const changePassword = (schema: any, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
-  const userId = authToken.split('Bearer ')[1];
+  const userId = authToken?.split('Bearer ')[1];
 
   return schema.users.find(userId).update({ ...attrs });
 };

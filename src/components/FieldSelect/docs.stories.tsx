@@ -60,7 +60,7 @@ export const DefaultValue = () => (
         placeholder="Placeholder"
         helper="This is an helper"
         required="Color is required"
-        defaultValue={colors[0].value}
+        defaultValue={colors[0]?.value}
         options={colors}
         selectProps={{ isClearable: true }}
       />
