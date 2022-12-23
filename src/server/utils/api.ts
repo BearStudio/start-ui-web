@@ -1,10 +1,18 @@
+import { User } from '@prisma/client';
+import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+import { db } from './db';
 
 type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {
   [key in HttpVerbs]?: {
     public?: boolean;
-    handler(req: NextApiRequest, res: NextApiResponse): Promise<unknown>;
+    handler(params: {
+      req: NextApiRequest;
+      res: NextApiResponse;
+      user?: Partial<User>;
+    }): Promise<unknown>;
   };
 };
 
@@ -29,5 +37,42 @@ export const apiMethods =
       return res.status(405).end();
     }
 
-    return method.handler(req, res);
+    if (method.public) {
+      return method.handler({ req, res });
+    }
+
+    const token = req.headers.authorization?.replace('Bearer ', '');
+
+    if (!token) {
+      return notSignedIn(res);
+    }
+
+    const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
+
+    if (
+      !jwtDecoded ||
+      typeof jwtDecoded !== 'object' ||
+      !('id' in jwtDecoded)
+    ) {
+      return notSignedIn(res);
+    }
+
+    const user = await db.user.findUnique({
+      where: { id: jwtDecoded.id },
+      select: {
+        id: true,
+        login: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        authorities: true,
+        langKey: true,
+      },
+    });
+
+    if (!user) {
+      return notSignedIn(res);
+    }
+
+    return method.handler({ req, res, user });
   };

@@ -3,6 +3,7 @@ export const getAccount = () => {
 };
 
 export const createAccount = () => {
+  // const passwordHash = await bcrypt.hash(password, 12);
   return {};
 };
 
