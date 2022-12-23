@@ -6,6 +6,8 @@ const { z } = require('zod');
  */
 
 const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+
   NEXT_PUBLIC_API_BASE_URL: z.string().url().optional(),
 
   NEXT_PUBLIC_DEV_ENV_NAME: z.string().optional(),
