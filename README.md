@@ -108,15 +108,9 @@ yarn theme:generate-icons
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
 
-### Development with [MirageJS](https://miragejs.com/) (mock)
-
-**This is the default behavior.**
-
-Do not set the `NEXT_PUBLIC_API_BASE_URL` variable in the `.env` file at the root of the project.
-
 ### Development with a [JHipster](https://www.jhipster.tech/) backend
 
-Create a `.env` file at the root of the project with the following content:
+Update the `NEXT_PUBLIC_API_BASE_URL` with your JHipster API url:
 
 ```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
@@ -130,14 +124,6 @@ Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environme
 NEXT_PUBLIC_DEV_ENV_NAME=staging
 NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
 ```
-
-## API Documentation
-
-API documentation is accessible by admins in the app with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react).
-```
-yarn docs:build
-```
-This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
 
 ## Translations
 
