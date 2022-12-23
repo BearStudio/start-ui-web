@@ -67,10 +67,11 @@ export const apiMethods =
         lastName: true,
         authorities: true,
         langKey: true,
+        activated: true,
       },
     });
 
-    if (!user) {
+    if (!user || !user.activated) {
       return notSignedIn(res);
     }
 
