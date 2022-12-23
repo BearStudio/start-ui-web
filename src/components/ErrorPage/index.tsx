@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { Center, Heading, Stack, Text, chakra } from '@chakra-ui/react';
+import { Center, Heading, Stack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
@@ -43,9 +43,7 @@ export const ErrorPage = ({ errorCode }: { errorCode?: number }) => {
           alignItems={{ base: 'center', md: 'flex-start' }}
         >
           <Link href="/" passHref>
-            <chakra.a>
-              <Logo my={4} />
-            </chakra.a>
+            <Logo my={4} />
           </Link>
           <Heading>{t(`components:errorPage.${errorType}.title`)}</Heading>
           <Text>{t(`components:errorPage.${errorType}.description`)}</Text>
