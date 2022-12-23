@@ -1,6 +1,6 @@
 import { Server } from 'miragejs';
 
-export const userSeeds = (server: Server<any>) => {
+export const userSeeds = (server: Server<TODO>) => {
   server.create('user', {
     login: 'admin',
     authorities: ['ROLE_ADMIN', 'ROLE_USER'],

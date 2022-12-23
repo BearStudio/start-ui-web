@@ -50,7 +50,7 @@ export const PageResetPasswordRequest = () => {
     },
   });
 
-  const submitResetPasswordInit = async (values: any) => {
+  const submitResetPasswordInit = async (values: TODO) => {
     await resetPasswordInit(values.email);
   };
 

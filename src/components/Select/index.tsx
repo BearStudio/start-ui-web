@@ -21,7 +21,7 @@ const BoxAny: ExplicitAny = Box;
 // as this code won't be in the final bundle.
 // https://fettblog.eu/typescript-react-generic-forward-refs/#option-3%3A-augment-forwardref
 declare module 'react' {
-  function forwardRef<T, P = {}>(
+  function forwardRef<T, P = unknown>(
     render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
   ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 }
@@ -66,7 +66,7 @@ const SelectInner = <
   const theme = useTheme();
   const isLightMode = useColorModeValue(true, false);
 
-  const stylesFromTheme: any = useStyleConfig('Select', {
+  const stylesFromTheme: TODO = useStyleConfig('Select', {
     size,
   });
   const [fieldFontSize] = useToken('fontSizes', [
@@ -97,7 +97,7 @@ const SelectInner = <
     return ReactSelect;
   })();
 
-  let debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const debounce = (func: () => unknown, delay: number) => {
     if (debounceTimeout?.current) {
@@ -136,7 +136,7 @@ const SelectInner = <
         ...componentsStyles,
       };
       return (
-        styles?.[componentName]?.(combinedStyles, state as any) ??
+        styles?.[componentName]?.(combinedStyles, state as TODO) ??
         combinedStyles
       );
     },

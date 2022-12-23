@@ -29,8 +29,10 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     debounce: 0,
     ...fieldProps,
   });
-  const { children, label, placeholder, helper, size, ...rest } =
-    otherProps as Omit<FieldDayPickerProps, keyof FieldProps>;
+  const { children, label, placeholder, helper, ...rest } = otherProps as Omit<
+    FieldDayPickerProps,
+    keyof FieldProps
+  >;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);

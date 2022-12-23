@@ -11,7 +11,6 @@ type CustomProps = {
   locale?: string;
   currency?: string | null;
   decimals?: number;
-  groupSpace?: number;
   onChange?(value?: number): void;
 };
 
@@ -25,7 +24,6 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
       locale,
       currency = 'EUR',
       decimals = 2,
-      groupSpace = 2,
       onChange = () => undefined,
       placeholder,
       ...rest

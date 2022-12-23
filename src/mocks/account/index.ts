@@ -9,7 +9,7 @@ export const AccountRoutes = (server: Server) => {
   server.post('/register', register);
 };
 
-export const getCurrent = (schema: any, request: Request) => {
+export const getCurrent = (schema: TODO, request: Request) => {
   const authToken = request.requestHeaders.Authorization;
   const userIdFromToken = authToken?.split('Bearer ')[1];
 
@@ -19,7 +19,7 @@ export const getCurrent = (schema: any, request: Request) => {
   return schema.users.find(userIdFromToken);
 };
 
-const register = (schema: any, request: Request) => {
+const register = (schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   schema.create('user', {
     ...attrs,
@@ -28,7 +28,7 @@ const register = (schema: any, request: Request) => {
   return '';
 };
 
-const update = (schema: any, request: Request) => {
+const update = (schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
   const userId = authToken?.split('Bearer ')[1];
@@ -36,16 +36,16 @@ const update = (schema: any, request: Request) => {
   return schema.users.find(userId).update(attrs);
 };
 
-const initResetPassword = (_: any, request: Request) => {
+const initResetPassword = (_: TODO, request: Request) => {
   return request.requestBody;
 };
 
-const finishResetPassword = (schema: any, request: Request) => {
+const finishResetPassword = (schema: TODO, request: Request) => {
   const { key, newPassword } = JSON.parse(request.requestBody);
   return schema.users.find(key).update({ password: newPassword });
 };
 
-const changePassword = (schema: any, request: Request) => {
+const changePassword = (schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const authToken = request.requestHeaders.Authorization;
   const userId = authToken?.split('Bearer ')[1];

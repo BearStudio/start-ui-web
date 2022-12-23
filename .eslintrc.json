@@ -1,23 +1,22 @@
 {
-  "extends": ["react-app", "plugin:@next/next/recommended"],
-  "env": {
-    "node": true,
-    "browser": true
-  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:sonarjs/recommended",
+    "next/core-web-vitals"
+  ],
   "rules": {
-    "jsx-a11y/anchor-is-valid": "warn"
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "sonarjs/no-duplicate-string": "off",
+    "sonarjs/cognitive-complexity": ["warn", 50]
   },
   "overrides": [
     {
-      "files": ["src/spa/*"],
-      "rules": {
-        "import/no-default-export": "error"
-      }
-    },
-    {
       "files": [
         "*.stories.tsx",
-        "src/locales/**/*",
+        "./src/locales/**/*",
         "./src/theme/components/**/*.ts"
       ],
       "rules": {

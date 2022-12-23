@@ -9,7 +9,7 @@ import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 export default {
   title: 'App Layout/Page',
   decorators: [
-    (Story: any) => {
+    (Story: TODO) => {
       return (
         <Flex
           h="100vh"

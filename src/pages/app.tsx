@@ -19,7 +19,7 @@ const Loading = () => (
   </Viewport>
 );
 
-const AppComponent = dynamic<{}>(
+const AppComponent = dynamic<unknown>(
   () => import('@/spa/App').then((mod) => mod.App),
   {
     ssr: false,

@@ -75,7 +75,7 @@ type UseActiveAccountVariables = {
 export const useActivateAccount = (
   config: UseMutationOptions<
     void,
-    AxiosError<any>,
+    AxiosError<TODO>,
     UseActiveAccountVariables
   > = {}
 ) => {
@@ -88,7 +88,7 @@ export const useActivateAccount = (
 };
 
 export const useUpdateAccount = (
-  config: UseMutationOptions<Account, AxiosError<any>, Account> = {}
+  config: UseMutationOptions<Account, AxiosError<TODO>, Account> = {}
 ) => {
   const { i18n } = useTranslation();
   return useMutation(
@@ -107,7 +107,7 @@ export const useUpdateAccount = (
 };
 
 export const useResetPasswordInit = (
-  config: UseMutationOptions<void, AxiosError<any>, string> = {}
+  config: UseMutationOptions<void, AxiosError<TODO>, string> = {}
 ) => {
   return useMutation(
     (email): Promise<void> =>
@@ -128,7 +128,7 @@ type UseResetPasswordFinishVariables = {
 export const useResetPasswordFinish = (
   config: UseMutationOptions<
     void,
-    AxiosError<any>,
+    AxiosError<TODO>,
     UseResetPasswordFinishVariables
   > = {}
 ) => {
@@ -144,7 +144,7 @@ export const useResetPasswordFinish = (
 export const useUpdatePassword = (
   config: UseMutationOptions<
     void,
-    AxiosError<any>,
+    AxiosError<TODO>,
     { currentPassword: string; newPassword: string }
   > = {}
 ) => {

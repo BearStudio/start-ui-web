@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const template = require('./svgr.template');
 
 module.exports = {

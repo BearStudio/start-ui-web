@@ -9,14 +9,10 @@ export type TextCurrencyProps = TextProps & {
   locale?: string;
   currency?: string;
   decimals?: number;
-  groupSpace?: number;
 };
 
 export const TextCurrency = forwardRef<TextCurrencyProps, 'span'>(
-  (
-    { value, locale, currency = 'EUR', decimals = 2, groupSpace = 2, ...rest },
-    ref
-  ) => {
+  ({ value, locale, currency = 'EUR', decimals = 2, ...rest }, ref) => {
     const { i18n } = useTranslation();
     return (
       <Text ref={ref} sx={{ fontVariantNumeric: 'tabular-nums' }} {...rest}>
