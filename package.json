@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 🐜 Formiz — From the 🐻 BearStudio Team",
   "engines": {
-    "node": ">=14.17",
+    "node": ">=16",
     "npm": "please-use-yarn",
     "yarn": ">=1.22"
   },

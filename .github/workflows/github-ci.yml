@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [14, 16, 'lts/*']
+        node: [16, 'lts/*']
 
     steps:
       - uses: actions/checkout@v2
