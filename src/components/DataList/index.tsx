@@ -244,7 +244,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
   ...rest
 }) => {
   const [columns, setColumns] = useState<DataListColumns>({});
-  const [listRef]: any = useAutoAnimate<HTMLDivElement>();
+  const [listRef] = useAutoAnimate<HTMLDivElement>();
 
   return (
     <DataListContext.Provider

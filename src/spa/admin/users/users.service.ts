@@ -15,6 +15,8 @@ type UserMutateError = {
   errorKey: 'userexists' | 'emailexists';
 };
 
+const USERS_BASE_URL = '/admin/users';
+
 const usersKeys = {
   all: () => ['usersService'] as const,
   users: ({ page, size }: { page?: number; size?: number }) =>
@@ -35,7 +37,7 @@ export const useUserList = (
   const result = useQuery(
     usersKeys.users({ page, size }),
     (): Promise<UserList> =>
-      Axios.get('/admin/users', { params: { page, size, sort: 'id,desc' } }),
+      Axios.get(USERS_BASE_URL, { params: { page, size, sort: 'id,desc' } }),
     { keepPreviousData: true, ...config }
   );
 
@@ -65,7 +67,7 @@ export const useUser = (
 ) => {
   const result = useQuery(
     usersKeys.user({ login: userLogin }),
-    (): Promise<User> => Axios.get(`/admin/users/${userLogin}`),
+    (): Promise<User> => Axios.get(`${USERS_BASE_URL}/${userLogin}`),
     {
       enabled: !!userLogin,
       ...config,
@@ -82,7 +84,7 @@ export const useUserUpdate = (
   config: UseMutationOptions<User, AxiosError<UserMutateError>, User> = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation((payload) => Axios.put('/admin/users', payload), {
+  return useMutation((payload) => Axios.put(USERS_BASE_URL, payload), {
     ...config,
     onSuccess: (data, payload, ...rest) => {
       queryClient.cancelQueries([...usersKeys.all(), 'users']);

@@ -6,7 +6,7 @@ export const AuthRoutes = (server: Server) => {
   server.post('/authenticate', authenticate);
 };
 
-const authenticate = (schema: any, request: Request) => {
+const authenticate = (schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   const user = schema.users.findBy({ login: attrs.username.toLowerCase() });
   if (!user) {
@@ -16,8 +16,8 @@ const authenticate = (schema: any, request: Request) => {
   return { id_token: user.id };
 };
 
-export const withAuth = (callback: any) => {
-  return (schema: any, request: Request) => {
+export const withAuth = (callback: TODO) => {
+  return (schema: TODO, request: Request) => {
     if (getCurrent(schema, request).code === 401) {
       return new Response(401);
     }

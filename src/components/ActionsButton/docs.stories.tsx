@@ -50,7 +50,7 @@ export const UsageWithMenu = () => (
   </Menu>
 );
 UsageWithMenu.decorators = [
-  (Story: any) => (
+  (Story: TODO) => (
     <Flex h="12rem" justify="flex-end">
       <Story />
     </Flex>

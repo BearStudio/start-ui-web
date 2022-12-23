@@ -74,7 +74,7 @@ export const PageUserUpdate = () => {
       navigate(-1);
     },
   });
-  const submitEditUser = (values: any) => {
+  const submitEditUser = (values: TODO) => {
     const userToSend = {
       id: user?.id,
       ...values,

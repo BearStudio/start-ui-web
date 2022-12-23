@@ -12,7 +12,7 @@ export const UsersRoutes = (server: Server) => {
   server.delete('/admin/users/:userLogin', deleteOne);
 };
 
-const getAll = withAuth((schema: any, request: Request) => {
+const getAll = withAuth((schema: TODO, request: Request) => {
   if (!request.queryParams) {
     throw new Error('Missing queryParams');
   }
@@ -28,7 +28,7 @@ const getAll = withAuth((schema: any, request: Request) => {
   );
 });
 
-const getOneByLogin = withAuth((schema: any, request: Request) => {
+const getOneByLogin = withAuth((schema: TODO, request: Request) => {
   const login = request.params.userLogin;
   const user = schema.where('user', { login }).models[0];
   if (!user) {
@@ -37,7 +37,7 @@ const getOneByLogin = withAuth((schema: any, request: Request) => {
   return user;
 });
 
-const create = withAuth((schema: any, request: Request) => {
+const create = withAuth((schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   return schema.create('user', {
     activated: true,
@@ -45,12 +45,12 @@ const create = withAuth((schema: any, request: Request) => {
   });
 });
 
-const update = withAuth((schema: any, request: Request) => {
+const update = withAuth((schema: TODO, request: Request) => {
   const attrs = JSON.parse(request.requestBody);
   return schema.users.find(attrs.id).update(attrs);
 });
 
-const deleteOne = withAuth((schema: any, request: Request) => {
+const deleteOne = withAuth((schema: TODO, request: Request) => {
   const login = request.params.userLogin;
   return schema.users.findBy({ login }).destroy();
 });

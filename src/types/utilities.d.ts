@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Use this type to temporary bypass to `any` without writting `any`
  * Comment the line to find where it's used
