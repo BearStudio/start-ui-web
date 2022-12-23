@@ -45,7 +45,7 @@ export const DefaultValue = () => {
           name="mySelect"
           label="Label"
           helper="Helper"
-          defaultValue={options[0].value}
+          defaultValue={options[0]?.value}
           options={options}
           required="Required"
         />
