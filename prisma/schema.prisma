@@ -31,3 +31,11 @@ model User {
   updatedBy       User?    @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
   updatedUsers    User[]   @relation("UpdatedByUser")
 }
+
+model VerificationToken {
+  token   String   @unique
+  userId  Int
+  expires DateTime
+
+  @@unique([token, userId])
+}
