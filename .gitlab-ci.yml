@@ -20,7 +20,7 @@ build:
 test:
   image:
     # Make sure to update this version number on version update
-    name: cypress/included:10.3.0
+    name: cypress/included:11.2.0
     entrypoint: ['']
   stage: test
   script:
