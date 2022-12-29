@@ -7,9 +7,9 @@ import {
   AlertTitle,
   Box,
   Button,
-  ButtonGroup,
   Heading,
   Text,
+  Wrap,
 } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { CgLoadbarDoc } from 'react-icons/cg';
@@ -42,7 +42,7 @@ export const PageDashboard = () => {
             </AlertDescription>
           </Box>
         </Alert>
-        <ButtonGroup mt="4" spacing="4">
+        <Wrap mt="4" spacing="4">
           <Button
             variant="link"
             as="a"
@@ -62,7 +62,7 @@ export const PageDashboard = () => {
             <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
-        </ButtonGroup>
+        </Wrap>
       </PageContent>
     </Page>
   );
