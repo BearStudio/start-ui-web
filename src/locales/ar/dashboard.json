@@ -1,7 +1,8 @@
 {
   "links": {
     "github": "مستودع Github",
-    "openIssue": "إفتح مشكلة"
+    "openIssue": "إفتح مشكلة",
+    "documentation": "توثيق"
   },
   "title": "اللوحة الرئيسية",
   "welcome": {

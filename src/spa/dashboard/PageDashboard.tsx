@@ -12,6 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
+import { CgLoadbarDoc } from 'react-icons/cg';
 import { FaGithub } from 'react-icons/fa';
 import { FiAlertCircle } from 'react-icons/fi';
 
@@ -48,6 +49,10 @@ export const PageDashboard = () => {
             href="https://github.com/BearStudio/start-ui"
           >
             <Icon icon={FaGithub} me="1" /> {t('dashboard:links.github')}
+          </Button>
+          <Button variant="link" as="a" href="https://docs.web.start-ui.com">
+            <Icon icon={CgLoadbarDoc} me="1" />{' '}
+            {t('dashboard:links.documentation')}
           </Button>
           <Button
             variant="link"
