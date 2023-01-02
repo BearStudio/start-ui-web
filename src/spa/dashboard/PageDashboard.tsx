@@ -7,11 +7,12 @@ import {
   AlertTitle,
   Box,
   Button,
-  ButtonGroup,
   Heading,
   Text,
+  Wrap,
 } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
+import { CgLoadbarDoc } from 'react-icons/cg';
 import { FaGithub } from 'react-icons/fa';
 import { FiAlertCircle } from 'react-icons/fi';
 
@@ -41,13 +42,17 @@ export const PageDashboard = () => {
             </AlertDescription>
           </Box>
         </Alert>
-        <ButtonGroup mt="4" spacing="4">
+        <Wrap mt="4" spacing="4">
           <Button
             variant="link"
             as="a"
             href="https://github.com/BearStudio/start-ui"
           >
             <Icon icon={FaGithub} me="1" /> {t('dashboard:links.github')}
+          </Button>
+          <Button variant="link" as="a" href="https://docs.web.start-ui.com">
+            <Icon icon={CgLoadbarDoc} me="1" />{' '}
+            {t('dashboard:links.documentation')}
           </Button>
           <Button
             variant="link"
@@ -57,7 +62,7 @@ export const PageDashboard = () => {
             <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
-        </ButtonGroup>
+        </Wrap>
       </PageContent>
     </Page>
   );

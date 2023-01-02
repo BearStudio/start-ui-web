@@ -5,6 +5,15 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
+## Documentation
+
+For detailed information on how to use this project, please refer to the [documentation](https://docs.web.start-ui.com). The documentation contains all the necessary information on installation, usage, and some guides.
+
+## Demo
+
+A live demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com)
+
+
 ## Getting Started
 
 ```bash
@@ -43,6 +52,8 @@ yarn dev
 ℹ️ API calls are mapped on a [JHipster](https://www.jhipster.tech/) backend application.
 
 ## Features
+
+You can find more details about each feature on the [documentation](https://docs.web.start-ui.com)
 
 - Reponsive layout / navigation.
 - Sign / Sign Up / Password recovery screens.
