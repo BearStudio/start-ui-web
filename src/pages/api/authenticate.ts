@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { login } from '@/server/auth';
-import { apiMethods, badRequest } from '@/server/utils/api';
+import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
 export default apiMethods({
   POST: {
@@ -12,7 +12,7 @@ export default apiMethods({
         .safeParse(req.body);
 
       if (!bodyParsed.success) {
-        return badRequest(res);
+        return badRequestResponse(res);
       }
 
       const token = await login({
@@ -20,7 +20,7 @@ export default apiMethods({
         password: bodyParsed.data.password,
       });
       if (!token) {
-        return badRequest(res);
+        return badRequestResponse(res);
       }
 
       return res.json({ id_token: token });
