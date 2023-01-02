@@ -1,14 +1,14 @@
-import { getUser } from '@/server/users';
+import { getUserByLogin } from '@/server/users';
 import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
 export default apiMethods({
   GET: {
     handler: async ({ req, res }) => {
-      if (typeof req.query.id !== 'string') {
+      if (typeof req.query.login !== 'string') {
         return badRequestResponse(res);
       }
-      const data = await getUser(Number(req.query.id));
-      res.json(data);
+      const user = await getUserByLogin(req.query.login);
+      res.json(user);
     },
   },
 });

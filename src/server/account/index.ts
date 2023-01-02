@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 
+import { prepareUserForDb } from '../users/utils';
 import { db } from '../utils/db';
 
 export const getAccount = () => {
@@ -24,12 +25,12 @@ export const createAccount = async ({
   const passwordHash = await bcrypt.hash(password, 12);
 
   const user = await db.user.create({
-    data: {
+    data: prepareUserForDb({
       email,
       login,
       password: passwordHash,
       langKey,
-    },
+    }),
   });
 
   const token = randomUUID();
