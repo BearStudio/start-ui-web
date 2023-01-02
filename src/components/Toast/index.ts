@@ -11,7 +11,7 @@ export const useToastError = () =>
   useToast({
     ...toastDefaultConfig,
     status: 'error',
-    duration: 5000,
+    duration: null,
   });
 
 export const useToastWarning = () =>
