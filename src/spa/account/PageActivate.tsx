@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 
-import { Box, HStack, Spinner, Text, useToast } from '@chakra-ui/react';
+import { Box, HStack, Spinner, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useActivateAccount } from '@/spa/account/account.service';
 
 export const PageActivate = () => {
@@ -11,8 +12,12 @@ export const PageActivate = () => {
   const activateAccount = useActivateAccount();
 
   const [searchParams] = useSearchParams();
-  const toast = useToast();
+
+  const toastError = useToastError();
+  const toastSuccess = useToastSuccess();
+
   const navigate = useNavigate();
+
   useEffect(() => {
     activateAccount.mutate({
       key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
@@ -21,22 +26,14 @@ export const PageActivate = () => {
 
   if (isError) {
     navigate('/');
-    toast({
+    toastError({
       title: t('account:activate.feedbacks.activationError.title'),
-      status: 'error',
-      duration: 9000,
-      isClosable: true,
-      position: 'top-right',
     });
   }
   if (isSuccess) {
     navigate('/');
-    toast({
+    toastSuccess({
       title: t('account:activate.feedbacks.activationSuccess.title'),
-      status: 'success',
-      duration: 9000,
-      isClosable: true,
-      position: 'top-right',
     });
   }
   return (
