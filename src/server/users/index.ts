@@ -1,7 +1,7 @@
 import { db } from '@/server/utils/db';
 
 export const getUserList = async () => {
-  return await db.user.findMany();
+  return await db.user.findMany(); // TODO pagination
 };
 
 export const getUser = (id: number) => {

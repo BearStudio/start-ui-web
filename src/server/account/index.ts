@@ -22,6 +22,7 @@ export const createAccount = async ({
   langKey,
 }: createAccountParams) => {
   const passwordHash = await bcrypt.hash(password, 12);
+
   const user = await db.user.create({
     data: {
       email,

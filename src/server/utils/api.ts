@@ -16,16 +16,54 @@ type Methods = {
   };
 };
 
-export const badRequest = (res: NextApiResponse) => {
-  return res.status(400).end();
+type ErrorResponse = (
+  res: NextApiResponse,
+  options?: { title?: string; message?: string; details?: string }
+) => unknown;
+
+export const demoReadOnlyResponse: ErrorResponse = (
+  res,
+  { title, message } = {}
+) => {
+  return res.status(403).json({
+    title: title ?? 'Demo Mode',
+    message: message ?? 'error.demo',
+    details:
+      'You are currently in demo mode. Certain features of the application are disabled or restricted. To remove Read Only mode, you can either change the `NEXT_PUBLIC_IS_DEMO` environment variable to "false" or remove it completely',
+  });
 };
 
-export const notSignedIn = (res: NextApiResponse) => {
-  return res.status(401).end();
+export const badRequestResponse: ErrorResponse = (
+  res,
+  { title, message, details } = {}
+) => {
+  return res.status(400).json({
+    title: title ?? 'Method argument not valid',
+    message: message ?? 'error.validation',
+    details,
+  });
 };
 
-export const notFound = (res: NextApiResponse) => {
-  return res.status(404).end();
+export const notSignedInResponse: ErrorResponse = (
+  res,
+  { title, message, details } = {}
+) => {
+  return res.status(401).json({
+    title: title ?? 'Not Signed In',
+    message: message ?? 'error.http.401',
+    details,
+  });
+};
+
+export const notFoundResponse: ErrorResponse = (
+  res,
+  { title, message, details } = {}
+) => {
+  return res.status(404).json({
+    title: title ?? 'Not Found',
+    message: message ?? 'error.http.404',
+    details,
+  });
 };
 
 export const apiMethods =
@@ -44,7 +82,7 @@ export const apiMethods =
     const token = req.headers.authorization?.replace('Bearer ', '');
 
     if (!token) {
-      return notSignedIn(res);
+      return notSignedInResponse(res);
     }
 
     const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
@@ -54,7 +92,7 @@ export const apiMethods =
       typeof jwtDecoded !== 'object' ||
       !('id' in jwtDecoded)
     ) {
-      return notSignedIn(res);
+      return notSignedInResponse(res);
     }
 
     const user = await db.user.findUnique({
@@ -72,7 +110,7 @@ export const apiMethods =
     });
 
     if (!user || !user.activated) {
-      return notSignedIn(res);
+      return notSignedInResponse(res);
     }
 
     return method.handler({ req, res, user });

@@ -1,12 +1,20 @@
 import { z } from 'zod';
 
 import { createAccount } from '@/server/account';
-import { apiMethods, badRequest } from '@/server/utils/api';
+import {
+  apiMethods,
+  badRequestResponse,
+  demoReadOnlyResponse,
+} from '@/server/utils/api';
 
 export default apiMethods({
   POST: {
     public: true,
     handler: async ({ req, res }) => {
+      if (process.env.NEXT_PUBLIC_IS_DEMO === 'true') {
+        return demoReadOnlyResponse(res);
+      }
+
       const bodyParsed = z
         .object({
           email: z.string().email(),
@@ -17,7 +25,7 @@ export default apiMethods({
         .safeParse(req.body);
 
       if (!bodyParsed.success) {
-        return badRequest(res);
+        return badRequestResponse(res);
       }
 
       const user = await createAccount(bodyParsed.data);

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { activateAccount } from '@/server/account';
-import { apiMethods, badRequest } from '@/server/utils/api';
+import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
 export default apiMethods({
   GET: {
@@ -10,7 +10,7 @@ export default apiMethods({
       const queryParsed = z.object({ key: z.string() }).safeParse(req.query);
 
       if (!queryParsed.success) {
-        return badRequest(res);
+        return badRequestResponse(res);
       }
 
       const user = await activateAccount({
@@ -18,7 +18,7 @@ export default apiMethods({
       });
 
       if (!user) {
-        return badRequest(res);
+        return badRequestResponse(res);
       }
 
       return res.status(200).end();
