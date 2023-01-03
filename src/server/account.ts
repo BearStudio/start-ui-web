@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 
-import { prepareUserForDb } from '../users/utils';
-import { db } from '../utils/db';
+import { prepareUserForDb } from '@/server/users';
+import { db } from '@/server/utils/db';
 
 export const getAccount = () => {
   return {};
