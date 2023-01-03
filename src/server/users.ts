@@ -2,9 +2,11 @@ import { User } from '@prisma/client';
 
 import { db } from '@/server/utils/db';
 
-export type UserFormatted = ReturnType<typeof formatUserFromDb>;
+export type UserFormatted<U extends Partial<User> = User> = ReturnType<
+  typeof formatUserFromDb<U>
+>;
 
-export const formatUserFromDb = <T extends Partial<User>>(user?: T | null) => {
+export const formatUserFromDb = <U extends Partial<User>>(user?: U | null) => {
   if (!user) {
     return undefined;
   }
@@ -21,9 +23,9 @@ export const formatUserFromDb = <T extends Partial<User>>(user?: T | null) => {
 };
 
 export const prepareUserForDb = <
-  T extends Partial<UserFormatted & { password?: string }>
+  U extends Partial<UserFormatted & { password?: string }>
 >(
-  user: T
+  user: U
 ) => {
   // Format fields for database
   return {
@@ -78,14 +80,26 @@ export const updateUserByLogin = async (
   return formatUserFromDb(user);
 };
 
-export const createUser = async (newUser: UserFormatted) => {
+export const createUser = async (
+  newUser: UserFormatted<
+    Pick<
+      User,
+      | 'email'
+      | 'login'
+      | 'firstName'
+      | 'lastName'
+      | 'langKey'
+      | 'authorities'
+      | 'activated'
+    >
+  >
+) => {
   if (!newUser) throw new Error('Missing new user');
 
-  // TODO
-  // const user = await db.user.create({
-  //   data: prepareUserForDb(newUser),
-  // });
-  // return formatUserFromDb(user);
+  const user = await db.user.create({
+    data: prepareUserForDb(newUser),
+  });
+  return formatUserFromDb(user);
 };
 
 export const removeUser = () => {
