@@ -8,7 +8,7 @@ type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {
   [key in HttpVerbs]?: {
     public?: boolean;
-    demoAllowed?: boolean;
+    demo?: 'allowed' | 'disallowed';
     handler(params: {
       req: NextApiRequest;
       res: NextApiResponse;
@@ -77,9 +77,10 @@ export const apiMethods =
     }
 
     if (
-      !method.demoAllowed &&
-      ['POST', 'DELETE', 'PATCH', 'PUT'].includes(req.method ?? '') &&
-      process.env.NEXT_PUBLIC_IS_DEMO === 'true'
+      method.demo === 'disallowed' ||
+      (method.demo !== 'allowed' &&
+        ['POST', 'DELETE', 'PATCH', 'PUT'].includes(req.method ?? '') &&
+        process.env.NEXT_PUBLIC_IS_DEMO === 'true')
     ) {
       return demoReadOnlyResponse(res);
     }
