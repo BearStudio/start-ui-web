@@ -1,8 +1,8 @@
-import { User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { db } from './db';
+import { getAccount } from '@/server/account';
+import { UserFormatted } from '@/server/users';
 
 type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {
@@ -11,7 +11,7 @@ type Methods = {
     handler(params: {
       req: NextApiRequest;
       res: NextApiResponse;
-      user?: Partial<User>;
+      user?: Partial<UserFormatted>;
     }): Promise<unknown>;
   };
 };
@@ -95,21 +95,9 @@ export const apiMethods =
       return notSignedInResponse(res);
     }
 
-    const user = await db.user.findUnique({
-      where: { id: jwtDecoded.id },
-      select: {
-        id: true,
-        login: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        authorities: true,
-        langKey: true,
-        activated: true,
-      },
-    });
+    const user = await getAccount(jwtDecoded.id);
 
-    if (!user || !user.activated) {
+    if (!user) {
       return notSignedInResponse(res);
     }
 

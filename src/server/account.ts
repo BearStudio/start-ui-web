@@ -2,11 +2,25 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 
-import { prepareUserForDb } from '@/server/users';
+import { formatUserFromDb, prepareUserForDb } from '@/server/users';
 import { db } from '@/server/utils/db';
 
-export const getAccount = () => {
-  return {};
+export const getAccount = async (id: number) => {
+  const user = await db.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      login: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      authorities: true,
+      langKey: true,
+      activated: true,
+    },
+  });
+  if (!user?.activated) return undefined;
+  return formatUserFromDb(user);
 };
 
 type createAccountParams = {
