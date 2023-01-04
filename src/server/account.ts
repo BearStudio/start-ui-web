@@ -2,7 +2,11 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 
-import { formatUserFromDb, prepareUserForDb } from '@/server/users';
+import {
+  UserFormatted,
+  formatUserFromDb,
+  prepareUserForDb,
+} from '@/server/users';
 import { db } from '@/server/utils/db';
 
 export const getAccount = async (id: number) => {
@@ -94,8 +98,16 @@ export const activateAccount = async ({ token }: activateAccountParams) => {
   return user;
 };
 
-export const updateAccount = () => {
-  return {};
+export const updateAccount = async (
+  id: number,
+  payload: Partial<UserFormatted>
+) => {
+  if (!payload) throw new Error('Missing payload');
+  const user = await db.user.update({
+    where: { id },
+    data: prepareUserForDb(payload),
+  });
+  return formatUserFromDb(user);
 };
 
 export const resetPasswordInit = () => {
