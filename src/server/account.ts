@@ -118,6 +118,33 @@ export const resetPasswordFinish = () => {
   return {};
 };
 
-export const updatePassword = () => {
-  return {};
+export const updatePassword = async (
+  id: number,
+  payload: { currentPassword: string; newPassword: string }
+) => {
+  const user = await db.user.findUnique({ where: { id } });
+
+  if (!user || !user.password) {
+    return undefined;
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    payload.currentPassword,
+    user.password
+  );
+
+  if (!isPasswordValid) {
+    return undefined;
+  }
+
+  const passwordHash = await bcrypt.hash(payload.newPassword, 12);
+
+  const updatedUser = await db.user.update({
+    where: { id },
+    data: {
+      password: passwordHash,
+    },
+  });
+
+  return formatUserFromDb(updatedUser);
 };
