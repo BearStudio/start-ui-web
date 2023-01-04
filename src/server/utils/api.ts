@@ -8,6 +8,7 @@ type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {
   [key in HttpVerbs]?: {
     public?: boolean;
+    demoAllowed?: boolean;
     handler(params: {
       req: NextApiRequest;
       res: NextApiResponse;
@@ -73,6 +74,14 @@ export const apiMethods =
 
     if (!method) {
       return res.status(405).end();
+    }
+
+    if (
+      !method.demoAllowed &&
+      ['POST', 'DELETE', 'PATCH', 'PUT'].includes(req.method ?? '') &&
+      process.env.NEXT_PUBLIC_IS_DEMO === 'true'
+    ) {
+      return demoReadOnlyResponse(res);
     }
 
     if (method.public) {

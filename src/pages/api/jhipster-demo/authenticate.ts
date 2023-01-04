@@ -5,6 +5,7 @@ import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
 export default apiMethods({
   POST: {
+    demoAllowed: true,
     public: true,
     handler: async ({ req, res }) => {
       const bodyParsed = z
