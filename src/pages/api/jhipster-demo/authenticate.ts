@@ -20,6 +20,7 @@ export default apiMethods({
         login: bodyParsed.data.username,
         password: bodyParsed.data.password,
       });
+
       if (!token) {
         return badRequestResponse(res);
       }

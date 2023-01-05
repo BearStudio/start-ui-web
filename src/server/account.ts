@@ -44,8 +44,8 @@ export const createAccount = async ({
 
   const user = await db.user.create({
     data: prepareUserForDb({
-      email,
-      login,
+      email: email.toLowerCase().trim(),
+      login: login.toLowerCase().trim(),
       password: passwordHash,
       langKey,
     }),
@@ -110,12 +110,62 @@ export const updateAccount = async (
   return formatUserFromDb(user);
 };
 
-export const resetPasswordInit = () => {
-  return {};
+export const resetPasswordInit = async (email: string) => {
+  const user = await db.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+
+  if (!user) {
+    return undefined;
+  }
+
+  const token = randomUUID();
+
+  await db.verificationToken.create({
+    data: {
+      userId: user.id,
+      token,
+      expires: dayjs().add(1, 'hour').toDate(),
+    },
+  });
+
+  // REPLACE ME WITH EMAIL SERVICE
+  console.log(`👇👇👇👇👇👇👇👇👇👇
+✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/reset/finish?key=${token}
+👆👆👆👆👆👆👆👆👆👆`);
+
+  return true;
 };
 
-export const resetPasswordFinish = () => {
-  return {};
+export const resetPasswordFinish = async (payload: {
+  token: string;
+  newPassword: string;
+}) => {
+  // Clear all expired tokens
+  await db.verificationToken.deleteMany({
+    where: { expires: { lt: new Date() } },
+  });
+
+  const verificationToken = await db.verificationToken.findUnique({
+    where: { token: payload.token },
+  });
+
+  if (!verificationToken) {
+    return undefined;
+  }
+
+  const passwordHash = await bcrypt.hash(payload.newPassword, 12);
+
+  const [updatedUser] = await db.$transaction([
+    db.user.update({
+      where: { id: verificationToken.userId },
+      data: { password: passwordHash },
+    }),
+    db.verificationToken.delete({ where: { token: payload.token } }),
+  ]);
+
+  return formatUserFromDb(updatedUser);
 };
 
 export const updatePassword = async (
