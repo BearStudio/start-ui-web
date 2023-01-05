@@ -102,6 +102,9 @@ export const createUser = async (
   return formatUserFromDb(user);
 };
 
-export const removeUser = () => {
-  return {};
+export const removeUserByLogin = async (
+  login: string,
+  currentUserId: number
+) => {
+  return db.user.delete({ where: { login, NOT: { id: currentUserId } } });
 };
