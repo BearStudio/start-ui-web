@@ -25,6 +25,9 @@ Then just go to the created folder and start the dev server.
 
 ```bash
 cd myApp
+# Make sure that if you are using the DB, you have run the following command
+yarn db:push
+# Then run yarn dev to develop and enjoy hot reload
 yarn dev
 ```
 
