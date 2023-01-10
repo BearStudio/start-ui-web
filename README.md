@@ -25,9 +25,11 @@ Then just go to the created folder and start the dev server.
 
 ```bash
 cd myApp
-# Make sure that if you are using the DB, you have run the following command
+
+# Init the local database
 yarn db:push
-# Then run yarn dev to develop and enjoy hot reload
+
+# Run the development server
 yarn dev
 ```
 
@@ -74,13 +76,17 @@ You can find more details about each feature on the [documentation](https://docs
 ## Installation
 
 ```bash
+# Install dependencies
 yarn install
-yarn build
+
+# Init the local database
+yarn db:push
 ```
 
 ## Development
 
 ```bash
+# Run the development server
 yarn dev
 ```
 
@@ -116,7 +122,7 @@ yarn theme:generate-icons
 Update the `NEXT_PUBLIC_API_BASE_URL` with your JHipster API url:
 
 ```
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+NEXT_PUBLIC_API_BASE_URL="http://localhost:8080/api"
 ```
 
 ## Show hint on development environments
@@ -124,8 +130,8 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
 
 ```
-NEXT_PUBLIC_DEV_ENV_NAME=staging
-NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
+NEXT_PUBLIC_DEV_ENV_NAME="staging"
+NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME="teal"
 ```
 
 ## Translations
