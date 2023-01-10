@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/app/:any*",
+      "destination": "/app.html"
+    }
+  ]
+}
