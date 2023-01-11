@@ -23,7 +23,7 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook && mv ./storybook-static ./public/storybook",
     "static:build": "yarn build && next export",
-    "static:serve": "yarn static:build && npx servor out app.html 5000",
+    "static:serve": "yarn static:build && npx serve out -c ../static.serve.json",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
     "docs:build": "swagger-cli bundle src/mocks/openapi/openapi.yaml -t json --outfile public/open-api.json"

@@ -256,13 +256,15 @@ Application will be exposed on port 80 ([http://localhost](http://localhost))
 ### Static files
 
 ```bash
-yarn storybook:build # Optional: Will expose the Storybook at `/storybook/index.html`
+yarn storybook:build # Optional: Will expose the Storybook at `/storybook/`
 yarn static:build
 ```
 
 Then expose the `/out` folder.
 
 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+
+> You can use `yarn static:serve` to build and run the static build locally.
 
 #### Using Apache as your web server
 
