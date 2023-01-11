@@ -10,8 +10,7 @@
 
 # next.js
 /.next/
-/out/*
-!/out/serve.json
+/out
 
 # production
 /build

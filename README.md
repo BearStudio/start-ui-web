@@ -256,7 +256,7 @@ Application will be exposed on port 80 ([http://localhost](http://localhost))
 ### Static files
 
 ```bash
-yarn storybook:build # Optional: Will expose the Storybook at `/storybook/index.html`
+yarn storybook:build # Optional: Will expose the Storybook at `/storybook/`
 yarn static:build
 ```
 
