@@ -47,3 +47,4 @@ yarn-error.log*
 
 # Build info
 .build-info.json
+next-env.d.ts
