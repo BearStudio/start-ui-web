@@ -6,7 +6,7 @@ declare module '@formiz/core' {
     UseFieldValues,
   } from '@formiz/core/dist/types/field.types';
 
-  // Override FieldProps type with generic param for define value type
+  // Override FieldProps type with generic param to define value type
   export declare type FieldProps<Value = ExplicitAny> = Omit<
     UseFieldProps,
     'defaultValue' | 'onChange' | 'formatValue'
