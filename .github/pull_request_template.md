@@ -15,10 +15,12 @@
 
 ## Checklist
 
- - [ ] I have performed a self review of my code
+ - [ ] I performed a self review of my code
+ - [ ] I ensured that everything is written in English
  - [ ] I tested the feature or fix on my local environment
- - [ ] I ensured that my code has been developed in English
- - [ ] I ensured that my code is commented enough
+ - [ ] I ran the `yarn storybook` command and everything is working
+ - [ ] If applicable, I updated the translations for english and french files  
+      (If you cannot update the french language, just let us know in the PR description)
  - [ ] If applicable, I updated the README.md
  - [ ] If applicable, I created a PR or an issue on the [documentation repository](https://github.com/bearstudio/start-ui-web-docs/)
  - [ ] If applicable, I’m sure that my feature or my component is mobile first and available correctly on desktop
