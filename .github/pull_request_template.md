@@ -1,7 +1,7 @@
 ## Describe your changes
 
 <!-- Please provide the issue id if applicable, else remove the line -->
-#closes <issue_id>
+closes #<issue_id>
 
 <!-- Please give some details about what you did and the way you did it -->
 
