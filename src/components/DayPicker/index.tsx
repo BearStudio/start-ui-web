@@ -140,6 +140,7 @@ export const DayPicker: FC<React.PropsWithChildren<DayPickerProps>> = ({
         parseDate={parseDate}
         placeholder={placeholder}
         value={value ?? undefined}
+        keepFocus={false}
         dayPickerProps={{
           dir: theme.direction,
           locale: i18n.language,
