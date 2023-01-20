@@ -18,7 +18,7 @@
     "build:info": "node .build-info.generate.js",
     "start": "next start",
     "pretty": "prettier -w .",
-    "lint": "eslint ./src --fix && tsc --noEmit",
+    "lint": "eslint . --fix && tsc --noEmit",
     "lint:staged": "tsc --noEmit && eslint --cache --fix",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook && mv ./storybook-static ./public/storybook",
