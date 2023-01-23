@@ -34,9 +34,14 @@ export const prepareUserForDb = <
   };
 };
 
-export const getUserList = async () => {
+export const getUserList = async (
+  options: { skip?: number; take?: number } = {}
+) => {
   const [users, total] = await Promise.all([
-    db.user.findMany(), // TODO pagination
+    db.user.findMany({
+      skip: options.skip ?? 0,
+      take: options.take ?? 2,
+    }),
     db.user.count(),
   ]);
 
