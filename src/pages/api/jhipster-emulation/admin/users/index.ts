@@ -5,8 +5,17 @@ import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
 export default apiMethods({
   GET: {
-    handler: async ({ res }) => {
-      const { users, total } = await getUserList();
+    handler: async ({ req, res }) => {
+      const options = z
+        .object({
+          page: z.string().optional().default('0').transform(Number),
+          size: z.string().optional().default('10').transform(Number),
+        })
+        .parse(req.query);
+      const { users, total } = await getUserList({
+        skip: options.page * options.size,
+        take: options.size,
+      });
       res.setHeader('x-total-count', total).json(users);
     },
   },
@@ -44,7 +53,7 @@ export default apiMethods({
           lastName: z.string().nullable(),
           langKey: z.string(),
           authorities: z.array(z.string()),
-          activated: z.boolean(),
+          activated: z.boolean().optional(),
         })
         .safeParse(req.body);
 
@@ -52,7 +61,7 @@ export default apiMethods({
         return badRequestResponse(res);
       }
 
-      const user = await createUser(bodyParsed.data);
+      const user = await createUser({ activated: true, ...bodyParsed.data });
       res.json(user);
     },
   },
