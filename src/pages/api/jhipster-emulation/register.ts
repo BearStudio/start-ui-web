@@ -3,6 +3,15 @@ import { z } from 'zod';
 import { createAccount } from '@/server/account';
 import { apiMethods, badRequestResponse } from '@/server/utils/api';
 
+export const openApi = {
+  '/register': {
+    post: {
+      summary: 'Create account',
+      tags: ['Account'],
+    },
+  },
+};
+
 export default apiMethods({
   POST: {
     public: true,
