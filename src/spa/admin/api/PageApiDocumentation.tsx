@@ -12,7 +12,7 @@ export const PageApiDocumentation = () => {
     <Page containerSize="xl" nav={<AdminNav />}>
       <PageContent>
         <Box borderRadius="md" bg="transparent" _dark={{ bg: 'gray.200' }}>
-          <SwaggerUI url="/open-api.json" />
+          <SwaggerUI url="/api/open-api" />
         </Box>
       </PageContent>
     </Page>
