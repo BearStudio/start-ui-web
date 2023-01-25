@@ -49,6 +49,7 @@
     "axios": "1.2.0",
     "dayjs": "1.11.7",
     "framer-motion": "7.6.15",
+    "history": "5.3.0",
     "i18next": "22.0.6",
     "isomorphic-form-data": "2.0.0",
     "lodash": "4.17.21",

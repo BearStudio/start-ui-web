@@ -5,14 +5,11 @@ import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { UserForm } from '@/app/admin/users/UserForm';
-import { useUserCreate } from '@/app/admin/users/users.service';
-import { Page, PageBottomBar, PageContent, PageTopBar } from '@/app/layout';
-import { useGoBack } from '@/app/router';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/spa/admin/users/UserForm';
 import { useUserCreate } from '@/spa/admin/users/users.service';
 import { Page, PageBottomBar, PageContent, PageTopBar } from '@/spa/layout';
+import { useGoBack } from '@/spa/router';
 
 export const PageUserCreate = () => {
   const { t } = useTranslation(['common', 'users']);
@@ -77,7 +74,9 @@ export const PageUserCreate = () => {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => goBack()}>{t('common:actions.cancel')}</Button>
+              <Button onClick={() => goBack()}>
+                {t('common:actions.cancel')}
+              </Button>
               <Button
                 type="submit"
                 variant="@primary"

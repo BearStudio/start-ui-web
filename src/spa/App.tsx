@@ -1,12 +1,14 @@
 import React, { Suspense } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { PageLogin } from '@/app/auth/PageLogin';
-import { PageLogout } from '@/app/auth/PageLogout';
-import { Layout, Loader } from '@/app/layout';
-import { BrowserRouter } from '@/app/router/Router';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorPage } from '@/components/ErrorPage';
+import { PageLogin } from '@/spa/auth/PageLogin';
+import { PageLogout } from '@/spa/auth/PageLogout';
+import { Layout, Loader } from '@/spa/layout';
+import { BrowserRouter } from '@/spa/router/Router';
 import {
   AdminRouteGuard,
   AuthenticatedRouteGuard,

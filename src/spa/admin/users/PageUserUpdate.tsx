@@ -23,10 +23,8 @@ import {
   PageBottomBar,
   PageContent,
   PageTopBar,
-} from '@/app/layout';
-import { useGoBack } from '@/app/router';
-import { useToastError, useToastSuccess } from '@/components/Toast';
-import { ErrorPage } from '@/components/ErrorPage';
+} from '@/spa/layout';
+import { useGoBack } from '@/spa/router';
 
 import { UserForm } from './UserForm';
 import { UserStatus } from './UserStatus';
@@ -127,7 +125,9 @@ export const PageUserUpdate = () => {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => goBack()}>{t('common:actions.cancel')}</Button>
+                <Button onClick={() => goBack()}>
+                  {t('common:actions.cancel')}
+                </Button>
                 <Button
                   type="submit"
                   variant="@primary"
