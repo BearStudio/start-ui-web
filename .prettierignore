@@ -11,3 +11,4 @@ public
 *.md
 *.mdx
 .env*
+!.env.validator.js
