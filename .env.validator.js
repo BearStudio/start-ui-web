@@ -1,5 +1,5 @@
 // @ts-check
-const { z } = require("zod");
+const { z } = require('zod');
 
 /**
  * Update this when adding/editing/removing environment variables
@@ -20,25 +20,25 @@ const _env = envSchema.safeParse(process.env);
 
 const formatErrors = (
   /** @type {import('zod').ZodFormattedError<Map<string,string>,string>} */
-  errors,
+  errors
 ) =>
   Object.entries(errors)
     .map(([name, value]) => {
-      if (value && "_errors" in value)
-        return `${name}: ${value._errors.join(", ")}\n`;
+      if (value && '_errors' in value)
+        return `${name}: ${value._errors.join(', ')}\n`;
     })
     .filter(Boolean);
 
 if (!_env.success) {
   console.error(
-    "❌ Invalid environment variables\n👇 Fix the following environment variables or update the `.env.validator.js` file.\n",
-    ...formatErrors(_env.error.format()),
+    '❌ Invalid environment variables\n👇 Fix the following environment variables or update the `.env.validator.js` file.\n',
+    ...formatErrors(_env.error.format())
   );
   process.exit(1);
 }
 
-console.log('✅ Environment variables validation')
+console.log('✅ Environment variables validation');
 
 module.exports = {
-  envSchema
-}
+  envSchema,
+};
