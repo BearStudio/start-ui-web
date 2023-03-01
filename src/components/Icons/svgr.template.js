@@ -11,7 +11,9 @@ const template = (variables, { tpl }) => {
   return tpl`
 ${comment}
 ${variables.imports};
+
 import { forwardRef } from '@chakra-ui/react';
+
 import { Icon, IconProps } from '..';
 
 ${variables.interfaces};
