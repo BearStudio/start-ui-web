@@ -22,8 +22,8 @@ type UserMutateError = {
 const USERS_BASE_URL = '/admin/users';
 
 const usersKeys = createQueryKeys('usersService', {
-  users: (params: { page?: number; size?: number }) => params,
-  user: (params: { login?: string }) => params,
+  users: (params: { page?: number; size?: number }) => [params],
+  user: (params: { login?: string }) => [params],
 });
 type UsersKeys = inferQueryKeys<typeof usersKeys>;
 
@@ -33,11 +33,11 @@ export const useUserList = (
     UserList,
     AxiosError,
     UserList,
-    UsersKeys['users']
+    UsersKeys['users']['queryKey']
   > = {}
 ) => {
   const result = useQuery(
-    usersKeys.users({ page, size }),
+    usersKeys.users({ page, size }).queryKey,
     (): Promise<UserList> =>
       Axios.get(USERS_BASE_URL, { params: { page, size, sort: 'id,desc' } }),
     { keepPreviousData: true, ...config }
@@ -60,10 +60,15 @@ export const useUserList = (
 
 export const useUser = (
   userLogin?: string,
-  config: UseQueryOptions<User, AxiosError, User, UsersKeys['user']> = {}
+  config: UseQueryOptions<
+    User,
+    AxiosError,
+    User,
+    UsersKeys['user']['queryKey']
+  > = {}
 ) => {
   const result = useQuery(
-    usersKeys.user({ login: userLogin }),
+    usersKeys.user({ login: userLogin }).queryKey,
     (): Promise<User> => Axios.get(`${USERS_BASE_URL}/${userLogin}`),
     {
       enabled: !!userLogin,

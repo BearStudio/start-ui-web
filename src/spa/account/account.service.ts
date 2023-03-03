@@ -24,12 +24,12 @@ export const useAccount = (
     Account,
     AxiosError,
     Account,
-    AccountKeys['account']
+    AccountKeys['account']['queryKey']
   > = {}
 ) => {
   const { i18n } = useTranslation();
   const { data: account, ...rest } = useQuery(
-    accountKeys.account,
+    accountKeys.account.queryKey,
     (): Promise<Account> => Axios.get('/account'),
     {
       onSuccess: (data) => {
