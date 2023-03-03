@@ -1,4 +1,8 @@
 import {
+  createQueryKeys,
+  inferQueryKeys,
+} from '@lukemorales/query-key-factory';
+import {
   UseMutationOptions,
   UseQueryOptions,
   useMutation,
@@ -10,22 +14,22 @@ import { useTranslation } from 'react-i18next';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
 import { Account } from '@/spa/account/account.types';
 
-export const accountKeys = {
-  all: () => ['accountService'] as const,
-  account: () => [...accountKeys.all(), 'account'] as const,
-};
+export const accountKeys = createQueryKeys('accountService', {
+  account: null,
+});
+type AccountKeys = inferQueryKeys<typeof accountKeys>;
 
 export const useAccount = (
   config: UseQueryOptions<
     Account,
     AxiosError,
     Account,
-    InferQueryKey<typeof accountKeys.account>
+    AccountKeys['account']['queryKey']
   > = {}
 ) => {
   const { i18n } = useTranslation();
   const { data: account, ...rest } = useQuery(
-    accountKeys.account(),
+    accountKeys.account.queryKey,
     (): Promise<Account> => Axios.get('/account'),
     {
       onSuccess: (data) => {

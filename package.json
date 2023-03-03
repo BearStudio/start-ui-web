@@ -43,6 +43,7 @@
     "@formiz/core": "1.8.1",
     "@formiz/validations": "1.0.0",
     "@formkit/auto-animate": "1.0.0-beta.5",
+    "@lukemorales/query-key-factory": "1.2.0",
     "@tanstack/react-query": "4.18.0",
     "@tanstack/react-query-devtools": "4.18.0",
     "axios": "1.2.0",
