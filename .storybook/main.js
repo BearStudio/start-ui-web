@@ -24,13 +24,6 @@ module.exports = {
 
     config.resolve.plugins.push(new TsconfigPathsPlugin());
 
-    // Fix issue between Chakra UI and storybook
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@emotion/core': toPath('node_modules/@emotion/react'),
-      'emotion-theming': toPath('node_modules/@emotion/react'),
-    };
-
     // Babel config
     config.module.rules.push({
       test: /\.([j|t]sx?)$/,
