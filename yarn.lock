@@ -2817,19 +2817,15 @@
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-4.5.15.tgz#eed1873d68755d3b52d6fcfcfa3493118430a512"
   integrity sha512-FzleM9AxZQK2nqsTDtBiY0PMEVWvnKnuu2i09+p6DHvrHsuucoV2j0tmw+kAT3L4hvsLdAIDv6MdGehsPIdT+Q==
 
-"@formiz/core@1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-1.8.1.tgz#861d562885ccec6cf188a79de6a64459fc02d229"
-  integrity sha512-1+hzKqJYqMO1cjnWPo5D85A7oRVdrbPxUzDKFgQZpZcE58z//64lbtkS9yrkrmI3Eor126bt1XM5bq+BieoGug==
-  dependencies:
-    lodash "4.17.21"
-    lodash-es "4.17.21"
-    rxjs "6.6.3"
+"@formiz/core@2.0.0@alpha.18":
+  version "2.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-2.0.0-alpha.18.tgz#28bea35c5fc88900c5e5b004b29decd86d145dfd"
+  integrity sha512-Du652zupNdWQ7jCrvaevCRZXFbTUgqCGGp8L7EbsSm059310fO1kW9bU2Dr+CcAq8k4HefPiWZOsic+RqiW2KA==
 
-"@formiz/validations@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-1.0.0.tgz#d61041076b8423d6f439a6b7acb0581caca37d9d"
-  integrity sha512-pGTf0IQmSDhK7+4oTYjwtkn5TXqts33URSFXcUBMidDJgd1bSUzTQMNftg7YCeRPY8ROSsaJNWP7bFwtwHQeSA==
+"@formiz/validations@2.0.0@alpha.18":
+  version "2.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-2.0.0-alpha.2.tgz#94a56e9cef5b188efdab0ac285088c7799663755"
+  integrity sha512-s4KHpC4iAZIIVAiP1vFOrdRnWSQnyfhLhjQCp7iSrHhC3pm1+5w8SCgUDNnx7r6XN5XdJUuNi6TtClW9BmcyWA==
 
 "@formkit/auto-animate@1.0.0-beta.6":
   version "1.0.0-beta.6"
@@ -10057,11 +10053,6 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash-es@4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
-
 lodash.assign@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.assign/-/lodash.assign-4.2.0.tgz#0d99f3ccd7a6d261d19bdaeb9245005d285808e7"
@@ -12415,13 +12406,6 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@6.6.3:
-  version "6.6.3"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
-  integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
-  dependencies:
-    tslib "^1.9.0"
-
 rxjs@^7.5.1:
   version "7.5.6"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.6.tgz#0446577557862afd6903517ce7cae79ecb9662bc"
@@ -13519,7 +13503,7 @@ tslib@2.4.0, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
-tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.8.1:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==

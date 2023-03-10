@@ -9,7 +9,7 @@ import {
   Flex,
   Stack,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormContext } from '@formiz/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ import { useLogin } from '@/spa/auth/auth.service';
 
 const MockedApiHint = () => {
   const { t } = useTranslation(['auth']);
-  const form = useForm({ subscribe: 'form' });
+  const form = useFormContext();
   const mockedUsername = 'admin';
   const mockedPassword = 'admin';
 
@@ -38,7 +38,7 @@ const MockedApiHint = () => {
                 variant="link"
                 color="inherit"
                 onClick={() =>
-                  form.setFieldsValues({
+                  form.setValues({
                     username: mockedUsername,
                     password: mockedPassword,
                   })
@@ -59,7 +59,6 @@ export const LoginForm = ({
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
-  const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 
   const login = useLogin({
@@ -72,14 +71,11 @@ export const LoginForm = ({
     },
   });
 
+  const form = useForm({ id: 'login-form', onValidSubmit: login.mutate });
+
   return (
     <Box {...rest}>
-      <Formiz
-        id="login-form"
-        autoForm
-        onValidSubmit={login.mutate}
-        connect={form}
-      >
+      <Formiz autoForm connect={form}>
         <Stack spacing="4">
           <FieldInput
             name="username"

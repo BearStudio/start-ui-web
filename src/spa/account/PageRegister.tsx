@@ -12,7 +12,7 @@ import {
   ScaleFade,
   Stack,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 import {
   isEmail,
   isMaxLength,
@@ -31,16 +31,9 @@ import { useCreateAccount } from '@/spa/account/account.service';
 
 export const PageRegister = () => {
   const { t, i18n } = useTranslation(['common', 'account']);
-  const form = useForm({
-    subscribe: { form: true, fields: ['langKey'] },
-  });
+
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
-
-  // Change language based on form
-  useEffect(() => {
-    i18n.changeLanguage(form.values?.langKey);
-  }, [i18n, form.values?.langKey]);
 
   const createUser = useCreateAccount({
     onMutate: ({ email }) => {
@@ -55,16 +48,31 @@ export const PageRegister = () => {
       });
 
       if (errorKey === 'userexists') {
-        form.invalidateFields({
+        form.setErrors({
           login: t('account:data.login.alreadyUsed'),
         });
       }
 
       if (errorKey === 'emailexists') {
-        form.invalidateFields({ email: t('account:data.email.alreadyUsed') });
+        form.setErrors({ email: t('account:data.email.alreadyUsed') });
       }
     },
   });
+
+  const form = useForm({
+    id: 'register-form',
+    onValidSubmit: createUser.mutate,
+  });
+  const values = useFormFields({
+    connect: form,
+    fields: ['langKey'],
+    selector: (field) => field.value,
+  });
+
+  // Change language based on form
+  useEffect(() => {
+    i18n.changeLanguage(values?.langKey);
+  }, [i18n, values?.langKey]);
 
   if (createUser.isSuccess) {
     return (
@@ -112,12 +120,7 @@ export const PageRegister = () => {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
-        <Formiz
-          id="register-form"
-          autoForm
-          onValidSubmit={createUser.mutate}
-          connect={form}
-        >
+        <Formiz connect={form} autoForm>
           <Box
             p="6"
             borderRadius="md"
@@ -144,15 +147,15 @@ export const PageRegister = () => {
                 required={t('account:data.login.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(2),
+                    handler: isMinLength(2),
                     message: t('account:data.login.tooShort', { min: 2 }),
                   },
                   {
-                    rule: isMaxLength(50),
+                    handler: isMaxLength(50),
                     message: t('account:data.login.tooLong', { max: 50 }),
                   },
                   {
-                    rule: isPattern(
+                    handler: isPattern(
                       '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
                     ),
                     message: t('account:data.login.invalid'),
@@ -165,15 +168,15 @@ export const PageRegister = () => {
                 required={t('account:data.email.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(5),
+                    handler: isMinLength(5),
                     message: t('account:data.email.tooShort', { min: 5 }),
                   },
                   {
-                    rule: isMaxLength(254),
+                    handler: isMaxLength(254),
                     message: t('account:data.email.tooLong', { min: 254 }),
                   },
                   {
-                    rule: isEmail(),
+                    handler: isEmail(),
                     message: t('account:data.email.invalid'),
                   },
                 ]}
@@ -185,11 +188,11 @@ export const PageRegister = () => {
                 required={t('account:data.password.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(4),
+                    handler: isMinLength(4),
                     message: t('account:data.password.tooShort', { min: 4 }),
                   },
                   {
-                    rule: isMaxLength(50),
+                    handler: isMaxLength(50),
                     message: t('account:data.password.tooLong', { min: 50 }),
                   },
                 ]}

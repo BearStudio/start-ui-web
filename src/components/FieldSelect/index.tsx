@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
 import { GroupBase } from 'react-select';
@@ -7,10 +7,10 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
 export type FieldSelectProps<
-  Option,
+  Option extends { label: ReactNode; value: unknown },
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
-> = FieldProps &
+> = FieldProps<TODO> &
   FormGroupProps & {
     placeholder?: string;
     size?: 'sm' | 'md' | 'lg';
@@ -21,7 +21,7 @@ export type FieldSelectProps<
   };
 
 export const FieldSelect = <
-  Option,
+  Option extends { label: ReactNode; value: unknown },
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
@@ -37,7 +37,7 @@ export const FieldSelect = <
     setValue,
     value,
     otherProps,
-  } = useField({ debounce: 0, ...props });
+  } = useField(props);
   const { required } = props;
   const {
     children,
@@ -51,10 +51,7 @@ export const FieldSelect = <
     size = 'md',
     selectProps,
     ...rest
-  } = otherProps as Omit<
-    FieldSelectProps<Option, IsMulti, Group>,
-    keyof FieldProps
-  >;
+  } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
@@ -77,9 +74,7 @@ export const FieldSelect = <
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={
-          options?.find((option: TODO) => option.value === value) ?? undefined
-        }
+        value={options?.find((option) => option.value === value) ?? undefined}
         onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
