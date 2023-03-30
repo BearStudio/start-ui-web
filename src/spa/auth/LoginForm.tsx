@@ -62,7 +62,7 @@ export const LoginForm = ({
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
 
-  const { mutate: login, isLoading } = useLogin({
+  const login = useLogin({
     onSuccess,
     onError: (error) => {
       toastError({
@@ -74,7 +74,12 @@ export const LoginForm = ({
 
   return (
     <Box {...rest}>
-      <Formiz id="login-form" autoForm onValidSubmit={login} connect={form}>
+      <Formiz
+        id="login-form"
+        autoForm
+        onValidSubmit={login.mutate}
+        connect={form}
+      >
         <Stack spacing="4">
           <FieldInput
             name="username"
@@ -98,7 +103,7 @@ export const LoginForm = ({
               {t('auth:login.actions.forgotPassword')}
             </Button>
             <Button
-              isLoading={isLoading}
+              isLoading={login.isLoading}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant="@primary"

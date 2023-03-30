@@ -33,12 +33,10 @@ export const PageUserUpdate = () => {
 
   const { login } = useParams();
   const navigate = useNavigate();
-  const {
-    user,
-    isLoading: userIsLoading,
-    isFetching: userIsFetching,
-    isError: userIsError,
-  } = useUser(login, { refetchOnWindowFocus: false, enabled: !!login });
+  const user = useUser(login, {
+    refetchOnWindowFocus: false,
+    enabled: !!login,
+  });
 
   const form = useForm({ subscribe: false });
 
@@ -76,7 +74,7 @@ export const PageUserUpdate = () => {
   });
   const submitEditUser = (values: TODO) => {
     const userToSend = {
-      id: user?.id,
+      id: user.data?.id,
       ...values,
     };
     editUser(userToSend);
@@ -87,31 +85,31 @@ export const PageUserUpdate = () => {
       <PageTopBar showBack onBack={() => navigate(-1)}>
         <HStack spacing="4">
           <Box flex="1">
-            {userIsLoading || userIsError ? (
+            {user.isLoading || user.isError ? (
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
               <Stack spacing="0">
-                <Heading size="sm">{user?.login}</Heading>
+                <Heading size="sm">{user.data?.login}</Heading>
                 <Text
                   fontSize="xs"
                   color="gray.600"
                   _dark={{ color: 'gray.300' }}
                 >
-                  {t('users:data.id.label')}: {user?.id}
+                  {t('users:data.id.label')}: {user.data?.id}
                 </Text>
               </Stack>
             )}
           </Box>
           {!!user && (
             <Box>
-              <UserStatus isActivated={user?.activated} />
+              <UserStatus isActivated={user.data?.activated} />
             </Box>
           )}
         </HStack>
       </PageTopBar>
-      {userIsFetching && <Loader />}
-      {userIsError && !userIsFetching && <ErrorPage errorCode={404} />}
-      {!userIsError && !userIsFetching && (
+      {user.isFetching && <Loader />}
+      {user.isError && !user.isFetching && <ErrorPage errorCode={404} />}
+      {!user.isError && !user.isFetching && (
         <Formiz
           id="create-user-form"
           onValidSubmit={submitEditUser}
