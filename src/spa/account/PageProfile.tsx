@@ -27,7 +27,7 @@ export const PageProfile = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { mutate: updateAccount, isLoading: updateLoading } = useUpdateAccount({
+  const updateAccount = useUpdateAccount({
     onError: (error) => {
       const { title } = error?.response?.data || {};
       toastError({
@@ -49,7 +49,7 @@ export const PageProfile = () => {
       ...values,
     };
 
-    await updateAccount(newAccount);
+    await updateAccount.mutate(newAccount);
   };
 
   return (
@@ -111,7 +111,7 @@ export const PageProfile = () => {
                     type="submit"
                     variant="@primary"
                     ms="auto"
-                    isLoading={updateLoading}
+                    isLoading={updateAccount.isLoading}
                   >
                     {t('account:profile.actions.save')}
                   </Button>

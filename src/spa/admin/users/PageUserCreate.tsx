@@ -18,7 +18,7 @@ export const PageUserCreate = () => {
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
 
-  const { mutate: createUser, isLoading: createUserLoading } = useUserCreate({
+  const createUser = useUserCreate({
     onError: (error) => {
       if (error.response) {
         const { title, errorKey } = error.response.data;
@@ -52,7 +52,7 @@ export const PageUserCreate = () => {
     const newUser = {
       ...values,
     };
-    await createUser(newUser);
+    await createUser.mutate(newUser);
   };
 
   return (
@@ -77,7 +77,7 @@ export const PageUserCreate = () => {
               <Button
                 type="submit"
                 variant="@primary"
-                isLoading={createUserLoading}
+                isLoading={createUser.isLoading}
               >
                 {t('users:create.action.save')}
               </Button>

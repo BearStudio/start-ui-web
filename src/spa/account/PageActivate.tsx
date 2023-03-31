@@ -8,29 +8,28 @@ import { useActivateAccount } from '@/spa/account/account.service';
 
 export const PageActivate = () => {
   const { t } = useTranslation(['account']);
-  const {
-    mutate: activateAccount,
-    isError,
-    isSuccess,
-    isLoading,
-  } = useActivateAccount();
+  const activateAccount = useActivateAccount();
 
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    activateAccount({ key: searchParams.get('key') ?? 'KEY_NOT_DEFINED' });
+    activateAccount.mutate({
+      key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
+    });
   }, [activateAccount, searchParams]);
 
   return (
     <Box p="4" maxW="20rem" m="auto">
-      {isLoading && (
+      {activateAccount.isLoading && (
         <HStack>
           <Spinner size="sm" me="2" />
           <Text>{t('account:activate.feedbacks.activationLoading.title')}</Text>
         </HStack>
       )}
-      {isSuccess && t('account:activate.feedbacks.activationSuccess.title')}
-      {isError && t('account:activate.feedbacks.activationError.title')}
+      {activateAccount.isSuccess &&
+        t('account:activate.feedbacks.activationSuccess.title')}
+      {activateAccount.isError &&
+        t('account:activate.feedbacks.activationError.title')}
     </Box>
   );
 };

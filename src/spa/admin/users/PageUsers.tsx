@@ -77,7 +77,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
-  const { mutate: userUpdate, ...userUpdateData } = useUserUpdate({
+  const userUpdate = useUserUpdate({
     onSuccess: ({ activated, login }) => {
       if (activated) {
         toastSuccess({
@@ -114,11 +114,11 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
     },
   });
 
-  const activateUser = () => userUpdate({ ...user, activated: true });
-  const deactivateUser = () => userUpdate({ ...user, activated: false });
-  const isActionsLoading = userUpdateData.isLoading;
+  const activateUser = () => userUpdate.mutate({ ...user, activated: true });
+  const deactivateUser = () => userUpdate.mutate({ ...user, activated: false });
+  const isActionsLoading = userUpdate.isLoading;
 
-  const { mutate: userRemove, ...userRemoveData } = useUserRemove({
+  const userRemove = useUserRemove({
     onSuccess: (_, { login }) => {
       toastSuccess({
         title: t('users:feedbacks.deleteUserSuccess.title'),
@@ -136,8 +136,8 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
       });
     },
   });
-  const removeUser = () => userRemove(user);
-  const isRemovalLoading = userRemoveData.isLoading;
+  const removeUser = () => userRemove.mutate(user);
+  const isRemovalLoading = userRemove.isLoading;
 
   return (
     <Menu isLazy placement="left-start" {...rest}>
@@ -188,7 +188,7 @@ export const PageUsers = () => {
   const { t } = useTranslation(['users']);
   const { page, setPage } = usePaginationFromUrl();
   const pageSize = 20;
-  const { users, totalItems, isLoadingPage, isError, refetch } = useUserList({
+  const users = useUserList({
     page: page - 1,
     size: pageSize,
   });
@@ -263,7 +263,7 @@ export const PageUsers = () => {
             </DataListCell>
             <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
           </DataListHeader>
-          {isError && (
+          {users.isError && (
             <Center p={4}>
               <Alert status="error">
                 <AlertIcon />
@@ -277,8 +277,8 @@ export const PageUsers = () => {
                     variant="ghost"
                     size="sm"
                     leftIcon={<FiRefreshCw />}
-                    isLoading={isLoadingPage}
-                    onClick={() => refetch()}
+                    isLoading={users.isLoadingPage}
+                    onClick={() => users.refetch()}
                   >
                     {t('users:list.actions.refetch')}
                   </Button>
@@ -286,7 +286,7 @@ export const PageUsers = () => {
               </Alert>
             </Center>
           )}
-          {users?.map((user) => (
+          {users.data?.content.map((user) => (
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
                 <HStack maxW="100%">
@@ -375,11 +375,11 @@ export const PageUsers = () => {
           ))}
           <DataListFooter>
             <Pagination
-              isLoadingPage={isLoadingPage}
+              isLoadingPage={users.isLoadingPage}
               setPage={setPage}
               page={page}
               pageSize={pageSize}
-              totalItems={totalItems}
+              totalItems={users.data?.totalItems}
             >
               <PaginationButtonFirstPage />
               <PaginationButtonPrevPage />

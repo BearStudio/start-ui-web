@@ -22,28 +22,27 @@ export const PageResetPasswordConfirm = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { mutate: resetPasswordFinish, isLoading: resetPasswordLoading } =
-    useResetPasswordFinish({
-      onError: (error) => {
-        const { title } = error?.response?.data || {};
-        toastError({
-          title: t('account:resetPassword.feedbacks.resetError.title'),
-          description: title,
-        });
-      },
-      onSuccess: () => {
-        toastSuccess({
-          title: t('account:resetPassword.feedbacks.resetSuccess.title'),
-          description: t(
-            'account:resetPassword.feedbacks.resetSuccess.description'
-          ),
-        });
-        navigate('/login');
-      },
-    });
+  const resetPasswordFinish = useResetPasswordFinish({
+    onError: (error) => {
+      const { title } = error?.response?.data || {};
+      toastError({
+        title: t('account:resetPassword.feedbacks.resetError.title'),
+        description: title,
+      });
+    },
+    onSuccess: () => {
+      toastSuccess({
+        title: t('account:resetPassword.feedbacks.resetSuccess.title'),
+        description: t(
+          'account:resetPassword.feedbacks.resetSuccess.description'
+        ),
+      });
+      navigate('/login');
+    },
+  });
 
   const submitResetPasswordFinish = async (values: TODO) => {
-    await resetPasswordFinish({
+    await resetPasswordFinish.mutate({
       key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
       newPassword: values.password,
     });
@@ -109,7 +108,7 @@ export const PageResetPasswordConfirm = () => {
                     type="submit"
                     variant="@primary"
                     ms="auto"
-                    isLoading={resetPasswordLoading}
+                    isLoading={resetPasswordFinish.isLoading}
                   >
                     {t('account:resetPassword.actions.reset')}
                   </Button>

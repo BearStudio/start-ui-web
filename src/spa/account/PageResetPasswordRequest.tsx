@@ -33,11 +33,7 @@ export const PageResetPasswordRequest = () => {
 
   const [accountEmail, setAccountEmail] = useState('');
 
-  const {
-    mutate: resetPasswordInit,
-    isLoading: resetPasswordLoading,
-    isSuccess: resetPasswordSuccess,
-  } = useResetPasswordInit({
+  const resetPasswordInit = useResetPasswordInit({
     onMutate: () => {
       setAccountEmail(resetPasswordInitForm.values?.email);
     },
@@ -51,10 +47,10 @@ export const PageResetPasswordRequest = () => {
   });
 
   const submitResetPasswordInit = async (values: TODO) => {
-    await resetPasswordInit(values.email);
+    await resetPasswordInit.mutate(values.email);
   };
 
-  if (resetPasswordSuccess) {
+  if (resetPasswordInit.isSuccess) {
     return (
       <Center p="4" m="auto">
         <ScaleFade initialScale={0.9} in>
@@ -141,7 +137,7 @@ export const PageResetPasswordRequest = () => {
                   type="submit"
                   variant="@primary"
                   ms="auto"
-                  isLoading={resetPasswordLoading}
+                  isLoading={resetPasswordInit.isLoading}
                 >
                   {t('account:resetPassword.actions.send')}
                 </Button>

@@ -18,32 +18,31 @@ export const PagePassword = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { mutate: changePasswordFinish, isLoading: changePasswordLoading } =
-    useUpdatePassword({
-      onError: (error) => {
-        const { title } = error?.response?.data || {};
-        if (title === 'Incorrect password') {
-          changePasswordForm.invalidateFields({
-            currentPassword: t('account:data.currentPassword.incorrect'),
-          });
-          return;
-        }
-        toastError({
-          title: t('account:password.feedbacks.updateError.title'),
-          description: title,
+  const updatePassword = useUpdatePassword({
+    onError: (error) => {
+      const { title } = error?.response?.data || {};
+      if (title === 'Incorrect password') {
+        changePasswordForm.invalidateFields({
+          currentPassword: t('account:data.currentPassword.incorrect'),
         });
-      },
-      onSuccess: () => {
-        toastSuccess({
-          title: t('account:password.feedbacks.updateSuccess.title'),
-        });
-        changePasswordForm.reset();
-      },
-    });
+        return;
+      }
+      toastError({
+        title: t('account:password.feedbacks.updateError.title'),
+        description: title,
+      });
+    },
+    onSuccess: () => {
+      toastSuccess({
+        title: t('account:password.feedbacks.updateSuccess.title'),
+      });
+      changePasswordForm.reset();
+    },
+  });
 
   const submitUpdatePassword = async (values: TODO) => {
     const { currentPassword, newPassword } = values;
-    await changePasswordFinish({ currentPassword, newPassword });
+    await updatePassword.mutate({ currentPassword, newPassword });
   };
 
   const passwordValidations = [
@@ -114,7 +113,7 @@ export const PagePassword = () => {
                   type="submit"
                   variant="@primary"
                   ms="auto"
-                  isLoading={changePasswordLoading}
+                  isLoading={updatePassword.isLoading}
                 >
                   {t('account:password.actions.changePassword')}
                 </Button>

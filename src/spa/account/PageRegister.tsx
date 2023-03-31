@@ -42,11 +42,7 @@ export const PageRegister = () => {
     i18n.changeLanguage(form.values?.langKey);
   }, [i18n, form.values?.langKey]);
 
-  const {
-    mutate: createUser,
-    isLoading,
-    isSuccess,
-  } = useCreateAccount({
+  const createUser = useCreateAccount({
     onMutate: ({ email }) => {
       setAccountEmail(email);
     },
@@ -70,7 +66,7 @@ export const PageRegister = () => {
     },
   });
 
-  if (isSuccess) {
+  if (createUser.isSuccess) {
     return (
       <Center p="4" m="auto">
         <ScaleFade initialScale={0.9} in>
@@ -119,7 +115,7 @@ export const PageRegister = () => {
         <Formiz
           id="register-form"
           autoForm
-          onValidSubmit={createUser}
+          onValidSubmit={createUser.mutate}
           connect={form}
         >
           <Box
@@ -200,7 +196,7 @@ export const PageRegister = () => {
               />
               <Flex>
                 <Button
-                  isLoading={isLoading}
+                  isLoading={createUser.isLoading}
                   isDisabled={form.isSubmitted && !form.isValid}
                   type="submit"
                   variant="@primary"
