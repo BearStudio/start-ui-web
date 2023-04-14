@@ -36,7 +36,7 @@ export const PageActivate = () => {
         },
       }
     );
-  }, [activateAccount, searchParams]);
+  }, [activateAccount, navigate, searchParams, t, toastError, toastSuccess]);
 
   return (
     <Box p="4" maxW="20rem" m="auto">
