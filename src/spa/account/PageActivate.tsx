@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 
 import { Box, HStack, Spinner, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useActivateAccount } from '@/spa/account/account.service';
 
 export const PageActivate = () => {
@@ -12,11 +13,30 @@ export const PageActivate = () => {
 
   const [searchParams] = useSearchParams();
 
+  const toastError = useToastError();
+  const toastSuccess = useToastSuccess();
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    activateAccount.mutate({
-      key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
-    });
-  }, [activateAccount, searchParams]);
+    activateAccount.mutate(
+      { key: searchParams.get('key') ?? 'KEY_NOT_DEFINED' },
+      {
+        onError: () => {
+          navigate('/');
+          toastError({
+            title: t('account:activate.feedbacks.activationError.title'),
+          });
+        },
+        onSuccess: () => {
+          navigate('/');
+          toastSuccess({
+            title: t('account:activate.feedbacks.activationSuccess.title'),
+          });
+        },
+      }
+    );
+  }, [activateAccount, navigate, searchParams, t, toastError, toastSuccess]);
 
   return (
     <Box p="4" maxW="20rem" m="auto">
@@ -26,10 +46,6 @@ export const PageActivate = () => {
           <Text>{t('account:activate.feedbacks.activationLoading.title')}</Text>
         </HStack>
       )}
-      {activateAccount.isSuccess &&
-        t('account:activate.feedbacks.activationSuccess.title')}
-      {activateAccount.isError &&
-        t('account:activate.feedbacks.activationError.title')}
     </Box>
   );
 };
