@@ -19,23 +19,25 @@ export const PageActivate = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    activateAccount.mutate({
-      key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
-    });
+    activateAccount.mutate(
+      { key: searchParams.get('key') ?? 'KEY_NOT_DEFINED' },
+      {
+        onError: () => {
+          navigate('/');
+          toastError({
+            title: t('account:activate.feedbacks.activationError.title'),
+          });
+        },
+        onSuccess: () => {
+          navigate('/');
+          toastSuccess({
+            title: t('account:activate.feedbacks.activationSuccess.title'),
+          });
+        },
+      }
+    );
   }, [activateAccount, searchParams]);
 
-  if (isError) {
-    navigate('/');
-    toastError({
-      title: t('account:activate.feedbacks.activationError.title'),
-    });
-  }
-  if (isSuccess) {
-    navigate('/');
-    toastSuccess({
-      title: t('account:activate.feedbacks.activationSuccess.title'),
-    });
-  }
   return (
     <Box p="4" maxW="20rem" m="auto">
       {activateAccount.isLoading && (
