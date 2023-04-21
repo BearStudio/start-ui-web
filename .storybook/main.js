@@ -1,18 +1,15 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const path = require('path');
-const toPath = (_path) => path.join(process.cwd(), _path);
 
 module.exports = {
-  framework: '@storybook/react',
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  core: {
-    builder: 'webpack5',
+  framework: {
+    name: '@storybook/nextjs',
+    options: {},
   },
-  features: { storyStoreV7: true, babelModeV7: true },
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    'storybook-dark-mode/register',
+    '@storybook/addon-mdx-gfm',
   ],
   staticDir: ['../public'],
   typescript: {
@@ -21,7 +18,6 @@ module.exports = {
   webpackFinal: (config) => {
     config.module.rules = config.module.rules ?? [];
     config.resolve.plugins = config.resolve.plugins ?? [];
-
     config.resolve.plugins.push(new TsconfigPathsPlugin());
 
     // Babel config
@@ -40,7 +36,9 @@ module.exports = {
       test: /\.mjs$/,
       include: /node_modules/,
     });
-
     return config;
+  },
+  docs: {
+    autodocs: true,
   },
 };
