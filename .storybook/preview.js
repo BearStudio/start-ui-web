@@ -15,8 +15,6 @@ import {
 import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';
 
-// .storybook/preview.js
-
 export const globalTypes = {
   locale: {
     name: 'Locale',
@@ -42,12 +40,12 @@ export const parameters = {
   darkMode: {
     dark: {
       ...themes.dark,
-      brandImage: logoReversed,
+      brandImage: logoReversed.src,
       brandTitle: 'Start UI',
     },
     light: {
       ...themes.light,
-      brandImage: logo,
+      brandImage: logo.src,
       brandTitle: 'Start UI',
     },
   },
@@ -92,11 +90,14 @@ const DocumentationWrapper = ({ children, context }) => {
 };
 
 export const decorators = [
-  (Story, context) => (
+  (story, context) => (
     <Providers>
       <MemoryRouter>
         <DocumentationWrapper context={context}>
-          <Story {...context} />
+          {/* Calling as a function to avoid errors. Learn more at:
+           * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+           */}
+          {story(context)}
         </DocumentationWrapper>
       </MemoryRouter>
     </Providers>

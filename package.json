@@ -78,7 +78,6 @@
     "@storybook/addon-actions": "7.0.6",
     "@storybook/addon-essentials": "7.0.6",
     "@storybook/addon-links": "7.0.6",
-    "@storybook/addon-mdx-gfm": "7.0.6",
     "@storybook/addon-postcss": "2.0.0",
     "@storybook/nextjs": "7.0.6",
     "@storybook/react": "7.0.6",
@@ -92,7 +91,6 @@
     "@types/swagger-ui-react": "4.18.0",
     "@typescript-eslint/eslint-plugin": "5.47.0",
     "babel-eslint": "10.1.0",
-    "babel-loader": "9.1.2",
     "css-mediaquery": "0.1.2",
     "cypress": "12.9.0",
     "eslint": "8.38.0",
@@ -106,7 +104,6 @@
     "react-is": "18.2.0",
     "storybook": "7.0.6",
     "storybook-dark-mode": "3.0.0",
-    "tsconfig-paths-webpack-plugin": "4.0.1",
     "typescript": "4.9.5"
   },
   "repository": {
