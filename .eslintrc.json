@@ -2,12 +2,15 @@
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:sonarjs/recommended",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:storybook/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "warn",
-      { "argsIgnorePattern": "^_" }
+      {
+        "argsIgnorePattern": "^_"
+      }
     ],
     "sonarjs/no-duplicate-string": "off",
     "sonarjs/cognitive-complexity": ["warn", 50]

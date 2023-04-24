@@ -71,7 +71,7 @@ export const LocaleFR = () => {
   );
 };
 
-export const defaultValue = () => (
+export const DefaultValue = () => (
   <Stack>
     <InputCurrency defaultValue={10} />
     <InputCurrency defaultValue={10} currency="USD" />
