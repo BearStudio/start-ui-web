@@ -186,12 +186,12 @@ export const SelectInPopover = () => {
 };
 
 export const SelectInModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const modal = useDisclosure();
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <Button onClick={modal.onOpen}>Open Modal</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
@@ -201,7 +201,7 @@ export const SelectInModal = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={onClose}>
+            <Button colorScheme="blue" onClick={modal.onClose}>
               Close
             </Button>
           </ModalFooter>

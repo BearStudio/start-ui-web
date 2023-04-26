@@ -20,13 +20,15 @@ import { LoginForm } from '@/spa/auth/LoginForm';
 
 export const LoginModalInterceptor = () => {
   const { t } = useTranslation(['auth']);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const loginModal = useDisclosure();
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
+
+  const openLoginModal = loginModal.onOpen;
 
   useEffect(() => {
     const interceptor = Axios.interceptors.response.use(
@@ -37,37 +39,37 @@ export const LoginModalInterceptor = () => {
           pathnameRef.current !== '/login'
         ) {
           queryCache.cancelQueries();
-          onOpen();
+          openLoginModal();
         }
         throw error;
       }
     );
 
     return () => Axios.interceptors.response.eject(interceptor);
-  }, [onOpen, updateToken, queryCache]);
+  }, [openLoginModal, updateToken, queryCache]);
 
   // On Route Change
   useEffect(() => {
-    if (isOpen && pathname !== pathnameRef.current) {
+    if (loginModal.isOpen && pathname !== pathnameRef.current) {
       updateToken(null);
-      onClose();
+      loginModal.onClose();
     }
-  }, [isOpen, updateToken, onClose, pathname]);
+  }, [loginModal, updateToken, pathname]);
 
   const handleLogin = () => {
     queryCache.refetchQueries();
-    onClose();
+    loginModal.onClose();
   };
 
   const handleClose = () => {
     updateToken(null);
-    onClose();
+    loginModal.onClose();
     navigate('/login');
   };
 
   return (
     <Modal
-      isOpen={isOpen && isAuthenticated}
+      isOpen={loginModal.isOpen && isAuthenticated}
       onClose={handleClose}
       closeOnOverlayClick={false}
       trapFocus={false}

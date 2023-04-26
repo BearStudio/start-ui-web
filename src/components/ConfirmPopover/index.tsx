@@ -42,7 +42,7 @@ export const ConfirmPopover: React.FC<
   ...rest
 }) => {
   const { t } = useTranslation(['common', 'components']);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const confirmPopover = useDisclosure();
 
   const displayHeading =
     !title && !message ? t('components:confirmPopover.heading') : title;
@@ -60,9 +60,9 @@ export const ConfirmPopover: React.FC<
     <>
       <Popover
         isLazy
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpen={onOpen}
+        isOpen={confirmPopover.isOpen}
+        onClose={confirmPopover.onClose}
+        onOpen={confirmPopover.onOpen}
         initialFocusRef={initialFocusRef}
         {...rest}
       >
@@ -81,14 +81,14 @@ export const ConfirmPopover: React.FC<
               </PopoverBody>
               <PopoverFooter>
                 <ButtonGroup size="sm" justifyContent="space-between" w="full">
-                  <Button onClick={onClose}>
+                  <Button onClick={confirmPopover.onClose}>
                     {cancelText ?? t('common:actions.cancel')}
                   </Button>
                   <Button
                     variant={confirmVariant}
                     onClick={() => {
                       onConfirm();
-                      onClose();
+                      confirmPopover.onClose();
                     }}
                     ref={initialFocusRef}
                   >

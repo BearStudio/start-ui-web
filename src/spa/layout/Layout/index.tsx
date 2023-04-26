@@ -10,11 +10,7 @@ import { LayoutContext, TopBar } from '@/spa/layout';
 
 export const Layout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const [isFocusMode, setIsFocusMode] = useState(false);
-  const {
-    isOpen: navIsOpen,
-    onClose: navOnClose,
-    onOpen: navOnOpen,
-  } = useDisclosure();
+  const nav = useDisclosure();
   const { isAuthenticated } = useAuthContext();
   const { pathname } = useLocation();
 
@@ -24,7 +20,13 @@ export const Layout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
 
   return (
     <LayoutContext.Provider
-      value={{ isFocusMode, setIsFocusMode, navIsOpen, navOnClose, navOnOpen }}
+      value={{
+        isFocusMode,
+        setIsFocusMode,
+        navIsOpen: nav.isOpen,
+        navOnClose: nav.onClose,
+        navOnOpen: nav.onOpen,
+      }}
     >
       <Viewport>
         {isAuthenticated && !isFocusMode && <TopBar />}

@@ -40,7 +40,7 @@ export const ConfirmModal: React.FC<
   ...rest
 }) => {
   const { t } = useTranslation(['common', 'components']);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const confirmModal = useDisclosure();
 
   const displayHeading =
     !title && !message ? t('components:confirmModal.heading') : title;
@@ -55,15 +55,15 @@ export const ConfirmModal: React.FC<
   }
 
   const childrenWithOnOpen = React.cloneElement(children, {
-    onClick: onOpen,
+    onClick: confirmModal.onOpen,
   });
 
   return (
     <>
       {childrenWithOnOpen}
       <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={confirmModal.isOpen}
+        onClose={confirmModal.onClose}
         size="xs"
         initialFocusRef={initialFocusRef}
         {...rest}
@@ -81,14 +81,14 @@ export const ConfirmModal: React.FC<
             </ModalBody>
             <ModalFooter>
               <ButtonGroup justifyContent="space-between" w="full">
-                <Button onClick={onClose}>
+                <Button onClick={confirmModal.onClose}>
                   {cancelText ?? t('common:actions.cancel')}
                 </Button>
                 <Button
                   variant={confirmVariant}
                   onClick={() => {
                     onConfirm();
-                    onClose();
+                    confirmModal.onClose();
                   }}
                   ref={initialFocusRef}
                 >
