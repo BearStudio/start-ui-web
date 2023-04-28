@@ -30,16 +30,22 @@ export const DateSelector: FC<React.PropsWithChildren<DateSelectorProps>> = ({
   onChange,
   ...rest
 }) => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const dayPicker = useDisclosure();
 
   const onDayClick = (d: Dayjs) => {
     onChange(d);
-    onClose();
+    dayPicker.onClose();
   };
 
   return (
     <DateSelectorContext.Provider
-      value={{ date, onDayClick, isOpen, onClose, onOpen }}
+      value={{
+        date,
+        onDayClick,
+        isOpen: dayPicker.isOpen,
+        onClose: dayPicker.onClose,
+        onOpen: dayPicker.onOpen,
+      }}
     >
       <Flex alignItems="center" {...rest} />
     </DateSelectorContext.Provider>

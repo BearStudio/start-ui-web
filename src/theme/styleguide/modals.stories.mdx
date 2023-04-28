@@ -33,11 +33,11 @@ import {
 <Canvas>
   <Story name="Default">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Modal Title</ModalHeader>
@@ -47,10 +47,10 @@ import {
               </ModalBody>
               <ModalFooter>
                 <ButtonGroup justifyContent="space-between" w="full">
-                  <Button onClick={onClose}>
+                  <Button onClick={modal.onClose}>
                     Cancel
                   </Button>
-                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                  <Button variant="@primary" onClick={modal.onClose}>Action</Button>
                 </ButtonGroup>
               </ModalFooter>
             </ModalContent>
@@ -66,11 +66,11 @@ import {
 <Canvas>
   <Story name="WithoutHeader">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalBody>
@@ -78,10 +78,10 @@ import {
               </ModalBody>
               <ModalFooter>
                 <ButtonGroup justifyContent="space-between" w="full">
-                  <Button onClick={onClose}>
+                  <Button onClick={modal.onClose}>
                     Cancel
                   </Button>
-                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                  <Button variant="@primary" onClick={modal.onClose}>Action</Button>
                 </ButtonGroup>
               </ModalFooter>
             </ModalContent>
@@ -98,21 +98,21 @@ import {
 <Canvas>
   <Story name="WithoutBody">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Modal Title</ModalHeader>
               <ModalCloseButton />
               <ModalFooter>
                 <ButtonGroup justifyContent="space-between" w="full">
-                  <Button onClick={onClose}>
+                  <Button onClick={modal.onClose}>
                     Cancel
                   </Button>
-                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                  <Button variant="@primary" onClick={modal.onClose}>Action</Button>
                 </ButtonGroup>
               </ModalFooter>
             </ModalContent>
@@ -128,11 +128,11 @@ import {
 <Canvas>
   <Story name="WithoutFooter">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Modal Title</ModalHeader>
@@ -154,11 +154,11 @@ import {
 <Canvas>
   <Story name="BodyOnly">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalCloseButton />
@@ -179,11 +179,11 @@ import {
 <Canvas>
   <Story name="Full">
     {(() => {
-      const { isOpen, onOpen, onClose } = useDisclosure()
+      const modal = useDisclosure()
       return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-          <Modal isOpen={isOpen} onClose={onClose} size="full">
+          <Button onClick={modal.onOpen}>Open Modal</Button>
+          <Modal isOpen={modal.isOpen} onClose={modal.onClose} size="full">
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Modal Title</ModalHeader>
@@ -193,10 +193,10 @@ import {
               </ModalBody>
               <ModalFooter>
                 <ButtonGroup justifyContent="space-between" w="full">
-                  <Button onClick={onClose}>
+                  <Button onClick={modal.onClose}>
                     Cancel
                   </Button>
-                  <Button variant="@primary" onClick={onClose}>Action</Button>
+                  <Button variant="@primary" onClick={modal.onClose}>Action</Button>
                 </ButtonGroup>
               </ModalFooter>
             </ModalContent>
