@@ -80,7 +80,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   ...rest
 }) => {
   const { setActive, isMenu } = useNavContext();
-  const Item = isMenu ? MenuItem : Flex;
+  const Item: TODO = isMenu ? MenuItem : Flex;
 
   const itemContent = useMemo(
     () => (
