@@ -2,6 +2,8 @@
 
 import { ReactNode } from 'react';
 
+import { ColorModeScript } from '@chakra-ui/react';
+
 import { Providers } from '@/app/providers';
 import { Viewport } from '@/components/Viewport';
 import i18n from '@/config/i18next';
@@ -59,6 +61,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <meta name="theme-color" content={theme.colors.gray?.['800']} />
       </head>
       <body>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Providers>
           <Viewport>{children}</Viewport>
           <EnvDevHint />
