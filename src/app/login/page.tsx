@@ -40,8 +40,6 @@ export default function PageLogin() {
           <LoginForm onSuccess={onLogin} />
         </Box>
         <Center mt="8">
-          <Button onClick={() => router.replace('/')}>Go to /</Button>
-          <Link href="/">Go to / link</Link>
           <Button as={Link} href="/account/register" variant="link">
             {t('auth:login.actions.needAccount')}{' '}
             <Box

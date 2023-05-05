@@ -65,7 +65,6 @@ export default function PageDashboard() {
             <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
-          <Link href="/login">Login</Link>
         </Wrap>
       </PageContent>
     </Page>
