@@ -12,22 +12,10 @@ import theme from '@/theme';
 
 const queryClient = new QueryClient();
 
-const useMocksServer = () => {
-  useEffect(() => {
-    (async () => {
-      if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
-        const { mockServer } = await import('@/mocks/server');
-        mockServer();
-      }
-    })();
-  }, []);
-};
-
 export const Providers: FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const { i18n } = useTranslation();
-  useMocksServer();
 
   return (
     <QueryClientProvider client={queryClient}>

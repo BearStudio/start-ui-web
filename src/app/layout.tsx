@@ -11,7 +11,7 @@ import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import { EnvDevHint } from '@/layout/EnvDevHint';
 import { theme } from '@/theme/theme';
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang={i18n.language}
@@ -61,6 +61,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <meta name="theme-color" content={theme.colors.gray?.['800']} />
       </head>
       <body>
+        {/* https://github.com/chakra-ui/chakra-ui/issues/7040 */}
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Providers>
           <Viewport>{children}</Viewport>

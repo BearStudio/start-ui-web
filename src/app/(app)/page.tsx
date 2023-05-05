@@ -13,6 +13,7 @@ import {
   Text,
   Wrap,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 import { CgLoadbarDoc } from 'react-icons/cg';
 import { FaGithub } from 'react-icons/fa';
@@ -64,6 +65,7 @@ export default function PageDashboard() {
             <Icon icon={FiAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
+          <Link href="/login">Login</Link>
         </Wrap>
       </PageContent>
     </Page>
