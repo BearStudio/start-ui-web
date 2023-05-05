@@ -114,7 +114,7 @@ export const PageUserUpdate = () => {
           id="create-user-form"
           onValidSubmit={submitEditUser}
           connect={form}
-          initialValues={user}
+          initialValues={user.data}
         >
           <form noValidate onSubmit={form.submit}>
             <PageContent>
