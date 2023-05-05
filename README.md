@@ -250,30 +250,22 @@ Application will be exposed on port 80 ([http://localhost](http://localhost))
 
 ### Static files
 
+Update the `next.config.js` file with `output: 'export'`
+
+```js
+{
+  output: 'export',
+}
+```
+
 ```bash
 yarn storybook:build # Optional: Will expose the Storybook at `/storybook/`
-yarn static:build
+yarn build
 ```
 
 Then expose the `/out` folder.
 
-💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
-
-> You can use `yarn static:serve` to build and run the static build locally.
-
-#### Using Apache as your web server
-
-If you are using [apache](https://httpd.apache.org/) to statically deploy your app, you can use the following configuration for `public/.htaccess` :
-
-```bash
-# public/.htaccess
-Options -MultiViews
-RewriteEngine On
-
-# Rewrite /app/* to app.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule "^app/" "app.html" [QSA,L]
-```
+> You can use `yarn build && npx serve out` to build and run the static build locally.
 
 ---
 

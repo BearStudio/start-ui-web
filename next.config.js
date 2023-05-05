@@ -13,7 +13,6 @@ function defineNextConfig(config) {
 }
 
 module.exports = defineNextConfig({
-  output: 'standalone',
   async redirects() {
     return [
       {
