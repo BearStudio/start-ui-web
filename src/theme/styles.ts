@@ -1,4 +1,4 @@
-import { StyleFunctionProps, Styles, mode } from '@chakra-ui/theme-tools';
+import { StyleFunctionProps, Styles } from '@chakra-ui/theme-tools';
 
 import * as externals from './externals';
 
