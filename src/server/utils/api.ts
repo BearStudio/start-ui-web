@@ -95,21 +95,25 @@ export const apiMethods =
       return notSignedInResponse(res);
     }
 
-    const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
+    try {
+      const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
 
-    if (
-      !jwtDecoded ||
-      typeof jwtDecoded !== 'object' ||
-      !('id' in jwtDecoded)
-    ) {
+      if (
+        !jwtDecoded ||
+        typeof jwtDecoded !== 'object' ||
+        !('id' in jwtDecoded)
+      ) {
+        return notSignedInResponse(res);
+      }
+
+      const user = await getAccount(jwtDecoded.id);
+
+      if (!user) {
+        return notSignedInResponse(res);
+      }
+
+      return method.handler({ req, res, user });
+    } catch (e) {
       return notSignedInResponse(res);
     }
-
-    const user = await getAccount(jwtDecoded.id);
-
-    if (!user) {
-      return notSignedInResponse(res);
-    }
-
-    return method.handler({ req, res, user });
   };

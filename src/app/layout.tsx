@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
 
+import { LoginModalInterceptor } from '@/app/LoginModalInterceptor';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
 import i18n from '@/config/i18next';
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Providers>
           <Viewport>{children}</Viewport>
+          <LoginModalInterceptor />
           <EnvDevHint />
         </Providers>
       </body>
