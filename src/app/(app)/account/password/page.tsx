@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 
 import { AccountNav } from '@/app/(app)/account/AccountNav';
 import { FieldInput } from '@/components/FieldInput';
+import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { Page, PageContent } from '@/layout/Page';
 import { useUpdatePassword } from '@/spa/account/account.service';
 
 export default function PagePassword() {

@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Center, Flex } from '@chakra-ui/react';
 
-import { Layout } from '@/spa/layout';
+import { Layout } from '@/layout/Layout';
 
 import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 
 export default {
-  title: 'App Layout/Page',
+  title: 'Components/Page',
   decorators: [
     (Story: TODO) => {
       return (

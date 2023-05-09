@@ -11,9 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { AccountNav } from '@/app/(app)/account/AccountNav';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
+import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
-import { Page, PageContent } from '@/layout/Page';
 import {
   accountKeys,
   useAccount,

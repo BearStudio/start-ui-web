@@ -19,7 +19,7 @@ import { FaGithub } from 'react-icons/fa';
 import { FiAlertCircle } from 'react-icons/fi';
 
 import { Icon } from '@/components/Icons';
-import { Page, PageContent } from '@/spa/layout';
+import { Page, PageContent } from '@/components/Page';
 
 export default function PageDashboard() {
   const { t } = useTranslation(['dashboard']);
