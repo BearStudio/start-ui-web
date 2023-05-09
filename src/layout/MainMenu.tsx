@@ -13,7 +13,7 @@ const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
   const pathname = usePathname();
-  const isActive = pathname === '/' ? to === '/' : pathname?.startsWith(to);
+  const isActive = to === '/' ? pathname === '/' : pathname?.startsWith(to);
   return (
     <Box
       as={Link}
@@ -68,7 +68,9 @@ export const MainMenu = ({ ...rest }) => {
     <Stack direction="row" spacing="1" {...rest}>
       <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
       {isAdmin && (
-        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
+        <MainMenuItem to="/admin/users">
+          {t('layout:mainMenu.admin')}
+        </MainMenuItem>
       )}
     </Stack>
   );
