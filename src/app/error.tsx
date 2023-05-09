@@ -2,12 +2,6 @@
 
 import { ErrorPage } from '@/components/ErrorPage';
 
-export default function Error({
-  reset,
-  error,
-}: {
-  error: Error;
-  reset: () => void;
-}) {
+export default function Error({}: { error: Error; reset: () => void }) {
   return <ErrorPage />;
 }

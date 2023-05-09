@@ -121,7 +121,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuGroup title={account?.email} noOfLines={1}>
             <MenuItem
               as={Link}
-              href="/account"
+              href="/account/profile"
               icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
             >
               {t('layout:accountMenu.myAccount')}
