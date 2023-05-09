@@ -5,7 +5,6 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Flex, Progress } from '@chakra-ui/react';
 
 import { useAuthContext } from '@/app/auth-context';
-import { Layout } from '@/layout/Layout';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuthContext();
@@ -28,7 +27,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       </Flex>
     );
 
-  if (!isAuthenticated) return null; // TODO Redirect
+  if (isAuthenticated) return null; // TODO Redirect
 
-  return <Layout>{children}</Layout>;
+  return <>{children}</>;
 }

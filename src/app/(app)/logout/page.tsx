@@ -6,7 +6,7 @@ import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-import { useAuthContext } from '@/spa/auth/AuthContext';
+import { useAuthContext } from '@/app/auth-context';
 
 export default function PageLogout() {
   const { updateToken } = useAuthContext();
