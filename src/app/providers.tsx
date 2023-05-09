@@ -5,7 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { AuthProvider } from '@/app/auth-context';
+import { AuthProvider } from '@/app/AuthContext';
 import '@/config';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
 import theme from '@/theme';
