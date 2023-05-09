@@ -218,7 +218,7 @@ export default function PageUsers() {
             <Button
               display={{ base: 'none', sm: 'flex' }}
               as={Link}
-              href="create"
+              href="/admin/users/create"
               variant="@primary"
               leftIcon={<FiPlus />}
             >
@@ -228,7 +228,7 @@ export default function PageUsers() {
               display={{ base: 'flex', sm: 'none' }}
               aria-label={t('users:list.actions.createUser')}
               as={Link}
-              href="create"
+              href="/admin/users/create"
               size="sm"
               variant="@primary"
               icon={<FiPlus />}
@@ -307,7 +307,10 @@ export default function PageUsers() {
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
                     <Text noOfLines={1} maxW="full" fontWeight="bold">
-                      <LinkOverlay as={Link} href={user.login}>
+                      <LinkOverlay
+                        as={Link}
+                        href={`/admin/users/${user.login}`}
+                      >
                         {user.login}
                       </LinkOverlay>
                     </Text>
