@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useContext, useState } from 'react';
 
+import { useIsClient } from '@/hooks/useIsClient';
 import { isBrowser } from '@/utils/ssr';
 
 type AuthContextValue = {
@@ -23,7 +24,16 @@ const updateToken = (newToken?: string | null) => {
   }
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => {
+  const { isAuthenticated, updateToken } = useContext(AuthContext);
+  const isClient = useIsClient();
+
+  return {
+    isLoading: !isClient,
+    isAuthenticated,
+    updateToken,
+  };
+};
 
 export const AuthProvider: FC<React.PropsWithChildren<unknown>> = ({
   children,

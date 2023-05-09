@@ -1,19 +1,16 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { Flex, Progress } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 import { useAuthContext } from '@/app/auth-context';
 import { Layout } from '@/layout/Layout';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
-  const { isAuthenticated } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
+  const { isAuthenticated, isLoading } = useAuthContext();
+  const router = useRouter();
 
   if (isLoading)
     return (
@@ -28,7 +25,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       </Flex>
     );
 
-  if (!isAuthenticated) return null; // TODO Redirect
+  if (!isAuthenticated) return router.replace('/login');
 
   return <Layout>{children}</Layout>;
 }
