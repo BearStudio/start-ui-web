@@ -4,14 +4,25 @@ FROM node:16-alpine AS deps
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache git
 WORKDIR /app
-COPY . .
-RUN yarn install --frozen-lockfile
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install --frozen-lockfile --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
 RUN apk add --no-cache git
 WORKDIR /app
-COPY . .
+COPY .git/ ./.git/
+COPY cypress/ ./cypress/
+COPY package.json .
+COPY yarn.lock .
+COPY src/ ./src/
+COPY public/ ./public/
+COPY .storybook/ ./storybook/
+COPY .build-info.generate.js .
+COPY .env.validator.js .
+COPY next.config.js .
+COPY tsconfig.json .
 COPY --from=deps /app/node_modules ./node_modules
 RUN yarn build
 
