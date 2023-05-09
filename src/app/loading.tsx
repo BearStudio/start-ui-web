@@ -1,11 +1,7 @@
 'use client';
 
-import { Center, Spinner } from '@chakra-ui/react';
+import { Loader } from '@/layout/Loader';
 
 export default function RootLoading() {
-  return (
-    <Center flex="1">
-      <Spinner />
-    </Center>
-  );
+  return <Loader />;
 }
