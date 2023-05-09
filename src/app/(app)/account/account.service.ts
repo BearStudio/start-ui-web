@@ -11,8 +11,8 @@ import {
 import Axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
+import { Account } from '@/app/(app)/account/account.types';
 import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
-import { Account } from '@/spa/account/account.types';
 
 export const accountKeys = createQueryKeys('accountService', {
   account: null,

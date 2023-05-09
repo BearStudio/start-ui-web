@@ -1,6 +1,6 @@
 import Axios, { AxiosResponse } from 'axios';
 
-import { AUTH_TOKEN_KEY } from '@/spa/auth/AuthContext';
+import { AUTH_TOKEN_KEY } from '@/app/AuthContext';
 import { isBrowser } from '@/utils/ssr';
 
 Axios.interceptors.request.use(

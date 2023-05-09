@@ -7,6 +7,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { useUserCreate } from '@/app/(app)/admin/users/users.service';
 import {
   Page,
   PageBottomBar,
@@ -14,7 +15,6 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useUserCreate } from '@/spa/admin/users/users.service';
 
 import { UserForm } from '../UserForm';
 

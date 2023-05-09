@@ -16,6 +16,7 @@ import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { useUser, useUserUpdate } from '@/app/(app)/admin/users/users.service';
 import { ErrorPage } from '@/components/ErrorPage';
 import {
   Page,
@@ -25,7 +26,6 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { Loader } from '@/layout/Loader';
-import { useUser, useUserUpdate } from '@/spa/admin/users/users.service';
 
 import { UserForm } from '../UserForm';
 import { UserStatus } from '../UserStatus';

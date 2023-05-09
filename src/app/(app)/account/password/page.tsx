@@ -8,10 +8,10 @@ import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { AccountNav } from '@/app/(app)/account/AccountNav';
+import { useUpdatePassword } from '@/app/(app)/account/account.service';
 import { FieldInput } from '@/components/FieldInput';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useUpdatePassword } from '@/spa/account/account.service';
 
 export default function PagePassword() {
   const { t } = useTranslation(['account']);

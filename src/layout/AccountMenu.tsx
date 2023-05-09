@@ -28,8 +28,8 @@ import {
 } from 'react-icons/fi';
 
 import buildInfo from '@/../.build-info.json';
+import { useAccount } from '@/app/(app)/account/account.service';
 import { Icon } from '@/components/Icons';
-import { useAccount } from '@/spa/account/account.service';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);
@@ -121,7 +121,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuGroup title={account?.email} noOfLines={1}>
             <MenuItem
               as={Link}
-              href="/account/profile"
+              href="/account"
               icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
             >
               {t('layout:accountMenu.myAccount')}

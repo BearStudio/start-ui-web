@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { useAccount } from '@/app/(app)/account/account.service';
 import { useRtl } from '@/hooks/useRtl';
 import { useLayoutContext } from '@/layout/LayoutContext';
-import { useAccount } from '@/spa/account/account.service';
 
 const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
@@ -68,9 +68,7 @@ export const MainMenu = ({ ...rest }) => {
     <Stack direction="row" spacing="1" {...rest}>
       <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
       {isAdmin && (
-        <MainMenuItem to="/admin/users">
-          {t('layout:mainMenu.admin')}
-        </MainMenuItem>
+        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
       )}
     </Stack>
   );

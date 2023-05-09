@@ -43,6 +43,12 @@ import {
 } from 'react-icons/fi';
 
 import { AdminNav } from '@/app/(app)/admin/AdminNav';
+import {
+  useUserList,
+  useUserRemove,
+  useUserUpdate,
+} from '@/app/(app)/admin/users/users.service';
+import { User } from '@/app/(app)/admin/users/users.types';
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import {
@@ -64,12 +70,6 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import {
-  useUserList,
-  useUserRemove,
-  useUserUpdate,
-} from '@/spa/admin/users/users.service';
-import { User } from '@/spa/admin/users/users.types';
 
 import { UserStatus } from './UserStatus';
 

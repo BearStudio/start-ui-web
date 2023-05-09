@@ -12,19 +12,19 @@ import {
 } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Axios from 'axios';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuthContext } from '@/spa/auth/AuthContext';
-import { LoginForm } from '@/spa/auth/LoginForm';
+import { LoginForm } from '@/app/(public-only)/login/LoginForm';
+import { useAuthContext } from '@/app/AuthContext';
 
 export const LoginModalInterceptor = () => {
   const { t } = useTranslation(['auth']);
   const loginModal = useDisclosure();
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
 
@@ -64,7 +64,7 @@ export const LoginModalInterceptor = () => {
   const handleClose = () => {
     updateToken(null);
     loginModal.onClose();
-    navigate('/login');
+    router.push('/login');
   };
 
   return (

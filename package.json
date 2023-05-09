@@ -53,7 +53,7 @@
     "isomorphic-form-data": "2.0.0",
     "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
-    "next": "13.4.1",
+    "next": "13.4.2-canary.3",
     "next-swagger-doc": "0.3.6",
     "react": "18.2.0",
     "react-currency-input-field": "3.6.10",

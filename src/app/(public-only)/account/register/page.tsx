@@ -24,12 +24,12 @@ import {
 import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { useCreateAccount } from '@/app/(app)/account/account.service';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
-import { useCreateAccount } from '@/spa/account/account.service';
 
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'account']);

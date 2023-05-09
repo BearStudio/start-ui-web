@@ -6,8 +6,8 @@ import { Box, HStack, Spinner, Text } from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { useActivateAccount } from '@/app/(app)/account/account.service';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useActivateAccount } from '@/spa/account/account.service';
 
 export default function PageActivate() {
   const { t } = useTranslation(['account']);
