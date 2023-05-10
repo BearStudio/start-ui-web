@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { ColorModeScript } from '@chakra-ui/react';
 
 import { LoginModalInterceptor } from '@/app/LoginModalInterceptor';
-import { Providers } from '@/app/providers';
+import { Providers } from '@/app/_Providers';
 import { Viewport } from '@/components/Viewport';
 import i18n from '@/config/i18next';
 import { AVAILABLE_LANGUAGES } from '@/constants/i18n';

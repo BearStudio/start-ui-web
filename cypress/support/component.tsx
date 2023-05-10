@@ -17,7 +17,7 @@
 // require('./commands')
 import { mount } from 'cypress/react';
 
-import { Providers } from '@/app/Providers';
+import { Providers } from '@/app/_Providers';
 
 import './commands';
 
