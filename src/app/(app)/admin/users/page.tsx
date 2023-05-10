@@ -153,7 +153,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={user.login}
+            href={`/admin/users/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
