@@ -8,6 +8,11 @@ import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 
 export default {
   title: 'Components/Page',
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
   decorators: [
     (Story: TODO) => {
       return (
