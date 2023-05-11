@@ -81,6 +81,9 @@ yarn install
 
 # Init the local database
 yarn db:push
+
+# Inject users
+yarn db:seed
 ```
 
 ## Development

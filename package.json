@@ -24,7 +24,8 @@
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
     "db:push": "prisma db push",
-    "db:ui": "prisma studio"
+    "db:ui": "prisma studio",
+    "db:seed": "prisma db seed"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json}": "prettier --write"
@@ -105,6 +106,9 @@
   },
   "resolutions": {
     "@apidevtools/json-schema-ref-parser": "9.1.0"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   },
   "repository": {
     "type": "git",
