@@ -6,9 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const adminPassword = await bcrypt.hash('admin', 12);
-  const userPassword = await bcrypt.hash('user', 12);
-
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: 'admin@admin.com',
       login: 'admin',
@@ -21,7 +19,8 @@ async function main() {
     },
   });
 
-  const user = await prisma.user.create({
+  const userPassword = await bcrypt.hash('user', 12);
+  await prisma.user.create({
     data: {
       email: 'user@user.com',
       login: 'user',
@@ -51,6 +50,10 @@ async function main() {
       })
     )
   );
+
+  console.log(`✅ 26 users created`);
+  console.log(`👉 Admin connect with: admin/admin`);
+  console.log(`👉 User connect with: user/user`);
 }
 
 main()
