@@ -11,14 +11,14 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Demo
 
-A live demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com)
-
+A live read-only demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com).
 
 ## Getting Started
 
 ```bash
 npx create-start-ui@latest --web myApp
 ```
+
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
 Then just go to the created folder and start the dev server.
@@ -37,13 +37,11 @@ yarn dev
 
 - 🟦 [TypeScript](https://www.typescriptlang.org/)
 - ⚛️ [React](https://reactjs.org/)
-- ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/advanced-features/static-html-export))
+- ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports))
 - 📕 [Storybook](https://storybook.js.org/)
-- ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
 - ⚛️ [TanStack Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
-- 💥 [React Error Boundary](https://github.com/bvaughn/react-error-boundary)
 - ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
 - 🌍 [React i18next](https://react.i18next.com/)
 - 🔽 [React Select](https://react-select.com/)
@@ -71,7 +69,7 @@ You can find more details about each feature on the [documentation](https://docs
 - Dark mode support with Storybook toggle.
 - App version & Environment name in the UI.
 - API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
-- API Mocking with persisting state via [MirageJS](https://miragejs.com/).
+- API Mocking with a JHipster mapping using Next.js API.
 
 ## Installation
 
@@ -288,13 +286,6 @@ for production: hybrid static & server rendering, TypeScript support, smart
 bundling, route pre-fetching, and more. No config needed.
 
 [GitHub](https://github.com/vercel/next.js) · [License MIT](https://github.com/vercel/next.js/blob/canary/license.md)
-
-### React Router
-
-Next.js is bundled with its own router, but at the time of writing those lines,
-it does not allow nested routes using a shared layout.
-
-[GitHub](https://github.com/ReactTraining/react-router) · [License MIT](https://github.com/ReactTraining/react-router/blob/master/LICENSE)
 
 ### TypeScript
 
