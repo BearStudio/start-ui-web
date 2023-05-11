@@ -1,5 +1,5 @@
 'use client';
 
-import { pageRedirect } from '@/utils/pageRedirect';
+import { pageRedirect } from '@/lib/pageRedirect';
 
 export default pageRedirect('/admin/users');

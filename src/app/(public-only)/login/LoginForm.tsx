@@ -13,9 +13,9 @@ import { Formiz, useForm } from '@formiz/core';
 import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useLogin } from '@/app/auth.service';
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
+import { useLogin } from '@/features/auth/service';
 
 const MockedApiHint = () => {
   const { t } = useTranslation(['auth']);

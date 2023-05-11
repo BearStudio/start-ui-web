@@ -12,7 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { FieldCheckboxes } from '@/components/FieldCheckboxes';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
-import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
+import {
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE_KEY,
+} from '@/lib/i18n/constants';
 
 const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',

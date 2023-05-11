@@ -16,7 +16,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/app/(public-only)/login/LoginForm';
-import { useAuthContext } from '@/app/AuthContext';
+import { useAuthContext } from '@/features/auth/AuthContext';
 
 export const LoginModalInterceptor = () => {
   const { t } = useTranslation(['auth']);

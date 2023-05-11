@@ -11,8 +11,8 @@ import {
 } from '@tanstack/react-query';
 import Axios, { AxiosError } from 'axios';
 
-import { User, UserList } from '@/app/(app)/admin/users/users.types';
-import { DEFAULT_LANGUAGE_KEY } from '@/constants/i18n';
+import { User, UserList } from '@/features/users/types';
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 type UserMutateError = {
   title: string;

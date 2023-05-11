@@ -19,10 +19,10 @@ import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
-import { useResetPasswordInit } from '@/app/(app)/account/account.service';
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
+import { useResetPasswordInit } from '@/features/account/service';
 import { useRtl } from '@/hooks/useRtl';
 
 export default function PageResetPasswordRequest() {

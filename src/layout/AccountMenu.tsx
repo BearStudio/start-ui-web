@@ -28,8 +28,8 @@ import {
 } from 'react-icons/fi';
 
 import buildInfo from '@/../.build-info.json';
-import { useAccount } from '@/app/(app)/account/account.service';
 import { Icon } from '@/components/Icons';
+import { useAccount } from '@/features/account/service';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);

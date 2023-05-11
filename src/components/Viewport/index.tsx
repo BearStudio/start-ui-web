@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Flex, FlexProps, useMediaQuery } from '@chakra-ui/react';
 
-import { isBrowser } from '@/utils/ssr';
+import { isBrowser } from '@/lib/ssr';
 
 const useFixViewport = () => {
   useEffect(() => {

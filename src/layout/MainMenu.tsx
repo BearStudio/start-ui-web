@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { useAccount } from '@/app/(app)/account/account.service';
+import { useAccount } from '@/features/account/service';
 import { useRtl } from '@/hooks/useRtl';
 import { useLayoutContext } from '@/layout/LayoutContext';
 

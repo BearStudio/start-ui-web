@@ -42,13 +42,6 @@ import {
   FiXCircle,
 } from 'react-icons/fi';
 
-import { AdminNav } from '@/app/(app)/admin/AdminNav';
-import {
-  useUserList,
-  useUserRemove,
-  useUserUpdate,
-} from '@/app/(app)/admin/users/users.service';
-import { User } from '@/app/(app)/admin/users/users.types';
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import {
@@ -70,9 +63,16 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminNav } from '@/features/admin/AdminNav';
+import {
+  useUserList,
+  useUserRemove,
+  useUserUpdate,
+} from '@/features/users/service';
+import { User } from '@/features/users/types';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 
-import { UserStatus } from './UserStatus';
+import { UserStatus } from '../../../../features/users/UserStatus';
 
 type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;
@@ -195,7 +195,7 @@ export default function PageUsers() {
   const updateSearchParams = useSearchParamsUpdater();
   const page = +(searchParams?.get('page') || 1);
 
-  const pageSize = 2;
+  const pageSize = 20;
   const users = useUserList({
     page: page - 1,
     size: pageSize,

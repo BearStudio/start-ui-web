@@ -1,6 +1,6 @@
 import 'i18next';
 
-import { DEFAULT_NAMESPACE } from '@/constants/i18n';
+import { DEFAULT_NAMESPACE } from '@/lib/i18n/constants';
 import locales from '@/locales';
 
 // Fix issue with i18next types

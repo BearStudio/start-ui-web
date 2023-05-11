@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useContext, useState } from 'react';
 
 import { useIsClient } from '@/hooks/useIsClient';
-import { isBrowser } from '@/utils/ssr';
+import { isBrowser } from '@/lib/ssr';
 
 type AuthContextValue = {
   isAuthenticated: boolean;

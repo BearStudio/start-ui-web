@@ -16,7 +16,6 @@ import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { useUser, useUserUpdate } from '@/app/(app)/admin/users/users.service';
 import { ErrorPage } from '@/components/ErrorPage';
 import {
   Page,
@@ -25,10 +24,11 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useUser, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
 
-import { UserForm } from '../UserForm';
-import { UserStatus } from '../UserStatus';
+import { UserForm } from '../../../../../features/users/UserForm';
+import { UserStatus } from '../../../../../features/users/UserStatus';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);

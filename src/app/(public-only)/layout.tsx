@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { Flex, Progress } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
-import { useAuthContext } from '@/app/AuthContext';
+import { useAuthContext } from '@/features/auth/AuthContext';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoading } = useAuthContext();

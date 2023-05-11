@@ -8,17 +8,17 @@ import { isEmail } from '@formiz/validations';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { AccountNav } from '@/app/(app)/account/AccountNav';
-import {
-  accountKeys,
-  useAccount,
-  useUpdateAccount,
-} from '@/app/(app)/account/account.service';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
+import { AccountNav } from '@/features/account/AccountNav';
+import {
+  accountKeys,
+  useAccount,
+  useUpdateAccount,
+} from '@/features/account/service';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);

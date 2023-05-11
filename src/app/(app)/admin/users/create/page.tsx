@@ -7,7 +7,6 @@ import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { useUserCreate } from '@/app/(app)/admin/users/users.service';
 import {
   Page,
   PageBottomBar,
@@ -15,8 +14,9 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useUserCreate } from '@/features/users/service';
 
-import { UserForm } from '../UserForm';
+import { UserForm } from '../../../../../features/users/UserForm';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);

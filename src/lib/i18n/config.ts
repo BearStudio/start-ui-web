@@ -6,9 +6,9 @@ import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
   DEFAULT_NAMESPACE,
-} from '@/constants/i18n';
+} from '@/lib/i18n/constants';
+import { isBrowser } from '@/lib/ssr';
 import locales from '@/locales';
-import { isBrowser } from '@/utils/ssr';
 
 dayjs.locale(DEFAULT_LANGUAGE_KEY);
 

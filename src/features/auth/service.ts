@@ -1,7 +1,7 @@
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
 import Axios, { AxiosError } from 'axios';
 
-import { useAuthContext } from '@/app/AuthContext';
+import { useAuthContext } from '@/features/auth/AuthContext';
 
 export const useLogin = (
   config: UseMutationOptions<

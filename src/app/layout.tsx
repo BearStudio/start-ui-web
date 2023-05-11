@@ -4,12 +4,12 @@ import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
 
-import { LoginModalInterceptor } from '@/app/LoginModalInterceptor';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
-import i18n from '@/config/i18next';
-import { AVAILABLE_LANGUAGES } from '@/constants/i18n';
+import { LoginModalInterceptor } from '@/features/auth/LoginModalInterceptor';
 import { EnvDevHint } from '@/layout/EnvDevHint';
+import i18n from '@/lib/i18n/config';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { theme } from '@/theme/theme';
 
 export default function RootLayout({ children }: { children: ReactNode }) {

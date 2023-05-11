@@ -8,10 +8,10 @@ import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { useResetPasswordFinish } from '@/app/(app)/account/account.service';
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useResetPasswordFinish } from '@/features/account/service';
 
 export default function PageResetPasswordConfirm() {
   const { t } = useTranslation(['account']);
