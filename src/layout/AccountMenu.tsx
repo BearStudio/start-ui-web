@@ -27,9 +27,10 @@ import {
   FiUser,
 } from 'react-icons/fi';
 
-import buildInfo from '@/../.build-info.json';
 import { Icon } from '@/components/Icons';
 import { useAccount } from '@/features/account/service';
+
+import buildInfo from '../../.build-info.json';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);
