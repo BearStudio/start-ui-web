@@ -24,11 +24,10 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { UserForm } from '@/features/users/UserForm';
+import { UserStatus } from '@/features/users/UserStatus';
 import { useUser, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
-
-import { UserForm } from '../../../../../features/users/UserForm';
-import { UserStatus } from '../../../../../features/users/UserStatus';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);

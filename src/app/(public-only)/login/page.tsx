@@ -8,8 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
-
-import { LoginForm } from './LoginForm';
+import { LoginForm } from '@/features/auth/LoginForm';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth']);

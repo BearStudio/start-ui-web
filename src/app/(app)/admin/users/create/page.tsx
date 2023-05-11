@@ -14,9 +14,8 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { UserForm } from '@/features/users/UserForm';
 import { useUserCreate } from '@/features/users/service';
-
-import { UserForm } from '../../../../../features/users/UserForm';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);

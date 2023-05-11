@@ -63,6 +63,7 @@ import {
 } from '@/components/Pagination';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminNav } from '@/features/admin/AdminNav';
+import { UserStatus } from '@/features/users/UserStatus';
 import {
   useUserList,
   useUserRemove,
@@ -70,8 +71,6 @@ import {
 } from '@/features/users/service';
 import { User } from '@/features/users/types';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
-
-import { UserStatus } from '../../../../features/users/UserStatus';
 
 type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;

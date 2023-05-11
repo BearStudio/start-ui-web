@@ -15,8 +15,8 @@ import Axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { LoginForm } from '@/app/(public-only)/login/LoginForm';
 import { useAuthContext } from '@/features/auth/AuthContext';
+import { LoginForm } from '@/features/auth/LoginForm';
 
 export const LoginModalInterceptor = () => {
   const { t } = useTranslation(['auth']);
