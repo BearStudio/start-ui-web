@@ -3,10 +3,7 @@
 import React from 'react';
 
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
