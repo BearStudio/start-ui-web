@@ -59,17 +59,19 @@ yarn dev
 You can find more details about each feature on the [documentation](https://docs.web.start-ui.com)
 
 - Reponsive layout / navigation.
-- Sign / Sign Up / Password recovery screens.
+- Sign In / Sign Up / Password recovery screens.
 - Account profile / Change Password screens.
 - Users management admin screens (CRUD).
-- Multi-languages (English & French built-in).
-- Custom Chakra UI theme with preview of customized components in Storybook.
-- Extra UI components with Storybook documentation.
+- Multi-languages (i18n) (English & French built-in).
+- Custom Chakra UI theme with generated typings.
+- Great list of UI components with their Storybook documentation.
 - Fields components for Formiz.
 - Dark mode support with Storybook toggle.
 - App version & Environment name in the UI.
 - API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
 - API Mocking with a JHipster mapping using Next.js API.
+- Developer eXperience improved with ESLint, Prettier and Husky
+- Deployment made easy using Next.js
 
 ## Installation
 
