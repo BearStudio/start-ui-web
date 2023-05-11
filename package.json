@@ -17,8 +17,7 @@
     "build:info": "node .build-info.generate.js",
     "start": "next start",
     "pretty": "prettier -w .",
-    "lint": "eslint ./ --fix --ignore-path .gitignore && tsc --noEmit",
-    "lint:staged": "tsc --noEmit && eslint --cache --fix --ignore-path .gitignore",
+    "lint": "next lint && tsc --noEmit",
     "storybook": "yarn build:info && storybook dev -p 6006",
     "storybook:build": "yarn build:info && storybook build && mv ./storybook-static ./public/storybook",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
@@ -27,8 +26,7 @@
     "db:ui": "prisma studio"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "yarn lint:staged"
+    "*.{ts,tsx,js,jsx,json}": "prettier --write"
   },
   "dependencies": {
     "@chakra-ui/next-js": "2.1.3",
