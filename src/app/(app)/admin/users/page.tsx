@@ -29,7 +29,6 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { Route } from 'next';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -154,7 +153,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={`/admin/users/${user.login}` as Route}
+            href={`/admin/users/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

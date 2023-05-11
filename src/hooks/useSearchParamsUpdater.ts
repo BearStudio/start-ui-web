@@ -1,4 +1,3 @@
-import { Route } from 'next';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -21,8 +20,6 @@ export const useSearchParamsUpdater = () => {
     }
     const search = current.toString();
     const query = search ? `?${search}` : '';
-    router[options?.replace ? 'replace' : 'push'](
-      `${pathname}${query}` as Route
-    );
+    router[options?.replace ? 'replace' : 'push'](`${pathname}${query}`);
   };
 };

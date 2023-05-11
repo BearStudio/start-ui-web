@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
 
-import type { Route } from 'next';
 import { useRouter } from 'next/navigation';
 
-export const pageRedirect =
-  <T extends string>(path: Route<T>) =>
-  () => {
-    const router = useRouter();
+export const pageRedirect = (path: string) => () => {
+  const router = useRouter();
 
-    useEffect(() => {
-      router.replace(path);
-    }, [router]);
+  useEffect(() => {
+    router.replace(path);
+  }, [router]);
 
-    return null;
-  };
+  return null;
+};
