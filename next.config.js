@@ -13,6 +13,9 @@ function defineNextConfig(config) {
 }
 
 module.exports = defineNextConfig({
+  experimental: {
+    typedRoutes: true,
+  },
   async redirects() {
     return [
       {

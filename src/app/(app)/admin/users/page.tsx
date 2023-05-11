@@ -29,6 +29,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
+import { Route } from 'next';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -153,7 +154,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={`/admin/users/${user.login}`}
+            href={`/admin/users/${user.login}` as Route}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
@@ -194,13 +195,16 @@ export default function PageUsers() {
   const router = useRouter();
   const pathname = usePathname();
   const page = +(searchParams?.get('page') ?? 1);
+
+  // TODO: extract this in custom hook
   const setPage = (newPage: number) => {
     const current = new URLSearchParams(searchParams?.toString() ?? undefined);
     current.set('page', newPage.toString());
     const search = current.toString();
     const query = search ? `?${search}` : '';
-    router.push(`${pathname}${query}`);
+    router.push(`${pathname}${query}` as Route);
   };
+
   const pageSize = 20;
   const users = useUserList({
     page: page - 1,
