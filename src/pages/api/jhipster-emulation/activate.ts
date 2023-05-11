@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { activateAccount } from '@/server/account';
-import { apiMethods, badRequestResponse } from '@/server/utils/api';
+import { activateAccount } from '@/mock-server/account';
+import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export default apiMethods({
   GET: {

@@ -1,9 +1,9 @@
-import { getUserByLogin, removeUserByLogin } from '@/server/users';
+import { getUserByLogin, removeUserByLogin } from '@/mock-server/users';
 import {
   apiMethods,
   badRequestResponse,
   notSignedInResponse,
-} from '@/server/utils/api';
+} from '@/mock-server/utils/api';
 
 export default apiMethods({
   GET: {

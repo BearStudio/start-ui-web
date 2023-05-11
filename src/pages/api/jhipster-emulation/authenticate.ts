@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { login } from '@/server/auth';
-import { apiMethods, badRequestResponse } from '@/server/utils/api';
+import { login } from '@/mock-server/auth';
+import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export default apiMethods({
   POST: {

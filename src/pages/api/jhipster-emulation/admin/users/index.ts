@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { createUser, getUserList, updateUserById } from '@/server/users';
-import { apiMethods, badRequestResponse } from '@/server/utils/api';
+import { createUser, getUserList, updateUserById } from '@/mock-server/users';
+import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export default apiMethods({
   GET: {

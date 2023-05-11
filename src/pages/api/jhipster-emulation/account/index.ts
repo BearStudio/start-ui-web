@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { updateAccount } from '@/server/account';
+import { updateAccount } from '@/mock-server/account';
 import {
   apiMethods,
   badRequestResponse,
   notSignedInResponse,
-} from '@/server/utils/api';
+} from '@/mock-server/utils/api';
 
 export default apiMethods({
   GET: {

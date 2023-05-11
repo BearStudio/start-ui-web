@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { db } from '@/server/utils/db';
+import { db } from '@/mock-server/utils/db';
 
 type LoginParams = {
   login: string;

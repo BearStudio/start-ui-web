@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { resetPasswordFinish } from '@/server/account';
-import { apiMethods, badRequestResponse } from '@/server/utils/api';
+import { resetPasswordFinish } from '@/mock-server/account';
+import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export default apiMethods({
   POST: {

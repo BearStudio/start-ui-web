@@ -6,8 +6,8 @@ import {
   UserFormatted,
   formatUserFromDb,
   prepareUserForDb,
-} from '@/server/users';
-import { db } from '@/server/utils/db';
+} from '@/mock-server/users';
+import { db } from '@/mock-server/utils/db';
 
 export const getAccount = async (id: number) => {
   const user = await db.user.findUnique({

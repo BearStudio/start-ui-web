@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { getAccount } from '@/server/account';
-import { UserFormatted } from '@/server/users';
+import { getAccount } from '@/mock-server/account';
+import { UserFormatted } from '@/mock-server/users';
 
 type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {

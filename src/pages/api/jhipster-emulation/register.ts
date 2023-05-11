@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { createAccount } from '@/server/account';
-import { apiMethods, badRequestResponse } from '@/server/utils/api';
+import { createAccount } from '@/mock-server/account';
+import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export const openApi = {
   '/register': {
