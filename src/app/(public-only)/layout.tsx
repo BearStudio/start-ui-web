@@ -3,13 +3,14 @@
 import { ReactNode } from 'react';
 
 import { Flex, Progress } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoading } = useAuthContext();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   if (isLoading)
     return (
@@ -24,7 +25,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       </Flex>
     );
 
-  if (isAuthenticated) return router.replace('/');
+  if (isAuthenticated) {
+    const redirect = searchParams?.get('redirect') ?? '/';
+    return router.replace(redirect);
+  }
 
   return <>{children}</>;
 }

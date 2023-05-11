@@ -10,6 +10,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -52,7 +53,7 @@ const MockedApiHint = () => {
   );
 };
 
-type LoginFormProps = BoxProps & { onSuccess: () => void };
+type LoginFormProps = BoxProps & { onSuccess?: () => void };
 
 export const LoginForm = ({
   onSuccess = () => undefined,
@@ -61,9 +62,13 @@ export const LoginForm = ({
   const { t } = useTranslation(['auth']);
   const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
+  const queryCache = useQueryClient();
 
   const login = useLogin({
-    onSuccess,
+    onSuccess: () => {
+      queryCache.clear();
+      onSuccess();
+    },
     onError: (error) => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),

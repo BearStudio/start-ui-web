@@ -6,6 +6,7 @@ import { Box, Button, Center, Heading } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
@@ -15,13 +16,6 @@ import { LoginForm } from './LoginForm';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth']);
-  const router = useRouter();
-
-  const queryCache = useQueryClient();
-  const onLogin = () => {
-    queryCache.clear();
-    router.replace('/'); // TODO redirect with url params (useRedirectFromUrl)
-  };
 
   return (
     <SlideIn>
@@ -37,7 +31,7 @@ export default function PageLogin() {
           <Heading size="md" mb="4" data-test="login-page-heading">
             {t('auth:login.title')}
           </Heading>
-          <LoginForm onSuccess={onLogin} />
+          <LoginForm />
         </Box>
         <Center mt="8">
           <Button as={Link} href="/account/register" variant="link">
