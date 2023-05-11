@@ -10,6 +10,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "postinstall": "prisma generate && yarn build:info && yarn theme:generate-typing",
     "test": "cypress open",
     "test:ci": "cypress run --component",
     "dev": "next dev",
