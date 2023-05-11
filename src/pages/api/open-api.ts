@@ -1,6 +1,6 @@
 import { withSwagger } from 'next-swagger-doc';
 
-import { openApi as register } from './jhipster-emulation/register';
+import { openApi as register } from './jhipster-mocks/register';
 
 const swaggerHandler = withSwagger({
   definition: {
