@@ -31,8 +31,7 @@ import {
 } from '@chakra-ui/react';
 import { Route } from 'next';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
   FiCheckCircle,
