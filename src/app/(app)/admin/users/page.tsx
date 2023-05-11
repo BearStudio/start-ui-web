@@ -193,8 +193,6 @@ export default function PageUsers() {
   const updateSearchParams = useSearchParamsUpdater();
   const page = +(searchParams?.get('page') || 1);
 
-  console.log('Page users');
-
   const pageSize = 20;
   const users = useUserList({
     page: page - 1,
