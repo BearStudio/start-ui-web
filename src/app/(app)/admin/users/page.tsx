@@ -71,6 +71,7 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 
 import { UserStatus } from './UserStatus';
 
@@ -192,20 +193,10 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 export default function PageUsers() {
   const { t } = useTranslation(['users']);
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const page = +(searchParams?.get('page') ?? 1);
+  const updateSearchParams = useSearchParamsUpdater();
+  const page = +(searchParams?.get('page') || 1);
 
-  // TODO: extract this in custom hook
-  const setPage = (newPage: number) => {
-    const current = new URLSearchParams(searchParams?.toString() ?? undefined);
-    current.set('page', newPage.toString());
-    const search = current.toString();
-    const query = search ? `?${search}` : '';
-    router.push(`${pathname}${query}` as Route);
-  };
-
-  const pageSize = 20;
+  const pageSize = 2;
   const users = useUserList({
     page: page - 1,
     size: pageSize,
@@ -397,7 +388,7 @@ export default function PageUsers() {
           <DataListFooter>
             <Pagination
               isLoadingPage={users.isLoadingPage}
-              setPage={setPage}
+              setPage={(newPage) => updateSearchParams('page', newPage)}
               page={page}
               pageSize={pageSize}
               totalItems={users.data?.totalItems}
