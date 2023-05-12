@@ -18,7 +18,6 @@ import { useUserCreate } from '@/features/users/service';
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
   const navigate = useNavigate();
-  const form = useForm({ subscribe: false });
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
@@ -33,12 +32,12 @@ export default function PageUserCreate() {
         });
         switch (errorKey) {
           case 'userexists':
-            form.invalidateFields({
+            form.setErrors({
               login: t('users:data.login.alreadyUsed'),
             });
             break;
           case 'emailexists':
-            form.invalidateFields({
+            form.setErrors({
               email: t('users:data.email.alreadyUsed'),
             });
             break;
@@ -53,20 +52,19 @@ export default function PageUserCreate() {
     },
   });
 
-  const submitCreateUser = (values: TODO) => {
-    const newUser = {
-      ...values,
-    };
-    createUser.mutate(newUser);
-  };
+  const form = useForm<TODO>({
+    id: 'create-user-form',
+    onValidSubmit: (values) => {
+      const newUser = {
+        ...values,
+      };
+      createUser.mutate(newUser);
+    },
+  });
 
   return (
     <Page containerSize="md" isFocusMode>
-      <Formiz
-        id="create-user-form"
-        onValidSubmit={submitCreateUser}
-        connect={form}
-      >
+      <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
           <PageTopBar showBack onBack={() => navigate(-1)}>
             <Heading size="md">{t('users:create.title')}</Heading>

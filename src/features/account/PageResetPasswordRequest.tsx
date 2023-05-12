@@ -11,11 +11,11 @@ import {
   Heading,
   ScaleFade,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { Trans, useTranslation } from 'react-i18next';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
@@ -27,15 +27,13 @@ export default function PageResetPasswordRequest() {
   const { rtlValue } = useRtl();
   const { t } = useTranslation(['account']);
 
-  const resetPasswordInitForm = useForm();
-
   const toastError = useToastError();
 
   const [accountEmail, setAccountEmail] = useState('');
 
   const resetPasswordInit = useResetPasswordInit({
     onMutate: () => {
-      setAccountEmail(resetPasswordInitForm.values?.email);
+      setAccountEmail(values?.email);
     },
     onError: (error) => {
       const { title } = error?.response?.data || {};
@@ -46,9 +44,17 @@ export default function PageResetPasswordRequest() {
     },
   });
 
-  const submitResetPasswordInit = async (values: TODO) => {
-    await resetPasswordInit.mutate(values.email);
-  };
+  const resetPasswordInitForm = useForm<TODO>({
+    id: 'reset-password-init-form',
+    onValidSubmit: (values) => {
+      resetPasswordInit.mutate(values.email);
+    },
+  });
+  const values = useFormFields({
+    connect: resetPasswordInitForm,
+    fields: ['email'],
+    selector: (field) => field.value,
+  });
 
   if (resetPasswordInit.isSuccess) {
     return (
@@ -80,7 +86,7 @@ export default function PageResetPasswordRequest() {
           </Alert>
           <Center mt="8">
             <Button
-              as={Link}
+              as={RouterLink}
               to="/login"
               variant="link"
               color="brand.500"
@@ -105,11 +111,7 @@ export default function PageResetPasswordRequest() {
           _dark={{ bg: 'blackAlpha.400' }}
         >
           <Heading size="lg">{t('account:resetPassword.title')}</Heading>
-          <Formiz
-            id="reset-password-init-form"
-            onValidSubmit={submitResetPasswordInit}
-            connect={resetPasswordInitForm}
-          >
+          <Formiz connect={resetPasswordInitForm}>
             <form noValidate onSubmit={resetPasswordInitForm.submit}>
               <FieldInput
                 name="email"
@@ -119,7 +121,7 @@ export default function PageResetPasswordRequest() {
                 required={t('account:data.email.required') as string}
                 validations={[
                   {
-                    rule: isEmail(),
+                    handler: isEmail(),
                     message: t('account:data.email.invalid'),
                   },
                 ]}
@@ -127,7 +129,7 @@ export default function PageResetPasswordRequest() {
               <Flex>
                 <Button
                   leftIcon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
-                  as={Link}
+                  as={RouterLink}
                   to="/login"
                   variant="link"
                 >

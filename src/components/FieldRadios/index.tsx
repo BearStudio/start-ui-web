@@ -10,13 +10,18 @@ type Option = {
   label?: ReactNode;
 };
 
-export type FieldRadiosProps = FieldProps &
+export type FieldRadiosProps<FormattedValue = string> = FieldProps<
+  string,
+  FormattedValue
+> &
   FormGroupProps & {
     size?: 'sm' | 'md' | 'lg';
     options?: Option[];
   };
 
-export const FieldRadios = (props: FieldRadiosProps) => {
+export const FieldRadios = <FormattedValue = string,>(
+  props: FieldRadiosProps<FormattedValue>
+) => {
   const {
     errorMessage,
     id,
@@ -26,7 +31,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     setValue,
     value,
     otherProps,
-  } = useField({ debounce: 0, ...props });
+  } = useField(props);
   const { required } = props;
   const {
     children,
@@ -35,7 +40,7 @@ export const FieldRadios = (props: FieldRadiosProps) => {
     helper,
     size = 'md',
     ...rest
-  } = otherProps as Omit<FieldRadiosProps, keyof FieldProps>;
+  } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);
 
@@ -55,7 +60,12 @@ export const FieldRadios = (props: FieldRadiosProps) => {
 
   return (
     <FormGroup {...formGroupProps}>
-      <RadioGroup size={size} id={id} value={value || []} onChange={setValue}>
+      <RadioGroup
+        size={size}
+        id={id}
+        value={value ?? undefined}
+        onChange={setValue}
+      >
         <Wrap spacing="4" overflow="visible">
           {options.map((option) => (
             <WrapItem key={option.value}>

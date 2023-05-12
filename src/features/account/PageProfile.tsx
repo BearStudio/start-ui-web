@@ -20,8 +20,8 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
-  const { account } = useAccount();
-  const generalInformationForm = useForm();
+  const account = useAccount();
+
   const queryClient = useQueryClient();
 
   const toastSuccess = useToastSuccess();
@@ -43,14 +43,19 @@ export default function PageProfile() {
     },
   });
 
-  const submitGeneralInformation = async (values: TODO) => {
-    const newAccount = {
-      ...account,
-      ...values,
-    };
+  const generalInformationForm = useForm<TODO>({
+    id: 'account-form',
+    ready: !account.isFetching,
+    initialValues: account.account,
+    onValidSubmit: (values) => {
+      const newAccount = {
+        ...account,
+        ...values,
+      };
 
-    await updateAccount.mutate(newAccount);
-  };
+      updateAccount.mutate(newAccount);
+    },
+  });
 
   return (
     <Page nav={<AccountNav />}>
@@ -59,12 +64,7 @@ export default function PageProfile() {
           {t('account:profile.title')}
         </Heading>
         {account && (
-          <Formiz
-            id="account-form"
-            onValidSubmit={submitGeneralInformation}
-            connect={generalInformationForm}
-            initialValues={account}
-          >
+          <Formiz connect={generalInformationForm}>
             <form noValidate onSubmit={generalInformationForm.submit}>
               <Stack
                 direction="column"
@@ -93,7 +93,7 @@ export default function PageProfile() {
                   required={t('account:data.email.required') as string}
                   validations={[
                     {
-                      rule: isEmail(),
+                      handler: isEmail(),
                       message: t('account:data.email.invalid'),
                     },
                   ]}

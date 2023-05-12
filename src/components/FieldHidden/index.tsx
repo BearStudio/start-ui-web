@@ -4,16 +4,17 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-type FieldHiddenProps = FieldProps & FormGroupProps;
+type FieldHiddenProps<FormattedValue = unknown> = FieldProps<
+  unknown,
+  FormattedValue
+> &
+  FormGroupProps;
 
-export const FieldHidden: React.FC<
-  React.PropsWithChildren<FieldHiddenProps>
-> = (props) => {
-  const { isValid, isSubmitted, errorMessage, otherProps } = useField({
-    debounce: 0,
-    ...props,
-  });
-  const { ...rest } = otherProps as Omit<FieldHiddenProps, keyof FieldProps>;
+export const FieldHidden = <FormattedValue = unknown,>(
+  props: FieldHiddenProps<FormattedValue>
+) => {
+  const { isValid, isSubmitted, errorMessage, otherProps } = useField(props);
+  const { ...rest } = otherProps;
   const showError = !isValid && isSubmitted;
   const formGroupProps = {
     errorMessage,

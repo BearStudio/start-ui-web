@@ -5,7 +5,10 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldTextareaProps = FieldProps &
+export type FieldTextareaProps<FormattedValue = string> = FieldProps<
+  string,
+  FormattedValue
+> &
   FormGroupProps & {
     textareaProps?: Omit<
       TextareaProps,
@@ -20,7 +23,9 @@ export type FieldTextareaProps = FieldProps &
     autoFocus?: boolean;
   };
 
-export const FieldTextarea = (props: FieldTextareaProps) => {
+export const FieldTextarea = <FormattedValue = string,>(
+  props: FieldTextareaProps<FormattedValue>
+) => {
   const {
     errorMessage,
     id,
@@ -34,7 +39,7 @@ export const FieldTextarea = (props: FieldTextareaProps) => {
   } = useField(props);
 
   const { helper, label, placeholder, textareaProps, autoFocus, ...rest } =
-    otherProps as Omit<FieldTextareaProps, keyof FieldProps>;
+    otherProps;
 
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);

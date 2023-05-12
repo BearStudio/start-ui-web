@@ -12,7 +12,7 @@ import {
   ScaleFade,
   Stack,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 import {
   isEmail,
   isMaxLength,
@@ -20,28 +20,23 @@ import {
   isPattern,
 } from '@formiz/validations';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { useCreateAccount } from '@/features/account/service';
+import { User } from '@/features/users/types';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { Language } from '@/lib/i18n/constants';
 
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'account']);
-  const form = useForm({
-    subscribe: { form: true, fields: ['langKey'] },
-  });
+
   const toastError = useToastError();
   const [accountEmail, setAccountEmail] = useState('');
-
-  // Change language based on form
-  useEffect(() => {
-    i18n.changeLanguage(form.values?.langKey);
-  }, [i18n, form.values?.langKey]);
 
   const createUser = useCreateAccount({
     onMutate: ({ email }) => {
@@ -56,16 +51,33 @@ export default function PageRegister() {
       });
 
       if (errorKey === 'userexists') {
-        form.invalidateFields({
+        form.setErrors({
           login: t('account:data.login.alreadyUsed'),
         });
       }
 
       if (errorKey === 'emailexists') {
-        form.invalidateFields({ email: t('account:data.email.alreadyUsed') });
+        form.setErrors({ email: t('account:data.email.alreadyUsed') });
       }
     },
   });
+
+  const form = useForm<
+    Pick<User, 'email' | 'login' | 'langKey'> & { password: string }
+  >({
+    id: 'register-form',
+    onValidSubmit: (values) => createUser.mutate(values),
+  });
+  const values = useFormFields({
+    connect: form,
+    fields: ['langKey'],
+    selector: (field) => field.value,
+  });
+
+  // Change language based on form
+  useEffect(() => {
+    i18n.changeLanguage(values?.langKey);
+  }, [i18n, values?.langKey]);
 
   if (createUser.isSuccess) {
     return (
@@ -96,7 +108,7 @@ export default function PageRegister() {
           </Alert>
           <Center mt="8">
             <Button
-              as={Link}
+              as={RouterLink}
               to="/login"
               variant="link"
               color="brand.500"
@@ -113,12 +125,7 @@ export default function PageRegister() {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
-        <Formiz
-          id="register-form"
-          autoForm
-          onValidSubmit={createUser.mutate}
-          connect={form}
-        >
+        <Formiz connect={form} autoForm>
           <Box
             p="6"
             borderRadius="md"
@@ -137,7 +144,7 @@ export default function PageRegister() {
                   label: t(`common:languages.${key}`),
                   value: key,
                 }))}
-                defaultValue={i18n.language}
+                defaultValue={i18n.language as Language['key']}
               />
               <FieldInput
                 name="login"
@@ -145,15 +152,15 @@ export default function PageRegister() {
                 required={t('account:data.login.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(2),
+                    handler: isMinLength(2),
                     message: t('account:data.login.tooShort', { min: 2 }),
                   },
                   {
-                    rule: isMaxLength(50),
+                    handler: isMaxLength(50),
                     message: t('account:data.login.tooLong', { max: 50 }),
                   },
                   {
-                    rule: isPattern(
+                    handler: isPattern(
                       '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
                     ),
                     message: t('account:data.login.invalid'),
@@ -166,15 +173,15 @@ export default function PageRegister() {
                 required={t('account:data.email.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(5),
+                    handler: isMinLength(5),
                     message: t('account:data.email.tooShort', { min: 5 }),
                   },
                   {
-                    rule: isMaxLength(254),
+                    handler: isMaxLength(254),
                     message: t('account:data.email.tooLong', { min: 254 }),
                   },
                   {
-                    rule: isEmail(),
+                    handler: isEmail(),
                     message: t('account:data.email.invalid'),
                   },
                 ]}
@@ -186,11 +193,11 @@ export default function PageRegister() {
                 required={t('account:data.password.required') as string}
                 validations={[
                   {
-                    rule: isMinLength(4),
+                    handler: isMinLength(4),
                     message: t('account:data.password.tooShort', { min: 4 }),
                   },
                   {
-                    rule: isMaxLength(50),
+                    handler: isMaxLength(50),
                     message: t('account:data.password.tooLong', { min: 50 }),
                   },
                 ]}
@@ -210,7 +217,7 @@ export default function PageRegister() {
             </Stack>
           </Box>
           <Center mt="8">
-            <Button as={Link} to="/login" variant="link">
+            <Button as={RouterLink} to="/login" variant="link">
               {t('account:register.actions.alreadyHaveAnAccount')}{' '}
               <Box
                 as="strong"

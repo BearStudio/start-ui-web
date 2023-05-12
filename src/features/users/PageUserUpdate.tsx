@@ -22,22 +22,21 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { UserForm } from '@/features/users/UserForm';
-import { UserStatus } from '@/features/users/UserStatus';
 import { useUser, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
+
+import { UserForm } from './UserForm';
+import { UserStatus } from './UserStatus';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
 
-  const params = useParams();
+  const { login } = useParams();
   const navigate = useNavigate();
-  const user = useUser(params?.login?.toString(), {
+  const user = useUser(login, {
     refetchOnWindowFocus: false,
-    enabled: !!params?.login,
+    enabled: !!login,
   });
-
-  const form = useForm({ subscribe: false });
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -52,12 +51,12 @@ export default function PageUserUpdate() {
         });
         switch (errorKey) {
           case 'userexists':
-            form.invalidateFields({
+            form.setErrors({
               login: t('users:data.login.alreadyUsed'),
             });
             break;
           case 'emailexists':
-            form.invalidateFields({
+            form.setErrors({
               email: t('users:data.email.alreadyUsed'),
             });
             break;
@@ -71,13 +70,19 @@ export default function PageUserUpdate() {
       navigate(-1);
     },
   });
-  const submitEditUser = (values: TODO) => {
-    const userToSend = {
-      id: user.data?.id,
-      ...values,
-    };
-    editUser(userToSend);
-  };
+
+  const form = useForm<TODO>({
+    id: 'create - user - form',
+    ready: !user.isFetching,
+    initialValues: user.data,
+    onValidSubmit: (values) => {
+      const userToSend = {
+        id: user.data?.id,
+        ...values,
+      };
+      editUser(userToSend);
+    },
+  });
 
   return (
     <Page containerSize="md" isFocusMode>
@@ -109,12 +114,7 @@ export default function PageUserUpdate() {
       {user.isFetching && <Loader />}
       {user.isError && !user.isFetching && <ErrorPage errorCode={404} />}
       {!user.isError && !user.isFetching && (
-        <Formiz
-          id="create-user-form"
-          onValidSubmit={submitEditUser}
-          connect={form}
-          initialValues={user.data}
-        >
+        <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>
             <PageContent>
               <UserForm />
