@@ -31,6 +31,14 @@ export const routes = [
     ),
     children: [
       {
+        path: 'logout',
+        element: <PageLogout />,
+      },
+
+      /**
+       * Public Routes
+       */
+      {
         path: 'login',
 
         element: (
@@ -62,6 +70,9 @@ export const routes = [
         ],
       },
 
+      /**
+       * Authenticated Routes
+       */
       {
         path: '',
         element: (
@@ -75,10 +86,6 @@ export const routes = [
           {
             path: '',
             element: <PageDashboard />,
-          },
-          {
-            path: 'logout',
-            element: <PageLogout />,
           },
           {
             path: 'account',
@@ -97,6 +104,9 @@ export const routes = [
               },
             ],
           },
+          /**
+           * Admin Routes
+           */
           {
             path: 'admin',
             element: (
