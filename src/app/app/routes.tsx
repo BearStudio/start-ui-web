@@ -49,7 +49,6 @@ export const routes = [
        */
       {
         path: 'login',
-
         element: (
           <GuardPublicOnly>
             <PageLogin />

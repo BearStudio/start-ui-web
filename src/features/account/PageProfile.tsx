@@ -46,10 +46,10 @@ export default function PageProfile() {
   const generalInformationForm = useForm<TODO>({
     id: 'account-form',
     ready: !account.isFetching,
-    initialValues: account.account,
+    initialValues: account.data,
     onValidSubmit: (values) => {
       const newAccount = {
-        ...account,
+        ...account.data,
         ...values,
       };
 

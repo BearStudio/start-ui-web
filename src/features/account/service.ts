@@ -28,7 +28,7 @@ export const useAccount = (
   > = {}
 ) => {
   const { i18n } = useTranslation();
-  const { data: account, ...rest } = useQuery(
+  const { data, ...rest } = useQuery(
     accountKeys.account.queryKey,
     async () => {
       const response = await Axios.get('/account');
@@ -42,13 +42,13 @@ export const useAccount = (
       },
     }
   );
-  const isAdmin = !!account?.authorities?.includes('ROLE_ADMIN');
-  return { account, isAdmin, ...rest };
+  const isAdmin = !!data?.authorities?.includes('ROLE_ADMIN');
+  return { data, isAdmin, ...rest };
 };
 
 export const useCreateAccount = (
   config: UseMutationOptions<
-    User,
+    void,
     AxiosError<
       ApiErrorResponse & {
         errorKey: 'userexists' | 'emailexists';
@@ -58,11 +58,10 @@ export const useCreateAccount = (
   > = {}
 ) => {
   return useMutation(async (payload) => {
-    const response = await Axios.post('/register', {
+    await Axios.post('/register', {
       ...payload,
       langKey: payload.langKey ?? DEFAULT_LANGUAGE_KEY,
     });
-    return zUser().parse(response);
   }, config);
 };
 
@@ -81,13 +80,12 @@ export const useActivateAccount = (
 };
 
 export const useUpdateAccount = (
-  config: UseMutationOptions<User, AxiosError<ApiErrorResponse>, User> = {}
+  config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, User> = {}
 ) => {
   const { i18n } = useTranslation();
   return useMutation(
     async (account) => {
-      const response = await Axios.post('/account', account);
-      return zUser().parse(response);
+      await Axios.post('/account', account);
     },
     {
       ...config,
