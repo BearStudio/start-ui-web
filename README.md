@@ -269,11 +269,9 @@ yarn build
 
 Then expose the `/out` folder.
 
-> You can use `yarn build && npx serve out` to build and run the static build locally.
->
-> 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+> You can use `yarn build && npx serve out -c ../static.serve.json` to build and run the static build locally.
 
-> You can use `yarn static:serve` to build and run the static build locally.
+> 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
 
 #### Using Apache as your web server
 
