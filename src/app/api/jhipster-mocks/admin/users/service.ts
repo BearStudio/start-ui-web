@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-import { db } from '@/mock-server/utils/db';
+import { db } from '@/app/api/jhipster-mocks/db';
 
 export type UserFormatted<U extends Partial<User> = User> = ReturnType<
   typeof formatUserFromDb<U>

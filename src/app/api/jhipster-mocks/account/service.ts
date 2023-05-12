@@ -6,8 +6,8 @@ import {
   UserFormatted,
   formatUserFromDb,
   prepareUserForDb,
-} from '@/mock-server/users';
-import { db } from '@/mock-server/utils/db';
+} from '@/app/api/jhipster-mocks/admin/users/service';
+import { db } from '@/app/api/jhipster-mocks/db';
 
 export const getAccount = async (id: number) => {
   const user = await db.user.findUnique({

@@ -288,7 +288,7 @@ export default function PageUsers() {
               </Alert>
             </Center>
           )}
-          {users.data?.content.map((user) => (
+          {users.data?.content?.map((user) => (
             <DataListRow as={LinkBox} key={user.id}>
               <DataListCell colName="login">
                 <HStack maxW="100%">

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { db } from '@/mock-server/utils/db';
+import { db } from '@/app/api/jhipster-mocks/db';
 
 type LoginParams = {
   login: string;
