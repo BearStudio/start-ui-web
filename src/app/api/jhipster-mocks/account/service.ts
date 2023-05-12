@@ -63,7 +63,7 @@ export const createAccount = async ({
 
   // REPLACE ME WITH EMAIL SERVICE
   console.log(`👇👇👇👇👇👇👇👇👇👇
-✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/account/activate?key=${token}
+✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/activate?key=${token}
 👆👆👆👆👆👆👆👆👆👆`);
 
   return user;
@@ -132,7 +132,7 @@ export const resetPasswordInit = async (email: string) => {
 
   // REPLACE ME WITH EMAIL SERVICE
   console.log(`👇👇👇👇👇👇👇👇👇👇
-✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/account/reset/finish?key=${token}
+✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/reset/finish?key=${token}
 👆👆👆👆👆👆👆👆👆👆`);
 
   return true;
