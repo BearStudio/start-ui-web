@@ -1,12 +1,10 @@
-'use client';
-
 import React from 'react';
 
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
@@ -16,10 +14,10 @@ import { useResetPasswordFinish } from '@/features/account/service';
 export default function PageResetPasswordConfirm() {
   const { t } = useTranslation(['account']);
 
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const resetPasswordFinishForm = useForm();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -39,7 +37,7 @@ export default function PageResetPasswordConfirm() {
           'account:resetPassword.feedbacks.resetSuccess.description'
         ),
       });
-      router.push('/login');
+      navigate('/login');
     },
   });
 

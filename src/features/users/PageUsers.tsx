@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import {
@@ -29,8 +27,6 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
   FiCheckCircle,
@@ -40,6 +36,8 @@ import {
   FiTrash2,
   FiXCircle,
 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
@@ -70,7 +68,6 @@ import {
   useUserUpdate,
 } from '@/features/users/service';
 import { User } from '@/features/users/types';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 
 type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;
@@ -152,7 +149,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={`/admin/users/${user.login}`}
+            to={`/admin/users/${user.login}`}
             icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
@@ -189,8 +186,7 @@ const UserActions = ({ user, ...rest }: UserActionProps) => {
 
 export default function PageUsers() {
   const { t } = useTranslation(['users']);
-  const searchParams = useSearchParams();
-  const updateSearchParams = useSearchParamsUpdater();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = +(searchParams?.get('page') || 1);
 
   const pageSize = 20;
@@ -210,7 +206,7 @@ export default function PageUsers() {
             <Button
               display={{ base: 'none', sm: 'flex' }}
               as={Link}
-              href="/admin/users/create"
+              to="/admin/users/create"
               variant="@primary"
               leftIcon={<FiPlus />}
             >
@@ -220,7 +216,7 @@ export default function PageUsers() {
               display={{ base: 'flex', sm: 'none' }}
               aria-label={t('users:list.actions.createUser')}
               as={Link}
-              href="/admin/users/create"
+              to="/admin/users/create"
               size="sm"
               variant="@primary"
               icon={<FiPlus />}
@@ -299,10 +295,7 @@ export default function PageUsers() {
                   <Avatar size="sm" name={user.login} mx="1" />
                   <Box minW="0">
                     <Text noOfLines={1} maxW="full" fontWeight="bold">
-                      <LinkOverlay
-                        as={Link}
-                        href={`/admin/users/${user.login}`}
-                      >
+                      <LinkOverlay as={Link} to={`/admin/users/${user.login}`}>
                         {user.login}
                       </LinkOverlay>
                     </Text>
@@ -385,7 +378,9 @@ export default function PageUsers() {
           <DataListFooter>
             <Pagination
               isLoadingPage={users.isLoadingPage}
-              setPage={(newPage) => updateSearchParams('page', newPage)}
+              setPage={(newPage) =>
+                setSearchParams({ page: newPage.toString() })
+              }
               page={page}
               pageSize={pageSize}
               totalItems={users.data?.totalItems}

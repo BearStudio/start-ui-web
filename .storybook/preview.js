@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Box, useColorMode } from '@chakra-ui/react';
 import { themes } from '@storybook/theming';
 import { useTranslation } from 'react-i18next';
+import { MemoryRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/app/Providers';
@@ -91,12 +92,14 @@ const DocumentationWrapper = ({ children, context }) => {
 export const decorators = [
   (story, context) => (
     <Providers>
-      <DocumentationWrapper context={context}>
-        {/* Calling as a function to avoid errors. Learn more at:
-         * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-         */}
-        {story(context)}
-      </DocumentationWrapper>
+      <MemoryRouter>
+        <DocumentationWrapper context={context}>
+          {/* Calling as a function to avoid errors. Learn more at:
+           * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+           */}
+          {story(context)}
+        </DocumentationWrapper>
+      </MemoryRouter>
     </Providers>
   ),
 ];

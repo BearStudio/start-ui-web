@@ -5,6 +5,7 @@ import { apiMethods, badRequestResponse } from '@/mock-server/utils/api';
 
 export default apiMethods({
   GET: {
+    admin: true,
     handler: async ({ req, res }) => {
       const options = z
         .object({
@@ -21,6 +22,7 @@ export default apiMethods({
   },
 
   PUT: {
+    admin: true,
     handler: async ({ req, res }) => {
       const bodyParsed = z
         .object({
@@ -44,6 +46,7 @@ export default apiMethods({
   },
 
   POST: {
+    admin: true,
     handler: async ({ req, res }) => {
       const bodyParsed = z
         .object({

@@ -8,6 +8,7 @@ type HttpVerbs = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 type Methods = {
   [key in HttpVerbs]?: {
     public?: boolean;
+    admin?: boolean;
     demo?: 'allowed' | 'disallowed';
     handler(params: {
       req: NextApiRequest;
@@ -52,6 +53,17 @@ export const notSignedInResponse: ErrorResponse = (
   return res.status(401).json({
     title: title ?? 'Not Signed In',
     message: message ?? 'error.http.401',
+    details,
+  });
+};
+
+export const notAutorizedResponse: ErrorResponse = (
+  res,
+  { title, message, details } = {}
+) => {
+  return res.status(403).json({
+    title: title ?? 'Not Authorized',
+    message: message ?? 'error.http.403',
     details,
   });
 };
@@ -110,6 +122,10 @@ export const apiMethods =
 
       if (!user) {
         return notSignedInResponse(res);
+      }
+
+      if (method.admin && !user.authorities?.includes('ROLE_ADMIN')) {
+        return notAutorizedResponse(res);
       }
 
       return method.handler({ req, res, user });

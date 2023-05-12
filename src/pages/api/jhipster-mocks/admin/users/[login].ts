@@ -7,6 +7,7 @@ import {
 
 export default apiMethods({
   GET: {
+    admin: true,
     handler: async ({ req, res }) => {
       if (typeof req.query.login !== 'string') {
         return badRequestResponse(res);
@@ -16,6 +17,7 @@ export default apiMethods({
     },
   },
   DELETE: {
+    admin: true,
     handler: async ({ req, res, user }) => {
       if (!user?.id) {
         return notSignedInResponse(res);

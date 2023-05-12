@@ -1,22 +1,22 @@
 import React from 'react';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { FiLock, FiUser } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 
 export const AccountNav = () => {
   const { t } = useTranslation(['account']);
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const isActive = (to: string) => pathname?.startsWith(to);
   return (
     <Nav>
       <NavGroup title={t('account:nav.myAccount')}>
         <NavItem
           as={Link}
-          href="/account/profile"
+          to="/account/profile"
           isActive={isActive('/account/profile')}
           icon={FiUser}
         >
@@ -24,7 +24,7 @@ export const AccountNav = () => {
         </NavItem>
         <NavItem
           as={Link}
-          href="/account/password"
+          to="/account/password"
           isActive={isActive('/account/password')}
           icon={FiLock}
         >

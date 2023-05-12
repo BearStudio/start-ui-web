@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import {
@@ -13,8 +11,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import {
@@ -33,7 +31,7 @@ export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
 
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const user = useUser(params?.login?.toString(), {
     refetchOnWindowFocus: false,
     enabled: !!params?.login,
@@ -70,7 +68,7 @@ export default function PageUserUpdate() {
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      router.back();
+      navigate(-1);
     },
   });
   const submitEditUser = (values: TODO) => {
@@ -83,7 +81,7 @@ export default function PageUserUpdate() {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => router.back()}>
+      <PageTopBar showBack onBack={() => navigate(-1)}>
         <HStack spacing="4">
           <Box flex="1">
             {user.isLoading || user.isError ? (
@@ -123,7 +121,7 @@ export default function PageUserUpdate() {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => router.back()}>
+                <Button onClick={() => navigate(-1)}>
                   {t('common:actions.cancel')}
                 </Button>
                 <Button

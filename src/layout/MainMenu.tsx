@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Box, BoxProps, Stack } from '@chakra-ui/react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/features/account/service';
 import { useRtl } from '@/hooks/useRtl';
@@ -12,12 +12,12 @@ import { useLayoutContext } from '@/layout/LayoutContext';
 const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const isActive = to === '/' ? pathname === '/' : pathname?.startsWith(to);
   return (
     <Box
       as={Link}
-      href={to}
+      to={to}
       bg="transparent"
       justifyContent="flex-start"
       position="relative"

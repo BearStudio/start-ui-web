@@ -22,4 +22,13 @@ module.exports = defineNextConfig({
       },
     ];
   },
+  async rewrites() {
+    return [
+      // Rewrite app
+      {
+        source: '/app/:any*',
+        destination: '/app/',
+      },
+    ];
+  },
 });

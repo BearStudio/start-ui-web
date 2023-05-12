@@ -15,8 +15,6 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
   FiCheck,
@@ -26,6 +24,8 @@ import {
   FiSun,
   FiUser,
 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
 import { useAccount } from '@/features/account/service';
@@ -108,7 +108,7 @@ export const AccountMenu = ({ ...rest }) => {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const { account, isLoading } = useAccount();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <Box color="gray.800" _dark={{ color: 'white' }}>
@@ -122,7 +122,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuGroup title={account?.email} noOfLines={1}>
             <MenuItem
               as={Link}
-              href="/account"
+              to="/account"
               icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
             >
               {t('layout:accountMenu.myAccount')}
@@ -146,7 +146,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuDivider />
           <MenuItem
             icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
-            onClick={() => router.push('/logout')}
+            onClick={() => navigate('/logout')}
           >
             {t('layout:accountMenu.logout')}
           </MenuItem>

@@ -39,6 +39,7 @@ yarn dev
 - ⚛️ [React](https://reactjs.org/)
 - ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports))
 - 📕 [Storybook](https://storybook.js.org/)
+- ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
 - ⚛️ [TanStack Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
@@ -253,7 +254,7 @@ Application will be exposed on port 80 ([http://localhost](http://localhost))
 
 ### Static files
 
-Update the `next.config.js` file with `output: 'export'`
+Update the `next.config.js` file with `output: 'export'` (and remove `redirects` and `rewrites`)
 
 ```js
 {
@@ -269,6 +270,24 @@ yarn build
 Then expose the `/out` folder.
 
 > You can use `yarn build && npx serve out` to build and run the static build locally.
+>
+> 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+
+> You can use `yarn static:serve` to build and run the static build locally.
+
+#### Using Apache as your web server
+
+If you are using [apache](https://httpd.apache.org/) to statically deploy your app, you can use the following configuration for `public/.htaccess` :
+
+```bash
+# public/.htaccess
+Options -MultiViews
+RewriteEngine On
+
+# Rewrite /app/* to app.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule "^app/" "app.html" [QSA,L]
+```
 
 ---
 
@@ -291,6 +310,13 @@ for production: hybrid static & server rendering, TypeScript support, smart
 bundling, route pre-fetching, and more. No config needed.
 
 [GitHub](https://github.com/vercel/next.js) · [License MIT](https://github.com/vercel/next.js/blob/canary/license.md)
+
+### React Router
+
+Next.js is bundled with its own router, but at the time of writing those lines,
+it does not allow SPA mode.
+
+[GitHub](https://github.com/ReactTraining/react-router) · [License MIT](https://github.com/ReactTraining/react-router/blob/master/LICENSE)
 
 ### TypeScript
 

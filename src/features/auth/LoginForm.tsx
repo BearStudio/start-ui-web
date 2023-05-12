@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
@@ -100,7 +100,7 @@ export const LoginForm = ({
           <Flex>
             <Button
               as={Link}
-              href="/account/reset"
+              to="/account/reset"
               size="sm"
               variant="link"
               whiteSpace="initial"

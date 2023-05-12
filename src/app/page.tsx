@@ -1,13 +1,17 @@
+'use client';
+
 import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-export const pageRedirect = (path: string) => () => {
+import { Loader } from '@/layout/Loader';
+
+export default function PageRoot() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(path);
+    router.replace('/app');
   }, [router]);
 
-  return null;
-};
+  return <Loader />;
+}

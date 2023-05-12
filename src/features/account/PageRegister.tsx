@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -21,8 +19,8 @@ import {
   isMinLength,
   isPattern,
 } from '@formiz/validations';
-import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
@@ -98,7 +96,7 @@ export default function PageRegister() {
           <Center mt="8">
             <Button
               as={Link}
-              href="/login"
+              to="/login"
               variant="link"
               color="brand.500"
               _dark={{ color: 'brand.300' }}
@@ -210,7 +208,7 @@ export default function PageRegister() {
             </Stack>
           </Box>
           <Center mt="8">
-            <Button as={Link} href="/login" variant="link">
+            <Button as={Link} to="/login" variant="link">
               {t('account:register.actions.alreadyHaveAnAccount')}{' '}
               <Box
                 as="strong"

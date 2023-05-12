@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 
 import {
@@ -15,9 +13,9 @@ import {
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
@@ -83,7 +81,7 @@ export default function PageResetPasswordRequest() {
           <Center mt="8">
             <Button
               as={Link}
-              href="/login"
+              to="/login"
               variant="link"
               color="brand.500"
               _dark={{ color: 'brand.300' }}
@@ -130,7 +128,7 @@ export default function PageResetPasswordRequest() {
                 <Button
                   leftIcon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
                   as={Link}
-                  href="/login"
+                  to="/login"
                   variant="link"
                 >
                   {t('account:resetPassword.actions.cancel')}

@@ -1,11 +1,9 @@
-'use client';
-
 import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Page,
@@ -19,7 +17,7 @@ import { useUserCreate } from '@/features/users/service';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
-  const router = useRouter();
+  const navigate = useNavigate();
   const form = useForm({ subscribe: false });
 
   const toastError = useToastError();
@@ -51,7 +49,7 @@ export default function PageUserCreate() {
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
-      router.push('/admin/users');
+      navigate('/admin/users');
     },
   });
 
@@ -70,7 +68,7 @@ export default function PageUserCreate() {
         connect={form}
       >
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => router.back()}>
+          <PageTopBar showBack onBack={() => navigate(-1)}>
             <Heading size="md">{t('users:create.title')}</Heading>
           </PageTopBar>
           <PageContent>
@@ -78,7 +76,7 @@ export default function PageUserCreate() {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => router.back()}>
+              <Button onClick={() => navigate(-1)}>
                 {t('common:actions.cancel')}
               </Button>
               <Button

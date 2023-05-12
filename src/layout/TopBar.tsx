@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Link } from '@chakra-ui/next-js';
 import {
   Box,
   Flex,
@@ -11,6 +10,7 @@ import {
   useTheme,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 import { Logo } from '@/components/Logo';
 import { AccountMenu } from '@/layout/AccountMenu';
@@ -58,12 +58,13 @@ export const TopBar = () => {
           _dark={{ bg: 'gray.900' }}
         >
           <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
-          <Link
-            href="/"
+          <Box
+            as={Link}
+            to="/"
             mx={{ base: 'auto', [theme.layout.breakpoints.desktop]: 0 }}
           >
             <Logo />
-          </Link>
+          </Box>
           <MainMenu me="auto" ms="4" display={{ base: 'none', md: 'flex' }} />
           <AccountMenu />
         </Flex>

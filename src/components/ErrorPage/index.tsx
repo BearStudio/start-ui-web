@@ -42,7 +42,7 @@ export const ErrorPage = ({ errorCode }: { errorCode?: number }) => {
           textAlign={{ base: 'center', md: 'left' }}
           alignItems={{ base: 'center', md: 'flex-start' }}
         >
-          <Link href="/" passHref>
+          <Link href="/">
             <Logo my={4} />
           </Link>
           <Heading>{t(`components:errorPage.${errorType}.title`)}</Heading>
