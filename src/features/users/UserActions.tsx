@@ -17,8 +17,8 @@ import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { User } from '@/features/users/schema';
 import { useUserRemove, useUserUpdate } from '@/features/users/service';
-import { User } from '@/features/users/types';
 
 export type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;

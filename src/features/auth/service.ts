@@ -3,24 +3,29 @@ import Axios, { AxiosError } from 'axios';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
 
+import { LoginPayload, zLoginPayload } from './schema';
+
 export const useLogin = (
   config: UseMutationOptions<
-    { id_token: string },
-    AxiosError<TODO>,
+    LoginPayload,
+    AxiosError<ApiErrorResponse>,
     { username: string; password: string }
   > = {}
 ) => {
   const { updateToken } = useAuthContext();
   return useMutation(
-    ({ username, password }) =>
-      Axios.post('/authenticate', { username, password }),
+    async ({ username, password }) => {
+      const response = await Axios.post('/authenticate', {
+        username,
+        password,
+      });
+      return zLoginPayload().parse(response);
+    },
     {
       ...config,
-      onSuccess: (data, ...rest) => {
+      onSuccess: (data, ...args) => {
         updateToken(data.id_token);
-        if (config.onSuccess) {
-          config.onSuccess(data, ...rest);
-        }
+        config?.onSuccess?.(data, ...args);
       },
     }
   );
