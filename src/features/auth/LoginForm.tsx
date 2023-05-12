@@ -51,7 +51,7 @@ export const LoginForm = ({
           />
           <Flex>
             <Button
-              as={Link}
+              as={RouterLink}
               to="/account/reset"
               size="sm"
               variant="link"
