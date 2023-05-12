@@ -69,6 +69,7 @@ export const PUT = apiMethod({
         lastName: z.string().nullable(),
         langKey: z.string(),
         authorities: z.array(z.string()),
+        activated: z.boolean().optional(),
       })
       .safeParse(await req.json());
 
