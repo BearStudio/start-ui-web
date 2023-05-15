@@ -1,6 +1,7 @@
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
+import PageActivate from '@/features/account/PageActivate';
 import PagePassword from '@/features/account/PagePassword';
 import PageProfile from '@/features/account/PageProfile';
 import PageRegister from '@/features/account/PageRegister';
@@ -55,6 +56,10 @@ export const routes = [
           </GuardPublicOnly>
         ),
         children: [
+          {
+            path: 'activate',
+            element: <PageActivate />,
+          },
           {
             path: 'register',
             element: <PageRegister />,
