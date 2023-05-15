@@ -28,7 +28,6 @@ export const Layout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
         <Flex flex="1" direction="column">
           {children}
         </Flex>
-        {/* <LoginModalInterceptor /> */}
       </Viewport>
     </LayoutContext.Provider>
   );
