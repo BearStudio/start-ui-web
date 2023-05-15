@@ -21,11 +21,17 @@ npx create-start-ui@latest --web myApp
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
-Then just go to the created folder and start the dev server.
+Then just go to the created folder:
 
 ```bash
 cd myApp
+```
 
+Make sure to duplicate the `.env.example` file to a new `.env` file, and update the environment variables according to your needs.
+
+You can now init the local database and start the dev server.
+
+```bash
 # Init the local database
 yarn db:push
 
