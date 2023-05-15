@@ -2309,12 +2309,12 @@
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-4.5.15.tgz#eed1873d68755d3b52d6fcfcfa3493118430a512"
   integrity sha512-FzleM9AxZQK2nqsTDtBiY0PMEVWvnKnuu2i09+p6DHvrHsuucoV2j0tmw+kAT3L4hvsLdAIDv6MdGehsPIdT+Q==
 
-"@formiz/core@2.0.0@beta.1":
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-2.0.0-beta.1.tgz#87e84d46317b1d4587741144cacc9dfe70a2ff96"
-  integrity sha512-UG2R4gGNxLnpe2ytt/aKUI4qY79MKrefNmQL9Qzf/gFqz/vF5NPAYTK68gd+NyKuhhoByW9p5jXKI5NOjNGwQg==
+"@formiz/core@2.0.0-beta.2":
+  version "2.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-2.0.0-beta.2.tgz#b94f1d5e15b103ff9d6305d15b43a204a84990f6"
+  integrity sha512-vq8aJ9IYi9edVWpXlEI1jV4hyCa+ifKVPVgO9oJCqcUfyMwUquTtGBu3+v+KXJQ+99ex+eMUxByv4O8B4yGWQw==
 
-"@formiz/validations@2.0.0@beta.1":
+"@formiz/validations@2.0.0-beta.1":
   version "2.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@formiz/validations/-/validations-2.0.0-beta.1.tgz#7de505158d2a2e0b2fe26bb7259a3e0af845cfce"
   integrity sha512-Wq4h0/4UQgkkJaOUxTUhsokgkksPaTZ0DGVdmOcZJwfKuNN2SGgnwOV1i6uNaMGhNx/4hHmwgdi2L5Rj6kZGtA==
