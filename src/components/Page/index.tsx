@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import {
   Box,
@@ -187,14 +187,18 @@ export const Page = ({
   ...rest
 }: PageProps) => {
   useFocusMode(isFocusMode);
+
+  const value = useMemo(
+    () => ({
+      nav,
+      hideContainer,
+      containerSize,
+    }),
+    [containerSize, hideContainer, nav]
+  );
+
   return (
-    <PageContext.Provider
-      value={{
-        nav,
-        hideContainer,
-        containerSize,
-      }}
-    >
+    <PageContext.Provider value={value}>
       <Flex direction="column" flex="1" position="relative" {...rest} />
     </PageContext.Provider>
   );

@@ -11,7 +11,7 @@ type LoginParams = {
 export const login = async ({ login, password }: LoginParams) => {
   const user = await db.user.findUnique({ where: { login } });
 
-  if (!user || !user.password || !user.activated) {
+  if (!user?.password || !user?.activated) {
     return undefined;
   }
 

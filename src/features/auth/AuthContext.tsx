@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useContext, useState } from 'react';
+import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 
 import { useIsClient } from '@/hooks/useIsClient';
 import { isBrowser } from '@/lib/ssr';
@@ -50,14 +50,13 @@ export const AuthProvider: FC<React.PropsWithChildren<unknown>> = ({
     [setToken]
   );
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated: !!token,
-        updateToken: handleUpdateToken,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      isAuthenticated: !!token,
+      updateToken: handleUpdateToken,
+    }),
+    [handleUpdateToken, token]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

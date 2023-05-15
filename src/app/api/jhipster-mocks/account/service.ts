@@ -174,7 +174,7 @@ export const updatePassword = async (
 ) => {
   const user = await db.user.findUnique({ where: { id } });
 
-  if (!user || !user.password) {
+  if (!user?.password) {
     return undefined;
   }
 

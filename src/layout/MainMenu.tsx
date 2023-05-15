@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Box, BoxProps, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/features/account/service';
 import { useRtl } from '@/hooks/useRtl';
