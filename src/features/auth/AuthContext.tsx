@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 
-import { useIsClient } from '@/hooks/useIsClient';
+import { useIsClientReady } from '@/hooks/useIsClientReady';
 import { isBrowser } from '@/lib/ssr';
 
 type AuthContextValue = {
@@ -26,10 +26,10 @@ const updateToken = (newToken?: string | null) => {
 
 export const useAuthContext = () => {
   const { isAuthenticated, updateToken } = useContext(AuthContext);
-  const isClient = useIsClient();
+  const isClientReady = useIsClientReady();
 
   return {
-    isLoading: !isClient,
+    isLoading: !isClientReady,
     isAuthenticated,
     updateToken,
   };
