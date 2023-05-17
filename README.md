@@ -32,8 +32,8 @@ Make sure to duplicate the `.env.example` file to a new `.env` file, and update 
 You can now init the local database and start the dev server.
 
 ```bash
-# Init the local database
-yarn db:push
+# Init the local mocks database and seed users
+yarn db:push && yarn db:seed
 
 # Run the development server
 yarn dev
@@ -86,11 +86,8 @@ You can find more details about each feature on the [documentation](https://docs
 # Install dependencies
 yarn install
 
-# Init the local database
-yarn db:push
-
-# Inject users
-yarn db:seed
+# Init the local mocks database and seed users
+yarn db:push && yarn db:seed
 ```
 
 ## Development
