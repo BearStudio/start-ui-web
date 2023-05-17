@@ -18,7 +18,7 @@
     "build:info": "node .build-info.generate.js",
     "start": "next start",
     "pretty": "prettier -w .",
-    "lint": "next lint && tsc --noEmit",
+    "lint": "SKIP_ENV_VALIDATIONS=true next lint && tsc --noEmit",
     "storybook": "yarn build:info && storybook dev -p 6006",
     "storybook:build": "yarn build:info && storybook build && mv ./storybook-static ./public/storybook",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",

@@ -1,4 +1,6 @@
-require('./.env.validator');
+if (!process.env.SKIP_ENV_VALIDATIONS) {
+  require('./.env.validator');
+}
 
 /**
  * Don't be scared of the generics here.
