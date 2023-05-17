@@ -27,11 +27,10 @@ Then just go to the created folder:
 cd myApp
 ```
 
-Make sure to duplicate the `.env.example` file to a new `.env` file, and update the environment variables according to your needs.
-
-You can now init the local database and start the dev server.
-
 ```bash
+# Duplicate the .env.example file to a new .env file (update variables)
+cp .env.example .env
+
 # Init the local mocks database and seed users
 yarn db:push && yarn db:seed
 
@@ -82,11 +81,19 @@ You can find more details about each feature on the [documentation](https://docs
 
 ## Installation
 
-```bash
-# Install dependencies
-yarn install
+1. Duplicate the `.env.example` file to a new `.env` file, and update the environment variables
 
-# Init the local mocks database and seed users
+```bash
+cp .env.example .env
+```
+
+2. Install dependencies
+```bash
+yarn install
+```
+
+3. Init the local mocks database and seed users
+```bash
 yarn db:push && yarn db:seed
 ```
 
