@@ -59,6 +59,7 @@
     "react-currency-input-field": "3.6.10",
     "react-day-picker": "7.4.10",
     "react-dom": "18.2.0",
+    "react-error-boundary": "4.0.4",
     "react-i18next": "12.2.2",
     "react-icons": "4.8.0",
     "react-popper": "2.3.0",

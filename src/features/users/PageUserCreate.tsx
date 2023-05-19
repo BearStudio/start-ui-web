@@ -53,11 +53,11 @@ export default function PageUserCreate() {
     },
   });
 
-  const submitCreateUser = async (values: TODO) => {
+  const submitCreateUser = (values: TODO) => {
     const newUser = {
       ...values,
     };
-    await createUser.mutate(newUser);
+    createUser.mutate(newUser);
   };
 
   return (
