@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useTranslation } from 'react-i18next';
 
 import { AuthProvider } from '@/features/auth/AuthContext';
@@ -35,6 +36,7 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
           </ChakraProvider>
         </CacheProvider>
       </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };
