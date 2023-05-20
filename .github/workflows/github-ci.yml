@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: Lint and Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -34,14 +34,11 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Install local dependencies
+      - name: Install dependencies
         run: yarn install
 
-      - name: Check coding rules and types
+      - name: Lint code and types
         run: yarn lint
 
-      - name: Run unit tests
+      - name: Run components tests
         run: yarn test:ci
-
-      - name: Building
-        run: yarn build

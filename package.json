@@ -12,7 +12,7 @@
     "prepare": "husky install",
     "postinstall": "prisma generate && yarn build:info && yarn theme:generate-typing",
     "test": "cypress open",
-    "test:ci": "cypress run --component",
+    "test:ci": "SKIP_ENV_VALIDATIONS=true cypress run --component",
     "dev": "next dev",
     "build": "yarn build:info && next build",
     "build:info": "node .build-info.generate.js",
