@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
@@ -15,10 +17,16 @@ import { LoginModalInterceptor } from '@/features/auth/LoginModalInterceptor';
 import PageLogin from '@/features/auth/PageLogin';
 import PageLogout from '@/features/auth/PageLogout';
 import PageDashboard from '@/features/dashboard/PageDashboard';
-import PageUserCreate from '@/features/users/PageUserCreate';
-import PageUserUpdate from '@/features/users/PageUserUpdate';
 import PageUsers from '@/features/users/PageUsers';
 import { Layout } from '@/layout/Layout';
+
+const PageUserCreate = React.lazy(
+  () => import('@/features/users/PageUserCreate')
+);
+
+const PageUserUpdate = React.lazy(
+  () => import('@/features/users/PageUserUpdate')
+);
 
 export const routes = [
   {
