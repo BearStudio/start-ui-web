@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
-import { FieldProps, useField, useForm } from '@formiz/core';
+import { FieldProps, useField, useFormContext } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 
 import { DayPicker } from '@/components/DayPicker';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldDayPickerProps = FieldProps &
+export type FieldDayPickerProps<FormattedValue = Date> = FieldProps<
+  Date,
+  FormattedValue
+> &
   FormGroupProps & {
     invalidMessage?: string;
   };
 
-export const FieldDayPicker = (props: FieldDayPickerProps) => {
+export const FieldDayPicker = <FormattedValue = Date,>(
+  props: FieldDayPickerProps<FormattedValue>
+) => {
   const { t } = useTranslation(['components']);
   const { invalidMessage, ...fieldProps } = props;
-  const { invalidateFields } = useForm({ subscribe: false });
+  const { setErrors } = useFormContext();
   const {
     errorMessage,
     id,
@@ -25,14 +30,8 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     value,
     resetKey,
     otherProps,
-  } = useField({
-    debounce: 0,
-    ...fieldProps,
-  });
-  const { children, label, placeholder, helper, ...rest } = otherProps as Omit<
-    FieldDayPickerProps,
-    keyof FieldProps
-  >;
+  } = useField(fieldProps);
+  const { children, label, placeholder, helper, ...rest } = otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
@@ -55,9 +54,9 @@ export const FieldDayPicker = (props: FieldDayPickerProps) => {
     date: Date | null | undefined,
     isValidDate: boolean
   ) => {
-    setValue(date);
+    setValue(date ?? null);
     if (!isValidDate) {
-      invalidateFields({
+      setErrors({
         [props.name]:
           invalidMessage ?? t('components:fieldDayPicker.invalidMessage'),
       });

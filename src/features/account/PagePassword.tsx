@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +13,6 @@ import { useUpdatePassword } from '@/features/account/service';
 
 export default function PagePassword() {
   const { t } = useTranslation(['account']);
-  const changePasswordForm = useForm();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -22,7 +21,7 @@ export default function PagePassword() {
     onError: (error) => {
       const { title } = error?.response?.data || {};
       if (title === 'Incorrect password') {
-        changePasswordForm.invalidateFields({
+        changePasswordForm.setErrors({
           currentPassword: t('account:data.currentPassword.incorrect'),
         });
         return;
@@ -40,18 +39,26 @@ export default function PagePassword() {
     },
   });
 
-  const submitUpdatePassword = async (values: TODO) => {
-    const { currentPassword, newPassword } = values;
-    await updatePassword.mutate({ currentPassword, newPassword });
-  };
+  const changePasswordForm = useForm<TODO>({
+    id: 'password-form',
+    onValidSubmit: (values) => {
+      const { currentPassword, newPassword } = values;
+      updatePassword.mutate({ currentPassword, newPassword });
+    },
+  });
+  const values = useFormFields({
+    connect: changePasswordForm,
+    fields: ['newPassword'] as const,
+    selector: (field) => field.value,
+  });
 
   const passwordValidations = [
     {
-      rule: isMinLength(4),
+      handler: isMinLength(4),
       message: t('account:data.password.tooShort', { min: 4 }),
     },
     {
-      rule: isMaxLength(50),
+      handler: isMaxLength(50),
       message: t('account:data.password.tooLong', { max: 50 }),
     },
   ];
@@ -62,11 +69,7 @@ export default function PagePassword() {
         <Heading size="md" mb="4">
           {t('account:password.title')}
         </Heading>
-        <Formiz
-          id="password-form"
-          onValidSubmit={submitUpdatePassword}
-          connect={changePasswordForm}
-        >
+        <Formiz connect={changePasswordForm}>
           <form noValidate onSubmit={changePasswordForm.submit}>
             <Stack
               direction="column"
@@ -101,10 +104,9 @@ export default function PagePassword() {
                 validations={[
                   ...passwordValidations,
                   {
-                    rule: (value) =>
-                      value === changePasswordForm?.values?.newPassword,
+                    handler: (value) => value === values?.newPassword,
                     message: t('account:data.confirmNewPassword.notEqual'),
-                    deps: [changePasswordForm?.values?.newPassword],
+                    deps: [values?.newPassword],
                   },
                 ]}
               />

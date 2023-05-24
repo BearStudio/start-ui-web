@@ -18,7 +18,6 @@ export const LoginForm = ({
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
-  const form = useForm({ subscribe: 'form' });
   const toastError = useToastError();
   const queryCache = useQueryClient();
 
@@ -35,14 +34,14 @@ export const LoginForm = ({
     },
   });
 
+  const form = useForm<{ username: string; password: string }>({
+    id: 'login-form',
+    onValidSubmit: (values) => login.mutate(values),
+  });
+
   return (
     <Box {...rest}>
-      <Formiz
-        id="login-form"
-        autoForm
-        onValidSubmit={login.mutate}
-        connect={form}
-      >
+      <Formiz autoForm connect={form}>
         <Stack spacing="4">
           <FieldInput
             name="username"

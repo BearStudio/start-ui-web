@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
 import { GroupBase } from 'react-select';
@@ -7,25 +7,23 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
 export type FieldSelectProps<
-  Option,
-  IsMulti extends boolean = false,
+  Option extends { label: ReactNode; value: unknown },
   Group extends GroupBase<Option> = GroupBase<Option>
-> = FieldProps &
+> = FieldProps<Option['value']> &
   FormGroupProps & {
     placeholder?: string;
     size?: 'sm' | 'md' | 'lg';
     options?: Option[];
     isClearable?: boolean;
     isSearchable?: boolean;
-    selectProps?: SelectProps<Option, IsMulti, Group>;
+    selectProps?: SelectProps<Option, false, Group>;
   };
 
 export const FieldSelect = <
-  Option,
-  IsMulti extends boolean = false,
+  Option extends { label: ReactNode; value: unknown },
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: FieldSelectProps<Option, IsMulti, Group>
+  props: FieldSelectProps<Option, Group>
 ) => {
   const {
     errorMessage,
@@ -37,7 +35,7 @@ export const FieldSelect = <
     setValue,
     value,
     otherProps,
-  } = useField({ debounce: 0, ...props });
+  } = useField(props);
   const { required } = props;
   const {
     children,
@@ -51,10 +49,7 @@ export const FieldSelect = <
     size = 'md',
     selectProps,
     ...rest
-  } = otherProps as Omit<
-    FieldSelectProps<Option, IsMulti, Group>,
-    keyof FieldProps
-  >;
+  } = otherProps;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
 
@@ -77,9 +72,7 @@ export const FieldSelect = <
     <FormGroup {...formGroupProps}>
       <Select
         id={id}
-        value={
-          options?.find((option: TODO) => option.value === value) ?? undefined
-        }
+        value={options?.find((option) => option.value === value) ?? undefined}
         onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -16,7 +16,6 @@ export default function PageResetPasswordConfirm() {
 
   const [searchParams] = useSearchParams();
 
-  const resetPasswordFinishForm = useForm();
   const navigate = useNavigate();
 
   const toastSuccess = useToastSuccess();
@@ -41,20 +40,30 @@ export default function PageResetPasswordConfirm() {
     },
   });
 
-  const submitResetPasswordFinish = async (values: TODO) => {
-    await resetPasswordFinish.mutate({
-      key: searchParams?.get('key') ?? 'KEY_NOT_DEFINED',
+  const submitResetPasswordFinish = (values: TODO) => {
+    resetPasswordFinish.mutate({
+      key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
       newPassword: values.password,
     });
   };
 
+  const resetPasswordFinishForm = useForm({
+    id: 'reset-password-finish-form',
+    onValidSubmit: submitResetPasswordFinish,
+  });
+  const values = useFormFields({
+    connect: resetPasswordFinishForm,
+    fields: ['password'] as const,
+    selector: (field) => field.value,
+  });
+
   const passwordValidations = [
     {
-      rule: isMinLength(4),
+      handler: isMinLength(4),
       message: t('account:data.password.tooShort', { min: 4 }),
     },
     {
-      rule: isMaxLength(50),
+      handler: isMaxLength(50),
       message: t('account:data.password.tooLong', { max: 50 }),
     },
   ];
@@ -72,11 +81,7 @@ export default function PageResetPasswordConfirm() {
           <Heading size="lg" mb="4">
             {t('account:resetPassword.title')}
           </Heading>
-          <Formiz
-            id="reset-password-finish-form"
-            onValidSubmit={submitResetPasswordFinish}
-            connect={resetPasswordFinishForm}
-          >
+          <Formiz connect={resetPasswordFinishForm}>
             <form noValidate onSubmit={resetPasswordFinishForm.submit}>
               <Stack spacing="4">
                 <FieldInput
@@ -96,10 +101,9 @@ export default function PageResetPasswordConfirm() {
                   validations={[
                     ...passwordValidations,
                     {
-                      rule: (value) =>
-                        value === resetPasswordFinishForm?.values?.password,
+                      handler: (value) => value === values?.password,
                       message: t('account:data.confirmNewPassword.notEqual'),
-                      deps: [resetPasswordFinishForm?.values?.password],
+                      deps: [values?.password],
                     },
                   ]}
                 />

@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
-import { Formiz } from '@formiz/core';
+import { Formiz, useForm } from '@formiz/core';
 
 import { FieldRadios } from './index';
 
@@ -13,8 +13,10 @@ export const Default = () => {
     { label: 'Blue', value: 'blue' },
   ];
 
+  const form = useForm({ onSubmit: console.log });
+
   return (
-    <Formiz autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldRadios
           name="FieldRadios"

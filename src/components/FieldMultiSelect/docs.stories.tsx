@@ -1,5 +1,5 @@
 import { Box, Button, Code, Stack } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
 
 import { FieldMultiSelect } from '.';
 
@@ -14,7 +14,11 @@ const options = [
 ];
 
 export const Default = () => {
-  const form = useForm({ subscribe: true });
+  const form = useForm();
+  const values = useFormFields({
+    connect: form,
+    selector: (field) => field.value,
+  });
 
   return (
     <Formiz autoForm connect={form}>
@@ -26,7 +30,7 @@ export const Default = () => {
           options={options}
           required="Required"
         />
-        <Code>{JSON.stringify(form.values, null, 2)}</Code>
+        <Code>{JSON.stringify(values, null, 2)}</Code>
         <Box>
           <Button type="submit">Submit</Button>
         </Box>
@@ -36,7 +40,11 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm({ subscribe: true });
+  const form = useForm();
+  const values = useFormFields({
+    connect: form,
+    selector: (field) => field.value,
+  });
 
   return (
     <Formiz autoForm connect={form}>
@@ -45,12 +53,12 @@ export const DefaultValue = () => {
           name="mySelect"
           label="Label"
           helper="Helper"
-          defaultValue={options[0]?.value}
+          defaultValue={options[0]?.value ? [options[0]?.value] : undefined}
           options={options}
           required="Required"
         />
 
-        <Code>{JSON.stringify(form.values, null, 2)}</Code>
+        <Code>{JSON.stringify(values, null, 2)}</Code>
         <Box>
           <Button type="submit">Submit</Button>
         </Box>

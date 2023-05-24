@@ -42,15 +42,15 @@ export const UserForm = () => {
         required={t('users:data.login.required') as string}
         validations={[
           {
-            rule: isMinLength(2),
+            handler: isMinLength(2),
             message: t('users:data.login.tooShort', { min: 2 }),
           },
           {
-            rule: isMaxLength(50),
+            handler: isMaxLength(50),
             message: t('users:data.login.tooLong', { max: 50 }),
           },
           {
-            rule: isPattern(
+            handler: isPattern(
               '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
             ),
             message: t('users:data.login.invalid'),
@@ -67,15 +67,15 @@ export const UserForm = () => {
         required={t('users:data.email.required') as string}
         validations={[
           {
-            rule: isMinLength(5),
+            handler: isMinLength(5),
             message: t('users:data.email.tooShort', { min: 5 }),
           },
           {
-            rule: isMaxLength(254),
+            handler: isMaxLength(254),
             message: t('users:data.email.tooLong', { min: 254 }),
           },
           {
-            rule: isEmail(),
+            handler: isEmail(),
             message: t('users:data.email.invalid'),
           },
         ]}

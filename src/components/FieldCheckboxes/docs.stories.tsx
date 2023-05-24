@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Box, Button, Divider, Flex, Stack } from '@chakra-ui/react';
-import { Formiz } from '@formiz/core';
+import { Formiz, useForm } from '@formiz/core';
 
 import {
   FieldCheckboxes,
@@ -19,9 +19,10 @@ export const Default = () => {
     { label: 'Green', value: 'green' },
     { label: 'Blue', value: 'blue' },
   ];
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           name="colors"
@@ -39,9 +40,10 @@ export const Default = () => {
 
 export const IsDisabled = () => {
   const options = [{ value: 'Red' }, { value: 'Green' }, { value: 'Blue' }];
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           name="colors"
@@ -63,9 +65,10 @@ export const WithDefaultValues = () => {
     { label: 'Green', value: 'green' },
     { label: 'Blue', value: 'blue' },
   ];
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           name="colors"
@@ -83,8 +86,9 @@ export const WithDefaultValues = () => {
 };
 
 export const WithCustomRender = () => {
+  const form = useForm({ onSubmit: console.log });
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           name="colors"
@@ -115,9 +119,10 @@ export const WithItemKey = () => {
     { id: 2, color: 'Green' },
     { id: 3, color: 'Blue' },
   ];
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           itemKey="id"
@@ -145,9 +150,10 @@ export const WithItemKey = () => {
 
 export const MountingFields = () => {
   const [isMounted, setIsMounted] = useState<boolean>(true);
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes name="colors" label="Colors" required="Required">
           <Stack>
@@ -175,8 +181,9 @@ export const MountingFields = () => {
 };
 
 export const WithNestedCheckboxGroup = () => {
+  const form = useForm({ onSubmit: console.log });
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes
           name="numbers"
@@ -225,9 +232,10 @@ export const LargeTest = () => {
   const options = Array.from({ length: 100 }).map((_, index) => ({
     value: index + 1,
   }));
+  const form = useForm({ onSubmit: console.log });
 
   return (
-    <Formiz onChange={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={4}>
         <FieldCheckboxes name="colors" label="Colors" required="Required">
           <Stack spacing={4}>

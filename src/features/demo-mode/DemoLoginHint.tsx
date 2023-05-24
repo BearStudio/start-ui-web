@@ -5,10 +5,10 @@ import {
   AlertTitle,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useForm } from '@formiz/core';
+import { useFormContext } from '@formiz/core';
 
 export const DemoLoginHint = () => {
-  const form = useForm({ subscribe: 'form' });
+  const form = useFormContext();
   const mockedUsername = 'admin';
   const mockedPassword = 'admin';
 
@@ -25,7 +25,7 @@ export const DemoLoginHint = () => {
           type="button"
           fontWeight="bold"
           onClick={() =>
-            form.setFieldsValues({
+            form.setValues({
               username: mockedUsername,
               password: mockedPassword,
             })

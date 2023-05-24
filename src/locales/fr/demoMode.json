@@ -1,0 +1,5 @@
+{
+  "title": "Mode Démo",
+  "registerHint": "Il s'agit d'une démo en lecture seule, mais vous pouvez vous connecter avec le compte <button>{{credentials}}</button>. N'oubliez pas qu'aucune modification ne peut être apportée. Profitez des fonctionnalités !",
+  "loginHint": "Il s'agit d'une démo en lecture seule, mais vous pouvez vous connecter avec le compte <button>{{credentials}}</button>. N'oubliez pas qu'aucune modification ne peut être apportée. Profitez des fonctionnalités !"
+}

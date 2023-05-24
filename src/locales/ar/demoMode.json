@@ -1,0 +1,5 @@
+{
+  "title": "Demo Mode",
+  "registerHint": "This is a read-only demo, but you can log in with the <button>{{credentials}}</button> account. Just remember, no changes can be made. Enjoy the features!",
+  "loginHint": "This is a read-only demo, but you can log in with the <button>{{credentials}}</button> account. Just remember, no changes can be made. Enjoy the features!"
+}
