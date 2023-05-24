@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { activateAccount } from '@/app/api/jhipster-mocks/account/service';
@@ -23,6 +24,6 @@ export const GET = apiMethod({
       return badRequestResponse();
     }
 
-    return new Response('ok', { status: 200 });
+    return new NextResponse('ok', { status: 200 });
   },
 });

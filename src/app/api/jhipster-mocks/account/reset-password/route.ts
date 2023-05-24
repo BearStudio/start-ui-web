@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { resetPasswordInit } from '@/app/api/jhipster-mocks/account/service';
@@ -19,6 +20,6 @@ export const POST = apiMethod({
     }
 
     await resetPasswordInit(bodyParsed.data);
-    return new Response('ok', { status: 200 });
+    return new NextResponse('ok', { status: 200 });
   },
 });

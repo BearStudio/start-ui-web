@@ -34,6 +34,6 @@ export const DELETE = apiMethod({
     }
 
     await removeUserByLogin(safeParams.data.login, user.id);
-    return new Response('ok', { status: 200 });
+    return new NextResponse('ok', { status: 200 });
   },
 });
