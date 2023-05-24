@@ -52,7 +52,7 @@ export default function PageResetPasswordRequest() {
   });
   const values = useFormFields({
     connect: resetPasswordInitForm,
-    fields: ['email'],
+    fields: ['email'] as const,
     selector: (field) => field.value,
   });
 

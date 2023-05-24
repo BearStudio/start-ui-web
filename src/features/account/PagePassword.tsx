@@ -48,7 +48,7 @@ export default function PagePassword() {
   });
   const values = useFormFields({
     connect: changePasswordForm,
-    fields: ['newPassword'],
+    fields: ['newPassword'] as const,
     selector: (field) => field.value,
   });
 

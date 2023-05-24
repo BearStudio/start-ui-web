@@ -68,9 +68,10 @@ export default function PageRegister() {
     id: 'register-form',
     onValidSubmit: (values) => createUser.mutate(values),
   });
+
   const values = useFormFields({
     connect: form,
-    fields: ['langKey'],
+    fields: ['langKey'] as const,
     selector: (field) => field.value,
   });
 
