@@ -15,7 +15,7 @@ import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { Trans, useTranslation } from 'react-i18next';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
@@ -86,7 +86,7 @@ export default function PageResetPasswordRequest() {
           </Alert>
           <Center mt="8">
             <Button
-              as={RouterLink}
+              as={Link}
               to="/login"
               variant="link"
               color="brand.500"
@@ -129,7 +129,7 @@ export default function PageResetPasswordRequest() {
               <Flex>
                 <Button
                   leftIcon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
-                  as={RouterLink}
+                  as={Link}
                   to="/login"
                   variant="link"
                 >

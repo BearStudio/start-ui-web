@@ -20,15 +20,15 @@ import {
   isPattern,
 } from '@formiz/validations';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { useCreateAccount } from '@/features/account/service';
-import { User } from '@/features/users/types';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
+import { User } from '@/features/users/types';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Language } from '@/lib/i18n/constants';
 
@@ -108,7 +108,7 @@ export default function PageRegister() {
           </Alert>
           <Center mt="8">
             <Button
-              as={RouterLink}
+              as={Link}
               to="/login"
               variant="link"
               color="brand.500"
@@ -217,7 +217,7 @@ export default function PageRegister() {
             </Stack>
           </Box>
           <Center mt="8">
-            <Button as={RouterLink} to="/login" variant="link">
+            <Button as={Link} to="/login" variant="link">
               {t('account:register.actions.alreadyHaveAnAccount')}{' '}
               <Box
                 as="strong"

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import dynamic from 'next/dynamic';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
@@ -9,7 +10,6 @@ import PageProfile from '@/features/account/PageProfile';
 import PageRegister from '@/features/account/PageRegister';
 import PageResetPasswordConfirm from '@/features/account/PageResetPasswordConfirm';
 import PageResetPasswordRequest from '@/features/account/PageResetPasswordRequest';
-import PageApiDocumentation from '@/features/api-documentation/PageApiDocumentation';
 import { GuardAdmin } from '@/features/auth/GuardAdmin';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 import { GuardPublicOnly } from '@/features/auth/GuardPublicOnly';
@@ -17,15 +17,32 @@ import { LoginModalInterceptor } from '@/features/auth/LoginModalInterceptor';
 import PageLogin from '@/features/auth/PageLogin';
 import PageLogout from '@/features/auth/PageLogout';
 import PageDashboard from '@/features/dashboard/PageDashboard';
-import PageUsers from '@/features/users/PageUsers';
 import { Layout } from '@/layout/Layout';
+import { Loader } from '@/layout/Loader';
 
-const PageUserCreate = React.lazy(
-  () => import('@/features/users/PageUserCreate')
+const PageApiDocumentation = dynamic(
+  () => import('@/features/api-documentation/PageApiDocumentation'),
+  {
+    loading: () => <Loader />,
+  }
 );
 
-const PageUserUpdate = React.lazy(
-  () => import('@/features/users/PageUserUpdate')
+const PageUsers = dynamic(() => import('@/features/users/PageUsers'), {
+  loading: () => <Loader />,
+});
+
+const PageUserCreate = dynamic(
+  () => import('@/features/users/PageUserCreate'),
+  {
+    loading: () => <Loader />,
+  }
+);
+
+const PageUserUpdate = dynamic(
+  () => import('@/features/users/PageUserUpdate'),
+  {
+    loading: () => <Loader />,
+  }
 );
 
 export const routes = [
