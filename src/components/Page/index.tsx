@@ -97,7 +97,7 @@ export const PageTopBar = ({
         <PageContainer>
           <HStack spacing="4">
             {showBack && (
-              <Box ms={{ base: 0, lg: '-3.5rem' }}>
+              <Box>
                 <IconButton
                   aria-label="Go Back"
                   icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}

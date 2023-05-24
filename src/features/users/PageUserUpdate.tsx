@@ -85,7 +85,7 @@ export default function PageUserUpdate() {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => navigate(-1)}>
+      <PageTopBar showBack onBack={() => navigate('/admin/users')}>
         <HStack spacing="4">
           <Box flex="1">
             {user.isLoading || user.isError ? (
@@ -120,7 +120,7 @@ export default function PageUserUpdate() {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => navigate(-1)}>
+                <Button onClick={() => navigate('/admin/users')}>
                   {t('common:actions.cancel')}
                 </Button>
                 <Button

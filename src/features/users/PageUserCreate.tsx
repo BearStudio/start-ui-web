@@ -66,7 +66,7 @@ export default function PageUserCreate() {
     <Page containerSize="md" isFocusMode>
       <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => navigate(-1)}>
+          <PageTopBar showBack onBack={() => navigate('/admin/users')}>
             <Heading size="md">{t('users:create.title')}</Heading>
           </PageTopBar>
           <PageContent>
@@ -74,7 +74,7 @@ export default function PageUserCreate() {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => navigate(-1)}>
+              <Button onClick={() => navigate('/admin/users')}>
                 {t('common:actions.cancel')}
               </Button>
               <Button
