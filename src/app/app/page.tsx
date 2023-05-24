@@ -8,7 +8,7 @@ import { Loader } from '@/layout/Loader';
 
 import { routes } from './routes';
 
-export default function Page() {
+export default function AppPage() {
   const [router, setRouter] =
     useState<ReturnType<typeof createBrowserRouter>>();
 
