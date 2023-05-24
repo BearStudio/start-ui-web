@@ -53,7 +53,7 @@ export default function PageResetPasswordConfirm() {
   });
   const values = useFormFields({
     connect: resetPasswordFinishForm,
-    fields: ['password'],
+    fields: ['password'] as const,
     selector: (field) => field.value,
   });
 

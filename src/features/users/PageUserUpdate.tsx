@@ -22,20 +22,19 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { UserForm } from '@/features/users/UserForm';
+import { UserStatus } from '@/features/users/UserStatus';
 import { useUser, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
-
-import { UserForm } from './UserForm';
-import { UserStatus } from './UserStatus';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
 
-  const { login } = useParams();
+  const params = useParams();
   const navigate = useNavigate();
-  const user = useUser(login, {
+  const user = useUser(params?.login?.toString(), {
     refetchOnWindowFocus: false,
-    enabled: !!login,
+    enabled: !!params?.login,
   });
 
   const toastSuccess = useToastSuccess();

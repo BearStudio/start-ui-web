@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -18,9 +19,13 @@ export const LoginForm = ({
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
   const toastError = useToastError();
+  const queryCache = useQueryClient();
 
   const login = useLogin({
-    onSuccess,
+    onSuccess: () => {
+      queryCache.clear();
+      onSuccess();
+    },
     onError: (error) => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),
