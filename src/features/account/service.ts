@@ -11,7 +11,7 @@ import {
 import Axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import { Account } from '@/features/account/types';
+import { User, zUser } from '@/features/users/schema';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 export const accountKeys = createQueryKeys('accountService', {
@@ -21,141 +21,115 @@ type AccountKeys = inferQueryKeys<typeof accountKeys>;
 
 export const useAccount = (
   config: UseQueryOptions<
-    Account,
-    AxiosError,
-    Account,
+    User,
+    AxiosError<ApiErrorResponse>,
+    User,
     AccountKeys['account']['queryKey']
   > = {}
 ) => {
   const { i18n } = useTranslation();
-  const { data: account, ...rest } = useQuery(
+  const { data, ...rest } = useQuery(
     accountKeys.account.queryKey,
-    (): Promise<Account> => Axios.get('/account'),
+    async () => {
+      const response = await Axios.get('/account');
+      return zUser().parse(response);
+    },
     {
-      onSuccess: (data) => {
-        i18n.changeLanguage(data?.langKey);
-
-        if (config?.onSuccess) {
-          config?.onSuccess(data);
-        }
-      },
       ...config,
+      onSuccess: (data, ...args) => {
+        i18n.changeLanguage(data?.langKey);
+        config?.onSuccess?.(data, ...args);
+      },
     }
   );
-  const isAdmin = !!account?.authorities?.includes('ROLE_ADMIN');
-  return { account, isAdmin, ...rest };
-};
-
-type AccountError = {
-  title: string;
-  errorKey: 'userexists' | 'emailexists';
+  const isAdmin = !!data?.authorities?.includes('ROLE_ADMIN');
+  return { data, isAdmin, ...rest };
 };
 
 export const useCreateAccount = (
   config: UseMutationOptions<
-    Account,
-    AxiosError<AccountError>,
-    Pick<Account, 'login' | 'email' | 'langKey'> & { password: string }
+    void,
+    AxiosError<
+      ApiErrorResponse & {
+        errorKey: 'userexists' | 'emailexists';
+      }
+    >,
+    Pick<User, 'login' | 'email' | 'langKey'> & { password: string }
   > = {}
 ) => {
-  return useMutation(
-    ({
-      login,
-      email,
-      password,
-      langKey = DEFAULT_LANGUAGE_KEY,
-    }): Promise<Account> =>
-      Axios.post('/register', { login, email, password, langKey }),
-    {
-      ...config,
-    }
-  );
-};
-
-type UseActiveAccountVariables = {
-  key: string;
+  return useMutation(async (payload) => {
+    await Axios.post('/register', {
+      ...payload,
+      langKey: payload.langKey ?? DEFAULT_LANGUAGE_KEY,
+    });
+  }, config);
 };
 
 export const useActivateAccount = (
   config: UseMutationOptions<
     void,
-    AxiosError<TODO>,
-    UseActiveAccountVariables
+    AxiosError<ApiErrorResponse>,
+    {
+      key: string;
+    }
   > = {}
 ) => {
-  return useMutation(
-    ({ key }): Promise<void> => Axios.get(`/activate?key=${key}`),
-    {
-      ...config,
-    }
-  );
+  return useMutation(async ({ key }) => {
+    await Axios.get(`/activate?key=${key}`);
+  }, config);
 };
 
 export const useUpdateAccount = (
-  config: UseMutationOptions<Account, AxiosError<TODO>, Account> = {}
+  config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, User> = {}
 ) => {
   const { i18n } = useTranslation();
   return useMutation(
-    (account): Promise<Account> => Axios.post('/account', account),
+    async (account) => {
+      await Axios.post('/account', account);
+    },
     {
-      onMutate: (data) => {
-        i18n.changeLanguage(data?.langKey);
-
-        if (config?.onMutate) {
-          config.onMutate(data);
-        }
-      },
       ...config,
+      onMutate: (data, ...args) => {
+        i18n.changeLanguage(data?.langKey);
+        config.onMutate?.(data, ...args);
+      },
     }
   );
 };
 
 export const useResetPasswordInit = (
-  config: UseMutationOptions<void, AxiosError<TODO>, string> = {}
+  config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, string> = {}
 ) => {
-  return useMutation(
-    (email): Promise<void> =>
-      Axios.post('/account/reset-password/init', email, {
-        headers: { 'Content-Type': 'text/plain' },
-      }),
-    {
-      ...config,
-    }
-  );
-};
-
-type UseResetPasswordFinishVariables = {
-  key: string;
-  newPassword: string;
+  return useMutation(async (email) => {
+    await Axios.post('/account/reset-password/init', email, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }, config);
 };
 
 export const useResetPasswordFinish = (
   config: UseMutationOptions<
     void,
-    AxiosError<TODO>,
-    UseResetPasswordFinishVariables
+    AxiosError<ApiErrorResponse>,
+    {
+      key: string;
+      newPassword: string;
+    }
   > = {}
 ) => {
-  return useMutation(
-    (payload): Promise<void> =>
-      Axios.post('/account/reset-password/finish', payload),
-    {
-      ...config,
-    }
-  );
+  return useMutation(async (payload) => {
+    await Axios.post('/account/reset-password/finish', payload);
+  }, config);
 };
 
 export const useUpdatePassword = (
   config: UseMutationOptions<
     void,
-    AxiosError<TODO>,
+    AxiosError<ApiErrorResponse>,
     { currentPassword: string; newPassword: string }
   > = {}
 ) => {
-  return useMutation(
-    (payload): Promise<void> => Axios.post('/account/change-password', payload),
-    {
-      ...config,
-    }
-  );
+  return useMutation(async (payload) => {
+    await Axios.post('/account/change-password', payload);
+  }, config);
 };

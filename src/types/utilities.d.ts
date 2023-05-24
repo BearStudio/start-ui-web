@@ -16,3 +16,11 @@ type ExplicitAny = any;
  * with the `as` props.
  */
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+
+/**
+ * Api Error Response
+ */
+type ApiErrorResponse = {
+  title?: string;
+  errorKey?: string;
+};

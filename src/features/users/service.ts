@@ -11,11 +11,10 @@ import {
 } from '@tanstack/react-query';
 import Axios, { AxiosError } from 'axios';
 
-import { User, UserList } from '@/features/users/types';
+import { User, UserList, zUser, zUserList } from '@/features/users/schema';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
-type UserMutateError = {
-  title: string;
+type UserMutateError = ApiErrorResponse & {
   errorKey: 'userexists' | 'emailexists';
 };
 
@@ -31,15 +30,19 @@ export const useUserList = (
   { page = 0, size = 10 } = {},
   config: UseQueryOptions<
     UserList,
-    AxiosError,
+    AxiosError<ApiErrorResponse>,
     UserList,
     UsersKeys['users']['queryKey']
   > = {}
 ) => {
   const result = useQuery(
     usersKeys.users({ page, size }).queryKey,
-    (): Promise<UserList> =>
-      Axios.get(USERS_BASE_URL, { params: { page, size, sort: 'id,desc' } }),
+    async () => {
+      const response = await Axios.get(USERS_BASE_URL, {
+        params: { page, size, sort: 'id,desc' },
+      });
+      return zUserList().parse(response);
+    },
     { keepPreviousData: true, ...config }
   );
 
@@ -62,14 +65,17 @@ export const useUser = (
   userLogin?: string,
   config: UseQueryOptions<
     User,
-    AxiosError,
+    AxiosError<ApiErrorResponse>,
     User,
     UsersKeys['user']['queryKey']
   > = {}
 ) => {
   const result = useQuery(
     usersKeys.user({ login: userLogin }).queryKey,
-    (): Promise<User> => Axios.get(`${USERS_BASE_URL}/${userLogin}`),
+    async () => {
+      const response = await Axios.get(`${USERS_BASE_URL}/${userLogin}`);
+      return zUser().parse(response);
+    },
     {
       enabled: !!userLogin,
       ...config,
@@ -86,34 +92,40 @@ export const useUserUpdate = (
   config: UseMutationOptions<User, AxiosError<UserMutateError>, User> = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation((payload) => Axios.put(USERS_BASE_URL, payload), {
-    ...config,
-    onSuccess: (data, payload, ...rest) => {
-      queryClient.cancelQueries(usersKeys.users._def);
-      queryClient
-        .getQueryCache()
-        .findAll(usersKeys.users._def)
-        .forEach(({ queryKey }) => {
-          queryClient.setQueryData<UserList | undefined>(
-            queryKey,
-            (cachedData) => {
-              if (!cachedData) return;
-              return {
-                ...cachedData,
-                content: (cachedData.content || []).map((user) =>
-                  user.id === data.id ? data : user
-                ),
-              };
-            }
-          );
-        });
-      queryClient.invalidateQueries(usersKeys.users._def);
-      queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
-      if (config.onSuccess) {
-        config.onSuccess(data, payload, ...rest);
-      }
+  return useMutation(
+    async (payload) => {
+      const response = await Axios.put(USERS_BASE_URL, payload);
+      return zUser().parse(response);
     },
-  });
+    {
+      ...config,
+      onSuccess: (data, payload, ...args) => {
+        queryClient.cancelQueries(usersKeys.users._def);
+        queryClient
+          .getQueryCache()
+          .findAll(usersKeys.users._def)
+          .forEach(({ queryKey }) => {
+            queryClient.setQueryData<UserList | undefined>(
+              queryKey,
+              (cachedData) => {
+                if (!cachedData) return;
+                return {
+                  ...cachedData,
+                  content: (cachedData.content || []).map((user) =>
+                    user.id === data.id ? data : user
+                  ),
+                };
+              }
+            );
+          });
+        queryClient.invalidateQueries(usersKeys.users._def);
+        queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
+        if (config.onSuccess) {
+          config.onSuccess(data, payload, ...args);
+        }
+      },
+    }
+  );
 };
 
 export const useUserCreate = (
@@ -128,11 +140,13 @@ export const useUserCreate = (
 ) => {
   const queryClient = useQueryClient();
   return useMutation(
-    ({ langKey = DEFAULT_LANGUAGE_KEY, ...payload }) =>
-      Axios.post('/admin/users', {
+    async ({ langKey = DEFAULT_LANGUAGE_KEY, ...payload }) => {
+      const response = await Axios.post('/admin/users', {
         langKey,
         ...payload,
-      }),
+      });
+      return zUser().parse(response);
+    },
     {
       ...config,
       onSuccess: (...args) => {
@@ -143,15 +157,18 @@ export const useUserCreate = (
   );
 };
 
-type UserWithLoginOnly = Pick<User, 'login'>;
-
 export const useUserRemove = (
-  config: UseMutationOptions<void, unknown, UserWithLoginOnly> = {}
+  config: UseMutationOptions<
+    void,
+    AxiosError<ApiErrorResponse>,
+    Pick<User, 'login'>
+  > = {}
 ) => {
   const queryClient = useQueryClient();
   return useMutation(
-    (user: UserWithLoginOnly): Promise<void> =>
-      Axios.delete(`/admin/users/${user.login}`),
+    async (user) => {
+      await Axios.delete(`/admin/users/${user.login}`);
+    },
     {
       ...config,
       onSuccess: (...args) => {

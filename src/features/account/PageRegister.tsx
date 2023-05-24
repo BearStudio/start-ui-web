@@ -28,7 +28,7 @@ import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { useCreateAccount } from '@/features/account/service';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
-import { User } from '@/features/users/types';
+import { User } from '@/features/users/schema';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Language } from '@/lib/i18n/constants';
 
