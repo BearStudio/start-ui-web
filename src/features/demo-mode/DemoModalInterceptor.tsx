@@ -20,10 +20,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Axios, { AxiosError } from 'axios';
-import { useTranslation } from 'react-i18next';
 
 export const DemoModalInterceptor = () => {
-  const { t } = useTranslation(['demoMode']);
   const demoModal = useDisclosure();
 
   const openDemoModal = demoModal.onOpen;
