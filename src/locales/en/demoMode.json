@@ -1,0 +1,10 @@
+{
+  "title": "Demo Mode",
+  "readOnlyModal": {
+    "why": "This is a read-only demo",
+    "how": "You can test the full app on your own with <code>`npx ...`<code>",
+    "help": "Don't want to do it on your own? This starter is made by the BearStudio team we can help you! <a>Contact us<a>"
+  },
+  "registerHint": "This is a read-only demo, but you can <button>log in page</button> to test some of the features. Just remember, no changes can be made. Enjoy the features!",
+  "loginHint": "This is a read-only demo, but you can log in with the <button>{{credentials}}</button> account. Just remember, no changes can be made. Enjoy the features!"
+}

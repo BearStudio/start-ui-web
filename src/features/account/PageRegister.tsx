@@ -27,6 +27,7 @@ import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { useCreateAccount } from '@/features/account/service';
+import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageRegister() {
@@ -205,6 +206,7 @@ export default function PageRegister() {
                   {t('account:register.actions.create')}
                 </Button>
               </Flex>
+              <DemoRegisterHint />
             </Stack>
           </Box>
           <Center mt="8">

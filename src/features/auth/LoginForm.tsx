@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
-import { DemoModeHint } from '@/features/auth/DemoModeHint';
 import { useLogin } from '@/features/auth/service';
+import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
 
 type LoginFormProps = BoxProps & { onSuccess?: () => void };
 
@@ -76,7 +76,7 @@ export const LoginForm = ({
             </Button>
           </Flex>
 
-          <DemoModeHint />
+          <DemoLoginHint />
         </Stack>
       </Formiz>
     </Box>

@@ -3,9 +3,11 @@
 import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
+import { DemoModalInterceptor } from '@/features/demo-mode/DemoModalInterceptor';
 import { EnvDevHint } from '@/layout/EnvDevHint';
 import i18n from '@/lib/i18n/config';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
@@ -66,6 +68,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <Viewport>{children}</Viewport>
           <EnvDevHint />
+          <DemoModalInterceptor />
+          <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </body>
     </html>
