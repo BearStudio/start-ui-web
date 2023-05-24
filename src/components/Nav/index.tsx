@@ -19,6 +19,7 @@ import {
 import { FiChevronDown } from 'react-icons/fi';
 
 import { Icon } from '@/components/Icons';
+import { useIsClientReady } from '@/hooks/useIsClientReady';
 
 type NavContextValue = {
   active: ReactNode;
@@ -38,6 +39,7 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 };
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
+  const isClientReady = useIsClientReady();
   const isMenu = useBreakpointValue({
     base: true,
     [breakpoint]: false,
@@ -47,10 +49,15 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   return (
     <NavContext.Provider value={{ active, setActive, isMenu: !!isMenu }}>
       <Menu matchWidth {...rest}>
-        {!isMenu && <Stack spacing="1">{children}</Stack>}
+        {!isMenu && (
+          <Stack spacing="1" opacity={!isClientReady ? 0 : undefined}>
+            {children}
+          </Stack>
+        )}
         {isMenu && (
           <>
             <MenuButton
+              opacity={!isClientReady ? 0 : undefined}
               textAlign="left"
               as={Button}
               rightIcon={<FiChevronDown />}

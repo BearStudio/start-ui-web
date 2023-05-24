@@ -1,4 +1,6 @@
-require('./.env.validator');
+if (!process.env.SKIP_ENV_VALIDATIONS) {
+  require('./.env.validator');
+}
 
 /**
  * Don't be scared of the generics here.
@@ -13,7 +15,6 @@ function defineNextConfig(config) {
 }
 
 module.exports = defineNextConfig({
-  output: 'standalone',
   async redirects() {
     return [
       {
@@ -25,12 +26,7 @@ module.exports = defineNextConfig({
   },
   async rewrites() {
     return [
-      // Do not rewrite API routes
-      {
-        source: '/api/:any*',
-        destination: '/api/:any*',
-      },
-      // Rewrite everything else to use `pages/app`
+      // Rewrite app
       {
         source: '/app/:any*',
         destination: '/app/',

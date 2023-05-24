@@ -1,4 +1,4 @@
-import { StyleFunctionProps, Styles, mode } from '@chakra-ui/theme-tools';
+import { StyleFunctionProps, Styles } from '@chakra-ui/theme-tools';
 
 import * as externals from './externals';
 
@@ -17,8 +17,11 @@ export const styles: Styles = {
       bg: 'gray.800',
     },
     body: {
-      bg: mode('gray.50', 'gray.800')(props),
+      bg: 'gray.50',
       WebkitTapHighlightColor: 'transparent',
+      _dark: {
+        bg: 'gray.800',
+      },
     },
     '#chakra-toast-portal > *': {
       pt: 'safe-top',

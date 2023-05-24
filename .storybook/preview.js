@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
-import { Providers } from '../src/Providers';
-import i18nGlobal from '../src/config/i18next';
+import { Providers } from '../src/app/Providers';
+import i18nGlobal from '../src/lib/i18n/config';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
-} from '../src/constants/i18n';
+} from '../src/lib/i18n/constants';
 import logoReversed from './logo-reversed.svg';
 import logo from './logo.svg';
 

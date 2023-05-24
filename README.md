@@ -11,20 +11,30 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Demo
 
-A live demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com)
-
+A live read-only demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com).
 
 ## Getting Started
 
 ```bash
 npx create-start-ui@latest --web myApp
 ```
+
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
-Then just go to the created folder and start the dev server.
+Then just go to the created folder:
 
 ```bash
 cd myApp
+```
+
+```bash
+# Duplicate the .env.example file to a new .env file (update variables)
+cp .env.example .env
+
+# Init the local mocks database and seed users
+yarn db:push && yarn db:seed
+
+# Run the development server
 yarn dev
 ```
 
@@ -32,13 +42,12 @@ yarn dev
 
 - 🟦 [TypeScript](https://www.typescriptlang.org/)
 - ⚛️ [React](https://reactjs.org/)
-- ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/advanced-features/static-html-export))
+- ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports))
 - 📕 [Storybook](https://storybook.js.org/)
 - ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
 - ⚛️ [TanStack Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
-- 💥 [React Error Boundary](https://github.com/bvaughn/react-error-boundary)
 - ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
 - 🌍 [React i18next](https://react.i18next.com/)
 - 🔽 [React Select](https://react-select.com/)
@@ -56,28 +65,42 @@ yarn dev
 You can find more details about each feature on the [documentation](https://docs.web.start-ui.com)
 
 - Reponsive layout / navigation.
-- Sign / Sign Up / Password recovery screens.
+- Sign In / Sign Up / Password recovery screens.
 - Account profile / Change Password screens.
 - Users management admin screens (CRUD).
-- Multi-languages (English & French built-in).
-- Custom Chakra UI theme with preview of customized components in Storybook.
-- Extra UI components with Storybook documentation.
+- Multi-languages (i18n) (English & French built-in).
+- Custom Chakra UI theme with generated typings.
+- Great list of UI components with their Storybook documentation.
 - Fields components for Formiz.
 - Dark mode support with Storybook toggle.
 - App version & Environment name in the UI.
 - API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
-- API Mocking with persisting state via [MirageJS](https://miragejs.com/).
+- API Mocking with a JHipster mapping using Next.js API.
+- Developer eXperience improved with ESLint, Prettier and Husky
+- Deployment made easy using Next.js
 
 ## Installation
 
+1. Duplicate the `.env.example` file to a new `.env` file, and update the environment variables
+
+```bash
+cp .env.example .env
+```
+
+2. Install dependencies
 ```bash
 yarn install
-yarn build
+```
+
+3. Init the local mocks database and seed users
+```bash
+yarn db:push && yarn db:seed
 ```
 
 ## Development
 
 ```bash
+# Run the development server
 yarn dev
 ```
 
@@ -108,18 +131,12 @@ yarn theme:generate-icons
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
 
-### Development with [MirageJS](https://miragejs.com/) (mock)
-
-**This is the default behavior.**
-
-Do not set the `NEXT_PUBLIC_API_BASE_URL` variable in the `.env` file at the root of the project.
-
 ### Development with a [JHipster](https://www.jhipster.tech/) backend
 
-Create a `.env` file at the root of the project with the following content:
+Update the `NEXT_PUBLIC_API_BASE_URL` with your JHipster API url:
 
 ```
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+NEXT_PUBLIC_API_BASE_URL="http://localhost:8080/api"
 ```
 
 ## Show hint on development environments
@@ -127,17 +144,9 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
 
 ```
-NEXT_PUBLIC_DEV_ENV_NAME=staging
-NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME=teal
+NEXT_PUBLIC_DEV_ENV_NAME="staging"
+NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME="teal"
 ```
-
-## API Documentation
-
-API documentation is accessible by admins in the app with [Swagger-UI](https://www.npmjs.com/package/swagger-ui-react).
-```
-yarn docs:build
-```
-This will build the json documentation from the main file `/src/mocks/openapi/openapi.yaml`.
 
 ## Translations
 
@@ -255,16 +264,24 @@ Application will be exposed on port 80 ([http://localhost](http://localhost))
 
 ### Static files
 
+Update the `next.config.js` file with `output: 'export'` (and remove `redirects` and `rewrites`)
+
+```js
+{
+  output: 'export',
+}
+```
+
 ```bash
 yarn storybook:build # Optional: Will expose the Storybook at `/storybook/`
-yarn static:build
+yarn build
 ```
 
 Then expose the `/out` folder.
 
-💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
+> You can use `yarn build && npx serve out -c ../static.serve.json` to build and run the static build locally.
 
-> You can use `yarn static:serve` to build and run the static build locally.
+> 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
 
 #### Using Apache as your web server
 
@@ -305,7 +322,7 @@ bundling, route pre-fetching, and more. No config needed.
 ### React Router
 
 Next.js is bundled with its own router, but at the time of writing those lines,
-it does not allow nested routes using a shared layout.
+it does not allow SPA mode.
 
 [GitHub](https://github.com/ReactTraining/react-router) · [License MIT](https://github.com/ReactTraining/react-router/blob/master/LICENSE)
 
