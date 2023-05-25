@@ -1,64 +1,99 @@
 import { alertAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
-import { getColor, mode, transparentize } from '@chakra-ui/theme-tools';
+import { getColor, transparentize } from '@chakra-ui/theme-tools';
 import type { StyleFunctionProps } from '@chakra-ui/theme-tools';
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(alertAnatomy.keys);
 
-function getBg(props: StyleFunctionProps): string {
+function getBg(props: StyleFunctionProps): { light: TODO; dark: string } {
   const { theme, colorScheme: c } = props;
-  const lightBg = getColor(theme, `${c}.100`, c);
-  const darkBg = transparentize(`${c}.200`, 0.16)(theme);
-  return mode(lightBg, darkBg)(props);
+  const light = getColor(theme, `${c}.100`, c);
+  const dark = transparentize(`${c}.200`, 0.16)(theme);
+  return { light, dark };
 }
 
 const variantSubtle = definePartsStyle((props) => {
-  const { colorScheme: c } = props;
+  const { colorScheme } = props;
+  const bg = getBg(props);
+
   return {
     container: {
-      bg: getBg(props),
-      color: mode(`${c}.800`, `${c}.200`)(props),
+      bg: bg.light,
+      color: `${colorScheme}.800`,
+      _dark: {
+        bg: bg.dark,
+        color: `${colorScheme}.200`,
+      },
     },
-    icon: { color: mode(`${c}.500`, `${c}.200`)(props) },
+    icon: {
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
+    },
     spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
     },
   };
 });
 
 const variantLeftAccent = definePartsStyle((props) => {
-  const { colorScheme: c } = props;
+  const { colorScheme } = props;
+  const bg = getBg(props);
+
   return {
     container: {
       paddingStart: 3,
       borderStartWidth: '4px',
-      borderStartColor: mode(`${c}.500`, `${c}.200`)(props),
-      bg: getBg(props),
+      borderStartColor: `${colorScheme}.500`,
+      bg: bg.light,
+      _dark: {
+        bg: bg.dark,
+        borderStartColor: `${colorScheme}.200`,
+      },
     },
     icon: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
     },
     spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
     },
   };
 });
 
 const variantTopAccent = definePartsStyle((props) => {
-  const { colorScheme: c } = props;
+  const { colorScheme } = props;
   return {
     container: {
       pt: 2,
       borderTopWidth: '4px',
-      borderTopColor: mode(`${c}.500`, `${c}.200`)(props),
+      borderTopColor: `${colorScheme}.500`,
       bg: getBg(props),
+      _dark: {
+        borderTopColor: `${colorScheme}.200`,
+      },
     },
     icon: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
     },
     spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      color: `${colorScheme}.500`,
+      _dark: {
+        color: `${colorScheme}.200`,
+      },
     },
   };
 });
@@ -67,8 +102,12 @@ const variantSolid = definePartsStyle((props) => {
   const { colorScheme: c } = props;
   return {
     container: {
-      bg: mode(`${c}.500`, `${c}.200`)(props),
-      color: mode(`white`, `gray.900`)(props),
+      bg: `${c}.500`,
+      color: 'white',
+      _dark: {
+        bg: `${c}.200`,
+        color: 'gray.900',
+      },
     },
   };
 });
