@@ -25,6 +25,7 @@
 .idea/
 .eslintcache
 .db
+.git
 
 # debug
 npm-debug.log*
