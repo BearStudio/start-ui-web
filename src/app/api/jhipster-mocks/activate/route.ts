@@ -9,16 +9,14 @@ import {
 
 export const GET = apiMethod({
   public: true,
-  handler: async ({ params }) => {
-    const safeParams = z.object({ key: z.string() }).safeParse(params);
+  handler: async ({ searchParams }) => {
+    const token = searchParams.get('key');
 
-    if (!safeParams.success) {
+    if (!token) {
       return badRequestResponse();
     }
 
-    const user = await activateAccount({
-      token: safeParams.data.key,
-    });
+    const user = await activateAccount({ token });
 
     if (!user) {
       return badRequestResponse();
