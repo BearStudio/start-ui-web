@@ -12,7 +12,7 @@ export const DemoLoginHint = () => {
   const mockedUsername = 'admin';
   const mockedPassword = 'admin';
 
-  if (!process.env.NEXT_PUBLIC_IS_DEMO) return null;
+  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
 
   return (
     <Alert status="info">

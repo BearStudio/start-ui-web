@@ -105,6 +105,7 @@
     "prisma": "4.14.0",
     "storybook": "7.0.10",
     "storybook-dark-mode": "3.0.0",
+    "tsx": "3.12.7",
     "typescript": "5.0.4"
   },
   "resolutions": {

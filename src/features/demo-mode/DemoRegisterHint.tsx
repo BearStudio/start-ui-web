@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 
 export const DemoRegisterHint = () => {
-  if (!process.env.NEXT_PUBLIC_IS_DEMO) return null;
+  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
 
   return (
     <Alert status="warning">
