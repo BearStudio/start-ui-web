@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 
 import { activateAccount } from '@/app/api/jhipster-mocks/account/service';
 import {
