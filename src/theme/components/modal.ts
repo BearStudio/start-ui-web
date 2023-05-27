@@ -1,6 +1,5 @@
 import { modalAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
-import { mode } from '@chakra-ui/theme-tools';
 
 const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(
   modalAnatomy.keys
@@ -33,14 +32,17 @@ function getSize(value: string) {
 }
 
 export const modalTheme = defineMultiStyleConfig({
-  baseStyle: (props) => ({
+  baseStyle: {
     overlay: {
       backdropFilter: 'blur(4px)',
     },
     dialog: {
-      bg: mode('white', 'gray.800')(props),
+      bg: 'white',
       mx: 4,
       py: 0,
+      _dark: {
+        bg: 'gray.800',
+      },
     },
     header: {
       px: 4,
@@ -60,7 +62,7 @@ export const modalTheme = defineMultiStyleConfig({
       pt: 0,
       pb: 4,
     },
-  }),
+  },
   sizes: {
     xs: getSize('xs'),
     sm: getSize('sm'),
