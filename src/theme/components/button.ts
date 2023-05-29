@@ -83,7 +83,6 @@ export const buttonTheme = defineStyleConfig({
             bg: 'blackAlpha.50!',
             borderColor: 'blackAlpha.50!',
             color: 'blackAlpha.300!',
-            textDecoration: 'line-through',
             _dark: {
               opacity: 1,
               bg: 'whiteAlpha.50!',
