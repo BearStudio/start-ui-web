@@ -2443,10 +2443,10 @@
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-4.5.15.tgz#eed1873d68755d3b52d6fcfcfa3493118430a512"
   integrity sha512-FzleM9AxZQK2nqsTDtBiY0PMEVWvnKnuu2i09+p6DHvrHsuucoV2j0tmw+kAT3L4hvsLdAIDv6MdGehsPIdT+Q==
 
-"@formiz/core@2.0.0-beta.3":
-  version "2.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-2.0.0-beta.3.tgz#a971cde2c61b9813004b70d5829b29a776829ca7"
-  integrity sha512-wILjMwUPwxgimuwMlJE8CuJWMgXwJ0/HaQ7esW3gkl8cZ4vDUIoQ8Crer6BlLQEyJYmNWeYralH5zoIdWRB2SA==
+"@formiz/core@2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@formiz/core/-/core-2.0.0-beta.4.tgz#49faaf4bde7fc39685397ce3ec910fca9cca0a5b"
+  integrity sha512-Z++2xx3tRo/m61qGV8elQoYpnCcbPI12CUIoxV+2NtN98N+U80C0MBWFCDkxlhf4IK6xJ2d8H5cSI4+e9NzKvA==
 
 "@formiz/validations@2.0.0-beta.1":
   version "2.0.0-beta.1"
