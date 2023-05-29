@@ -101,7 +101,6 @@ export const PageTopBar = ({
                 <IconButton
                   aria-label="Go Back"
                   icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
-                  variant="ghost"
                   onClick={() => onBack()}
                 />
               </Box>
