@@ -4,9 +4,6 @@ import { transparentize } from '@chakra-ui/theme-tools';
 const variantPrimary = defineStyle((props) => ({
   bg: `${props.colorScheme}.600`,
   color: 'white',
-  _focusVisible: {
-    boxShadow: 'outline-brand',
-  },
   _hover: {
     bg: `${props.colorScheme}.700`,
     color: 'white',
@@ -16,13 +13,13 @@ const variantPrimary = defineStyle((props) => ({
     },
   },
   _active: { bg: `${props.colorScheme}.800` },
+  _focusVisible: {
+    ringColor: `${props.colorScheme}.500`,
+  },
 
   _dark: {
     bg: `${props.colorScheme}.300`,
     color: `${props.colorScheme}.900`,
-    _focusVisible: {
-      boxShadow: 'outline-brand',
-    },
     _hover: {
       bg: `${props.colorScheme}.400`,
       color: `${props.colorScheme}.900`,
@@ -53,6 +50,9 @@ const variantSecondary = defineStyle((props) => ({
   _active: {
     bg: `${props.colorScheme}.100`,
   },
+  _focusVisible: {
+    ringColor: `${props.colorScheme}.500`,
+  },
 
   _dark: {
     bg: 'gray.800',
@@ -73,9 +73,15 @@ const variantSecondary = defineStyle((props) => ({
 }));
 
 export const buttonTheme = defineStyleConfig({
-  baseStyle: (props) =>
+  baseStyle: (props) => ({
+    _focusVisible: {
+      boxShadow: 'none',
+      ring: '2px',
+      ringOffset: '2px',
+      ringColor: `${props.colorScheme}.500`,
+    },
     // Disabled Style
-    props.isDisabled
+    ...(props.isDisabled
       ? {
           _disabled: {
             opacity: 0.8,
@@ -91,27 +97,14 @@ export const buttonTheme = defineStyleConfig({
             },
           },
         }
-      : { _disabled: {} },
+      : { _disabled: {} }),
+  }),
   variants: {
     // Custom variants
-    '@primary': (props) => ({
-      ...variantPrimary({ ...props, colorScheme: 'brand' }),
-      _focusVisible: {
-        boxShadow: 'outline-brand',
-      },
-    }),
-    '@secondary': (props) => ({
-      ...variantSecondary({ ...props, colorScheme: 'brand' }),
-      _focusVisible: {
-        boxShadow: 'outline-brand',
-      },
-    }),
-    '@danger': (props) => ({
-      ...variantSecondary({ ...props, colorScheme: 'error' }),
-      _focusVisible: {
-        boxShadow: 'outline-error',
-      },
-    }),
+    '@primary': (props) => variantPrimary({ ...props, colorScheme: 'brand' }),
+    '@secondary': (props) =>
+      variantSecondary({ ...props, colorScheme: 'brand' }),
+    '@danger': (props) => variantSecondary({ ...props, colorScheme: 'error' }),
     // Default variants
     solid: (props) =>
       props.colorScheme === 'gray' ? variantSecondary(props) : {},
