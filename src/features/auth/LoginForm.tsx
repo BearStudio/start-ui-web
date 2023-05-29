@@ -11,10 +11,14 @@ import { useToastError } from '@/components/Toast';
 import { useLogin } from '@/features/auth/service';
 import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
 
-type LoginFormProps = BoxProps & { onSuccess?: () => void };
+type LoginFormProps = BoxProps & {
+  onSuccess?: () => void;
+  onResetPassword?: () => void;
+};
 
 export const LoginForm = ({
   onSuccess = () => undefined,
+  onResetPassword = () => undefined,
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
@@ -46,14 +50,14 @@ export const LoginForm = ({
           <FieldInput
             name="username"
             label={t('auth:data.username.label')}
-            required={t('auth:data.username.required') as string}
+            required={t('auth:data.username.required')}
             formatValue={(v) => v?.toLowerCase().trim()}
           />
           <FieldInput
             name="password"
             type="password"
             label={t('auth:data.password.label')}
-            required={t('auth:data.password.required') as string}
+            required={t('auth:data.password.required')}
           />
           <Flex>
             <Button
@@ -62,6 +66,9 @@ export const LoginForm = ({
               size="sm"
               variant="link"
               whiteSpace="initial"
+              onClick={() => {
+                onResetPassword?.();
+              }}
             >
               {t('auth:login.actions.forgotPassword')}
             </Button>

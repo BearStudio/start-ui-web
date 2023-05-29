@@ -48,16 +48,8 @@ export const LoginModalInterceptor = () => {
     return () => Axios.interceptors.response.eject(interceptor);
   }, [openLoginModal, updateToken, queryCache]);
 
-  // On Route Change
-  useEffect(() => {
-    if (loginModal.isOpen && pathname !== pathnameRef.current) {
-      updateToken(null);
-      loginModal.onClose();
-    }
-  }, [loginModal, updateToken, pathname]);
-
-  const handleLogin = () => {
-    queryCache.refetchQueries();
+  const handleLogin = async () => {
+    await queryCache.refetchQueries();
     loginModal.onClose();
   };
 
@@ -65,6 +57,12 @@ export const LoginModalInterceptor = () => {
     updateToken(null);
     loginModal.onClose();
     navigate('/login');
+  };
+
+  const handleResetPassword = () => {
+    updateToken(null);
+    loginModal.onClose();
+    navigate('/account/reset');
   };
 
   return (
@@ -80,7 +78,10 @@ export const LoginModalInterceptor = () => {
         <ModalBody p="6">
           <Heading size="lg">{t('auth:interceptor.title')}</Heading>
           <Text mb="2">{t('auth:interceptor.description')}</Text>
-          <LoginForm onSuccess={handleLogin} />
+          <LoginForm
+            onSuccess={handleLogin}
+            onResetPassword={handleResetPassword}
+          />
         </ModalBody>
       </ModalContent>
     </Modal>
