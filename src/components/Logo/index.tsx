@@ -1,8 +1,8 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 
 import { chakra, useTheme } from '@chakra-ui/react';
 
-export const Logo = ({ ...rest }) => {
+export const Logo = ({ ...rest }: ComponentProps<typeof chakra.svg>) => {
   const theme = useTheme();
   const gradientId = 'logo-brand-gradient';
   return (
