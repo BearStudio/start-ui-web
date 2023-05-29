@@ -25,7 +25,7 @@ const MenuButton = (props: Partial<IconButtonProps>) => {
       aria-label="Navigation"
       icon={<FiMenu size="1.5em" />}
       onClick={navOnOpen}
-      bg="transparent"
+      variant="unstyled"
       _active={{ bg: 'gray.700' }}
       _hover={{ bg: 'gray.900' }}
       {...props}
