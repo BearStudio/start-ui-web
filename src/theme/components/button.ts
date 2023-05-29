@@ -10,8 +10,13 @@ const variantPrimary = defineStyle((props) => ({
   _hover: {
     bg: `${props.colorScheme}.700`,
     color: 'white',
+    _disabled: {
+      bg: `${props.colorScheme}.600`,
+      color: 'white',
+    },
   },
   _active: { bg: `${props.colorScheme}.800` },
+
   _dark: {
     bg: `${props.colorScheme}.300`,
     color: `${props.colorScheme}.900`,
@@ -21,6 +26,10 @@ const variantPrimary = defineStyle((props) => ({
     _hover: {
       bg: `${props.colorScheme}.400`,
       color: `${props.colorScheme}.900`,
+      _disabled: {
+        bg: `${props.colorScheme}.300`,
+        color: `${props.colorScheme}.900`,
+      },
     },
     _active: {
       bg: `${props.colorScheme}.500`,
@@ -36,10 +45,15 @@ const variantSecondary = defineStyle((props) => ({
   _hover: {
     bg: `${props.colorScheme}.50`,
     borderColor: `${props.colorScheme}.200`,
+    _disabled: {
+      bg: 'white',
+      borderColor: 'gray.200',
+    },
   },
   _active: {
     bg: `${props.colorScheme}.100`,
   },
+
   _dark: {
     bg: 'gray.800',
     color: props.colorScheme === 'gray' ? 'white' : `${props.colorScheme}.400`,
@@ -47,6 +61,10 @@ const variantSecondary = defineStyle((props) => ({
     _hover: {
       bg: 'gray.900',
       borderColor: `${props.colorScheme}.700`,
+      _disabled: {
+        bg: 'gray.800',
+        borderColor: 'gray.700',
+      },
     },
     _active: {
       bg: 'gray.800',
