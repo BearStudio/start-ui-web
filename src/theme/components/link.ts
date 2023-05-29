@@ -1,6 +1,6 @@
 import { defineStyleConfig } from '@chakra-ui/react';
 
-export default defineStyleConfig({
+export const linkTheme = defineStyleConfig({
   baseStyle: {
     textDecoration: 'underline',
     fontWeight: 'medium',

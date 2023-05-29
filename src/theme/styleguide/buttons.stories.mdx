@@ -16,8 +16,9 @@ import { Button, IconButton } from '@chakra-ui/react'
   <Story name="Default">
     <ButtonGroup>
       <Button>Default Button</Button>
-      <Button isLoading>Button</Button>
+      <Button isLoading loadingText="Processing...">Button</Button>
       <IconButton icon={<HiPlus />} aria-label="Add" />
+      <Button isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
 </Canvas>
@@ -28,8 +29,9 @@ import { Button, IconButton } from '@chakra-ui/react'
   <Story name="Primary">
     <ButtonGroup>
       <Button variant="@primary">Primary Button</Button>
-      <Button variant="@primary" isLoading>Button</Button>
+      <Button variant="@primary" isLoading loadingText="Processing...">Button</Button>
       <IconButton variant="@primary" icon={<HiPlus />} aria-label="Add" />
+      <Button variant="@primary" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
 </Canvas>
@@ -40,8 +42,9 @@ import { Button, IconButton } from '@chakra-ui/react'
   <Story name="Secondary">
     <ButtonGroup>
       <Button variant="@secondary">Secondary Button</Button>
-      <Button variant="@secondary" isLoading>Button</Button>
+      <Button variant="@secondary" isLoading loadingText="Processing...">Button</Button>
       <IconButton variant="@secondary" icon={<HiPlus />} aria-label="Add" />
+      <Button variant="@secondary" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
 </Canvas>
@@ -52,8 +55,9 @@ import { Button, IconButton } from '@chakra-ui/react'
   <Story name="Danger">
     <ButtonGroup>
       <Button variant="@danger">Danger Button</Button>
-      <Button variant="@danger" isLoading>Button</Button>
+      <Button variant="@danger" isLoading loadingText="Processing...">Button</Button>
       <IconButton variant="@danger" icon={<HiMinus />} aria-label="Remove" />
+      <Button variant="@danger" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
 </Canvas>

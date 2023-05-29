@@ -1,104 +1,119 @@
-import {
-  StyleFunctionProps,
-  SystemStyleInterpolation,
-  isAccessible,
-  mode,
-  transparentize,
-} from '@chakra-ui/theme-tools';
+import { defineStyle, defineStyleConfig } from '@chakra-ui/react';
+import { transparentize } from '@chakra-ui/theme-tools';
 
-type customVariantOptions = {
-  theme: StyleFunctionProps['theme'];
-  bg: string;
-  bgHover?: string;
-  bgActive?: string;
-  color: string;
-  colorHover?: string;
-  boxShadowFocus?: string;
-};
-const customVariant = ({
-  theme,
-  bg,
-  bgHover = bg,
-  bgActive = bgHover,
-  color,
-  colorHover = color,
-  boxShadowFocus = 'outline',
-}: customVariantOptions) => {
-  const isColorAccessible = isAccessible(color, bg, {
-    size: 'large',
-    level: 'AA',
-  })(theme);
-
-  return {
-    bg,
-    color: isColorAccessible ? color : 'black',
-    _focusVisible: {
-      boxShadow: boxShadowFocus,
+const variantPrimary = defineStyle((props) => ({
+  bg: `${props.colorScheme}.600`,
+  color: 'white',
+  _hover: {
+    bg: `${props.colorScheme}.700`,
+    color: 'white',
+    _disabled: {
+      bg: `${props.colorScheme}.600`,
+      color: 'white',
     },
+  },
+  _active: { bg: `${props.colorScheme}.800` },
+  _focusVisible: {
+    ringColor: `${props.colorScheme}.500`,
+  },
+
+  _dark: {
+    bg: `${props.colorScheme}.300`,
+    color: `${props.colorScheme}.900`,
     _hover: {
-      bg: bgHover,
-      color: isColorAccessible ? colorHover : 'black',
+      bg: `${props.colorScheme}.400`,
+      color: `${props.colorScheme}.900`,
       _disabled: {
-        bg,
+        bg: `${props.colorScheme}.300`,
+        color: `${props.colorScheme}.900`,
       },
     },
-    _active: { bg: bgActive },
-  };
-};
-
-const variants: Record<string, SystemStyleInterpolation> = {
-  // Custom variants
-  '@primary': (props) =>
-    customVariant({
-      theme: props.theme,
-      bg: mode('brand.600', 'brand.300')(props),
-      bgHover: mode('brand.700', 'brand.400')(props),
-      bgActive: mode('brand.800', 'brand.500')(props),
-      color: mode('white', 'brand.900')(props),
-      boxShadowFocus: 'outline-brand',
-    }),
-  '@secondary': (props) =>
-    customVariant({
-      theme: props.theme,
-      bg: mode('brand.100', 'brand.900')(props),
-      bgHover: mode('brand.200', 'brand.800')(props),
-      bgActive: mode('brand.300', 'brand.700')(props),
-      color: mode('brand.700', 'brand.50')(props),
-      colorHover: mode('brand.800', 'brand.100')(props),
-      boxShadowFocus: 'outline-brand',
-    }),
-  '@danger': (props) =>
-    customVariant({
-      theme: props.theme,
-      bg: mode('error.100', 'error.900')(props),
-      bgHover: mode('error.200', 'error.800')(props),
-      bgActive: mode('error.300', 'error.700')(props),
-      color: mode('error.700', 'error.50')(props),
-      colorHover: mode('error.800', 'error.100')(props),
-      boxShadowFocus: 'outline-error',
-    }),
-
-  // Default variants
-  solid: (props) => ({
-    bg:
-      props.colorScheme === 'gray'
-        ? mode('gray.100', 'whiteAlpha.100')(props)
-        : `${props.colorScheme}.600`,
-    _hover: {
-      bg:
-        props.colorScheme === 'gray'
-          ? mode('gray.200', 'whiteAlpha.200')(props)
-          : `${props.colorScheme}.700`,
+    _active: {
+      bg: `${props.colorScheme}.500`,
     },
-  }),
-  ghost: (props) => ({
-    bg: transparentize(`${props.colorScheme}.50`, 0.05)(props.theme),
-    _hover: {
-      bg: transparentize(`${props.colorScheme}.50`, 0.15)(props.theme),
-    },
-  }),
-};
+  },
+}));
 
-export default {
-  variants,
-};
+const variantSecondary = defineStyle((props) => ({
+  bg: 'white',
+  color: `${props.colorScheme}.600`,
+  border: '1px solid',
+  borderColor: 'gray.200',
+  _hover: {
+    bg: `${props.colorScheme}.50`,
+    borderColor: `${props.colorScheme}.200`,
+    _disabled: {
+      bg: 'white',
+      borderColor: 'gray.200',
+    },
+  },
+  _active: {
+    bg: `${props.colorScheme}.100`,
+  },
+  _focusVisible: {
+    ringColor: `${props.colorScheme}.500`,
+  },
+
+  _dark: {
+    bg: 'gray.800',
+    color: props.colorScheme === 'gray' ? 'white' : `${props.colorScheme}.400`,
+    borderColor: 'gray.700',
+    _hover: {
+      bg: 'gray.900',
+      borderColor: `${props.colorScheme}.700`,
+      _disabled: {
+        bg: 'gray.800',
+        borderColor: 'gray.700',
+      },
+    },
+    _active: {
+      bg: 'gray.800',
+    },
+  },
+}));
+
+export const buttonTheme = defineStyleConfig({
+  baseStyle: (props) => ({
+    _focusVisible: {
+      boxShadow: 'none',
+      ring: '2px',
+      ringOffset: '2px',
+      ringColor: `${props.colorScheme}.500`,
+    },
+    // Disabled Style
+    ...(props.isDisabled
+      ? {
+          _disabled: {
+            opacity: 0.8,
+            border: '1px solid!',
+            bg: 'blackAlpha.50!',
+            borderColor: 'blackAlpha.50!',
+            color: 'blackAlpha.300!',
+            _dark: {
+              opacity: 1,
+              bg: 'whiteAlpha.50!',
+              borderColor: 'whiteAlpha.50!',
+              color: 'whiteAlpha.300!',
+            },
+          },
+        }
+      : { _disabled: {} }),
+  }),
+  variants: {
+    // Custom variants
+    '@primary': (props) => variantPrimary({ ...props, colorScheme: 'brand' }),
+    '@secondary': (props) =>
+      variantSecondary({ ...props, colorScheme: 'brand' }),
+    '@danger': (props) => variantSecondary({ ...props, colorScheme: 'error' }),
+    // Default variants
+    solid: (props) =>
+      props.colorScheme === 'gray' ? variantSecondary(props) : {},
+    outline: variantSecondary,
+    ghost: (props) => ({
+      bg: transparentize(`${props.colorScheme}.500`, 0.05)(props.theme),
+      _hover: {
+        bg: transparentize(`${props.colorScheme}.500`, 0.15)(props.theme),
+      },
+    }),
+  },
+});

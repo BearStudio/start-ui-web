@@ -1,28 +1,31 @@
-import {
-  SystemStyleInterpolation,
-  getColor,
-  mode,
-} from '@chakra-ui/theme-tools';
+import { defineStyleConfig } from '@chakra-ui/react';
+import { getColor } from '@chakra-ui/theme-tools';
 
-const variants: Record<string, SystemStyleInterpolation> = {
-  outline: (props) => {
-    const focusBorderColor = getColor(
-      props.theme,
-      props.focusBorderColor
-        ? props.focusBorderColor
-        : mode('brand.500', 'brand.300')(props)
-    );
-    return {
-      bg: mode('blackAlpha.50', 'whiteAlpha.50')(props),
-      borderColor: mode('blackAlpha.100', 'whiteAlpha.100')(props),
-      _focusVisible: {
-        borderColor: focusBorderColor,
-        boxShadow: `0 0 0 1px ${focusBorderColor}`,
-      },
-    };
+export const textareaTheme = defineStyleConfig({
+  variants: {
+    outline: (props) => {
+      return {
+        bg: 'blackAlpha.50',
+        borderColor: 'blackAlpha.100',
+        _focusVisible: {
+          borderColor: props.focusBorderColor ?? 'brand.500',
+          boxShadow: `0 0 0 1px ${getColor(
+            props.theme,
+            props.focusBorderColor ?? 'brand.500'
+          )}`,
+        },
+        _dark: {
+          bg: 'whiteAlpha.50',
+          borderColor: 'whiteAlpha.100',
+          _focusVisible: {
+            borderColor: props.focusBorderColor ?? 'brand.300',
+            boxShadow: `0 0 0 1px ${getColor(
+              props.theme,
+              props.focusBorderColor ?? 'brand.300'
+            )}`,
+          },
+        },
+      };
+    },
   },
-};
-
-export default {
-  variants,
-};
+});

@@ -1,4 +1,6 @@
-export default {
+import { defineStyleConfig } from '@chakra-ui/react';
+
+export const badgeTheme = defineStyleConfig({
   sizes: {
     xs: {
       fontSize: '0.6em',
@@ -16,4 +18,4 @@ export default {
   defaultProps: {
     size: 'md',
   },
-};
+});
