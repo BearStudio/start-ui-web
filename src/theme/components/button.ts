@@ -10,9 +10,6 @@ const variantPrimary = defineStyle((props) => ({
   _hover: {
     bg: `${props.colorScheme}.700`,
     color: 'white',
-    _disabled: {
-      bg: `${props.colorScheme}.600`,
-    },
   },
   _active: { bg: `${props.colorScheme}.800` },
   _dark: {
@@ -24,9 +21,6 @@ const variantPrimary = defineStyle((props) => ({
     _hover: {
       bg: `${props.colorScheme}.400`,
       color: `${props.colorScheme}.900`,
-      _disabled: {
-        bg: `${props.colorScheme}.300`,
-      },
     },
     _active: {
       bg: `${props.colorScheme}.500`,
@@ -43,23 +37,19 @@ const variantSecondary = defineStyle((props) => ({
     bg: `${props.colorScheme}.50`,
     borderColor: `${props.colorScheme}.200`,
   },
-  _disabled: {
-    _hover: {
-      borderColor: 'gray.200',
-    },
+  _active: {
+    bg: `${props.colorScheme}.100`,
   },
   _dark: {
     bg: 'gray.800',
-    color: `${props.colorScheme}.500`,
+    color: props.colorScheme === 'gray' ? 'white' : `${props.colorScheme}.400`,
     borderColor: 'gray.700',
     _hover: {
       bg: 'gray.900',
       borderColor: `${props.colorScheme}.700`,
     },
-    _disabled: {
-      _hover: {
-        borderColor: 'gray.700',
-      },
+    _active: {
+      bg: 'gray.800',
     },
   },
 }));
@@ -106,6 +96,8 @@ export const buttonTheme = defineStyleConfig({
       },
     }),
     // Default variants
+    solid: (props) =>
+      props.colorScheme === 'gray' ? variantSecondary(props) : {},
     outline: variantSecondary,
     ghost: (props) => ({
       bg: transparentize(`${props.colorScheme}.500`, 0.05)(props.theme),
