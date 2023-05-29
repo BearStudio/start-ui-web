@@ -65,6 +65,26 @@ const variantSecondary = defineStyle((props) => ({
 }));
 
 export const buttonTheme = defineStyleConfig({
+  baseStyle: (props) =>
+    // Disabled Style
+    props.isDisabled
+      ? {
+          _disabled: {
+            opacity: 0.8,
+            border: '1px solid!',
+            bg: 'blackAlpha.50!',
+            borderColor: 'blackAlpha.50!',
+            color: 'blackAlpha.300!',
+            textDecoration: 'line-through',
+            _dark: {
+              opacity: 1,
+              bg: 'whiteAlpha.50!',
+              borderColor: 'whiteAlpha.50!',
+              color: 'whiteAlpha.300!',
+            },
+          },
+        }
+      : { _disabled: {} },
   variants: {
     // Custom variants
     '@primary': (props) => ({
