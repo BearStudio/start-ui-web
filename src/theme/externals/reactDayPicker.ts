@@ -30,6 +30,11 @@ export const reactDayPicker: Styles['global'] = {
     borderRadius: 'md',
     width: 'min-content',
 
+    color: 'gray.900',
+    _dark: {
+      color: 'white',
+    },
+
     '*': {
       outline: 'none',
     },
