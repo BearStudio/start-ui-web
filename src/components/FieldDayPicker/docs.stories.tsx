@@ -7,6 +7,15 @@ import { FieldDayPicker } from './index';
 
 export default {
   title: 'Fields/FieldDayPicker',
+  decorators: [
+    (Story: TODO) => {
+      return (
+        <Box minH={'20rem'}>
+          <Story />
+        </Box>
+      );
+    },
+  ],
 };
 
 export const Default = () => {

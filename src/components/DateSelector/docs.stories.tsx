@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Kbd, Stack, Text, chakra } from '@chakra-ui/react';
+import { Box, Kbd, Stack, Text, chakra } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
 import {
@@ -12,6 +12,15 @@ import {
 
 export default {
   title: 'Components/DateSelector',
+  decorators: [
+    (Story: TODO) => {
+      return (
+        <Box minH={'20rem'}>
+          <Story />
+        </Box>
+      );
+    },
+  ],
 };
 
 export const Default = () => {
