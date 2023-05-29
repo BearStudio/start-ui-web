@@ -81,12 +81,12 @@
     },
     "email": {
       "label": "Email",
-      "required": "Email est requis",
+      "required": "L'email est requis",
       "invalid": "L'email est invalide",
       "resetHelper": "Entrez l'adresse email que vous avez utilisée pour vous inscrire",
-      "alreadyUsed": "Adresse email déjà utilisée",
-      "tooLong": "L'email est trop long (max. {max} caractères)",
-      "tooShort": "L'email est trop court (min. {min} caractères)"
+      "alreadyUsed": "L'email est déjà utilisé",
+      "tooLong": "L'email est trop long (max. {max} caractères)",
+      "tooShort": "L'email est trop court (min. {min} caractères)"
     },
     "language": {
       "label": "Langue"
@@ -112,11 +112,11 @@
       "notEqual": "Les nouveaux mots de passe doivent être égaux"
     },
     "login": {
-      "alreadyUsed": "Nom d'utilisateur déjà utilisé",
+      "alreadyUsed": "Le nom d'utilisateur est déjà utilisé",
       "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
       "label": "Nom d'utilisateur",
       "required": "Le nom d'utilisateur est requis",
-      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
+      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
       "tooShort": "Le nom d'utilisateur est trop court (min. {{min}} caractères)"
     }
   },
