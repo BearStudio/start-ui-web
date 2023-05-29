@@ -163,6 +163,7 @@ export const routes = [
               },
             ],
           },
+          { path: '*', element: <ErrorPage errorCode={404} /> },
         ],
       },
     ],
