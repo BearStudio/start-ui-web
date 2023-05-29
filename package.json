@@ -38,7 +38,7 @@
     "@emotion/styled": "11.11.0",
     "@faker-js/faker": "7.6.0",
     "@fontsource/inter": "4.5.15",
-    "@formiz/core": "2.0.0-beta.3",
+    "@formiz/core": "2.0.0-beta.4",
     "@formiz/validations": "2.0.0-beta.1",
     "@formkit/auto-animate": "1.0.0-beta.6",
     "@lukemorales/query-key-factory": "1.2.0",
