@@ -1,100 +1,110 @@
 import { defineStyleConfig } from '@chakra-ui/react';
-import {
-  StyleFunctionProps,
-  isAccessible,
-  mode,
-  transparentize,
-} from '@chakra-ui/theme-tools';
-
-type customVariantOptions = {
-  theme: StyleFunctionProps['theme'];
-  bg: string;
-  bgHover?: string;
-  bgActive?: string;
-  color: string;
-  colorHover?: string;
-  boxShadowFocus?: string;
-};
-const customVariant = ({
-  theme,
-  bg,
-  bgHover = bg,
-  bgActive = bgHover,
-  color,
-  colorHover = color,
-  boxShadowFocus = 'outline',
-}: customVariantOptions) => {
-  const isColorAccessible = isAccessible(color, bg, {
-    size: 'large',
-    level: 'AA',
-  })(theme);
-
-  return {
-    bg,
-    color: isColorAccessible ? color : 'black',
-    _focusVisible: {
-      boxShadow: boxShadowFocus,
-    },
-    _hover: {
-      bg: bgHover,
-      color: isColorAccessible ? colorHover : 'black',
-      _disabled: {
-        bg,
-      },
-    },
-    _active: { bg: bgActive },
-  };
-};
+import { transparentize } from '@chakra-ui/theme-tools';
 
 export const buttonTheme = defineStyleConfig({
   variants: {
     // Custom variants
-    '@primary': (props) =>
-      customVariant({
-        theme: props.theme,
-        bg: mode('brand.600', 'brand.300')(props),
-        bgHover: mode('brand.700', 'brand.400')(props),
-        bgActive: mode('brand.800', 'brand.500')(props),
-        color: mode('white', 'brand.900')(props),
-        boxShadowFocus: 'outline-brand',
-      }),
-    '@secondary': (props) =>
-      customVariant({
-        theme: props.theme,
-        bg: mode('brand.100', 'brand.900')(props),
-        bgHover: mode('brand.200', 'brand.800')(props),
-        bgActive: mode('brand.300', 'brand.700')(props),
-        color: mode('brand.700', 'brand.50')(props),
-        colorHover: mode('brand.800', 'brand.100')(props),
-        boxShadowFocus: 'outline-brand',
-      }),
-    '@danger': (props) =>
-      customVariant({
-        theme: props.theme,
-        bg: mode('error.100', 'error.900')(props),
-        bgHover: mode('error.200', 'error.800')(props),
-        bgActive: mode('error.300', 'error.700')(props),
-        color: mode('error.700', 'error.50')(props),
-        colorHover: mode('error.800', 'error.100')(props),
-        boxShadowFocus: 'outline-error',
-      }),
-    // Default variants
-    solid: (props) => ({
-      bg:
-        props.colorScheme === 'gray'
-          ? mode('gray.100', 'whiteAlpha.100')(props)
-          : `${props.colorScheme}.600`,
-      _hover: {
-        bg:
-          props.colorScheme === 'gray'
-            ? mode('gray.200', 'whiteAlpha.200')(props)
-            : `${props.colorScheme}.700`,
+    '@primary': {
+      bg: 'brand.600',
+      color: 'white',
+      _focusVisible: {
+        boxShadow: 'outline-brand',
       },
-    }),
-    ghost: (props) => ({
-      bg: transparentize(`${props.colorScheme}.50`, 0.05)(props.theme),
       _hover: {
-        bg: transparentize(`${props.colorScheme}.50`, 0.15)(props.theme),
+        bg: 'brand.700',
+        color: 'white',
+        _disabled: {
+          bg: 'brand.600',
+        },
+      },
+      _active: { bg: 'brand.800' },
+      _dark: {
+        bg: 'brand.300',
+        color: 'brand.900',
+        _focusVisible: {
+          boxShadow: 'outline-brand',
+        },
+        _hover: {
+          bg: 'brand.400',
+          color: 'brand.900',
+          _disabled: {
+            bg: 'brand.300',
+          },
+        },
+        _active: {
+          bg: 'brand.500',
+        },
+      },
+    },
+    '@secondary': {
+      bg: 'white',
+      color: 'brand.600',
+      border: '1px solid',
+      borderColor: 'gray.200',
+      _hover: {
+        bg: 'brand.50',
+        borderColor: 'brand.200',
+      },
+      _focusVisible: {
+        boxShadow: 'outline-brand',
+      },
+      _disabled: {
+        _hover: {
+          borderColor: 'gray.200',
+        },
+      },
+      _dark: {
+        bg: 'gray.800',
+        color: 'brand.400',
+        borderColor: 'gray.700',
+        _hover: {
+          bg: 'gray.900',
+          borderColor: 'brand.700',
+        },
+        _disabled: {
+          _hover: {
+            borderColor: 'gray.700',
+          },
+        },
+      },
+    },
+    '@danger': {
+      bg: 'white',
+      color: 'error.700',
+      border: '1px solid',
+      borderColor: 'gray.200',
+      _hover: {
+        bg: 'error.50',
+        borderColor: 'error.200',
+      },
+      _focusVisible: {
+        boxShadow: 'outline-error',
+      },
+      _disabled: {
+        _hover: {
+          borderColor: 'gray.200',
+        },
+      },
+      _dark: {
+        bg: 'gray.800',
+        color: 'error.500',
+        borderColor: 'gray.700',
+        _hover: {
+          bg: 'gray.900',
+          borderColor: 'error.700',
+        },
+        _disabled: {
+          _hover: {
+            borderColor: 'gray.700',
+          },
+        },
+      },
+    },
+    // Default variants
+    ghost: (props) => ({
+      bg: transparentize(`${props.colorScheme}.500`, 0.05)(props.theme),
+      _hover: {
+        bg: transparentize(`${props.colorScheme}.500`, 0.15)(props.theme),
       },
     }),
   },
