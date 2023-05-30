@@ -25,7 +25,7 @@
       "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
     },
     "loadingUserError": {
-      "title": "Il semblerait qu’il y est un problème. ",
+      "title": "Il semblerait qu'il y ait un problème",
       "description": "Échec du chargement des utilisateurs"
     }
   },
@@ -42,16 +42,16 @@
       "required": "Le nom d'utilisateur est requis",
       "alreadyUsed": "Nom d'utilisateur déjà utilisé",
       "invalid": "Le nom d'utilisateur n'est pas valide, n'utilisez pas de caractères spéciaux",
-      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
+      "tooLong": "Le nom d'utilisateur est trop long (max. {max} caractères)",
       "tooShort": "Le nom d'utilisateur est trop court (min. {{min}} caractères)"
     },
     "email": {
       "label": "Email",
       "required": "L'email est requis",
       "invalid": "L'email est invalide",
-      "alreadyUsed": "Adresse email déjà utilisée",
-      "tooLong": "L'email est trop long (max. {max} caractères)",
-      "tooShort": "L'email est trop court (min. {min} caractères)"
+      "alreadyUsed": "L'email est déjà utilisé",
+      "tooLong": "L'email est trop long (max. {max} caractères)",
+      "tooShort": "L'email est trop court (min. {min} caractères)"
     },
     "id": {
       "label": "ID"
