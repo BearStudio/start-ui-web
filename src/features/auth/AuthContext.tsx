@@ -10,7 +10,7 @@ type AuthContextValue = {
 
 export const AUTH_TOKEN_KEY = 'authToken';
 
-const AuthContext = React.createContext<AuthContextValue>(null as TODO);
+const AuthContext = React.createContext<AuthContextValue | null>(null);
 
 const updateToken = (newToken?: string | null) => {
   if (!isBrowser) {
@@ -25,7 +25,11 @@ const updateToken = (newToken?: string | null) => {
 };
 
 export const useAuthContext = () => {
-  const { isAuthenticated, updateToken } = useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('Missing parent <AuthProvider> component');
+  }
+  const { isAuthenticated, updateToken } = context;
   const isClientReady = useIsClientReady();
 
   return {
