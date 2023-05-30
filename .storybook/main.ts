@@ -1,4 +1,6 @@
-module.exports = {
+import { StorybookConfig } from '@storybook/nextjs';
+
+const config: StorybookConfig = {
   framework: {
     name: '@storybook/nextjs',
     options: {},
@@ -9,11 +11,10 @@ module.exports = {
     '@storybook/addon-essentials',
     'storybook-dark-mode',
   ],
-  features: {
-    emotionAlias: false,
-  },
-  staticDir: ['../public'],
+  staticDirs: ['../public'],
   docs: {
     autodocs: true,
   },
 };
+
+export default config;
