@@ -44,8 +44,7 @@ export default function PageResetPasswordRequest() {
     },
   });
 
-  const resetPasswordInitForm = useForm<TODO>({
-    id: 'reset-password-init-form',
+  const resetPasswordInitForm = useForm<{ email: string }>({
     onValidSubmit: (values) => {
       resetPasswordInit.mutate(values.email);
     },

@@ -24,6 +24,7 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
+import { User } from '@/features/users/schema';
 import { useUser, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
 
@@ -40,7 +41,7 @@ export default function PageUserUpdate() {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { mutate: editUser, isLoading: editUserIsLoading } = useUserUpdate({
+  const userUpdate = useUserUpdate({
     onError: (error) => {
       if (error.response) {
         const { title, errorKey } = error.response.data;
@@ -70,16 +71,15 @@ export default function PageUserUpdate() {
     },
   });
 
-  const form = useForm<TODO>({
-    id: 'create - user - form',
+  const form = useForm<Omit<User, 'id'>>({
     ready: !user.isFetching,
     initialValues: user.data,
     onValidSubmit: (values) => {
-      const userToSend = {
-        id: user.data?.id,
+      if (!user.data?.id) return null;
+      userUpdate.mutate({
+        id: user.data.id,
         ...values,
-      };
-      editUser(userToSend);
+      });
     },
   });
 
@@ -126,7 +126,7 @@ export default function PageUserUpdate() {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={editUserIsLoading}
+                  isLoading={userUpdate.isLoading}
                 >
                   {t('users:update.action.save')}
                 </Button>

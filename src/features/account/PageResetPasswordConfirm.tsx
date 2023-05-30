@@ -39,17 +39,14 @@ export default function PageResetPasswordConfirm() {
       navigate('/login');
     },
   });
-
-  const submitResetPasswordFinish = (values: TODO) => {
-    resetPasswordFinish.mutate({
-      key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
-      newPassword: values.password,
-    });
-  };
-
-  const resetPasswordFinishForm = useForm({
+  const resetPasswordFinishForm = useForm<{ password: string }>({
     id: 'reset-password-finish-form',
-    onValidSubmit: submitResetPasswordFinish,
+    onValidSubmit: (values) => {
+      resetPasswordFinish.mutate({
+        key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
+        newPassword: values.password,
+      });
+    },
   });
   const values = useFormFields({
     connect: resetPasswordFinishForm,
