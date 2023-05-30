@@ -11,7 +11,7 @@ import {
   useMergeRefs,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiSearch, FiX } from 'react-icons/fi';
+import { LuSearch, LuX } from 'react-icons/lu';
 
 type CustomProps = {
   value?: string;
@@ -107,10 +107,10 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
               size="xs"
               aria-label={clearLabel ?? t('components:searchInput.clear')}
             >
-              <FiX />
+              <LuX />
             </IconButton>
           ) : (
-            <FiSearch />
+            <LuSearch />
           )}
         </InputRightElement>
       </InputGroup>

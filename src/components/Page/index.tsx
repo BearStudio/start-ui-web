@@ -9,7 +9,7 @@ import {
   Stack,
   useTheme,
 } from '@chakra-ui/react';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import useMeasure from 'react-use-measure';
 
 import { useRtl } from '@/hooks/useRtl';
@@ -100,7 +100,7 @@ export const PageTopBar = ({
               <Box>
                 <IconButton
                   aria-label="Go Back"
-                  icon={rtlValue(<FiArrowLeft />, <FiArrowRight />)}
+                  icon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
                   onClick={() => onBack()}
                 />
               </Box>

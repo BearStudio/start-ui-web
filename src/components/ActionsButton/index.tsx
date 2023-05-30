@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { IconButton, IconButtonProps, forwardRef } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiMoreVertical } from 'react-icons/fi';
+import { LuMoreVertical } from 'react-icons/lu';
 
 export type ActionsButtonProps = Omit<IconButtonProps, 'aria-label'> & {
   label?: string;
@@ -24,7 +24,7 @@ export const ActionsButton: FC<React.PropsWithChildren<ActionsButtonProps>> =
         _hover={{ opacity: 1, bg: 'rgba(0, 0, 0, 0.05)' }}
         _focusVisible={{ opacity: 1, boxShadow: 'outline' }}
         _active={{ bg: 'rgba(0, 0, 0, 0.1)' }}
-        icon={<FiMoreVertical />}
+        icon={<LuMoreVertical />}
         aria-label={label ?? t('components:actionsButton.label')}
         data-test="actions-button"
         {...rest}

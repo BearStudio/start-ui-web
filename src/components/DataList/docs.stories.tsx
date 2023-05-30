@@ -15,7 +15,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { FiCopy, FiEdit, FiTrash2, FiUserPlus } from 'react-icons/fi';
+import { LuCopy, LuEdit, LuTrash2, LuUserPlus } from 'react-icons/lu';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { Icon } from '@/components/Icons';
@@ -298,25 +298,25 @@ export const Complete = () => {
               />
               <MenuList>
                 <MenuItem
-                  icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
                 >
                   Edit
                 </MenuItem>
                 <MenuItem
-                  icon={<Icon icon={FiCopy} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={LuCopy} fontSize="lg" color="gray.400" />}
                 >
                   Duplicate
                 </MenuItem>
                 <MenuItem
                   icon={
-                    <Icon icon={FiUserPlus} fontSize="lg" color="gray.400" />
+                    <Icon icon={LuUserPlus} fontSize="lg" color="gray.400" />
                   }
                 >
                   Share
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
-                  icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
                 >
                   Delete
                 </MenuItem>

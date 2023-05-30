@@ -17,13 +17,13 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
-  FiCheck,
-  FiCopy,
-  FiLogOut,
-  FiMoon,
-  FiSun,
-  FiUser,
-} from 'react-icons/fi';
+  LuCheck,
+  LuCopy,
+  LuLogOut,
+  LuMoon,
+  LuSun,
+  LuUser,
+} from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
@@ -88,7 +88,7 @@ const AppVersion = ({ ...rest }) => {
           transition="0.2s"
           _groupHover={{ d: 'flex' }}
         >
-          <Icon icon={hasCopied ? FiCheck : FiCopy} me="2" fontSize="sm" />
+          <Icon icon={hasCopied ? LuCheck : LuCopy} me="2" fontSize="sm" />
           {hasCopied
             ? t('layout:accountMenu.version.copied')
             : t('layout:accountMenu.version.copy')}
@@ -122,7 +122,7 @@ export const AccountMenu = ({ ...rest }) => {
             <MenuItem
               as={Link}
               to="/account"
-              icon={<Icon icon={FiUser} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={LuUser} fontSize="lg" color="gray.400" />}
             >
               {t('layout:accountMenu.myAccount')}
             </MenuItem>
@@ -131,7 +131,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuItem
             icon={
               <Icon
-                icon={colorMode === 'dark' ? FiSun : FiMoon}
+                icon={colorMode === 'dark' ? LuSun : LuMoon}
                 fontSize="lg"
                 color="gray.400"
               />
@@ -144,7 +144,7 @@ export const AccountMenu = ({ ...rest }) => {
           </MenuItem>
           <MenuDivider />
           <MenuItem
-            icon={<Icon icon={FiLogOut} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuLogOut} fontSize="lg" color="gray.400" />}
             onClick={() => navigate('/logout')}
           >
             {t('layout:accountMenu.logout')}

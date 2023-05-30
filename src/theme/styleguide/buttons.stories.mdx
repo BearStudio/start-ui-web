@@ -1,13 +1,13 @@
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/react';
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
-import { HiPlus, HiMinus } from 'react-icons/hi'
+import { LuPlus, LuMinus } from 'react-icons/lu'
 
 <Meta title="StyleGuide/Buttons" />
 
 # Buttons
 
 ```jsx
-import { Button, IconButton } from '@chakra-ui/react'
+import { Button, IconButton } from '@chakra-ui/react'
 ```
 
 ## Default Button
@@ -17,7 +17,7 @@ import { Button, IconButton } from '@chakra-ui/react'
     <ButtonGroup>
       <Button>Default Button</Button>
       <Button isLoading loadingText="Processing...">Button</Button>
-      <IconButton icon={<HiPlus />} aria-label="Add" />
+      <IconButton icon={<LuPlus />} aria-label="Add" />
       <Button isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
@@ -30,7 +30,7 @@ import { Button, IconButton } from '@chakra-ui/react'
     <ButtonGroup>
       <Button variant="@primary">Primary Button</Button>
       <Button variant="@primary" isLoading loadingText="Processing...">Button</Button>
-      <IconButton variant="@primary" icon={<HiPlus />} aria-label="Add" />
+      <IconButton variant="@primary" icon={<LuPlus />} aria-label="Add" />
       <Button variant="@primary" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
@@ -43,7 +43,7 @@ import { Button, IconButton } from '@chakra-ui/react'
     <ButtonGroup>
       <Button variant="@secondary">Secondary Button</Button>
       <Button variant="@secondary" isLoading loadingText="Processing...">Button</Button>
-      <IconButton variant="@secondary" icon={<HiPlus />} aria-label="Add" />
+      <IconButton variant="@secondary" icon={<LuPlus />} aria-label="Add" />
       <Button variant="@secondary" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
@@ -56,7 +56,7 @@ import { Button, IconButton } from '@chakra-ui/react'
     <ButtonGroup>
       <Button variant="@danger">Danger Button</Button>
       <Button variant="@danger" isLoading loadingText="Processing...">Button</Button>
-      <IconButton variant="@danger" icon={<HiMinus />} aria-label="Remove" />
+      <IconButton variant="@danger" icon={<LuMinus />} aria-label="Remove" />
       <Button variant="@danger" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { FiHexagon, FiLock, FiUser } from 'react-icons/fi';
+import { LuHexagon, LuLock, LuUser } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from './index';
 
@@ -15,7 +15,7 @@ export const Default = () => {
       <NavGroup title="My Account">
         <NavItem
           as="a"
-          icon={FiUser}
+          icon={LuUser}
           isActive={active === 0}
           onClick={() => setActive(0)}
         >
@@ -23,7 +23,7 @@ export const Default = () => {
         </NavItem>
         <NavItem
           as="a"
-          icon={FiLock}
+          icon={LuLock}
           isActive={active === 1}
           onClick={() => setActive(1)}
         >
@@ -33,7 +33,7 @@ export const Default = () => {
       <NavGroup title="Other">
         <NavItem
           as="a"
-          icon={FiHexagon}
+          icon={LuHexagon}
           isActive={active === 2}
           onClick={() => setActive(2)}
         >
@@ -41,7 +41,7 @@ export const Default = () => {
         </NavItem>
         <NavItem
           as="a"
-          icon={FiHexagon}
+          icon={LuHexagon}
           isActive={active === 3}
           onClick={() => setActive(3)}
         >

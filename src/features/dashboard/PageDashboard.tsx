@@ -12,9 +12,7 @@ import {
   Wrap,
 } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { CgLoadbarDoc } from 'react-icons/cg';
-import { FaGithub } from 'react-icons/fa';
-import { FiAlertCircle } from 'react-icons/fi';
+import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { Page, PageContent } from '@/components/Page';
@@ -48,10 +46,10 @@ export default function PageDashboard() {
             as="a"
             href="https://github.com/BearStudio/start-ui"
           >
-            <Icon icon={FaGithub} me="1" /> {t('dashboard:links.github')}
+            <Icon icon={LuGithub} me="1" /> {t('dashboard:links.github')}
           </Button>
           <Button variant="link" as="a" href="https://docs.web.start-ui.com">
-            <Icon icon={CgLoadbarDoc} me="1" />{' '}
+            <Icon icon={LuBookOpen} me="1" />{' '}
             {t('dashboard:links.documentation')}
           </Button>
           <Button
@@ -59,7 +57,7 @@ export default function PageDashboard() {
             as="a"
             href="https://github.com/BearStudio/start-ui/issues/new"
           >
-            <Icon icon={FiAlertCircle} me="1" />{' '}
+            <Icon icon={LuAlertCircle} me="1" />{' '}
             {t('dashboard:links.openIssue')}
           </Button>
         </Wrap>

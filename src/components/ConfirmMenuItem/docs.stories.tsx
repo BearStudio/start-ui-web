@@ -11,7 +11,7 @@ import {
   MenuList,
   Portal,
 } from '@chakra-ui/react';
-import { FiActivity, FiChevronDown, FiTrash2 } from 'react-icons/fi';
+import { LuActivity, LuChevronDown, LuTrash2 } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -24,7 +24,7 @@ export default {
 export const Default = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -47,7 +47,7 @@ export const Default = () => {
 export const MenuItemLongText = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -68,7 +68,7 @@ export const MenuItemLongText = () => {
 export const ConfirmText = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -87,7 +87,7 @@ export const ConfirmText = () => {
 export const ConfirmTextLong = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -109,14 +109,14 @@ export const ConfirmTextLong = () => {
 export const ConfirmMenuItemIcon = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
         <MenuList>
           <MenuItem>Action</MenuItem>
           <ConfirmMenuItem
-            icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
           >
             Confirm Action
           </ConfirmMenuItem>
@@ -130,13 +130,13 @@ export const ConfirmMenuItemIcon = () => {
 export const ConfirmIcon = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
         <MenuList>
           <MenuItem>Action</MenuItem>
-          <ConfirmMenuItem confirmIcon={FiActivity}>
+          <ConfirmMenuItem confirmIcon={LuActivity}>
             Confirm Action
           </ConfirmMenuItem>
           <MenuItem>Action</MenuItem>
@@ -149,7 +149,7 @@ export const ConfirmIcon = () => {
 export const ConfirmContent = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -175,7 +175,7 @@ export const ConfirmContent = () => {
 export const ConfirmColorScheme = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>
@@ -194,7 +194,7 @@ export const ConfirmColorScheme = () => {
 export const ConfirmDelay = () => {
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<Icon icon={FiChevronDown} />}>
+      <MenuButton as={Button} rightIcon={<Icon icon={LuChevronDown} />}>
         Actions
       </MenuButton>
       <Portal>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { FaSortDown, FaSortUp } from 'react-icons/fa';
+import { LuArrowDown, LuArrowUp } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -52,15 +52,15 @@ export const CustomIcons = () => {
         sort={sortDesc}
         onChange={setSortDesc}
         options={options}
-        ascIcon={<Icon icon={FaSortUp} />}
-        descIcon={<Icon icon={FaSortDown} />}
+        ascIcon={<Icon icon={LuArrowUp} />}
+        descIcon={<Icon icon={LuArrowDown} />}
       />
       <Sort
         sort={sortAsc}
         onChange={setSortAsc}
         options={options}
-        ascIcon={<Icon icon={FaSortUp} />}
-        descIcon={<Icon icon={FaSortDown} />}
+        ascIcon={<Icon icon={LuArrowUp} />}
+        descIcon={<Icon icon={LuArrowDown} />}
       />
     </>
   );

@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import { DayModifiers } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar } from 'react-icons/fi';
+import { LuCalendar } from 'react-icons/lu';
 import { usePopper } from 'react-popper';
 
 import { Icon } from '@/components/Icons';
@@ -28,7 +28,7 @@ const ReactDayPickerInput = forwardRef<InputProps, 'input'>(
     <InputGroup>
       <InputLeftElement pointerEvents="none">
         <Icon
-          icon={FiCalendar}
+          icon={LuCalendar}
           fontSize="lg"
           color={isDisabled ? 'gray.300' : 'gray.400'}
         />
