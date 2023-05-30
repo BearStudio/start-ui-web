@@ -53,12 +53,6 @@ export const LoginModalInterceptor = () => {
     loginModal.onClose();
   };
 
-  const handleClose = () => {
-    updateToken(null);
-    loginModal.onClose();
-    navigate('/login');
-  };
-
   // Clear the token and close the modal if we click on a link (like the reset link) inside of the modal
   useEffect(
     () => () => {
@@ -73,7 +67,7 @@ export const LoginModalInterceptor = () => {
   return (
     <Modal
       isOpen={loginModal.isOpen && isAuthenticated}
-      onClose={handleClose}
+      onClose={() => navigate('/login')}
       closeOnOverlayClick={false}
       trapFocus={false}
     >
