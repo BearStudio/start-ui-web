@@ -59,11 +59,16 @@ export const LoginModalInterceptor = () => {
     navigate('/login');
   };
 
-  const handleResetPassword = () => {
-    updateToken(null);
-    loginModal.onClose();
-    navigate('/account/reset');
-  };
+  // Clear the token and close the modal if we click on a link (like the reset link) inside of the modal
+  useEffect(
+    () => () => {
+      if (loginModal.isOpen && pathname !== pathnameRef.current) {
+        updateToken(null);
+        loginModal.onClose();
+      }
+    },
+    [loginModal, updateToken, pathname]
+  );
 
   return (
     <Modal
@@ -78,10 +83,7 @@ export const LoginModalInterceptor = () => {
         <ModalBody p="6">
           <Heading size="lg">{t('auth:interceptor.title')}</Heading>
           <Text mb="2">{t('auth:interceptor.description')}</Text>
-          <LoginForm
-            onSuccess={handleLogin}
-            onResetPassword={handleResetPassword}
-          />
+          <LoginForm onSuccess={handleLogin} />
         </ModalBody>
       </ModalContent>
     </Modal>

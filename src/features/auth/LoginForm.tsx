@@ -13,12 +13,10 @@ import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
 
 type LoginFormProps = BoxProps & {
   onSuccess?: () => void;
-  onResetPassword?: () => void;
 };
 
 export const LoginForm = ({
   onSuccess = () => undefined,
-  onResetPassword = () => undefined,
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
@@ -66,9 +64,6 @@ export const LoginForm = ({
               size="sm"
               variant="link"
               whiteSpace="initial"
-              onClick={() => {
-                onResetPassword?.();
-              }}
             >
               {t('auth:login.actions.forgotPassword')}
             </Button>
