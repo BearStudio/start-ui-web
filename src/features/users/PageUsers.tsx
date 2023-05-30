@@ -21,7 +21,7 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiPlus, FiRefreshCw } from 'react-icons/fi';
+import { LuPlus, LuRefreshCw } from 'react-icons/lu';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import {
@@ -71,7 +71,7 @@ export default function PageUsers() {
               as={Link}
               to="/admin/users/create"
               variant="@primary"
-              leftIcon={<FiPlus />}
+              leftIcon={<LuPlus />}
             >
               {t('users:list.actions.createUser')}
             </Button>
@@ -82,7 +82,7 @@ export default function PageUsers() {
               to="/admin/users/create"
               size="sm"
               variant="@primary"
-              icon={<FiPlus />}
+              icon={<LuPlus />}
             />
           </Box>
         </HStack>
@@ -141,7 +141,7 @@ export default function PageUsers() {
                     colorScheme="error"
                     variant="ghost"
                     size="sm"
-                    leftIcon={<FiRefreshCw />}
+                    leftIcon={<LuRefreshCw />}
                     isLoading={users.isLoadingPage}
                     onClick={() => users.refetch()}
                   >

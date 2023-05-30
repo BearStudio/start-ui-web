@@ -5,7 +5,7 @@ import {
   IconButtonProps,
   useEventListener,
 } from '@chakra-ui/react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 import { useDateSelectorContext } from './DateSelector';
 
@@ -25,7 +25,7 @@ export const DateSelectorPreviousDayButton: FC<
   return (
     <IconButton
       onClick={() => onDayClick(date.subtract(1, 'day'))}
-      icon={<FiChevronLeft />}
+      icon={<LuChevronLeft />}
       variant="outline"
       {...rest}
     />
@@ -46,7 +46,7 @@ export const DateSelectorNextDayButton: FC<
   return (
     <IconButton
       onClick={() => onDayClick(date.add(1, 'day'))}
-      icon={<FiChevronRight />}
+      icon={<LuChevronRight />}
       variant="outline"
       {...rest}
     />

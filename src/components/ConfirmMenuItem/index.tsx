@@ -15,7 +15,7 @@ import {
   useMultiStyleConfig,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiAlertCircle } from 'react-icons/fi';
+import { LuAlertCircle } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -114,7 +114,7 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
       children,
       confirmColorScheme = 'error',
       confirmContent = '',
-      confirmIcon = FiAlertCircle,
+      confirmIcon = LuAlertCircle,
       confirmText,
       confirmDelay = 2000,
       icon,

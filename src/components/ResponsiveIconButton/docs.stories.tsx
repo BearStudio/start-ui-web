@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FiPlus } from 'react-icons/fi';
+import { LuPlus } from 'react-icons/lu';
 
 import { ResponsiveIconButton } from '.';
 
@@ -9,7 +9,7 @@ export default {
 };
 
 export const Default = () => (
-  <ResponsiveIconButton icon={<FiPlus />}>Add something</ResponsiveIconButton>
+  <ResponsiveIconButton icon={<LuPlus />}>Add something</ResponsiveIconButton>
 );
 
 export const WithCustomBreakpoints = () => (
@@ -21,7 +21,7 @@ export const WithCustomBreakpoints = () => (
       lg: false,
       xl: true,
     }}
-    icon={<FiPlus />}
+    icon={<LuPlus />}
   >
     Add something
   </ResponsiveIconButton>

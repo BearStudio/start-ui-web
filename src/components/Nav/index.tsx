@@ -16,7 +16,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { FiChevronDown } from 'react-icons/fi';
+import { LuChevronDown } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { useIsClientReady } from '@/hooks/useIsClientReady';
@@ -60,7 +60,7 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
               opacity={!isClientReady ? 0 : undefined}
               textAlign="left"
               as={Button}
-              rightIcon={<FiChevronDown />}
+              rightIcon={<LuChevronDown />}
               sx={{ '> *': { minW: 0 } }}
             >
               {active}

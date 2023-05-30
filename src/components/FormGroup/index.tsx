@@ -8,7 +8,7 @@ import {
   FormLabel,
   SlideFade,
 } from '@chakra-ui/react';
-import { FiAlertCircle } from 'react-icons/fi';
+import { LuAlertCircle } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -43,7 +43,7 @@ export const FormGroup = ({
     {!!errorMessage && (
       <FormErrorMessage id={`${id}-error`}>
         <SlideFade in offsetY={-6}>
-          <Icon icon={FiAlertCircle} me="2" />
+          <Icon icon={LuAlertCircle} me="2" />
           {errorMessage}
         </SlideFade>
       </FormErrorMessage>

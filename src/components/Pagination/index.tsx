@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import {
-  FiChevronLeft,
-  FiChevronRight,
-  FiChevronsLeft,
-  FiChevronsRight,
-} from 'react-icons/fi';
+  LuChevronLeft,
+  LuChevronRight,
+  LuChevronsLeft,
+  LuChevronsRight,
+} from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { useRtl } from '@/hooks/useRtl';
@@ -83,7 +83,7 @@ export const PaginationButtonFirstPage: FC<
       onClick={() => setPage(firstPage)}
       aria-label={t('components:pagination.firstPage')}
       icon={
-        <Icon icon={rtlValue(FiChevronsLeft, FiChevronsRight)} fontSize="lg" />
+        <Icon icon={rtlValue(LuChevronsLeft, LuChevronsRight)} fontSize="lg" />
       }
       size="sm"
       isDisabled={isFirstPage}
@@ -103,7 +103,7 @@ export const PaginationButtonPrevPage: FC<
       onClick={() => setPage(page - 1)}
       aria-label={t('components:pagination.prevPage')}
       icon={
-        <Icon icon={rtlValue(FiChevronLeft, FiChevronRight)} fontSize="lg" />
+        <Icon icon={rtlValue(LuChevronLeft, LuChevronRight)} fontSize="lg" />
       }
       size="sm"
       isDisabled={isFirstPage}
@@ -123,7 +123,7 @@ export const PaginationButtonLastPage: FC<
       onClick={() => setPage(lastPage)}
       aria-label={t('components:pagination.lastPage')}
       icon={
-        <Icon icon={rtlValue(FiChevronsRight, FiChevronsLeft)} fontSize="lg" />
+        <Icon icon={rtlValue(LuChevronsRight, LuChevronsLeft)} fontSize="lg" />
       }
       size="sm"
       isDisabled={isLastPage}
@@ -143,7 +143,7 @@ export const PaginationButtonNextPage: FC<
       onClick={() => setPage(page + 1)}
       aria-label={t('components:pagination.nextPage')}
       icon={
-        <Icon icon={rtlValue(FiChevronRight, FiChevronLeft)} fontSize="lg" />
+        <Icon icon={rtlValue(LuChevronRight, LuChevronLeft)} fontSize="lg" />
       }
       size="sm"
       isDisabled={isLastPage}

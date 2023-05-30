@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 
 import { SimpleGrid, Text, Tooltip, useClipboard } from '@chakra-ui/react';
-import { HiUser } from 'react-icons/hi';
+import { LuUser } from 'react-icons/lu';
 
 import { Icon, IconSortAsc } from '.';
 import * as icons from './icons-generated';
@@ -12,7 +12,7 @@ export default {
 
 export const ReactIcons = () => (
   <Text>
-    This is a HiUser <Icon icon={HiUser} /> icon from react-icons.
+    This is a LuUser <Icon icon={LuUser} /> icon from react-icons.
   </Text>
 );
 

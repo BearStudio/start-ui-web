@@ -10,7 +10,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiCheckCircle, FiEdit, FiTrash2, FiXCircle } from 'react-icons/fi';
+import { LuCheckCircle, LuEdit, LuTrash2, LuXCircle } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
@@ -101,14 +101,14 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
           <MenuItem
             as={Link}
             to={`/admin/users/${user.login}`}
-            icon={<Icon icon={FiEdit} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>
           {user.activated ? (
             <MenuItem
               onClick={deactivateUser}
-              icon={<Icon icon={FiXCircle} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
             >
               {t('common:actions.deactivate')}
             </MenuItem>
@@ -116,7 +116,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
             <MenuItem
               onClick={activateUser}
               icon={
-                <Icon icon={FiCheckCircle} fontSize="lg" color="gray.400" />
+                <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
               }
             >
               {t('common:actions.activate')}
@@ -124,7 +124,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
           )}
           <MenuDivider />
           <ConfirmMenuItem
-            icon={<Icon icon={FiTrash2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
             onClick={removeUser}
           >
             {t('common:actions.delete')}

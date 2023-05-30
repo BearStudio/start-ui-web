@@ -1,6 +1,6 @@
 import { Badge, Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiCheck, FiX } from 'react-icons/fi';
+import { LuCheck, LuX } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -12,7 +12,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         {t('users:data.status.activated')}
       </Box>
       <Icon
-        icon={FiCheck}
+        icon={LuCheck}
         aria-label={t('users:data.status.activated')}
         display={{ base: 'inline-flex', md: 'none' }}
       />
@@ -23,7 +23,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
         {t('users:data.status.deactivated')}
       </Box>
       <Icon
-        icon={FiX}
+        icon={LuX}
         aria-label={t('users:data.status.deactivated')}
         display={{ base: 'inline-flex', md: 'none' }}
       />

@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { FiUsers } from 'react-icons/fi';
-import { GoBook } from 'react-icons/go';
+import { LuBookOpen, LuUsers } from 'react-icons/lu';
 import { Link, useLocation } from 'react-router-dom';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
@@ -18,7 +17,7 @@ export const AdminNav = () => {
           as={Link}
           to="/admin/users"
           isActive={isActive('/admin/users')}
-          icon={FiUsers}
+          icon={LuUsers}
         >
           {t('admin:nav.users')}
         </NavItem>
@@ -26,7 +25,7 @@ export const AdminNav = () => {
           as={Link}
           to="/admin/api"
           isActive={isActive('/admin/api')}
-          icon={GoBook}
+          icon={LuBookOpen}
         >
           {t('admin:nav.apiDocumentation')}
         </NavItem>

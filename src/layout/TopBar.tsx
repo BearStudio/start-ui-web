@@ -9,7 +9,7 @@ import {
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react';
-import { FiMenu } from 'react-icons/fi';
+import { LuMenu } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { Logo } from '@/components/Logo';
@@ -23,7 +23,7 @@ const MenuButton = (props: Partial<IconButtonProps>) => {
   return (
     <IconButton
       aria-label="Navigation"
-      icon={<FiMenu size="1.5em" />}
+      icon={<LuMenu size="1.5em" />}
       onClick={navOnOpen}
       variant="unstyled"
       _active={{ bg: 'gray.700' }}
