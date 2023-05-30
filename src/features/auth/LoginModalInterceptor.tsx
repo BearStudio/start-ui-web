@@ -48,29 +48,26 @@ export const LoginModalInterceptor = () => {
     return () => Axios.interceptors.response.eject(interceptor);
   }, [openLoginModal, updateToken, queryCache]);
 
-  // On Route Change
-  useEffect(() => {
-    if (loginModal.isOpen && pathname !== pathnameRef.current) {
-      updateToken(null);
-      loginModal.onClose();
-    }
-  }, [loginModal, updateToken, pathname]);
-
-  const handleLogin = () => {
-    queryCache.refetchQueries();
+  const handleLogin = async () => {
+    await queryCache.refetchQueries();
     loginModal.onClose();
   };
 
-  const handleClose = () => {
-    updateToken(null);
-    loginModal.onClose();
-    navigate('/login');
-  };
+  // Clear the token and close the modal if we click on a link (like the reset link) inside of the modal
+  useEffect(
+    () => () => {
+      if (loginModal.isOpen && pathname !== pathnameRef.current) {
+        updateToken(null);
+        loginModal.onClose();
+      }
+    },
+    [loginModal, updateToken, pathname]
+  );
 
   return (
     <Modal
       isOpen={loginModal.isOpen && isAuthenticated}
-      onClose={handleClose}
+      onClose={() => navigate('/login')}
       closeOnOverlayClick={false}
       trapFocus={false}
     >
