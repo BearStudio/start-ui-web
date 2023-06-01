@@ -15,7 +15,7 @@ import { User, zUser } from '@/features/users/schema';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 export const accountKeys = createQueryKeys('accountService', {
-  account: null,
+  account: (extraKey = 'default') => [extraKey],
 });
 type AccountKeys = inferQueryKeys<typeof accountKeys>;
 
@@ -29,7 +29,7 @@ export const useAccount = (
 ) => {
   const { i18n } = useTranslation();
   const { data, ...rest } = useQuery(
-    accountKeys.account.queryKey,
+    accountKeys.account(config.meta?.extraKey).queryKey,
     async () => {
       const response = await Axios.get('/account');
       return zUser().parse(response);
