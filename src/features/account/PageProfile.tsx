@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
+import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from '@tanstack/react-query';
