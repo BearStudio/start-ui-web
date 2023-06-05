@@ -16,12 +16,17 @@ import {
   useAccount,
   useUpdateAccount,
 } from '@/features/account/service';
+import { Loader } from '@/layout/Loader';
 import { User } from '@/features/users/schema';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
-  const account = useAccount();
+  const account = useAccount({
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    meta: { extraKey: 'form' },
+  });
 
   const queryClient = useQueryClient();
 
@@ -40,12 +45,11 @@ export default function PageProfile() {
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
-      queryClient.invalidateQueries(accountKeys.account);
+      queryClient.invalidateQueries(accountKeys.account._def);
     },
   });
 
   const generalInformationForm = useForm<User>({
-    ready: !account.isFetching,
     initialValues: account.data,
     onValidSubmit: (values) => {
       const newAccount = {
@@ -63,63 +67,66 @@ export default function PageProfile() {
         <Heading size="md" mb="4">
           {t('account:profile.title')}
         </Heading>
-        {account && (
-          <Formiz connect={generalInformationForm}>
-            <form noValidate onSubmit={generalInformationForm.submit}>
-              <Stack
-                direction="column"
-                p="6"
-                borderRadius="lg"
-                spacing="6"
-                shadow="md"
-                bg="white"
-                _dark={{ bg: 'blackAlpha.400' }}
-              >
-                <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
+        <Stack
+          p="6"
+          borderRadius="lg"
+          spacing="6"
+          shadow="md"
+          bg="white"
+          _dark={{ bg: 'blackAlpha.400' }}
+          minH="22rem"
+        >
+          {account.isFetching && <Loader />}
+          {!account.isFetching && (
+            <Formiz connect={generalInformationForm}>
+              <form noValidate onSubmit={generalInformationForm.submit}>
+                <Stack spacing="6">
+                  <Stack direction={{ base: 'column', sm: 'row' }} spacing="6">
+                    <FieldInput
+                      name="firstName"
+                      label={t('account:data.firstname.label')}
+                      required={t('account:data.firstname.required') as string}
+                    />
+                    <FieldInput
+                      name="lastName"
+                      label={t('account:data.lastname.label')}
+                      required={t('account:data.lastname.required') as string}
+                    />
+                  </Stack>
                   <FieldInput
-                    name="firstName"
-                    label={t('account:data.firstname.label')}
-                    required={t('account:data.firstname.required') as string}
+                    name="email"
+                    label={t('account:data.email.label')}
+                    required={t('account:data.email.required') as string}
+                    validations={[
+                      {
+                        handler: isEmail(),
+                        message: t('account:data.email.invalid'),
+                      },
+                    ]}
                   />
-                  <FieldInput
-                    name="lastName"
-                    label={t('account:data.lastname.label')}
-                    required={t('account:data.lastname.required') as string}
+                  <FieldSelect
+                    name="langKey"
+                    label={t('account:data.language.label')}
+                    options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                      label: t(`common:languages.${key}`),
+                      value: key,
+                    }))}
                   />
+                  <Flex>
+                    <Button
+                      type="submit"
+                      variant="@primary"
+                      ms="auto"
+                      isLoading={updateAccount.isLoading}
+                    >
+                      {t('account:profile.actions.save')}
+                    </Button>
+                  </Flex>
                 </Stack>
-                <FieldInput
-                  name="email"
-                  label={t('account:data.email.label')}
-                  required={t('account:data.email.required') as string}
-                  validations={[
-                    {
-                      handler: isEmail(),
-                      message: t('account:data.email.invalid'),
-                    },
-                  ]}
-                />
-                <FieldSelect
-                  name="langKey"
-                  label={t('account:data.language.label')}
-                  options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                    label: t(`common:languages.${key}`),
-                    value: key,
-                  }))}
-                />
-                <Flex>
-                  <Button
-                    type="submit"
-                    variant="@primary"
-                    ms="auto"
-                    isLoading={updateAccount.isLoading}
-                  >
-                    {t('account:profile.actions.save')}
-                  </Button>
-                </Flex>
-              </Stack>
-            </form>
-          </Formiz>
-        )}
+              </form>
+            </Formiz>
+          )}
+        </Stack>
       </PageContent>
     </Page>
   );

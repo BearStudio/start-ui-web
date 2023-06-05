@@ -35,6 +35,7 @@ export default function PageUserUpdate() {
   const navigate = useNavigate();
   const user = useUser(params?.login?.toString(), {
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     enabled: !!params?.login,
   });
 
