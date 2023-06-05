@@ -1,12 +1,10 @@
-import {
-  createQueryKeys,
-  inferQueryKeys,
-} from '@lukemorales/query-key-factory';
+import { createQueryKeys } from '@lukemorales/query-key-factory';
 import {
   UseMutationOptions,
   UseQueryOptions,
   useMutation,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import Axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -16,31 +14,38 @@ import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 export const accountKeys = createQueryKeys('accountService', {
   account: null,
+  accountForm: null,
 });
-type AccountKeys = inferQueryKeys<typeof accountKeys>;
 
-export const useAccount = (
-  config: UseQueryOptions<
-    User,
-    AxiosError<ApiErrorResponse>,
-    User,
-    AccountKeys['account']['queryKey']
-  > = {}
-) => {
+type UseAccountQueryOptions = UseQueryOptions<
+  User,
+  AxiosError<ApiErrorResponse>
+>;
+export const useAccount = (queryOptions: UseAccountQueryOptions = {}) => {
   const { i18n } = useTranslation();
-  const query = useQuery(
-    accountKeys.account.queryKey,
-    async () => {
+  const query = useQuery({
+    queryKey: accountKeys.account.queryKey,
+    queryFn: async () => {
       const response = await Axios.get('/account');
       const data = zUser().parse(response);
       await i18n.changeLanguage(data?.langKey);
       return data;
     },
-    config
-  );
+    ...queryOptions,
+  });
   const isAdmin = !!query.data?.authorities?.includes('ROLE_ADMIN');
   return { isAdmin, ...query };
 };
+
+export const useAccountFormQuery = (
+  queryOptions: UseAccountQueryOptions = {}
+) =>
+  useAccount({
+    queryKey: accountKeys.accountForm.queryKey,
+    staleTime: Infinity,
+    cacheTime: 0,
+    ...queryOptions,
+  });
 
 export const useCreateAccount = (
   config: UseMutationOptions<
@@ -79,15 +84,20 @@ export const useUpdateAccount = (
   config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, User> = {}
 ) => {
   const { i18n } = useTranslation();
+  const queryClient = useQueryClient();
   return useMutation(
     async (account) => {
       await Axios.post('/account', account);
     },
     {
       ...config,
-      onMutate: (data, ...args) => {
-        i18n.changeLanguage(data?.langKey);
-        config.onMutate?.(data, ...args);
+      onMutate: async (data, ...args) => {
+        await i18n.changeLanguage(data?.langKey);
+        await config.onMutate?.(data, ...args);
+      },
+      onSuccess: async (...args) => {
+        await queryClient.invalidateQueries(accountKeys.account);
+        await config.onSuccess?.(...args);
       },
     }
   );

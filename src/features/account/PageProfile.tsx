@@ -3,7 +3,6 @@ import React from 'react';
 import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -12,23 +11,16 @@ import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
 import {
-  accountKeys,
-  useAccount,
+  useAccountFormQuery,
   useUpdateAccount,
 } from '@/features/account/service';
-import { Loader } from '@/layout/Loader';
 import { User } from '@/features/users/schema';
+import { Loader } from '@/layout/Loader';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
-  const account = useAccount({
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    meta: { extraKey: 'form' },
-  });
-
-  const queryClient = useQueryClient();
+  const account = useAccountFormQuery();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -45,7 +37,6 @@ export default function PageProfile() {
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
-      queryClient.invalidateQueries(accountKeys.account._def);
     },
   });
 
@@ -76,8 +67,8 @@ export default function PageProfile() {
           _dark={{ bg: 'blackAlpha.400' }}
           minH="22rem"
         >
-          {account.isFetching && <Loader />}
-          {!account.isFetching && (
+          {account.isLoading && <Loader />}
+          {!account.isLoading && (
             <Formiz connect={generalInformationForm}>
               <form noValidate onSubmit={generalInformationForm.submit}>
                 <Stack spacing="6">

@@ -1,7 +1,4 @@
-import {
-  createQueryKeys,
-  inferQueryKeys,
-} from '@lukemorales/query-key-factory';
+import { createQueryKeys } from '@lukemorales/query-key-factory';
 import {
   UseMutationOptions,
   UseQueryOptions,
@@ -23,28 +20,24 @@ const USERS_BASE_URL = '/admin/users';
 const usersKeys = createQueryKeys('usersService', {
   users: (params: { page?: number; size?: number }) => [params],
   user: (params: { login?: string }) => [params],
+  userForm: null,
 });
-type UsersKeys = inferQueryKeys<typeof usersKeys>;
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
-  config: UseQueryOptions<
-    UserList,
-    AxiosError<ApiErrorResponse>,
-    UserList,
-    UsersKeys['users']['queryKey']
-  > = {}
+  queryOptions: UseQueryOptions<UserList, AxiosError<ApiErrorResponse>> = {}
 ) => {
-  const result = useQuery(
-    usersKeys.users({ page, size }).queryKey,
-    async () => {
+  const result = useQuery({
+    queryKey: usersKeys.users({ page, size }).queryKey,
+    queryFn: async () => {
       const response = await Axios.get(USERS_BASE_URL, {
         params: { page, size, sort: 'id,desc' },
       });
       return zUserList().parse(response);
     },
-    { keepPreviousData: true, ...config }
-  );
+    keepPreviousData: true,
+    ...queryOptions,
+  });
 
   const { content: users, totalItems } = result.data || {};
   const totalPages = Math.ceil((totalItems ?? 0) / size);
@@ -61,32 +54,32 @@ export const useUserList = (
   };
 };
 
+type UseUserQueryOptions = UseQueryOptions<User, AxiosError<ApiErrorResponse>>;
 export const useUser = (
   userLogin?: string,
-  config: UseQueryOptions<
-    User,
-    AxiosError<ApiErrorResponse>,
-    User,
-    UsersKeys['user']['queryKey']
-  > = {}
+  queryOptions: UseUserQueryOptions = {}
 ) => {
-  const result = useQuery(
-    usersKeys.user({ login: userLogin }).queryKey,
-    async () => {
+  return useQuery({
+    queryKey: usersKeys.user({ login: userLogin }).queryKey,
+    queryFn: async () => {
       const response = await Axios.get(`${USERS_BASE_URL}/${userLogin}`);
       return zUser().parse(response);
     },
-    {
-      enabled: !!userLogin,
-      ...config,
-    }
-  );
-
-  return {
-    user: result.data,
-    ...result,
-  };
+    enabled: !!userLogin,
+    ...queryOptions,
+  });
 };
+
+export const useUserFormQuery = (
+  userLogin?: string,
+  queryOptions: UseUserQueryOptions = {}
+) =>
+  useUser(userLogin, {
+    queryKey: usersKeys.userForm.queryKey,
+    staleTime: Infinity,
+    cacheTime: 0,
+    ...queryOptions,
+  });
 
 export const useUserUpdate = (
   config: UseMutationOptions<User, AxiosError<UserMutateError>, User> = {}

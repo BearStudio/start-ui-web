@@ -25,7 +25,7 @@ import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
 import { User } from '@/features/users/schema';
-import { useUser, useUserUpdate } from '@/features/users/service';
+import { useUserFormQuery, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
 
 export default function PageUserUpdate() {
@@ -33,11 +33,7 @@ export default function PageUserUpdate() {
 
   const params = useParams();
   const navigate = useNavigate();
-  const user = useUser(params?.login?.toString(), {
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    enabled: !!params?.login,
-  });
+  const user = useUserFormQuery(params?.login?.toString());
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -73,7 +69,7 @@ export default function PageUserUpdate() {
   });
 
   const form = useForm<Omit<User, 'id'>>({
-    ready: !user.isFetching,
+    ready: !user.isLoading,
     initialValues: user.data,
     onValidSubmit: (values) => {
       if (!user.data?.id) return null;
@@ -111,9 +107,9 @@ export default function PageUserUpdate() {
           )}
         </HStack>
       </PageTopBar>
-      {user.isFetching && <Loader />}
-      {user.isError && !user.isFetching && <ErrorPage errorCode={404} />}
-      {!user.isError && !user.isFetching && (
+      {user.isLoading && <Loader />}
+      {user.isError && <ErrorPage errorCode={404} />}
+      {user.isSuccess && (
         <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>
             <PageContent>
