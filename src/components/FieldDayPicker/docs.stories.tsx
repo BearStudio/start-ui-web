@@ -2,13 +2,14 @@ import React from 'react';
 
 import { Box, Button, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { Meta } from '@storybook/react';
 
 import { FieldDayPicker } from './index';
 
 export default {
   title: 'Fields/FieldDayPicker',
   decorators: [
-    (Story: TODO) => {
+    (Story) => {
       return (
         <Box minH={'20rem'}>
           <Story />
@@ -16,7 +17,7 @@ export default {
       );
     },
   ],
-};
+} satisfies Meta;
 
 export const Default = () => {
   const form = useForm({ onSubmit: console.log });

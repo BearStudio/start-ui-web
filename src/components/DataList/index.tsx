@@ -22,9 +22,18 @@ type DataListContextValue = {
 };
 type DataListHeaderContextValue = boolean;
 
-export const DataListContext = React.createContext<DataListContextValue>(
-  {} as TODO
+export const DataListContext = React.createContext<DataListContextValue | null>(
+  null
 );
+
+const useDataListContext = () => {
+  const context = useContext(DataListContext);
+  if (context === null) {
+    throw new Error('Missing parent <DataList> component');
+  }
+  return context;
+};
+
 export const DataListHeaderContext =
   React.createContext<DataListHeaderContextValue>(false);
 
@@ -41,7 +50,7 @@ export const DataListCell = ({
   isVisible = true,
   ...rest
 }: DataListCellProps) => {
-  const { columns, setColumns } = useContext(DataListContext);
+  const { columns, setColumns } = useDataListContext();
   const isInHeader = useContext(DataListHeaderContext);
   const restRef = useRef(rest);
   restRef.current = rest;
@@ -148,7 +157,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
   isDisabled = false,
   ...rest
 }) => {
-  const { isHover } = useContext(DataListContext);
+  const { isHover } = useDataListContext();
   const showRow = useBreakpointValue(
     typeof isVisible === 'object' ? isVisible : { base: isVisible }
   );

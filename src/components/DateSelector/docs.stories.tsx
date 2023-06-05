@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Box, Kbd, Stack, Text, chakra } from '@chakra-ui/react';
+import { Meta } from '@storybook/react';
 import dayjs from 'dayjs';
 
 import {
@@ -13,7 +14,7 @@ import {
 export default {
   title: 'Components/DateSelector',
   decorators: [
-    (Story: TODO) => {
+    (Story) => {
       return (
         <Box minH={'20rem'}>
           <Story />
@@ -21,7 +22,7 @@ export default {
       );
     },
   ],
-};
+} satisfies Meta;
 
 export const Default = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs());

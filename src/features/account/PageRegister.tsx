@@ -65,7 +65,6 @@ export default function PageRegister() {
   const form = useForm<
     Pick<User, 'email' | 'login' | 'langKey'> & { password: string }
   >({
-    id: 'register-form',
     onValidSubmit: (values) => createUser.mutate(values),
   });
 

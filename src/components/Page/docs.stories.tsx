@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Center, Flex } from '@chakra-ui/react';
+import { Meta } from '@storybook/react';
 
 import { Layout } from '@/layout/Layout';
 
@@ -14,7 +15,7 @@ export default {
     },
   },
   decorators: [
-    (Story: TODO) => {
+    (Story) => {
       return (
         <Flex
           h="100vh"
@@ -29,7 +30,7 @@ export default {
       );
     },
   ],
-};
+} satisfies Meta;
 
 export const Default = () => (
   <Page>

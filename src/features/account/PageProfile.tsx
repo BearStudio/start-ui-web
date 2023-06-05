@@ -17,6 +17,7 @@ import {
   useUpdateAccount,
 } from '@/features/account/service';
 import { Loader } from '@/layout/Loader';
+import { User } from '@/features/users/schema';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 export default function PageProfile() {
@@ -48,8 +49,7 @@ export default function PageProfile() {
     },
   });
 
-  const generalInformationForm = useForm<TODO>({
-    id: 'account-form',
+  const generalInformationForm = useForm<User>({
     initialValues: account.data,
     onValidSubmit: (values) => {
       const newAccount = {

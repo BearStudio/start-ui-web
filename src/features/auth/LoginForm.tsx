@@ -37,7 +37,6 @@ export const LoginForm = ({
   });
 
   const form = useForm<{ username: string; password: string }>({
-    id: 'login-form',
     onValidSubmit: (values) => login.mutate(values),
   });
 

@@ -39,8 +39,10 @@ export default function PagePassword() {
     },
   });
 
-  const changePasswordForm = useForm<TODO>({
-    id: 'password-form',
+  const changePasswordForm = useForm<{
+    currentPassword: string;
+    newPassword: string;
+  }>({
     onValidSubmit: (values) => {
       const { currentPassword, newPassword } = values;
       updatePassword.mutate({ currentPassword, newPassword });

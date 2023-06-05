@@ -6,11 +6,11 @@ import type { StyleFunctionProps } from '@chakra-ui/theme-tools';
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(alertAnatomy.keys);
 
-function getBg(props: StyleFunctionProps): { light: TODO; dark: string } {
+function getBg(props: StyleFunctionProps) {
   const { theme, colorScheme: c } = props;
   const light = getColor(theme, `${c}.100`, c);
   const dark = transparentize(`${c}.200`, 0.16)(theme);
-  return { light, dark };
+  return { light, dark } as const;
 }
 
 const variantSubtle = definePartsStyle((props) => {
