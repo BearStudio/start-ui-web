@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
+import { StoryFn } from '@storybook/react';
 import { LuCopy, LuEdit, LuTrash2, LuUserPlus } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
@@ -50,7 +51,7 @@ export const UsageWithMenu = () => (
   </Menu>
 );
 UsageWithMenu.decorators = [
-  (Story: TODO) => (
+  (Story: StoryFn) => (
     <Flex h="12rem" justify="flex-end">
       <Story />
     </Flex>

@@ -22,7 +22,15 @@ type PageContextValue = {
   containerSize: keyof typeof containerSizes;
 };
 
-const PageContext = React.createContext<PageContextValue>(null as TODO);
+const PageContext = React.createContext<PageContextValue | null>(null);
+
+const usePageContext = () => {
+  const context = useContext(PageContext);
+  if (context === null) {
+    throw new Error('Missing parent <Page> component');
+  }
+  return context;
+};
 
 const containerSizes = {
   sm: '60ch',
@@ -33,7 +41,7 @@ const containerSizes = {
 } as const;
 
 const PageContainer = ({ children, ...rest }: FlexProps) => {
-  const { hideContainer, containerSize } = useContext(PageContext);
+  const { hideContainer, containerSize } = usePageContext();
 
   if (hideContainer) return <>{children}</>;
 
@@ -119,7 +127,7 @@ type PageContentProps = FlexProps & {
 };
 
 export const PageContent = ({ children, ...rest }: PageContentProps) => {
-  const { nav } = useContext(PageContext);
+  const { nav } = usePageContext();
   return (
     <Flex zIndex="1" direction="column" flex="1" py="4" {...rest}>
       <PageContainer>

@@ -13,6 +13,7 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
+import { User } from '@/features/users/schema';
 import { useUserCreate } from '@/features/users/service';
 
 export default function PageUserCreate() {
@@ -52,8 +53,12 @@ export default function PageUserCreate() {
     },
   });
 
-  const form = useForm<TODO>({
-    id: 'create-user-form',
+  const form = useForm<
+    Pick<
+      User,
+      'login' | 'email' | 'firstName' | 'lastName' | 'langKey' | 'authorities'
+    >
+  >({
     onValidSubmit: (values) => {
       const newUser = {
         ...values,

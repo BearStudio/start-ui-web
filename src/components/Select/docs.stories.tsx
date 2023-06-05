@@ -21,19 +21,20 @@ import {
   Stack,
   useDisclosure,
 } from '@chakra-ui/react';
+import { Meta } from '@storybook/react';
 
 import { Select } from '.';
 
 export default {
   title: 'components/Select',
   decorators: [
-    (Story: TODO) => (
+    (Story) => (
       <Box h="24rem">
         <Story />
       </Box>
     ),
   ],
-};
+} satisfies Meta;
 
 const selectOptions = [
   { value: 1, label: 'Option 1' },
