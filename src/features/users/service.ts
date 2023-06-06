@@ -25,24 +25,28 @@ const usersKeys = createQueryKeys('usersService', {
 
 export const useUserList = (
   { page = 0, size = 10 } = {},
-  queryOptions: UseQueryOptions<UserList, AxiosError<ApiErrorResponse>> = {}
+  queryOptions: UseQueryOptions<UserList> = {}
 ) => {
-  const result = useQuery({
+  const query = useQuery({
     queryKey: usersKeys.users({ page, size }).queryKey,
     queryFn: async () => {
       const response = await Axios.get(USERS_BASE_URL, {
         params: { page, size, sort: 'id,desc' },
       });
-      return zUserList().parse(response);
+      return zUserList().parse({
+        users: response.data,
+        totalItems: response.headers?.['x-total-count'],
+      });
     },
     keepPreviousData: true,
     ...queryOptions,
   });
 
-  const { content: users, totalItems } = result.data || {};
-  const totalPages = Math.ceil((totalItems ?? 0) / size);
+  const users = query.data?.users;
+  const totalItems = query.data?.totalItems ?? 0;
+  const totalPages = Math.ceil(totalItems / size);
   const hasMore = page + 1 < totalPages;
-  const isLoadingPage = result.isFetching;
+  const isLoadingPage = query.isFetching;
 
   return {
     users,
@@ -50,20 +54,19 @@ export const useUserList = (
     hasMore,
     totalPages,
     isLoadingPage,
-    ...result,
+    ...query,
   };
 };
 
-type UseUserQueryOptions = UseQueryOptions<User, AxiosError<ApiErrorResponse>>;
 export const useUser = (
   userLogin?: string,
-  queryOptions: UseUserQueryOptions = {}
+  queryOptions: UseQueryOptions<User> = {}
 ) => {
   return useQuery({
     queryKey: usersKeys.user({ login: userLogin }).queryKey,
     queryFn: async () => {
       const response = await Axios.get(`${USERS_BASE_URL}/${userLogin}`);
-      return zUser().parse(response);
+      return zUser().parse(response.data);
     },
     enabled: !!userLogin,
     ...queryOptions,
@@ -72,7 +75,7 @@ export const useUser = (
 
 export const useUserFormQuery = (
   userLogin?: string,
-  queryOptions: UseUserQueryOptions = {}
+  queryOptions: UseQueryOptions<User> = {}
 ) =>
   useUser(userLogin, {
     queryKey: usersKeys.userForm.queryKey,
@@ -88,7 +91,7 @@ export const useUserUpdate = (
   return useMutation(
     async (payload) => {
       const response = await Axios.put(USERS_BASE_URL, payload);
-      return zUser().parse(response);
+      return zUser().parse(response.data);
     },
     {
       ...config,
@@ -104,7 +107,7 @@ export const useUserUpdate = (
                 if (!cachedData) return;
                 return {
                   ...cachedData,
-                  content: (cachedData.content || []).map((user) =>
+                  content: (cachedData.users || []).map((user) =>
                     user.id === data.id ? data : user
                   ),
                 };
@@ -138,7 +141,7 @@ export const useUserCreate = (
         langKey,
         ...payload,
       });
-      return zUser().parse(response);
+      return zUser().parse(response.data);
     },
     {
       ...config,

@@ -17,17 +17,14 @@ export const accountKeys = createQueryKeys('accountService', {
   accountForm: null,
 });
 
-type UseAccountQueryOptions = UseQueryOptions<
-  User,
-  AxiosError<ApiErrorResponse>
->;
+type UseAccountQueryOptions = UseQueryOptions<User>;
 export const useAccount = (queryOptions: UseAccountQueryOptions = {}) => {
   const { i18n } = useTranslation();
   const query = useQuery({
     queryKey: accountKeys.account.queryKey,
     queryFn: async () => {
       const response = await Axios.get('/account');
-      const data = zUser().parse(response);
+      const data = zUser().parse(response.data);
       await i18n.changeLanguage(data?.langKey);
       return data;
     },
