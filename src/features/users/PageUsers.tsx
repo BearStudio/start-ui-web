@@ -13,7 +13,6 @@ import {
   Code,
   HStack,
   Heading,
-  IconButton,
   LinkBox,
   LinkOverlay,
   Stack,
