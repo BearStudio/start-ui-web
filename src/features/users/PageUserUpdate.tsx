@@ -64,7 +64,7 @@ export default function PageUserUpdate() {
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      navigate(-1);
+      navigate('/admin/users');
     },
   });
 
