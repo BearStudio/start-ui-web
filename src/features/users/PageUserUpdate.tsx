@@ -100,7 +100,7 @@ export default function PageUserUpdate() {
               </Stack>
             )}
           </Box>
-          {!!user && (
+          {!!user.data && (
             <Box>
               <UserStatus isActivated={user.data?.activated} />
             </Box>
