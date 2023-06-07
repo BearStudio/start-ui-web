@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 
-import { useIsClientReady } from '@/hooks/useIsClientReady';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { isBrowser } from '@/lib/ssr';
 
 type AuthContextValue = {
@@ -30,7 +30,7 @@ export const useAuthContext = () => {
     throw new Error('Missing parent <AuthProvider> component');
   }
   const { isAuthenticated, updateToken } = context;
-  const isClientReady = useIsClientReady();
+  const isClientReady = useIsHydrated();
 
   return {
     isLoading: !isClientReady,

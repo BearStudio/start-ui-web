@@ -19,7 +19,7 @@ import {
 import { LuChevronDown } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
-import { useIsClientReady } from '@/hooks/useIsClientReady';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 
 type NavContextValue = {
   active: ReactNode;
@@ -39,7 +39,7 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 };
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
-  const isClientReady = useIsClientReady();
+  const isClientReady = useIsHydrated();
   const isMenu = useBreakpointValue({
     base: true,
     [breakpoint]: false,
