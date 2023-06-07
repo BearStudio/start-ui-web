@@ -177,7 +177,8 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
 }) => {
   const { isHover } = useDataListContext();
   const showRow = useBreakpointValue(
-    typeof isVisible === 'object' ? isVisible : { base: isVisible }
+    typeof isVisible === 'object' ? isVisible : { base: isVisible },
+    { ssr: false }
   );
   const disabledProps = isDisabled
     ? {
