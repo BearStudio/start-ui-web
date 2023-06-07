@@ -1,15 +1,9 @@
 import React from 'react';
 
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Avatar,
   Badge,
   Box,
-  Button,
-  Center,
   Code,
   HStack,
   Heading,
@@ -21,14 +15,17 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuPlus, LuRefreshCw } from 'react-icons/lu';
+import { LuPlus } from 'react-icons/lu';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   DataList,
   DataListCell,
+  DataListEmptyState,
+  DataListErrorState,
   DataListFooter,
   DataListHeader,
+  DataListLoadingState,
   DataListRow,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
@@ -123,28 +120,15 @@ export default function PageUsers() {
                 align="flex-end"
               />
             </DataListHeader>
+            {users.isLoading && <DataListLoadingState />}
             {users.isError && (
-              <Center p={4}>
-                <Alert status="error">
-                  <AlertIcon />
-                  <AlertTitle>
-                    {t('users:feedbacks.loadingUserError.title')}
-                  </AlertTitle>
-                  <AlertDescription>
-                    {t('users:feedbacks.loadingUserError.description')}
-                    <Button
-                      colorScheme="error"
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={<LuRefreshCw />}
-                      isLoading={users.isLoadingPage}
-                      onClick={() => users.refetch()}
-                    >
-                      {t('users:list.actions.refetch')}
-                    </Button>
-                  </AlertDescription>
-                </Alert>
-              </Center>
+              <DataListErrorState
+                title={t('users:feedbacks.loadingUserError.title')}
+                retry={() => users.refetch()}
+              />
+            )}
+            {users.isSuccess && !users.data.users.length && (
+              <DataListEmptyState />
             )}
             {users.data?.users?.map((user) => (
               <DataListRow as={LinkBox} key={user.id}>

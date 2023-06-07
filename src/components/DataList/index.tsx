@@ -1,4 +1,11 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Accordion,
@@ -7,12 +14,21 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionProps,
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Box,
+  Button,
   Flex,
   FlexProps,
+  Skeleton,
+  Stack,
+  Wrap,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useTranslation } from 'react-i18next';
+import { LuRefreshCw } from 'react-icons/lu';
 
 type DataListColumns = Record<string, DataListCellProps>;
 type DataListContextValue = {
@@ -239,6 +255,101 @@ export const DataListFooter: FC<
         {...rest}
       />
     </Box>
+  );
+};
+
+export type DataListErrorStateProps = {
+  title?: ReactNode;
+  children?: ReactNode;
+  retry?: () => void;
+};
+
+export const DataListErrorState = (props: DataListErrorStateProps) => {
+  const { t } = useTranslation(['components']);
+  return (
+    <DataListRow>
+      <DataListCell>
+        <Alert status="error">
+          <AlertTitle>
+            {props.title ?? t('components:datalist.errorTitle')}
+          </AlertTitle>
+          {(!!props.children || !!props.retry) && (
+            <AlertDescription>
+              <Wrap spacingX={2} spacingY={1}>
+                {!!props.children && (
+                  <Box alignSelf="center">{props.children}</Box>
+                )}
+                {!!props.retry && (
+                  <Button
+                    colorScheme="error"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={<LuRefreshCw />}
+                    onClick={() => props.retry?.()}
+                  >
+                    {t('components:datalist.retry')}
+                  </Button>
+                )}
+              </Wrap>
+            </AlertDescription>
+          )}
+        </Alert>
+      </DataListCell>
+    </DataListRow>
+  );
+};
+
+export type DataListEmptyStateProps = {
+  title?: ReactNode;
+  children?: ReactNode;
+};
+
+export const DataListEmptyState = (props: DataListEmptyStateProps) => {
+  const { t } = useTranslation(['components']);
+  return (
+    <DataListRow>
+      <DataListCell>
+        <Alert status="info">
+          <AlertTitle>
+            {props.title ?? t('components:datalist.emptyTitle')}
+          </AlertTitle>
+          {!!props.children && (
+            <AlertDescription>{props.children}</AlertDescription>
+          )}
+        </Alert>
+      </DataListCell>
+    </DataListRow>
+  );
+};
+
+export const DataListLoadingState = () => {
+  return (
+    <>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.6} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.4} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.2} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+    </>
   );
 };
 

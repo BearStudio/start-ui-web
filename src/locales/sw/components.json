@@ -1,4 +1,9 @@
 {
+  "datalist": {
+    "retry": "Jaribu tena",
+    "errorTitle": "Hitilafu fulani imetokea",
+    "emptyTitle": "Hakuna Data"
+  },
   "dateAgo": {
     "format": "siku DD MMMM YYYY, HH:mm"
   },

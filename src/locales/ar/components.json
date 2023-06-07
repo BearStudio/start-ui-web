@@ -1,4 +1,9 @@
 {
+  "datalist": {
+    "retry": "أعد المحاولة",
+    "errorTitle": "هناك خطأ ما",
+    "emptyTitle": "لايوجد بيانات"
+  },
   "dateAgo": {
     "format": "dddd, DD MMMM YYYY, hh:mm a"
   },
