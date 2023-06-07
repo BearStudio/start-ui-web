@@ -159,7 +159,7 @@ export const DataListAccordionPanel = ({ ...rest }) => {
       px="4"
       py="3"
       bg="gray.50"
-      _dark={{ bg: 'blackAlpha.400' }}
+      _dark={{ bg: 'gray.800' }}
       {...rest}
     />
   );
@@ -182,7 +182,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
   const disabledProps = isDisabled
     ? {
         bg: 'gray.50',
-        _dark: { borderBottomColor: 'gray.900', bg: 'whiteAlpha.50' },
+        _dark: { borderBottomColor: 'gray.900', bg: 'gray.800' },
         _hover: {},
         _focusVisible: {},
         'aria-disabled': true,
@@ -202,7 +202,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
       borderBottomColor="gray.100"
       transition="0.2s"
       _dark={{
-        borderBottomColor: 'gray.900',
+        borderBottomColor: 'gray.800',
         _hover: isHover ? { bg: 'blackAlpha.200' } : undefined,
       }}
       _hover={isHover ? { bg: 'gray.50' } : undefined}
@@ -220,13 +220,13 @@ export const DataListHeader: FC<
   return (
     <DataListHeaderContext.Provider value={true}>
       <DataListRow
-        fontSize="sm"
+        fontSize="xs"
         fontWeight="bold"
-        border="none"
+        color="gray.500"
+        borderBottom="1px solid"
+        borderBottomColor="gray.100"
         _hover={{}}
-        bg="gray.100"
-        color="gray.600"
-        _dark={{ bg: 'blackAlpha.400', color: 'gray.300' }}
+        _dark={{ color: 'gray.400', borderBottomColor: 'gray.800' }}
         {...rest}
       />
     </DataListHeaderContext.Provider>
@@ -243,16 +243,14 @@ export const DataListFooter: FC<
       <Flex
         fontSize="sm"
         mt="-1px"
-        borderTop="1px solid"
         p="2"
         align="center"
-        bg="white"
+        borderTop="1px solid"
         borderTopColor="gray.100"
         color="gray.600"
         _dark={{
-          bg: 'blackAlpha.50',
           color: 'gray.300',
-          borderTopColor: 'gray.900',
+          borderTopColor: 'gray.800',
         }}
         {...rest}
       />
@@ -389,7 +387,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         allowToggle={allowToggle}
         bg="white"
         _dark={{
-          bg: 'blackAlpha.400',
+          bg: 'gray.700',
         }}
         ref={listRef}
         {...rest}
