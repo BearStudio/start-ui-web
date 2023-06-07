@@ -40,10 +40,13 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   const isHydrated = useIsHydrated();
-  const isMenu = useBreakpointValue({
-    base: true,
-    [breakpoint]: false,
-  });
+  const isMenu = useBreakpointValue(
+    {
+      base: true,
+      [breakpoint]: false,
+    },
+    { ssr: false }
+  );
 
   const [active, setActive] = useState<ReactNode>(<>-</>);
   return (

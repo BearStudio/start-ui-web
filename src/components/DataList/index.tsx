@@ -93,12 +93,14 @@ export const DataListCell = ({
   };
 
   const showCell = useBreakpointValue(
-    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible }
+    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible },
+    { ssr: false }
   );
 
   const cellWidth =
     useBreakpointValue(
-      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth }
+      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth },
+      { ssr: false }
     ) ?? 0;
 
   if (!showCell) return null;
