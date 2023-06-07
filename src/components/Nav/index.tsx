@@ -39,7 +39,7 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 };
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
-  const isClientReady = useIsHydrated();
+  const isHydrated = useIsHydrated();
   const isMenu = useBreakpointValue({
     base: true,
     [breakpoint]: false,
@@ -50,14 +50,14 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
     <NavContext.Provider value={{ active, setActive, isMenu: !!isMenu }}>
       <Menu matchWidth {...rest}>
         {!isMenu && (
-          <Stack spacing="1" opacity={!isClientReady ? 0 : undefined}>
+          <Stack spacing="1" opacity={!isHydrated ? 0 : undefined}>
             {children}
           </Stack>
         )}
         {isMenu && (
           <>
             <MenuButton
-              opacity={!isClientReady ? 0 : undefined}
+              opacity={!isHydrated ? 0 : undefined}
               textAlign="left"
               as={Button}
               rightIcon={<LuChevronDown />}

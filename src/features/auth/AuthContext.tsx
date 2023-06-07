@@ -30,10 +30,10 @@ export const useAuthContext = () => {
     throw new Error('Missing parent <AuthProvider> component');
   }
   const { isAuthenticated, updateToken } = context;
-  const isClientReady = useIsHydrated();
+  const isHydrated = useIsHydrated();
 
   return {
-    isLoading: !isClientReady,
+    isLoading: !isHydrated,
     isAuthenticated,
     updateToken,
   };
