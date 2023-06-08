@@ -1,7 +1,4 @@
-import { useSyncExternalStore } from 'react';
-
-// Stable function that do nothing
-const doNothing = () => () => undefined;
+import { useEffect, useState } from 'react';
 
 /**
  * This hook is used to make sure your are on the client only
@@ -9,9 +6,9 @@ const doNothing = () => () => undefined;
  * @returns boolean
  */
 export const useIsHydrated = () => {
-  return useSyncExternalStore(
-    doNothing,
-    () => true,
-    () => false
-  );
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+  return isHydrated;
 };
