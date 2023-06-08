@@ -49,7 +49,7 @@ export default function PageUserCreate() {
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
-      navigate('/admin/users');
+      navigate('../');
     },
   });
 
