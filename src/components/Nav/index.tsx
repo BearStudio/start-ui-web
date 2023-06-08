@@ -130,8 +130,8 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       bg={isActive ? 'white' : 'transparent'}
       color={isActive ? 'gray.700' : 'gray.600'}
       _dark={{
-        color: isActive ? 'white' : 'gray.300',
-        bg: isActive ? 'blackAlpha.300' : 'transparent',
+        color: isActive ? 'white' : 'gray.100',
+        bg: isActive ? 'gray.700' : 'transparent',
       }}
       _hover={
         !isActive && !isMenu
@@ -139,7 +139,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
               bg: 'white',
               color: 'gray.700',
               _dark: {
-                bg: 'blackAlpha.300',
+                bg: 'gray.700',
                 color: 'gray.100',
               },
             }
