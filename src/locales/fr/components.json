@@ -1,4 +1,9 @@
 {
+  "datalist": {
+    "retry": "Réessayer",
+    "errorTitle": "Une erreur est survenue",
+    "emptyTitle": "Aucune donnée"
+  },
   "dateAgo": {
     "format": "dddd DD MMMM YYYY, HH:mm"
   },

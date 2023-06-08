@@ -64,7 +64,7 @@ export default function PageUserUpdate() {
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
-      navigate(-1);
+      navigate('../');
     },
   });
 
@@ -82,7 +82,7 @@ export default function PageUserUpdate() {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => navigate('/admin/users')}>
+      <PageTopBar showBack onBack={() => navigate('../')}>
         <HStack spacing="4">
           <Box flex="1">
             {user.isLoading || user.isError ? (
@@ -100,7 +100,7 @@ export default function PageUserUpdate() {
               </Stack>
             )}
           </Box>
-          {!!user && (
+          {!!user.data && (
             <Box>
               <UserStatus isActivated={user.data?.activated} />
             </Box>
@@ -117,7 +117,7 @@ export default function PageUserUpdate() {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => navigate('/admin/users')}>
+                <Button onClick={() => navigate('../')}>
                   {t('common:actions.cancel')}
                 </Button>
                 <Button

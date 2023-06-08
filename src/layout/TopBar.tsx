@@ -36,10 +36,13 @@ const MenuButton = (props: Partial<IconButtonProps>) => {
 export const TopBar = () => {
   const theme = useTheme();
 
-  const showDrawer = useBreakpointValue({
-    base: true,
-    [theme.layout.breakpoints.desktop]: false,
-  });
+  const showDrawer = useBreakpointValue(
+    {
+      base: true,
+      [theme.layout.breakpoints.desktop]: false,
+    },
+    { ssr: false }
+  );
 
   return (
     <>

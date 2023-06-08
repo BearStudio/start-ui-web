@@ -6,10 +6,14 @@ import {
   AlertTitle,
   Box,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   Center,
   Flex,
   Heading,
   ScaleFade,
+  Stack,
 } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
@@ -102,50 +106,49 @@ export default function PageResetPasswordRequest() {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
-        <Box
-          p="6"
-          borderRadius="md"
-          boxShadow="md"
-          bg="white"
-          _dark={{ bg: 'blackAlpha.400' }}
-        >
-          <Heading size="lg">{t('account:resetPassword.title')}</Heading>
-          <Formiz connect={resetPasswordInitForm}>
-            <form noValidate onSubmit={resetPasswordInitForm.submit}>
-              <FieldInput
-                name="email"
-                label={t('account:data.email.label')}
-                my="6"
-                helper={t('account:data.email.resetHelper')}
-                required={t('account:data.email.required') as string}
-                validations={[
-                  {
-                    handler: isEmail(),
-                    message: t('account:data.email.invalid'),
-                  },
-                ]}
-              />
-              <Flex>
-                <Button
-                  leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
-                  as={Link}
-                  to="/login"
-                  variant="link"
-                >
-                  {t('account:resetPassword.actions.cancel')}
-                </Button>
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  ms="auto"
-                  isLoading={resetPasswordInit.isLoading}
-                >
-                  {t('account:resetPassword.actions.send')}
-                </Button>
-              </Flex>
-            </form>
-          </Formiz>
-        </Box>
+        <Card>
+          <CardHeader pb={0}>
+            <Heading size="md">{t('account:resetPassword.title')}</Heading>
+          </CardHeader>
+          <CardBody>
+            <Formiz connect={resetPasswordInitForm}>
+              <form noValidate onSubmit={resetPasswordInitForm.submit}>
+                <Stack spacing={4}>
+                  <FieldInput
+                    name="email"
+                    label={t('account:data.email.label')}
+                    helper={t('account:data.email.resetHelper')}
+                    required={t('account:data.email.required') as string}
+                    validations={[
+                      {
+                        handler: isEmail(),
+                        message: t('account:data.email.invalid'),
+                      },
+                    ]}
+                  />
+                  <Flex>
+                    <Button
+                      leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
+                      as={Link}
+                      to="/login"
+                      variant="link"
+                    >
+                      {t('account:resetPassword.actions.cancel')}
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="@primary"
+                      ms="auto"
+                      isLoading={resetPasswordInit.isLoading}
+                    >
+                      {t('account:resetPassword.actions.send')}
+                    </Button>
+                  </Flex>
+                </Stack>
+              </form>
+            </Formiz>
+          </CardBody>
+        </Card>
       </Box>
     </SlideIn>
   );

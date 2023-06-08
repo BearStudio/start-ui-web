@@ -6,6 +6,9 @@ import {
   AlertTitle,
   Box,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   Center,
   Flex,
   Heading,
@@ -125,111 +128,107 @@ export default function PageRegister() {
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
-        <Formiz connect={form} autoForm>
-          <Box
-            p="6"
-            borderRadius="md"
-            boxShadow="md"
-            bg="white"
-            _dark={{ bg: 'blackAlpha.400' }}
-          >
-            <Heading size="lg" mb="4">
-              {t('account:register.title')}
-            </Heading>
-            <Stack spacing="4">
-              <FieldSelect
-                name="langKey"
-                label={t('account:data.language.label')}
-                options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                  label: t(`common:languages.${key}`),
-                  value: key,
-                }))}
-                defaultValue={i18n.language as Language['key']}
-              />
-              <FieldInput
-                name="login"
-                label={t('account:data.login.label')}
-                required={t('account:data.login.required') as string}
-                validations={[
-                  {
-                    handler: isMinLength(2),
-                    message: t('account:data.login.tooShort', { min: 2 }),
-                  },
-                  {
-                    handler: isMaxLength(50),
-                    message: t('account:data.login.tooLong', { max: 50 }),
-                  },
-                  {
-                    handler: isPattern(
-                      '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
-                    ),
-                    message: t('account:data.login.invalid'),
-                  },
-                ]}
-              />
-              <FieldInput
-                name="email"
-                label={t('account:data.email.label')}
-                required={t('account:data.email.required') as string}
-                validations={[
-                  {
-                    handler: isMinLength(5),
-                    message: t('account:data.email.tooShort', { min: 5 }),
-                  },
-                  {
-                    handler: isMaxLength(254),
-                    message: t('account:data.email.tooLong', { min: 254 }),
-                  },
-                  {
-                    handler: isEmail(),
-                    message: t('account:data.email.invalid'),
-                  },
-                ]}
-              />
-              <FieldInput
-                name="password"
-                type="password"
-                label={t('account:data.password.label')}
-                required={t('account:data.password.required') as string}
-                validations={[
-                  {
-                    handler: isMinLength(4),
-                    message: t('account:data.password.tooShort', { min: 4 }),
-                  },
-                  {
-                    handler: isMaxLength(50),
-                    message: t('account:data.password.tooLong', { min: 50 }),
-                  },
-                ]}
-              />
-              <Flex>
-                <Button
-                  isLoading={createUser.isLoading}
-                  isDisabled={form.isSubmitted && !form.isValid}
-                  type="submit"
-                  variant="@primary"
-                  ms="auto"
-                >
-                  {t('account:register.actions.create')}
-                </Button>
-              </Flex>
-              <DemoRegisterHint />
-            </Stack>
-          </Box>
-          <Center mt="8">
-            <Button as={Link} to="/login" variant="link">
-              {t('account:register.actions.alreadyHaveAnAccount')}{' '}
-              <Box
-                as="strong"
-                ms="2"
-                color="brand.500"
-                _dark={{ color: 'brand.300' }}
-              >
-                {t('account:register.actions.login')}
-              </Box>
-            </Button>
-          </Center>
-        </Formiz>
+        <Card>
+          <CardHeader pb={0}>
+            <Heading size="md">{t('account:register.title')}</Heading>
+          </CardHeader>
+          <CardBody>
+            <Formiz connect={form} autoForm>
+              <Stack spacing="4">
+                <FieldSelect
+                  name="langKey"
+                  label={t('account:data.language.label')}
+                  options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                    label: t(`common:languages.${key}`),
+                    value: key,
+                  }))}
+                  defaultValue={i18n.language as Language['key']}
+                />
+                <FieldInput
+                  name="login"
+                  label={t('account:data.login.label')}
+                  required={t('account:data.login.required') as string}
+                  validations={[
+                    {
+                      handler: isMinLength(2),
+                      message: t('account:data.login.tooShort', { min: 2 }),
+                    },
+                    {
+                      handler: isMaxLength(50),
+                      message: t('account:data.login.tooLong', { max: 50 }),
+                    },
+                    {
+                      handler: isPattern(
+                        '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'
+                      ),
+                      message: t('account:data.login.invalid'),
+                    },
+                  ]}
+                />
+                <FieldInput
+                  name="email"
+                  label={t('account:data.email.label')}
+                  required={t('account:data.email.required') as string}
+                  validations={[
+                    {
+                      handler: isMinLength(5),
+                      message: t('account:data.email.tooShort', { min: 5 }),
+                    },
+                    {
+                      handler: isMaxLength(254),
+                      message: t('account:data.email.tooLong', { min: 254 }),
+                    },
+                    {
+                      handler: isEmail(),
+                      message: t('account:data.email.invalid'),
+                    },
+                  ]}
+                />
+                <FieldInput
+                  name="password"
+                  type="password"
+                  label={t('account:data.password.label')}
+                  required={t('account:data.password.required') as string}
+                  validations={[
+                    {
+                      handler: isMinLength(4),
+                      message: t('account:data.password.tooShort', { min: 4 }),
+                    },
+                    {
+                      handler: isMaxLength(50),
+                      message: t('account:data.password.tooLong', { min: 50 }),
+                    },
+                  ]}
+                />
+                <Flex>
+                  <Button
+                    isLoading={createUser.isLoading}
+                    isDisabled={form.isSubmitted && !form.isValid}
+                    type="submit"
+                    variant="@primary"
+                    ms="auto"
+                  >
+                    {t('account:register.actions.create')}
+                  </Button>
+                </Flex>
+                <DemoRegisterHint />
+              </Stack>
+            </Formiz>
+          </CardBody>
+        </Card>
+        <Center mt="8">
+          <Button as={Link} to="/login" variant="link">
+            {t('account:register.actions.alreadyHaveAnAccount')}{' '}
+            <Box
+              as="strong"
+              ms="2"
+              color="brand.500"
+              _dark={{ color: 'brand.300' }}
+            >
+              {t('account:register.actions.login')}
+            </Box>
+          </Button>
+        </Center>
       </Box>
     </SlideIn>
   );

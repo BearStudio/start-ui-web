@@ -1,29 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  RouterProvider,
+  RouterProviderProps,
+  createBrowserRouter,
+} from 'react-router-dom';
 
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { Loader } from '@/layout/Loader';
 
 import { routes } from './routes';
 
 export default function AppPage() {
-  const [router, setRouter] =
-    useState<ReturnType<typeof createBrowserRouter>>();
+  const routerRef = useRef<RouterProviderProps['router']>();
+  const isHydrated = useIsHydrated();
 
-  useEffect(() => {
-    setRouter(
-      createBrowserRouter(routes, {
-        basename: '/app',
-        future: {
-          v7_normalizeFormMethod: true,
-        },
-      })
-    );
-  }, []);
+  if (!routerRef.current && isHydrated) {
+    routerRef.current = createBrowserRouter(routes, {
+      basename: '/app',
+      future: {
+        v7_normalizeFormMethod: true,
+      },
+    });
+  }
 
-  if (!router) return <Loader />;
+  if (!routerRef.current) return <Loader />;
 
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={routerRef.current} />;
 }

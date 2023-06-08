@@ -5,12 +5,10 @@ import { useEffect, useState } from 'react';
  * to prevent hydratation errors with SSR.
  * @returns boolean
  */
-export const useIsClientReady = () => {
-  const [isClientReady, setIsClientReady] = useState(false);
-
+export const useIsHydrated = () => {
+  const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => {
-    setIsClientReady(true);
+    setIsHydrated(true);
   }, []);
-
-  return isClientReady;
+  return isHydrated;
 };

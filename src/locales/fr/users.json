@@ -25,15 +25,13 @@
       "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
     },
     "loadingUserError": {
-      "title": "Il semblerait qu'il y ait un problème",
-      "description": "Échec du chargement des utilisateurs"
+      "title": "Échec du chargement des utilisateurs"
     }
   },
   "list": {
     "title": "Gestion des utilisateurs",
     "actions": {
-      "createUser": "Créer un utilisateur",
-      "refetch": "Réessayer"
+      "createUser": "Créer un utilisateur"
     }
   },
   "data": {

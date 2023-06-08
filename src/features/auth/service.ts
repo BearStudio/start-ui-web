@@ -19,7 +19,7 @@ export const useLogin = (
         username,
         password,
       });
-      return zLoginPayload().parse(response);
+      return zLoginPayload().parse(response.data);
     },
     {
       ...config,

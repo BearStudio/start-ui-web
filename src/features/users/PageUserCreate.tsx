@@ -49,7 +49,7 @@ export default function PageUserCreate() {
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
-      navigate('/admin/users');
+      navigate('../');
     },
   });
 
@@ -71,7 +71,7 @@ export default function PageUserCreate() {
     <Page containerSize="md" isFocusMode>
       <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => navigate('/admin/users')}>
+          <PageTopBar showBack onBack={() => navigate('../')}>
             <Heading size="md">{t('users:create.title')}</Heading>
           </PageTopBar>
           <PageContent>
@@ -79,7 +79,7 @@ export default function PageUserCreate() {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => navigate('/admin/users')}>
+              <Button onClick={() => navigate('../')}>
                 {t('common:actions.cancel')}
               </Button>
               <Button

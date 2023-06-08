@@ -31,7 +31,9 @@ export const ResponsiveIconButton = forwardRef<
     },
     ref
   ) => {
-    const responsiveStates = useBreakpointValue(hideTextBreakpoints);
+    const responsiveStates = useBreakpointValue(hideTextBreakpoints, {
+      ssr: false,
+    });
 
     const buttonProps =
       iconPosition === 'right' ? { rightIcon: icon } : { leftIcon: icon };

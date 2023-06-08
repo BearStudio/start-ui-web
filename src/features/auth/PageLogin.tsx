@@ -1,6 +1,14 @@
 import React from 'react';
 
-import { Box, Button, Center, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Heading,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -15,18 +23,16 @@ export default function PageLogin() {
     <SlideIn>
       <Box px="2" py="4rem" w="22rem" maxW="full" m="auto">
         <Logo h="3rem" mb="8" mx="auto" />
-        <Box
-          p="6"
-          borderRadius="md"
-          boxShadow="md"
-          bg="white"
-          _dark={{ bg: 'blackAlpha.400' }}
-        >
-          <Heading size="md" mb="4" data-test="login-page-heading">
-            {t('auth:login.title')}
-          </Heading>
-          <LoginForm />
-        </Box>
+        <Card>
+          <CardHeader pb={0}>
+            <Heading size="md" data-test="login-page-heading">
+              {t('auth:login.title')}
+            </Heading>
+          </CardHeader>
+          <CardBody>
+            <LoginForm />
+          </CardBody>
+        </Card>
         <Center mt="8">
           <Button as={Link} to="/account/register" variant="link">
             {t('auth:login.actions.needAccount')}{' '}

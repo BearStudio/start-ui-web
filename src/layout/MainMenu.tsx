@@ -8,6 +8,19 @@ import { useAccount } from '@/features/account/service';
 import { useRtl } from '@/hooks/useRtl';
 import { useLayoutContext } from '@/layout/LayoutContext';
 
+export const MainMenu = ({ ...rest }) => {
+  const { t } = useTranslation(['layout']);
+  const { isAdmin } = useAccount();
+  return (
+    <Stack direction="row" spacing="1" {...rest}>
+      <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
+      {isAdmin && (
+        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
+      )}
+    </Stack>
+  );
+};
+
 const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
@@ -57,18 +70,5 @@ const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
       onClick={navOnClose}
       {...rest}
     />
-  );
-};
-
-export const MainMenu = ({ ...rest }) => {
-  const { t } = useTranslation(['layout']);
-  const { isAdmin } = useAccount();
-  return (
-    <Stack direction="row" spacing="1" {...rest}>
-      <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
-      {isAdmin && (
-        <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
-      )}
-    </Stack>
   );
 };

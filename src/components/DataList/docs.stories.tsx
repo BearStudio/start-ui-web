@@ -2,6 +2,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   Code,
   HStack,
   LinkBox,
@@ -14,8 +15,9 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Wrap,
 } from '@chakra-ui/react';
-import { LuCopy, LuEdit, LuTrash2, LuUserPlus } from 'react-icons/lu';
+import { LuCopy, LuEdit, LuPlus, LuTrash2, LuUserPlus } from 'react-icons/lu';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { Icon } from '@/components/Icons';
@@ -35,8 +37,11 @@ import {
   DataListAccordionIcon,
   DataListAccordionPanel,
   DataListCell,
+  DataListEmptyState,
+  DataListErrorState,
   DataListFooter,
   DataListHeader,
+  DataListLoadingState,
   DataListRow,
 } from './index';
 
@@ -177,6 +182,52 @@ export const NoHover = () => (
     </DataListRow>
   </DataList>
 );
+
+export const LoadingState = () => {
+  return (
+    <DataList>
+      <DataListLoadingState />
+    </DataList>
+  );
+};
+
+export const EmptyState = () => {
+  return (
+    <DataList>
+      <DataListEmptyState />
+      <DataListEmptyState title="No Users">
+        <Wrap spacingX={2} spacingY={1}>
+          <Text alignSelf="center">Let&apos;s create your first user</Text>
+          <Button
+            variant="ghost"
+            colorScheme="info"
+            size="sm"
+            leftIcon={<LuPlus />}
+          >
+            Create User
+          </Button>
+        </Wrap>
+      </DataListEmptyState>
+    </DataList>
+  );
+};
+
+export const ErrorState = () => {
+  return (
+    <Stack>
+      <DataList>
+        <DataListErrorState />
+        <DataListErrorState retry={() => alert('Retry')} />
+        <DataListErrorState
+          title="Failed to load the users"
+          retry={() => alert('Retry')}
+        >
+          Something wrong happen, please retry or contact the administator
+        </DataListErrorState>
+      </DataList>
+    </Stack>
+  );
+};
 
 export const Complete = () => {
   const users = [

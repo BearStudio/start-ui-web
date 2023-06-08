@@ -23,6 +23,6 @@ export const zUser = () =>
 export type UserList = z.infer<ReturnType<typeof zUserList>>;
 export const zUserList = () =>
   z.object({
-    content: z.array(zUser()),
+    users: z.array(zUser()),
     totalItems: z.string().transform(Number),
   });

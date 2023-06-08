@@ -2,8 +2,7 @@
   "list": {
     "title": "Users Management",
     "actions": {
-      "createUser": "Create User",
-      "refetch": "Retry"
+      "createUser": "Create User"
     }
   },
   "feedbacks": {
@@ -32,8 +31,7 @@
       "description": "Fail to remove \"{{login}}\" user"
     },
     "loadingUserError": {
-      "title": "It seems that we have a problem ",
-      "description": "Failed to load users"
+      "title": "Failed to load users"
     }
   },
   "data": {

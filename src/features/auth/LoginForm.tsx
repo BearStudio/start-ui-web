@@ -43,7 +43,7 @@ export const LoginForm = ({
   return (
     <Box {...rest}>
       <Formiz autoForm connect={form}>
-        <Stack spacing="4">
+        <Stack spacing={4}>
           <FieldInput
             name="username"
             label={t('auth:data.username.label')}

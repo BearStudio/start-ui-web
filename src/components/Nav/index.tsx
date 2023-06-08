@@ -19,7 +19,7 @@ import {
 import { LuChevronDown } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
-import { useIsClientReady } from '@/hooks/useIsClientReady';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 
 type NavContextValue = {
   active: ReactNode;
@@ -39,25 +39,28 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 };
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
-  const isClientReady = useIsClientReady();
-  const isMenu = useBreakpointValue({
-    base: true,
-    [breakpoint]: false,
-  });
+  const isHydrated = useIsHydrated();
+  const isMenu = useBreakpointValue(
+    {
+      base: true,
+      [breakpoint]: false,
+    },
+    { ssr: false }
+  );
 
   const [active, setActive] = useState<ReactNode>(<>-</>);
   return (
     <NavContext.Provider value={{ active, setActive, isMenu: !!isMenu }}>
       <Menu matchWidth {...rest}>
         {!isMenu && (
-          <Stack spacing="1" opacity={!isClientReady ? 0 : undefined}>
+          <Stack spacing="1" opacity={!isHydrated ? 0 : undefined}>
             {children}
           </Stack>
         )}
         {isMenu && (
           <>
             <MenuButton
-              opacity={!isClientReady ? 0 : undefined}
+              opacity={!isHydrated ? 0 : undefined}
               textAlign="left"
               as={Button}
               rightIcon={<LuChevronDown />}
@@ -127,8 +130,8 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       bg={isActive ? 'white' : 'transparent'}
       color={isActive ? 'gray.700' : 'gray.600'}
       _dark={{
-        color: isActive ? 'white' : 'gray.300',
-        bg: isActive ? 'blackAlpha.300' : 'transparent',
+        color: isActive ? 'white' : 'gray.100',
+        bg: isActive ? 'gray.700' : 'transparent',
       }}
       _hover={
         !isActive && !isMenu
@@ -136,7 +139,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
               bg: 'white',
               color: 'gray.700',
               _dark: {
-                bg: 'blackAlpha.300',
+                bg: 'gray.700',
                 color: 'gray.100',
               },
             }

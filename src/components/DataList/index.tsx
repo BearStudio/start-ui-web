@@ -1,4 +1,11 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Accordion,
@@ -7,12 +14,21 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionProps,
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Box,
+  Button,
   Flex,
   FlexProps,
+  Skeleton,
+  Stack,
+  Wrap,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useTranslation } from 'react-i18next';
+import { LuRefreshCw } from 'react-icons/lu';
 
 type DataListColumns = Record<string, DataListCellProps>;
 type DataListContextValue = {
@@ -77,12 +93,14 @@ export const DataListCell = ({
   };
 
   const showCell = useBreakpointValue(
-    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible }
+    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible },
+    { ssr: false }
   );
 
   const cellWidth =
     useBreakpointValue(
-      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth }
+      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth },
+      { ssr: false }
     ) ?? 0;
 
   if (!showCell) return null;
@@ -141,7 +159,7 @@ export const DataListAccordionPanel = ({ ...rest }) => {
       px="4"
       py="3"
       bg="gray.50"
-      _dark={{ bg: 'blackAlpha.400' }}
+      _dark={{ bg: 'gray.800' }}
       {...rest}
     />
   );
@@ -159,12 +177,13 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
 }) => {
   const { isHover } = useDataListContext();
   const showRow = useBreakpointValue(
-    typeof isVisible === 'object' ? isVisible : { base: isVisible }
+    typeof isVisible === 'object' ? isVisible : { base: isVisible },
+    { ssr: false }
   );
   const disabledProps = isDisabled
     ? {
         bg: 'gray.50',
-        _dark: { borderBottomColor: 'gray.900', bg: 'whiteAlpha.50' },
+        _dark: { borderBottomColor: 'gray.900', bg: 'gray.800' },
         _hover: {},
         _focusVisible: {},
         'aria-disabled': true,
@@ -184,7 +203,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
       borderBottomColor="gray.100"
       transition="0.2s"
       _dark={{
-        borderBottomColor: 'gray.900',
+        borderBottomColor: 'gray.800',
         _hover: isHover ? { bg: 'blackAlpha.200' } : undefined,
       }}
       _hover={isHover ? { bg: 'gray.50' } : undefined}
@@ -202,13 +221,13 @@ export const DataListHeader: FC<
   return (
     <DataListHeaderContext.Provider value={true}>
       <DataListRow
-        fontSize="sm"
+        fontSize="xs"
         fontWeight="bold"
-        border="none"
+        color="gray.500"
+        borderBottom="1px solid"
+        borderBottomColor="gray.100"
         _hover={{}}
-        bg="gray.100"
-        color="gray.600"
-        _dark={{ bg: 'blackAlpha.400', color: 'gray.300' }}
+        _dark={{ color: 'gray.400', borderBottomColor: 'gray.800' }}
         {...rest}
       />
     </DataListHeaderContext.Provider>
@@ -225,20 +244,113 @@ export const DataListFooter: FC<
       <Flex
         fontSize="sm"
         mt="-1px"
-        borderTop="1px solid"
         p="2"
         align="center"
-        bg="white"
+        borderTop="1px solid"
         borderTopColor="gray.100"
         color="gray.600"
         _dark={{
-          bg: 'blackAlpha.50',
           color: 'gray.300',
-          borderTopColor: 'gray.900',
+          borderTopColor: 'gray.800',
         }}
         {...rest}
       />
     </Box>
+  );
+};
+
+export type DataListErrorStateProps = {
+  title?: ReactNode;
+  children?: ReactNode;
+  retry?: () => void;
+};
+
+export const DataListErrorState = (props: DataListErrorStateProps) => {
+  const { t } = useTranslation(['components']);
+  return (
+    <DataListRow>
+      <DataListCell>
+        <Alert status="error">
+          <AlertTitle>
+            {props.title ?? t('components:datalist.errorTitle')}
+          </AlertTitle>
+          {(!!props.children || !!props.retry) && (
+            <AlertDescription>
+              <Wrap spacingX={2} spacingY={1}>
+                {!!props.children && (
+                  <Box alignSelf="center">{props.children}</Box>
+                )}
+                {!!props.retry && (
+                  <Button
+                    colorScheme="error"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={<LuRefreshCw />}
+                    onClick={() => props.retry?.()}
+                  >
+                    {t('components:datalist.retry')}
+                  </Button>
+                )}
+              </Wrap>
+            </AlertDescription>
+          )}
+        </Alert>
+      </DataListCell>
+    </DataListRow>
+  );
+};
+
+export type DataListEmptyStateProps = {
+  title?: ReactNode;
+  children?: ReactNode;
+};
+
+export const DataListEmptyState = (props: DataListEmptyStateProps) => {
+  const { t } = useTranslation(['components']);
+  return (
+    <DataListRow>
+      <DataListCell>
+        <Alert status="info">
+          <AlertTitle>
+            {props.title ?? t('components:datalist.emptyTitle')}
+          </AlertTitle>
+          {!!props.children && (
+            <AlertDescription>{props.children}</AlertDescription>
+          )}
+        </Alert>
+      </DataListCell>
+    </DataListRow>
+  );
+};
+
+export const DataListLoadingState = () => {
+  return (
+    <>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.6} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.4} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+      <DataListRow>
+        <DataListCell>
+          <Stack w="full" opacity={0.2} p={2}>
+            <Skeleton w="30%" h={2} noOfLines={1} />
+            <Skeleton w="20%" h={2} noOfLines={1} />
+          </Stack>
+        </DataListCell>
+      </DataListRow>
+    </>
   );
 };
 
@@ -276,7 +388,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         allowToggle={allowToggle}
         bg="white"
         _dark={{
-          bg: 'blackAlpha.400',
+          bg: 'gray.700',
         }}
         ref={listRef}
         {...rest}
