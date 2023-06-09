@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { InputGroup } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
@@ -6,13 +6,12 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { ImageUpload, ImageUploadProps } from '@/components/ImageUpload';
 
-export interface FieldImageUploadProps
-  extends FieldProps,
-    Omit<FormGroupProps, 'placeholder'> {
-  imageUploadProps?: Omit<ImageUploadProps, 'value' | 'onChange'>;
-}
+export type FieldImageUploadProps = FieldProps &
+  Omit<FormGroupProps, 'placeholder'> & {
+    imageUploadProps?: Omit<ImageUploadProps, 'value' | 'onChange'>;
+  };
 
-export const FieldImageUpload = (props: FieldImageUploadProps) => {
+export const FieldImageUpload: FC<FieldImageUploadProps> = (props) => {
   const {
     errorMessage,
     id,
@@ -23,18 +22,9 @@ export const FieldImageUpload = (props: FieldImageUploadProps) => {
     value,
     otherProps,
   } = useField(props);
-  const {
-    children,
-    label,
-    type,
-    placeholder,
-    helper,
-    leftIcon,
-    rightIcon,
-    color,
-    imageUploadProps,
-    ...rest
-  } = otherProps;
+
+  const { children, label, helper, color, imageUploadProps, ...rest } =
+    otherProps;
   const { required } = props;
   const [isTouched, setIsTouched] = useState(false);
   const showError = !isValid && (isTouched || isSubmitted);

@@ -8,15 +8,15 @@ import {
   IconButton,
   Image,
   ImageProps,
-  Input,
 } from '@chakra-ui/react';
+import Uploady from '@rpldy/uploady';
 import { FiX } from 'react-icons/fi';
 
-import { Loader } from '@/app/layout';
 import { DefaultImagePlaceholder } from '@/components/ImageUpload/DefaultImagePlaceholder';
-import { uploadFile } from '@/components/ImageUpload/cloudinary.service';
+import { ImageUploadInput } from '@/components/ImageUpload/ImageUpload';
+import { Loader } from '@/layout/Loader';
 
-export type ImageUploadProps = Omit<BoxProps, 'onChange' | 'placeholder'> &
+export type ImageUploadProps = BoxProps &
   Pick<AspectRatioProps, 'ratio'> & {
     value: string;
     onChange: (url: string) => void;
@@ -35,25 +35,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // TODO: I think the onChange should handle the upload, and the form value should contain
+  // the uploaded picture id (for future ref, like deleting on ccloudinary the uploaded image)
+  // and the unique url
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    try {
-      setIsUploading(true);
-      onUploadStateChange(true);
-
-      const imageUrl = await uploadFile(file);
-      console.log({ imageUrl });
-      onChange(imageUrl);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      onUploadStateChange(false);
-      setIsUploading(false);
-    }
+    // TODO
   };
 
   const handleDelete = () => {
@@ -74,41 +60,48 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   return (
-    <Box
-      position="relative"
-      border="1px"
-      borderStyle="dashed"
-      borderColor="gray.200"
-      borderRadius="16px"
-      overflow="hidden"
-      cursor="pointer"
-      transition="border-color 150ms ease-in-out"
-      _hover={{ borderColor: 'gray.400' }}
-      {...rest}
+    <Uploady
+      destination={{
+        url: `https://api.cloudinary.com/v1_1/s${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+        params: {
+          upload_preset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+        },
+      }}
     >
-      <Input
-        ref={fileInputRef}
-        type="file"
-        display="none"
-        onChange={handleChange}
-      />
-      <AspectRatio ratio={ratio} onClick={() => fileInputRef.current?.click()}>
-        <Image src={value} fallback={getFallback()} />
-      </AspectRatio>
-      {!!value && (
-        <IconButton
-          icon={<FiX />}
-          position="absolute"
-          top="0"
-          right="0"
-          size="lg"
-          variant="ghost"
-          aria-label="Remove photo"
-          onClick={handleDelete}
-          _active={{ bgColor: 'blackAlpha.600' }}
-          _hover={{ bgColor: 'blackAlpha.300' }}
-        />
-      )}
-    </Box>
+      <Box
+        position="relative"
+        border="1px"
+        borderStyle="dashed"
+        borderColor="gray.200"
+        borderRadius="16px"
+        overflow="hidden"
+        cursor="pointer"
+        transition="border-color 150ms ease-in-out"
+        _hover={{ borderColor: 'gray.400' }}
+        {...rest}
+      >
+        <ImageUploadInput ref={fileInputRef} onChange={handleChange} />
+        <AspectRatio
+          ratio={ratio}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Image src={value} fallback={getFallback()} />
+        </AspectRatio>
+        {!!value && (
+          <IconButton
+            icon={<FiX />}
+            position="absolute"
+            top="0"
+            right="0"
+            size="lg"
+            variant="ghost"
+            aria-label="Remove photo"
+            onClick={handleDelete}
+            _active={{ bgColor: 'blackAlpha.600' }}
+            _hover={{ bgColor: 'blackAlpha.300' }}
+          />
+        )}
+      </Box>
+    </Uploady>
   );
 };

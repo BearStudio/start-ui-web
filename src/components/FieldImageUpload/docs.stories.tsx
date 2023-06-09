@@ -9,36 +9,50 @@ export default {
   title: 'Fields/FieldImageUpload',
 };
 
-export const Default = () => (
-  <Formiz onSubmit={console.log} autoForm>
-    <Stack spacing={6}>
-      <FieldImageUpload
-        name="demo"
-        label="Profil picture"
-        helper="This is an helper"
-        required="Profil picture is required"
-        width="360px"
-      />
-      <FieldImageUpload
-        name="demo-default-value"
-        label="Default value"
-        defaultValue="https://bit.ly/dan-abramov"
-        width="360px"
-      />
-      <FieldImageUpload
-        name="demo-ratio"
-        label="Custom aspect ratio and size"
-        imageUploadProps={{ ratio: 1 }}
-        w="240px"
-      />
-      <Box>
-        <Button type="submit">Submit</Button>
-      </Box>
-    </Stack>
-  </Formiz>
-);
+export const Default = () => {
+  const form = useForm({
+    onValidSubmit(formValues) {
+      console.log(formValues);
+    },
+  });
+
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={6}>
+        <FieldImageUpload
+          name="demo"
+          label="Profil picture"
+          helper="This is an helper"
+          required="Profil picture is required"
+          width="360px"
+        />
+        <FieldImageUpload
+          name="demo-default-value"
+          label="Default value"
+          defaultValue="https://bit.ly/dan-abramov"
+          width="360px"
+        />
+        <FieldImageUpload
+          name="demo-ratio"
+          label="Custom aspect ratio and size"
+          imageUploadProps={{ ratio: 1 }}
+          w="240px"
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};
 
 export const CustomPlaceholder = () => {
+  const form = useForm({
+    onValidSubmit(formValues) {
+      console.log(formValues);
+    },
+  });
+
   const PlaceholderComponent = () => (
     <Center bgColor="gray.50" overflow="hidden">
       <Stack textAlign="center" spacing={2}>
@@ -56,7 +70,7 @@ export const CustomPlaceholder = () => {
   );
 
   return (
-    <Formiz onSubmit={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={6}>
         <FieldImageUpload
           name="demo"
@@ -73,10 +87,14 @@ export const CustomPlaceholder = () => {
 };
 
 export const InvalidateFormWhileUploading = () => {
-  const form = useForm();
+  const form = useForm({
+    onValidSubmit(formValues) {
+      console.log(formValues);
+    },
+  });
 
   return (
-    <Formiz connect={form} onSubmit={console.log} autoForm>
+    <Formiz connect={form} autoForm>
       <Stack spacing={2}>
         <FieldImageUpload
           name="demo"
@@ -84,8 +102,7 @@ export const InvalidateFormWhileUploading = () => {
           w="360px"
           imageUploadProps={{
             onUploadStateChange: (isUploading) =>
-              isUploading &&
-              form.invalidateFields({ demo: 'Image is uploading' }),
+              isUploading && form.setErrors({ demo: 'Image is uploading' }),
           }}
         />
         <Box>

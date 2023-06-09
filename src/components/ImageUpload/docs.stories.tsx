@@ -15,11 +15,19 @@ export const Default = () => {
 
   return (
     <Stack>
-      <ImageUpload value={imageUrl} onChange={setImageUrl} w="240px" />
-      <ImageUpload value={imageUrl} onChange={setImageUrl} w="360px" />
       <ImageUpload
         value={imageUrl}
-        onChange={setImageUrl}
+        onChange={(e) => setImageUrl(e.toString())}
+        w="240px"
+      />
+      <ImageUpload
+        value={imageUrl}
+        onChange={(e) => setImageUrl(e.toString())}
+        w="360px"
+      />
+      <ImageUpload
+        value={imageUrl}
+        onChange={(e) => setImageUrl(e.toString())}
         w="480px"
         ratio={1}
       />
@@ -50,7 +58,7 @@ export const CustomPlaceholder = () => {
     <Stack>
       <ImageUpload
         value={imageUrl}
-        onChange={setImageUrl}
+        onChange={(e) => setImageUrl(e.toString())}
         placeholder={<PlaceholderComponent />}
         w="360px"
       />
