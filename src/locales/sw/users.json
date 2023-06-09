@@ -102,5 +102,9 @@
         "title": "Utilisateur créé avec succès"
       }
     }
+  },
+  "deleteModal": {
+    "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
+    "title": "Thibitisha kufuta mtumiaji"
   }
 }
