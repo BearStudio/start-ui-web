@@ -11,7 +11,7 @@ import { DemoModalInterceptor } from '@/features/demo-mode/DemoModalInterceptor'
 import { EnvDevHint } from '@/layout/EnvDevHint';
 import i18n from '@/lib/i18n/config';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import { theme } from '@/theme/theme';
+import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 export const Document = ({ children }: { children: ReactNode }) => {
   return (
@@ -64,7 +64,11 @@ export const Document = ({ children }: { children: ReactNode }) => {
       </head>
       <body>
         {/* https://github.com/chakra-ui/chakra-ui/issues/7040 */}
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <ColorModeScript
+          initialColorMode={theme.config.initialColorMode}
+          storageKey={COLOR_MODE_STORAGE_KEY}
+        />
+
         <Providers>
           <Viewport>{children}</Viewport>
           <EnvDevHint />

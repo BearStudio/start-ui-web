@@ -139,6 +139,14 @@ Update the `NEXT_PUBLIC_API_BASE_URL` with your JHipster API url:
 NEXT_PUBLIC_API_BASE_URL="http://localhost:8080/api"
 ```
 
+### Update color mode storage key
+
+You can update the storage key used to detect the color mode by updating this constant in the `src/theme/config.ts` file:
+
+```tsx
+export const COLOR_MODE_STORAGE_KEY = 'start-ui-color-mode'; // Update the key according to your needs
+```
+
 ## Show hint on development environments
 
 Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.

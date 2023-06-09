@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, createLocalStorageManager } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -10,9 +10,11 @@ import '@/lib/axios/config';
 import '@/lib/dayjs/config';
 import '@/lib/i18n/config';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import theme from '@/theme';
+import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 const queryClient = new QueryClient();
+
+const localStorageManager = createLocalStorageManager(COLOR_MODE_STORAGE_KEY);
 
 export const Providers: FC<React.PropsWithChildren<unknown>> = ({
   children,
@@ -24,6 +26,7 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
       <AuthProvider>
         <CacheProvider>
           <ChakraProvider
+            colorModeManager={localStorageManager}
             theme={{
               ...theme,
               direction:
