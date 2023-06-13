@@ -16,7 +16,7 @@ A live read-only demonstration of what you will have when starting a project wit
 ## Getting Started
 
 ```bash
-npx create-start-ui@latest --web myApp
+yarn create start-ui --web myApp
 ```
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
