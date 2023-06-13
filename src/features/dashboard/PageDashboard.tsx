@@ -44,7 +44,7 @@ export default function PageDashboard() {
           <Button
             variant="link"
             as="a"
-            href="https://github.com/BearStudio/start-ui"
+            href="https://github.com/BearStudio/start-ui-web"
           >
             <Icon icon={LuGithub} me="1" /> {t('dashboard:links.github')}
           </Button>
