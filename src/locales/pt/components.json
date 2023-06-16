@@ -1,0 +1,72 @@
+{
+  "datalist": {
+    "retry": "Tentar novamente",
+    "errorTitle": "Algo deu errado",
+    "emptyTitle": "Sem dados"
+  },
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "Ações"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Clique para confirmar"
+  },
+  "confirmModal": {
+    "confirmText": "Confirmar",
+    "heading": "Tem certeza?"
+  },
+  "confirmPopover": {
+    "confirmText": "Confirmar",
+    "heading": "Tem certeza?"
+  },
+  "errorBoundary": {
+    "title": "Ocorreu um erro inesperado.",
+    "actions": {
+      "expand": "Mostrar detalhes"
+    }
+  },
+  "errorPage": {
+    "403": {
+      "title": "Não autorizado",
+      "description": "Desculpe, você não pode acessar esta página."
+    },
+    "404": {
+      "title": "Página não encontrada",
+      "description": "A página não existe ou o URL foi alterado."
+    },
+    "errorCode": "Erro {{code}}",
+    "default": {
+      "title": "Erro",
+      "description": "Algo deu errado 😞"
+    }
+  },
+  "pagination": {
+    "showing": "<box>Mostrando</box> <strong>{{firstItemOnPage}}</strong> <span>a</span> <strong>{{lastItemOnPage}}</strong> <span>de</span> <strong>{{totalItems}}</strong> <box>resultados</box>",
+    "loading": "<spinner></spinner> <box>Carregando</box> <strong>{{firstItemOnPage}}</strong> <span>a</span> <strong>{{lastItemOnPage}}</strong> <span>de</span> <strong>{{totalItems}}</strong> <box>resultados</box>",
+    "firstPage": "Primeira Página",
+    "prevPage": "Página Anterior",
+    "lastPage": "Última Página",
+    "nextPage": "Próxima Página"
+  },
+  "searchInput": {
+    "placeholder": "Pesquisar...",
+    "clear": "Limpar Pesquisa"
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "Data inválida"
+  },
+  "fieldRepeater": {
+    "invalidMessage": "Pelo menos um elemento é inválido"
+  },
+  "fieldMultiSelect": {
+    "noOption": "Nenhuma opção"
+  },
+  "sort": {
+    "sortAscending": "Crescente",
+    "sortDescending": "Decrescente",
+    "sortBy": "Ordenar por",
+    "order": "Ordem"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "profile": "Perfil",
+    "password": "Senha",
+    "myAccount": "Minha Conta"
+  },
+  "profile": {
+    "title": "Perfil",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Atualizado com sucesso"
+      },
+      "updateError": {
+        "title": "Falha na atualização"
+      }
+    },
+    "actions": {
+      "save": "Salvar"
+    }
+  },
+  "password": {
+    "title": "Senha",
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Sua senha foi atualizada com sucesso"
+      },
+      "updateError": {
+        "title": "Falha na atualização da senha"
+      }
+    },
+    "actions": {
+      "changePassword": "Alterar Senha"
+    }
+  },
+  "resetPassword": {
+    "title": "Redefinir Senha",
+    "actions": {
+      "cancel": "Voltar",
+      "send": "Enviar Email",
+      "goToLogin": "Ir para Login",
+      "reset": "Redefinir Senha"
+    },
+    "feedbacks": {
+      "initSuccess": {
+        "title": "Email de redefinição de senha enviado com sucesso!",
+        "description": "Se uma conta existir com o email <strong>{{email}}</strong>, você deverá ter recebido um email."
+      },
+      "initError": {
+        "title": "Falha na redefinição de senha"
+      },
+      "resetSuccess": {
+        "title": "Sua senha foi redefinida",
+        "description": "Agora você pode fazer login"
+      },
+      "resetError": {
+        "title": "Falha na redefinição de senha"
+      }
+    }
+  },
+  "activate": {
+    "feedbacks": {
+      "activationLoading": {
+        "title": "Ativando conta..."
+      },
+      "activationSuccess": {
+        "title": "Conta ativada com sucesso"
+      },
+      "activationError": {
+        "title": "Falha na ativação da conta"
+      }
+    }
+  },
+  "data": {
+    "firstname": {
+      "label": "Nome",
+      "required": "Nome é obrigatório"
+    },
+    "lastname": {
+      "label": "Sobrenome",
+      "required": "Sobrenome é obrigatório"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email é obrigatório",
+      "invalid": "Email inválido",
+      "resetHelper": "Digite o endereço de email que você usou para se registrar",
+      "alreadyUsed": "Email já utilizado",
+      "tooShort": "Email é muito curto (mínimo de {{min}} caracteres)",
+      "tooLong": "Email é muito longo (máximo de {{max}} caracteres)"
+    },
+    "language": {
+      "label": "Idioma"
+    },
+    "password": {
+      "label": "Senha",
+      "tooShort": "Senha muito curta (mínimo de {{min}} caracteres)",
+      "tooLong": "Senha muito longa (máximo de {{max}} caracteres)",
+      "required": "Senha é obrigatória"
+    },
+    "currentPassword": {
+      "label": "Senha Atual",
+      "incorrect": "Senha atual inválida",
+      "required": "Senha Atual é obrigatória"
+    },
+    "newPassword": {
+      "label": "Nova Senha",
+      "required": "Nova Senha é obrigatória"
+    },
+    "confirmNewPassword": {
+      "label": "Confirmar Nova Senha",
+      "required": "Confirmação de Nova Senha é obrigatória",
+      "notEqual": "As novas senhas devem ser iguais"
+    },
+    "login": {
+      "alreadyUsed": "Nome de usuário já utilizado",
+      "label": "Nome de Usuário",
+      "required": "Nome de Usuário é obrigatório",
+      "tooShort": "Nome de Usuário muito curto (mínimo de {{min}} caracteres)",
+      "tooLong": "Nome de Usuário muito longo (máximo de {{max}} caracteres)",
+      "invalid": "Nome de Usuário inválido, não use caracteres especiais"
+    }
+  },
+  "register": {
+    "feedbacks": {
+      "registrationError": {
+        "title": "Falha no registro"
+      },
+      "registrationSuccess": {
+        "title": "Conta criada com sucesso!",
+        "description": "Por favor, verifique sua caixa de entrada de email <strong>{{email}}</strong> para ativar sua conta."
+      }
+    },
+    "actions": {
+      "goToLogin": "Ir para Login",
+      "create": "Criar Conta",
+      "alreadyHaveAnAccount": "Já tem uma conta?",
+      "login": "Login"
+    },
+    "title": "Registrar"
+  }
+}
