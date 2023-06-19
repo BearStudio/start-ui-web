@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
@@ -8,7 +7,6 @@ import { z } from 'zod';
 import {
   apiMethod,
   badRequestResponse,
-  unknownErrorResponse,
 } from '@/app/api/jhipster-mocks/_helpers/api';
 import { db } from '@/app/api/jhipster-mocks/_helpers/db';
 import {
