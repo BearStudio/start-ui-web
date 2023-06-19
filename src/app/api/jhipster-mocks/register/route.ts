@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
@@ -10,7 +11,10 @@ import {
   unknownErrorResponse,
 } from '@/app/api/jhipster-mocks/_helpers/api';
 import { db } from '@/app/api/jhipster-mocks/_helpers/db';
-import { prepareUserForDb } from '@/app/api/jhipster-mocks/_helpers/user';
+import {
+  prepareUserForDb,
+  userErrorResponse,
+} from '@/app/api/jhipster-mocks/_helpers/user';
 
 export const POST = apiMethod({
   public: true,
@@ -30,14 +34,19 @@ export const POST = apiMethod({
 
     const passwordHash = await bcrypt.hash(bodyParsed.data.password, 12);
 
-    const user = await db.user.create({
-      data: prepareUserForDb({
-        email: bodyParsed.data.email.toLowerCase().trim(),
-        login: bodyParsed.data.login.toLowerCase().trim(),
-        password: passwordHash,
-        langKey: bodyParsed.data.langKey,
-      }),
-    });
+    let user;
+    try {
+      user = await db.user.create({
+        data: prepareUserForDb({
+          email: bodyParsed.data.email.toLowerCase().trim(),
+          login: bodyParsed.data.login.toLowerCase().trim(),
+          password: passwordHash,
+          langKey: bodyParsed.data.langKey,
+        }),
+      });
+    } catch (e) {
+      return userErrorResponse(e);
+    }
 
     const token = randomUUID();
 
@@ -53,12 +62,6 @@ export const POST = apiMethod({
     console.log(`👇👇👇👇👇👇👇👇👇👇
 ✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/activate?key=${token}
 👆👆👆👆👆👆👆👆👆👆`);
-
-    return user;
-
-    if (!user) {
-      return unknownErrorResponse();
-    }
 
     return NextResponse.json(user);
   },

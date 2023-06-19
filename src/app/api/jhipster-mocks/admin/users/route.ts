@@ -9,6 +9,7 @@ import { db } from '@/app/api/jhipster-mocks/_helpers/db';
 import {
   formatUserFromDb,
   prepareUserForDb,
+  userErrorResponse,
 } from '@/app/api/jhipster-mocks/_helpers/user';
 
 export const GET = apiMethod({
@@ -58,13 +59,16 @@ export const POST = apiMethod({
       return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const user = formatUserFromDb(
-      await db.user.create({
-        data: prepareUserForDb(bodyParsed.data),
-      })
-    );
-
-    return NextResponse.json(user);
+    try {
+      const user = formatUserFromDb(
+        await db.user.create({
+          data: prepareUserForDb(bodyParsed.data),
+        })
+      );
+      return NextResponse.json(user);
+    } catch (e) {
+      return userErrorResponse(e);
+    }
   },
 });
 
@@ -88,12 +92,16 @@ export const PUT = apiMethod({
       return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const user = formatUserFromDb(
-      await db.user.update({
-        where: { id: bodyParsed.data.id },
-        data: prepareUserForDb(bodyParsed.data),
-      })
-    );
-    return NextResponse.json(user);
+    try {
+      const user = formatUserFromDb(
+        await db.user.update({
+          where: { id: bodyParsed.data.id },
+          data: prepareUserForDb(bodyParsed.data),
+        })
+      );
+      return NextResponse.json(user);
+    } catch (e) {
+      return userErrorResponse(e);
+    }
   },
 });
