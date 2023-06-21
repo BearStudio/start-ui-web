@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { updateAccount } from '@/app/api/jhipster-mocks/account/service';
 import {
   apiMethod,
   badRequestResponse,
   notSignedInResponse,
-} from '@/app/api/jhipster-mocks/helpers';
+} from '@/app/api/jhipster-mocks/_helpers/api';
+import { db } from '@/app/api/jhipster-mocks/_helpers/db';
+import {
+  formatUserFromDb,
+  prepareUserForDb,
+} from '@/app/api/jhipster-mocks/_helpers/user';
 
 export const GET = apiMethod({
   handler: async ({ user }) => {
@@ -29,10 +33,16 @@ export const POST = apiMethod({
       .safeParse(await req.json());
 
     if (!bodyParsed.success) {
-      return badRequestResponse();
+      return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const updatedUser = await updateAccount(user.id, bodyParsed.data);
+    const updatedUser = formatUserFromDb(
+      await db.user.update({
+        where: { id: user.id },
+        data: prepareUserForDb(bodyParsed.data),
+      })
+    );
+
     return NextResponse.json(updatedUser);
   },
 });

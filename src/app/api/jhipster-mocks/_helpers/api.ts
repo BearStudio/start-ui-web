@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 
-import { getAccount } from '@/app/api/jhipster-mocks/account/service';
-import { UserFormatted } from '@/app/api/jhipster-mocks/admin/users/service';
+import { db } from '@/app/api/jhipster-mocks/_helpers/db';
+import {
+  UserFormatted,
+  formatUserFromDb,
+} from '@/app/api/jhipster-mocks/_helpers/user';
 
 type Method = {
   public?: boolean;
@@ -19,7 +22,7 @@ type Method = {
 type ErrorResponse = (options?: {
   title?: string;
   message?: string;
-  details?: string;
+  details?: unknown;
 }) => unknown;
 
 export const demoReadOnlyResponse: ErrorResponse = ({
@@ -150,7 +153,21 @@ export const apiMethod =
         return notSignedInResponse();
       }
 
-      const user = await getAccount(jwtDecoded.id);
+      const user = formatUserFromDb(
+        await db.user.findUnique({
+          where: { id: jwtDecoded.id, activated: true },
+          select: {
+            id: true,
+            login: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            authorities: true,
+            langKey: true,
+            activated: true,
+          },
+        })
+      );
 
       if (!user) {
         return notSignedInResponse();
@@ -160,7 +177,12 @@ export const apiMethod =
         return notAutorizedResponse();
       }
 
-      return method.handler({ req, params, searchParams, user });
+      return method.handler({
+        req,
+        params,
+        searchParams,
+        user,
+      });
     } catch (e) {
       return notSignedInResponse();
     }

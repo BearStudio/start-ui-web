@@ -2,14 +2,15 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import {
-  createUser,
-  getUserList,
-  updateUserById,
-} from '@/app/api/jhipster-mocks/admin/users/service';
-import {
   apiMethod,
   badRequestResponse,
-} from '@/app/api/jhipster-mocks/helpers';
+} from '@/app/api/jhipster-mocks/_helpers/api';
+import { db } from '@/app/api/jhipster-mocks/_helpers/db';
+import {
+  formatUserFromDb,
+  prepareUserForDb,
+  userErrorResponse,
+} from '@/app/api/jhipster-mocks/_helpers/user';
 
 export const GET = apiMethod({
   admin: true,
@@ -24,13 +25,18 @@ export const GET = apiMethod({
         page: searchParams.get('page'),
         size: searchParams.get('size'),
       });
-    const { users, total } = await getUserList({
-      skip: options.page * options.size,
-      take: options.size,
-    });
+
+    const [users, total] = await Promise.all([
+      db.user.findMany({
+        skip: options.page * options.size,
+        take: options.size,
+      }),
+      db.user.count(),
+    ]);
+
     const headers = new Headers();
     headers.set('x-total-count', total.toString());
-    return NextResponse.json(users, { headers });
+    return NextResponse.json(users.map(formatUserFromDb), { headers });
   },
 });
 
@@ -45,18 +51,27 @@ export const POST = apiMethod({
         lastName: z.string().nullable(),
         langKey: z.string(),
         authorities: z.array(z.string()),
-        activated: z.boolean().optional(),
+        activated: z.boolean().optional().default(true),
       })
       .safeParse(await req.json());
 
     if (!bodyParsed.success) {
-      return badRequestResponse();
+      return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const user = await createUser({ activated: true, ...bodyParsed.data });
-    return NextResponse.json(user);
+    try {
+      const user = formatUserFromDb(
+        await db.user.create({
+          data: prepareUserForDb(bodyParsed.data),
+        })
+      );
+      return NextResponse.json(user);
+    } catch (e) {
+      return userErrorResponse(e);
+    }
   },
 });
+
 export const PUT = apiMethod({
   admin: true,
   handler: async ({ req }) => {
@@ -74,10 +89,19 @@ export const PUT = apiMethod({
       .safeParse(await req.json());
 
     if (!bodyParsed.success) {
-      return badRequestResponse();
+      return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const user = await updateUserById(bodyParsed.data.id, bodyParsed.data);
-    return NextResponse.json(user);
+    try {
+      const user = formatUserFromDb(
+        await db.user.update({
+          where: { id: bodyParsed.data.id },
+          data: prepareUserForDb(bodyParsed.data),
+        })
+      );
+      return NextResponse.json(user);
+    } catch (e) {
+      return userErrorResponse(e);
+    }
   },
 });

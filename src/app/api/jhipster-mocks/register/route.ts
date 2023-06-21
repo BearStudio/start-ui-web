@@ -1,12 +1,18 @@
+import bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
+import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { createAccount } from '@/app/api/jhipster-mocks/account/service';
 import {
   apiMethod,
   badRequestResponse,
-  unknownErrorResponse,
-} from '@/app/api/jhipster-mocks/helpers';
+} from '@/app/api/jhipster-mocks/_helpers/api';
+import { db } from '@/app/api/jhipster-mocks/_helpers/db';
+import {
+  prepareUserForDb,
+  userErrorResponse,
+} from '@/app/api/jhipster-mocks/_helpers/user';
 
 export const POST = apiMethod({
   public: true,
@@ -21,14 +27,39 @@ export const POST = apiMethod({
       .safeParse(await req.json());
 
     if (!bodyParsed.success) {
-      return badRequestResponse();
+      return badRequestResponse({ details: bodyParsed.error });
     }
 
-    const user = await createAccount(bodyParsed.data);
+    const passwordHash = await bcrypt.hash(bodyParsed.data.password, 12);
 
-    if (!user) {
-      return unknownErrorResponse();
+    let user;
+    try {
+      user = await db.user.create({
+        data: prepareUserForDb({
+          email: bodyParsed.data.email.toLowerCase().trim(),
+          login: bodyParsed.data.login.toLowerCase().trim(),
+          password: passwordHash,
+          langKey: bodyParsed.data.langKey,
+        }),
+      });
+    } catch (e) {
+      return userErrorResponse(e);
     }
+
+    const token = randomUUID();
+
+    await db.verificationToken.create({
+      data: {
+        userId: user.id,
+        token,
+        expires: dayjs().add(1, 'hour').toDate(),
+      },
+    });
+
+    // REPLACE ME WITH EMAIL SERVICE
+    console.log(`👇👇👇👇👇👇👇👇👇👇
+✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/activate?key=${token}
+👆👆👆👆👆👆👆👆👆👆`);
 
     return NextResponse.json(user);
   },
