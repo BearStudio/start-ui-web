@@ -127,10 +127,10 @@ export default function PageUsers() {
                 retry={() => users.refetch()}
               />
             )}
-            {users.isSuccess && !users.data.users.length && (
+            {users.isSuccess && !users.data.body.length && (
               <DataListEmptyState />
             )}
-            {users.data?.users?.map((user) => (
+            {users.data?.body?.map((user) => (
               <DataListRow as={LinkBox} key={user.id}>
                 <DataListCell colName="login">
                   <HStack maxW="100%">
@@ -225,13 +225,13 @@ export default function PageUsers() {
             ))}
             <DataListFooter>
               <Pagination
-                isLoadingPage={users.isLoadingPage}
+                isLoadingPage={users.isFetching}
                 setPage={(newPage) =>
                   setSearchParams({ page: newPage.toString() })
                 }
                 page={page}
                 pageSize={pageSize}
-                totalItems={users.data?.totalItems}
+                totalItems={users.totalItems}
               >
                 <PaginationButtonFirstPage />
                 <PaginationButtonPrevPage />

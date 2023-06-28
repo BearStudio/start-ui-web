@@ -23,10 +23,9 @@ export default function PageResetPasswordConfirm() {
 
   const resetPasswordFinish = useResetPasswordFinish({
     onError: (error) => {
-      const { title } = error?.response?.data || {};
       toastError({
         title: t('account:resetPassword.feedbacks.resetError.title'),
-        description: title,
+        description: error.status === 400 ? error?.body.title : '',
       });
     },
     onSuccess: () => {
@@ -43,8 +42,10 @@ export default function PageResetPasswordConfirm() {
     id: 'reset-password-finish-form',
     onValidSubmit: (values) => {
       resetPasswordFinish.mutate({
-        key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
-        newPassword: values.password,
+        body: {
+          key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
+          newPassword: values.password,
+        },
       });
     },
   });

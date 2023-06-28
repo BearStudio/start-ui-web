@@ -1,32 +1,21 @@
-import { UseMutationOptions, useMutation } from '@tanstack/react-query';
-import Axios, { AxiosError } from 'axios';
+import { UseMutationOptions } from '@ts-rest/react-query';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
-
-import { LoginPayload, zLoginPayload } from './schema';
+import { client } from '@/lib/tsRest/client';
+import { Contract } from '@/lib/tsRest/contract';
 
 export const useLogin = (
   config: UseMutationOptions<
-    LoginPayload,
-    AxiosError<ApiErrorResponse>,
-    { username: string; password: string }
+    Contract['auth']['authenticate'],
+    typeof client
   > = {}
 ) => {
   const { updateToken } = useAuthContext();
-  return useMutation(
-    async ({ username, password }) => {
-      const response = await Axios.post('/authenticate', {
-        username,
-        password,
-      });
-      return zLoginPayload().parse(response.data);
+  return client.auth.authenticate.useMutation({
+    ...config,
+    onSuccess: (data, ...args) => {
+      updateToken(data.body.id_token);
+      config?.onSuccess?.(data, ...args);
     },
-    {
-      ...config,
-      onSuccess: (data, ...args) => {
-        updateToken(data.id_token);
-        config?.onSuccess?.(data, ...args);
-      },
-    }
-  );
+  });
 };

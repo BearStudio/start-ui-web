@@ -40,17 +40,16 @@ export default function PageResetPasswordRequest() {
       setAccountEmail(values?.email);
     },
     onError: (error) => {
-      const { title } = error?.response?.data || {};
       toastError({
         title: t('account:resetPassword.feedbacks.initError.title'),
-        description: title,
+        description: error.status === 400 ? error?.body.title : '',
       });
     },
   });
 
   const resetPasswordInitForm = useForm<{ email: string }>({
     onValidSubmit: (values) => {
-      resetPasswordInit.mutate(values.email);
+      resetPasswordInit.mutate({ body: values.email });
     },
   });
   const values = useFormFields({

@@ -11,6 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -24,9 +25,9 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
-import { User } from '@/features/users/schema';
 import { useUserFormQuery, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
+import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
@@ -40,24 +41,30 @@ export default function PageUserUpdate() {
 
   const userUpdate = useUserUpdate({
     onError: (error) => {
-      if (error.response) {
-        const { title, errorKey } = error.response.data;
+      if (error.body) {
+        if (error.status === 400) {
+          const { title, errorKey } = error.body;
+          toastError({
+            title: t('users:update.feedbacks.updateError.title'),
+            description: title,
+          });
+          switch (errorKey) {
+            case 'userexists':
+              form.setErrors({
+                login: t('users:data.login.alreadyUsed'),
+              });
+              break;
+            case 'emailexists':
+              form.setErrors({
+                email: t('users:data.email.alreadyUsed'),
+              });
+              break;
+          }
+          return;
+        }
         toastError({
           title: t('users:update.feedbacks.updateError.title'),
-          description: title,
         });
-        switch (errorKey) {
-          case 'userexists':
-            form.setErrors({
-              login: t('users:data.login.alreadyUsed'),
-            });
-            break;
-          case 'emailexists':
-            form.setErrors({
-              email: t('users:data.email.alreadyUsed'),
-            });
-            break;
-        }
       }
     },
     onSuccess: () => {
@@ -68,14 +75,18 @@ export default function PageUserUpdate() {
     },
   });
 
-  const form = useForm<Omit<User, 'id'>>({
+  const form = useForm<
+    Omit<ClientInferRequest<Contract['users']['update']>['body'], 'id'>
+  >({
     ready: !user.isLoading,
-    initialValues: user.data,
+    initialValues: user.data?.body,
     onValidSubmit: (values) => {
-      if (!user.data?.id) return null;
+      if (!user.data?.body.id) return null;
       userUpdate.mutate({
-        id: user.data.id,
-        ...values,
+        body: {
+          id: user.data.body.id,
+          ...values,
+        },
       });
     },
   });
@@ -89,20 +100,20 @@ export default function PageUserUpdate() {
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
               <Stack spacing="0">
-                <Heading size="sm">{user.data?.login}</Heading>
+                <Heading size="sm">{user.data?.body.login}</Heading>
                 <Text
                   fontSize="xs"
                   color="gray.600"
                   _dark={{ color: 'gray.300' }}
                 >
-                  {t('users:data.id.label')}: {user.data?.id}
+                  {t('users:data.id.label')}: {user.data?.body.id}
                 </Text>
               </Stack>
             )}
           </Box>
           {!!user.data && (
             <Box>
-              <UserStatus isActivated={user.data?.activated} />
+              <UserStatus isActivated={user.data?.body.activated} />
             </Box>
           )}
         </HStack>

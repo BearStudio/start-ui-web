@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Card, CardBody, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
+import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -14,9 +15,10 @@ import {
   useAccountFormQuery,
   useUpdateAccount,
 } from '@/features/account/service';
-import { User } from '@/features/users/schema';
+import { User } from '@/features/users/contract';
 import { Loader } from '@/layout/Loader';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
@@ -27,10 +29,9 @@ export default function PageProfile() {
 
   const updateAccount = useUpdateAccount({
     onError: (error) => {
-      const { title } = error?.response?.data || {};
       toastError({
         title: t('account:profile.feedbacks.updateError.title'),
-        description: title,
+        description: error.status === 400 ? error?.body.title : '',
       });
     },
     onSuccess: () => {
@@ -40,8 +41,10 @@ export default function PageProfile() {
     },
   });
 
-  const generalInformationForm = useForm<User>({
-    initialValues: account.data,
+  const generalInformationForm = useForm<
+    ClientInferRequest<Contract['account']['update']>['body']
+  >({
+    initialValues: account.data?.body,
     onValidSubmit: (values) => {
       const newAccount = {
         ...account.data,

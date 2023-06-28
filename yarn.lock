@@ -4293,6 +4293,16 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
+"@ts-rest/core@3.26.3":
+  version "3.26.3"
+  resolved "https://registry.yarnpkg.com/@ts-rest/core/-/core-3.26.3.tgz#ea297f360828e6432e499d01471191258c18e19f"
+  integrity sha512-JyiZHmbKiEDnh3veQEobqSq3gmq9Sg3RtmJzxT0mefbIAw68NsOfgWYDhMci5yjI1AlCjWU/i3IIEAhr4kBt2g==
+
+"@ts-rest/react-query@^3.26.3":
+  version "3.26.3"
+  resolved "https://registry.yarnpkg.com/@ts-rest/react-query/-/react-query-3.26.3.tgz#953caaa62e7dba482359a53cacc5d3b4afe88fd9"
+  integrity sha512-DPZYWVU8QpHTNjgiewIU+IM5kj8k9ori88Hpk3ccSVnrwfYt0w+/x9WH6NWmgdR8wAvOeRiUMU0uxARunKE9AQ==
+
 "@types/babel__core@^7.0.0":
   version "7.20.0"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.0.tgz#61bc5a4cae505ce98e1e36c5445e4bee060d8891"

@@ -1,37 +1,37 @@
+import { useEffect } from 'react';
+
 import { createQueryKeys } from '@lukemorales/query-key-factory';
-import {
-  UseMutationOptions,
-  UseQueryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import Axios, { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import { UseMutationOptions, UseQueryOptions } from '@ts-rest/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { User, zUser } from '@/features/users/schema';
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { client } from '@/lib/tsRest/client';
+import { Contract } from '@/lib/tsRest/contract';
 
 export const accountKeys = createQueryKeys('accountService', {
   account: null,
   accountForm: null,
+  activate: null,
 });
 
-type UseAccountQueryOptions = UseQueryOptions<User>;
+type UseAccountQueryOptions = UseQueryOptions<Contract['account']['get']>;
 export const useAccount = (queryOptions: UseAccountQueryOptions = {}) => {
   const { i18n } = useTranslation();
-  const query = useQuery({
-    queryKey: accountKeys.account.queryKey,
-    queryFn: async () => {
-      const response = await Axios.get('/account');
-      const data = zUser().parse(response.data);
-      await i18n.changeLanguage(data?.langKey);
-      return data;
-    },
-    ...queryOptions,
-  });
-  const isAdmin = !!query.data?.authorities?.includes('ROLE_ADMIN');
-  return { isAdmin, ...query };
+
+  const query = client.account.get.useQuery(
+    queryOptions.queryKey ?? accountKeys.account.queryKey,
+    undefined,
+    queryOptions
+  );
+
+  useEffect(() => {
+    i18n.changeLanguage(query.data?.body.langKey);
+  }, [query.data?.body.langKey, i18n]);
+
+  return {
+    isAdmin: !!query.data?.body.authorities?.includes('ROLE_ADMIN'),
+    ...query,
+  };
 };
 
 export const useAccountFormQuery = (
@@ -45,94 +45,66 @@ export const useAccountFormQuery = (
   });
 
 export const useCreateAccount = (
-  config: UseMutationOptions<
-    void,
-    AxiosError<
-      ApiErrorResponse & {
-        errorKey: 'userexists' | 'emailexists';
-      }
-    >,
-    Pick<User, 'login' | 'email' | 'langKey'> & { password: string }
+  options: UseMutationOptions<
+    Contract['account']['register'],
+    typeof client
   > = {}
 ) => {
-  return useMutation(async (payload) => {
-    await Axios.post('/register', {
-      ...payload,
-      langKey: payload.langKey ?? DEFAULT_LANGUAGE_KEY,
-    });
-  }, config);
+  return client.account.register.useMutation(options);
 };
 
-export const useActivateAccount = (
-  config: UseMutationOptions<
-    void,
-    AxiosError<ApiErrorResponse>,
+export const useActivateAccount = (key: string) => {
+  return client.account.activate.useQuery(
+    [accountKeys.activate.queryKey, key],
+    { query: { key } },
     {
-      key: string;
-    }
-  > = {}
-) => {
-  return useMutation(async ({ key }) => {
-    await Axios.get(`/activate?key=${key}`);
-  }, config);
-};
-
-export const useUpdateAccount = (
-  config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, User> = {}
-) => {
-  const { i18n } = useTranslation();
-  const queryClient = useQueryClient();
-  return useMutation(
-    async (account) => {
-      await Axios.post('/account', account);
-    },
-    {
-      ...config,
-      onMutate: async (data, ...args) => {
-        await i18n.changeLanguage(data?.langKey);
-        await config.onMutate?.(data, ...args);
-      },
-      onSuccess: async (...args) => {
-        await queryClient.invalidateQueries(accountKeys.account);
-        await config.onSuccess?.(...args);
-      },
+      staleTime: Infinity,
+      cacheTime: 0,
     }
   );
 };
 
-export const useResetPasswordInit = (
-  config: UseMutationOptions<void, AxiosError<ApiErrorResponse>, string> = {}
+export const useUpdateAccount = (
+  config: UseMutationOptions<Contract['account']['update'], typeof client> = {}
 ) => {
-  return useMutation(async (email) => {
-    await Axios.post('/account/reset-password/init', email, {
-      headers: { 'Content-Type': 'text/plain' },
-    });
-  }, config);
+  const { i18n } = useTranslation();
+  const queryClient = useQueryClient();
+  return client.account.update.useMutation({
+    ...config,
+    onMutate: async (data, ...args) => {
+      await i18n.changeLanguage(data?.body?.langKey);
+      await config.onMutate?.(data, ...args);
+    },
+    onSuccess: async (...args) => {
+      await queryClient.invalidateQueries(accountKeys.account);
+      await config.onSuccess?.(...args);
+    },
+  });
+};
+
+export const useResetPasswordInit = (
+  config: UseMutationOptions<
+    Contract['account']['resetPasswordInit'],
+    typeof client
+  > = {}
+) => {
+  return client.account.resetPasswordInit.useMutation(config);
 };
 
 export const useResetPasswordFinish = (
   config: UseMutationOptions<
-    void,
-    AxiosError<ApiErrorResponse>,
-    {
-      key: string;
-      newPassword: string;
-    }
+    Contract['account']['resetPasswordFinish'],
+    typeof client
   > = {}
 ) => {
-  return useMutation(async (payload) => {
-    await Axios.post('/account/reset-password/finish', payload);
-  }, config);
+  return client.account.resetPasswordFinish.useMutation(config);
 };
 
 export const useUpdatePassword = (
   config: UseMutationOptions<
-    void,
-    AxiosError<ApiErrorResponse>,
-    { currentPassword: string; newPassword: string }
+    Contract['account']['updatePassword'],
+    typeof client
   > = {}
 ) => {
-  return useMutation(async (payload) => {
-    await Axios.post('/account/change-password', payload);
-  }, config);
+  return client.account.updatePassword.useMutation(config);
 };

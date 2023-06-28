@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,8 +14,8 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
-import { User } from '@/features/users/schema';
 import { useUserCreate } from '@/features/users/service';
+import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
@@ -25,8 +26,8 @@ export default function PageUserCreate() {
 
   const createUser = useUserCreate({
     onError: (error) => {
-      if (error.response) {
-        const { title, errorKey } = error.response.data;
+      if (error.status === 400) {
+        const { title, errorKey } = error.body;
         toastError({
           title: t('users:create.feedbacks.updateError.title'),
           description: title,
@@ -43,7 +44,12 @@ export default function PageUserCreate() {
             });
             break;
         }
+        return;
       }
+
+      toastError({
+        title: t('users:create.feedbacks.updateError.title'),
+      });
     },
     onSuccess: () => {
       toastSuccess({
@@ -53,19 +59,16 @@ export default function PageUserCreate() {
     },
   });
 
-  const form = useForm<
-    Pick<
-      User,
-      'login' | 'email' | 'firstName' | 'lastName' | 'langKey' | 'authorities'
-    >
-  >({
-    onValidSubmit: (values) => {
-      const newUser = {
-        ...values,
-      };
-      createUser.mutate(newUser);
-    },
-  });
+  const form = useForm<ClientInferRequest<Contract['users']['create']>['body']>(
+    {
+      onValidSubmit: (values) => {
+        const newUser = {
+          ...values,
+        };
+        createUser.mutate({ body: newUser });
+      },
+    }
+  );
 
   return (
     <Page containerSize="md" isFocusMode>

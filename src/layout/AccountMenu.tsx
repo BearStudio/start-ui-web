@@ -113,12 +113,12 @@ export const AccountMenu = ({ ...rest }) => {
     <Box color="gray.800" _dark={{ color: 'white' }}>
       <Menu placement="bottom-end" {...rest}>
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
-          <Avatar size="sm" icon={<></>} name={account.data?.login}>
+          <Avatar size="sm" icon={<></>} name={account.data?.body.login}>
             {account.isLoading && <Spinner size="xs" />}
           </Avatar>
         </MenuButton>
         <MenuList maxW="12rem" overflow="hidden">
-          <MenuGroup title={account.data?.email} noOfLines={1}>
+          <MenuGroup title={account.data?.body.email} noOfLines={1}>
             <MenuItem
               as={Link}
               to="/account"

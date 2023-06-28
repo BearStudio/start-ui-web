@@ -1,81 +1,76 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
+import { useQueryClient } from '@tanstack/react-query';
+import { ClientInferRequest } from '@ts-rest/core';
 import {
   UseMutationOptions,
   UseQueryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import Axios, { AxiosError } from 'axios';
+  useTsRestQueryClient,
+} from '@ts-rest/react-query';
+import { z } from 'zod';
 
-import { User, UserList, zUser, zUserList } from '@/features/users/schema';
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
-
-type UserMutateError = ApiErrorResponse & {
-  errorKey: 'userexists' | 'emailexists';
-};
-
-const USERS_BASE_URL = '/admin/users';
+import { client } from '@/lib/tsRest/client';
+import { Contract, contract } from '@/lib/tsRest/contract';
 
 const usersKeys = createQueryKeys('usersService', {
-  users: (params: { page?: number; size?: number }) => [params],
+  users: (params: ClientInferRequest<Contract['users']['getAll']>['query']) => [
+    params,
+  ],
   user: (params: { login?: string }) => [params],
   userForm: null,
 });
 
 export const useUserList = (
-  { page = 0, size = 10 } = {},
-  queryOptions: UseQueryOptions<UserList> = {}
+  {
+    page = 0,
+    size = 20,
+    sort = ['id', 'desc'],
+  }: ClientInferRequest<Contract['users']['getAll']>['query'] = {},
+  queryOptions: UseQueryOptions<Contract['users']['getAll']> = {}
 ) => {
-  const query = useQuery({
-    queryKey: usersKeys.users({ page, size }).queryKey,
-    queryFn: async () => {
-      const response = await Axios.get(USERS_BASE_URL, {
-        params: { page, size, sort: 'id,desc' },
-      });
-      return zUserList().parse({
-        users: response.data,
-        totalItems: response.headers?.['x-total-count'],
-      });
-    },
-    keepPreviousData: true,
-    ...queryOptions,
-  });
+  const params = { page, size, sort };
+  const query = client.users.getAll.useQuery(
+    usersKeys.users(params).queryKey,
+    { query: params },
+    {
+      keepPreviousData: true,
+      ...queryOptions,
+    }
+  );
 
-  const users = query.data?.users;
-  const totalItems = query.data?.totalItems ?? 0;
-  const totalPages = Math.ceil(totalItems / size);
-  const hasMore = page + 1 < totalPages;
-  const isLoadingPage = query.isFetching;
+  const totalItems =
+    z.coerce
+      .number()
+      .optional()
+      .catch(0)
+      .parse(query.data?.headers.get('x-total-count')) ?? 0;
+  const totalPages = Math.ceil(totalItems / params.size);
+  const hasMore = params.page + 1 < totalPages;
 
   return {
-    users,
     totalItems,
     hasMore,
     totalPages,
-    isLoadingPage,
     ...query,
   };
 };
 
 export const useUser = (
   userLogin?: string,
-  queryOptions: UseQueryOptions<User> = {}
+  queryOptions: UseQueryOptions<Contract['account']['get']> = {}
 ) => {
-  return useQuery({
-    queryKey: usersKeys.user({ login: userLogin }).queryKey,
-    queryFn: async () => {
-      const response = await Axios.get(`${USERS_BASE_URL}/${userLogin}`);
-      return zUser().parse(response.data);
-    },
-    enabled: !!userLogin,
-    ...queryOptions,
-  });
+  return client.users.getByLogin.useQuery(
+    queryOptions.queryKey ?? usersKeys.user({ login: userLogin }).queryKey,
+    { params: { login: userLogin ?? '' } },
+    {
+      enabled: !!userLogin,
+      ...queryOptions,
+    }
+  );
 };
 
 export const useUserFormQuery = (
   userLogin?: string,
-  queryOptions: UseQueryOptions<User> = {}
+  queryOptions: UseQueryOptions<typeof contract.account.get> = {}
 ) =>
   useUser(userLogin, {
     queryKey: usersKeys.userForm.queryKey,
@@ -85,92 +80,61 @@ export const useUserFormQuery = (
   });
 
 export const useUserUpdate = (
-  config: UseMutationOptions<User, AxiosError<UserMutateError>, User> = {}
+  config: UseMutationOptions<Contract['users']['update'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (payload) => {
-      const response = await Axios.put(USERS_BASE_URL, payload);
-      return zUser().parse(response.data);
-    },
-    {
-      ...config,
-      onSuccess: (data, payload, ...args) => {
-        queryClient.cancelQueries(usersKeys.users._def);
-        queryClient
-          .getQueryCache()
-          .findAll(usersKeys.users._def)
-          .forEach(({ queryKey }) => {
-            queryClient.setQueryData<UserList | undefined>(
-              queryKey,
-              (cachedData) => {
-                if (!cachedData) return;
-                return {
-                  ...cachedData,
-                  content: (cachedData.users || []).map((user) =>
-                    user.id === data.id ? data : user
-                  ),
-                };
-              }
-            );
+  const apiQueryClient = useTsRestQueryClient(client);
+  return client.users.update.useMutation({
+    ...config,
+    onSuccess: (data, payload, ...args) => {
+      queryClient.cancelQueries(usersKeys.users._def);
+      queryClient
+        .getQueryCache()
+        .findAll(usersKeys.users._def)
+        .forEach(({ queryKey }) => {
+          apiQueryClient.users.getAll.setQueryData(queryKey, (cachedData) => {
+            if (!cachedData) return;
+            return {
+              ...cachedData,
+              content: (cachedData.body || []).map((user) =>
+                user.id === data.body.id ? data : user
+              ),
+            };
           });
-        queryClient.invalidateQueries(usersKeys.users._def);
-        queryClient.invalidateQueries(usersKeys.user({ login: payload.login }));
-        if (config.onSuccess) {
-          config.onSuccess(data, payload, ...args);
-        }
-      },
-    }
-  );
+        });
+      queryClient.invalidateQueries(usersKeys.users._def);
+      queryClient.invalidateQueries(
+        usersKeys.user({ login: payload.body.login })
+      );
+      if (config.onSuccess) {
+        config.onSuccess(data, payload, ...args);
+      }
+    },
+  });
 };
 
 export const useUserCreate = (
-  config: UseMutationOptions<
-    User,
-    AxiosError<UserMutateError>,
-    Pick<
-      User,
-      'login' | 'email' | 'firstName' | 'lastName' | 'langKey' | 'authorities'
-    >
-  > = {}
+  config: UseMutationOptions<Contract['users']['create'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async ({ langKey = DEFAULT_LANGUAGE_KEY, ...payload }) => {
-      const response = await Axios.post('/admin/users', {
-        langKey,
-        ...payload,
-      });
-      return zUser().parse(response.data);
+  return client.users.create.useMutation({
+    ...config,
+    onSuccess: (...args) => {
+      queryClient.invalidateQueries(usersKeys.users._def);
+      config?.onSuccess?.(...args);
     },
-    {
-      ...config,
-      onSuccess: (...args) => {
-        queryClient.invalidateQueries(usersKeys.users._def);
-        config?.onSuccess?.(...args);
-      },
-    }
-  );
+  });
 };
 
 export const useUserRemove = (
-  config: UseMutationOptions<
-    void,
-    AxiosError<ApiErrorResponse>,
-    Pick<User, 'login'>
-  > = {}
+  config: UseMutationOptions<Contract['users']['remove'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (user) => {
-      await Axios.delete(`/admin/users/${user.login}`);
+  return client.users.remove.useMutation({
+    ...config,
+    onSuccess: (...args) => {
+      queryClient.invalidateQueries(usersKeys.users._def);
+      config?.onSuccess?.(...args);
     },
-    {
-      ...config,
-      onSuccess: (...args) => {
-        queryClient.invalidateQueries(usersKeys.users._def);
-        config?.onSuccess?.(...args);
-      },
-    }
-  );
+  });
 };

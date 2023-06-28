@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Card, CardBody, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
+import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -10,6 +11,7 @@ import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
 import { useUpdatePassword } from '@/features/account/service';
+import { Contract } from '@/lib/tsRest/contract';
 
 export default function PagePassword() {
   const { t } = useTranslation(['account']);
@@ -19,7 +21,7 @@ export default function PagePassword() {
 
   const updatePassword = useUpdatePassword({
     onError: (error) => {
-      const { title } = error?.response?.data || {};
+      const { title = '' } = error.status === 400 ? error?.body : {};
       if (title === 'Incorrect password') {
         changePasswordForm.setErrors({
           currentPassword: t('account:data.currentPassword.incorrect'),
@@ -39,13 +41,12 @@ export default function PagePassword() {
     },
   });
 
-  const changePasswordForm = useForm<{
-    currentPassword: string;
-    newPassword: string;
-  }>({
+  const changePasswordForm = useForm<
+    ClientInferRequest<Contract['account']['updatePassword']>['body']
+  >({
     onValidSubmit: (values) => {
       const { currentPassword, newPassword } = values;
-      updatePassword.mutate({ currentPassword, newPassword });
+      updatePassword.mutate({ body: { currentPassword, newPassword } });
     },
   });
   const values = useFormFields({

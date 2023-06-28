@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
+import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -10,6 +11,7 @@ import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
 import { useLogin } from '@/features/auth/service';
 import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
+import { Contract } from '@/lib/tsRest/contract';
 
 type LoginFormProps = BoxProps & {
   onSuccess?: () => void;
@@ -31,13 +33,15 @@ export const LoginForm = ({
     onError: (error) => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),
-        description: error?.response?.data?.title,
+        description: error.status === 400 ? error?.body.title : '',
       });
     },
   });
 
-  const form = useForm<{ username: string; password: string }>({
-    onValidSubmit: (values) => login.mutate(values),
+  const form = useForm<
+    ClientInferRequest<Contract['auth']['authenticate']>['body']
+  >({
+    onValidSubmit: (values) => login.mutate({ body: values }),
   });
 
   return (

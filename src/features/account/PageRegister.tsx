@@ -22,6 +22,7 @@ import {
   isMinLength,
   isPattern,
 } from '@formiz/validations';
+import { ClientInferRequest } from '@ts-rest/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -31,9 +32,9 @@ import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { useCreateAccount } from '@/features/account/service';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
-import { User } from '@/features/users/schema';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Language } from '@/lib/i18n/constants';
+import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'account']);
@@ -42,33 +43,40 @@ export default function PageRegister() {
   const [accountEmail, setAccountEmail] = useState('');
 
   const createUser = useCreateAccount({
-    onMutate: ({ email }) => {
+    onMutate: ({ body: { email } }) => {
       setAccountEmail(email);
     },
     onError: (error) => {
-      const { errorKey, title } = error?.response?.data || {};
+      if (error.status === 400) {
+        const { errorKey, title } = error.body;
+
+        toastError({
+          title: t('account:register.feedbacks.registrationError.title'),
+          description: title,
+        });
+
+        if (errorKey === 'userexists') {
+          form.setErrors({
+            login: t('account:data.login.alreadyUsed'),
+          });
+        }
+
+        if (errorKey === 'emailexists') {
+          form.setErrors({ email: t('account:data.email.alreadyUsed') });
+        }
+        return;
+      }
 
       toastError({
         title: t('account:register.feedbacks.registrationError.title'),
-        description: title,
       });
-
-      if (errorKey === 'userexists') {
-        form.setErrors({
-          login: t('account:data.login.alreadyUsed'),
-        });
-      }
-
-      if (errorKey === 'emailexists') {
-        form.setErrors({ email: t('account:data.email.alreadyUsed') });
-      }
     },
   });
 
   const form = useForm<
-    Pick<User, 'email' | 'login' | 'langKey'> & { password: string }
+    ClientInferRequest<Contract['account']['register']>['body']
   >({
-    onValidSubmit: (values) => createUser.mutate(values),
+    onValidSubmit: (values) => createUser.mutate({ body: values }),
   });
 
   const values = useFormFields({
