@@ -131,13 +131,13 @@ export const alertTheme = defineMultiStyleConfig({
       flexShrink: 0,
       marginEnd: 2,
       w: 4,
-      h: 4,
+      h: 6,
     },
     spinner: {
       flexShrink: 0,
       marginEnd: 2,
-      w: 4,
-      h: 4,
+      w: 5,
+      h: 5,
     },
   },
   variants: {
