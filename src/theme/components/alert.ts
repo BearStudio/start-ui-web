@@ -130,13 +130,13 @@ export const alertTheme = defineMultiStyleConfig({
     icon: {
       flexShrink: 0,
       marginEnd: 2,
-      w: 4,
+      w: 4, // Does not need to have same height and width because it is a .svg
       h: 6,
     },
     spinner: {
       flexShrink: 0,
       marginEnd: 2,
-      w: 5,
+      w: 5, // Broken if width and height are not equal
       h: 5,
     },
   },
