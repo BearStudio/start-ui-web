@@ -14,6 +14,9 @@ export const MainMenu = ({ ...rest }) => {
   return (
     <Stack direction="row" spacing="1" {...rest}>
       <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
+      <MainMenuItem to="/repositories">
+        {t('layout:mainMenu.repositories')}
+      </MainMenuItem>
       {isAdmin && (
         <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
       )}

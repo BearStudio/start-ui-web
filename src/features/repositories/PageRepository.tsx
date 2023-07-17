@@ -2,8 +2,6 @@ import React from 'react';
 
 import {
   Box,
-  Button,
-  ButtonGroup,
   HStack,
   Heading,
   SkeletonText,
@@ -15,12 +13,7 @@ import { LuExternalLink } from 'react-icons/lu';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
-import {
-  Page,
-  PageBottomBar,
-  PageContent,
-  PageTopBar,
-} from '@/components/Page';
+import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { useRepository } from '@/features/repositories/service';
 
 export default function PageRepository() {
@@ -104,14 +97,6 @@ export default function PageRepository() {
           </Stack>
         )}
       </PageContent>
-
-      <PageBottomBar _dark={{ bg: 'gray.700' }}>
-        <ButtonGroup justifyContent="space-between">
-          <Button onClick={() => navigate('/repositories')}>
-            {t('common:actions.goBack')}
-          </Button>
-        </ButtonGroup>
-      </PageBottomBar>
     </Page>
   );
 }
