@@ -1,13 +1,25 @@
 import React from 'react';
 
 import {
+  Box,
+  Button,
+  ButtonGroup,
+  CloseButton,
+  HStack,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   MenuProps,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Portal,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuCheckCircle, LuEdit, LuTrash2, LuXCircle } from 'react-icons/lu';
@@ -26,6 +38,8 @@ export type UserActionProps = Omit<MenuProps, 'children'> & {
 
 export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
+
+  const confirmDeleteModal = useDisclosure();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const userUpdate = useUserUpdate({
@@ -91,46 +105,83 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const isRemovalLoading = userRemove.isLoading;
 
   return (
-    <Menu isLazy placement="left-start" {...rest}>
-      <MenuButton
-        as={ActionsButton}
-        isLoading={isActionsLoading || isRemovalLoading}
-      />
-      <Portal>
-        <MenuList>
-          <MenuItem
-            as={Link}
-            to={`/admin/users/${user.login}`}
-            icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
-          >
-            {t('common:actions.edit')}
-          </MenuItem>
-          {user.activated ? (
+    <>
+      <Menu isLazy placement="left-start" {...rest}>
+        <MenuButton
+          as={ActionsButton}
+          isLoading={isActionsLoading || isRemovalLoading}
+        />
+        <Portal>
+          <MenuList>
             <MenuItem
-              onClick={deactivateUser}
-              icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
+              as={Link}
+              to={`/admin/users/${user.login}`}
+              icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
             >
-              {t('common:actions.deactivate')}
+              {t('common:actions.edit')}
             </MenuItem>
-          ) : (
+            {user.activated ? (
+              <MenuItem
+                onClick={deactivateUser}
+                icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
+              >
+                {t('common:actions.deactivate')}
+              </MenuItem>
+            ) : (
+              <ConfirmMenuItem
+                onClick={activateUser}
+                icon={
+                  <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
+                }
+              >
+                {t('common:actions.activate')}
+              </ConfirmMenuItem>
+            )}
+            <MenuDivider />
             <MenuItem
-              onClick={activateUser}
-              icon={
-                <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
-              }
+              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
+              onClick={confirmDeleteModal.onOpen}
             >
-              {t('common:actions.activate')}
+              {t('common:actions.delete')}
             </MenuItem>
-          )}
-          <MenuDivider />
-          <ConfirmMenuItem
-            icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
-            onClick={removeUser}
-          >
-            {t('common:actions.delete')}
-          </ConfirmMenuItem>
-        </MenuList>
-      </Portal>
-    </Menu>
+          </MenuList>
+        </Portal>
+      </Menu>
+      <Modal
+        isOpen={confirmDeleteModal.isOpen}
+        onClose={confirmDeleteModal.onClose}
+      >
+        <Portal>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <HStack>
+                <Box flex={1}>{t('users:deleteModal.title')}</Box>
+                <CloseButton onClick={confirmDeleteModal.onClose} />
+              </HStack>
+            </ModalHeader>
+            <ModalBody fontSize="sm">
+              {t('users:deleteModal.message', { name: user.login })}
+            </ModalBody>
+            <ModalFooter>
+              <ButtonGroup justifyContent="space-between" w="full">
+                <Button onClick={confirmDeleteModal.onClose}>
+                  {t('common:actions.cancel')}
+                </Button>
+                <Button
+                  variant="@danger"
+                  onClick={() => {
+                    removeUser();
+                    confirmDeleteModal.onClose();
+                  }}
+                >
+                  {t('common:actions.delete')}
+                </Button>
+              </ButtonGroup>
+            </ModalFooter>
+          </ModalContent>
+        </Portal>
+      </Modal>
+    </>
   );
 };
