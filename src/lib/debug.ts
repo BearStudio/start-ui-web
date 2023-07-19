@@ -1,4 +1,4 @@
-import { HTMLChakraProps, ThemeTypings } from '@chakra-ui/react';
+import { ChakraProps, ThemeTypings } from '@chakra-ui/react';
 
 export const debugComponent = ({
   label = 'Debug',
@@ -10,7 +10,7 @@ export const debugComponent = ({
   colorScheme?: ThemeTypings['colorSchemes'];
   hideLabel?: boolean;
   hideBackground?: boolean;
-} = {}): HTMLChakraProps<'div'> => {
+} = {}): ChakraProps => {
   if (process.env.NODE_ENV !== 'development') return {};
   return {
     border: '1px solid',
