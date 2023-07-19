@@ -1,0 +1,66 @@
+import { debugComponent } from '@/lib/debug'
+import { Box, Stack } from '@chakra-ui/react';
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="Utils/debug" />
+
+# Debug components
+
+```jsx
+import { debugComponent } from '@/lib/debug'
+
+// ...
+
+<MyComponent {...debugComponent()}>
+  // ...
+</MyComponent>
+
+```
+
+## Default
+
+<Canvas>
+  <Story name="Default">
+    <Box h="32" {...debugComponent()} />
+  </Story>
+</Canvas>
+
+
+## With custom label and color and background
+
+<Canvas>
+  <Story name="With custom label and color">
+    <Box
+      h="32"
+      {...debugComponent({
+        label: 'MyComponent',
+        colorScheme: 'brand',
+        hideBackground: false
+      })}
+    />
+  </Story>
+</Canvas>
+
+
+## Without label
+
+<Canvas>
+  <Story name="Without label">
+    <Box h="32" {...debugComponent({ hideLabel: true })} />
+  </Story>
+</Canvas>
+
+## Complex usage
+
+<Canvas height="120px">
+  <Story name="Real case usage">
+    <Box p={4} {...debugComponent({ colorScheme: 'red', label: 'Container' })}>
+      <Stack {...debugComponent({ colorScheme: 'cyan', label: 'List', hideBackground: false })}>
+        <Box h="8" {...debugComponent({ label: 'ListItem 1', hideBackground: false })} />
+        <Box h="8" w="90%" {...debugComponent({ label: 'ListItem 2', hideBackground: false })} />
+        <Box h="8" w="50%" {...debugComponent({ label: 'ListItem 3', hideBackground: false })} />
+        <Box h="8" w="60%" {...debugComponent({ label: 'ListItem 4', hideBackground: false })} />
+      </Stack>
+    </Box>
+  </Story>
+</Canvas>
