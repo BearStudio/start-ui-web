@@ -8,7 +8,6 @@ import {
   MenuList,
   MenuProps,
   Portal,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuCheckCircle, LuEdit, LuTrash2, LuXCircle } from 'react-icons/lu';
@@ -29,7 +28,6 @@ export type UserActionProps = Omit<MenuProps, 'children'> & {
 export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
 
-  const confirmDeleteModal = useDisclosure();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const userUpdate = useUserUpdate({
