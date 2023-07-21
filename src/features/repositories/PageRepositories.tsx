@@ -2,10 +2,8 @@ import React from 'react';
 
 import {
   Box,
-  Button,
   HStack,
   Heading,
-  IconButton,
   LinkBox,
   LinkOverlay,
   Text,
@@ -33,6 +31,7 @@ import {
   PaginationButtonPrevPage,
   PaginationInfo,
 } from '@/components/Pagination';
+import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { RepositoryActions } from '@/features/repositories/RepositoryActions';
 import { useRepositoryList } from '@/features/repositories/service';
 
@@ -51,29 +50,17 @@ export default function PageRepositories() {
     <Page containerSize="lg">
       <PageContent>
         <HStack mb="4">
-          <Box flex="1">
-            <Heading size="md">{t('repositories:list.title')}</Heading>
-          </Box>
-          <Box>
-            <Button
-              display={{ base: 'none', sm: 'flex' }}
-              as={Link}
-              to="/repositories/create"
-              variant="@primary"
-              leftIcon={<LuPlus />}
-            >
-              {t('repositories:list.actions.createRepository')}
-            </Button>
-            <IconButton
-              display={{ base: 'flex', sm: 'none' }}
-              aria-label={t('repositories:list.actions.createRepository')}
-              as={Link}
-              to="/repositories/create"
-              size="sm"
-              variant="@primary"
-              icon={<LuPlus />}
-            />
-          </Box>
+          <Heading size="md" flex={1}>
+            {t('repositories:list.title')}
+          </Heading>
+          <ResponsiveIconButton
+            as={Link}
+            to="/repositories/create"
+            variant="@primary"
+            icon={<LuPlus />}
+          >
+            {t('repositories:list.actions.createRepository')}
+          </ResponsiveIconButton>
         </HStack>
 
         <DataList>

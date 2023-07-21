@@ -4,7 +4,6 @@ import {
   Box,
   Card,
   CardBody,
-  HStack,
   Heading,
   SkeletonText,
   Stack,
@@ -17,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '@/components/Icons';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { useRepository } from '@/features/repositories/service';
+import { Loader } from '@/layout/Loader';
 
 export default function PageRepository() {
   const { t } = useTranslation(['common', 'repositories']);
@@ -29,21 +29,14 @@ export default function PageRepository() {
     <Page containerSize="lg">
       <PageTopBar zIndex={0} showBack onBack={() => navigate('/repositories')}>
         {repository.isLoading || repository.isError ? (
-          <HStack spacing="4">
-            <Box flex="1">
-              <SkeletonText maxW="6rem" noOfLines={2} />
-            </Box>
-          </HStack>
+          <SkeletonText maxW="6rem" noOfLines={2} />
         ) : (
-          <HStack spacing="4">
-            <Heading size="md">{repository.data?.name}</Heading>
-          </HStack>
+          <Heading size="md">{repository.data?.name}</Heading>
         )}
       </PageTopBar>
       <PageContent>
-        {repository.isLoading || repository.isError ? (
-          <SkeletonText maxW="6rem" noOfLines={2} />
-        ) : (
+        {repository.isLoading && <Loader />}
+        {repository.isSuccess && (
           <Card>
             <CardBody>
               <Stack spacing={4}>
@@ -51,7 +44,7 @@ export default function PageRepository() {
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.name.label')}
                   </Text>
-                  <Text size="md">{repository.data?.name}</Text>
+                  <Text>{repository.data?.name}</Text>
                 </Box>
                 <Box as="a" href={repository.data?.link} target="_blank">
                   <Text fontSize="sm" fontWeight="bold">
@@ -67,7 +60,7 @@ export default function PageRepository() {
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.description.label')}
                   </Text>
-                  <Text size="md">{repository.data?.description}</Text>
+                  <Text>{repository.data?.description}</Text>
                 </Box>
               </Stack>
             </CardBody>

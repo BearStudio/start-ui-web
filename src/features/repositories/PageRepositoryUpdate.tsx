@@ -1,13 +1,10 @@
 import React from 'react';
 
 import {
-  Box,
   Button,
   ButtonGroup,
-  HStack,
   Heading,
   SkeletonText,
-  Stack,
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
@@ -39,24 +36,23 @@ export default function PageRepositoryUpdate() {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const { mutate: editUser, isLoading: editUserIsLoading } =
-    useRepositoryUpdate({
-      onError: (error) => {
-        if (error.response) {
-          const { title } = error.response.data;
-          toastError({
-            title: t('repositories:update.feedbacks.updateError.title'),
-            description: title,
-          });
-        }
-      },
-      onSuccess: () => {
-        toastSuccess({
-          title: t('repositories:update.feedbacks.updateSuccess.title'),
+  const updateRepository = useRepositoryUpdate({
+    onError: (error) => {
+      if (error.response) {
+        const { title } = error.response.data;
+        toastError({
+          title: t('repositories:update.feedbacks.updateError.title'),
+          description: title,
         });
-        navigate(-1);
-      },
-    });
+      }
+    },
+    onSuccess: () => {
+      toastSuccess({
+        title: t('repositories:update.feedbacks.updateSuccess.title'),
+      });
+      navigate(-1);
+    },
+  });
 
   const form = useForm<TODO>({
     id: 'create - user - form',
@@ -67,31 +63,23 @@ export default function PageRepositoryUpdate() {
         id: repository.data?.id,
         ...values,
       };
-      editUser(userToSend);
+      updateRepository.mutate(userToSend);
     },
   });
 
   return (
     <Page containerSize="md" isFocusMode>
       <PageTopBar showBack onBack={() => navigate('/repositories')}>
-        <HStack spacing="4">
-          <Box flex="1">
-            {repository.isLoading || repository.isError ? (
-              <SkeletonText maxW="6rem" noOfLines={2} />
-            ) : (
-              <Stack spacing="0">
-                <Heading size="sm">{repository.data?.name}</Heading>
-                <Text
-                  fontSize="xs"
-                  color="gray.600"
-                  _dark={{ color: 'gray.300' }}
-                >
-                  {t('repositories:data.id.label')}: {repository.data?.id}
-                </Text>
-              </Stack>
-            )}
-          </Box>
-        </HStack>
+        {repository.isLoading || repository.isError ? (
+          <SkeletonText maxW="6rem" noOfLines={2} />
+        ) : (
+          <>
+            <Heading size="md">{repository.data?.name}</Heading>
+            <Text fontSize="xs" color="gray.600" _dark={{ color: 'gray.300' }}>
+              {t('repositories:data.id.label')}: {repository.data?.id}
+            </Text>
+          </>
+        )}
       </PageTopBar>
       {repository.isLoading && <Loader />}
       {repository.isError && !repository.isLoading && (
@@ -111,7 +99,7 @@ export default function PageRepositoryUpdate() {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={editUserIsLoading}
+                  isLoading={updateRepository.isLoading}
                 >
                   {t('repositories:update.action.save')}
                 </Button>
