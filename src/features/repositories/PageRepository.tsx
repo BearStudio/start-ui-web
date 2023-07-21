@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Box,
-  Button,
   ButtonGroup,
   Card,
   CardBody,
@@ -127,7 +126,9 @@ export default function PageRepository() {
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.description.label')}
                   </Text>
-                  <Text>{repository.data?.description}</Text>
+                  <Text>
+                    {repository.data?.description || <small>-</small>}
+                  </Text>
                 </Box>
               </Stack>
             </CardBody>
