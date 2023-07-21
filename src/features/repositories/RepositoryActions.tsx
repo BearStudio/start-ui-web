@@ -9,7 +9,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuEdit2, LuEye, LuTrash2 } from 'react-icons/lu';
+import { LuEdit3, LuEye, LuTrash2 } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
@@ -72,7 +72,7 @@ export const RepositoryActions = ({
           <MenuItem
             as={Link}
             to={`/repositories/${repository.id}/update`}
-            icon={<Icon icon={LuEdit2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>

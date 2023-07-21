@@ -10,7 +10,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuCheckCircle, LuEdit2, LuTrash2, LuXCircle } from 'react-icons/lu';
+import { LuCheckCircle, LuEdit3, LuTrash2, LuXCircle } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
@@ -101,7 +101,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
           <MenuItem
             as={Link}
             to={`/admin/users/${user.login}`}
-            icon={<Icon icon={LuEdit2} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>

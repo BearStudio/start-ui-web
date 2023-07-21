@@ -14,7 +14,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuEdit2, LuExternalLink, LuTrash2 } from 'react-icons/lu';
+import { LuEdit3, LuExternalLink, LuTrash2 } from 'react-icons/lu';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
@@ -74,7 +74,7 @@ export default function PageRepository() {
             )}
           </Box>
           <ButtonGroup>
-            <ResponsiveIconButton as={Link} to="update" icon={<LuEdit2 />}>
+            <ResponsiveIconButton as={Link} to="update" icon={<LuEdit3 />}>
               {t('common:actions.edit')}
             </ResponsiveIconButton>
 
