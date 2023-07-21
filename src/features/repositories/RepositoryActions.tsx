@@ -1,22 +1,11 @@
 import React from 'react';
 
 import {
-  Box,
-  Button,
-  ButtonGroup,
-  CloseButton,
-  HStack,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   MenuProps,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -25,6 +14,7 @@ import { LuEdit, LuEye, LuTrash2 } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
+import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { Repository } from '@/features/repositories/schema';
@@ -73,7 +63,7 @@ export const RepositoryActions = ({
 
   return (
     <>
-      <Menu isLazy placement="left-start" {...rest}>
+      <Menu placement="left-start" {...rest}>
         <MenuButton as={ActionsButton} isLoading={isRemovalLoading} />
         <Portal>
           <MenuList>
@@ -91,50 +81,26 @@ export const RepositoryActions = ({
             >
               {t('common:actions.edit')}
             </MenuItem>
-            <MenuItem
-              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
-              onClick={confirmDeleteModal.onOpen}
+            <ConfirmModal
+              title={t('repositories:deleteModal.title')}
+              message={t('repositories:deleteModal.message', {
+                name: repository.name,
+              })}
+              onConfirm={() => removeRepository()}
+              confirmText={t('common:actions.delete')}
+              confirmVariant="@danger"
+              size="sm"
             >
-              {t('common:actions.delete')}
-            </MenuItem>
+              <MenuItem
+                icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
+                onClick={confirmDeleteModal.onOpen}
+              >
+                {t('common:actions.delete')}
+              </MenuItem>
+            </ConfirmModal>
           </MenuList>
         </Portal>
       </Menu>
-      <Modal
-        isOpen={confirmDeleteModal.isOpen}
-        onClose={confirmDeleteModal.onClose}
-      >
-        <Portal>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              <HStack>
-                <Box flex={1}>{t('repositories:deleteModal.title')}</Box>
-                <CloseButton onClick={confirmDeleteModal.onClose} />
-              </HStack>
-            </ModalHeader>
-            <ModalBody fontSize="sm">
-              {t('repositories:deleteModal.message', { name: repository.name })}
-            </ModalBody>
-            <ModalFooter>
-              <ButtonGroup justifyContent="space-between" w="full">
-                <Button onClick={confirmDeleteModal.onClose}>
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button
-                  variant="@danger"
-                  onClick={() => {
-                    removeRepository();
-                    confirmDeleteModal.onClose();
-                  }}
-                >
-                  {t('common:actions.delete')}
-                </Button>
-              </ButtonGroup>
-            </ModalFooter>
-          </ModalContent>
-        </Portal>
-      </Modal>
     </>
   );
 };

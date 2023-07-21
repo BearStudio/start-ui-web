@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Card, CardBody, Stack } from '@chakra-ui/react';
-import { isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -17,17 +16,11 @@ export const RepositoryForm = () => {
           <FieldInput
             name="name"
             label={t('repositories:data.name.label')}
-            required={t('repositories:data.name.required') as string}
-            validations={[
-              {
-                handler: isMinLength(5),
-                message: t('repositories:data.name.tooShort', { min: 5 }),
-              },
-            ]}
+            required={t('repositories:data.name.required')}
           />
           <FieldInput
             name="link"
-            required={t('repositories:data.link.required') as string}
+            required={t('repositories:data.link.required')}
             label={t('repositories:data.link.label')}
           />
           <FieldTextarea
