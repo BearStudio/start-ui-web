@@ -85,33 +85,31 @@ export default function PageRepositoryUpdate() {
           </>
         )}
       </PageTopBar>
-      <PageContent>
-        {repository.isLoading && <Loader />}
-        {repository.isError && <ErrorPage />}
-        {repository.isSuccess && (
-          <Formiz connect={form}>
-            <form noValidate onSubmit={form.submit}>
-              <PageContent>
-                <RepositoryForm />
-              </PageContent>
-              <PageBottomBar>
-                <ButtonGroup justifyContent="space-between">
-                  <Button onClick={() => navigate('/repositories')}>
-                    {t('common:actions.cancel')}
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="@primary"
-                    isLoading={updateRepository.isLoading}
-                  >
-                    {t('repositories:update.action.save')}
-                  </Button>
-                </ButtonGroup>
-              </PageBottomBar>
-            </form>
-          </Formiz>
-        )}
-      </PageContent>
+      {repository.isLoading && <Loader />}
+      {repository.isError && <ErrorPage />}
+      {repository.isSuccess && (
+        <Formiz connect={form}>
+          <form noValidate onSubmit={form.submit}>
+            <PageContent>
+              <RepositoryForm />
+            </PageContent>
+            <PageBottomBar>
+              <ButtonGroup justifyContent="space-between">
+                <Button onClick={() => navigate('/repositories')}>
+                  {t('common:actions.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  variant="@primary"
+                  isLoading={updateRepository.isLoading}
+                >
+                  {t('repositories:update.action.save')}
+                </Button>
+              </ButtonGroup>
+            </PageBottomBar>
+          </form>
+        </Formiz>
+      )}
     </Page>
   );
 }
