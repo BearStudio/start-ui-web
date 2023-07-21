@@ -69,7 +69,7 @@ export default function PageRepositoryUpdate() {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => navigate('/repositories')}>
+      <PageTopBar showBack onBack={() => navigate(-1)}>
         {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
           <>

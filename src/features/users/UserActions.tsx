@@ -10,7 +10,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuCheckCircle, LuEdit, LuTrash2, LuXCircle } from 'react-icons/lu';
+import { LuCheckCircle, LuEdit2, LuTrash2, LuXCircle } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
@@ -91,56 +91,54 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const removeUser = () => userRemove.mutate(user);
 
   return (
-    <>
-      <Menu placement="left-start" {...rest}>
-        <MenuButton
-          as={ActionsButton}
-          isLoading={userUpdate.isLoading || userRemove.isLoading}
-        />
-        <Portal>
-          <MenuList>
+    <Menu placement="left-start" {...rest}>
+      <MenuButton
+        as={ActionsButton}
+        isLoading={userUpdate.isLoading || userRemove.isLoading}
+      />
+      <Portal>
+        <MenuList>
+          <MenuItem
+            as={Link}
+            to={`/admin/users/${user.login}`}
+            icon={<Icon icon={LuEdit2} fontSize="lg" color="gray.400" />}
+          >
+            {t('common:actions.edit')}
+          </MenuItem>
+          {user.activated ? (
+            <ConfirmMenuItem
+              onClick={deactivateUser}
+              icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
+            >
+              {t('common:actions.deactivate')}
+            </ConfirmMenuItem>
+          ) : (
+            <ConfirmMenuItem
+              onClick={activateUser}
+              icon={
+                <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
+              }
+            >
+              {t('common:actions.activate')}
+            </ConfirmMenuItem>
+          )}
+          <MenuDivider />
+          <ConfirmModal
+            title={t('users:deleteModal.title')}
+            message={t('users:deleteModal.message', { name: user.login })}
+            onConfirm={() => removeUser()}
+            confirmText={t('common:actions.delete')}
+            confirmVariant="@danger"
+            size="sm"
+          >
             <MenuItem
-              as={Link}
-              to={`/admin/users/${user.login}`}
-              icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
             >
-              {t('common:actions.edit')}
+              {t('common:actions.delete')}
             </MenuItem>
-            {user.activated ? (
-              <ConfirmMenuItem
-                onClick={deactivateUser}
-                icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
-              >
-                {t('common:actions.deactivate')}
-              </ConfirmMenuItem>
-            ) : (
-              <ConfirmMenuItem
-                onClick={activateUser}
-                icon={
-                  <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
-                }
-              >
-                {t('common:actions.activate')}
-              </ConfirmMenuItem>
-            )}
-            <MenuDivider />
-            <ConfirmModal
-              title={t('users:deleteModal.title')}
-              message={t('users:deleteModal.message', { name: user.login })}
-              onConfirm={() => removeUser()}
-              confirmText={t('common:actions.delete')}
-              confirmVariant="@danger"
-              size="sm"
-            >
-              <MenuItem
-                icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
-              >
-                {t('common:actions.delete')}
-              </MenuItem>
-            </ConfirmModal>
-          </MenuList>
-        </Portal>
-      </Menu>
-    </>
+          </ConfirmModal>
+        </MenuList>
+      </Portal>
+    </Menu>
   );
 };

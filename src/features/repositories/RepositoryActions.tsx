@@ -7,10 +7,9 @@ import {
   MenuList,
   MenuProps,
   Portal,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuEdit, LuEye, LuTrash2 } from 'react-icons/lu';
+import { LuEdit2, LuEye, LuTrash2 } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
@@ -30,7 +29,6 @@ export const RepositoryActions = ({
 }: RepositoryActionProps) => {
   const { t } = useTranslation(['common', 'repositories']);
 
-  const confirmDeleteModal = useDisclosure();
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
@@ -58,48 +56,44 @@ export const RepositoryActions = ({
       });
     },
   });
-  const removeRepository = () => repositoryRemove.mutate(repository);
 
   return (
-    <>
-      <Menu placement="left-start" {...rest}>
-        <MenuButton as={ActionsButton} isLoading={repositoryRemove.isLoading} />
-        <Portal>
-          <MenuList>
+    <Menu placement="left-start" {...rest}>
+      <MenuButton as={ActionsButton} isLoading={repositoryRemove.isLoading} />
+      <Portal>
+        <MenuList>
+          <MenuItem
+            as={Link}
+            to={`/repositories/${repository.id}`}
+            icon={<Icon icon={LuEye} fontSize="lg" color="gray.400" />}
+          >
+            {t('repositories:list.actions.view')}
+          </MenuItem>
+          <MenuItem
+            as={Link}
+            to={`/repositories/${repository.id}/update`}
+            icon={<Icon icon={LuEdit2} fontSize="lg" color="gray.400" />}
+          >
+            {t('common:actions.edit')}
+          </MenuItem>
+          <ConfirmModal
+            title={t('repositories:deleteModal.title')}
+            message={t('repositories:deleteModal.message', {
+              name: repository.name,
+            })}
+            onConfirm={() => repositoryRemove.mutate(repository)}
+            confirmText={t('common:actions.delete')}
+            confirmVariant="@danger"
+            size="sm"
+          >
             <MenuItem
-              as={Link}
-              to={`/repositories/${repository.id}`}
-              icon={<Icon icon={LuEye} fontSize="lg" color="gray.400" />}
+              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
             >
-              {t('repositories:list.actions.view')}
+              {t('common:actions.delete')}
             </MenuItem>
-            <MenuItem
-              as={Link}
-              to={`/repositories/${repository.id}/update`}
-              icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
-            >
-              {t('common:actions.edit')}
-            </MenuItem>
-            <ConfirmModal
-              title={t('repositories:deleteModal.title')}
-              message={t('repositories:deleteModal.message', {
-                name: repository.name,
-              })}
-              onConfirm={() => removeRepository()}
-              confirmText={t('common:actions.delete')}
-              confirmVariant="@danger"
-              size="sm"
-            >
-              <MenuItem
-                icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
-                onClick={confirmDeleteModal.onOpen}
-              >
-                {t('common:actions.delete')}
-              </MenuItem>
-            </ConfirmModal>
-          </MenuList>
-        </Portal>
-      </Menu>
-    </>
+          </ConfirmModal>
+        </MenuList>
+      </Portal>
+    </Menu>
   );
 };

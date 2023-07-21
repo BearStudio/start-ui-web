@@ -129,9 +129,8 @@ export const useRepositoryUpdate = (
         queryClient.invalidateQueries(
           repositoriesKeys.repository({ id: payload.id })
         );
-        if (config.onSuccess) {
-          config.onSuccess(data, payload, ...args);
-        }
+
+        config?.onSuccess?.(data, payload, ...args);
       },
     }
   );
@@ -152,9 +151,9 @@ export const useRepositoryCreate = (
     },
     {
       ...config,
-      onSuccess: (...args) => {
-        queryClient.invalidateQueries(repositoriesKeys.repositories._def);
-        config?.onSuccess?.(...args);
+      onSuccess: async (...args) => {
+        await queryClient.invalidateQueries(repositoriesKeys.repositories._def);
+        await config?.onSuccess?.(...args);
       },
     }
   );
@@ -174,9 +173,9 @@ export const useRepositoryRemove = (
     },
     {
       ...config,
-      onSuccess: (...args) => {
-        queryClient.invalidateQueries(repositoriesKeys.repositories._def);
-        config?.onSuccess?.(...args);
+      onSuccess: async (...args) => {
+        await queryClient.invalidateQueries(repositoriesKeys.repositories._def);
+        await config?.onSuccess?.(...args);
       },
     }
   );
