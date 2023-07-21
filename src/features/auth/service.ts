@@ -1,8 +1,8 @@
 import { UseMutationOptions } from '@ts-rest/react-query';
 
+import { client } from '@/api/client';
+import { Contract } from '@/api/contract';
 import { useAuthContext } from '@/features/auth/AuthContext';
-import { client } from '@/lib/tsRest/client';
-import { Contract } from '@/lib/tsRest/contract';
 
 export const useLogin = (
   config: UseMutationOptions<

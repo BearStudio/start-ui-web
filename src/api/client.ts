@@ -1,9 +1,9 @@
 import { tsRestFetchApi } from '@ts-rest/core';
 import { initQueryClient } from '@ts-rest/react-query';
 
+import { useModalInterceptor } from '@/api/ModalInterceptor';
 import { AUTH_TOKEN_KEY } from '@/features/auth/AuthContext';
 import { isBrowser } from '@/lib/ssr';
-import { useModalInterceptor } from '@/lib/tsRest/ModalInterceptor';
 
 import { contract } from './contract';
 

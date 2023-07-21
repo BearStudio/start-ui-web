@@ -3,6 +3,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
+import { ModalInterceptor } from '@/api/ModalInterceptor';
 import { ErrorPage } from '@/components/ErrorPage';
 import PageActivate from '@/features/account/PageActivate';
 import PagePassword from '@/features/account/PagePassword';
@@ -18,7 +19,6 @@ import PageLogout from '@/features/auth/PageLogout';
 import PageDashboard from '@/features/dashboard/PageDashboard';
 import { Layout } from '@/layout/Layout';
 import { Loader } from '@/layout/Loader';
-import { ModalInterceptor } from '@/lib/tsRest/ModalInterceptor';
 
 const PageApiDocumentation = dynamic(
   () => import('@/features/api-documentation/PageApiDocumentation'),

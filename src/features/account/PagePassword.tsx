@@ -6,12 +6,12 @@ import { isMaxLength, isMinLength } from '@formiz/validations';
 import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 
+import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
 import { useUpdatePassword } from '@/features/account/service';
-import { Contract } from '@/lib/tsRest/contract';
 
 export default function PagePassword() {
   const { t } = useTranslation(['account']);

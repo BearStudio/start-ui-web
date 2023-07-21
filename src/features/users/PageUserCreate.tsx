@@ -6,6 +6,7 @@ import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { Contract } from '@/api/contract';
 import {
   Page,
   PageBottomBar,
@@ -15,7 +16,6 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
 import { useUserCreate } from '@/features/users/service';
-import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);

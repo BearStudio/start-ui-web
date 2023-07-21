@@ -15,6 +15,7 @@ import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { Contract } from '@/api/contract';
 import { ErrorPage } from '@/components/ErrorPage';
 import {
   Page,
@@ -27,7 +28,6 @@ import { UserForm } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
 import { useUserFormQuery, useUserUpdate } from '@/features/users/service';
 import { Loader } from '@/layout/Loader';
-import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);

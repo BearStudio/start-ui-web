@@ -5,8 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { UseMutationOptions, UseQueryOptions } from '@ts-rest/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { client } from '@/lib/tsRest/client';
-import { Contract } from '@/lib/tsRest/contract';
+import { client } from '@/api/client';
+import { Contract } from '@/api/contract';
 
 export const accountKeys = createQueryKeys('accountService', {
   account: null,

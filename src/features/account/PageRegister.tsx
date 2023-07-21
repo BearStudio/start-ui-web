@@ -26,6 +26,7 @@ import { ClientInferRequest } from '@ts-rest/core';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
@@ -34,7 +35,6 @@ import { useCreateAccount } from '@/features/account/service';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Language } from '@/lib/i18n/constants';
-import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'account']);

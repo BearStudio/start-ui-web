@@ -8,8 +8,8 @@ import {
 } from '@ts-rest/react-query';
 import { z } from 'zod';
 
-import { client } from '@/lib/tsRest/client';
-import { Contract, contract } from '@/lib/tsRest/contract';
+import { client } from '@/api/client';
+import { Contract, contract } from '@/api/contract';
 
 const usersKeys = createQueryKeys('usersService', {
   users: (params: ClientInferRequest<Contract['users']['getAll']>['query']) => [

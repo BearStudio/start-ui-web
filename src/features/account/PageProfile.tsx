@@ -6,6 +6,7 @@ import { isEmail } from '@formiz/validations';
 import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 
+import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { Page, PageContent } from '@/components/Page';
@@ -17,7 +18,6 @@ import {
 } from '@/features/account/service';
 import { Loader } from '@/layout/Loader';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import { Contract } from '@/lib/tsRest/contract';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
