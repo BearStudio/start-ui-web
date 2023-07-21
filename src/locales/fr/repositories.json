@@ -27,7 +27,7 @@
     "name": {
       "label": "Nom",
       "required": "Le nom est requis",
-      "tooShort": "Le nom est trop court (min. {{min}} caractères)"
+      "alreadyUsed": "Nom déjà utilisé"
     },
     "link": {
       "label": "Lien",

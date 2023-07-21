@@ -39,11 +39,16 @@ export default function PageRepositoryUpdate() {
   const updateRepository = useRepositoryUpdate({
     onError: (error) => {
       if (error.response) {
-        const { title } = error.response.data;
+        const { title, errorKey } = error.response.data;
         toastError({
           title: t('repositories:update.feedbacks.updateError.title'),
           description: title,
         });
+        if (errorKey === 'name_already_used') {
+          form.setErrors({
+            name: t('repositories:data.name.alreadyUsed'),
+          });
+        }
       }
     },
     onSuccess: () => {

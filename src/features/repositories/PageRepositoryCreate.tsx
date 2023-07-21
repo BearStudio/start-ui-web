@@ -25,11 +25,16 @@ export default function PageRepositoryCreate() {
   const createRepository = useRepositoryCreate({
     onError: (error) => {
       if (error.response) {
-        const { title } = error.response.data;
+        const { title, errorKey } = error.response.data;
         toastError({
           title: t('repositories:create.feedbacks.updateError.title'),
           description: title,
         });
+        if (errorKey === 'name_already_used') {
+          form.setErrors({
+            name: t('repositories:data.name.alreadyUsed'),
+          });
+        }
       }
     },
     onSuccess: () => {

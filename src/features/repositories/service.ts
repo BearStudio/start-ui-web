@@ -16,7 +16,7 @@ import {
 } from '@/features/repositories/schema';
 
 type RepositoryMutateError = ApiErrorResponse & {
-  errorKey: 'userexists' | 'emailexists';
+  errorKey: 'name_already_used';
 };
 
 const REPOSITORIES_BASE_URL = '/repositories';

@@ -31,7 +31,7 @@
     "name": {
       "label": "Name",
       "required": "Name is required",
-      "tooShort": "Name is too short (min. {{min}} characters)"
+      "alreadyUsed": "Name already used"
     },
     "link": {
       "label": "Link",

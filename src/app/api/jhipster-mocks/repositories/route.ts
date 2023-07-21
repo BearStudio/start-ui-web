@@ -5,6 +5,7 @@ import {
   apiMethod,
   badRequestResponse,
 } from '@/app/api/jhipster-mocks/_helpers/api';
+import { repositoryErrorResponse } from '@/app/api/jhipster-mocks/_helpers/repository';
 import {
   createRepository,
   getRepositoryList,
@@ -47,7 +48,13 @@ export const POST = apiMethod({
       return badRequestResponse();
     }
 
-    const repository = await createRepository(bodyParsed.data);
+    let repository;
+    try {
+      repository = await createRepository(bodyParsed.data);
+    } catch (e) {
+      return repositoryErrorResponse(e);
+    }
+
     return NextResponse.json(repository);
   },
 });
@@ -67,10 +74,16 @@ export const PUT = apiMethod({
       return badRequestResponse();
     }
 
-    const user = await updateRepositoryById(
-      bodyParsed.data.id,
-      bodyParsed.data
-    );
-    return NextResponse.json(user);
+    let repository;
+    try {
+      repository = await updateRepositoryById(
+        bodyParsed.data.id,
+        bodyParsed.data
+      );
+    } catch (e) {
+      return repositoryErrorResponse(e);
+    }
+
+    return NextResponse.json(repository);
   },
 });
