@@ -21,7 +21,7 @@ export default function PagePassword() {
 
   const updatePassword = useUpdatePassword({
     onError: (error) => {
-      const { title = '' } = error.status === 400 ? error?.body : {};
+      const { title = '' } = error.status === 400 ? error.body : {};
       if (title === 'Incorrect password') {
         changePasswordForm.setErrors({
           currentPassword: t('account:data.currentPassword.incorrect'),
