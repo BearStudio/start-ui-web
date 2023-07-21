@@ -15,7 +15,6 @@ import {
   useAccountFormQuery,
   useUpdateAccount,
 } from '@/features/account/service';
-import { User } from '@/features/users/contract';
 import { Loader } from '@/layout/Loader';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Contract } from '@/lib/tsRest/contract';
