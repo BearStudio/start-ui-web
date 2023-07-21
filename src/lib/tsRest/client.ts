@@ -3,6 +3,7 @@ import { initQueryClient } from '@ts-rest/react-query';
 
 import { AUTH_TOKEN_KEY } from '@/features/auth/AuthContext';
 import { isBrowser } from '@/lib/ssr';
+import { useModalInterceptor } from '@/lib/tsRest/ModalInterceptor';
 
 import { contract } from './contract';
 
@@ -16,6 +17,26 @@ export const client = initQueryClient(contract, {
     if (token) {
       args.headers['Authorization'] = `Bearer ${token}`;
     }
-    return tsRestFetchApi(args);
+    const response = await tsRestFetchApi(args);
+
+    // Login Interceptor
+    if (response.status === 401 && args.path !== '/authenticate') {
+      useModalInterceptor.setState({ modal: 'login' });
+    }
+
+    // Demo Interceptor
+    if (response.status === 403) {
+      let isDemo = false;
+      try {
+        isDemo =
+          JSON.parse(response.body as ExplicitAny).message === 'error.demo';
+      } catch (e) {}
+
+      if (isDemo) {
+        useModalInterceptor.setState({ modal: 'demo' });
+      }
+    }
+
+    return response;
   },
 });

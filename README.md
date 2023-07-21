@@ -52,7 +52,6 @@ yarn dev
 - 🌍 [React i18next](https://react.i18next.com/)
 - 🔽 [React Select](https://react-select.com/)
 - 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
-- ↔ [Axios](https://github.com/axios/axios)
 - 📅 [Day.js](https://day.js.org/)
 - 👮 [Cypress](https://www.cypress.io/)
 
@@ -349,8 +348,7 @@ practice to do so to avoid bugs in the future.
 
 [TanStack Query](https://github.com/tannerlinsley/react-query) is a powerful tool
 to do efficient data synchronization for React. No need of Redux
-or another global state manager anymore. Usable with [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API),
-[`axios`](https://github.com/axios/axios), or [`graphql-request`](https://github.com/prisma-labs/graphql-request),
+or another global state manager anymore.
 React Query will do the work and is agnostic of the method you will use.
 
 [GitHub](https://github.com/tannerlinsley/react-query) · [License MIT](https://github.com/tannerlinsley/react-query/blob/master/LICENSE)

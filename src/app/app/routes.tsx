@@ -13,12 +13,12 @@ import PageResetPasswordRequest from '@/features/account/PageResetPasswordReques
 import { GuardAdmin } from '@/features/auth/GuardAdmin';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 import { GuardPublicOnly } from '@/features/auth/GuardPublicOnly';
-import { LoginModalInterceptor } from '@/features/auth/LoginModalInterceptor';
 import PageLogin from '@/features/auth/PageLogin';
 import PageLogout from '@/features/auth/PageLogout';
 import PageDashboard from '@/features/dashboard/PageDashboard';
 import { Layout } from '@/layout/Layout';
 import { Loader } from '@/layout/Loader';
+import { ModalInterceptor } from '@/lib/tsRest/ModalInterceptor';
 
 const PageApiDocumentation = dynamic(
   () => import('@/features/api-documentation/PageApiDocumentation'),
@@ -80,7 +80,7 @@ export const routes = [
     element: (
       <>
         <Outlet />
-        <LoginModalInterceptor />
+        <ModalInterceptor />
       </>
     ),
     children: [

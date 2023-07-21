@@ -8,19 +8,16 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import Axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
 import { LoginForm } from '@/features/auth/LoginForm';
 
-export const LoginModalInterceptor = () => {
+export const LoginModalInterceptor = ({ reset }: { reset: () => void }) => {
   const { t } = useTranslation(['auth']);
-  const loginModal = useDisclosure();
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
   const navigate = useNavigate();
@@ -28,45 +25,27 @@ export const LoginModalInterceptor = () => {
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
 
-  const openLoginModal = loginModal.onOpen;
-
-  useEffect(() => {
-    const interceptor = Axios.interceptors.response.use(
-      (r) => r,
-      (error) => {
-        if (
-          error?.response?.status === 401 &&
-          pathnameRef.current !== '/login'
-        ) {
-          queryCache.cancelQueries();
-          openLoginModal();
-        }
-        throw error;
-      }
-    );
-
-    return () => Axios.interceptors.response.eject(interceptor);
-  }, [openLoginModal, updateToken, queryCache]);
-
   const handleLogin = async () => {
     await queryCache.refetchQueries();
-    loginModal.onClose();
+    reset();
   };
 
   // Clear the token and close the modal if we click on a link (like the reset link) inside of the modal
   useEffect(
     () => () => {
-      if (loginModal.isOpen && pathname !== pathnameRef.current) {
+      queryCache.cancelQueries();
+
+      if (pathname !== pathnameRef.current) {
         updateToken(null);
-        loginModal.onClose();
+        reset();
       }
     },
-    [loginModal, updateToken, pathname]
+    [reset, updateToken, pathname, queryCache]
   );
 
   return (
     <Modal
-      isOpen={loginModal.isOpen && isAuthenticated}
+      isOpen={isAuthenticated}
       onClose={() => navigate('/login')}
       closeOnOverlayClick={false}
       trapFocus={false}
