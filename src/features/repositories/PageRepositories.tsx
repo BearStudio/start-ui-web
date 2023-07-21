@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuBookMarked, LuExternalLink, LuPlus } from 'react-icons/lu';
+import { LuBookMarked, LuPlus } from 'react-icons/lu';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import {
@@ -20,7 +20,6 @@ import {
   DataListEmptyState,
   DataListErrorState,
   DataListFooter,
-  DataListHeader,
   DataListLoadingState,
   DataListRow,
 } from '@/components/DataList';
@@ -49,7 +48,7 @@ export default function PageRepositories() {
   });
 
   return (
-    <Page containerSize="xl">
+    <Page containerSize="lg">
       <PageContent>
         <HStack mb="4">
           <Box flex="1">
@@ -78,16 +77,6 @@ export default function PageRepositories() {
         </HStack>
 
         <DataList>
-          <DataListHeader isVisible={{ base: false, md: true }}>
-            <DataListCell colName="name">
-              {t('repositories:data.name.label')} /{' '}
-              {t('repositories:data.link.label')}
-            </DataListCell>
-            <DataListCell colName="description">
-              {t('repositories:data.description.label')}
-            </DataListCell>
-            <DataListCell colName="actions" colWidth="4rem" align="flex-end" />
-          </DataListHeader>
           {repositories.isLoading && <DataListLoadingState />}
           {repositories.isError && (
             <DataListErrorState
@@ -100,11 +89,11 @@ export default function PageRepositories() {
           )}
           {repositories.data?.repositories?.map((repository) => (
             <DataListRow as={LinkBox} key={repository.id}>
-              <DataListCell colName="name">
+              <DataListCell colWidth={1} colName="name">
                 <HStack maxW="100%">
                   <Icon
                     icon={LuBookMarked}
-                    fontSize="3xl"
+                    fontSize="2xl"
                     color="gray.500"
                     _dark={{ color: 'gray.400' }}
                     marginX={1}
@@ -118,26 +107,30 @@ export default function PageRepositories() {
                         {repository.name}
                       </LinkOverlay>
                     </Text>
-                    <Link to={repository.link}>
-                      <Text
-                        noOfLines={1}
-                        maxW="full"
-                        fontSize="sm"
-                        color="gray.600"
-                        _dark={{ color: 'gray.300' }}
-                        _hover={{ textDecoration: 'underline' }}
-                      >
-                        {repository.link}
-                        <Icon icon={LuExternalLink} marginX={1} />
-                      </Text>
-                    </Link>
+
+                    <Text
+                      noOfLines={1}
+                      maxW="full"
+                      fontSize="sm"
+                      color="gray.600"
+                      _dark={{ color: 'gray.300' }}
+                      _hover={{ textDecoration: 'underline' }}
+                    >
+                      {repository.link}
+                    </Text>
                   </Box>
                 </HStack>
               </DataListCell>
-              <DataListCell colName="description">
-                <Text noOfLines={1}>{repository.description}</Text>
+              <DataListCell
+                colWidth={1}
+                colName="description"
+                isVisible={{ base: false, md: true }}
+              >
+                <Text noOfLines={2} fontSize="sm">
+                  {repository.description}
+                </Text>
               </DataListCell>
-              <DataListCell colName="actions">
+              <DataListCell colWidth="4rem" colName="actions">
                 <RepositoryActions repository={repository} />
               </DataListCell>
             </DataListRow>

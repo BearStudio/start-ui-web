@@ -2,6 +2,8 @@ import React from 'react';
 
 import {
   Box,
+  Card,
+  CardBody,
   HStack,
   Heading,
   SkeletonText,
@@ -10,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuExternalLink } from 'react-icons/lu';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
@@ -25,12 +27,7 @@ export default function PageRepository() {
 
   return (
     <Page containerSize="lg">
-      <PageTopBar
-        _dark={{ bg: 'gray.700' }}
-        zIndex={0}
-        showBack
-        onBack={() => navigate('/repositories')}
-      >
+      <PageTopBar zIndex={0} showBack onBack={() => navigate('/repositories')}>
         {repository.isLoading || repository.isError ? (
           <HStack spacing="4">
             <Box flex="1">
@@ -47,54 +44,34 @@ export default function PageRepository() {
         {repository.isLoading || repository.isError ? (
           <SkeletonText maxW="6rem" noOfLines={2} />
         ) : (
-          <Stack
-            direction="column"
-            borderRadius="lg"
-            spacing="6"
-            shadow="md"
-            bg="white"
-            _dark={{ bg: 'gray.700' }}
-            p="6"
-          >
-            <Box>
-              <Text
-                fontSize={14}
-                fontWeight={700}
-                color="gray.600"
-                _dark={{ color: 'gray.300' }}
-              >
-                {t('repositories:data.name.label')}
-              </Text>
-              <Text size="md">{repository.data?.name}</Text>
-            </Box>
-            <Box>
-              <Text
-                fontSize={14}
-                fontWeight={700}
-                color="gray.600"
-                _dark={{ color: 'gray.300' }}
-              >
-                {t('repositories:data.link.label')}
-                <Icon marginLeft={1} icon={LuExternalLink} />
-              </Text>
-              <Link to={repository.data?.link}>
-                <Text _hover={{ textDecoration: 'underline' }}>
-                  {repository.data?.link}
-                </Text>
-              </Link>
-            </Box>
-            <Box>
-              <Text
-                fontSize={14}
-                fontWeight={700}
-                color="gray.600"
-                _dark={{ color: 'gray.300' }}
-              >
-                {t('repositories:data.description.label')}
-              </Text>
-              <Text size="md">{repository.data?.description}</Text>
-            </Box>
-          </Stack>
+          <Card>
+            <CardBody>
+              <Stack spacing={4}>
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.name.label')}
+                  </Text>
+                  <Text size="md">{repository.data?.name}</Text>
+                </Box>
+                <Box as="a" href={repository.data?.link} target="_blank">
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.link.label')}
+                    <Icon marginLeft={1} icon={LuExternalLink} />
+                  </Text>
+
+                  <Text _hover={{ textDecoration: 'underline' }}>
+                    {repository.data?.link}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.description.label')}
+                  </Text>
+                  <Text size="md">{repository.data?.description}</Text>
+                </Box>
+              </Stack>
+            </CardBody>
+          </Card>
         )}
       </PageContent>
     </Page>
