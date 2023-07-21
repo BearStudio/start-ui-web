@@ -59,12 +59,11 @@ export const RepositoryActions = ({
     },
   });
   const removeRepository = () => repositoryRemove.mutate(repository);
-  const isRemovalLoading = repositoryRemove.isLoading;
 
   return (
     <>
       <Menu placement="left-start" {...rest}>
-        <MenuButton as={ActionsButton} isLoading={isRemovalLoading} />
+        <MenuButton as={ActionsButton} isLoading={repositoryRemove.isLoading} />
         <Portal>
           <MenuList>
             <MenuItem
