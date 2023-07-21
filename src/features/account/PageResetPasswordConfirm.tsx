@@ -85,16 +85,14 @@ export default function PageResetPasswordConfirm() {
                   name="password"
                   type="password"
                   label={t('account:data.newPassword.label')}
-                  required={t('account:data.newPassword.required') as string}
+                  required={t('account:data.newPassword.required')}
                   validations={passwordValidations}
                 />
                 <FieldInput
                   name="confirmPassword"
                   type="password"
                   label={t('account:data.confirmNewPassword.label')}
-                  required={
-                    t('account:data.confirmNewPassword.required') as string
-                  }
+                  required={t('account:data.confirmNewPassword.required')}
                   validations={[
                     ...passwordValidations,
                     {
