@@ -112,13 +112,18 @@ export default function PageRepository() {
                   </Text>
                   <Text>{repository.data?.name}</Text>
                 </Box>
-                <Box as="a" href={repository.data?.link} target="_blank">
+                <Box
+                  role="group"
+                  as="a"
+                  href={repository.data?.link}
+                  target="_blank"
+                >
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.link.label')}
                     <Icon marginLeft={1} icon={LuExternalLink} />
                   </Text>
 
-                  <Text _hover={{ textDecoration: 'underline' }}>
+                  <Text _groupHover={{ textDecoration: 'underline' }}>
                     {repository.data?.link}
                   </Text>
                 </Box>
