@@ -80,9 +80,8 @@ export default function PageRepositories() {
                 <HStack maxW="100%">
                   <Icon
                     icon={LuBookMarked}
-                    fontSize="2xl"
-                    color="gray.500"
-                    _dark={{ color: 'gray.400' }}
+                    fontSize="xl"
+                    color="gray.400"
                     marginX={1}
                   />
                   <Box minW="0">
