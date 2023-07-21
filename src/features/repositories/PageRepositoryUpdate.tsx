@@ -70,9 +70,8 @@ export default function PageRepositoryUpdate() {
   return (
     <Page containerSize="md" isFocusMode>
       <PageTopBar showBack onBack={() => navigate('/repositories')}>
-        {repository.isLoading || repository.isError ? (
-          <SkeletonText maxW="6rem" noOfLines={2} />
-        ) : (
+        {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+        {repository.isSuccess && (
           <>
             <Heading size="md">{repository.data?.name}</Heading>
             <Text fontSize="xs" color="gray.600" _dark={{ color: 'gray.300' }}>
@@ -81,33 +80,33 @@ export default function PageRepositoryUpdate() {
           </>
         )}
       </PageTopBar>
-      {repository.isLoading && <Loader />}
-      {repository.isError && !repository.isLoading && (
-        <ErrorPage errorCode={404} />
-      )}
-      {!repository.isError && !repository.isLoading && (
-        <Formiz connect={form}>
-          <form noValidate onSubmit={form.submit}>
-            <PageContent>
-              <RepositoryForm />
-            </PageContent>
-            <PageBottomBar>
-              <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => navigate('/repositories')}>
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={updateRepository.isLoading}
-                >
-                  {t('repositories:update.action.save')}
-                </Button>
-              </ButtonGroup>
-            </PageBottomBar>
-          </form>
-        </Formiz>
-      )}
+      <PageContent>
+        {repository.isLoading && <Loader />}
+        {repository.isError && <ErrorPage />}
+        {repository.isSuccess && (
+          <Formiz connect={form}>
+            <form noValidate onSubmit={form.submit}>
+              <PageContent>
+                <RepositoryForm />
+              </PageContent>
+              <PageBottomBar>
+                <ButtonGroup justifyContent="space-between">
+                  <Button onClick={() => navigate('/repositories')}>
+                    {t('common:actions.cancel')}
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="@primary"
+                    isLoading={updateRepository.isLoading}
+                  >
+                    {t('repositories:update.action.save')}
+                  </Button>
+                </ButtonGroup>
+              </PageBottomBar>
+            </form>
+          </Formiz>
+        )}
+      </PageContent>
     </Page>
   );
 }

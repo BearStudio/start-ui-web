@@ -108,7 +108,7 @@ export default function PageUserUpdate() {
         </HStack>
       </PageTopBar>
       {user.isLoading && <Loader />}
-      {user.isError && <ErrorPage errorCode={404} />}
+      {user.isError && <ErrorPage />}
       {user.isSuccess && (
         <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>

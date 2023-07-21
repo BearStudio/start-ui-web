@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { LuExternalLink } from 'react-icons/lu';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { useRepository } from '@/features/repositories/service';
@@ -28,14 +29,15 @@ export default function PageRepository() {
   return (
     <Page containerSize="lg">
       <PageTopBar zIndex={0} showBack onBack={() => navigate('/repositories')}>
-        {repository.isLoading || repository.isError ? (
-          <SkeletonText maxW="6rem" noOfLines={2} />
-        ) : (
+        {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+
+        {repository.isSuccess && (
           <Heading size="md">{repository.data?.name}</Heading>
         )}
       </PageTopBar>
       <PageContent>
         {repository.isLoading && <Loader />}
+        {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
           <Card>
             <CardBody>
