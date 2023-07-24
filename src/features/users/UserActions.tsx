@@ -81,7 +81,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
         }),
       });
     },
-    onError: (_, { params: login }) => {
+    onError: (_, { params: { login } }) => {
       toastError({
         title: t('users:feedbacks.deleteUserError.title'),
         description: t('users:feedbacks.deleteUserError.description', {
@@ -91,7 +91,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
     },
   });
   const removeUser = () =>
-    userRemove.mutate({ params: { login: user.login }, body: undefined });
+    userRemove.mutate({ params: { login: user.login }, body: {} });
 
   return (
     <Menu placement="left-start" {...rest}>

@@ -69,7 +69,7 @@ export const RepositoryActions = ({
             onConfirm={() =>
               repositoryRemove.mutate({
                 params: { id: repository.id.toString() },
-                body: undefined,
+                body: {},
               })
             }
             confirmText={t('common:actions.delete')}

@@ -10,6 +10,13 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@anatine/zod-openapi@^1.12.0":
+  version "1.14.2"
+  resolved "https://registry.yarnpkg.com/@anatine/zod-openapi/-/zod-openapi-1.14.2.tgz#ba5d2b0732bbb7b2bebb009e6312adfdc159d148"
+  integrity sha512-q0qHfnuNYVKu0Swrnnvfj9971AEyW7c8v9jCOZGCl5ZbyGMNG4RPyJkRcMi/JC8CRfdOe0IDfNm1nNsi2avprg==
+  dependencies:
+    ts-deepmerge "^6.0.3"
+
 "@apidevtools/json-schema-ref-parser@9.1.0", "@apidevtools/json-schema-ref-parser@^9.0.6":
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-9.1.0.tgz#a28015be4693af1b02bb955eb2dc2f27918f0090"
@@ -4297,6 +4304,19 @@
   version "3.26.3"
   resolved "https://registry.yarnpkg.com/@ts-rest/core/-/core-3.26.3.tgz#ea297f360828e6432e499d01471191258c18e19f"
   integrity sha512-JyiZHmbKiEDnh3veQEobqSq3gmq9Sg3RtmJzxT0mefbIAw68NsOfgWYDhMci5yjI1AlCjWU/i3IIEAhr4kBt2g==
+
+"@ts-rest/next@3.26.4":
+  version "3.26.4"
+  resolved "https://registry.yarnpkg.com/@ts-rest/next/-/next-3.26.4.tgz#30e07f97a6216af37afe8ad480f1abd41a0d6c5a"
+  integrity sha512-elENScl3RDQ+o+zsz9YO8TdoLnJ2u1g8PNA0qGna8CEkRDB7y4tXOgreRiZJeCw+6DI9UTXgVvbynCwCYGk4gA==
+
+"@ts-rest/open-api@3.26.4":
+  version "3.26.4"
+  resolved "https://registry.yarnpkg.com/@ts-rest/open-api/-/open-api-3.26.4.tgz#4e56af49d0188093a2e63da2e77ee5a7efbff59f"
+  integrity sha512-RopH8p9APBVPAap6ZW9uCvfOGecSc4jud2sug9ERZvqd6KTDR8/QmMe0UHplFwdGEs+QOCtY0L2PWnHMIQ6UVg==
+  dependencies:
+    "@anatine/zod-openapi" "^1.12.0"
+    openapi3-ts "^2.0.2"
 
 "@ts-rest/react-query@3.26.3":
   version "3.26.3"
@@ -10381,6 +10401,13 @@ open@^9.1.0:
     is-inside-container "^1.0.0"
     is-wsl "^2.2.0"
 
+openapi3-ts@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/openapi3-ts/-/openapi3-ts-2.0.2.tgz#a200dd838bf24c9086c8eedcfeb380b7eb31e82a"
+  integrity sha512-TxhYBMoqx9frXyOgnRHufjQfPXomTIHYKhSKJ6jHfj13kS8OEIhvmE8CTuQyKtjjWttAjX5DPxM1vmalEpo8Qw==
+  dependencies:
+    yaml "^1.10.2"
+
 optionator@^0.8.1:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.8.3.tgz#84fa1d036fe9d3c7e21d99884b601167ec8fb495"
@@ -12827,6 +12854,11 @@ ts-dedent@^2.0.0, ts-dedent@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
+
+ts-deepmerge@^6.0.3:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-6.2.0.tgz#77554381a4884d66cab799470bc2620a1c9d84e8"
+  integrity sha512-2qxI/FZVDPbzh63GwWIZYE7daWKtwXZYuyc8YNq0iTmMUwn4mL0jRLsp6hfFlgbdRSR4x2ppe+E86FnvEpN7Nw==
 
 ts-pnp@^1.1.6:
   version "1.2.0"

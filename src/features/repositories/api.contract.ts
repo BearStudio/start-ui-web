@@ -68,9 +68,9 @@ export const repositoriesContract = c.router({
   remove: {
     method: 'DELETE',
     path: '/repositories/:id',
-    body: z.void(),
+    body: z.object({}),
     responses: {
-      200: z.void(),
+      200: z.object({}),
     },
   },
 });

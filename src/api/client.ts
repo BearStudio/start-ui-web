@@ -29,7 +29,8 @@ export const client = initQueryClient(contract, {
       let isDemo = false;
       try {
         isDemo =
-          JSON.parse(response.body as ExplicitAny).message === 'error.demo';
+          (response.body as ExplicitAny).errorKey === 'error.demo' ||
+          JSON.parse(response.body as ExplicitAny).errorKey === 'error.demo';
       } catch (e) {}
 
       if (isDemo) {
