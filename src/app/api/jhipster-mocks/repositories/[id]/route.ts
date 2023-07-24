@@ -29,6 +29,6 @@ export const DELETE = apiMethod({
     }
 
     await removeRepositoryById(Number(safeParams.data.id));
-    return new NextResponse('ok', { status: 200 });
+    return new NextResponse('ok', { status: 202 });
   },
 });

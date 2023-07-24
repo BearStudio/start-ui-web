@@ -100,7 +100,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
             _dark={{ color: 'gray.50' }}
             value={by}
             onChange={
-              (value: string | string[]) => handleByChange(String(value)) // type === radio, so value always be string
+              (value: string | string[]) => handleByChange(value.toString()) // type === radio, so value always be string
             }
           >
             {options?.map((option) => (

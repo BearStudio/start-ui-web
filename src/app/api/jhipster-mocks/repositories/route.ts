@@ -30,6 +30,7 @@ export const GET = apiMethod({
     });
     const headers = new Headers();
     headers.set('x-total-count', total.toString());
+
     return NextResponse.json(repositories, { headers });
   },
 });

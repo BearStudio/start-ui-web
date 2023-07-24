@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { Repository } from '@prisma/client';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -59,16 +60,15 @@ export default function PageRepositoryUpdate() {
     },
   });
 
-  const form = useForm<TODO>({
-    id: 'create - user - form',
+  const form = useForm<Omit<Repository, 'id'>>({
     ready: !repository.isLoading,
     initialValues: repository.data,
     onValidSubmit: (values) => {
-      const userToSend = {
+      if (!repository.data?.id) return null;
+      updateRepository.mutate({
         id: repository.data?.id,
         ...values,
-      };
-      updateRepository.mutate(userToSend);
+      });
     },
   });
 
