@@ -10,11 +10,12 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuCheckCircle, LuEdit, LuTrash2, LuXCircle } from 'react-icons/lu';
+import { LuCheckCircle, LuEdit3, LuTrash2, LuXCircle } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
+import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { User } from '@/features/users/schema';
@@ -26,6 +27,7 @@ export type UserActionProps = Omit<MenuProps, 'children'> & {
 
 export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
+
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
   const userUpdate = useUserUpdate({
@@ -67,7 +69,6 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
 
   const activateUser = () => userUpdate.mutate({ ...user, activated: true });
   const deactivateUser = () => userUpdate.mutate({ ...user, activated: false });
-  const isActionsLoading = userUpdate.isLoading;
 
   const userRemove = useUserRemove({
     onSuccess: (_, { login }) => {
@@ -88,47 +89,54 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
     },
   });
   const removeUser = () => userRemove.mutate(user);
-  const isRemovalLoading = userRemove.isLoading;
 
   return (
-    <Menu isLazy placement="left-start" {...rest}>
+    <Menu placement="left-start" {...rest}>
       <MenuButton
         as={ActionsButton}
-        isLoading={isActionsLoading || isRemovalLoading}
+        isLoading={userUpdate.isLoading || userRemove.isLoading}
       />
       <Portal>
         <MenuList>
           <MenuItem
             as={Link}
             to={`/admin/users/${user.login}`}
-            icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>
           {user.activated ? (
-            <MenuItem
+            <ConfirmMenuItem
               onClick={deactivateUser}
               icon={<Icon icon={LuXCircle} fontSize="lg" color="gray.400" />}
             >
               {t('common:actions.deactivate')}
-            </MenuItem>
+            </ConfirmMenuItem>
           ) : (
-            <MenuItem
+            <ConfirmMenuItem
               onClick={activateUser}
               icon={
                 <Icon icon={LuCheckCircle} fontSize="lg" color="gray.400" />
               }
             >
               {t('common:actions.activate')}
-            </MenuItem>
+            </ConfirmMenuItem>
           )}
           <MenuDivider />
-          <ConfirmMenuItem
-            icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
-            onClick={removeUser}
+          <ConfirmModal
+            title={t('users:deleteModal.title')}
+            message={t('users:deleteModal.message', { name: user.login })}
+            onConfirm={() => removeUser()}
+            confirmText={t('common:actions.delete')}
+            confirmVariant="@danger"
+            size="sm"
           >
-            {t('common:actions.delete')}
-          </ConfirmMenuItem>
+            <MenuItem
+              icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}
+            >
+              {t('common:actions.delete')}
+            </MenuItem>
+          </ConfirmModal>
         </MenuList>
       </Portal>
     </Menu>

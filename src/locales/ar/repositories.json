@@ -1,0 +1,72 @@
+{
+  "list": {
+    "title": "إدارة المستودعات",
+    "actions": {
+      "createRepository": "إنشاء مستودع",
+      "updateRepository": "مستودع التحديث",
+      "view": "منظر"
+    }
+  },
+  "feedbacks": {
+    "deleteRepositorySuccess": {
+      "title": "تم حذف المستودع",
+      "description": "تم حذف المستودع \"{{name}}\" بنجاح"
+    },
+    "deleteRepositoryError": {
+      "title": "فشل الحذف",
+      "description": "فشل إزالة مستودع \"{{name}}\""
+    },
+    "loadingRepositoryError": {
+      "title": "فشل تحميل المستودعات"
+    }
+  },
+  "data": {
+    "id": {
+      "label": "بطاقة تعريف"
+    },
+    "name": {
+      "label": "اسم",
+      "required": "مطلوب اسم",
+      "tooShort": "الاسم قصير جدًا (الحد الأدنى {{min}} حرفًا)",
+      "alreadyUsed": "الاسم مستخدم بالفعل"
+    },
+    "link": {
+      "label": "وصلة",
+      "required": "الارتباط مطلوب"
+    },
+    "description": {
+      "label": "وصف"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "مستودع التحديث"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل التحديث"
+      },
+      "updateSuccess": {
+        "title": "تم التحديث بنجاح"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل الخلق"
+      },
+      "updateSuccess": {
+        "title": "تم إنشاء المستودع بنجاح"
+      }
+    },
+    "action": {
+      "save": "إنشاء مستودع"
+    },
+    "title": "إنشاء مستودع جديد"
+  },
+  "deleteModal": {
+    "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",
+    "title": "قم بتأكيد حذف المستودع"
+  }
+}

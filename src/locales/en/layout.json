@@ -1,6 +1,7 @@
 {
   "mainMenu": {
     "dashboard": "Dashboard",
+    "repositories": "Repositories",
     "admin": "Admin"
   },
   "accountMenu": {

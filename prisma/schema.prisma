@@ -11,6 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Repository {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  link        String
+  description String?
+}
+
 model User {
   id          Int     @id @default(autoincrement())
   email       String  @unique

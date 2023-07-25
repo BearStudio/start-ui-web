@@ -1,7 +1,7 @@
 import { Prisma, User } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
-import { unknownErrorResponse } from '@/app/api/jhipster-mocks/_helpers/api';
+import { unknownErrorResponse } from './api';
 
 export type UserFormatted<U extends Partial<User> = User> = ReturnType<
   typeof formatUserFromDb<U>

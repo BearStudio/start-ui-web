@@ -5,6 +5,10 @@
       "createUser": "Create User"
     }
   },
+  "deleteModal": {
+    "title": "Confirm deleting the user",
+    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
+  },
   "feedbacks": {
     "activateUserSuccess": {
       "title": "User Activated",

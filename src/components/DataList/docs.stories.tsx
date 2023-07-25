@@ -17,7 +17,7 @@ import {
   Text,
   Wrap,
 } from '@chakra-ui/react';
-import { LuCopy, LuEdit, LuPlus, LuTrash2, LuUserPlus } from 'react-icons/lu';
+import { LuCopy, LuEdit3, LuPlus, LuTrash2, LuUserPlus } from 'react-icons/lu';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { Icon } from '@/components/Icons';
@@ -349,7 +349,7 @@ export const Complete = () => {
               />
               <MenuList>
                 <MenuItem
-                  icon={<Icon icon={LuEdit} fontSize="lg" color="gray.400" />}
+                  icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
                 >
                   Edit
                 </MenuItem>

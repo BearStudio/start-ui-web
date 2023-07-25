@@ -90,7 +90,11 @@ export const PageTopBar = ({
         boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
         ref={ref}
-        _dark={{ bg: 'gray.900' }}
+        _dark={{
+          bg: 'gray.900',
+          borderTop: '1px solid',
+          borderTopColor: 'blackAlpha.600',
+        }}
         {...(isFixed
           ? {
               top: !isFocusMode ? theme.layout.topBar.height : '0',

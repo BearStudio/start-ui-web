@@ -1,0 +1,71 @@
+{
+  "list": {
+    "title": "Repositories' Management",
+    "actions": {
+      "createRepository": "Create Repository",
+      "updateRepository": "Update Repository",
+      "view": "View"
+    }
+  },
+  "deleteModal": {
+    "title": "Confirm deleting the repository",
+    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
+  },
+  "feedbacks": {
+    "deleteRepositorySuccess": {
+      "title": "Repository deleted",
+      "description": "Repository \"{{name}}\" deleted with success"
+    },
+    "deleteRepositoryError": {
+      "title": "Deletion Failed",
+      "description": "Fail to remove \"{{name}}\" repository"
+    },
+    "loadingRepositoryError": {
+      "title": "Failed to load repositories"
+    }
+  },
+  "data": {
+    "id": {
+      "label": "ID"
+    },
+    "name": {
+      "label": "Name",
+      "required": "Name is required",
+      "alreadyUsed": "Name already used"
+    },
+    "link": {
+      "label": "Link",
+      "required": "Link is required"
+    },
+    "description": {
+      "label": "Description"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Update Repository"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Update failed"
+      },
+      "updateSuccess": {
+        "title": "Updated with success"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Creation failed"
+      },
+      "updateSuccess": {
+        "title": "Repository created with success"
+      }
+    },
+    "action": {
+      "save": "Create Repository"
+    },
+    "title": "Create New Repository"
+  }
+}

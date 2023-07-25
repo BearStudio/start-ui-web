@@ -105,5 +105,9 @@
         "title": "Utilisateur créé avec succès"
       }
     }
+  },
+  "deleteModal": {
+    "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
+    "title": "Confirmer la suppression de l'utilisateur"
   }
 }

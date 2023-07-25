@@ -27,6 +27,34 @@ const PageApiDocumentation = dynamic(
   }
 );
 
+const PageRepositories = dynamic(
+  () => import('@/features/repositories/PageRepositories'),
+  {
+    loading: () => <Loader />,
+  }
+);
+
+const PageRepository = dynamic(
+  () => import('@/features/repositories/PageRepository'),
+  {
+    loading: () => <Loader />,
+  }
+);
+
+const PageRepositoryCreate = dynamic(
+  () => import('@/features/repositories/PageRepositoryCreate'),
+  {
+    loading: () => <Loader />,
+  }
+);
+
+const PageRepositoryUpdate = dynamic(
+  () => import('@/features/repositories/PageRepositoryUpdate'),
+  {
+    loading: () => <Loader />,
+  }
+);
+
 const PageUsers = dynamic(() => import('@/features/users/PageUsers'), {
   loading: () => <Loader />,
 });
@@ -116,6 +144,20 @@ export const routes = [
           {
             path: '',
             element: <PageDashboard />,
+          },
+          {
+            path: 'repositories',
+            children: [
+              { path: '', element: <PageRepositories /> },
+              { path: 'create', element: <PageRepositoryCreate /> },
+              {
+                path: ':id',
+                children: [
+                  { path: '', element: <PageRepository /> },
+                  { path: 'update', element: <PageRepositoryUpdate /> },
+                ],
+              },
+            ],
           },
           {
             path: 'account',

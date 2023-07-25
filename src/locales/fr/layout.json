@@ -1,6 +1,7 @@
 {
   "mainMenu": {
     "dashboard": "Tableau de bord",
+    "repositories": "Dépôts",
     "admin": "Admin"
   },
   "accountMenu": {
