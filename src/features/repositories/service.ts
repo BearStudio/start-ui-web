@@ -118,8 +118,8 @@ export const useRepositoryUpdate = (
                 if (!cachedData) return;
                 return {
                   ...cachedData,
-                  content: (cachedData.repositories || []).map((user) =>
-                    user.id === data.id ? data : user
+                  content: (cachedData.repositories || []).map((repository) =>
+                    repository.id === data.id ? data : repository
                   ),
                 };
               }
@@ -168,8 +168,8 @@ export const useRepositoryRemove = (
 ) => {
   const queryClient = useQueryClient();
   return useMutation(
-    async (user) => {
-      await Axios.delete(`/repositories/${user.id}`);
+    async (repository) => {
+      await Axios.delete(`/repositories/${repository.id}`);
     },
     {
       ...config,
