@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom';
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
-import { useToastError, useToastSuccess } from '@/components/Toast';
-import { Repository } from '@/features/repositories/schema';
+import { useToastError } from '@/components/Toast';
+import { Repository } from '@/features/repositories/contract';
 import { useRepositoryRemove } from '@/features/repositories/service';
 
 export type RepositoryActionProps = Omit<MenuProps, 'children'> & {
@@ -29,29 +29,14 @@ export const RepositoryActions = ({
 }: RepositoryActionProps) => {
   const { t } = useTranslation(['common', 'repositories']);
 
-  const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
   const repositoryRemove = useRepositoryRemove({
-    onSuccess: (_, { name }) => {
-      toastSuccess({
-        title: t('repositories:feedbacks.deleteRepositorySuccess.title'),
-        description: t(
-          'repositories:feedbacks.deleteRepositorySuccess.description',
-          {
-            name,
-          }
-        ),
-      });
-    },
-    onError: (_, { name }) => {
+    onError: () => {
       toastError({
         title: t('repositories:feedbacks.deleteRepositoryError.title'),
         description: t(
-          'repositories:feedbacks.deleteRepositoryError.description',
-          {
-            name,
-          }
+          'repositories:feedbacks.deleteRepositoryError.description'
         ),
       });
     },
@@ -81,7 +66,12 @@ export const RepositoryActions = ({
             message={t('repositories:deleteModal.message', {
               name: repository.name,
             })}
-            onConfirm={() => repositoryRemove.mutate(repository)}
+            onConfirm={() =>
+              repositoryRemove.mutate({
+                params: { id: repository.id.toString() },
+                body: undefined,
+              })
+            }
             confirmText={t('common:actions.delete')}
             confirmVariant="@danger"
             size="sm"

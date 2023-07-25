@@ -14,7 +14,7 @@
     },
     "deleteRepositoryError": {
       "title": "فشل الحذف",
-      "description": "فشل إزالة مستودع \"{{name}}\""
+      "description": "فشل إزالة مستودع"
     },
     "loadingRepositoryError": {
       "title": "فشل تحميل المستودعات"

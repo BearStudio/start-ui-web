@@ -14,7 +14,7 @@
     },
     "deleteRepositoryError": {
       "title": "Imeshindwa Kufuta",
-      "description": "Imeshindwa kuondoa hazina ya \"{{jina}}\"."
+      "description": "Imeshindwa kuondoa hazina ya."
     },
     "loadingRepositoryError": {
       "title": "Imeshindwa kupakia hazina"

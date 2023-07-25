@@ -39,8 +39,9 @@ export default function PageRepositoryUpdate() {
 
   const updateRepository = useRepositoryUpdate({
     onError: (error) => {
-      if (error.response) {
-        const { title, errorKey } = error.response.data;
+      if (error.status === 400) {
+        const { title, errorKey } = error.body;
+
         toastError({
           title: t('repositories:update.feedbacks.updateError.title'),
           description: title,
@@ -60,14 +61,16 @@ export default function PageRepositoryUpdate() {
     },
   });
 
-  const form = useForm<Omit<Repository, 'id'>>({
+  const form = useForm<Pick<Repository, 'name' | 'link' | 'description'>>({
     ready: !repository.isLoading,
-    initialValues: repository.data,
+    initialValues: repository.data?.body,
     onValidSubmit: (values) => {
-      if (!repository.data?.id) return null;
+      if (!repository.data?.body.id) return null;
       updateRepository.mutate({
-        id: repository.data?.id,
-        ...values,
+        body: {
+          id: repository.data?.body.id,
+          ...values,
+        },
       });
     },
   });
@@ -78,9 +81,9 @@ export default function PageRepositoryUpdate() {
         {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
           <>
-            <Heading size="md">{repository.data?.name}</Heading>
+            <Heading size="md">{repository.data?.body.name}</Heading>
             <Text fontSize="xs" color="gray.600" _dark={{ color: 'gray.300' }}>
-              {t('repositories:data.id.label')}: {repository.data?.id}
+              {t('repositories:data.id.label')}: {repository.data?.body.id}
             </Text>
           </>
         )}

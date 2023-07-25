@@ -21,7 +21,7 @@ import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useToastError } from '@/components/Toast';
 import {
   useRepository,
   useRepositoryRemove,
@@ -30,33 +30,21 @@ import { Loader } from '@/layout/Loader';
 
 export default function PageRepository() {
   const { t } = useTranslation(['common', 'repositories']);
-  const toastSuccess = useToastSuccess();
+
   const toastError = useToastError();
 
   const params = useParams();
   const navigate = useNavigate();
   const repository = useRepository(Number(params?.id));
   const repositoryRemove = useRepositoryRemove({
-    onSuccess: (_, { name }) => {
-      toastSuccess({
-        title: t('repositories:feedbacks.deleteRepositorySuccess.title'),
-        description: t(
-          'repositories:feedbacks.deleteRepositorySuccess.description',
-          {
-            name,
-          }
-        ),
-      });
+    onSuccess: () => {
       navigate('/repositories');
     },
-    onError: (_, { name }) => {
+    onError: () => {
       toastError({
         title: t('repositories:feedbacks.deleteRepositoryError.title'),
         description: t(
-          'repositories:feedbacks.deleteRepositoryError.description',
-          {
-            name,
-          }
+          'repositories:feedbacks.deleteRepositoryError.description'
         ),
       });
     },
@@ -69,7 +57,7 @@ export default function PageRepository() {
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
             {repository.isSuccess && (
-              <Heading size="md">{repository.data?.name}</Heading>
+              <Heading size="md">{repository.data?.body.name}</Heading>
             )}
           </Box>
           <ButtonGroup>
@@ -80,10 +68,14 @@ export default function PageRepository() {
             <ConfirmModal
               title={t('repositories:deleteModal.title')}
               message={t('repositories:deleteModal.message', {
-                name: repository.data?.name,
+                name: repository.data?.body.name,
               })}
               onConfirm={() =>
-                repository.data && repositoryRemove.mutate(repository.data)
+                repository.data &&
+                repositoryRemove.mutate({
+                  params: { id: repository.data.body.id.toString() },
+                  body: undefined,
+                })
               }
               confirmText={t('common:actions.delete')}
               confirmVariant="@danger"
@@ -110,12 +102,12 @@ export default function PageRepository() {
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.name.label')}
                   </Text>
-                  <Text>{repository.data?.name}</Text>
+                  <Text>{repository.data?.body.name}</Text>
                 </Box>
                 <Box
                   role="group"
                   as="a"
-                  href={repository.data?.link}
+                  href={repository.data?.body.link}
                   target="_blank"
                 >
                   <Text fontSize="sm" fontWeight="bold">
@@ -124,7 +116,7 @@ export default function PageRepository() {
                   </Text>
 
                   <Text _groupHover={{ textDecoration: 'underline' }}>
-                    {repository.data?.link}
+                    {repository.data?.body.link}
                   </Text>
                 </Box>
                 <Box>
@@ -132,7 +124,7 @@ export default function PageRepository() {
                     {t('repositories:data.description.label')}
                   </Text>
                   <Text>
-                    {repository.data?.description || <small>-</small>}
+                    {repository.data?.body.description || <small>-</small>}
                   </Text>
                 </Box>
               </Stack>

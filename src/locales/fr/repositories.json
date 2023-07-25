@@ -14,7 +14,7 @@
     },
     "deleteRepositoryError": {
       "title": "Échec de la suppression",
-      "description": "Échec de la suppression du dépôt \"{{name}}\""
+      "description": "Échec de la suppression du dépôt"
     },
     "loadingRepositoryError": {
       "title": "Échec du chargement des dépôts"

@@ -25,7 +25,7 @@ export const useUserList = (
     size = 20,
     sort = ['id', 'desc'],
   }: ClientInferRequest<Contract['users']['getAll']>['query'] = {},
-  queryOptions: UseQueryOptions<Contract['users']['getAll']> = {}
+  options: UseQueryOptions<Contract['users']['getAll']> = {}
 ) => {
   const params = { page, size, sort };
   const query = client.users.getAll.useQuery(
@@ -33,7 +33,7 @@ export const useUserList = (
     { query: params },
     {
       keepPreviousData: true,
-      ...queryOptions,
+      ...options,
     }
   );
 
@@ -56,36 +56,36 @@ export const useUserList = (
 
 export const useUser = (
   userLogin?: string,
-  queryOptions: UseQueryOptions<Contract['account']['get']> = {}
+  options: UseQueryOptions<Contract['users']['getByLogin']> = {}
 ) => {
   return client.users.getByLogin.useQuery(
-    queryOptions.queryKey ?? usersKeys.user({ login: userLogin }).queryKey,
+    options.queryKey ?? usersKeys.user({ login: userLogin }).queryKey,
     { params: { login: userLogin ?? '' } },
     {
       enabled: !!userLogin,
-      ...queryOptions,
+      ...options,
     }
   );
 };
 
 export const useUserFormQuery = (
   userLogin?: string,
-  queryOptions: UseQueryOptions<typeof contract.account.get> = {}
+  options: UseQueryOptions<typeof contract.account.get> = {}
 ) =>
   useUser(userLogin, {
     queryKey: usersKeys.userForm.queryKey,
     staleTime: Infinity,
     cacheTime: 0,
-    ...queryOptions,
+    ...options,
   });
 
 export const useUserUpdate = (
-  config: UseMutationOptions<Contract['users']['update'], typeof client> = {}
+  options: UseMutationOptions<Contract['users']['update'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
   const apiQueryClient = useTsRestQueryClient(client);
   return client.users.update.useMutation({
-    ...config,
+    ...options,
     onSuccess: (data, payload, ...args) => {
       queryClient.cancelQueries(usersKeys.users._def);
       queryClient
@@ -106,35 +106,35 @@ export const useUserUpdate = (
       queryClient.invalidateQueries(
         usersKeys.user({ login: payload.body.login })
       );
-      if (config.onSuccess) {
-        config.onSuccess(data, payload, ...args);
+      if (options.onSuccess) {
+        options.onSuccess(data, payload, ...args);
       }
     },
   });
 };
 
 export const useUserCreate = (
-  config: UseMutationOptions<Contract['users']['create'], typeof client> = {}
+  options: UseMutationOptions<Contract['users']['create'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
   return client.users.create.useMutation({
-    ...config,
+    ...options,
     onSuccess: (...args) => {
       queryClient.invalidateQueries(usersKeys.users._def);
-      config?.onSuccess?.(...args);
+      options?.onSuccess?.(...args);
     },
   });
 };
 
 export const useUserRemove = (
-  config: UseMutationOptions<Contract['users']['remove'], typeof client> = {}
+  options: UseMutationOptions<Contract['users']['remove'], typeof client> = {}
 ) => {
   const queryClient = useQueryClient();
   return client.users.remove.useMutation({
-    ...config,
+    ...options,
     onSuccess: (...args) => {
       queryClient.invalidateQueries(usersKeys.users._def);
-      config?.onSuccess?.(...args);
+      options?.onSuccess?.(...args);
     },
   });
 };

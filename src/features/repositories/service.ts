@@ -1,25 +1,14 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   UseMutationOptions,
   UseQueryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import Axios, { AxiosError } from 'axios';
+  useTsRestQueryClient,
+} from '@ts-rest/react-query';
+import { z } from 'zod';
 
-import {
-  Repository,
-  RepositoryList,
-  zRepository,
-  zRepositoryList,
-} from '@/features/repositories/schema';
-
-type RepositoryMutateError = ApiErrorResponse & {
-  errorKey: 'name_already_used';
-};
-
-const REPOSITORIES_BASE_URL = '/repositories';
+import { client } from '@/api/client';
+import { Contract } from '@/api/contract';
 
 const repositoriesKeys = createQueryKeys('repositoriesService', {
   repositories: (params: { page?: number; size?: number }) => [params],
@@ -29,154 +18,128 @@ const repositoriesKeys = createQueryKeys('repositoriesService', {
 
 export const useRepositoryList = (
   { page = 0, size = 10 } = {},
-  queryOptions: UseQueryOptions<RepositoryList> = {}
+  options: UseQueryOptions<Contract['repositories']['getAll']> = {}
 ) => {
-  const query = useQuery({
-    queryKey: repositoriesKeys.repositories({ page, size }).queryKey,
-    queryFn: async () => {
-      const response = await Axios.get(REPOSITORIES_BASE_URL, {
-        params: { page, size, sort: 'id,desc' },
-      });
-      return zRepositoryList().parse({
-        repositories: response.data,
-        totalItems: response.headers?.['x-total-count'],
-      });
-    },
-    keepPreviousData: true,
-    ...queryOptions,
-  });
+  const params = { page, size };
+  const query = client.repositories.getAll.useQuery(
+    repositoriesKeys.repositories(params).queryKey,
+    { query: params },
+    {
+      keepPreviousData: true,
+      ...options,
+    }
+  );
 
-  const repositories = query.data?.repositories;
-  const totalItems = query.data?.totalItems ?? 0;
-  const totalPages = Math.ceil(totalItems / size);
-  const hasMore = page + 1 < totalPages;
-  const isLoadingPage = query.isFetching;
+  const totalItems =
+    z.coerce
+      .number()
+      .optional()
+      .catch(0)
+      .parse(query.data?.headers.get('x-total-count')) ?? 0;
+  const totalPages = Math.ceil(totalItems / params.size);
+  const hasMore = params.page + 1 < totalPages;
 
   return {
-    repositories,
     totalItems,
     hasMore,
     totalPages,
-    isLoadingPage,
     ...query,
   };
 };
 
 export const useRepository = (
-  repositoryId?: number,
-  queryOptions: UseQueryOptions<Repository> = {}
+  id?: number,
+  options: UseQueryOptions<Contract['repositories']['getById']> = {}
 ) => {
-  return useQuery({
-    queryKey: repositoriesKeys.repository({ id: repositoryId }).queryKey,
-    queryFn: async () => {
-      const response = await Axios.get(
-        `${REPOSITORIES_BASE_URL}/${repositoryId}`
-      );
-      return zRepository().parse(response.data);
-    },
-
-    enabled: !!repositoryId,
-    ...queryOptions,
-  });
+  return client.repositories.getById.useQuery(
+    options.queryKey ?? repositoriesKeys.repository({ id }).queryKey,
+    { params: { id: id?.toString() ?? '' } },
+    {
+      enabled: !!id,
+      ...options,
+    }
+  );
 };
 
 export const useRepositoryFormQuery = (
-  repositoryId?: number,
-  queryOptions: UseQueryOptions<Repository> = {}
+  id?: number,
+  options: UseQueryOptions<Contract['repositories']['getById']> = {}
 ) =>
-  useRepository(repositoryId, {
+  useRepository(id, {
     queryKey: repositoriesKeys.repositoryForm.queryKey,
     staleTime: Infinity,
     cacheTime: 0,
-    ...queryOptions,
+    ...options,
   });
 
 export const useRepositoryUpdate = (
-  config: UseMutationOptions<
-    Repository,
-    AxiosError<RepositoryMutateError>,
-    Repository
+  options: UseMutationOptions<
+    Contract['repositories']['update'],
+    typeof client
   > = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (payload) => {
-      const response = await Axios.put(REPOSITORIES_BASE_URL, payload);
-      return zRepository().parse(response.data);
+  const apiQueryClient = useTsRestQueryClient(client);
+  return client.repositories.update.useMutation({
+    ...options,
+    onSuccess: (data, payload, ...args) => {
+      queryClient.cancelQueries(repositoriesKeys.repositories._def);
+      queryClient
+        .getQueryCache()
+        .findAll(repositoriesKeys.repositories._def)
+        .forEach(({ queryKey }) => {
+          apiQueryClient.repositories.getAll.setQueryData(
+            queryKey,
+            (cachedData) => {
+              if (!cachedData) return;
+              return {
+                ...cachedData,
+                content: (cachedData.body || []).map((repository) =>
+                  repository.id === data.body.id ? data : repository
+                ),
+              };
+            }
+          );
+        });
+      queryClient.invalidateQueries(repositoriesKeys.repositories._def);
+      queryClient.invalidateQueries(
+        repositoriesKeys.repository({ id: payload.body.id })
+      );
+      if (options.onSuccess) {
+        options.onSuccess(data, payload, ...args);
+      }
     },
-    {
-      ...config,
-      onSuccess: (data, payload, ...args) => {
-        queryClient.cancelQueries(repositoriesKeys.repositories._def);
-        queryClient
-          .getQueryCache()
-          .findAll(repositoriesKeys.repositories._def)
-          .forEach(({ queryKey }) => {
-            queryClient.setQueryData<RepositoryList | undefined>(
-              queryKey,
-              (cachedData) => {
-                if (!cachedData) return;
-                return {
-                  ...cachedData,
-                  content: (cachedData.repositories || []).map((repository) =>
-                    repository.id === data.id ? data : repository
-                  ),
-                };
-              }
-            );
-          });
-        queryClient.invalidateQueries(repositoriesKeys.repositories._def);
-        queryClient.invalidateQueries(
-          repositoriesKeys.repository({ id: payload.id })
-        );
-
-        config?.onSuccess?.(data, payload, ...args);
-      },
-    }
-  );
+  });
 };
 
 export const useRepositoryCreate = (
-  config: UseMutationOptions<
-    Repository,
-    AxiosError<RepositoryMutateError>,
-    Pick<Repository, 'name' | 'link' | 'description'>
+  options: UseMutationOptions<
+    Contract['repositories']['create'],
+    typeof client
   > = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (payload) => {
-      const response = await Axios.post('/repositories', payload);
-      return zRepository().parse(response.data);
+  return client.repositories.create.useMutation({
+    ...options,
+    onSuccess: (...args) => {
+      queryClient.invalidateQueries(repositoriesKeys.repositories._def);
+      options?.onSuccess?.(...args);
     },
-    {
-      ...config,
-      onSuccess: async (...args) => {
-        await queryClient.invalidateQueries(repositoriesKeys.repositories._def);
-        await config?.onSuccess?.(...args);
-      },
-    }
-  );
+  });
 };
 
 export const useRepositoryRemove = (
-  config: UseMutationOptions<
-    void,
-    AxiosError<ApiErrorResponse>,
-    Pick<Repository, 'id' | 'name'>
+  options: UseMutationOptions<
+    Contract['repositories']['remove'],
+    typeof client
   > = {}
 ) => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (repository) => {
-      await Axios.delete(`/repositories/${repository.id}`);
+  return client.repositories.remove.useMutation({
+    ...options,
+    onSuccess: (...args) => {
+      queryClient.invalidateQueries(repositoriesKeys.repositories._def);
+      options?.onSuccess?.(...args);
     },
-    {
-      ...config,
-      onSuccess: async (...args) => {
-        await queryClient.invalidateQueries(repositoriesKeys.repositories._def);
-        await config?.onSuccess?.(...args);
-      },
-    }
-  );
+  });
 };

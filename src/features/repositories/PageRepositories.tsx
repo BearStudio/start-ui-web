@@ -71,10 +71,10 @@ export default function PageRepositories() {
               retry={() => repositories.refetch()}
             />
           )}
-          {repositories.isSuccess && !repositories.data.repositories.length && (
+          {repositories.isSuccess && !repositories.data.body.length && (
             <DataListEmptyState />
           )}
-          {repositories.data?.repositories?.map((repository) => (
+          {repositories.data?.body?.map((repository) => (
             <DataListRow as={LinkBox} key={repository.id}>
               <DataListCell colWidth={1} colName="name">
                 <HStack maxW="100%">
@@ -123,13 +123,13 @@ export default function PageRepositories() {
           ))}
           <DataListFooter>
             <Pagination
-              isLoadingPage={repositories.isLoadingPage}
+              isLoadingPage={repositories.isFetching}
               setPage={(newPage) =>
                 setSearchParams({ page: newPage.toString() })
               }
               page={page}
               pageSize={pageSize}
-              totalItems={repositories.data?.totalItems}
+              totalItems={repositories.totalItems}
             >
               <PaginationButtonFirstPage />
               <PaginationButtonPrevPage />

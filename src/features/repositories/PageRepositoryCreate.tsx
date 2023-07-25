@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { Repository } from '@prisma/client';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,8 +25,8 @@ export default function PageRepositoryCreate() {
 
   const createRepository = useRepositoryCreate({
     onError: (error) => {
-      if (error.response) {
-        const { title, errorKey } = error.response.data;
+      if (error.status === 400) {
+        const { title, errorKey } = error.body;
         toastError({
           title: t('repositories:create.feedbacks.updateError.title'),
           description: title,
@@ -45,10 +46,9 @@ export default function PageRepositoryCreate() {
     },
   });
 
-  const form = useForm<TODO>({
-    id: 'create-repository-form',
+  const form = useForm<Pick<Repository, 'name' | 'link' | 'description'>>({
     onValidSubmit: (newRepository) => {
-      createRepository.mutate(newRepository);
+      createRepository.mutate({ body: newRepository });
     },
   });
 

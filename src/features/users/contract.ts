@@ -83,7 +83,7 @@ export const usersContract = c.router({
   },
   remove: {
     method: 'DELETE',
-    path: '/admin/user/:login',
+    path: '/admin/users/:login',
     body: z.void(),
     responses: {
       200: z.void(),

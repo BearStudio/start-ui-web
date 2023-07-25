@@ -18,7 +18,7 @@
     },
     "deleteRepositoryError": {
       "title": "Deletion Failed",
-      "description": "Fail to remove \"{{name}}\" repository"
+      "description": "Fail to remove repository"
     },
     "loadingRepositoryError": {
       "title": "Failed to load repositories"
