@@ -14,7 +14,7 @@ export const repositoryErrorResponse = (e: unknown) => {
     if (e.meta?.target?.includes('name')) {
       return NextResponse.json(
         { title: 'Name already used', errorKey: 'name_already_used' },
-        { status: 409 }
+        { status: 400 }
       );
     }
   }
