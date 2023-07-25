@@ -20,7 +20,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-export const DemoModalInterceptor = ({ reset }: { reset: () => void }) => {
+export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   const toast = useToast();
 
   const toastCloseAll = toast.closeAll;
@@ -32,7 +32,7 @@ export const DemoModalInterceptor = ({ reset }: { reset: () => void }) => {
   }, [toastCloseAll]);
 
   return (
-    <Modal isOpen onClose={reset}>
+    <Modal isOpen onClose={onClose}>
       <ModalOverlay style={{ backdropFilter: 'blur(6px)' }} />
       <ModalContent>
         <ModalCloseButton />

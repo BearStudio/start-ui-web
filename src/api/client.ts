@@ -1,7 +1,7 @@
 import { tsRestFetchApi } from '@ts-rest/core';
 import { initQueryClient } from '@ts-rest/react-query';
 
-import { useModalInterceptor } from '@/api/ModalInterceptor';
+import { useModalInterceptorStore } from '@/api/ModalInterceptor';
 import { AUTH_TOKEN_KEY } from '@/features/auth/AuthContext';
 import { isBrowser } from '@/lib/ssr';
 
@@ -21,7 +21,7 @@ export const client = initQueryClient(contract, {
 
     // Login Interceptor
     if (response.status === 401 && args.path !== '/authenticate') {
-      useModalInterceptor.setState({ modal: 'login' });
+      useModalInterceptorStore.setState({ modal: 'login' });
     }
 
     // Demo Interceptor
@@ -33,7 +33,7 @@ export const client = initQueryClient(contract, {
       } catch (e) {}
 
       if (isDemo) {
-        useModalInterceptor.setState({ modal: 'demo' });
+        useModalInterceptorStore.setState({ modal: 'demo' });
       }
     }
 

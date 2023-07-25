@@ -16,7 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/features/auth/AuthContext';
 import { LoginForm } from '@/features/auth/LoginForm';
 
-export const LoginModalInterceptor = ({ reset }: { reset: () => void }) => {
+export const LoginModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation(['auth']);
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
@@ -27,7 +27,7 @@ export const LoginModalInterceptor = ({ reset }: { reset: () => void }) => {
 
   const handleLogin = async () => {
     await queryCache.refetchQueries();
-    reset();
+    onClose();
   };
 
   // Clear the token and close the modal if we click on a link (like the reset link) inside of the modal
@@ -37,10 +37,10 @@ export const LoginModalInterceptor = ({ reset }: { reset: () => void }) => {
 
       if (pathname !== pathnameRef.current) {
         updateToken(null);
-        reset();
+        onClose();
       }
     },
-    [reset, updateToken, pathname, queryCache]
+    [onClose, updateToken, pathname, queryCache]
   );
 
   return (
