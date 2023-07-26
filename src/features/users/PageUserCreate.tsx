@@ -62,10 +62,7 @@ export default function PageUserCreate() {
   const form = useForm<ClientInferRequest<Contract['users']['create']>['body']>(
     {
       onValidSubmit: (values) => {
-        const newUser = {
-          ...values,
-        };
-        createUser.mutate({ body: newUser });
+        createUser.mutate({ body: values });
       },
     }
   );

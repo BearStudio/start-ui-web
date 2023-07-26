@@ -47,8 +47,8 @@ export default function PageRepositoryCreate() {
   });
 
   const form = useForm<Pick<Repository, 'name' | 'link' | 'description'>>({
-    onValidSubmit: (newRepository) => {
-      createRepository.mutate({ body: newRepository });
+    onValidSubmit: (values) => {
+      createRepository.mutate({ body: values });
     },
   });
 
