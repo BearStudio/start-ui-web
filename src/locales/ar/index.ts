@@ -6,6 +6,7 @@ import components from './components.json';
 import dashboard from './dashboard.json';
 import demoMode from './demoMode.json';
 import layout from './layout.json';
+import repositories from './repositories.json';
 import users from './users.json';
 
 export default {
@@ -17,5 +18,6 @@ export default {
   dashboard,
   demoMode,
   layout,
+  repositories,
   users,
 } as const;

@@ -47,7 +47,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
     const inputRef = useRef<HTMLInputElement>();
     const refs = useMergeRefs(inputRef, ref);
 
-    const [search, setSearch] = useState<string>(externalValue as string);
+    const [search, setSearch] = useState<string>(externalValue);
 
     const searchRef = useRef(search);
     searchRef.current = search;

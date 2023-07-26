@@ -74,22 +74,18 @@ export default function PageProfile() {
                         <FieldInput
                           name="firstName"
                           label={t('account:data.firstname.label')}
-                          required={
-                            t('account:data.firstname.required') as string
-                          }
+                          required={t('account:data.firstname.required')}
                         />
                         <FieldInput
                           name="lastName"
                           label={t('account:data.lastname.label')}
-                          required={
-                            t('account:data.lastname.required') as string
-                          }
+                          required={t('account:data.lastname.required')}
                         />
                       </Stack>
                       <FieldInput
                         name="email"
                         label={t('account:data.email.label')}
-                        required={t('account:data.email.required') as string}
+                        required={t('account:data.email.required')}
                         validations={[
                           {
                             handler: isEmail(),

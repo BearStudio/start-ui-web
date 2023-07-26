@@ -33,7 +33,7 @@ export const UserForm = () => {
           <FieldInput
             name="login"
             label={t('users:data.login.label')}
-            required={t('users:data.login.required') as string}
+            required={t('users:data.login.required')}
             validations={[
               {
                 handler: isMinLength(2),
@@ -64,7 +64,7 @@ export const UserForm = () => {
           <FieldInput
             name="email"
             label={t('users:data.email.label')}
-            required={t('users:data.email.required') as string}
+            required={t('users:data.email.required')}
             validations={[
               {
                 handler: isMinLength(5),
@@ -93,7 +93,7 @@ export const UserForm = () => {
             name="authorities"
             label={t('users:data.authorities.label')}
             options={authorities}
-            required={t('users:data.authorities.required') as string}
+            required={t('users:data.authorities.required')}
           />
         </Stack>
       </CardBody>

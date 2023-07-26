@@ -118,7 +118,7 @@ export default function PageResetPasswordRequest() {
                     name="email"
                     label={t('account:data.email.label')}
                     helper={t('account:data.email.resetHelper')}
-                    required={t('account:data.email.required') as string}
+                    required={t('account:data.email.required')}
                     validations={[
                       {
                         handler: isEmail(),

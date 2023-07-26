@@ -147,7 +147,7 @@ export default function PageRegister() {
                 <FieldInput
                   name="login"
                   label={t('account:data.login.label')}
-                  required={t('account:data.login.required') as string}
+                  required={t('account:data.login.required')}
                   validations={[
                     {
                       handler: isMinLength(2),
@@ -168,7 +168,7 @@ export default function PageRegister() {
                 <FieldInput
                   name="email"
                   label={t('account:data.email.label')}
-                  required={t('account:data.email.required') as string}
+                  required={t('account:data.email.required')}
                   validations={[
                     {
                       handler: isMinLength(5),
@@ -188,7 +188,7 @@ export default function PageRegister() {
                   name="password"
                   type="password"
                   label={t('account:data.password.label')}
-                  required={t('account:data.password.required') as string}
+                  required={t('account:data.password.required')}
                   validations={[
                     {
                       handler: isMinLength(4),

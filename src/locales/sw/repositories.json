@@ -1,0 +1,72 @@
+{
+  "list": {
+    "title": "Usimamizi wa hazina",
+    "actions": {
+      "createRepository": "Unda Hifadhi",
+      "updateRepository": "Sasisha Hifadhi",
+      "view": "Tazama"
+    }
+  },
+  "feedbacks": {
+    "deleteRepositorySuccess": {
+      "title": "Hifadhi imefutwa",
+      "description": "Hazina \"{{jina}}\" imefutwa kwa mafanikio"
+    },
+    "deleteRepositoryError": {
+      "title": "Imeshindwa Kufuta",
+      "description": "Imeshindwa kuondoa hazina ya \"{{jina}}\"."
+    },
+    "loadingRepositoryError": {
+      "title": "Imeshindwa kupakia hazina"
+    }
+  },
+  "data": {
+    "id": {
+      "label": "ID"
+    },
+    "name": {
+      "label": "Jina",
+      "required": "Jina linahitajika",
+      "tooShort": "Jina ni fupi mno (dakika ya vibambo {{min}})",
+      "alreadyUsed": "Jina tayari limetumika"
+    },
+    "link": {
+      "label": "Kiungo",
+      "required": "Kiungo kinahitajika"
+    },
+    "description": {
+      "label": "Maelezo"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Sasisha Hifadhi"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Imesasishwa na mafanikio"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Uundaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Hifadhi imeundwa kwa mafanikio"
+      }
+    },
+    "action": {
+      "save": "Unda Hifadhi"
+    },
+    "title": "Unda Hifadhi Mpya"
+  },
+  "deleteModal": {
+    "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
+    "title": "Thibitisha kufuta hazina"
+  }
+}

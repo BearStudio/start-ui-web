@@ -58,7 +58,11 @@ export const TopBar = () => {
           px="4"
           h={theme.layout.topBar.height}
           bg="gray.800"
-          _dark={{ bg: 'gray.900' }}
+          boxShadow="layout"
+          _dark={{
+            bg: 'gray.900',
+            boxShadow: 'xl',
+          }}
         >
           <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
           <Box

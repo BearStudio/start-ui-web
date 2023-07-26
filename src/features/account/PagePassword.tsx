@@ -80,25 +80,21 @@ export default function PagePassword() {
                     name="currentPassword"
                     type="password"
                     label={t('account:data.currentPassword.label')}
-                    required={
-                      t('account:data.currentPassword.required') as string
-                    }
+                    required={t('account:data.currentPassword.required')}
                     validations={passwordValidations}
                   />
                   <FieldInput
                     name="newPassword"
                     type="password"
                     label={t('account:data.newPassword.label')}
-                    required={t('account:data.newPassword.required') as string}
+                    required={t('account:data.newPassword.required')}
                     validations={passwordValidations}
                   />
                   <FieldInput
                     name="confirmNewPassword"
                     type="password"
                     label={t('account:data.confirmNewPassword.label')}
-                    required={
-                      t('account:data.confirmNewPassword.required') as string
-                    }
+                    required={t('account:data.confirmNewPassword.required')}
                     validations={[
                       ...passwordValidations,
                       {
