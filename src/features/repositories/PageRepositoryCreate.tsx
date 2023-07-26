@@ -14,7 +14,7 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { RepositoryForm } from '@/features/repositories/RepositoryForm';
-import { useRepositoryCreate } from '@/features/repositories/service';
+import { useRepositoryCreate } from '@/features/repositories/api.client';
 
 export default function PageRepositoryCreate() {
   const { t } = useTranslation(['common', 'repositories']);

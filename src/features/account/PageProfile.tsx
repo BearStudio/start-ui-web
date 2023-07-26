@@ -15,7 +15,7 @@ import { AccountNav } from '@/features/account/AccountNav';
 import {
   useAccountFormQuery,
   useUpdateAccount,
-} from '@/features/account/service';
+} from '@/features/account/api.client';
 import { Loader } from '@/layout/Loader';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
@@ -45,12 +45,12 @@ export default function PageProfile() {
   >({
     initialValues: account.data?.body,
     onValidSubmit: (values) => {
-      const newAccount = {
-        ...account.data,
-        ...values,
-      };
-
-      updateAccount.mutate(newAccount);
+      updateAccount.mutate({
+        body: {
+          ...(account.data?.body ?? {}),
+          ...values,
+        },
+      });
     },
   });
 

@@ -104,7 +104,7 @@ export const useUserUpdate = (
         });
       queryClient.invalidateQueries(usersKeys.users._def);
       queryClient.invalidateQueries(
-        usersKeys.user({ login: payload.body.login })
+        usersKeys.user({ login: payload.body?.login })
       );
       if (options.onSuccess) {
         options.onSuccess(data, payload, ...args);

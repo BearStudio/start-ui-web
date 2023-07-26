@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useResetPasswordFinish } from '@/features/account/service';
+import { useResetPasswordFinish } from '@/features/account/api.client';
 
 export default function PageResetPasswordConfirm() {
   const { t } = useTranslation(['account']);

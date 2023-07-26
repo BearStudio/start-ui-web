@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useActivateAccount } from '@/features/account/service';
+import { useActivateAccount } from '@/features/account/api.client';
 
 export default function PageActivate() {
   const { t } = useTranslation(['account']);

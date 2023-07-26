@@ -31,7 +31,7 @@ import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
-import { useCreateAccount } from '@/features/account/service';
+import { useCreateAccount } from '@/features/account/api.client';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { Language } from '@/lib/i18n/constants';

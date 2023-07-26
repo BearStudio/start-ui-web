@@ -18,8 +18,8 @@ import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { User } from '@/features/users/contract';
-import { useUserRemove, useUserUpdate } from '@/features/users/service';
+import { useUserRemove, useUserUpdate } from '@/features/users/api.client';
+import { User } from '@/features/users/api.contract';
 
 export type UserActionProps = Omit<MenuProps, 'children'> & {
   user: User;
@@ -48,27 +48,29 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
         });
       }
     },
-    onError: (_, { body: { activated, login } }) => {
-      if (activated) {
+    onError: (_, { body }) => {
+      if (body?.activated) {
         toastError({
           title: t('users:feedbacks.activateUserError.title'),
           description: t('users:feedbacks.activateUserError.description', {
-            login,
+            login: body?.login ?? '??',
           }),
         });
       } else {
         toastError({
           title: t('users:feedbacks.deactivateUserError.title'),
           description: t('users:feedbacks.deactivateUserError.description', {
-            login,
+            login: body?.login ?? '??',
           }),
         });
       }
     },
   });
 
-  const activateUser = () => userUpdate.mutate({ body: { ...user, activated: true }});
-  const deactivateUser = () => userUpdate.mutate({ body: { ...user, activated: false }});
+  const activateUser = () =>
+    userUpdate.mutate({ body: { ...user, activated: true } });
+  const deactivateUser = () =>
+    userUpdate.mutate({ body: { ...user, activated: false } });
 
   const userRemove = useUserRemove({
     onSuccess: (_, { params: { login } }) => {

@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 
 import { ErrorPage } from '@/components/ErrorPage';
-import { useAccount } from '@/features/account/service';
+import { useAccount } from '@/features/account/api.client';
 import { Loader } from '@/layout/Loader';
 
 export const GuardAdmin = ({ children }: { children: ReactNode }) => {

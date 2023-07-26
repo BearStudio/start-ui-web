@@ -27,7 +27,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
-import { useAccount } from '@/features/account/service';
+import { useAccount } from '@/features/account/api.client';
 
 import buildInfo from '../../.build-info.json';
 

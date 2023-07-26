@@ -4,7 +4,7 @@ import { Box, BoxProps, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 
-import { useAccount } from '@/features/account/service';
+import { useAccount } from '@/features/account/api.client';
 import { useRtl } from '@/hooks/useRtl';
 import { useLayoutContext } from '@/layout/LayoutContext';
 

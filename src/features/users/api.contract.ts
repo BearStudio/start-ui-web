@@ -42,8 +42,8 @@ export const usersContract = c.router({
     method: 'GET',
     path: '/admin/users',
     query: z.object({
-      page: z.number().int().gte(0).optional(),
-      size: z.number().int().gte(1).optional(),
+      page: z.number().int().gte(0).default(1),
+      size: z.number().int().gte(1).default(20),
       sort: z.array(z.string()).optional(),
     }),
     responses: {
@@ -53,9 +53,9 @@ export const usersContract = c.router({
   update: {
     method: 'PUT',
     path: '/admin/users',
-    body: zUser(),
+    body: zUser().partial(),
     responses: {
-      200: zUser().partial(),
+      200: zUser(),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),

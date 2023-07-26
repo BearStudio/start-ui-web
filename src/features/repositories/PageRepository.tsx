@@ -25,7 +25,7 @@ import { useToastError } from '@/components/Toast';
 import {
   useRepository,
   useRepositoryRemove,
-} from '@/features/repositories/service';
+} from '@/features/repositories/api.client';
 import { Loader } from '@/layout/Loader';
 
 export default function PageRepository() {

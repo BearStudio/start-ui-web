@@ -15,7 +15,7 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
-import { useUserCreate } from '@/features/users/service';
+import { useUserCreate } from '@/features/users/api.client';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);

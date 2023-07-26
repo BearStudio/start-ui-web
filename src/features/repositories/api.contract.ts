@@ -29,8 +29,8 @@ export const repositoriesContract = c.router({
     method: 'GET',
     path: '/repositories',
     query: z.object({
-      page: z.number().int().gte(0).optional(),
-      size: z.number().int().gte(1).optional(),
+      page: z.number().int().gte(0).default(0),
+      size: z.number().int().gte(1).default(20),
       sort: z.array(z.string()).optional(),
     }),
     responses: {

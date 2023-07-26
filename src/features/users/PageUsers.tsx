@@ -41,7 +41,7 @@ import {
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { AdminNav } from '@/features/admin/AdminNav';
 import { UserStatus } from '@/features/users/UserStatus';
-import { useUserList } from '@/features/users/service';
+import { useUserList } from '@/features/users/api.client';
 
 import { UserActions } from './UserActions';
 

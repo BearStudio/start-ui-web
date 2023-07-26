@@ -16,8 +16,8 @@ import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError } from '@/components/Toast';
-import { Repository } from '@/features/repositories/contract';
-import { useRepositoryRemove } from '@/features/repositories/service';
+import { useRepositoryRemove } from '@/features/repositories/api.client';
+import { Repository } from '@/features/repositories/api.contract';
 
 export type RepositoryActionProps = Omit<MenuProps, 'children'> & {
   repository: Repository;

@@ -11,7 +11,7 @@ import { FieldInput } from '@/components/FieldInput';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
-import { useUpdatePassword } from '@/features/account/service';
+import { useUpdatePassword } from '@/features/account/api.client';
 
 export default function PagePassword() {
   const { t } = useTranslation(['account']);

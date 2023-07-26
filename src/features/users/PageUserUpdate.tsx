@@ -26,7 +26,7 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
-import { useUserFormQuery, useUserUpdate } from '@/features/users/service';
+import { useUserFormQuery, useUserUpdate } from '@/features/users/api.client';
 import { Loader } from '@/layout/Loader';
 
 export default function PageUserUpdate() {
@@ -76,15 +76,17 @@ export default function PageUserUpdate() {
   });
 
   const form = useForm<
-    Omit<ClientInferRequest<Contract['users']['update']>['body'], 'id'>
+    Pick<
+      ClientInferRequest<Contract['users']['update']>['body'],
+      'firstName' | 'lastName' | 'email' | 'langKey' | 'login' | 'authorities'
+    >
   >({
     ready: !user.isLoading,
     initialValues: user.data?.body,
     onValidSubmit: (values) => {
-      if (!user.data?.body.id) return null;
       userUpdate.mutate({
         body: {
-          id: user.data.body.id,
+          ...(user.data?.body ?? {}),
           ...values,
         },
       });

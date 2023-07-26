@@ -1,9 +1,9 @@
 import { initContract } from '@ts-rest/core';
 
-import { accountContract } from '@/features/account/contract';
-import { authContract } from '@/features/auth/contract';
-import { repositoriesContract } from '@/features/repositories/contract';
-import { usersContract } from '@/features/users/contract';
+import { accountContract } from '@/features/account/api.contract';
+import { authContract } from '@/features/auth/api.contract';
+import { repositoriesContract } from '@/features/repositories/api.contract';
+import { usersContract } from '@/features/users/api.contract';
 
 const c = initContract();
 

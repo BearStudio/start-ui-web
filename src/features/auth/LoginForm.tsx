@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
-import { useLogin } from '@/features/auth/service';
+import { useLogin } from '@/features/auth/api.client';
 import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
 
 type LoginFormProps = BoxProps & {

@@ -33,7 +33,7 @@ import {
 } from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { RepositoryActions } from '@/features/repositories/RepositoryActions';
-import { useRepositoryList } from '@/features/repositories/service';
+import { useRepositoryList } from '@/features/repositories/api.client';
 
 export default function PageRepositories() {
   const { t } = useTranslation(['repositories']);

@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { zUser } from '@/features/users/contract';
+import { zUser } from '@/features/users/api.contract';
 
 const c = initContract();
 
@@ -40,9 +40,9 @@ export const accountContract = c.router({
   update: {
     method: 'POST',
     path: '/account',
-    body: zUser().partial(),
+    body: zUser().partial().omit({ createdBy: true, createdDate: true }),
     responses: {
-      200: z.void(),
+      200: zUser(),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),

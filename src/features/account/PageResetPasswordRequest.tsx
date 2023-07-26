@@ -24,7 +24,7 @@ import { Link } from 'react-router-dom';
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
-import { useResetPasswordInit } from '@/features/account/service';
+import { useResetPasswordInit } from '@/features/account/api.client';
 import { useRtl } from '@/hooks/useRtl';
 
 export default function PageResetPasswordRequest() {
