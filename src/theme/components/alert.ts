@@ -128,16 +128,10 @@ export const alertTheme = defineMultiStyleConfig({
       lineHeight: 5,
     },
     icon: {
-      flexShrink: 0,
       marginEnd: 2,
-      w: 4,
-      h: 4,
     },
     spinner: {
-      flexShrink: 0,
       marginEnd: 2,
-      w: 4,
-      h: 4,
     },
   },
   variants: {
