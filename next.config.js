@@ -33,4 +33,17 @@ module.exports = defineNextConfig({
       },
     ];
   },
+  experimental: {
+    // This experimental configuration is useful to remove some SWC dependencies
+    // from the final output. Those dependencies are included since Storybook v7
+    // https://github.com/orgs/vercel/discussions/103#discussioncomment-6356642
+    // https://nextjs.org/docs/app/api-reference/next-config-js/output#caveats
+    outputFileTracingExcludes: {
+      '*': [
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild/linux-x64',
+      ],
+    },
+  },
 });
