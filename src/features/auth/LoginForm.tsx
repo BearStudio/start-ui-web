@@ -49,6 +49,7 @@ export const LoginForm = ({
             label={t('auth:data.username.label')}
             required={t('auth:data.username.required')}
             formatValue={(v) => v?.toLowerCase().trim()}
+            autoFocus
           />
           <FieldInput
             name="password"
