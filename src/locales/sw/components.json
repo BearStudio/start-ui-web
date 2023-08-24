@@ -47,5 +47,26 @@
     "sortDescending": "Descendant",
     "sortBy": "panga kwa",
     "order": "Agizo"
+  },
+  "errorBoundary": {
+    "actions": {
+      "expand": "Onyesha maelezo"
+    },
+    "title": "Hitilafu isiyotarajiwa imetokea."
+  },
+  "errorPage": {
+    "403": {
+      "description": "Samahani, huwezi kufikia ukurasa huu.",
+      "title": "Haijaidhinishwa"
+    },
+    "404": {
+      "description": "Ukurasa haupo au url imebadilika.",
+      "title": "Ukurasa haujapatikana"
+    },
+    "default": {
+      "description": "Hitilafu fulani imetokea 😞",
+      "title": "Hitilafu"
+    },
+    "errorCode": "Hitilafu {{code}}"
   }
 }

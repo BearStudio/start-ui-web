@@ -1,7 +1,8 @@
 {
   "mainMenu": {
     "dashboard": "Dashibodi",
-    "admin": "Admin"
+    "admin": "Admin",
+    "repositories": "hazina"
   },
   "accountMenu": {
     "version": {

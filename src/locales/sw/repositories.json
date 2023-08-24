@@ -27,7 +27,6 @@
     "name": {
       "label": "Jina",
       "required": "Jina linahitajika",
-      "tooShort": "Jina ni fupi mno (dakika ya vibambo {{min}})",
       "alreadyUsed": "Jina tayari limetumika"
     },
     "link": {

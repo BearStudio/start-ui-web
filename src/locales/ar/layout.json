@@ -1,7 +1,8 @@
 {
   "mainMenu": {
     "dashboard": "اللوحة الرئيسية",
-    "admin": "المسؤول"
+    "admin": "المسؤول",
+    "repositories": "المستودعات"
   },
   "accountMenu": {
     "version": {

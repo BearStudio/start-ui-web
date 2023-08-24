@@ -23,6 +23,9 @@
     "deleteUserError": {
       "title": "Imeshindwa kufuta",
       "description": "Imeshindwa kufuta mtumiaji \"{{ingia}}\""
+    },
+    "loadingUserError": {
+      "title": "Imeshindwa kupakia watumiaji"
     }
   },
   "list": {
