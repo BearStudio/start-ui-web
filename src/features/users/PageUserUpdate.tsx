@@ -11,11 +11,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Contract } from '@/api/contract';
 import { ErrorPage } from '@/components/ErrorPage';
 import {
   Page,
@@ -24,7 +22,7 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { UserForm } from '@/features/users/UserForm';
+import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
 import { useUserFormQuery, useUserUpdate } from '@/features/users/api.client';
 import { Loader } from '@/layout/Loader';
@@ -75,12 +73,7 @@ export default function PageUserUpdate() {
     },
   });
 
-  const form = useForm<
-    Pick<
-      ClientInferRequest<Contract['users']['update']>['body'],
-      'firstName' | 'lastName' | 'email' | 'langKey' | 'login' | 'authorities'
-    >
-  >({
+  const form = useForm<UserFormFields>({
     ready: !user.isLoading,
     initialValues: user.data?.body,
     onValidSubmit: (values) => {

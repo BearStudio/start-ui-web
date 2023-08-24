@@ -8,11 +8,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Contract } from '@/api/contract';
 import { ErrorPage } from '@/components/ErrorPage';
 import {
   Page,
@@ -21,7 +19,10 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { RepositoryForm } from '@/features/repositories/RepositoryForm';
+import {
+  RepositoryForm,
+  RepositoryFormFields,
+} from '@/features/repositories/RepositoryForm';
 import {
   useRepositoryFormQuery,
   useRepositoryUpdate,
@@ -62,19 +63,14 @@ export default function PageRepositoryUpdate() {
     },
   });
 
-  const form = useForm<
-    Pick<
-      ClientInferRequest<Contract['repositories']['update']>['body'],
-      'name' | 'link' | 'description'
-    >
-  >({
+  const form = useForm<RepositoryFormFields>({
     ready: !repository.isLoading,
     initialValues: repository.data?.body,
     onValidSubmit: (values) => {
       if (!repository.data?.body.id) return null;
       updateRepository.mutate({
         body: {
-          ...(repository.data?.body ?? {}),
+          ...repository.data.body,
           ...values,
         },
       });

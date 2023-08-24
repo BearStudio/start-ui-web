@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { Repository } from '@prisma/client';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +12,10 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { RepositoryForm } from '@/features/repositories/RepositoryForm';
+import {
+  RepositoryForm,
+  RepositoryFormFields,
+} from '@/features/repositories/RepositoryForm';
 import { useRepositoryCreate } from '@/features/repositories/api.client';
 
 export default function PageRepositoryCreate() {
@@ -46,7 +48,7 @@ export default function PageRepositoryCreate() {
     },
   });
 
-  const form = useForm<Pick<Repository, 'name' | 'link' | 'description'>>({
+  const form = useForm<RepositoryFormFields>({
     onValidSubmit: (values) => {
       createRepository.mutate({ body: values });
     },

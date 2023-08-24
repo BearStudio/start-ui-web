@@ -2,11 +2,9 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Contract } from '@/api/contract';
 import {
   Page,
   PageBottomBar,
@@ -14,7 +12,7 @@ import {
   PageTopBar,
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { UserForm } from '@/features/users/UserForm';
+import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { useUserCreate } from '@/features/users/api.client';
 
 export default function PageUserCreate() {
@@ -59,13 +57,11 @@ export default function PageUserCreate() {
     },
   });
 
-  const form = useForm<ClientInferRequest<Contract['users']['create']>['body']>(
-    {
-      onValidSubmit: (values) => {
-        createUser.mutate({ body: values });
-      },
-    }
-  );
+  const form = useForm<UserFormFields>({
+    onValidSubmit: (values) => {
+      createUser.mutate({ body: values });
+    },
+  });
 
   return (
     <Page containerSize="md" isFocusMode>

@@ -6,6 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldTextarea } from '@/components/FieldTextarea';
 
+export type RepositoryFormFields = {
+  name: string;
+  link: string;
+  description?: string | null;
+};
+
 export const RepositoryForm = () => {
   const { t } = useTranslation(['common', 'repositories']);
 

@@ -17,15 +17,21 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
 
-const AUTHORITIES = {
-  ADMIN: 'ROLE_ADMIN',
-  USER: 'ROLE_USER',
+const AUTHORITIES = ['ROLE_ADMIN', 'ROLE_USER'] as const;
+
+export type UserFormFields = {
+  login: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email: string;
+  langKey?: string;
+  authorities: Array<(typeof AUTHORITIES)[number]>;
 };
 
 export const UserForm = () => {
   const { t } = useTranslation(['common', 'users']);
 
-  const authorities = Object.values(AUTHORITIES).map((value) => ({ value }));
+  const authorities = AUTHORITIES.map((value) => ({ value }));
   return (
     <Card>
       <CardBody>
