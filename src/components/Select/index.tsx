@@ -3,7 +3,6 @@ import React, { ReactNode, useRef } from 'react';
 import {
   Box,
   BoxProps,
-  useColorModeValue,
   useStyleConfig,
   useTheme,
   useToken,
@@ -64,7 +63,6 @@ const SelectInner = <
   ref: React.ForwardedRef<HTMLElement>
 ) => {
   const theme = useTheme();
-  const isLightMode = useColorModeValue(true, false);
 
   const stylesFromTheme: TODO = useStyleConfig('Select', {
     size,
@@ -165,26 +163,30 @@ const SelectInner = <
       height: `calc(${fieldHeight} - 2px)`,
     })),
     ...getComponentStyles('multiValue', () => ({
-      backgroundColor: isLightMode
-        ? theme.colors.brand['100']
-        : theme.colors.brand['300'],
+      backgroundColor: 'gray.100',
+      _dark: {
+        backgroundColor: 'gray.300',
+      },
     })),
     ...getComponentStyles('multiValueLabel', () => ({
       fontWeight: 'bold',
-      color: isLightMode
-        ? theme.colors.brand['800']
-        : theme.colors.brand['900'],
+      color: 'brand.800',
+      _dark: {
+        color: 'brand.900',
+      },
     })),
     ...getComponentStyles('multiValueRemove', () => ({
-      color: isLightMode
-        ? theme.colors.brand['800']
-        : theme.colors.brand['900'],
+      color: 'brand.800',
+      _dark: {
+        color: 'brand.900',
+      },
       opacity: 0.5,
       '&:hover': {
         background: 'transparent',
-        color: isLightMode
-          ? theme.colors.brand['800']
-          : theme.colors.brand['900'],
+        color: 'brand.800',
+        _dark: {
+          color: 'brand.900',
+        },
         opacity: 1,
       },
     })),
@@ -226,32 +228,35 @@ const SelectInner = <
       ({ isFocused, isDisabled, isSelected }) => ({
         fontSize: fieldFontSize,
         ':active': {
-          backgroundColor: isLightMode
-            ? theme.colors.gray['100']
-            : theme.colors.blackAlpha['500'],
+          backgroundColor: 'gray.100',
+          _dark: {
+            backgroundColor: 'blackAlpha.500',
+          },
         },
         ...getConditionalStyles(isFocused, {
-          backgroundColor: isLightMode
-            ? theme.colors.gray['100']
-            : theme.colors.blackAlpha['400'],
-          color: isLightMode
-            ? theme.colors.gray['600']
-            : theme.colors.gray['100'],
+          backgroundColor: 'gray.100',
+          _dark: {
+            backgroundColor: 'blackAlpha.400',
+            color: 'gray.100',
+          },
+          color: 'gray.600',
         }),
         ...getConditionalStyles(isSelected, {
-          backgroundColor: isLightMode
-            ? theme.colors.gray['50']
-            : theme.colors.blackAlpha['500'],
-          color: isLightMode ? theme.colors.gray['700'] : 'white',
+          backgroundColor: 'gray.50',
+          color: 'gray.700',
+          _dark: {
+            backgroundColor: 'blackAlpha.500',
+            color: 'white',
+          },
           borderLeft: `2px solid ${theme.colors.brand['500']}`,
         }),
         ...getConditionalStyles(isFocused && isSelected, {
-          backgroundColor: isLightMode
-            ? theme.colors.gray['100']
-            : theme.colors.blackAlpha['400'],
-          color: isLightMode
-            ? theme.colors.gray['600']
-            : theme.colors.gray['100'],
+          backgroundColor: 'gray.100',
+          color: 'gray.600',
+          _dark: {
+            backgroundColor: 'blackAlpha.400',
+            color: 'gray.100',
+          },
         }),
         ...getConditionalStyles(isDisabled, {
           opacity: 0.4,
@@ -260,7 +265,10 @@ const SelectInner = <
     ),
     ...getComponentStyles('menu', () => ({
       zIndex: 10,
-      backgroundColor: isLightMode ? 'white' : theme.colors.gray['700'],
+      backgroundColor: 'white',
+      _dark: {
+        backgroundColor: 'gray.700',
+      },
     })),
     ...getComponentStyles('menuPortal', () => ({
       zIndex: theme.zIndices.select,
