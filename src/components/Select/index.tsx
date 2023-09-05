@@ -3,6 +3,7 @@ import React, { ReactNode, useRef } from 'react';
 import {
   Box,
   BoxProps,
+  useColorMode,
   useStyleConfig,
   useTheme,
   useToken,
@@ -63,6 +64,9 @@ const SelectInner = <
   ref: React.ForwardedRef<HTMLElement>
 ) => {
   const theme = useTheme();
+
+  // const isDark = useColorModeValue(false, true)
+  const mode = useColorMode();
 
   const stylesFromTheme: TODO = useStyleConfig('Select', {
     size,
@@ -163,30 +167,30 @@ const SelectInner = <
       height: `calc(${fieldHeight} - 2px)`,
     })),
     ...getComponentStyles('multiValue', () => ({
-      backgroundColor: 'gray.100',
-      _dark: {
-        backgroundColor: 'gray.300',
-      },
+      backgroundColor:
+        mode.colorMode === 'dark'
+          ? theme.colors.gray['300']
+          : theme.colors.gray['100'],
     })),
     ...getComponentStyles('multiValueLabel', () => ({
       fontWeight: 'bold',
-      color: 'brand.800',
-      _dark: {
-        color: 'brand.900',
-      },
+      color:
+        mode.colorMode === 'dark'
+          ? theme.colors.gray['900']
+          : theme.colors.gray['800'],
     })),
     ...getComponentStyles('multiValueRemove', () => ({
-      color: 'brand.800',
-      _dark: {
-        color: 'brand.900',
-      },
+      color:
+        mode.colorMode === 'dark'
+          ? theme.colors.gray['900']
+          : theme.colors.gray['800'],
       opacity: 0.5,
       '&:hover': {
         background: 'transparent',
-        color: 'brand.800',
-        _dark: {
-          color: 'brand.900',
-        },
+        color:
+          mode.colorMode === 'dark'
+            ? theme.colors.gray['900']
+            : theme.colors.gray['800'],
         opacity: 1,
       },
     })),
@@ -228,35 +232,41 @@ const SelectInner = <
       ({ isFocused, isDisabled, isSelected }) => ({
         fontSize: fieldFontSize,
         ':active': {
-          backgroundColor: 'gray.100',
-          _dark: {
-            backgroundColor: 'blackAlpha.500',
-          },
+          backgroundColor:
+            mode.colorMode === 'dark'
+              ? theme.colors.blackAlpha['500']
+              : theme.colors.gray['100'],
         },
         ...getConditionalStyles(isFocused, {
-          backgroundColor: 'gray.100',
-          _dark: {
-            backgroundColor: 'blackAlpha.400',
-            color: 'gray.100',
-          },
-          color: 'gray.600',
+          backgroundColor:
+            mode.colorMode === 'dark'
+              ? theme.colors.blackAlpha['400']
+              : theme.colors.gray['100'],
+          color:
+            mode.colorMode === 'dark'
+              ? theme.colors.gray['100']
+              : theme.colors.gray['600'],
         }),
         ...getConditionalStyles(isSelected, {
-          backgroundColor: 'gray.50',
-          color: 'gray.700',
-          _dark: {
-            backgroundColor: 'blackAlpha.500',
-            color: 'white',
-          },
+          backgroundColor:
+            mode.colorMode === 'dark'
+              ? theme.colors.blackAlpha['500']
+              : theme.colors.gray['50'],
+          color:
+            mode.colorMode === 'dark'
+              ? theme.colors.white
+              : theme.colors.gray['700'],
           borderLeft: `2px solid ${theme.colors.brand['500']}`,
         }),
         ...getConditionalStyles(isFocused && isSelected, {
-          backgroundColor: 'gray.100',
-          color: 'gray.600',
-          _dark: {
-            backgroundColor: 'blackAlpha.400',
-            color: 'gray.100',
-          },
+          backgroundColor:
+            mode.colorMode === 'dark'
+              ? theme.colors.blackAlpha['400']
+              : theme.colors.gray['100'],
+          color:
+            mode.colorMode === 'dark'
+              ? theme.colors.gray['100']
+              : theme.colors.gray['060'],
         }),
         ...getConditionalStyles(isDisabled, {
           opacity: 0.4,
@@ -265,10 +275,10 @@ const SelectInner = <
     ),
     ...getComponentStyles('menu', () => ({
       zIndex: 10,
-      backgroundColor: 'white',
-      _dark: {
-        backgroundColor: 'gray.700',
-      },
+      backgroundColor:
+        mode.colorMode === 'dark'
+          ? theme.colors.gray['700']
+          : theme.colors.white,
     })),
     ...getComponentStyles('menuPortal', () => ({
       zIndex: theme.zIndices.select,
