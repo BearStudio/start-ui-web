@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import i18n from 'i18next';
+import { isDate } from 'lodash';
 import { initReactI18next } from 'react-i18next';
 
 import {
@@ -10,6 +11,8 @@ import {
 import { isBrowser } from '@/lib/ssr';
 import locales from '@/locales';
 
+import { formatDate, minutesToHours } from './formatters';
+
 dayjs.locale(DEFAULT_LANGUAGE_KEY);
 
 i18n.use(initReactI18next).init({
@@ -18,13 +21,29 @@ i18n.use(initReactI18next).init({
   resources: locales,
   lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
-
   // Fix issue with i18next types
   // https://www.i18next.com/overview/typescript#argument-of-type-defaulttfuncreturn-is-not-assignable-to-parameter-of-type-xyz
   returnNull: false,
 
   interpolation: {
     escapeValue: false, // react already safes from xss
+    format: (value, format) => {
+      /* Default date formatter */
+      if (isDate(value)) {
+        return formatDate(value, format);
+      }
+
+      /**  List of custom formatters
+       *
+       * Declare your custom formatters in './formatters'
+       * And use them here
+       */
+      if (format === 'minutesToHours') {
+        return minutesToHours(value);
+      }
+
+      return value;
+    },
   },
 });
 
