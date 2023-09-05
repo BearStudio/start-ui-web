@@ -1,0 +1,109 @@
+{
+  "list": {
+    "title": "Gerenciamento de Usuários",
+    "actions": {
+      "createUser": "Criar Usuário"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "Usuário Ativado",
+      "description": "Usuário \"{{login}}\" ativado com sucesso"
+    },
+    "deactivateUserSuccess": {
+      "title": "Usuário Desativado",
+      "description": "Usuário \"{{login}}\" desativado com sucesso"
+    },
+    "activateUserError": {
+      "title": "Falha na Ativação",
+      "description": "Falha ao ativar o usuário \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "Falha na Desativação",
+      "description": "Falha ao desativar o usuário \"{{login}}\""
+    },
+    "deleteUserSuccess": {
+      "title": "Usuário Excluído",
+      "description": "Usuário \"{{login}}\" excluído com sucesso"
+    },
+    "deleteUserError": {
+      "title": "Falha na Exclusão",
+      "description": "Falha ao remover o usuário \"{{login}}\""
+    },
+    "loadingUserError": {
+      "title": "Falha ao carregar usuários"
+    }
+  },
+  "data": {
+    "login": {
+      "alreadyUsed": "Nome de usuário já utilizado",
+      "label": "Nome de Usuário",
+      "required": "Nome de usuário é obrigatório",
+      "tooShort": "Nome de usuário é muito curto (mín. {{min}} caracteres)",
+      "tooLong": "Nome de usuário é muito longo (máx. {{max}} caracteres)",
+      "invalid": "Nome de usuário é inválido, não use caracteres especiais"
+    },
+    "email": {
+      "label": "E-mail",
+      "alreadyUsed": "E-mail já utilizado",
+      "required": "E-mail é obrigatório",
+      "invalid": "E-mail é inválido",
+      "tooShort": "E-mail é muito curto (mín. {{min}} caracteres)",
+      "tooLong": "E-mail é muito longo (máx. {{max}} caracteres)"
+    },
+    "id": {
+      "label": "ID"
+    },
+    "authorities": {
+      "label": "Autoridades",
+      "required": "Autoridades são obrigatórias"
+    },
+    "createdBy": {
+      "label": "Criado Por"
+    },
+    "modifiedBy": {
+      "label": "Modificado Por"
+    },
+    "status": {
+      "label": "Status",
+      "activated": "Ativado",
+      "deactivated": "Não Ativado"
+    },
+    "firstname": {
+      "label": "Primeiro Nome"
+    },
+    "lastname": {
+      "label": "Último Nome"
+    },
+    "language": {
+      "label": "Idioma"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Atualizar Usuário"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Falha na Atualização"
+      },
+      "updateSuccess": {
+        "title": "Atualizado com sucesso"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Falha na Criação"
+      },
+      "updateSuccess": {
+        "title": "Usuário criado com sucesso"
+      }
+    },
+    "action": {
+      "save": "Criar Usuário"
+    },
+    "title": "Criar Novo Usuário"
+  }
+}

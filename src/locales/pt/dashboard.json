@@ -1,0 +1,13 @@
+{
+  "title": "Painel de Controle",
+  "welcome": {
+    "title": "Bem-vindo ao Start UI",
+    "description": "Um starter de UI opinativo com React, Chakra UI, React Query & Formiz",
+    "author": "— Da equipe <strong>BearStudio</strong>"
+  },
+  "links": {
+    "github": "Repositório do GitHub",
+    "openIssue": "Abrir Issue",
+    "documentation": "Documentação"
+  }
+}

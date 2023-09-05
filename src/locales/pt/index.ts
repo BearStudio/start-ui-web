@@ -5,7 +5,6 @@ import common from './common.json';
 import components from './components.json';
 import dashboard from './dashboard.json';
 import layout from './layout.json';
-import repositories from './repositories.json';
 import users from './users.json';
 
 export default {
@@ -16,6 +15,5 @@ export default {
   components,
   dashboard,
   layout,
-  repositories,
   users,
 } as const;

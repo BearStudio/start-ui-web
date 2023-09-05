@@ -1,0 +1,17 @@
+{
+  "mainMenu": {
+    "dashboard": "Painel",
+    "admin": "Admin"
+  },
+  "accountMenu": {
+    "version": {
+      "copied": "Versão copiada",
+      "copy": "Copiar versão",
+      "label": "Versão"
+    },
+    "switchColorModeDark": "Mudar para Modo Escuro",
+    "switchColorModeLight": "Mudar para Modo Claro",
+    "myAccount": "Minha Conta",
+    "logout": "Sair"
+  }
+}
