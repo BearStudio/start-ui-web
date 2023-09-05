@@ -197,7 +197,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
     : {};
   return (
     <Flex
-      d={!showRow ? 'none' : undefined}
+      display={!showRow ? 'none' : undefined}
       position="relative"
       borderBottom="1px solid"
       borderBottomColor="gray.100"
