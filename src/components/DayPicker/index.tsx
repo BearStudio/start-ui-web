@@ -106,10 +106,7 @@ export const DayPicker: FC<React.PropsWithChildren<DayPickerProps>> = ({
 }) => {
   const theme = useTheme();
   const { i18n } = useTranslation();
-  const isSmartphoneFormat = useBreakpointValue(
-    { base: true, sm: false },
-    { ssr: false }
-  );
+  const isSmartphoneFormat = useBreakpointValue({ base: true, sm: false });
 
   const formatDate = (date: Date, format: string) => dayjs(date).format(format);
 

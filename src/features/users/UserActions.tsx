@@ -9,9 +9,9 @@ import {
   MenuProps,
   Portal,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { LuCheckCircle, LuEdit3, LuTrash2, LuXCircle } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
@@ -103,7 +103,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            to={`/admin/users/${user.login}`}
+            href={`/admin/users/${user.login}`}
             icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

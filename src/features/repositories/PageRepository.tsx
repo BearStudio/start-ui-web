@@ -12,10 +12,12 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuEdit3, LuExternalLink, LuTrash2 } from 'react-icons/lu';
-import { Link, useNavigate, useParams } from 'react-router-dom';
 
+// import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
@@ -33,12 +35,12 @@ export default function PageRepository() {
 
   const toastError = useToastError();
 
+  const router = useRouter();
   const params = useParams();
-  const navigate = useNavigate();
   const repository = useRepository(Number(params?.id));
   const repositoryRemove = useRepositoryRemove({
     onSuccess: () => {
-      navigate('/repositories');
+      router.push('/repositories');
     },
     onError: () => {
       toastError({
@@ -52,7 +54,11 @@ export default function PageRepository() {
 
   return (
     <Page containerSize="lg">
-      <PageTopBar zIndex={0} showBack onBack={() => navigate('/repositories')}>
+      <PageTopBar
+        zIndex={0}
+        showBack
+        onBack={() => router.push('/repositories')}
+      >
         <HStack>
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
@@ -61,7 +67,11 @@ export default function PageRepository() {
             )}
           </Box>
           <ButtonGroup>
-            <ResponsiveIconButton as={Link} to="update" icon={<LuEdit3 />}>
+            <ResponsiveIconButton
+              as={Link}
+              href={`/repositories/${params?.id}/update`}
+              icon={<LuEdit3 />}
+            >
               {t('common:actions.edit')}
             </ResponsiveIconButton>
 

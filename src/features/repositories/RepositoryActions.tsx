@@ -8,9 +8,9 @@ import {
   MenuProps,
   Portal,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { LuEdit3, LuEye, LuTrash2 } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
@@ -49,14 +49,14 @@ export const RepositoryActions = ({
         <MenuList>
           <MenuItem
             as={Link}
-            to={`/repositories/${repository.id}`}
+            href={`/repositories/${repository.id}`}
             icon={<Icon icon={LuEye} fontSize="lg" color="gray.400" />}
           >
             {t('repositories:list.actions.view')}
           </MenuItem>
           <MenuItem
             as={Link}
-            to={`/repositories/${repository.id}/update`}
+            href={`/repositories/${repository.id}/update`}
             icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

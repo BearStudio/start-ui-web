@@ -1,16 +1,16 @@
 import React from 'react';
 
 import { Box, HStack, Spinner, Text } from '@chakra-ui/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useActivateAccount } from '@/features/account/api.client';
 
 export default function PageActivate() {
   const { t } = useTranslation(['account']);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const key = searchParams?.get('key')?.toString();
   const activateAccount = useActivateAccount(key ?? '');
 
@@ -32,7 +32,7 @@ export default function PageActivate() {
     toastSuccess({
       title: t('account:activate.feedbacks.activationSuccess.title'),
     });
-    navigate('/');
+    router.replace('/');
     return null;
   }
 
@@ -40,7 +40,7 @@ export default function PageActivate() {
     toastError({
       title: t('account:activate.feedbacks.activationError.title'),
     });
-    navigate('/login');
+    router.replace('/login');
     return null;
   }
 

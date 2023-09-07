@@ -54,7 +54,7 @@ export const accountRouter = createNextRoute(contract.account, {
     ]);
     if (!user) return errorResponseBadRequest;
 
-    return { status: 200, body: undefined };
+    return { status: 200, body: {} };
   },
 
   register: async ({ req, body }) => {
@@ -90,7 +90,7 @@ export const accountRouter = createNextRoute(contract.account, {
 ✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/app/account/activate?key=${token}
 👆👆👆👆👆👆👆👆👆👆`);
 
-    return { status: 200, body: undefined };
+    return { status: 200, body: {} };
   },
 
   resetPasswordInit: async ({ req }) => {
@@ -116,7 +116,7 @@ export const accountRouter = createNextRoute(contract.account, {
 
     return {
       status: 200,
-      body: undefined,
+      body: {},
     };
   },
 
@@ -153,7 +153,7 @@ export const accountRouter = createNextRoute(contract.account, {
 
     return {
       status: 200,
-      body: undefined,
+      body: {},
     };
   },
 
@@ -201,7 +201,7 @@ export const accountRouter = createNextRoute(contract.account, {
 
     return {
       status: 200,
-      body: undefined,
+      body: {},
     };
   },
 });

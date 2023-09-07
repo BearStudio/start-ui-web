@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import {
   Page,
@@ -17,7 +17,7 @@ import { useUserCreate } from '@/features/users/api.client';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
@@ -53,7 +53,7 @@ export default function PageUserCreate() {
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
-      navigate('../');
+      router.back();
     },
   });
 
@@ -67,7 +67,7 @@ export default function PageUserCreate() {
     <Page containerSize="md" isFocusMode>
       <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => navigate('../')}>
+          <PageTopBar showBack onBack={() => router.back()}>
             <Heading size="md">{t('users:create.title')}</Heading>
           </PageTopBar>
           <PageContent>
@@ -75,7 +75,7 @@ export default function PageUserCreate() {
           </PageContent>
           <PageBottomBar>
             <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => navigate('../')}>
+              <Button onClick={() => router.back()}>
                 {t('common:actions.cancel')}
               </Button>
               <Button

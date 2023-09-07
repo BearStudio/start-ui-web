@@ -9,8 +9,8 @@ import {
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { LuMenu } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
 
 import { Logo } from '@/components/Logo';
 import { AccountMenu } from '@/layout/AccountMenu';
@@ -20,6 +20,7 @@ import { NavDrawer } from '@/layout/NavDrawer';
 
 const MenuButton = (props: Partial<IconButtonProps>) => {
   const { navOnOpen } = useLayoutContext();
+
   return (
     <IconButton
       aria-label="Navigation"
@@ -36,13 +37,10 @@ const MenuButton = (props: Partial<IconButtonProps>) => {
 export const TopBar = () => {
   const theme = useTheme();
 
-  const showDrawer = useBreakpointValue(
-    {
-      base: true,
-      [theme.layout.breakpoints.desktop]: false,
-    },
-    { ssr: false }
-  );
+  const showDrawer = useBreakpointValue({
+    base: true,
+    [theme.layout.breakpoints.desktop]: false,
+  });
 
   return (
     <>
@@ -67,7 +65,7 @@ export const TopBar = () => {
           <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
           <Box
             as={Link}
-            to="/"
+            href="/"
             mx={{ base: 'auto', [theme.layout.breakpoints.desktop]: 0 }}
           >
             <Logo />

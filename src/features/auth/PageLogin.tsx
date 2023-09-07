@@ -9,8 +9,8 @@ import {
   Center,
   Heading,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
@@ -34,7 +34,7 @@ export default function PageLogin() {
           </CardBody>
         </Card>
         <Center mt="8">
-          <Button as={Link} to="/account/register" variant="link">
+          <Button as={Link} href="/account/register" variant="link">
             {t('auth:login.actions.needAccount')}{' '}
             <Box
               as="strong"

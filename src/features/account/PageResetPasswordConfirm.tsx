@@ -3,8 +3,8 @@ import React from 'react';
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isMaxLength, isMinLength } from '@formiz/validations';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { SlideIn } from '@/components/SlideIn';
@@ -14,9 +14,9 @@ import { useResetPasswordFinish } from '@/features/account/api.client';
 export default function PageResetPasswordConfirm() {
   const { t } = useTranslation(['account']);
 
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
@@ -35,7 +35,7 @@ export default function PageResetPasswordConfirm() {
           'account:resetPassword.feedbacks.resetSuccess.description'
         ),
       });
-      navigate('/login');
+      router.replace('/login');
     },
   });
   const resetPasswordFinishForm = useForm<{ password: string }>({
@@ -43,7 +43,7 @@ export default function PageResetPasswordConfirm() {
     onValidSubmit: (values) => {
       resetPasswordFinish.mutate({
         body: {
-          key: searchParams.get('key') ?? 'KEY_NOT_DEFINED',
+          key: searchParams?.get('key') ?? 'KEY_NOT_DEFINED',
           newPassword: values.password,
         },
       });

@@ -2,14 +2,15 @@
 
 import { ReactNode } from 'react';
 
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
 import { Loader } from '@/layout/Loader';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuthContext();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   if (isLoading) {
     return <Loader />;
@@ -17,7 +18,8 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
 
   if (isAuthenticated) {
     const redirect = searchParams?.get('redirect') ?? '/';
-    return <Navigate to={redirect} replace />;
+    router.replace(redirect);
+    return null;
   }
 
   return <>{children}</>;

@@ -5,7 +5,7 @@ import {
   AlertTitle,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export const DemoRegisterHint = () => {
   if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
@@ -16,7 +16,7 @@ export const DemoRegisterHint = () => {
       <AlertTitle>Demo Mode</AlertTitle>
       <AlertDescription>
         This is a read-only demo, but you can{' '}
-        <ChakraLink as={Link} to="/login" fontWeight="bold">
+        <ChakraLink as={Link} href="/login" fontWeight="bold">
           log in
         </ChakraLink>{' '}
         to test some of the features. Just remember, no changes can be made.

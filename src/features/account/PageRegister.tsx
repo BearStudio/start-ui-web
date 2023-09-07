@@ -23,8 +23,8 @@ import {
   isPattern,
 } from '@formiz/validations';
 import { ClientInferRequest } from '@ts-rest/core';
+import Link from 'next/link';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
@@ -120,7 +120,7 @@ export default function PageRegister() {
           <Center mt="8">
             <Button
               as={Link}
-              to="/login"
+              href="/login"
               variant="link"
               color="brand.500"
               _dark={{ color: 'brand.300' }}
@@ -225,7 +225,7 @@ export default function PageRegister() {
           </CardBody>
         </Card>
         <Center mt="8">
-          <Button as={Link} to="/login" variant="link">
+          <Button as={Link} href="/login" variant="link">
             {t('account:register.actions.alreadyHaveAnAccount')}{' '}
             <Box
               as="strong"

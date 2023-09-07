@@ -20,7 +20,7 @@ export const accountContract = c.router({
       .pick({ login: true, email: true, langKey: true })
       .merge(z.object({ password: z.string() })),
     responses: {
-      200: z.void(),
+      200: z.object({}),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),
@@ -34,7 +34,7 @@ export const accountContract = c.router({
       key: z.string(),
     }),
     responses: {
-      200: z.void(),
+      200: z.object({}),
     },
   },
   update: {
@@ -54,7 +54,7 @@ export const accountContract = c.router({
     path: '/account/reset-password/init',
     body: z.string(),
     responses: {
-      200: z.void(),
+      200: z.object({}),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),
@@ -69,7 +69,7 @@ export const accountContract = c.router({
       newPassword: z.string(),
     }),
     responses: {
-      200: z.void(),
+      200: z.object({}),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),
@@ -84,7 +84,7 @@ export const accountContract = c.router({
       newPassword: z.string(),
     }),
     responses: {
-      200: z.void(),
+      200: z.object({}),
       400: z.object({
         title: z.string(),
         errorKey: z.string(),

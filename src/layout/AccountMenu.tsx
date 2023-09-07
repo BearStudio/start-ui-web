@@ -15,6 +15,9 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
+// import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
   LuCheck,
@@ -24,7 +27,6 @@ import {
   LuSun,
   LuUser,
 } from 'react-icons/lu';
-import { Link, useNavigate } from 'react-router-dom';
 
 import { Icon } from '@/components/Icons';
 import { useAccount } from '@/features/account/api.client';
@@ -107,7 +109,7 @@ export const AccountMenu = ({ ...rest }) => {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const account = useAccount();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <Box color="gray.800" _dark={{ color: 'white' }}>
@@ -121,7 +123,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuGroup title={account.data?.body.email} noOfLines={1}>
             <MenuItem
               as={Link}
-              to="/account"
+              href="/account"
               icon={<Icon icon={LuUser} fontSize="lg" color="gray.400" />}
             >
               {t('layout:accountMenu.myAccount')}
@@ -145,7 +147,7 @@ export const AccountMenu = ({ ...rest }) => {
           <MenuDivider />
           <MenuItem
             icon={<Icon icon={LuLogOut} fontSize="lg" color="gray.400" />}
-            onClick={() => navigate('/logout')}
+            onClick={() => router.push('/logout')}
           >
             {t('layout:accountMenu.logout')}
           </MenuItem>

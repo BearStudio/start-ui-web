@@ -4,8 +4,8 @@ import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { ClientInferRequest } from '@ts-rest/core';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { Contract } from '@/api/contract';
 import { FieldInput } from '@/components/FieldInput';
@@ -63,7 +63,7 @@ export const LoginForm = ({
           <Flex>
             <Button
               as={Link}
-              to="/account/reset"
+              href="/account/reset"
               size="sm"
               variant="link"
               whiteSpace="initial"

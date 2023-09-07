@@ -36,10 +36,7 @@ export const DateSelectorPicker: FC<DateSelectorPickerProps> = ({
   children = defaultChildren,
   ...rest
 }) => {
-  const isMobile = useBreakpointValue(
-    { base: true, md: false },
-    { ssr: false }
-  );
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const { date, onDayClick, isOpen, onOpen, onClose } =
     useDateSelectorContext();

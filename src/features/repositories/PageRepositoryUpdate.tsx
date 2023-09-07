@@ -8,8 +8,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import {
@@ -33,7 +33,7 @@ export default function PageRepositoryUpdate() {
   const { t } = useTranslation(['common', 'repositories']);
 
   const params = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const repository = useRepositoryFormQuery(Number(params?.id));
 
   const toastSuccess = useToastSuccess();
@@ -59,7 +59,7 @@ export default function PageRepositoryUpdate() {
       toastSuccess({
         title: t('repositories:update.feedbacks.updateSuccess.title'),
       });
-      navigate(-1);
+      router.back();
     },
   });
 
@@ -79,7 +79,7 @@ export default function PageRepositoryUpdate() {
 
   return (
     <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => navigate(-1)}>
+      <PageTopBar showBack onBack={() => router.back()}>
         {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
           <>
@@ -100,7 +100,7 @@ export default function PageRepositoryUpdate() {
             </PageContent>
             <PageBottomBar>
               <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => navigate('/repositories')}>
+                <Button onClick={() => router.back()}>
                   {t('common:actions.cancel')}
                 </Button>
                 <Button

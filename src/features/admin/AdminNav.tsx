@@ -1,21 +1,22 @@
 import React from 'react';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuBookOpen, LuUsers } from 'react-icons/lu';
-import { Link, useLocation } from 'react-router-dom';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 
 export const AdminNav = () => {
   const { t } = useTranslation(['admin']);
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const isActive = (to: string) => pathname?.startsWith(to);
   return (
     <Nav>
       <NavGroup title={t('admin:nav.administration')}>
         <NavItem
           as={Link}
-          to="/admin/users"
+          href="/admin/users"
           isActive={isActive('/admin/users')}
           icon={LuUsers}
         >
@@ -23,7 +24,7 @@ export const AdminNav = () => {
         </NavItem>
         <NavItem
           as={Link}
-          to="/admin/api"
+          href="/admin/api"
           isActive={isActive('/admin/api')}
           icon={LuBookOpen}
         >

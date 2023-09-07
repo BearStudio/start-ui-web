@@ -14,9 +14,10 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuPlus } from 'react-icons/lu';
-import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   DataList,
@@ -42,12 +43,14 @@ import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { AdminNav } from '@/features/admin/AdminNav';
 import { UserStatus } from '@/features/users/UserStatus';
 import { useUserList } from '@/features/users/api.client';
+import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 
 import { UserActions } from './UserActions';
 
 export default function PageUsers() {
   const { t } = useTranslation(['users']);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const setSearchParams = useSearchParamsUpdater();
   const page = +(searchParams?.get('page') || 1);
 
   const pageSize = 20;
@@ -67,7 +70,7 @@ export default function PageUsers() {
 
             <ResponsiveIconButton
               as={Link}
-              to="/admin/users/create"
+              href="/admin/users/create"
               variant="@primary"
               icon={<LuPlus />}
             >
@@ -139,7 +142,7 @@ export default function PageUsers() {
                       <Text noOfLines={1} maxW="full" fontWeight="bold">
                         <LinkOverlay
                           as={Link}
-                          to={`/admin/users/${user.login}`}
+                          href={`/admin/users/${user.login}`}
                         >
                           {user.login}
                         </LinkOverlay>

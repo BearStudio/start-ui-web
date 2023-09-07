@@ -2,6 +2,6 @@
 
 import { Loader } from '@/layout/Loader';
 
-export default function RootLoading() {
+export default function Loading() {
   return <Loader />;
 }

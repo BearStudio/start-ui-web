@@ -8,9 +8,10 @@ import {
   LinkOverlay,
   Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuBookMarked, LuPlus } from 'react-icons/lu';
-import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   DataList,
@@ -34,10 +35,12 @@ import {
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { RepositoryActions } from '@/features/repositories/RepositoryActions';
 import { useRepositoryList } from '@/features/repositories/api.client';
+import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 
 export default function PageRepositories() {
   const { t } = useTranslation(['repositories']);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const setSearchParams = useSearchParamsUpdater();
   const page = +(searchParams?.get('page') || 1);
 
   const pageSize = 20;
@@ -55,7 +58,7 @@ export default function PageRepositories() {
           </Heading>
           <ResponsiveIconButton
             as={Link}
-            to="/repositories/create"
+            href="/repositories/create"
             variant="@primary"
             icon={<LuPlus />}
           >
@@ -88,7 +91,7 @@ export default function PageRepositories() {
                     <Text noOfLines={1} maxW="full" fontWeight="bold">
                       <LinkOverlay
                         as={Link}
-                        to={`/repositories/${repository.id}`}
+                        href={`/repositories/${repository.id}`}
                       >
                         {repository.name}
                       </LinkOverlay>
@@ -124,9 +127,11 @@ export default function PageRepositories() {
           <DataListFooter>
             <Pagination
               isLoadingPage={repositories.isFetching}
-              setPage={(newPage) =>
-                setSearchParams({ page: newPage.toString() })
-              }
+              setPage={(newPage) => {
+                setSearchParams({
+                  page: newPage.toString(),
+                });
+              }}
               page={page}
               pageSize={pageSize}
               totalItems={repositories.totalItems}

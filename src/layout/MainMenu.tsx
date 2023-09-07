@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Box, BoxProps, Stack } from '@chakra-ui/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
 
 import { useAccount } from '@/features/account/api.client';
 import { useRtl } from '@/hooks/useRtl';
@@ -13,7 +14,9 @@ export const MainMenu = ({ ...rest }) => {
   const { isAdmin } = useAccount();
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <MainMenuItem to="/">{t('layout:mainMenu.dashboard')}</MainMenuItem>
+      <MainMenuItem to="/dashboard">
+        {t('layout:mainMenu.dashboard')}
+      </MainMenuItem>
       <MainMenuItem to="/repositories">
         {t('layout:mainMenu.repositories')}
       </MainMenuItem>
@@ -27,12 +30,12 @@ export const MainMenu = ({ ...rest }) => {
 const MainMenuItem = ({ to, ...rest }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
   const { navOnClose } = useLayoutContext();
-  const { pathname } = useLocation();
-  const isActive = to === '/' ? pathname === '/' : pathname?.startsWith(to);
+  const pathname = usePathname() ?? '';
+  const isActive = to === '/' ? pathname === '/' : pathname.startsWith(to);
   return (
     <Box
       as={Link}
-      to={to}
+      href={to}
       bg="transparent"
       justifyContent="flex-start"
       position="relative"

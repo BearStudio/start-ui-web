@@ -93,14 +93,12 @@ export const DataListCell = ({
   };
 
   const showCell = useBreakpointValue(
-    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible },
-    { ssr: false }
+    typeof _isVisible === 'object' ? _isVisible : { base: _isVisible }
   );
 
   const cellWidth =
     useBreakpointValue(
-      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth },
-      { ssr: false }
+      typeof _colWidth === 'object' ? _colWidth : { base: _colWidth }
     ) ?? 0;
 
   if (!showCell) return null;
@@ -177,8 +175,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
 }) => {
   const { isHover } = useDataListContext();
   const showRow = useBreakpointValue(
-    typeof isVisible === 'object' ? isVisible : { base: isVisible },
-    { ssr: false }
+    typeof isVisible === 'object' ? isVisible : { base: isVisible }
   );
   const disabledProps = isDisabled
     ? {

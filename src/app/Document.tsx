@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import { ModalInterceptor } from '@/api/ModalInterceptor';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
 import { EnvDevHint } from '@/layout/EnvDevHint';
@@ -70,6 +71,7 @@ export const Document = ({ children }: { children: ReactNode }) => {
 
         <Providers>
           <Viewport>{children}</Viewport>
+          <ModalInterceptor />
           <EnvDevHint />
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>

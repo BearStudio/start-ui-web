@@ -10,8 +10,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '@/features/auth/AuthContext';
 import { LoginForm } from '@/features/auth/LoginForm';
@@ -20,8 +20,8 @@ export const LoginModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation(['auth']);
   const { isAuthenticated, updateToken } = useAuthContext();
   const queryCache = useQueryClient();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
 
@@ -46,7 +46,7 @@ export const LoginModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   return (
     <Modal
       isOpen={isAuthenticated}
-      onClose={() => navigate('/login')}
+      onClose={() => router.push('/login')}
       closeOnOverlayClick={false}
       trapFocus={false}
     >
