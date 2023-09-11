@@ -1,6 +1,6 @@
 import { ChakraProps, ThemeTypings } from '@chakra-ui/react';
 
-export const debugComponent = ({
+export const debugStyles = ({
   label = 'Debug',
   colorScheme = 'green',
   hideLabel = false,

@@ -1,4 +1,4 @@
-import { debugComponent } from '@/lib/debug'
+import { debugStyles } from '@/lib/debug'
 import { Box, Stack } from '@chakra-ui/react';
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
@@ -7,11 +7,11 @@ import { Meta, Story, Canvas } from '@storybook/addon-docs';
 # Debug components
 
 ```jsx
-import { debugComponent } from '@/lib/debug'
+import { debugStyles } from '@/lib/debug'
 
 // ...
 
-<MyComponent {...debugComponent()}>
+<MyComponent {...debugStyles()}>
   // ...
 </MyComponent>
 
@@ -21,7 +21,7 @@ import { debugComponent } from '@/lib/debug'
 
 <Canvas>
   <Story name="Default">
-    <Box h="32" {...debugComponent()} />
+    <Box h="32" {...debugStyles()} />
   </Story>
 </Canvas>
 
@@ -32,7 +32,7 @@ import { debugComponent } from '@/lib/debug'
   <Story name="With custom label and color">
     <Box
       h="32"
-      {...debugComponent({
+      {...debugStyles({
         label: 'MyComponent',
         colorScheme: 'brand',
         hideBackground: false
@@ -46,7 +46,7 @@ import { debugComponent } from '@/lib/debug'
 
 <Canvas>
   <Story name="Without label">
-    <Box h="32" {...debugComponent({ hideLabel: true })} />
+    <Box h="32" {...debugStyles({ hideLabel: true })} />
   </Story>
 </Canvas>
 
@@ -54,12 +54,12 @@ import { debugComponent } from '@/lib/debug'
 
 <Canvas height="120px">
   <Story name="Real case usage">
-    <Box p={4} {...debugComponent({ colorScheme: 'red', label: 'Container' })}>
-      <Stack {...debugComponent({ colorScheme: 'cyan', label: 'List', hideBackground: false })}>
-        <Box h="8" {...debugComponent({ label: 'ListItem 1', hideBackground: false })} />
-        <Box h="8" w="90%" {...debugComponent({ label: 'ListItem 2', hideBackground: false })} />
-        <Box h="8" w="50%" {...debugComponent({ label: 'ListItem 3', hideBackground: false })} />
-        <Box h="8" w="60%" {...debugComponent({ label: 'ListItem 4', hideBackground: false })} />
+    <Box p={4} {...debugStyles({ colorScheme: 'red', label: 'Container' })}>
+      <Stack {...debugStyles({ colorScheme: 'cyan', label: 'List', hideBackground: false })}>
+        <Box h="8" {...debugStyles({ label: 'ListItem 1', hideBackground: false })} />
+        <Box h="8" w="90%" {...debugStyles({ label: 'ListItem 2', hideBackground: false })} />
+        <Box h="8" w="50%" {...debugStyles({ label: 'ListItem 3', hideBackground: false })} />
+        <Box h="8" w="60%" {...debugStyles({ label: 'ListItem 4', hideBackground: false })} />
       </Stack>
     </Box>
   </Story>
