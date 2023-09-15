@@ -16,41 +16,46 @@ import {
   RepositoryForm,
   RepositoryFormFields,
 } from '@/features/repositories/RepositoryForm';
-import { useRepositoryCreate } from '@/features/repositories/api.client';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageRepositoryCreate() {
   const { t } = useTranslation(['common', 'repositories']);
+  const trpcContext = trpc.useContext();
   const router = useRouter();
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
 
-  const createRepository = useRepositoryCreate({
-    onError: (error) => {
-      if (error.status === 400) {
-        const { title, errorKey } = error.body;
-        toastError({
-          title: t('repositories:create.feedbacks.updateError.title'),
-          description: title,
-        });
-        if (errorKey === 'name_already_used') {
-          form.setErrors({
-            name: t('repositories:data.name.alreadyUsed'),
-          });
-        }
-      }
-    },
-    onSuccess: () => {
+  const createRepository = trpc.repositories.create.useMutation({
+    onSuccess: async () => {
+      await trpcContext.repositories.getAll.invalidate();
       toastSuccess({
         title: t('repositories:create.feedbacks.updateSuccess.title'),
       });
       router.back();
     },
+    onError: () => {
+      toastError({
+        title: 'Error', // TODO
+      });
+      // if (error instanceof TRPCError && error.code === 'BAD_REQUEST') {
+      //   const { title, errorKey } = error.body;
+      //   toastError({
+      //     title: t('repositories:create.feedbacks.updateError.title'),
+      //     description: title,
+      //   });
+      //   if (errorKey === 'name_already_used') {
+      //     form.setErrors({
+      //       name: t('repositories:data.name.alreadyUsed'),
+      //     });
+      //   }
+      // }
+    },
   });
 
   const form = useForm<RepositoryFormFields>({
     onValidSubmit: (values) => {
-      createRepository.mutate({ body: values });
+      createRepository.mutate(values);
     },
   });
 

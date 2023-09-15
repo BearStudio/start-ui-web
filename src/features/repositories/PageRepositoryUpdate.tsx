@@ -23,56 +23,65 @@ import {
   RepositoryForm,
   RepositoryFormFields,
 } from '@/features/repositories/RepositoryForm';
-import {
-  useRepositoryFormQuery,
-  useRepositoryUpdate,
-} from '@/features/repositories/api.client';
 import { Loader } from '@/layout/Loader';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageRepositoryUpdate() {
   const { t } = useTranslation(['common', 'repositories']);
+  const trpcContext = trpc.useContext();
 
   const params = useParams();
   const router = useRouter();
-  const repository = useRepositoryFormQuery(Number(params?.id));
+  const repository = trpc.repositories.getById.useQuery(
+    {
+      id: params?.id?.toString() ?? '',
+    },
+    {
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const isReady = !repository.isFetching;
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const updateRepository = useRepositoryUpdate({
-    onError: (error) => {
-      if (error.status === 400) {
-        const { title, errorKey } = error.body;
-
-        toastError({
-          title: t('repositories:update.feedbacks.updateError.title'),
-          description: title,
-        });
-        if (errorKey === 'name_already_used') {
-          form.setErrors({
-            name: t('repositories:data.name.alreadyUsed'),
-          });
-        }
-      }
-    },
-    onSuccess: () => {
+  const updateRepository = trpc.repositories.updateById.useMutation({
+    onSuccess: async () => {
+      await trpcContext.repositories.invalidate();
       toastSuccess({
         title: t('repositories:update.feedbacks.updateSuccess.title'),
       });
       router.back();
     },
+    onError: () => {
+      toastError({
+        title: 'Error', // TODO
+      });
+      // if (error.status === 400) {
+      //   const { title, errorKey } = error.body;
+      //   toastError({
+      //     title: t('repositories:update.feedbacks.updateError.title'),
+      //     description: title,
+      //   });
+      //   if (errorKey === 'name_already_used') {
+      //     form.setErrors({
+      //       name: t('repositories:data.name.alreadyUsed'),
+      //     });
+      //   }
+      // }
+    },
   });
 
   const form = useForm<RepositoryFormFields>({
-    ready: !repository.isLoading,
-    initialValues: repository.data?.body,
+    ready: isReady,
+    initialValues: repository.data,
     onValidSubmit: (values) => {
-      if (!repository.data?.body.id) return null;
+      if (!repository.data?.id) return;
       updateRepository.mutate({
-        body: {
-          ...repository.data.body,
-          ...values,
-        },
+        ...repository.data,
+        ...values,
       });
     },
   });
@@ -83,16 +92,16 @@ export default function PageRepositoryUpdate() {
         {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
           <>
-            <Heading size="md">{repository.data?.body.name}</Heading>
+            <Heading size="md">{repository.data?.name}</Heading>
             <Text fontSize="xs" color="gray.600" _dark={{ color: 'gray.300' }}>
-              {t('repositories:data.id.label')}: {repository.data?.body.id}
+              {t('repositories:data.id.label')}: {repository.data?.id}
             </Text>
           </>
         )}
       </PageTopBar>
-      {repository.isLoading && <Loader />}
-      {repository.isError && <ErrorPage />}
-      {repository.isSuccess && (
+      {!isReady && <Loader />}
+      {isReady && repository.isError && <ErrorPage />}
+      {isReady && repository.isSuccess && (
         <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>
             <PageContent>

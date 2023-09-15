@@ -16,11 +16,10 @@ import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError } from '@/components/Toast';
-import { useRepositoryRemove } from '@/features/repositories/api.client';
-import { Repository } from '@/features/repositories/api.contract';
+import { RouterOutputs, trpc } from '@/lib/trpc/client';
 
 export type RepositoryActionProps = Omit<MenuProps, 'children'> & {
-  repository: Repository;
+  repository: RouterOutputs['repositories']['getAll']['items'][number];
 };
 
 export const RepositoryActions = ({
@@ -28,10 +27,14 @@ export const RepositoryActions = ({
   ...rest
 }: RepositoryActionProps) => {
   const { t } = useTranslation(['common', 'repositories']);
+  const trpcContext = trpc.useContext();
 
   const toastError = useToastError();
 
-  const repositoryRemove = useRepositoryRemove({
+  const repositoryRemove = trpc.repositories.removeById.useMutation({
+    onSuccess: async () => {
+      await trpcContext.repositories.getAll.invalidate();
+    },
     onError: () => {
       toastError({
         title: t('repositories:feedbacks.deleteRepositoryError.title'),
@@ -66,12 +69,7 @@ export const RepositoryActions = ({
             message={t('repositories:deleteModal.message', {
               name: repository.name,
             })}
-            onConfirm={() =>
-              repositoryRemove.mutate({
-                params: { id: repository.id.toString() },
-                body: {},
-              })
-            }
+            onConfirm={() => repositoryRemove.mutate({ id: repository.id })}
             confirmText={t('common:actions.delete')}
             confirmVariant="@danger"
             size="sm"

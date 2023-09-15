@@ -1,25 +1,26 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
+import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useAuthContext } from '@/features/auth/AuthContext';
 import { Loader } from '@/layout/Loader';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const session = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    if (session.status === 'authenticated') {
+      const redirect = searchParams?.get('redirect') ?? '/';
+      router.replace(redirect);
+    }
+  }, [searchParams, router, session.status]);
 
-  if (isAuthenticated) {
-    const redirect = searchParams?.get('redirect') ?? '/';
-    router.replace(redirect);
-    return null;
+  if (session.status !== 'unauthenticated') {
+    return <Loader />;
   }
 
   return <>{children}</>;

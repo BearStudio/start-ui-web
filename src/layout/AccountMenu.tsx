@@ -15,7 +15,6 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
-// import { Link, useNavigate } from 'react-router-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +28,7 @@ import {
 } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
-import { useAccount } from '@/features/account/api.client';
+import { trpc } from '@/lib/trpc/client';
 
 import buildInfo from '../../.build-info.json';
 
@@ -108,19 +107,19 @@ export const AccountMenu = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);
 
   const { colorMode, toggleColorMode } = useColorMode();
-  const account = useAccount();
+  const account = trpc.account.get.useQuery();
   const router = useRouter();
 
   return (
     <Box color="gray.800" _dark={{ color: 'white' }}>
       <Menu placement="bottom-end" {...rest}>
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
-          <Avatar size="sm" icon={<></>} name={account.data?.body.login}>
+          <Avatar size="sm" icon={<></>} name={account.data?.email ?? ''}>
             {account.isLoading && <Spinner size="xs" />}
           </Avatar>
         </MenuButton>
         <MenuList maxW="12rem" overflow="hidden">
-          <MenuGroup title={account.data?.body.email} noOfLines={1}>
+          <MenuGroup title={account.data?.email ?? ''} noOfLines={1}>
             <MenuItem
               as={Link}
               href="/account"

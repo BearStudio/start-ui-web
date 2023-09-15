@@ -13,53 +13,60 @@ import {
 } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
-import { useUserCreate } from '@/features/users/api.client';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
   const router = useRouter();
+  const trpcContext = trpc.useContext();
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
 
-  const createUser = useUserCreate({
-    onError: (error) => {
-      if (error.status === 400) {
-        const { title, errorKey } = error.body;
-        toastError({
-          title: t('users:create.feedbacks.updateError.title'),
-          description: title,
-        });
-        switch (errorKey) {
-          case 'userexists':
-            form.setErrors({
-              login: t('users:data.login.alreadyUsed'),
-            });
-            break;
-          case 'emailexists':
-            form.setErrors({
-              email: t('users:data.email.alreadyUsed'),
-            });
-            break;
-        }
-        return;
-      }
-
-      toastError({
-        title: t('users:create.feedbacks.updateError.title'),
-      });
-    },
-    onSuccess: () => {
+  const createUser = trpc.users.create.useMutation({
+    onSuccess: async () => {
+      await trpcContext.users.getAll.invalidate();
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
       router.back();
     },
+    onError: () => {
+      toastError({
+        title: 'Error', // TODO
+      });
+    },
+    // onError: (error) => {
+    //   if (error.status === 400) {
+    //     const { title, errorKey } = error.body;
+    //     toastError({
+    //       title: t('users:create.feedbacks.updateError.title'),
+    //       description: title,
+    //     });
+    //     switch (errorKey) {
+    //       case 'userexists':
+    //         form.setErrors({
+    //           login: t('users:data.login.alreadyUsed'),
+    //         });
+    //         break;
+    //       case 'emailexists':
+    //         form.setErrors({
+    //           email: t('users:data.email.alreadyUsed'),
+    //         });
+    //         break;
+    //     }
+    //     return;
+    //   }
+
+    //   toastError({
+    //     title: t('users:create.feedbacks.updateError.title'),
+    //   });
+    // },
   });
 
   const form = useForm<UserFormFields>({
     onValidSubmit: (values) => {
-      createUser.mutate({ body: values });
+      createUser.mutate(values);
     },
   });
 

@@ -4,15 +4,12 @@ import {
   Avatar,
   Badge,
   Box,
-  Code,
   HStack,
   Heading,
   LinkBox,
   LinkOverlay,
   Stack,
   Text,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -25,7 +22,6 @@ import {
   DataListEmptyState,
   DataListErrorState,
   DataListFooter,
-  DataListHeader,
   DataListLoadingState,
   DataListRow,
 } from '@/components/DataList';
@@ -42,8 +38,8 @@ import {
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { AdminNav } from '@/features/admin/AdminNav';
 import { UserStatus } from '@/features/users/UserStatus';
-import { useUserList } from '@/features/users/api.client';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
+import { trpc } from '@/lib/trpc/client';
 
 import { UserActions } from './UserActions';
 
@@ -52,10 +48,11 @@ export default function PageUsers() {
   const searchParams = useSearchParams();
   const setSearchParams = useSearchParamsUpdater();
   const page = +(searchParams?.get('page') || 1);
+  const account = trpc.account.get.useQuery();
 
   const pageSize = 20;
-  const users = useUserList({
-    page: page - 1,
+  const users = trpc.users.getAll.useQuery({
+    page,
     size: pageSize,
   });
 
@@ -79,50 +76,6 @@ export default function PageUsers() {
           </HStack>
 
           <DataList>
-            <DataListHeader isVisible={{ base: false, md: true }}>
-              <DataListCell colName="login" colWidth="2">
-                {t('users:data.login.label')} / {t('users:data.email.label')}
-              </DataListCell>
-              <DataListCell
-                colName="id"
-                colWidth="4rem"
-                isVisible={{ base: false, lg: true }}
-              >
-                {t('users:data.id.label')}
-              </DataListCell>
-              <DataListCell
-                colName="authorities"
-                isVisible={{ base: false, lg: true }}
-              >
-                {t('users:data.authorities.label')}
-              </DataListCell>
-              <DataListCell
-                colName="created"
-                isVisible={{ base: false, lg: true }}
-              >
-                {t('users:data.createdBy.label')}
-              </DataListCell>
-              <DataListCell
-                colName="lastModified"
-                isVisible={{ base: false, md: true }}
-              >
-                {t('users:data.modifiedBy.label')}
-              </DataListCell>
-              <DataListCell
-                colName="status"
-                colWidth={{ base: '2rem', md: '0.5' }}
-                align="center"
-              >
-                <Box as="span" display={{ base: 'none', md: 'block' }}>
-                  {t('users:data.status.label')}
-                </Box>
-              </DataListCell>
-              <DataListCell
-                colName="actions"
-                colWidth="4rem"
-                align="flex-end"
-              />
-            </DataListHeader>
             {users.isLoading && <DataListLoadingState />}
             {users.isError && (
               <DataListErrorState
@@ -130,21 +83,23 @@ export default function PageUsers() {
                 retry={() => users.refetch()}
               />
             )}
-            {users.isSuccess && !users.data.body.length && (
+            {users.isSuccess && !users.data.items.length && (
               <DataListEmptyState />
             )}
-            {users.data?.body?.map((user) => (
+            {users.data?.items.map((user) => (
               <DataListRow as={LinkBox} key={user.id}>
-                <DataListCell colName="login">
+                <DataListCell colName="login" colWidth="2">
                   <HStack maxW="100%">
-                    <Avatar size="sm" name={user.login} mx="1" />
+                    <Avatar size="sm" name={user.email ?? ''} mx="1" />
                     <Box minW="0">
                       <Text noOfLines={1} maxW="full" fontWeight="bold">
-                        <LinkOverlay
-                          as={Link}
-                          href={`/admin/users/${user.login}`}
-                        >
-                          {user.login}
+                        {user.id === account.data?.id && (
+                          <Badge size="xs" colorScheme="success" mr="2">
+                            YOU {/* TODO */}
+                          </Badge>
+                        )}
+                        <LinkOverlay as={Link} href={`/admin/users/${user.id}`}>
+                          {user.name ?? user.email}
                         </LinkOverlay>
                       </Text>
                       <Text
@@ -159,69 +114,42 @@ export default function PageUsers() {
                     </Box>
                   </HStack>
                 </DataListCell>
-                <DataListCell colName="id">
-                  <Code maxW="full" fontSize="xs">
-                    {user.id}
-                  </Code>
-                </DataListCell>
-                <DataListCell colName="authorities">
-                  <Wrap>
-                    {user.authorities?.map((authority) => (
-                      <WrapItem key={authority}>
-                        <Badge size="sm">{authority}</Badge>
-                      </WrapItem>
-                    ))}
-                  </Wrap>
+                <DataListCell colName="authorities" colWidth="0.5">
+                  {user.role === 'ADMIN' && (
+                    <Badge size="sm" colorScheme="warning">
+                      {user.role}
+                    </Badge>
+                  )}
                 </DataListCell>
                 <DataListCell
                   colName="created"
                   fontSize="sm"
                   position="relative"
                   pointerEvents="none"
+                  isVisible={{ base: false, lg: true }}
                 >
-                  <Text noOfLines={1} maxW="full">
-                    {user.createdBy}
+                  <Text
+                    noOfLines={2}
+                    maxW="full"
+                    pointerEvents="auto"
+                    color="gray.600"
+                    _dark={{ color: 'gray.300' }}
+                  >
+                    Created <DateAgo date={user.createdAt} />
                   </Text>
-                  {!!user.createdDate && (
-                    <Text
-                      noOfLines={1}
-                      maxW="full"
-                      pointerEvents="auto"
-                      color="gray.600"
-                      _dark={{ color: 'gray.300' }}
-                    >
-                      <DateAgo date={user.createdDate} />
-                    </Text>
-                  )}
                 </DataListCell>
                 <DataListCell
-                  colName="lastModified"
-                  fontSize="sm"
-                  position="relative"
-                  pointerEvents="none"
+                  colName="status"
+                  colWidth={{ base: '2rem', md: '0.5' }}
+                  align="center"
                 >
-                  <Text noOfLines={1} maxW="full">
-                    {user.lastModifiedBy}
-                  </Text>
-                  {!!user.lastModifiedDate && (
-                    <Text
-                      noOfLines={1}
-                      maxW="full"
-                      pointerEvents="auto"
-                      color="gray.600"
-                      _dark={{ color: 'gray.300' }}
-                    >
-                      <DateAgo
-                        position="relative"
-                        date={user.lastModifiedDate}
-                      />
-                    </Text>
-                  )}
-                </DataListCell>
-                <DataListCell colName="status">
                   <UserStatus isActivated={user.activated} />
                 </DataListCell>
-                <DataListCell colName="actions">
+                <DataListCell
+                  colName="actions"
+                  colWidth="4rem"
+                  align="flex-end"
+                >
                   <UserActions user={user} />
                 </DataListCell>
               </DataListRow>
@@ -234,7 +162,7 @@ export default function PageUsers() {
                 }
                 page={page}
                 pageSize={pageSize}
-                totalItems={users.totalItems}
+                totalItems={users.data?.total}
               >
                 <PaginationButtonFirstPage />
                 <PaginationButtonPrevPage />

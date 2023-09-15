@@ -1,0 +1,89 @@
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+
+export const repositoriesRouter = createTRPCRouter({
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(async ({ ctx, input }) => {
+      const repository = await ctx.db.repository.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!repository) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+        });
+      }
+
+      return repository;
+    }),
+
+  getAll: protectedProcedure
+    .input(
+      z.object({
+        page: z.number().int().gte(1).default(1),
+        size: z.number().int().gte(1).default(20),
+        sort: z.array(z.string()).optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const [items, total] = await Promise.all([
+        ctx.db.repository.findMany({
+          skip: (input.page - 1) * input.size,
+          take: input.size,
+          orderBy: {
+            name: 'asc',
+          },
+        }),
+        ctx.db.repository.count(),
+      ]);
+      return {
+        items,
+        total,
+      };
+    }),
+
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        link: z.string(),
+        description: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.repository.create({
+        data: input,
+      });
+    }),
+
+  updateById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        name: z.string(),
+        link: z.string(),
+        description: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.repository.update({
+        where: { id: input.id },
+        data: input,
+      });
+    }),
+
+  removeById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.repository.delete({
+        where: { id: input.id },
+      });
+    }),
+});

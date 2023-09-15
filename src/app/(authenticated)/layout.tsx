@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 
+import { useUpdateAccountLanguage } from '@/features/account/useUpdateAccountLanguage';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 import { Layout } from '@/layout/Layout';
 
@@ -10,6 +11,7 @@ export default function AutenticatedLayout({
 }: {
   children: ReactNode;
 }) {
+  useUpdateAccountLanguage();
   return (
     <GuardAuthenticated>
       <Layout>{children}</Layout>

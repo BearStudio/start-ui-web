@@ -3,54 +3,58 @@ import React from 'react';
 import { Button, Card, CardBody, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import { ClientInferRequest } from '@ts-rest/core';
 import { useTranslation } from 'react-i18next';
 
-import { Contract } from '@/api/contract';
+import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
-import {
-  useAccountFormQuery,
-  useUpdateAccount,
-} from '@/features/account/api.client';
 import { Loader } from '@/layout/Loader';
-import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import {
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE_KEY,
+} from '@/lib/i18n/constants';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
-  const account = useAccountFormQuery();
+  const trpcContext = trpc.useContext();
+  const account = trpc.account.get.useQuery(undefined, {
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const updateAccount = useUpdateAccount({
-    onError: (error) => {
-      toastError({
-        title: t('account:profile.feedbacks.updateError.title'),
-        description: error.status === 400 ? error?.body.title : '',
-      });
-    },
-    onSuccess: () => {
+  const updateAccount = trpc.account.update.useMutation({
+    onSuccess: async () => {
+      await trpcContext.account.invalidate();
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
     },
+    onError: () => {
+      toastError({
+        title: 'Error', // TODO
+      });
+      // toastError({
+      //   title: t('account:profile.feedbacks.updateError.title'),
+      //   description: error.status === 400 ? error?.body.title : '',
+      // });
+    },
   });
 
-  const generalInformationForm = useForm<
-    ClientInferRequest<Contract['account']['update']>['body']
-  >({
-    initialValues: account.data?.body,
+  const generalInformationForm = useForm<{
+    name: string;
+    email: string;
+    language: string;
+  }>({
+    initialValues: account.data as TODO, // TODO
     onValidSubmit: (values) => {
-      updateAccount.mutate({
-        body: {
-          ...(account.data?.body ?? {}),
-          ...values,
-        },
-      });
+      updateAccount.mutate(values);
     },
   });
 
@@ -63,27 +67,18 @@ export default function PageProfile() {
 
         <Card minH="22rem">
           {account.isLoading && <Loader />}
+          {account.isError && <ErrorPage />}
           {account.isSuccess && (
             <CardBody>
               <Stack spacing={4}>
                 <Formiz connect={generalInformationForm}>
                   <form noValidate onSubmit={generalInformationForm.submit}>
                     <Stack spacing="6">
-                      <Stack
-                        direction={{ base: 'column', sm: 'row' }}
-                        spacing="6"
-                      >
-                        <FieldInput
-                          name="firstName"
-                          label={t('account:data.firstname.label')}
-                          required={t('account:data.firstname.required')}
-                        />
-                        <FieldInput
-                          name="lastName"
-                          label={t('account:data.lastname.label')}
-                          required={t('account:data.lastname.required')}
-                        />
-                      </Stack>
+                      <FieldInput
+                        name="name"
+                        label={t('account:data.firstname.label')}
+                        required={t('account:data.firstname.required')}
+                      />
                       <FieldInput
                         name="email"
                         label={t('account:data.email.label')}
@@ -96,12 +91,13 @@ export default function PageProfile() {
                         ]}
                       />
                       <FieldSelect
-                        name="langKey"
+                        name="language"
                         label={t('account:data.language.label')}
                         options={AVAILABLE_LANGUAGES.map(({ key }) => ({
                           label: t(`common:languages.${key}`),
                           value: key,
                         }))}
+                        defaultValue={DEFAULT_LANGUAGE_KEY}
                       />
                       <Flex>
                         <Button

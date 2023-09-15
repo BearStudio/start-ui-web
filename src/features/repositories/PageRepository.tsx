@@ -24,11 +24,8 @@ import { Icon } from '@/components/Icons';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { useToastError } from '@/components/Toast';
-import {
-  useRepository,
-  useRepositoryRemove,
-} from '@/features/repositories/api.client';
 import { Loader } from '@/layout/Loader';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageRepository() {
   const { t } = useTranslation(['common', 'repositories']);
@@ -37,8 +34,10 @@ export default function PageRepository() {
 
   const router = useRouter();
   const params = useParams();
-  const repository = useRepository(Number(params?.id));
-  const repositoryRemove = useRepositoryRemove({
+  const repository = trpc.repositories.getById.useQuery({
+    id: params?.id?.toString() ?? '',
+  });
+  const repositoryRemove = trpc.repositories.removeById.useMutation({
     onSuccess: () => {
       router.push('/repositories');
     },
@@ -63,7 +62,7 @@ export default function PageRepository() {
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
             {repository.isSuccess && (
-              <Heading size="md">{repository.data?.body.name}</Heading>
+              <Heading size="md">{repository.data?.name}</Heading>
             )}
           </Box>
           <ButtonGroup>
@@ -78,13 +77,12 @@ export default function PageRepository() {
             <ConfirmModal
               title={t('repositories:deleteModal.title')}
               message={t('repositories:deleteModal.message', {
-                name: repository.data?.body.name,
+                name: repository.data?.name,
               })}
               onConfirm={() =>
                 repository.data &&
                 repositoryRemove.mutate({
-                  params: { id: repository.data.body.id.toString() },
-                  body: undefined,
+                  id: repository.data.id,
                 })
               }
               confirmText={t('common:actions.delete')}
@@ -112,12 +110,12 @@ export default function PageRepository() {
                   <Text fontSize="sm" fontWeight="bold">
                     {t('repositories:data.name.label')}
                   </Text>
-                  <Text>{repository.data?.body.name}</Text>
+                  <Text>{repository.data?.name}</Text>
                 </Box>
                 <Box
                   role="group"
                   as="a"
-                  href={repository.data?.body.link}
+                  href={repository.data?.link}
                   target="_blank"
                 >
                   <Text fontSize="sm" fontWeight="bold">
@@ -126,7 +124,7 @@ export default function PageRepository() {
                   </Text>
 
                   <Text _groupHover={{ textDecoration: 'underline' }}>
-                    {repository.data?.body.link}
+                    {repository.data?.link}
                   </Text>
                 </Box>
                 <Box>
@@ -134,7 +132,7 @@ export default function PageRepository() {
                     {t('repositories:data.description.label')}
                   </Text>
                   <Text>
-                    {repository.data?.body.description || <small>-</small>}
+                    {repository.data?.description || <small>-</small>}
                   </Text>
                 </Box>
               </Stack>

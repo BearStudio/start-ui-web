@@ -2,18 +2,19 @@
 
 import { ReactNode } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 import { ErrorPage } from '@/components/ErrorPage';
-import { useAccount } from '@/features/account/api.client';
 import { Loader } from '@/layout/Loader';
 
 export const GuardAdmin = ({ children }: { children: ReactNode }) => {
-  const account = useAccount();
+  const session = useSession();
 
-  if (account.isLoading) {
+  if (session.status === 'loading') {
     return <Loader />;
   }
 
-  if (!account.isAdmin) {
+  if (session.data?.user.role !== 'ADMIN') {
     return <ErrorPage errorCode={403} />;
   }
 

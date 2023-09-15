@@ -1,29 +1,30 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
+import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { useAuthContext } from '@/features/auth/AuthContext';
 import { Loader } from '@/layout/Loader';
 
 export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const session = useSession();
   const pathname = usePathname();
   const router = useRouter();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (session.status === 'unauthenticated') {
+      const redirect =
+        !pathname || ['/', '/logout'].includes(pathname)
+          ? '/login'
+          : `/login?redirect=${pathname}`;
+
+      router.replace(redirect);
+    }
+  }, [pathname, router, session.status]);
+
+  if (session.status !== 'authenticated') {
     return <Loader />;
-  }
-
-  if (!isAuthenticated) {
-    const redirect =
-      !pathname || ['/', '/logout'].includes(pathname)
-        ? '/login'
-        : `/login?redirect=${pathname}`;
-
-    router.replace(redirect);
-    return null;
   }
 
   return <>{children}</>;

@@ -4,8 +4,9 @@ import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 
-import { ModalInterceptor } from '@/api/ModalInterceptor';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
 import { EnvDevHint } from '@/layout/EnvDevHint';
@@ -13,7 +14,13 @@ import i18n from '@/lib/i18n/config';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
-export const Document = ({ children }: { children: ReactNode }) => {
+export const Document = ({
+  children,
+  session,
+}: {
+  children: ReactNode;
+  session: Session | null;
+}) => {
   return (
     <html
       lang={i18n.language}
@@ -68,13 +75,13 @@ export const Document = ({ children }: { children: ReactNode }) => {
           initialColorMode={theme.config.initialColorMode}
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
-
-        <Providers>
-          <Viewport>{children}</Viewport>
-          <ModalInterceptor />
-          <EnvDevHint />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Providers>
+        <SessionProvider session={session}>
+          <Providers>
+            <Viewport>{children}</Viewport>
+            <EnvDevHint />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );

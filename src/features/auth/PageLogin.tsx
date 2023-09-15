@@ -34,7 +34,7 @@ export default function PageLogin() {
           </CardBody>
         </Card>
         <Center mt="8">
-          <Button as={Link} href="/account/register" variant="link">
+          <Button as={Link} href="/register" variant="link">
             {t('auth:login.actions.needAccount')}{' '}
             <Box
               as="strong"

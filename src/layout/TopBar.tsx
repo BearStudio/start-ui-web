@@ -5,7 +5,6 @@ import {
   Flex,
   IconButton,
   IconButtonProps,
-  SlideFade,
   useBreakpointValue,
   useTheme,
 } from '@chakra-ui/react';
@@ -44,36 +43,35 @@ export const TopBar = () => {
 
   return (
     <>
-      <SlideFade in offsetY={-40} style={{ zIndex: 2 }}>
-        <Flex
-          position="fixed"
-          top="0"
-          insetStart="0"
-          insetEnd="0"
-          color="gray.50"
-          align="center"
-          pt="safe-top"
-          px="4"
-          h={theme.layout.topBar.height}
-          bg="gray.800"
-          boxShadow="layout"
-          _dark={{
-            bg: 'gray.900',
-            boxShadow: 'xl',
-          }}
+      <Flex
+        zIndex="sticky"
+        position="fixed"
+        top="0"
+        insetStart="0"
+        insetEnd="0"
+        color="gray.50"
+        align="center"
+        pt="safe-top"
+        px="4"
+        h={theme.layout.topBar.height}
+        bg="gray.800"
+        boxShadow="layout"
+        _dark={{
+          bg: 'gray.900',
+          boxShadow: 'xl',
+        }}
+      >
+        <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
+        <Box
+          as={Link}
+          href="/"
+          mx={{ base: 'auto', [theme.layout.breakpoints.desktop]: 0 }}
         >
-          <MenuButton display={{ base: 'flex', md: 'none' }} ms="-0.5rem" />
-          <Box
-            as={Link}
-            href="/"
-            mx={{ base: 'auto', [theme.layout.breakpoints.desktop]: 0 }}
-          >
-            <Logo />
-          </Box>
-          <MainMenu me="auto" ms="4" display={{ base: 'none', md: 'flex' }} />
-          <AccountMenu />
-        </Flex>
-      </SlideFade>
+          <Logo />
+        </Box>
+        <MainMenu me="auto" ms="4" display={{ base: 'none', md: 'flex' }} />
+        <AccountMenu />
+      </Flex>
       <Box h={theme.layout.topBar.height} />
       {showDrawer && <NavDrawer />}
     </>

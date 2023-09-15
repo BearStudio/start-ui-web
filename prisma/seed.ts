@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
 
 // Those are ANSI espace code to reverse and reset terminal print to emphase logins
 // https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -15,64 +14,48 @@ async function createUsers() {
   let createdUsersCounter = 0;
   const existingUsersCount = await prisma.user.count();
 
-  if (!(await prisma.user.findUnique({ where: { login: 'admin' } }))) {
-    const adminPassword = await bcrypt.hash('admin', 12);
-    await prisma.user.create({
-      data: {
-        email: 'admin@admin.com',
-        login: 'admin',
-        password: adminPassword,
-        firstName: 'Admin',
-        lastName: 'Admin',
-        activated: true,
-        langKey: 'en',
-        authorities: 'ROLE_ADMIN',
-      },
-    });
-    createdUsersCounter += 1;
-  }
-
-  if (!(await prisma.user.findUnique({ where: { login: 'user' } }))) {
-    const userPassword = await bcrypt.hash('user', 12);
-    await prisma.user.create({
-      data: {
-        email: 'user@user.com',
-        login: 'user',
-        password: userPassword,
-        firstName: 'User',
-        lastName: 'User',
-        activated: true,
-        langKey: 'en',
-        authorities: 'ROLE_USER',
-      },
-    });
-    createdUsersCounter += 1;
-  }
-
-  const password = await bcrypt.hash('password', 12);
   await Promise.all(
     Array.from({ length: Math.max(0, 26 - existingUsersCount) }, async () => {
       await prisma.user.create({
         data: {
+          name: faker.person.fullName(),
           email: faker.internet.email(),
-          login: faker.internet.userName(),
-          password: password,
-          firstName: faker.person.firstName(),
-          lastName: faker.person.lastName(),
-          activated: true,
-          langKey: 'en',
-          authorities: 'ROLE_USER',
         },
       });
       createdUsersCounter += 1;
     })
   );
 
+  if (
+    !(await prisma.user.findUnique({ where: { email: 'user@start-ui.com' } }))
+  ) {
+    await prisma.user.create({
+      data: {
+        name: 'User',
+        email: 'user@start-ui.com',
+      },
+    });
+    createdUsersCounter += 1;
+  }
+
+  if (
+    !(await prisma.user.findUnique({ where: { email: 'admin@start-ui.com' } }))
+  ) {
+    await prisma.user.create({
+      data: {
+        name: 'Admin',
+        email: 'admin@start-ui.com',
+        role: 'ADMIN',
+      },
+    });
+    createdUsersCounter += 1;
+  }
+
   console.log(
     `✅ ${existingUsersCount} existing user 👉 ${createdUsersCounter} users created`
   );
-  console.log(`👉 Admin connect with: ${REVERSE}admin/admin${RESET}`);
-  console.log(`👉 User connect with: ${REVERSE}user/user${RESET}`);
+  console.log(`👉 Admin connect with: ${REVERSE}admin@start-ui.com${RESET}`);
+  console.log(`👉 User connect with: ${REVERSE}user@start-ui.com${RESET}`);
 }
 
 async function createRepositories() {

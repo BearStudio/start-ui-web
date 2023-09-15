@@ -10,11 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
 
-type LoginFormProps = BoxProps;
+type RegisterFormProps = BoxProps;
 
-export const LoginForm = ({ ...rest }: LoginFormProps) => {
+export const RegisterForm = ({ ...rest }: RegisterFormProps) => {
   const [emailSentTo, setEmailSent] = useState<null | string>(null);
-  const { t } = useTranslation(['auth']);
   const toastError = useToastError();
   const queryCache = useQueryClient();
 
@@ -25,7 +24,7 @@ export const LoginForm = ({ ...rest }: LoginFormProps) => {
         throw new Error(response.error);
       }
       if (!response?.ok) {
-        throw new Error('Login Failed');
+        throw new Error('Register Failed');
       }
       setEmailSent(email);
     },
@@ -45,7 +44,7 @@ export const LoginForm = ({ ...rest }: LoginFormProps) => {
     return (
       <Box {...rest}>
         <Alert status="success">
-          Login email sent to {emailSentTo} {/* TODO */}
+          Register email sent to {emailSentTo} {/* TODO */}
           <br />
           Check your inbox.
         </Alert>
@@ -75,7 +74,7 @@ export const LoginForm = ({ ...rest }: LoginFormProps) => {
             variant="@primary"
             ms="auto"
           >
-            {t('auth:login.actions.login')}
+            Register {/* TODO */}
           </Button>
         </Stack>
       </Formiz>

@@ -24,64 +24,85 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
-import { useUserFormQuery, useUserUpdate } from '@/features/users/api.client';
 import { Loader } from '@/layout/Loader';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
+  const trpcContext = trpc.useContext();
 
   const params = useParams();
   const router = useRouter();
-  const user = useUserFormQuery(params?.login?.toString());
+  const user = trpc.users.getById.useQuery(
+    {
+      id: params?.id?.toString() ?? '',
+    },
+    {
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const userUpdate = useUserUpdate({
-    onError: (error) => {
-      if (error.body) {
-        if (error.status === 400) {
-          const { title, errorKey } = error.body;
-          toastError({
-            title: t('users:update.feedbacks.updateError.title'),
-            description: title,
-          });
-          switch (errorKey) {
-            case 'userexists':
-              form.setErrors({
-                login: t('users:data.login.alreadyUsed'),
-              });
-              break;
-            case 'emailexists':
-              form.setErrors({
-                email: t('users:data.email.alreadyUsed'),
-              });
-              break;
-          }
-          return;
-        }
-        toastError({
-          title: t('users:update.feedbacks.updateError.title'),
-        });
-      }
-    },
-    onSuccess: () => {
+  const userUpdate = trpc.users.updateById.useMutation({
+    onSuccess: async () => {
+      await trpcContext.users.invalidate();
       toastSuccess({
-        title: t('users:update.feedbacks.updateSuccess.title'),
+        title: 'Success', // TODO
       });
-      router.back();
     },
+    onError: () => {
+      toastError({
+        title: 'Error', // TODO
+      });
+    },
+    // onError: (error) => {
+    //   if (error.body) {
+    //     if (error.status === 400) {
+    //       const { title, errorKey } = error.body;
+    //       toastError({
+    //         title: t('users:update.feedbacks.updateError.title'),
+    //         description: title,
+    //       });
+    //       switch (errorKey) {
+    //         case 'userexists':
+    //           form.setErrors({
+    //             login: t('users:data.login.alreadyUsed'),
+    //           });
+    //           break;
+    //         case 'emailexists':
+    //           form.setErrors({
+    //             email: t('users:data.email.alreadyUsed'),
+    //           });
+    //           break;
+    //       }
+    //       return;
+    //     }
+    //     toastError({
+    //       title: t('users:update.feedbacks.updateError.title'),
+    //     });
+    //   }
+    // },
+    // onSuccess: () => {
+    //   toastSuccess({
+    //     title: t('users:update.feedbacks.updateSuccess.title'),
+    //   });
+    //   router.back();
+    // },
   });
 
+  const isReady = !user.isFetching;
+
   const form = useForm<UserFormFields>({
-    ready: !user.isLoading,
-    initialValues: user.data?.body,
+    ready: isReady,
+    initialValues: user.data as TODO, // TODO
     onValidSubmit: (values) => {
+      if (!user.data?.id) return;
       userUpdate.mutate({
-        body: {
-          ...(user.data?.body ?? {}),
-          ...values,
-        },
+        id: user.data.id,
+        ...values,
       });
     },
   });
@@ -95,27 +116,27 @@ export default function PageUserUpdate() {
               <SkeletonText maxW="6rem" noOfLines={2} />
             ) : (
               <Stack spacing="0">
-                <Heading size="sm">{user.data?.body.login}</Heading>
+                <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
                 <Text
                   fontSize="xs"
                   color="gray.600"
                   _dark={{ color: 'gray.300' }}
                 >
-                  {t('users:data.id.label')}: {user.data?.body.id}
+                  {user.data.email}
                 </Text>
               </Stack>
             )}
           </Box>
           {!!user.data && (
             <Box>
-              <UserStatus isActivated={user.data?.body.activated} />
+              <UserStatus isActivated={user.data.activated} />
             </Box>
           )}
         </HStack>
       </PageTopBar>
-      {user.isLoading && <Loader />}
-      {user.isError && <ErrorPage />}
-      {user.isSuccess && (
+      {!isReady && <Loader />}
+      {isReady && user.isError && <ErrorPage />}
+      {isReady && user.isSuccess && (
         <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>
             <PageContent>

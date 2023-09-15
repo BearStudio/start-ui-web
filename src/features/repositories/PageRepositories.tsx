@@ -34,8 +34,8 @@ import {
 } from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { RepositoryActions } from '@/features/repositories/RepositoryActions';
-import { useRepositoryList } from '@/features/repositories/api.client';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageRepositories() {
   const { t } = useTranslation(['repositories']);
@@ -44,8 +44,8 @@ export default function PageRepositories() {
   const page = +(searchParams?.get('page') || 1);
 
   const pageSize = 20;
-  const repositories = useRepositoryList({
-    page: page - 1,
+  const repositories = trpc.repositories.getAll.useQuery({
+    page,
     size: pageSize,
   });
 
@@ -74,10 +74,10 @@ export default function PageRepositories() {
               retry={() => repositories.refetch()}
             />
           )}
-          {repositories.isSuccess && !repositories.data.body.length && (
+          {repositories.isSuccess && !repositories.data.items.length && (
             <DataListEmptyState />
           )}
-          {repositories.data?.body?.map((repository) => (
+          {repositories.data?.items.map((repository) => (
             <DataListRow as={LinkBox} key={repository.id}>
               <DataListCell colWidth={1} colName="name">
                 <HStack maxW="100%">
@@ -134,7 +134,7 @@ export default function PageRepositories() {
               }}
               page={page}
               pageSize={pageSize}
-              totalItems={repositories.totalItems}
+              totalItems={repositories.data?.total}
             >
               <PaginationButtonFirstPage />
               <PaginationButtonPrevPage />
