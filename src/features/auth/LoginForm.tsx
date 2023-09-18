@@ -1,57 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Alert, Box, BoxProps, Button, Stack } from '@chakra-ui/react';
+import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
+import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
+import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
+import { trpc } from '@/lib/trpc/client';
 
-type LoginFormProps = BoxProps;
+type LoginFormProps = BoxProps & {
+  onSuccess?: () => void;
+};
 
-export const LoginForm = ({ ...rest }: LoginFormProps) => {
-  const [emailSentTo, setEmailSent] = useState<null | string>(null);
+export const LoginForm = ({
+  onSuccess = () => undefined,
+  ...rest
+}: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
   const toastError = useToastError();
   const queryCache = useQueryClient();
+  const trpcContext = trpc.useContext();
 
-  const login = useMutation({
-    mutationFn: async (email: string) => {
-      const response = await signIn('email', { email, redirect: false });
-      if (response?.error) {
-        throw new Error(response.error);
-      }
-      if (!response?.ok) {
-        throw new Error('Login Failed');
-      }
-      setEmailSent(email);
-    },
+  const login = trpc.auth.login.useMutation({
     onSuccess: () => {
       queryCache.clear();
+      // Optimistic Update
+      trpcContext.auth.checkAuthenticated.setData(undefined, true);
+      onSuccess();
     },
     onError: () => {
-      // TODO
+      toastError({
+        title: t('auth:login.feedbacks.loginError.title'),
+      });
     },
   });
 
-  const form = useForm<{ email: string }>({
-    onValidSubmit: (values) => login.mutate(values.email),
+  const form = useForm<{ email: string; password: string }>({
+    onValidSubmit: (values) => login.mutate(values),
   });
-
-  if (emailSentTo) {
-    return (
-      <Box {...rest}>
-        <Alert status="success">
-          Login email sent to {emailSentTo} {/* TODO */}
-          <br />
-          Check your inbox.
-        </Alert>
-      </Box>
-    );
-  }
 
   return (
     <Box {...rest}>
@@ -59,24 +49,44 @@ export const LoginForm = ({ ...rest }: LoginFormProps) => {
         <Stack spacing={4}>
           <FieldInput
             name="email"
-            label="Email" //TODO
-            required="Email is required" //TODO
+            label="Email" // TODO translation
+            required="Email is required" // TODO translation
             validations={[
               {
                 handler: isEmail(),
-                message: 'Invalid email', //TODO
+                message: 'Invalid email', // TODO translation
               },
             ]}
+            formatValue={(v) => v?.toLowerCase().trim()}
           />
-          <Button
-            isLoading={login.isLoading}
-            isDisabled={form.isSubmitted && !form.isValid}
-            type="submit"
-            variant="@primary"
-            ms="auto"
-          >
-            {t('auth:login.actions.login')}
-          </Button>
+          <FieldInput
+            name="password"
+            type="password"
+            label={t('auth:data.password.label')}
+            required={t('auth:data.password.required')}
+          />
+          <Flex>
+            <Button
+              as={Link}
+              href="/reset-password/request"
+              size="sm"
+              variant="link"
+              whiteSpace="initial"
+            >
+              {t('auth:login.actions.forgotPassword')}
+            </Button>
+            <Button
+              isLoading={login.isLoading}
+              isDisabled={form.isSubmitted && !form.isValid}
+              type="submit"
+              variant="@primary"
+              ms="auto"
+            >
+              {t('auth:login.actions.login')}
+            </Button>
+          </Flex>
+
+          <DemoLoginHint />
         </Stack>
       </Formiz>
     </Box>

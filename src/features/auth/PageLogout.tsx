@@ -2,21 +2,27 @@ import React, { useEffect } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageLogout() {
   const router = useRouter();
   const queryCache = useQueryClient();
+  const logout = trpc.auth.logout.useMutation();
+  const logoutMutate = logout.mutate;
+  const trpcContext = trpc.useContext();
 
   useEffect(() => {
-    const logout = async () => {
-      await signOut({ redirect: false });
+    const trigger = async () => {
+      await logoutMutate();
       queryCache.clear();
+      // Optimistic Update
+      trpcContext.auth.checkAuthenticated.setData(undefined, false);
       router.replace('/');
     };
-    logout();
-  }, [queryCache, router]);
+    trigger();
+  }, [queryCache, router, logoutMutate, trpcContext.auth.checkAuthenticated]);
 
   return (
     <Center flex="1">

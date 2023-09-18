@@ -4,8 +4,6 @@ import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
@@ -14,13 +12,7 @@ import i18n from '@/lib/i18n/config';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
-export const Document = ({
-  children,
-  session,
-}: {
-  children: ReactNode;
-  session: Session | null;
-}) => {
+export const Document = ({ children }: { children: ReactNode }) => {
   return (
     <html
       lang={i18n.language}
@@ -75,13 +67,12 @@ export const Document = ({
           initialColorMode={theme.config.initialColorMode}
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
-        <SessionProvider session={session}>
-          <Providers>
-            <Viewport>{children}</Viewport>
-            <EnvDevHint />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </Providers>
-        </SessionProvider>
+
+        <Providers>
+          <Viewport>{children}</Viewport>
+          <EnvDevHint />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Providers>
       </body>
     </html>
   );

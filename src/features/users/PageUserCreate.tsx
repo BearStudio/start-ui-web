@@ -31,37 +31,15 @@ export default function PageUserCreate() {
       });
       router.back();
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        form.setErrors({ email: t('users:data.email.alreadyUsed') });
+        return;
+      }
       toastError({
-        title: 'Error', // TODO
+        title: t('users:create.feedbacks.updateError.title'),
       });
     },
-    // onError: (error) => {
-    //   if (error.status === 400) {
-    //     const { title, errorKey } = error.body;
-    //     toastError({
-    //       title: t('users:create.feedbacks.updateError.title'),
-    //       description: title,
-    //     });
-    //     switch (errorKey) {
-    //       case 'userexists':
-    //         form.setErrors({
-    //           login: t('users:data.login.alreadyUsed'),
-    //         });
-    //         break;
-    //       case 'emailexists':
-    //         form.setErrors({
-    //           email: t('users:data.email.alreadyUsed'),
-    //         });
-    //         break;
-    //     }
-    //     return;
-    //   }
-
-    //   toastError({
-    //     title: t('users:create.feedbacks.updateError.title'),
-    //   });
-    // },
   });
 
   const form = useForm<UserFormFields>({

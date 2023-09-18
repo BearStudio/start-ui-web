@@ -9,7 +9,6 @@ import {
   MenuProps,
   Portal,
 } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { LuCheckCircle, LuEdit3, LuTrash2, LuXCircle } from 'react-icons/lu';
@@ -27,74 +26,48 @@ export type UserActionProps = Omit<MenuProps, 'children'> & {
 
 export const UserActions = ({ user, ...rest }: UserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
-  const session = useSession();
+  const account = trpc.account.get.useQuery();
   const trpcContext = trpc.useContext();
-  const isCurrentUser = session.data?.user.id === user.id;
+  const isCurrentUser = account.data?.id === user.id;
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  // const userUpdate = trpc.users.updateById.useMutation({
-  //   // TODO
-  //   // onSuccess: ({  activated, email }) => {
-  //   //   if (activated) {
-  //   //     toastSuccess({
-  //   //       title: t('users:feedbacks.activateUserSuccess.title'),
-  //   //       description: t('users:feedbacks.activateUserSuccess.description', {
-  //   //         login: email, // TODO
-  //   //       }),
-  //   //     });
-  //   //   } else {
-  //   //     toastSuccess({
-  //   //       title: t('users:feedbacks.deactivateUserSuccess.title'),
-  //   //       description: t('users:feedbacks.deactivateUserSuccess.description', {
-  //   //         login,
-  //   //       }),
-  //   //     });
-  //   //   }
-  //   // },
-  //   // onError: (_, { body }) => {
-  //   //   if (body?.activated) {
-  //   //     toastError({
-  //   //       title: t('users:feedbacks.activateUserError.title'),
-  //   //       description: t('users:feedbacks.activateUserError.description', {
-  //   //         login: body?.login ?? '??',
-  //   //       }),
-  //   //     });
-  //   //   } else {
-  //   //     toastError({
-  //   //       title: t('users:feedbacks.deactivateUserError.title'),
-  //   //       description: t('users:feedbacks.deactivateUserError.description', {
-  //   //         login: body?.login ?? '??',
-  //   //       }),
-  //   //     });
-  //   //   }
-  //   // },
-  // });
-
   const activateUser = trpc.users.activate.useMutation({
-    onSuccess: async () => {
+    onSuccess: async ({ email, name }) => {
       await trpcContext.users.invalidate();
       toastSuccess({
-        title: 'Success', // TODO
+        title: t('users:feedbacks.activateUserSuccess.title'),
+        description: t('users:feedbacks.activateUserSuccess.description', {
+          login: name ?? email,
+        }),
       });
     },
     onError: () => {
       toastError({
-        title: 'Error', // TODO
+        title: t('users:feedbacks.activateUserError.title'),
+        description: t('users:feedbacks.activateUserError.description', {
+          login: user.name ?? user.email,
+        }),
       });
     },
   });
   const deactivateUser = trpc.users.deactivate.useMutation({
-    onSuccess: async () => {
+    onSuccess: async ({ email, name }) => {
       await trpcContext.users.invalidate();
       toastSuccess({
-        title: 'Success', // TODO
+        title: t('users:feedbacks.deactivateUserSuccess.title'),
+        description: t('users:feedbacks.deactivateUserSuccess.description', {
+          login: name ?? email,
+        }),
       });
     },
     onError: () => {
       toastError({
-        title: 'Error', // TODO
+        title: t('users:feedbacks.deactivateUserError.title'),
+        description: t('users:feedbacks.deactivateUserError.description', {
+          login: user.name ?? user.email,
+        }),
       });
     },
   });
@@ -105,17 +78,12 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
     },
     onError: () => {
       toastError({
-        title: 'Error', // TODO
+        title: t('users:feedbacks.deleteUserError.title'),
+        description: t('users:feedbacks.deleteUserError.description', {
+          login: user.name ?? user.email,
+        }),
       });
     },
-    // onError: (_, { params: { login } }) => {
-    //   toastError({
-    //     title: t('users:feedbacks.deleteUserError.title'),
-    //     description: t('users:feedbacks.deleteUserError.description', {
-    //       login,
-    //     }),
-    //   });
-    // },
   });
 
   const isLoading =

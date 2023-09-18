@@ -50,54 +50,31 @@ export default function PageUserUpdate() {
     onSuccess: async () => {
       await trpcContext.users.invalidate();
       toastSuccess({
-        title: 'Success', // TODO
+        title: t('users:update.feedbacks.updateSuccess.title'),
       });
+      router.back();
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        form.setErrors({ email: t('users:data.email.alreadyUsed') });
+        return;
+      }
       toastError({
-        title: 'Error', // TODO
+        title: t('users:update.feedbacks.updateError.title'),
       });
     },
-    // onError: (error) => {
-    //   if (error.body) {
-    //     if (error.status === 400) {
-    //       const { title, errorKey } = error.body;
-    //       toastError({
-    //         title: t('users:update.feedbacks.updateError.title'),
-    //         description: title,
-    //       });
-    //       switch (errorKey) {
-    //         case 'userexists':
-    //           form.setErrors({
-    //             login: t('users:data.login.alreadyUsed'),
-    //           });
-    //           break;
-    //         case 'emailexists':
-    //           form.setErrors({
-    //             email: t('users:data.email.alreadyUsed'),
-    //           });
-    //           break;
-    //       }
-    //       return;
-    //     }
-    //     toastError({
-    //       title: t('users:update.feedbacks.updateError.title'),
-    //     });
-    //   }
-    // },
-    // onSuccess: () => {
-    //   toastSuccess({
-    //     title: t('users:update.feedbacks.updateSuccess.title'),
-    //   });
-    //   router.back();
-    // },
   });
 
   const isReady = !user.isFetching;
 
   const form = useForm<UserFormFields>({
     ready: isReady,
-    initialValues: user.data as TODO, // TODO
+    initialValues: {
+      email: user.data?.email,
+      name: user.data?.name ?? undefined,
+      language: user.data?.language,
+      role: user.data?.role,
+    },
     onValidSubmit: (values) => {
       if (!user.data?.id) return;
       userUpdate.mutate({

@@ -34,22 +34,14 @@ export default function PageRepositoryCreate() {
       });
       router.back();
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        form.setErrors({ email: t('repositories:data.name.alreadyUsed') });
+        return;
+      }
       toastError({
-        title: 'Error', // TODO
+        title: t('repositories:create.feedbacks.updateError.title'),
       });
-      // if (error instanceof TRPCError && error.code === 'BAD_REQUEST') {
-      //   const { title, errorKey } = error.body;
-      //   toastError({
-      //     title: t('repositories:create.feedbacks.updateError.title'),
-      //     description: title,
-      //   });
-      //   if (errorKey === 'name_already_used') {
-      //     form.setErrors({
-      //       name: t('repositories:data.name.alreadyUsed'),
-      //     });
-      //   }
-      // }
     },
   });
 

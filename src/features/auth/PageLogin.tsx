@@ -10,6 +10,7 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
@@ -18,6 +19,7 @@ import { LoginForm } from '@/features/auth/LoginForm';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth']);
+  const router = useRouter();
 
   return (
     <SlideIn>
@@ -30,7 +32,7 @@ export default function PageLogin() {
             </Heading>
           </CardHeader>
           <CardBody>
-            <LoginForm />
+            <LoginForm onSuccess={() => router.replace('/')} />
           </CardBody>
         </Card>
         <Center mt="8">

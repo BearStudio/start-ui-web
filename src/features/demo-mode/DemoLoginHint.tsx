@@ -9,7 +9,7 @@ import { useFormContext } from '@formiz/core';
 
 export const DemoLoginHint = () => {
   const form = useFormContext();
-  const mockedUsername = 'admin';
+  const mockedEmail = 'admin@admin.com';
   const mockedPassword = 'admin';
 
   if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
@@ -26,12 +26,12 @@ export const DemoLoginHint = () => {
           fontWeight="bold"
           onClick={() =>
             form.setValues({
-              username: mockedUsername,
+              email: mockedEmail,
               password: mockedPassword,
             })
           }
         >
-          {mockedUsername}/{mockedPassword}
+          {mockedEmail}/{mockedPassword}
         </ChakraLink>{' '}
         account. Just remember, no changes can be made. Enjoy the features!
       </AlertDescription>

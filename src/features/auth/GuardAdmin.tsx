@@ -2,19 +2,18 @@
 
 import { ReactNode } from 'react';
 
-import { useSession } from 'next-auth/react';
-
 import { ErrorPage } from '@/components/ErrorPage';
 import { Loader } from '@/layout/Loader';
+import { trpc } from '@/lib/trpc/client';
 
 export const GuardAdmin = ({ children }: { children: ReactNode }) => {
-  const session = useSession();
+  const account = trpc.account.get.useQuery();
 
-  if (session.status === 'loading') {
+  if (account.isLoading) {
     return <Loader />;
   }
 
-  if (session.data?.user.role !== 'ADMIN') {
+  if (account.data?.role !== 'ADMIN') {
     return <ErrorPage errorCode={403} />;
   }
 

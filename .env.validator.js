@@ -14,8 +14,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_DEV_ENV_NAME: z.string().optional(),
   NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME: z.string().optional(),
 
-  NEXTAUTH_URL: z.string().url(),
-  NEXTAUTH_SECRET: z.string(),
+  AUTH_SECRET: z.string(),
 
   EMAIL_SERVER: z.string().url(),
   EMAIL_FROM: z.string(),

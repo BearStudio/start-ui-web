@@ -1,17 +1,17 @@
 import React from 'react';
 
 import { Box, BoxProps, Stack } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { useRtl } from '@/hooks/useRtl';
 import { useLayoutContext } from '@/layout/LayoutContext';
+import { trpc } from '@/lib/trpc/client';
 
 export const MainMenu = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);
-  const session = useSession();
+  const account = trpc.account.get.useQuery();
   return (
     <Stack direction="row" spacing="1" {...rest}>
       <MainMenuItem to="/dashboard">
@@ -20,7 +20,7 @@ export const MainMenu = ({ ...rest }) => {
       <MainMenuItem to="/repositories">
         {t('layout:mainMenu.repositories')}
       </MainMenuItem>
-      {session.data?.user.role === 'ADMIN' && (
+      {account.data?.role === 'ADMIN' && (
         <MainMenuItem to="/admin">{t('layout:mainMenu.admin')}</MainMenuItem>
       )}
     </Stack>

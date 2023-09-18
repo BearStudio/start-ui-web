@@ -2,18 +2,21 @@
 
 import { ReactNode, useEffect } from 'react';
 
-import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { Loader } from '@/layout/Loader';
+import { trpc } from '@/lib/trpc/client';
 
 export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
-  const session = useSession();
+  const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery(undefined, {
+    staleTime: 30000,
+    cacheTime: Infinity,
+  });
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    if (session.status === 'unauthenticated') {
+    if (!checkAuthenticated.data) {
       const redirect =
         !pathname || ['/', '/logout'].includes(pathname)
           ? '/login'
@@ -21,9 +24,9 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
 
       router.replace(redirect);
     }
-  }, [pathname, router, session.status]);
+  }, [pathname, router, checkAuthenticated.data]);
 
-  if (session.status !== 'authenticated') {
+  if (checkAuthenticated.isLoading || !checkAuthenticated.data) {
     return <Loader />;
   }
 

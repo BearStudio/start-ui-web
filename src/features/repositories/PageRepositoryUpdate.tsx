@@ -55,22 +55,14 @@ export default function PageRepositoryUpdate() {
       });
       router.back();
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        form.setErrors({ email: t('repositories:data.name.alreadyUsed') });
+        return;
+      }
       toastError({
-        title: 'Error', // TODO
+        title: t('repositories:update.feedbacks.updateError.title'),
       });
-      // if (error.status === 400) {
-      //   const { title, errorKey } = error.body;
-      //   toastError({
-      //     title: t('repositories:update.feedbacks.updateError.title'),
-      //     description: title,
-      //   });
-      //   if (errorKey === 'name_already_used') {
-      //     form.setErrors({
-      //       name: t('repositories:data.name.alreadyUsed'),
-      //     });
-      //   }
-      // }
     },
   });
 

@@ -1,22 +1,117 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Center,
+  Flex,
   Heading,
+  ScaleFade,
+  Stack,
 } from '@chakra-ui/react';
+import { Formiz, useForm, useFormFields } from '@formiz/core';
+import { isEmail, isMaxLength, isMinLength } from '@formiz/validations';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
+import { FieldInput } from '@/components/FieldInput';
+import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
-import { RegisterForm } from '@/features/auth/RegisterForm';
+import { useToastError } from '@/components/Toast';
+import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { Language } from '@/lib/i18n/constants';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageRegister() {
-  const { t } = useTranslation(['common', 'account']);
+  const { t, i18n } = useTranslation(['common', 'account']);
+
+  const toastError = useToastError();
+  const [accountEmail, setAccountEmail] = useState('');
+
+  const register = trpc.auth.register.useMutation({
+    onMutate: ({ email }) => {
+      setAccountEmail(email);
+    },
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        form.setErrors({ email: t('account:data.email.alreadyUsed') });
+        return;
+      }
+      toastError({
+        title: t('account:register.feedbacks.registrationError.title'),
+      });
+    },
+  });
+
+  const form = useForm<{
+    language: string;
+    name: string;
+    email: string;
+    password: string;
+  }>({
+    onValidSubmit: (values) => register.mutate(values),
+  });
+
+  const values = useFormFields({
+    connect: form,
+    fields: ['language'] as const,
+    selector: (field) => field.value,
+  });
+
+  // Change language based on form
+  useEffect(() => {
+    i18n.changeLanguage(values?.language);
+  }, [i18n, values?.language]);
+
+  if (register.isSuccess) {
+    return (
+      <Center p="4" m="auto">
+        <ScaleFade initialScale={0.9} in>
+          <Alert
+            status="success"
+            variant="solid"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            borderRadius="lg"
+            px="8"
+            py="4"
+          >
+            <Box fontSize="3rem">🎉</Box>
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              {t('account:register.feedbacks.registrationSuccess.title')}
+            </AlertTitle>
+            <AlertDescription>
+              <Trans
+                t={t}
+                i18nKey="account:register.feedbacks.registrationSuccess.description"
+                values={{ email: accountEmail }}
+              />
+            </AlertDescription>
+          </Alert>
+          <Center mt="8">
+            <Button
+              as={Link}
+              href="/login"
+              variant="link"
+              color="brand.500"
+              _dark={{ color: 'brand.300' }}
+            >
+              {t('account:register.actions.goToLogin')}
+            </Button>
+          </Center>
+        </ScaleFade>
+      </Center>
+    );
+  }
 
   return (
     <SlideIn>
@@ -26,7 +121,71 @@ export default function PageRegister() {
             <Heading size="md">{t('account:register.title')}</Heading>
           </CardHeader>
           <CardBody>
-            <RegisterForm />
+            <Formiz connect={form} autoForm>
+              <Stack spacing="4">
+                <FieldSelect
+                  name="language"
+                  label={t('account:data.language.label')}
+                  options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                    label: t(`common:languages.${key}`),
+                    value: key,
+                  }))}
+                  defaultValue={i18n.language as Language['key']}
+                />
+                <FieldInput
+                  name="name"
+                  label="Name" // TODO translation
+                  required="Name is required" // TODO translation
+                />
+                <FieldInput
+                  name="email"
+                  label={t('account:data.email.label')}
+                  required={t('account:data.email.required')}
+                  validations={[
+                    {
+                      handler: isMinLength(5),
+                      message: t('account:data.email.tooShort', { min: 5 }),
+                    },
+                    {
+                      handler: isMaxLength(254),
+                      message: t('account:data.email.tooLong', { min: 254 }),
+                    },
+                    {
+                      handler: isEmail(),
+                      message: t('account:data.email.invalid'),
+                    },
+                  ]}
+                />
+                <FieldInput
+                  name="password"
+                  type="password"
+                  label={t('account:data.password.label')}
+                  required={t('account:data.password.required')}
+                  validations={[
+                    {
+                      handler: isMinLength(4),
+                      message: t('account:data.password.tooShort', { min: 4 }),
+                    },
+                    {
+                      handler: isMaxLength(50),
+                      message: t('account:data.password.tooLong', { min: 50 }),
+                    },
+                  ]}
+                />
+                <Flex>
+                  <Button
+                    isLoading={register.isLoading}
+                    isDisabled={form.isSubmitted && !form.isValid}
+                    type="submit"
+                    variant="@primary"
+                    ms="auto"
+                  >
+                    {t('account:register.actions.create')}
+                  </Button>
+                </Flex>
+                <DemoRegisterHint />
+              </Stack>
+            </Formiz>
           </CardBody>
         </Card>
         <Center mt="8">

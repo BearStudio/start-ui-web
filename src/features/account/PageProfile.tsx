@@ -36,23 +36,29 @@ export default function PageProfile() {
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.data?.code === 'CONFLICT') {
+        profileForm.setErrors({
+          email: t('account:data.email.alreadyUsed'),
+        });
+        return;
+      }
       toastError({
-        title: 'Error', // TODO
+        title: t('account:profile.feedbacks.updateError.title'),
       });
-      // toastError({
-      //   title: t('account:profile.feedbacks.updateError.title'),
-      //   description: error.status === 400 ? error?.body.title : '',
-      // });
     },
   });
 
-  const generalInformationForm = useForm<{
+  const profileForm = useForm<{
     name: string;
     email: string;
     language: string;
   }>({
-    initialValues: account.data as TODO, // TODO
+    initialValues: {
+      name: account.data?.name ?? undefined,
+      email: account.data?.email ?? undefined,
+      language: account.data?.language ?? undefined,
+    },
     onValidSubmit: (values) => {
       updateAccount.mutate(values);
     },
@@ -71,8 +77,8 @@ export default function PageProfile() {
           {account.isSuccess && (
             <CardBody>
               <Stack spacing={4}>
-                <Formiz connect={generalInformationForm}>
-                  <form noValidate onSubmit={generalInformationForm.submit}>
+                <Formiz connect={profileForm}>
+                  <form noValidate onSubmit={profileForm.submit}>
                     <Stack spacing="6">
                       <FieldInput
                         name="name"

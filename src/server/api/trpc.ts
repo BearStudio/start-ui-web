@@ -6,8 +6,8 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
+import { User } from '@prisma/client';
 import { TRPCError, initTRPC } from '@trpc/server';
-import { type Session } from 'next-auth';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
@@ -23,7 +23,10 @@ import { db } from '@/server/db';
  */
 
 interface CreateContextOptions {
-  session: Session | null;
+  user: Pick<
+    User,
+    'id' | 'email' | 'role' | 'activated' | 'emailVerified'
+  > | null;
 }
 
 /**
@@ -38,7 +41,7 @@ interface CreateContextOptions {
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    session: opts.session,
+    user: opts.user,
     db,
   };
 };
@@ -51,10 +54,10 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  */
 export const createTRPCContext = async () => {
   // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession();
+  const user = await getServerAuthSession();
 
   return createInnerTRPCContext({
-    session,
+    user,
   });
 };
 
@@ -94,6 +97,52 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  */
 export const createTRPCRouter = t.router;
 
+/** Reusable middleware that enforces users are logged in before running the procedure. */
+const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+  if (!ctx.user || !ctx.user.activated || !ctx.user.emailVerified) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
+  return next({
+    ctx: {
+      // infers the `user` as non-nullable
+      user: ctx.user,
+    },
+  });
+});
+
+/** Reusable middleware that enforces users are admin before running the procedure. */
+const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
+  if (ctx.user?.role !== 'ADMIN') {
+    throw new TRPCError({ code: 'FORBIDDEN' });
+  }
+  return next({
+    ctx: {
+      // infers the `user` as non-nullable
+      user: ctx.user,
+    },
+  });
+});
+
+/** Demo Middleware */
+const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
+  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') {
+    return next({
+      ctx,
+    });
+  }
+
+  if (type !== 'mutation' || path === 'auth.login' || path === 'auth.logout') {
+    return next({
+      ctx,
+    });
+  }
+
+  throw new TRPCError({
+    code: 'FORBIDDEN',
+    message: '[DEMO] You cannot run mutation in Demo mode',
+  });
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -101,51 +150,7 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
-
-/** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user || !ctx.session.user.activated) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
-  }
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  });
-});
-
-/** Reusable middleware that enforces users are admin before running the procedure. */
-const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-  if (
-    !ctx.session?.user ||
-    !ctx.session.user.activated ||
-    ctx.session.user.role !== 'ADMIN'
-  ) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
-  }
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  });
-});
-
-/** Demo Middleware */
-const enforceDemo = t.middleware(({ ctx, next, type }) => {
-  if (type === 'mutation' && process.env.NEXT_PUBLIC_IS_DEMO === 'true') {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: '[DEMO] You cannot run mutation in Demo mode',
-    });
-  }
-
-  return next({
-    ctx,
-  });
-});
+export const publicProcedure = t.procedure.use(enforceDemo);
 
 /**
  * Protected (authenticated) procedure
@@ -169,4 +174,5 @@ export const protectedProcedure = t.procedure
  */
 export const adminProcedure = t.procedure
   .use(enforceDemo)
+  .use(enforceUserIsAuthed)
   .use(enforceUserIsAdmin);

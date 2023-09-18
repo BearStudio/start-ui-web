@@ -1,9 +1,24 @@
+import { User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { adminProcedure, createTRPCRouter } from '@/server/api/trpc';
+import { prismaThrowFormatedTRPCError } from '@/server/db';
 
 const zRole = () => z.enum(['USER', 'ADMIN']);
+
+export const formatUser = <U extends User>(user: U) => {
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    password, // Drop password
+    role,
+    ...partialUser
+  } = user;
+  return {
+    ...partialUser,
+    role: zRole().catch('USER').parse(role),
+  };
+};
 
 export const usersRouter = createTRPCRouter({
   getById: adminProcedure
@@ -19,7 +34,7 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      return user;
+      return formatUser(user);
     }),
 
   getAll: adminProcedure
@@ -42,7 +57,7 @@ export const usersRouter = createTRPCRouter({
         ctx.db.user.count(),
       ]);
       return {
-        items,
+        items: items.map(formatUser),
         total,
       };
     }),
@@ -55,44 +70,55 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.create({
-        data: input,
-      });
+      try {
+        const user = await ctx.db.user.create({
+          data: input,
+        });
+        return formatUser(user);
+      } catch (e) {
+        prismaThrowFormatedTRPCError(e);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
     }),
 
   deactivate: adminProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(async ({ ctx, input }) => {
-      if (ctx.session.user.id === input.id) {
+      if (ctx.user.id === input.id) {
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot deactivate yourself',
         });
       }
 
-      await ctx.db.user.update({
+      const user = await ctx.db.user.update({
         where: { id: input.id },
         data: {
           activated: false,
         },
       });
+
+      return formatUser(user);
     }),
 
   activate: adminProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(async ({ ctx, input }) => {
-      if (ctx.session.user.id === input.id) {
+      if (ctx.user.id === input.id) {
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot activate yourself',
         });
       }
-      await ctx.db.user.update({
+      const user = await ctx.db.user.update({
         where: { id: input.id },
         data: {
           activated: true,
         },
       });
+      return formatUser(user);
     }),
 
   updateById: adminProcedure
@@ -106,10 +132,18 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.update({
-        where: { id: input.id },
-        data: input,
-      });
+      try {
+        const user = await ctx.db.user.update({
+          where: { id: input.id },
+          data: input,
+        });
+        return formatUser(user);
+      } catch (e) {
+        prismaThrowFormatedTRPCError(e);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
     }),
 
   removeById: adminProcedure
@@ -119,14 +153,15 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (ctx.session.user.id === input.id) {
+      if (ctx.user.id === input.id) {
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot remove yourself',
         });
       }
-      return ctx.db.user.delete({
+      const user = await ctx.db.user.delete({
         where: { id: input.id },
       });
+      return formatUser(user);
     }),
 });

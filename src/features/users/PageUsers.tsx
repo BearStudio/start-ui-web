@@ -95,7 +95,7 @@ export default function PageUsers() {
                       <Text noOfLines={1} maxW="full" fontWeight="bold">
                         {user.id === account.data?.id && (
                           <Badge size="xs" colorScheme="success" mr="2">
-                            YOU {/* TODO */}
+                            YOU {/* TODO translation */}
                           </Badge>
                         )}
                         <LinkOverlay as={Link} href={`/admin/users/${user.id}`}>

@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import { prismaThrowFormatedTRPCError } from '@/server/db';
 
 export const repositoriesRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -54,9 +55,16 @@ export const repositoriesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.repository.create({
-        data: input,
-      });
+      try {
+        return await ctx.db.repository.create({
+          data: input,
+        });
+      } catch (e) {
+        prismaThrowFormatedTRPCError(e);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
     }),
 
   updateById: protectedProcedure
@@ -69,10 +77,17 @@ export const repositoriesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.repository.update({
-        where: { id: input.id },
-        data: input,
-      });
+      try {
+        return await ctx.db.repository.update({
+          where: { id: input.id },
+          data: input,
+        });
+      } catch (e) {
+        prismaThrowFormatedTRPCError(e);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
     }),
 
   removeById: protectedProcedure
