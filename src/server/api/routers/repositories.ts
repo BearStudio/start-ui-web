@@ -4,9 +4,25 @@ import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
 
+const zRepository = () =>
+  z.object({
+    id: z.string(), // @id @default(cuid())
+    name: z.string(), // @unique
+    link: z.string(),
+    description: z.string().nullish(),
+  });
+
 export const repositoriesRouter = createTRPCRouter({
   getById: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/repositories/{id}',
+        protect: true,
+      },
+    })
     .input(z.object({ id: z.string().cuid() }))
+    .output(zRepository())
     .query(async ({ ctx, input }) => {
       const repository = await ctx.db.repository.findUnique({
         where: { id: input.id },

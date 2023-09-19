@@ -15,7 +15,15 @@ export const authRouter = createTRPCRouter({
   }),
 
   login: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/login',
+        tags: ['accounts'],
+      },
+    })
     .input(z.object({ email: z.string().email(), password: z.string() }))
+    .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         where: { email: input.email },

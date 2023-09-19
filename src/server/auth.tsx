@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import { db } from '@/server/db';
 
@@ -7,7 +7,9 @@ import { db } from '@/server/db';
  * getServerAuthSession
  */
 export const getServerAuthSession = async () => {
-  const token = cookies().get('auth')?.value;
+  const token =
+    headers().get('Authorization')?.split('Bearer ')[1] ??
+    cookies().get('auth')?.value;
 
   if (!token) {
     return null;

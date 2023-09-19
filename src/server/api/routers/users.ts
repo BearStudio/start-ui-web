@@ -7,6 +7,18 @@ import { prismaThrowFormatedTRPCError } from '@/server/db';
 
 const zRole = () => z.enum(['USER', 'ADMIN']);
 
+const zUser = () =>
+  z.object({
+    id: z.string(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    name: z.string().nullish(),
+    email: z.string(),
+    activated: z.boolean(),
+    role: zRole(),
+    language: z.string(),
+  });
+
 export const formatUser = <U extends User>(user: U) => {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,7 +34,16 @@ export const formatUser = <U extends User>(user: U) => {
 
 export const usersRouter = createTRPCRouter({
   getById: adminProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/users/{id}',
+        tags: ['users'],
+        protect: true,
+      },
+    })
     .input(z.object({ id: z.string().cuid() }))
+    .output(zUser())
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         where: { id: input.id },

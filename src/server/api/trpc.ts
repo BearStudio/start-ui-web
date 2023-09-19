@@ -9,6 +9,7 @@
 import { User } from '@prisma/client';
 import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
+import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
 
 import { getServerAuthSession } from '@/server/auth';
@@ -69,19 +70,22 @@ export const createTRPCContext = async () => {
  * errors on the backend.
  */
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+const t = initTRPC
+  .meta<OpenApiMeta>()
+  .context<typeof createTRPCContext>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError:
+            error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
+      };
+    },
+  });
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -100,7 +104,10 @@ export const createTRPCRouter = t.router;
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.user || !ctx.user.activated || !ctx.user.emailVerified) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'coucou' + ctx.user?.email,
+    });
   }
   return next({
     ctx: {
