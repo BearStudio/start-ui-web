@@ -10,19 +10,19 @@ export default function PageLogout() {
   const router = useRouter();
   const queryCache = useQueryClient();
   const logout = trpc.auth.logout.useMutation();
-  const logoutMutate = logout.mutate;
   const trpcContext = trpc.useContext();
 
   useEffect(() => {
     const trigger = async () => {
-      await logoutMutate();
+      if (!logout.isIdle) return;
+      await logout.mutate();
       queryCache.clear();
       // Optimistic Update
       trpcContext.auth.checkAuthenticated.setData(undefined, false);
       router.replace('/');
     };
     trigger();
-  }, [queryCache, router, logoutMutate, trpcContext.auth.checkAuthenticated]);
+  }, [queryCache, router, logout, trpcContext.auth.checkAuthenticated]);
 
   return (
     <Center flex="1">
