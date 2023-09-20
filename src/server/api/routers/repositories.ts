@@ -19,6 +19,7 @@ export const repositoriesRouter = createTRPCRouter({
         method: 'GET',
         path: '/repositories/{id}',
         protect: true,
+        tags: ['repositories'],
       },
     })
     .input(z.object({ id: z.string().cuid() }))

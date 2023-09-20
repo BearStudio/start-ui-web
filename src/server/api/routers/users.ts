@@ -38,8 +38,8 @@ export const usersRouter = createTRPCRouter({
       openapi: {
         method: 'GET',
         path: '/users/{id}',
-        tags: ['users'],
         protect: true,
+        tags: ['users'],
       },
     })
     .input(z.object({ id: z.string().cuid() }))

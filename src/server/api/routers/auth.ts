@@ -20,7 +20,7 @@ export const authRouter = createTRPCRouter({
       openapi: {
         method: 'POST',
         path: '/login',
-        tags: ['accounts'],
+        tags: ['auth'],
       },
     })
     .input(z.object({ email: z.string().email(), password: z.string() }))
