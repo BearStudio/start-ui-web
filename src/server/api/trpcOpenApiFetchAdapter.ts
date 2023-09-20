@@ -144,7 +144,7 @@ export function createOpenApiFetchHandler<TRouter extends OpenApiRouter>(
       const openApiHttpHandler = createOpenApiNodeHttpHandler({
         ...opts,
         createContext,
-      } as any);
+      } as TODO);
 
       const res = createResponse({ eventEmitter: EventEmitter });
 
@@ -181,7 +181,7 @@ export function createOpenApiFetchHandler<TRouter extends OpenApiRouter>(
         type: 'unknown',
         paths: [url.pathname],
         ctx: undefined,
-        data: [undefined as unknown as any],
+        data: [undefined as TODO],
         errors: [error],
       });
 

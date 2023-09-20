@@ -5,7 +5,7 @@ import { createTRPCContext } from '@/server/api/trpc';
 import { createOpenApiFetchHandler } from '@/server/api/trpcOpenApiFetchAdapter';
 
 const handler = createOpenApiFetchHandler({
-  router: appRouter as any,
+  router: appRouter as TODO,
   createContext: createTRPCContext,
   endpoint: '/api/rest',
 });

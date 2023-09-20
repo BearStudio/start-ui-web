@@ -1,11 +1,10 @@
-import { User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { adminProcedure, createTRPCRouter } from '@/server/api/trpc';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
 
-const zRole = () => z.enum(['USER', 'ADMIN']);
+const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
 
 const zUser = () =>
   z.object({
@@ -15,7 +14,7 @@ const zUser = () =>
     name: z.string().nullish(),
     email: z.string(),
     activated: z.boolean(),
-    role: zRole().catch('USER'),
+    role: zUserRole(),
     language: z.string(),
   });
 
@@ -180,7 +179,7 @@ export const usersRouter = createTRPCRouter({
         name: z.string(),
         email: z.string().email(),
         language: z.string(),
-        role: zRole(),
+        role: zUserRole(),
       })
     )
     .output(zUser())
