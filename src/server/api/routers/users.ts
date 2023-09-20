@@ -15,22 +15,9 @@ const zUser = () =>
     name: z.string().nullish(),
     email: z.string(),
     activated: z.boolean(),
-    role: zRole(),
+    role: zRole().catch('USER'),
     language: z.string(),
   });
-
-export const formatUser = <U extends User>(user: U) => {
-  const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    password, // Drop password
-    role,
-    ...partialUser
-  } = user;
-  return {
-    ...partialUser,
-    role: zRole().catch('USER').parse(role),
-  };
-};
 
 export const usersRouter = createTRPCRouter({
   getById: adminProcedure
@@ -55,15 +42,28 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      return formatUser(user);
+      return user;
     }),
 
   getAll: adminProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/users',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(
       z.object({
         page: z.number().int().gte(1).default(1),
         size: z.number().int().gte(1).default(20),
-        sort: z.array(z.string()).optional(),
+      })
+    )
+    .output(
+      z.object({
+        items: z.array(zUser()),
+        total: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -78,24 +78,32 @@ export const usersRouter = createTRPCRouter({
         ctx.db.user.count(),
       ]);
       return {
-        items: items.map(formatUser),
+        items,
         total,
       };
     }),
 
   create: adminProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/users',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(
       z.object({
         name: z.string(),
         email: z.string().email(),
       })
     )
+    .output(zUser())
     .mutation(async ({ ctx, input }) => {
       try {
-        const user = await ctx.db.user.create({
+        return await ctx.db.user.create({
           data: input,
         });
-        return formatUser(user);
       } catch (e) {
         prismaThrowFormatedTRPCError(e);
         throw new TRPCError({
@@ -105,7 +113,16 @@ export const usersRouter = createTRPCRouter({
     }),
 
   deactivate: adminProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/users/{id}/deactivate',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(z.object({ id: z.string().cuid() }))
+    .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
         throw new TRPCError({
@@ -114,18 +131,25 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      const user = await ctx.db.user.update({
+      return await ctx.db.user.update({
         where: { id: input.id },
         data: {
           activated: false,
         },
       });
-
-      return formatUser(user);
     }),
 
   activate: adminProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/users/{id}/activate',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(z.object({ id: z.string().cuid() }))
+    .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
         throw new TRPCError({
@@ -133,16 +157,23 @@ export const usersRouter = createTRPCRouter({
           message: 'You cannot activate yourself',
         });
       }
-      const user = await ctx.db.user.update({
+      return await ctx.db.user.update({
         where: { id: input.id },
         data: {
           activated: true,
         },
       });
-      return formatUser(user);
     }),
 
   updateById: adminProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/users/{id}',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(
       z.object({
         id: z.string(),
@@ -152,13 +183,13 @@ export const usersRouter = createTRPCRouter({
         role: zRole(),
       })
     )
+    .output(zUser())
     .mutation(async ({ ctx, input }) => {
       try {
-        const user = await ctx.db.user.update({
+        return await ctx.db.user.update({
           where: { id: input.id },
           data: input,
         });
-        return formatUser(user);
       } catch (e) {
         prismaThrowFormatedTRPCError(e);
         throw new TRPCError({
@@ -168,11 +199,20 @@ export const usersRouter = createTRPCRouter({
     }),
 
   removeById: adminProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/users/{id}',
+        protect: true,
+        tags: ['users'],
+      },
+    })
     .input(
       z.object({
         id: z.string().cuid(),
       })
     )
+    .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
         throw new TRPCError({
@@ -180,9 +220,8 @@ export const usersRouter = createTRPCRouter({
           message: 'You cannot remove yourself',
         });
       }
-      const user = await ctx.db.user.delete({
+      return await ctx.db.user.delete({
         where: { id: input.id },
       });
-      return formatUser(user);
     }),
 });

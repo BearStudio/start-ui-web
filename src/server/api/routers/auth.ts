@@ -19,7 +19,7 @@ export const authRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/login',
+        path: '/auth/login',
         tags: ['auth'],
       },
     })
@@ -67,11 +67,28 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  logout: publicProcedure.mutation(async () => {
-    cookies().delete('auth');
-  }),
+  logout: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/logout',
+        tags: ['auth'],
+      },
+    })
+    .input(z.void())
+    .output(z.void())
+    .mutation(async () => {
+      cookies().delete('auth');
+    }),
 
   register: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/register',
+        tags: ['auth'],
+      },
+    })
     .input(
       z.object({
         email: z.string().email(),
@@ -80,6 +97,7 @@ export const authRouter = createTRPCRouter({
         language: z.string(),
       })
     )
+    .output(z.void())
     .mutation(async ({ ctx, input }) => {
       const passwordHash = await bcrypt.hash(input.password, 12);
 
@@ -118,12 +136,24 @@ export const authRouter = createTRPCRouter({
     }),
 
   activate: publicProcedure
-    .input(z.object({ token: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/register/activate',
+        tags: ['auth'],
+      },
+    })
+    .input(z.object({ token: z.string().optional() }))
+    .output(z.void())
+    .mutation(async ({ ctx, input }) => {
       // Clear all expired tokens
       await ctx.db.verificationToken.deleteMany({
         where: { expires: { lt: new Date() } },
       });
+
+      if (!input.token) {
+        throw new TRPCError({ code: 'BAD_REQUEST' });
+      }
 
       const verificationToken = await ctx.db.verificationToken.findUnique({
         where: { token: input.token },
@@ -151,7 +181,15 @@ export const authRouter = createTRPCRouter({
     }),
 
   resetPasswordRequest: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/reset-password/request',
+        tags: ['auth'],
+      },
+    })
     .input(z.object({ email: z.string().email() }))
+    .output(z.void())
     .mutation(async ({ ctx, input }) => {
       const token = randomUUID();
 
@@ -181,7 +219,15 @@ export const authRouter = createTRPCRouter({
     }),
 
   resetPasswordConfirm: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/reset-password/confirm',
+        tags: ['auth'],
+      },
+    })
     .input(z.object({ token: z.string(), newPassword: z.string() }))
+    .output(z.void())
     .mutation(async ({ ctx, input }) => {
       await ctx.db.verificationToken.deleteMany({
         where: { expires: { lt: new Date() } },

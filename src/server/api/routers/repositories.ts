@@ -39,11 +39,24 @@ export const repositoriesRouter = createTRPCRouter({
     }),
 
   getAll: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/repositories',
+        protect: true,
+        tags: ['repositories'],
+      },
+    })
     .input(
       z.object({
         page: z.number().int().gte(1).default(1),
         size: z.number().int().gte(1).default(20),
-        sort: z.array(z.string()).optional(),
+      })
+    )
+    .output(
+      z.object({
+        items: z.array(zRepository()),
+        total: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -64,6 +77,14 @@ export const repositoriesRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/repositories',
+        protect: true,
+        tags: ['repositories'],
+      },
+    })
     .input(
       z.object({
         name: z.string(),
@@ -71,6 +92,7 @@ export const repositoriesRouter = createTRPCRouter({
         description: z.string().nullish(),
       })
     )
+    .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
         return await ctx.db.repository.create({
@@ -85,6 +107,14 @@ export const repositoriesRouter = createTRPCRouter({
     }),
 
   updateById: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/repositories/{id}',
+        protect: true,
+        tags: ['repositories'],
+      },
+    })
     .input(
       z.object({
         id: z.string().cuid(),
@@ -93,6 +123,7 @@ export const repositoriesRouter = createTRPCRouter({
         description: z.string().nullish(),
       })
     )
+    .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
         return await ctx.db.repository.update({
@@ -108,13 +139,22 @@ export const repositoriesRouter = createTRPCRouter({
     }),
 
   removeById: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/repositories/{id}',
+        protect: true,
+        tags: ['repositories'],
+      },
+    })
     .input(
       z.object({
         id: z.string().cuid(),
       })
     )
+    .output(zRepository())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.repository.delete({
+      return await ctx.db.repository.delete({
         where: { id: input.id },
       });
     }),
