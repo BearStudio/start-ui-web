@@ -7,6 +7,7 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { AUTH_COOKIE_NAME } from '@/server/auth';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
 
 export const authRouter = createTRPCRouter({
@@ -55,9 +56,10 @@ export const authRouter = createTRPCRouter({
       }
 
       cookies().set({
-        name: 'auth',
+        name: AUTH_COOKIE_NAME,
         value: token,
         httpOnly: true,
+        secure: true,
       });
 
       return {

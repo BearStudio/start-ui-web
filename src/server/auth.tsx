@@ -3,13 +3,17 @@ import { cookies, headers } from 'next/headers';
 
 import { db } from '@/server/db';
 
+export const AUTH_COOKIE_NAME = 'auth';
+
 /**
  * getServerAuthSession
  */
 export const getServerAuthSession = async () => {
   const token =
+    // Get from Headers
     headers().get('Authorization')?.split('Bearer ')[1] ??
-    cookies().get('auth')?.value;
+    // Get from Cookies
+    cookies().get(AUTH_COOKIE_NAME)?.value;
 
   if (!token) {
     return null;
