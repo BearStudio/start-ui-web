@@ -15,7 +15,7 @@ import {
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuEdit3, LuExternalLink, LuTrash2 } from 'react-icons/lu';
+import { LuPenLine, LuExternalLink, LuTrash2 } from 'react-icons/lu';
 
 // import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ConfirmModal } from '@/components/ConfirmModal';
@@ -69,7 +69,7 @@ export default function PageRepository() {
             <ResponsiveIconButton
               as={Link}
               href={`/repositories/${params?.id}/update`}
-              icon={<LuEdit3 />}
+              icon={<LuPenLine />}
             >
               {t('common:actions.edit')}
             </ResponsiveIconButton>

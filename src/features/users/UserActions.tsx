@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { LuCheckCircle, LuEdit3, LuTrash2, LuXCircle } from 'react-icons/lu';
+import { LuCheckCircle, LuPenLine, LuTrash2, LuXCircle } from 'react-icons/lu';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
@@ -97,7 +97,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
           <MenuItem
             as={Link}
             href={`/admin/users/${user.id}`}
-            icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>

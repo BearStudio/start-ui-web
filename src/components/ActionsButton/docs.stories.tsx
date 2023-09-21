@@ -10,7 +10,7 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { StoryFn } from '@storybook/react';
-import { LuCopy, LuEdit3, LuTrash2, LuUserPlus } from 'react-icons/lu';
+import { LuCopy, LuPenLine, LuTrash2, LuUserPlus } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
@@ -32,7 +32,7 @@ export const UsageWithMenu = () => (
   <Menu isLazy placement="left-start">
     <MenuButton as={ActionsButton} />
     <MenuList>
-      <MenuItem icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}>
+      <MenuItem icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}>
         Edit
       </MenuItem>
       <MenuItem icon={<Icon icon={LuCopy} fontSize="lg" color="gray.400" />}>

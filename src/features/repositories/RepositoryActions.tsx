@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { LuEdit3, LuEye, LuTrash2 } from 'react-icons/lu';
+import { LuEye, LuPenLine, LuTrash2 } from 'react-icons/lu';
 
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
@@ -60,7 +60,7 @@ export const RepositoryActions = ({
           <MenuItem
             as={Link}
             href={`/repositories/${repository.id}/update`}
-            icon={<Icon icon={LuEdit3} fontSize="lg" color="gray.400" />}
+            icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
           </MenuItem>

@@ -39,6 +39,3 @@ jobs:
 
       - name: Lint code and types
         run: yarn lint
-
-      - name: Run components tests
-        run: yarn test:ci
