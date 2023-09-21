@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@chakra-ui/next-js": "2.1.5",
-    "@chakra-ui/react": "2.8.1",
-    "@chakra-ui/theme-tools": "2.1.1",
+    "@chakra-ui/react": "2.7.0",
+    "@chakra-ui/theme-tools": "2.0.18",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@faker-js/faker": "8.1.0",
