@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/app/Providers';
-import i18nGlobal from '../src/lib/i18n/config';
+import i18nGlobal from '../src/lib/i18n/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,

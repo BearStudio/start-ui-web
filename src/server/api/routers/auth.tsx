@@ -1,3 +1,4 @@
+import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
@@ -6,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
+import EmailResetPassword from '@/emails/reset-password';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { AUTH_COOKIE_NAME } from '@/server/auth';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
@@ -129,8 +131,9 @@ export const authRouter = createTRPCRouter({
       });
 
       await sendEmail({
-        to: 'ivan@bearstudio.fr',
+        to: input.email,
         text: `✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`,
+        html: render(<EmailResetPassword language={user.language} />), // TODO
       });
 
       return undefined;
@@ -212,8 +215,9 @@ export const authRouter = createTRPCRouter({
       });
 
       await sendEmail({
-        to: 'ivan@bearstudio.fr',
+        to: user.email,
         text: `✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`,
+        html: render(<EmailResetPassword language={user.language} />), // TODO
       });
 
       return undefined;

@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
 import { EnvDevHint } from '@/layout/EnvDevHint';
-import i18n from '@/lib/i18n/config';
+import i18n from '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 

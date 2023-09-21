@@ -5,7 +5,7 @@ import { ChakraProvider, createLocalStorageManager } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import '@/lib/dayjs/config';
-import '@/lib/i18n/config';
+import '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';

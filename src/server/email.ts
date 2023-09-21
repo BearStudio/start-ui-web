@@ -3,8 +3,9 @@ import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 
 const transport = nodemailer.createTransport(process.env.EMAIL_SERVER);
 
-export const sendEmail = (options: MailOptions) =>
-  transport.sendMail({
+export const sendEmail = (options: MailOptions) => {
+  return transport.sendMail({
     from: process.env.EMAIL_FROM,
     ...options,
   });
+};
