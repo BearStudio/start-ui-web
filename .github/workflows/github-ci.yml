@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --foreground-scripts
 
       - name: Lint code and types
         run: yarn lint
