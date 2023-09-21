@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { AUTH_COOKIE_NAME } from '@/server/auth';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
+import { sendEmail } from '@/server/email';
 
 export const authRouter = createTRPCRouter({
   checkAuthenticated: publicProcedure.query(async ({ ctx }) => {
@@ -127,10 +128,10 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      // REPLACE ME WITH EMAIL SERVICE
-      console.log(`👇👇👇👇👇👇👇👇👇👇
-✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}
-👆👆👆👆👆👆👆👆👆👆`);
+      await sendEmail({
+        to: 'ivan@bearstudio.fr',
+        text: `✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`,
+      });
 
       return undefined;
     }),
@@ -210,10 +211,10 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      // REPLACE ME WITH EMAIL SERVICE
-      console.log(`👇👇👇👇👇👇👇👇👇👇
-  ✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}
-  👆👆👆👆👆👆👆👆👆👆`);
+      await sendEmail({
+        to: 'ivan@bearstudio.fr',
+        text: `✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`,
+      });
 
       return undefined;
     }),
