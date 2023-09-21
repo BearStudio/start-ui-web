@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button, Card, CardBody, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
-import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -21,7 +20,7 @@ export default function PagePassword() {
     onError: (error) => {
       if (error.data?.code === 'UNAUTHORIZED') {
         changePasswordForm.setErrors({
-          currentPassword: t('account:data.currentPassword.incorrect'),
+          currentPassword: t('account:data.currentPassword.invalid'),
         });
       }
       toastError({
@@ -50,17 +49,6 @@ export default function PagePassword() {
     selector: (field) => field.value,
   });
 
-  const passwordValidations = [
-    {
-      handler: isMinLength(4),
-      message: t('account:data.password.tooShort', { min: 4 }),
-    },
-    {
-      handler: isMaxLength(50),
-      message: t('account:data.password.tooLong', { max: 50 }),
-    },
-  ];
-
   return (
     <Page nav={<AccountNav />}>
       <PageContent>
@@ -77,14 +65,12 @@ export default function PagePassword() {
                     type="password"
                     label={t('account:data.currentPassword.label')}
                     required={t('account:data.currentPassword.required')}
-                    validations={passwordValidations}
                   />
                   <FieldInput
                     name="newPassword"
                     type="password"
                     label={t('account:data.newPassword.label')}
                     required={t('account:data.newPassword.required')}
-                    validations={passwordValidations}
                   />
                   <FieldInput
                     name="confirmNewPassword"
@@ -92,7 +78,6 @@ export default function PagePassword() {
                     label={t('account:data.confirmNewPassword.label')}
                     required={t('account:data.confirmNewPassword.required')}
                     validations={[
-                      ...passwordValidations,
                       {
                         handler: (value) => value === values?.newPassword,
                         message: t('account:data.confirmNewPassword.notEqual'),

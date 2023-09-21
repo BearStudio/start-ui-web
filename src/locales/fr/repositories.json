@@ -3,15 +3,10 @@
     "title": "Gestion des dépôts",
     "actions": {
       "createRepository": "Créer un dépôt",
-      "updateRepository": "Mettre à jour le dépôt",
       "view": "Voir"
     }
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Dépôt supprimé",
-      "description": "Dépôt \"{{name}}\" supprimé avec succès"
-    },
     "deleteRepositoryError": {
       "title": "Échec de la suppression",
       "description": "Échec de la suppression du dépôt"

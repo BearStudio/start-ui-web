@@ -49,12 +49,12 @@ export const LoginForm = ({
         <Stack spacing={4}>
           <FieldInput
             name="email"
-            label="Email" // TODO translation
-            required="Email is required" // TODO translation
+            label={t('auth:data.email.label')}
+            required={t('auth:data.email.required')}
             validations={[
               {
                 handler: isEmail(),
-                message: 'Invalid email', // TODO translation
+                message: t('auth:data.email.invalid'),
               },
             ]}
             formatValue={(v) => v?.toLowerCase().trim()}

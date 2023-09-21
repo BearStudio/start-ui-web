@@ -3,7 +3,6 @@
     "title": "Repositories' Management",
     "actions": {
       "createRepository": "Create Repository",
-      "updateRepository": "Update Repository",
       "view": "View"
     }
   },
@@ -12,10 +11,6 @@
     "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Repository deleted",
-      "description": "Repository \"{{name}}\" deleted with success"
-    },
     "deleteRepositoryError": {
       "title": "Deletion Failed",
       "description": "Fail to remove repository"

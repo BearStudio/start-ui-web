@@ -29,7 +29,7 @@ import { trpc } from '@/lib/trpc/client';
 
 export default function PageResetPasswordRequest() {
   const { rtlValue } = useRtl();
-  const { t } = useTranslation(['account']);
+  const { t } = useTranslation(['auth']);
 
   const toastError = useToastError();
 
@@ -41,7 +41,7 @@ export default function PageResetPasswordRequest() {
     },
     onError: () => {
       toastError({
-        title: t('account:resetPassword.feedbacks.initError.title'),
+        title: t('auth:resetPassword.feedbacks.initError.title'),
       });
     },
   });
@@ -70,12 +70,12 @@ export default function PageResetPasswordRequest() {
           >
             <Box fontSize="3rem">✉️</Box>
             <AlertTitle mt={4} mb={1} fontSize="lg">
-              {t('account:resetPassword.feedbacks.initSuccess.title')}
+              {t('auth:resetPassword.feedbacks.initSuccess.title')}
             </AlertTitle>
             <AlertDescription>
               <Trans
                 t={t}
-                i18nKey="account:resetPassword.feedbacks.initSuccess.description"
+                i18nKey="auth:resetPassword.feedbacks.initSuccess.description"
                 values={{ email: accountEmail }}
               />
             </AlertDescription>
@@ -88,7 +88,7 @@ export default function PageResetPasswordRequest() {
               color="brand.500"
               _dark={{ color: 'brand.300' }}
             >
-              {t('account:resetPassword.actions.goToLogin')}
+              {t('auth:resetPassword.actions.goToLogin')}
             </Button>
           </Center>
         </ScaleFade>
@@ -101,7 +101,7 @@ export default function PageResetPasswordRequest() {
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
         <Card>
           <CardHeader pb={0}>
-            <Heading size="md">{t('account:resetPassword.title')}</Heading>
+            <Heading size="md">{t('auth:resetPassword.title')}</Heading>
           </CardHeader>
           <CardBody>
             <Formiz connect={resetPasswordRequestForm}>
@@ -109,13 +109,13 @@ export default function PageResetPasswordRequest() {
                 <Stack spacing={4}>
                   <FieldInput
                     name="email"
-                    label={t('account:data.email.label')}
-                    helper={t('account:data.email.resetHelper')}
-                    required={t('account:data.email.required')}
+                    label={t('auth:data.email.label')}
+                    helper={t('auth:data.email.resetHelper')}
+                    required={t('auth:data.email.required')}
                     validations={[
                       {
                         handler: isEmail(),
-                        message: t('account:data.email.invalid'),
+                        message: t('auth:data.email.invalid'),
                       },
                     ]}
                   />
@@ -126,7 +126,7 @@ export default function PageResetPasswordRequest() {
                       href="/login"
                       variant="link"
                     >
-                      {t('account:resetPassword.actions.cancel')}
+                      {t('auth:resetPassword.actions.cancel')}
                     </Button>
                     <Button
                       type="submit"
@@ -134,7 +134,7 @@ export default function PageResetPasswordRequest() {
                       ms="auto"
                       isLoading={resetPasswordRequest.isLoading}
                     >
-                      {t('account:resetPassword.actions.send')}
+                      {t('auth:resetPassword.actions.send')}
                     </Button>
                   </Flex>
                 </Stack>

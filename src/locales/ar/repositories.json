@@ -3,15 +3,10 @@
     "title": "إدارة المستودعات",
     "actions": {
       "createRepository": "إنشاء مستودع",
-      "updateRepository": "مستودع التحديث",
       "view": "منظر"
     }
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "تم حذف المستودع",
-      "description": "تم حذف المستودع \"{{name}}\" بنجاح"
-    },
     "deleteRepositoryError": {
       "title": "فشل الحذف",
       "description": "فشل إزالة مستودع"

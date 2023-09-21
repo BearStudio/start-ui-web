@@ -36,9 +36,6 @@
   "fieldDayPicker": {
     "invalidMessage": "تاريخ غير صالح"
   },
-  "fieldRepeater": {
-    "invalidMessage": "عنصر واحد على الأقل غير صالح"
-  },
   "fieldMultiSelect": {
     "noOption": "لا يوجد خيار"
   },

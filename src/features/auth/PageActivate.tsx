@@ -8,18 +8,18 @@ import { useToastError, useToastSuccess } from '@/components/Toast';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageActivate() {
-  const { t } = useTranslation(['account']);
+  const { t } = useTranslation(['auth']);
   const router = useRouter();
   const activateAccountMutation = trpc.auth.activate.useMutation({
     onSuccess: () => {
       toastSuccess({
-        title: t('account:activate.feedbacks.activationSuccess.title'),
+        title: t('auth:activate.feedbacks.activationSuccess.title'),
       });
       router.replace('/');
     },
     onError: () => {
       toastError({
-        title: t('account:activate.feedbacks.activationError.title'),
+        title: t('auth:activate.feedbacks.activationError.title'),
       });
       router.replace('/');
     },
@@ -40,7 +40,7 @@ export default function PageActivate() {
       {activateAccountMutation.isLoading && (
         <HStack>
           <Spinner size="sm" me="2" />
-          <Text>{t('account:activate.feedbacks.activationLoading.title')}</Text>
+          <Text>{t('auth:activate.feedbacks.activationLoading.title')}</Text>
         </HStack>
       )}
     </Box>

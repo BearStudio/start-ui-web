@@ -27,8 +27,8 @@ export const UserForm = () => {
         <Stack spacing={4}>
           <FieldInput
             name="name"
-            required="Name is required" // TODO translation
-            label="Name" // TODO translation
+            required={t('users:data.name.required')}
+            label={t('users:data.name.label')}
           />
           <FieldInput
             name="email"
@@ -52,7 +52,7 @@ export const UserForm = () => {
           />
           <FieldSelect
             name="role"
-            label="Role" // TODO translation
+            label={t('users:data.role.label')}
             options={[
               { value: 'USER', label: 'User' }, // TODO translation
               { value: 'ADMIN', label: 'Admin' }, // TODO translation

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
-import { isMaxLength, isMinLength } from '@formiz/validations';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +11,7 @@ import { useToastError, useToastSuccess } from '@/components/Toast';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageResetPasswordConfirm() {
-  const { t } = useTranslation(['account']);
+  const { t } = useTranslation(['auth']);
 
   const searchParams = useSearchParams();
 
@@ -24,16 +23,14 @@ export default function PageResetPasswordConfirm() {
   const resetPasswordFinish = trpc.auth.resetPasswordConfirm.useMutation({
     onSuccess: () => {
       toastSuccess({
-        title: t('account:resetPassword.feedbacks.resetSuccess.title'),
-        description: t(
-          'account:resetPassword.feedbacks.resetSuccess.description'
-        ),
+        title: t('auth:resetPassword.feedbacks.resetSuccess.title'),
+        description: t('auth:resetPassword.feedbacks.resetSuccess.description'),
       });
       router.replace('/login');
     },
     onError: () => {
       toastError({
-        title: t('account:resetPassword.feedbacks.resetError.title'),
+        title: t('auth:resetPassword.feedbacks.resetError.title'),
       });
     },
   });
@@ -51,17 +48,6 @@ export default function PageResetPasswordConfirm() {
     selector: (field) => field.value,
   });
 
-  const passwordValidations = [
-    {
-      handler: isMinLength(4),
-      message: t('account:data.password.tooShort', { min: 4 }),
-    },
-    {
-      handler: isMaxLength(50),
-      message: t('account:data.password.tooLong', { max: 50 }),
-    },
-  ];
-
   return (
     <SlideIn>
       <Box p="2" pb="4rem" w="22rem" maxW="full" m="auto">
@@ -73,7 +59,7 @@ export default function PageResetPasswordConfirm() {
           _dark={{ bg: 'blackAlpha.400' }}
         >
           <Heading size="lg" mb="4">
-            {t('account:resetPassword.title')}
+            {t('auth:resetPassword.title')}
           </Heading>
           <Formiz connect={resetPasswordFinishForm}>
             <form noValidate onSubmit={resetPasswordFinishForm.submit}>
@@ -81,20 +67,18 @@ export default function PageResetPasswordConfirm() {
                 <FieldInput
                   name="password"
                   type="password"
-                  label={t('account:data.newPassword.label')}
-                  required={t('account:data.newPassword.required')}
-                  validations={passwordValidations}
+                  label={t('auth:data.newPassword.label')}
+                  required={t('auth:data.newPassword.required')}
                 />
                 <FieldInput
                   name="confirmPassword"
                   type="password"
-                  label={t('account:data.confirmNewPassword.label')}
-                  required={t('account:data.confirmNewPassword.required')}
+                  label={t('auth:data.confirmNewPassword.label')}
+                  required={t('auth:data.confirmNewPassword.required')}
                   validations={[
-                    ...passwordValidations,
                     {
                       handler: (value) => value === values?.password,
-                      message: t('account:data.confirmNewPassword.notEqual'),
+                      message: t('auth:data.confirmNewPassword.notEqual'),
                       deps: [values?.password],
                     },
                   ]}
@@ -106,7 +90,7 @@ export default function PageResetPasswordConfirm() {
                     ms="auto"
                     isLoading={resetPasswordFinish.isLoading}
                   >
-                    {t('account:resetPassword.actions.reset')}
+                    {t('auth:resetPassword.actions.reset')}
                   </Button>
                 </Flex>
               </Stack>

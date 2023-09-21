@@ -82,8 +82,8 @@ export default function PageProfile() {
                     <Stack spacing="6">
                       <FieldInput
                         name="name"
-                        label={t('account:data.firstname.label')}
-                        required={t('account:data.firstname.required')}
+                        label={t('account:data.name.label')}
+                        required={t('account:data.name.required')}
                       />
                       <FieldInput
                         name="email"

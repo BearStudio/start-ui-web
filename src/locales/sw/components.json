@@ -36,9 +36,6 @@
   "fieldDayPicker": {
     "invalidMessage": "Tarehe batili"
   },
-  "fieldRepeater": {
-    "invalidMessage": "Angalau kipengele kimoja ni batili"
-  },
   "fieldMultiSelect": {
     "noOption": "Hakuna chaguo"
   },

@@ -3,15 +3,10 @@
     "title": "Usimamizi wa hazina",
     "actions": {
       "createRepository": "Unda Hifadhi",
-      "updateRepository": "Sasisha Hifadhi",
       "view": "Tazama"
     }
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Hifadhi imefutwa",
-      "description": "Hazina \"{{jina}}\" imefutwa kwa mafanikio"
-    },
     "deleteRepositoryError": {
       "title": "Imeshindwa Kufuta",
       "description": "Imeshindwa kuondoa hazina ya."
