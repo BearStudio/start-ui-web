@@ -103,6 +103,31 @@ yarn db:push && yarn db:seed
 yarn dev
 ```
 
+### Emails in development
+
+#### Maildev to catch emails
+
+In development, the emails will not be sent and will be catched by [maildev](https://github.com/maildev/maildev).
+
+The maildev UI is available at [0.0.0.0:1080](http://0.0.0.0:1080).
+
+#### Preview emails
+
+Emails templates are built with `react-email` components in the `src/emails` folder.
+
+You can preview an email template at `http://localhost:3000/devtools/email/templates/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
+
+Example: [Reset Password](http://localhost:3000/devtools/email/reset-password)
+
+##### Email translation preview
+
+Add the language in the preview url like `http://localhost:3000/devtools/email/{template}/{language}` where `{language}` is the language key (`en`, `fr`, ...)
+
+#### Email props preview
+
+You can add search params to the preview url to pass as props to the template.
+`http://localhost:3000/devtools/email/{template}/?{propsName}={propsValue}`
+
 ### Storybook
 
 ```bash

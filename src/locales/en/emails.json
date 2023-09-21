@@ -1,0 +1,7 @@
+{
+  "resetPassword": {
+    "subject": "Reset your password",
+    "preview": "Link to update your password",
+    "title": "Reset password"
+  }
+}

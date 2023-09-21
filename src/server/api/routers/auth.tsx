@@ -1,4 +1,3 @@
-import { render } from '@react-email/render';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
@@ -7,7 +6,8 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
-import EmailResetPassword from '@/emails/reset-password';
+import EmailResetPassword from '@/emails/templates/reset-password';
+import i18n from '@/lib/i18n/server';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { AUTH_COOKIE_NAME } from '@/server/auth';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
@@ -132,8 +132,9 @@ export const authRouter = createTRPCRouter({
 
       await sendEmail({
         to: input.email,
+        subject: '',
         text: `✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`,
-        html: render(<EmailResetPassword language={user.language} />), // TODO
+        template: <EmailResetPassword language={user.language} />, // TODO
       });
 
       return undefined;
@@ -216,8 +217,9 @@ export const authRouter = createTRPCRouter({
 
       await sendEmail({
         to: user.email,
+        subject: i18n.t('emails:resetPassword.subject', { lng: user.language }),
         text: `✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`,
-        html: render(<EmailResetPassword language={user.language} />), // TODO
+        template: <EmailResetPassword language={user.language} />, // TODO
       });
 
       return undefined;
