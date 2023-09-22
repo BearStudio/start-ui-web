@@ -15,7 +15,7 @@
     "dev:next": "next dev",
     "dev:email": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
     "build": "yarn build:info && next build",
-    "build:info": "node .build-info.generate.js",
+    "build:info": "tsx scripts/build-info.ts && tsx scripts/openapi.ts",
     "start": "next start",
     "pretty": "prettier -w .",
     "lint": "SKIP_ENV_VALIDATIONS=true next lint && tsc --noEmit",
