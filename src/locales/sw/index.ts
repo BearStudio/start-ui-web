@@ -4,6 +4,7 @@ import auth from './auth.json';
 import common from './common.json';
 import components from './components.json';
 import dashboard from './dashboard.json';
+import emails from './emails.json';
 import layout from './layout.json';
 import repositories from './repositories.json';
 import users from './users.json';
@@ -15,6 +16,7 @@ export default {
   common,
   components,
   dashboard,
+  emails,
   layout,
   repositories,
   users,

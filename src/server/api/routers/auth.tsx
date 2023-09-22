@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
+import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailResetPassword from '@/emails/templates/reset-password';
 import i18n from '@/lib/i18n/server';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
@@ -130,11 +131,20 @@ export const authRouter = createTRPCRouter({
         },
       });
 
+      const link = `${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`;
+
       await sendEmail({
         to: input.email,
-        subject: '',
-        text: `✉️ Activation link: ${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`,
-        template: <EmailResetPassword language={user.language} />, // TODO
+        subject: i18n.t('emails:activateAccount.subject', {
+          lng: user.language,
+        }),
+        template: (
+          <EmailActivateAccount
+            language={user.language}
+            name={user.name ?? ''}
+            link={link}
+          />
+        ),
       });
 
       return undefined;
@@ -215,11 +225,18 @@ export const authRouter = createTRPCRouter({
         },
       });
 
+      const link = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`;
+
       await sendEmail({
-        to: user.email,
+        to: input.email,
         subject: i18n.t('emails:resetPassword.subject', { lng: user.language }),
-        text: `✉️ Reset password link: ${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`,
-        template: <EmailResetPassword language={user.language} />, // TODO
+        template: (
+          <EmailResetPassword
+            language={user.language}
+            name={user.name ?? ''}
+            link={link}
+          />
+        ),
       });
 
       return undefined;

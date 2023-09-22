@@ -2,6 +2,21 @@
   "resetPassword": {
     "subject": "Reset your password",
     "preview": "Link to update your password",
-    "title": "Reset password"
+    "hello": "Hi {{name}},",
+    "intro": "Someone recently requested a password change for you account. If this was you, you can set a new password here:",
+    "title": "Reset password",
+    "link": "Reset password",
+    "copyPastHelper": "Or, copy and paste this link to your browser:",
+    "ignoreHelper": "If you didn't try to reset your password, you can safely ignore this email."
+  },
+  "activateAccount": {
+    "subject": "Activate your account",
+    "preview": "Link to activate your account",
+    "title": "Activate account",
+    "hello": "Hi {{name}},",
+    "intro": "Welcome, you account is almost ready, activate it to start:",
+    "link": "Activate account",
+    "copyPastHelper": "Or, copy and paste this link to your browser:",
+    "ignoreHelper": "If you didn't try to register, you can safely ignore this email."
   }
 }

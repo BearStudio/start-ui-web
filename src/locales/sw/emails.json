@@ -1,0 +1,22 @@
+{
+  "resetPassword": {
+    "copyPastHelper": "Au, nakili na ubandike kiungo hiki kwenye kivinjari chako:",
+    "ignoreHelper": "Ikiwa hukujaribu kuweka upya nenosiri lako, unaweza kupuuza barua pepe hii kwa usalama.",
+    "link": "Weka upya nenosiri",
+    "preview": "Kiungo cha kusasisha nenosiri lako",
+    "subject": "Weka upya nenosiri lako",
+    "title": "Weka upya nenosiri",
+    "hello": "Hujambo {{jina}},",
+    "intro": "Hivi majuzi, mtu aliomba kubadilisha nenosiri la akaunti yako. \nIkiwa huyu alikuwa wewe, unaweza kuweka nenosiri jipya hapa:"
+  },
+  "activateAccount": {
+    "copyPastHelper": "Au, nakili na ubandike kiungo hiki kwenye kivinjari chako:",
+    "ignoreHelper": "Ikiwa hukujaribu kujiandikisha, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Karibu, akaunti yako inakaribia kuwa tayari, iwashe ili kuanza:",
+    "link": "Anzisha akaunti",
+    "preview": "Kiungo cha kuwezesha akaunti yako",
+    "subject": "Washa akaunti yako",
+    "title": "Anzisha akaunti",
+    "hello": "Hujambo {{jina}},"
+  }
+}

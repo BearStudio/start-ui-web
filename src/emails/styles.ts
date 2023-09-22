@@ -11,6 +11,9 @@ export const styles = {
     padding: '16px 12px',
     margin: '0 auto',
   },
+  section: {
+    margin: '16px 0',
+  },
   h1: {
     color: theme.colors.text,
     fontFamily: theme.fontFamily.sans,
@@ -24,11 +27,20 @@ export const styles = {
     fontFamily: theme.fontFamily.sans,
     textDecoration: 'underline',
   },
+  button: {
+    fontSize: '14px',
+    backgroundColor: theme.colors.brand,
+    color: theme.colors.white,
+    lineHeight: 1.5,
+    borderRadius: '0.5em',
+    padding: '0.75em 1.5em',
+  },
   text: {
     color: theme.colors.text,
     fontFamily: theme.fontFamily.sans,
     fontSize: '14px',
     margin: '8px 0',
+    lineHeight: '1.5',
   },
   code: {
     display: 'inline-block',
