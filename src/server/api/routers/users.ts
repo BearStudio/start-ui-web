@@ -71,7 +71,7 @@ export const usersRouter = createTRPCRouter({
           skip: (input.page - 1) * input.size,
           take: input.size,
           orderBy: {
-            createdAt: 'desc',
+            id: 'desc',
           },
         }),
         ctx.db.user.count(),
