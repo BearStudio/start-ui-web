@@ -54,8 +54,8 @@ export const UserForm = () => {
             name="role"
             label={t('users:data.role.label')}
             options={[
-              { value: 'USER', label: 'User' }, // TODO translation
-              { value: 'ADMIN', label: 'Admin' }, // TODO translation
+              { value: 'USER', label: t('users:data.role.options.USER') },
+              { value: 'ADMIN', label: t('users:data.role.options.ADMIN') },
             ]}
             defaultValue="USER"
           />

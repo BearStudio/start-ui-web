@@ -49,7 +49,11 @@
       "label": "Langue"
     },
     "role": {
-      "label": "Rôle"
+      "label": "Rôle",
+      "options": {
+        "USER": "Utilisateur",
+        "ADMIN": "Administrateur"
+      }
     }
   },
   "update": {
@@ -82,5 +86,6 @@
   "deleteModal": {
     "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
     "title": "Confirmer la suppression de l'utilisateur"
-  }
+  },
+  "you": "vous"
 }

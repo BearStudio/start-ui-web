@@ -1,4 +1,5 @@
 {
+  "you": "you",
   "list": {
     "title": "Users Management",
     "actions": {
@@ -42,7 +43,11 @@
       "invalid": "Email is invalid"
     },
     "role": {
-      "label": "Role"
+      "label": "Role",
+      "options": {
+        "USER": "User",
+        "ADMIN": "Admin"
+      }
     },
     "status": {
       "activated": "Activated",

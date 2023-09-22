@@ -94,8 +94,13 @@ export default function PageUsers() {
                     <Box minW="0">
                       <Text noOfLines={1} maxW="full" fontWeight="bold">
                         {user.id === account.data?.id && (
-                          <Badge size="xs" colorScheme="success" mr="2">
-                            YOU {/* TODO translation */}
+                          <Badge
+                            size="xs"
+                            colorScheme="success"
+                            mr="2"
+                            textTransform="uppercase"
+                          >
+                            {t('users:you')}
                           </Badge>
                         )}
                         <LinkOverlay as={Link} href={`/admin/users/${user.id}`}>
@@ -117,7 +122,7 @@ export default function PageUsers() {
                 <DataListCell colName="authorities" colWidth="0.5">
                   {user.role === 'ADMIN' && (
                     <Badge size="sm" colorScheme="warning">
-                      {user.role}
+                      {t(`users:data.role.options.${user.role}`)}
                     </Badge>
                   )}
                 </DataListCell>

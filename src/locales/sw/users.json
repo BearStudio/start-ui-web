@@ -49,7 +49,11 @@
       "label": "Lugha"
     },
     "role": {
-      "label": "Jukumu"
+      "label": "Jukumu",
+      "options": {
+        "USER": "Mtumiaji",
+        "ADMIN": "Msimamizi"
+      }
     }
   },
   "update": {
@@ -82,5 +86,6 @@
   "deleteModal": {
     "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
     "title": "Thibitisha kufuta mtumiaji"
-  }
+  },
+  "you": "wewe"
 }
