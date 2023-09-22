@@ -33,13 +33,13 @@ const getContent = () => {
 const generateAppBuild = () => {
   try {
     fs.writeFileSync(
-      './.build-info.json',
+      './scripts/.build-info.json',
       JSON.stringify(getContent(), null, 2)
     );
-    console.log('✅ Generate `.build-info.json`');
+    console.log('✅ Generate `./scripts/.build-info.json`');
   } catch (error) {
     console.error(error);
-    throw new Error('❌ Failed to generate `.build-info.json`');
+    throw new Error('❌ Failed to generate `./scripts/.build-info.json`');
   }
 };
 

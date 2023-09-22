@@ -30,7 +30,7 @@ import {
 import { Icon } from '@/components/Icons';
 import { trpc } from '@/lib/trpc/client';
 
-import buildInfo from '../../.build-info.json';
+import buildInfo from '../../scripts/.build-info.json';
 
 const AppVersion = ({ ...rest }) => {
   const { t } = useTranslation(['layout']);
