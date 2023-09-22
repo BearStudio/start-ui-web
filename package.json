@@ -23,6 +23,10 @@
     "storybook:build": "yarn build:info && storybook build && mv ./storybook-static ./public/storybook",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
+    "db:init": "docker run --name startui -e POSTGRES_PASSWORD=startui -e POSTGRES_USER=startui -e POSTGRES_DB=startui -p 5432:5432 -d postgres && sleep 10 && yarn db:push && yarn db:seed",
+    "db:start": "docker start startui",
+    "db:stop": "docker stop startui",
+    "db:clear": "docker stop startui && docker rm startui",
     "db:push": "prisma db push",
     "db:ui": "prisma studio",
     "db:seed": "prisma db seed"

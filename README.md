@@ -31,8 +31,8 @@ cd myApp
 # Duplicate the .env.example file to a new .env file (update variables)
 cp .env.example .env
 
-# Init the local mocks database and seed users
-yarn db:push && yarn db:seed
+# Setup and start the db with docker
+yarn db:init
 
 # Run the development server
 yarn dev
@@ -91,9 +91,9 @@ cp .env.example .env
 yarn install
 ```
 
-3. Init the local mocks database and seed users
+3. Setup and start the db with docker
 ```bash
-yarn db:push && yarn db:seed
+yarn db:init
 ```
 
 ## Development

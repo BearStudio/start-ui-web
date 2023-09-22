@@ -1,10 +1,11 @@
-const dayjs = require('dayjs');
-const fs = require('fs');
+import dayjs from 'dayjs';
+import childProcess from 'node:child_process';
+import fs from 'node:fs';
 
 const getContent = () => {
   const getCommitHashShort = () => {
     try {
-      return require('child_process')
+      return childProcess
         .execSync('git rev-parse --short HEAD')
         .toString()
         .trim();
@@ -15,10 +16,7 @@ const getContent = () => {
 
   const getCommitHash = () => {
     try {
-      return require('child_process')
-        .execSync('git rev-parse HEAD')
-        .toString()
-        .trim();
+      return childProcess.execSync('git rev-parse HEAD').toString().trim();
     } catch (error) {
       return null;
     }
