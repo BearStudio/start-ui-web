@@ -56,3 +56,6 @@ prisma/dev.db-journal
 
 # Emails
 .react-email
+/test-results/
+/playwright-report/
+/playwright/.cache/

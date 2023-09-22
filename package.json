@@ -87,6 +87,7 @@
     "@babel/parser": "7.22.16",
     "@chakra-ui/cli": "2.4.1",
     "@next/eslint-plugin-next": "13.5.2",
+    "@playwright/test": "1.38.1",
     "@storybook/addon-actions": "7.4.5",
     "@storybook/addon-essentials": "7.4.5",
     "@storybook/addon-links": "7.4.5",
