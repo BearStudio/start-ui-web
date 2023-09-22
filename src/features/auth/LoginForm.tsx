@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
 import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
+import { DevLoginHint } from '@/features/dev/DevLoginHint';
 import { trpc } from '@/lib/trpc/client';
 
 type LoginFormProps = BoxProps & {
@@ -87,6 +88,7 @@ export const LoginForm = ({
           </Flex>
 
           <DemoLoginHint />
+          <DevLoginHint />
         </Stack>
       </Formiz>
     </Box>
