@@ -42,9 +42,8 @@ yarn dev
 
 - 🟦 [TypeScript](https://www.typescriptlang.org/)
 - ⚛️ [React](https://reactjs.org/)
-- ▲ [NextJS](https://nextjs.org/) (with [Static Export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports))
+- ▲ [NextJS](https://nextjs.org/)
 - 📕 [Storybook](https://storybook.js.org/)
-- ⚛️ [React Router](https://reactrouter.com/)
 - ⚡️ [Chakra UI](https://chakra-ui.com/)
 - ⚛️ [TanStack Query](https://react-query.tanstack.com/)
 - 🐜 [Formiz](https://formiz-react.com/)
@@ -53,11 +52,9 @@ yarn dev
 - 🔽 [React Select](https://react-select.com/)
 - 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
 - 📅 [Day.js](https://day.js.org/)
-- 👮 [Cypress](https://www.cypress.io/)
 
 👉 [Technology Choices](#technology-choices)
 
-ℹ️ API calls are mapped on a [JHipster](https://www.jhipster.tech/) backend application.
 
 ## Features
 
@@ -154,14 +151,6 @@ yarn theme:generate-icons
 
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
-
-### Development with a [JHipster](https://www.jhipster.tech/) backend
-
-Update the `NEXT_PUBLIC_API_BASE_URL` with your JHipster API url:
-
-```
-NEXT_PUBLIC_API_BASE_URL="http://localhost:8080/api"
-```
 
 ### Update color mode storage key
 
@@ -272,8 +261,6 @@ t('account:resetPassword.actions.reset')
 
 ## Production
 
-### NodeJS (recommended)
-
 ```bash
 yarn install
 yarn storybook:build # Optional: Will expose the Storybook at `/storybook`
@@ -293,41 +280,6 @@ docker build -t start-ui-web .
 docker run -p 80:3000 start-ui-web
 ```
 Application will be exposed on port 80 ([http://localhost](http://localhost))
-
-### Static files
-
-Update the `next.config.js` file with `output: 'export'` (and remove `redirects` and `rewrites`)
-
-```js
-{
-  output: 'export',
-}
-```
-
-```bash
-yarn storybook:build # Optional: Will expose the Storybook at `/storybook/`
-yarn build
-```
-
-Then expose the `/out` folder.
-
-> You can use `yarn build && npx serve out -c ../static.serve.json` to build and run the static build locally.
-
-> 💡 You will need to setup your server to rewrite all `/app/*` urls to serve the `app.html` file.
-
-#### Using Apache as your web server
-
-If you are using [apache](https://httpd.apache.org/) to statically deploy your app, you can use the following configuration for `public/.htaccess` :
-
-```bash
-# public/.htaccess
-Options -MultiViews
-RewriteEngine On
-
-# Rewrite /app/* to app.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule "^app/" "app.html" [QSA,L]
-```
 
 ---
 
@@ -350,13 +302,6 @@ for production: hybrid static & server rendering, TypeScript support, smart
 bundling, route pre-fetching, and more. No config needed.
 
 [GitHub](https://github.com/vercel/next.js) · [License MIT](https://github.com/vercel/next.js/blob/canary/license.md)
-
-### React Router
-
-Next.js is bundled with its own router, but at the time of writing those lines,
-it does not allow SPA mode.
-
-[GitHub](https://github.com/ReactTraining/react-router) · [License MIT](https://github.com/ReactTraining/react-router/blob/master/LICENSE)
 
 ### TypeScript
 
@@ -399,9 +344,3 @@ To create React forms, there is a lot of libraries out there.
 Composable, headless & with built-in multi steps.
 
 [GitHub](https://github.com/ivan-dalmet/formiz) · [License MIT](https://github.com/ivan-dalmet/formiz/blob/master/LICENSE)
-
-### Cypress
-
-[Cypress](https://www.cypress.io/) is a tool for end-to-end, component and unit test
-
-[Cypress](https://github.com/cypress-io/cypress) · [License MIT](https://github.com/cypress-io/cypress/blob/develop/LICENSE)
