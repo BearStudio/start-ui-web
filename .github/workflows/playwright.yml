@@ -52,7 +52,7 @@ jobs:
         run: yarn db:seed
 
       - name: Run Playwright tests
-        run: yarn playwright test
+        run: yarn e2e
 
       - uses: actions/upload-artifact@v3
         if: always()
