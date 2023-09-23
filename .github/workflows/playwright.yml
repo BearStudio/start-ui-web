@@ -4,10 +4,36 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master, feat/fullstack]
+
 jobs:
-  test:
+  E2E:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+      NEXT_PUBLIC_DEV_ENV_NAME: tests
+      DATABASE_URL: postgres://startui:startui@localhost:5432/startui
+      NEXT_PUBLIC_IS_DEMO: false
+      AUTH_SECRET: Replace me with `openssl rand -base64 32` generated secret
+      EMAIL_SERVER: smtp://username:password@localhost:1025
+      EMAIL_FROM: Start UI <noreply@example.com>
+    services:
+      postgres:
+        image: postgres
+
+        env:
+          POSTGRES_PASSWORD: startui
+          POSTGRES_USER: startui
+          POSTGRES_DB: startui
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -15,10 +41,19 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: yarn
+
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
+
+      - name: Migrate database
+        run: yarn db:push
+
+      - name: Add default data into database
+        run: yarn db:seed
+
       - name: Run Playwright tests
         run: yarn playwright test
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
