@@ -63,7 +63,7 @@ export const authRouter = createTRPCRouter({
         name: AUTH_COOKIE_NAME,
         value: token,
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === 'production',
       });
 
       return {
