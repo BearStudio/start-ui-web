@@ -18,7 +18,7 @@ closes #<issue_id>
  - [ ] I performed a self review of my code
  - [ ] I ensured that everything is written in English
  - [ ] I tested the feature or fix on my local environment
- - [ ] I ran the `yarn storybook` command and everything is working
+ - [ ] I ran the `pnpm storybook` command and everything is working
  - [ ] If applicable, I updated the translations for english and french files  
       (If you cannot update the french language, just let us know in the PR description)
  - [ ] If applicable, I updated the README.md

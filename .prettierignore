@@ -12,3 +12,4 @@ public
 *.mdx
 .env*
 !.env.validator.js
+pnpm-lock.yaml

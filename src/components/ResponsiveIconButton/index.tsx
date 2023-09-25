@@ -1,10 +1,10 @@
-import { useBreakpointValue } from '@chakra-ui/media-query';
 import {
   Button,
   ButtonProps,
   IconButton,
   ResponsiveValue,
   forwardRef,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 type ResponsiveIconButtonProps = ButtonProps & {

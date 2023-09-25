@@ -11,17 +11,17 @@ import { Layout } from '@/emails/components/Layout';
 import { styles } from '@/emails/styles';
 import i18n from '@/lib/i18n/server';
 
-type EmailResetPasswordProps = {
+type EmailActivateAccountProps = {
   language: string;
   name?: string;
   link: string;
 };
 
-export const EmailResetPassword = ({
+export const EmailActivateAccount = ({
   language,
   name,
   link,
-}: EmailResetPasswordProps) => {
+}: EmailActivateAccountProps) => {
   i18n.changeLanguage(language);
   return (
     <Layout preview={i18n.t('emails:activateAccount.preview')}>
@@ -62,4 +62,4 @@ export const EmailResetPassword = ({
   );
 };
 
-export default EmailResetPassword;
+export default EmailActivateAccount;

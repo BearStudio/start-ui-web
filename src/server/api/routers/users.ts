@@ -160,6 +160,7 @@ export const usersRouter = createTRPCRouter({
         where: { id: input.id },
         data: {
           activated: true,
+          emailVerified: true,
         },
       });
     }),

@@ -10,7 +10,6 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     'storybook-dark-mode',
-    '@storybook/addon-mdx-gfm',
   ],
   staticDirs: ['../public'],
   docs: {

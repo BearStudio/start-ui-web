@@ -16,12 +16,12 @@ A live read-only demonstration of what you will have when starting a project wit
 ## Getting Started
 
 ```bash
-yarn create start-ui --web myApp
+pnpm create start-ui --web myApp
 ```
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
-Then just go to the created folder:
+Then go to the created folder:
 
 ```bash
 cd myApp
@@ -32,10 +32,10 @@ cd myApp
 cp .env.example .env
 
 # Setup and start the db with docker
-yarn db:init
+pnpm db:init
 
 # Run the development server
-yarn dev
+pnpm dev
 ```
 
 ## Technology
@@ -85,19 +85,19 @@ cp .env.example .env
 
 2. Install dependencies
 ```bash
-yarn install
+pnpm install
 ```
 
 3. Setup and start the db with docker
 ```bash
-yarn db:init
+pnpm db:init
 ```
 
 ## Development
 
 ```bash
 # Run the development server
-yarn dev
+pnpm dev
 ```
 
 ### Emails in development
@@ -128,7 +128,7 @@ You can add search params to the preview url to pass as props to the template.
 ### Storybook
 
 ```bash
-yarn storybook
+pnpm storybook
 ```
 
 ### Update theme typing
@@ -138,7 +138,7 @@ When adding or updating theme components, component variations, sizes, colors an
 Just run the following command after updating the theme:
 
 ```bash
-yarn theme:generate-typing
+pnpm theme:generate-typing
 ```
 
 ### Generate custom icons components from svg files
@@ -146,7 +146,7 @@ yarn theme:generate-typing
 Put the custom svg files into the `src/components/Icons/svg-sources` folder and then run the following command:
 
 ```bash
-yarn theme:generate-icons
+pnpm theme:generate-icons
 ```
 
 > ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
@@ -262,10 +262,10 @@ t('account:resetPassword.actions.reset')
 ## Production
 
 ```bash
-yarn install
-yarn storybook:build # Optional: Will expose the Storybook at `/storybook`
-yarn build
-yarn start
+pnpm install
+pnpm storybook:build # Optional: Will expose the Storybook at `/storybook`
+pnpm build
+pnpm start
 ```
 
 ### Docker

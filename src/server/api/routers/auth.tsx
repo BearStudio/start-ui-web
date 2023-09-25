@@ -181,7 +181,7 @@ export const authRouter = createTRPCRouter({
       const [user] = await ctx.db.$transaction([
         ctx.db.user.update({
           where: { id: verificationToken.userId },
-          data: { activated: true },
+          data: { activated: true, emailVerified: true },
         }),
         ctx.db.verificationToken.delete({
           where: { token: verificationToken.token },
