@@ -1,6 +1,5 @@
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
-import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
@@ -10,7 +9,7 @@ import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailResetPassword from '@/emails/templates/reset-password';
 import i18n from '@/lib/i18n/server';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import { AUTH_COOKIE_NAME } from '@/server/auth';
+import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/auth';
 import { prismaThrowFormatedTRPCError } from '@/server/db';
 import { sendEmail } from '@/server/email';
 
@@ -122,7 +121,7 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const token = randomUUID();
+      const token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET);
       await ctx.db.verificationToken.create({
         data: {
           userId: user.id,
@@ -170,12 +169,17 @@ export const authRouter = createTRPCRouter({
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
+      const jwtDecoded = decodeJwt(input.token);
+      if (!jwtDecoded?.id) {
+        throw new TRPCError({ code: 'BAD_REQUEST' });
+      }
+
       const verificationToken = await ctx.db.verificationToken.findUnique({
-        where: { token: input.token },
+        where: { token: input.token, userId: jwtDecoded.id },
       });
 
       if (!verificationToken) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
       const [user] = await ctx.db.$transaction([
@@ -189,7 +193,7 @@ export const authRouter = createTRPCRouter({
       ]);
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
       return undefined;
@@ -206,8 +210,6 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ email: z.string().email() }))
     .output(z.void())
     .mutation(async ({ ctx, input }) => {
-      const token = randomUUID();
-
       const user = await ctx.db.user.findFirst({
         where: { email: input.email },
       });
@@ -216,6 +218,8 @@ export const authRouter = createTRPCRouter({
         // Silent failure for security
         return undefined;
       }
+
+      const token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET);
 
       await ctx.db.verificationToken.create({
         data: {
@@ -257,14 +261,17 @@ export const authRouter = createTRPCRouter({
         where: { expires: { lt: new Date() } },
       });
 
+      const jwtDecoded = decodeJwt(input.token);
+      if (!jwtDecoded?.id) {
+        throw new TRPCError({ code: 'BAD_REQUEST' });
+      }
+
       const verificationToken = await ctx.db.verificationToken.findUnique({
-        where: { token: input.token },
+        where: { token: input.token, userId: jwtDecoded.id },
       });
 
       if (!verificationToken) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-        });
+        throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
       const passwordHash = await bcrypt.hash(input.newPassword, 12);
@@ -278,9 +285,7 @@ export const authRouter = createTRPCRouter({
       ]);
 
       if (!user) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-        });
+        throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
       return undefined;

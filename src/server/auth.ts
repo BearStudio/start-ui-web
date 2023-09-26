@@ -19,9 +19,9 @@ export const getServerAuthSession = async () => {
     return null;
   }
 
-  const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
+  const jwtDecoded = decodeJwt(token);
 
-  if (!jwtDecoded || typeof jwtDecoded !== 'object' || !('id' in jwtDecoded)) {
+  if (!jwtDecoded?.id) {
     return null;
   }
 
@@ -37,4 +37,12 @@ export const getServerAuthSession = async () => {
       emailVerified: true,
     },
   });
+};
+
+export const decodeJwt = (token: string) => {
+  const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
+  if (!jwtDecoded || typeof jwtDecoded !== 'object' || !('id' in jwtDecoded)) {
+    return null;
+  }
+  return jwtDecoded;
 };
