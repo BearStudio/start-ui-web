@@ -3,7 +3,7 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master, feat/fullstack]
+    branches: [main, master, v2-going-full-stack]
 
 jobs:
   E2E:
