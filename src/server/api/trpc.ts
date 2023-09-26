@@ -79,7 +79,7 @@ export const createTRPCRouter = t.router;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.user || !ctx.user.activated || !ctx.user.emailVerified) {
+  if (!ctx.user?.activated || !ctx.user?.emailVerified) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: ctx.user?.email,

@@ -15,9 +15,8 @@ import {
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuPenLine, LuExternalLink, LuTrash2 } from 'react-icons/lu';
+import { LuExternalLink, LuPenLine, LuTrash2 } from 'react-icons/lu';
 
-// import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';

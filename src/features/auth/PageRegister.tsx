@@ -24,8 +24,7 @@ import { Icon } from '@/components/Icons';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
-import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import { Language } from '@/lib/i18n/constants';
+import { AVAILABLE_LANGUAGES, Language } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageRegister() {
