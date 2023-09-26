@@ -160,6 +160,17 @@ You can update the storage key used to detect the color mode by updating this co
 export const COLOR_MODE_STORAGE_KEY = 'start-ui-color-mode'; // Update the key according to your needs
 ```
 
+### E2E Tests
+
+E2E tests are setup with Playwright.
+
+```sh
+yarn e2e     # Run tests in headless mode, this is the command executed in CI
+yarn e2e:ui  # Open a UI which allow you to run specific tests and see test execution
+```
+
+Tests are written in the `e2e` folder; there is also a `e2e/utils` folder which contains some utils to help writing tests.
+
 ## Show hint on development environments
 
 Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
