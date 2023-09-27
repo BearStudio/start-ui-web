@@ -14,9 +14,19 @@ import { prismaThrowFormatedTRPCError } from '@/server/db';
 import { sendEmail } from '@/server/email';
 
 export const authRouter = createTRPCRouter({
-  checkAuthenticated: publicProcedure.query(async ({ ctx }) => {
-    return !!ctx.user;
-  }),
+  checkAuthenticated: publicProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/auth/check',
+        tags: ['auth'],
+      },
+    })
+    .input(z.void())
+    .output(z.boolean())
+    .query(async ({ ctx }) => {
+      return !!ctx.user;
+    }),
 
   login: publicProcedure
     .meta({
@@ -33,7 +43,7 @@ export const authRouter = createTRPCRouter({
         where: { email: input.email },
       });
 
-      if (!user?.password || !user?.activated) {
+      if (!user?.password || !user?.activated || !user.emailVerified) {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
         });

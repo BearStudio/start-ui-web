@@ -7,6 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 import { TRPCError, initTRPC } from '@trpc/server';
+import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
@@ -28,8 +29,7 @@ import { db } from '@/server/db';
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async () => {
-  // Get the session from the server using the getServerSession wrapper function
+export const createTRPCContext = async ({}: FetchCreateContextFnOptions) => {
   const user = await getServerAuthSession();
 
   return {

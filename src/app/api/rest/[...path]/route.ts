@@ -1,5 +1,3 @@
-import { NextRequest } from 'next/server';
-
 import { appRouter } from '@/server/api/root';
 import { createTRPCContext } from '@/server/api/trpc';
 import { createOpenApiFetchHandler } from '@/server/api/trpcOpenApiFetchAdapter';
@@ -10,7 +8,5 @@ const handler = createOpenApiFetchHandler({
   endpoint: '/api/rest',
 });
 
-export const GET = (req: NextRequest) => {
-  return handler(req);
-};
+export const GET = handler;
 export const POST = handler;
