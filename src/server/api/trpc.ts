@@ -143,9 +143,7 @@ export const publicProcedure = t.procedure.use(enforceDemo);
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure
-  .use(enforceDemo)
-  .use(enforceUserIsAuthed);
+export const protectedProcedure = publicProcedure.use(enforceUserIsAuthed);
 
 /**
  * Admin protected procedure
@@ -155,7 +153,4 @@ export const protectedProcedure = t.procedure
  *
  * @see https://trpc.io/docs/procedures
  */
-export const adminProcedure = t.procedure
-  .use(enforceDemo)
-  .use(enforceUserIsAuthed)
-  .use(enforceUserIsAdmin);
+export const adminProcedure = protectedProcedure.use(enforceUserIsAdmin);
