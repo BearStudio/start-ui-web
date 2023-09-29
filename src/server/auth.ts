@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
 
+import { env } from '@/env.mjs';
 import { db } from '@/server/db';
 
 export const AUTH_COOKIE_NAME = 'auth';
@@ -40,7 +41,7 @@ export const getServerAuthSession = async () => {
 };
 
 export const decodeJwt = (token: string) => {
-  const jwtDecoded = jwt.verify(token, process.env.AUTH_SECRET);
+  const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
   if (!jwtDecoded || typeof jwtDecoded !== 'object' || !('id' in jwtDecoded)) {
     return null;
   }

@@ -8,13 +8,14 @@ import {
 import { TRPCClientError, httpBatchLink, loggerLink } from '@trpc/client';
 import superjson from 'superjson';
 
+import { env } from '@/env.mjs';
 import { DemoModalInterceptor } from '@/features/demo-mode/DemoModalInterceptor';
 
 import { trpc } from './client';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') return ''; // browser should use relative url SSR should use vercel url
-  return process.env.NEXT_PUBLIC_BASE_URL;
+  return env.NEXT_PUBLIC_BASE_URL;
 };
 
 export function TrpcProvider(props: { children: React.ReactNode }) {
@@ -41,7 +42,7 @@ export function TrpcProvider(props: { children: React.ReactNode }) {
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === 'development' ||
+            env.NODE_ENV === 'development' ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({

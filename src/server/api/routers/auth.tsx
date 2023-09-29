@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailResetPassword from '@/emails/templates/reset-password';
+import { env } from '@/env.mjs';
 import i18n from '@/lib/i18n/server';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/auth';
@@ -60,7 +61,7 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const token = await jwt.sign({ id: user.id }, process.env.AUTH_SECRET);
+      const token = await jwt.sign({ id: user.id }, env.AUTH_SECRET);
       if (!token) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
@@ -72,7 +73,7 @@ export const authRouter = createTRPCRouter({
         name: AUTH_COOKIE_NAME,
         value: token,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: env.NODE_ENV === 'production',
       });
 
       return {
@@ -131,7 +132,7 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET);
+      const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
       await ctx.db.verificationToken.create({
         data: {
           userId: user.id,
@@ -140,7 +141,7 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      const link = `${process.env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`;
+      const link = `${env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`;
 
       await sendEmail({
         to: input.email,
@@ -229,7 +230,7 @@ export const authRouter = createTRPCRouter({
         return undefined;
       }
 
-      const token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET);
+      const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
 
       await ctx.db.verificationToken.create({
         data: {
@@ -239,7 +240,7 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      const link = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`;
+      const link = `${env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`;
 
       await sendEmail({
         to: input.email,

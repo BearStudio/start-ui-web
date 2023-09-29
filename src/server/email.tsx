@@ -4,9 +4,10 @@ import { render } from '@react-email/render';
 import nodemailer from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/sendmail-transport';
 
+import { env } from '@/env.mjs';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
-const transport = nodemailer.createTransport(process.env.EMAIL_SERVER);
+const transport = nodemailer.createTransport(env.EMAIL_SERVER);
 
 export const sendEmail = ({
   template,
@@ -15,7 +16,7 @@ export const sendEmail = ({
   Required<Pick<MailOptions, 'subject'>> & { template: ReactElement }) => {
   const html = render(template);
   return transport.sendMail({
-    from: process.env.EMAIL_FROM,
+    from: env.EMAIL_FROM,
     html,
     ...options,
   });
@@ -30,7 +31,7 @@ export const previewEmailRoute = async (
   }
 ) => {
   // Allows debug only in development
-  if (process.env.NODE_ENV !== 'development') {
+  if (env.NODE_ENV !== 'development') {
     return new Response(undefined, {
       status: 404,
     });

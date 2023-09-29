@@ -7,15 +7,14 @@ import {
 } from '@chakra-ui/react';
 import { useFormContext } from '@formiz/core';
 
+import { env } from '@/env.mjs';
+
 export const DevLoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
   const mockedPassword = 'admin';
 
-  if (
-    process.env.NODE_ENV !== 'development' ||
-    process.env.NEXT_PUBLIC_IS_DEMO === 'true'
-  )
+  if (env.NODE_ENV !== 'development' || env.NEXT_PUBLIC_IS_DEMO === 'true')
     return null;
 
   return (

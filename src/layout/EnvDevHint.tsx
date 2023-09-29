@@ -1,14 +1,16 @@
 import { Box, Text } from '@chakra-ui/react';
 
+import { env } from '@/env.mjs';
+
 export const EnvDevHint = () => {
   const envName =
-    process.env.NODE_ENV === 'development'
+    env.NODE_ENV === 'development'
       ? 'Development'
-      : process.env.NEXT_PUBLIC_DEV_ENV_NAME;
+      : env.NEXT_PUBLIC_DEV_ENV_NAME;
   const colorScheme =
-    process.env.NODE_ENV === 'development'
+    env.NODE_ENV === 'development'
       ? 'warning'
-      : process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'success';
+      : env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'success';
 
   if (!envName) {
     return null;

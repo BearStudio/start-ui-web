@@ -7,8 +7,10 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
+import { env } from '@/env.mjs';
+
 export const DemoRegisterHint = () => {
-  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
+  if (env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
 
   return (
     <Alert status="warning">
