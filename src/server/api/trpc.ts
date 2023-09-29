@@ -12,6 +12,7 @@ import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
 
+import { env } from '@/env.mjs';
 import { getServerAuthSession } from '@/server/auth';
 import { db } from '@/server/db';
 
@@ -108,7 +109,7 @@ const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
 
 /** Demo Middleware */
 const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
-  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') {
+  if (env.NEXT_PUBLIC_IS_DEMO !== 'true') {
     return next({
       ctx,
     });

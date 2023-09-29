@@ -18,6 +18,12 @@
   },
   "overrides": [
     {
+      "files": ["./src/**/*.*"],
+      "rules": {
+        "no-process-env": "error"
+      }
+    },
+    {
       "files": [
         "*.stories.tsx",
         "./src/locales/**/*",
