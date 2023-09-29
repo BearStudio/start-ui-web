@@ -16,6 +16,34 @@ export const db =
 
 if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
 
+export class ExtendedTRPCError extends TRPCError {
+  public readonly meta: Prisma.PrismaClientKnownRequestError['meta'];
+
+  constructor(opts: {
+    message?: TRPCError['message'];
+    code?: TRPCError['code'];
+    cause?: unknown;
+  }) {
+    if (
+      opts.cause instanceof Prisma.PrismaClientKnownRequestError &&
+      opts.cause.code === 'P2002'
+    ) {
+      super({ code: 'CONFLICT', message: opts.message, cause: opts.cause });
+      return;
+    }
+
+    super({
+      code: opts.code ?? 'INTERNAL_SERVER_ERROR',
+      message: opts.message,
+      cause: opts.cause,
+    });
+  }
+}
+
+/**
+ *
+ * @deprecated
+ */
 export const prismaThrowFormatedTRPCError = (error: unknown) => {
   if (
     error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -23,6 +51,7 @@ export const prismaThrowFormatedTRPCError = (error: unknown) => {
   ) {
     throw new TRPCError({
       code: 'CONFLICT',
+      cause: error,
     });
   }
 };

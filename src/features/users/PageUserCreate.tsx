@@ -14,6 +14,7 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { trpc } from '@/lib/trpc/client';
+import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageUserCreate() {
   const { t } = useTranslation(['common', 'users']);
@@ -32,8 +33,9 @@ export default function PageUserCreate() {
       router.back();
     },
     onError: (error) => {
-      if (error.data?.code === 'CONFLICT') {
+      if (isErrorDatabaseConflict(error, 'email')) {
         form.setErrors({ email: t('users:data.email.alreadyUsed') });
+
         return;
       }
       toastError({

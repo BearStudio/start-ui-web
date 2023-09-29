@@ -6,6 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
+import { Prisma } from '@prisma/client';
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { randomUUID } from 'node:crypto';
@@ -32,11 +33,20 @@ import { logger } from '@/server/logger';
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async ({}: FetchCreateContextFnOptions) => {
+export const createTRPCContext = async ({
+  req,
+}: FetchCreateContextFnOptions) => {
   const user = await getServerAuthSession();
+
+  const apiType: 'REST' | 'TRPC' = new URL(req.url).pathname.startsWith(
+    '/api/rest'
+  )
+    ? 'REST'
+    : 'TRPC';
 
   return {
     user,
+    apiType,
     db,
   };
 };
@@ -61,6 +71,10 @@ const t = initTRPC
           ...shape.data,
           zodError:
             error.cause instanceof ZodError ? error.cause.flatten() : null,
+          prismaError:
+            error.cause instanceof Prisma.PrismaClientKnownRequestError
+              ? error.cause.meta
+              : null,
         },
       };
     },
@@ -89,6 +103,7 @@ const loggerMiddleware = t.middleware(async (opts) => {
     type: opts.type,
     requestId: randomUUID(),
     userId: opts.ctx.user?.id,
+    apiType: opts.ctx.apiType,
   };
 
   // We are doing the next operation in tRPC
