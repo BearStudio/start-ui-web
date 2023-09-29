@@ -14,7 +14,10 @@ export const DevLoginHint = () => {
   const mockedEmail = 'admin@admin.com';
   const mockedPassword = 'admin';
 
-  if (env.NODE_ENV !== 'development' || env.NEXT_PUBLIC_IS_DEMO === 'true')
+  if (
+    env.NEXT_PUBLIC_NODE_ENV !== 'development' ||
+    env.NEXT_PUBLIC_IS_DEMO === 'true'
+  )
     return null;
 
   return (

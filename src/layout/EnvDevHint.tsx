@@ -4,11 +4,11 @@ import { env } from '@/env.mjs';
 
 export const EnvDevHint = () => {
   const envName =
-    env.NODE_ENV === 'development'
+    env.NEXT_PUBLIC_NODE_ENV === 'development'
       ? 'Development'
       : env.NEXT_PUBLIC_DEV_ENV_NAME;
   const colorScheme =
-    env.NODE_ENV === 'development'
+    env.NEXT_PUBLIC_NODE_ENV === 'development'
       ? 'warning'
       : env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME ?? 'success';
 

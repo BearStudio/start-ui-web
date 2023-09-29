@@ -40,15 +40,20 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ email: z.string().email(), password: z.string() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug('Init login');
       const user = await ctx.db.user.findUnique({
         where: { email: input.email },
       });
 
       if (!user?.password || !user?.activated || !user.emailVerified) {
+        ctx.logger.info('User has no password or is not activated');
+
         throw new TRPCError({
           code: 'UNAUTHORIZED',
         });
       }
+
+      ctx.logger.debug('Checking password');
 
       const isPasswordValid = await bcrypt.compare(
         input.password,
@@ -58,8 +63,11 @@ export const authRouter = createTRPCRouter({
       if (!isPasswordValid) {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
+          message: 'Password not valid',
         });
       }
+
+      ctx.logger.debug('Password valid');
 
       const token = await jwt.sign({ id: user.id }, env.AUTH_SECRET);
       if (!token) {

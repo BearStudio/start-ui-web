@@ -42,7 +42,7 @@ export function TrpcProvider(props: { children: React.ReactNode }) {
       links: [
         loggerLink({
           enabled: (opts) =>
-            env.NODE_ENV === 'development' ||
+            env.NEXT_PUBLIC_NODE_ENV === 'development' ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({

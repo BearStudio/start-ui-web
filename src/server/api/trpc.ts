@@ -8,6 +8,7 @@
  */
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
+import { randomUUID } from 'node:crypto';
 import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
@@ -15,6 +16,7 @@ import { ZodError } from 'zod';
 import { env } from '@/env.mjs';
 import { getServerAuthSession } from '@/server/auth';
 import { db } from '@/server/db';
+import { logger } from '@/server/logger';
 
 /**
  * 1. CONTEXT
@@ -78,6 +80,49 @@ const t = initTRPC
  */
 export const createTRPCRouter = t.router;
 
+const loggerMiddleware = t.middleware(async (opts) => {
+  const start = Date.now();
+
+  // Those are the default informations we want to print for all the requests
+  const meta = {
+    path: opts.path,
+    type: opts.type,
+    requestId: randomUUID(),
+    userId: opts.ctx.user?.id,
+  };
+
+  // We are doing the next operation in tRPC
+  const result = await opts.next({
+    ctx: {
+      logger: logger.child({ ...meta, scope: 'procedure' }),
+    },
+  });
+
+  // This should be after the operation so we can really compute the duration
+  const durationMs = Date.now() - start;
+
+  const extendedMeta = {
+    ...meta,
+    durationMs,
+  };
+
+  if (result.ok) {
+    logger.info(extendedMeta, '✅ OK');
+  } else {
+    logger.error(
+      {
+        ...extendedMeta,
+        code: result.error.code,
+        message: result.error.message,
+      },
+      '❌ Non-OK'
+    );
+  }
+
+  // Finally, return the result so tRPC can continue
+  return result;
+});
+
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.user?.activated || !ctx.user?.emailVerified) {
@@ -134,7 +179,9 @@ const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure.use(enforceDemo);
+export const publicProcedure = t.procedure
+  .use(enforceDemo)
+  .use(loggerMiddleware);
 
 /**
  * Protected (authenticated) procedure
