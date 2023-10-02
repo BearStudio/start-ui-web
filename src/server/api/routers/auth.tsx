@@ -26,6 +26,7 @@ export const authRouter = createTRPCRouter({
     .input(z.void())
     .output(z.boolean())
     .query(async ({ ctx }) => {
+      ctx.logger.debug(`User ${!!ctx.user ? 'is' : 'is not'} logged`);
       return !!ctx.user;
     }),
 
@@ -106,7 +107,8 @@ export const authRouter = createTRPCRouter({
     })
     .input(z.void())
     .output(z.void())
-    .mutation(async () => {
+    .mutation(async ({ ctx }) => {
+      ctx.logger.debug('Delete auth cookie');
       cookies().delete('auth');
     }),
 
@@ -128,10 +130,12 @@ export const authRouter = createTRPCRouter({
     )
     .output(z.void())
     .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug('Hash password');
       const passwordHash = await bcrypt.hash(input.password, 12);
 
       let user;
       try {
+        ctx.logger.debug('Create user');
         user = await ctx.db.user.create({
           data: {
             email: input.email.toLowerCase().trim(),
@@ -141,12 +145,16 @@ export const authRouter = createTRPCRouter({
           },
         });
       } catch (e) {
+        ctx.logger.warn('Failed to create user');
         throw new ExtendedTRPCError({
           cause: e,
         });
       }
 
+      ctx.logger.debug('Sign JWT');
       const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
+
+      ctx.logger.debug('Create verification token in database');
       await ctx.db.verificationToken.create({
         data: {
           userId: user.id,
@@ -157,6 +165,7 @@ export const authRouter = createTRPCRouter({
 
       const link = `${env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`;
 
+      ctx.logger.debug('Send email');
       await sendEmail({
         to: input.email,
         subject: i18n.t('emails:activateAccount.subject', {
@@ -185,28 +194,37 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ token: z.string().optional() }))
     .output(z.void())
     .mutation(async ({ ctx, input }) => {
-      // Clear all expired tokens
+      ctx.logger.debug('Clear all expired tokens');
       await ctx.db.verificationToken.deleteMany({
         where: { expires: { lt: new Date() } },
       });
 
       if (!input.token) {
-        throw new TRPCError({ code: 'BAD_REQUEST' });
+        ctx.logger.warn('Missing input token');
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Missing input token',
+        });
       }
 
+      ctx.logger.warn('Decode JWT');
       const jwtDecoded = decodeJwt(input.token);
       if (!jwtDecoded?.id) {
+        ctx.logger.warn('Failed to decode JWT');
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
+      ctx.logger.debug('Check verification token in database');
       const verificationToken = await ctx.db.verificationToken.findUnique({
         where: { token: input.token, userId: jwtDecoded.id },
       });
 
       if (!verificationToken) {
+        ctx.logger.warn('No verification token in database');
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
+      ctx.logger.debug('Update user activation and remove verification token');
       const [user] = await ctx.db.$transaction([
         ctx.db.user.update({
           where: { id: verificationToken.userId },
@@ -218,6 +236,7 @@ export const authRouter = createTRPCRouter({
       ]);
 
       if (!user) {
+        ctx.logger.fatal(verificationToken, 'User does not exist');
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
