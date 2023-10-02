@@ -17,6 +17,7 @@ import {
   RepositoryFormFields,
 } from '@/features/repositories/RepositoryForm';
 import { trpc } from '@/lib/trpc/client';
+import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageRepositoryCreate() {
   const { t } = useTranslation(['common', 'repositories']);
@@ -35,7 +36,7 @@ export default function PageRepositoryCreate() {
       router.back();
     },
     onError: (error) => {
-      if (error.data?.code === 'CONFLICT') {
+      if (isErrorDatabaseConflict(error, 'email')) {
         form.setErrors({ email: t('repositories:data.name.alreadyUsed') });
         return;
       }

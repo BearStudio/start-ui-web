@@ -26,6 +26,7 @@ import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
 import { Loader } from '@/layout/Loader';
 import { trpc } from '@/lib/trpc/client';
+import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
@@ -55,7 +56,7 @@ export default function PageUserUpdate() {
       router.back();
     },
     onError: (error) => {
-      if (error.data?.code === 'CONFLICT') {
+      if (isErrorDatabaseConflict(error, 'email')) {
         form.setErrors({ email: t('users:data.email.alreadyUsed') });
         return;
       }

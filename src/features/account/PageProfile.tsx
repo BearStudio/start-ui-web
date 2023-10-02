@@ -17,6 +17,7 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
+import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageProfile() {
   const { t } = useTranslation(['common', 'account']);
@@ -37,7 +38,7 @@ export default function PageProfile() {
       });
     },
     onError: (error) => {
-      if (error.data?.code === 'CONFLICT') {
+      if (isErrorDatabaseConflict(error, 'email')) {
         profileForm.setErrors({
           email: t('account:data.email.alreadyUsed'),
         });
