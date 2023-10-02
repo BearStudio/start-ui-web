@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
-import { prismaThrowFormatedTRPCError } from '@/server/db';
+import { ExtendedTRPCError } from '@/server/db';
 
 export const accountRouter = createTRPCRouter({
   get: protectedProcedure.query(async ({ ctx }) => {
@@ -42,9 +42,8 @@ export const accountRouter = createTRPCRouter({
           data: input,
         });
       } catch (e) {
-        prismaThrowFormatedTRPCError(e);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
+        throw new ExtendedTRPCError({
+          cause: e,
         });
       }
     }),

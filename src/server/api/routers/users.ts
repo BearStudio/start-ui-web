@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { adminProcedure, createTRPCRouter } from '@/server/api/trpc';
-import { ExtendedTRPCError, prismaThrowFormatedTRPCError } from '@/server/db';
+import { ExtendedTRPCError } from '@/server/db';
 
 const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
 
@@ -190,9 +190,8 @@ export const usersRouter = createTRPCRouter({
           data: input,
         });
       } catch (e) {
-        prismaThrowFormatedTRPCError(e);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
+        throw new ExtendedTRPCError({
+          cause: e,
         });
       }
     }),

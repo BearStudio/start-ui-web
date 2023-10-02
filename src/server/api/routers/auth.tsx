@@ -11,7 +11,7 @@ import { env } from '@/env.mjs';
 import i18n from '@/lib/i18n/server';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/auth';
-import { prismaThrowFormatedTRPCError } from '@/server/db';
+import { ExtendedTRPCError } from '@/server/db';
 import { sendEmail } from '@/server/email';
 
 export const authRouter = createTRPCRouter({
@@ -40,43 +40,50 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ email: z.string().email(), password: z.string() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Init login');
+      ctx.logger.debug('Retrieving user info by email');
       const user = await ctx.db.user.findUnique({
         where: { email: input.email },
       });
 
-      if (!user?.password || !user?.activated || !user.emailVerified) {
-        ctx.logger.info('User has no password or is not activated');
-
+      if (!user) {
+        ctx.logger.warn('User not found');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
         });
       }
 
-      ctx.logger.debug('Checking password');
+      if (!user.password || !user.activated || !user.emailVerified) {
+        ctx.logger.warn('Invalid user');
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+        });
+      }
 
+      ctx.logger.debug('Checking user password');
       const isPasswordValid = await bcrypt.compare(
         input.password,
         user.password
       );
 
       if (!isPasswordValid) {
+        ctx.logger.warn('Invalid user password');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
           message: 'Password not valid',
         });
       }
 
-      ctx.logger.debug('Password valid');
-
+      ctx.logger.debug('User password valid and decoding JWT');
       const token = await jwt.sign({ id: user.id }, env.AUTH_SECRET);
       if (!token) {
+        ctx.logger.warn('Failed to decode JWT');
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create the JWT token',
         });
       }
 
+      ctx.logger.debug('Set auth cookie');
       cookies().set({
         name: AUTH_COOKIE_NAME,
         value: token,
@@ -134,9 +141,8 @@ export const authRouter = createTRPCRouter({
           },
         });
       } catch (e) {
-        prismaThrowFormatedTRPCError(e);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
+        throw new ExtendedTRPCError({
+          cause: e,
         });
       }
 

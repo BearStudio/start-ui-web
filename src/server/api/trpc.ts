@@ -9,6 +9,7 @@
 import { Prisma } from '@prisma/client';
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
+import { getHTTPStatusCodeFromError } from '@trpc/server/http';
 import { randomUUID } from 'node:crypto';
 import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-openapi';
@@ -122,9 +123,17 @@ const loggerMiddleware = t.middleware(async (opts) => {
   };
 
   if (result.ok) {
-    logger.info(extendedMeta, '✅ OK');
+    logger.debug(extendedMeta, '✅ OK');
   } else {
-    logger.error(
+    const logLevel = () => {
+      const errorCode = getHTTPStatusCodeFromError(result.error);
+      if (errorCode >= 500) return 'error';
+      if (errorCode >= 400) return 'warn';
+      if (errorCode >= 300) return 'info';
+      return 'error';
+    };
+
+    logger[logLevel()](
       {
         ...extendedMeta,
         code: result.error.code,

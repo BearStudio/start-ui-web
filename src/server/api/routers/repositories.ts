@@ -2,12 +2,12 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
-import { prismaThrowFormatedTRPCError } from '@/server/db';
+import { ExtendedTRPCError } from '@/server/db';
 
 const zRepository = () =>
   z.object({
-    id: z.string(), // @id @default(cuid())
-    name: z.string(), // @unique
+    id: z.string(),
+    name: z.string(),
     link: z.string(),
     description: z.string().nullish(),
   });
@@ -99,9 +99,8 @@ export const repositoriesRouter = createTRPCRouter({
           data: input,
         });
       } catch (e) {
-        prismaThrowFormatedTRPCError(e);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
+        throw new ExtendedTRPCError({
+          cause: e,
         });
       }
     }),
@@ -131,9 +130,8 @@ export const repositoriesRouter = createTRPCRouter({
           data: input,
         });
       } catch (e) {
-        prismaThrowFormatedTRPCError(e);
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
+        throw new ExtendedTRPCError({
+          cause: e,
         });
       }
     }),

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+import { LogLevel } from '@prisma/client/runtime/library';
 import { TRPCError } from '@trpc/server';
 
 import { env } from '@/env.mjs';
@@ -7,11 +8,18 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+const levels = {
+  debug: ['query', 'error', 'warn', 'info'],
+  info: ['error', 'warn', 'info'],
+  warn: ['error', 'warn'],
+  error: ['error'],
+  fatal: ['error'],
+} satisfies Record<string, LogLevel[]>;
+
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log:
-      env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log: levels[env.LOGGER_LEVEL],
   });
 
 if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
@@ -24,6 +32,7 @@ export class ExtendedTRPCError extends TRPCError {
     code?: TRPCError['code'];
     cause?: unknown;
   }) {
+    // Prisma Conflict Error
     if (
       opts.cause instanceof Prisma.PrismaClientKnownRequestError &&
       opts.cause.code === 'P2002'
@@ -32,6 +41,7 @@ export class ExtendedTRPCError extends TRPCError {
       return;
     }
 
+    // Unknown Error
     super({
       code: opts.code ?? 'INTERNAL_SERVER_ERROR',
       message: opts.message,
@@ -39,19 +49,3 @@ export class ExtendedTRPCError extends TRPCError {
     });
   }
 }
-
-/**
- *
- * @deprecated
- */
-export const prismaThrowFormatedTRPCError = (error: unknown) => {
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    error.code === 'P2002'
-  ) {
-    throw new TRPCError({
-      code: 'CONFLICT',
-      cause: error,
-    });
-  }
-};
