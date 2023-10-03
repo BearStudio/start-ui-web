@@ -57,8 +57,8 @@ export default function PageRepositoryUpdate() {
       router.back();
     },
     onError: (error) => {
-      if (isErrorDatabaseConflict(error, 'email')) {
-        form.setErrors({ email: t('repositories:data.name.alreadyUsed') });
+      if (isErrorDatabaseConflict(error, 'name')) {
+        form.setErrors({ name: t('repositories:data.name.alreadyUsed') });
         return;
       }
       toastError({
