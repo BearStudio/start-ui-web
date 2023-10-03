@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { adminProcedure, createTRPCRouter } from '@/server/api/trpc';
 import { ExtendedTRPCError } from '@/server/db';
 
-const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
+export const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
 
 const zUser = () =>
   z.object({

@@ -24,6 +24,10 @@ export const db =
 
 if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
 
+/**
+ * We extend the TRPCError so we can implement tRPC code based on what Prisma
+ * or other tool throw as an error.
+ */
 export class ExtendedTRPCError extends TRPCError {
   public readonly meta: Prisma.PrismaClientKnownRequestError['meta'];
 
