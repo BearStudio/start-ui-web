@@ -25,11 +25,13 @@ export const repositoriesRouter = createTRPCRouter({
     .input(z.object({ id: z.string().cuid() }))
     .output(zRepository())
     .query(async ({ ctx, input }) => {
+      ctx.logger.debug({ input }, 'Getting repository');
       const repository = await ctx.db.repository.findUnique({
         where: { id: input.id },
       });
 
       if (!repository) {
+        ctx.logger.debug('Unable to find repository with the provided input');
         throw new TRPCError({
           code: 'NOT_FOUND',
         });
@@ -60,6 +62,7 @@ export const repositoriesRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      ctx.logger.debug({ input }, 'Getting repositories using pagination');
       const [items, total] = await Promise.all([
         ctx.db.repository.findMany({
           skip: (input.page - 1) * input.size,
@@ -70,6 +73,7 @@ export const repositoriesRouter = createTRPCRouter({
         }),
         ctx.db.repository.count(),
       ]);
+
       return {
         items,
         total,
@@ -95,6 +99,7 @@ export const repositoriesRouter = createTRPCRouter({
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
+        ctx.logger.debug('Creating repository');
         return await ctx.db.repository.create({
           data: input,
         });
@@ -125,6 +130,7 @@ export const repositoriesRouter = createTRPCRouter({
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
+        ctx.logger.debug('Updating repository');
         return await ctx.db.repository.update({
           where: { id: input.id },
           data: input,
@@ -152,8 +158,15 @@ export const repositoriesRouter = createTRPCRouter({
     )
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.repository.delete({
-        where: { id: input.id },
-      });
+      ctx.logger.debug({ input }, 'Removing repository');
+      try {
+        return await ctx.db.repository.delete({
+          where: { id: input.id },
+        });
+      } catch (e) {
+        throw new ExtendedTRPCError({
+          cause: e,
+        });
+      }
     }),
 });
