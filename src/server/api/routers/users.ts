@@ -31,11 +31,13 @@ export const usersRouter = createTRPCRouter({
     .input(z.object({ id: z.string().cuid() }))
     .output(zUser())
     .query(async ({ ctx, input }) => {
+      ctx.logger.debug({ input }, 'Getting user');
       const user = await ctx.db.user.findUnique({
         where: { id: input.id },
       });
 
       if (!user) {
+        ctx.logger.warn('Unable to find user with the provided input');
         throw new TRPCError({
           code: 'NOT_FOUND',
         });
@@ -66,6 +68,7 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      ctx.logger.debug({ input }, 'Getting users using pagination');
       const [items, total] = await Promise.all([
         ctx.db.user.findMany({
           skip: (input.page - 1) * input.size,
@@ -76,6 +79,7 @@ export const usersRouter = createTRPCRouter({
         }),
         ctx.db.user.count(),
       ]);
+
       return {
         items,
         total,
@@ -99,6 +103,7 @@ export const usersRouter = createTRPCRouter({
     )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug('Creating user');
       try {
         return await ctx.db.user.create({
           data: input,
@@ -123,12 +128,14 @@ export const usersRouter = createTRPCRouter({
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
+        ctx.logger.warn('Logged user cannot deactivate itself');
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot deactivate yourself',
         });
       }
 
+      ctx.logger.debug('Deactivating user');
       return await ctx.db.user.update({
         where: { id: input.id },
         data: {
@@ -150,11 +157,14 @@ export const usersRouter = createTRPCRouter({
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
+        ctx.logger.warn('Logged user cannot activate itself');
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot activate yourself',
         });
       }
+
+      ctx.logger.debug('Activating user');
       return await ctx.db.user.update({
         where: { id: input.id },
         data: {
@@ -184,6 +194,7 @@ export const usersRouter = createTRPCRouter({
     )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug({ input }, 'Updating user');
       try {
         return await ctx.db.user.update({
           where: { id: input.id },
@@ -213,11 +224,14 @@ export const usersRouter = createTRPCRouter({
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
+        ctx.logger.warn('Logged user cannot delete itself');
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'You cannot remove yourself',
         });
       }
+
+      ctx.logger.debug({ input }, 'Removing user');
       return await ctx.db.user.delete({
         where: { id: input.id },
       });

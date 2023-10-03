@@ -31,7 +31,7 @@ export const repositoriesRouter = createTRPCRouter({
       });
 
       if (!repository) {
-        ctx.logger.debug('Unable to find repository with the provided input');
+        ctx.logger.warn('Unable to find repository with the provided input');
         throw new TRPCError({
           code: 'NOT_FOUND',
         });
