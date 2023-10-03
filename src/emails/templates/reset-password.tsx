@@ -53,7 +53,6 @@ export const EmailResetPassword = ({
           <code style={styles.code}>{link}</code>
           <Text style={styles.text}>
             {i18n.t('emails:resetPassword.ignoreHelper')}
-            email.
           </Text>
         </Section>
         <Footer />
