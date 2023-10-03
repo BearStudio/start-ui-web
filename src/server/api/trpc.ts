@@ -136,10 +136,10 @@ const loggerMiddleware = t.middleware(async (opts) => {
     logger[logLevel()](
       {
         ...extendedMeta,
-        code: result.error.code,
-        message: result.error.message,
+        errorCode: result.error.code,
+        errorMessage: result.error.message,
       },
-      '❌ Non-OK'
+      `❌ KO`
     );
   }
 

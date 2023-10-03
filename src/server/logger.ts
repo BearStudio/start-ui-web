@@ -1,4 +1,4 @@
-import { black, blue, cyan, gray, green, magenta } from 'colorette';
+import { black, blue, cyan, gray, green, magenta, red } from 'colorette';
 import pino from 'pino';
 import pretty from 'pino-pretty';
 import { z } from 'zod';
@@ -12,7 +12,7 @@ export const logger = env.LOGGER_PRETTY
       options,
       pretty({
         ignore:
-          'scope,type,path,pid,hostname,requestId,durationMs,userId,apiType',
+          'scope,type,path,pid,hostname,requestId,durationMs,userId,apiType,errorCode,errorMessage',
         messageFormat: (log, messageKey) => {
           const {
             requestId,
@@ -23,6 +23,8 @@ export const logger = env.LOGGER_PRETTY
             message,
             userId,
             apiType,
+            errorCode,
+            errorMessage,
           } = z
             .object({
               requestId: z
@@ -69,11 +71,24 @@ export const logger = env.LOGGER_PRETTY
                 .optional()
                 .catch(undefined)
                 .transform((v) => (v ? black(`${v} `) : '')),
+              errorCode: z
+                .string()
+                .optional()
+                .catch(undefined)
+                .transform((v) => (v ? red(`[${v}] `) : '')),
+              errorMessage: z
+                .string()
+                .optional()
+                .catch(undefined)
+                .transform((v) => (v ? black(`${v} `) : '')),
             })
             .parse({ ...log, message: log[messageKey] });
 
+          const error =
+            errorCode || errorMessage ? `· ${errorCode}${errorMessage}` : '';
+
           return black(
-            `${apiType}${userId}${requestId}${type}${path}· ${message}${scope}${durationMs}`
+            `${apiType}${userId}${requestId}${type}${path}· ${message}${error}${scope}${durationMs}`
           );
         },
       })
