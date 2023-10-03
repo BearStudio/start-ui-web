@@ -2,9 +2,9 @@ import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 
+import { ExtendedTRPCError } from '@/server/api/errors';
 import { zUserRole } from '@/server/api/routers/users';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
-import { ExtendedTRPCError } from '@/server/db';
 
 const zUserAccount = () =>
   z.object({
