@@ -259,10 +259,12 @@ export const authRouter = createTRPCRouter({
       });
 
       if (!user) {
+        ctx.logger.warn('User not found');
         // Silent failure for security
         return undefined;
       }
 
+      ctx.logger.debug('Creating reset password JWT');
       const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
 
       await ctx.db.verificationToken.create({
@@ -273,8 +275,10 @@ export const authRouter = createTRPCRouter({
         },
       });
 
+      ctx.logger.debug('JWT stored in database');
       const link = `${env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`;
 
+      ctx.logger.debug('Sending email');
       await sendEmail({
         to: input.email,
         subject: i18n.t('emails:resetPassword.subject', { lng: user.language }),
@@ -301,6 +305,7 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ token: z.string(), newPassword: z.string() }))
     .output(z.void())
     .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug('Removing expired tokens');
       await ctx.db.verificationToken.deleteMany({
         where: { expires: { lt: new Date() } },
       });
@@ -310,6 +315,7 @@ export const authRouter = createTRPCRouter({
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
+      ctx.logger.debug('Checking if user id match the provided JWT');
       const verificationToken = await ctx.db.verificationToken.findUnique({
         where: { token: input.token, userId: jwtDecoded.id },
       });
@@ -318,8 +324,10 @@ export const authRouter = createTRPCRouter({
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
+      ctx.logger.debug('Hashing new password');
       const passwordHash = await bcrypt.hash(input.newPassword, 12);
 
+      ctx.logger.debug('Saving new hash and removing verification JWT');
       const [user] = await ctx.db.$transaction([
         ctx.db.user.update({
           where: { id: verificationToken.userId },
@@ -329,6 +337,7 @@ export const authRouter = createTRPCRouter({
       ]);
 
       if (!user) {
+        ctx.logger.error('User not found');
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
 
