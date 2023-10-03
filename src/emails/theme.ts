@@ -6,6 +6,6 @@ export const theme = {
     white: '#ffffff',
     black: '#000000',
     text: '#333',
-    brand: '#3b82f6',
+    brand: '#2563eb',
   },
 } as const;

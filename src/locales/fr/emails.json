@@ -14,7 +14,7 @@
     "hello": "Bonjour {{name}},",
     "ignoreHelper": "Si vous n'avez pas essayé de vous inscrire, vous pouvez ignorer cet e-mail en toute sécurité.",
     "intro": "Bienvenue, votre compte est presque prêt, activez-le pour commencer :",
-    "link": "Activez votre compte",
+    "link": "Activez mon compte",
     "preview": "Lien pour activer votre compte",
     "subject": "Activez votre compte",
     "title": "Activez votre compte"

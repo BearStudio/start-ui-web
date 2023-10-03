@@ -37,8 +37,8 @@ export const EmailActivateAccount = ({
             <br />
           </Text>
           <Button
-            pY={11}
-            pX={23}
+            pY={12}
+            pX={20}
             style={styles.button}
             href={link}
             target="_blank"
