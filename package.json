@@ -81,7 +81,7 @@
     "react-use-measure": "2.1.1",
     "sharp": "0.32.6",
     "superjson": "1.13.3",
-    "swagger-ui-react": "5.9.0",
+    "swagger-ui-react": "4.19.0",
     "trpc-openapi": "1.2.0",
     "zod": "3.22.2",
     "zustand": "4.4.1"
