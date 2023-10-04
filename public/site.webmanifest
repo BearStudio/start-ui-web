@@ -1,6 +1,6 @@
 {
-    "name": "Start UI",
-    "short_name": "Start UI",
+    "name": "Start UI [web]",
+    "short_name": "Start UI [web]",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -15,5 +15,7 @@
     ],
     "theme_color": "#000000",
     "background_color": "#000000",
-    "display": "standalone"
+    "display": "standalone",
+    "start_url": "/",
+    "prefer_related_applications": true
 }

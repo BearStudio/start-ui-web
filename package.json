@@ -41,6 +41,7 @@
     "@chakra-ui/react": "2.7.0",
     "@chakra-ui/styled-system": "2.9.1",
     "@chakra-ui/theme-tools": "2.0.18",
+    "@ducanh2912/next-pwa": "9.7.1",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@faker-js/faker": "8.1.0",
