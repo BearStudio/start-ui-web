@@ -56,7 +56,9 @@ export const env = createEnv({
     LOGGER_LEVEL: process.env.LOGGER_LEVEL,
     LOGGER_PRETTY: process.env.LOGGER_PRETTY,
 
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME:
       process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME,
     NEXT_PUBLIC_DEV_ENV_NAME: process.env.NEXT_PUBLIC_DEV_ENV_NAME,
