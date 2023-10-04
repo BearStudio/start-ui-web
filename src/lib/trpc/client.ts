@@ -8,7 +8,7 @@ import {
 } from '@trpc/react-query';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
-import { type AppRouter } from '@/server/api/root';
+import { type AppRouter } from '@/server/router';
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const trpc = createTRPCReact<AppRouter>();

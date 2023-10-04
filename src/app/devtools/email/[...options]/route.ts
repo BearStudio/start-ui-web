@@ -1,3 +1,3 @@
-import { previewEmailRoute } from '@/server/email';
+import { previewEmailRoute } from '@/server/config/email';
 
 export const GET = previewEmailRoute;

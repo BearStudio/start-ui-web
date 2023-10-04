@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { ExtendedTRPCError } from '@/server/api/errors';
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import { ExtendedTRPCError } from '@/server/config/errors';
+import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 const zRepository = () =>
   z.object({

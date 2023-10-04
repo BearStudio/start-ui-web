@@ -16,9 +16,9 @@ import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
 
 import { env } from '@/env.mjs';
-import { getServerAuthSession } from '@/server/auth';
-import { db } from '@/server/db';
-import { logger } from '@/server/logger';
+import { getServerAuthSession } from '@/server/config/auth';
+import { db } from '@/server/config/db';
+import { logger } from '@/server/config/logger';
 
 /**
  * 1. CONTEXT

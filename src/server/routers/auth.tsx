@@ -9,10 +9,10 @@ import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailResetPassword from '@/emails/templates/reset-password';
 import { env } from '@/env.mjs';
 import i18n from '@/lib/i18n/server';
-import { ExtendedTRPCError } from '@/server/api/errors';
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/auth';
-import { sendEmail } from '@/server/email';
+import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/config/auth';
+import { sendEmail } from '@/server/config/email';
+import { ExtendedTRPCError } from '@/server/config/errors';
+import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
 
 export const authRouter = createTRPCRouter({
   checkAuthenticated: publicProcedure

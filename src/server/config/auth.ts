@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
 
 import { env } from '@/env.mjs';
-import { db } from '@/server/db';
+import { db } from '@/server/config/db';
 
 export const AUTH_COOKIE_NAME = 'auth';
 
