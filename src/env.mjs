@@ -21,7 +21,7 @@ export const env = createEnv({
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
     LOGGER_LEVEL: z
-      .enum(['debug', 'info', 'warn', 'error', 'fatal'])
+      .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
       .default(process.env.NODE_ENV === 'production' ? 'error' : 'info'),
     LOGGER_PRETTY: z
       .enum(['true', 'false'])
