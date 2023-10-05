@@ -10,6 +10,7 @@ import { Viewport } from '@/components/Viewport';
 import { EnvDevHint } from '@/layout/EnvDevHint';
 import i18n from '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 export const Document = ({ children }: { children: ReactNode }) => {
@@ -68,11 +69,13 @@ export const Document = ({ children }: { children: ReactNode }) => {
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
 
-        <Providers>
-          <Viewport>{children}</Viewport>
-          <EnvDevHint />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Providers>
+        <TrpcProvider>
+          <Providers>
+            <Viewport>{children}</Viewport>
+            <EnvDevHint />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Providers>
+        </TrpcProvider>
       </body>
     </html>
   );

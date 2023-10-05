@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import '@/lib/dayjs/config';
 import '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 const localStorageManager = createLocalStorageManager(COLOR_MODE_STORAGE_KEY);
@@ -28,7 +27,7 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
             'ltr',
         }}
       >
-        <TrpcProvider>{children}</TrpcProvider>
+        {children}
       </ChakraProvider>
     </CacheProvider>
   );
