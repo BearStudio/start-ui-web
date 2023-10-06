@@ -53,7 +53,6 @@ export const EmailActivateAccount = ({
           <code style={styles.code}>{link}</code>
           <Text style={styles.text}>
             {i18n.t('emails:activateAccount.ignoreHelper')}
-            email.
           </Text>
         </Section>
         <Footer />
