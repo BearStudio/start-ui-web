@@ -18,7 +18,7 @@ export const EnvDevHint = () => {
 
   return (
     <Box
-      zIndex="100"
+      zIndex="9999"
       position="fixed"
       top="0"
       insetStart="0"
