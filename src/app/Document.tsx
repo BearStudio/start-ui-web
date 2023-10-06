@@ -69,13 +69,13 @@ export const Document = ({ children }: { children: ReactNode }) => {
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
 
-        <TrpcProvider>
-          <Providers>
+        <Providers>
+          <TrpcProvider>
             <Viewport>{children}</Viewport>
             <EnvDevHint />
             <ReactQueryDevtools initialIsOpen={false} />
-          </Providers>
-        </TrpcProvider>
+          </TrpcProvider>
+        </Providers>
       </body>
     </html>
   );
