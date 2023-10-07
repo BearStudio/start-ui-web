@@ -18,5 +18,6 @@
     "link": "Activate account",
     "copyPastHelper": "Or, copy and paste this link to your browser:",
     "ignoreHelper": "If you didn't try to register, you can safely ignore this email."
-  }
+  },
+  "loginCode": {}
 }

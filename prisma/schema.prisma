@@ -17,12 +17,20 @@ model User {
   updatedAt     DateTime @updatedAt
   name          String?
   email         String   @unique
-  password      String?
   emailVerified Boolean  @default(false)
   image         String?
   activated     Boolean  @default(false)
   role          String   @default("USER")
   language      String   @default("en")
+}
+
+model CodeToken {
+  userId  String
+  code    String
+  token   String
+  expires DateTime
+
+  @@unique([userId, code])
 }
 
 model VerificationToken {

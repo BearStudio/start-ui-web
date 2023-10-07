@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import bcrypt from 'bcrypt';
 import { z } from 'zod';
 
 import { ExtendedTRPCError } from '@/server/config/errors';
@@ -80,62 +79,5 @@ export const accountRouter = createTRPCRouter({
           cause: e,
         });
       }
-    }),
-
-  updatePassword: protectedProcedure
-    .meta({
-      openapi: {
-        method: 'PATCH',
-        path: '/accounts/me/password',
-        protect: true,
-        tags: ['accounts'],
-      },
-    })
-    .input(z.object({ currentPassword: z.string(), newPassword: z.string() }))
-    .output(z.void())
-    .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Getting current user based on context user id');
-      const currentUser = await ctx.db.user.findUnique({
-        where: { id: ctx.user.id },
-      });
-
-      if (!currentUser?.password) {
-        ctx.logger.fatal(
-          { userId: currentUser?.id },
-          'Current user does not have any password'
-        );
-
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Missing password on user',
-        });
-      }
-
-      ctx.logger.debug('Comparing current password with the one in database');
-      const isPasswordValid = await bcrypt.compare(
-        input.currentPassword,
-        currentUser.password
-      );
-
-      if (!isPasswordValid) {
-        ctx.logger.warn(
-          'Current passwords and the one in database do not match'
-        );
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-        });
-      }
-
-      ctx.logger.debug('Hashing new password and saving it to database');
-      const passwordHash = await bcrypt.hash(input.newPassword, 12);
-      await ctx.db.user.update({
-        where: { id: ctx.user.id },
-        data: {
-          password: passwordHash,
-        },
-      });
-
-      ctx.logger.debug('End of the procedure');
-      return undefined;
     }),
 });

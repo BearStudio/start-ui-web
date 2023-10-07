@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
 
 // Those are ANSI espace code to reverse and reset terminal print to emphase logins
 // https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -15,14 +14,12 @@ async function createUsers() {
   let createdUsersCounter = 0;
   const existingUsersCount = await prisma.user.count();
 
-  const password = await bcrypt.hash('password', 12);
   await Promise.all(
     Array.from({ length: Math.max(0, 26 - existingUsersCount) }, async () => {
       await prisma.user.create({
         data: {
           name: faker.person.fullName(),
           email: faker.internet.email(),
-          password,
           activated: true,
           emailVerified: true,
         },
@@ -32,12 +29,10 @@ async function createUsers() {
   );
 
   if (!(await prisma.user.findUnique({ where: { email: 'user@user.com' } }))) {
-    const userPassword = await bcrypt.hash('user', 12);
     await prisma.user.create({
       data: {
         name: 'User',
         email: 'user@user.com',
-        password: userPassword,
         activated: true,
         emailVerified: true,
       },
@@ -48,12 +43,10 @@ async function createUsers() {
   if (
     !(await prisma.user.findUnique({ where: { email: 'admin@admin.com' } }))
   ) {
-    const adminPassword = await bcrypt.hash('admin', 12);
     await prisma.user.create({
       data: {
         name: 'Admin',
         email: 'admin@admin.com',
-        password: adminPassword,
         role: 'ADMIN',
         activated: true,
         emailVerified: true,
@@ -65,8 +58,8 @@ async function createUsers() {
   console.log(
     `✅ ${existingUsersCount} existing user 👉 ${createdUsersCounter} users created`
   );
-  console.log(`👉 Admin connect with: ${REVERSE}admin@admin.com/admin${RESET}`);
-  console.log(`👉 User connect with: ${REVERSE}user@user.com/user${RESET}`);
+  console.log(`👉 Admin connect with: ${REVERSE}admin@admin.com${RESET}`);
+  console.log(`👉 User connect with: ${REVERSE}user@user.com${RESET}`);
 }
 
 async function createRepositories() {

@@ -32,7 +32,11 @@ export default function PageLogin() {
             </Heading>
           </CardHeader>
           <CardBody>
-            <LoginForm onSuccess={() => router.replace('/')} />
+            <LoginForm
+              onSuccess={(data, variables) => {
+                router.replace(`/login/${data.token}?email=${variables.email}`);
+              }}
+            />
           </CardBody>
         </Card>
         <Center mt="8">

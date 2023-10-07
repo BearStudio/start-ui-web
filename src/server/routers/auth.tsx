@@ -1,11 +1,12 @@
 import { TRPCError } from '@trpc/server';
-import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
+import { randomInt, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import EmailActivateAccount from '@/emails/templates/activate-account';
+import EmailLoginCode from '@/emails/templates/login-code';
 import EmailResetPassword from '@/emails/templates/reset-password';
 import { env } from '@/env.mjs';
 import i18n from '@/lib/i18n/server';
@@ -27,6 +28,9 @@ export const authRouter = createTRPCRouter({
     .output(z.boolean())
     .query(async ({ ctx }) => {
       ctx.logger.debug(`User ${!!ctx.user ? 'is' : 'is not'} logged`);
+
+      console.log({ user: !!ctx.user });
+
       return !!ctx.user;
     }),
 
@@ -38,7 +42,7 @@ export const authRouter = createTRPCRouter({
         tags: ['auth'],
       },
     })
-    .input(z.object({ email: z.string().email(), password: z.string() }))
+    .input(z.object({ email: z.string().email() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       ctx.logger.debug('Retrieving user info by email');
@@ -46,38 +50,87 @@ export const authRouter = createTRPCRouter({
         where: { email: input.email },
       });
 
+      ctx.logger.debug('Creating token');
+      const token = await randomUUID();
+
       if (!user) {
         ctx.logger.warn('User not found');
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-        });
+        return {
+          token,
+        };
       }
 
-      if (!user.password || !user.activated || !user.emailVerified) {
+      if (!user.activated || !user.emailVerified) {
         ctx.logger.warn('Invalid user');
+        return {
+          token,
+        };
+      }
+
+      ctx.logger.debug('Creating code');
+      const code = randomInt(0, 999999).toString().padStart(6, '0');
+
+      ctx.logger.debug('Saving code and token to database');
+      await ctx.db.codeToken.create({
+        data: {
+          userId: user.id,
+          expires: dayjs().add(10, 'minutes').toDate(),
+          code,
+          token,
+        },
+      });
+
+      ctx.logger.debug('Send email with code');
+      // Envoie  de l'email ici
+      await sendEmail({
+        to: input.email,
+        subject: 'TODO',
+        template: <EmailLoginCode language={user.language} code={code} />,
+      });
+
+      return {
+        token,
+      };
+    }),
+
+  validate: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/login/{token}',
+        tags: ['auth'],
+      },
+    })
+    .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
+    .output(z.object({ token: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      ctx.logger.debug('Removing old code token from database');
+      await ctx.db.codeToken.deleteMany({
+        where: { expires: { lt: new Date() } },
+      });
+
+      ctx.logger.debug('Getting the matching code token from database');
+      const codeToken = await ctx.db.codeToken.findFirst({
+        where: {
+          code: input.code,
+          token: input.token,
+        },
+      });
+
+      if (!codeToken) {
+        ctx.logger.warn("Didn't find the code");
+        // TODO logic de timeout
+
         throw new TRPCError({
           code: 'UNAUTHORIZED',
+          message: 'Failed to authenticate the user',
         });
       }
 
-      ctx.logger.debug('Checking user password');
-      const isPasswordValid = await bcrypt.compare(
-        input.password,
-        user.password
-      );
-
-      if (!isPasswordValid) {
-        ctx.logger.warn('Invalid user password');
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Password not valid',
-        });
-      }
-
-      ctx.logger.debug('User password valid and decoding JWT');
-      const token = await jwt.sign({ id: user.id }, env.AUTH_SECRET);
+      ctx.logger.debug('Encoding JWT');
+      const token = await jwt.sign({ id: codeToken?.userId }, env.AUTH_SECRET);
       if (!token) {
-        ctx.logger.warn('Failed to decode JWT');
+        ctx.logger.warn('Failed to encode JWT');
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create the JWT token',
@@ -123,23 +176,18 @@ export const authRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-        password: z.string(),
         name: z.string(),
         language: z.string(),
       })
     )
     .output(z.void())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Hash password');
-      const passwordHash = await bcrypt.hash(input.password, 12);
-
       let user;
       try {
         ctx.logger.debug('Create user');
         user = await ctx.db.user.create({
           data: {
             email: input.email.toLowerCase().trim(),
-            password: passwordHash,
             name: input.name,
             language: input.language,
           },
@@ -290,56 +338,6 @@ export const authRouter = createTRPCRouter({
           />
         ),
       });
-
-      return undefined;
-    }),
-
-  resetPasswordConfirm: publicProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/auth/reset-password/confirm',
-        tags: ['auth'],
-      },
-    })
-    .input(z.object({ token: z.string(), newPassword: z.string() }))
-    .output(z.void())
-    .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Removing expired tokens');
-      await ctx.db.verificationToken.deleteMany({
-        where: { expires: { lt: new Date() } },
-      });
-
-      const jwtDecoded = decodeJwt(input.token);
-      if (!jwtDecoded?.id) {
-        throw new TRPCError({ code: 'BAD_REQUEST' });
-      }
-
-      ctx.logger.debug('Checking if user id match the provided JWT');
-      const verificationToken = await ctx.db.verificationToken.findUnique({
-        where: { token: input.token, userId: jwtDecoded.id },
-      });
-
-      if (!verificationToken) {
-        throw new TRPCError({ code: 'BAD_REQUEST' });
-      }
-
-      ctx.logger.debug('Hashing new password');
-      const passwordHash = await bcrypt.hash(input.newPassword, 12);
-
-      ctx.logger.debug('Saving new hash and removing verification JWT');
-      const [user] = await ctx.db.$transaction([
-        ctx.db.user.update({
-          where: { id: verificationToken.userId },
-          data: { password: passwordHash },
-        }),
-        ctx.db.verificationToken.delete({ where: { token: input.token } }),
-      ]);
-
-      if (!user) {
-        ctx.logger.error('User not found');
-        throw new TRPCError({ code: 'BAD_REQUEST' });
-      }
 
       return undefined;
     }),

@@ -4,7 +4,6 @@ import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -12,9 +11,13 @@ import { useToastError } from '@/components/Toast';
 import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
 import { DevLoginHint } from '@/features/dev/DevLoginHint';
 import { trpc } from '@/lib/trpc/client';
+import { RouterInput, RouterOutput } from '@/server/router';
 
 type LoginFormProps = BoxProps & {
-  onSuccess?: () => void;
+  onSuccess?: (
+    data: RouterOutput['auth']['login'],
+    variables: RouterInput['auth']['login']
+  ) => void;
 };
 
 export const LoginForm = ({
@@ -24,14 +27,12 @@ export const LoginForm = ({
   const { t } = useTranslation(['auth']);
   const toastError = useToastError();
   const queryCache = useQueryClient();
-  const trpcContext = trpc.useContext();
 
   const login = trpc.auth.login.useMutation({
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryCache.clear();
-      // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, true);
-      onSuccess();
+
+      onSuccess(data, variables);
     },
     onError: () => {
       toastError({
@@ -40,7 +41,7 @@ export const LoginForm = ({
     },
   });
 
-  const form = useForm<{ email: string; password: string }>({
+  const form = useForm<{ email: string }>({
     onValidSubmit: (values) => login.mutate(values),
   });
 
@@ -60,22 +61,8 @@ export const LoginForm = ({
             ]}
             formatValue={(v) => v?.toLowerCase().trim()}
           />
-          <FieldInput
-            name="password"
-            type="password"
-            label={t('auth:data.password.label')}
-            required={t('auth:data.password.required')}
-          />
+
           <Flex>
-            <Button
-              as={Link}
-              href="/reset-password/request"
-              size="sm"
-              variant="link"
-              whiteSpace="initial"
-            >
-              {t('auth:login.actions.forgotPassword')}
-            </Button>
             <Button
               isLoading={login.isLoading}
               isDisabled={form.isSubmitted && !form.isValid}

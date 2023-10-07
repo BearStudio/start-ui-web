@@ -12,7 +12,6 @@ import { env } from '@/env.mjs';
 export const DevLoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
-  const mockedPassword = 'admin';
 
   if (
     env.NEXT_PUBLIC_NODE_ENV !== 'development' ||
@@ -33,13 +32,11 @@ export const DevLoginHint = () => {
           onClick={() =>
             form.setValues({
               email: mockedEmail,
-              password: mockedPassword,
             })
           }
         >
           {mockedEmail}
-        </ChakraLink>{' '}
-        (Password: {mockedPassword}) account.
+        </ChakraLink>
       </AlertDescription>
     </Alert>
   );
