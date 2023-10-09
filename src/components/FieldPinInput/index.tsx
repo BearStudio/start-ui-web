@@ -34,7 +34,7 @@ export const FieldPinInput = <FormattedValue = string,>(
   const {
     label,
     helper,
-    size = 'md',
+    size = 'lg',
     autoFocus,
     onComplete,
     ...rest
@@ -76,13 +76,14 @@ export const FieldPinInput = <FormattedValue = string,>(
           onChange={(val) => setValue(val)}
           autoFocus={autoFocus}
           onComplete={handleOnComplete}
+          placeholder="·"
         >
-          <PinInputField />
-          <PinInputField />
-          <PinInputField />
-          <PinInputField />
-          <PinInputField />
-          <PinInputField />
+          <PinInputField flex={1} />
+          <PinInputField flex={1} />
+          <PinInputField flex={1} />
+          <PinInputField flex={1} />
+          <PinInputField flex={1} />
+          <PinInputField flex={1} />
         </PinInput>
       </HStack>
     </FormGroup>

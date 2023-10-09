@@ -83,6 +83,7 @@ export default function PageLoginValidate() {
                   name="code"
                   label="Code"
                   helper="Can't find the code? Check your spams"
+                  autoFocus
                   onComplete={() => form.submit()}
                 />
                 <Flex>
