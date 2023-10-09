@@ -21,7 +21,7 @@ import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
 import { trpc } from '@/lib/trpc/client';
 
-export default function PageLoginActivate() {
+export default function PageLoginValidate() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
   const params = useParams();
@@ -77,22 +77,25 @@ export default function PageLoginActivate() {
           </CardHeader>
           <CardBody>
             <Formiz connect={form} autoForm>
-              <FieldPinInput
-                name="code"
-                label="Code"
-                onComplete={() => form.submit()}
-              />
-              <Flex>
-                <Button
-                  isLoading={validate.isLoading}
-                  isDisabled={form.isSubmitted && !form.isValid}
-                  type="submit"
-                  variant="@primary"
-                  ms="auto"
-                >
-                  {t('auth:login.actions.login')}
-                </Button>
-              </Flex>
+              <Stack>
+                <FieldPinInput
+                  name="code"
+                  label="Code"
+                  helper="Can't find the code? Check your spams"
+                  onComplete={() => form.submit()}
+                />
+                <Flex>
+                  <Button
+                    isLoading={validate.isLoading}
+                    isDisabled={form.isSubmitted && !form.isValid}
+                    type="submit"
+                    variant="@primary"
+                    ms="auto"
+                  >
+                    {t('auth:login.actions.login')}
+                  </Button>
+                </Flex>
+              </Stack>
             </Formiz>
           </CardBody>
         </Card>

@@ -1,0 +1,1 @@
+export const VALIDATE_MOCKED_CODE = '000000';

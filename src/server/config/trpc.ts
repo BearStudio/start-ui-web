@@ -178,7 +178,7 @@ const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
 
 /** Demo Middleware */
 const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
-  if (env.NEXT_PUBLIC_IS_DEMO !== 'true') {
+  if (!env.NEXT_PUBLIC_IS_DEMO) {
     return next({
       ctx,
     });

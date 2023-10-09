@@ -25,12 +25,11 @@ model User {
 }
 
 model CodeToken {
-  userId  String
-  code    String
-  token   String
-  expires DateTime
-
-  @@unique([userId, code])
+  userId   String
+  code     String
+  token    String   @unique
+  expires  DateTime
+  attempts Int?
 }
 
 model VerificationToken {

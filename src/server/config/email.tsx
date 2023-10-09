@@ -14,6 +14,10 @@ export const sendEmail = ({
   ...options
 }: Omit<MailOptions, 'html'> &
   Required<Pick<MailOptions, 'subject'>> & { template: ReactElement }) => {
+  if (env.NEXT_PUBLIC_IS_DEMO) {
+    return;
+  }
+
   const html = render(template);
   return transport.sendMail({
     from: env.EMAIL_FROM,

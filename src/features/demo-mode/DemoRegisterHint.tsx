@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { env } from '@/env.mjs';
 
 export const DemoRegisterHint = () => {
-  if (env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
+  if (!env.NEXT_PUBLIC_IS_DEMO) return null;
 
   return (
     <Alert status="warning">

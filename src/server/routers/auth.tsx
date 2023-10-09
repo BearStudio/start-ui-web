@@ -7,8 +7,8 @@ import { z } from 'zod';
 
 import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailLoginCode from '@/emails/templates/login-code';
-import EmailResetPassword from '@/emails/templates/reset-password';
 import { env } from '@/env.mjs';
+import { VALIDATE_MOCKED_CODE } from '@/features/auth/constants';
 import i18n from '@/lib/i18n/server';
 import { AUTH_COOKIE_NAME, decodeJwt } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
@@ -28,8 +28,6 @@ export const authRouter = createTRPCRouter({
     .output(z.boolean())
     .query(async ({ ctx }) => {
       ctx.logger.debug(`User ${!!ctx.user ? 'is' : 'is not'} logged`);
-
-      console.log({ user: !!ctx.user });
 
       return !!ctx.user;
     }),
@@ -68,7 +66,10 @@ export const authRouter = createTRPCRouter({
       }
 
       ctx.logger.debug('Creating code');
-      const code = randomInt(0, 999999).toString().padStart(6, '0');
+      const code =
+        env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
+          ? VALIDATE_MOCKED_CODE
+          : randomInt(0, 999999).toString().padStart(6, '0');
 
       ctx.logger.debug('Saving code and token to database');
       await ctx.db.codeToken.create({
@@ -287,57 +288,6 @@ export const authRouter = createTRPCRouter({
         ctx.logger.fatal(verificationToken, 'User does not exist');
         throw new TRPCError({ code: 'BAD_REQUEST' });
       }
-
-      return undefined;
-    }),
-
-  resetPasswordRequest: publicProcedure
-    .meta({
-      openapi: {
-        method: 'POST',
-        path: '/auth/reset-password/request',
-        tags: ['auth'],
-      },
-    })
-    .input(z.object({ email: z.string().email() }))
-    .output(z.void())
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findFirst({
-        where: { email: input.email },
-      });
-
-      if (!user) {
-        ctx.logger.warn('User not found');
-        // Silent failure for security
-        return undefined;
-      }
-
-      ctx.logger.debug('Creating reset password JWT');
-      const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
-
-      await ctx.db.verificationToken.create({
-        data: {
-          userId: user.id,
-          token,
-          expires: dayjs().add(1, 'hour').toDate(),
-        },
-      });
-
-      ctx.logger.debug('JWT stored in database');
-      const link = `${env.NEXT_PUBLIC_BASE_URL}/reset-password/confirm?token=${token}`;
-
-      ctx.logger.debug('Sending email');
-      await sendEmail({
-        to: input.email,
-        subject: i18n.t('emails:resetPassword.subject', { lng: user.language }),
-        template: (
-          <EmailResetPassword
-            language={user.language}
-            name={user.name ?? ''}
-            link={link}
-          />
-        ),
-      });
 
       return undefined;
     }),

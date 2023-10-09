@@ -53,7 +53,6 @@ export default function PageRegister() {
     language: string;
     name: string;
     email: string;
-    password: string;
   }>({
     onValidSubmit: (values) => register.mutate(values),
   });
@@ -138,12 +137,6 @@ export default function PageRegister() {
                       message: t('auth:data.email.invalid'),
                     },
                   ]}
-                />
-                <FieldInput
-                  name="password"
-                  type="password"
-                  label={t('auth:data.password.label')}
-                  required={t('auth:data.password.required')}
                 />
                 <Flex>
                   <Button

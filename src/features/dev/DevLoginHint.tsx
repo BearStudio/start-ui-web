@@ -13,10 +13,7 @@ export const DevLoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
 
-  if (
-    env.NEXT_PUBLIC_NODE_ENV !== 'development' ||
-    env.NEXT_PUBLIC_IS_DEMO === 'true'
-  )
+  if (env.NEXT_PUBLIC_NODE_ENV !== 'development' || env.NEXT_PUBLIC_IS_DEMO)
     return null;
 
   return (

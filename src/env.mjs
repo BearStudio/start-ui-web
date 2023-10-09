@@ -35,7 +35,11 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_IS_DEMO: z.enum(['true', 'false']).optional().default('false'),
+    NEXT_PUBLIC_IS_DEMO: z
+      .enum(['true', 'false'])
+      .optional()
+      .default('false')
+      .transform((v) => v === 'true'),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
 
     NEXT_PUBLIC_DEV_ENV_NAME: z.string().optional(),

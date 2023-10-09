@@ -12,9 +12,8 @@ import { env } from '@/env.mjs';
 export const DemoLoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
-  const mockedPassword = 'admin';
 
-  if (env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
+  if (!env.NEXT_PUBLIC_IS_DEMO) return null;
 
   return (
     <Alert status="info">
@@ -29,11 +28,10 @@ export const DemoLoginHint = () => {
           onClick={() =>
             form.setValues({
               email: mockedEmail,
-              password: mockedPassword,
             })
           }
         >
-          {mockedEmail}/{mockedPassword}
+          {mockedEmail}
         </ChakraLink>{' '}
         account. Just remember, no changes can be made. Enjoy the features!
       </AlertDescription>
