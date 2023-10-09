@@ -35,7 +35,7 @@ export default function PageLoginValidate() {
     onValidSubmit: (values) => validate.mutate({ ...values, token }),
   });
 
-  const validate = trpc.auth.validate.useMutation({
+  const validate = trpc.auth.loginValidate.useMutation({
     onSuccess: () => {
       // Optimistic Update
       trpcContext.auth.checkAuthenticated.setData(undefined, true);

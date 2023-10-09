@@ -12,32 +12,26 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   name          String?
-  email         String   @unique
-  emailVerified Boolean  @default(false)
+  email         String    @unique
+  emailVerified Boolean   @default(false)
   image         String?
-  activated     Boolean  @default(false)
-  role          String   @default("USER")
-  language      String   @default("en")
-}
-
-model CodeToken {
-  userId   String
-  code     String
-  token    String   @unique
-  expires  DateTime
-  attempts Int?
+  activated     Boolean   @default(true)
+  role          String    @default("USER")
+  language      String    @default("en")
+  lastLoginAt   DateTime?
 }
 
 model VerificationToken {
-  userId  String
-  token   String   @unique
-  expires DateTime
-
-  @@unique([userId, token])
+  userId        String
+  code          String
+  token         String   @unique
+  expires       DateTime
+  lastAttemptAt DateTime @updatedAt
+  attempts      Int      @default(0)
 }
 
 model Repository {
