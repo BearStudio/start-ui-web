@@ -29,15 +29,16 @@ import {
   getRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { DevCodeHint } from '@/features/dev/DevCodeHint';
+import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageLoginValidate() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
   const params = useParams();
-  const pathname = usePathname();
   const trpcContext = trpc.useContext();
   const searchParams = useSearchParams();
+  const searchParamsUpdater = useSearchParamsUpdater();
 
   const token = params?.token?.toString() ?? '';
   const email = searchParams.get('email');
@@ -63,9 +64,12 @@ export default function PageLoginValidate() {
           code: `Code is invalid, please wait ${seconds} seconds before submitting`,
         });
 
-        const params = new URLSearchParams(searchParams);
-        params.set('retries', (retries + 1).toString());
-        router.replace(`${pathname}?${params.toString()}`);
+        searchParamsUpdater(
+          {
+            retries: (retries + 1).toString(),
+          },
+          { replace: true }
+        );
 
         await new Promise((r) => {
           setTimeout(r, seconds * 1_000);
