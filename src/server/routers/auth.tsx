@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 import { randomInt, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import EmailActivateAccount from '@/emails/templates/activate-account';
 import EmailLoginCode from '@/emails/templates/login-code';
 import { env } from '@/env.mjs';
 import {
@@ -14,11 +13,16 @@ import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getRetryDelayInSeconds as getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
-import i18n from '@/lib/i18n/server';
 import { AUTH_COOKIE_NAME } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
+
+function generateCode() {
+  return env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
+    ? VALIDATION_CODE_MOCKED
+    : randomInt(0, 999999).toString().padStart(6, '0');
+}
 
 export const authRouter = createTRPCRouter({
   checkAuthenticated: publicProcedure
@@ -63,7 +67,7 @@ export const authRouter = createTRPCRouter({
         };
       }
 
-      if (!user.activated || !user.emailVerified) {
+      if (!user.activated || user.status !== 'VERIFIED') {
         ctx.logger.warn('Invalid user');
         return {
           token,
@@ -71,10 +75,7 @@ export const authRouter = createTRPCRouter({
       }
 
       ctx.logger.debug('Creating code');
-      const code =
-        env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
-          ? VALIDATION_CODE_MOCKED
-          : randomInt(0, 999999).toString().padStart(6, '0');
+      const code = generateCode();
 
       ctx.logger.debug('Saving code and token to database');
       await ctx.db.verificationToken.create({
@@ -210,7 +211,7 @@ export const authRouter = createTRPCRouter({
           where: { id: verificationToken.userId },
           data: {
             lastLoginAt: new Date(),
-            emailVerified: true,
+            status: 'VERIFIED',
           },
         });
       } catch (e) {
@@ -263,56 +264,81 @@ export const authRouter = createTRPCRouter({
         language: z.string(),
       })
     )
-    .output(z.void())
+    .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // 👉 check si le compte existe
-      // 👉 s'il existe et s'il est pas "emailVerified"
-      // 👉 s'il existe pas on le créé sinon on l'update sur l'email
-      // 👉 envoit code par email
-      // 👉 redirect flow loginValidate
+      ctx.logger.debug('Checking if the user exists');
+      let user = await ctx.db.user.findUnique({
+        where: {
+          email: input.email.toLowerCase().trim(),
+        },
+      });
 
-      let user;
-      try {
-        ctx.logger.debug('Create user');
-        user = await ctx.db.user.create({
+      // If the user doesn't exist, we create a new one.
+      if (!user) {
+        try {
+          ctx.logger.debug('Creating a new user');
+          user = await ctx.db.user.create({
+            data: {
+              email: input.email.toLowerCase().trim(),
+              name: input.name,
+              language: input.language,
+            },
+          });
+        } catch (e) {
+          ctx.logger.warn('Failed to create user');
+          throw new ExtendedTRPCError({
+            cause: e,
+          });
+        }
+      }
+
+      // If the user exists and email is not verified, it means the user (or
+      // someone else) did register using this email but did not complete the
+      // validation flow. So we update the data according to the new
+      // informations.
+      if (user && user.status !== 'VERIFIED') {
+        user = await ctx.db.user.update({
+          where: {
+            email: input.email,
+          },
           data: {
-            email: input.email.toLowerCase().trim(),
-            name: input.name,
+            ...user,
             language: input.language,
+            name: input.name,
           },
         });
-      } catch (e) {
-        ctx.logger.warn('Failed to create user');
-        throw new ExtendedTRPCError({
-          cause: e,
-        });
       }
-      ctx.logger.debug('Sign JWT');
-      const token = jwt.sign({ id: user.id }, env.AUTH_SECRET);
-      ctx.logger.debug('Create verification token in database');
-      // TODO
-      // await ctx.db.verificationToken.create({
-      //   data: {
-      //     userId: user.id,
-      //     token,
-      //     expires: dayjs().add(1, 'hour').toDate(),
-      //   },
-      // });
-      const link = `${env.NEXT_PUBLIC_BASE_URL}/register/activate?token=${token}`;
-      ctx.logger.debug('Send email');
+
+      // If we got here, the user exists and email is verified, no need to
+      // register, send the email to login the user.
+
+      ctx.logger.debug('Creating code');
+      const code = generateCode();
+
+      ctx.logger.debug('Creating token');
+      const token = await randomUUID();
+
+      ctx.logger.debug('Creating verification token in database');
+      await ctx.db.verificationToken.create({
+        data: {
+          userId: user.id,
+          token,
+          expires: dayjs()
+            .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
+            .toDate(),
+          code,
+        },
+      });
+
+      ctx.logger.debug('Sending email to login');
       await sendEmail({
         to: input.email,
-        subject: i18n.t('emails:activateAccount.subject', {
-          lng: user.language,
-        }),
-        template: (
-          <EmailActivateAccount
-            language={user.language}
-            name={user.name ?? ''}
-            link={link}
-          />
-        ),
+        subject: 'TODO',
+        template: <EmailLoginCode language={user.language} code={code} />,
       });
-      return undefined;
+
+      return {
+        token,
+      };
     }),
 });

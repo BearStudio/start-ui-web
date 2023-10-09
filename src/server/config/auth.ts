@@ -35,7 +35,7 @@ export const getServerAuthSession = async () => {
       role: true,
       language: true,
       activated: true,
-      emailVerified: true,
+      status: true,
     },
   });
 };

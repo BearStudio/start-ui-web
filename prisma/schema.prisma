@@ -11,18 +11,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountStatus {
+  REGISTERED
+  VERIFIED
+}
+
 model User {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  name          String?
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  activated     Boolean   @default(true)
-  role          String    @default("USER")
-  language      String    @default("en")
-  lastLoginAt   DateTime?
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String?
+  email       String        @unique
+  status      AccountStatus @default(REGISTERED)
+  image       String?
+  activated   Boolean       @default(true)
+  role        String        @default("USER")
+  language    String        @default("en")
+  lastLoginAt DateTime?
 }
 
 model VerificationToken {

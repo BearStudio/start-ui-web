@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Box,
@@ -13,12 +13,21 @@ import {
   chakra,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { FieldPinInput } from '@/components/FieldPinInput';
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
+import {
+  VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
+  getRetryDelayInSeconds,
+} from '@/features/auth/utils';
 import { DevCodeHint } from '@/features/dev/DevCodeHint';
 import { trpc } from '@/lib/trpc/client';
 
@@ -26,6 +35,7 @@ export default function PageLoginValidate() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const trpcContext = trpc.useContext();
   const searchParams = useSearchParams();
 
@@ -44,9 +54,23 @@ export default function PageLoginValidate() {
       // TODO setup redirect logic (redirect url params)
       router.push('/dashboard');
     },
-    onError: (error) => {
+    onError: async (error) => {
       if (error.data?.code === 'UNAUTHORIZED') {
-        form.setErrors({ code: 'Code is invalid' });
+        const retries = parseInt(searchParams.get('retries') ?? '0', 10);
+        const seconds = getRetryDelayInSeconds(retries);
+
+        form.setErrors({
+          code: `Code is invalid, please wait ${seconds} seconds before submitting`,
+        });
+
+        const params = new URLSearchParams(searchParams);
+        params.set('retries', (retries + 1).toString());
+        router.replace(`${pathname}?${params.toString()}`);
+
+        await new Promise((r) => {
+          setTimeout(r, seconds * 1_000);
+        });
+
         return;
       }
 
@@ -71,22 +95,34 @@ export default function PageLoginValidate() {
               </Heading>
               <Text>
                 We&apos;ve sent a 6-character code to{' '}
-                <chakra.strong>{email}</chakra.strong>. The code expires
-                shortly, so please enter it soon.
+                <chakra.strong>{email}</chakra.strong>. The code expires shortly
+                ({VALIDATION_TOKEN_EXPIRATION_IN_MINUTES} minutes), so please
+                enter it soon.
               </Text>
             </Stack>
           </CardHeader>
           <CardBody>
             <Formiz connect={form} autoForm>
-              <Stack>
+              <Stack spacing="4">
                 <FieldPinInput
                   name="code"
                   label="Code"
-                  helper="Can't find the code? Check your spams"
+                  helper="Can't find the code? Check your spams."
                   autoFocus
-                  onComplete={() => form.submit()}
+                  onComplete={() => {
+                    if (validate.isLoading) {
+                      // We don't want to submit if the previous request is
+                      // still loading.
+                      return;
+                    }
+
+                    form.submit();
+                  }}
                 />
                 <Flex>
+                  <Button type="button" onClick={() => router.back()}>
+                    Back
+                  </Button>
                   <Button
                     isLoading={validate.isLoading}
                     isDisabled={form.isSubmitted && !form.isValid}

@@ -1,7 +1,7 @@
 'use client';
 
-import PageLoginActivate from '@/features/auth/PageLoginActivate';
+import PageLoginValidate from '@/features/auth/PageLoginValidate';
 
 export default function Page() {
-  return <PageLoginActivate />;
+  return <PageLoginValidate />;
 }

@@ -16,10 +16,21 @@ import { useTranslation } from 'react-i18next';
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
 import { LoginForm } from '@/features/auth/LoginForm';
+import { RouterInput, RouterOutput } from '@/server/router';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
+
+  const handleOnSuccess = (
+    data: RouterOutput['auth']['login'],
+    variables: RouterInput['auth']['login']
+  ) => {
+    const urlSearchParams = new URLSearchParams({
+      email: variables.email,
+    });
+    router.push(`/login/${data.token}?${urlSearchParams.toString()}`);
+  };
 
   return (
     <SlideIn>
@@ -32,11 +43,7 @@ export default function PageLogin() {
             </Heading>
           </CardHeader>
           <CardBody>
-            <LoginForm
-              onSuccess={(data, variables) => {
-                router.replace(`/login/${data.token}?email=${variables.email}`);
-              }}
-            />
+            <LoginForm onSuccess={handleOnSuccess} />
           </CardBody>
         </Card>
         <Center mt="8">

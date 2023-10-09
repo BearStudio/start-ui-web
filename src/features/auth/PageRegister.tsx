@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Box,
@@ -9,18 +9,16 @@ import {
   Center,
   Flex,
   Heading,
-  ScaleFade,
   Stack,
 } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import Link from 'next/link';
-import { Trans, useTranslation } from 'react-i18next';
-import { LuCheckCircle2 } from 'react-icons/lu';
+import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
-import { Icon } from '@/components/Icons';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
@@ -32,11 +30,11 @@ export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'auth']);
 
   const toastError = useToastError();
-  const [accountEmail, setAccountEmail] = useState('');
+  const router = useRouter();
 
   const register = trpc.auth.register.useMutation({
-    onMutate: ({ email }) => {
-      setAccountEmail(email);
+    onSuccess: (data, variables) => {
+      router.push(`/login/${data.token}?email=${variables.email}`);
     },
     onError: (error) => {
       if (isErrorDatabaseConflict(error, 'email')) {
@@ -67,41 +65,6 @@ export default function PageRegister() {
   useEffect(() => {
     i18n.changeLanguage(values?.language);
   }, [i18n, values?.language]);
-
-  if (register.isSuccess) {
-    return (
-      <Center p="4" m="auto">
-        <ScaleFade initialScale={0.9} in>
-          <Card maxW="md">
-            <CardHeader pb={0}>
-              <Heading size="md">
-                <Icon icon={LuCheckCircle2} mr={2} color="success.500" />
-                {t('auth:register.feedbacks.registrationSuccess.title')}
-              </Heading>
-            </CardHeader>
-            <CardBody pt={2}>
-              <Trans
-                t={t}
-                i18nKey="auth:register.feedbacks.registrationSuccess.description"
-                values={{ email: accountEmail }}
-              />
-            </CardBody>
-          </Card>
-          <Center mt="8">
-            <Button
-              as={Link}
-              href="/login"
-              variant="link"
-              color="brand.500"
-              _dark={{ color: 'brand.300' }}
-            >
-              {t('auth:register.actions.goToLogin')}
-            </Button>
-          </Center>
-        </ScaleFade>
-      </Center>
-    );
-  }
 
   return (
     <SlideIn>
