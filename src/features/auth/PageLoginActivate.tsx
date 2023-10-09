@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldPinInput } from '@/components/FieldPinInput';
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
+import { DevCodeHint } from '@/features/dev/DevCodeHint';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageLoginValidate() {
@@ -95,6 +96,8 @@ export default function PageLoginValidate() {
                     {t('auth:login.actions.login')}
                   </Button>
                 </Flex>
+
+                <DevCodeHint />
               </Stack>
             </Formiz>
           </CardBody>

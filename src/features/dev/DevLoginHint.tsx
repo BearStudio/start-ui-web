@@ -13,15 +13,17 @@ export const DevLoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
 
-  if (env.NEXT_PUBLIC_NODE_ENV !== 'development' || env.NEXT_PUBLIC_IS_DEMO)
+  if (env.NEXT_PUBLIC_NODE_ENV !== 'development' && !env.NEXT_PUBLIC_IS_DEMO)
     return null;
 
   return (
     <Alert status="info">
       <AlertIcon />
-      <AlertTitle>Development</AlertTitle>
+      <AlertTitle textTransform="capitalize">
+        {env.NEXT_PUBLIC_IS_DEMO ? 'Demo mode' : env.NEXT_PUBLIC_NODE_ENV}
+      </AlertTitle>
       <AlertDescription>
-        You can login with{' '}
+        Enjoy the features! You can login with{' '}
         <ChakraLink
           as="button"
           type="button"

@@ -8,32 +8,34 @@ import {
 import { useFormContext } from '@formiz/core';
 
 import { env } from '@/env.mjs';
+import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
 
-export const DemoLoginHint = () => {
+export const DevCodeHint = () => {
   const form = useFormContext();
-  const mockedEmail = 'admin@admin.com';
 
-  if (!env.NEXT_PUBLIC_IS_DEMO) return null;
+  if (env.NEXT_PUBLIC_NODE_ENV !== 'development' && !env.NEXT_PUBLIC_IS_DEMO)
+    return null;
 
   return (
     <Alert status="info">
       <AlertIcon />
-      <AlertTitle>Demo Mode</AlertTitle>
+      <AlertTitle textTransform="capitalize">
+        {env.NEXT_PUBLIC_IS_DEMO ? 'Demo mode' : env.NEXT_PUBLIC_NODE_ENV}
+      </AlertTitle>
       <AlertDescription>
-        This is a read-only demo, but you can log in with the{' '}
+        To quickly connect, use the code{' '}
         <ChakraLink
           as="button"
           type="button"
           fontWeight="bold"
           onClick={() =>
             form.setValues({
-              email: mockedEmail,
+              code: VALIDATION_CODE_MOCKED,
             })
           }
         >
-          {mockedEmail}
-        </ChakraLink>{' '}
-        account. Just remember, no changes can be made. Enjoy the features!
+          {VALIDATION_CODE_MOCKED}
+        </ChakraLink>
       </AlertDescription>
     </Alert>
   );
