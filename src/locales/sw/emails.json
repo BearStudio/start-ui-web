@@ -24,5 +24,14 @@
     "preview": "Nambari yako ya uthibitishaji",
     "subject": "Hakikisha akaunti yako",
     "title": "Hakikisha akaunti yako"
+  },
+  "emailAddressChange": {
+    "hello": "Hujambo {{jina}},",
+    "ignoreHelper": "Ikiwa hukujaribu kubadilisha barua pepe yako, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Huu ndio nambari ya kuthibitisha ili kusasisha barua pepe yako:",
+    "preview": "Badilisha barua pepe yako",
+    "subject": "Nambari ya uthibitishaji",
+    "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata.",
+    "title": "Nambari yako ya uthibitishaji"
   }
 }

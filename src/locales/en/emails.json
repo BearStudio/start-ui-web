@@ -24,5 +24,14 @@
     "intro": "It looks like there isn't an account tied to this email address.",
     "button": "Try a different email",
     "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  },
+  "emailAddressChange": {
+    "subject": "Verification code",
+    "preview": "Change your email",
+    "title": "Your verification code",
+    "hello": "Hi {{name}},",
+    "intro": "This is the verification code to update your email:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
   }
 }

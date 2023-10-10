@@ -24,5 +24,14 @@
     "preview": "Votre code de vérification",
     "subject": "Vérifiez votre compte",
     "title": "Vérifiez votre compte"
+  },
+  "emailAddressChange": {
+    "hello": "Bonjour {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de modifier votre adresse email, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Voici le code de vérification pour mettre à jour votre email :",
+    "preview": "Changez votre email",
+    "subject": "Code de vérification",
+    "validityTime": "Ce code ne sera valable que pour les prochaines {{expiration}} minutes.",
+    "title": "Votre code de vérification"
   }
 }
