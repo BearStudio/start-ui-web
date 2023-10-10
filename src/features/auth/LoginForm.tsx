@@ -50,6 +50,7 @@ export const LoginForm = ({
         <Stack spacing={4}>
           <FieldInput
             name="email"
+            size="lg"
             label={t('auth:data.email.label')}
             required={t('auth:data.email.required')}
             validations={[
@@ -67,7 +68,8 @@ export const LoginForm = ({
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant="@primary"
-              ms="auto"
+              size="lg"
+              flex={1}
             >
               {t('auth:login.actions.login')}
             </Button>

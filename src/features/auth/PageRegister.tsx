@@ -107,7 +107,8 @@ export default function PageRegister() {
                     isDisabled={form.isSubmitted && !form.isValid}
                     type="submit"
                     variant="@primary"
-                    ms="auto"
+                    flex={1}
+                    size="lg"
                   >
                     {t('auth:register.actions.create')}
                   </Button>

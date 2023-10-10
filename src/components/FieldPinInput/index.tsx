@@ -32,6 +32,7 @@ export const FieldPinInput = <FormattedValue = string,>(
     otherProps,
   } = useField(props);
   const {
+    isDisabled,
     label,
     helper,
     size = 'lg',
@@ -77,6 +78,8 @@ export const FieldPinInput = <FormattedValue = string,>(
           autoFocus={autoFocus}
           onComplete={handleOnComplete}
           placeholder="·"
+          isInvalid={showError}
+          isDisabled={isDisabled}
         >
           <PinInputField flex={1} />
           <PinInputField flex={1} />

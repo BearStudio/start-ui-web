@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Box,
@@ -7,19 +7,16 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  HStack,
   Heading,
   Stack,
   Text,
   chakra,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { FieldPinInput } from '@/components/FieldPinInput';
 import { Logo } from '@/components/Logo';
@@ -29,10 +26,12 @@ import {
   getRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { DevCodeHint } from '@/features/dev/DevCodeHint';
+import { useRtl } from '@/hooks/useRtl';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageLoginValidate() {
+  const { rtlValue } = useRtl();
   const { t } = useTranslation(['auth']);
   const router = useRouter();
   const params = useParams();
@@ -60,10 +59,6 @@ export default function PageLoginValidate() {
         const retries = parseInt(searchParams.get('retries') ?? '0', 10);
         const seconds = getRetryDelayInSeconds(retries);
 
-        form.setErrors({
-          code: `Code is invalid, please wait ${seconds} seconds before submitting`,
-        });
-
         searchParamsUpdater(
           {
             retries: (retries + 1).toString(),
@@ -73,6 +68,10 @@ export default function PageLoginValidate() {
 
         await new Promise((r) => {
           setTimeout(r, seconds * 1_000);
+        });
+
+        form.setErrors({
+          code: `Code is invalid`,
         });
 
         return;
@@ -93,50 +92,54 @@ export default function PageLoginValidate() {
         <Logo h="3rem" mb="8" mx="auto" />
         <Card>
           <CardHeader pb={0}>
-            <Stack>
-              <Heading size="md" data-test="login-page-heading">
-                {t('auth:login.code.title')}
-              </Heading>
-              <Text>
-                We&apos;ve sent a 6-character code to{' '}
-                <chakra.strong>{email}</chakra.strong>. The code expires shortly
-                ({VALIDATION_TOKEN_EXPIRATION_IN_MINUTES} minutes), so please
-                enter it soon.
-              </Text>
-            </Stack>
+            <Button
+              me="auto"
+              size="sm"
+              leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
+              onClick={() => router.back()}
+            >
+              Back
+            </Button>
           </CardHeader>
           <CardBody>
             <Formiz connect={form} autoForm>
               <Stack spacing="4">
+                <Stack>
+                  <Heading size="md" data-test="login-page-heading">
+                    {t('auth:login.code.title')}
+                  </Heading>
+                  <Text fontSize="sm">
+                    We&apos;ve sent a 6-character code to{' '}
+                    <chakra.strong>{email}</chakra.strong>. The code expires
+                    shortly ({VALIDATION_TOKEN_EXPIRATION_IN_MINUTES} minutes),
+                    so please enter it soon.
+                  </Text>
+                </Stack>
                 <FieldPinInput
                   name="code"
-                  label="Code"
+                  label="Verification code"
                   helper="Can't find the code? Check your spams."
                   autoFocus
+                  isDisabled={validate.isLoading}
                   onComplete={() => {
-                    if (validate.isLoading) {
-                      // We don't want to submit if the previous request is
-                      // still loading.
-                      return;
+                    // Only auto submit on first try
+                    if (!form.isSubmitted) {
+                      form.submit();
                     }
-
-                    form.submit();
                   }}
                 />
-                <Flex>
-                  <Button type="button" onClick={() => router.back()}>
-                    Back
-                  </Button>
+                <HStack spacing={8}>
                   <Button
+                    size="lg"
                     isLoading={validate.isLoading}
                     isDisabled={form.isSubmitted && !form.isValid}
                     type="submit"
                     variant="@primary"
-                    ms="auto"
+                    flex={1}
                   >
-                    {t('auth:login.actions.login')}
+                    Confirm
                   </Button>
-                </Flex>
+                </HStack>
 
                 <DevCodeHint />
               </Stack>
