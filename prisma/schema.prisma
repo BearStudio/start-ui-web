@@ -40,6 +40,9 @@ model VerificationToken {
   expires       DateTime
   lastAttemptAt DateTime @updatedAt
   attempts      Int      @default(0)
+  // Useful to change the user email. This model will contains the next user
+  // email, waiting for the user to validate it.
+  email         String?
 }
 
 model Repository {

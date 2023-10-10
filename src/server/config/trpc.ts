@@ -28,6 +28,8 @@ import { logger } from '@/server/config/logger';
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
+export type AppContext = Awaited<ReturnType<typeof createTRPCContext>>;
+
 /**
  * This is the actual context you will use in your router. It will be used to process every request
  * that goes through your tRPC endpoint.
@@ -48,6 +50,7 @@ export const createTRPCContext = async ({
   return {
     user,
     apiType,
+    logger,
     db,
   };
 };
