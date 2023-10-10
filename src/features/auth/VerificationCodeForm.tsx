@@ -19,12 +19,12 @@ export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
 
   return async (error: TRPCClientErrorLike<AppRouter>) => {
     if (error.data?.code === 'UNAUTHORIZED') {
-      const retries = parseInt(searchParams.get('retries') ?? '0', 10);
-      const seconds = getRetryDelayInSeconds(retries);
+      const attempts = parseInt(searchParams.get('attempts') ?? '0', 10);
+      const seconds = getRetryDelayInSeconds(attempts);
 
       searchParamsUpdater(
         {
-          retries: (retries + 1).toString(),
+          attempts: (attempts + 1).toString(),
         },
         { replace: true }
       );
@@ -78,6 +78,7 @@ export const VerificationCodeForm = ({
         helper="Can't find the code? Check your spams." // TODO translations
         autoFocus
         isDisabled={isLoading}
+        required="Required" // TODO translations
         onComplete={() => {
           // Only auto submit on first try
           if (!form.isSubmitted) {
