@@ -30,7 +30,10 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
     checkAuthenticated.data,
   ]);
 
-  if (checkAuthenticated.isLoading || checkAuthenticated.data) {
+  if (
+    checkAuthenticated.isLoading ||
+    checkAuthenticated.data?.isAuthenticated
+  ) {
     return <Loader />;
   }
 
