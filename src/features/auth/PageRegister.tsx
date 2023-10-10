@@ -34,7 +34,7 @@ export default function PageRegister() {
 
   const register = trpc.auth.register.useMutation({
     onSuccess: (data, variables) => {
-      router.push(`/login/${data.token}?email=${variables.email}`);
+      router.push(`/register/${data.token}?email=${variables.email}`);
     },
     onError: (error) => {
       if (isErrorDatabaseConflict(error, 'email')) {

@@ -14,7 +14,7 @@ import {
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
-export default function PageLoginValidate() {
+export default function PageRegisterValidate() {
   const { rtlValue } = useRtl();
   const router = useRouter();
   const params = useParams();
@@ -30,15 +30,14 @@ export default function PageLoginValidate() {
 
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 
-  const validate = trpc.auth.loginValidate.useMutation({
+  const validate = trpc.auth.registerValidate.useMutation({
     onSuccess: () => {
       // Optimistic Update
       trpcContext.auth.checkAuthenticated.setData(undefined, {
         isAuthenticated: true,
       });
 
-      // TODO setup redirect logic (redirect url params)
-      router.push('/dashboard');
+      router.replace('/');
     },
     onError: onVerificationCodeError,
   });

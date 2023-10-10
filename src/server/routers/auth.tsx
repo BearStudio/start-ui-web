@@ -1,3 +1,4 @@
+import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
@@ -20,12 +21,106 @@ import i18n from '@/lib/i18n/server';
 import { AUTH_COOKIE_NAME } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
+import {
+  AppContext,
+  createTRPCRouter,
+  publicProcedure,
+} from '@/server/config/trpc';
+import { RouterInput } from '@/server/router';
 
 function generateCode() {
   return env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
     ? VALIDATION_CODE_MOCKED
     : randomInt(0, 999999).toString().padStart(6, '0');
+}
+
+async function validateCode(
+  ctx: AppContext,
+  input:
+    | RouterInput['auth']['loginValidate']
+    | RouterInput['auth']['registerValidate']
+): Promise<{ verificationToken: VerificationToken; userJwt: string }> {
+  ctx.logger.debug('Removing expired verification tokens from database');
+  await ctx.db.verificationToken.deleteMany({
+    where: { expires: { lt: new Date() } },
+  });
+
+  ctx.logger.debug('Checking if verification token exists');
+  const verificationToken = await ctx.db.verificationToken.findUnique({
+    where: {
+      token: input.token,
+    },
+  });
+
+  if (!verificationToken) {
+    ctx.logger.warn('Verification token does not exist');
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  const retryDelayInSeconds = getValidationRetryDelayInSeconds(
+    verificationToken.attempts
+  );
+
+  ctx.logger.debug(
+    {
+      retryDelayInSeconds,
+    },
+    'Check last attempt date'
+  );
+  if (
+    dayjs().isBefore(
+      dayjs(verificationToken.lastAttemptAt).add(retryDelayInSeconds, 'seconds')
+    )
+  ) {
+    ctx.logger.warn('Last attempt was to close');
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  ctx.logger.debug('Checking code');
+  if (verificationToken.code !== input.code) {
+    ctx.logger.warn('Invalid code');
+
+    try {
+      ctx.logger.debug('Updating token attempts');
+      await ctx.db.verificationToken.update({
+        where: {
+          token: input.token,
+        },
+        data: {
+          attempts: {
+            increment: 1,
+          },
+        },
+      });
+    } catch (e) {
+      ctx.logger.error('Failed to update token attempts');
+    }
+
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  ctx.logger.debug('Encoding JWT');
+  const userJwt = await jwt.sign(
+    { id: verificationToken.userId },
+    env.AUTH_SECRET
+  );
+  if (!userJwt) {
+    ctx.logger.error('Failed to encode JWT');
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+    });
+  }
+
+  return { verificationToken, userJwt };
 }
 
 export const authRouter = createTRPCRouter({
@@ -139,86 +234,21 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Removing expired verification tokens from database');
-      await ctx.db.verificationToken.deleteMany({
-        where: { expires: { lt: new Date() } },
-      });
+      const { verificationToken, userJwt } = await validateCode(ctx, input);
 
-      ctx.logger.debug('Checking if verification token exists');
-      const verificationToken = await ctx.db.verificationToken.findUnique({
-        where: {
-          token: input.token,
-        },
-      });
-
-      if (!verificationToken) {
-        ctx.logger.warn('Verification token does not exist');
+      ctx.logger.debug('Updating user');
+      try {
+        await ctx.db.user.update({
+          where: { id: verificationToken.userId, accountStatus: 'ENABLED' },
+          data: {
+            lastLoginAt: new Date(),
+          },
+        });
+      } catch (e) {
+        ctx.logger.warn('Failed to update the user, probably not enabled');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
           message: 'Failed to authenticate the user',
-        });
-      }
-
-      const retryDelayInSeconds = getValidationRetryDelayInSeconds(
-        verificationToken.attempts
-      );
-
-      ctx.logger.debug(
-        {
-          retryDelayInSeconds,
-        },
-        'Check last attempt date'
-      );
-      if (
-        dayjs().isBefore(
-          dayjs(verificationToken.lastAttemptAt).add(
-            retryDelayInSeconds,
-            'seconds'
-          )
-        )
-      ) {
-        ctx.logger.warn('Last attempt was to close');
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Failed to authenticate the user',
-        });
-      }
-
-      ctx.logger.debug('Checking code');
-      if (verificationToken.code !== input.code) {
-        ctx.logger.warn('Invalid code');
-
-        try {
-          ctx.logger.debug('Updating token attempts');
-          await ctx.db.verificationToken.update({
-            where: {
-              token: input.token,
-            },
-            data: {
-              attempts: {
-                increment: 1,
-              },
-            },
-          });
-        } catch (e) {
-          ctx.logger.error('Failed to update token attempts');
-        }
-
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Failed to authenticate the user',
-        });
-      }
-
-      ctx.logger.debug('Encoding JWT');
-      const userJwt = await jwt.sign(
-        { id: verificationToken.userId },
-        env.AUTH_SECRET
-      );
-      if (!userJwt) {
-        ctx.logger.error('Failed to encode JWT');
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
         });
       }
 
@@ -229,22 +259,6 @@ export const authRouter = createTRPCRouter({
         });
       } catch (e) {
         ctx.logger.warn('Failed to delete the used token');
-      }
-
-      ctx.logger.debug('Updating user');
-      try {
-        await ctx.db.user.update({
-          where: { id: verificationToken.userId },
-          data: {
-            lastLoginAt: new Date(),
-            accountStatus: 'ENABLED',
-          },
-        });
-      } catch (e) {
-        ctx.logger.error('Failed to update the user');
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-        });
       }
 
       ctx.logger.debug('Set auth cookie');
@@ -292,20 +306,23 @@ export const authRouter = createTRPCRouter({
     )
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const formattedEmail = input.email.toLowerCase().trim();
+
       ctx.logger.debug('Checking if the user exists');
-      let user = await ctx.db.user.findUnique({
+      const user = await ctx.db.user.findUnique({
         where: {
-          email: input.email.toLowerCase().trim(),
+          email: formattedEmail,
         },
       });
 
+      let newUser;
       // If the user doesn't exist, we create a new one.
       if (!user) {
         try {
           ctx.logger.debug('Creating a new user');
-          user = await ctx.db.user.create({
+          newUser = await ctx.db.user.create({
             data: {
-              email: input.email.toLowerCase().trim(),
+              email: formattedEmail,
               name: input.name,
               language: input.language,
             },
@@ -317,15 +334,14 @@ export const authRouter = createTRPCRouter({
           });
         }
       }
-
       // If the user exists and email is not verified, it means the user (or
       // someone else) did register using this email but did not complete the
       // validation flow. So we update the data according to the new
       // informations.
-      if (user && user.accountStatus === 'NOT_VERIFIED') {
-        user = await ctx.db.user.update({
+      else if (user && user.accountStatus === 'NOT_VERIFIED') {
+        newUser = await ctx.db.user.update({
           where: {
-            email: input.email,
+            email: formattedEmail,
           },
           data: {
             ...user,
@@ -335,9 +351,17 @@ export const authRouter = createTRPCRouter({
         });
       }
 
+      if (!newUser) {
+        ctx.logger.error(
+          'An error occured while creating or updating the user, the address may already exists'
+        );
+        return {
+          token: await randomUUID(),
+        };
+      }
+
       // If we got here, the user exists and email is verified, no need to
       // register, send the email to login the user.
-
       ctx.logger.debug('Creating code');
       const code = generateCode();
 
@@ -347,7 +371,7 @@ export const authRouter = createTRPCRouter({
       ctx.logger.debug('Creating verification token in database');
       await ctx.db.verificationToken.create({
         data: {
-          userId: user.id,
+          userId: newUser.id,
           token,
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
@@ -359,11 +383,13 @@ export const authRouter = createTRPCRouter({
       ctx.logger.debug('Sending email to register');
       await sendEmail({
         to: input.email,
-        subject: i18n.t('emails:registerCode.subject', { lng: user.language }),
+        subject: i18n.t('emails:registerCode.subject', {
+          lng: newUser.language,
+        }),
         template: (
           <EmailRegisterCode
-            language={user.language}
-            name={user.name ?? ''}
+            language={newUser.language}
+            name={newUser.name ?? ''}
             code={code}
           />
         ),
@@ -371,6 +397,61 @@ export const authRouter = createTRPCRouter({
 
       return {
         token,
+      };
+    }),
+  registerValidate: publicProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/auth/register/validate/{token}',
+        tags: ['auth'],
+        description: `Failed requests will increment retry delay timeout based on the number of attempts multiplied by ${VALIDATION_RETRY_DELAY_IN_SECONDS} seconds. The number of attempts will not be returned in the response for security purposes. You will have to save the number of attemps in the client.`,
+      },
+    })
+    .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
+    .output(z.object({ token: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { verificationToken, userJwt } = await validateCode(ctx, input);
+
+      ctx.logger.debug('Updating user');
+      try {
+        await ctx.db.user.update({
+          where: {
+            id: verificationToken.userId,
+            accountStatus: 'NOT_VERIFIED',
+          },
+          data: {
+            lastLoginAt: new Date(),
+            accountStatus: 'ENABLED',
+          },
+        });
+      } catch (e) {
+        ctx.logger.warn('Failed to update the user, probably already verified');
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Failed to authenticate the user',
+        });
+      }
+
+      ctx.logger.debug('Deleting used token');
+      try {
+        await ctx.db.verificationToken.delete({
+          where: { token: verificationToken.token },
+        });
+      } catch (e) {
+        ctx.logger.warn('Failed to delete the used token');
+      }
+
+      ctx.logger.debug('Set auth cookie');
+      cookies().set({
+        name: AUTH_COOKIE_NAME,
+        value: userJwt,
+        httpOnly: true,
+        secure: env.NODE_ENV === 'production',
+      });
+
+      return {
+        token: userJwt,
       };
     }),
 });
