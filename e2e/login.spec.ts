@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { getUtils } from 'e2e/utils';
 
-test.describe('Authentication flow', () => {
+test.describe('Login flow', () => {
   test('Login as admin', async ({ page }) => {
     const utils = getUtils(page);
 

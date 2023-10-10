@@ -1,5 +1,8 @@
 import { Page } from '@playwright/test';
 
+import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
+import { RouterInput } from '@/server/router';
+
 /**
  * Utilities constructor
  *
@@ -20,25 +23,24 @@ export const getUtils = (page: Page) => {
     /**
      * Utility used to authenticate the user on the app
      */
-    async login(userDetails: { email: string; password: string }) {
+    async login(input: RouterInput['auth']['login']) {
       await page.goto('/login');
       await page.waitForURL('**/login');
 
-      await page.getByLabel('Email').fill(userDetails.email);
-      await page.getByLabel(/^Password/).fill(userDetails.password);
+      await page.getByLabel('Email').fill(input.email);
+      await page.getByRole('button', { name: 'Sign In' }).click();
 
-      await page.getByRole('button', { name: 'Log In' }).click();
+      await page.waitForURL('**/login/**');
+      await page.fill('input', VALIDATION_CODE_MOCKED);
     },
     async loginAsAdmin() {
       return this.login({
         email: 'admin@admin.com',
-        password: 'admin',
       });
     },
     async loginAsUser() {
       return this.login({
         email: 'user@user.com',
-        password: 'user',
       });
     },
   } as const;

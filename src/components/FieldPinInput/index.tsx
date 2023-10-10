@@ -15,7 +15,9 @@ type FieldPinInputProps<FormattedValue = string> = FieldProps<
   FormattedValue
 > &
   Omit<FormGroupProps, 'placeholder'> &
-  Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'>;
+  Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'> & {
+    length?: number;
+  };
 
 export const FieldPinInput = <FormattedValue = string,>(
   props: FieldPinInputProps<FormattedValue>
@@ -38,6 +40,7 @@ export const FieldPinInput = <FormattedValue = string,>(
     size = 'lg',
     autoFocus,
     onComplete,
+    length = 6,
     ...rest
   } = otherProps;
   const { required } = props;
@@ -52,7 +55,7 @@ export const FieldPinInput = <FormattedValue = string,>(
   const formGroupProps = {
     errorMessage,
     helper,
-    id,
+    id: `${id}-0`, // Target the first input
     isRequired: !!required,
     label,
     showError,
@@ -80,13 +83,11 @@ export const FieldPinInput = <FormattedValue = string,>(
           placeholder="·"
           isInvalid={showError}
           isDisabled={isDisabled}
+          id={id}
         >
-          <PinInputField flex={1} />
-          <PinInputField flex={1} />
-          <PinInputField flex={1} />
-          <PinInputField flex={1} />
-          <PinInputField flex={1} />
-          <PinInputField flex={1} />
+          {Array.from({ length }, (_, index) => (
+            <PinInputField key={index} flex={1} />
+          ))}
         </PinInput>
       </HStack>
     </FormGroup>

@@ -38,9 +38,7 @@ export default function PageLogin() {
         <Logo h="3rem" mb="8" mx="auto" />
         <Card>
           <CardHeader pb={0}>
-            <Heading size="md" data-test="login-page-heading">
-              {t('auth:login.title')}
-            </Heading>
+            <Heading size="md">{t('auth:login.title')}</Heading>
           </CardHeader>
           <CardBody>
             <LoginForm onSuccess={handleOnSuccess} />
