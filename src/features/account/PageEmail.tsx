@@ -12,13 +12,11 @@ import {
   ModalContent,
   ModalOverlay,
   Stack,
-  Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuCheckCircle2 } from 'react-icons/lu';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
@@ -48,10 +46,15 @@ export default function PageEmail() {
   const toastError = useToastError();
 
   const updateEmail = trpc.account.updateEmail.useMutation({
-    onSuccess: async (_, { email }) => {
+    onSuccess: async ({ token }, { email }) => {
       searchParamsUpdater(
-        { [SEARCH_PARAM_VERIFY_EMAIL]: email },
-        { replace: true }
+        {
+          [SEARCH_PARAM_VERIFY_EMAIL]: email,
+          token,
+        },
+        {
+          replace: true,
+        }
       );
     },
     onError: () => {
@@ -146,13 +149,16 @@ const VerificationCodeModale = () => {
   const searchParams = useSearchParams();
   const searchParamsUpdater = useSearchParamsUpdater();
   const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
+  const token = searchParams.get('token');
   const trpcContext = trpc.useContext();
   const toastSuccess = useToastSuccess();
 
   const onClose = () => {
+    trpcContext.account.get.reset();
     searchParamsUpdater(
       {
         [SEARCH_PARAM_VERIFY_EMAIL]: null,
+        token: null,
         attempts: null,
       },
       { replace: true }
@@ -160,15 +166,16 @@ const VerificationCodeModale = () => {
   };
 
   const form = useForm<{ code: string }>({
-    onValidSubmit: () => {
-      // TODO
-      updateEmailValidate.mutate(undefined);
+    onValidSubmit: (values) => {
+      updateEmailValidate.mutate({
+        code: values.code,
+        token: token ?? '',
+      });
     },
   });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
   const updateEmailValidate = trpc.account.updateEmailValidate.useMutation({
     onSuccess: async () => {
-      await trpcContext.account.get.reset();
       onClose();
       toastSuccess({
         title: 'Email updated', // TODO translations

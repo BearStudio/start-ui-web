@@ -1,8 +1,17 @@
+import { VerificationToken } from '@prisma/client';
+import { TRPCError } from '@trpc/server';
+import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
+import { randomInt } from 'node:crypto';
 
 import { env } from '@/env.mjs';
+import {
+  VALIDATION_CODE_MOCKED,
+  getValidationRetryDelayInSeconds,
+} from '@/features/auth/utils';
 import { db } from '@/server/config/db';
+import { AppContext } from '@/server/config/trpc';
 
 export const AUTH_COOKIE_NAME = 'auth';
 
@@ -46,3 +55,118 @@ export const decodeJwt = (token: string) => {
   }
   return jwtDecoded;
 };
+
+export function generateCode() {
+  return env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
+    ? VALIDATION_CODE_MOCKED
+    : randomInt(0, 999999).toString().padStart(6, '0');
+}
+
+export async function validateCode({
+  ctx,
+  code,
+  token,
+}: {
+  ctx: AppContext;
+  code: string;
+  token: string;
+}): Promise<{ verificationToken: VerificationToken; userJwt: string }> {
+  ctx.logger.debug('Removing expired verification tokens from database');
+  await ctx.db.verificationToken.deleteMany({
+    where: { expires: { lt: new Date() } },
+  });
+
+  ctx.logger.debug('Checking if verification token exists');
+  const verificationToken = await ctx.db.verificationToken.findUnique({
+    where: {
+      token,
+    },
+  });
+
+  if (!verificationToken) {
+    ctx.logger.warn('Verification token does not exist');
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  const retryDelayInSeconds = getValidationRetryDelayInSeconds(
+    verificationToken.attempts
+  );
+
+  ctx.logger.debug(
+    {
+      retryDelayInSeconds,
+    },
+    'Check last attempt date'
+  );
+  if (
+    dayjs().isBefore(
+      dayjs(verificationToken.lastAttemptAt).add(retryDelayInSeconds, 'seconds')
+    )
+  ) {
+    ctx.logger.warn('Last attempt was to close');
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  ctx.logger.debug('Checking code');
+  if (verificationToken.code !== code) {
+    ctx.logger.warn('Invalid code');
+
+    try {
+      ctx.logger.debug('Updating token attempts');
+      await ctx.db.verificationToken.update({
+        where: {
+          token,
+        },
+        data: {
+          attempts: {
+            increment: 1,
+          },
+        },
+      });
+    } catch (e) {
+      ctx.logger.error('Failed to update token attempts');
+    }
+
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Failed to authenticate the user',
+    });
+  }
+
+  ctx.logger.debug('Encoding JWT');
+  const userJwt = await jwt.sign(
+    { id: verificationToken.userId },
+    env.AUTH_SECRET
+  );
+  if (!userJwt) {
+    ctx.logger.error('Failed to encode JWT');
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+    });
+  }
+
+  return { verificationToken, userJwt };
+}
+
+export async function deleteUsedCode({
+  ctx,
+  token,
+}: {
+  ctx: AppContext;
+  token: string;
+}) {
+  ctx.logger.debug('Deleting used token');
+  try {
+    await ctx.db.verificationToken.delete({
+      where: { token },
+    });
+  } catch (e) {
+    ctx.logger.warn('Failed to delete the used token');
+  }
+}

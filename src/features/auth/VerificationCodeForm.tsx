@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldPinInput } from '@/components/FieldPinInput';
 import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
-  getRetryDelayInSeconds,
+  getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { DevCodeHint } from '@/features/dev/DevCodeHint';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
@@ -20,7 +20,7 @@ export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
   return async (error: TRPCClientErrorLike<AppRouter>) => {
     if (error.data?.code === 'UNAUTHORIZED') {
       const attempts = parseInt(searchParams.get('attempts') ?? '0', 10);
-      const seconds = getRetryDelayInSeconds(attempts);
+      const seconds = getValidationRetryDelayInSeconds(attempts);
 
       searchParamsUpdater(
         {
