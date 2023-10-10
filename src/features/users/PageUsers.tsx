@@ -148,7 +148,7 @@ export default function PageUsers() {
                   colWidth={{ base: '2rem', md: '0.5' }}
                   align="center"
                 >
-                  <UserStatus isActivated={user.activated} />
+                  <UserStatus isActivated={user.accountStatus === 'ENABLED'} />
                 </DataListCell>
                 <DataListCell
                   colName="actions"

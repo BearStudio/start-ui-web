@@ -12,22 +12,25 @@ datasource db {
 }
 
 enum AccountStatus {
-  REGISTERED
-  VERIFIED
+  // User has registered and verified their email
+  ENABLED
+  // User has been disabled and can't login anymore
+  DISABLED
+  // User did register, but has not verified their email yet.
+  NOT_VERIFIED
 }
 
 model User {
-  id          String        @id @default(cuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  name        String?
-  email       String        @unique
-  status      AccountStatus @default(REGISTERED)
-  image       String?
-  activated   Boolean       @default(true)
-  role        String        @default("USER")
-  language    String        @default("en")
-  lastLoginAt DateTime?
+  id            String        @id @default(cuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  name          String?
+  email         String        @unique
+  accountStatus AccountStatus @default(NOT_VERIFIED)
+  image         String?
+  role          String        @default("USER")
+  language      String        @default("en")
+  lastLoginAt   DateTime?
 }
 
 model VerificationToken {

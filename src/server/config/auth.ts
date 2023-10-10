@@ -27,15 +27,14 @@ export const getServerAuthSession = async () => {
   }
 
   return await db.user.findUnique({
-    where: { id: jwtDecoded.id, activated: true },
+    where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
     select: {
       id: true,
       name: true,
       email: true,
       role: true,
       language: true,
-      activated: true,
-      status: true,
+      accountStatus: true,
     },
   });
 };

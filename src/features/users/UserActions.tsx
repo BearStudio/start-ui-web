@@ -103,7 +103,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
           </MenuItem>
           {!isCurrentUser && (
             <>
-              {user.activated ? (
+              {user.accountStatus === 'ENABLED' && (
                 <ConfirmMenuItem
                   onClick={() => deactivateUser.mutate({ id: user.id })}
                   icon={
@@ -112,7 +112,9 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
                 >
                   {t('common:actions.deactivate')}
                 </ConfirmMenuItem>
-              ) : (
+              )}
+              {(user.accountStatus === 'NOT_VERIFIED' ||
+                user.accountStatus === 'DISABLED') && (
                 <ConfirmMenuItem
                   onClick={() => activateUser.mutate({ id: user.id })}
                   icon={

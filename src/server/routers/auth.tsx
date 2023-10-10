@@ -85,7 +85,7 @@ export const authRouter = createTRPCRouter({
         };
       }
 
-      if (!user.activated || user.status !== 'VERIFIED') {
+      if (user.accountStatus !== 'ENABLED') {
         ctx.logger.warn('Invalid user');
         return {
           token,
@@ -235,7 +235,7 @@ export const authRouter = createTRPCRouter({
           where: { id: verificationToken.userId },
           data: {
             lastLoginAt: new Date(),
-            status: 'VERIFIED',
+            accountStatus: 'ENABLED',
           },
         });
       } catch (e) {
@@ -320,7 +320,7 @@ export const authRouter = createTRPCRouter({
       // someone else) did register using this email but did not complete the
       // validation flow. So we update the data according to the new
       // informations.
-      if (user && user.status !== 'VERIFIED') {
+      if (user && user.accountStatus === 'NOT_VERIFIED') {
         user = await ctx.db.user.update({
           where: {
             email: input.email,

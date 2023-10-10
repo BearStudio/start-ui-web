@@ -107,7 +107,7 @@ export default function PageUserUpdate() {
           </Box>
           {!!user.data && (
             <Box>
-              <UserStatus isActivated={user.data.activated} />
+              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
             </Box>
           )}
         </HStack>

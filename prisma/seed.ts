@@ -20,8 +20,7 @@ async function createUsers() {
         data: {
           name: faker.person.fullName(),
           email: faker.internet.email(),
-          activated: true,
-          status: 'VERIFIED',
+          accountStatus: 'ENABLED',
         },
       });
       createdUsersCounter += 1;
@@ -33,8 +32,7 @@ async function createUsers() {
       data: {
         name: 'User',
         email: 'user@user.com',
-        activated: true,
-        status: 'VERIFIED',
+        accountStatus: 'ENABLED',
       },
     });
     createdUsersCounter += 1;
@@ -48,8 +46,7 @@ async function createUsers() {
         name: 'Admin',
         email: 'admin@admin.com',
         role: 'ADMIN',
-        activated: true,
-        status: 'VERIFIED',
+        accountStatus: 'ENABLED',
       },
     });
     createdUsersCounter += 1;
