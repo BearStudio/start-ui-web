@@ -37,8 +37,7 @@ export default function PageLoginValidate() {
         isAuthenticated: true,
       });
 
-      // TODO setup redirect logic (redirect url params)
-      router.push('/dashboard');
+      router.push(searchParams.get('redirect') || '/');
     },
     onError: onVerificationCodeError,
   });

@@ -10,7 +10,7 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
@@ -21,14 +21,14 @@ import { RouterInput, RouterOutput } from '@/server/router';
 export default function PageLogin() {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleOnSuccess = (
     data: RouterOutput['auth']['login'],
     variables: RouterInput['auth']['login']
   ) => {
-    const urlSearchParams = new URLSearchParams({
-      email: variables.email,
-    });
+    const urlSearchParams = new URLSearchParams(searchParams);
+    urlSearchParams.set('email', variables.email);
     router.push(`/login/${data.token}?${urlSearchParams.toString()}`);
   };
 
