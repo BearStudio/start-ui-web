@@ -7,4 +7,4 @@ export const getRetryDelayInSeconds = (attempts: number) =>
   attempts > VALIDATION_RETRY_ALLOWED_BEFORE_DELAY
     ? (attempts - VALIDATION_RETRY_ALLOWED_BEFORE_DELAY) *
       VALIDATION_RETRY_DELAY_IN_SECONDS
-    : VALIDATION_RETRY_DELAY_IN_SECONDS;
+    : 0;
