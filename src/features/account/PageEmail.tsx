@@ -2,22 +2,18 @@ import React from 'react';
 
 import { Button, Card, CardBody, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
+import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
-import { FieldSelect } from '@/components/FieldSelect';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
 import { Loader } from '@/layout/Loader';
-import {
-  AVAILABLE_LANGUAGES,
-  DEFAULT_LANGUAGE_KEY,
-} from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
 
-export default function PageProfile() {
+export default function PageEmail() {
   const { t } = useTranslation(['common', 'account']);
   const trpcContext = trpc.useContext();
   const account = trpc.account.get.useQuery(undefined, {
@@ -28,31 +24,28 @@ export default function PageProfile() {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const updateAccount = trpc.account.update.useMutation({
+  const updateEmail = trpc.account.updateEmail.useMutation({
     onSuccess: async () => {
       await trpcContext.account.invalidate();
       toastSuccess({
-        title: t('account:profile.feedbacks.updateSuccess.title'),
+        title: t('account:email.feedbacks.updateSuccess.title'),
       });
     },
     onError: () => {
       toastError({
-        title: t('account:profile.feedbacks.updateError.title'),
+        title: t('account:email.feedbacks.updateError.title'),
       });
     },
   });
 
   const profileForm = useForm<{
-    name: string;
-    language: string;
+    email: string;
   }>({
     initialValues: {
-      name: account.data?.name ?? undefined,
-
-      language: account.data?.language ?? undefined,
+      email: account.data?.email ?? undefined,
     },
     onValidSubmit: (values) => {
-      updateAccount.mutate(values);
+      updateEmail.mutate(values);
     },
   });
 
@@ -60,10 +53,10 @@ export default function PageProfile() {
     <Page nav={<AccountNav />}>
       <PageContent>
         <Heading size="md" mb="4">
-          {t('account:profile.title')}
+          {t('account:email.title')}
         </Heading>
 
-        <Card minH="16rem">
+        <Card minH="11rem">
           {account.isLoading && <Loader />}
           {account.isError && <ErrorPage />}
           {account.isSuccess && (
@@ -73,27 +66,24 @@ export default function PageProfile() {
                   <form noValidate onSubmit={profileForm.submit}>
                     <Stack spacing="6">
                       <FieldInput
-                        name="name"
-                        label={t('account:data.name.label')}
-                        required={t('account:data.name.required')}
-                      />
-                      <FieldSelect
-                        name="language"
-                        label={t('account:data.language.label')}
-                        options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                          label: t(`common:languages.${key}`),
-                          value: key,
-                        }))}
-                        defaultValue={DEFAULT_LANGUAGE_KEY}
+                        name="email"
+                        label={t('account:data.email.label')}
+                        required={t('account:data.email.required')}
+                        validations={[
+                          {
+                            handler: isEmail(),
+                            message: t('account:data.email.invalid'),
+                          },
+                        ]}
                       />
                       <Flex>
                         <Button
                           type="submit"
                           variant="@primary"
                           ms="auto"
-                          isLoading={updateAccount.isLoading}
+                          isLoading={updateEmail.isLoading}
                         >
-                          {t('account:profile.actions.update')}
+                          {t('account:email.actions.update')}
                         </Button>
                       </Flex>
                     </Stack>

@@ -61,7 +61,6 @@ export const accountRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        email: z.string().email(),
         language: z.string(),
       })
     )
@@ -79,5 +78,26 @@ export const accountRouter = createTRPCRouter({
           cause: e,
         });
       }
+    }),
+
+  updateEmail: protectedProcedure
+    .meta({
+      openapi: {
+        method: 'PUT',
+        path: '/accounts/update-email/',
+        protect: true,
+        tags: ['accounts'],
+      },
+    })
+    .input(
+      z.object({
+        email: z.string().email(),
+      })
+    )
+    .output(zUserAccount())
+    .mutation(async ({ ctx, input }) => {
+      // TODO send email
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return {} as any;
     }),
 });

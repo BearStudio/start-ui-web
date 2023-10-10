@@ -1,7 +1,6 @@
 {
   "nav": {
     "profile": "Profil",
-    "password": "Mot de passe",
     "myAccount": "Mon compte"
   },
   "profile": {
@@ -13,9 +12,6 @@
       "updateError": {
         "title": "Échec de la mise à jour"
       }
-    },
-    "actions": {
-      "save": "Sauvegarder"
     }
   },
   "password": {

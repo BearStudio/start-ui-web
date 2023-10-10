@@ -1,7 +1,6 @@
 {
   "nav": {
     "profile": "Wasifu",
-    "password": "Nenosiri",
     "myAccount": "Akaunti yangu"
   },
   "profile": {
@@ -13,9 +12,6 @@
       "updateError": {
         "title": "Usasishaji haukufaulu"
       }
-    },
-    "actions": {
-      "save": "Kulinda"
     }
   },
   "password": {

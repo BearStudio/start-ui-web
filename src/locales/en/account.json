@@ -1,7 +1,7 @@
 {
   "nav": {
     "profile": "Profile",
-    "password": "Password",
+    "email": "Email",
     "myAccount": "My Account"
   },
   "profile": {
@@ -15,21 +15,21 @@
       }
     },
     "actions": {
-      "save": "Save"
+      "update": "Update"
     }
   },
-  "password": {
-    "title": "Password",
+  "email": {
+    "title": "Email",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Your password has been updated with success"
+        "title": "Updated with success"
       },
       "updateError": {
-        "title": "Password update failed"
+        "title": "Update failed"
       }
     },
     "actions": {
-      "changePassword": "Change Password"
+      "update": "Update"
     }
   },
 

@@ -1,7 +1,6 @@
 {
   "nav": {
     "profile": "الملف الشخصي",
-    "password": "كلمة المرور",
     "myAccount": "حسابي"
   },
   "profile": {
@@ -13,9 +12,6 @@
       "updateError": {
         "title": "فشل التحديث"
       }
-    },
-    "actions": {
-      "save": "حفظ"
     }
   },
   "password": {
