@@ -1,22 +1,28 @@
 {
-  "resetPassword": {
-    "copyPastHelper": "Au, nakili na ubandike kiungo hiki kwenye kivinjari chako:",
-    "ignoreHelper": "Ikiwa hukujaribu kuweka upya nenosiri lako, unaweza kupuuza barua pepe hii kwa usalama.",
-    "link": "Weka upya nenosiri",
-    "preview": "Kiungo cha kusasisha nenosiri lako",
-    "subject": "Weka upya nenosiri lako",
-    "title": "Weka upya nenosiri",
-    "hello": "Hujambo {{jina}},",
-    "intro": "Hivi majuzi, mtu aliomba kubadilisha nenosiri la akaunti yako. \nIkiwa huyu alikuwa wewe, unaweza kuweka nenosiri jipya hapa:"
+  "loginCode": {
+    "hello": "Karibu tena {{name}},",
+    "ignoreHelper": "Ikiwa hukujaribu kuingia, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Huu ndio nambari yako ya uthibitishaji:",
+    "preview": "Nambari ya kuthibitisha ili kuingia",
+    "subject": "Ingia katika nambari ya kuthibitisha",
+    "title": "Ingia katika nambari ya kuthibitisha",
+    "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata."
   },
-  "activateAccount": {
-    "copyPastHelper": "Au, nakili na ubandike kiungo hiki kwenye kivinjari chako:",
+  "loginNotFound": {
+    "button": "Jaribu barua pepe tofauti",
+    "ignoreHelper": "Ikiwa hukujaribu kuingia, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Inaonekana hakuna akaunti iliyounganishwa na anwani hii ya barua pepe.",
+    "preview": "Je, hii ndiyo barua pepe inayofaa?",
+    "subject": "Akaunti haijapatikana",
+    "title": "Je, hii ndiyo barua pepe inayofaa?"
+  },
+  "registerCode": {
+    "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata.",
+    "hello": "Karibu {{name}},",
     "ignoreHelper": "Ikiwa hukujaribu kujiandikisha, unaweza kupuuza barua pepe hii kwa usalama.",
-    "intro": "Karibu, akaunti yako inakaribia kuwa tayari, iwashe ili kuanza:",
-    "link": "Anzisha akaunti",
-    "preview": "Kiungo cha kuwezesha akaunti yako",
-    "subject": "Washa akaunti yako",
-    "title": "Anzisha akaunti",
-    "hello": "Hujambo {{jina}},"
+    "intro": "Akaunti yako iko karibu kuwa tayari! \nHuu ndio nambari yako ya uthibitishaji:",
+    "preview": "Nambari yako ya uthibitishaji",
+    "subject": "Hakikisha akaunti yako",
+    "title": "Hakikisha akaunti yako"
   }
 }

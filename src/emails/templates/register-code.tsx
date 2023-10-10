@@ -6,35 +6,37 @@ import { styles } from '@/emails/styles';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
 
-type EmailLoginCodeProps = {
+type EmailRegisterCodeProps = {
   language: string;
-  name: string;
+  name?: string;
   code: string;
 };
 
-export const EmailLoginCode = ({
+export const EmailRegisterCode = ({
   language,
   name,
   code,
-}: EmailLoginCodeProps) => {
+}: EmailRegisterCodeProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:loginCode.preview')}>
+    <Layout preview={i18n.t('emails:registerCode.preview')}>
       <Container style={styles.container}>
-        <Heading style={styles.h1}>{i18n.t('emails:loginCode.title')}</Heading>
+        <Heading style={styles.h1}>
+          {i18n.t('emails:registerCode.title')}
+        </Heading>
         <Section style={styles.section}>
           <Text style={styles.text}>
-            {i18n.t('emails:loginCode.hello', { name: name ?? '' })}
+            {i18n.t('emails:registerCode.hello', { name: name ?? '' })}
             <br />
-            {i18n.t('emails:loginCode.intro')}
+            {i18n.t('emails:registerCode.intro')}
           </Text>
           <Text style={styles.code}>{code}</Text>
           <Text style={styles.textMuted}>
-            {i18n.t('emails:loginCode.validityTime', {
+            {i18n.t('emails:registerCode.validityTime', {
               expiration: VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
             })}
             <br />
-            {i18n.t('emails:loginCode.ignoreHelper')}
+            {i18n.t('emails:registerCode.ignoreHelper')}
           </Text>
         </Section>
         <Footer />
@@ -43,4 +45,4 @@ export const EmailLoginCode = ({
   );
 };
 
-export default EmailLoginCode;
+export default EmailRegisterCode;

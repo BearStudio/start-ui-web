@@ -6,6 +6,8 @@ import { randomInt, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import EmailLoginCode from '@/emails/templates/login-code';
+import { EmailLoginNotFound } from '@/emails/templates/login-not-found';
+import EmailRegisterCode from '@/emails/templates/register-code';
 import { env } from '@/env.mjs';
 import {
   VALIDATION_CODE_MOCKED,
@@ -13,6 +15,8 @@ import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getRetryDelayInSeconds as getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import i18n from '@/lib/i18n/server';
 import { AUTH_COOKIE_NAME } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
@@ -49,7 +53,12 @@ export const authRouter = createTRPCRouter({
         tags: ['auth'],
       },
     })
-    .input(z.object({ email: z.string().email() }))
+    .input(
+      z.object({
+        email: z.string().email(),
+        language: z.string().default(DEFAULT_LANGUAGE_KEY),
+      })
+    )
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       ctx.logger.debug('Retrieving user info by email');
@@ -62,6 +71,15 @@ export const authRouter = createTRPCRouter({
 
       if (!user) {
         ctx.logger.warn('User not found');
+
+        await sendEmail({
+          to: input.email,
+          subject: i18n.t('emails:loginNotFound.subject', {
+            lng: input.language,
+          }),
+          template: <EmailLoginNotFound language={input.language} />,
+        });
+
         return {
           token,
         };
@@ -92,8 +110,14 @@ export const authRouter = createTRPCRouter({
       ctx.logger.debug('Send email with code');
       await sendEmail({
         to: input.email,
-        subject: 'TODO',
-        template: <EmailLoginCode language={user.language} code={code} />,
+        subject: i18n.t('emails:loginCode.subject', { lng: user.language }),
+        template: (
+          <EmailLoginCode
+            language={user.language}
+            name={user.name ?? ''}
+            code={code}
+          />
+        ),
       });
 
       return {
@@ -330,11 +354,17 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      ctx.logger.debug('Sending email to login');
+      ctx.logger.debug('Sending email to register');
       await sendEmail({
         to: input.email,
-        subject: 'TODO',
-        template: <EmailLoginCode language={user.language} code={code} />,
+        subject: i18n.t('emails:registerCode.subject', { lng: user.language }),
+        template: (
+          <EmailRegisterCode
+            language={user.language}
+            name={user.name ?? ''}
+            code={code}
+          />
+        ),
       });
 
       return {

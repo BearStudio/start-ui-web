@@ -6,7 +6,7 @@ export const Footer = () => {
   return (
     <Section style={styles.footer}>
       <Link style={styles.link} href="https://start-ui.com" target="_blank">
-        Start UI
+        🚀 Start UI
       </Link>
       <br />
       Opinionated UI starters
