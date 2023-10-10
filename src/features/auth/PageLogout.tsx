@@ -18,7 +18,9 @@ export default function PageLogout() {
       await logout.mutate();
       queryCache.clear();
       // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, false);
+      trpcContext.auth.checkAuthenticated.setData(undefined, {
+        isAuthenticated: false,
+      });
       router.replace('/');
     };
     trigger();

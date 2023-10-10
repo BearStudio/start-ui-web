@@ -33,7 +33,9 @@ export default function PageLoginValidate() {
   const validate = trpc.auth.loginValidate.useMutation({
     onSuccess: () => {
       // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, true);
+      trpcContext.auth.checkAuthenticated.setData(undefined, {
+        isAuthenticated: true,
+      });
 
       // TODO setup redirect logic (redirect url params)
       router.push('/dashboard');

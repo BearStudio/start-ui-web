@@ -16,7 +16,10 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!checkAuthenticated.data) {
+    if (
+      checkAuthenticated.isSuccess &&
+      !checkAuthenticated.data.isAuthenticated
+    ) {
       const redirect =
         !pathname || ['/', '/logout'].includes(pathname)
           ? '/login'
@@ -24,7 +27,7 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
 
       router.replace(redirect);
     }
-  }, [pathname, router, checkAuthenticated.data]);
+  }, [pathname, router, checkAuthenticated.isSuccess, checkAuthenticated.data]);
 
   if (checkAuthenticated.isLoading || !checkAuthenticated.data) {
     return <Loader />;

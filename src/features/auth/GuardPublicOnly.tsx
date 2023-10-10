@@ -16,11 +16,19 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (checkAuthenticated.data) {
+    if (
+      checkAuthenticated.isSuccess &&
+      checkAuthenticated.data.isAuthenticated
+    ) {
       const redirect = searchParams?.get('redirect') ?? '/';
       router.replace(redirect);
     }
-  }, [searchParams, router, checkAuthenticated.data]);
+  }, [
+    searchParams,
+    router,
+    checkAuthenticated.isSuccess,
+    checkAuthenticated.data,
+  ]);
 
   if (checkAuthenticated.isLoading || checkAuthenticated.data) {
     return <Loader />;
