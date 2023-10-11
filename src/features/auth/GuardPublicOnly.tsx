@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Loader } from '@/layout/Loader';
+import { LoaderFull } from '@/components/LoaderFull';
 import { trpc } from '@/lib/trpc/client';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
@@ -34,7 +34,7 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
     checkAuthenticated.isLoading ||
     checkAuthenticated.data?.isAuthenticated
   ) {
-    return <Loader />;
+    return <LoaderFull />;
   }
 
   return <>{children}</>;

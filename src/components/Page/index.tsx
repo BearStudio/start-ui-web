@@ -12,9 +12,9 @@ import {
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import useMeasure from 'react-use-measure';
 
+import { useLayoutContext } from '@/features/layout/Layout';
+import { useLayoutFocusMode } from '@/features/layout/Layout';
 import { useRtl } from '@/hooks/useRtl';
-import { useLayoutContext } from '@/layout/LayoutContext';
-import { useFocusMode } from '@/layout/useFocusMode';
 
 type PageContextValue = {
   nav: React.ReactNode;
@@ -197,7 +197,7 @@ export const Page = ({
   nav = null,
   ...rest
 }: PageProps) => {
-  useFocusMode(isFocusMode);
+  useLayoutFocusMode(isFocusMode);
 
   const value = useMemo(
     () => ({

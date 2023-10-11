@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
+import { LoaderFull } from '@/components/LoaderFull';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
-import { Loader } from '@/layout/Loader';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -64,7 +64,7 @@ export default function PageProfile() {
         </Heading>
 
         <Card minH="16rem">
-          {account.isLoading && <Loader />}
+          {account.isLoading && <LoaderFull />}
           {account.isError && <ErrorPage />}
           {account.isSuccess && (
             <CardBody>

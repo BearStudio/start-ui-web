@@ -3,7 +3,7 @@ import React from 'react';
 import { Center, Flex } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
-import { Layout } from '@/layout/Layout';
+import { Layout } from '@/features/layout/Layout';
 
 import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 

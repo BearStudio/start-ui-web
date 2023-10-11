@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 
-export const Loader = () => {
+export const LoaderFull = () => {
   return (
     <Center flex="1">
       <Spinner />

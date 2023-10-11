@@ -2,7 +2,7 @@ import { Box, Text } from '@chakra-ui/react';
 
 import { env } from '@/env.mjs';
 
-export const EnvDevHint = () => {
+export const DevEnvHint = () => {
   const envName =
     env.NEXT_PUBLIC_NODE_ENV === 'development'
       ? 'Development'

@@ -15,6 +15,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
+import { LoaderFull } from '@/components/LoaderFull';
 import {
   Page,
   PageBottomBar,
@@ -24,7 +25,6 @@ import {
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
-import { Loader } from '@/layout/Loader';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
@@ -112,7 +112,7 @@ export default function PageUserUpdate() {
           )}
         </HStack>
       </PageTopBar>
-      {!isReady && <Loader />}
+      {!isReady && <LoaderFull />}
       {isReady && user.isError && <ErrorPage />}
       {isReady && user.isSuccess && (
         <Formiz connect={form}>

@@ -20,10 +20,10 @@ import { LuExternalLink, LuPenLine, LuTrash2 } from 'react-icons/lu';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
+import { LoaderFull } from '@/components/LoaderFull';
 import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { useToastError } from '@/components/Toast';
-import { Loader } from '@/layout/Loader';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageRepository() {
@@ -99,7 +99,7 @@ export default function PageRepository() {
         </HStack>
       </PageTopBar>
       <PageContent>
-        {repository.isLoading && <Loader />}
+        {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
           <Card>

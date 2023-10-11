@@ -1,7 +1,7 @@
 'use client';
 
-import { Loader } from '@/layout/Loader';
+import { LoaderFull } from '@/components/LoaderFull';
 
 export default function Loading() {
-  return <Loader />;
+  return <LoaderFull />;
 }

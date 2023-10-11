@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
+import { LoaderFull } from '@/components/LoaderFull';
 import { Page, PageContent } from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AccountNav } from '@/features/account/AccountNav';
@@ -28,7 +29,6 @@ import {
   useOnVerificationCodeError,
 } from '@/features/auth/VerificationCodeForm';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
-import { Loader } from '@/layout/Loader';
 import { trpc } from '@/lib/trpc/client';
 
 const SEARCH_PARAM_VERIFY_EMAIL = 'verify-email';
@@ -89,7 +89,7 @@ export default function PageEmail() {
           </Heading>
 
           <Card minH="11rem">
-            {account.isLoading && <Loader />}
+            {account.isLoading && <LoaderFull />}
             {account.isError && <ErrorPage />}
             {account.isSuccess && (
               <CardBody>

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 import { useUpdateAccountLanguage } from '@/features/account/useUpdateAccountLanguage';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
-import { Layout } from '@/layout/Layout';
+import { Layout } from '@/features/layout/Layout';
 
 export default function AutenticatedLayout({
   children,

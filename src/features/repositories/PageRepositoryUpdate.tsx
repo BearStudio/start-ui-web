@@ -12,6 +12,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
+import { LoaderFull } from '@/components/LoaderFull';
 import {
   Page,
   PageBottomBar,
@@ -23,7 +24,6 @@ import {
   RepositoryForm,
   RepositoryFormFields,
 } from '@/features/repositories/RepositoryForm';
-import { Loader } from '@/layout/Loader';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
@@ -92,7 +92,7 @@ export default function PageRepositoryUpdate() {
           </>
         )}
       </PageTopBar>
-      {!isReady && <Loader />}
+      {!isReady && <LoaderFull />}
       {isReady && repository.isError && <ErrorPage />}
       {isReady && repository.isSuccess && (
         <Formiz connect={form}>
