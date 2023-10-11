@@ -24,6 +24,12 @@ export function TrpcProvider(props: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
+        defaultOptions: {
+          queries: {
+            networkMode:
+              env.NEXT_PUBLIC_NODE_ENV !== 'production' ? 'always' : undefined,
+          },
+        },
         mutationCache: new MutationCache({
           onError: (error) => {
             if (
