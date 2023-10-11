@@ -29,7 +29,10 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
     }
   }, [pathname, router, checkAuthenticated.isSuccess, checkAuthenticated.data]);
 
-  if (checkAuthenticated.isLoading || !checkAuthenticated.data) {
+  if (
+    checkAuthenticated.isLoading ||
+    !checkAuthenticated.data?.isAuthenticated
+  ) {
     return <Loader />;
   }
 
