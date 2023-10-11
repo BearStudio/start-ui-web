@@ -187,7 +187,12 @@ const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
     });
   }
 
-  if (type !== 'mutation' || path === 'auth.login' || path === 'auth.logout') {
+  if (
+    type !== 'mutation' ||
+    path === 'auth.login' ||
+    path === 'auth.loginValidate' ||
+    path === 'auth.logout'
+  ) {
     return next({
       ctx,
     });
