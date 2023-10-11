@@ -33,6 +33,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
+  LuBookOpen,
   LuCheck,
   LuCopy,
   LuLogOut,
@@ -94,7 +95,18 @@ const TopBarAccountMenu = ({ ...rest }) => {
             >
               {t('layout:accountMenu.myAccount')}
             </MenuItem>
+
+            {account.data?.role === 'ADMIN' && (
+              <MenuItem
+                as={Link}
+                href="/docs/api"
+                icon={<Icon icon={LuBookOpen} fontSize="lg" color="gray.400" />}
+              >
+                Api Documentation
+              </MenuItem>
+            )}
           </MenuGroup>
+
           <MenuDivider />
           <MenuItem
             icon={
