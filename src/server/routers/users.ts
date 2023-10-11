@@ -33,7 +33,7 @@ export const usersRouter = createTRPCRouter({
     .input(z.object({ id: z.string().cuid() }))
     .output(zUser())
     .query(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Getting user');
+      ctx.logger.info('Getting user');
       const user = await ctx.db.user.findUnique({
         where: { id: input.id },
       });
@@ -70,7 +70,7 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Getting users using pagination');
+      ctx.logger.info('Getting users using pagination');
       const [items, total] = await Promise.all([
         ctx.db.user.findMany({
           skip: (input.page - 1) * input.size,
@@ -105,7 +105,7 @@ export const usersRouter = createTRPCRouter({
     )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Creating user');
+      ctx.logger.info('Creating user');
       try {
         return await ctx.db.user.create({
           data: input,
@@ -137,7 +137,7 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      ctx.logger.debug('Deactivating user');
+      ctx.logger.info('Deactivating user');
       return await ctx.db.user.update({
         where: { id: input.id },
         data: {
@@ -166,7 +166,7 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      ctx.logger.debug('Activating user');
+      ctx.logger.info('Activating user');
       return await ctx.db.user.update({
         where: { id: input.id },
         data: {
@@ -195,7 +195,7 @@ export const usersRouter = createTRPCRouter({
     )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Updating user');
+      ctx.logger.info({ input }, 'Updating user');
       try {
         return await ctx.db.user.update({
           where: { id: input.id },
@@ -232,7 +232,7 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      ctx.logger.debug({ input }, 'Removing user');
+      ctx.logger.info({ input }, 'Removing user');
       return await ctx.db.user.delete({
         where: { id: input.id },
       });

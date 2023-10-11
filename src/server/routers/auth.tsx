@@ -36,7 +36,7 @@ export const authRouter = createTRPCRouter({
     .input(z.void())
     .output(z.object({ isAuthenticated: z.boolean() }))
     .query(async ({ ctx }) => {
-      ctx.logger.debug(`User ${ctx.user ? 'is' : 'is not'} logged`);
+      ctx.logger.info(`User ${ctx.user ? 'is' : 'is not'} logged`);
 
       return {
         isAuthenticated: !!ctx.user,
@@ -59,13 +59,13 @@ export const authRouter = createTRPCRouter({
     )
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Retrieving user info by email');
+      ctx.logger.info('Retrieving user info by email');
       const user = await ctx.db.user.findUnique({
         where: { email: input.email },
       });
 
-      ctx.logger.debug('Creating token');
-      const token = await randomUUID();
+      ctx.logger.info('Creating token');
+      const token = randomUUID();
 
       if (!user) {
         ctx.logger.warn('User not found, silent error for security reasons');
@@ -90,10 +90,10 @@ export const authRouter = createTRPCRouter({
         };
       }
 
-      ctx.logger.debug('Creating code');
+      ctx.logger.info('Creating code');
       const code = generateCode();
 
-      ctx.logger.debug('Saving code and token to database');
+      ctx.logger.info('Saving code and token to database');
       await ctx.db.verificationToken.create({
         data: {
           userId: user.id,
@@ -105,7 +105,7 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      ctx.logger.debug('Send email with code');
+      ctx.logger.info('Send email with code');
       await sendEmail({
         to: input.email,
         subject: i18n.t('emails:loginCode.subject', { lng: user.language }),
@@ -140,7 +140,7 @@ export const authRouter = createTRPCRouter({
         ...input,
       });
 
-      ctx.logger.debug('Updating user');
+      ctx.logger.info('Updating user');
       try {
         await ctx.db.user.update({
           where: { id: verificationToken.userId, accountStatus: 'ENABLED' },
@@ -158,7 +158,7 @@ export const authRouter = createTRPCRouter({
 
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
-      ctx.logger.debug('Set auth cookie');
+      ctx.logger.info('Set auth cookie');
       cookies().set({
         name: AUTH_COOKIE_NAME,
         value: userJwt,
@@ -182,7 +182,7 @@ export const authRouter = createTRPCRouter({
     .input(z.void())
     .output(z.void())
     .mutation(async ({ ctx }) => {
-      ctx.logger.debug('Delete auth cookie');
+      ctx.logger.info('Delete auth cookie');
       cookies().delete('auth');
     }),
 
@@ -198,26 +198,26 @@ export const authRouter = createTRPCRouter({
       z.object({
         email: z.string().email().trim().toLowerCase(),
         name: z.string(),
-        language: z.string(),
+        language: z.string().trim(),
       })
     )
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug('Checking if the user exists');
+      ctx.logger.info('Checking if the user exists');
       const user = await ctx.db.user.findUnique({
         where: {
           email: input.email,
         },
       });
 
-      ctx.logger.debug('Creating token');
-      const token = await randomUUID();
+      ctx.logger.info('Creating token');
+      const token = randomUUID();
 
       let newUser;
       // If the user doesn't exist, we create a new one.
       if (!user) {
         try {
-          ctx.logger.debug('Creating a new user');
+          ctx.logger.info('Creating a new user');
           newUser = await ctx.db.user.create({
             data: {
               email: input.email,
@@ -259,10 +259,10 @@ export const authRouter = createTRPCRouter({
 
       // If we got here, the user exists and email is verified, no need to
       // register, send the email to login the user.
-      ctx.logger.debug('Creating code');
+      ctx.logger.info('Creating code');
       const code = generateCode();
 
-      ctx.logger.debug('Creating verification token in database');
+      ctx.logger.info('Creating verification token in database');
       await ctx.db.verificationToken.create({
         data: {
           userId: newUser.id,
@@ -274,7 +274,7 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      ctx.logger.debug('Sending email to register');
+      ctx.logger.info('Sending email to register');
       await sendEmail({
         to: input.email,
         subject: i18n.t('emails:registerCode.subject', {
@@ -310,7 +310,7 @@ export const authRouter = createTRPCRouter({
         ...input,
       });
 
-      ctx.logger.debug('Updating user');
+      ctx.logger.info('Updating user');
       try {
         await ctx.db.user.update({
           where: {
@@ -332,7 +332,7 @@ export const authRouter = createTRPCRouter({
 
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
-      ctx.logger.debug('Set auth cookie');
+      ctx.logger.info('Set auth cookie');
       cookies().set({
         name: AUTH_COOKIE_NAME,
         value: userJwt,

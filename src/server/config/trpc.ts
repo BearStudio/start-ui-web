@@ -110,6 +110,11 @@ const loggerMiddleware = t.middleware(async (opts) => {
     apiType: opts.ctx.apiType,
   };
 
+  logger.debug(
+    { ...meta, input: opts.rawInput },
+    `${opts.rawInput ? '📨 With' : '📥 No'} input`
+  );
+
   // We are doing the next operation in tRPC
   const result = await opts.next({
     ctx: {
@@ -126,7 +131,7 @@ const loggerMiddleware = t.middleware(async (opts) => {
   };
 
   if (result.ok) {
-    logger.debug(extendedMeta, '✅ OK');
+    logger.info(extendedMeta, '✅ OK');
   } else {
     const logLevel = () => {
       const errorCode = getHTTPStatusCodeFromError(result.error);

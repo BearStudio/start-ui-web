@@ -38,7 +38,7 @@ export const accountRouter = createTRPCRouter({
     .input(z.void())
     .output(zUserAccount())
     .query(async ({ ctx }) => {
-      ctx.logger.debug('Getting user');
+      ctx.logger.info('Getting user');
       const user = await ctx.db.user.findUnique({
         where: { id: ctx.user.id },
         select: {
@@ -78,7 +78,7 @@ export const accountRouter = createTRPCRouter({
     .output(zUserAccount())
     .mutation(async ({ ctx, input }) => {
       try {
-        ctx.logger.debug('Updating the user');
+        ctx.logger.info('Updating the user');
         return await ctx.db.user.update({
           where: { id: ctx.user.id },
           data: input,
@@ -116,7 +116,7 @@ export const accountRouter = createTRPCRouter({
         });
       }
 
-      const token = await randomUUID();
+      const token = randomUUID();
 
       ctx.logger.info('Checking if new email is already used');
       const existingEmail = await ctx.db.user.findUnique({
@@ -136,10 +136,10 @@ export const accountRouter = createTRPCRouter({
 
       // If we got here, the user can update the email
       // and we send the email to verify the new email.
-      ctx.logger.debug('Creating code');
+      ctx.logger.info('Creating code');
       const code = generateCode();
 
-      ctx.logger.debug('Creating verification token in database');
+      ctx.logger.info('Creating verification token in database');
       await ctx.db.verificationToken.create({
         data: {
           userId: ctx.user.id,
@@ -152,7 +152,7 @@ export const accountRouter = createTRPCRouter({
         },
       });
 
-      ctx.logger.debug('Sending email with verification code');
+      ctx.logger.info('Sending email with verification code');
       await sendEmail({
         to: input.email,
         subject: i18n.t('emails:emailAddressChange.subject', {

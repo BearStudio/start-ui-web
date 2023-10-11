@@ -25,7 +25,7 @@ export const repositoriesRouter = createTRPCRouter({
     .input(z.object({ id: z.string().cuid() }))
     .output(zRepository())
     .query(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Getting repository');
+      ctx.logger.info('Getting repository');
       const repository = await ctx.db.repository.findUnique({
         where: { id: input.id },
       });
@@ -62,7 +62,7 @@ export const repositoriesRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Getting repositories using pagination');
+      ctx.logger.info('Getting repositories using pagination');
       const [items, total] = await Promise.all([
         ctx.db.repository.findMany({
           skip: (input.page - 1) * input.size,
@@ -99,7 +99,7 @@ export const repositoriesRouter = createTRPCRouter({
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
-        ctx.logger.debug('Creating repository');
+        ctx.logger.info('Creating repository');
         return await ctx.db.repository.create({
           data: input,
         });
@@ -130,7 +130,7 @@ export const repositoriesRouter = createTRPCRouter({
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       try {
-        ctx.logger.debug('Updating repository');
+        ctx.logger.info('Updating repository');
         return await ctx.db.repository.update({
           where: { id: input.id },
           data: input,
@@ -158,7 +158,7 @@ export const repositoriesRouter = createTRPCRouter({
     )
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
-      ctx.logger.debug({ input }, 'Removing repository');
+      ctx.logger.info({ input }, 'Removing repository');
       try {
         return await ctx.db.repository.delete({
           where: { id: input.id },

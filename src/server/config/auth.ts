@@ -71,12 +71,12 @@ export async function validateCode({
   code: string;
   token: string;
 }): Promise<{ verificationToken: VerificationToken; userJwt: string }> {
-  ctx.logger.debug('Removing expired verification tokens from database');
+  ctx.logger.info('Removing expired verification tokens from database');
   await ctx.db.verificationToken.deleteMany({
     where: { expires: { lt: new Date() } },
   });
 
-  ctx.logger.debug('Checking if verification token exists');
+  ctx.logger.info('Checking if verification token exists');
   const verificationToken = await ctx.db.verificationToken.findUnique({
     where: {
       token,
@@ -95,12 +95,7 @@ export async function validateCode({
     verificationToken.attempts
   );
 
-  ctx.logger.debug(
-    {
-      retryDelayInSeconds,
-    },
-    'Check last attempt date'
-  );
+  ctx.logger.info('Check last attempt date');
   if (
     dayjs().isBefore(
       dayjs(verificationToken.lastAttemptAt).add(retryDelayInSeconds, 'seconds')
@@ -113,12 +108,12 @@ export async function validateCode({
     });
   }
 
-  ctx.logger.debug('Checking code');
+  ctx.logger.info('Checking code');
   if (verificationToken.code !== code) {
     ctx.logger.warn('Invalid code');
 
     try {
-      ctx.logger.debug('Updating token attempts');
+      ctx.logger.info('Updating token attempts');
       await ctx.db.verificationToken.update({
         where: {
           token,
@@ -139,11 +134,8 @@ export async function validateCode({
     });
   }
 
-  ctx.logger.debug('Encoding JWT');
-  const userJwt = await jwt.sign(
-    { id: verificationToken.userId },
-    env.AUTH_SECRET
-  );
+  ctx.logger.info('Encoding JWT');
+  const userJwt = jwt.sign({ id: verificationToken.userId }, env.AUTH_SECRET);
   if (!userJwt) {
     ctx.logger.error('Failed to encode JWT');
     throw new TRPCError({
@@ -161,7 +153,7 @@ export async function deleteUsedCode({
   ctx: AppContext;
   token: string;
 }) {
-  ctx.logger.debug('Deleting used token');
+  ctx.logger.info('Deleting used token');
   try {
     await ctx.db.verificationToken.delete({
       where: { token },
