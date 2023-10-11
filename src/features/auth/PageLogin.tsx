@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
+import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
 import { RouterInput, RouterOutput } from '@/server/router';
 
@@ -29,7 +30,9 @@ export default function PageLogin() {
   ) => {
     const urlSearchParams = new URLSearchParams(searchParams);
     urlSearchParams.set('email', variables.email);
-    router.push(`/login/${data.token}?${urlSearchParams.toString()}`);
+    router.push(
+      `${APP_PATH}/login/${data.token}?${urlSearchParams.toString()}`
+    );
   };
 
   return (
@@ -45,7 +48,7 @@ export default function PageLogin() {
           </CardBody>
         </Card>
         <Center mt="8">
-          <Button as={Link} href="/register" variant="link">
+          <Button as={Link} href={`${APP_PATH}/register`} variant="link">
             {t('auth:login.actions.needAccount')}{' '}
             <Box
               as="strong"

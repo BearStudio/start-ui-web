@@ -21,6 +21,7 @@ import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { SlideIn } from '@/components/SlideIn';
 import { useToastError } from '@/components/Toast';
+import { APP_PATH } from '@/features/app/constants';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES, Language } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
@@ -33,7 +34,9 @@ export default function PageRegister() {
 
   const register = trpc.auth.register.useMutation({
     onSuccess: (data, variables) => {
-      router.push(`/register/${data.token}?email=${variables.email}`);
+      router.push(
+        `${APP_PATH}/register/${data.token}?email=${variables.email}`
+      );
     },
     onError: () => {
       toastError({
@@ -108,13 +111,13 @@ export default function PageRegister() {
                     {t('auth:register.actions.create')}
                   </Button>
                 </Flex>
-                <DemoRegisterHint />
+                <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
               </Stack>
             </Formiz>
           </CardBody>
         </Card>
         <Center mt="8">
-          <Button as={Link} href="/login" variant="link">
+          <Button as={Link} href={`${APP_PATH}/login`} variant="link">
             {t('auth:register.actions.alreadyHaveAnAccount')}{' '}
             <Box
               as="strong"

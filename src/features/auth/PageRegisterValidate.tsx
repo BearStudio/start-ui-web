@@ -8,6 +8,7 @@ import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
+import { ADMIN_PATH } from '@/features/admin/constants';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -39,7 +40,7 @@ export default function PageRegisterValidate() {
         isAuthenticated: true,
       });
 
-      router.replace('/');
+      router.replace(ADMIN_PATH || '/');
     },
     onError: onVerificationCodeError,
   });

@@ -1,10 +1,9 @@
 import account from './account.json';
+import admin from './admin.json';
 import auth from './auth.json';
 import common from './common.json';
 import components from './components.json';
-import dashboard from './dashboard.json';
 import emails from './emails.json';
-import layout from './layout.json';
 import management from './management.json';
 import repositories from './repositories.json';
 import users from './users.json';
@@ -15,9 +14,8 @@ export default {
   auth,
   common,
   components,
-  dashboard,
+  admin,
   emails,
-  layout,
   repositories,
   users,
 } as const;

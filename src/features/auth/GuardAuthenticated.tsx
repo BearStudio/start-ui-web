@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
+import { APP_PATH } from '@/features/app/constants';
 import { useCheckAuthenticated } from '@/features/auth/hooks';
 
 export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
@@ -18,7 +19,7 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
       checkAuthenticated.isSuccess &&
       !checkAuthenticated.data.isAuthenticated
     ) {
-      router.replace(`/login?redirect=${pathname ?? '/'}`);
+      router.replace(`${APP_PATH}/login?redirect=${pathname ?? '/'}`);
     }
   }, [pathname, router, checkAuthenticated.isSuccess, checkAuthenticated.data]);
 

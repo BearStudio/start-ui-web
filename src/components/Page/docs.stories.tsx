@@ -3,7 +3,7 @@ import React from 'react';
 import { Center, Flex } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
-import { Layout } from '@/features/layout/Layout';
+import { AdminLayout } from '@/features/admin/AdminLayout';
 
 import { Page, PageBottomBar, PageContent, PageTopBar } from './index';
 
@@ -23,9 +23,9 @@ export default {
           bg="white"
           _dark={{ bg: 'gray.800' }}
         >
-          <Layout>
+          <AdminLayout>
             <Story />
-          </Layout>
+          </AdminLayout>
         </Flex>
       );
     },

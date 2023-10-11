@@ -9,7 +9,7 @@ import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
-import { DevCodeHint } from '@/features/dev/DevCodeHint';
+import { DevCodeHint } from '@/features/devtools/DevCodeHint';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { AppRouter } from '@/server/router';
 

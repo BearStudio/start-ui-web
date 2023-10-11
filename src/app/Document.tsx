@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
-import { DevEnvHint } from '@/features/dev/DevEnvHint';
+import { DevEnvHint } from '@/features/devtools/DevEnvHint';
 import i18n from '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';

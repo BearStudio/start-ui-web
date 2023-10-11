@@ -12,8 +12,8 @@ import {
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import useMeasure from 'react-use-measure';
 
-import { useLayoutContext } from '@/features/layout/Layout';
-import { useLayoutFocusMode } from '@/features/layout/Layout';
+import { useAdminLayoutContext } from '@/features/admin/AdminLayout';
+import { useAdminLayoutFocusMode } from '@/features/admin/AdminLayout';
 import { useRtl } from '@/hooks/useRtl';
 
 type PageContextValue = {
@@ -73,7 +73,7 @@ export const PageTopBar = ({
   isFixed = false,
   ...rest
 }: PageTopBarProps) => {
-  const { isFocusMode } = useLayoutContext();
+  const { isFocusMode } = useAdminLayoutContext();
   const theme = useTheme();
   const [ref, { height }] = useMeasure();
 
@@ -197,7 +197,7 @@ export const Page = ({
   nav = null,
   ...rest
 }: PageProps) => {
-  useLayoutFocusMode(isFocusMode);
+  useAdminLayoutFocusMode(isFocusMode);
 
   const value = useMemo(
     () => ({

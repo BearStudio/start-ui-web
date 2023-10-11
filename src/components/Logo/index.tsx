@@ -1,10 +1,10 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useId } from 'react';
 
 import { chakra, useTheme } from '@chakra-ui/react';
 
 export const Logo = ({ ...rest }: ComponentProps<typeof chakra.svg>) => {
   const theme = useTheme();
-  const gradientId = 'logo-brand-gradient';
+  const gradientId = useId();
   return (
     <chakra.svg h="1.8rem" fill="none" viewBox="0 0 673 116" {...rest}>
       <title>Start UI</title>

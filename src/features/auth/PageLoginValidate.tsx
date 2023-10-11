@@ -8,6 +8,7 @@ import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Logo } from '@/components/Logo';
 import { SlideIn } from '@/components/SlideIn';
+import { APP_PATH } from '@/features/app/constants';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -39,7 +40,7 @@ export default function PageLoginValidate() {
         isAuthenticated: true,
       });
 
-      router.push(searchParams.get('redirect') || '/');
+      router.push(searchParams.get('redirect') || APP_PATH || '/');
     },
     onError: onVerificationCodeError,
   });

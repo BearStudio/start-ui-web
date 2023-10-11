@@ -1,0 +1,33 @@
+{
+  "layout": {
+    "mainMenu": {
+      "dashboard": "Dashboard",
+      "repositories": "Repositories",
+      "management": "Management"
+    },
+    "accountMenu": {
+      "version": {
+        "copied": "Version copied",
+        "copy": "Copy version",
+        "label": "Version"
+      },
+      "switchColorModeDark": "Switch to Dark Mode",
+      "switchColorModeLight": "Switch to Light Mode",
+      "myAccount": "My Account",
+      "logout": "Logout"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": {
+      "title": "Welcome to Start UI",
+      "description": "An opinionated UI starter with React, Chakra UI, React Query & Formiz",
+      "author": "— From the <strong>BearStudio Team</strong>"
+    },
+    "links": {
+      "github": "GitHub Repository",
+      "openIssue": "Open Issue",
+      "documentation": "Documentation"
+    }
+  }
+}

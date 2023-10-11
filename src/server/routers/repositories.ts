@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
 
 const zRepository = () =>
   z.object({
@@ -13,7 +13,7 @@ const zRepository = () =>
   });
 
 export const repositoriesRouter = createTRPCRouter({
-  getById: protectedProcedure
+  getById: adminProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -40,7 +40,7 @@ export const repositoriesRouter = createTRPCRouter({
       return repository;
     }),
 
-  getAll: protectedProcedure
+  getAll: adminProcedure
     .meta({
       openapi: {
         method: 'GET',
@@ -80,7 +80,7 @@ export const repositoriesRouter = createTRPCRouter({
       };
     }),
 
-  create: protectedProcedure
+  create: adminProcedure
     .meta({
       openapi: {
         method: 'POST',
@@ -110,7 +110,7 @@ export const repositoriesRouter = createTRPCRouter({
       }
     }),
 
-  updateById: protectedProcedure
+  updateById: adminProcedure
     .meta({
       openapi: {
         method: 'PUT',
@@ -142,7 +142,7 @@ export const repositoriesRouter = createTRPCRouter({
       }
     }),
 
-  removeById: protectedProcedure
+  removeById: adminProcedure
     .meta({
       openapi: {
         method: 'DELETE',

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
+import { ADMIN_PATH } from '@/features/admin/constants';
 import { useCheckAuthenticated } from '@/features/auth/hooks';
 import { trpc } from '@/lib/trpc/client';
 
@@ -28,7 +29,7 @@ export const GuardAdminAuthenticated = ({
       checkAuthenticated.isSuccess &&
       !checkAuthenticated.data.isAuthenticated
     ) {
-      router.replace(`/login?redirect=${pathname ?? '/'}`);
+      router.replace(`${ADMIN_PATH}/login?redirect=${pathname ?? '/'}`);
     }
   }, [pathname, router, checkAuthenticated.isSuccess, checkAuthenticated.data]);
 
