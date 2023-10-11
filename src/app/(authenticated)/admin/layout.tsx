@@ -2,8 +2,8 @@
 
 import { ReactNode } from 'react';
 
-import { GuardAdmin } from '@/features/auth/GuardAdmin';
+import { GuardAdminAuthenticated } from '@/features/auth/GuardAdminAuthenticated';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  return <GuardAdmin>{children}</GuardAdmin>;
+  return <GuardAdminAuthenticated>{children}</GuardAdminAuthenticated>;
 }

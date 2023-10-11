@@ -4,14 +4,12 @@ import { ReactNode, useEffect } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
-import { trpc } from '@/lib/trpc/client';
+import { useCheckAuthenticated } from '@/features/auth/hooks';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
-  const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery(undefined, {
-    staleTime: 30000,
-    cacheTime: Infinity,
-  });
+  const checkAuthenticated = useCheckAuthenticated();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -31,11 +29,15 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
   ]);
 
   if (
-    checkAuthenticated.isLoading ||
-    checkAuthenticated.data?.isAuthenticated
+    checkAuthenticated.isSuccess &&
+    !checkAuthenticated.data.isAuthenticated
   ) {
-    return <LoaderFull />;
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  if (checkAuthenticated.isError) {
+    return <ErrorPage />;
+  }
+
+  return <LoaderFull />;
 };

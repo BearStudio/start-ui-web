@@ -7,9 +7,19 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useCheckAuthenticated } from '@/features/auth/hooks';
+import { trpc } from '@/lib/trpc/client';
 
-export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
+export const GuardAdminAuthenticated = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const checkAuthenticated = useCheckAuthenticated();
+  const account = trpc.account.get.useQuery(undefined, {
+    retry: 1,
+    enabled: !!checkAuthenticated.data?.isAuthenticated,
+  });
+
   const pathname = usePathname();
   const router = useRouter();
 
@@ -22,11 +32,15 @@ export const GuardAuthenticated = ({ children }: { children: ReactNode }) => {
     }
   }, [pathname, router, checkAuthenticated.isSuccess, checkAuthenticated.data]);
 
-  if (checkAuthenticated.isSuccess && checkAuthenticated.data.isAuthenticated) {
+  if (account.isSuccess && account.data.role === 'ADMIN') {
     return <>{children}</>;
   }
 
-  if (checkAuthenticated.isError) {
+  if (account.isSuccess && account.data.role !== 'ADMIN') {
+    return <ErrorPage errorCode={403} />;
+  }
+
+  if (checkAuthenticated.isError || account.isError) {
     return <ErrorPage />;
   }
 
