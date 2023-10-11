@@ -5,7 +5,7 @@ import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
 import { Page, PageContent } from '@/components/Page';
-import { AdminNav } from '@/features/admin/AdminNav';
+import { AdminNav } from '@/features/management/ManagementNav';
 
 export default function PageApiDocumentation() {
   return (

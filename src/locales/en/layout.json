@@ -2,7 +2,7 @@
   "mainMenu": {
     "dashboard": "Dashboard",
     "repositories": "Repositories",
-    "admin": "Admin"
+    "management": "Management"
   },
   "accountMenu": {
     "version": {

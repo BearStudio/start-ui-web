@@ -8,27 +8,27 @@ import { LuBookOpen, LuUsers } from 'react-icons/lu';
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
 
 export const AdminNav = () => {
-  const { t } = useTranslation(['admin']);
+  const { t } = useTranslation(['management']);
   const pathname = usePathname();
   const isActive = (to: string) => pathname?.startsWith(to);
   return (
     <Nav>
-      <NavGroup title={t('admin:nav.administration')}>
+      <NavGroup title={t('management:nav.title')}>
         <NavItem
           as={Link}
-          href="/admin/users"
-          isActive={isActive('/admin/users')}
+          href="/management/users"
+          isActive={isActive('/management/users')}
           icon={LuUsers}
         >
-          {t('admin:nav.users')}
+          {t('management:nav.users')}
         </NavItem>
         <NavItem
           as={Link}
-          href="/admin/api"
-          isActive={isActive('/admin/api')}
+          href="/management/api"
+          isActive={isActive('/management/api')}
           icon={LuBookOpen}
         >
-          {t('admin:nav.apiDocumentation')}
+          {t('management:nav.apiDocumentation')}
         </NavItem>
       </NavGroup>
     </Nav>

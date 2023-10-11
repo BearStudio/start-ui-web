@@ -15,7 +15,7 @@ test.describe('Login flow', () => {
     ).toBeVisible();
 
     await expect(
-      page.getByRole('link', { name: locales.en.layout.mainMenu.admin })
+      page.getByRole('link', { name: locales.en.layout.mainMenu.management })
     ).toBeVisible();
   });
 
@@ -29,7 +29,7 @@ test.describe('Login flow', () => {
     ).toBeVisible();
 
     await expect(
-      page.getByRole('link', { name: locales.en.layout.mainMenu.admin })
+      page.getByRole('link', { name: locales.en.layout.mainMenu.management })
     ).not.toBeVisible();
   });
 

@@ -36,7 +36,7 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
-import { AdminNav } from '@/features/admin/AdminNav';
+import { AdminNav } from '@/features/management/ManagementNav';
 import { UserStatus } from '@/features/users/UserStatus';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
@@ -67,7 +67,7 @@ export default function PageUsers() {
 
             <ResponsiveIconButton
               as={Link}
-              href="/admin/users/create"
+              href="/management/users/create"
               variant="@primary"
               icon={<LuPlus />}
             >
@@ -103,7 +103,10 @@ export default function PageUsers() {
                             {t('users:you')}
                           </Badge>
                         )}
-                        <LinkOverlay as={Link} href={`/admin/users/${user.id}`}>
+                        <LinkOverlay
+                          as={Link}
+                          href={`/management/users/${user.id}`}
+                        >
                           {user.name ?? user.email}
                         </LinkOverlay>
                       </Text>

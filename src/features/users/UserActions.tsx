@@ -96,7 +96,7 @@ export const UserActions = ({ user, ...rest }: UserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={`/admin/users/${user.id}`}
+            href={`/management/users/${user.id}`}
             icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

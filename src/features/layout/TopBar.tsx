@@ -62,8 +62,8 @@ const TopBarMainMenu = ({ ...rest }) => {
         {t('layout:mainMenu.repositories')}
       </TopBarMainMenuItem>
       {account.data?.role === 'ADMIN' && (
-        <TopBarMainMenuItem to="/admin">
-          {t('layout:mainMenu.admin')}
+        <TopBarMainMenuItem to="/management">
+          {t('layout:mainMenu.management')}
         </TopBarMainMenuItem>
       )}
     </Stack>
