@@ -36,7 +36,7 @@ export const authRouter = createTRPCRouter({
     .input(z.void())
     .output(z.object({ isAuthenticated: z.boolean() }))
     .query(async ({ ctx }) => {
-      ctx.logger.debug(`User ${!!ctx.user ? 'is' : 'is not'} logged`);
+      ctx.logger.debug(`User ${ctx.user ? 'is' : 'is not'} logged`);
 
       return {
         isAuthenticated: !!ctx.user,

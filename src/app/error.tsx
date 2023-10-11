@@ -2,6 +2,6 @@
 
 import { ErrorPage } from '@/components/ErrorPage';
 
-export default function Error() {
+export default function GlobalError() {
   return <ErrorPage />;
 }
