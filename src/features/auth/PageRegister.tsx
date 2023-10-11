@@ -24,7 +24,6 @@ import { useToastError } from '@/components/Toast';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES, Language } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
-import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'auth']);
@@ -36,11 +35,7 @@ export default function PageRegister() {
     onSuccess: (data, variables) => {
       router.push(`/register/${data.token}?email=${variables.email}`);
     },
-    onError: (error) => {
-      if (isErrorDatabaseConflict(error, 'email')) {
-        form.setErrors({ email: t('auth:data.email.alreadyUsed') });
-        return;
-      }
+    onError: () => {
       toastError({
         title: t('auth:register.feedbacks.registrationError.title'),
       });

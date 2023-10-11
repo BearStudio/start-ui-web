@@ -38,7 +38,9 @@ test.describe('Login flow', () => {
 
     await utils.login({ email: 'admin@admin.com', code: '111111' });
 
-    await expect(page.getByText('Code is invalid')).toBeVisible();
+    await expect(
+      page.getByText(locales.en.auth.data.verificationCode.unknown)
+    ).toBeVisible();
   });
 
   test('Login with a wrong email', async ({ page }) => {
@@ -49,6 +51,8 @@ test.describe('Login flow', () => {
 
     await utils.login({ email });
 
-    await expect(page.getByText('Code is invalid')).toBeVisible();
+    await expect(
+      page.getByText(locales.en.auth.data.verificationCode.unknown)
+    ).toBeVisible();
   });
 });

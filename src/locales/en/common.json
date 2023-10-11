@@ -6,6 +6,7 @@
     "sw": "Swahili"
   },
   "actions": {
+    "back": "Back",
     "activate": "Activate",
     "cancel": "Cancel",
     "deactivate": "Deactivate",

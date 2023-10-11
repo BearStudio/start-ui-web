@@ -40,7 +40,9 @@ test.describe('Register flow', () => {
     await page.waitForURL('**/register/**');
     await page.fill('input', VALIDATION_CODE_MOCKED);
 
-    await expect(page.getByText('Code is invalid')).toBeVisible();
+    await expect(
+      page.getByText(locales.en.auth.data.verificationCode.unknown)
+    ).toBeVisible();
   });
 
   test('Login with a not verified account', async ({ page }) => {
@@ -59,6 +61,8 @@ test.describe('Register flow', () => {
 
     await utils.login({ email });
 
-    await expect(page.getByText('Code is invalid')).toBeVisible();
+    await expect(
+      page.getByText(locales.en.auth.data.verificationCode.unknown)
+    ).toBeVisible();
   });
 });

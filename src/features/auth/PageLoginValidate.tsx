@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Button, Card, CardBody, CardHeader } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Logo } from '@/components/Logo';
@@ -15,6 +16,7 @@ import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageLoginValidate() {
+  const { t } = useTranslation(['common']);
   const { rtlValue } = useRtl();
   const router = useRouter();
   const params = useParams();
@@ -54,7 +56,7 @@ export default function PageLoginValidate() {
               leftIcon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
               onClick={() => router.back()}
             >
-              Back
+              {t('common:actions.back')}
             </Button>
           </CardHeader>
           <CardBody>

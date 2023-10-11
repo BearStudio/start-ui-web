@@ -1,7 +1,8 @@
 {
   "nav": {
     "profile": "الملف الشخصي",
-    "myAccount": "حسابي"
+    "myAccount": "حسابي",
+    "email": "بريد إلكتروني"
   },
   "profile": {
     "title": "الملف الشخصي",
@@ -12,20 +13,9 @@
       "updateError": {
         "title": "فشل التحديث"
       }
-    }
-  },
-  "password": {
-    "title": "كلمة المرور",
-    "feedbacks": {
-      "updateSuccess": {
-        "title": "تم تحديث كلمة مرورك بنجاح"
-      },
-      "updateError": {
-        "title": "فشل تحديث كلمة المرور"
-      }
     },
     "actions": {
-      "changePassword": "تغيير كلمة السر"
+      "update": "تحديث"
     }
   },
   "data": {
@@ -37,24 +27,24 @@
       "label": "البريد إلكتروني",
       "required": "البريد الإلكتروني مطلوب",
       "invalid": "البريد الإلكتروني غير صالح",
-      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل"
+      "current": "هذا هو بريدك الإلكتروني الحالي"
     },
     "language": {
       "label": "اللغة"
-    },
-    "currentPassword": {
-      "label": "كلمة المرور الحالية",
-      "invalid": "كلمة المرور خاطئة ",
-      "required": "كلمة المرور الحالية مطلوبة"
-    },
-    "newPassword": {
-      "label": "كلمة المرور الجديدة",
-      "required": "كلمة المرور الجديدة مطلوبة"
-    },
-    "confirmNewPassword": {
-      "label": "تأكيد كلمة المرور الجديدة",
-      "required": "تأكيد كلمة المرور الجديدة مطلوب",
-      "notEqual": "يجب أن تكون كلمة المرور الجديدة متطابقة"
     }
+  },
+  "email": {
+    "actions": {
+      "update": "تحديث"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل التحديث"
+      },
+      "updateSuccess": {
+        "title": "تم تحديث البريد الإلكتروني"
+      }
+    },
+    "title": "بريد إلكتروني"
   }
 }

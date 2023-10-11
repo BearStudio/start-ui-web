@@ -1,7 +1,8 @@
 {
   "nav": {
     "profile": "Wasifu",
-    "myAccount": "Akaunti yangu"
+    "myAccount": "Akaunti yangu",
+    "email": "Barua pepe"
   },
   "profile": {
     "title": "Wasifu",
@@ -12,20 +13,9 @@
       "updateError": {
         "title": "Usasishaji haukufaulu"
       }
-    }
-  },
-  "password": {
-    "title": "Nenosiri",
-    "feedbacks": {
-      "updateSuccess": {
-        "title": "Nenosiri lako limesasishwa"
-      },
-      "updateError": {
-        "title": "Imeshindwa kusasisha nenosiri"
-      }
     },
     "actions": {
-      "changePassword": "Badilisha neno la siri"
+      "update": "Sasisha"
     }
   },
   "data": {
@@ -37,24 +27,24 @@
       "label": "Barua pepe",
       "required": " Barua pepe inahitajika",
       "invalid": "Barua pepe ni batili",
-      "alreadyUsed": "Anwani ya barua pepe tayari inatumika"
+      "current": "Hii ndiyo barua pepe yako ya sasa"
     },
     "language": {
       "label": "Lugha"
-    },
-    "currentPassword": {
-      "invalid": "Nenosiri batili la sasa",
-      "label": "Nenosiri la sasa",
-      "required": "Nenosiri la sasa linahitajika"
-    },
-    "newPassword": {
-      "label": "Nenosiri Mpya",
-      "required": "Nenosiri jipya linahitajika"
-    },
-    "confirmNewPassword": {
-      "label": "Thibitisha nenosiri jipya",
-      "required": "Uthibitishaji wa nenosiri unahitajika",
-      "notEqual": "Nywila mpya lazima ziwe sawa"
     }
+  },
+  "email": {
+    "actions": {
+      "update": "Sasisha"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Barua pepe imesasishwa"
+      }
+    },
+    "title": "Barua pepe"
   }
 }

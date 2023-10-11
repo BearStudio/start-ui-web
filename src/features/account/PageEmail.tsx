@@ -115,8 +115,7 @@ export default function PageEmail() {
                         >
                           {account.data.email === values.email && (
                             <Flex fontSize="sm" opacity={0.6}>
-                              {/* TODO translations */}
-                              This is your current email
+                              {t('account:data.email.current')}
                             </Flex>
                           )}
                           <Button
@@ -146,6 +145,7 @@ export default function PageEmail() {
 }
 
 const VerificationCodeModale = () => {
+  const { t } = useTranslation(['account']);
   const searchParams = useSearchParams();
   const searchParamsUpdater = useSearchParamsUpdater();
   const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
@@ -178,7 +178,7 @@ const VerificationCodeModale = () => {
     onSuccess: async () => {
       onClose();
       toastSuccess({
-        title: 'Email updated', // TODO translations
+        title: t('account:email.feedbacks.updateSuccess.title'),
       });
     },
     onError: onVerificationCodeError,

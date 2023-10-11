@@ -1,8 +1,8 @@
-import { Button, HStack, Heading, Stack, Text, chakra } from '@chakra-ui/react';
+import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
 import { FormContext, useFormContext } from '@formiz/core';
 import { TRPCClientErrorLike } from '@trpc/client';
 import { useSearchParams } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { FieldPinInput } from '@/components/FieldPinInput';
 import {
@@ -14,6 +14,7 @@ import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { AppRouter } from '@/server/router';
 
 export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
+  const { t } = useTranslation(['auth']);
   const searchParams = useSearchParams();
   const searchParamsUpdater = useSearchParamsUpdater();
 
@@ -34,18 +35,18 @@ export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
       });
 
       form.setErrors({
-        code: `Code is invalid`, // TODO translations
+        code: t('auth:data.verificationCode.unknown'),
       });
 
       return;
     }
 
     if (error.data?.code === 'BAD_REQUEST') {
-      form.setErrors({ code: 'Code should be 6 digits' }); // TODO translations
+      form.setErrors({ code: t('auth:data.verificationCode.invalid') });
       return;
     }
 
-    form.setErrors({ code: 'Unkown error' }); // TODO translations
+    form.setErrors({ code: t('auth:data.verificationCode.unknown') });
   };
 };
 
@@ -63,22 +64,28 @@ export const VerificationCodeForm = ({
   return (
     <Stack spacing="4">
       <Stack>
-        <Heading size="md">{t('auth:login.code.title')}</Heading>
+        <Heading size="md">{t('auth:validate.title')}</Heading>
         <Text fontSize="sm">
-          {/* TODO translations */}
-          We&apos;ve sent a 6-character code to{' '}
-          <chakra.strong>{email}</chakra.strong>. The code expires shortly (
-          {VALIDATION_TOKEN_EXPIRATION_IN_MINUTES} minutes), so please enter it
-          soon.
+          <Trans
+            t={t}
+            i18nKey="auth:validate.description"
+            values={{
+              email,
+              expiration: VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
+            }}
+            components={{
+              b: <strong />,
+            }}
+          />
         </Text>
       </Stack>
       <FieldPinInput
         name="code"
-        label="Verification code" // TODO translations
-        helper="Can't find the code? Check your spams." // TODO translations
+        label={t('auth:data.verificationCode.label')}
+        helper={t('auth:data.verificationCode.helper')}
         autoFocus
         isDisabled={isLoading}
-        required="Required" // TODO translations
+        required={t('auth:data.verificationCode.required')}
         onComplete={() => {
           // Only auto submit on first try
           if (!form.isSubmitted) {
@@ -95,7 +102,7 @@ export const VerificationCodeForm = ({
           variant="@primary"
           flex={1}
         >
-          Confirm {/* TODO translations */}
+          {t('auth:validate.actions.confirm')}
         </Button>
       </HStack>
 

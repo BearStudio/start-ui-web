@@ -1,7 +1,8 @@
 {
   "nav": {
     "profile": "Profil",
-    "myAccount": "Mon compte"
+    "myAccount": "Mon compte",
+    "email": "Email"
   },
   "profile": {
     "title": "Profil",
@@ -12,20 +13,9 @@
       "updateError": {
         "title": "Échec de la mise à jour"
       }
-    }
-  },
-  "password": {
-    "title": "Mot de passe",
-    "feedbacks": {
-      "updateSuccess": {
-        "title": "Votre mot de passe a été mis à jour avec succès"
-      },
-      "updateError": {
-        "title": "Échec de la mise à jour du mot de passe"
-      }
     },
     "actions": {
-      "changePassword": "Changer le mot de passe"
+      "update": "Mettre à jour"
     }
   },
   "data": {
@@ -37,24 +27,24 @@
       "label": "Email",
       "required": "L'email est requis",
       "invalid": "L'email est invalide",
-      "alreadyUsed": "L'email est déjà utilisé"
+      "current": "Ceci est votre email actuel"
     },
     "language": {
       "label": "Langue"
-    },
-    "currentPassword": {
-      "invalid": "Mot de passe actuel non valide",
-      "label": "Mot de passe actuel",
-      "required": "Le mot de passe actuel est requis"
-    },
-    "newPassword": {
-      "label": "Nouveau mot de passe",
-      "required": "Le nouveau mot de passe est requis"
-    },
-    "confirmNewPassword": {
-      "label": "Confirmer le nouveau mot de passe",
-      "required": "La confirmation du mot de passe est requise",
-      "notEqual": "Les nouveaux mots de passe doivent être égaux"
     }
+  },
+  "email": {
+    "actions": {
+      "update": "Mettre à jour"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      },
+      "updateSuccess": {
+        "title": "Email mis à jour"
+      }
+    },
+    "title": "Email"
   }
 }

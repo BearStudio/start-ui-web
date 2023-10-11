@@ -8,7 +8,7 @@
     "title": "Profile",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Updated with success"
+        "title": "Profile updated"
       },
       "updateError": {
         "title": "Update failed"
@@ -22,7 +22,7 @@
     "title": "Email",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Updated with success"
+        "title": "Email updated"
       },
       "updateError": {
         "title": "Update failed"
@@ -42,24 +42,10 @@
       "label": "Email",
       "required": "Email is required",
       "invalid": "Email is invalid",
-      "alreadyUsed": "Email already used"
+      "current": "This is your current email"
     },
     "language": {
       "label": "Language"
-    },
-    "currentPassword": {
-      "label": "Current Password",
-      "invalid": "Invalid current password",
-      "required": "Current Password is required"
-    },
-    "newPassword": {
-      "label": "New Password",
-      "required": "New Password is required"
-    },
-    "confirmNewPassword": {
-      "label": "Confirm New Password",
-      "required": "New Password confirmation is required",
-      "notEqual": "New passwords must be equal"
     }
   }
 }
