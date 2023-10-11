@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
+import locales from '@/locales';
 import { RouterInput } from '@/server/router';
 
 /**
@@ -27,8 +28,10 @@ export const getUtils = (page: Page) => {
       await page.goto('/login');
       await page.waitForURL('**/login');
 
-      await page.getByLabel('Email').fill(input.email);
-      await page.getByRole('button', { name: 'Sign In' }).click();
+      await page.getByLabel(locales.en.auth.data.email.label).fill(input.email);
+      await page
+        .getByRole('button', { name: locales.en.auth.login.actions.login })
+        .click();
 
       await page.waitForURL('**/login/**');
       await page.fill('input', input.code ?? VALIDATION_CODE_MOCKED);
