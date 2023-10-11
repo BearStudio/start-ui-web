@@ -23,7 +23,7 @@ export const getUtils = (page: Page) => {
     /**
      * Utility used to authenticate the user on the app
      */
-    async login(input: RouterInput['auth']['login']) {
+    async login(input: RouterInput['auth']['login'] & { code?: string }) {
       await page.goto('/login');
       await page.waitForURL('**/login');
 
@@ -31,7 +31,7 @@ export const getUtils = (page: Page) => {
       await page.getByRole('button', { name: 'Sign In' }).click();
 
       await page.waitForURL('**/login/**');
-      await page.fill('input', VALIDATION_CODE_MOCKED);
+      await page.fill('input', input.code ?? VALIDATION_CODE_MOCKED);
     },
     async loginAsAdmin() {
       return this.login({

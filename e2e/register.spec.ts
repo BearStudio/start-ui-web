@@ -24,7 +24,7 @@ test.describe('Register flow', () => {
     await expect(page.getByRole('link', { name: 'Admin' })).not.toBeVisible();
   });
 
-  test('Should not be able to login with existing email', async ({ page }) => {
+  test('Register with existing email', async ({ page }) => {
     await page.goto('/register');
     await page.waitForURL('**/register');
 
@@ -38,9 +38,7 @@ test.describe('Register flow', () => {
     await expect(page.getByText('Code is invalid')).toBeVisible();
   });
 
-  test('Should not be able to login with a not verified account', async ({
-    page,
-  }) => {
+  test('Login with a not verified account', async ({ page }) => {
     const utils = getUtils(page);
     await page.goto('/register');
     await page.waitForURL('**/register');
