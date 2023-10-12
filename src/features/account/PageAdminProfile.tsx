@@ -14,7 +14,7 @@ export default function PageAdminProfile() {
   const { t } = useTranslation(['common', 'account']);
 
   return (
-    <AdminLayoutPage nav={<AdminAccountNav />}>
+    <AdminLayoutPage containerMaxWidth="container.md" nav={<AdminAccountNav />}>
       <AdminLayoutPageContent>
         <Heading size="md" mb="4">
           {t('account:profile.title')}

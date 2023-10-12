@@ -2,6 +2,8 @@ import React, { useContext, useMemo } from 'react';
 
 import {
   Box,
+  Container,
+  ContainerProps,
   Flex,
   FlexProps,
   HStack,
@@ -21,8 +23,8 @@ import { useRtl } from '@/hooks/useRtl';
 
 type AdminLayoutPageContextValue = {
   nav: React.ReactNode;
-  hideContainer: boolean;
-  containerSize: keyof typeof containerSizes;
+  noContainer: boolean;
+  containerMaxWidth: ContainerProps['maxW'];
 };
 
 const AdminLayoutPageContext =
@@ -36,31 +38,21 @@ const useAdminLayoutPageContext = () => {
   return context;
 };
 
-const containerSizes = {
-  sm: '60ch',
-  md: '80ch',
-  lg: '100ch',
-  xl: '140ch',
-  full: '100%',
-} as const;
+const PageContainer = ({ children, ...rest }: ContainerProps) => {
+  const { noContainer, containerMaxWidth } = useAdminLayoutPageContext();
 
-const PageContainer = ({ children, ...rest }: FlexProps) => {
-  const { hideContainer, containerSize } = useAdminLayoutPageContext();
-
-  if (hideContainer) return <>{children}</>;
-
+  if (noContainer) return <>{children}</>;
   return (
-    <Flex
-      direction="column"
+    <Container
+      display="flex"
+      flexDirection="column"
       flex="1"
       w="full"
-      px="6"
-      mx="auto"
-      maxW={containerSizes[containerSize]}
+      maxW={containerMaxWidth}
       {...rest}
     >
       {children}
-    </Flex>
+    </Container>
   );
 };
 
@@ -201,15 +193,15 @@ export const AdminLayoutPageBottomBar = ({ children, ...rest }: FlexProps) => {
 
 type AdminLayoutPageProps = FlexProps & {
   showNavBar?: AdminLayoutContextNavDisplayed;
-  containerSize?: keyof typeof containerSizes;
-  hideContainer?: boolean;
+  containerMaxWidth?: ContainerProps['maxW'];
+  noContainer?: boolean;
   nav?: React.ReactNode;
 };
 
 export const AdminLayoutPage = ({
   showNavBar = true,
-  hideContainer = false,
-  containerSize = 'md',
+  noContainer = false,
+  containerMaxWidth = 'container.lg',
   nav = null,
   ...rest
 }: AdminLayoutPageProps) => {
@@ -218,10 +210,10 @@ export const AdminLayoutPage = ({
   const value = useMemo(
     () => ({
       nav,
-      hideContainer,
-      containerSize,
+      noContainer,
+      containerMaxWidth,
     }),
-    [containerSize, hideContainer, nav]
+    [containerMaxWidth, noContainer, nav]
   );
 
   return (

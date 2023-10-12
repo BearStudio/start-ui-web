@@ -54,7 +54,7 @@ export default function PageAdminRepositories() {
   });
 
   return (
-    <AdminLayoutPage containerSize="lg">
+    <AdminLayoutPage>
       <AdminLayoutPageContent>
         <HStack mb="4">
           <Heading size="md" flex={1}>

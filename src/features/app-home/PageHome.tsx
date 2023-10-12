@@ -10,7 +10,7 @@ export default function PageHome() {
     <AppLayoutPage>
       <Flex
         display={{ base: 'flex', md: 'none' }}
-        py={4}
+        py={2}
         alignItems="center"
         justifyContent="center"
       >

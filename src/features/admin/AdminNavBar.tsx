@@ -59,13 +59,13 @@ const AdminNavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['admin']);
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <AdminNavBarMainMenuItem to={`${ADMIN_PATH}/dashboard`}>
+      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/dashboard`}>
         {t('admin:layout.mainMenu.dashboard')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem to={`${ADMIN_PATH}/repositories`}>
+      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/repositories`}>
         {t('admin:layout.mainMenu.repositories')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem to={`${ADMIN_PATH}/management`}>
+      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/management`}>
         {t('admin:layout.mainMenu.management')}
       </AdminNavBarMainMenuItem>
     </Stack>
@@ -180,20 +180,20 @@ export const AdminNavBar = (props: BoxProps) => {
 };
 
 const AdminNavBarMainMenuItem = ({
-  to,
+  href,
   ...rest
-}: BoxProps & { to: string }) => {
+}: BoxProps & { href: string }) => {
   const { rtlValue } = useRtl();
   const { navDrawer } = useAdminLayoutContext();
   const pathname = usePathname() ?? '';
   const isActive =
-    to === (ADMIN_PATH || '/')
+    href === (ADMIN_PATH || '/')
       ? pathname === (ADMIN_PATH || '/')
-      : pathname.startsWith(to);
+      : pathname.startsWith(href);
   return (
     <Box
       as={Link}
-      href={to}
+      href={href}
       bg="transparent"
       justifyContent="flex-start"
       position="relative"

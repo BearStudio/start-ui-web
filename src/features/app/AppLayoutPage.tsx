@@ -14,8 +14,8 @@ import {
 } from '@/features/app/AppLayout';
 
 type AppLayoutPageContextValue = {
-  hideContainer: boolean;
-  containerSize: ContainerProps['maxW'];
+  noContainer: boolean;
+  containerMaxWidth: ContainerProps['maxW'];
 };
 
 const AppLayoutPageContext =
@@ -30,23 +30,33 @@ const useAppLayoutPageContext = () => {
 };
 
 const PageContainer = ({ children }: { children: ReactNode }) => {
-  const { hideContainer, containerSize } = useAppLayoutPageContext();
+  const { noContainer, containerMaxWidth } = useAppLayoutPageContext();
 
-  if (hideContainer) return <>{children}</>;
-  return <Container maxW={containerSize}>{children}</Container>;
+  if (noContainer) return <>{children}</>;
+  return (
+    <Container
+      display="flex"
+      flexDirection="column"
+      flex="1"
+      w="full"
+      maxW={containerMaxWidth}
+    >
+      {children}
+    </Container>
+  );
 };
 
 type AppLayoutPageProps = FlexProps & {
   showNavBar?: AppLayoutContextNavDisplayed;
-  containerSize?: ContainerProps['maxW'];
-  hideContainer?: boolean;
+  containerMaxWidth?: ContainerProps['maxW'];
+  noContainer?: boolean;
   nav?: React.ReactNode;
 };
 
 export const AppLayoutPage = ({
   showNavBar = true,
-  hideContainer = false,
-  containerSize = undefined,
+  noContainer = false,
+  containerMaxWidth = 'container.md',
   children,
   ...rest
 }: AppLayoutPageProps) => {
@@ -54,10 +64,10 @@ export const AppLayoutPage = ({
 
   const value = useMemo(
     () => ({
-      hideContainer,
-      containerSize,
+      noContainer,
+      containerMaxWidth: containerMaxWidth,
     }),
-    [containerSize, hideContainer]
+    [containerMaxWidth, noContainer]
   );
 
   return (

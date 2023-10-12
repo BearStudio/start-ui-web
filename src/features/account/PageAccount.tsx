@@ -8,7 +8,7 @@ import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 
 export default function PageHome() {
   return (
-    <AppLayoutPage>
+    <AppLayoutPage containerMaxWidth="md">
       <Stack spacing={4}>
         <Heading size="md">Account {/* TODO Translations */}</Heading>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   Avatar,
@@ -11,7 +11,9 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { LuHome } from 'react-icons/lu';
 
+import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
 import { APP_PATH } from '@/features/app/constants';
 import { trpc } from '@/lib/trpc/client';
@@ -23,13 +25,16 @@ export const AppNavBarDesktop = (props: BoxProps) => {
     <Box display={{ base: 'none', md: 'block' }} {...props}>
       <Box w="full" h="0" pb="safe-top" />
       <Flex align="center" pt={6} pb={2}>
-        <Container>
+        <Container maxW="container.md">
           <HStack spacing={4}>
             <Box as={Link} href={APP_PATH || '/'}>
-              <Logo />
+              <Logo w="10rem" />
             </Box>
             <HStack flex={1}>
-              <AppNavBarDesktopMainMenuItem to={APP_PATH || '/'}>
+              <AppNavBarDesktopMainMenuItem
+                href={APP_PATH || '/'}
+                icon={LuHome}
+              >
                 Home {/* TODO translations */}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
@@ -50,19 +55,24 @@ export const AppNavBarDesktop = (props: BoxProps) => {
 };
 
 const AppNavBarDesktopMainMenuItem = ({
-  to,
-  ...rest
-}: BoxProps & { to: string }) => {
+  children,
+  href,
+  icon,
+}: {
+  children: ReactNode;
+  href: string;
+  icon?: React.FC;
+}) => {
   const pathname = usePathname() ?? '';
   const isActive =
-    to === (APP_PATH || '/')
+    href === (APP_PATH || '/')
       ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(to);
+      : pathname.startsWith(href);
 
   return (
-    <Box
+    <Flex
       as={Link}
-      href={to}
+      href={href}
       bg="transparent"
       justifyContent="flex-start"
       position="relative"
@@ -71,6 +81,7 @@ const AppNavBarDesktopMainMenuItem = ({
       borderRadius="md"
       px={3}
       py={1.5}
+      gap={1.5}
       _hover={{
         bg: 'gray.200',
       }}
@@ -79,7 +90,9 @@ const AppNavBarDesktopMainMenuItem = ({
           bg: 'gray.800',
         },
       }}
-      {...rest}
-    />
+    >
+      {!!icon && <Icon fontSize="0.9em" icon={icon} />}
+      {children}
+    </Flex>
   );
 };

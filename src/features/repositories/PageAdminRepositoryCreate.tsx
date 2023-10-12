@@ -53,7 +53,7 @@ export default function PageAdminRepositoryCreate() {
   });
 
   return (
-    <AdminLayoutPage containerSize="md" showNavBar={false}>
+    <AdminLayoutPage containerMaxWidth="container.sm" showNavBar={false}>
       <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
           <AdminLayoutPageTopBar showBack onBack={() => router.back()}>

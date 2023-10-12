@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-import { Box, BoxProps, Flex, HStack } from '@chakra-ui/react';
+import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { LuHome, LuUser } from 'react-icons/lu';
 
+import { Icon } from '@/components/Icons';
 import { APP_PATH } from '@/features/app/constants';
 
 const HEIGHT = '60px';
@@ -17,6 +19,7 @@ export const AppNavBarMobile = (props: BoxProps) => {
         align="center"
         pt="safe-bottom"
         position="fixed"
+        direction="column"
         bottom={0}
         insetStart={0}
         insetEnd={0}
@@ -29,42 +32,53 @@ export const AppNavBarMobile = (props: BoxProps) => {
         boxShadow="layout"
         h={HEIGHT}
       >
-        <HStack w="full">
-          <AppNavBarMobileMainMenuItem to={APP_PATH || '/'}>
+        <Container display="flex" flexDirection="row" w="full" flex={1}>
+          <AppNavBarMobileMainMenuItem icon={LuHome} href={APP_PATH || '/'}>
             Home {/* TODO translations */}
           </AppNavBarMobileMainMenuItem>
-          <AppNavBarMobileMainMenuItem to={`${APP_PATH}/account`}>
+          <AppNavBarMobileMainMenuItem
+            icon={LuUser}
+            href={`${APP_PATH}/account`}
+          >
             Account {/* TODO translations */}
           </AppNavBarMobileMainMenuItem>
-        </HStack>
+        </Container>
       </Flex>
     </Box>
   );
 };
 
 const AppNavBarMobileMainMenuItem = ({
-  to,
-  ...rest
-}: BoxProps & { to: string }) => {
+  href,
+  children,
+  icon,
+}: {
+  children: ReactNode;
+  href: string;
+  icon: React.FC;
+}) => {
   const pathname = usePathname() ?? '';
   const isActive =
-    to === (APP_PATH || '/')
+    href === (APP_PATH || '/')
       ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(to);
+      : pathname.startsWith(href);
 
-  console.log({ isActive, to, pathname });
   return (
     <Flex
       as={Link}
-      href={to}
-      bg="transparent"
+      href={href}
+      direction="column"
       justifyContent="center"
       position="relative"
       fontWeight="medium"
       alignItems="center"
       opacity={isActive ? 1 : 0.6}
       flex={1}
-      {...rest}
-    />
+    >
+      <Icon fontSize="2xl" icon={icon} />
+      <Box fontSize="xs" opacity={0.8} mt={-1.5}>
+        {children}
+      </Box>
+    </Flex>
   );
 };

@@ -80,7 +80,7 @@ export default function PageAdminRepositoryUpdate() {
   });
 
   return (
-    <AdminLayoutPage containerSize="md" showNavBar={false}>
+    <AdminLayoutPage containerMaxWidth="container.sm" showNavBar={false}>
       <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
