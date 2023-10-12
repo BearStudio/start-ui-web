@@ -16,17 +16,13 @@ import { Logo } from '@/components/Logo';
 import { APP_PATH } from '@/features/app/constants';
 import { trpc } from '@/lib/trpc/client';
 
-export const AppNavBarDesktop = () => {
+export const AppNavBarDesktop = (props: BoxProps) => {
   const account = trpc.account.get.useQuery();
 
   return (
-    <>
-      <Flex
-        align="center"
-        pt="safe-top"
-        display={{ base: 'none', md: 'flex' }}
-        py={6}
-      >
+    <Box display={{ base: 'none', md: 'block' }} {...props}>
+      <Box w="full" h="0" pb="safe-top" />
+      <Flex align="center" pt={6} pb={2}>
         <Container>
           <HStack spacing={4}>
             <Box as={Link} href={APP_PATH || '/'}>
@@ -49,7 +45,7 @@ export const AppNavBarDesktop = () => {
           </HStack>
         </Container>
       </Flex>
-    </>
+    </Box>
   );
 };
 
@@ -63,7 +59,6 @@ const AppNavBarDesktopMainMenuItem = ({
       ? pathname === (APP_PATH || '/')
       : pathname.startsWith(to);
 
-  console.log({ isActive, to, pathname });
   return (
     <Box
       as={Link}

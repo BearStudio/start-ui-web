@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, BoxProps, Container, Flex, HStack } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, HStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -8,18 +8,18 @@ import { APP_PATH } from '@/features/app/constants';
 
 const HEIGHT = '60px';
 
-export const AppNavBarMobile = () => {
+export const AppNavBarMobile = (props: BoxProps) => {
   return (
-    <>
+    <Box display={{ base: 'block', md: 'none' }} {...props}>
       <Box h={HEIGHT} />
       <Flex
+        zIndex={3}
         align="center"
         pt="safe-bottom"
         position="fixed"
         bottom={0}
         insetStart={0}
         insetEnd={0}
-        display={{ base: 'flex', md: 'none' }}
         bg="white"
         color="gray.800"
         _dark={{
@@ -29,18 +29,16 @@ export const AppNavBarMobile = () => {
         boxShadow="layout"
         h={HEIGHT}
       >
-        <Container>
-          <HStack>
-            <AppNavBarMobileMainMenuItem to={APP_PATH || '/'}>
-              Home {/* TODO translations */}
-            </AppNavBarMobileMainMenuItem>
-            <AppNavBarMobileMainMenuItem to={`${APP_PATH}/account`}>
-              Account {/* TODO translations */}
-            </AppNavBarMobileMainMenuItem>
-          </HStack>
-        </Container>
+        <HStack w="full">
+          <AppNavBarMobileMainMenuItem to={APP_PATH || '/'}>
+            Home {/* TODO translations */}
+          </AppNavBarMobileMainMenuItem>
+          <AppNavBarMobileMainMenuItem to={`${APP_PATH}/account`}>
+            Account {/* TODO translations */}
+          </AppNavBarMobileMainMenuItem>
+        </HStack>
       </Flex>
-    </>
+    </Box>
   );
 };
 

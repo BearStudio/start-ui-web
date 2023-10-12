@@ -1,63 +1,67 @@
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
-import { Flex, useDisclosure } from '@chakra-ui/react';
+import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
 
 import { Viewport } from '@/components/Viewport';
 import { AppNavBarDesktop } from '@/features/app/AppNavBarDesktop';
 import { AppNavBarMobile } from '@/features/app/AppNavBarMobile';
 
+export type AppLayoutContextNavDisplayed = boolean | 'desktop';
+
 type AppLayoutContextValue = {
-  isFocusMode: boolean;
-  setIsFocusMode: React.Dispatch<React.SetStateAction<boolean>> | undefined;
-  navIsOpen: boolean;
-  navOnOpen: () => void;
-  navOnClose: () => void;
+  navDisplayed: AppLayoutContextNavDisplayed;
+  setNavDisplayed: React.Dispatch<
+    React.SetStateAction<AppLayoutContextNavDisplayed>
+  >;
+  navDrawer: UseDisclosureProps;
 };
 
-export const AppLayoutContext = React.createContext<AppLayoutContextValue>({
-  isFocusMode: false,
-  setIsFocusMode: undefined,
-  navIsOpen: false,
-  navOnOpen: () => undefined,
-  navOnClose: () => undefined,
-});
-export const useAppLayoutContext = () => useContext(AppLayoutContext);
+export const AppLayoutContext =
+  React.createContext<AppLayoutContextValue | null>(null);
 
-export const useAppLayoutFocusMode = (enabled = true) => {
-  const ctx = useAppLayoutContext();
-  const { setIsFocusMode } = ctx || {};
+export const useAppLayoutContext = () => {
+  const ctx = useContext(AppLayoutContext);
+  if (ctx === null) {
+    throw new Error('Missing parent <AppLayout> component');
+  }
+  return ctx;
+};
+
+export const useAppLayoutHideNav = (
+  displayed: AppLayoutContextNavDisplayed = true
+) => {
+  const { setNavDisplayed } = useAppLayoutContext();
 
   useEffect(() => {
-    setIsFocusMode?.(enabled);
-    return () => setIsFocusMode?.(false);
-  }, [ctx, setIsFocusMode, enabled]);
+    setNavDisplayed(displayed);
+    return () => setNavDisplayed(true);
+  }, [setNavDisplayed, displayed]);
 };
 
 export const AppLayout: FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const [isFocusMode, setIsFocusMode] = useState(false);
-  const nav = useDisclosure();
+  const [navDisplayed, setNavDisplayed] =
+    useState<AppLayoutContextNavDisplayed>(true);
+  const navDrawer = useDisclosure();
 
   const providerValue = useMemo(
     () => ({
-      isFocusMode,
-      setIsFocusMode,
-      navIsOpen: nav.isOpen,
-      navOnClose: nav.onClose,
-      navOnOpen: nav.onOpen,
+      navDisplayed,
+      setNavDisplayed,
+      navDrawer,
     }),
-    [isFocusMode, nav.isOpen, nav.onClose, nav.onOpen]
+    [navDisplayed, setNavDisplayed, navDrawer]
   );
 
   return (
     <AppLayoutContext.Provider value={providerValue}>
-      <Viewport>
-        {!isFocusMode && <AppNavBarDesktop />}
+      <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
+        {!!navDisplayed && <AppNavBarDesktop />}
         <Flex flex="1" direction="column">
           {children}
         </Flex>
-        {!isFocusMode && <AppNavBarMobile />}
+        {navDisplayed === true && <AppNavBarMobile />}
       </Viewport>
     </AppLayoutContext.Provider>
   );

@@ -1,14 +1,15 @@
 import React from 'react';
 
-import { Container, Divider, Heading, Stack } from '@chakra-ui/react';
+import { Divider, Heading, Stack } from '@chakra-ui/react';
 
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
+import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 
 export default function PageHome() {
   return (
-    <Container py={{ base: 6, md: 0 }}>
-      <Stack spacing={6}>
+    <AppLayoutPage>
+      <Stack spacing={4}>
         <Heading size="md">Account {/* TODO Translations */}</Heading>
 
         <Divider />
@@ -26,6 +27,6 @@ export default function PageHome() {
           <AccountEmailForm />
         </Stack>
       </Stack>
-    </Container>
+    </AppLayoutPage>
   );
 }

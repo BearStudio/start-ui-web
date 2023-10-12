@@ -14,8 +14,8 @@ import useMeasure from 'react-use-measure';
 import {
   AdminLayoutContextNavDisplayed,
   useAdminLayoutContext,
+  useAdminLayoutHideNav,
 } from '@/features/admin/AdminLayout';
-import { useAdminLayoutHideNav } from '@/features/admin/AdminLayout';
 import { ADMIN_NAV_BAR_HEIGHT } from '@/features/admin/AdminNavBar';
 import { useRtl } from '@/hooks/useRtl';
 
@@ -201,7 +201,7 @@ export const AdminLayoutPageBottomBar = ({ children, ...rest }: FlexProps) => {
 
 type AdminLayoutPageProps = FlexProps & {
   showNavBar?: AdminLayoutContextNavDisplayed;
-  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  containerSize?: keyof typeof containerSizes;
   hideContainer?: boolean;
   nav?: React.ReactNode;
 };

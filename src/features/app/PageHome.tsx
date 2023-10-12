@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Container, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { Logo } from '@/components/Logo';
+import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 
 export default function PageHome() {
   return (
-    <Container>
+    <AppLayoutPage>
       <Flex
         display={{ base: 'flex', md: 'none' }}
         py={4}
@@ -16,6 +17,6 @@ export default function PageHome() {
         <Logo />
       </Flex>
       Home {/* TODO translations */}
-    </Container>
+    </AppLayoutPage>
   );
 }

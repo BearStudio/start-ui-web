@@ -41,7 +41,7 @@ export const AdminLayout: FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const [navDisplayed, setNavDisplayed] =
-    useState<AdminLayoutContextNavDisplayed>(false);
+    useState<AdminLayoutContextNavDisplayed>(true);
   const navDrawer = useDisclosure();
 
   const providerValue = useMemo(
