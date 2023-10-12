@@ -61,7 +61,7 @@ export default function PageAdminUsers() {
   });
 
   return (
-    <AdminLayoutPage containerSize="xl" nav={<AdminNav />}>
+    <AdminLayoutPage containerMaxWidth="container.xl" nav={<AdminNav />}>
       <AdminLayoutPageContent>
         <Stack spacing={4}>
           <HStack spacing={4}>

@@ -11,7 +11,7 @@ import {
 
 export default function PageApiDocumentation() {
   return (
-    <AdminLayoutPage containerSize="xl">
+    <AdminLayoutPage noContainer>
       <AdminLayoutPageContent>
         <Box
           borderRadius="md"
