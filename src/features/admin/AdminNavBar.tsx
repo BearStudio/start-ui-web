@@ -155,8 +155,12 @@ export const AdminNavBar = (props: BoxProps) => {
         h={ADMIN_NAV_BAR_HEIGHT}
         bg="gray.800"
         boxShadow="layout"
+        borderBottom="1px solid transparent"
         _dark={{
-          bg: 'gray.800',
+          bg: 'gray.900',
+          color: 'white',
+          borderBottomColor: 'gray.800',
+          boxShadow: 'layout-dark',
         }}
       >
         <AdminNavBarDrawerButton

@@ -25,11 +25,14 @@ export const AppNavBarMobile = (props: BoxProps) => {
         insetEnd={0}
         bg="white"
         color="gray.800"
+        borderTop="1px solid transparent"
+        boxShadow="layout"
         _dark={{
           bg: 'gray.900',
           color: 'white',
+          borderTopColor: 'gray.800',
+          boxShadow: 'dark-lg',
         }}
-        boxShadow="layout"
         h={HEIGHT}
       >
         <Container display="flex" flexDirection="row" w="full" flex={1}>
@@ -73,6 +76,7 @@ const AppNavBarMobileMainMenuItem = ({
       fontWeight="medium"
       alignItems="center"
       opacity={isActive ? 1 : 0.6}
+      transition="0.2s"
       flex={1}
     >
       <Icon fontSize="2xl" icon={icon} />

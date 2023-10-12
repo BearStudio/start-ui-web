@@ -96,6 +96,7 @@ const AppNavBarDesktopMainMenuItem = ({
       px={3}
       py={1.5}
       gap={1.5}
+      transition="0.2s"
       _hover={{
         bg: 'gray.200',
       }}

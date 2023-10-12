@@ -83,13 +83,15 @@ export const AdminLayoutPageTopBar = ({
         zIndex={2}
         direction="column"
         py={3}
-        boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
+        boxShadow="layout"
         bg="white"
         ref={ref}
+        borderBottom="1px solid transparent"
         _dark={{
-          bg: 'gray.800',
-          borderTop: '1px solid',
-          borderTopColor: 'blackAlpha.600',
+          bg: 'gray.900',
+          color: 'white',
+          borderBottomColor: 'gray.800',
+          boxShadow: 'layout-dark',
         }}
         {...(isFixed
           ? {
@@ -191,9 +193,15 @@ export const AdminLayoutPageBottomBar = ({
         insetStart="0"
         insetEnd="0"
         py="2"
-        boxShadow="0 -4px 20px rgba(0, 0, 0, 0.05)"
+        boxShadow="layout"
         bg="white"
-        _dark={{ bg: 'gray.800' }}
+        borderTop="1px solid transparent"
+        _dark={{
+          bg: 'gray.900',
+          color: 'white',
+          borderTopColor: 'gray.800',
+          boxShadow: 'layout-dark',
+        }}
         {...rest}
       >
         <PageContainer maxW={containerMaxWidth}>{children}</PageContainer>
