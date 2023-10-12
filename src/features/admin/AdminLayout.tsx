@@ -1,58 +1,70 @@
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
-import { Flex, useDisclosure } from '@chakra-ui/react';
+import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';
 
 import { Viewport } from '@/components/Viewport';
 import { AdminNavBar } from '@/features/admin/AdminNavBar';
 
+export type AdminLayoutContextNavDisplayed = boolean | 'desktop';
+
 type AdminLayoutContextValue = {
-  isFocusMode: boolean;
-  setIsFocusMode: React.Dispatch<React.SetStateAction<boolean>> | undefined;
-  navIsOpen: boolean;
-  navOnOpen: () => void;
-  navOnClose: () => void;
+  navDisplayed: AdminLayoutContextNavDisplayed;
+  setNavDisplayed: React.Dispatch<
+    React.SetStateAction<AdminLayoutContextNavDisplayed>
+  >;
+  navDrawer: UseDisclosureProps;
 };
 
-export const AdminLayoutContext = React.createContext<AdminLayoutContextValue>({
-  isFocusMode: false,
-  setIsFocusMode: undefined,
-  navIsOpen: false,
-  navOnOpen: () => undefined,
-  navOnClose: () => undefined,
-});
-export const useAdminLayoutContext = () => useContext(AdminLayoutContext);
+export const AdminLayoutContext =
+  React.createContext<AdminLayoutContextValue | null>(null);
 
-export const useAdminLayoutFocusMode = (enabled = true) => {
-  const ctx = useAdminLayoutContext();
-  const { setIsFocusMode } = ctx || {};
+export const useAdminLayoutContext = () => {
+  const ctx = useContext(AdminLayoutContext);
+  if (ctx === null) {
+    throw new Error('Missing parent <AdminLayout> component');
+  }
+  return ctx;
+};
+
+export const useAdminLayoutHideNav = (
+  displayed: AdminLayoutContextNavDisplayed = true
+) => {
+  const { setNavDisplayed } = useAdminLayoutContext();
 
   useEffect(() => {
-    setIsFocusMode?.(enabled);
-    return () => setIsFocusMode?.(false);
-  }, [ctx, setIsFocusMode, enabled]);
+    setNavDisplayed(displayed);
+    return () => setNavDisplayed(true);
+  }, [setNavDisplayed, displayed]);
 };
 
 export const AdminLayout: FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const [isFocusMode, setIsFocusMode] = useState(false);
-  const nav = useDisclosure();
+  const [navDisplayed, setNavDisplayed] =
+    useState<AdminLayoutContextNavDisplayed>(false);
+  const navDrawer = useDisclosure();
 
   const providerValue = useMemo(
     () => ({
-      isFocusMode,
-      setIsFocusMode,
-      navIsOpen: nav.isOpen,
-      navOnClose: nav.onClose,
-      navOnOpen: nav.onOpen,
+      navDisplayed,
+      setNavDisplayed,
+      navDrawer,
     }),
-    [isFocusMode, nav.isOpen, nav.onClose, nav.onOpen]
+    [navDisplayed, setNavDisplayed, navDrawer]
   );
 
   return (
     <AdminLayoutContext.Provider value={providerValue}>
       <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
-        {!isFocusMode && <AdminNavBar />}
+        {!!navDisplayed && (
+          <AdminNavBar
+            display={
+              navDisplayed === 'desktop'
+                ? { base: 'none', md: 'block' }
+                : undefined
+            }
+          />
+        )}
         <Flex flex="1" direction="column">
           {children}
         </Flex>

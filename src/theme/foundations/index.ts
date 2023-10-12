@@ -1,5 +1,4 @@
 import { colors } from './colors';
-import { layout } from './layout';
 import { shadows } from './shadows';
 import { spacing } from './spacing';
 import { typography } from './typography';
@@ -10,7 +9,6 @@ const foundations = {
   ...typography,
   shadows,
   space: spacing,
-  layout,
   zIndices,
 };
 

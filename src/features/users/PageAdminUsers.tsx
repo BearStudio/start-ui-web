@@ -26,7 +26,6 @@ import {
   DataListRow,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
-import { Page, PageContent } from '@/components/Page';
 import {
   Pagination,
   PaginationButtonFirstPage,
@@ -36,6 +35,10 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageContent,
+} from '@/features/admin/AdminLayoutPage';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { UserStatus } from '@/features/users/UserStatus';
@@ -58,8 +61,8 @@ export default function PageAdminUsers() {
   });
 
   return (
-    <Page containerSize="xl" nav={<AdminNav />}>
-      <PageContent>
+    <AdminLayoutPage containerSize="xl" nav={<AdminNav />}>
+      <AdminLayoutPageContent>
         <Stack spacing={4}>
           <HStack spacing={4}>
             <Heading size="md" flex="1">
@@ -182,7 +185,7 @@ export default function PageAdminUsers() {
             </DataListFooter>
           </DataList>
         </Stack>
-      </PageContent>
-    </Page>
+      </AdminLayoutPageContent>
+    </AdminLayoutPage>
   );
 }

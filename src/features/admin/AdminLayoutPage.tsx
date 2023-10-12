@@ -7,27 +7,31 @@ import {
   HStack,
   IconButton,
   Stack,
-  useTheme,
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import useMeasure from 'react-use-measure';
 
-import { useAdminLayoutContext } from '@/features/admin/AdminLayout';
-import { useAdminLayoutFocusMode } from '@/features/admin/AdminLayout';
+import {
+  AdminLayoutContextNavDisplayed,
+  useAdminLayoutContext,
+} from '@/features/admin/AdminLayout';
+import { useAdminLayoutHideNav } from '@/features/admin/AdminLayout';
+import { ADMIN_NAV_BAR_HEIGHT } from '@/features/admin/AdminNavBar';
 import { useRtl } from '@/hooks/useRtl';
 
-type PageContextValue = {
+type AdminLayoutPageContextValue = {
   nav: React.ReactNode;
   hideContainer: boolean;
   containerSize: keyof typeof containerSizes;
 };
 
-const PageContext = React.createContext<PageContextValue | null>(null);
+const AdminLayoutPageContext =
+  React.createContext<AdminLayoutPageContextValue | null>(null);
 
-const usePageContext = () => {
-  const context = useContext(PageContext);
+const useAdminLayoutPageContext = () => {
+  const context = useContext(AdminLayoutPageContext);
   if (context === null) {
-    throw new Error('Missing parent <Page> component');
+    throw new Error('Missing parent <AdminLayoutPage> component');
   }
   return context;
 };
@@ -41,7 +45,7 @@ const containerSizes = {
 } as const;
 
 const PageContainer = ({ children, ...rest }: FlexProps) => {
-  const { hideContainer, containerSize } = usePageContext();
+  const { hideContainer, containerSize } = useAdminLayoutPageContext();
 
   if (hideContainer) return <>{children}</>;
 
@@ -60,21 +64,20 @@ const PageContainer = ({ children, ...rest }: FlexProps) => {
   );
 };
 
-type PageTopBarProps = FlexProps & {
+type AdminLayoutPageTopBarProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
   isFixed?: boolean;
 };
 
-export const PageTopBar = ({
+export const AdminLayoutPageTopBar = ({
   children,
   onBack = () => undefined,
   showBack = false,
-  isFixed = false,
+  isFixed = true,
   ...rest
-}: PageTopBarProps) => {
-  const { isFocusMode } = useAdminLayoutContext();
-  const theme = useTheme();
+}: AdminLayoutPageTopBarProps) => {
+  const { navDisplayed } = useAdminLayoutContext();
   const [ref, { height }] = useMeasure();
 
   const { rtlValue } = useRtl();
@@ -83,21 +86,24 @@ export const PageTopBar = ({
     <>
       {isFixed && <Box h={`${height}px`} />}
       <Flex
-        zIndex="2"
+        zIndex={2}
         direction="column"
-        pt="4"
-        pb="4"
+        py={3}
         boxShadow="0 4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
         ref={ref}
         _dark={{
-          bg: 'gray.900',
+          bg: 'gray.800',
           borderTop: '1px solid',
           borderTopColor: 'blackAlpha.600',
         }}
         {...(isFixed
           ? {
-              top: !isFocusMode ? theme.layout.topBar.height : '0',
+              top: navDisplayed
+                ? navDisplayed === 'desktop'
+                  ? { base: 0, md: ADMIN_NAV_BAR_HEIGHT }
+                  : ADMIN_NAV_BAR_HEIGHT
+                : '0',
               position: 'fixed',
               right: '0',
               left: '0',
@@ -125,15 +131,25 @@ export const PageTopBar = ({
   );
 };
 
-type PageContentProps = FlexProps & {
+type AdminLayoutPageContentProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
 };
 
-export const PageContent = ({ children, ...rest }: PageContentProps) => {
-  const { nav } = usePageContext();
+export const AdminLayoutPageContent = ({
+  children,
+  ...rest
+}: AdminLayoutPageContentProps) => {
+  const { nav } = useAdminLayoutPageContext();
   return (
-    <Flex zIndex="1" direction="column" flex="1" py="4" {...rest}>
+    <Flex
+      position="relative"
+      zIndex="1"
+      direction="column"
+      flex="1"
+      py="4"
+      {...rest}
+    >
       <PageContainer>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
@@ -155,7 +171,7 @@ export const PageContent = ({ children, ...rest }: PageContentProps) => {
   );
 };
 
-export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
+export const AdminLayoutPageBottomBar = ({ children, ...rest }: FlexProps) => {
   const [ref, { height }] = useMeasure();
 
   return (
@@ -173,7 +189,7 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
         py="2"
         boxShadow="0 -4px 20px rgba(0, 0, 0, 0.05)"
         bg="white"
-        _dark={{ bg: 'gray.900' }}
+        _dark={{ bg: 'gray.800' }}
         {...rest}
       >
         <PageContainer>{children}</PageContainer>
@@ -183,21 +199,21 @@ export const PageBottomBar = ({ children, ...rest }: FlexProps) => {
   );
 };
 
-type PageProps = FlexProps & {
-  isFocusMode?: boolean;
+type AdminLayoutPageProps = FlexProps & {
+  showNavBar?: AdminLayoutContextNavDisplayed;
   containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   hideContainer?: boolean;
   nav?: React.ReactNode;
 };
 
-export const Page = ({
-  isFocusMode = false,
+export const AdminLayoutPage = ({
+  showNavBar = true,
   hideContainer = false,
   containerSize = 'md',
   nav = null,
   ...rest
-}: PageProps) => {
-  useAdminLayoutFocusMode(isFocusMode);
+}: AdminLayoutPageProps) => {
+  useAdminLayoutHideNav(showNavBar);
 
   const value = useMemo(
     () => ({
@@ -209,8 +225,8 @@ export const Page = ({
   );
 
   return (
-    <PageContext.Provider value={value}>
+    <AdminLayoutPageContext.Provider value={value}>
       <Flex direction="column" flex="1" position="relative" {...rest} />
-    </PageContext.Provider>
+    </AdminLayoutPageContext.Provider>
   );
 };

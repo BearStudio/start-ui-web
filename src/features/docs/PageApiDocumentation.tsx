@@ -4,12 +4,15 @@ import { Box } from '@chakra-ui/react';
 import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
-import { Page, PageContent } from '@/components/Page';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageContent,
+} from '@/features/admin/AdminLayoutPage';
 
 export default function PageApiDocumentation() {
   return (
-    <Page containerSize="xl">
-      <PageContent>
+    <AdminLayoutPage containerSize="xl">
+      <AdminLayoutPageContent>
         <Box
           borderRadius="md"
           mt={-8}
@@ -18,7 +21,7 @@ export default function PageApiDocumentation() {
         >
           <SwaggerUI url="/api/openapi.json" />
         </Box>
-      </PageContent>
-    </Page>
+      </AdminLayoutPageContent>
+    </AdminLayoutPage>
   );
 }

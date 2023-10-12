@@ -23,7 +23,6 @@ import {
   DataListRow,
 } from '@/components/DataList';
 import { Icon } from '@/components/Icons';
-import { Page, PageContent } from '@/components/Page';
 import {
   Pagination,
   PaginationButtonFirstPage,
@@ -33,6 +32,10 @@ import {
   PaginationInfo,
 } from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageContent,
+} from '@/features/admin/AdminLayoutPage';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AdminRepositoryActions } from '@/features/repositories/AdminRepositoryActions';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
@@ -51,8 +54,8 @@ export default function PageAdminRepositories() {
   });
 
   return (
-    <Page containerSize="lg">
-      <PageContent>
+    <AdminLayoutPage containerSize="lg">
+      <AdminLayoutPageContent>
         <HStack mb="4">
           <Heading size="md" flex={1}>
             {t('repositories:list.title')}
@@ -145,7 +148,7 @@ export default function PageAdminRepositories() {
             </Pagination>
           </DataListFooter>
         </DataList>
-      </PageContent>
-    </Page>
+      </AdminLayoutPageContent>
+    </AdminLayoutPage>
   );
 }

@@ -5,13 +5,13 @@ import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Page,
-  PageBottomBar,
-  PageContent,
-  PageTopBar,
-} from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageBottomBar,
+  AdminLayoutPageContent,
+  AdminLayoutPageTopBar,
+} from '@/features/admin/AdminLayoutPage';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
@@ -51,16 +51,16 @@ export default function PageAdminUserCreate() {
   });
 
   return (
-    <Page containerSize="md" isFocusMode>
+    <AdminLayoutPage containerSize="md" showNavBar={false}>
       <Formiz connect={form}>
         <form noValidate onSubmit={form.submit}>
-          <PageTopBar showBack onBack={() => router.back()}>
+          <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
             <Heading size="md">{t('users:create.title')}</Heading>
-          </PageTopBar>
-          <PageContent>
+          </AdminLayoutPageTopBar>
+          <AdminLayoutPageContent>
             <UserForm />
-          </PageContent>
-          <PageBottomBar>
+          </AdminLayoutPageContent>
+          <AdminLayoutPageBottomBar>
             <ButtonGroup justifyContent="space-between">
               <Button onClick={() => router.back()}>
                 {t('common:actions.cancel')}
@@ -73,9 +73,9 @@ export default function PageAdminUserCreate() {
                 {t('users:create.action.save')}
               </Button>
             </ButtonGroup>
-          </PageBottomBar>
+          </AdminLayoutPageBottomBar>
         </form>
       </Formiz>
-    </Page>
+    </AdminLayoutPage>
   );
 }

@@ -21,9 +21,13 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
 import { LoaderFull } from '@/components/LoaderFull';
-import { Page, PageContent, PageTopBar } from '@/components/Page';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { useToastError } from '@/components/Toast';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageContent,
+  AdminLayoutPageTopBar,
+} from '@/features/admin/AdminLayoutPage';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { trpc } from '@/lib/trpc/client';
 
@@ -52,8 +56,8 @@ export default function PageAdminRepository() {
   });
 
   return (
-    <Page containerSize="lg">
-      <PageTopBar zIndex={0} showBack onBack={() => router.back()}>
+    <AdminLayoutPage containerSize="lg" showNavBar="desktop">
+      <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack>
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
@@ -94,8 +98,8 @@ export default function PageAdminRepository() {
             </ConfirmModal>
           </ButtonGroup>
         </HStack>
-      </PageTopBar>
-      <PageContent>
+      </AdminLayoutPageTopBar>
+      <AdminLayoutPageContent>
         {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
@@ -135,7 +139,7 @@ export default function PageAdminRepository() {
             </CardBody>
           </Card>
         )}
-      </PageContent>
-    </Page>
+      </AdminLayoutPageContent>
+    </AdminLayoutPage>
   );
 }

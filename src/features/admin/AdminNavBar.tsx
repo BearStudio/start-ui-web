@@ -21,7 +21,6 @@ import {
   useBreakpointValue,
   useClipboard,
   useColorMode,
-  useTheme,
 } from '@chakra-ui/react';
 import {
   Drawer,
@@ -53,6 +52,8 @@ import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
 import buildInfo from '../../../scripts/.build-info.json';
+
+export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
 
 const AdminNavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['admin']);
@@ -100,7 +101,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
               href={`${ADMIN_PATH}/docs/api`}
               icon={<Icon icon={LuBookOpen} fontSize="lg" color="gray.400" />}
             >
-              Api Documentation
+              Api Documentation {/* TODO translations */}
             </MenuItem>
           </MenuGroup>
 
@@ -133,16 +134,14 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
   );
 };
 
-export const AdminNavBar = () => {
-  const theme = useTheme();
-
+export const AdminNavBar = (props: BoxProps) => {
   const showDrawer = useBreakpointValue({
     base: true,
-    [theme.layout.breakpoints.desktop]: false,
+    md: false,
   });
 
   return (
-    <>
+    <Box {...props}>
       <Flex
         zIndex="sticky"
         position="fixed"
@@ -153,23 +152,18 @@ export const AdminNavBar = () => {
         align="center"
         pt="safe-top"
         px="4"
-        h={theme.layout.topBar.height}
+        h={ADMIN_NAV_BAR_HEIGHT}
         bg="gray.800"
         boxShadow="layout"
         _dark={{
           bg: 'gray.800',
-          boxShadow: 'xl',
         }}
       >
         <AdminNavBarDrawerButton
           display={{ base: 'flex', md: 'none' }}
           ms="-0.5rem"
         />
-        <Box
-          as={Link}
-          href={ADMIN_PATH || '/'}
-          mx={{ base: 'auto', [theme.layout.breakpoints.desktop]: 0 }}
-        >
+        <Box as={Link} href={ADMIN_PATH || '/'} mx={{ base: 'auto', md: 0 }}>
           <Logo />
         </Box>
         <AdminNavBarMainMenu
@@ -179,9 +173,9 @@ export const AdminNavBar = () => {
         />
         <AdminNavBarAccountMenu />
       </Flex>
-      <Box h={theme.layout.topBar.height} />
+      <Box h={ADMIN_NAV_BAR_HEIGHT} />
       {showDrawer && <AdminNavBarDrawer />}
-    </>
+    </Box>
   );
 };
 
@@ -190,7 +184,7 @@ const AdminNavBarMainMenuItem = ({
   ...rest
 }: BoxProps & { to: string }) => {
   const { rtlValue } = useRtl();
-  const { navOnClose } = useAdminLayoutContext();
+  const { navDrawer } = useAdminLayoutContext();
   const pathname = usePathname() ?? '';
   const isActive =
     to === (ADMIN_PATH || '/')
@@ -237,20 +231,20 @@ const AdminNavBarMainMenuItem = ({
         borderRadius: 'full',
         bg: 'currentColor',
       }}
-      onClick={navOnClose}
+      onClick={navDrawer.onClose}
       {...rest}
     />
   );
 };
 
 const AdminNavBarDrawerButton = (props: Partial<IconButtonProps>) => {
-  const { navOnOpen } = useAdminLayoutContext();
+  const { navDrawer } = useAdminLayoutContext();
 
   return (
     <IconButton
       aria-label="Navigation"
       icon={<LuMenu size="1.5em" />}
-      onClick={navOnOpen}
+      onClick={navDrawer.onOpen}
       variant="unstyled"
       _active={{ bg: 'gray.700' }}
       _hover={{ bg: 'gray.900' }}
@@ -260,13 +254,13 @@ const AdminNavBarDrawerButton = (props: Partial<IconButtonProps>) => {
 };
 
 const AdminNavBarDrawer = ({ ...rest }) => {
-  const { navIsOpen, navOnClose } = useAdminLayoutContext();
+  const { navDrawer } = useAdminLayoutContext();
   const { rtlValue } = useRtl();
   return (
     <Drawer
-      isOpen={navIsOpen}
+      isOpen={navDrawer.isOpen ?? false}
       placement={rtlValue('left', 'right')}
-      onClose={() => navOnClose?.()}
+      onClose={navDrawer.onClose ?? (() => undefined)}
       {...rest}
     >
       <DrawerOverlay>

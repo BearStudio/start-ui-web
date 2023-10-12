@@ -16,13 +16,13 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
-import {
-  Page,
-  PageBottomBar,
-  PageContent,
-  PageTopBar,
-} from '@/components/Page';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageBottomBar,
+  AdminLayoutPageContent,
+  AdminLayoutPageTopBar,
+} from '@/features/admin/AdminLayoutPage';
 import { UserForm, UserFormFields } from '@/features/users/UserForm';
 import { UserStatus } from '@/features/users/UserStatus';
 import { trpc } from '@/lib/trpc/client';
@@ -86,8 +86,8 @@ export default function PageAdminUserUpdate() {
   });
 
   return (
-    <Page containerSize="md" isFocusMode>
-      <PageTopBar showBack onBack={() => router.back()}>
+    <AdminLayoutPage containerSize="md" showNavBar={false}>
+      <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack spacing="4">
           <Box flex="1">
             {user.isLoading || user.isError ? (
@@ -111,16 +111,16 @@ export default function PageAdminUserUpdate() {
             </Box>
           )}
         </HStack>
-      </PageTopBar>
+      </AdminLayoutPageTopBar>
       {!isReady && <LoaderFull />}
       {isReady && user.isError && <ErrorPage />}
       {isReady && user.isSuccess && (
         <Formiz connect={form}>
           <form noValidate onSubmit={form.submit}>
-            <PageContent>
+            <AdminLayoutPageContent>
               <UserForm />
-            </PageContent>
-            <PageBottomBar>
+            </AdminLayoutPageContent>
+            <AdminLayoutPageBottomBar>
               <ButtonGroup justifyContent="space-between">
                 <Button onClick={() => router.back()}>
                   {t('common:actions.cancel')}
@@ -133,10 +133,10 @@ export default function PageAdminUserUpdate() {
                   {t('users:update.action.save')}
                 </Button>
               </ButtonGroup>
-            </PageBottomBar>
+            </AdminLayoutPageBottomBar>
           </form>
         </Formiz>
       )}
-    </Page>
+    </AdminLayoutPage>
   );
 }

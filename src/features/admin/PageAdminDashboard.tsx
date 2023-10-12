@@ -15,13 +15,16 @@ import { Trans, useTranslation } from 'react-i18next';
 import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
-import { Page, PageContent } from '@/components/Page';
+import {
+  AdminLayoutPage,
+  AdminLayoutPageContent,
+} from '@/features/admin/AdminLayoutPage';
 
 export default function PageAdminDashboard() {
   const { t } = useTranslation(['admin']);
   return (
-    <Page>
-      <PageContent>
+    <AdminLayoutPage>
+      <AdminLayoutPageContent>
         <Heading size="md" mb="4">
           {t('admin:dashboard.title')}
         </Heading>
@@ -61,7 +64,7 @@ export default function PageAdminDashboard() {
             {t('admin:dashboard.links.openIssue')}
           </Button>
         </Wrap>
-      </PageContent>
-    </Page>
+      </AdminLayoutPageContent>
+    </AdminLayoutPage>
   );
 }

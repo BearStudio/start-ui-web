@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, CardBody, Flex, Stack } from '@chakra-ui/react';
+import { Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useSearchParams } from 'next/navigation';
