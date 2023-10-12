@@ -7,7 +7,7 @@ export const SlideIn = ({ children, ...rest }: SlideFadeProps) => {
     <SlideFade
       in
       offsetY={-20}
-      style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+      style={{ display: 'flex', minWidth: 0, flex: 1, flexDirection: 'column' }}
       {...rest}
     >
       {children}

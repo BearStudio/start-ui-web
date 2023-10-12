@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { trpc } from '@/lib/trpc/client';
 
@@ -11,6 +11,7 @@ export default function PageLogout() {
   const queryCache = useQueryClient();
   const logout = trpc.auth.logout.useMutation();
   const trpcContext = trpc.useContext();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const trigger = async () => {
@@ -21,10 +22,16 @@ export default function PageLogout() {
       trpcContext.auth.checkAuthenticated.setData(undefined, {
         isAuthenticated: false,
       });
-      router.replace('/');
+      router.replace(searchParams.get('redirect') || '/');
     };
     trigger();
-  }, [queryCache, router, logout, trpcContext.auth.checkAuthenticated]);
+  }, [
+    searchParams,
+    queryCache,
+    router,
+    logout,
+    trpcContext.auth.checkAuthenticated,
+  ]);
 
   return (
     <Center flex="1">

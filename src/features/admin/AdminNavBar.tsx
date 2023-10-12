@@ -123,7 +123,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
           <MenuDivider />
           <MenuItem
             icon={<Icon icon={LuLogOut} fontSize="lg" color="gray.400" />}
-            onClick={() => router.push('/logout')}
+            onClick={() => router.push(`/logout?redirect=${ADMIN_PATH || ''}`)}
           >
             {t('admin:layout.accountMenu.logout')}
           </MenuItem>
