@@ -157,7 +157,7 @@ export const DataListAccordionPanel = ({ ...rest }) => {
       px="4"
       py="3"
       bg="gray.50"
-      _dark={{ bg: 'gray.800' }}
+      _dark={{ bg: 'blackAlpha.300' }}
       {...rest}
     />
   );
@@ -200,7 +200,7 @@ export const DataListRow: FC<React.PropsWithChildren<DataListRowProps>> = ({
       borderBottomColor="gray.100"
       transition="0.2s"
       _dark={{
-        borderBottomColor: 'gray.800',
+        borderBottomColor: 'gray.900',
         _hover: isHover ? { bg: 'blackAlpha.200' } : undefined,
       }}
       _hover={isHover ? { bg: 'gray.50' } : undefined}
@@ -224,7 +224,7 @@ export const DataListHeader: FC<
         borderBottom="1px solid"
         borderBottomColor="gray.100"
         _hover={{}}
-        _dark={{ color: 'gray.400', borderBottomColor: 'gray.800' }}
+        _dark={{ color: 'gray.400', borderBottomColor: 'gray.900' }}
         {...rest}
       />
     </DataListHeaderContext.Provider>
@@ -248,7 +248,7 @@ export const DataListFooter: FC<
         color="gray.600"
         _dark={{
           color: 'gray.300',
-          borderTopColor: 'gray.800',
+          borderTopColor: 'gray.900',
         }}
         {...rest}
       />
@@ -385,7 +385,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         allowToggle={allowToggle}
         bg="white"
         _dark={{
-          bg: 'gray.700',
+          bg: 'gray.800',
         }}
         ref={listRef}
         {...rest}

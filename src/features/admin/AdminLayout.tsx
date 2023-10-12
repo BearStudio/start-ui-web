@@ -51,7 +51,7 @@ export const AdminLayout: FC<React.PropsWithChildren<unknown>> = ({
 
   return (
     <AdminLayoutContext.Provider value={providerValue}>
-      <Viewport>
+      <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
         {!isFocusMode && <AdminNavBar />}
         <Flex flex="1" direction="column">
           {children}

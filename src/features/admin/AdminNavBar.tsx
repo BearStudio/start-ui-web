@@ -157,7 +157,7 @@ export const AdminNavBar = () => {
         bg="gray.800"
         boxShadow="layout"
         _dark={{
-          bg: 'gray.900',
+          bg: 'gray.800',
           boxShadow: 'xl',
         }}
       >

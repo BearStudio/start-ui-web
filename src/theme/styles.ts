@@ -14,15 +14,15 @@ const externalsStyles = (props: StyleFunctionProps) =>
 export const styles: Styles = {
   global: (props) => ({
     html: {
-      bg: 'gray.800',
+      bg: 'gray.900',
     },
     body: {
       // Prevent visual jump between pages with and without scroll
       overflowY: 'scroll',
       WebkitTapHighlightColor: 'transparent',
-      bg: 'gray.50',
+      bg: 'white',
       _dark: {
-        bg: 'gray.800',
+        bg: 'gray.900',
       },
     },
     '#chakra-toast-portal > *': {

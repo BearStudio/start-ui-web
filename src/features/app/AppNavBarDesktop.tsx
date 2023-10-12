@@ -76,9 +76,13 @@ const AppNavBarDesktopMainMenuItem = ({
       borderRadius="md"
       px={3}
       py={1.5}
-      _active={{ bg: 'gray.300' }}
       _hover={{
         bg: 'gray.200',
+      }}
+      _dark={{
+        _hover: {
+          bg: 'gray.800',
+        },
       }}
       {...rest}
     />
