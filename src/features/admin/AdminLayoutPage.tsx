@@ -38,7 +38,7 @@ const useAdminLayoutPageContext = () => {
   return context;
 };
 
-const PageContainer = ({ children, ...rest }: ContainerProps) => {
+const PageContainer = ({ children, maxW, ...rest }: ContainerProps) => {
   const { noContainer, containerMaxWidth } = useAdminLayoutPageContext();
 
   if (noContainer) return <>{children}</>;
@@ -48,7 +48,7 @@ const PageContainer = ({ children, ...rest }: ContainerProps) => {
       flexDirection="column"
       flex="1"
       w="full"
-      maxW={containerMaxWidth}
+      maxW={maxW ?? containerMaxWidth}
       {...rest}
     >
       {children}
@@ -60,6 +60,7 @@ type AdminLayoutPageTopBarProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
   isFixed?: boolean;
+  containerMaxWidth?: ContainerProps['maxW'];
 };
 
 export const AdminLayoutPageTopBar = ({
@@ -67,6 +68,7 @@ export const AdminLayoutPageTopBar = ({
   onBack = () => undefined,
   showBack = false,
   isFixed = true,
+  containerMaxWidth,
   ...rest
 }: AdminLayoutPageTopBarProps) => {
   const { navDisplayed } = useAdminLayoutContext();
@@ -104,7 +106,7 @@ export const AdminLayoutPageTopBar = ({
         {...rest}
       >
         <Box w="full" h="0" pb="safe-top" />
-        <PageContainer>
+        <PageContainer maxW={containerMaxWidth}>
           <HStack spacing="4">
             {showBack && (
               <Box>
@@ -126,10 +128,12 @@ export const AdminLayoutPageTopBar = ({
 type AdminLayoutPageContentProps = FlexProps & {
   onBack?(): void;
   showBack?: boolean;
+  containerMaxWidth?: ContainerProps['maxW'];
 };
 
 export const AdminLayoutPageContent = ({
   children,
+  containerMaxWidth,
   ...rest
 }: AdminLayoutPageContentProps) => {
   const { nav } = useAdminLayoutPageContext();
@@ -142,7 +146,7 @@ export const AdminLayoutPageContent = ({
       py="4"
       {...rest}
     >
-      <PageContainer>
+      <PageContainer maxW={containerMaxWidth}>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
           spacing={{ base: '4', lg: '8' }}
@@ -163,7 +167,15 @@ export const AdminLayoutPageContent = ({
   );
 };
 
-export const AdminLayoutPageBottomBar = ({ children, ...rest }: FlexProps) => {
+type AdminLayoutPageBottomBarProps = FlexProps & {
+  containerMaxWidth?: ContainerProps['maxW'];
+};
+
+export const AdminLayoutPageBottomBar = ({
+  children,
+  containerMaxWidth,
+  ...rest
+}: AdminLayoutPageBottomBarProps) => {
   const [ref, { height }] = useMeasure();
 
   return (
@@ -184,7 +196,7 @@ export const AdminLayoutPageBottomBar = ({ children, ...rest }: FlexProps) => {
         _dark={{ bg: 'gray.800' }}
         {...rest}
       >
-        <PageContainer>{children}</PageContainer>
+        <PageContainer maxW={containerMaxWidth}>{children}</PageContainer>
         <Box w="full" h="0" pb="safe-bottom" />
       </Flex>
     </>

@@ -86,7 +86,7 @@ export default function PageAdminUserUpdate() {
   });
 
   return (
-    <AdminLayoutPage containerMaxWidth="container.sm" showNavBar={false}>
+    <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
       <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack spacing="4">
           <Box flex="1">

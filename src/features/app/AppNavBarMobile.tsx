@@ -76,7 +76,7 @@ const AppNavBarMobileMainMenuItem = ({
       flex={1}
     >
       <Icon fontSize="2xl" icon={icon} />
-      <Box fontSize="xs" opacity={0.8} mt={-1.5}>
+      <Box fontSize="xs" opacity={isActive ? 1 : 0.8} mt={-1.5}>
         {children}
       </Box>
     </Flex>

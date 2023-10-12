@@ -20,6 +20,8 @@ import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {
   const account = trpc.account.get.useQuery();
+  const pathname = usePathname();
+  const isAccountActive = pathname.startsWith(`${APP_PATH}/account`);
 
   return (
     <Box display={{ base: 'none', md: 'block' }} {...props}>
@@ -44,6 +46,18 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               size="sm"
               icon={<></>}
               name={account.data?.email ?? ''}
+              {...(isAccountActive
+                ? {
+                    ring: '2px',
+                    ringOffset: '3px',
+                    ringColor: 'gray.800',
+                    ringOffsetColor: 'white',
+                    _dark: {
+                      ringColor: 'gray.200',
+                      ringOffsetColor: 'black',
+                    },
+                  }
+                : {})}
             >
               {account.isLoading && <Spinner size="xs" />}
             </Avatar>
@@ -77,7 +91,7 @@ const AppNavBarDesktopMainMenuItem = ({
       justifyContent="flex-start"
       position="relative"
       opacity={isActive ? 1 : 0.6}
-      fontWeight="medium"
+      fontWeight="semibold"
       borderRadius="md"
       px={3}
       py={1.5}

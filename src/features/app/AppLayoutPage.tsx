@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import {
   Box,
@@ -29,7 +29,7 @@ const useAppLayoutPageContext = () => {
   return context;
 };
 
-const PageContainer = ({ children }: { children: ReactNode }) => {
+const PageContainer = ({ children, maxW, ...rest }: ContainerProps) => {
   const { noContainer, containerMaxWidth } = useAppLayoutPageContext();
 
   if (noContainer) return <>{children}</>;
@@ -39,7 +39,8 @@ const PageContainer = ({ children }: { children: ReactNode }) => {
       flexDirection="column"
       flex="1"
       w="full"
-      maxW={containerMaxWidth}
+      maxW={maxW ?? containerMaxWidth}
+      {...rest}
     >
       {children}
     </Container>

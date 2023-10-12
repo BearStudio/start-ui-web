@@ -56,7 +56,7 @@ export default function PageAdminRepository() {
   });
 
   return (
-    <AdminLayoutPage containerMaxWidth="container.md" showNavBar="desktop">
+    <AdminLayoutPage showNavBar="desktop">
       <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack>
           <Box flex={1}>
@@ -99,7 +99,7 @@ export default function PageAdminRepository() {
           </ButtonGroup>
         </HStack>
       </AdminLayoutPageTopBar>
-      <AdminLayoutPageContent>
+      <AdminLayoutPageContent containerMaxWidth="container.md">
         {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
