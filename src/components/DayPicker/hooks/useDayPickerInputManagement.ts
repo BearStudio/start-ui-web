@@ -1,0 +1,69 @@
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
+
+import dayjs from 'dayjs';
+
+import { parseInputToDate } from '@/components/DayPicker/parseInputToDate';
+
+type UseDayPickerInputManagement = {
+  inputValue: string;
+  setInputValue: (value: string) => void;
+  handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleInputBlur: (inputValue: string) => void;
+};
+
+type UseDayPickerInputManagementParams = {
+  dateValue?: Date;
+  dateFormat: string;
+  onChange: (newDate?: Date, updateMonth?: boolean) => void;
+  preventBlurAction: boolean;
+};
+
+export const useDayPickerInputManagement = (
+  params: UseDayPickerInputManagementParams
+): UseDayPickerInputManagement => {
+  const { dateValue, dateFormat, onChange, preventBlurAction } = params;
+  const [inputValue, setInputValue] = useState<string>(
+    dateValue ? dayjs(dateValue).format(dateFormat) : ''
+  );
+
+  // Pour mettre à jour l'input selon la value
+  useEffect(() => {
+    if (!!dateValue) {
+      setInputValue(dayjs(dateValue).format(dateFormat));
+    } else {
+      setInputValue('');
+    }
+  }, [dateFormat, dateValue]);
+
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setInputValue(e.currentTarget.value);
+    const date = dayjs(e.currentTarget.value, dateFormat);
+    if (date.isValid()) {
+      const dateValue = date.startOf('day').toDate();
+      onChange(dateValue, true);
+    } else {
+      onChange(undefined);
+    }
+  };
+
+  const handleInputBlur = (inputValue: string) => {
+    if (preventBlurAction) {
+      return;
+    }
+    const date = parseInputToDate(inputValue);
+    const isNewValue = !date.isSame(dateValue, 'date');
+    if (!isNewValue) {
+      // Pour éviter le problème de non sélection quand :
+      // * L'input est focus avec une valeur déjà sélectionnée
+      // * On clique directement sur une nouvelle date
+      return;
+    }
+    if (date.isValid()) {
+      onChange(date.toDate());
+    } else {
+      setInputValue('');
+    }
+  };
+
+  return { inputValue, setInputValue, handleInputChange, handleInputBlur };
+};
