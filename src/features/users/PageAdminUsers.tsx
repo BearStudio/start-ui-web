@@ -127,11 +127,13 @@ export default function PageAdminUsers() {
                   </HStack>
                 </DataListCell>
                 <DataListCell colName="authorities" colWidth="0.5">
-                  {user.role === 'ADMIN' && (
-                    <Badge size="sm" colorScheme="warning">
-                      {t(`users:data.roles.options.${user.role}`)}
-                    </Badge>
-                  )}
+                  {user.roles
+                    .filter((r) => r !== 'USER')
+                    .map((role) => (
+                      <Badge size="sm" colorScheme="warning" key={role}>
+                        {t(`users:data.roles.options.${role}`)}
+                      </Badge>
+                    ))}
                 </DataListCell>
                 <DataListCell
                   colName="created"

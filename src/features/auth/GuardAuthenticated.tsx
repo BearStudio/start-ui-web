@@ -50,7 +50,7 @@ export const GuardAuthenticated = ({
     if (account.isSuccess) {
       i18n.changeLanguage(account.data.language);
     }
-  }, [account.data, i18n]);
+  }, [account.isSuccess, account.data?.language, i18n]);
 
   if (account.isSuccess) {
     // Check if the account has all requested roles
