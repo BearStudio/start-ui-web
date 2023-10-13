@@ -12,7 +12,7 @@ export async function createUsers() {
       await prisma.user.create({
         data: {
           name: faker.person.fullName(),
-          email: faker.internet.email(),
+          email: faker.internet.email().toLowerCase(),
           accountStatus: 'ENABLED',
         },
       });
