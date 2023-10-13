@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type Repository = ReturnType<typeof zRepository>;
+export type Repository = z.infer<ReturnType<typeof zRepository>>;
 export const zRepository = () =>
   z.object({
     id: z.string(),

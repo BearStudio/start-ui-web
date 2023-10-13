@@ -17,7 +17,7 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
-  get: protectedProcedure
+  get: protectedProcedure()
     .meta({
       openapi: {
         method: 'GET',
@@ -51,7 +51,7 @@ export const accountRouter = createTRPCRouter({
       return user;
     }),
 
-  update: protectedProcedure
+  update: protectedProcedure()
     .meta({
       openapi: {
         method: 'PUT',
@@ -82,7 +82,7 @@ export const accountRouter = createTRPCRouter({
       }
     }),
 
-  updateEmail: protectedProcedure
+  updateEmail: protectedProcedure()
     .meta({
       openapi: {
         method: 'PUT',
@@ -163,7 +163,7 @@ export const accountRouter = createTRPCRouter({
       };
     }),
 
-  updateEmailValidate: protectedProcedure
+  updateEmailValidate: protectedProcedure()
     .meta({
       openapi: {
         method: 'POST',

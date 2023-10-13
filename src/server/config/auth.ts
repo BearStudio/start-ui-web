@@ -10,6 +10,7 @@ import {
   VALIDATION_CODE_MOCKED,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
+import { zUser } from '@/features/users/schemas';
 import { db } from '@/server/config/db';
 import { AppContext } from '@/server/config/trpc';
 
@@ -35,17 +36,19 @@ export const getServerAuthSession = async () => {
     return null;
   }
 
-  return await db.user.findUnique({
-    where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      authorizations: true,
-      language: true,
-      accountStatus: true,
-    },
-  });
+  return zUser().parse(
+    await db.user.findUnique({
+      where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        authorizations: true,
+        language: true,
+        accountStatus: true,
+      },
+    })
+  );
 };
 
 export const decodeJwt = (token: string) => {

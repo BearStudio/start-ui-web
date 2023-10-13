@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useCheckAuthenticated } from '@/features/auth/hooks';
+import { UserAuthorization } from '@/features/users/schemas';
 import { trpc } from '@/lib/trpc/client';
 
 export const GuardAuthenticated = ({
@@ -16,7 +17,7 @@ export const GuardAuthenticated = ({
   loginPath,
 }: {
   children: ReactNode;
-  authorizations?: ('APP' | 'ADMIN')[];
+  authorizations?: UserAuthorization[];
   loginPath: string;
 }) => {
   const { i18n } = useTranslation();

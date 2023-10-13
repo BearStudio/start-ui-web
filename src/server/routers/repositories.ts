@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 import { zRepository } from '@/features/repositories/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
+import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const repositoriesRouter = createTRPCRouter({
-  getById: adminProcedure
+  getById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -33,7 +33,7 @@ export const repositoriesRouter = createTRPCRouter({
       return repository;
     }),
 
-  getAll: adminProcedure
+  getAll: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -73,7 +73,7 @@ export const repositoriesRouter = createTRPCRouter({
       };
     }),
 
-  create: adminProcedure
+  create: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'POST',
@@ -103,7 +103,7 @@ export const repositoriesRouter = createTRPCRouter({
       }
     }),
 
-  updateById: adminProcedure
+  updateById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'PUT',
@@ -135,7 +135,7 @@ export const repositoriesRouter = createTRPCRouter({
       }
     }),
 
-  removeById: adminProcedure
+  removeById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'DELETE',

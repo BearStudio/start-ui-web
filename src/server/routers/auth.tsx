@@ -25,7 +25,7 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
 
 export const authRouter = createTRPCRouter({
-  checkAuthenticated: publicProcedure
+  checkAuthenticated: publicProcedure()
     .meta({
       openapi: {
         method: 'GET',
@@ -43,7 +43,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  login: publicProcedure
+  login: publicProcedure()
     .meta({
       openapi: {
         method: 'POST',
@@ -123,7 +123,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  loginValidate: publicProcedure
+  loginValidate: publicProcedure()
     .meta({
       openapi: {
         method: 'POST',
@@ -171,7 +171,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  logout: publicProcedure
+  logout: publicProcedure()
     .meta({
       openapi: {
         method: 'POST',
@@ -186,7 +186,7 @@ export const authRouter = createTRPCRouter({
       cookies().delete('auth');
     }),
 
-  register: publicProcedure
+  register: publicProcedure()
     .meta({
       openapi: {
         method: 'POST',
@@ -293,7 +293,7 @@ export const authRouter = createTRPCRouter({
         token,
       };
     }),
-  registerValidate: publicProcedure
+  registerValidate: publicProcedure()
     .meta({
       openapi: {
         method: 'POST',

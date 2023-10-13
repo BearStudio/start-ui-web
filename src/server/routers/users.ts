@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
+import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const usersRouter = createTRPCRouter({
-  getById: adminProcedure
+  getById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -37,7 +37,7 @@ export const usersRouter = createTRPCRouter({
       return user;
     }),
 
-  getAll: adminProcedure
+  getAll: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -77,7 +77,7 @@ export const usersRouter = createTRPCRouter({
       };
     }),
 
-  create: adminProcedure
+  create: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'POST',
@@ -106,7 +106,7 @@ export const usersRouter = createTRPCRouter({
       }
     }),
 
-  deactivate: adminProcedure
+  deactivate: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'POST',
@@ -139,7 +139,7 @@ export const usersRouter = createTRPCRouter({
       });
     }),
 
-  activate: adminProcedure
+  activate: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'POST',
@@ -172,7 +172,7 @@ export const usersRouter = createTRPCRouter({
       });
     }),
 
-  updateById: adminProcedure
+  updateById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'PUT',
@@ -205,7 +205,7 @@ export const usersRouter = createTRPCRouter({
       }
     }),
 
-  removeById: adminProcedure
+  removeById: protectedProcedure({ authorizations: ['ADMIN'] })
     .meta({
       openapi: {
         method: 'DELETE',

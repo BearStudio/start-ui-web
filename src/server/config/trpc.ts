@@ -16,6 +16,7 @@ import { OpenApiMeta } from 'trpc-openapi';
 import { ZodError } from 'zod';
 
 import { env } from '@/env.mjs';
+import { UserAuthorization } from '@/features/users/schemas';
 import { getServerAuthSession } from '@/server/config/auth';
 import { db } from '@/server/config/db';
 import { logger } from '@/server/config/logger';
@@ -155,35 +156,6 @@ const loggerMiddleware = t.middleware(async (opts) => {
   return result;
 });
 
-/** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (ctx.user?.accountStatus !== 'ENABLED') {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: ctx.user?.email,
-    });
-  }
-  return next({
-    ctx: {
-      // infers the `user` as non-nullable
-      user: ctx.user,
-    },
-  });
-});
-
-/** Reusable middleware that enforces users can access admin before running the procedure. */
-const enforceUserCanAccessAdmin = t.middleware(({ ctx, next }) => {
-  if (!ctx.user?.authorizations.includes('ADMIN')) {
-    throw new TRPCError({ code: 'FORBIDDEN' });
-  }
-  return next({
-    ctx: {
-      // infers the `user` as non-nullable
-      user: ctx.user,
-    },
-  });
-});
-
 /** Demo Middleware */
 const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
   if (!env.NEXT_PUBLIC_IS_DEMO) {
@@ -216,9 +188,8 @@ const enforceDemo = t.middleware(({ ctx, next, type, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure
-  .use(enforceDemo)
-  .use(loggerMiddleware);
+export const publicProcedure = () =>
+  t.procedure.use(enforceDemo).use(loggerMiddleware);
 
 /**
  * Protected (authenticated) procedure
@@ -228,14 +199,34 @@ export const publicProcedure = t.procedure
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = publicProcedure.use(enforceUserIsAuthed);
+export const protectedProcedure = (
+  options: {
+    authorizations?: UserAuthorization[];
+  } = {}
+) =>
+  publicProcedure().use(
+    t.middleware(({ ctx, next }) => {
+      const user = ctx.user;
 
-/**
- * Admin protected procedure
- *
- * If you want a query or mutation to ONLY be accessible to users with admin authorization, use this. It verifies
- * the session is valid and guarantees `ctx.session.user.authorizations` has `ADMIN`.
- *
- * @see https://trpc.io/docs/procedures
- */
-export const adminProcedure = protectedProcedure.use(enforceUserCanAccessAdmin);
+      if (!user || user.accountStatus !== 'ENABLED') {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: user?.email,
+        });
+      }
+
+      if (
+        !options.authorizations ||
+        options.authorizations.every((a) => user.authorizations.includes(a))
+      ) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      return next({
+        ctx: {
+          // infers the `user` as non-nullable
+          user,
+        },
+      });
+    })
+  );

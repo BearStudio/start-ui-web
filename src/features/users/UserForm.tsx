@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldMultiSelect } from '@/components/FieldMultiSelect';
 import { FieldSelect } from '@/components/FieldSelect';
+import { UserAuthorization } from '@/features/users/schemas';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -16,7 +17,7 @@ export type UserFormFields = {
   name: string;
   email: string;
   language: string;
-  authorizations: ('APP' | 'ADMIN')[];
+  authorizations: UserAuthorization[];
 };
 
 export const UserForm = () => {
@@ -55,10 +56,12 @@ export const UserForm = () => {
             name="authorizations"
             label={t('users:data.authorizations.label')}
             required={t('users:data.authorizations.required')}
-            options={(['APP', 'ADMIN'] as const).map((authorization) => ({
-              value: authorization,
-              label: t(`users:data.authorizations.options.${authorization}`),
-            }))}
+            options={(['APP', 'ADMIN'] satisfies UserAuthorization[]).map(
+              (authorization) => ({
+                value: authorization,
+                label: t(`users:data.authorizations.options.${authorization}`),
+              })
+            )}
             defaultValue={['APP']}
           />
         </Stack>

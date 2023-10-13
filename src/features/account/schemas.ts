@@ -1,6 +1,8 @@
+import { z } from 'zod';
+
 import { zUser } from '@/features/users/schemas';
 
-export type UserAccount = ReturnType<typeof zUserAccount>;
+export type UserAccount = z.infer<ReturnType<typeof zUserAccount>>;
 export const zUserAccount = () =>
   zUser().pick({
     id: true,
