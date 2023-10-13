@@ -79,3 +79,29 @@ export const DefaultValue = () => {
     </Formiz>
   );
 };
+
+export const OptionsColorScheme = () => {
+  const form = useForm<{ colors: string }>({ onSubmit: console.log });
+
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          selectProps={{
+            isClearable: true,
+            selectedOptionColorScheme: 'red',
+          }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};

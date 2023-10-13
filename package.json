@@ -58,6 +58,7 @@
     "@trpc/client": "10.38.5",
     "@trpc/react-query": "10.38.5",
     "@trpc/server": "10.38.5",
+    "chakra-react-select": "4.7.4",
     "colorette": "2.0.20",
     "dayjs": "1.11.10",
     "framer-motion": "10.16.4",

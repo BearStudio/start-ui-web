@@ -9,7 +9,7 @@ import { Select, SelectProps } from '@/components/Select';
 
 export type FieldMultiSelectProps<
   Option extends { label: ReactNode; value: unknown },
-  Group extends GroupBase<Option> = GroupBase<Option>
+  Group extends GroupBase<Option> = GroupBase<Option>,
 > = FieldProps<Array<Option['value']>> &
   FormGroupProps & {
     placeholder?: string;
@@ -23,7 +23,7 @@ export type FieldMultiSelectProps<
 
 export const FieldMultiSelect = <
   Option extends { label: ReactNode; value: unknown },
-  Group extends GroupBase<Option> = GroupBase<Option>
+  Group extends GroupBase<Option> = GroupBase<Option>,
 >(
   props: FieldMultiSelectProps<Option, Group>
 ) => {
@@ -96,7 +96,7 @@ export const FieldMultiSelect = <
         noOptionsMessage={() =>
           noOptionsMessage || t('components:fieldMultiSelect.noOption')
         }
-        isError={showError}
+        isInvalid={showError}
         size={size}
         isMulti
         {...selectProps}

@@ -8,7 +8,7 @@ import { Select, SelectProps } from '@/components/Select';
 
 export type FieldSelectProps<
   Option extends { label: ReactNode; value: unknown },
-  Group extends GroupBase<Option> = GroupBase<Option>
+  Group extends GroupBase<Option> = GroupBase<Option>,
 > = FieldProps<Option['value']> &
   FormGroupProps & {
     placeholder?: string;
@@ -21,7 +21,7 @@ export type FieldSelectProps<
 
 export const FieldSelect = <
   Option extends { label: ReactNode; value: unknown },
-  Group extends GroupBase<Option> = GroupBase<Option>
+  Group extends GroupBase<Option> = GroupBase<Option>,
 >(
   props: FieldSelectProps<Option, Group>
 ) => {
@@ -84,7 +84,7 @@ export const FieldSelect = <
         isDisabled={isDisabled}
         isClearable={isClearable}
         isSearchable={isSearchable}
-        isError={showError}
+        isInvalid={showError}
         {...selectProps}
       />
       {children}

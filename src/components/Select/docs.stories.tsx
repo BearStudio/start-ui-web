@@ -22,6 +22,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
+import { Options } from 'chakra-react-select';
 
 import { Select } from '.';
 
@@ -45,7 +46,6 @@ const selectOptions = [
 export const Default = () => {
   return (
     <Stack spacing={2}>
-      <Select size="xs" options={selectOptions} />
       <Select size="sm" options={selectOptions} />
       <Select size="md" options={selectOptions} />
       <Select size="lg" options={selectOptions} />
@@ -71,7 +71,7 @@ export const DisabledSelect = () => {
 };
 
 export const IsErrorSelect = () => {
-  return <Select isError />;
+  return <Select isInvalid />;
 };
 
 export const MultiSelect = () => {
@@ -81,7 +81,7 @@ export const MultiSelect = () => {
 export const CreatableSelect = () => {
   return (
     <Select
-      isCreatable
+      type="creatable"
       formatCreateLabel={(input) => `Add other option : "${input}"`}
       options={selectOptions.slice(0, 2)}
     />
@@ -107,17 +107,17 @@ const options = [
   'white',
 ];
 
-const handleLoadOptions = async (inputValue: unknown) => {
+const handleLoadOptions = async (inputValue: string) => {
   // Fake API call
-  return new Promise((resolve) =>
+  return new Promise<Options<{ label: string; value: string }>>((resolve) =>
     setTimeout(
       () =>
         resolve(
           options
-            .filter((option) => option.startsWith(String(inputValue)))
+            .filter((option) => option.startsWith(inputValue))
             .map((option) => ({ label: option, value: option }))
         ),
-      300
+      500
     )
   );
 };
@@ -125,10 +125,9 @@ const handleLoadOptions = async (inputValue: unknown) => {
 export const AsyncSelect = () => {
   return (
     <Select
-      isAsync
+      type="async"
       isClearable
       loadOptions={handleLoadOptions}
-      debounceDelay={300}
       defaultOptions={options.map((option) => ({
         label: option,
         value: option,
@@ -141,11 +140,9 @@ export const AsyncSelect = () => {
 export const AsyncCreatableSelect = () => {
   return (
     <Select
-      isAsync
-      isCreatable
+      type="async-creatable"
       isClearable
       loadOptions={handleLoadOptions}
-      debounceDelay={300}
       defaultOptions={options.map((option) => ({
         label: option,
         value: option,
@@ -202,7 +199,7 @@ export const SelectInModal = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={modal.onClose}>
+            <Button variant="@primary" onClick={modal.onClose}>
               Close
             </Button>
           </ModalFooter>
