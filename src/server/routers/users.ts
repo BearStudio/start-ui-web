@@ -1,25 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
+import { zUser } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
-
-export const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
-export const zUserRoles = () => z.array(zUserRole());
-export const zUserAccountStatus = () =>
-  z.enum(['DISABLED', 'ENABLED', 'NOT_VERIFIED']).catch('DISABLED');
-
-const zUser = () =>
-  z.object({
-    id: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    name: z.string().nullish(),
-    email: z.string(),
-    roles: zUserRoles(),
-    accountStatus: zUserAccountStatus(),
-    language: z.string(),
-  });
 
 export const usersRouter = createTRPCRouter({
   getById: adminProcedure
@@ -31,7 +15,11 @@ export const usersRouter = createTRPCRouter({
         tags: ['users'],
       },
     })
-    .input(z.object({ id: z.string().cuid() }))
+    .input(
+      zUser().pick({
+        id: true,
+      })
+    )
     .output(zUser())
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting user');
@@ -99,9 +87,9 @@ export const usersRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        name: z.string(),
-        email: z.string().email(),
+      zUser().required().pick({
+        name: true,
+        email: true,
       })
     )
     .output(zUser())
@@ -127,7 +115,11 @@ export const usersRouter = createTRPCRouter({
         tags: ['users'],
       },
     })
-    .input(z.object({ id: z.string().cuid() }))
+    .input(
+      zUser().pick({
+        id: true,
+      })
+    )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
@@ -156,7 +148,11 @@ export const usersRouter = createTRPCRouter({
         tags: ['users'],
       },
     })
-    .input(z.object({ id: z.string().cuid() }))
+    .input(
+      zUser().pick({
+        id: true,
+      })
+    )
     .output(zUser())
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.id === input.id) {
@@ -186,12 +182,12 @@ export const usersRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        email: z.string().email(),
-        language: z.string(),
-        roles: zUserRoles(),
+      zUser().required().pick({
+        id: true,
+        name: true,
+        email: true,
+        language: true,
+        authorizations: true,
       })
     )
     .output(zUser())
@@ -219,8 +215,8 @@ export const usersRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        id: z.string().cuid(),
+      zUser().required().pick({
+        id: true,
       })
     )
     .output(zUser())

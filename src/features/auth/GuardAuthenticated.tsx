@@ -12,18 +12,18 @@ import { trpc } from '@/lib/trpc/client';
 
 export const GuardAuthenticated = ({
   children,
-  roles,
+  authorizations,
   loginPath,
 }: {
   children: ReactNode;
-  roles: ('USER' | 'ADMIN')[];
+  authorizations?: ('APP' | 'ADMIN')[];
   loginPath: string;
 }) => {
   const { i18n } = useTranslation();
   const checkAuthenticated = useCheckAuthenticated();
   const account = trpc.account.get.useQuery(undefined, {
     retry: 1,
-    enabled: roles && !!checkAuthenticated.data?.isAuthenticated,
+    enabled: authorizations && !!checkAuthenticated.data?.isAuthenticated,
   });
 
   const pathname = usePathname();
@@ -53,8 +53,9 @@ export const GuardAuthenticated = ({
   }, [account.isSuccess, account.data?.language, i18n]);
 
   if (account.isSuccess) {
-    // Check if the account has all requested roles
-    return !roles || roles.every((r) => account.data.roles.includes(r)) ? (
+    // Check if the account has all requested authorizations
+    return !authorizations ||
+      authorizations.every((a) => account.data.authorizations.includes(a)) ? (
       <>{children}</>
     ) : (
       <ErrorPage errorCode={403} />

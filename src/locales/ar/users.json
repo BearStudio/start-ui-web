@@ -47,13 +47,6 @@
     },
     "language": {
       "label": "اللغة"
-    },
-    "roles": {
-      "label": "دور",
-      "options": {
-        "USER": "مستخدم",
-        "ADMIN": "مسؤل"
-      }
     }
   },
   "update": {

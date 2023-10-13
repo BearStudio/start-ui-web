@@ -21,16 +21,16 @@ enum AccountStatus {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  name          String?
-  email         String        @unique
-  accountStatus AccountStatus @default(NOT_VERIFIED)
-  image         String?
-  roles         String[]      @default(["USER"])
-  language      String        @default("en")
-  lastLoginAt   DateTime?
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  name           String?
+  email          String        @unique
+  accountStatus  AccountStatus @default(NOT_VERIFIED)
+  image          String?
+  authorizations String[]      @default(["APP"])
+  language       String        @default("en")
+  lastLoginAt    DateTime?
 }
 
 model VerificationToken {

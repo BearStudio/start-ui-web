@@ -16,7 +16,7 @@ export type UserFormFields = {
   name: string;
   email: string;
   language: string;
-  roles: ('USER' | 'ADMIN')[];
+  authorizations: ('APP' | 'ADMIN')[];
 };
 
 export const UserForm = () => {
@@ -52,14 +52,14 @@ export const UserForm = () => {
             defaultValue={DEFAULT_LANGUAGE_KEY}
           />
           <FieldMultiSelect
-            name="roles"
-            label={t('users:data.roles.label')}
-            required={t('users:data.roles.required')}
-            options={[
-              { value: 'USER', label: t('users:data.roles.options.USER') },
-              { value: 'ADMIN', label: t('users:data.roles.options.ADMIN') },
-            ]}
-            defaultValue={['USER']}
+            name="authorizations"
+            label={t('users:data.authorizations.label')}
+            required={t('users:data.authorizations.required')}
+            options={(['APP', 'ADMIN'] as const).map((authorization) => ({
+              value: authorization,
+              label: t(`users:data.authorizations.options.${authorization}`),
+            }))}
+            defaultValue={['APP']}
           />
         </Stack>
       </CardBody>

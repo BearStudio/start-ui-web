@@ -12,7 +12,10 @@ export default function AutenticatedLayout({
   children: ReactNode;
 }) {
   return (
-    <GuardAuthenticated roles={['ADMIN']} loginPath={`${ADMIN_PATH}/login`}>
+    <GuardAuthenticated
+      authorizations={['ADMIN']}
+      loginPath={`${ADMIN_PATH}/login`}
+    >
       <AdminLayout>{children}</AdminLayout>
     </GuardAuthenticated>
   );

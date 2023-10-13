@@ -38,7 +38,7 @@ export async function createUsers() {
       data: {
         name: 'Admin',
         email: 'admin@admin.com',
-        roles: ['USER', 'ADMIN'],
+        authorizations: ['APP', 'ADMIN'],
         accountStatus: 'ENABLED',
       },
     });

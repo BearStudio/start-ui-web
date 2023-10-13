@@ -74,7 +74,7 @@ export default function PageAdminUserUpdate() {
       email: user.data?.email,
       name: user.data?.name ?? undefined,
       language: user.data?.language,
-      roles: user.data?.roles,
+      authorizations: user.data?.authorizations,
     },
     onValidSubmit: (values) => {
       if (!user.data?.id) return;

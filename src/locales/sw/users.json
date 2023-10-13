@@ -47,13 +47,6 @@
     },
     "language": {
       "label": "Lugha"
-    },
-    "roles": {
-      "label": "Jukumu",
-      "options": {
-        "USER": "Mtumiaji",
-        "ADMIN": "Msimamizi"
-      }
     }
   },
   "update": {

@@ -1,16 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
+import { zRepository } from '@/features/repositories/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
-
-const zRepository = () =>
-  z.object({
-    id: z.string(),
-    name: z.string(),
-    link: z.string(),
-    description: z.string().nullish(),
-  });
 
 export const repositoriesRouter = createTRPCRouter({
   getById: adminProcedure
@@ -22,7 +15,7 @@ export const repositoriesRouter = createTRPCRouter({
         tags: ['repositories'],
       },
     })
-    .input(z.object({ id: z.string().cuid() }))
+    .input(zRepository().pick({ id: true }))
     .output(zRepository())
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting repository');
@@ -90,10 +83,10 @@ export const repositoriesRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        name: z.string(),
-        link: z.string(),
-        description: z.string().nullish(),
+      zRepository().pick({
+        name: true,
+        link: true,
+        description: true,
       })
     )
     .output(zRepository())
@@ -120,11 +113,11 @@ export const repositoriesRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        id: z.string().cuid(),
-        name: z.string(),
-        link: z.string(),
-        description: z.string().nullish(),
+      zRepository().pick({
+        id: true,
+        name: true,
+        link: true,
+        description: true,
       })
     )
     .output(zRepository())
@@ -151,11 +144,7 @@ export const repositoriesRouter = createTRPCRouter({
         tags: ['repositories'],
       },
     })
-    .input(
-      z.object({
-        id: z.string().cuid(),
-      })
-    )
+    .input(zRepository().pick({ id: true }))
     .output(zRepository())
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info({ input }, 'Removing repository');

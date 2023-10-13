@@ -42,11 +42,11 @@
       "required": "Email is required",
       "invalid": "Email is invalid"
     },
-    "roles": {
-      "label": "Roles",
-      "required": "At least one role is required",
+    "authorizations": {
+      "label": "Authorizations",
+      "required": "At least one authorization is required",
       "options": {
-        "USER": "User",
+        "APP": "App",
         "ADMIN": "Admin"
       }
     },

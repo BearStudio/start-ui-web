@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import EmailAddressChange from '@/emails/templates/email-address-change';
+import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
 import {
@@ -14,16 +15,6 @@ import {
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
-import { zUserRoles } from '@/server/routers/users';
-
-const zUserAccount = () =>
-  z.object({
-    id: z.string(),
-    name: z.string().nullish(),
-    email: z.string(),
-    roles: zUserRoles(),
-    language: z.string(),
-  });
 
 export const accountRouter = createTRPCRouter({
   get: protectedProcedure
@@ -45,7 +36,7 @@ export const accountRouter = createTRPCRouter({
           id: true,
           name: true,
           email: true,
-          roles: true,
+          authorizations: true,
           language: true,
         },
       });
@@ -70,9 +61,9 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        name: z.string(),
-        language: z.string(),
+      zUserAccount().required().pick({
+        name: true,
+        language: true,
       })
     )
     .output(zUserAccount())
@@ -101,8 +92,8 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        email: z.string().email().trim().toLowerCase(),
+      zUserAccount().pick({
+        email: true,
       })
     )
     .output(z.object({ token: z.string() }))

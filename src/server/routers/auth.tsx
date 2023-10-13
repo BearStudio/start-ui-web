@@ -12,7 +12,7 @@ import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
 } from '@/features/auth/utils';
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { zUser } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
   AUTH_COOKIE_NAME,
@@ -52,9 +52,9 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        email: z.string().email().trim().toLowerCase(),
-        language: z.string().default(DEFAULT_LANGUAGE_KEY),
+      zUser().pick({
+        email: true,
+        language: true,
       })
     )
     .output(z.object({ token: z.string() }))
@@ -195,10 +195,10 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        email: z.string().email().trim().toLowerCase(),
-        name: z.string(),
-        language: z.string().trim(),
+      zUser().required().pick({
+        email: true,
+        name: true,
+        language: true,
       })
     )
     .output(z.object({ token: z.string() }))

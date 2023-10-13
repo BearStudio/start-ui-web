@@ -47,13 +47,6 @@
     },
     "language": {
       "label": "Langue"
-    },
-    "roles": {
-      "label": "Rôle",
-      "options": {
-        "USER": "Utilisateur",
-        "ADMIN": "Administrateur"
-      }
     }
   },
   "update": {
