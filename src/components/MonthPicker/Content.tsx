@@ -23,7 +23,7 @@ export const Content: React.FC<React.PropsWithChildren<ContentProps>> = () => {
   };
 
   const isSelected = (date: Date): boolean =>
-    selectedMonths.some(
+    !!selectedMonths?.some(
       (month) =>
         month.getFullYear() === date.getFullYear() &&
         month.getMonth() === date.getMonth()

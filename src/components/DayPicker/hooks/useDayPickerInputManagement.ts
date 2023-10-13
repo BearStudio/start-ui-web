@@ -2,6 +2,7 @@ import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 
+import { DATE_FORMAT } from '@/components/DayPicker/constants';
 import { parseInputToDate } from '@/components/DayPicker/parseInputToDate';
 
 type UseDayPickerInputManagement = {
@@ -26,6 +27,8 @@ export const useDayPickerInputManagement = (
     dateValue ? dayjs(dateValue).format(dateFormat) : ''
   );
 
+  const dateValueAsDayjs = dayjs(dateValue);
+
   // Pour mettre à jour l'input selon la value
   useEffect(() => {
     if (!!dateValue) {
@@ -41,8 +44,6 @@ export const useDayPickerInputManagement = (
     if (date.isValid()) {
       const dateValue = date.startOf('day').toDate();
       onChange(dateValue, true);
-    } else {
-      onChange(undefined);
     }
   };
 
@@ -51,8 +52,21 @@ export const useDayPickerInputManagement = (
       return;
     }
     const date = parseInputToDate(inputValue);
+
+    if (!date.isValid()) {
+      if (!inputValue) {
+        onChange(undefined);
+        return;
+      }
+      setInputValue(
+        dateValueAsDayjs.isValid() ? dateValueAsDayjs.format(DATE_FORMAT) : ''
+      );
+      return;
+    }
+
     const isNewValue = !date.isSame(dateValue, 'date');
     if (!isNewValue) {
+      setInputValue(date.format(DATE_FORMAT));
       // Pour éviter le problème de non sélection quand :
       // * L'input est focus avec une valeur déjà sélectionnée
       // * On clique directement sur une nouvelle date
@@ -60,8 +74,6 @@ export const useDayPickerInputManagement = (
     }
     if (date.isValid()) {
       onChange(date.toDate());
-    } else {
-      setInputValue('');
     }
   };
 
