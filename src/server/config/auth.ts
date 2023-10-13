@@ -41,7 +41,7 @@ export const getServerAuthSession = async () => {
       id: true,
       name: true,
       email: true,
-      role: true,
+      roles: true,
       language: true,
       accountStatus: true,
     },

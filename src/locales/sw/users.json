@@ -48,7 +48,7 @@
     "language": {
       "label": "Lugha"
     },
-    "role": {
+    "roles": {
       "label": "Jukumu",
       "options": {
         "USER": "Mtumiaji",

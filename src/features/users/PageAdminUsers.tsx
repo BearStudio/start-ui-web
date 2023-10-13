@@ -129,7 +129,7 @@ export default function PageAdminUsers() {
                 <DataListCell colName="authorities" colWidth="0.5">
                   {user.role === 'ADMIN' && (
                     <Badge size="sm" colorScheme="warning">
-                      {t(`users:data.role.options.${user.role}`)}
+                      {t(`users:data.roles.options.${user.role}`)}
                     </Badge>
                   )}
                 </DataListCell>

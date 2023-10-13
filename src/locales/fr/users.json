@@ -48,7 +48,7 @@
     "language": {
       "label": "Langue"
     },
-    "role": {
+    "roles": {
       "label": "Rôle",
       "options": {
         "USER": "Utilisateur",

@@ -5,6 +5,7 @@ import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
+import { FieldMultiSelect } from '@/components/FieldMultiSelect';
 import { FieldSelect } from '@/components/FieldSelect';
 import {
   AVAILABLE_LANGUAGES,
@@ -15,7 +16,7 @@ export type UserFormFields = {
   name: string;
   email: string;
   language: string;
-  role: 'USER' | 'ADMIN';
+  roles: ('USER' | 'ADMIN')[];
 };
 
 export const UserForm = () => {
@@ -50,14 +51,15 @@ export const UserForm = () => {
             }))}
             defaultValue={DEFAULT_LANGUAGE_KEY}
           />
-          <FieldSelect
-            name="role"
-            label={t('users:data.role.label')}
+          <FieldMultiSelect
+            name="roles"
+            label={t('users:data.roles.label')}
+            required={t('users:data.roles.required')}
             options={[
-              { value: 'USER', label: t('users:data.role.options.USER') },
-              { value: 'ADMIN', label: t('users:data.role.options.ADMIN') },
+              { value: 'USER', label: t('users:data.roles.options.USER') },
+              { value: 'ADMIN', label: t('users:data.roles.options.ADMIN') },
             ]}
-            defaultValue="USER"
+            defaultValue={['USER']}
           />
         </Stack>
       </CardBody>

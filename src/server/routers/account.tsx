@@ -14,14 +14,14 @@ import {
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
-import { zUserRole } from '@/server/routers/users';
+import { zUserRoles } from '@/server/routers/users';
 
 const zUserAccount = () =>
   z.object({
     id: z.string(),
     name: z.string().nullish(),
     email: z.string(),
-    role: zUserRole(),
+    roles: zUserRoles(),
     language: z.string(),
   });
 
@@ -45,7 +45,7 @@ export const accountRouter = createTRPCRouter({
           id: true,
           name: true,
           email: true,
-          role: true,
+          roles: true,
           language: true,
         },
       });

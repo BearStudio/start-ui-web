@@ -173,7 +173,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 
 /** Reusable middleware that enforces users are admin before running the procedure. */
 const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-  if (ctx.user?.role !== 'ADMIN') {
+  if (!ctx.user?.roles.includes('ADMIN')) {
     throw new TRPCError({ code: 'FORBIDDEN' });
   }
   return next({

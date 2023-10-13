@@ -28,7 +28,7 @@ model User {
   email         String        @unique
   accountStatus AccountStatus @default(NOT_VERIFIED)
   image         String?
-  role          String        @default("USER")
+  roles         String[]      @default(["USER"])
   language      String        @default("en")
   lastLoginAt   DateTime?
 }

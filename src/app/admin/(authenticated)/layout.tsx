@@ -2,19 +2,18 @@
 
 import { ReactNode } from 'react';
 
-import { useUpdateAccountLanguage } from '@/features/account/useUpdateAccountLanguage';
 import { AdminLayout } from '@/features/admin/AdminLayout';
-import { GuardAdminAuthenticated } from '@/features/auth/GuardAdminAuthenticated';
+import { ADMIN_PATH } from '@/features/admin/constants';
+import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 
 export default function AutenticatedLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  useUpdateAccountLanguage();
   return (
-    <GuardAdminAuthenticated>
+    <GuardAuthenticated roles={['ADMIN']} loginPath={`${ADMIN_PATH}/login`}>
       <AdminLayout>{children}</AdminLayout>
-    </GuardAdminAuthenticated>
+    </GuardAuthenticated>
   );
 }

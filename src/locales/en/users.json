@@ -42,8 +42,9 @@
       "required": "Email is required",
       "invalid": "Email is invalid"
     },
-    "role": {
-      "label": "Role",
+    "roles": {
+      "label": "Roles",
+      "required": "At least one role is required",
       "options": {
         "USER": "User",
         "ADMIN": "Admin"

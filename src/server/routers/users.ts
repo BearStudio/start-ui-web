@@ -5,7 +5,8 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { adminProcedure, createTRPCRouter } from '@/server/config/trpc';
 
 export const zUserRole = () => z.enum(['USER', 'ADMIN']).catch('USER');
-export const zAccountStatus = () =>
+export const zUserRoles = () => z.array(zUserRole());
+export const zUserAccountStatus = () =>
   z.enum(['DISABLED', 'ENABLED', 'NOT_VERIFIED']).catch('DISABLED');
 
 const zUser = () =>
@@ -15,8 +16,8 @@ const zUser = () =>
     updatedAt: z.date(),
     name: z.string().nullish(),
     email: z.string(),
-    role: zUserRole(),
-    accountStatus: zAccountStatus(),
+    roles: zUserRoles(),
+    accountStatus: zUserAccountStatus(),
     language: z.string(),
   });
 
@@ -190,7 +191,7 @@ export const usersRouter = createTRPCRouter({
         name: z.string(),
         email: z.string().email(),
         language: z.string(),
-        role: zUserRole(),
+        roles: zUserRoles(),
       })
     )
     .output(zUser())
