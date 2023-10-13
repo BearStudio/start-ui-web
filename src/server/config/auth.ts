@@ -36,19 +36,25 @@ export const getServerAuthSession = async () => {
     return null;
   }
 
-  return zUser().parse(
-    await db.user.findUnique({
-      where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        authorizations: true,
-        language: true,
-        accountStatus: true,
-      },
-    })
-  );
+  const userPick = {
+    id: true,
+    name: true,
+    email: true,
+    authorizations: true,
+    language: true,
+    accountStatus: true,
+  } as const;
+
+  const user = await db.user.findUnique({
+    where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
+    select: userPick,
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return zUser().pick(userPick).parse(user);
 };
 
 export const decodeJwt = (token: string) => {

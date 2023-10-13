@@ -216,8 +216,8 @@ export const protectedProcedure = (
       }
 
       if (
-        !options.authorizations ||
-        options.authorizations.every((a) => user.authorizations.includes(a))
+        options.authorizations &&
+        options.authorizations.some((a) => !user.authorizations.includes(a))
       ) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
