@@ -1,9 +1,13 @@
 {
   "list": {
-    "title": "Usimamizi wa hazina",
+    "title": "hazina",
     "actions": {
       "createRepository": "Unda Hifadhi",
       "view": "Tazama"
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha hazina {{loaded}} kati ya {{total}}"
     }
   },
   "feedbacks": {

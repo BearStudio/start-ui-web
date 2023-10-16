@@ -4,6 +4,10 @@
     "title": "Users Management",
     "actions": {
       "createUser": "Create User"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} users"
     }
   },
   "deleteModal": {

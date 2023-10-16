@@ -34,7 +34,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
             <Box as={Link} href={APP_PATH || '/'}>
               <Logo />
             </Box>
-            <HStack flex={1}>
+            <HStack flex={1} spacing={0}>
               <AppNavBarDesktopMainMenuItem
                 href={APP_PATH || '/'}
                 icon={LuHome}

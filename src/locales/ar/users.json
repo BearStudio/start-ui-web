@@ -3,6 +3,10 @@
     "title": "إدارة المستخدمين ",
     "actions": {
       "createUser": "إنشاء مستخدم"
+    },
+    "loadMore": {
+      "button": "تحميل المزيد",
+      "display": "عرض {{محملة}} من {{total}} من المستخدمين"
     }
   },
   "feedbacks": {

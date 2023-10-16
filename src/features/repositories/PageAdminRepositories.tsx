@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Box,
+  Button,
   HStack,
   Heading,
   LinkBox,
@@ -9,8 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { LuBookMarked, LuPlus } from 'react-icons/lu';
 
 import {
@@ -23,14 +23,6 @@ import {
   DataListRow,
 } from '@/components/DataList';
 import { Icon } from '@/components/Icons';
-import {
-  Pagination,
-  PaginationButtonFirstPage,
-  PaginationButtonLastPage,
-  PaginationButtonNextPage,
-  PaginationButtonPrevPage,
-  PaginationInfo,
-} from '@/components/Pagination';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import {
   AdminLayoutPage,
@@ -38,20 +30,17 @@ import {
 } from '@/features/admin/AdminLayoutPage';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AdminRepositoryActions } from '@/features/repositories/AdminRepositoryActions';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageAdminRepositories() {
   const { t } = useTranslation(['repositories']);
-  const searchParams = useSearchParams();
-  const setSearchParams = useSearchParamsUpdater();
-  const page = +(searchParams?.get('page') || 1);
 
-  const pageSize = 20;
-  const repositories = trpc.repositories.getAll.useQuery({
-    page,
-    size: pageSize,
-  });
+  const repositories = trpc.repositories.getAll.useInfiniteQuery(
+    { limit: 50 },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
   return (
     <AdminLayoutPage>
@@ -78,75 +67,93 @@ export default function PageAdminRepositories() {
               retry={() => repositories.refetch()}
             />
           )}
-          {repositories.isSuccess && !repositories.data.items.length && (
-            <DataListEmptyState />
-          )}
-          {repositories.data?.items.map((repository) => (
-            <DataListRow as={LinkBox} key={repository.id}>
-              <DataListCell colWidth={1} colName="name">
-                <HStack maxW="100%">
-                  <Icon
-                    icon={LuBookMarked}
-                    fontSize="xl"
-                    color="gray.400"
-                    marginX={1}
-                  />
-                  <Box minW="0">
-                    <Text noOfLines={1} maxW="full" fontWeight="bold">
-                      <LinkOverlay
-                        as={Link}
-                        href={`${ADMIN_PATH}/repositories/${repository.id}`}
-                      >
-                        {repository.name}
-                      </LinkOverlay>
-                    </Text>
+          {repositories.isSuccess &&
+            !repositories.data.pages.flatMap((p) => p.items).length && (
+              <DataListEmptyState />
+            )}
 
-                    <Text
-                      noOfLines={1}
-                      maxW="full"
-                      fontSize="sm"
-                      color="gray.600"
-                      _dark={{ color: 'gray.300' }}
-                      _hover={{ textDecoration: 'underline' }}
-                    >
-                      {repository.link}
-                    </Text>
-                  </Box>
-                </HStack>
-              </DataListCell>
-              <DataListCell
-                colWidth={1}
-                colName="description"
-                isVisible={{ base: false, md: true }}
+          {repositories.data?.pages
+            .flatMap((p) => p.items)
+            .map((repository) => (
+              <DataListRow as={LinkBox} key={repository.id}>
+                <DataListCell colWidth={1} colName="name">
+                  <HStack maxW="100%">
+                    <Icon
+                      icon={LuBookMarked}
+                      fontSize="xl"
+                      color="gray.400"
+                      marginX={1}
+                    />
+                    <Box minW="0">
+                      <Text noOfLines={1} maxW="full" fontWeight="bold">
+                        <LinkOverlay
+                          as={Link}
+                          href={`${ADMIN_PATH}/repositories/${repository.id}`}
+                        >
+                          {repository.name}
+                        </LinkOverlay>
+                      </Text>
+
+                      <Text
+                        noOfLines={1}
+                        maxW="full"
+                        fontSize="sm"
+                        color="gray.600"
+                        _dark={{ color: 'gray.300' }}
+                        _hover={{ textDecoration: 'underline' }}
+                      >
+                        {repository.link}
+                      </Text>
+                    </Box>
+                  </HStack>
+                </DataListCell>
+                <DataListCell
+                  colWidth={1}
+                  colName="description"
+                  isVisible={{ base: false, md: true }}
+                >
+                  <Text noOfLines={2} fontSize="sm">
+                    {repository.description}
+                  </Text>
+                </DataListCell>
+                <DataListCell colWidth="4rem" colName="actions">
+                  <AdminRepositoryActions repository={repository} />
+                </DataListCell>
+              </DataListRow>
+            ))}
+          {repositories.isSuccess && (
+            <DataListFooter gap={3}>
+              <Button
+                size="sm"
+                onClick={() => repositories.fetchNextPage()}
+                isLoading={repositories.isFetchingNextPage}
+                isDisabled={!repositories.hasNextPage}
               >
-                <Text noOfLines={2} fontSize="sm">
-                  {repository.description}
-                </Text>
-              </DataListCell>
-              <DataListCell colWidth="4rem" colName="actions">
-                <AdminRepositoryActions repository={repository} />
-              </DataListCell>
-            </DataListRow>
-          ))}
-          <DataListFooter>
-            <Pagination
-              isLoadingPage={repositories.isFetching}
-              setPage={(newPage) => {
-                setSearchParams({
-                  page: newPage.toString(),
-                });
-              }}
-              page={page}
-              pageSize={pageSize}
-              totalItems={repositories.data?.total}
-            >
-              <PaginationButtonFirstPage />
-              <PaginationButtonPrevPage />
-              <PaginationInfo flex="1" />
-              <PaginationButtonNextPage />
-              <PaginationButtonLastPage />
-            </Pagination>
-          </DataListFooter>
+                {t('repositories:list.loadMore.button')}
+              </Button>
+              <Box flex={1}>
+                {repositories.isSuccess &&
+                  !!repositories.data.pages[0]?.total && (
+                    <Text
+                      fontSize="xs"
+                      color="gray.500"
+                      _dark={{ color: 'gray.300' }}
+                    >
+                      <Trans
+                        i18nKey="repositories:list.loadMore.display"
+                        t={t}
+                        values={{
+                          loaded: repositories.data.pages.flatMap(
+                            (p) => p.items
+                          ).length,
+                          total: repositories.data.pages[0].total,
+                        }}
+                      />
+                    </Text>
+                  )}
+              </Box>
+            </DataListFooter>
+          )}
         </DataList>
       </AdminLayoutPageContent>
     </AdminLayoutPage>

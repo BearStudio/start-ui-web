@@ -1,9 +1,13 @@
 {
   "list": {
-    "title": "إدارة المستودعات",
+    "title": "المستودعات",
     "actions": {
       "createRepository": "إنشاء مستودع",
       "view": "منظر"
+    },
+    "loadMore": {
+      "button": "تحميل المزيد",
+      "display": "عرض {{loaded}} من المستودعات {{total}}."
     }
   },
   "feedbacks": {

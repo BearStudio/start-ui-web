@@ -28,6 +28,10 @@
     "title": "Usimamizi wa Mtumiaji",
     "actions": {
       "createUser": "Unda mtumiaji"
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha watumiaji {{loaded}} kati ya {{total}}"
     }
   },
   "data": {

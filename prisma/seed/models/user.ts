@@ -8,7 +8,7 @@ export async function createUsers() {
   const existingUsersCount = await prisma.user.count();
 
   await Promise.all(
-    Array.from({ length: Math.max(0, 26 - existingUsersCount) }, async () => {
+    Array.from({ length: Math.max(0, 98 - existingUsersCount) }, async () => {
       await prisma.user.create({
         data: {
           name: faker.person.fullName(),

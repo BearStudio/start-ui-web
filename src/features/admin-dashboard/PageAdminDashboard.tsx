@@ -15,7 +15,6 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
 
-import { Icon } from '@/components/Icons';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -29,7 +28,7 @@ export default function PageAdminDashboard() {
         <Heading size="md" mb="4">
           {t('adminDashboard:title')}
         </Heading>
-        <Stack spacing={2}>
+        <Stack spacing={4}>
           <Alert status="success" colorScheme="brand" borderRadius="md">
             <AlertIcon />
             <Box flex="1">

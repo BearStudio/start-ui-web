@@ -28,6 +28,10 @@
     "title": "Gestion des utilisateurs",
     "actions": {
       "createUser": "Créer un utilisateur"
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} utilisateurs sur {{total}}"
     }
   },
   "data": {

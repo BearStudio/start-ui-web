@@ -148,7 +148,7 @@ export const AdminLayoutPageContent = ({
       py="4"
       {...rest}
     >
-      <PageContainer maxW={containerMaxWidth}>
+      <PageContainer maxW={containerMaxWidth} pb={16}>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
           spacing={{ base: '4', lg: '8' }}

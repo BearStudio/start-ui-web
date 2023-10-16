@@ -44,22 +44,24 @@ export const repositoriesRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        page: z.number().int().gte(1).default(1),
-        size: z.number().int().gte(1).default(20),
+        cursor: z.string().cuid().nullish(),
+        limit: z.number().min(1).max(100).default(50),
       })
     )
     .output(
       z.object({
         items: z.array(zRepository()),
+        nextCursor: z.string().cuid().optional(),
         total: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      ctx.logger.info('Getting repositories using pagination');
+      ctx.logger.info('Getting repositories from database');
       const [items, total] = await Promise.all([
         ctx.db.repository.findMany({
-          skip: (input.page - 1) * input.size,
-          take: input.size,
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
           orderBy: {
             name: 'asc',
           },
@@ -67,8 +69,15 @@ export const repositoriesRouter = createTRPCRouter({
         ctx.db.repository.count(),
       ]);
 
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
       return {
         items,
+        nextCursor,
         total,
       };
     }),
