@@ -1,6 +1,8 @@
 import React, { useId } from 'react';
 
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   Divider,
@@ -8,18 +10,22 @@ import {
   FormLabel,
   HStack,
   Heading,
+  Link,
+  LinkBox,
+  LinkOverlay,
   Stack,
   Switch,
   useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuUser } from 'react-icons/lu';
+import { LuExternalLink, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
+import { ADMIN_PATH } from '@/features/admin/constants';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 import { APP_PATH } from '@/features/app/constants';
 
@@ -34,6 +40,20 @@ export default function PageHome() {
           <Icon icon={LuUser} mr={2} opacity={0.6} />
           {t('account:title')}
         </Heading>
+
+        <Alert as={LinkBox} status="info">
+          <AlertTitle flex="none">{t('account:admin.title')}</AlertTitle>
+          <Link
+            as={LinkOverlay}
+            ms="auto"
+            gap={2}
+            display="inline-flex"
+            href={ADMIN_PATH ?? '/'}
+          >
+            {t('account:admin.button')}
+            <Icon icon={LuExternalLink} />
+          </Link>
+        </Alert>
 
         <Stack direction={{ base: 'column', sm: 'row' }}>
           <Heading size="sm" flex={0.5}>

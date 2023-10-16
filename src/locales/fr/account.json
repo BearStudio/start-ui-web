@@ -62,5 +62,9 @@
     },
     "title": "Préférences"
   },
-  "title": "Compte"
+  "title": "Compte",
+  "admin": {
+    "button": "Ouvrir l'interface d'administration",
+    "title": "Utilisateur administrateur"
+  }
 }

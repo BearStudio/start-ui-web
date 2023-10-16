@@ -5,6 +5,10 @@
     "email": "Email",
     "myAccount": "My Account"
   },
+  "admin": {
+    "title": "Admin user",
+    "button": "Open Administration"
+  },
   "profile": {
     "title": "Profile informations",
     "feedbacks": {

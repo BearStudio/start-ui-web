@@ -62,5 +62,9 @@
     },
     "title": "Mapendeleo"
   },
-  "title": "Akaunti"
+  "title": "Akaunti",
+  "admin": {
+    "button": "Fungua Utawala",
+    "title": "Mtumiaji wa msimamizi"
+  }
 }
