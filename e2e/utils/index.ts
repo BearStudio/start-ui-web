@@ -30,7 +30,9 @@ export const getUtils = (page: Page) => {
       await page.goto(`${APP_PATH}/login`);
       await page.waitForURL(`**${APP_PATH}/login`);
 
-      await page.getByLabel(locales.en.auth.data.email.label).fill(input.email);
+      await page
+        .getByPlaceholder(locales.en.auth.data.email.label)
+        .fill(input.email);
       await page
         .getByRole('button', { name: locales.en.auth.login.actions.login })
         .click();
@@ -46,7 +48,9 @@ export const getUtils = (page: Page) => {
       await page.goto(`${ADMIN_PATH}/login`);
       await page.waitForURL(`**${ADMIN_PATH}/login`);
 
-      await page.getByLabel(locales.en.auth.data.email.label).fill(input.email);
+      await page
+        .getByPlaceholder(locales.en.auth.data.email.label)
+        .fill(input.email);
       await page
         .getByRole('button', { name: locales.en.auth.login.actions.login })
         .click();
