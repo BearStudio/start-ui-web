@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
@@ -34,14 +33,9 @@ export const LoginForm = ({
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
   const toastError = useToastError();
-  const queryCache = useQueryClient();
 
   const login = trpc.auth.login.useMutation({
-    onSuccess: (data, variables) => {
-      queryCache.clear();
-
-      onSuccess(data, variables);
-    },
+    onSuccess,
     onError: () => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),

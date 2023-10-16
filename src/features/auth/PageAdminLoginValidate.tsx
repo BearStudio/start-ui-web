@@ -10,6 +10,7 @@ import { ADMIN_PATH } from '@/features/admin/constants';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
+  useOnVerificationCodeSuccess,
 } from '@/features/auth/VerificationCodeForm';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
@@ -19,7 +20,6 @@ export default function PageAdminLoginValidate() {
   const { rtlValue } = useRtl();
   const router = useRouter();
   const params = useParams();
-  const trpcContext = trpc.useContext();
   const searchParams = useSearchParams();
 
   const token = params?.token?.toString() ?? '';
@@ -29,17 +29,13 @@ export default function PageAdminLoginValidate() {
     onValidSubmit: (values) => validate.mutate({ ...values, token }),
   });
 
+  const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
+    defaultRedirect: ADMIN_PATH,
+  });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 
   const validate = trpc.auth.loginValidate.useMutation({
-    onSuccess: () => {
-      // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, {
-        isAuthenticated: true,
-      });
-
-      router.push(searchParams.get('redirect') || ADMIN_PATH || '/');
-    },
+    onSuccess: onVerificationCodeSuccess,
     onError: onVerificationCodeError,
   });
 

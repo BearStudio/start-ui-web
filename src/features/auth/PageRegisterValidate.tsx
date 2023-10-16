@@ -6,10 +6,11 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { APP_PATH } from '@/features/app/constants';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
+  useOnVerificationCodeSuccess,
 } from '@/features/auth/VerificationCodeForm';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
@@ -19,7 +20,6 @@ export default function PageRegisterValidate() {
   const { rtlValue } = useRtl();
   const router = useRouter();
   const params = useParams();
-  const trpcContext = trpc.useContext();
   const searchParams = useSearchParams();
 
   const token = params?.token?.toString() ?? '';
@@ -29,17 +29,13 @@ export default function PageRegisterValidate() {
     onValidSubmit: (values) => validate.mutate({ ...values, token }),
   });
 
+  const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
+    defaultRedirect: APP_PATH,
+  });
   const onVerificationCodeError = useOnVerificationCodeError({ form });
 
   const validate = trpc.auth.registerValidate.useMutation({
-    onSuccess: () => {
-      // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, {
-        isAuthenticated: true,
-      });
-
-      router.replace(ADMIN_PATH || '/');
-    },
+    onSuccess: onVerificationCodeSuccess,
     onError: onVerificationCodeError,
   });
 
