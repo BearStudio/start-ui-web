@@ -4,7 +4,7 @@ import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuHome, LuUser } from 'react-icons/lu';
+import { LuFolderGit2, LuHome, LuUser } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { APP_PATH } from '@/features/app/constants';
@@ -42,6 +42,12 @@ export const AppNavBarMobile = (props: BoxProps) => {
             {t('app:layout.mainMenu.home')}
           </AppNavBarMobileMainMenuItem>
           <AppNavBarMobileMainMenuItem
+            href={`${APP_PATH}/repositories`}
+            icon={LuFolderGit2}
+          >
+            {t('app:layout.mainMenu.repositories')}
+          </AppNavBarMobileMainMenuItem>
+          <AppNavBarMobileMainMenuItem
             icon={LuUser}
             href={`${APP_PATH}/account`}
           >
@@ -77,12 +83,13 @@ const AppNavBarMobileMainMenuItem = ({
       position="relative"
       fontWeight="medium"
       alignItems="center"
-      opacity={isActive ? 1 : 0.6}
+      opacity={isActive ? 1 : 0.4}
       transition="0.2s"
+      pb={1}
       flex={1}
     >
       <Icon fontSize="2xl" icon={icon} />
-      <Box fontSize="xs" opacity={isActive ? 1 : 0.8} mt={-1.5}>
+      <Box fontSize="2xs" opacity={isActive ? 1 : 0.8} mt={-1.5}>
         {children}
       </Box>
     </Flex>

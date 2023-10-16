@@ -8,7 +8,8 @@
     "loadMore": {
       "button": "تحميل المزيد",
       "display": "عرض {{loaded}} من المستودعات {{total}}."
-    }
+    },
+    "empty": "لا مستودعات"
   },
   "feedbacks": {
     "deleteRepositoryError": {

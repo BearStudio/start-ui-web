@@ -1,6 +1,7 @@
 {
   "list": {
     "title": "Repositories",
+    "empty": "No repositories",
     "actions": {
       "createRepository": "Create Repository",
       "view": "View"

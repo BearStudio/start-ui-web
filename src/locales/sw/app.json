@@ -2,7 +2,8 @@
   "layout": {
     "mainMenu": {
       "account": "Akaunti",
-      "home": "Nyumbani"
+      "home": "Nyumbani",
+      "repositories": "hazina"
     }
   }
 }

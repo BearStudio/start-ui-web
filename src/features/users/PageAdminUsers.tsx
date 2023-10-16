@@ -50,7 +50,7 @@ export default function PageAdminUsers() {
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { limit: 50, searchTerm },
+    { searchTerm },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }

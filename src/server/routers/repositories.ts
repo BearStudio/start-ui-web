@@ -6,7 +6,7 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const repositoriesRouter = createTRPCRouter({
-  getById: protectedProcedure({ authorizations: ['ADMIN'] })
+  getById: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -33,7 +33,7 @@ export const repositoriesRouter = createTRPCRouter({
       return repository;
     }),
 
-  getAll: protectedProcedure({ authorizations: ['ADMIN'] })
+  getAll: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',

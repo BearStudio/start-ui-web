@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuHome } from 'react-icons/lu';
+import { LuFolderGit2, LuHome } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
@@ -40,6 +40,12 @@ export const AppNavBarDesktop = (props: BoxProps) => {
                 icon={LuHome}
               >
                 {t('app:layout.mainMenu.home')}
+              </AppNavBarDesktopMainMenuItem>
+              <AppNavBarDesktopMainMenuItem
+                href={`${APP_PATH}/repositories`}
+                icon={LuFolderGit2}
+              >
+                {t('app:layout.mainMenu.repositories')}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar

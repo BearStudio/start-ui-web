@@ -2,7 +2,8 @@
   "layout": {
     "mainMenu": {
       "account": "حساب",
-      "home": "بيت"
+      "home": "بيت",
+      "repositories": "المستودعات"
     }
   }
 }

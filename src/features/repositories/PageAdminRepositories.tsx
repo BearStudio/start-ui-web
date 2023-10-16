@@ -44,7 +44,7 @@ export default function PageAdminRepositories() {
   const searchTerm = searchParams.get('s') ?? '';
 
   const repositories = trpc.repositories.getAll.useInfiniteQuery(
-    { limit: 50, searchTerm },
+    { searchTerm },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }

@@ -2,7 +2,8 @@
   "layout": {
     "mainMenu": {
       "account": "Compte",
-      "home": "Accueil"
+      "home": "Accueil",
+      "repositories": "Dépôts"
     }
   }
 }

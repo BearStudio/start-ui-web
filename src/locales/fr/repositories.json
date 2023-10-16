@@ -8,7 +8,8 @@
     "loadMore": {
       "button": "Charger plus",
       "display": "Affichage de {{loaded}} sur {{total}} dépôts"
-    }
+    },
+    "empty": "Aucun référentiel"
   },
   "feedbacks": {
     "deleteRepositoryError": {

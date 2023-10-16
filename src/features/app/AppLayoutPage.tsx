@@ -81,7 +81,7 @@ export const AppLayoutPage = ({
         py={6}
         {...rest}
       >
-        <PageContainer>{children}</PageContainer>
+        <PageContainer pb={16}>{children}</PageContainer>
         <Box w="full" h="0" pb="safe-bottom" />
       </Flex>
     </AppLayoutPageContext.Provider>
