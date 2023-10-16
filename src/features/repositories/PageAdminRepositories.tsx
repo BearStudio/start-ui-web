@@ -138,7 +138,7 @@ export default function PageAdminRepositories() {
                       {repository.description}
                     </Text>
                   </DataListCell>
-                  <DataListCell colWidth="4rem" colName="actions">
+                  <DataListCell colWidth="3rem" colName="actions">
                     <AdminRepositoryActions repository={repository} />
                   </DataListCell>
                 </DataListRow>

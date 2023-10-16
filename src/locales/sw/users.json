@@ -59,6 +59,9 @@
         "APP": "Programu"
       },
       "required": "Angalau idhini moja inahitajika"
+    },
+    "createdAt": {
+      "ago": "Imeundwa <dateAgo />"
     }
   },
   "update": {

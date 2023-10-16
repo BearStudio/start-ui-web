@@ -59,6 +59,9 @@
         "APP": "Application"
       },
       "required": "Au moins une autorisation est requise"
+    },
+    "createdAt": {
+      "ago": "Créé <dateAgo />"
     }
   },
   "update": {

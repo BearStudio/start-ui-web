@@ -54,6 +54,9 @@
         "ADMIN": "Admin"
       }
     },
+    "createdAt": {
+      "ago": "Created <dateAgo />"
+    },
     "status": {
       "activated": "Activated",
       "deactivated": "Not Activated"

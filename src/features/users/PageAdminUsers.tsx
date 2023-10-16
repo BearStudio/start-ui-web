@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Flex,
@@ -11,6 +10,7 @@ import {
   LinkBox,
   LinkOverlay,
   Stack,
+  Tag,
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -109,14 +109,18 @@ export default function PageAdminUsers() {
                       <Box minW="0">
                         <Text noOfLines={1} maxW="full" fontWeight="bold">
                           {user.id === account.data?.id && (
-                            <Badge
-                              size="xs"
+                            <Tag
+                              size="sm"
+                              fontSize="2xs"
                               colorScheme="success"
-                              mr="2"
+                              me="2"
                               textTransform="uppercase"
+                              lineHeight={1}
+                              px={1.5}
+                              py={0}
                             >
                               {t('users:you')}
-                            </Badge>
+                            </Tag>
                           )}
                           <LinkOverlay
                             as={Link}
@@ -137,19 +141,24 @@ export default function PageAdminUsers() {
                       </Box>
                     </HStack>
                   </DataListCell>
-                  <DataListCell colName="authorities" colWidth="0.5">
+                  <DataListCell
+                    colName="authorities"
+                    colWidth="0.5"
+                    isVisible={{ base: false, md: true }}
+                  >
                     {user.authorizations
                       .filter((a) => a !== 'APP')
                       .map((authorization) => (
-                        <Badge
+                        <Tag
                           size="sm"
                           colorScheme="warning"
                           key={authorization}
+                          lineHeight={1}
                         >
                           {t(
                             `users:data.authorizations.options.${authorization}`
                           )}
-                        </Badge>
+                        </Tag>
                       ))}
                   </DataListCell>
                   <DataListCell
@@ -166,12 +175,18 @@ export default function PageAdminUsers() {
                       color="gray.600"
                       _dark={{ color: 'gray.300' }}
                     >
-                      Created <DateAgo date={user.createdAt} />
+                      <Trans
+                        i18nKey="users:data.createdAt.ago"
+                        t={t}
+                        components={{
+                          dateAgo: <DateAgo date={user.createdAt} />,
+                        }}
+                      />
                     </Text>
                   </DataListCell>
                   <DataListCell
                     colName="status"
-                    colWidth={{ base: '2rem', md: '0.5' }}
+                    colWidth={{ base: '3rem', lg: '8rem' }}
                     align="center"
                   >
                     <UserStatus
@@ -180,7 +195,7 @@ export default function PageAdminUsers() {
                   </DataListCell>
                   <DataListCell
                     colName="actions"
-                    colWidth="4rem"
+                    colWidth="3rem"
                     align="flex-end"
                   >
                     <AdminUserActions user={user} />
