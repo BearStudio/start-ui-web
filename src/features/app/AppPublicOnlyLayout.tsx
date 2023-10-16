@@ -21,13 +21,13 @@ export const AppPublicOnlyLayout = ({ children }: AppPublicOnlyLayout) => {
           bg: 'gray.800',
         }}
       >
-        <Logo h="3rem" mb="8" mx="auto" />
+        <Logo w="16rem" mb="8" mx="auto" />
       </Center>
       <Flex flex={1} minW={0} bg="white" _dark={{ bg: 'gray.900' }}>
         <SlideIn>
           <Box px="4" py="4rem" w="22rem" maxW="full" m="auto">
             <Logo
-              h="3rem"
+              w="12rem"
               mb="8"
               mx="auto"
               display={{ base: 'block', md: 'none' }}

@@ -15,7 +15,7 @@ export const AdminPublicOnlyLayout = ({ children }: AdminPublicOnlyLayout) => {
     <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
       <SlideIn>
         <Box px="4" py="4rem" w="22rem" maxW="full" m="auto">
-          <Logo h="3rem" mb="8" mx="auto" />
+          <Logo w="12rem" mb="8" mx="auto" />
           {children}
         </Box>
       </SlideIn>

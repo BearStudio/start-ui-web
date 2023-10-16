@@ -67,7 +67,7 @@ export default function PageHome() {
           <Box flex={1}>
             <ConfirmModal
               onConfirm={() =>
-                router.push(`/logout?redirect=/${APP_PATH}/login`)
+                router.push(`/logout?redirect=${APP_PATH}/login`)
               }
               title={t('account:logout.confirm.title')}
               message={t('account:logout.confirm.message')}

@@ -1,22 +1,9 @@
 import React from 'react';
 
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  Wrap,
-} from '@chakra-ui/react';
+import { Button, Flex, Heading, Stack, Text, Wrap } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
 
-import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 

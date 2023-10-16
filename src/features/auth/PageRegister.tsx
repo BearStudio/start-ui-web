@@ -55,7 +55,32 @@ export default function PageRegister() {
 
   return (
     <Stack spacing={6}>
-      <Heading size="md">{t('auth:register.title')}</Heading>
+      <Stack spacing={1}>
+        <Heading size="md">{t('auth:register.title')}</Heading>
+        <Button
+          as={Link}
+          href={`${APP_PATH}/login`}
+          variant="link"
+          size="sm"
+          whiteSpace="normal"
+          display="inline"
+          textAlign="left"
+          fontWeight="normal"
+          px="0"
+          color="gray.500"
+          _dark={{ color: 'gray.400' }}
+        >
+          {t('auth:register.actions.alreadyHaveAnAccount')}{' '}
+          <Box
+            as="strong"
+            ms="1"
+            color="brand.500"
+            _dark={{ color: 'brand.300' }}
+          >
+            {t('auth:register.actions.login')}
+          </Box>
+        </Button>
+      </Stack>
 
       <Formiz connect={form} autoForm>
         <Stack spacing="4">
@@ -99,25 +124,6 @@ export default function PageRegister() {
           <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
         </Stack>
       </Formiz>
-
-      <Button
-        as={Link}
-        href={`${APP_PATH}/login`}
-        variant="link"
-        whiteSpace="normal"
-        display="inline"
-        textAlign="center"
-      >
-        {t('auth:register.actions.alreadyHaveAnAccount')}{' '}
-        <Box
-          as="strong"
-          ms="2"
-          color="brand.500"
-          _dark={{ color: 'brand.300' }}
-        >
-          {t('auth:register.actions.login')}
-        </Box>
-      </Button>
     </Stack>
   );
 }

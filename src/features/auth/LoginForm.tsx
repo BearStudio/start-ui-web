@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  Button,
+  ButtonProps,
+  Flex,
+  Stack,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,10 +24,12 @@ type LoginFormProps = BoxProps & {
     data: RouterOutput['auth']['login'],
     variables: RouterInput['auth']['login']
   ) => void;
+  buttonVariant?: ButtonProps['variant'];
 };
 
 export const LoginForm = ({
   onSuccess = () => undefined,
+  buttonVariant = '@primary',
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
@@ -51,7 +60,7 @@ export const LoginForm = ({
           <FieldInput
             name="email"
             size="lg"
-            label={t('auth:data.email.label')}
+            placeholder={t('auth:data.email.label')}
             required={t('auth:data.email.required')}
             validations={[
               {
@@ -67,7 +76,7 @@ export const LoginForm = ({
               isLoading={login.isLoading}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
-              variant="@primary"
+              variant={buttonVariant}
               size="lg"
               flex={1}
             >

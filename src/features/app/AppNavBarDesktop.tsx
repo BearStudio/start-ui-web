@@ -32,7 +32,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
         <Container maxW="container.md">
           <HStack spacing={4}>
             <Box as={Link} href={APP_PATH || '/'}>
-              <Logo w="10rem" />
+              <Logo />
             </Box>
             <HStack flex={1}>
               <AppNavBarDesktopMainMenuItem

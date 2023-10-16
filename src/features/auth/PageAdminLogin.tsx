@@ -27,7 +27,7 @@ export default function PageAdminLogin() {
   return (
     <Card boxShadow="layout">
       <CardHeader pb={0}>
-        <Heading size="md">{t('auth:login.title')}</Heading>
+        <Heading size="md">{t('auth:login.adminTitle')}</Heading>
       </CardHeader>
       <CardBody>
         <LoginForm onSuccess={handleOnSuccess} />
