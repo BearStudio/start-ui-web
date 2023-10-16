@@ -49,6 +49,7 @@ export default function PageHome() {
             gap={2}
             display="inline-flex"
             href={ADMIN_PATH ?? '/'}
+            target="_blank"
           >
             {t('account:admin.button')}
             <Icon icon={LuExternalLink} />
