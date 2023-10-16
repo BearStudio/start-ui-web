@@ -5,6 +5,7 @@ import {
   Badge,
   Box,
   Button,
+  Flex,
   HStack,
   Heading,
   LinkBox,
@@ -13,6 +14,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuPlus } from 'react-icons/lu';
 
@@ -27,6 +29,7 @@ import {
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
+import { SearchInput } from '@/components/SearchInput';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -34,16 +37,20 @@ import {
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { UserStatus } from '@/features/users/UserStatus';
+import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
 
 export default function PageAdminUsers() {
   const { t } = useTranslation(['users']);
+  const searchParams = useSearchParams();
+  const searchParamsUpdater = useSearchParamsUpdater();
+  const searchTerm = searchParams.get('s') ?? '';
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { limit: 50 },
+    { limit: 50, searchTerm },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
@@ -53,11 +60,23 @@ export default function PageAdminUsers() {
     <AdminLayoutPage containerMaxWidth="container.xl" nav={<AdminNav />}>
       <AdminLayoutPageContent>
         <Stack spacing={4}>
-          <HStack spacing={4}>
-            <Heading size="md" flex="1">
-              {t('users:list.title')}
-            </Heading>
-
+          <HStack spacing={4} alignItems={{ base: 'end', md: 'center' }}>
+            <Flex
+              direction={{ base: 'column', md: 'row' }}
+              rowGap={2}
+              columnGap={4}
+              alignItems={{ base: 'start', md: 'center' }}
+              flex={1}
+            >
+              <Heading flex="none" size="md">
+                {t('users:list.title')}
+              </Heading>
+              <SearchInput
+                value={searchTerm}
+                onChange={(value) => searchParamsUpdater({ s: value || null })}
+                maxW={{ base: 'none', md: '20rem' }}
+              />
+            </Flex>
             <ResponsiveIconButton
               as={Link}
               href={`${ADMIN_PATH}/management/users/create`}
@@ -78,7 +97,7 @@ export default function PageAdminUsers() {
             )}
             {users.isSuccess &&
               !users.data.pages.flatMap((p) => p.items).length && (
-                <DataListEmptyState />
+                <DataListEmptyState searchTerm={searchTerm} />
               )}
             {users.data?.pages
               .flatMap((p) => p.items)

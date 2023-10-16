@@ -300,21 +300,35 @@ export const DataListErrorState = (props: DataListErrorStateProps) => {
 export type DataListEmptyStateProps = {
   title?: ReactNode;
   children?: ReactNode;
+  searchTerm?: string;
 };
 
 export const DataListEmptyState = (props: DataListEmptyStateProps) => {
   const { t } = useTranslation(['components']);
   return (
-    <DataListRow>
+    <DataListRow
+      flex={1}
+      opacity={1}
+      _hover={{ bg: 'transparent', _dark: { bg: 'transparent' } }}
+    >
       <DataListCell>
-        <Alert status="info">
-          <AlertTitle>
-            {props.title ?? t('components:datalist.emptyTitle')}
-          </AlertTitle>
-          {!!props.children && (
-            <AlertDescription>{props.children}</AlertDescription>
-          )}
-        </Alert>
+        <Flex
+          flex={1}
+          w="full"
+          justifyContent="center"
+          alignItems="center"
+          fontSize="sm"
+          fontWeight="semibold"
+          color="gray.500"
+          _dark={{ color: 'gray.300' }}
+        >
+          {props.title ?? props.searchTerm
+            ? t('components:datalist.noResultsTitle', {
+                searchTerm: props.searchTerm,
+              })
+            : t('components:datalist.emptyTitle')}
+          {!!props.children && props.children}
+        </Flex>
       </DataListCell>
     </DataListRow>
   );

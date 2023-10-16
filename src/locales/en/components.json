@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Retry",
     "errorTitle": "Something went wrong",
-    "emptyTitle": "No Data"
+    "emptyTitle": "No Data",
+    "noResultsTitle": "No results for \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd, DD MMMM YYYY, hh:mm a"

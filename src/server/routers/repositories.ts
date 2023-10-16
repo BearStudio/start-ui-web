@@ -46,6 +46,7 @@ export const repositoriesRouter = createTRPCRouter({
       z.object({
         cursor: z.string().cuid().nullish(),
         limit: z.number().min(1).max(100).default(50),
+        searchTerm: z.string().optional(),
       })
     )
     .output(
@@ -65,8 +66,21 @@ export const repositoriesRouter = createTRPCRouter({
           orderBy: {
             name: 'asc',
           },
+          where: {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
         }),
-        ctx.db.repository.count(),
+        ctx.db.repository.count({
+          where: {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        }),
       ]);
 
       let nextCursor: typeof input.cursor | undefined = undefined;

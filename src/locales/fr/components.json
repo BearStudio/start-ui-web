@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Réessayer",
     "errorTitle": "Une erreur est survenue",
-    "emptyTitle": "Aucune donnée"
+    "emptyTitle": "Aucune donnée",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd DD MMMM YYYY, HH:mm"
@@ -28,7 +29,6 @@
     }
   },
   "errorPage": {
-    "errorCode": "Erreur {{code}}",
     "403": {
       "title": "Page non autorisée",
       "description": "Désolé, vous ne pouvez pas accéder à cette page."
@@ -37,6 +37,7 @@
       "title": "Page introuvable",
       "description": "La page n'existe pas ou l'URL a changé."
     },
+    "errorCode": "Erreur {{code}}",
     "default": {
       "title": "Erreur",
       "description": "Une erreur est survenue 😞"

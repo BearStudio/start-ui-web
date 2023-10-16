@@ -50,6 +50,7 @@ export const usersRouter = createTRPCRouter({
       z.object({
         cursor: z.string().cuid().nullish(),
         limit: z.number().min(1).max(100).default(50),
+        searchTerm: z.string().optional(),
       })
     )
     .output(
@@ -69,8 +70,41 @@ export const usersRouter = createTRPCRouter({
           orderBy: {
             id: 'desc',
           },
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
         }),
-        ctx.db.user.count(),
+        ctx.db.user.count({
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+        }),
       ]);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
