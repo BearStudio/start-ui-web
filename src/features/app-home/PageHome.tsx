@@ -9,6 +9,7 @@ import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 
 export default function PageHome() {
   const { t } = useTranslation(['appHome']);
+
   return (
     <AppLayoutPage>
       <Stack flex={1} spacing={4}>

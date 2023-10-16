@@ -13,7 +13,7 @@ import {
 import { DevCodeHint } from '@/features/devtools/DevCodeHint';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
-import { AppRouter } from '@/server/router';
+import { AppRouter } from '@/lib/trpc/types';
 
 export type VerificationCodeFormProps = {
   email: string;

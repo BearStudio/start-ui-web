@@ -3,8 +3,8 @@ import { Page } from '@playwright/test';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { APP_PATH } from '@/features/app/constants';
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
+import type { RouterInputs } from '@/lib/trpc/types';
 import locales from '@/locales';
-import { RouterInput } from '@/server/router';
 
 /**
  * Utilities constructor
@@ -26,7 +26,7 @@ export const getUtils = (page: Page) => {
     /**
      * Utility used to authenticate a user on the app
      */
-    async login(input: RouterInput['auth']['login'] & { code?: string }) {
+    async login(input: RouterInputs['auth']['login'] & { code?: string }) {
       await page.goto(`${APP_PATH}/login`);
       await page.waitForURL(`**${APP_PATH}/login`);
 
@@ -44,7 +44,7 @@ export const getUtils = (page: Page) => {
     /**
      * Utility used to authenticate an admin on the app
      */
-    async loginAdmin(input: RouterInput['auth']['login'] & { code?: string }) {
+    async loginAdmin(input: RouterInputs['auth']['login'] & { code?: string }) {
       await page.goto(`${ADMIN_PATH}/login`);
       await page.waitForURL(`**${ADMIN_PATH}/login`);
 

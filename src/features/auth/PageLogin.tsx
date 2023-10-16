@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
-import { RouterInput, RouterOutput } from '@/server/router';
+import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth', 'common']);
@@ -22,8 +22,8 @@ export default function PageLogin() {
   const searchParams = useSearchParams();
 
   const handleOnSuccess = (
-    data: RouterOutput['auth']['login'],
-    variables: RouterInput['auth']['login']
+    data: RouterOutputs['auth']['login'],
+    variables: RouterInputs['auth']['login']
   ) => {
     const urlSearchParams = new URLSearchParams(searchParams);
     urlSearchParams.set('email', variables.email);

@@ -16,12 +16,12 @@ import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
 import { DevLoginHint } from '@/features/devtools/DevLoginHint';
 import { trpc } from '@/lib/trpc/client';
-import { RouterInput, RouterOutput } from '@/server/router';
+import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 type LoginFormProps = BoxProps & {
   onSuccess?: (
-    data: RouterOutput['auth']['login'],
-    variables: RouterInput['auth']['login']
+    data: RouterOutputs['auth']['login'],
+    variables: RouterInputs['auth']['login']
   ) => void;
   buttonVariant?: ButtonProps['variant'];
 };

@@ -17,7 +17,8 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError } from '@/components/Toast';
 import { ADMIN_PATH } from '@/features/admin/constants';
-import { RouterOutputs, trpc } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 export type RepositoryActionProps = Omit<MenuProps, 'children'> & {
   repository: RouterOutputs['repositories']['getAll']['items'][number];
