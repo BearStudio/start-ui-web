@@ -47,6 +47,14 @@
     },
     "language": {
       "label": "Lugha"
+    },
+    "authorizations": {
+      "label": "Uidhinishaji",
+      "options": {
+        "ADMIN": "Msimamizi",
+        "APP": "Programu"
+      },
+      "required": "Angalau idhini moja inahitajika"
     }
   },
   "update": {

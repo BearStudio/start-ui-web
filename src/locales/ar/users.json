@@ -47,6 +47,14 @@
     },
     "language": {
       "label": "اللغة"
+    },
+    "authorizations": {
+      "label": "التراخيص",
+      "options": {
+        "ADMIN": "مسؤل",
+        "APP": "برنامج"
+      },
+      "required": "مطلوب تصريح واحد على الأقل"
     }
   },
   "update": {

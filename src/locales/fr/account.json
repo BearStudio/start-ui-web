@@ -46,5 +46,21 @@
       }
     },
     "title": "Email"
-  }
+  },
+  "logout": {
+    "button": "Se déconnecter",
+    "confirm": {
+      "button": "Se déconnecter",
+      "message": "Vous êtes sur le point de terminer votre session",
+      "title": "Déconnexion du compte"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "dark": "Mode sombre",
+      "light": "Mode lumière"
+    },
+    "title": "Préférences"
+  },
+  "title": "Compte"
 }

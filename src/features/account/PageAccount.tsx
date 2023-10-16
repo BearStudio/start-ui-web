@@ -13,6 +13,7 @@ import {
   useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
@@ -20,8 +21,10 @@ import { Icon } from '@/components/Icons';
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
+import { APP_PATH } from '@/features/app/constants';
 
 export default function PageHome() {
+  const { t } = useTranslation(['account']);
   const router = useRouter();
 
   return (
@@ -29,12 +32,12 @@ export default function PageHome() {
       <Stack spacing={6} divider={<Divider />}>
         <Heading size="md">
           <Icon icon={LuUser} mr={2} opacity={0.6} />
-          Account {/* TODO Translations */}
+          {t('account:title')}
         </Heading>
 
         <Stack direction={{ base: 'column', sm: 'row' }}>
           <Heading size="sm" flex={0.5}>
-            Profile informations {/* TODO Translations */}
+            {t('account:profile.title')}
           </Heading>
           <Box flex={1}>
             <AccountProfileForm />
@@ -43,7 +46,7 @@ export default function PageHome() {
 
         <Stack direction={{ base: 'column', sm: 'row' }}>
           <Heading size="sm" flex={0.5}>
-            Update your email {/* TODO Translations */}
+            {t('account:email.title')}
           </Heading>
           <Box flex={1}>
             <AccountEmailForm />
@@ -52,7 +55,7 @@ export default function PageHome() {
 
         <Stack direction={{ base: 'column', sm: 'row' }}>
           <Heading size="sm" flex={0.5}>
-            Preferences {/* TODO Translations */}
+            {t('account:preferences.title')}
           </Heading>
           <Stack flex={1} divider={<Divider />} spacing={4}>
             <DarkModeSwitch />
@@ -63,15 +66,15 @@ export default function PageHome() {
           <Box flex={0.5} />
           <Box flex={1}>
             <ConfirmModal
-              onConfirm={() => router.push('/logout')}
-              title="Account logout" // TODO translations
-              message="You are about to end your session" // TODO translations
-              confirmText="Logout" // TODO translations
+              onConfirm={() =>
+                router.push(`/logout?redirect=/${APP_PATH}/login`)
+              }
+              title={t('account:logout.confirm.title')}
+              message={t('account:logout.confirm.message')}
+              confirmText={t('account:logout.confirm.button')}
               confirmVariant="@danger"
             >
-              <Button variant="@danger">
-                Logout {/* TODO Translations */}
-              </Button>
+              <Button variant="@danger">{t('account:logout.button')}</Button>
             </ConfirmModal>
           </Box>
         </Stack>
@@ -81,6 +84,7 @@ export default function PageHome() {
 }
 
 const DarkModeSwitch = () => {
+  const { t } = useTranslation(['account']);
   const { colorMode, setColorMode } = useColorMode();
   const id = useId();
 
@@ -94,7 +98,7 @@ const DarkModeSwitch = () => {
           mb="0"
           mr={0}
         >
-          Light Mode {/* TODO Translations */}
+          {t('account:preferences.theme.light')}
         </FormLabel>
         <Switch
           colorScheme="brand"
@@ -108,7 +112,7 @@ const DarkModeSwitch = () => {
           htmlFor={id}
           mb="0"
         >
-          Dark Mode {/* TODO Translations */}
+          {t('account:preferences.theme.dark')}
         </FormLabel>
       </HStack>
     </FormControl>

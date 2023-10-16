@@ -37,6 +37,7 @@ import {
   LuBookOpen,
   LuCheck,
   LuCopy,
+  LuExternalLink,
   LuLogOut,
   LuMenu,
   LuMoon,
@@ -48,6 +49,7 @@ import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
 import { useAdminLayoutContext } from '@/features/admin/AdminLayout';
 import { ADMIN_PATH } from '@/features/admin/constants';
+import { APP_PATH } from '@/features/app/constants';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
@@ -101,8 +103,21 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
               href={`${ADMIN_PATH}/docs/api`}
               icon={<Icon icon={LuBookOpen} fontSize="lg" color="gray.400" />}
             >
-              Api Documentation {/* TODO translations */}
+              {t('admin:layout.accountMenu.apiDocs')}
             </MenuItem>
+
+            {account.data?.authorizations.includes('APP') && (
+              <MenuItem
+                as={Link}
+                href={APP_PATH ?? '/'}
+                target="_blank"
+                icon={
+                  <Icon icon={LuExternalLink} fontSize="lg" color="gray.400" />
+                }
+              >
+                {t('admin:layout.accountMenu.openApp')}
+              </MenuItem>
+            )}
           </MenuGroup>
 
           <MenuDivider />

@@ -1,11 +1,12 @@
 {
+  "title": "Account",
   "nav": {
     "profile": "Profile",
     "email": "Email",
     "myAccount": "My Account"
   },
   "profile": {
-    "title": "Profile",
+    "title": "Profile informations",
     "feedbacks": {
       "updateSuccess": {
         "title": "Profile updated"
@@ -19,7 +20,7 @@
     }
   },
   "email": {
-    "title": "Email",
+    "title": "Update your email",
     "feedbacks": {
       "updateSuccess": {
         "title": "Email updated"
@@ -32,7 +33,21 @@
       "update": "Update"
     }
   },
-
+  "preferences": {
+    "title": "Preferences",
+    "theme": {
+      "dark": "Dark mode",
+      "light": "Light mode"
+    }
+  },
+  "logout": {
+    "button": "Logout",
+    "confirm": {
+      "title": "Account logout",
+      "message": "You are about to end your session",
+      "button": "Logout"
+    }
+  },
   "data": {
     "name": {
       "label": "Name",

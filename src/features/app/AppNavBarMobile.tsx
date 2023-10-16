@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { LuHome, LuUser } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
@@ -11,6 +12,7 @@ import { APP_PATH } from '@/features/app/constants';
 const HEIGHT = '60px';
 
 export const AppNavBarMobile = (props: BoxProps) => {
+  const { t } = useTranslation(['app']);
   return (
     <Box display={{ base: 'block', md: 'none' }} {...props}>
       <Box h={HEIGHT} />
@@ -37,13 +39,13 @@ export const AppNavBarMobile = (props: BoxProps) => {
       >
         <Container display="flex" flexDirection="row" w="full" flex={1}>
           <AppNavBarMobileMainMenuItem icon={LuHome} href={APP_PATH || '/'}>
-            Home {/* TODO translations */}
+            {t('app:layout.mainMenu.home')}
           </AppNavBarMobileMainMenuItem>
           <AppNavBarMobileMainMenuItem
             icon={LuUser}
             href={`${APP_PATH}/account`}
           >
-            Account {/* TODO translations */}
+            {t('app:layout.mainMenu.account')}
           </AppNavBarMobileMainMenuItem>
         </Container>
       </Flex>

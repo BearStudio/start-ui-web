@@ -2,7 +2,8 @@
   "layout": {
     "mainMenu": {
       "dashboard": "Tableau de bord",
-      "repositories": "Dépôts"
+      "repositories": "Dépôts",
+      "management": "Gestion"
     },
     "accountMenu": {
       "version": {
@@ -13,20 +14,9 @@
       "switchColorModeDark": "Passer en mode sombre",
       "switchColorModeLight": "Passer en mode clair",
       "myAccount": "Mon compte",
-      "logout": "Déconnexion"
-    }
-  },
-  "dashboard": {
-    "title": "Tableau de bord",
-    "welcome": {
-      "author": "— <strong>L'équipe BearStudio</strong>",
-      "description": "Un starter UI dogmatique avec React, Chakra UI, React Query & Formiz",
-      "title": "Bienvenue dans Start UI"
-    },
-    "links": {
-      "github": "Dépôt GitHub",
-      "openIssue": "Ouvrir une issue",
-      "documentation": "Documentation"
+      "logout": "Déconnexion",
+      "apiDocs": "Documentation de l'API",
+      "openApp": "Ouvrir l'app"
     }
   }
 }

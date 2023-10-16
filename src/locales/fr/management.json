@@ -1,1 +1,7 @@
-{}
+{
+  "nav": {
+    "apiDocumentation": "Documentation API",
+    "title": "Gestion",
+    "users": "Utilisateurs"
+  }
+}

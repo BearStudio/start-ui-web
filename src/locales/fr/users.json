@@ -47,6 +47,14 @@
     },
     "language": {
       "label": "Langue"
+    },
+    "authorizations": {
+      "label": "Autorisations",
+      "options": {
+        "ADMIN": "Administrateur",
+        "APP": "Application"
+      },
+      "required": "Au moins une autorisation est requise"
     }
   },
   "update": {

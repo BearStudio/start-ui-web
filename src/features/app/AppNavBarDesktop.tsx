@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { LuHome } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
@@ -19,6 +20,7 @@ import { APP_PATH } from '@/features/app/constants';
 import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {
+  const { t } = useTranslation(['app']);
   const account = trpc.account.get.useQuery();
   const pathname = usePathname();
   const isAccountActive = pathname.startsWith(`${APP_PATH}/account`);
@@ -37,7 +39,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
                 href={APP_PATH || '/'}
                 icon={LuHome}
               >
-                Home {/* TODO translations */}
+                {t('app:layout.mainMenu.home')}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar
