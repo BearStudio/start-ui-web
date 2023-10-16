@@ -195,7 +195,7 @@ export default function PageAdminUsers() {
                   </DataListCell>
                   <DataListCell
                     colName="actions"
-                    colWidth="3rem"
+                    colWidth="4rem"
                     align="flex-end"
                   >
                     <AdminUserActions user={user} />
