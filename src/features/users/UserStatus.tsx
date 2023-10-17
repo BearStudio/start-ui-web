@@ -12,6 +12,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
       alignItems="center"
       colorScheme="success"
       gap={1}
+      whiteSpace="nowrap"
       {...rest}
     >
       <TagLeftIcon
@@ -30,6 +31,7 @@ export const UserStatus = ({ isActivated = false, ...rest }) => {
       justifyContent="center"
       alignItems="center"
       colorScheme="warning"
+      whiteSpace="nowrap"
       gap={1}
       {...rest}
     >

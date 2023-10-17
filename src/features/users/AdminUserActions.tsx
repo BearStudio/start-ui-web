@@ -135,7 +135,6 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
                 onConfirm={() => removeUser.mutate({ id: user.id })}
                 confirmText={t('common:actions.delete')}
                 confirmVariant="@danger"
-                size="sm"
               >
                 <MenuItem
                   icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}

@@ -77,6 +77,7 @@
     "react-focus-lock": "2.9.6",
     "react-i18next": "13.3.0",
     "react-icons": "4.11.0",
+    "react-modal-sheet": "2.2.0",
     "react-popper": "2.3.0",
     "react-select": "5.7.7",
     "react-use-measure": "2.1.1",

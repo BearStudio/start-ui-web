@@ -186,7 +186,7 @@ export default function PageAdminUsers() {
                   </DataListCell>
                   <DataListCell
                     colName="status"
-                    colWidth={{ base: '3rem', lg: '8rem' }}
+                    colWidth={{ base: '3rem', lg: '10rem' }}
                     align="center"
                   >
                     <UserStatus
