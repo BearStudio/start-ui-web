@@ -28,9 +28,11 @@ import { AccountProfileForm } from '@/features/account/AccountProfileForm';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 import { APP_PATH } from '@/features/app/constants';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageHome() {
   const { t } = useTranslation(['account']);
+  const account = trpc.account.get.useQuery();
   const router = useRouter();
 
   return (
@@ -41,20 +43,22 @@ export default function PageHome() {
           {t('account:title')}
         </Heading>
 
-        <Alert as={LinkBox} status="info">
-          <AlertTitle flex="none">{t('account:admin.title')}</AlertTitle>
-          <Link
-            as={LinkOverlay}
-            ms="auto"
-            gap={2}
-            display="inline-flex"
-            href={ADMIN_PATH ?? '/'}
-            target="_blank"
-          >
-            {t('account:admin.button')}
-            <Icon icon={LuExternalLink} />
-          </Link>
-        </Alert>
+        {account.isSuccess && account.data.authorizations.includes('ADMIN') && (
+          <Alert as={LinkBox} status="info">
+            <AlertTitle flex="none">{t('account:admin.title')}</AlertTitle>
+            <Link
+              as={LinkOverlay}
+              ms="auto"
+              gap={2}
+              display="inline-flex"
+              href={ADMIN_PATH ?? '/'}
+              target="_blank"
+            >
+              {t('account:admin.button')}
+              <Icon icon={LuExternalLink} />
+            </Link>
+          </Alert>
+        )}
 
         <Stack direction={{ base: 'column', sm: 'row' }}>
           <Heading size="sm" flex={0.5}>
