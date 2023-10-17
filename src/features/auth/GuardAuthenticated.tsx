@@ -54,9 +54,9 @@ export const GuardAuthenticated = ({
   }, [account.isSuccess, account.data?.language, i18n]);
 
   if (account.isSuccess) {
-    // Check if the account has all requested authorizations
+    // Check if the account has some requested authorizations
     return !authorizations ||
-      authorizations.every((a) => account.data.authorizations.includes(a)) ? (
+      authorizations.some((a) => account.data.authorizations.includes(a)) ? (
       <>{children}</>
     ) : (
       <ErrorPage errorCode={403} />
