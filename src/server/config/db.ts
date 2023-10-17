@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { LogLevel } from '@prisma/client/runtime/library';
 
 import { env } from '@/env.mjs';
 
@@ -14,7 +13,7 @@ const levels = {
   warn: ['error', 'warn'],
   error: ['error'],
   fatal: ['error'],
-} satisfies Record<string, LogLevel[]>;
+} satisfies Record<string, ('query' | 'error' | 'warn' | 'info')[]>;
 
 export const db =
   globalForPrisma.prisma ??
