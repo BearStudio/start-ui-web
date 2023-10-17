@@ -215,9 +215,10 @@ export const protectedProcedure = (
         });
       }
 
+      // Check if the user has at least one of the authorizations
       if (
         options.authorizations &&
-        options.authorizations.some((a) => !user.authorizations.includes(a))
+        !options.authorizations.some((a) => user.authorizations.includes(a))
       ) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
