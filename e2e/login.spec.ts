@@ -18,7 +18,7 @@ test.describe('Login flow', () => {
   test('Login as user', async ({ page }) => {
     const utils = getUtils(page);
 
-    await utils.login({ email: 'user@user.com' });
+    await utils.loginApp({ email: 'user@user.com' });
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -28,7 +28,7 @@ test.describe('Login flow', () => {
   test('Login with a wrong code', async ({ page }) => {
     const utils = getUtils(page);
 
-    await utils.login({ email: 'user@user.com', code: '111111' });
+    await utils.loginApp({ email: 'user@user.com', code: '111111' });
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -41,7 +41,7 @@ test.describe('Login flow', () => {
     const randomId = await randomUUID();
     const email = `${randomId}@example.com`;
 
-    await utils.login({ email });
+    await utils.loginApp({ email });
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)

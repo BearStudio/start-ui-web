@@ -26,7 +26,7 @@ export const getUtils = (page: Page) => {
     /**
      * Utility used to authenticate a user on the app
      */
-    async login(input: RouterInputs['auth']['login'] & { code?: string }) {
+    async loginApp(input: RouterInputs['auth']['login'] & { code?: string }) {
       await page.goto(`${APP_PATH}/login`);
       await page.waitForURL(`**${APP_PATH}/login`);
 
