@@ -9,7 +9,7 @@ import { LuFolderGit2, LuHome, LuUser } from 'react-icons/lu';
 import { Icon } from '@/components/Icons';
 import { APP_PATH } from '@/features/app/constants';
 
-const HEIGHT = '60px';
+const HEIGHT = 'calc(60px+env(safe-area-inset-bottom))';
 
 export const AppNavBarMobile = (props: BoxProps) => {
   const { t } = useTranslation(['app']);
@@ -19,7 +19,7 @@ export const AppNavBarMobile = (props: BoxProps) => {
       <Flex
         zIndex={3}
         align="center"
-        pt="safe-bottom"
+        pb="safe-bottom"
         position="fixed"
         direction="column"
         bottom={0}
