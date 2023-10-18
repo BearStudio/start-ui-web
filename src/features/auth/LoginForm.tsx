@@ -73,7 +73,6 @@ export const LoginForm = ({
               variant={buttonVariant}
               size="lg"
               flex={1}
-              noOfLines={1}
             >
               {t('auth:login.actions.login')}
             </Button>
