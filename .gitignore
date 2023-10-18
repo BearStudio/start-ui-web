@@ -63,3 +63,5 @@ prisma/dev.db-journal
 **/public/workbox-*.js*
 **/public/sw.js*
 **/public/worker-development.js*
+
+certificates
