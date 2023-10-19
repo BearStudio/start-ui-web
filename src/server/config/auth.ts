@@ -58,11 +58,19 @@ export const getServerAuthSession = async () => {
 };
 
 export const decodeJwt = (token: string) => {
-  const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
-  if (!jwtDecoded || typeof jwtDecoded !== 'object' || !('id' in jwtDecoded)) {
+  try {
+    const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
+    if (
+      !jwtDecoded ||
+      typeof jwtDecoded !== 'object' ||
+      !('id' in jwtDecoded)
+    ) {
+      return null;
+    }
+    return jwtDecoded;
+  } catch {
     return null;
   }
-  return jwtDecoded;
 };
 
 export function generateCode() {
