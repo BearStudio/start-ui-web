@@ -68,7 +68,6 @@ export const Document = ({ children }: { children: ReactNode }) => {
           initialColorMode={theme.config.initialColorMode}
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
-
         <Providers>
           <TrpcProvider>
             <Viewport>{children}</Viewport>

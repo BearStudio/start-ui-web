@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Flex, UseDisclosureProps, useDisclosure } from '@chakra-ui/react';

@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 
 import { Box } from '@chakra-ui/react';

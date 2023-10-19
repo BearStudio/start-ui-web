@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode } from 'react';
 
 import { AppPublicOnlyLayout } from '@/features/app/AppPublicOnlyLayout';

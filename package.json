@@ -67,6 +67,7 @@
     "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "next": "13.5.6",
+    "nextjs-toploader": "1.5.3",
     "nodemailer": "6.9.6",
     "pino": "8.16.0",
     "pino-pretty": "10.2.3",
