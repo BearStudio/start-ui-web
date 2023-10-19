@@ -53,7 +53,7 @@ export default function PageLoginValidate() {
       <Formiz connect={form} autoForm>
         <VerificationCodeForm
           email={email ?? ''}
-          isLoading={validate.isLoading}
+          isLoading={validate.isLoading || validate.isSuccess}
         />
       </Formiz>
     </Stack>

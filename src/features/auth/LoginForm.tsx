@@ -67,7 +67,7 @@ export const LoginForm = ({
 
           <Flex>
             <Button
-              isLoading={login.isLoading}
+              isLoading={login.isLoading || login.isSuccess}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant={buttonVariant}

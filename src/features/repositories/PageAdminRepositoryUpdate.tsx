@@ -108,7 +108,9 @@ export default function PageAdminRepositoryUpdate() {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={updateRepository.isLoading}
+                  isLoading={
+                    updateRepository.isLoading || updateRepository.isSuccess
+                  }
                 >
                   {t('repositories:update.action.save')}
                 </Button>

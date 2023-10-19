@@ -128,7 +128,7 @@ export default function PageAdminUserUpdate() {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={userUpdate.isLoading}
+                  isLoading={userUpdate.isLoading || userUpdate.isSuccess}
                 >
                   {t('users:update.action.save')}
                 </Button>
