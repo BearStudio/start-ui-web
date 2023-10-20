@@ -91,7 +91,7 @@ export const authRouter = createTRPCRouter({
       }
 
       ctx.logger.info('Creating code');
-      const code = generateCode();
+      const code = await generateCode();
 
       ctx.logger.info('Saving code and token to database');
       await ctx.db.verificationToken.create({
@@ -260,7 +260,7 @@ export const authRouter = createTRPCRouter({
       // If we got here, the user exists and email is verified, no need to
       // register, send the email to login the user.
       ctx.logger.info('Creating code');
-      const code = generateCode();
+      const code = await generateCode();
 
       ctx.logger.info('Creating verification token in database');
       await ctx.db.verificationToken.create({
