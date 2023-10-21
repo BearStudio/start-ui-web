@@ -143,9 +143,7 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
       }}
       dayPickerProps={{
         ...dayPickerProps,
-        ...(!defaultDisabledDays?.length
-          ? {}
-          : { disabled: defaultDisabledDays }),
+        disabled: defaultDisabledDays as Array<TODO>,
       }}
       inputProps={{
         id,

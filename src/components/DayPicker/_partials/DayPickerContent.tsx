@@ -122,7 +122,7 @@ export const DayPickerContent = forwardRef<
                     arePastDaysDisabled
                       ? [
                           { before: dayjs().startOf('day').toDate() },
-                          //TODO fix typage
+                          // TODO fix typage
                           ...((dayPickerProps?.disabled as Array<TODO>) || []),
                         ]
                       : dayPickerProps?.disabled

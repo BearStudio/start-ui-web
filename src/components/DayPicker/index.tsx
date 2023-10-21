@@ -159,13 +159,14 @@ export const DayPicker: FC<DayPickerProps> = ({
         data-test={inputProps?.['data-test'] ?? 'day-picker-input'}
         {...inputProps} // on veut que le style s'applique sur l'input (bg par exemple)
       />
-      <InputRightElement zIndex={1}>
+      <InputRightElement>
         <IconButton
           ref={buttonRef}
           aria-label="Toggle calendar"
           bg="transparent"
           _hover={{ bg: 'transparent', color: 'gray.500' }}
           _active={{ bg: 'transparent', color: 'gray.600' }}
+          border="none"
           icon={<Icon icon={FiCalendar} />}
           size={size}
           p={0}
