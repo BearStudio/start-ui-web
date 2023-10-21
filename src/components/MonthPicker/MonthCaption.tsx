@@ -12,7 +12,12 @@ export const MonthCaption = () => {
 
   return (
     <HStack justifyContent="space-between">
-      <Text fontWeight="700" color="gray.600" fontSize="sm">
+      <Text
+        fontWeight="700"
+        color="gray.600"
+        fontSize="sm"
+        _dark={{ color: 'white' }}
+      >
         {year}
       </Text>
       <Navbar
