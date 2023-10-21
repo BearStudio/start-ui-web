@@ -94,7 +94,15 @@ export const DayPickerContent = forwardRef<
           disabled={!isCalendarFocused}
           onDeactivation={() => setTimeout(() => buttonRef.current?.focus(), 0)} // setTimeout recommandé par FocusLock
         >
-          <Box shadow="md" bg="white" p={1} {...rest}>
+          <Box
+            shadow="md"
+            bg="white"
+            p={1}
+            _dark={{
+              bg: 'gray.800',
+            }}
+            {...rest}
+          >
             {mode === 'DAY' ? (
               <>
                 <ReactDayPicker
