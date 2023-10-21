@@ -1,10 +1,15 @@
 {
   "list": {
-    "title": "Gestion des dépôts",
+    "title": "Dépôts",
     "actions": {
       "createRepository": "Créer un dépôt",
       "view": "Voir"
-    }
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} sur {{total}} dépôts"
+    },
+    "empty": "Aucun dépôt"
   },
   "feedbacks": {
     "deleteRepositoryError": {

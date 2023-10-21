@@ -11,7 +11,8 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LuHome } from 'react-icons/lu';
+import { useTranslation } from 'react-i18next';
+import { LuFolderGit2, LuHome } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
@@ -19,6 +20,7 @@ import { APP_PATH } from '@/features/app/constants';
 import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {
+  const { t } = useTranslation(['app']);
   const account = trpc.account.get.useQuery();
   const pathname = usePathname();
   const isAccountActive = pathname.startsWith(`${APP_PATH}/account`);
@@ -30,14 +32,20 @@ export const AppNavBarDesktop = (props: BoxProps) => {
         <Container maxW="container.md">
           <HStack spacing={4}>
             <Box as={Link} href={APP_PATH || '/'}>
-              <Logo w="10rem" />
+              <Logo />
             </Box>
-            <HStack flex={1}>
+            <HStack flex={1} spacing={0}>
               <AppNavBarDesktopMainMenuItem
                 href={APP_PATH || '/'}
                 icon={LuHome}
               >
-                Home {/* TODO translations */}
+                {t('app:layout.mainMenu.home')}
+              </AppNavBarDesktopMainMenuItem>
+              <AppNavBarDesktopMainMenuItem
+                href={`${APP_PATH}/repositories`}
+                icon={LuFolderGit2}
+              >
+                {t('app:layout.mainMenu.repositories')}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar

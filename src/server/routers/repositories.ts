@@ -6,7 +6,7 @@ import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const repositoriesRouter = createTRPCRouter({
-  getById: protectedProcedure({ authorizations: ['ADMIN'] })
+  getById: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -33,7 +33,7 @@ export const repositoriesRouter = createTRPCRouter({
       return repository;
     }),
 
-  getAll: protectedProcedure({ authorizations: ['ADMIN'] })
+  getAll: protectedProcedure({ authorizations: ['APP', 'ADMIN'] })
     .meta({
       openapi: {
         method: 'GET',
@@ -44,31 +44,54 @@ export const repositoriesRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        page: z.number().int().gte(1).default(1),
-        size: z.number().int().gte(1).default(20),
+        cursor: z.string().cuid().optional(),
+        limit: z.number().min(1).max(100).default(20),
+        searchTerm: z.string().optional(),
       })
     )
     .output(
       z.object({
         items: z.array(zRepository()),
+        nextCursor: z.string().cuid().optional(),
         total: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      ctx.logger.info('Getting repositories using pagination');
+      ctx.logger.info('Getting repositories from database');
       const [items, total] = await Promise.all([
         ctx.db.repository.findMany({
-          skip: (input.page - 1) * input.size,
-          take: input.size,
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
           orderBy: {
             name: 'asc',
           },
+          where: {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
         }),
-        ctx.db.repository.count(),
+        ctx.db.repository.count({
+          where: {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        }),
       ]);
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
 
       return {
         items,
+        nextCursor,
         total,
       };
     }),

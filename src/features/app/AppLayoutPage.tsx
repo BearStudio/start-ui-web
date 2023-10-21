@@ -78,10 +78,12 @@ export const AppLayoutPage = ({
         zIndex="1"
         direction="column"
         flex="1"
-        py={6}
+        pt="safe-top"
         {...rest}
       >
-        <PageContainer>{children}</PageContainer>
+        <PageContainer pt={4} pb={16}>
+          {children}
+        </PageContainer>
         <Box w="full" h="0" pb="safe-bottom" />
       </Flex>
     </AppLayoutPageContext.Provider>

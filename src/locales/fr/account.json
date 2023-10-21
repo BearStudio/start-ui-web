@@ -5,7 +5,6 @@
     "email": "Email"
   },
   "profile": {
-    "title": "Profil",
     "feedbacks": {
       "updateSuccess": {
         "title": "Mis à jour avec succès"
@@ -16,7 +15,8 @@
     },
     "actions": {
       "update": "Mettre à jour"
-    }
+    },
+    "title": "Informations du profil"
   },
   "data": {
     "name": {
@@ -45,6 +45,26 @@
         "title": "Email mis à jour"
       }
     },
-    "title": "Email"
+    "title": "Mettez à jour votre email"
+  },
+  "logout": {
+    "button": "Se déconnecter",
+    "confirm": {
+      "button": "Se déconnecter",
+      "message": "Vous êtes sur le point de terminer votre session",
+      "title": "Déconnexion du compte"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "dark": "Mode sombre",
+      "light": "Mode lumière"
+    },
+    "title": "Préférences"
+  },
+  "title": "Compte",
+  "admin": {
+    "button": "Ouvrir l'interface d'administration",
+    "title": "Utilisateur administrateur"
   }
 }

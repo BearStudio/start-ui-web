@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "أعد المحاولة",
     "errorTitle": "هناك خطأ ما",
-    "emptyTitle": "لايوجد بيانات"
+    "emptyTitle": "لايوجد بيانات",
+    "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd, DD MMMM YYYY, hh:mm a"

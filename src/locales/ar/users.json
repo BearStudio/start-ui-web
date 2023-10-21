@@ -3,6 +3,10 @@
     "title": "إدارة المستخدمين ",
     "actions": {
       "createUser": "إنشاء مستخدم"
+    },
+    "loadMore": {
+      "button": "تحميل المزيد",
+      "display": "عرض {{محملة}} من {{total}} من المستخدمين"
     }
   },
   "feedbacks": {
@@ -47,6 +51,17 @@
     },
     "language": {
       "label": "اللغة"
+    },
+    "authorizations": {
+      "label": "التراخيص",
+      "options": {
+        "ADMIN": "مسؤل",
+        "APP": "برنامج"
+      },
+      "required": "مطلوب تصريح واحد على الأقل"
+    },
+    "createdAt": {
+      "ago": "تم الإنشاء <dateAgo />"
     }
   },
   "update": {

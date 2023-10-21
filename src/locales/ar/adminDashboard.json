@@ -1,0 +1,13 @@
+{
+  "links": {
+    "github": "مستودع Github",
+    "openIssue": "إفتح مشكلة",
+    "documentation": "توثيق"
+  },
+  "welcome": {
+    "author": "- من <strong>فريق BearStudio</strong>",
+    "description": "منشئ واجهات المستخدم غير الموضوعي بإستخدام React، Chakra UI، React Query و Formiz",
+    "title": "مرحبًا بك في Start UI"
+  },
+  "title": "لوحة القيادة"
+}

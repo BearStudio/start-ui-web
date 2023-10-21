@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Jaribu tena",
     "errorTitle": "Hitilafu fulani imetokea",
-    "emptyTitle": "Hakuna Data"
+    "emptyTitle": "Hakuna Data",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "siku DD MMMM YYYY, HH:mm"

@@ -1,5 +1,8 @@
 import account from './account.json';
 import admin from './admin.json';
+import adminDashboard from './adminDashboard.json';
+import app from './app.json';
+import appHome from './appHome.json';
 import auth from './auth.json';
 import common from './common.json';
 import components from './components.json';
@@ -10,12 +13,15 @@ import users from './users.json';
 
 export default {
   account,
-  management,
+  admin,
+  adminDashboard,
+  app,
+  appHome,
   auth,
   common,
   components,
-  admin,
   emails,
+  management,
   repositories,
   users,
 } as const;

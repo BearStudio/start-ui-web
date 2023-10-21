@@ -5,7 +5,6 @@
     "email": "Barua pepe"
   },
   "profile": {
-    "title": "Wasifu",
     "feedbacks": {
       "updateSuccess": {
         "title": "Imesasishwa"
@@ -16,7 +15,8 @@
     },
     "actions": {
       "update": "Sasisha"
-    }
+    },
+    "title": "Maelezo ya wasifu"
   },
   "data": {
     "name": {
@@ -45,6 +45,26 @@
         "title": "Barua pepe imesasishwa"
       }
     },
-    "title": "Barua pepe"
+    "title": "Sasisha barua pepe yako"
+  },
+  "logout": {
+    "button": "Ondoka",
+    "confirm": {
+      "button": "Ondoka",
+      "message": "Unakaribia kumaliza kipindi chako",
+      "title": "Kuondoka kwa akaunti"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "dark": "Hali ya giza",
+      "light": "Hali ya mwanga"
+    },
+    "title": "Mapendeleo"
+  },
+  "title": "Akaunti",
+  "admin": {
+    "button": "Fungua Utawala",
+    "title": "Mtumiaji wa msimamizi"
   }
 }

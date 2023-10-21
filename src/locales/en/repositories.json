@@ -1,9 +1,14 @@
 {
   "list": {
-    "title": "Repositories' Management",
+    "title": "Repositories",
+    "empty": "No repositories",
     "actions": {
       "createRepository": "Create Repository",
       "view": "View"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} repositories"
     }
   },
   "deleteModal": {

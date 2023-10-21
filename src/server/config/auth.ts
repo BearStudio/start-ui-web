@@ -1,5 +1,6 @@
 import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
@@ -58,17 +59,27 @@ export const getServerAuthSession = async () => {
 };
 
 export const decodeJwt = (token: string) => {
-  const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
-  if (!jwtDecoded || typeof jwtDecoded !== 'object' || !('id' in jwtDecoded)) {
+  try {
+    const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
+    if (
+      !jwtDecoded ||
+      typeof jwtDecoded !== 'object' ||
+      !('id' in jwtDecoded)
+    ) {
+      return null;
+    }
+    return jwtDecoded;
+  } catch {
     return null;
   }
-  return jwtDecoded;
 };
 
-export function generateCode() {
-  return env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
-    ? VALIDATION_CODE_MOCKED
-    : randomInt(0, 999999).toString().padStart(6, '0');
+export async function generateCode() {
+  const code =
+    env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
+      ? VALIDATION_CODE_MOCKED
+      : randomInt(0, 999999).toString().padStart(6, '0');
+  return await bcrypt.hash(code, 12);
 }
 
 export async function validateCode({
@@ -118,7 +129,9 @@ export async function validateCode({
   }
 
   ctx.logger.info('Checking code');
-  if (verificationToken.code !== code) {
+  const isCodeValid = await bcrypt.compare(code, verificationToken.code);
+
+  if (!isCodeValid) {
     ctx.logger.warn('Invalid code');
 
     try {

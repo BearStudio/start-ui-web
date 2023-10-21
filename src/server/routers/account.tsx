@@ -128,7 +128,7 @@ export const accountRouter = createTRPCRouter({
       // If we got here, the user can update the email
       // and we send the email to verify the new email.
       ctx.logger.info('Creating code');
-      const code = generateCode();
+      const code = await generateCode();
 
       ctx.logger.info('Creating verification token in database');
       await ctx.db.verificationToken.create({

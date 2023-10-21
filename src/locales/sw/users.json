@@ -28,6 +28,10 @@
     "title": "Usimamizi wa Mtumiaji",
     "actions": {
       "createUser": "Unda mtumiaji"
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha watumiaji {{loaded}} kati ya {{total}}"
     }
   },
   "data": {
@@ -47,6 +51,17 @@
     },
     "language": {
       "label": "Lugha"
+    },
+    "authorizations": {
+      "label": "Uidhinishaji",
+      "options": {
+        "ADMIN": "Msimamizi",
+        "APP": "Programu"
+      },
+      "required": "Angalau idhini moja inahitajika"
+    },
+    "createdAt": {
+      "ago": "Imeundwa <dateAgo />"
     }
   },
   "update": {

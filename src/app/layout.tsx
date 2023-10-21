@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { Metadata } from 'next';
 
 import { Document } from '@/app/Document';
+import { NextLoader } from '@/app/NextLoader';
 
 export const metadata: Metadata = {
   applicationName: 'Start UI [web]',
@@ -14,5 +15,10 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  return <Document>{children}</Document>;
+  return (
+    <Document>
+      <NextLoader />
+      {children}
+    </Document>
+  );
 }

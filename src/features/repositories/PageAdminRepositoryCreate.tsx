@@ -70,7 +70,9 @@ export default function PageAdminRepositoryCreate() {
               <Button
                 type="submit"
                 variant="@primary"
-                isLoading={createRepository.isLoading}
+                isLoading={
+                  createRepository.isLoading || createRepository.isSuccess
+                }
               >
                 {t('repositories:create.action.save')}
               </Button>

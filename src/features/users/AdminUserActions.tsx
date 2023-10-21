@@ -19,7 +19,8 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { ADMIN_PATH } from '@/features/admin/constants';
-import { RouterOutputs, trpc } from '@/lib/trpc/client';
+import { trpc } from '@/lib/trpc/client';
+import type { RouterOutputs } from '@/lib/trpc/types';
 
 export type AdminUserActionProps = Omit<MenuProps, 'children'> & {
   user: RouterOutputs['users']['getAll']['items'][number];
@@ -134,7 +135,6 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
                 onConfirm={() => removeUser.mutate({ id: user.id })}
                 confirmText={t('common:actions.delete')}
                 confirmVariant="@danger"
-                size="sm"
               >
                 <MenuItem
                   icon={<Icon icon={LuTrash2} fontSize="lg" color="gray.400" />}

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
-import { RouterInput, RouterOutput } from '@/server/router';
+import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 export default function PageAdminLogin() {
   const { t } = useTranslation(['auth']);
@@ -14,8 +14,8 @@ export default function PageAdminLogin() {
   const searchParams = useSearchParams();
 
   const handleOnSuccess = (
-    data: RouterOutput['auth']['login'],
-    variables: RouterInput['auth']['login']
+    data: RouterOutputs['auth']['login'],
+    variables: RouterInputs['auth']['login']
   ) => {
     const urlSearchParams = new URLSearchParams(searchParams);
     urlSearchParams.set('email', variables.email);
@@ -27,7 +27,7 @@ export default function PageAdminLogin() {
   return (
     <Card boxShadow="layout">
       <CardHeader pb={0}>
-        <Heading size="md">{t('auth:login.title')}</Heading>
+        <Heading size="md">{t('auth:login.adminTitle')}</Heading>
       </CardHeader>
       <CardBody>
         <LoginForm onSuccess={handleOnSuccess} />

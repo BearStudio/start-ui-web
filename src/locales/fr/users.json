@@ -28,6 +28,10 @@
     "title": "Gestion des utilisateurs",
     "actions": {
       "createUser": "Créer un utilisateur"
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} utilisateurs sur {{total}}"
     }
   },
   "data": {
@@ -47,6 +51,17 @@
     },
     "language": {
       "label": "Langue"
+    },
+    "authorizations": {
+      "label": "Autorisations",
+      "options": {
+        "ADMIN": "Administrateur",
+        "APP": "Application"
+      },
+      "required": "Au moins une autorisation est requise"
+    },
+    "createdAt": {
+      "ago": "Créé <dateAgo />"
     }
   },
   "update": {

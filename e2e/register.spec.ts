@@ -58,7 +58,7 @@ test.describe('Register flow', () => {
       .getByRole('button', { name: locales.en.auth.register.actions.create })
       .click();
 
-    await utils.login({ email });
+    await utils.loginApp({ email });
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)

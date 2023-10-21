@@ -48,31 +48,74 @@ export const usersRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        page: z.number().int().gte(1).default(1),
-        size: z.number().int().gte(1).default(20),
+        cursor: z.string().cuid().optional(),
+        limit: z.number().min(1).max(100).default(20),
+        searchTerm: z.string().optional(),
       })
     )
     .output(
       z.object({
         items: z.array(zUser()),
+        nextCursor: z.string().cuid().optional(),
         total: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      ctx.logger.info('Getting users using pagination');
+      ctx.logger.info('Getting users from database');
       const [items, total] = await Promise.all([
         ctx.db.user.findMany({
-          skip: (input.page - 1) * input.size,
-          take: input.size,
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
           orderBy: {
             id: 'desc',
           },
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
         }),
-        ctx.db.user.count(),
+        ctx.db.user.count({
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                email: {
+                  contains: input.searchTerm,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+        }),
       ]);
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
 
       return {
         items,
+        nextCursor,
         total,
       };
     }),

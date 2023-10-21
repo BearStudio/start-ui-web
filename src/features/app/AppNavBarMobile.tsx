@@ -3,21 +3,23 @@ import React, { ReactNode } from 'react';
 import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LuHome, LuUser } from 'react-icons/lu';
+import { useTranslation } from 'react-i18next';
+import { LuFolderGit2, LuHome, LuUser } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { APP_PATH } from '@/features/app/constants';
 
-const HEIGHT = '60px';
+const HEIGHT = 'calc(60px+env(safe-area-inset-bottom))';
 
 export const AppNavBarMobile = (props: BoxProps) => {
+  const { t } = useTranslation(['app']);
   return (
     <Box display={{ base: 'block', md: 'none' }} {...props}>
       <Box h={HEIGHT} />
       <Flex
         zIndex={3}
         align="center"
-        pt="safe-bottom"
+        pb="safe-bottom"
         position="fixed"
         direction="column"
         bottom={0}
@@ -37,13 +39,19 @@ export const AppNavBarMobile = (props: BoxProps) => {
       >
         <Container display="flex" flexDirection="row" w="full" flex={1}>
           <AppNavBarMobileMainMenuItem icon={LuHome} href={APP_PATH || '/'}>
-            Home {/* TODO translations */}
+            {t('app:layout.mainMenu.home')}
+          </AppNavBarMobileMainMenuItem>
+          <AppNavBarMobileMainMenuItem
+            href={`${APP_PATH}/repositories`}
+            icon={LuFolderGit2}
+          >
+            {t('app:layout.mainMenu.repositories')}
           </AppNavBarMobileMainMenuItem>
           <AppNavBarMobileMainMenuItem
             icon={LuUser}
             href={`${APP_PATH}/account`}
           >
-            Account {/* TODO translations */}
+            {t('app:layout.mainMenu.account')}
           </AppNavBarMobileMainMenuItem>
         </Container>
       </Flex>
@@ -75,12 +83,13 @@ const AppNavBarMobileMainMenuItem = ({
       position="relative"
       fontWeight="medium"
       alignItems="center"
-      opacity={isActive ? 1 : 0.6}
+      opacity={isActive ? 1 : 0.4}
       transition="0.2s"
+      pb={1}
       flex={1}
     >
       <Icon fontSize="2xl" icon={icon} />
-      <Box fontSize="xs" opacity={isActive ? 1 : 0.8} mt={-1.5}>
+      <Box fontSize="2xs" opacity={isActive ? 1 : 0.8} mt={-1.5}>
         {children}
       </Box>
     </Flex>

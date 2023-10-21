@@ -7,10 +7,10 @@ export const Logo = ({ ...rest }: ComponentProps<typeof chakra.svg>) => {
   const gradientId = useId();
   return (
     <chakra.svg
-      h="1.8rem"
       fill="none"
       viewBox="0 0 673 116"
       maxW="full"
+      w="10rem"
       {...rest}
     >
       <title>Start UI</title>
