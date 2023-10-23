@@ -21,7 +21,7 @@ import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageAdminRepositoryCreate() {
   const { t } = useTranslation(['common', 'repositories']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const router = useRouter();
 
   const toastError = useToastError();
@@ -29,7 +29,7 @@ export default function PageAdminRepositoryCreate() {
 
   const createRepository = trpc.repositories.create.useMutation({
     onSuccess: async () => {
-      await trpcContext.repositories.getAll.invalidate();
+      await trpcUtils.repositories.getAll.invalidate();
       toastSuccess({
         title: t('repositories:create.feedbacks.updateSuccess.title'),
       });

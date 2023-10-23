@@ -10,7 +10,7 @@ export default function PageLogout() {
   const router = useRouter();
   const queryCache = useQueryClient();
   const logout = trpc.auth.logout.useMutation();
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function PageLogout() {
       await logout.mutate();
       queryCache.clear();
       // Optimistic Update
-      trpcContext.auth.checkAuthenticated.setData(undefined, {
+      trpcUtils.auth.checkAuthenticated.setData(undefined, {
         isAuthenticated: false,
       });
       router.replace(searchParams.get('redirect') || '/');
@@ -30,7 +30,7 @@ export default function PageLogout() {
     queryCache,
     router,
     logout,
-    trpcContext.auth.checkAuthenticated,
+    trpcUtils.auth.checkAuthenticated,
   ]);
 
   return (

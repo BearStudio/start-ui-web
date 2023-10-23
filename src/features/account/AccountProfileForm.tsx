@@ -17,7 +17,7 @@ import { trpc } from '@/lib/trpc/client';
 
 export const AccountProfileForm = () => {
   const { t } = useTranslation(['common', 'account']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const account = trpc.account.get.useQuery(undefined, {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -28,7 +28,7 @@ export const AccountProfileForm = () => {
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
-      await trpcContext.account.invalidate();
+      await trpcUtils.account.invalidate();
       toastSuccess({
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });

@@ -29,7 +29,7 @@ import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageAdminRepositoryUpdate() {
   const { t } = useTranslation(['common', 'repositories']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
 
   const params = useParams();
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function PageAdminRepositoryUpdate() {
 
   const updateRepository = trpc.repositories.updateById.useMutation({
     onSuccess: async () => {
-      await trpcContext.repositories.invalidate();
+      await trpcUtils.repositories.invalidate();
       toastSuccess({
         title: t('repositories:update.feedbacks.updateSuccess.title'),
       });

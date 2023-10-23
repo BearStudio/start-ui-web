@@ -19,14 +19,14 @@ import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 export default function PageAdminUserCreate() {
   const { t } = useTranslation(['common', 'users']);
   const router = useRouter();
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
 
   const toastError = useToastError();
   const toastSuccess = useToastSuccess();
 
   const createUser = trpc.users.create.useMutation({
     onSuccess: async () => {
-      await trpcContext.users.getAll.invalidate();
+      await trpcUtils.users.getAll.invalidate();
       toastSuccess({
         title: t('users:create.feedbacks.updateSuccess.title'),
       });

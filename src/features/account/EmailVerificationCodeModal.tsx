@@ -27,11 +27,11 @@ export const EmailVerificationCodeModale = () => {
   const searchParamsUpdater = useSearchParamsUpdater();
   const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
   const token = searchParams.get('token');
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const toastSuccess = useToastSuccess();
 
   const onClose = () => {
-    trpcContext.account.get.reset();
+    trpcUtils.account.get.reset();
     searchParamsUpdater(
       {
         [SEARCH_PARAM_VERIFY_EMAIL]: null,

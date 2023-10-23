@@ -30,7 +30,7 @@ import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageAdminUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
 
   const params = useParams();
   const router = useRouter();
@@ -49,7 +49,7 @@ export default function PageAdminUserUpdate() {
 
   const userUpdate = trpc.users.updateById.useMutation({
     onSuccess: async () => {
-      await trpcContext.users.invalidate();
+      await trpcUtils.users.invalidate();
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
