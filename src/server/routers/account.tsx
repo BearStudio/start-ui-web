@@ -139,7 +139,7 @@ export const accountRouter = createTRPCRouter({
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
             .toDate(),
-          code,
+          code: code.hashed,
         },
       });
 
@@ -153,7 +153,7 @@ export const accountRouter = createTRPCRouter({
           <EmailAddressChange
             language={ctx.user.language}
             name={ctx.user.name ?? ''}
-            code={code}
+            code={code.readable}
           />
         ),
       });

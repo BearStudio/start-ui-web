@@ -79,7 +79,10 @@ export async function generateCode() {
     env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
       ? VALIDATION_CODE_MOCKED
       : randomInt(0, 999999).toString().padStart(6, '0');
-  return await bcrypt.hash(code, 12);
+  return {
+    hashed: await bcrypt.hash(code, 12),
+    readable: code,
+  };
 }
 
 export async function validateCode({

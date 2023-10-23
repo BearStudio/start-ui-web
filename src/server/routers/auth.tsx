@@ -100,7 +100,7 @@ export const authRouter = createTRPCRouter({
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
             .toDate(),
-          code,
+          code: code.hashed,
           token,
         },
       });
@@ -113,7 +113,7 @@ export const authRouter = createTRPCRouter({
           <EmailLoginCode
             language={user.language}
             name={user.name ?? ''}
-            code={code}
+            code={code.readable}
           />
         ),
       });
@@ -270,7 +270,7 @@ export const authRouter = createTRPCRouter({
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
             .toDate(),
-          code,
+          code: code.hashed,
         },
       });
 
@@ -284,7 +284,7 @@ export const authRouter = createTRPCRouter({
           <EmailRegisterCode
             language={newUser.language}
             name={newUser.name ?? ''}
-            code={code}
+            code={code.readable}
           />
         ),
       });
