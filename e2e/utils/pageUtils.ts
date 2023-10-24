@@ -13,7 +13,7 @@ import locales from '@/locales';
  * ```ts
  * test.describe('My scope', () => {
  *   test('My test', async ({ page }) => {
- *     const utils = getUtils(page);
+ *     const utils = pageUtils(page);
  *
  *     // No need too pass page on each util
  *     await utils.login(...)
@@ -21,7 +21,7 @@ import locales from '@/locales';
  * })
  * ```
  */
-export const getUtils = (page: Page) => {
+export const pageUtils = (page: Page) => {
   return {
     /**
      * Utility used to authenticate a user on the app

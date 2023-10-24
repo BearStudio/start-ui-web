@@ -57,7 +57,11 @@ export const AdminLayout: FC<React.PropsWithChildren<unknown>> = ({
 
   return (
     <AdminLayoutContext.Provider value={providerValue}>
-      <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
+      <Viewport
+        data-testid="admin-layout"
+        bg="gray.50"
+        _dark={{ bg: 'gray.900' }}
+      >
         {!!navDisplayed && (
           <AdminNavBar
             display={
