@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
+import { parse } from 'superjson';
 import { z } from 'zod';
 
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
@@ -12,6 +13,7 @@ import {
 } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
+import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
 import i18n from '@/lib/i18n/server';
 import {
   deleteUsedCode,
@@ -20,6 +22,7 @@ import {
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
+import { getS3UploadSignedUrl } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
@@ -49,7 +52,8 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(
-      zUserAccount().required().pick({
+      zUserAccount().pick({
+        image: true,
         name: true,
         language: true,
       })
