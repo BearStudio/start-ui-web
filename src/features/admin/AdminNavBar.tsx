@@ -89,7 +89,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
           <Avatar
             size="sm"
-            icon={<></>}
+            src={account.data?.image ?? undefined}
             name={account.data?.name ?? account.data?.email ?? ''}
           >
             {account.isLoading && <Spinner size="xs" />}

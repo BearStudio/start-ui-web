@@ -20,6 +20,9 @@
     "confirmText": "Leave without saving",
     "cancelText": "Stay on the page"
   },
+  "files": {
+    "invalid": "Provided file must be of type : {{acceptedTypes}}"
+  },
   "filter": "Filter",
   "clear": "Clear",
   "submit": "Submit"

@@ -25,7 +25,7 @@ A live read-only demonstration of what you will have when starting a project wit
 
 - [NodeJS](https://nodejs.org/) >=20
 - [Pnpm](https://pnpm.io/)
-- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
+- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database and an [S3 compatible](https://aws.amazon.com/s3/) service)
 
 ## Getting Started
 
@@ -53,14 +53,17 @@ cp .env.example .env
 pnpm install
 ```
 
-3. Setup and start the db with docker
+3. Setup and start the services (database and S3) with docker
 ```bash
 pnpm dk:init
 ```
+
 > [!NOTE]
 > **Don't want to use docker?**
 >
 > Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
+> For S3, Start UI  [web] comes with a Minio service. You can use any online S3 compatible services and update the
+> environment variables accordingly.
 
 ## Development
 

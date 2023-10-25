@@ -20,6 +20,9 @@
     "message": "Vous êtes sur le point de quitter la page sans sauvegarder vos modifications.",
     "title": "Quitter la page ?"
   },
+  "files": {
+    "invalid": "Le fichier doit être de type : {{acceptedTypes}}"
+  },
   "filter": "Filtrer",
   "clear": "Effacer",
   "submit": "Soumettre"

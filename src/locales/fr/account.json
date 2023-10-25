@@ -11,6 +11,9 @@
       },
       "updateError": {
         "title": "Échec de la mise à jour"
+      },
+      "uploadError": {
+        "title": "Échec de l'import"
       }
     },
     "actions": {
@@ -19,6 +22,11 @@
     "title": "Informations du profil"
   },
   "data": {
+    "avatar": {
+      "label": "Avatar",
+      "inputText": "Modifier l'avatar...",
+      "required": "L'avatar est requis"
+    },
     "name": {
       "label": "Nom"
     },

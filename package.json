@@ -29,7 +29,7 @@
     "test:ui": "vitest --ui",
     "e2e": "dotenv -- cross-var playwright test",
     "e2e:ui": "dotenv -- cross-var playwright test --ui",
-    "dk:init": "docker compose up -d && sleep 10 && pnpm db:init",
+    "dk:init": "docker compose up -d",
     "dk:start": "docker compose start",
     "dk:stop": "docker compose stop",
     "dk:clear": "docker compose down --volumes",
@@ -42,6 +42,8 @@
     "*.{ts,tsx,js,jsx,json}": "prettier --write"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.435.0",
+    "@aws-sdk/s3-request-presigner": "3.435.0",
     "@chakra-ui/anatomy": "2.2.2",
     "@chakra-ui/next-js": "2.2.0",
     "@chakra-ui/react": "2.8.2",

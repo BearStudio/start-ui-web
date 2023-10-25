@@ -18,6 +18,7 @@ import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
+import { useAvatarFetch, useAvatarUpload } from '@/features/account/service';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -30,6 +31,13 @@ export const AccountProfileForm = () => {
   const account = trpc.account.get.useQuery(undefined, {
     staleTime: Infinity,
   });
+
+  const accountAvatar = useAvatarFetch(account.data?.image || '');
+
+  const toastSuccess = useToastSuccess();
+  const toastError = useToastError();
+
+  const uploadFile = useAvatarUpload();
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -53,11 +61,26 @@ export const AccountProfileForm = () => {
     values: {
       name: account.data?.name ?? '',
       language: account.data?.language ?? DEFAULT_LANGUAGE_KEY,
+      image: accountAvatar.data ?? undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = (values) => {
-    updateAccount.mutate(values);
+  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = async ({
+    image,
+    ...values
+  }) => {
+    let fileUrl = account.data?.image;
+    try {
+      if (image?.file) {
+        const uploadResponse = await uploadFile.mutateAsync(image?.file);
+        fileUrl = uploadResponse.fileUrl;
+      }
+      updateAccount.mutate({ ...values, image: fileUrl });
+    } catch (e) {
+      form.setError('image', {
+        message: t('account:profile.feedbacks.uploadError.title'),
+      });
+    }
   };
 
   return (
@@ -68,6 +91,18 @@ export const AccountProfileForm = () => {
         <Stack spacing={4}>
           <Form {...form} onSubmit={onSubmit}>
             <Stack spacing={4}>
+              <FormField>
+                <FormFieldLabel>
+                  {t('account:data.avatar.label')}
+                </FormFieldLabel>
+                <FormFieldController
+                  name="image"
+                  type="upload"
+                  control={form.control}
+                  inputText={t('account:data.avatar.inputText')}
+                />
+              </FormField>
+
               <FormField>
                 <FormFieldLabel>{t('account:data.name.label')}</FormFieldLabel>
                 <FormFieldController

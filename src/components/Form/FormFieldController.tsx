@@ -21,6 +21,7 @@ import { FieldSelect, FieldSelectProps } from './FieldSelect';
 import { FieldSwitch, FieldSwitchProps } from './FieldSwitch';
 import { FieldText, FieldTextProps } from './FieldText';
 import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
+import { FieldUpload, FieldUploadProps } from './FieldUpload';
 
 type FormFieldSize = 'sm' | 'md' | 'lg';
 
@@ -49,6 +50,7 @@ export type FormFieldControllerProps<
   // -- ADD NEW FIELD PROPS TYPE HERE --
   | FieldCheckboxProps<TFieldValues, TName>
   | FieldSwitchProps<TFieldValues, TName>
+  | FieldUploadProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
   | FieldTextareaProps<TFieldValues, TName>
   | FieldSelectProps<TFieldValues, TName>
@@ -115,6 +117,8 @@ export const FormFieldController = <
 
       case 'switch':
         return <FieldSwitch {...props} />;
+      case 'upload':
+        return <FieldUpload {...props} />;
 
       // -- ADD NEW FIELD COMPONENT HERE --
     }
