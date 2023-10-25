@@ -8,6 +8,7 @@ export const zUserAccount = () =>
     id: true,
     name: true,
     email: true,
+    image: true,
     authorizations: true,
     language: true,
   });

@@ -7,8 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
+import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useUploadFile } from '@/hooks/useUploadFile';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -25,6 +27,8 @@ export const AccountProfileForm = () => {
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
+
+  const uploadFile = useUploadFile();
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -43,14 +47,23 @@ export const AccountProfileForm = () => {
   const form = useForm<{
     name: string;
     language: string;
+    image: FieldUploadValue;
   }>({
     initialValues: {
       name: account.data?.name ?? undefined,
-
       language: account.data?.language ?? undefined,
     },
-    onValidSubmit: (values) => {
-      updateAccount.mutate(values);
+    onValidSubmit: async ({ image, ...values }) => {
+      try {
+        const { fileUrl } = await uploadFile.mutateAsync({
+          fileName: image.name,
+          contentType: image.type ?? '',
+          file: image.file,
+        });
+        updateAccount.mutate({ ...values, image: fileUrl });
+      } catch {
+        form.setErrors({ image: 'Upload fail' }); // TODO translations
+      }
     },
   });
 
@@ -63,6 +76,11 @@ export const AccountProfileForm = () => {
           <Formiz connect={form}>
             <form noValidate onSubmit={form.submit}>
               <Stack spacing={4}>
+                <FieldUpload
+                  name="image"
+                  label="Avatar" // TODO: translations
+                  required
+                />
                 <FieldInput
                   name="name"
                   label={t('account:data.name.label')}
@@ -81,7 +99,7 @@ export const AccountProfileForm = () => {
                   <Button
                     type="submit"
                     variant="@primary"
-                    isLoading={updateAccount.isLoading}
+                    isLoading={updateAccount.isLoading || uploadFile.isLoading}
                     isDisabled={!form.isValid && form.isSubmitted}
                   >
                     {t('account:profile.actions.update')}

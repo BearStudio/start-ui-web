@@ -18,6 +18,7 @@ export const zUser = () =>
     updatedAt: z.date(),
     name: z.string().nullish(),
     email: z.string().trim().toLowerCase(),
+    image: z.string().url().nullish(),
     authorizations: z.array(zUserAuthorization()).catch(['APP']),
     accountStatus: zUserAccountStatus(),
     language: z.string().default(DEFAULT_LANGUAGE_KEY),
