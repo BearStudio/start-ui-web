@@ -21,8 +21,6 @@ import { Icon } from '@/components/Icons';
 
 export type DayPickerNavigationMode = 'DAY' | 'MONTH';
 
-const DEFAULT_DAY_PICKER_WIDTH = 180;
-
 export type DayPickerProps = {
   id?: string;
   value?: Date;
@@ -63,11 +61,11 @@ export const DayPicker: FC<DayPickerProps> = ({
 
   const size = inputProps?.size ?? 'sm';
 
-  // Gestion du focus du DayPicker
+  // DayPicker focus management
   const [isCalendarFocused, setIsCalendarFocused] = useState<boolean>(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  //Gestion du popper
+  // Popper management
   const onClosePopper = () => {
     onClose?.(value);
     setMode('DAY');
@@ -85,7 +83,6 @@ export const DayPicker: FC<DayPickerProps> = ({
   const { setPopperElement, togglePopper, openPopper, closePopper } =
     popperManagement;
 
-  // Gestion de changement de value (DayPicker et Input)
   const onChangeInput = (newDate?: Date, updateMonth = false) => {
     onChange(newDate);
     if (updateMonth) {
@@ -111,7 +108,7 @@ export const DayPicker: FC<DayPickerProps> = ({
     }
   };
 
-  // Gestion du changement de mois
+  // Month change management
   const hookMonthNavigation = useDayPickerMonthNavigation(value);
   const { setMode, setMonth, selectMonth } = hookMonthNavigation;
 
@@ -120,7 +117,7 @@ export const DayPicker: FC<DayPickerProps> = ({
     setMonth(date);
   };
 
-  // Le select va faire basculer le calendrier en mode jour après sélection
+  // Change to day view once we have selected a month on the month picker
   const handleSelectMonth = (date: Date) => {
     onMonthChange?.(date);
     selectMonth(date);
@@ -129,7 +126,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   const valueRef = useRef(value);
   valueRef.current = value;
 
-  // on ouvre automatiquement le calendrier au focus seulement si on a pas encore de valeur
+  // Open day picker on focus only if there is no value
   const manageOpenOnFocus = () => {
     if (!valueRef.current) {
       openPopper();
@@ -137,15 +134,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   };
 
   return (
-    // on override le data-test pour ne pas qu'il soit dupliqué entre InputGroup et Input
-    // si on force la width de l'input, on veut que la width du groupe soit la même
-    <InputGroup
-      ref={containerRef}
-      size={size}
-      width={inputProps.width}
-      maxW={DEFAULT_DAY_PICKER_WIDTH}
-      data-test="day-picker-input-group'"
-    >
+    <InputGroup ref={containerRef} size={size} width={inputProps.width}>
       <Input
         ref={inputRef}
         id={id}
@@ -156,8 +145,7 @@ export const DayPicker: FC<DayPickerProps> = ({
         onFocus={() => manageOpenOnFocus()}
         isDisabled={isDisabled}
         autoFocus={autoFocus}
-        data-test={inputProps?.['data-test'] ?? 'day-picker-input'}
-        {...inputProps} // on veut que le style s'applique sur l'input (bg par exemple)
+        {...inputProps} // We want the style to be applied on the input (like the background)
       />
       <InputRightElement>
         <IconButton

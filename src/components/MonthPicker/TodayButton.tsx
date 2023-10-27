@@ -1,9 +1,11 @@
 import { Button } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useMonthPickerContext } from './MonthPickerContext';
 import { useYearContext } from './YearContext';
 
 export const TodayButton = () => {
+  const { t } = useTranslation(['components']);
   const { setYear } = useYearContext();
   const { onTodayButtonClick } = useMonthPickerContext();
 
@@ -22,7 +24,7 @@ export const TodayButton = () => {
       onClick={handleClick}
       size="sm"
     >
-      Aujourd'hui
+      {t('monthPicker.today')}
     </Button>
   );
 };

@@ -66,5 +66,25 @@
       "title": "Hitilafu"
     },
     "errorCode": "Hitilafu {{code}}"
+  },
+  "dayPicker": {
+    "today": "Leo"
+  },
+  "monthPicker": {
+    "today": "Leo",
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Machi",
+      "april": "Aprili",
+      "may": "Mei",
+      "june": "Juni",
+      "july": "Julai",
+      "august": "Agosti",
+      "september": "Septemba",
+      "october": "Oktoba",
+      "november": "Novemba",
+      "december": "Desemba"
+    }
   }
 }

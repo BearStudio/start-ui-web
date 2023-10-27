@@ -39,7 +39,6 @@ export type FieldDayPickerProps<FormattedValue = Dayjs> = FieldProps<
 export const FieldDayPicker: FC<FieldDayPickerProps> = ({
   invalidMessage = 'Date invalide',
   dayPickerProps,
-  required,
   ...restFieldProps
 }) => {
   const getValidations = useCallback<
@@ -80,6 +79,7 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
     value,
     errorMessage,
     otherProps,
+    isRequired,
   } = useField(restFieldProps, {
     formatValue: (value: Dayjs | null) => (!!value ? dayjs(value) : undefined),
     validations: getValidations(),
@@ -109,7 +109,7 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
     helper,
     errorMessage,
     showError: shouldDisplayError,
-    isRequired: !!required,
+    isRequired,
     ...(noFormGroup ? {} : rest),
   };
 
@@ -147,13 +147,12 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
       }}
       inputProps={{
         id,
-        'data-test': restFieldProps.name,
         ...inputProps,
       }}
       isDisabled={isDisabled}
       usePortal={usePortal}
       autoFocus={autoFocus}
-      required={!!required}
+      required={isRequired}
       hasTodayButton={hasTodayButton}
       popperPlacement={popperPlacement}
       dateFormat={dateFormat}
@@ -165,9 +164,5 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
     return content;
   }
 
-  return (
-    <FormGroup width="fit-content" {...formGroupProps}>
-      {content}
-    </FormGroup>
-  );
+  return <FormGroup {...formGroupProps}>{content}</FormGroup>;
 };

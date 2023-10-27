@@ -9,6 +9,7 @@ import {
   DayPicker as ReactDayPicker,
 } from 'react-day-picker';
 import FocusLock from 'react-focus-lock';
+import { useTranslation } from 'react-i18next';
 
 import { DayPickerProps } from '@/components/DayPicker';
 import { Caption, Day } from '@/components/DayPicker/_partials';
@@ -59,6 +60,7 @@ export const DayPickerContent = forwardRef<
     }: DayPickerContentProps,
     ref
   ) => {
+    const { t } = useTranslation(['components']);
     const { mode, toggleMode, month } = hookMonthNavigation;
     // Gestion des modifiers et leurs styles
     const modifiers: DayModifiers = {
@@ -151,7 +153,7 @@ export const DayPickerContent = forwardRef<
                               isCalendarFocused ? undefined : closePopper()
                             } // fix le problème de tabulation qui ne reste pas bloqué sur la popper
                           >
-                            Aujourd'hui
+                            {t('dayPicker.today')}
                           </Button>
                         ),
                       }

@@ -66,5 +66,25 @@
     "sortDescending": "Descendant",
     "sortBy": "Trier par",
     "order": "Ordre"
+  },
+  "dayPicker": {
+    "today": "Aujourd'hui"
+  },
+  "monthPicker": {
+    "today": "Aujourd'hui",
+    "months": {
+      "january": "Janvier",
+      "february": "Février",
+      "march": "Mars",
+      "april": "Avril",
+      "may": "Mai",
+      "june": "Juin",
+      "july": "Juillet",
+      "august": "Août",
+      "september": "Septembre",
+      "october": "Octobre",
+      "november": "Novembre",
+      "december": "Décembre"
+    }
   }
 }
