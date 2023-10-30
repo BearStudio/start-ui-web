@@ -119,7 +119,7 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   return (
     <Item
       px="3"
-      py="2"
+      py="1"
       borderRadius={isMenu ? undefined : 'md'}
       transition="0.2s"
       fontSize="sm"
