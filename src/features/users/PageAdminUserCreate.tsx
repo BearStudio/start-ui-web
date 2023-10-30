@@ -54,7 +54,7 @@ export default function PageAdminUserCreate() {
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
         <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
           <HStack>
-            <Heading size="md" flex={1}>
+            <Heading size="sm" flex={1}>
               {t('users:create.title')}
             </Heading>
             <Button
