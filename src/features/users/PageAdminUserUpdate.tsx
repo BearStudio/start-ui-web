@@ -93,7 +93,7 @@ export default function PageAdminUserUpdate() {
               ) : (
                 <Flex
                   flexDirection={{ base: 'column', md: 'row' }}
-                  alignItems="center"
+                  alignItems={{ base: 'start', md: 'center' }}
                   rowGap={1}
                   columnGap={4}
                 >
