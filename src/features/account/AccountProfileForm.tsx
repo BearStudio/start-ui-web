@@ -81,7 +81,6 @@ export const AccountProfileForm = () => {
                   <Button
                     type="submit"
                     variant="@primary"
-                    ms="auto"
                     isLoading={updateAccount.isLoading}
                   >
                     {t('account:profile.actions.update')}

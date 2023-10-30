@@ -40,7 +40,7 @@ export default function PageAdminLoginValidate() {
   });
 
   return (
-    <Card boxShadow="layout">
+    <Card boxShadow="card">
       <CardHeader pb={0}>
         <Button
           me="auto"

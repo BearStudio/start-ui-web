@@ -72,6 +72,7 @@ export default function PageAdminUsers() {
                 {t('users:list.title')}
               </Heading>
               <SearchInput
+                size="sm"
                 value={searchTerm}
                 onChange={(value) => searchParamsUpdater({ s: value || null })}
                 maxW={{ base: 'none', md: '20rem' }}
@@ -81,6 +82,7 @@ export default function PageAdminUsers() {
               as={Link}
               href={`${ADMIN_PATH}/management/users/create`}
               variant="@primary"
+              size="sm"
               icon={<LuPlus />}
             >
               {t('users:list.actions.createUser')}
@@ -191,6 +193,7 @@ export default function PageAdminUsers() {
                   >
                     <UserStatus
                       isActivated={user.accountStatus === 'ENABLED'}
+                      showLabelBreakpoint="lg"
                     />
                   </DataListCell>
                   <DataListCell

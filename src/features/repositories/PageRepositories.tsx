@@ -48,7 +48,7 @@ export default function PageRepositories() {
           repositories.data.pages
             .flatMap((p) => p.items)
             .map((repository) => (
-              <Card as={LinkBox} key={repository.id} shadow="layout">
+              <Card as={LinkBox} key={repository.id} shadow="card">
                 <CardBody>
                   <Stack>
                     <Heading size="sm">{repository.name}</Heading>

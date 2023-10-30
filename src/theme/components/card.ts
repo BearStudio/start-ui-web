@@ -29,4 +29,9 @@ const variants = {
 
 export const cardTheme = defineMultiStyleConfig({
   variants,
+  baseStyle: {
+    container: {
+      boxShadow: 'card',
+    },
+  },
 });

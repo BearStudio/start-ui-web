@@ -78,9 +78,9 @@
     }
   },
   "create": {
-    "title": "Unda mtumiaji mpya",
+    "title": "Mtumiaji Mpya",
     "action": {
-      "save": "Unda mtumiaji"
+      "save": "Unda"
     },
     "feedbacks": {
       "updateError": {

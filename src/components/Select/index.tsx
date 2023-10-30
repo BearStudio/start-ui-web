@@ -55,6 +55,13 @@ export const Select = <
         valueContainer: (provided) => ({
           ...provided,
           padding: 0,
+          pl: 1,
+        }),
+        multiValue: (provided) => ({
+          ...provided,
+          _first: {
+            ml: -1,
+          },
         }),
       }}
       {...props}

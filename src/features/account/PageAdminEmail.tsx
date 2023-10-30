@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardBody, Heading } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
@@ -19,11 +19,7 @@ export default function PageAdminEmail() {
         <Heading size="md" mb="4">
           {t('account:email.title')}
         </Heading>
-        <Card>
-          <CardBody>
-            <AccountEmailForm />
-          </CardBody>
-        </Card>
+        <AccountEmailForm />
       </AdminLayoutPageContent>
     </AdminLayoutPage>
   );

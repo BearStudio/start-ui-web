@@ -3,8 +3,6 @@ import React from 'react';
 import {
   Box,
   ButtonGroup,
-  Card,
-  CardBody,
   HStack,
   Heading,
   IconButton,
@@ -56,13 +54,13 @@ export default function PageAdminRepository() {
   });
 
   return (
-    <AdminLayoutPage showNavBar="desktop">
+    <AdminLayoutPage showNavBar="desktop" containerMaxWidth="container.md">
       <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack>
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
             {repository.isSuccess && (
-              <Heading size="md">{repository.data?.name}</Heading>
+              <Heading size="sm">{repository.data?.name}</Heading>
             )}
           </Box>
           <ButtonGroup>
@@ -70,6 +68,7 @@ export default function PageAdminRepository() {
               as={Link}
               href={`${ADMIN_PATH}/repositories/${params?.id}/update`}
               icon={<LuPenLine />}
+              size="sm"
             >
               {t('common:actions.edit')}
             </ResponsiveIconButton>
@@ -93,50 +92,45 @@ export default function PageAdminRepository() {
                 icon={<LuTrash2 />}
                 isDisabled={!repository.data}
                 isLoading={repositoryRemove.isLoading}
+                size="sm"
               />
             </ConfirmModal>
           </ButtonGroup>
         </HStack>
       </AdminLayoutPageTopBar>
-      <AdminLayoutPageContent containerMaxWidth="container.md">
+      <AdminLayoutPageContent>
         {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
-          <Card>
-            <CardBody>
-              <Stack spacing={4}>
-                <Box>
-                  <Text fontSize="sm" fontWeight="bold">
-                    {t('repositories:data.name.label')}
-                  </Text>
-                  <Text>{repository.data?.name}</Text>
-                </Box>
-                <Box
-                  role="group"
-                  as="a"
-                  href={repository.data?.link}
-                  target="_blank"
-                >
-                  <Text fontSize="sm" fontWeight="bold">
-                    {t('repositories:data.link.label')}
-                    <Icon marginLeft={1} icon={LuExternalLink} />
-                  </Text>
+          <Stack spacing={4}>
+            <Box>
+              <Text fontSize="sm" fontWeight="bold">
+                {t('repositories:data.name.label')}
+              </Text>
+              <Text>{repository.data?.name}</Text>
+            </Box>
+            <Box
+              role="group"
+              as="a"
+              href={repository.data?.link}
+              target="_blank"
+            >
+              <Text fontSize="sm" fontWeight="bold">
+                {t('repositories:data.link.label')}
+                <Icon marginLeft={1} icon={LuExternalLink} />
+              </Text>
 
-                  <Text _groupHover={{ textDecoration: 'underline' }}>
-                    {repository.data?.link}
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontSize="sm" fontWeight="bold">
-                    {t('repositories:data.description.label')}
-                  </Text>
-                  <Text>
-                    {repository.data?.description || <small>-</small>}
-                  </Text>
-                </Box>
-              </Stack>
-            </CardBody>
-          </Card>
+              <Text _groupHover={{ textDecoration: 'underline' }}>
+                {repository.data?.link}
+              </Text>
+            </Box>
+            <Box>
+              <Text fontSize="sm" fontWeight="bold">
+                {t('repositories:data.description.label')}
+              </Text>
+              <Text>{repository.data?.description || <small>-</small>}</Text>
+            </Box>
+          </Stack>
         )}
       </AdminLayoutPageContent>
     </AdminLayoutPage>

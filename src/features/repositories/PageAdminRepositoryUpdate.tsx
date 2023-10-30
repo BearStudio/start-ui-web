@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  Button,
-  ButtonGroup,
-  Heading,
-  SkeletonText,
-  Text,
-} from '@chakra-ui/react';
+import { Button, HStack, Heading, SkeletonText, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +10,6 @@ import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import {
   AdminLayoutPage,
-  AdminLayoutPageBottomBar,
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
@@ -80,45 +73,39 @@ export default function PageAdminRepositoryUpdate() {
   });
 
   return (
-    <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-      <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-        {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
-        {repository.isSuccess && (
-          <>
-            <Heading size="md">{repository.data?.name}</Heading>
-            <Text fontSize="xs" color="gray.600" _dark={{ color: 'gray.300' }}>
-              {t('repositories:data.id.label')}: {repository.data?.id}
-            </Text>
-          </>
+    <Formiz connect={form} autoForm>
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
+          <HStack>
+            <Stack flex={1} spacing={0}>
+              {repository.isLoading && (
+                <SkeletonText maxW="6rem" noOfLines={2} />
+              )}
+              {repository.isSuccess && (
+                <Heading size="sm">{repository.data?.name}</Heading>
+              )}
+            </Stack>
+            <Button
+              type="submit"
+              variant="@primary"
+              size="sm"
+              isLoading={
+                updateRepository.isLoading || updateRepository.isSuccess
+              }
+              isDisabled={!form.isValid && form.isSubmitted}
+            >
+              {t('repositories:update.action.save')}
+            </Button>
+          </HStack>
+        </AdminLayoutPageTopBar>
+        {!isReady && <LoaderFull />}
+        {isReady && repository.isError && <ErrorPage />}
+        {isReady && repository.isSuccess && (
+          <AdminLayoutPageContent>
+            <RepositoryForm />
+          </AdminLayoutPageContent>
         )}
-      </AdminLayoutPageTopBar>
-      {!isReady && <LoaderFull />}
-      {isReady && repository.isError && <ErrorPage />}
-      {isReady && repository.isSuccess && (
-        <Formiz connect={form}>
-          <form noValidate onSubmit={form.submit}>
-            <AdminLayoutPageContent>
-              <RepositoryForm />
-            </AdminLayoutPageContent>
-            <AdminLayoutPageBottomBar>
-              <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => router.back()}>
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={
-                    updateRepository.isLoading || updateRepository.isSuccess
-                  }
-                >
-                  {t('repositories:update.action.save')}
-                </Button>
-              </ButtonGroup>
-            </AdminLayoutPageBottomBar>
-          </form>
-        </Formiz>
-      )}
-    </AdminLayoutPage>
+      </AdminLayoutPage>
+    </Formiz>
   );
 }

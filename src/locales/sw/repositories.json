@@ -39,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "Sasisha Hifadhi"
+      "save": "Sasisha"
     },
     "feedbacks": {
       "updateError": {
@@ -60,9 +60,9 @@
       }
     },
     "action": {
-      "save": "Unda Hifadhi"
+      "save": "Unda"
     },
-    "title": "Unda Hifadhi Mpya"
+    "title": "Hifadhi Mpya"
   },
   "deleteModal": {
     "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",

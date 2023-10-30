@@ -67,6 +67,7 @@ export default function PageAdminRepositories() {
               </Heading>
               <SearchInput
                 value={searchTerm}
+                size="sm"
                 onChange={(value) => searchParamsUpdater({ s: value || null })}
                 maxW={{ base: 'none', md: '20rem' }}
               />
@@ -75,6 +76,7 @@ export default function PageAdminRepositories() {
               as={Link}
               href={`${ADMIN_PATH}/repositories/create`}
               variant="@primary"
+              size="sm"
               icon={<LuPlus />}
             >
               {t('repositories:list.actions.createRepository')}

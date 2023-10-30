@@ -125,9 +125,15 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
       fontSize="sm"
       fontWeight="bold"
       bg={isActive ? 'white' : 'transparent'}
+      border="1px solid transparent"
+      boxShadow={isActive ? 'card' : undefined}
       color={isActive ? 'gray.700' : 'gray.600'}
+      borderColor={isActive ? 'gray.100' : undefined}
+      borderLeft={isMenu ? 'none' : undefined}
+      borderRight={isMenu ? 'none' : undefined}
       _dark={{
         color: isActive ? 'white' : 'gray.100',
+        borderColor: isActive ? 'gray.800' : undefined,
         bg: isActive ? 'gray.800' : 'transparent',
       }}
       _hover={

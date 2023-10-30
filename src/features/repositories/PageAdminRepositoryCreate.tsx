@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, ButtonGroup, Heading } from '@chakra-ui/react';
+import { Button, HStack, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import {
   AdminLayoutPage,
-  AdminLayoutPageBottomBar,
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
@@ -53,33 +52,30 @@ export default function PageAdminRepositoryCreate() {
   });
 
   return (
-    <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-      <Formiz connect={form}>
-        <form noValidate onSubmit={form.submit}>
-          <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-            <Heading size="md">{t('repositories:create.title')}</Heading>
-          </AdminLayoutPageTopBar>
-          <AdminLayoutPageContent>
-            <RepositoryForm />
-          </AdminLayoutPageContent>
-          <AdminLayoutPageBottomBar>
-            <ButtonGroup justifyContent="space-between">
-              <Button onClick={() => router.back()}>
-                {t('common:actions.cancel')}
-              </Button>
-              <Button
-                type="submit"
-                variant="@primary"
-                isLoading={
-                  createRepository.isLoading || createRepository.isSuccess
-                }
-              >
-                {t('repositories:create.action.save')}
-              </Button>
-            </ButtonGroup>
-          </AdminLayoutPageBottomBar>
-        </form>
-      </Formiz>
-    </AdminLayoutPage>
+    <Formiz connect={form} autoForm>
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
+          <HStack>
+            <Heading size="md" flex={1}>
+              {t('repositories:create.title')}
+            </Heading>
+            <Button
+              type="submit"
+              variant="@primary"
+              size="sm"
+              isLoading={
+                createRepository.isLoading || createRepository.isSuccess
+              }
+              isDisabled={!form.isValid && form.isSubmitted}
+            >
+              {t('repositories:create.action.save')}
+            </Button>
+          </HStack>
+        </AdminLayoutPageTopBar>
+        <AdminLayoutPageContent>
+          <RepositoryForm />
+        </AdminLayoutPageContent>
+      </AdminLayoutPage>
+    </Formiz>
   );
 }
