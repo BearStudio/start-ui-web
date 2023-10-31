@@ -141,9 +141,12 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
           ? {
               bg: 'white',
               color: 'gray.700',
+              boxShadow: 'card',
+              borderColor: 'gray.100',
               _dark: {
                 bg: 'gray.700',
                 color: 'gray.100',
+                borderColor: 'gray.800',
               },
             }
           : {}

@@ -3,6 +3,8 @@ import React from 'react';
 import {
   Box,
   ButtonGroup,
+  Card,
+  CardBody,
   HStack,
   Heading,
   IconButton,
@@ -102,35 +104,41 @@ export default function PageAdminRepository() {
         {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
-          <Stack spacing={4}>
-            <Box>
-              <Text fontSize="sm" fontWeight="bold">
-                {t('repositories:data.name.label')}
-              </Text>
-              <Text>{repository.data?.name}</Text>
-            </Box>
-            <Box
-              role="group"
-              as="a"
-              href={repository.data?.link}
-              target="_blank"
-            >
-              <Text fontSize="sm" fontWeight="bold">
-                {t('repositories:data.link.label')}
-                <Icon marginLeft={1} icon={LuExternalLink} />
-              </Text>
+          <Card>
+            <CardBody>
+              <Stack spacing={4}>
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.name.label')}
+                  </Text>
+                  <Text>{repository.data?.name}</Text>
+                </Box>
+                <Box
+                  role="group"
+                  as="a"
+                  href={repository.data?.link}
+                  target="_blank"
+                >
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.link.label')}
+                    <Icon marginLeft={1} icon={LuExternalLink} />
+                  </Text>
 
-              <Text _groupHover={{ textDecoration: 'underline' }}>
-                {repository.data?.link}
-              </Text>
-            </Box>
-            <Box>
-              <Text fontSize="sm" fontWeight="bold">
-                {t('repositories:data.description.label')}
-              </Text>
-              <Text>{repository.data?.description || <small>-</small>}</Text>
-            </Box>
-          </Stack>
+                  <Text _groupHover={{ textDecoration: 'underline' }}>
+                    {repository.data?.link}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold">
+                    {t('repositories:data.description.label')}
+                  </Text>
+                  <Text>
+                    {repository.data?.description || <small>-</small>}
+                  </Text>
+                </Box>
+              </Stack>
+            </CardBody>
+          </Card>
         )}
       </AdminLayoutPageContent>
     </AdminLayoutPage>
