@@ -71,7 +71,7 @@
   },
   "update": {
     "action": {
-      "save": "Update User"
+      "save": "Update"
     },
     "feedbacks": {
       "updateError": {
