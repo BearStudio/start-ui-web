@@ -99,6 +99,7 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           {!isDisabled && search ? (
             <IconButton
               onClick={handleClear}
+              variant="@secondary"
               size="xs"
               aria-label={clearLabel ?? t('components:searchInput.clear')}
               pointerEvents="auto"
