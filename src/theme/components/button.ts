@@ -107,6 +107,9 @@ export const buttonTheme = defineStyleConfig({
       variantSecondary({ ...props, colorScheme: 'brand' }),
     '@danger': (props) => variantSecondary({ ...props, colorScheme: 'error' }),
     // Default variants
+    link: {
+      boxShadow: 'none',
+    },
     solid: (props) =>
       props.colorScheme === 'gray' ? variantSecondary(props) : {},
     outline: variantSecondary,
