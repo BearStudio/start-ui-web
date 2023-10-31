@@ -82,6 +82,7 @@ export const AccountProfileForm = () => {
                     type="submit"
                     variant="@primary"
                     isLoading={updateAccount.isLoading}
+                    isDisabled={!profileForm.isValid && profileForm.isSubmitted}
                   >
                     {t('account:profile.actions.update')}
                   </Button>
