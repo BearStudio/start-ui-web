@@ -39,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "تحديث"
+      "save": "يحفظ"
     },
     "feedbacks": {
       "updateError": {

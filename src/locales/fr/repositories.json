@@ -39,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "Mettre à jour"
+      "save": "Sauvegarder"
     },
     "feedbacks": {
       "updateError": {
