@@ -86,7 +86,7 @@ Emails templates are built with `react-email` components in the `src/emails` fol
 
 You can preview an email template at `http://localhost:3000/devtools/email/templates/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
 
-Example: [Reset Password](http://localhost:3000/devtools/email/reset-password)
+Example: [Login Code](http://localhost:3000/devtools/email/login-code)
 
 ##### Email translation preview
 
