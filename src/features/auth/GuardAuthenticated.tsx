@@ -3,11 +3,10 @@
 import { ReactNode, useEffect } from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useCheckAuthenticated } from '@/features/auth/hooks';
+import { useSyncAccountLanguage } from '@/features/account/useSyncAccountLanguage';
 import { UserAuthorization } from '@/features/users/schemas';
 import { trpc } from '@/lib/trpc/client';
 
@@ -20,12 +19,8 @@ export const GuardAuthenticated = ({
   authorizations?: UserAuthorization[];
   loginPath: string;
 }) => {
-  const { i18n } = useTranslation();
-  const checkAuthenticated = useCheckAuthenticated();
-  const account = trpc.account.get.useQuery(undefined, {
-    retry: 1,
-    enabled: authorizations && !!checkAuthenticated.data?.isAuthenticated,
-  });
+  useSyncAccountLanguage();
+  const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -42,28 +37,31 @@ export const GuardAuthenticated = ({
     pathname,
     router,
     checkAuthenticated.isSuccess,
-    checkAuthenticated.data,
+    checkAuthenticated.data?.isAuthenticated,
     loginPath,
   ]);
 
-  // Udpdate account language
-  useEffect(() => {
-    if (account.isSuccess) {
-      i18n.changeLanguage(account.data.language);
-    }
-  }, [account.isSuccess, account.data?.language, i18n]);
+  // If no requested authorizations, check the isAuthenticated
+  if (!authorizations && checkAuthenticated.data?.isAuthenticated) {
+    return <>{children}</>;
+  }
 
-  if (checkAuthenticated.data?.isAuthenticated && account.isSuccess) {
-    // Check if the account has some requested authorizations
+  if (
+    checkAuthenticated.data?.authorizations &&
+    checkAuthenticated.data?.isAuthenticated
+  ) {
+    // Check if the account has some of the requested authorizations
     return !authorizations ||
-      authorizations.some((a) => account.data.authorizations.includes(a)) ? (
+      authorizations.some(
+        (a) => checkAuthenticated.data.authorizations?.includes(a)
+      ) ? (
       <>{children}</>
     ) : (
       <ErrorPage errorCode={403} />
     );
   }
 
-  if (checkAuthenticated.isError || account.isError) {
+  if (checkAuthenticated.isError) {
     return <ErrorPage />;
   }
 
