@@ -29,7 +29,7 @@ export type AdminUserActionProps = Omit<MenuProps, 'children'> & {
 export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
   const { t } = useTranslation(['common', 'users']);
   const account = trpc.account.get.useQuery();
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const isCurrentUser = account.data?.id === user.id;
 
   const toastSuccess = useToastSuccess();
@@ -37,7 +37,7 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
 
   const activateUser = trpc.users.activate.useMutation({
     onSuccess: async ({ email, name }) => {
-      await trpcContext.users.invalidate();
+      await trpcUtils.users.invalidate();
       toastSuccess({
         title: t('users:feedbacks.activateUserSuccess.title'),
         description: t('users:feedbacks.activateUserSuccess.description', {
@@ -56,7 +56,7 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
   });
   const deactivateUser = trpc.users.deactivate.useMutation({
     onSuccess: async ({ email, name }) => {
-      await trpcContext.users.invalidate();
+      await trpcUtils.users.invalidate();
       toastSuccess({
         title: t('users:feedbacks.deactivateUserSuccess.title'),
         description: t('users:feedbacks.deactivateUserSuccess.description', {
@@ -76,7 +76,7 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
 
   const removeUser = trpc.users.removeById.useMutation({
     onSuccess: async () => {
-      await trpcContext.users.getAll.invalidate();
+      await trpcUtils.users.getAll.invalidate();
     },
     onError: () => {
       toastError({

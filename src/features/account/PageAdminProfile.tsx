@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardBody, Heading } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
@@ -19,12 +19,7 @@ export default function PageAdminProfile() {
         <Heading size="md" mb="4">
           {t('account:profile.title')}
         </Heading>
-
-        <Card>
-          <CardBody>
-            <AccountProfileForm />
-          </CardBody>
-        </Card>
+        <AccountProfileForm />
       </AdminLayoutPageContent>
     </AdminLayoutPage>
   );

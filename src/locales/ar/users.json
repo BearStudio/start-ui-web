@@ -66,7 +66,7 @@
   },
   "update": {
     "action": {
-      "save": "تحديث المستخدم"
+      "save": "يحفظ"
     },
     "feedbacks": {
       "updateError": {
@@ -87,9 +87,9 @@
       }
     },
     "action": {
-      "save": "إنشاء مستخدم"
+      "save": "يخلق"
     },
-    "title": "إنشاء مستخدم جديد"
+    "title": "مستخدم جديد"
   },
   "deleteModal": {
     "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",

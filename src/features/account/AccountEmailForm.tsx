@@ -84,12 +84,7 @@ export const AccountEmailForm = () => {
                     },
                   ]}
                 />
-                <Flex justifyContent="flex-end" alignItems="center" gap={4}>
-                  {account.data.email === values.email && (
-                    <Flex fontSize="sm" opacity={0.6}>
-                      {t('account:data.email.current')}
-                    </Flex>
-                  )}
+                <Flex alignItems="center" gap={4}>
                   <Button
                     type="submit"
                     variant="@primary"
@@ -101,6 +96,11 @@ export const AccountEmailForm = () => {
                   >
                     {t('account:email.actions.update')}
                   </Button>
+                  {account.data.email === values.email && (
+                    <Flex fontSize="sm" opacity={0.6}>
+                      {t('account:data.email.current')}
+                    </Flex>
+                  )}
                 </Flex>
               </Stack>
             </form>

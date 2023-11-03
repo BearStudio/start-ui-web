@@ -13,6 +13,20 @@ For detailed information on how to use this project, please refer to the [docume
 
 A live read-only demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com).
 
+## Technologies
+
+<div align="center" style="margin: 0 0 16px 0"><img src="assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
+
+[🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [⚫️ NextJS](https://nextjs.org/), [⚡️ Chakra UI](https://chakra-ui.com/),  [🟦 tRPC](https://trpc.io/), [▲ Prisma](https://www.prisma.io/), [🏖️ TanStack Query](https://react-query.tanstack.com/), [📕 Storybook](https://storybook.js.org/), [🎭 Playwright](https://playwright.dev/), [🐜 Formiz](https://formiz-react.com/)
+, [🌍 React i18next](https://react.i18next.com/)
+
+
+## Requirements
+
+- [NodeJS](https://nodejs.org/) >=18
+- [Pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
+
 ## Getting Started
 
 ```bash
@@ -21,60 +35,6 @@ pnpm create start-ui --web myApp
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
-Then go to the created folder:
-
-```bash
-cd myApp
-```
-
-```bash
-# Duplicate the .env.example file to a new .env file (update variables)
-cp .env.example .env
-
-# Setup and start the db with docker
-pnpm db:init
-
-# Run the development server
-pnpm dev
-```
-
-## Technology
-
-- 🟦 [TypeScript](https://www.typescriptlang.org/)
-- ⚛️ [React](https://reactjs.org/)
-- ▲ [NextJS](https://nextjs.org/)
-- 📕 [Storybook](https://storybook.js.org/)
-- ⚡️ [Chakra UI](https://chakra-ui.com/)
-- ⚛️ [TanStack Query](https://react-query.tanstack.com/)
-- 🐜 [Formiz](https://formiz-react.com/)
-- ⭐️ [React Icons](https://react-icons.github.io/react-icons/)
-- 🌍 [React i18next](https://react.i18next.com/)
-- 🔽 [React Select](https://react-select.com/)
-- 🔢 [React Currency Input Field](https://github.com/cchanxzy/react-currency-input-field)
-- 📅 [Day.js](https://day.js.org/)
-
-👉 [Technology Choices](#technology-choices)
-
-
-## Features
-
-You can find more details about each feature on the [documentation](https://docs.web.start-ui.com)
-
-- Reponsive layout / navigation.
-- Sign In / Sign Up / Password recovery screens.
-- Account profile / Change Password screens.
-- Users management admin screens (CRUD).
-- Multi-languages (i18n) (English & French built-in).
-- Custom Chakra UI theme with generated typings.
-- Great list of UI components with their Storybook documentation.
-- Fields components for Formiz.
-- Dark mode support with Storybook toggle.
-- App version & Environment name in the UI.
-- API Schema documentation via [Swagger UI React](https://github.com/swagger-api/swagger-ui).
-- API Mocking with a JHipster mapping using Next.js API.
-- Developer eXperience improved with ESLint, Prettier and Husky
-- Deployment made easy using Next.js
-
 ## Installation
 
 1. Duplicate the `.env.example` file to a new `.env` file, and update the environment variables
@@ -82,6 +42,12 @@ You can find more details about each feature on the [documentation](https://docs
 ```bash
 cp .env.example .env
 ```
+
+> [!NOTE]
+> **Quick advices for local development**
+> - **Update** the **DATABASE_DOCKER_IMAGE_NAME** variable with your project name. This will prevent docker collision name if you have another Start UI project on your computer.
+> - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
+
 
 2. Install dependencies
 ```bash
@@ -92,10 +58,16 @@ pnpm install
 ```bash
 pnpm db:init
 ```
+> [!NOTE]
+> **Don't want to use docker?**
+>
+> Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
 
 ## Development
 
 ```bash
+# Run the database in Docker (if not already started)
+pnpm db:start
 # Run the development server
 pnpm dev
 ```
@@ -114,7 +86,7 @@ Emails templates are built with `react-email` components in the `src/emails` fol
 
 You can preview an email template at `http://localhost:3000/devtools/email/templates/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
 
-Example: [Reset Password](http://localhost:3000/devtools/email/reset-password)
+Example: [Login Code](http://localhost:3000/devtools/email/login-code)
 
 ##### Email translation preview
 
@@ -149,7 +121,8 @@ Put the custom svg files into the `src/components/Icons/svg-sources` folder and 
 pnpm theme:generate-icons
 ```
 
-> ⚠️ All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
+> [!WARNING]
+> All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
 
 
 ### Update color mode storage key
@@ -200,76 +173,6 @@ Create or edit the `.vscode/settings.json` file with the following settings:
 }
 ```
 
-### Guidelines for translations
-
-- Use namespaces `t('namespace:translationKey')` and nesting `t('namespace:this.is.nested')`.
-```js
-// Example for translations available in account.json
-t('account:data.firstname.label')
-```
-
-- For fields and data translations use a `data` object.
-```json
-// account.json
-{
-  "data": {
-    "firstname": {
-      "label": "First Name",
-      "required": "First Name is required",
-    },
-  }
-}
-```
-```js
-// React
-t('account:data.firstname.label')
-t('account:data.firstname.required')
-```
-
-- For user feedbacks, use a `feedbacks` object with `actionSuccess` & `actionError` keys containing each `title` and `description` (optional).
-```json
-// account.json
-{
-  "resetPassword": {
-    "feedbacks": {
-      "resetSuccess": {
-        "title": "Your password has been reset",
-        "description": "You can now login"
-      },
-      "resetError": {
-        "title": "Reset password failed"
-      }
-    }
-  }
-}
-```
-```js
-// React
-t('account:resetPassword.feedbacks.updateSuccess.title')
-t('account:resetPassword.feedbacks.updateSuccess.description')
-t('account:resetPassword.feedbacks.updateError.title')
-```
-
-- For user actions, use an `actions` object.
-```json
-// account.json
-{
-  "resetPassword": {
-    "actions": {
-      "send": "Send Email",
-      "reset": "Reset Password"
-    }
-  }
-}
-```
-```js
-// React
-t('account:resetPassword.actions.send')
-t('account:resetPassword.actions.reset')
-```
-
-- Use the common workspace only for VERY generic translations. By default, use specific namespaces to allow easy update on large code base without unwanted side-effects.
-
 ## Production
 
 ```bash
@@ -279,7 +182,7 @@ pnpm build
 pnpm start
 ```
 
-### Docker
+### Deploy with Docker
 
 1. Build the Docker image (replace `start-ui-web` with your project name)
 ```
@@ -291,67 +194,3 @@ docker build -t start-ui-web .
 docker run -p 80:3000 start-ui-web
 ```
 Application will be exposed on port 80 ([http://localhost](http://localhost))
-
----
-
-## Technology Choices
-
-### React
-
-[React](https://reactjs.org/) is a JavaScript library created in 2013 to build
-reactive user interfaces. At the time of writing, React is probably the front
-end library the most used to create new projects and has a huge community which
-is beneficial for the maintainability of the project in terms of developers and
-online resources.
-
-[GitHub](https://github.com/facebook/react) · [License MIT](https://github.com/facebook/react/blob/master/LICENSE)
-
-### Next.js
-
-Next.js gives you the best developer experience with all the features you need
-for production: hybrid static & server rendering, TypeScript support, smart
-bundling, route pre-fetching, and more. No config needed.
-
-[GitHub](https://github.com/vercel/next.js) · [License MIT](https://github.com/vercel/next.js/blob/canary/license.md)
-
-### TypeScript
-
-JavaScript is a not typed language. [TypeScript](https://www.typescriptlang.org/)
-is here to help add static type definition. TypeScript helps a lot when it comes
-to types, interfaces and define contract between functions which helps a lot for
-a reliable documentation. No worry, the TypeScript adoption is incremental and
-writing in TypeScript is not mandatory to use Start UI, but it is a good
-practice to do so to avoid bugs in the future.
-
-[GitHub](https://github.com/microsoft/TypeScript) · [License Apache 2.0](https://github.com/microsoft/TypeScript/blob/master/LICENSE.txt)
-
-### TanStack Query
-
-[TanStack Query](https://github.com/tannerlinsley/react-query) is a powerful tool
-to do efficient data synchronization for React. No need of Redux
-or another global state manager anymore.
-React Query will do the work and is agnostic of the method you will use.
-
-[GitHub](https://github.com/tannerlinsley/react-query) · [License MIT](https://github.com/tannerlinsley/react-query/blob/master/LICENSE)
-
-### Storybook
-
-[Storybook](https://storybook.js.org/) is an Open Source tool to help you
-develop framework agnostic components in isolation and document them.
-
-[GitHub](https://github.com/storybookjs/storybook) · [License MIT](https://github.com/storybookjs/storybook/blob/next/LICENSE)
-
-### Chakra UI
-
-[Chakra UI](https://chakra-ui.com/) is a simple, modular, composable and
-accessible component library that is highly customizable.
-
-[GitHub](https://github.com/chakra-ui/chakra-ui/) · [License MIT](https://github.com/chakra-ui/chakra-ui/blob/main/LICENSE)
-
-### Formiz
-
-To create React forms, there is a lot of libraries out there.
-[Formiz](https://formiz-react.com/) will help you create React forms with ease!
-Composable, headless & with built-in multi steps.
-
-[GitHub](https://github.com/ivan-dalmet/formiz) · [License MIT](https://github.com/ivan-dalmet/formiz/blob/master/LICENSE)

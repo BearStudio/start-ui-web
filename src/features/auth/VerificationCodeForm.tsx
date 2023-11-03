@@ -82,14 +82,14 @@ export const useOnVerificationCodeSuccess = ({
   defaultRedirect: string;
 }) => {
   const router = useRouter();
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
   const queryCache = useQueryClient();
   const searchParams = useSearchParams();
   return async () => {
     queryCache.clear();
 
     // Optimistic Update
-    trpcContext.auth.checkAuthenticated.setData(undefined, {
+    trpcUtils.auth.checkAuthenticated.setData(undefined, {
       isAuthenticated: true,
     });
 

@@ -31,6 +31,11 @@ export const styles: Styles = {
       pr: 'safe-right',
       pb: 'safe-bottom',
     },
+    form: {
+      display: 'flex',
+      flexDir: 'column',
+      flex: 1,
+    },
     ...externalsStyles(props),
   }),
 };

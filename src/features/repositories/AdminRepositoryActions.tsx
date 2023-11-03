@@ -29,13 +29,13 @@ export const AdminRepositoryActions = ({
   ...rest
 }: RepositoryActionProps) => {
   const { t } = useTranslation(['common', 'repositories']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
 
   const toastError = useToastError();
 
   const repositoryRemove = trpc.repositories.removeById.useMutation({
     onSuccess: async () => {
-      await trpcContext.repositories.getAll.invalidate();
+      await trpcUtils.repositories.getAll.invalidate();
     },
     onError: () => {
       toastError({

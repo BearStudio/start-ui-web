@@ -66,7 +66,7 @@
   },
   "update": {
     "action": {
-      "save": "Sasisha"
+      "save": "Hifadhi"
     },
     "feedbacks": {
       "updateError": {
@@ -78,9 +78,9 @@
     }
   },
   "create": {
-    "title": "Unda mtumiaji mpya",
+    "title": "Mtumiaji Mpya",
     "action": {
-      "save": "Unda mtumiaji"
+      "save": "Unda"
     },
     "feedbacks": {
       "updateError": {

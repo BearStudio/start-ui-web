@@ -1,33 +1,20 @@
-import { defineStyleConfig } from '@chakra-ui/react';
-import { getColor } from '@chakra-ui/theme-tools';
-
-export const selectTheme = defineStyleConfig({
+export const selectTheme = {
+  defaultProps: {
+    focusBorderColor: 'brand.500',
+  },
   variants: {
-    outline: (props) => {
+    outline: () => {
       return {
         field: {
-          bg: 'blackAlpha.50',
-          borderColor: 'blackAlpha.100',
-          _focusVisible: {
-            borderColor: props.focusBorderColor ?? 'brand.500',
-            boxShadow: `0 0 0 1px ${getColor(
-              props.theme,
-              props.focusBorderColor ?? 'brand.500'
-            )}`,
-          },
+          bg: 'white',
+          borderColor: 'gray.200',
+          boxShadow: 'sm',
           _dark: {
             bg: 'whiteAlpha.50',
             borderColor: 'whiteAlpha.100',
-            _focusVisible: {
-              borderColor: props.focusBorderColor ?? 'brand.300',
-              boxShadow: `0 0 0 1px ${getColor(
-                props.theme,
-                props.focusBorderColor ?? 'brand.300'
-              )}`,
-            },
           },
         },
       };
     },
   },
-});
+};

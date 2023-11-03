@@ -74,6 +74,7 @@ const variantSecondary = defineStyle((props) => ({
 
 export const buttonTheme = defineStyleConfig({
   baseStyle: (props) => ({
+    boxShadow: 'sm',
     _focusVisible: {
       boxShadow: 'none',
       ring: '2px',
@@ -106,6 +107,9 @@ export const buttonTheme = defineStyleConfig({
       variantSecondary({ ...props, colorScheme: 'brand' }),
     '@danger': (props) => variantSecondary({ ...props, colorScheme: 'error' }),
     // Default variants
+    link: {
+      boxShadow: 'none',
+    },
     solid: (props) =>
       props.colorScheme === 'gray' ? variantSecondary(props) : {},
     outline: variantSecondary,

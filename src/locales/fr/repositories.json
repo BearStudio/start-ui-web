@@ -39,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "Mettre à jour le dépôt"
+      "save": "Sauvegarder"
     },
     "feedbacks": {
       "updateError": {
@@ -60,9 +60,9 @@
       }
     },
     "action": {
-      "save": "Créer un dépôt"
+      "save": "Créer"
     },
-    "title": "Créer un nouveau dépôt"
+    "title": "Nouveau dépôt"
   },
   "deleteModal": {
     "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",

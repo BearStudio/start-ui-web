@@ -3,12 +3,10 @@ import React from 'react';
 import {
   Box,
   Button,
-  ButtonGroup,
+  Flex,
   HStack,
   Heading,
   SkeletonText,
-  Stack,
-  Text,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
@@ -19,7 +17,6 @@ import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import {
   AdminLayoutPage,
-  AdminLayoutPageBottomBar,
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
@@ -30,7 +27,7 @@ import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
 export default function PageAdminUserUpdate() {
   const { t } = useTranslation(['common', 'users']);
-  const trpcContext = trpc.useContext();
+  const trpcUtils = trpc.useUtils();
 
   const params = useParams();
   const router = useRouter();
@@ -49,7 +46,7 @@ export default function PageAdminUserUpdate() {
 
   const userUpdate = trpc.users.updateById.useMutation({
     onSuccess: async () => {
-      await trpcContext.users.invalidate();
+      await trpcUtils.users.invalidate();
       toastSuccess({
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
@@ -86,57 +83,49 @@ export default function PageAdminUserUpdate() {
   });
 
   return (
-    <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-      <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-        <HStack spacing="4">
-          <Box flex="1">
-            {user.isLoading || user.isError ? (
-              <SkeletonText maxW="6rem" noOfLines={2} />
-            ) : (
-              <Stack spacing="0">
-                <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
-                <Text
-                  fontSize="xs"
-                  color="gray.600"
-                  _dark={{ color: 'gray.300' }}
+    <Formiz connect={form} autoForm>
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
+          <HStack spacing="4">
+            <Box flex="1">
+              {user.isLoading || user.isError ? (
+                <SkeletonText maxW="6rem" noOfLines={2} />
+              ) : (
+                <Flex
+                  flexDirection={{ base: 'column', md: 'row' }}
+                  alignItems={{ base: 'start', md: 'center' }}
+                  rowGap={1}
+                  columnGap={4}
                 >
-                  {user.data.email}
-                </Text>
-              </Stack>
-            )}
-          </Box>
-          {!!user.data && (
-            <Box>
-              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
+                  <Heading size="sm">
+                    {user.data.name ?? user.data.email}
+                  </Heading>
+                  <UserStatus
+                    isActivated={user.data.accountStatus === 'ENABLED'}
+                  />
+                </Flex>
+              )}
             </Box>
-          )}
-        </HStack>
-      </AdminLayoutPageTopBar>
-      {!isReady && <LoaderFull />}
-      {isReady && user.isError && <ErrorPage />}
-      {isReady && user.isSuccess && (
-        <Formiz connect={form}>
-          <form noValidate onSubmit={form.submit}>
-            <AdminLayoutPageContent>
-              <UserForm />
-            </AdminLayoutPageContent>
-            <AdminLayoutPageBottomBar>
-              <ButtonGroup justifyContent="space-between">
-                <Button onClick={() => router.back()}>
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={userUpdate.isLoading || userUpdate.isSuccess}
-                >
-                  {t('users:update.action.save')}
-                </Button>
-              </ButtonGroup>
-            </AdminLayoutPageBottomBar>
-          </form>
-        </Formiz>
-      )}
-    </AdminLayoutPage>
+
+            <Button
+              type="submit"
+              variant="@primary"
+              size="sm"
+              isDisabled={!form.isValid && form.isSubmitted}
+              isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+            >
+              {t('users:update.action.save')}
+            </Button>
+          </HStack>
+        </AdminLayoutPageTopBar>
+        {!isReady && <LoaderFull />}
+        {isReady && user.isError && <ErrorPage />}
+        {isReady && user.isSuccess && (
+          <AdminLayoutPageContent>
+            <UserForm />
+          </AdminLayoutPageContent>
+        )}
+      </AdminLayoutPage>
+    </Formiz>
   );
 }

@@ -71,7 +71,7 @@
   },
   "update": {
     "action": {
-      "save": "Update User"
+      "save": "Save"
     },
     "feedbacks": {
       "updateError": {
@@ -92,8 +92,8 @@
       }
     },
     "action": {
-      "save": "Create User"
+      "save": "Create"
     },
-    "title": "Create New User"
+    "title": "New User"
   }
 }

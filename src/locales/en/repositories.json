@@ -43,7 +43,7 @@
   },
   "update": {
     "action": {
-      "save": "Update Repository"
+      "save": "Save"
     },
     "feedbacks": {
       "updateError": {
@@ -64,8 +64,8 @@
       }
     },
     "action": {
-      "save": "Create Repository"
+      "save": "Create"
     },
-    "title": "Create New Repository"
+    "title": "New Repository"
   }
 }

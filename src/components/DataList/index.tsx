@@ -390,7 +390,7 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         display="flex"
         flexDirection="column"
         position="relative"
-        boxShadow="md"
+        boxShadow="card"
         borderRadius="md"
         overflowX="auto"
         overflowY="hidden"
@@ -398,8 +398,11 @@ export const DataList: FC<React.PropsWithChildren<DataListProps>> = ({
         allowMultiple={allowMultiple && !allowToggle}
         allowToggle={allowToggle}
         bg="white"
+        border="1px solid"
+        borderColor="gray.100"
         _dark={{
           bg: 'gray.800',
+          borderColor: 'gray.800',
         }}
         ref={listRef}
         {...rest}

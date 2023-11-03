@@ -25,7 +25,7 @@ export default function PageAdminLogin() {
   };
 
   return (
-    <Card boxShadow="layout">
+    <Card boxShadow="card">
       <CardHeader pb={0}>
         <Heading size="md">{t('auth:login.adminTitle')}</Heading>
       </CardHeader>

@@ -56,13 +56,13 @@ export default function PageAdminRepository() {
   });
 
   return (
-    <AdminLayoutPage showNavBar="desktop">
+    <AdminLayoutPage showNavBar="desktop" containerMaxWidth="container.md">
       <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
         <HStack>
           <Box flex={1}>
             {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
             {repository.isSuccess && (
-              <Heading size="md">{repository.data?.name}</Heading>
+              <Heading size="sm">{repository.data?.name}</Heading>
             )}
           </Box>
           <ButtonGroup>
@@ -70,6 +70,7 @@ export default function PageAdminRepository() {
               as={Link}
               href={`${ADMIN_PATH}/repositories/${params?.id}/update`}
               icon={<LuPenLine />}
+              size="sm"
             >
               {t('common:actions.edit')}
             </ResponsiveIconButton>
@@ -93,12 +94,13 @@ export default function PageAdminRepository() {
                 icon={<LuTrash2 />}
                 isDisabled={!repository.data}
                 isLoading={repositoryRemove.isLoading}
+                size="sm"
               />
             </ConfirmModal>
           </ButtonGroup>
         </HStack>
       </AdminLayoutPageTopBar>
-      <AdminLayoutPageContent containerMaxWidth="container.md">
+      <AdminLayoutPageContent>
         {repository.isLoading && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (

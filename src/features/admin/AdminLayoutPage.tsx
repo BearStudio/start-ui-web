@@ -87,6 +87,7 @@ export const AdminLayoutPageTopBar = ({
         bg="white"
         ref={ref}
         borderBottom="1px solid transparent"
+        borderBottomColor="gray.100"
         _dark={{
           bg: 'gray.900',
           color: 'white',
@@ -113,6 +114,7 @@ export const AdminLayoutPageTopBar = ({
             {showBack && (
               <Box>
                 <IconButton
+                  size="sm"
                   aria-label="Go Back"
                   icon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
                   onClick={() => onBack()}

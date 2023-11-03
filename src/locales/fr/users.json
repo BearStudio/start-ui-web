@@ -66,7 +66,7 @@
   },
   "update": {
     "action": {
-      "save": "Mettre à jour"
+      "save": "Sauvegarder"
     },
     "feedbacks": {
       "updateError": {
@@ -78,9 +78,9 @@
     }
   },
   "create": {
-    "title": "Créer un nouvel utilisateur",
+    "title": "Nouvel utilisateur",
     "action": {
-      "save": "Créer l'utilisateur"
+      "save": "Créer"
     },
     "feedbacks": {
       "updateError": {

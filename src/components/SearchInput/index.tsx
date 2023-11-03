@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
+  Box,
   IconButton,
   Input,
   InputGroup,
@@ -94,17 +95,21 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
           isDisabled={isDisabled}
           onKeyDown={handleEscape}
         />
-        <InputRightElement>
+        <InputRightElement pointerEvents="none">
           {!isDisabled && search ? (
             <IconButton
               onClick={handleClear}
+              variant="@secondary"
               size="xs"
               aria-label={clearLabel ?? t('components:searchInput.clear')}
+              pointerEvents="auto"
             >
               <LuX />
             </IconButton>
           ) : (
-            <LuSearch />
+            <Box pointerEvents="none" opacity={isDisabled ? 0.3 : undefined}>
+              <LuSearch />
+            </Box>
           )}
         </InputRightElement>
       </InputGroup>

@@ -6,10 +6,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useCheckAuthenticated } from '@/features/auth/hooks';
+import { trpc } from '@/lib/trpc/client';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
-  const checkAuthenticated = useCheckAuthenticated();
+  const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery();
   const searchParams = useSearchParams();
   const router = useRouter();
 

@@ -58,7 +58,11 @@ export const AppLayout: FC<React.PropsWithChildren<unknown>> = ({
 
   return (
     <AppLayoutContext.Provider value={providerValue}>
-      <Viewport bg="gray.50" _dark={{ bg: 'gray.900' }}>
+      <Viewport
+        data-testid="app-layout"
+        bg="gray.50"
+        _dark={{ bg: 'gray.900' }}
+      >
         {!!navDisplayed && <AppNavBarDesktop />}
         <Flex flex="1" direction="column">
           {children}

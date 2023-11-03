@@ -12,7 +12,7 @@ import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
 } from '@/features/auth/utils';
-import { zUser } from '@/features/users/schemas';
+import { zUser, zUserAuthorization } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
   AUTH_COOKIE_NAME,
@@ -34,12 +34,18 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(z.void())
-    .output(z.object({ isAuthenticated: z.boolean() }))
+    .output(
+      z.object({
+        isAuthenticated: z.boolean(),
+        authorizations: z.array(zUserAuthorization()).optional(),
+      })
+    )
     .query(async ({ ctx }) => {
       ctx.logger.info(`User ${ctx.user ? 'is' : 'is not'} logged`);
 
       return {
         isAuthenticated: !!ctx.user,
+        authorizations: ctx.user?.authorizations,
       };
     }),
 
@@ -100,7 +106,7 @@ export const authRouter = createTRPCRouter({
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
             .toDate(),
-          code,
+          code: code.hashed,
           token,
         },
       });
@@ -113,7 +119,7 @@ export const authRouter = createTRPCRouter({
           <EmailLoginCode
             language={user.language}
             name={user.name ?? ''}
-            code={code}
+            code={code.readable}
           />
         ),
       });
@@ -270,7 +276,7 @@ export const authRouter = createTRPCRouter({
           expires: dayjs()
             .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
             .toDate(),
-          code,
+          code: code.hashed,
         },
       });
 
@@ -284,7 +290,7 @@ export const authRouter = createTRPCRouter({
           <EmailRegisterCode
             language={newUser.language}
             name={newUser.name ?? ''}
-            code={code}
+            code={code.readable}
           />
         ),
       });
