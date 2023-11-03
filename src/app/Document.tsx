@@ -23,7 +23,6 @@ export const Document = ({ children }: { children: ReactNode }) => {
       }
     >
       <head>
-        <title>Start UI</title>
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,viewport-fit=cover"
