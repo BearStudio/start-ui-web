@@ -12,7 +12,6 @@ import { Formiz, useForm } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
-import { FieldDayPicker } from '@/components/FieldDayPicker';
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
 import { DevLoginHint } from '@/features/devtools/DevLoginHint';
@@ -67,13 +66,6 @@ export const LoginForm = ({
               },
             ]}
             formatValue={(v) => v?.toLowerCase().trim()}
-          />
-
-          <FieldDayPicker
-            inputProps={{ size: 'lg' }}
-            label="Date de naissance"
-            name="birthDate"
-            required="C'est obligatoire"
           />
 
           <Flex>
