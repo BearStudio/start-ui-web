@@ -80,8 +80,13 @@ export const DayPicker: FC<DayPickerProps> = ({
     onClosePopper,
     inputRef,
   });
-  const { setPopperElement, togglePopper, openPopper, closePopper } =
-    popperManagement;
+  const {
+    setPopperElement,
+    togglePopper,
+    openPopper,
+    closePopper,
+    isPopperOpen,
+  } = popperManagement;
 
   const onChangeInput = (newDate: Date | null, updateMonth = false) => {
     onChange(newDate);
@@ -95,7 +100,7 @@ export const DayPicker: FC<DayPickerProps> = ({
       dateValue: value,
       dateFormat,
       onChange: onChangeInput,
-      preventBlurAction: isCalendarFocused,
+      preventBlurAction: isPopperOpen,
     });
 
   const handleDaySelect = (date?: Date | null) => {
