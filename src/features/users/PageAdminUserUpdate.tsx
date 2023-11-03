@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Box,
   Button,
+  ButtonGroup,
   Flex,
   HStack,
   Heading,
@@ -106,16 +107,22 @@ export default function PageAdminUserUpdate() {
                 </Flex>
               )}
             </Box>
-
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isDisabled={!form.isValid && form.isSubmitted}
-              isLoading={userUpdate.isLoading || userUpdate.isSuccess}
-            >
-              {t('users:update.action.save')}
-            </Button>
+            <ButtonGroup spacing={3} size="sm">
+              <Button
+                onClick={() => router.back()}
+                display={{ base: 'none', md: 'inline-flex' }}
+              >
+                {t('common:actions.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                variant="@primary"
+                isDisabled={!form.isValid && form.isSubmitted}
+                isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+              >
+                {t('users:update.action.save')}
+              </Button>
+            </ButtonGroup>
           </HStack>
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}

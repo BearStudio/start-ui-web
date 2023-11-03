@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { Button, HStack, Heading, SkeletonText, Stack } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  HStack,
+  Heading,
+  SkeletonText,
+  Stack,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -85,17 +92,24 @@ export default function PageAdminRepositoryUpdate() {
                 <Heading size="sm">{repository.data?.name}</Heading>
               )}
             </Stack>
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isLoading={
-                updateRepository.isLoading || updateRepository.isSuccess
-              }
-              isDisabled={!form.isValid && form.isSubmitted}
-            >
-              {t('repositories:update.action.save')}
-            </Button>
+            <ButtonGroup spacing={3} size="sm">
+              <Button
+                onClick={() => router.back()}
+                display={{ base: 'none', md: 'inline-flex' }}
+              >
+                {t('common:actions.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  updateRepository.isLoading || updateRepository.isSuccess
+                }
+                isDisabled={!form.isValid && form.isSubmitted}
+              >
+                {t('repositories:update.action.save')}
+              </Button>
+            </ButtonGroup>
           </HStack>
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}

@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { Button, HStack, Heading } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Divider,
+  HStack,
+  Heading,
+  Stack,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -57,15 +64,22 @@ export default function PageAdminUserCreate() {
             <Heading size="sm" flex={1}>
               {t('users:create.title')}
             </Heading>
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isLoading={createUser.isLoading || createUser.isSuccess}
-              isDisabled={!form.isValid && form.isSubmitted}
-            >
-              {t('users:create.action.save')}
-            </Button>
+            <ButtonGroup spacing={3} size="sm">
+              <Button
+                onClick={() => router.back()}
+                display={{ base: 'none', md: 'inline-flex' }}
+              >
+                {t('common:actions.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={createUser.isLoading || createUser.isSuccess}
+                isDisabled={!form.isValid && form.isSubmitted}
+              >
+                {t('users:create.action.save')}
+              </Button>
+            </ButtonGroup>
           </HStack>
         </AdminLayoutPageTopBar>
         <AdminLayoutPageContent>

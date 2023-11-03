@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, HStack, Heading } from '@chakra-ui/react';
+import { Button, ButtonGroup, HStack, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -59,17 +59,24 @@ export default function PageAdminRepositoryCreate() {
             <Heading size="sm" flex={1}>
               {t('repositories:create.title')}
             </Heading>
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isLoading={
-                createRepository.isLoading || createRepository.isSuccess
-              }
-              isDisabled={!form.isValid && form.isSubmitted}
-            >
-              {t('repositories:create.action.save')}
-            </Button>
+            <ButtonGroup spacing={3} size="sm">
+              <Button
+                onClick={() => router.back()}
+                display={{ base: 'none', md: 'inline-flex' }}
+              >
+                {t('common:actions.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  createRepository.isLoading || createRepository.isSuccess
+                }
+                isDisabled={!form.isValid && form.isSubmitted}
+              >
+                {t('repositories:create.action.save')}
+              </Button>
+            </ButtonGroup>
           </HStack>
         </AdminLayoutPageTopBar>
         <AdminLayoutPageContent>
