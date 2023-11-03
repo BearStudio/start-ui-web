@@ -9,7 +9,7 @@ export default {
 };
 
 export const Default = () => {
-  const [selectedDay, setSelectedDay] = useState<Date>();
+  const [selectedDay, setSelectedDay] = useState<Date | null>();
 
   return (
     <Stack spacing={2}>
@@ -30,7 +30,7 @@ export const Default = () => {
 };
 
 export const WithDefaultValue = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
 
   return (
     <Stack spacing={2}>
@@ -41,7 +41,7 @@ export const WithDefaultValue = () => {
 };
 
 export const AutoFocus = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
 
   return (
     <Stack spacing={2}>
@@ -52,7 +52,7 @@ export const AutoFocus = () => {
 };
 
 export const IsDisabled = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
 
   return (
     <Stack spacing={2}>
@@ -63,7 +63,7 @@ export const IsDisabled = () => {
 };
 
 export const WithPastDaysDisabled = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
 
   return (
     <Stack spacing={2}>
@@ -78,7 +78,7 @@ export const WithPastDaysDisabled = () => {
 };
 
 export const WithoutPortal = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
 
   return (
     <Stack spacing={2}>

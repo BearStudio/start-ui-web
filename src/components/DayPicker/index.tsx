@@ -23,8 +23,8 @@ export type DayPickerNavigationMode = 'DAY' | 'MONTH';
 
 export type DayPickerProps = {
   id?: string;
-  value?: Date;
-  onChange(date?: Date): void;
+  value?: Date | null;
+  onChange(date: Date | null): void;
   popperPlacement?: Placement;
   dateFormat?: string;
   placeholder?: string;
@@ -38,22 +38,22 @@ export type DayPickerProps = {
   isDisabled?: boolean;
   usePortal?: boolean;
   autoFocus?: boolean;
-  onClose?(day?: Date): void;
-  onMonthChange?(date?: Date): void;
+  onClose?(day?: Date | null): void;
+  onMonthChange?(date?: Date | null): void;
 } & Omit<BoxProps, 'onChange'>;
 
 export const DayPicker: FC<DayPickerProps> = ({
   id,
   value,
   onChange,
-  onClose,
+  onClose = () => {},
   popperPlacement = 'bottom-start',
   dateFormat = DATE_FORMAT,
   placeholder = 'JJ/MM/AAAA',
   inputProps = {},
   isDisabled = false,
   autoFocus = false,
-  onMonthChange,
+  onMonthChange = () => {},
   ...rest
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ export const DayPicker: FC<DayPickerProps> = ({
 
   // Popper management
   const onClosePopper = () => {
-    onClose?.(value);
+    onClose(value);
     setMode('DAY');
   };
 
@@ -83,7 +83,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   const { setPopperElement, togglePopper, openPopper, closePopper } =
     popperManagement;
 
-  const onChangeInput = (newDate?: Date, updateMonth = false) => {
+  const onChangeInput = (newDate: Date | null, updateMonth = false) => {
     onChange(newDate);
     if (updateMonth) {
       selectMonth(newDate);
@@ -98,9 +98,9 @@ export const DayPicker: FC<DayPickerProps> = ({
       preventBlurAction: isCalendarFocused,
     });
 
-  const handleDaySelect = (date?: Date) => {
+  const handleDaySelect = (date?: Date | null) => {
     setMonth(date);
-    onChange(date ?? undefined);
+    onChange(date ?? null);
     if (date) {
       closePopper();
     } else {
@@ -112,14 +112,14 @@ export const DayPicker: FC<DayPickerProps> = ({
   const hookMonthNavigation = useDayPickerMonthNavigation(value);
   const { setMode, setMonth, selectMonth } = hookMonthNavigation;
 
-  const handleChangeMonth = (date?: Date) => {
-    onMonthChange?.(date);
+  const handleChangeMonth = (date?: Date | null) => {
+    onMonthChange(date);
     setMonth(date);
   };
 
   // Change to day view once we have selected a month on the month picker
   const handleSelectMonth = (date: Date) => {
-    onMonthChange?.(date);
+    onMonthChange(date);
     selectMonth(date);
   };
 

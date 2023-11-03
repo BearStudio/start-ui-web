@@ -1,6 +1,6 @@
-import { FC, useCallback } from 'react';
+import { useCallback } from 'react';
 
-import { FieldProps, FieldValidation, useField } from '@formiz/core';
+import { FieldProps, useField } from '@formiz/core';
 import dayjs, { Dayjs } from 'dayjs';
 import { isMatch } from 'react-day-picker';
 
@@ -23,11 +23,16 @@ type PickedDayPickerProps =
   | 'isDisabled'
   | 'onClose';
 
+export type FieldDayPickerPossibleFormattedValue =
+  | string
+  | number
+  | Dayjs
+  | Date;
+
 export type DisabledDays = 'future' | 'past';
-export type FieldDayPickerProps<FormattedValue = Dayjs> = FieldProps<
-  Dayjs,
-  FormattedValue
-> &
+export type FieldDayPickerProps<
+  FormattedValue extends FieldDayPickerPossibleFormattedValue = Dayjs,
+> = FieldProps<Dayjs, FormattedValue> &
   Omit<FormGroupProps, 'onChange'> &
   Pick<DayPickerProps, PickedDayPickerProps> & {
     noFormGroup?: boolean;
@@ -36,24 +41,24 @@ export type FieldDayPickerProps<FormattedValue = Dayjs> = FieldProps<
     disabledDays?: DisabledDays;
   };
 
-export const FieldDayPicker: FC<FieldDayPickerProps> = ({
+export const FieldDayPicker = <
+  FormattedValue extends FieldDayPickerPossibleFormattedValue = Dayjs,
+>({
   invalidMessage = 'Date invalide',
   dayPickerProps,
   ...restFieldProps
-}) => {
-  const getValidations = useCallback<
-    () => FieldValidation<dayjs.Dayjs, dayjs.Dayjs | undefined>[] | undefined
-  >(
+}: FieldDayPickerProps<FormattedValue>) => {
+  const getValidations = useCallback(
     () => [
       {
-        handler: (v: Dayjs) => v !== undefined,
+        handler: (v: FormattedValue) => v !== undefined,
         message: invalidMessage,
       },
 
       // le spread de la prop validations ne doit pas être à la fin de la constante validations, sinon elle sera exécuté (écrasé)
       ...(restFieldProps.validations ?? []),
       {
-        handler: (value: Dayjs) =>
+        handler: (value: FormattedValue) =>
           value
             ? !isMatch(
                 dayjs(value).toDate(),
@@ -79,11 +84,12 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
     value,
     errorMessage,
     otherProps,
-    isRequired,
   } = useField(restFieldProps, {
-    formatValue: (value: Dayjs | null) => (!!value ? dayjs(value) : undefined),
+    formatValue: (value) => (!!value ? dayjs(value) : null) as FormattedValue,
     validations: getValidations(),
   });
+
+  const { required } = restFieldProps;
 
   const {
     label,
@@ -109,7 +115,7 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
     helper,
     errorMessage,
     showError: shouldDisplayError,
-    isRequired,
+    isRequired: !!required,
     ...(noFormGroup ? {} : rest),
   };
 
@@ -135,8 +141,8 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
   const content = (
     <DayPicker
       placeholder={placeholder}
-      value={!!value ? dayjs(value).toDate() : undefined}
-      onChange={(date) => setValue(dayjs(date))}
+      value={!!value ? dayjs(value).toDate() : null}
+      onChange={(date) => setValue(date instanceof Date ? dayjs(date) : date)}
       onClose={(date) => {
         setIsTouched(true);
         onClose?.(date);
@@ -152,7 +158,7 @@ export const FieldDayPicker: FC<FieldDayPickerProps> = ({
       isDisabled={isDisabled}
       usePortal={usePortal}
       autoFocus={autoFocus}
-      required={isRequired}
+      required={!!required}
       hasTodayButton={hasTodayButton}
       popperPlacement={popperPlacement}
       dateFormat={dateFormat}

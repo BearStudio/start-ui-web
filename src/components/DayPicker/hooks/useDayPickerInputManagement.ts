@@ -13,9 +13,9 @@ type UseDayPickerInputManagement = {
 };
 
 type UseDayPickerInputManagementParams = {
-  dateValue?: Date;
+  dateValue?: Date | null;
   dateFormat: string;
-  onChange: (newDate?: Date, updateMonth?: boolean) => void;
+  onChange: (newDate: Date | null, updateMonth?: boolean) => void;
   preventBlurAction: boolean;
 };
 
@@ -51,11 +51,12 @@ export const useDayPickerInputManagement = (
     if (preventBlurAction) {
       return;
     }
+
     const date = parseInputToDate(inputValue);
 
     if (!date.isValid()) {
       if (!inputValue) {
-        onChange(undefined);
+        onChange(null);
         return;
       }
       setInputValue(

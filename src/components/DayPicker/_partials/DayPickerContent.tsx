@@ -28,10 +28,10 @@ type DayPickerContentProps = {
   buttonRef: RefObject<HTMLButtonElement>;
   hookMonthNavigation: UseDayPickerMonthNavigationValue;
   handleSelectMonth: (date: Date) => void;
-  handleChangeMonth: (date?: Date) => void;
-  handleDaySelect: (date?: Date) => void;
+  handleChangeMonth: (date?: Date | null) => void;
+  handleDaySelect: (date?: Date | null) => void;
   handleOnTapEnter: () => void;
-  value?: Date;
+  value?: Date | null;
   popperManagement: UseDayPickerPopperManagementValue;
 } & Omit<DayPickerProps, 'onChange'>;
 
@@ -114,7 +114,7 @@ export const DayPickerContent = forwardRef<
                   onMonthChange={(date) => {
                     handleChangeMonth(date);
                   }}
-                  selected={value}
+                  selected={value ? value : undefined}
                   onSelect={handleDaySelect}
                   components={{
                     Caption: (props) => (
