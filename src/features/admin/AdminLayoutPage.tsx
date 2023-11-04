@@ -1,16 +1,15 @@
-import React, { useContext, useMemo } from 'react';
+import React, { ReactNode, useContext, useMemo } from 'react';
 
 import {
   Box,
+  ButtonGroup,
   Container,
   ContainerProps,
   Flex,
   FlexProps,
   HStack,
-  IconButton,
   Stack,
 } from '@chakra-ui/react';
-import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import useMeasure from 'react-use-measure';
 
 import {
@@ -19,7 +18,6 @@ import {
   useAdminLayoutHideNav,
 } from '@/features/admin/AdminLayout';
 import { ADMIN_NAV_BAR_HEIGHT } from '@/features/admin/AdminNavBar';
-import { useRtl } from '@/hooks/useRtl';
 
 type AdminLayoutPageContextValue = {
   nav: React.ReactNode;
@@ -57,24 +55,23 @@ const PageContainer = ({ children, maxW, ...rest }: ContainerProps) => {
 };
 
 type AdminLayoutPageTopBarProps = FlexProps & {
-  onBack?(): void;
-  showBack?: boolean;
+  leftActions?: ReactNode;
+  rightActions?: ReactNode;
   isFixed?: boolean;
+  isConfirmDiscardChanges?: boolean;
   containerMaxWidth?: ContainerProps['maxW'];
 };
 
 export const AdminLayoutPageTopBar = ({
   children,
-  onBack = () => undefined,
-  showBack = false,
+  leftActions,
+  rightActions,
   isFixed = true,
   containerMaxWidth,
   ...rest
 }: AdminLayoutPageTopBarProps) => {
   const { navDisplayed } = useAdminLayoutContext();
   const [ref, { height }] = useMeasure();
-
-  const { rtlValue } = useRtl();
 
   return (
     <>
@@ -111,17 +108,17 @@ export const AdminLayoutPageTopBar = ({
         <Box w="full" h="0" pb="safe-top" />
         <PageContainer maxW={containerMaxWidth}>
           <HStack spacing="4">
-            {showBack && (
-              <Box>
-                <IconButton
-                  size="sm"
-                  aria-label="Go Back"
-                  icon={rtlValue(<LuArrowLeft />, <LuArrowRight />)}
-                  onClick={() => onBack()}
-                />
-              </Box>
+            {!!leftActions && (
+              <ButtonGroup size="sm" spacing={3}>
+                {leftActions}
+              </ButtonGroup>
             )}
             <Box flex="1">{children}</Box>
+            {!!rightActions && (
+              <ButtonGroup size="sm" spacing={3}>
+                {rightActions}
+              </ButtonGroup>
+            )}
           </HStack>
         </PageContainer>
       </Flex>

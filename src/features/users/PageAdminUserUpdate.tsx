@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -86,34 +88,11 @@ export default function PageAdminUserUpdate() {
   return (
     <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-          <HStack spacing="4">
-            <Box flex="1">
-              {user.isLoading || user.isError ? (
-                <SkeletonText maxW="6rem" noOfLines={2} />
-              ) : (
-                <Flex
-                  flexDirection={{ base: 'column', md: 'row' }}
-                  alignItems={{ base: 'start', md: 'center' }}
-                  rowGap={1}
-                  columnGap={4}
-                >
-                  <Heading size="sm">
-                    {user.data.name ?? user.data.email}
-                  </Heading>
-                  <UserStatus
-                    isActivated={user.data.accountStatus === 'ENABLED'}
-                  />
-                </Flex>
-              )}
-            </Box>
-            <ButtonGroup spacing={3} size="sm">
-              <Button
-                onClick={() => router.back()}
-                display={{ base: 'none', md: 'inline-flex' }}
-              >
-                {t('common:actions.cancel')}
-              </Button>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
               <Button
                 type="submit"
                 variant="@primary"
@@ -122,8 +101,22 @@ export default function PageAdminUserUpdate() {
               >
                 {t('users:update.action.save')}
               </Button>
-            </ButtonGroup>
-          </HStack>
+            </>
+          }
+        >
+          {user.isLoading || user.isError ? (
+            <SkeletonText maxW="6rem" noOfLines={2} />
+          ) : (
+            <Flex
+              flexDirection={{ base: 'column', md: 'row' }}
+              alignItems={{ base: 'start', md: 'center' }}
+              rowGap={1}
+              columnGap={4}
+            >
+              <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
+              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
+            </Flex>
+          )}
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}
         {isReady && user.isError && <ErrorPage />}

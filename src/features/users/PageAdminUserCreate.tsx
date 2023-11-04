@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -59,18 +61,11 @@ export default function PageAdminUserCreate() {
   return (
     <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-          <HStack>
-            <Heading size="sm" flex={1}>
-              {t('users:create.title')}
-            </Heading>
-            <ButtonGroup spacing={3} size="sm">
-              <Button
-                onClick={() => router.back()}
-                display={{ base: 'none', md: 'inline-flex' }}
-              >
-                {t('common:actions.cancel')}
-              </Button>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
               <Button
                 type="submit"
                 variant="@primary"
@@ -79,8 +74,10 @@ export default function PageAdminUserCreate() {
               >
                 {t('users:create.action.save')}
               </Button>
-            </ButtonGroup>
-          </HStack>
+            </>
+          }
+        >
+          <Heading size="sm">{t('users:create.title')}</Heading>
         </AdminLayoutPageTopBar>
         <AdminLayoutPageContent>
           <UserForm />
