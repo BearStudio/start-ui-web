@@ -1,14 +1,6 @@
 import React from 'react';
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  HStack,
-  Heading,
-  SkeletonText,
-} from '@chakra-ui/react';
+import { Button, Flex, Heading, SkeletonText } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';

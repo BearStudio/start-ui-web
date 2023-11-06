@@ -5,7 +5,6 @@ import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { ConfirmModal } from '@/components/ConfirmModal';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';

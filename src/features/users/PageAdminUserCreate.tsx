@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  Button,
-  ButtonGroup,
-  Divider,
-  HStack,
-  Heading,
-  Stack,
-} from '@chakra-ui/react';
+import { Button, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
