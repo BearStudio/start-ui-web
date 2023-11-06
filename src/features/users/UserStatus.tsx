@@ -1,14 +1,8 @@
-import {
-  Tag,
-  TagLabel,
-  TagLeftIcon,
-  TagProps,
-  ThemeTypings,
-} from '@chakra-ui/react';
+import { Tag, TagLabel, TagLeftIcon, ThemeTypings } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuCheck, LuX } from 'react-icons/lu';
 
-export type UserStatusProps = TagProps & {
+export type UserStatusProps = {
   isActivated?: boolean;
   showLabelBreakpoint?: ThemeTypings['breakpoints'];
 };
@@ -16,53 +10,34 @@ export type UserStatusProps = TagProps & {
 export const UserStatus = ({
   isActivated = false,
   showLabelBreakpoint = 'base',
-  ...rest
 }: UserStatusProps) => {
   const { t } = useTranslation(['users']);
-  return isActivated ? (
+
+  return (
     <Tag
       size="sm"
-      px={{ base: 0, [showLabelBreakpoint]: 2 }}
-      justifyContent="center"
-      alignItems="center"
-      colorScheme="success"
+      colorScheme={isActivated ? 'success' : 'warning'}
       gap={1}
-      whiteSpace="nowrap"
-      {...rest}
+      justifyContent="center"
+      px={{ base: 0, [showLabelBreakpoint]: 2 }}
     >
       <TagLeftIcon
-        as={LuCheck}
-        m={0}
-        aria-label={t('users:data.status.activated')}
+        as={isActivated ? LuCheck : LuX}
+        mr={0}
+        aria-label={
+          isActivated
+            ? t('users:data.status.activated')
+            : t('users:data.status.deactivated')
+        }
       />
       <TagLabel
-        display={{ base: 'none', [showLabelBreakpoint]: 'inline-flex' }}
         lineHeight={1}
+        display={{ base: 'none', [showLabelBreakpoint]: 'inline' }}
+        whiteSpace="nowrap"
       >
-        {t('users:data.status.activated')}
-      </TagLabel>
-    </Tag>
-  ) : (
-    <Tag
-      size="sm"
-      px={{ base: 0, [showLabelBreakpoint]: 2 }}
-      justifyContent="center"
-      alignItems="center"
-      colorScheme="warning"
-      whiteSpace="nowrap"
-      gap={1}
-      {...rest}
-    >
-      <TagLeftIcon
-        as={LuX}
-        aria-label={t('users:data.status.deactivated')}
-        m={0}
-      />
-      <TagLabel
-        display={{ base: 'none', [showLabelBreakpoint]: 'inline-flex' }}
-        lineHeight={1}
-      >
-        {t('users:data.status.deactivated')}
+        {isActivated
+          ? t('users:data.status.activated')
+          : t('users:data.status.deactivated')}
       </TagLabel>
     </Tag>
   );
