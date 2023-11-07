@@ -114,7 +114,7 @@ export const DayPickerContent = forwardRef<
                   onMonthChange={(date) => {
                     handleChangeMonth(date);
                   }}
-                  selected={value ? value : undefined}
+                  selected={value || undefined}
                   onSelect={handleDaySelect}
                   components={{
                     Caption: (props) => (
