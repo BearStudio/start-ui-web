@@ -153,31 +153,27 @@ export const DataListEmptyState = (props: DataListEmptyStateProps) => {
   const { t } = useTranslation(['components']);
   return (
     <DataListRow flex={1}>
-      <DataListCell>
-        <Flex
-          flex={1}
-          flexDirection="column"
-          maxW="full"
-          justifyContent="center"
-          alignItems="center"
-          fontSize="sm"
-          fontWeight="semibold"
-          color="text-dimmed"
-        >
-          {props.searchTerm && (
-            <Box>
-              {t('components:datalist.noResultsTitle', {
-                searchTerm: props.searchTerm,
-              })}
-            </Box>
-          )}
+      <DataListCell
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        fontSize="sm"
+        fontWeight="semibold"
+        color="text-dimmed"
+      >
+        {props.searchTerm && (
+          <Box>
+            {t('components:datalist.noResultsTitle', {
+              searchTerm: props.searchTerm,
+            })}
+          </Box>
+        )}
 
-          {!!props.children
-            ? props.children
-            : !props.searchTerm && (
-                <Box>{t('components:datalist.emptyTitle')}</Box>
-              )}
-        </Flex>
+        {!!props.children
+          ? props.children
+          : !props.searchTerm && (
+              <Box>{t('components:datalist.emptyTitle')}</Box>
+            )}
       </DataListCell>
     </DataListRow>
   );
