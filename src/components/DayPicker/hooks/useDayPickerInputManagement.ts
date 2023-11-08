@@ -16,13 +16,12 @@ type UseDayPickerInputManagementParams = {
   dateValue?: Date | null;
   dateFormat: string;
   onChange: (newDate: Date | null, updateMonth?: boolean) => void;
-  preventBlurAction: boolean;
 };
 
 export const useDayPickerInputManagement = (
   params: UseDayPickerInputManagementParams
 ): UseDayPickerInputManagement => {
-  const { dateValue, dateFormat, onChange, preventBlurAction } = params;
+  const { dateValue, dateFormat, onChange } = params;
   const [inputValue, setInputValue] = useState<string>(
     dateValue ? dayjs(dateValue).format(dateFormat) : ''
   );
@@ -48,10 +47,6 @@ export const useDayPickerInputManagement = (
   };
 
   const handleInputBlur = (inputValue: string) => {
-    if (preventBlurAction) {
-      return;
-    }
-
     const date = parseInputToDate(inputValue);
 
     if (!date.isValid()) {

@@ -58,7 +58,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const size = inputProps?.size ?? 'sm';
+  const size = inputProps?.size;
 
   // DayPicker focus management
   const [isCalendarFocused, setIsCalendarFocused] = useState<boolean>(false);
@@ -78,8 +78,7 @@ export const DayPicker: FC<DayPickerProps> = ({
     onClosePopper,
     inputRef,
   });
-  const { setPopperElement, openPopper, closePopper, isPopperOpen } =
-    popperManagement;
+  const { setPopperElement, openPopper, closePopper } = popperManagement;
 
   const onChangeInput = (newDate: Date | null, updateMonth = false) => {
     onChange(newDate);
@@ -93,7 +92,6 @@ export const DayPicker: FC<DayPickerProps> = ({
       dateValue: value,
       dateFormat,
       onChange: onChangeInput,
-      preventBlurAction: isPopperOpen,
     });
 
   const handleDaySelect = (date?: Date | null) => {

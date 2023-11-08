@@ -96,7 +96,7 @@ export const FieldDayPicker = <
     helper,
     placeholder,
     isDisabled,
-    inputProps = { size: 'sm' },
+    inputProps,
     noFormGroup,
     autoFocus,
     popperPlacement,

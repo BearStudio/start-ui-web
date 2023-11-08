@@ -19,12 +19,12 @@ export const Default = () => {
         onChange={setSelectedDay}
         inputProps={{ size: 'xs' }}
       />
-      <DayPicker value={selectedDay} onChange={setSelectedDay} />
       <DayPicker
         value={selectedDay}
         onChange={setSelectedDay}
-        inputProps={{ size: 'md' }}
+        inputProps={{ size: 'sm' }}
       />
+      <DayPicker value={selectedDay} onChange={setSelectedDay} />
     </Stack>
   );
 };
