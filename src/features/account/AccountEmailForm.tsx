@@ -101,6 +101,11 @@ export const AccountEmailForm = () => {
                       {t('account:data.email.current')}
                     </Flex>
                   )}
+                  {account.data.email !== values.email && (
+                    <Button onClick={() => form.reset()}>
+                      {t('common:actions.cancel')}
+                    </Button>
+                  )}
                 </Flex>
               </Stack>
             </form>

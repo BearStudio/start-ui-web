@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Flex, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 
@@ -40,7 +40,7 @@ export const AccountProfileForm = () => {
     },
   });
 
-  const profileForm = useForm<{
+  const form = useForm<{
     name: string;
     language: string;
   }>({
@@ -60,8 +60,8 @@ export const AccountProfileForm = () => {
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Formiz connect={profileForm}>
-            <form noValidate onSubmit={profileForm.submit}>
+          <Formiz connect={form}>
+            <form noValidate onSubmit={form.submit}>
               <Stack spacing={4}>
                 <FieldInput
                   name="name"
@@ -77,16 +77,21 @@ export const AccountProfileForm = () => {
                   }))}
                   defaultValue={DEFAULT_LANGUAGE_KEY}
                 />
-                <Flex>
+                <ButtonGroup spacing={3}>
                   <Button
                     type="submit"
                     variant="@primary"
                     isLoading={updateAccount.isLoading}
-                    isDisabled={!profileForm.isValid && profileForm.isSubmitted}
+                    isDisabled={!form.isValid && form.isSubmitted}
                   >
                     {t('account:profile.actions.update')}
                   </Button>
-                </Flex>
+                  {!form.isPristine && (
+                    <Button onClick={() => form.reset()}>
+                      {t('common:actions.cancel')}
+                    </Button>
+                  )}
+                </ButtonGroup>
               </Stack>
             </form>
           </Formiz>
