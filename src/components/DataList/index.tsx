@@ -118,7 +118,7 @@ export const DataListLoadingState = () => {
     <>
       <DataListRow>
         <DataListCell>
-          <Stack maxW="full" opacity={0.6} p={2}>
+          <Stack w="full" opacity={0.6} p={2}>
             <Skeleton w="30%" h={2} noOfLines={1} />
             <Skeleton w="20%" h={2} noOfLines={1} />
           </Stack>
@@ -126,7 +126,7 @@ export const DataListLoadingState = () => {
       </DataListRow>
       <DataListRow>
         <DataListCell>
-          <Stack maxW="full" opacity={0.4} p={2}>
+          <Stack w="full" opacity={0.4} p={2}>
             <Skeleton w="30%" h={2} noOfLines={1} />
             <Skeleton w="20%" h={2} noOfLines={1} />
           </Stack>
@@ -134,7 +134,7 @@ export const DataListLoadingState = () => {
       </DataListRow>
       <DataListRow>
         <DataListCell>
-          <Stack maxW="full" opacity={0.2} p={2}>
+          <Stack w="full" opacity={0.2} p={2}>
             <Skeleton w="30%" h={2} noOfLines={1} />
             <Skeleton w="20%" h={2} noOfLines={1} />
           </Stack>
