@@ -2,11 +2,10 @@ import React, { FC, useRef, useState } from 'react';
 
 import {
   BoxProps,
-  IconButton,
   Input,
   InputGroup,
+  InputLeftElement,
   InputProps,
-  InputRightElement,
   Placement,
 } from '@chakra-ui/react';
 import { DayPickerProps as ReactDayPickerProps } from 'react-day-picker';
@@ -76,17 +75,11 @@ export const DayPicker: FC<DayPickerProps> = ({
     popperPlacement,
     autoFocus,
     setIsCalendarFocused,
-    buttonRef,
     onClosePopper,
     inputRef,
   });
-  const {
-    setPopperElement,
-    togglePopper,
-    openPopper,
-    closePopper,
-    isPopperOpen,
-  } = popperManagement;
+  const { setPopperElement, openPopper, closePopper, isPopperOpen } =
+    popperManagement;
 
   const onChangeInput = (newDate: Date | null, updateMonth = false) => {
     onChange(newDate);
@@ -131,15 +124,19 @@ export const DayPicker: FC<DayPickerProps> = ({
   const valueRef = useRef(value);
   valueRef.current = value;
 
-  // Open day picker on focus only if there is no value
-  const manageOpenOnFocus = () => {
-    if (!valueRef.current) {
-      openPopper();
-    }
-  };
-
   return (
     <InputGroup ref={containerRef} size={size} width={inputProps.width}>
+      <InputLeftElement pointerEvents="none">
+        <Icon
+          icon={FiCalendar}
+          fontSize={size}
+          transform="scale(1.2)"
+          color={isDisabled ? 'gray.300' : 'gray.400'}
+          _dark={{
+            color: isDisabled ? 'gray.500' : 'gray.300',
+          }}
+        />
+      </InputLeftElement>
       <Input
         ref={inputRef}
         id={id}
@@ -147,28 +144,11 @@ export const DayPicker: FC<DayPickerProps> = ({
         onChange={handleInputChange}
         placeholder={placeholder}
         onBlur={(e) => handleInputBlur(e.target.value)}
-        onFocus={() => manageOpenOnFocus()}
+        onFocus={() => openPopper()}
         isDisabled={isDisabled}
         autoFocus={autoFocus}
         {...inputProps} // We want the style to be applied on the input (like the background)
       />
-      <InputRightElement>
-        <IconButton
-          ref={buttonRef}
-          aria-label="Toggle calendar"
-          bg="transparent"
-          _hover={{ bg: 'transparent', color: 'gray.500' }}
-          _active={{ bg: 'transparent', color: 'gray.600' }}
-          border="none"
-          icon={<Icon icon={FiCalendar} />}
-          size={size}
-          p={0}
-          isDisabled={isDisabled}
-          color={isDisabled ? 'gray.300' : 'gray.400'}
-          onClick={() => togglePopper(true)}
-          borderStartRadius="none"
-        />
-      </InputRightElement>
       <DayPickerContent
         value={value}
         isCalendarFocused={isCalendarFocused}

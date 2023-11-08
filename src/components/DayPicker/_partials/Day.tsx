@@ -15,15 +15,20 @@ export const Day: React.FC<React.PropsWithChildren<CustomDayProps>> = ({
   const { buttonProps, isHidden, isButton, divProps, activeModifiers } =
     useDayRender(date, displayMonth, buttonRef);
 
-  // Here we extract the `style` attribute in order to not use it
-  // it was used before, but the style is inlined in the button and
-  // makes the dark style hard to override
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { style: _unusedStyle, ...buttonPropsWithoutStyle } = buttonProps;
+  // Here we extract the `style` and 'className' attributes in order to not use it
+  // It allow us to make custom style easier
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    style: _unusedStyle,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    className: _unusedClassName,
+    ...buttonPropsWithoutStyle
+  } = buttonProps;
 
   if (isHidden) {
     return <></>;
   }
+
   if (!isButton) {
     return <div {...divProps} />;
   }
@@ -45,21 +50,27 @@ export const Day: React.FC<React.PropsWithChildren<CustomDayProps>> = ({
       size="xs"
       borderRadius="full"
       borderColor="transparent"
+      shadow="none"
+      p={5}
+      boxSize={8}
+      isDisabled={activeModifiers.disabled}
+      fontWeight={activeModifiers.today ? 'bold' : 'normal'}
+      bg={activeModifiers.selected ? 'brand.600' : 'transparent'}
+      color={activeModifiers.selected ? 'gray.100' : undefined}
+      _hover={{
+        bg: activeModifiers.selected ? 'brand.600' : 'gray.100',
+        borderColor: 'gray.200',
+      }}
+      {...disabledStyle}
       _dark={{
-        color: 'gray.200',
+        bg: activeModifiers.selected ? 'brand.400' : 'transparent',
+        color: 'gray.100',
         _hover: {
-          bg: 'transparent',
-          borderColor: 'gray.500',
+          bg: activeModifiers.selected ? 'brand.400' : 'gray.700',
+          borderColor: activeModifiers.selected ? 'gray.800' : 'gray.600',
         },
         ...disabledStyle,
       }}
-      px={0}
-      bg="transparent"
-      fontWeight={activeModifiers.today ? 'bold' : 'normal'}
-      isDisabled={activeModifiers.disabled}
-      {...disabledStyle}
-      w={8}
-      h={8}
     >
       {dayjs(date).format('DD')}
     </Button>

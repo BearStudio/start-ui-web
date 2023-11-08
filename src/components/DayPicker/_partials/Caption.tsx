@@ -31,7 +31,6 @@ export const Caption: React.FC<
           size="sm"
           onClick={() => onCaptionLabelClick?.()}
           textTransform="capitalize"
-          bg="gray.50"
         >
           {monthText}
         </Button>

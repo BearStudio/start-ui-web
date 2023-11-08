@@ -149,6 +149,7 @@ export const DayPickerContent = forwardRef<
                             variant="@secondary"
                             size="sm"
                             w="full"
+                            mt="2"
                             onBlur={() =>
                               isCalendarFocused ? undefined : closePopper()
                             } // fix le problème de tabulation qui ne reste pas bloqué sur la popper

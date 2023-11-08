@@ -16,7 +16,6 @@ export type UseDayPickerPopperManagementValue = {
 
 type UseDayPickerPopperManagementParams = {
   containerRef: React.RefObject<HTMLDivElement>;
-  buttonRef: React.RefObject<HTMLButtonElement>;
   inputRef: React.RefObject<HTMLInputElement>;
   popperPlacement: Placement;
   autoFocus: boolean;
@@ -32,7 +31,6 @@ export const useDayPickerPopperManagement = (
     popperPlacement,
     autoFocus,
     setIsCalendarFocused,
-    buttonRef,
     onClosePopper,
     inputRef,
   } = params;
@@ -72,13 +70,10 @@ export const useDayPickerPopperManagement = (
     setIsPopperOpen(true);
   };
 
-  const closePopper = (withFocus = true) => {
+  const closePopper = () => {
     onClosePopper();
     setIsPopperOpen(false);
     setIsCalendarFocused(false);
-    if (withFocus) {
-      buttonRef.current?.focus();
-    }
   };
 
   useEventListener('keydown', (event) => {
@@ -94,7 +89,7 @@ export const useDayPickerPopperManagement = (
       event?.key?.toLowerCase() === 'tab'
     ) {
       // Si l'input est focus, tab ne doit pas rentrer dans la popper de DayPicker
-      closePopper(false);
+      closePopper();
     }
   });
 
