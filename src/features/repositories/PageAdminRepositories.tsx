@@ -140,11 +140,7 @@ export default function PageAdminRepositories() {
                   <Box flex={1}>
                     {repositories.isSuccess &&
                       !!repositories.data.pages[0]?.total && (
-                        <Text
-                          fontSize="xs"
-                          color="gray.500"
-                          _dark={{ color: 'gray.300' }}
-                        >
+                        <Text fontSize="xs" color="text-dimmed">
                           <Trans
                             i18nKey="repositories:list.loadMore.display"
                             t={t}

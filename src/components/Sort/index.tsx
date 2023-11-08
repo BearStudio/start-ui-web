@@ -96,8 +96,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
             type="radio"
             fontWeight="medium"
             fontSize="xs"
-            color="gray.500"
-            _dark={{ color: 'gray.50' }}
+            color="text-dimmed"
             value={by}
             onChange={
               (value: string | string[]) => handleByChange(value.toString()) // type === radio, so value always be string
@@ -122,8 +121,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
             type="radio"
             fontWeight="medium"
             fontSize="xs"
-            color="gray.500"
-            _dark={{ color: 'gray.50' }}
+            color="text-dimmed"
             onChange={
               (value: string | string[]) =>
                 handleOrderChange(value as SortValue['order']) // type === radio, so value always be "asc" or "desc"

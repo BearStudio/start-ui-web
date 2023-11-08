@@ -97,7 +97,7 @@ export const AccountEmailForm = () => {
                     {t('account:email.actions.update')}
                   </Button>
                   {account.data.email === values.email && (
-                    <Flex fontSize="sm" opacity={0.6}>
+                    <Flex fontSize="sm" color="text-dimmed">
                       {t('account:data.email.current')}
                     </Flex>
                   )}

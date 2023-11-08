@@ -196,11 +196,7 @@ export default function PageAdminUsers() {
                   </Button>
                   <Box flex={1}>
                     {users.isSuccess && !!users.data.pages[0]?.total && (
-                      <Text
-                        fontSize="xs"
-                        color="gray.500"
-                        _dark={{ color: 'gray.300' }}
-                      >
+                      <Text fontSize="xs" color="text-dimmed">
                         <Trans
                           i18nKey="users:list.loadMore.display"
                           t={t}

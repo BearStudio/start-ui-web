@@ -67,8 +67,7 @@ export default function PageRegister() {
           textAlign="left"
           fontWeight="normal"
           px="0"
-          color="gray.500"
-          _dark={{ color: 'gray.400' }}
+          color="text-dimmed"
         >
           {t('auth:register.actions.alreadyHaveAnAccount')}{' '}
           <Box

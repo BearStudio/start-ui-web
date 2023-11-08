@@ -99,9 +99,8 @@ export const DataListTextHeader = (props: DataListTextHeaderProps) => {
     <DataListText
       fontWeight="bold"
       fontSize="xs"
-      color="gray.500"
+      color="text-dimmed"
       {...props}
-      _dark={{ color: 'gray.300', ...props._dark }}
     >
       {props.children}
     </DataListText>
@@ -163,8 +162,7 @@ export const DataListEmptyState = (props: DataListEmptyStateProps) => {
           alignItems="center"
           fontSize="sm"
           fontWeight="semibold"
-          color="gray.500"
-          _dark={{ color: 'gray.300' }}
+          color="text-dimmed"
         >
           {props.searchTerm && (
             <Box>
