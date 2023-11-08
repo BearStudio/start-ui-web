@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, ButtonGroup, Flex, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useTranslation } from 'react-i18next';
 
