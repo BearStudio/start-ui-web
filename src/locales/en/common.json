@@ -13,5 +13,11 @@
     "delete": "Delete",
     "edit": "Edit"
   },
-  "or": "or"
+  "or": "or",
+  "confirmDiscardChanges": {
+    "title": "Discard changes?",
+    "message": "You are about to undo all the changes you made.",
+    "confirmText": "Discard changes",
+    "cancelText": "Keep changes"
+  }
 }

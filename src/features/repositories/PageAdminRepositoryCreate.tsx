@@ -1,11 +1,13 @@
 import React from 'react';
 
-import { Button, HStack, Heading } from '@chakra-ui/react';
+import { Button, Heading } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -54,23 +56,25 @@ export default function PageAdminRepositoryCreate() {
   return (
     <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-          <HStack>
-            <Heading size="sm" flex={1}>
-              {t('repositories:create.title')}
-            </Heading>
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isLoading={
-                createRepository.isLoading || createRepository.isSuccess
-              }
-              isDisabled={!form.isValid && form.isSubmitted}
-            >
-              {t('repositories:create.action.save')}
-            </Button>
-          </HStack>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  createRepository.isLoading || createRepository.isSuccess
+                }
+                isDisabled={!form.isValid && form.isSubmitted}
+              >
+                {t('repositories:create.action.save')}
+              </Button>
+            </>
+          }
+        >
+          <Heading size="sm">{t('repositories:create.title')}</Heading>
         </AdminLayoutPageTopBar>
         <AdminLayoutPageContent>
           <RepositoryForm />

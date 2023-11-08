@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, HStack, Heading, SkeletonText, Stack } from '@chakra-ui/react';
+import { Button, Heading, SkeletonText, Stack } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -75,28 +77,30 @@ export default function PageAdminRepositoryUpdate() {
   return (
     <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-          <HStack>
-            <Stack flex={1} spacing={0}>
-              {repository.isLoading && (
-                <SkeletonText maxW="6rem" noOfLines={2} />
-              )}
-              {repository.isSuccess && (
-                <Heading size="sm">{repository.data?.name}</Heading>
-              )}
-            </Stack>
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isLoading={
-                updateRepository.isLoading || updateRepository.isSuccess
-              }
-              isDisabled={!form.isValid && form.isSubmitted}
-            >
-              {t('repositories:update.action.save')}
-            </Button>
-          </HStack>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  updateRepository.isLoading || updateRepository.isSuccess
+                }
+                isDisabled={!form.isValid && form.isSubmitted}
+              >
+                {t('repositories:update.action.save')}
+              </Button>
+            </>
+          }
+        >
+          <Stack flex={1} spacing={0}>
+            {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+            {repository.isSuccess && (
+              <Heading size="sm">{repository.data?.name}</Heading>
+            )}
+          </Stack>
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}
         {isReady && repository.isError && <ErrorPage />}

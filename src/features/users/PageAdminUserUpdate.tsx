@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Heading,
-  SkeletonText,
-} from '@chakra-ui/react';
+import { Button, Flex, Heading, SkeletonText } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { AdminBackButton } from '@/features/admin/AdminBackButton';
+import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
   AdminLayoutPage,
   AdminLayoutPageContent,
@@ -85,38 +80,35 @@ export default function PageAdminUserUpdate() {
   return (
     <Formiz connect={form} autoForm>
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar showBack onBack={() => router.back()}>
-          <HStack spacing="4">
-            <Box flex="1">
-              {user.isLoading || user.isError ? (
-                <SkeletonText maxW="6rem" noOfLines={2} />
-              ) : (
-                <Flex
-                  flexDirection={{ base: 'column', md: 'row' }}
-                  alignItems={{ base: 'start', md: 'center' }}
-                  rowGap={1}
-                  columnGap={4}
-                >
-                  <Heading size="sm">
-                    {user.data.name ?? user.data.email}
-                  </Heading>
-                  <UserStatus
-                    isActivated={user.data.accountStatus === 'ENABLED'}
-                  />
-                </Flex>
-              )}
-            </Box>
-
-            <Button
-              type="submit"
-              variant="@primary"
-              size="sm"
-              isDisabled={!form.isValid && form.isSubmitted}
-              isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={!form.isPristine} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isDisabled={!form.isValid && form.isSubmitted}
+                isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+              >
+                {t('users:update.action.save')}
+              </Button>
+            </>
+          }
+        >
+          {user.isLoading || user.isError ? (
+            <SkeletonText maxW="6rem" noOfLines={2} />
+          ) : (
+            <Flex
+              flexDirection={{ base: 'column', md: 'row' }}
+              alignItems={{ base: 'start', md: 'center' }}
+              rowGap={1}
+              columnGap={4}
             >
-              {t('users:update.action.save')}
-            </Button>
-          </HStack>
+              <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
+              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
+            </Flex>
+          )}
         </AdminLayoutPageTopBar>
         {!isReady && <LoaderFull />}
         {isReady && user.isError && <ErrorPage />}

@@ -36,7 +36,7 @@ export default function PageLogin() {
     <Stack spacing={6}>
       <Stack spacing={1}>
         <Heading size="md">{t('auth:login.appTitle')}</Heading>
-        <Text fontSize="sm" color="gray.500" _dark={{ color: 'gray.400' }}>
+        <Text fontSize="sm" color="text-dimmed">
           {t('auth:login.appSubTitle')}
         </Text>
       </Stack>

@@ -21,9 +21,9 @@ import {
   DataListCell,
   DataListEmptyState,
   DataListErrorState,
-  DataListFooter,
   DataListLoadingState,
   DataListRow,
+  DataListText,
 } from '@/components/DataList';
 import { Icon } from '@/components/Icons';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
@@ -99,84 +99,63 @@ export default function PageAdminRepositories() {
             {repositories.data?.pages
               .flatMap((p) => p.items)
               .map((repository) => (
-                <DataListRow as={LinkBox} key={repository.id}>
-                  <DataListCell colWidth={1} colName="name">
-                    <HStack maxW="100%">
-                      <Icon
-                        icon={LuBookMarked}
-                        fontSize="xl"
-                        color="gray.400"
-                        marginX={1}
-                      />
-                      <Box minW="0">
-                        <Text noOfLines={1} maxW="full" fontWeight="bold">
-                          <LinkOverlay
-                            as={Link}
-                            href={`${ADMIN_PATH}/repositories/${repository.id}`}
-                          >
-                            {repository.name}
-                          </LinkOverlay>
-                        </Text>
-
-                        <Text
-                          noOfLines={1}
-                          maxW="full"
-                          fontSize="sm"
-                          color="gray.600"
-                          _dark={{ color: 'gray.300' }}
-                          _hover={{ textDecoration: 'underline' }}
-                        >
-                          {repository.link}
-                        </Text>
-                      </Box>
-                    </HStack>
+                <DataListRow as={LinkBox} key={repository.id} withHover>
+                  <DataListCell w="auto">
+                    <Icon icon={LuBookMarked} fontSize="xl" color="gray.400" />
                   </DataListCell>
-                  <DataListCell
-                    colWidth={1}
-                    colName="description"
-                    isVisible={{ base: false, md: true }}
-                  >
-                    <Text noOfLines={2} fontSize="sm">
+                  <DataListCell>
+                    <DataListText fontWeight="bold">
+                      <LinkOverlay
+                        as={Link}
+                        href={`${ADMIN_PATH}/repositories/${repository.id}`}
+                      >
+                        {repository.name}
+                      </LinkOverlay>
+                    </DataListText>
+                    <DataListText color="text-dimmed">
+                      {repository.link}
+                    </DataListText>
+                  </DataListCell>
+                  <DataListCell flex={2} display={{ base: 'none', md: 'flex' }}>
+                    <DataListText noOfLines={2} color="text-dimmed">
                       {repository.description}
-                    </Text>
+                    </DataListText>
                   </DataListCell>
-                  <DataListCell colWidth="4rem" colName="actions">
+                  <DataListCell w="auto">
                     <AdminRepositoryActions repository={repository} />
                   </DataListCell>
                 </DataListRow>
               ))}
             {repositories.isSuccess && (
-              <DataListFooter gap={3}>
-                <Button
-                  size="sm"
-                  onClick={() => repositories.fetchNextPage()}
-                  isLoading={repositories.isFetchingNextPage}
-                  isDisabled={!repositories.hasNextPage}
-                >
-                  {t('repositories:list.loadMore.button')}
-                </Button>
-                <Box flex={1}>
-                  {repositories.isSuccess &&
-                    !!repositories.data.pages[0]?.total && (
-                      <Text
-                        fontSize="xs"
-                        color="gray.500"
-                        _dark={{ color: 'gray.300' }}
-                      >
-                        <Trans
-                          i18nKey="repositories:list.loadMore.display"
-                          t={t}
-                          values={{
-                            loaded: repositories.data.pages.flatMap(
-                              (p) => p.items
-                            ).length,
-                            total: repositories.data.pages[0].total,
-                          }}
-                        />
-                      </Text>
-                    )}
-                </Box>
-              </DataListFooter>
+              <DataListRow>
+                <DataListCell flexDirection="row" alignItems="center" gap={3}>
+                  <Button
+                    size="sm"
+                    onClick={() => repositories.fetchNextPage()}
+                    isLoading={repositories.isFetchingNextPage}
+                    isDisabled={!repositories.hasNextPage}
+                  >
+                    {t('repositories:list.loadMore.button')}
+                  </Button>
+                  <Box flex={1}>
+                    {repositories.isSuccess &&
+                      !!repositories.data.pages[0]?.total && (
+                        <Text fontSize="xs" color="text-dimmed">
+                          <Trans
+                            i18nKey="repositories:list.loadMore.display"
+                            t={t}
+                            values={{
+                              loaded: repositories.data.pages.flatMap(
+                                (p) => p.items
+                              ).length,
+                              total: repositories.data.pages[0].total,
+                            }}
+                          />
+                        </Text>
+                      )}
+                  </Box>
+                </DataListCell>
+              </DataListRow>
             )}
           </DataList>
         </Stack>

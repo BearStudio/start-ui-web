@@ -328,11 +328,10 @@ const AdminNavBarAccountMenuVersion = ({ ...rest }) => {
         fontSize="0.7rem"
         fontWeight="medium"
         outline="none"
-        color="gray.500"
+        color="text-dimmed"
         _hover={{ bg: 'gray.50' }}
         _focusVisible={{ bg: 'gray.50' }}
         _dark={{
-          color: 'gray.200',
           _focusVisible: { bg: 'gray.800' },
           _hover: { bg: 'gray.600' },
         }}

@@ -13,5 +13,11 @@
     "edit": "Hariri",
     "back": "Nyuma"
   },
-  "or": "au"
+  "or": "au",
+  "confirmDiscardChanges": {
+    "cancelText": "Weka mabadiliko",
+    "confirmText": "Tupa mabadiliko",
+    "message": "Unakaribia kutendua mabadiliko yote uliyofanya.",
+    "title": "Ungependa kutupa mabadiliko?"
+  }
 }

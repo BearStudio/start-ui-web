@@ -39,7 +39,7 @@ export default function PageRepositories() {
 
         {repositories.isSuccess &&
           !repositories.data.pages.flatMap((p) => p.items).length && (
-            <Text fontSize="sm" color="gray.500" _dark={{ color: 'gray.300' }}>
+            <Text fontSize="sm" color="text-dimmed">
               {t('repositories:list.empty')}
             </Text>
           )}

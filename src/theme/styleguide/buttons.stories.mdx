@@ -61,3 +61,17 @@ import { Button, IconButton } from '@chakra-ui/react'
     </ButtonGroup>
   </Story>
 </Canvas>
+
+
+## Link Button
+
+<Canvas>
+  <Story name="Link">
+    <ButtonGroup>
+      <Button variant="link">Link Button</Button>
+      <Button variant="link" isLoading loadingText="Processing...">Button</Button>
+      <IconButton variant="link" icon={<LuMinus />} aria-label="Remove" />
+      <Button variant="link" isDisabled>Button</Button>
+    </ButtonGroup>
+  </Story>
+</Canvas>

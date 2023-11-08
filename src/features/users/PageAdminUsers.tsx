@@ -23,9 +23,9 @@ import {
   DataListCell,
   DataListEmptyState,
   DataListErrorState,
-  DataListFooter,
   DataListLoadingState,
   DataListRow,
+  DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
@@ -104,50 +104,38 @@ export default function PageAdminUsers() {
             {users.data?.pages
               .flatMap((p) => p.items)
               .map((user) => (
-                <DataListRow as={LinkBox} key={user.id}>
-                  <DataListCell colName="login" colWidth="2">
-                    <HStack maxW="100%">
-                      <Avatar size="sm" name={user.email ?? ''} mx="1" />
-                      <Box minW="0">
-                        <Text noOfLines={1} maxW="full" fontWeight="bold">
-                          {user.id === account.data?.id && (
-                            <Tag
-                              size="sm"
-                              fontSize="2xs"
-                              colorScheme="success"
-                              me="2"
-                              textTransform="uppercase"
-                              lineHeight={1}
-                              px={1.5}
-                              py={0}
-                            >
-                              {t('users:you')}
-                            </Tag>
-                          )}
-                          <LinkOverlay
-                            as={Link}
-                            href={`${ADMIN_PATH}/management/users/${user.id}`}
-                          >
-                            {user.name ?? user.email}
-                          </LinkOverlay>
-                        </Text>
-                        <Text
-                          noOfLines={1}
-                          maxW="full"
-                          fontSize="sm"
-                          color="gray.600"
-                          _dark={{ color: 'gray.300' }}
-                        >
-                          {user.email}
-                        </Text>
-                      </Box>
-                    </HStack>
+                <DataListRow as={LinkBox} key={user.id} withHover>
+                  <DataListCell w="auto">
+                    <Avatar size="sm" name={user.email ?? ''} />
                   </DataListCell>
-                  <DataListCell
-                    colName="authorities"
-                    colWidth="0.5"
-                    isVisible={{ base: false, md: true }}
-                  >
+                  <DataListCell flex={2}>
+                    <DataListText fontWeight="bold">
+                      {user.id === account.data?.id && (
+                        <Tag
+                          size="sm"
+                          fontSize="2xs"
+                          colorScheme="success"
+                          me="2"
+                          textTransform="uppercase"
+                          lineHeight={1}
+                          px={1.5}
+                          py={0}
+                        >
+                          {t('users:you')}
+                        </Tag>
+                      )}
+                      <LinkOverlay
+                        as={Link}
+                        href={`${ADMIN_PATH}/management/users/${user.id}`}
+                      >
+                        {user.name ?? user.email}
+                      </LinkOverlay>
+                    </DataListText>
+                    <DataListText color="text-dimmed">
+                      {user.email}
+                    </DataListText>
+                  </DataListCell>
+                  <DataListCell w="10ch" display={{ base: 'none', sm: 'flex' }}>
                     {user.authorizations
                       .filter((a) => a !== 'APP')
                       .map((authorization) => (
@@ -164,18 +152,13 @@ export default function PageAdminUsers() {
                       ))}
                   </DataListCell>
                   <DataListCell
-                    colName="created"
-                    fontSize="sm"
-                    position="relative"
                     pointerEvents="none"
-                    isVisible={{ base: false, lg: true }}
+                    display={{ base: 'none', md: 'flex' }}
                   >
-                    <Text
+                    <DataListText
                       noOfLines={2}
-                      maxW="full"
                       pointerEvents="auto"
-                      color="gray.600"
-                      _dark={{ color: 'gray.300' }}
+                      color="text-dimmed"
                     >
                       <Trans
                         i18nKey="users:data.createdAt.ago"
@@ -184,57 +167,47 @@ export default function PageAdminUsers() {
                           dateAgo: <DateAgo date={user.createdAt} />,
                         }}
                       />
-                    </Text>
+                    </DataListText>
                   </DataListCell>
-                  <DataListCell
-                    colName="status"
-                    colWidth={{ base: '3rem', lg: '10rem' }}
-                    align="center"
-                  >
+                  <DataListCell w={{ base: 'auto', md: '14ch' }} align="center">
                     <UserStatus
                       isActivated={user.accountStatus === 'ENABLED'}
-                      showLabelBreakpoint="lg"
+                      showLabelBreakpoint="md"
                     />
                   </DataListCell>
-                  <DataListCell
-                    colName="actions"
-                    colWidth="4rem"
-                    align="flex-end"
-                  >
+                  <DataListCell w="auto">
                     <AdminUserActions user={user} />
                   </DataListCell>
                 </DataListRow>
               ))}
             {users.isSuccess && (
-              <DataListFooter gap={3}>
-                <Button
-                  size="sm"
-                  onClick={() => users.fetchNextPage()}
-                  isLoading={users.isFetchingNextPage}
-                  isDisabled={!users.hasNextPage}
-                >
-                  {t('users:list.loadMore.button')}
-                </Button>
-                <Box flex={1}>
-                  {users.isSuccess && !!users.data.pages[0]?.total && (
-                    <Text
-                      fontSize="xs"
-                      color="gray.500"
-                      _dark={{ color: 'gray.300' }}
-                    >
-                      <Trans
-                        i18nKey="users:list.loadMore.display"
-                        t={t}
-                        values={{
-                          loaded: users.data.pages.flatMap((p) => p.items)
-                            .length,
-                          total: users.data.pages[0].total,
-                        }}
-                      />
-                    </Text>
-                  )}
-                </Box>
-              </DataListFooter>
+              <DataListRow>
+                <DataListCell gap={3} flexDirection="row" align="center">
+                  <Button
+                    size="sm"
+                    onClick={() => users.fetchNextPage()}
+                    isLoading={users.isFetchingNextPage}
+                    isDisabled={!users.hasNextPage}
+                  >
+                    {t('users:list.loadMore.button')}
+                  </Button>
+                  <Box flex={1}>
+                    {users.isSuccess && !!users.data.pages[0]?.total && (
+                      <Text fontSize="xs" color="text-dimmed">
+                        <Trans
+                          i18nKey="users:list.loadMore.display"
+                          t={t}
+                          values={{
+                            loaded: users.data.pages.flatMap((p) => p.items)
+                              .length,
+                            total: users.data.pages[0].total,
+                          }}
+                        />
+                      </Text>
+                    )}
+                  </Box>
+                </DataListCell>
+              </DataListRow>
             )}
           </DataList>
         </Stack>
