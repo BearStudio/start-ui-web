@@ -44,6 +44,7 @@ const data = [
     department: 'Optimization',
     status: 'active',
     role: 'Admin',
+    wallet: 42,
   },
   {
     id: 2,
@@ -53,6 +54,7 @@ const data = [
     department: 'Intranet',
     status: 'active',
     role: 'Owner',
+    wallet: 142,
   },
   {
     id: 3,
@@ -62,6 +64,7 @@ const data = [
     department: 'Directives',
     status: 'inactive',
     role: 'Member',
+    wallet: 23,
   },
   {
     id: 4,
@@ -71,6 +74,7 @@ const data = [
     department: 'Directives',
     status: 'inactive',
     role: 'Member',
+    wallet: 132,
   },
 ] as const;
 
@@ -93,10 +97,11 @@ export const Default = () => (
         <DataListCell flex={0.4} display={{ base: 'none', md: 'flex' }}>
           <DataListText color="text-dimmed">{user.role}</DataListText>
         </DataListCell>
-        <DataListCell w={{ base: 'auto', md: '5rem', lg: '8rem' }}>
-          <DataListText textAlign="center">
-            <ExampleStatus status={user.status} />
-          </DataListText>
+        <DataListCell
+          w={{ base: 'auto', md: '5rem', lg: '8rem' }}
+          align="center"
+        >
+          <ExampleStatus status={user.status} />
         </DataListCell>
         <DataListCell w="auto" p={0}>
           <ExampleMenu />
@@ -115,7 +120,10 @@ export const WithHeaders = () => (
       <DataListCell>
         <DataListTextHeader>Email</DataListTextHeader>
       </DataListCell>
-      <DataListCell>
+      <DataListCell align="end">
+        <DataListTextHeader>Wallet</DataListTextHeader>
+      </DataListCell>
+      <DataListCell align="center">
         <DataListTextHeader>Role</DataListTextHeader>
       </DataListCell>
     </DataListRow>
@@ -127,8 +135,11 @@ export const WithHeaders = () => (
         <DataListCell>
           <DataListText>{user.email}</DataListText>
         </DataListCell>
-        <DataListCell>
-          <DataListText>{user.role}</DataListText>
+        <DataListCell align="end">
+          <DataListText>{user.wallet}$</DataListText>
+        </DataListCell>
+        <DataListCell align="center">
+          <DataListText color="text-dimmed">{user.role}</DataListText>
         </DataListCell>
       </DataListRow>
     ))}

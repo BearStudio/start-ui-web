@@ -169,10 +169,7 @@ export default function PageAdminUsers() {
                       />
                     </DataListText>
                   </DataListCell>
-                  <DataListCell
-                    w={{ base: 'auto', md: '14ch' }}
-                    alignItems="center"
-                  >
+                  <DataListCell w={{ base: 'auto', md: '14ch' }} align="center">
                     <UserStatus
                       isActivated={user.accountStatus === 'ENABLED'}
                       showLabelBreakpoint="md"
@@ -185,7 +182,7 @@ export default function PageAdminUsers() {
               ))}
             {users.isSuccess && (
               <DataListRow>
-                <DataListCell gap={3} flexDirection="row" alignItems="center">
+                <DataListCell gap={3} flexDirection="row" align="center">
                   <Button
                     size="sm"
                     onClick={() => users.fetchNextPage()}
