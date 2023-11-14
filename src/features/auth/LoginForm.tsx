@@ -44,7 +44,10 @@ export const LoginForm = ({
   });
 
   const form = useForm<{ email: string }>({
-    onValidSubmit: (values) => login.mutate(values),
+    onValidSubmit: (values) => {
+      console.log({ values });
+      // login.mutate(values)
+    },
   });
 
   return (

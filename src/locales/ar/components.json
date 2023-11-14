@@ -66,5 +66,25 @@
       "title": "خطأ"
     },
     "errorCode": "Error {{code}}"
+  },
+  "dayPicker": {
+    "today": "اليوم"
+  },
+  "monthPicker": {
+    "today": "اليوم",
+    "months": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    }
   }
 }

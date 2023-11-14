@@ -4,7 +4,7 @@ import * as externals from './externals';
 
 const externalsStyles = (props: StyleFunctionProps) =>
   Object.values(externals).reduce(
-    (acc, cur) => ({
+    (acc: object, cur) => ({
       ...acc,
       ...(typeof cur === 'function' ? cur(props) : cur),
     }),

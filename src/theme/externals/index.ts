@@ -1,1 +1,1 @@
-export { reactDayPicker } from './reactDayPicker';
+export {};
