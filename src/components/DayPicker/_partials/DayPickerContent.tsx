@@ -154,7 +154,7 @@ export const DayPickerContent = forwardRef<
                               isCalendarFocused ? undefined : closePopper()
                             } // fix le problème de tabulation qui ne reste pas bloqué sur la popper
                           >
-                            {t('dayPicker.today')}
+                            {t('components:dayPicker.today')}
                           </Button>
                         ),
                       }

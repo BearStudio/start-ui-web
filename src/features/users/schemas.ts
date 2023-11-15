@@ -2,8 +2,9 @@ import { z } from 'zod';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
+export const USER_AUTHORIZATIONS = ['APP', 'ADMIN'] as const;
 export type UserAuthorization = z.infer<ReturnType<typeof zUserAuthorization>>;
-export const zUserAuthorization = () => z.enum(['APP', 'ADMIN']);
+export const zUserAuthorization = () => z.enum(USER_AUTHORIZATIONS);
 
 export type UserAccountStatus = z.infer<ReturnType<typeof zUserAccountStatus>>;
 export const zUserAccountStatus = () =>

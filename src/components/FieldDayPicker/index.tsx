@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { FieldProps, useField } from '@formiz/core';
 import dayjs, { Dayjs } from 'dayjs';
 import { isMatch } from 'react-day-picker';
+import { useTranslation } from 'react-i18next';
 
 import { DayPicker, DayPickerProps } from '@/components/DayPicker';
 import {
@@ -44,15 +45,18 @@ export type FieldDayPickerProps<
 export const FieldDayPicker = <
   FormattedValue extends FieldDayPickerPossibleFormattedValue = Dayjs,
 >({
-  invalidMessage = 'Date invalide',
+  invalidMessage,
   dayPickerProps,
   ...restFieldProps
 }: FieldDayPickerProps<FormattedValue>) => {
+  const { t } = useTranslation(['components']);
+
   const getValidations = useCallback(
     () => [
       {
         handler: (v: FormattedValue) => v !== undefined,
-        message: invalidMessage,
+        message:
+          invalidMessage ?? t('components:fieldDayPicker.invalidMessage'),
       },
 
       // le spread de la prop validations ne doit pas être à la fin de la constante validations, sinon elle sera exécuté (écrasé)

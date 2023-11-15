@@ -181,7 +181,7 @@ export default function PageAdminUsers() {
                 </DataListRow>
               ))}
             {users.isSuccess && (
-              <DataListRow>
+              <DataListRow mt="auto">
                 <DataListCell gap={3} flexDirection="row" align="center">
                   <Button
                     size="sm"

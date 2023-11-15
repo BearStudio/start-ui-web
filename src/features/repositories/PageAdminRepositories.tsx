@@ -127,7 +127,7 @@ export default function PageAdminRepositories() {
                 </DataListRow>
               ))}
             {repositories.isSuccess && (
-              <DataListRow>
+              <DataListRow mt="auto">
                 <DataListCell flexDirection="row" alignItems="center" gap={3}>
                   <Button
                     size="sm"

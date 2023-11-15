@@ -24,7 +24,7 @@ export const TodayButton = () => {
       onClick={handleClick}
       size="sm"
     >
-      {t('monthPicker.today')}
+      {t('components:monthPicker.today')}
     </Button>
   );
 };
