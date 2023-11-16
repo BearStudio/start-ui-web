@@ -66,7 +66,7 @@
     "react-router-dom": "6.11.2",
     "react-select": "5.7.3",
     "react-use-measure": "2.1.1",
-    "sharp": "0.32.1",
+    "sharp": "0.32.6",
     "swagger-ui-react": "4.19.0",
     "zod": "3.21.4",
     "zustand": "4.3.8"
