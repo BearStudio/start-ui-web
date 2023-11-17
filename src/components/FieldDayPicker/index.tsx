@@ -77,7 +77,7 @@ export const FieldDayPicker = <
         deps: [dayPickerProps?.disabled],
       },
     ],
-    [dayPickerProps?.disabled, restFieldProps.validations, invalidMessage]
+    [invalidMessage, t, restFieldProps.validations, dayPickerProps?.disabled]
   );
 
   const {
