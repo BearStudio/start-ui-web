@@ -105,3 +105,25 @@ export const OptionsColorScheme = () => {
     </Formiz>
   );
 };
+
+export const CreateableMultiSelect = () => {
+  const form = useForm({ onSubmit: console.log });
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          selectProps={{ isMulti: true, type: 'creatable' }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};

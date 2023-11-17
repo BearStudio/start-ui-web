@@ -88,6 +88,12 @@ export const CreatableSelect = () => {
   );
 };
 
+export const MultiCreatableSelect = () => {
+  return (
+    <Select isMulti type="creatable" options={selectOptions.slice(0, 2)} />
+  );
+};
+
 export const NotSearchableSelect = () => {
   return <Select isSearchable={false} options={selectOptions.slice(0, 2)} />;
 };

@@ -1,13 +1,14 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
-import { GroupBase } from 'react-select';
+import { GroupBase, MultiValue, SingleValue } from 'react-select';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
 export type FieldSelectProps<
   Option extends { label: ReactNode; value: unknown },
+  IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
 > = FieldProps<Option['value']> &
   FormGroupProps & {
@@ -16,14 +17,15 @@ export type FieldSelectProps<
     options?: Option[];
     isClearable?: boolean;
     isSearchable?: boolean;
-    selectProps?: SelectProps<Option, false, Group>;
+    selectProps?: SelectProps<Option, IsMulti, Group>;
   };
 
 export const FieldSelect = <
   Option extends { label: ReactNode; value: unknown },
+  IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
 >(
-  props: FieldSelectProps<Option, Group>
+  props: FieldSelectProps<Option, IsMulti, Group>
 ) => {
   const {
     errorMessage,
@@ -70,15 +72,19 @@ export const FieldSelect = <
 
   return (
     <FormGroup {...formGroupProps}>
-      <Select
+      <Select<Option, IsMulti, Group>
         id={id}
         value={options?.find((option) => option.value === value) ?? undefined}
         onFocus={() => setIsTouched(false)}
         onBlur={() => setIsTouched(true)}
         placeholder={placeholder || 'Select...'}
-        onChange={(fieldValue: TODO) =>
-          setValue(fieldValue ? fieldValue.value : null)
-        }
+        onChange={(fieldValue) => {
+          if (isMultiValue<Option>(fieldValue)) {
+            setValue(fieldValue.map((f) => f.value) as TODO);
+          } else {
+            setValue(fieldValue ? (fieldValue.value as TODO) : null);
+          }
+        }}
         size={size}
         options={options}
         isDisabled={isDisabled}
@@ -91,3 +97,9 @@ export const FieldSelect = <
     </FormGroup>
   );
 };
+
+function isMultiValue<Option extends { label: ReactNode; value: unknown }>(
+  value: MultiValue<Option> | SingleValue<Option>
+): value is MultiValue<Option> {
+  return Array.isArray(value);
+}
