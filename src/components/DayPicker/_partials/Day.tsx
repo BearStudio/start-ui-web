@@ -6,10 +6,7 @@ import { DayProps, useDayRender } from 'react-day-picker';
 
 type CustomDayProps = DayProps;
 
-export const Day: React.FC<React.PropsWithChildren<CustomDayProps>> = ({
-  displayMonth,
-  date,
-}) => {
+export const Day = ({ displayMonth, date }: CustomDayProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const { buttonProps, isHidden, isButton, divProps, activeModifiers } =
