@@ -5,7 +5,6 @@ import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
-import { FieldMultiSelect } from '@/components/FieldMultiSelect';
 import { FieldSelect } from '@/components/FieldSelect';
 import {
   USER_AUTHORIZATIONS,
@@ -53,7 +52,7 @@ export const UserForm = () => {
         }))}
         defaultValue={DEFAULT_LANGUAGE_KEY}
       />
-      <FieldMultiSelect
+      <FieldSelect
         name="authorizations"
         label={t('users:data.authorizations.label')}
         required={t('users:data.authorizations.required')}
@@ -62,6 +61,7 @@ export const UserForm = () => {
           label: t(`users:data.authorizations.options.${authorization}`),
         }))}
         defaultValue={['APP']}
+        selectProps={{ isMulti: true }}
       />
     </Stack>
   );

@@ -157,6 +157,21 @@ export const AsyncCreatableSelect = () => {
   );
 };
 
+export const AsyncCreatableMultiSelect = () => {
+  return (
+    <Select
+      type="async-creatable"
+      isClearable
+      loadOptions={handleLoadOptions}
+      defaultOptions={options.map((option) => ({
+        label: option,
+        value: option,
+      }))}
+      isMulti
+    />
+  );
+};
+
 export const SelectWithSomeDisabledOptions = () => {
   return (
     <Select
