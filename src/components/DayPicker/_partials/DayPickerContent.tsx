@@ -20,6 +20,7 @@ import {
 import { useDayPickerCalendarFocusController } from '@/components/DayPicker/hooks/useDayPickerCalendarFocusController';
 import { UseDayPickerMonthNavigationValue } from '@/components/DayPicker/hooks/useDayPickerMonthNavigation';
 import { UseDayPickerPopperManagementValue } from '@/components/DayPicker/hooks/useDayPickerPopperManagement';
+import { matcherToArray } from '@/components/DayPicker/matcherToArray';
 import { MonthPicker } from '@/components/MonthPicker';
 
 type DayPickerContentProps = {
@@ -82,19 +83,36 @@ export const DayPickerContent = forwardRef<
       onTapEnter: handleOnTapEnter,
     });
 
+    const todayButtonProps = hasTodayButton
+      ? {
+          footer: (
+            <Button
+              onClick={() => handleDaySelect(dayjs().startOf('day').toDate())}
+              variant="@secondary"
+              size="sm"
+              w="full"
+              mt="2"
+              onBlur={() => (isCalendarFocused ? undefined : closePopper())} // fix tab not locked in popper issue
+            >
+              {t('components:dayPicker.today')}
+            </Button>
+          ),
+        }
+      : {};
+
     const content = (
       <Box
         tabIndex={-1}
         style={popper.styles.popper}
         {...popper.attributes.popper}
         ref={ref}
-        role="dialog"
         zIndex={2}
         minW={250}
+        role="dialog"
       >
         <FocusLock
           disabled={!isCalendarFocused}
-          onDeactivation={() => setTimeout(() => buttonRef.current?.focus(), 0)} // setTimeout recommandé par FocusLock
+          onDeactivation={() => setTimeout(() => buttonRef.current?.focus(), 0)} // setTimeout recommended by FocusLock
         >
           <Box
             shadow="md"
@@ -106,63 +124,41 @@ export const DayPickerContent = forwardRef<
             {...rest}
           >
             {mode === 'DAY' ? (
-              <>
-                <ReactDayPicker
-                  mode="single"
-                  initialFocus={isCalendarFocused}
-                  month={month ?? undefined}
-                  onMonthChange={(date) => {
-                    handleChangeMonth(date);
-                  }}
-                  selected={value || undefined}
-                  onSelect={handleDaySelect}
-                  components={{
-                    Caption: (props) => (
-                      <Caption
-                        {...props}
-                        onCaptionLabelClick={toggleMode}
-                        setMonth={(date) => {
-                          handleChangeMonth(date);
-                        }}
-                      />
-                    ),
-                    Day: (props) => <Day {...props} />,
-                  }}
-                  disabled={
-                    arePastDaysDisabled
-                      ? [
-                          { before: dayjs().startOf('day').toDate() },
-                          // TODO fix typage
-                          ...((dayPickerProps?.disabled as Array<TODO>) || []),
-                        ]
-                      : dayPickerProps?.disabled
-                  }
-                  modifiers={modifiers}
-                  modifiersStyles={modifiersStyles}
-                  {...(hasTodayButton
-                    ? {
-                        footer: (
-                          <Button
-                            onClick={() =>
-                              handleDaySelect(dayjs().startOf('day').toDate())
-                            }
-                            variant="@secondary"
-                            size="sm"
-                            w="full"
-                            mt="2"
-                            onBlur={() =>
-                              isCalendarFocused ? undefined : closePopper()
-                            } // fix le problème de tabulation qui ne reste pas bloqué sur la popper
-                          >
-                            {t('components:dayPicker.today')}
-                          </Button>
-                        ),
-                      }
-                    : {})}
-                  locale={fr}
-                  required={required}
-                />
-              </>
+              <ReactDayPicker
+                mode="single"
+                initialFocus={isCalendarFocused}
+                month={month ?? undefined}
+                onMonthChange={(date) => {
+                  handleChangeMonth(date);
+                }}
+                selected={value ?? undefined}
+                onSelect={handleDaySelect}
+                components={{
+                  Caption: (props) => (
+                    <Caption
+                      {...props}
+                      onCaptionLabelClick={toggleMode}
+                      setMonth={(date) => {
+                        handleChangeMonth(date);
+                      }}
+                    />
+                  ),
+                  Day,
+                }}
+                disabled={
+                  arePastDaysDisabled
+                    ? [
+                        { before: dayjs().startOf('day').toDate() },
+                        ...matcherToArray(dayPickerProps?.disabled),
+                      ]
+                    : dayPickerProps?.disabled
+                }
+                modifiers={modifiers}
+                modifiersStyles={modifiersStyles}
+                {...todayButtonProps}
+                locale={fr}
+                required={required}
+              />
             ) : (
               <MonthPicker
                 year={month?.getFullYear()}
