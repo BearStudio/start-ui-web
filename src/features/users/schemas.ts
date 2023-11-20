@@ -10,7 +10,7 @@ export type UserAccountStatus = z.infer<ReturnType<typeof zUserAccountStatus>>;
 export const zUserAccountStatus = () =>
   z.enum(['DISABLED', 'ENABLED', 'NOT_VERIFIED']).catch('DISABLED');
 
-export type User = ReturnType<typeof zUser>;
+export type User = z.infer<ReturnType<typeof zUser>>;
 export const zUser = () =>
   z.object({
     id: z.string(),
