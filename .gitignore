@@ -45,7 +45,6 @@ yarn-error.log*
 
 # Build info
 .build-info.json
-openapi.json
 
 # Prisma
 prisma/dev.db
