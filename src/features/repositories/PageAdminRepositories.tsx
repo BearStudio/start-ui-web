@@ -93,7 +93,9 @@ export default function PageAdminRepositories() {
             )}
             {repositories.isSuccess &&
               !repositories.data.pages.flatMap((p) => p.items).length && (
-                <DataListEmptyState searchTerm={searchTerm} />
+                <DataListEmptyState searchTerm={searchTerm}>
+                  {t('repositories:list.empty')}
+                </DataListEmptyState>
               )}
 
             {repositories.data?.pages
