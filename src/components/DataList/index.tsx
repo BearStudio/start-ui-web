@@ -161,19 +161,15 @@ export const DataListEmptyState = (props: DataListEmptyStateProps) => {
         fontWeight="semibold"
         color="text-dimmed"
       >
-        {props.searchTerm && (
+        {props.searchTerm ? (
           <Box>
             {t('components:datalist.noResultsTitle', {
               searchTerm: props.searchTerm,
             })}
           </Box>
+        ) : (
+          props.children ?? <Box>{t('components:datalist.emptyTitle')}</Box>
         )}
-
-        {!!props.children
-          ? props.children
-          : !props.searchTerm && (
-              <Box>{t('components:datalist.emptyTitle')}</Box>
-            )}
       </DataListCell>
     </DataListRow>
   );
