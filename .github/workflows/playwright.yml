@@ -7,7 +7,7 @@ on:
 
 jobs:
   E2E:
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
