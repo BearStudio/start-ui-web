@@ -25,7 +25,7 @@ export const AppPublicOnlyLayout = ({ children }: AppPublicOnlyLayout) => {
       >
         <Logo w="16rem" mb="8" mx="auto" />
       </Center>
-      <Flex flex={1} minW={0} bg="white" _dark={{ bg: 'gray.900' }}>
+      <Flex flex={1} minW={0} bg="gray.50" _dark={{ bg: 'gray.900' }}>
         <SlideIn>
           <Box px="4" py="4rem" w="22rem" maxW="full" m="auto">
             <Logo

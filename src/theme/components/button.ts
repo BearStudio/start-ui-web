@@ -74,6 +74,7 @@ const variantSecondary = defineStyle((props) => ({
 
 export const buttonTheme = defineStyleConfig({
   baseStyle: (props) => ({
+    fontWeight: 'medium',
     boxShadow: 'sm',
     border: '1px solid transparent',
     _focusVisible: {

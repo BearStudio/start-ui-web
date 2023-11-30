@@ -44,7 +44,7 @@ export default function PageHome() {
         </Heading>
 
         {account.isSuccess && account.data.authorizations.includes('ADMIN') && (
-          <Alert as={LinkBox} status="info">
+          <Alert as={LinkBox} colorScheme="brand">
             <AlertTitle flex="none">{t('account:admin.title')}</AlertTitle>
             <Link
               as={LinkOverlay}

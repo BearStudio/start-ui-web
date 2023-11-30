@@ -5,14 +5,12 @@ export const pinInputTheme = {
   variants: {
     outline: () => {
       return {
-        field: {
-          bg: 'white',
-          borderColor: 'gray.200',
-          boxShadow: 'sm',
-          _dark: {
-            bg: 'whiteAlpha.50',
-            borderColor: 'whiteAlpha.100',
-          },
+        bg: 'white',
+        borderColor: 'gray.200',
+        boxShadow: 'sm',
+        _dark: {
+          bg: 'whiteAlpha.50',
+          borderColor: 'whiteAlpha.100',
         },
       };
     },
