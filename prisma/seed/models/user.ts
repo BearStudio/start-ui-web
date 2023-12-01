@@ -4,11 +4,11 @@ import { emphasis, prisma } from 'prisma/seed/utils';
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
 
-  let createdUsersCounter = 0;
-  const existingUsersCount = await prisma.user.count();
+  let createdCounter = 0;
+  const existingCount = await prisma.user.count();
 
   await Promise.all(
-    Array.from({ length: Math.max(0, 98 - existingUsersCount) }, async () => {
+    Array.from({ length: Math.max(0, 98 - existingCount) }, async () => {
       await prisma.user.create({
         data: {
           name: faker.person.fullName(),
@@ -16,7 +16,7 @@ export async function createUsers() {
           accountStatus: 'ENABLED',
         },
       });
-      createdUsersCounter += 1;
+      createdCounter += 1;
     })
   );
 
@@ -28,7 +28,7 @@ export async function createUsers() {
         accountStatus: 'ENABLED',
       },
     });
-    createdUsersCounter += 1;
+    createdCounter += 1;
   }
 
   if (
@@ -42,11 +42,11 @@ export async function createUsers() {
         accountStatus: 'ENABLED',
       },
     });
-    createdUsersCounter += 1;
+    createdCounter += 1;
   }
 
   console.log(
-    `✅ ${existingUsersCount} existing user 👉 ${createdUsersCounter} users created`
+    `✅ ${existingCount} existing user 👉 ${createdCounter} users created`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);
