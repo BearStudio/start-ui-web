@@ -110,7 +110,7 @@ export const usersRouter = createTRPCRouter({
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
         const nextItem = items.pop();
-        nextCursor = nextItem!.id;
+        nextCursor = nextItem?.id;
       }
 
       return {
