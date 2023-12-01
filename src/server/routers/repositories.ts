@@ -58,14 +58,8 @@ export const repositoriesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting repositories from database');
-      const [items, total] = await Promise.all([
-        ctx.db.repository.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
+      const [total, items] = await ctx.db.$transaction([
+        ctx.db.repository.count({
           where: {
             name: {
               contains: input.searchTerm,
@@ -73,7 +67,13 @@ export const repositoriesRouter = createTRPCRouter({
             },
           },
         }),
-        ctx.db.repository.count({
+        ctx.db.repository.findMany({
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
+          orderBy: {
+            name: 'asc',
+          },
           where: {
             name: {
               contains: input.searchTerm,

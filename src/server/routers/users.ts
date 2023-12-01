@@ -62,14 +62,8 @@ export const usersRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting users from database');
-      const [items, total] = await Promise.all([
-        ctx.db.user.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            id: 'desc',
-          },
+      const [total, items] = await ctx.db.$transaction([
+        ctx.db.user.count({
           where: {
             OR: [
               {
@@ -87,7 +81,13 @@ export const usersRouter = createTRPCRouter({
             ],
           },
         }),
-        ctx.db.user.count({
+        ctx.db.user.findMany({
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
+          orderBy: {
+            id: 'desc',
+          },
           where: {
             OR: [
               {
