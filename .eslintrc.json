@@ -14,7 +14,8 @@
       }
     ],
     "sonarjs/no-duplicate-string": "off",
-    "sonarjs/cognitive-complexity": ["warn", 50]
+    "sonarjs/cognitive-complexity": ["warn", 50],
+    "sonarjs/prefer-immediate-return": "warn"
   },
   "overrides": [
     {
