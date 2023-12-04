@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -62,24 +63,27 @@ export const usersRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting users from database');
+
+      const where = {
+        OR: [
+          {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      } satisfies Prisma.UserWhereInput;
+
       const [total, items] = await ctx.db.$transaction([
         ctx.db.user.count({
-          where: {
-            OR: [
-              {
-                name: {
-                  contains: input.searchTerm,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                email: {
-                  contains: input.searchTerm,
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          },
+          where,
         }),
         ctx.db.user.findMany({
           // Get an extra item at the end which we'll use as next cursor
@@ -88,22 +92,7 @@ export const usersRouter = createTRPCRouter({
           orderBy: {
             id: 'desc',
           },
-          where: {
-            OR: [
-              {
-                name: {
-                  contains: input.searchTerm,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                email: {
-                  contains: input.searchTerm,
-                  mode: 'insensitive',
-                },
-              },
-            ],
-          },
+          where,
         }),
       ]);
 

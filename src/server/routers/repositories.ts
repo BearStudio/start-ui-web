@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -58,14 +59,17 @@ export const repositoriesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting repositories from database');
+
+      const where = {
+        name: {
+          contains: input.searchTerm,
+          mode: 'insensitive',
+        },
+      } satisfies Prisma.RepositoryWhereInput;
+
       const [total, items] = await ctx.db.$transaction([
         ctx.db.repository.count({
-          where: {
-            name: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
+          where,
         }),
         ctx.db.repository.findMany({
           // Get an extra item at the end which we'll use as next cursor
@@ -74,12 +78,7 @@ export const repositoriesRouter = createTRPCRouter({
           orderBy: {
             name: 'asc',
           },
-          where: {
-            name: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
+          where,
         }),
       ]);
 
