@@ -4,6 +4,12 @@ import {
   Avatar,
   Box,
   BoxProps,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   IconButton,
   IconButtonProps,
@@ -21,14 +27,6 @@ import {
   useBreakpointValue,
   useClipboard,
   useColorMode,
-} from '@chakra-ui/react';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
