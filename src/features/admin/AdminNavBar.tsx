@@ -107,7 +107,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
             {account.data?.authorizations.includes('APP') && (
               <MenuItem
                 as={Link}
-                href={APP_PATH ?? '/'}
+                href={APP_PATH || '/'}
                 target="_blank"
                 icon={
                   <Icon icon={LuExternalLink} fontSize="lg" color="gray.400" />

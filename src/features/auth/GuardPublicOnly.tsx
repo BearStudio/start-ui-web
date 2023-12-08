@@ -18,7 +18,7 @@ export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
       checkAuthenticated.isSuccess &&
       checkAuthenticated.data.isAuthenticated
     ) {
-      const redirect = searchParams?.get('redirect') ?? '/';
+      const redirect = searchParams?.get('redirect') || '/';
       router.replace(redirect);
     }
   }, [

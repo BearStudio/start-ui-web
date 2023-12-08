@@ -10,7 +10,7 @@ test.describe('App access', () => {
     const utils = pageUtils(page);
 
     await utils.loginApp({ email: USER_EMAIL });
-    await page.waitForURL(`${env.NEXT_PUBLIC_BASE_URL}${APP_PATH}**`);
+    await page.waitForURL(`${env.NEXT_PUBLIC_BASE_URL}${APP_PATH || '/'}**`);
 
     await expect(page.getByTestId('app-layout')).toBeVisible();
   });

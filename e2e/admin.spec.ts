@@ -10,7 +10,7 @@ test.describe('Admin access', () => {
     const utils = pageUtils(page);
 
     await utils.loginAdmin({ email: ADMIN_EMAIL });
-    await page.waitForURL(`${env.NEXT_PUBLIC_BASE_URL}${ADMIN_PATH}**`);
+    await page.waitForURL(`${env.NEXT_PUBLIC_BASE_URL}${ADMIN_PATH || '/'}**`);
 
     await expect(page.getByTestId('admin-layout')).toBeVisible();
   });

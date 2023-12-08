@@ -31,7 +31,7 @@ export const GuardAuthenticated = ({
       checkAuthenticated.isSuccess &&
       !checkAuthenticated.data.isAuthenticated
     ) {
-      router.replace(`${loginPath}?redirect=${pathname ?? '/'}`);
+      router.replace(`${loginPath}?redirect=${pathname || '/'}`);
     }
   }, [
     pathname,

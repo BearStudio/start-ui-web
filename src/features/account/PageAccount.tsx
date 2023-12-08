@@ -51,7 +51,7 @@ export default function PageHome() {
               ms="auto"
               gap={2}
               display="inline-flex"
-              href={ADMIN_PATH ?? '/'}
+              href={ADMIN_PATH || '/'}
               target="_blank"
             >
               {t('account:admin.button')}
