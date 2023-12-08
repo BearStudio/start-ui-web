@@ -90,7 +90,7 @@ export const FieldSelect = <
   // If the FieldSelect is not in multi mode, then the value is a single element
   const finalValue = Array.isArray(value)
     ? [
-        ...options?.filter((option) => value.includes(option.value)),
+        ...(options?.filter((option) => value.includes(option.value)) ?? []),
         ...getCreatedValues(),
       ]
     : options?.find((option) => option.value === value) ?? undefined;
