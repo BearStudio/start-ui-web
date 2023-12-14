@@ -27,7 +27,7 @@ type UploadSignedUrlOptions = {
 };
 
 export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
-  const randomId = await randomUUID();
+  const randomId = randomUUID();
   const key = `${randomId}-${options.fileName}`;
   const signedUrl = await getSignedUrl(
     S3,

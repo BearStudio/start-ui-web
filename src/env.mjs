@@ -72,6 +72,7 @@ export const env = createEnv({
           (process.env.NODE_ENV === 'development' ? 'warning' : 'success')
       ),
     NEXT_PUBLIC_NODE_ENV: zNodeEnv,
+    NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL: z.string().url(),
   },
 
   /**
@@ -100,6 +101,8 @@ export const env = createEnv({
     NEXT_PUBLIC_ENV_EMOJI: process.env.NEXT_PUBLIC_ENV_EMOJI,
     NEXT_PUBLIC_IS_DEMO: process.env.NEXT_PUBLIC_IS_DEMO,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL:
+      process.env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
