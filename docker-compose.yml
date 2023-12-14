@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  postgres:
+    image: postgres
+    ports:
+      - '${DATABASE_DOCKER_IMAGE_PORT:-5432}:5432'
+    environment:
+      POSTGRES_DB: startui
+      POSTGRES_USER: startui
+      POSTGRES_PASSWORD: startui
+
   minio:
     image: 'minio/minio:latest'
     ports:
