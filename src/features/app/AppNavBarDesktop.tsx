@@ -52,7 +52,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               as={Link}
               href={`${APP_PATH}/account`}
               size="sm"
-              icon={<></>}
+              src={account.data?.image ?? undefined}
               name={account.data?.email ?? ''}
               {...(isAccountActive
                 ? {

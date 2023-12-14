@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { env } from '@/env.mjs';
 import { trpc } from '@/lib/trpc/client';
 
 export const useUploadFile = () => {
@@ -21,7 +22,7 @@ export const useUploadFile = () => {
       });
 
       return {
-        fileUrl: `https://pub-05258b3c66f44fed943559697587557f.r2.dev/${key}`,
+        fileUrl: `${env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL}/${key}`,
       } as const;
     },
   });
