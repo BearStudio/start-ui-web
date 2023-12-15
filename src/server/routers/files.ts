@@ -23,6 +23,7 @@ export const filesRouter = createTRPCRouter({
       z.object({
         signedUrl: z.string(),
         key: z.string(),
+        futureFileUrl: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -33,7 +34,7 @@ export const filesRouter = createTRPCRouter({
       return {
         signedUrl: s3.signedUrl,
         key: s3.key,
-        futureFileUrl: `${env.S3_BUCKET_PUBLIC_BASE_URL}/${s3.key}`,
+        futureFileUrl: `${env.S3_BUCKET_PUBLIC_URL}/${s3.key}`,
       };
     }),
 });
