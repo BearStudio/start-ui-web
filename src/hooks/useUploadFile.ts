@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { env } from '@/env.mjs';
 import { trpc } from '@/lib/trpc/client';
 
 export const useUploadFile = () => {
@@ -11,7 +10,7 @@ export const useUploadFile = () => {
       contentType: string;
       file: File;
     }) => {
-      const { signedUrl, key } = await getPresignedUrl.mutateAsync({
+      const { signedUrl, futureFileUrl } = await getPresignedUrl.mutateAsync({
         fileName: args.fileName,
       });
 
@@ -22,7 +21,7 @@ export const useUploadFile = () => {
       });
 
       return {
-        fileUrl: `${env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL}/${key}`,
+        fileUrl: futureFileUrl,
       } as const;
     },
   });

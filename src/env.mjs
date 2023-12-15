@@ -30,7 +30,7 @@ export const env = createEnv({
 
     S3_ENDPOINT: z.string().url(),
     S3_BUCKET_NAME: z.string(),
-    S3_BUCKET_PUBLIC_BASE_URL: z.string().url(),
+    S3_BUCKET_PUBLIC_URL: z.string().url(),
     S3_ACCESS_KEY_ID: z.string(),
     S3_SECRET_ACCESS_KEY: z.string(),
   },
@@ -72,7 +72,6 @@ export const env = createEnv({
           (process.env.NODE_ENV === 'development' ? 'warning' : 'success')
       ),
     NEXT_PUBLIC_NODE_ENV: zNodeEnv,
-    NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL: z.string().url(),
   },
 
   /**
@@ -89,7 +88,7 @@ export const env = createEnv({
     LOGGER_PRETTY: process.env.LOGGER_PRETTY,
     S3_ENDPOINT: process.env.S3_ENDPOINT,
     S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
-    S3_BUCKET_PUBLIC_BASE_URL: process.env.S3_BUCKET_PUBLIC_BASE_URL,
+    S3_BUCKET_PUBLIC_URL: process.env.S3_BUCKET_PUBLIC_URL,
     S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
     S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
 
@@ -101,8 +100,6 @@ export const env = createEnv({
     NEXT_PUBLIC_ENV_EMOJI: process.env.NEXT_PUBLIC_ENV_EMOJI,
     NEXT_PUBLIC_IS_DEMO: process.env.NEXT_PUBLIC_IS_DEMO,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL:
-      process.env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
