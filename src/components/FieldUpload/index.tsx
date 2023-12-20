@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import { Icon, Input, chakra, useToken } from '@chakra-ui/react';
+import { Icon, Input, chakra } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 import { FiPaperclip } from 'react-icons/fi';
 
