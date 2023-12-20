@@ -1,4 +1,4 @@
-<h1 align="center"><img src="assets/thumbnail.png" alt="Start UI Web" /></h1>
+<h1 align="center"><img src=".github/assets/thumbnail.png" alt="Start UI Web" /></h1>
 
 [![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
 
@@ -15,7 +15,7 @@ A live read-only demonstration of what you will have when starting a project wit
 
 ## Technologies
 
-<div align="center" style="margin: 0 0 16px 0"><img src="assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
+<div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
 
 [🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [⚫️ NextJS](https://nextjs.org/), [⚡️ Chakra UI](https://chakra-ui.com/),  [🟦 tRPC](https://trpc.io/), [▲ Prisma](https://www.prisma.io/), [🏖️ TanStack Query](https://react-query.tanstack.com/), [📕 Storybook](https://storybook.js.org/), [🎭 Playwright](https://playwright.dev/), [🐜 Formiz](https://formiz-react.com/)
 , [🌍 React i18next](https://react.i18next.com/)
