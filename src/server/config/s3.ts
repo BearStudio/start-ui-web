@@ -20,26 +20,25 @@ const S3 = new S3Client({
 type UploadFileType = 'image' | 'video' | 'audio' | 'blob' | 'pdf' | 'text';
 
 type UploadSignedUrlOptions = {
-  fileName: string;
   allowedFileTypes?: UploadFileType[];
   expiresIn?: number;
   acl: ObjectCannedACL;
+  /** The tree structure of the file in S3 */
+  key: string;
 };
 
 export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
-  const randomId = randomUUID();
-  const key = `${randomId}-${options.fileName}`;
   const signedUrl = await getSignedUrl(
     S3,
     new PutObjectCommand({
       Bucket: env.S3_BUCKET_NAME,
-      Key: key,
+      Key: options.key,
       ACL: options.acl,
     }),
     { expiresIn: options.expiresIn ?? 3600 }
   );
   return {
     signedUrl,
-    key,
+    key: options.key,
   };
 };
