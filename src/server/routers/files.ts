@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 import { env } from '@/env.mjs';
@@ -28,7 +29,7 @@ export const filesRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const s3 = await getS3UploadSignedUrl({
-        fileName: input.fileName,
+        key: `${randomUUID()}-${input.fileName}`,
         acl: 'public-read',
       });
       return {
