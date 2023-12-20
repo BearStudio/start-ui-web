@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import EmailAddressChange from '@/emails/templates/email-address-change';
+import { env } from '@/env.mjs';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
@@ -14,6 +15,7 @@ import {
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
+import { getS3UploadSignedUrl } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
@@ -63,9 +65,9 @@ export const accountRouter = createTRPCRouter({
     })
     .input(
       zUserAccount().required().pick({
+        image: true,
         name: true,
         language: true,
-        image: true,
       })
     )
     .output(zUserAccount())
@@ -207,5 +209,33 @@ export const accountRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       return user;
+    }),
+  uploadAvatarPresignedUrl: protectedProcedure()
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/accounts/avatar-upload-presigned-url',
+        tags: ['accounts', 'files'],
+        protect: true,
+      },
+    })
+    .input(z.void())
+    .output(
+      z.object({
+        signedUrl: z.string(),
+        key: z.string(),
+        futureFileUrl: z.string(),
+      })
+    )
+    .mutation(async ({ ctx }) => {
+      const s3 = await getS3UploadSignedUrl({
+        key: ctx.user.id,
+        acl: 'public-read',
+      });
+      return {
+        signedUrl: s3.signedUrl,
+        key: s3.key,
+        futureFileUrl: `${env.S3_BUCKET_PUBLIC_URL}/${s3.key}`,
+      };
     }),
 });

@@ -10,7 +10,7 @@ import { FieldSelect } from '@/components/FieldSelect';
 import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { useUploadFile } from '@/hooks/useUploadFile';
+import { useAvatarUpload } from '@/features/account/useAvatarUpload';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -28,7 +28,7 @@ export const AccountProfileForm = () => {
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
-  const uploadFile = useUploadFile();
+  const uploadFile = useAvatarUpload();
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -56,7 +56,6 @@ export const AccountProfileForm = () => {
     onValidSubmit: async ({ image, ...values }) => {
       try {
         const { fileUrl } = await uploadFile.mutateAsync({
-          fileName: image.name,
           contentType: image.type ?? '',
           file: image.file,
         });
