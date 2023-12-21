@@ -34,15 +34,18 @@ export default function PageAdminRepository() {
   const { t } = useTranslation(['common', 'repositories']);
 
   const toastError = useToastError();
+  const trpcUtils = trpc.useUtils();
 
   const router = useRouter();
   const params = useParams();
   const repository = trpc.repositories.getById.useQuery({
     id: params?.id?.toString() ?? '',
   });
+
   const repositoryRemove = trpc.repositories.removeById.useMutation({
-    onSuccess: () => {
-      router.back();
+    onSuccess: async () => {
+      await trpcUtils.repositories.getAll.invalidate();
+      router.replace(`${ADMIN_PATH}/repositories`);
     },
     onError: () => {
       toastError({
