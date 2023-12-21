@@ -182,7 +182,7 @@ export default function PageAdminUsers() {
               ))}
             {users.isSuccess && (
               <DataListRow mt="auto">
-                <DataListCell gap={3} flexDirection="row" align="center">
+                <DataListCell w="auto">
                   <Button
                     size="sm"
                     onClick={() => users.fetchNextPage()}
@@ -191,21 +191,21 @@ export default function PageAdminUsers() {
                   >
                     {t('users:list.loadMore.button')}
                   </Button>
-                  <Box flex={1}>
-                    {users.isSuccess && !!users.data.pages[0]?.total && (
-                      <Text fontSize="xs" color="text-dimmed">
-                        <Trans
-                          i18nKey="users:list.loadMore.display"
-                          t={t}
-                          values={{
-                            loaded: users.data.pages.flatMap((p) => p.items)
-                              .length,
-                            total: users.data.pages[0].total,
-                          }}
-                        />
-                      </Text>
-                    )}
-                  </Box>
+                </DataListCell>
+                <DataListCell>
+                  {users.isSuccess && !!users.data.pages[0]?.total && (
+                    <Text fontSize="xs" color="text-dimmed">
+                      <Trans
+                        i18nKey="users:list.loadMore.display"
+                        t={t}
+                        values={{
+                          loaded: users.data.pages.flatMap((p) => p.items)
+                            .length,
+                          total: users.data.pages[0].total,
+                        }}
+                      />
+                    </Text>
+                  )}
                 </DataListCell>
               </DataListRow>
             )}

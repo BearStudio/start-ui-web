@@ -130,7 +130,7 @@ export default function PageAdminRepositories() {
               ))}
             {repositories.isSuccess && (
               <DataListRow mt="auto">
-                <DataListCell flexDirection="row" alignItems="center" gap={3}>
+                <DataListCell w="auto">
                   <Button
                     size="sm"
                     onClick={() => repositories.fetchNextPage()}
@@ -139,23 +139,23 @@ export default function PageAdminRepositories() {
                   >
                     {t('repositories:list.loadMore.button')}
                   </Button>
-                  <Box flex={1}>
-                    {repositories.isSuccess &&
-                      !!repositories.data.pages[0]?.total && (
-                        <Text fontSize="xs" color="text-dimmed">
-                          <Trans
-                            i18nKey="repositories:list.loadMore.display"
-                            t={t}
-                            values={{
-                              loaded: repositories.data.pages.flatMap(
-                                (p) => p.items
-                              ).length,
-                              total: repositories.data.pages[0].total,
-                            }}
-                          />
-                        </Text>
-                      )}
-                  </Box>
+                </DataListCell>
+                <DataListCell>
+                  {repositories.isSuccess &&
+                    !!repositories.data.pages[0]?.total && (
+                      <Text fontSize="xs" color="text-dimmed">
+                        <Trans
+                          i18nKey="repositories:list.loadMore.display"
+                          t={t}
+                          values={{
+                            loaded: repositories.data.pages.flatMap(
+                              (p) => p.items
+                            ).length,
+                            total: repositories.data.pages[0].total,
+                          }}
+                        />
+                      </Text>
+                    )}
                 </DataListCell>
               </DataListRow>
             )}
