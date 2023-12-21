@@ -20,23 +20,28 @@ services:
       - 'minio:/data/minio'
     command: minio server /data/minio --console-address ":${FORWARD_MINIO_CONSOLE_PORT:-9090}"
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
-      interval: 20s
-      timeout: 20s
-      retries: 3
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   createbuckets:
     image: minio/mc
     depends_on:
       minio:
         condition: service_healthy
+    # Set an alias, meaning myminio is an alias for the host, the username and the password, avoiding to type it again in the next commands
+    # As an admin, add a new user to scope minio access to this new user, avoiding to use the admin credentials in the application
+    # Set the policy readwrite to the user we previously created on the previously created alias
+    # Create the bucket on the previously created alias
+    # Set the public access policy to download, meaning readonly.
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set myminio http://minio:${FORWARD_MINIO_PORT:-9000} root password;
       /usr/bin/mc admin user add myminio $S3_ACCESS_KEY_ID $S3_SECRET_ACCESS_KEY;
       /usr/bin/mc admin policy attach myminio readwrite --user $S3_ACCESS_KEY_ID;
       /usr/bin/mc mb myminio/$S3_BUCKET_NAME;
-      /usr/bin/mc anonymous set public myminio/$S3_BUCKET_NAME;
+      /usr/bin/mc anonymous set download myminio/$S3_BUCKET_NAME;
       exit 0;
       "
 
