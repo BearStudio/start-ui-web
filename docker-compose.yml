@@ -19,11 +19,17 @@ services:
     volumes:
       - 'minio:/data/minio'
     command: minio server /data/minio --console-address ":${FORWARD_MINIO_CONSOLE_PORT:-9090}"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 20s
+      timeout: 20s
+      retries: 3
 
   createbuckets:
     image: minio/mc
     depends_on:
-      - minio
+      minio:
+        condition: service_healthy
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set myminio http://minio:${FORWARD_MINIO_PORT:-9000} root password;
