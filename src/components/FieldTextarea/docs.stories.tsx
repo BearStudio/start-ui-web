@@ -17,25 +17,25 @@ export const Default = () => {
         <FieldTextarea
           name="demo-description"
           label="Description"
-          placeholder="Placeholder"
           helper="Please give a description to your project"
           required="Description is required"
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <FieldTextarea
           name="demo-read-only"
           label="Read Only"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isReadOnly
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <FieldTextarea
           name="demo-disabled"
           label="Disabled"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isDisabled
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <Box>
           <Button type="submit">Submit</Button>
@@ -53,20 +53,20 @@ export const TextareaProps = () => {
         <FieldTextarea
           name="demo-description"
           label="Resize is horizontal"
-          placeholder="Placeholder"
           helper="Please give a description to your project"
           required="Description is required"
-          textareaProps={{
+          componentProps={{
             resize: 'horizontal',
+            placeholder: 'Placeholder',
           }}
         />
         <FieldTextarea
           name="demo-description"
           label="Resize is none"
-          placeholder="Placeholder"
           helper="Please give a description to your project"
-          textareaProps={{
+          componentProps={{
             resize: 'none',
+            placeholder: 'Placeholder',
           }}
         />
         <Box>

@@ -60,8 +60,8 @@ export const UserForm = () => {
           value: authorization,
           label: t(`users:data.authorizations.options.${authorization}`),
         }))}
+        componentProps={{ isMulti: true }}
         defaultValue={['APP']}
-        selectProps={{ isMulti: true }}
       />
     </Stack>
   );
