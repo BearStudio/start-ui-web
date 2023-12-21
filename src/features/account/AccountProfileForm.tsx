@@ -8,7 +8,6 @@ import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
-import { FieldUploadPreview } from '@/components/FieldUpload/FieldUploadPreview';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useAvatarUpload } from '@/features/account/useAvatarUpload';
@@ -53,7 +52,7 @@ export const AccountProfileForm = () => {
     initialValues: {
       name: account.data?.name ?? undefined,
       language: account.data?.language ?? undefined,
-      image: { name: account.data?.image ?? '' } ?? undefined,
+      image: account.data?.image ?? undefined,
     },
     onValidSubmit: async ({ image, ...values }) => {
       try {
@@ -61,6 +60,9 @@ export const AccountProfileForm = () => {
           const { fileUrl } = await uploadFile.mutateAsync({
             contentType: image.type ?? '',
             file: image?.file,
+            metadata: {
+              name: image?.name, // TODO: Improve typing
+            },
           });
           updateAccount.mutate({ ...values, image: fileUrl });
         } else {
@@ -88,11 +90,6 @@ export const AccountProfileForm = () => {
                   label={t('account:data.avatar.label')}
                   inputText={t('account:data.avatar.inputText')}
                   required={t('account:data.avatar.required')}
-                />
-                <FieldUploadPreview
-                  uploaderName="image"
-                  width="fit-content"
-                  p="0"
                 />
                 <FieldInput
                   name="name"

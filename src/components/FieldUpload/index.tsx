@@ -7,11 +7,12 @@ import { FiPaperclip } from 'react-icons/fi';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export type FieldUploadValue = {
+  fileUrl?: string;
   file?: File;
   lastModified?: number;
   lastModifiedDate?: Date;
   name: string;
-  size?: number;
+  size?: string;
   type?: string;
 };
 
@@ -32,6 +33,7 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
     isRequired,
     setValue,
     shouldDisplayError,
+    value,
     otherProps: { children, label, helper, inputText, ...rest },
   } = useField(props);
 
@@ -55,7 +57,7 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
 
     setValue({
       name: file.name,
-      size: file.size,
+      size: file.size.toString(),
       type: file.type,
       lastModified: file.lastModified,
       lastModifiedDate: new Date(file.lastModified),
@@ -84,7 +86,7 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
           onChange={handleChange}
         />
         <Icon as={FiPaperclip} mr="2" />
-        {inputText}
+        {!value ? inputText : value.name}
       </Input>
 
       {children}
