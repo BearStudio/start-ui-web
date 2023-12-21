@@ -10,7 +10,6 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuBookMarked, LuPlus } from 'react-icons/lu';
@@ -31,7 +30,7 @@ import {
   AdminLayoutPage,
   AdminLayoutPageContent,
 } from '@/features/admin/AdminLayoutPage';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminRepositoryActions } from '@/features/repositories/AdminRepositoryActions';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
@@ -72,8 +71,8 @@ export default function PageAdminRepositories() {
               />
             </Flex>
             <ResponsiveIconButton
-              as={Link}
-              href={`${ADMIN_PATH}/repositories/create`}
+              as={LinkAdmin}
+              href="/repositories/create"
               variant="@primary"
               size="sm"
               icon={<LuPlus />}
@@ -107,8 +106,8 @@ export default function PageAdminRepositories() {
                   <DataListCell>
                     <DataListText fontWeight="bold">
                       <LinkOverlay
-                        as={Link}
-                        href={`${ADMIN_PATH}/repositories/${repository.id}`}
+                        as={LinkAdmin}
+                        href={`/repositories/${repository.id}`}
                       >
                         {repository.name}
                       </LinkOverlay>

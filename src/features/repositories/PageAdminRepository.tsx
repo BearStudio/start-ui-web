@@ -10,7 +10,6 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuExternalLink, LuPenLine, LuTrash2 } from 'react-icons/lu';
@@ -27,6 +26,7 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { trpc } from '@/lib/trpc/client';
 
@@ -64,8 +64,8 @@ export default function PageAdminRepository() {
         rightActions={
           <>
             <ResponsiveIconButton
-              as={Link}
-              href={`${ADMIN_PATH}/repositories/${params?.id}/update`}
+              as={LinkAdmin}
+              href={`/repositories/${params?.id}/update`}
               icon={<LuPenLine />}
             >
               {t('common:actions.edit')}

@@ -9,13 +9,13 @@ import {
   HStack,
   Spinner,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuFolderGit2, LuHome } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
+import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
 import { trpc } from '@/lib/trpc/client';
 
@@ -31,26 +31,23 @@ export const AppNavBarDesktop = (props: BoxProps) => {
       <Flex align="center" pt={6} pb={2}>
         <Container maxW="container.md">
           <HStack spacing={4}>
-            <Box as={Link} href={APP_PATH || '/'}>
+            <Box as={LinkApp} href="/">
               <Logo />
             </Box>
             <HStack flex={1} spacing={0}>
-              <AppNavBarDesktopMainMenuItem
-                href={APP_PATH || '/'}
-                icon={LuHome}
-              >
+              <AppNavBarDesktopMainMenuItem href="/" icon={LuHome}>
                 {t('app:layout.mainMenu.home')}
               </AppNavBarDesktopMainMenuItem>
               <AppNavBarDesktopMainMenuItem
-                href={`${APP_PATH}/repositories`}
+                href="/repositories"
                 icon={LuFolderGit2}
               >
                 {t('app:layout.mainMenu.repositories')}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar
-              as={Link}
-              href={`${APP_PATH}/account`}
+              as={LinkApp}
+              href="/account"
               size="sm"
               icon={<></>}
               name={account.data?.email ?? ''}
@@ -87,13 +84,13 @@ const AppNavBarDesktopMainMenuItem = ({
 }) => {
   const pathname = usePathname() ?? '';
   const isActive =
-    href === (APP_PATH || '/')
+    href === '/'
       ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(href);
+      : pathname.startsWith(`${APP_PATH}${href}`);
 
   return (
     <Flex
-      as={Link}
+      as={LinkApp}
       href={href}
       bg="transparent"
       justifyContent="flex-start"
