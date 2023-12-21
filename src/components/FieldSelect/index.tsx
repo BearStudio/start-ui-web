@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 
 import { FieldProps, useField } from '@formiz/core';
 import { GroupBase, MultiValue, SingleValue } from 'react-select';
@@ -14,12 +14,8 @@ export type FieldSelectProps<
   IsMulti extends true ? Array<Option['value']> : Option['value']
 > &
   FormGroupProps & {
-    placeholder?: string;
-    size?: 'sm' | 'md' | 'lg';
-    options?: Option[];
-    isClearable?: boolean;
-    isSearchable?: boolean;
-    selectProps?: SelectProps<Option, IsMulti, Group>;
+    options: Option[];
+    componentProps?: SelectProps<Option, IsMulti, Group>;
   };
 
 export const FieldSelect = <
@@ -29,56 +25,27 @@ export const FieldSelect = <
 >(
   props: FieldSelectProps<Option, IsMulti, Group>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    isPristine,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const { required } = props;
-  const {
-    children,
-    label,
-    options = [],
-    placeholder,
-    helper,
-    isDisabled,
-    isClearable,
-    isSearchable,
-    size = 'md',
-    selectProps,
-    ...rest
-  } = otherProps;
-  const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
+  const field = useField(props);
 
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  const { componentProps, children, options, ...rest } = field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
-    isDisabled,
     ...rest,
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
   };
+
+  const fieldValue = field.value;
 
   // If we are in creatable mode, the onChange will add values to the Formiz value state
   // value is an Array so we filter the options to make sure we don't double it in the "label" section
   const getCreatedValues = () =>
-    Array.isArray(value) &&
-    (selectProps?.type === 'creatable' ||
-      selectProps?.type === 'async-creatable')
-      ? value
+    Array.isArray(fieldValue) &&
+    (componentProps?.type === 'creatable' ||
+      componentProps?.type === 'async-creatable')
+      ? fieldValue
           // We do not want already available options, so we filter them.
           .filter((v) => !options.map((o) => o.value).includes(v))
           // We need to map the created values so they match the Option format
@@ -88,39 +55,35 @@ export const FieldSelect = <
   // We compute the final value.
   // If the FieldSelect is in multi mode, the value is an Array
   // If the FieldSelect is not in multi mode, then the value is a single element
-  const finalValue = Array.isArray(value)
+  const finalValue = Array.isArray(fieldValue)
     ? [
-        ...(options?.filter((option) => value.includes(option.value)) ?? []),
+        ...(options?.filter((option) => fieldValue?.includes(option.value)) ??
+          []),
         ...getCreatedValues(),
       ]
-    : options?.find((option) => option.value === value) ?? undefined;
+    : options?.find((option) => option.value === fieldValue) ?? undefined;
 
   return (
     <FormGroup {...formGroupProps}>
       <Select<Option, IsMulti, Group>
-        id={id}
+        {...componentProps}
+        id={field.id}
         value={finalValue}
-        onFocus={() => setIsTouched(false)}
-        onBlur={() => setIsTouched(true)}
-        placeholder={placeholder || 'Select...'}
+        onFocus={() => field.setIsTouched(false)}
+        onBlur={() => field.setIsTouched(true)}
+        placeholder={componentProps?.placeholder ?? 'Select...'}
         onChange={(fieldValue) => {
           if (isMultiValue<Option>(fieldValue)) {
-            setValue(
+            field.setValue(
               fieldValue.length
                 ? (fieldValue.map((f) => f.value) as TODO)
                 : null
             );
           } else {
-            setValue(fieldValue ? (fieldValue.value as TODO) : null);
+            field.setValue(fieldValue ? (fieldValue.value as TODO) : null);
           }
         }}
-        size={size}
         options={options}
-        isDisabled={isDisabled}
-        isClearable={isClearable}
-        isSearchable={isSearchable}
-        isInvalid={showError}
-        {...selectProps}
       />
       {children}
     </FormGroup>

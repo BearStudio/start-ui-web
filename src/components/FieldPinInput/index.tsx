@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import {
   HStack,
   PinInput,
@@ -28,9 +26,10 @@ export const FieldPinInput = <FormattedValue = string,>(
     isValid,
     isPristine,
     isSubmitted,
-    resetKey,
     setValue,
     value,
+    isRequired,
+    isTouched,
     otherProps,
   } = useField(props);
   const {
@@ -43,20 +42,14 @@ export const FieldPinInput = <FormattedValue = string,>(
     length = 6,
     ...rest
   } = otherProps;
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
 
   const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
-
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
 
   const formGroupProps = {
     errorMessage,
     helper,
     id: `${id}-0`, // Target the first input
-    isRequired: !!required,
+    isRequired,
     label,
     showError,
     ...rest,

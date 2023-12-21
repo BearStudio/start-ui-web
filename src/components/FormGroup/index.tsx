@@ -14,7 +14,7 @@ import { Icon } from '@/components/Icons';
 
 export type FormGroupProps = Omit<
   FormControlProps,
-  'onChange' | 'defaultValue' | 'label'
+  'onChange' | 'defaultValue' | 'label' | 'placeholder'
 > & {
   children?: ReactNode;
   errorMessage?: ReactNode;

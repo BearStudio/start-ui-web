@@ -17,33 +17,32 @@ export const Default = () => {
         <FieldInput
           name="demo-username"
           label="Username"
-          placeholder="Placeholder"
           helper="This is an helper"
           required="Username is required"
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <FieldInput
           name="demo-password"
-          type="password"
           label="Password"
-          placeholder="Placeholder"
           helper="This is an helper"
           required="Password is required"
+          componentProps={{ type: 'password', placeholder: 'Placeholder' }}
         />
         <FieldInput
           name="demo-read-only"
           label="Read Only"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isReadOnly
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <FieldInput
           name="demo-disabled"
           label="Disabled"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isDisabled
+          componentProps={{ placeholder: 'Placeholder' }}
         />
         <Box>
           <Button type="submit">Submit</Button>

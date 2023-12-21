@@ -17,35 +17,30 @@ export const Default = () => {
         <FieldCurrency
           name="demo-currency"
           label="Currency"
-          placeholder={100}
           helper="This is an helper"
           required="Currency is required"
-          currency="EUR"
+          componentProps={{ placeholder: 100, currency: 'EUR' }}
         />
         <FieldCurrency
           name="demo-currency-usd"
           label="Currency USD"
-          placeholder={100}
           helper="This is an helper"
           required="Currency is required"
-          currency="USD"
+          componentProps={{ placeholder: 100, currency: 'USD' }}
         />
         <FieldCurrency
           name="demo-currency-locale-fr"
           label="Currency locale FR"
-          placeholder={100}
           helper="This is an helper"
           required="Currency is required"
-          currency="EUR"
-          locale="fr"
+          componentProps={{ placeholder: 100, currency: 'EUR', locale: 'fr' }}
         />
         <FieldCurrency
           name="demo-currency-decimals-0"
           label="0 Decimals"
-          placeholder={100}
-          decimals={0}
           helper="This is an helper"
           required="Currency is required"
+          componentProps={{ placeholder: 100, decimals: 0 }}
         />
         <Box>
           <Button type="submit">Submit</Button>
