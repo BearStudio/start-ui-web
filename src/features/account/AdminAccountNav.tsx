@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuMail, LuUser } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { ADMIN_PATH } from '@/features/admin/constants';
 
 export const AdminAccountNav = () => {
@@ -16,16 +16,16 @@ export const AdminAccountNav = () => {
     <Nav>
       <NavGroup title={t('account:nav.myAccount')}>
         <NavItem
-          as={Link}
-          href={`${ADMIN_PATH}/account/profile`}
+          as={LinkAdmin}
+          href="/account/profile"
           isActive={isActive(`${ADMIN_PATH}/account/profile`)}
           icon={LuUser}
         >
           {t('account:nav.profile')}
         </NavItem>
         <NavItem
-          as={Link}
-          href={`${ADMIN_PATH}/account/email`}
+          as={LinkAdmin}
+          href="/account/email"
           isActive={isActive(`${ADMIN_PATH}/account/email`)}
           icon={LuMail}
         >

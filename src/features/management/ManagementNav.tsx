@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuUsers } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { ADMIN_PATH } from '@/features/admin/constants';
 
 export const AdminNav = () => {
@@ -16,8 +16,8 @@ export const AdminNav = () => {
     <Nav>
       <NavGroup title={t('management:nav.title')}>
         <NavItem
-          as={Link}
-          href={`${ADMIN_PATH}/management/users`}
+          as={LinkAdmin}
+          href="/management/users"
           isActive={isActive(`${ADMIN_PATH}/management/users`)}
           icon={LuUsers}
         >

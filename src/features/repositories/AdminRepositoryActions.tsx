@@ -9,7 +9,6 @@ import {
   MenuProps,
   Portal,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { LuEye, LuPenLine, LuTrash2 } from 'react-icons/lu';
 
@@ -17,7 +16,7 @@ import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError } from '@/components/Toast';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
@@ -54,15 +53,15 @@ export const AdminRepositoryActions = ({
       <Portal>
         <MenuList>
           <MenuItem
-            as={Link}
-            href={`${ADMIN_PATH}/repositories/${repository.id}`}
+            as={LinkAdmin}
+            href={`/repositories/${repository.id}`}
             icon={<Icon icon={LuEye} fontSize="lg" color="gray.400" />}
           >
             {t('repositories:list.actions.view')}
           </MenuItem>
           <MenuItem
-            as={Link}
-            href={`${ADMIN_PATH}/repositories/${repository.id}/update`}
+            as={LinkAdmin}
+            href={`/repositories/${repository.id}/update`}
             icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}
