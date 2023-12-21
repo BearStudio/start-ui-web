@@ -44,11 +44,13 @@ export const repositoriesRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        cursor: z.string().cuid().optional(),
-        limit: z.number().min(1).max(100).default(20),
-        searchTerm: z.string().optional(),
-      })
+      z
+        .object({
+          cursor: z.string().cuid().optional(),
+          limit: z.number().min(1).max(100).default(20),
+          searchTerm: z.string().optional(),
+        })
+        .default({})
     )
     .output(
       z.object({
