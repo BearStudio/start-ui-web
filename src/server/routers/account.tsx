@@ -64,7 +64,7 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(
-      zUserAccount().required().pick({
+      zUserAccount().pick({
         image: true,
         name: true,
         language: true,

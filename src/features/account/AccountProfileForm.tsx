@@ -8,6 +8,7 @@ import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
+import { FieldUploadPreview } from '@/components/FieldUpload/FieldUploadPreview';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { useAvatarUpload } from '@/features/account/useAvatarUpload';
@@ -52,16 +53,23 @@ export const AccountProfileForm = () => {
     initialValues: {
       name: account.data?.name ?? undefined,
       language: account.data?.language ?? undefined,
+      image: { name: account.data?.image ?? '' } ?? undefined,
     },
     onValidSubmit: async ({ image, ...values }) => {
       try {
-        const { fileUrl } = await uploadFile.mutateAsync({
-          contentType: image.type ?? '',
-          file: image.file,
-        });
-        updateAccount.mutate({ ...values, image: fileUrl });
+        if (image?.file) {
+          const { fileUrl } = await uploadFile.mutateAsync({
+            contentType: image.type ?? '',
+            file: image?.file,
+          });
+          updateAccount.mutate({ ...values, image: fileUrl });
+        } else {
+          updateAccount.mutate(values);
+        }
       } catch {
-        form.setErrors({ image: 'Upload fail' }); // TODO translations
+        form.setErrors({
+          image: t('account:profile.feedbacks.uploadError.title'),
+        });
       }
     },
   });
@@ -77,8 +85,14 @@ export const AccountProfileForm = () => {
               <Stack spacing={4}>
                 <FieldUpload
                   name="image"
-                  label="Avatar" // TODO: translations
-                  required
+                  label={t('account:data.avatar.label')}
+                  inputText={t('account:data.avatar.inputText')}
+                  required={t('account:data.avatar.required')}
+                />
+                <FieldUploadPreview
+                  uploaderName="image"
+                  width="fit-content"
+                  p="0"
                 />
                 <FieldInput
                   name="name"

@@ -7,19 +7,21 @@ import { FiPaperclip } from 'react-icons/fi';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 export type FieldUploadValue = {
+  file?: File;
+  lastModified?: number;
+  lastModifiedDate?: Date;
   name: string;
   size?: number;
   type?: string;
-  lastModified?: number;
-  lastModifiedDate?: Date;
-  file: File;
 };
 
 export type FieldUploadProps<FormattedValue = FieldUploadValue> = FieldProps<
   FieldUploadValue,
   FormattedValue
 > &
-  FormGroupProps;
+  FormGroupProps & {
+    inputText?: string;
+  };
 
 export const FieldUpload = <FormattedValue = FieldUploadValue,>(
   props: FieldUploadProps<FormattedValue>
@@ -29,9 +31,8 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
     id,
     isRequired,
     setValue,
-    value,
     shouldDisplayError,
-    otherProps: { children, label, helper, ...rest },
+    otherProps: { children, label, helper, inputText, ...rest },
   } = useField(props);
 
   const formGroupProps = {
@@ -44,7 +45,7 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
     ...rest,
   };
 
-  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     const file = target.files?.[0];
 
     if (!file) {
@@ -82,11 +83,10 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
           id={id}
           onChange={handleChange}
         />
-        <Icon as={FiPaperclip} mr="2" />{' '}
-        {
-          value?.name || 'Select file' // TODO translations
-        }
+        <Icon as={FiPaperclip} mr="2" />
+        {inputText}
       </Input>
+
       {children}
     </FormGroup>
   );
