@@ -16,12 +16,15 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Value = InputProps['value'];
 
+type UsualInputProps = 'placeholder' | 'autoFocus' | 'type';
+
 export type FieldInputProps<FormattedValue = Value> = FieldProps<
   Value,
   FormattedValue
 > &
-  FormGroupProps & {
-    componentProps?: InputProps;
+  FormGroupProps &
+  Pick<InputProps, UsualInputProps> & {
+    inputProps?: Omit<InputProps, UsualInputProps>;
   };
 
 export const FieldInput = <FormattedValue = Value,>(
@@ -29,7 +32,8 @@ export const FieldInput = <FormattedValue = Value,>(
 ) => {
   const field = useField(props);
 
-  const { componentProps, children, ...rest } = field.otherProps;
+  const { inputProps, children, placeholder, type, autoFocus, ...rest } =
+    field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -43,23 +47,20 @@ export const FieldInput = <FormattedValue = Value,>(
 
   return (
     <FormGroup {...formGroupProps}>
-      <InputGroup size={componentProps?.size}>
+      <InputGroup size={inputProps?.size}>
         <Input
-          type={showPassword ? 'text' : componentProps?.type ?? 'text'}
+          {...inputProps}
+          type={showPassword ? 'text' : type ?? 'text'}
           id={field.id}
           value={field.value ?? ''}
           onChange={(e) => field.setValue(e.target.value)}
           onFocus={() => field.setIsTouched(false)}
           onBlur={() => field.setIsTouched(true)}
-          placeholder={
-            componentProps?.placeholder
-              ? String(componentProps?.placeholder)
-              : ''
-          }
-          autoFocus={componentProps?.autoFocus}
+          placeholder={placeholder ? String(placeholder) : ''}
+          autoFocus={autoFocus}
         />
 
-        {componentProps?.type === 'password' && (
+        {type === 'password' && (
           <InputLeftElement>
             <IconButton
               onClick={() => setShowPassword((x) => !x)}

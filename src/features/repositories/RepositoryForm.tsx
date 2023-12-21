@@ -30,7 +30,7 @@ export const RepositoryForm = () => {
       <FieldTextarea
         name="description"
         label={t('repositories:data.description.label')}
-        componentProps={{ rows: 6 }}
+        textAreaProps={{ rows: 6 }}
       />
     </Stack>
   );

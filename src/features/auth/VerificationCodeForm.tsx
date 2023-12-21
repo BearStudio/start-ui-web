@@ -51,11 +51,13 @@ export const VerificationCodeForm = ({
         autoFocus
         isDisabled={isLoading}
         required={t('auth:data.verificationCode.required')}
-        onComplete={() => {
-          // Only auto submit on first try
-          if (!form.isSubmitted) {
-            form.submit();
-          }
+        pinInputProps={{
+          onComplete: () => {
+            // Only auto submit on first try
+            if (!form.isSubmitted) {
+              form.submit();
+            }
+          },
         }}
       />
       <HStack spacing={8}>

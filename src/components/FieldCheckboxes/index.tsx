@@ -81,7 +81,7 @@ type FieldCheckboxesProps<FormattedValue = Value[]> = FieldProps<
   FormattedValue
 > &
   FormGroupProps & {
-    componentProps?: CheckboxProps;
+    checkboxProps?: CheckboxProps;
     itemKey?: string;
     options?: Option[];
   };
@@ -90,7 +90,7 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
   props: FieldCheckboxesProps<FormattedValue>
 ) => {
   const field = useField(props);
-  const { itemKey, children, options, componentProps, ...rest } =
+  const { itemKey, children, options, checkboxProps, ...rest } =
     field.otherProps;
 
   const valueRef = useRef(field.value);
@@ -209,9 +209,9 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
         value={{
           useStore,
           checkboxGroupProps: {
-            size: componentProps?.size,
-            colorScheme: componentProps?.colorScheme,
-            isDisabled: componentProps?.isDisabled,
+            size: checkboxProps?.size,
+            colorScheme: checkboxProps?.colorScheme,
+            isDisabled: checkboxProps?.isDisabled,
           },
         }}
       >

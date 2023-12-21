@@ -19,28 +19,32 @@ export const Default = () => {
           label="Currency"
           helper="This is an helper"
           required="Currency is required"
-          componentProps={{ placeholder: 100, currency: 'EUR' }}
+          placeholder={100}
+          inputCurrencyProps={{ currency: 'EUR' }}
         />
         <FieldCurrency
           name="demo-currency-usd"
           label="Currency USD"
           helper="This is an helper"
           required="Currency is required"
-          componentProps={{ placeholder: 100, currency: 'USD' }}
+          placeholder={100}
+          inputCurrencyProps={{ currency: 'USD' }}
         />
         <FieldCurrency
           name="demo-currency-locale-fr"
           label="Currency locale FR"
           helper="This is an helper"
           required="Currency is required"
-          componentProps={{ placeholder: 100, currency: 'EUR', locale: 'fr' }}
+          placeholder={100}
+          inputCurrencyProps={{ currency: 'EUR', locale: 'fr' }}
         />
         <FieldCurrency
           name="demo-currency-decimals-0"
           label="0 Decimals"
           helper="This is an helper"
           required="Currency is required"
-          componentProps={{ placeholder: 100, decimals: 0 }}
+          placeholder={100}
+          inputCurrencyProps={{ decimals: 0 }}
         />
         <Box>
           <Button type="submit">Submit</Button>

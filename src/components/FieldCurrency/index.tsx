@@ -6,12 +6,15 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
+type UsualInputCurrencyProps = 'placeholder';
+
 export type FieldCurrencyProps<FormattedValue = number> = FieldProps<
   number,
   FormattedValue
 > &
-  FormGroupProps & {
-    componentProps?: InputCurrencyProps;
+  FormGroupProps &
+  Pick<InputCurrencyProps, UsualInputCurrencyProps> & {
+    inputCurrencyProps?: Omit<InputCurrencyProps, UsualInputCurrencyProps>;
   };
 
 export const FieldCurrency = <FormattedValue = number,>(
@@ -19,7 +22,8 @@ export const FieldCurrency = <FormattedValue = number,>(
 ) => {
   const field = useField(props);
 
-  const { componentProps, children, ...rest } = field.otherProps;
+  const { inputCurrencyProps, children, placeholder, ...rest } =
+    field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -31,14 +35,15 @@ export const FieldCurrency = <FormattedValue = number,>(
 
   return (
     <FormGroup {...formGroupProps}>
-      <InputGroup size={componentProps?.size}>
+      <InputGroup size={inputCurrencyProps?.size}>
         <InputCurrency
           id={field.id}
           value={field.value ?? undefined}
           onChange={(newValue) => field.setValue(newValue ?? null)}
           onFocus={() => field.setIsTouched(false)}
           onBlur={() => field.setIsTouched(true)}
-          {...componentProps}
+          placeholder={placeholder}
+          {...inputCurrencyProps}
         />
         {(field.isTouched || field.isSubmitted) && field.isValidating && (
           <InputRightElement>

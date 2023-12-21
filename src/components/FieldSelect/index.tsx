@@ -6,6 +6,13 @@ import { GroupBase, MultiValue, SingleValue } from 'react-select';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { Select, SelectProps } from '@/components/Select';
 
+type UsualSelectProps =
+  | 'isClearable'
+  | 'isSearchable'
+  | 'placeholder'
+  | 'isMulti'
+  | 'autoFocus';
+
 export type FieldSelectProps<
   Option extends { label: ReactNode; value: unknown },
   IsMulti extends boolean = false,
@@ -13,9 +20,13 @@ export type FieldSelectProps<
 > = FieldProps<
   IsMulti extends true ? Array<Option['value']> : Option['value']
 > &
-  FormGroupProps & {
+  FormGroupProps &
+  Pick<SelectProps<Option, IsMulti, Group>, UsualSelectProps> & {
     options: Option[];
-    componentProps?: SelectProps<Option, IsMulti, Group>;
+    selectProps?: Omit<
+      SelectProps<Option, IsMulti, Group>,
+      'options' | UsualSelectProps
+    >;
   };
 
 export const FieldSelect = <
@@ -27,7 +38,17 @@ export const FieldSelect = <
 ) => {
   const field = useField(props);
 
-  const { componentProps, children, options, ...rest } = field.otherProps;
+  const {
+    selectProps,
+    children,
+    options,
+    placeholder,
+    isClearable,
+    isSearchable,
+    isMulti,
+    autoFocus,
+    ...rest
+  } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -43,11 +64,11 @@ export const FieldSelect = <
   // value is an Array so we filter the options to make sure we don't double it in the "label" section
   const getCreatedValues = () =>
     Array.isArray(fieldValue) &&
-    (componentProps?.type === 'creatable' ||
-      componentProps?.type === 'async-creatable')
+    (selectProps?.type === 'creatable' ||
+      selectProps?.type === 'async-creatable')
       ? fieldValue
           // We do not want already available options, so we filter them.
-          .filter((v) => !options.map((o) => o.value).includes(v))
+          .filter((v) => !options?.map((o) => o.value).includes(v))
           // We need to map the created values so they match the Option format
           .map((v) => ({ label: v, value: v }) as Option)
       : [];
@@ -66,12 +87,17 @@ export const FieldSelect = <
   return (
     <FormGroup {...formGroupProps}>
       <Select<Option, IsMulti, Group>
-        {...componentProps}
+        {...selectProps}
+        autoFocus={autoFocus}
+        isClearable={isClearable}
+        isSearchable={isSearchable}
+        isMulti={isMulti}
+        options={options}
         id={field.id}
         value={finalValue}
         onFocus={() => field.setIsTouched(false)}
         onBlur={() => field.setIsTouched(true)}
-        placeholder={componentProps?.placeholder ?? 'Select...'}
+        placeholder={placeholder ?? 'Select...'}
         onChange={(fieldValue) => {
           if (isMultiValue<Option>(fieldValue)) {
             field.setValue(
@@ -83,7 +109,6 @@ export const FieldSelect = <
             field.setValue(fieldValue ? (fieldValue.value as TODO) : null);
           }
         }}
-        options={options}
       />
       {children}
     </FormGroup>

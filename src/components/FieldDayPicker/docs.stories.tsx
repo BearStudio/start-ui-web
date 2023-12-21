@@ -29,7 +29,7 @@ export const Default = () => {
           label="Date"
           helper="This is an helper"
           required="Date is required"
-          componentProps={{ placeholder: 'Select a date...' }}
+          placeholder="Select a date"
         />
         <Box>
           <Button type="submit">Submit</Button>

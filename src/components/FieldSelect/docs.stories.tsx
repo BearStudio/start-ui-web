@@ -26,7 +26,7 @@ export const Default = () => {
           helper="This is an helper"
           required="Color is required"
           options={colors}
-          componentProps={{ placeholder: 'Placeholder' }}
+          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit">Submit</Button>
@@ -47,7 +47,7 @@ export const Disabled = () => {
           helper="This is an helper"
           options={colors}
           isDisabled
-          componentProps={{ placeholder: 'Placeholder' }}
+          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit">Submit</Button>
@@ -69,7 +69,8 @@ export const DefaultValue = () => {
           required="Color is required"
           defaultValue={colors[0]?.value}
           options={colors}
-          componentProps={{ isClearable: true, placeholder: 'Placeholder' }}
+          isClearable
+          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit">Submit</Button>
@@ -91,10 +92,10 @@ export const OptionsColorScheme = () => {
           helper="This is an helper"
           required="Color is required"
           options={colors}
-          componentProps={{
-            isClearable: true,
+          isClearable
+          placeholder="Placeholder"
+          selectProps={{
             selectedOptionColorScheme: 'red',
-            placeholder: 'Placeholder',
           }}
         />
         <Box>
@@ -116,10 +117,10 @@ export const CreateableMultiSelect = () => {
           helper="This is an helper"
           required="Color is required"
           options={colors}
-          componentProps={{
-            isMulti: true,
+          isMulti
+          placeholder="Placeholder"
+          selectProps={{
             type: 'creatable',
-            placeholder: 'Placeholder',
           }}
         />
         <Box>
@@ -143,11 +144,11 @@ export const DefaultValueCreateableMultiSelect = () => {
           helper="This is an helper"
           required="Color is required"
           options={colors}
+          isMulti
           defaultValue={['red', 'blue']}
-          componentProps={{
-            isMulti: true,
+          placeholder="Placeholder"
+          selectProps={{
             type: 'creatable',
-            placeholder: 'Placeholder',
           }}
         />
         <Box>
@@ -172,10 +173,10 @@ export const InitialValuesCreateableMultiSelect = () => {
           helper="This is an helper"
           required="Color is required"
           options={colors}
-          componentProps={{
-            isMulti: true,
+          isMulti
+          placeholder="Placeholder"
+          selectProps={{
             type: 'creatable',
-            placeholder: 'Placeholder',
           }}
         />
         <Box>

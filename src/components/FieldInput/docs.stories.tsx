@@ -14,27 +14,31 @@ export const Default = () => {
   return (
     <Formiz connect={form} autoForm>
       <Stack spacing={4}>
-        <FieldInput
-          name="demo-username"
-          label="Username"
-          helper="This is an helper"
-          required="Username is required"
-          componentProps={{ placeholder: 'Placeholder' }}
-        />
+        {/* 1 */}
         <FieldInput
           name="demo-password"
           label="Password"
           helper="This is an helper"
           required="Password is required"
-          componentProps={{ type: 'password', placeholder: 'Placeholder' }}
+          placeholder="Placeholder"
+          type="password"
         />
+        {/* 2 */}
+        <FieldInput
+          name="demo-username"
+          label="Username"
+          helper="This is an helper"
+          required="Username is required"
+          placeholder="Placeholder"
+        />
+        {/* 3 */}
         <FieldInput
           name="demo-read-only"
           label="Read Only"
           defaultValue="Value"
           helper="This is an helper"
           isReadOnly
-          componentProps={{ placeholder: 'Placeholder' }}
+          placeholder="Placeholder"
         />
         <FieldInput
           name="demo-disabled"
@@ -42,7 +46,7 @@ export const Default = () => {
           defaultValue="Value"
           helper="This is an helper"
           isDisabled
-          componentProps={{ placeholder: 'Placeholder' }}
+          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit">Submit</Button>
