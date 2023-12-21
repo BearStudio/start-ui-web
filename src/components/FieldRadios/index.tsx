@@ -21,7 +21,7 @@ export type FieldRadiosProps<FormattedValue = Option['value']> = FieldProps<
   FormattedValue
 > &
   FormGroupProps & {
-    componentProps?: RadioGroupProps;
+    radioGroupProps?: RadioGroupProps;
     options?: Option[];
   };
 
@@ -30,7 +30,7 @@ export const FieldRadios = <FormattedValue = Option['value'],>(
 ) => {
   const field = useField(props);
 
-  const { options, componentProps, children, ...rest } = field.otherProps;
+  const { options, radioGroupProps, children, ...rest } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -43,7 +43,7 @@ export const FieldRadios = <FormattedValue = Option['value'],>(
   return (
     <FormGroup {...formGroupProps}>
       <RadioGroup
-        {...componentProps}
+        {...radioGroupProps}
         id={field.id}
         value={field.value ?? undefined}
         onChange={field.setValue}

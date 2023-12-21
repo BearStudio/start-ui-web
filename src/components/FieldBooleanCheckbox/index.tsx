@@ -12,7 +12,7 @@ export type FieldBooleanCheckboxProps<FormattedValue = Value> = FieldProps<
   FormattedValue
 > &
   FormGroupProps & {
-    componentProps?: CheckboxProps;
+    checkboxProps?: CheckboxProps;
     optionLabel?: string;
   };
 
@@ -20,7 +20,7 @@ export const FieldBooleanCheckbox = <FormattedValue = Value,>(
   props: FieldBooleanCheckboxProps<FormattedValue>
 ) => {
   const field = useField(props);
-  const { children, componentProps, optionLabel, ...rest } = field.otherProps;
+  const { children, checkboxProps, optionLabel, ...rest } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -33,7 +33,7 @@ export const FieldBooleanCheckbox = <FormattedValue = Value,>(
   return (
     <FormGroup {...formGroupProps}>
       <Checkbox
-        {...componentProps}
+        {...checkboxProps}
         id={field.id}
         isChecked={field.value ?? undefined}
         onChange={() => field.setValue(!field.value)}

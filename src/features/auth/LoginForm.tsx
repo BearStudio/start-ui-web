@@ -64,7 +64,7 @@ export const LoginForm = ({
               },
             ]}
             formatValue={(v) => v?.toString()?.toLowerCase().trim()}
-            componentProps={{ placeholder: t('auth:data.email.label') }}
+            placeholder={t('auth:data.email.label')}
           />
 
           <Flex>

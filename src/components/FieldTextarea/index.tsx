@@ -5,12 +5,15 @@ import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Value = TextareaProps['value'];
 
+type UsualTextareaProps = 'placeholder';
+
 export type FieldTextareaProps<FormattedValue = Value> = FieldProps<
   Value,
   FormattedValue
 > &
-  FormGroupProps & {
-    componentProps?: TextareaProps;
+  FormGroupProps &
+  Pick<TextareaProps, UsualTextareaProps> & {
+    textAreaProps?: Omit<TextareaProps, UsualTextareaProps>;
   };
 
 export const FieldTextarea = <FormattedValue = Value,>(
@@ -18,7 +21,7 @@ export const FieldTextarea = <FormattedValue = Value,>(
 ) => {
   const field = useField(props);
 
-  const { componentProps, children, ...rest } = field.otherProps;
+  const { textAreaProps, children, placeholder, ...rest } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -31,12 +34,22 @@ export const FieldTextarea = <FormattedValue = Value,>(
   return (
     <FormGroup {...formGroupProps}>
       <Textarea
-        {...componentProps}
+        {...textAreaProps}
+        placeholder={placeholder}
         id={field.id}
         value={field.value ?? ''}
-        onChange={(e) => field.setValue(e.target.value)}
-        onFocus={() => field.setIsTouched(false)}
-        onBlur={() => field.setIsTouched(true)}
+        onChange={(e) => {
+          field.setValue(e.target.value);
+          textAreaProps?.onChange?.(e);
+        }}
+        onFocus={(e) => {
+          field.setIsTouched(false);
+          textAreaProps?.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          field.setIsTouched(true);
+          textAreaProps?.onBlur?.(e);
+        }}
       />
       {children}
     </FormGroup>
