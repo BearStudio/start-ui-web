@@ -33,5 +33,14 @@
     "subject": "Code de vérification",
     "validityTime": "Ce code ne sera valable que pour les {{expiration}} prochaines minutes.",
     "title": "Votre code de vérification"
+  },
+  "deleteAccountCode": {
+    "hello": "{{name}}, vous êtes sur le point de supprimer votre compte. \nCela sera permanent, soyez sûr de ce que vous faites.",
+    "ignoreHelper": "Si vous n'avez pas essayé de supprimer votre compte, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Voici votre code de vérification :",
+    "preview": "Code de vérification pour supprimer votre compte",
+    "subject": "Supprimer votre compte",
+    "title": "Supprimer votre compte",
+    "validityTime": "Ce code ne sera valable que pour les prochaines {{expiration}} minutes."
   }
 }

@@ -33,5 +33,14 @@
     "subject": "Nambari ya uthibitishaji",
     "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata.",
     "title": "Nambari yako ya uthibitishaji"
+  },
+  "deleteAccountCode": {
+    "hello": "{{name}}, unakaribia kufuta akaunti yako. \nHii itakuwa ya kudumu, hakikisha unafanya nini.",
+    "ignoreHelper": "Ikiwa hukujaribu kufuta akaunti yako, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Huu ndio nambari yako ya uthibitishaji:",
+    "preview": "Nambari ya kuthibitisha ili kufuta akaunti yako",
+    "subject": "Futa akaunti yako",
+    "title": "Futa akaunti yako",
+    "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata."
   }
 }
