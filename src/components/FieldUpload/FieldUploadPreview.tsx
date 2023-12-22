@@ -58,16 +58,20 @@ export const FieldUploadPreview: FC<
     const uploaderFieldValue = fields?.[uploaderName]
       ?.value as FieldUploadValue;
 
-    if (!uploaderFieldValue || !uploaderFieldValue?.name) {
+    if (
+      !uploaderFieldValue ||
+      (!uploaderFieldValue.fileUrl && !uploaderFieldValue.file)
+    ) {
       setFileToPreview(undefined);
       return;
     }
 
     const hasUserUploadedAFile = uploaderFieldValue.file;
-    const hasDefaultFileSet = uploaderFieldValue.name && !hasUserUploadedAFile;
+    const hasDefaultFileSet =
+      uploaderFieldValue.fileUrl && !hasUserUploadedAFile;
 
     if (hasDefaultFileSet) {
-      setFileToPreview(uploaderFieldValue.name);
+      setFileToPreview(uploaderFieldValue.fileUrl);
       return;
     }
 
