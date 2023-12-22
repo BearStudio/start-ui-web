@@ -7,7 +7,7 @@ import { Meta } from '@storybook/react';
 import { FieldUploadPreview } from '@/components/FieldUpload/FieldUploadPreview';
 import { useFieldUploadFileFromUrl } from '@/components/FieldUpload/utils';
 
-import { FieldUpload } from '.';
+import { FieldUpload, FieldUploadValue } from '.';
 
 export default {
   title: 'Fields/FieldUpload',
@@ -53,14 +53,15 @@ export const DefaultValue = () => {
 };
 
 export const WithPreview = () => {
-  const initialFiles = useFieldUploadFileFromUrl(
-    'https://plus.unsplash.com/premium_photo-1674593231084-d8b27596b134?auto=format&fit=crop&q=60&w=800&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8'
-  );
+  const file: FieldUploadValue = {
+    fileUrl:
+      'https://plus.unsplash.com/premium_photo-1674593231084-d8b27596b134?auto=format&fit=crop&q=60&w=800&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8',
+    name: 'mon-image',
+  };
 
   const form = useForm({
-    ready: initialFiles.isSuccess,
     initialValues: {
-      file: initialFiles.data,
+      file: file,
     },
     onSubmit: console.log,
   });
