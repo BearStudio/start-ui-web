@@ -1,9 +1,11 @@
 image: node:lts
 
 cache:
+  key:
+    files:
+      - pnpm-lock.yaml
   paths:
-    - node_modules
-    - .yarn
+    - .pnpm-store
 
 stages:
   - build
@@ -11,24 +13,12 @@ stages:
 
 build:
   stage: build
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest-8 --activate
+    - pnpm config set store-dir .pnpm-store
   script:
     - echo "Installing dependencies"
-    - yarn install
+    - pnpm install
     - echo "Building application"
-    - yarn build
-
-test:
-  image:
-    # Make sure to update this version number on version update
-    name: cypress/included:11.2.0
-    entrypoint: ['']
-  stage: test
-  script:
-    - yarn install
-    - yarn cypress install
-    - echo "Checking format code eslint"
-    - yarn eslint .
-    - echo "Checking types"
-    - yarn tsc --noEmit
-    - echo "Running tests"
-    - yarn test:ci --browser chrome
+    - pnpm build

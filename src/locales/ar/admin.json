@@ -1,7 +1,22 @@
 {
-  "nav": {
-    "administration": "الادارة",
-    "apiDocumentation": "مستندات واجهة API",
-    "users": "المستخدمين"
+  "layout": {
+    "mainMenu": {
+      "dashboard": "اللوحة الرئيسية",
+      "repositories": "المستودعات",
+      "management": "إدارة"
+    },
+    "accountMenu": {
+      "version": {
+        "copied": "تم نسخ الإصدار",
+        "copy": "نسخ الإصدار",
+        "label": "إصدار"
+      },
+      "switchColorModeDark": "التحويل إلى وضع الظلام ",
+      "switchColorModeLight": "التحويل إلى وضع الإضاءة ",
+      "myAccount": "حسابي",
+      "logout": "تسجيل خروج",
+      "apiDocs": "توثيق واجهة برمجة التطبيقات",
+      "openApp": "افتح التطبيق"
+    }
   }
 }

@@ -2,6 +2,6 @@
 
 import { ErrorPage } from '@/components/ErrorPage';
 
-export default function Page404() {
+export default function PageNotFound() {
   return <ErrorPage errorCode={404} />;
 }

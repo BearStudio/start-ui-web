@@ -1,8 +1,13 @@
 {
+  "you": "you",
   "list": {
     "title": "Users Management",
     "actions": {
       "createUser": "Create User"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} users"
     }
   },
   "deleteModal": {
@@ -26,10 +31,6 @@
       "title": "Deactivation Failed",
       "description": "Fail to deactivate \"{{login}}\" user"
     },
-    "deleteUserSuccess": {
-      "title": "User deleted",
-      "description": "User \"{{login}}\" deleted with success"
-    },
     "deleteUserError": {
       "title": "Deletion Failed",
       "description": "Fail to remove \"{{login}}\" user"
@@ -39,45 +40,30 @@
     }
   },
   "data": {
-    "login": {
-      "alreadyUsed": "Username already used",
-      "label": "Username",
-      "required": "Username is required",
-      "tooShort": "Username is too short (min. {{min}} characters)",
-      "tooLong": "Username is too long (max. {{max}} characters)",
-      "invalid": "Username is invalid, don't use special characters"
-    },
     "email": {
       "label": "Email",
       "alreadyUsed": "Email already used",
       "required": "Email is required",
-      "invalid": "Email is invalid",
-      "tooShort": "Email is too short (min. {{min}} characters)",
-      "tooLong": "Email is too long (max. {{max}} characters)"
+      "invalid": "Email is invalid"
     },
-    "id": {
-      "label": "ID"
+    "authorizations": {
+      "label": "Authorizations",
+      "required": "At least one authorization is required",
+      "options": {
+        "APP": "App",
+        "ADMIN": "Admin"
+      }
     },
-    "authorities": {
-      "label": "Authorities",
-      "required": "Authorities are required"
-    },
-    "createdBy": {
-      "label": "Created By"
-    },
-    "modifiedBy": {
-      "label": "Modified By"
+    "createdAt": {
+      "ago": "Created <dateAgo />"
     },
     "status": {
-      "label": "Status",
       "activated": "Activated",
       "deactivated": "Not Activated"
     },
-    "firstname": {
-      "label": "First Name"
-    },
-    "lastname": {
-      "label": "Last Name"
+    "name": {
+      "label": "Name",
+      "required": "Name is required"
     },
     "language": {
       "label": "Language"
@@ -85,7 +71,7 @@
   },
   "update": {
     "action": {
-      "save": "Update User"
+      "save": "Save"
     },
     "feedbacks": {
       "updateError": {
@@ -106,8 +92,8 @@
       }
     },
     "action": {
-      "save": "Create User"
+      "save": "Create"
     },
-    "title": "Create New User"
+    "title": "New User"
   }
 }

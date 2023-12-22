@@ -5,10 +5,16 @@ import {
   AlertTitle,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
-export const DemoRegisterHint = () => {
-  if (process.env.NEXT_PUBLIC_IS_DEMO !== 'true') return null;
+import { env } from '@/env.mjs';
+
+type DemoRegisterHintProps = {
+  loginPath: string;
+};
+
+export const DemoRegisterHint = ({ loginPath }: DemoRegisterHintProps) => {
+  if (!env.NEXT_PUBLIC_IS_DEMO) return null;
 
   return (
     <Alert status="warning">
@@ -16,8 +22,8 @@ export const DemoRegisterHint = () => {
       <AlertTitle>Demo Mode</AlertTitle>
       <AlertDescription>
         This is a read-only demo, but you can{' '}
-        <ChakraLink as={Link} to="/login" fontWeight="bold">
-          log in
+        <ChakraLink as={Link} href={loginPath} fontWeight="bold">
+          Sign in
         </ChakraLink>{' '}
         to test some of the features. Just remember, no changes can be made.
         Enjoy the features!

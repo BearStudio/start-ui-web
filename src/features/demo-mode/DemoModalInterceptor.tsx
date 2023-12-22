@@ -17,41 +17,22 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import Axios, { AxiosError } from 'axios';
 
-export const DemoModalInterceptor = () => {
-  const demoModal = useDisclosure();
+export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   const toast = useToast();
 
-  const openDemoModal = demoModal.onOpen;
   const toastCloseAll = toast.closeAll;
 
   useEffect(() => {
-    const interceptor = Axios.interceptors.response.use(
-      (r) => r,
-      (error) => {
-        if (
-          error instanceof AxiosError &&
-          error.response?.status === 403 &&
-          error.response.data.message === 'error.demo'
-        ) {
-          openDemoModal();
-          setTimeout(() => {
-            toastCloseAll();
-          });
-        }
-        throw error;
-      }
-    );
-
-    return () => Axios.interceptors.response.eject(interceptor);
-  }, [openDemoModal, toastCloseAll]);
+    setTimeout(() => {
+      toastCloseAll();
+    });
+  }, [toastCloseAll]);
 
   return (
-    <Modal isOpen={demoModal.isOpen} onClose={demoModal.onClose}>
+    <Modal isOpen onClose={onClose}>
       <ModalOverlay style={{ backdropFilter: 'blur(6px)' }} />
       <ModalContent>
         <ModalCloseButton />

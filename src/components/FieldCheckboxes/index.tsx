@@ -142,7 +142,9 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
       ) => {
         set((state) => ({ options: [...state.options, optionToRegister] }));
         setValue((prevValue) =>
-          isChecked ? [...(prevValue ?? []), optionToRegister.value] : prevValue
+          isChecked
+            ? [...(prevValue ?? []), optionToRegister.value]
+            : prevValue ?? []
         );
       },
       unregisterOption: (optionToUnregister: InternalOption) => {

@@ -3,47 +3,53 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["extendedWhereUnique", "jsonProtocol"]
+  previewFeatures = []
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Repository {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
-  link        String
-  description String?
+enum AccountStatus {
+  // User has registered and verified their email
+  ENABLED
+  // User has been disabled and can't login anymore
+  DISABLED
+  // User did register, but has not verified their email yet.
+  NOT_VERIFIED
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  email       String  @unique
-  login       String? @unique
-  password    String?
-  firstName   String?
-  lastName    String?
-  activated   Boolean @default(false)
-  langKey     String  @default("en")
-  authorities String  @default("ROLE_USER")
-
-  createdAt       DateTime @default(now())
-  createdByUserId Int?
-  createdBy       User?    @relation("CreatedByUser", fields: [createdByUserId], references: [id])
-  createdUsers    User[]   @relation("CreatedByUser")
-
-  updatedAt       DateTime @updatedAt
-  updatedByUserId Int?
-  updatedBy       User?    @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
-  updatedUsers    User[]   @relation("UpdatedByUser")
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  name           String?
+  email          String        @unique
+  accountStatus  AccountStatus @default(NOT_VERIFIED)
+  image          String?
+  authorizations String[]      @default(["APP"])
+  language       String        @default("en")
+  lastLoginAt    DateTime?
 }
 
 model VerificationToken {
-  token   String   @unique
-  userId  Int
-  expires DateTime
+  userId        String
+  code          String
+  token         String   @unique
+  expires       DateTime
+  lastAttemptAt DateTime @updatedAt
+  attempts      Int      @default(0)
+  // Useful to change the user email. This model will contains the next user
+  // email, waiting for the user to validate it.
+  email         String?
+}
 
-  @@unique([token, userId])
+model Repository {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  link        String
+  description String?
 }

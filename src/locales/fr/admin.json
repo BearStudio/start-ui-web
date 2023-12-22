@@ -1,7 +1,22 @@
 {
-  "nav": {
-    "administration": "Administration",
-    "apiDocumentation": "Documentation API",
-    "users": "Utilisateurs"
+  "layout": {
+    "mainMenu": {
+      "dashboard": "Tableau de bord",
+      "repositories": "Dépôts",
+      "management": "Gestion"
+    },
+    "accountMenu": {
+      "version": {
+        "copied": "Version copiée",
+        "copy": "Copier la version",
+        "label": "Version"
+      },
+      "switchColorModeDark": "Passer en mode sombre",
+      "switchColorModeLight": "Passer en mode clair",
+      "myAccount": "Mon compte",
+      "logout": "Déconnexion",
+      "apiDocs": "Documentation de l'API",
+      "openApp": "Ouvrir l'app"
+    }
   }
 }

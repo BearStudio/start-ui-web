@@ -1,0 +1,9 @@
+{
+  "layout": {
+    "mainMenu": {
+      "account": "حساب",
+      "home": "بيت",
+      "repositories": "المستودعات"
+    }
+  }
+}

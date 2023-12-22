@@ -1,20 +1,20 @@
 {
   "list": {
-    "title": "Usimamizi wa hazina",
+    "title": "hazina",
     "actions": {
       "createRepository": "Unda Hifadhi",
-      "updateRepository": "Sasisha Hifadhi",
       "view": "Tazama"
-    }
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha hazina {{loaded}} kati ya {{total}}"
+    },
+    "empty": "Hakuna hazina"
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Hifadhi imefutwa",
-      "description": "Hazina \"{{jina}}\" imefutwa kwa mafanikio"
-    },
     "deleteRepositoryError": {
       "title": "Imeshindwa Kufuta",
-      "description": "Imeshindwa kuondoa hazina ya \"{{jina}}\"."
+      "description": "Imeshindwa kuondoa hazina ya."
     },
     "loadingRepositoryError": {
       "title": "Imeshindwa kupakia hazina"
@@ -27,7 +27,6 @@
     "name": {
       "label": "Jina",
       "required": "Jina linahitajika",
-      "tooShort": "Jina ni fupi mno (dakika ya vibambo {{min}})",
       "alreadyUsed": "Jina tayari limetumika"
     },
     "link": {
@@ -40,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "Sasisha Hifadhi"
+      "save": "Hifadhi"
     },
     "feedbacks": {
       "updateError": {
@@ -61,9 +60,9 @@
       }
     },
     "action": {
-      "save": "Unda Hifadhi"
+      "save": "Unda"
     },
-    "title": "Unda Hifadhi Mpya"
+    "title": "Hifadhi Mpya"
   },
   "deleteModal": {
     "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",

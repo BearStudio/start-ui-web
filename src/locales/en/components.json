@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Retry",
     "errorTitle": "Something went wrong",
-    "emptyTitle": "No Data"
+    "emptyTitle": "No Data",
+    "noResultsTitle": "No results for \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd, DD MMMM YYYY, hh:mm a"
@@ -57,9 +58,6 @@
   "fieldDayPicker": {
     "invalidMessage": "Invalid date"
   },
-  "fieldRepeater": {
-    "invalidMessage": "At least one element is invalid"
-  },
   "fieldMultiSelect": {
     "noOption": "No option"
   },
@@ -68,5 +66,25 @@
     "sortDescending": "Descending",
     "sortBy": "Sort by",
     "order": "Order"
+  },
+  "dayPicker": {
+    "today": "Today"
+  },
+  "monthPicker": {
+    "today": "Today",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
   }
 }

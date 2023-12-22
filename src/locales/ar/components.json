@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "أعد المحاولة",
     "errorTitle": "هناك خطأ ما",
-    "emptyTitle": "لايوجد بيانات"
+    "emptyTitle": "لايوجد بيانات",
+    "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd, DD MMMM YYYY, hh:mm a"
@@ -36,9 +37,6 @@
   "fieldDayPicker": {
     "invalidMessage": "تاريخ غير صالح"
   },
-  "fieldRepeater": {
-    "invalidMessage": "عنصر واحد على الأقل غير صالح"
-  },
   "fieldMultiSelect": {
     "noOption": "لا يوجد خيار"
   },
@@ -68,5 +66,25 @@
       "title": "خطأ"
     },
     "errorCode": "Error {{code}}"
+  },
+  "dayPicker": {
+    "today": "اليوم"
+  },
+  "monthPicker": {
+    "today": "اليوم",
+    "months": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    }
   }
 }

@@ -1,0 +1,37 @@
+{
+  "loginCode": {
+    "hello": "Content de vous revoir {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de vous connecter, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Voici votre code de vérification :",
+    "preview": "Code de vérification pour vous connecter",
+    "subject": "Code de vérification de connexion",
+    "title": "Code de vérification de connexion",
+    "validityTime": "Ce code ne sera valable que pour les {{expiration}} prochaines minutes."
+  },
+  "loginNotFound": {
+    "button": "Essayez un autre email",
+    "ignoreHelper": "Si vous n'avez pas essayé de vous connecter, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Il semble qu'aucun compte ne soit lié à cette adresse email.",
+    "preview": "Est-ce le bon email ?",
+    "subject": "Compte non trouvé",
+    "title": "Est-ce le bon email ?"
+  },
+  "registerCode": {
+    "validityTime": "Ce code ne sera valable que pour les {{expiration}} prochainesminutes.",
+    "hello": "Bienvenue {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de vous inscrire, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Votre compte est presque prêt ! \nVoici votre code de vérification :",
+    "preview": "Votre code de vérification",
+    "subject": "Vérifiez votre compte",
+    "title": "Vérifiez votre compte"
+  },
+  "emailAddressChange": {
+    "hello": "Bonjour {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de modifier votre adresse email, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Voici le code de vérification pour mettre à jour votre email :",
+    "preview": "Changez votre email",
+    "subject": "Code de vérification",
+    "validityTime": "Ce code ne sera valable que pour les {{expiration}} prochaines minutes.",
+    "title": "Votre code de vérification"
+  }
+}

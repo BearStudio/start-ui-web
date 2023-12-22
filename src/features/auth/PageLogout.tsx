@@ -2,20 +2,36 @@ import React, { useEffect } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useAuthContext } from '@/features/auth/AuthContext';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageLogout() {
-  const { updateToken } = useAuthContext();
-  const navigate = useNavigate();
+  const router = useRouter();
   const queryCache = useQueryClient();
+  const logout = trpc.auth.logout.useMutation();
+  const trpcUtils = trpc.useUtils();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    updateToken(null);
-    queryCache.clear();
-    navigate('/login');
-  }, [updateToken, queryCache, navigate]);
+    const trigger = async () => {
+      if (!logout.isIdle) return;
+      await logout.mutate();
+      queryCache.clear();
+      // Optimistic Update
+      trpcUtils.auth.checkAuthenticated.setData(undefined, {
+        isAuthenticated: false,
+      });
+      router.replace(searchParams.get('redirect') || '/');
+    };
+    trigger();
+  }, [
+    searchParams,
+    queryCache,
+    router,
+    logout,
+    trpcUtils.auth.checkAuthenticated,
+  ]);
 
   return (
     <Center flex="1">

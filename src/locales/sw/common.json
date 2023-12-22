@@ -10,6 +10,14 @@
     "cancel": "Kughairi",
     "deactivate": "Zima",
     "delete": "Ili kufuta",
-    "edit": "Hariri"
+    "edit": "Hariri",
+    "back": "Nyuma"
+  },
+  "or": "au",
+  "confirmDiscardChanges": {
+    "cancelText": "Weka mabadiliko",
+    "confirmText": "Tupa mabadiliko",
+    "message": "Unakaribia kutendua mabadiliko yote uliyofanya.",
+    "title": "Ungependa kutupa mabadiliko?"
   }
 }

@@ -79,3 +79,101 @@ export const DefaultValue = () => {
     </Formiz>
   );
 };
+
+export const OptionsColorScheme = () => {
+  const form = useForm<{ colors: string }>({ onSubmit: console.log });
+
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          selectProps={{
+            isClearable: true,
+            selectedOptionColorScheme: 'red',
+          }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};
+
+export const CreateableMultiSelect = () => {
+  const form = useForm({ onSubmit: console.log });
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          selectProps={{ isMulti: true, type: 'creatable' }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};
+
+export const DefaultValueCreateableMultiSelect = () => {
+  const form = useForm({
+    onSubmit: console.log,
+  });
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          defaultValue={['red', 'blue']}
+          selectProps={{ isMulti: true, type: 'creatable' }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};
+
+export const InitialValuesCreateableMultiSelect = () => {
+  const form = useForm({
+    onSubmit: console.log,
+    initialValues: { colors: ['red', 'blue'] },
+  });
+  return (
+    <Formiz connect={form} autoForm>
+      <Stack spacing={4}>
+        <FieldSelect
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          helper="This is an helper"
+          required="Color is required"
+          options={colors}
+          selectProps={{ isMulti: true, type: 'creatable' }}
+        />
+        <Box>
+          <Button type="submit">Submit</Button>
+        </Box>
+      </Stack>
+    </Formiz>
+  );
+};

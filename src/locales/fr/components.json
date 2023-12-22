@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Réessayer",
     "errorTitle": "Une erreur est survenue",
-    "emptyTitle": "Aucune donnée"
+    "emptyTitle": "Aucune donnée",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "dddd DD MMMM YYYY, HH:mm"
@@ -28,7 +29,6 @@
     }
   },
   "errorPage": {
-    "errorCode": "Erreur {{code}}",
     "403": {
       "title": "Page non autorisée",
       "description": "Désolé, vous ne pouvez pas accéder à cette page."
@@ -37,6 +37,7 @@
       "title": "Page introuvable",
       "description": "La page n'existe pas ou l'URL a changé."
     },
+    "errorCode": "Erreur {{code}}",
     "default": {
       "title": "Erreur",
       "description": "Une erreur est survenue 😞"
@@ -57,9 +58,6 @@
   "fieldDayPicker": {
     "invalidMessage": "Date invalide"
   },
-  "fieldRepeater": {
-    "invalidMessage": "Au moins un élément est invalide"
-  },
   "fieldMultiSelect": {
     "noOption": "Aucune option"
   },
@@ -68,5 +66,25 @@
     "sortDescending": "Descendant",
     "sortBy": "Trier par",
     "order": "Ordre"
+  },
+  "dayPicker": {
+    "today": "Aujourd'hui"
+  },
+  "monthPicker": {
+    "today": "Aujourd'hui",
+    "months": {
+      "january": "Janvier",
+      "february": "Février",
+      "march": "Mars",
+      "april": "Avril",
+      "may": "Mai",
+      "june": "Juin",
+      "july": "Juillet",
+      "august": "Août",
+      "september": "Septembre",
+      "october": "Octobre",
+      "november": "Novembre",
+      "december": "Décembre"
+    }
   }
 }

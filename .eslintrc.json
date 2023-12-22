@@ -6,6 +6,7 @@
     "plugin:storybook/recommended"
   ],
   "rules": {
+    "react/no-unescaped-entities": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -13,9 +14,16 @@
       }
     ],
     "sonarjs/no-duplicate-string": "off",
-    "sonarjs/cognitive-complexity": ["warn", 50]
+    "sonarjs/cognitive-complexity": ["warn", 50],
+    "sonarjs/prefer-immediate-return": "warn"
   },
   "overrides": [
+    {
+      "files": ["./src/**/*.*"],
+      "rules": {
+        "no-process-env": "error"
+      }
+    },
     {
       "files": [
         "*.stories.tsx",

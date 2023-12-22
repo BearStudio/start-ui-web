@@ -1,43 +1,52 @@
 import React from 'react';
 
-import { Box, BoxProps, Button, Flex, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  Button,
+  ButtonProps,
+  Flex,
+  Stack,
+} from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useQueryClient } from '@tanstack/react-query';
+import { isEmail } from '@formiz/validations';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
-import { useLogin } from '@/features/auth/service';
-import { DemoLoginHint } from '@/features/demo-mode/DemoLoginHint';
+import { DevLoginHint } from '@/features/devtools/DevLoginHint';
+import { trpc } from '@/lib/trpc/client';
+import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 type LoginFormProps = BoxProps & {
-  onSuccess?: () => void;
+  onSuccess?: (
+    data: RouterOutputs['auth']['login'],
+    variables: RouterInputs['auth']['login']
+  ) => void;
+  buttonVariant?: ButtonProps['variant'];
 };
 
 export const LoginForm = ({
   onSuccess = () => undefined,
+  buttonVariant = '@primary',
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
   const toastError = useToastError();
-  const queryCache = useQueryClient();
 
-  const login = useLogin({
-    onSuccess: () => {
-      queryCache.clear();
-      onSuccess();
-    },
-    onError: (error) => {
+  const login = trpc.auth.login.useMutation({
+    onSuccess,
+    onError: () => {
       toastError({
         title: t('auth:login.feedbacks.loginError.title'),
-        description: error?.response?.data?.title,
       });
     },
   });
 
-  const form = useForm<{ username: string; password: string }>({
-    onValidSubmit: (values) => login.mutate(values),
+  const form = useForm<{ email: string }>({
+    onValidSubmit: (values) => {
+      login.mutate(values)
+    },
   });
 
   return (
@@ -45,39 +54,33 @@ export const LoginForm = ({
       <Formiz autoForm connect={form}>
         <Stack spacing={4}>
           <FieldInput
-            name="username"
-            label={t('auth:data.username.label')}
-            required={t('auth:data.username.required')}
+            name="email"
+            size="lg"
+            placeholder={t('auth:data.email.label')}
+            required={t('auth:data.email.required')}
+            validations={[
+              {
+                handler: isEmail(),
+                message: t('auth:data.email.invalid'),
+              },
+            ]}
             formatValue={(v) => v?.toLowerCase().trim()}
           />
-          <FieldInput
-            name="password"
-            type="password"
-            label={t('auth:data.password.label')}
-            required={t('auth:data.password.required')}
-          />
+
           <Flex>
             <Button
-              as={Link}
-              to="/account/reset"
-              size="sm"
-              variant="link"
-              whiteSpace="initial"
-            >
-              {t('auth:login.actions.forgotPassword')}
-            </Button>
-            <Button
-              isLoading={login.isLoading}
+              isLoading={login.isLoading || login.isSuccess}
               isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
-              variant="@primary"
-              ms="auto"
+              variant={buttonVariant}
+              size="lg"
+              flex={1}
             >
               {t('auth:login.actions.login')}
             </Button>
           </Flex>
 
-          <DemoLoginHint />
+          <DevLoginHint />
         </Stack>
       </Formiz>
     </Box>

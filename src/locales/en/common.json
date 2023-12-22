@@ -6,10 +6,18 @@
     "sw": "Swahili"
   },
   "actions": {
+    "back": "Back",
     "activate": "Activate",
     "cancel": "Cancel",
     "deactivate": "Deactivate",
     "delete": "Delete",
     "edit": "Edit"
+  },
+  "or": "or",
+  "confirmDiscardChanges": {
+    "title": "Discard changes?",
+    "message": "You are about to undo all the changes you made.",
+    "confirmText": "Discard changes",
+    "cancelText": "Keep changes"
   }
 }

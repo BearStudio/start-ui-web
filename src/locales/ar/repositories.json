@@ -1,20 +1,20 @@
 {
   "list": {
-    "title": "إدارة المستودعات",
+    "title": "المستودعات",
     "actions": {
       "createRepository": "إنشاء مستودع",
-      "updateRepository": "مستودع التحديث",
       "view": "منظر"
-    }
+    },
+    "loadMore": {
+      "button": "تحميل المزيد",
+      "display": "عرض {{loaded}} من المستودعات {{total}}."
+    },
+    "empty": "لا مستودعات"
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "تم حذف المستودع",
-      "description": "تم حذف المستودع \"{{name}}\" بنجاح"
-    },
     "deleteRepositoryError": {
       "title": "فشل الحذف",
-      "description": "فشل إزالة مستودع \"{{name}}\""
+      "description": "فشل إزالة مستودع"
     },
     "loadingRepositoryError": {
       "title": "فشل تحميل المستودعات"
@@ -27,7 +27,6 @@
     "name": {
       "label": "اسم",
       "required": "مطلوب اسم",
-      "tooShort": "الاسم قصير جدًا (الحد الأدنى {{min}} حرفًا)",
       "alreadyUsed": "الاسم مستخدم بالفعل"
     },
     "link": {
@@ -40,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "مستودع التحديث"
+      "save": "يحفظ"
     },
     "feedbacks": {
       "updateError": {
@@ -61,9 +60,9 @@
       }
     },
     "action": {
-      "save": "إنشاء مستودع"
+      "save": "يخلق"
     },
-    "title": "إنشاء مستودع جديد"
+    "title": "مستودع جديد"
   },
   "deleteModal": {
     "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",

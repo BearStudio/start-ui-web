@@ -1,10 +1,14 @@
 {
   "list": {
-    "title": "Repositories' Management",
+    "title": "Repositories",
+    "empty": "No repositories",
     "actions": {
       "createRepository": "Create Repository",
-      "updateRepository": "Update Repository",
       "view": "View"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} repositories"
     }
   },
   "deleteModal": {
@@ -12,13 +16,9 @@
     "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Repository deleted",
-      "description": "Repository \"{{name}}\" deleted with success"
-    },
     "deleteRepositoryError": {
       "title": "Deletion Failed",
-      "description": "Fail to remove \"{{name}}\" repository"
+      "description": "Fail to remove repository"
     },
     "loadingRepositoryError": {
       "title": "Failed to load repositories"
@@ -43,7 +43,7 @@
   },
   "update": {
     "action": {
-      "save": "Update Repository"
+      "save": "Save"
     },
     "feedbacks": {
       "updateError": {
@@ -64,8 +64,8 @@
       }
     },
     "action": {
-      "save": "Create Repository"
+      "save": "Create"
     },
-    "title": "Create New Repository"
+    "title": "New Repository"
   }
 }

@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16.1
+    ports:
+      - '${DOCKER_DATABASE_PORT:-5432}:5432'
+    environment:
+      POSTGRES_DB: $DOCKER_DATABASE_NAME
+      POSTGRES_USER: $DOCKER_DATABASE_USERNAME
+      POSTGRES_PASSWORD: $DOCKER_DATABASE_PASSWORD

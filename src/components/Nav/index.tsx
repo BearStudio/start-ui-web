@@ -40,13 +40,10 @@ type NavProps = React.PropsWithChildren<MenuProps> & {
 
 export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   const isHydrated = useIsHydrated();
-  const isMenu = useBreakpointValue(
-    {
-      base: true,
-      [breakpoint]: false,
-    },
-    { ssr: false }
-  );
+  const isMenu = useBreakpointValue({
+    base: true,
+    [breakpoint]: false,
+  });
 
   const [active, setActive] = useState<ReactNode>(<>-</>);
   return (
@@ -122,25 +119,34 @@ export const NavItem: ChakraComponent<'span', NavItemProps> = ({
   return (
     <Item
       px="3"
-      py="2"
+      py="1"
       borderRadius={isMenu ? undefined : 'md'}
       transition="0.2s"
       fontSize="sm"
       fontWeight="bold"
       bg={isActive ? 'white' : 'transparent'}
+      border="1px solid transparent"
+      boxShadow={isActive ? 'card' : undefined}
       color={isActive ? 'gray.700' : 'gray.600'}
+      borderColor={isActive ? 'gray.100' : undefined}
+      borderLeft={isMenu ? 'none' : undefined}
+      borderRight={isMenu ? 'none' : undefined}
       _dark={{
         color: isActive ? 'white' : 'gray.100',
-        bg: isActive ? 'gray.700' : 'transparent',
+        borderColor: isActive ? 'gray.800' : undefined,
+        bg: isActive ? 'gray.800' : 'transparent',
       }}
       _hover={
         !isActive && !isMenu
           ? {
               bg: 'white',
               color: 'gray.700',
+              boxShadow: 'card',
+              borderColor: 'gray.100',
               _dark: {
                 bg: 'gray.700',
                 color: 'gray.100',
+                borderColor: 'gray.800',
               },
             }
           : {}
@@ -174,8 +180,7 @@ export const NavGroup: FC<React.PropsWithChildren<FlexProps>> = ({
         px="3"
         pt="6"
         pb="2"
-        color="gray.500"
-        _dark={{ color: 'gray.300' }}
+        color="text-dimmed"
         {...rest}
       >
         {title}

@@ -1,36 +1,93 @@
 import { useState } from 'react';
 
-import { Box } from '@chakra-ui/react';
-import { Meta } from '@storybook/react';
+import { Stack, Text } from '@chakra-ui/react';
 
 import { DayPicker } from './index';
 
 export default {
   title: 'Components/DayPicker',
-  decorators: [
-    (Story) => {
-      return (
-        <Box minH={'20rem'}>
-          <Story />
-        </Box>
-      );
-    },
-  ],
-} satisfies Meta;
+};
 
 export const Default = () => {
-  const [selectedDay, setSelectedDay] = useState<Date | null | undefined>(
-    new Date()
-  );
+  const [selectedDay, setSelectedDay] = useState<Date | null>();
+
   return (
-    <>
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
       <DayPicker
         value={selectedDay}
-        onChange={(day) => {
-          setSelectedDay(day);
-        }}
+        onChange={setSelectedDay}
+        inputProps={{ size: 'xs' }}
       />
-      {JSON.stringify(selectedDay)}
-    </>
+      <DayPicker
+        value={selectedDay}
+        onChange={setSelectedDay}
+        inputProps={{ size: 'sm' }}
+      />
+      <DayPicker value={selectedDay} onChange={setSelectedDay} />
+    </Stack>
+  );
+};
+
+export const WithDefaultValue = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker value={selectedDay} onChange={setSelectedDay} />
+    </Stack>
+  );
+};
+
+export const AutoFocus = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker value={selectedDay} onChange={setSelectedDay} autoFocus />
+    </Stack>
+  );
+};
+
+export const IsDisabled = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker value={selectedDay} onChange={setSelectedDay} isDisabled />
+    </Stack>
+  );
+};
+
+export const WithPastDaysDisabled = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker
+        value={selectedDay}
+        onChange={setSelectedDay}
+        arePastDaysDisabled
+      />
+    </Stack>
+  );
+};
+
+export const WithoutPortal = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker
+        value={selectedDay}
+        onChange={setSelectedDay}
+        usePortal={false}
+      />
+    </Stack>
   );
 };

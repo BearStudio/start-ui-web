@@ -49,15 +49,44 @@ import { Button, IconButton } from '@chakra-ui/react'
   </Story>
 </Canvas>
 
-## Danger Button
+
+
+## Danger Primary Button
 
 <Canvas>
-  <Story name="Danger">
+  <Story name="DangerPrimary">
     <ButtonGroup>
-      <Button variant="@danger">Danger Button</Button>
-      <Button variant="@danger" isLoading loadingText="Processing...">Button</Button>
-      <IconButton variant="@danger" icon={<LuMinus />} aria-label="Remove" />
-      <Button variant="@danger" isDisabled>Button</Button>
+      <Button variant="@dangerPrimary">Danger Primary Button</Button>
+      <Button variant="@dangerPrimary" isLoading loadingText="Processing...">Button</Button>
+      <IconButton variant="@dangerPrimary" icon={<LuMinus />} aria-label="Remove" />
+      <Button variant="@dangerPrimary" isDisabled>Button</Button>
+    </ButtonGroup>
+  </Story>
+</Canvas>
+
+## Danger Secondary Button
+
+<Canvas>
+  <Story name="DangerSecondary">
+    <ButtonGroup>
+      <Button variant="@dangerSecondary">Danger Secondary Button</Button>
+      <Button variant="@dangerSecondary" isLoading loadingText="Processing...">Button</Button>
+      <IconButton variant="@dangerSecondary" icon={<LuMinus />} aria-label="Remove" />
+      <Button variant="@dangerSecondary" isDisabled>Button</Button>
+    </ButtonGroup>
+  </Story>
+</Canvas>
+
+
+## Link Button
+
+<Canvas>
+  <Story name="Link">
+    <ButtonGroup>
+      <Button variant="link">Link Button</Button>
+      <Button variant="link" isLoading loadingText="Processing...">Button</Button>
+      <IconButton variant="link" icon={<LuMinus />} aria-label="Remove" />
+      <Button variant="link" isDisabled>Button</Button>
     </ButtonGroup>
   </Story>
 </Canvas>

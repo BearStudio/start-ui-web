@@ -15,7 +15,7 @@ export const popoverTheme = defineMultiStyleConfig({
       py: 3,
       maxW: '98vw',
       _dark: {
-        [$popperBg.variable]: 'colors.gray.900',
+        [$popperBg.variable]: 'colors.gray.800',
       },
     },
     header: {

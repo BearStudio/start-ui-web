@@ -1,0 +1,37 @@
+{
+  "registerCode": {
+    "subject": "Verify your account",
+    "preview": "Your verification code",
+    "title": "Verify your account",
+    "hello": "Welcome {{name}},",
+    "intro": "Your account is almost ready! This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to register, you can safely ignore this email."
+  },
+  "loginCode": {
+    "subject": "Sign in verification code",
+    "preview": "Verification code to sign in",
+    "title": "Sign in verification code",
+    "hello": "Welcome back {{name}},",
+    "intro": "This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  },
+  "loginNotFound": {
+    "subject": "Account not found",
+    "preview": "Is this the right email?",
+    "title": "Is this the right email?",
+    "intro": "It looks like there isn't an account tied to this email address.",
+    "button": "Try a different email",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  },
+  "emailAddressChange": {
+    "subject": "Verification code",
+    "preview": "Change your email",
+    "title": "Your verification code",
+    "hello": "Hi {{name}},",
+    "intro": "This is the verification code to update your email:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
+  }
+}

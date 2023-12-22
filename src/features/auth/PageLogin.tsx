@@ -1,52 +1,69 @@
 import React from 'react';
 
 import {
-  Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Center,
+  Divider,
+  HStack,
   Heading,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
-import { Logo } from '@/components/Logo';
-import { SlideIn } from '@/components/SlideIn';
+import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
+import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 export default function PageLogin() {
-  const { t } = useTranslation(['auth']);
+  const { t } = useTranslation(['auth', 'common']);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleOnSuccess = (
+    data: RouterOutputs['auth']['login'],
+    variables: RouterInputs['auth']['login']
+  ) => {
+    const urlSearchParams = new URLSearchParams(searchParams);
+    urlSearchParams.set('email', variables.email);
+    router.push(
+      `${APP_PATH}/login/${data.token}?${urlSearchParams.toString()}`
+    );
+  };
 
   return (
-    <SlideIn>
-      <Box px="2" py="4rem" w="22rem" maxW="full" m="auto">
-        <Logo h="3rem" mb="8" mx="auto" />
-        <Card>
-          <CardHeader pb={0}>
-            <Heading size="md" data-test="login-page-heading">
-              {t('auth:login.title')}
-            </Heading>
-          </CardHeader>
-          <CardBody>
-            <LoginForm />
-          </CardBody>
-        </Card>
-        <Center mt="8">
-          <Button as={Link} to="/account/register" variant="link">
-            {t('auth:login.actions.needAccount')}{' '}
-            <Box
-              as="strong"
-              ms="2"
-              color="gray.600"
-              _dark={{ color: 'gray.300' }}
-            >
-              {t('auth:login.actions.register')}
-            </Box>
-          </Button>
-        </Center>
-      </Box>
-    </SlideIn>
+    <Stack spacing={6}>
+      <Stack spacing={1}>
+        <Heading size="md">{t('auth:login.appTitle')}</Heading>
+        <Text fontSize="sm" color="text-dimmed">
+          {t('auth:login.appSubTitle')}
+        </Text>
+      </Stack>
+
+      <Button
+        variant="@primary"
+        size="lg"
+        as={Link}
+        href={`${APP_PATH}/register`}
+      >
+        {t('auth:login.actions.register')}
+      </Button>
+
+      <HStack>
+        <Divider flex={1} />
+        <Text
+          fontSize="xs"
+          color="gray.400"
+          fontWeight="bold"
+          textTransform="uppercase"
+        >
+          {t('common:or')}
+        </Text>
+        <Divider flex={1} />
+      </HStack>
+
+      <LoginForm onSuccess={handleOnSuccess} buttonVariant="@secondary" />
+    </Stack>
   );
 }

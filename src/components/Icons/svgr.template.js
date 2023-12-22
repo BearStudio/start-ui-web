@@ -1,5 +1,5 @@
 /**
- * Use `yarn theme:generate-icons` to generate icons components
+ * Use `pnpm theme:generate-icons` to generate icons components
  * from the svg files `svg-sources` folder
  * to the `icons-generated` folder
  */

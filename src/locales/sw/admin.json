@@ -1,7 +1,22 @@
 {
-  "nav": {
-    "administration": "Administration",
-    "apiDocumentation": "Nyaraka za API",
-    "users": "Watumiaji"
+  "layout": {
+    "mainMenu": {
+      "dashboard": "Dashibodi",
+      "repositories": "Hazina",
+      "management": "Usimamizi"
+    },
+    "accountMenu": {
+      "version": {
+        "copied": "Toleo lililonakiwa",
+        "copy": "Toleo la Nakili",
+        "label": "Toleo"
+      },
+      "switchColorModeDark": "Badili hadi ya giza",
+      "switchColorModeLight": "Badilisha kwa hali ya mwanga",
+      "myAccount": "Akauti yangu",
+      "logout": "Ondoka",
+      "apiDocs": "Nyaraka za Api",
+      "openApp": "Fungua Programu"
+    }
   }
 }

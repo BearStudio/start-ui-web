@@ -43,11 +43,24 @@ yarn-error.log*
 # vercel
 .vercel
 
-# cypress
-/cypress/videos
-
 # Build info
 .build-info.json
 
 # Prisma
 prisma/dev.db
+prisma/dev.db-journal
+
+# Emails
+.react-email
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# next-pwa recommandation
+**/public/workbox-*.js*
+**/public/sw.js*
+**/public/worker-development.js*
+
+certificates

@@ -1,141 +1,70 @@
 {
+  "title": "Account",
   "nav": {
     "profile": "Profile",
-    "password": "Password",
+    "email": "Email",
     "myAccount": "My Account"
   },
+  "admin": {
+    "title": "Admin user",
+    "button": "Open Administration"
+  },
   "profile": {
-    "title": "Profile",
+    "title": "Profile informations",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Updated with success"
+        "title": "Profile updated"
       },
       "updateError": {
         "title": "Update failed"
       }
     },
     "actions": {
-      "save": "Save"
+      "update": "Update"
     }
   },
-  "password": {
-    "title": "Password",
+  "email": {
+    "title": "Update your email",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Your password has been updated with success"
+        "title": "Email updated"
       },
       "updateError": {
-        "title": "Password update failed"
+        "title": "Update failed"
       }
     },
     "actions": {
-      "changePassword": "Change Password"
+      "update": "Update"
     }
   },
-  "resetPassword": {
-    "title": "Reset Password",
-    "actions": {
-      "cancel": "Back",
-      "send": "Send Email",
-      "goToLogin": "Go to Login",
-      "reset": "Reset Password"
-    },
-    "feedbacks": {
-      "initSuccess": {
-        "title": "Reset password email sent with success!",
-        "description": "If an account exist with email <strong>{{email}}</strong> you should have received an email."
-      },
-      "initError": {
-        "title": "Reset password failed"
-      },
-      "resetSuccess": {
-        "title": "Your password has been reset",
-        "description": "You can now login"
-      },
-      "resetError": {
-        "title": "Reset password failed"
-      }
+  "preferences": {
+    "title": "Preferences",
+    "theme": {
+      "dark": "Dark mode",
+      "light": "Light mode"
     }
   },
-  "activate": {
-    "feedbacks": {
-      "activationLoading": {
-        "title": "Account activation..."
-      },
-      "activationSuccess": {
-        "title": "Account activation successfully"
-      },
-      "activationError": {
-        "title": "Failed to activate account"
-      }
+  "logout": {
+    "button": "Logout",
+    "confirm": {
+      "title": "Account logout",
+      "message": "You are about to end your session",
+      "button": "Logout"
     }
   },
   "data": {
-    "firstname": {
-      "label": "First Name",
-      "required": "First name is required"
-    },
-    "lastname": {
-      "label": "Last Name",
-      "required": "Last name is required"
+    "name": {
+      "label": "Name",
+      "required": "Name is required"
     },
     "email": {
       "label": "Email",
       "required": "Email is required",
       "invalid": "Email is invalid",
-      "resetHelper": "Enter the email address you used to register",
-      "alreadyUsed": "Email already used",
-      "tooShort": "Email is too short (min. {{min}} characters)",
-      "tooLong": "Email is too long (max. {{max}} characters)"
+      "current": "This is your current email"
     },
     "language": {
       "label": "Language"
-    },
-    "password": {
-      "label": "Password",
-      "tooShort": "Password too short (min. {{min}} characters)",
-      "tooLong": "Password too long (max. {{max}} characters)",
-      "required": "Password is required"
-    },
-    "currentPassword": {
-      "label": "Current Password",
-      "incorrect": "Invalid current password",
-      "required": "Current Password is required"
-    },
-    "newPassword": {
-      "label": "New Password",
-      "required": "New Password is required"
-    },
-    "confirmNewPassword": {
-      "label": "Confirm New Password",
-      "required": "New Password confirmation is required",
-      "notEqual": "New passwords must be equal"
-    },
-    "login": {
-      "alreadyUsed": "Username already used",
-      "label": "Username",
-      "required": "Username is required",
-      "tooShort": "Username is too short (min. {{min}} characters)",
-      "tooLong": "Username is too long (max. {{max}} characters)",
-      "invalid": "Username is invalid, don't use special characters"
     }
-  },
-  "register": {
-    "feedbacks": {
-      "registrationError": {
-        "title": "Registration failed"
-      },
-      "registrationSuccess": {
-        "title": "Account created with success!",
-        "description": "Please check your email <strong>{{email}}</strong> inbox to activate your account."
-      }
-    },
-    "actions": {
-      "goToLogin": "Go to Login",
-      "create": "Create Account",
-      "alreadyHaveAnAccount": "Already have an account?",
-      "login": "Login"
-    },
-    "title": "Register"
   }
 }

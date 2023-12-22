@@ -74,6 +74,9 @@ const variantSecondary = defineStyle((props) => ({
 
 export const buttonTheme = defineStyleConfig({
   baseStyle: (props) => ({
+    fontWeight: 'medium',
+    boxShadow: 'sm',
+    border: '1px solid transparent',
     _focusVisible: {
       boxShadow: 'none',
       ring: '2px',
@@ -81,7 +84,7 @@ export const buttonTheme = defineStyleConfig({
       ringColor: `${props.colorScheme}.500`,
     },
     // Disabled Style
-    ...(props.isDisabled
+    ...(props.isDisabled && props.variant !== 'link'
       ? {
           _disabled: {
             opacity: 0.8,
@@ -104,8 +107,14 @@ export const buttonTheme = defineStyleConfig({
     '@primary': (props) => variantPrimary({ ...props, colorScheme: 'brand' }),
     '@secondary': (props) =>
       variantSecondary({ ...props, colorScheme: 'brand' }),
-    '@danger': (props) => variantSecondary({ ...props, colorScheme: 'error' }),
+    '@dangerPrimary': (props) =>
+      variantPrimary({ ...props, colorScheme: 'error' }),
+    '@dangerSecondary': (props) =>
+      variantSecondary({ ...props, colorScheme: 'error' }),
     // Default variants
+    link: {
+      boxShadow: 'none',
+    },
     solid: (props) =>
       props.colorScheme === 'gray' ? variantSecondary(props) : {},
     outline: variantSecondary,

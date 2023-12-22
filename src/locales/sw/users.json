@@ -16,69 +16,57 @@
       "title": "Imeshindwa kuzima",
       "description": "Imeshindwa kulemaza mtumiaji \"{{ingia}}\""
     },
-    "deleteUserSuccess": {
-      "title": "Mtumiaji amefutwa",
-      "description": "Mtumiaji \"{{ingia}}\" amefutwa kwa mafanikio"
-    },
     "deleteUserError": {
       "title": "Imeshindwa kufuta",
       "description": "Imeshindwa kufuta mtumiaji \"{{ingia}}\""
+    },
+    "loadingUserError": {
+      "title": "Imeshindwa kupakia watumiaji"
     }
   },
   "list": {
     "title": "Usimamizi wa Mtumiaji",
     "actions": {
       "createUser": "Unda mtumiaji"
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha watumiaji {{loaded}} kati ya {{total}}"
     }
   },
   "data": {
-    "login": {
-      "label": "jina la mtumiaji",
-      "required": "Jina la mtumiaji linahitajika",
-      "alreadyUsed": "Jina la mtumiaji tayari linatumika",
-      "invalid": "Jina la mtumiaji ni batili, usitumie herufi maalum",
-      "tooLong": "Jina la mtumiaji ni refu sana (upeo wa herufi {max})",
-      "tooShort": "Jina la mtumiaji ni fupi mno (dakika za herufi {{min}})"
-    },
     "email": {
       "label": "Barua pepe",
       "required": "Barua pepe inahitajika",
       "invalid": "Barua pepe ni batili",
-      "alreadyUsed": "Anwani ya barua pepe tayari inatumika",
-      "tooLong": "Barua pepe ni ndefu mno (isizidi herufi {max})",
-      "tooShort": "Barua pepe ni fupi mno (dakika. {min} herufi)"
-    },
-    "id": {
-      "label": "ID"
-    },
-    "authorities": {
-      "label": "Ruhusa",
-      "required": "Ruhusa zinahitajika"
-    },
-    "createdBy": {
-      "label": "Imetengenezwa na"
-    },
-    "modifiedBy": {
-      "label": "Imehaririwa na"
+      "alreadyUsed": "Anwani ya barua pepe tayari inatumika"
     },
     "status": {
-      "label": "Hali",
       "activated": "Imewashwa",
       "deactivated": "Isiyotumika"
     },
-    "firstname": {
-      "label": "Jina la kwanza"
-    },
-    "lastname": {
-      "label": "Jina la familia"
+    "name": {
+      "label": "Jina",
+      "required": "Jina linahitajika"
     },
     "language": {
       "label": "Lugha"
+    },
+    "authorizations": {
+      "label": "Uidhinishaji",
+      "options": {
+        "ADMIN": "Msimamizi",
+        "APP": "Programu"
+      },
+      "required": "Angalau idhini moja inahitajika"
+    },
+    "createdAt": {
+      "ago": "Imeundwa <dateAgo />"
     }
   },
   "update": {
     "action": {
-      "save": "Sasisha"
+      "save": "Hifadhi"
     },
     "feedbacks": {
       "updateError": {
@@ -90,9 +78,9 @@
     }
   },
   "create": {
-    "title": "Unda mtumiaji mpya",
+    "title": "Mtumiaji Mpya",
     "action": {
-      "save": "Unda mtumiaji"
+      "save": "Unda"
     },
     "feedbacks": {
       "updateError": {
@@ -106,5 +94,6 @@
   "deleteModal": {
     "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
     "title": "Thibitisha kufuta mtumiaji"
-  }
+  },
+  "you": "wewe"
 }

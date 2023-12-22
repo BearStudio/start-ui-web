@@ -1,20 +1,20 @@
 {
   "list": {
-    "title": "Gestion des dépôts",
+    "title": "Dépôts",
     "actions": {
       "createRepository": "Créer un dépôt",
-      "updateRepository": "Mettre à jour le dépôt",
       "view": "Voir"
-    }
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} sur {{total}} dépôts"
+    },
+    "empty": "Aucun dépôt"
   },
   "feedbacks": {
-    "deleteRepositorySuccess": {
-      "title": "Dépôt supprimé",
-      "description": "Dépôt \"{{name}}\" supprimé avec succès"
-    },
     "deleteRepositoryError": {
       "title": "Échec de la suppression",
-      "description": "Échec de la suppression du dépôt \"{{name}}\""
+      "description": "Échec de la suppression du dépôt"
     },
     "loadingRepositoryError": {
       "title": "Échec du chargement des dépôts"
@@ -39,7 +39,7 @@
   },
   "update": {
     "action": {
-      "save": "Mettre à jour le dépôt"
+      "save": "Sauvegarder"
     },
     "feedbacks": {
       "updateError": {
@@ -60,9 +60,9 @@
       }
     },
     "action": {
-      "save": "Créer un dépôt"
+      "save": "Créer"
     },
-    "title": "Créer un nouveau dépôt"
+    "title": "Nouveau dépôt"
   },
   "deleteModal": {
     "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",

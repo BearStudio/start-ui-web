@@ -2,7 +2,8 @@
   "datalist": {
     "retry": "Jaribu tena",
     "errorTitle": "Hitilafu fulani imetokea",
-    "emptyTitle": "Hakuna Data"
+    "emptyTitle": "Hakuna Data",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\""
   },
   "dateAgo": {
     "format": "siku DD MMMM YYYY, HH:mm"
@@ -36,9 +37,6 @@
   "fieldDayPicker": {
     "invalidMessage": "Tarehe batili"
   },
-  "fieldRepeater": {
-    "invalidMessage": "Angalau kipengele kimoja ni batili"
-  },
   "fieldMultiSelect": {
     "noOption": "Hakuna chaguo"
   },
@@ -47,5 +45,46 @@
     "sortDescending": "Descendant",
     "sortBy": "panga kwa",
     "order": "Agizo"
+  },
+  "errorBoundary": {
+    "actions": {
+      "expand": "Onyesha maelezo"
+    },
+    "title": "Hitilafu isiyotarajiwa imetokea."
+  },
+  "errorPage": {
+    "403": {
+      "description": "Samahani, huwezi kufikia ukurasa huu.",
+      "title": "Haijaidhinishwa"
+    },
+    "404": {
+      "description": "Ukurasa haupo au url imebadilika.",
+      "title": "Ukurasa haujapatikana"
+    },
+    "default": {
+      "description": "Hitilafu fulani imetokea 😞",
+      "title": "Hitilafu"
+    },
+    "errorCode": "Hitilafu {{code}}"
+  },
+  "dayPicker": {
+    "today": "Leo"
+  },
+  "monthPicker": {
+    "today": "Leo",
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Machi",
+      "april": "Aprili",
+      "may": "Mei",
+      "june": "Juni",
+      "july": "Julai",
+      "august": "Agosti",
+      "september": "Septemba",
+      "october": "Oktoba",
+      "november": "Novemba",
+      "december": "Desemba"
+    }
   }
 }

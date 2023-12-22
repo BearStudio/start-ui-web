@@ -4,11 +4,10 @@ import { Box, useColorMode } from '@chakra-ui/react';
 import { Preview } from '@storybook/react';
 import { themes } from '@storybook/theming';
 import { useTranslation } from 'react-i18next';
-import { MemoryRouter } from 'react-router-dom';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import { Providers } from '../src/app/Providers';
-import i18nGlobal from '../src/lib/i18n/config';
+import i18nGlobal from '../src/lib/i18n/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -94,14 +93,12 @@ const preview: Preview = {
   decorators: [
     (story, context) => (
       <Providers>
-        <MemoryRouter>
-          <DocumentationWrapper context={context}>
-            {/* Calling as a function to avoid errors. Learn more at:
-             * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-             */}
-            {story(context)}
-          </DocumentationWrapper>
-        </MemoryRouter>
+        <DocumentationWrapper context={context}>
+          {/* Calling as a function to avoid errors. Learn more at:
+           * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+           */}
+          {story(context)}
+        </DocumentationWrapper>
       </Providers>
     ),
   ],

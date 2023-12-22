@@ -4,7 +4,7 @@ import * as externals from './externals';
 
 const externalsStyles = (props: StyleFunctionProps) =>
   Object.values(externals).reduce(
-    (acc, cur) => ({
+    (acc: object, cur) => ({
       ...acc,
       ...(typeof cur === 'function' ? cur(props) : cur),
     }),
@@ -14,15 +14,15 @@ const externalsStyles = (props: StyleFunctionProps) =>
 export const styles: Styles = {
   global: (props) => ({
     html: {
-      bg: 'gray.800',
+      bg: 'gray.900',
     },
     body: {
       // Prevent visual jump between pages with and without scroll
       overflowY: 'scroll',
       WebkitTapHighlightColor: 'transparent',
-      bg: 'gray.50',
+      bg: 'white',
       _dark: {
-        bg: 'gray.800',
+        bg: 'gray.900',
       },
     },
     '#chakra-toast-portal > *': {
@@ -30,6 +30,11 @@ export const styles: Styles = {
       pl: 'safe-left',
       pr: 'safe-right',
       pb: 'safe-bottom',
+    },
+    form: {
+      display: 'flex',
+      flexDir: 'column',
+      flex: 1,
     },
     ...externalsStyles(props),
   }),

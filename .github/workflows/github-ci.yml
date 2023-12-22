@@ -1,44 +1,51 @@
 name: 🚀 Start UI [web]
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
+  - push
+  - pull_request
 
 jobs:
   build-and-test:
+    timeout-minutes: 30
     name: Lint and Test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node: [16, 'lts/*']
+        node: [18, 20, 'lts/*']
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Cache node modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-pnpm-store-${{ env.cache-name }}-
+            ${{ runner.os }}-pnpm-store-
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Lint code and types
-        run: yarn lint
-
-      - name: Run components tests
-        run: yarn test:ci
+        run: pnpm lint

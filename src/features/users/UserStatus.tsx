@@ -1,32 +1,44 @@
-import { Badge, Box } from '@chakra-ui/react';
+import { Tag, TagLabel, TagLeftIcon, ThemeTypings } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuCheck, LuX } from 'react-icons/lu';
 
-import { Icon } from '@/components/Icons';
+export type UserStatusProps = {
+  isActivated?: boolean;
+  showLabelBreakpoint?: ThemeTypings['breakpoints'];
+};
 
-export const UserStatus = ({ isActivated = false, ...rest }) => {
+export const UserStatus = ({
+  isActivated = false,
+  showLabelBreakpoint = 'base',
+}: UserStatusProps) => {
   const { t } = useTranslation(['users']);
-  return isActivated ? (
-    <Badge size="sm" colorScheme="success" {...rest}>
-      <Box as="span" display={{ base: 'none', md: 'block' }}>
-        {t('users:data.status.activated')}
-      </Box>
-      <Icon
-        icon={LuCheck}
-        aria-label={t('users:data.status.activated')}
-        display={{ base: 'inline-flex', md: 'none' }}
+
+  return (
+    <Tag
+      size="sm"
+      colorScheme={isActivated ? 'success' : 'warning'}
+      gap={1}
+      justifyContent="center"
+      px={{ base: 0, [showLabelBreakpoint]: 2 }}
+    >
+      <TagLeftIcon
+        as={isActivated ? LuCheck : LuX}
+        mr={0}
+        aria-label={
+          isActivated
+            ? t('users:data.status.activated')
+            : t('users:data.status.deactivated')
+        }
       />
-    </Badge>
-  ) : (
-    <Badge size="sm" colorScheme="warning" {...rest}>
-      <Box as="span" display={{ base: 'none', md: 'block' }}>
-        {t('users:data.status.deactivated')}
-      </Box>
-      <Icon
-        icon={LuX}
-        aria-label={t('users:data.status.deactivated')}
-        display={{ base: 'inline-flex', md: 'none' }}
-      />
-    </Badge>
+      <TagLabel
+        lineHeight={1}
+        display={{ base: 'none', [showLabelBreakpoint]: 'inline' }}
+        whiteSpace="nowrap"
+      >
+        {isActivated
+          ? t('users:data.status.activated')
+          : t('users:data.status.deactivated')}
+      </TagLabel>
+    </Tag>
   );
 };

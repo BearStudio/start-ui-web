@@ -7,10 +7,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
-import { DemoModalInterceptor } from '@/features/demo-mode/DemoModalInterceptor';
-import { EnvDevHint } from '@/layout/EnvDevHint';
-import i18n from '@/lib/i18n/config';
+import { DevEnvHint } from '@/features/devtools/DevEnvHint';
+import i18n from '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 export const Document = ({ children }: { children: ReactNode }) => {
@@ -23,7 +23,6 @@ export const Document = ({ children }: { children: ReactNode }) => {
       }
     >
       <head>
-        <title>Start UI</title>
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,viewport-fit=cover"
@@ -68,12 +67,12 @@ export const Document = ({ children }: { children: ReactNode }) => {
           initialColorMode={theme.config.initialColorMode}
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
-
         <Providers>
-          <Viewport>{children}</Viewport>
-          <EnvDevHint />
-          <DemoModalInterceptor />
-          <ReactQueryDevtools initialIsOpen={false} />
+          <TrpcProvider>
+            <Viewport>{children}</Viewport>
+            <DevEnvHint />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </TrpcProvider>
         </Providers>
       </body>
     </html>

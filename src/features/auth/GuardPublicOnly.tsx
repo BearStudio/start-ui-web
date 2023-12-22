@@ -1,24 +1,43 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useAuthContext } from '@/features/auth/AuthContext';
-import { Loader } from '@/layout/Loader';
+import { ErrorPage } from '@/components/ErrorPage';
+import { LoaderFull } from '@/components/LoaderFull';
+import { trpc } from '@/lib/trpc/client';
 
 export const GuardPublicOnly = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuthContext();
-  const [searchParams] = useSearchParams();
+  const checkAuthenticated = trpc.auth.checkAuthenticated.useQuery();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  if (isLoading) {
-    return <Loader />;
+  useEffect(() => {
+    if (
+      checkAuthenticated.isSuccess &&
+      checkAuthenticated.data.isAuthenticated
+    ) {
+      const redirect = searchParams?.get('redirect') || '/';
+      router.replace(redirect);
+    }
+  }, [
+    searchParams,
+    router,
+    checkAuthenticated.isSuccess,
+    checkAuthenticated.data,
+  ]);
+
+  if (
+    checkAuthenticated.isSuccess &&
+    !checkAuthenticated.data.isAuthenticated
+  ) {
+    return <>{children}</>;
   }
 
-  if (isAuthenticated) {
-    const redirect = searchParams?.get('redirect') ?? '/';
-    return <Navigate to={redirect} replace />;
+  if (checkAuthenticated.isError) {
+    return <ErrorPage />;
   }
 
-  return <>{children}</>;
+  return <LoaderFull />;
 };
