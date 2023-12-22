@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
 import { FormContext, useFormContext } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
@@ -18,11 +20,17 @@ import { AppRouter } from '@/lib/trpc/types';
 export type VerificationCodeFormProps = {
   email: string;
   isLoading?: boolean;
+  confirmText?: ReactNode;
+  confirmVariant?: string;
+  autoSubmit?: boolean;
 };
 
 export const VerificationCodeForm = ({
   email,
   isLoading,
+  confirmText,
+  confirmVariant,
+  autoSubmit = true,
 }: VerificationCodeFormProps) => {
   const { t } = useTranslation(['auth']);
   const form = useFormContext();
@@ -52,8 +60,8 @@ export const VerificationCodeForm = ({
         isDisabled={isLoading}
         required={t('auth:data.verificationCode.required')}
         onComplete={() => {
-          // Only auto submit on first try
-          if (!form.isSubmitted) {
+          if (!form.isSubmitted && autoSubmit) {
+            // Only auto submit on first try
             form.submit();
           }
         }}
@@ -64,10 +72,10 @@ export const VerificationCodeForm = ({
           isLoading={isLoading}
           isDisabled={form.isSubmitted && !form.isValid}
           type="submit"
-          variant="@primary"
+          variant={confirmVariant || '@primary'}
           flex={1}
         >
-          {t('auth:validate.actions.confirm')}
+          {confirmText || t('auth:validate.actions.confirm')}
         </Button>
       </HStack>
 
