@@ -83,7 +83,7 @@ The maildev UI is available at [0.0.0.0:1080](http://0.0.0.0:1080).
 
 Emails templates are built with `react-email` components in the `src/emails` folder.
 
-You can preview an email template at `http://localhost:3000/devtools/email/templates/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
+You can preview an email template at `http://localhost:3000/devtools/email/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
 
 Example: [Login Code](http://localhost:3000/devtools/email/login-code)
 
