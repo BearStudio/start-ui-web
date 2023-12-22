@@ -66,7 +66,7 @@ pnpm dk:init
 
 ```bash
 # Run the database in Docker (if not already started)
-pnpm db:start
+pnpm dk:start
 # Run the development server
 pnpm dev
 ```
