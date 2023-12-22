@@ -8,6 +8,7 @@ import { env } from '@/env.mjs';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
+import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/lib/s3';
 import {
   deleteUsedCode,
   generateCode,
@@ -252,23 +253,13 @@ export const accountRouter = createTRPCRouter({
         protect: true,
       },
     })
-    .input(z.object({ metadata: z.record(z.string()).nullish() }).nullish())
-    .output(
-      z.object({
-        signedUrl: z.string(),
-        key: z.string(),
-        futureFileUrl: z.string(),
-      })
-    )
+    .input(zUploadSignedUrlInput())
+    .output(zUploadSignedUrlOutput())
     .mutation(async ({ ctx, input }) => {
-      const s3 = await getS3UploadSignedUrl({
+      return await getS3UploadSignedUrl({
         key: ctx.user.id,
+        host: env.S3_BUCKET_PUBLIC_URL,
         metadata: input?.metadata || undefined,
       });
-      return {
-        signedUrl: s3.signedUrl,
-        key: s3.key,
-        futureFileUrl: `${env.S3_BUCKET_PUBLIC_URL}/${s3.key}`,
-      };
     }),
 });

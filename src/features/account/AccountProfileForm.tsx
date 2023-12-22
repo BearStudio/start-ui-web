@@ -56,18 +56,8 @@ export const AccountProfileForm = () => {
     },
     onValidSubmit: async ({ image, ...values }) => {
       try {
-        if (image?.file) {
-          const { fileUrl } = await uploadFile.mutateAsync({
-            contentType: image.type ?? '',
-            file: image?.file,
-            metadata: {
-              name: image?.name, // TODO: Improve typing
-            },
-          });
-          updateAccount.mutate({ ...values, image: fileUrl });
-        } else {
-          updateAccount.mutate(values);
-        }
+        const { fileUrl } = await uploadFile.mutateAsync(image.file);
+        updateAccount.mutate({ ...values, image: fileUrl });
       } catch {
         form.setErrors({
           image: t('account:profile.feedbacks.uploadError.title'),
