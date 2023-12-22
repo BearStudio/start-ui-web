@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
   MenuList,
   MenuProps,
@@ -66,6 +67,7 @@ export const AdminRepositoryActions = ({
           >
             {t('common:actions.edit')}
           </MenuItem>
+          <MenuDivider />
           <ConfirmModal
             title={t('repositories:deleteModal.title')}
             message={t('repositories:deleteModal.message', {
