@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
+import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailAddressChange from '@/emails/templates/email-address-change';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
@@ -245,7 +246,7 @@ export const accountRouter = createTRPCRouter({
           lng: ctx.user.language,
         }),
         template: (
-          <EmailAddressChange // TODO
+          <EmailDeleteAccountCode
             language={ctx.user.language}
             name={ctx.user.name ?? ''}
             code={code.readable}
