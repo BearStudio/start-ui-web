@@ -242,7 +242,7 @@ export const accountRouter = createTRPCRouter({
       ctx.logger.info('Sending email with verification code');
       await sendEmail({
         to: ctx.user.email,
-        subject: i18n.t('emails:emailAddressChange.subject', {
+        subject: i18n.t('emails:deleteAccountCode.subject', {
           lng: ctx.user.language,
         }),
         template: (
