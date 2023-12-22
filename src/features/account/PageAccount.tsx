@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuExternalLink, LuUser } from 'react-icons/lu';
+import { LuExternalLink, LuLogOut, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
@@ -97,9 +97,11 @@ export default function PageHome() {
               title={t('account:logout.confirm.title')}
               message={t('account:logout.confirm.message')}
               confirmText={t('account:logout.confirm.button')}
-              confirmVariant="@danger"
+              confirmVariant="@dangerSecondary"
             >
-              <Button variant="@danger">{t('account:logout.button')}</Button>
+              <Button variant="@dangerSecondary" leftIcon={<LuLogOut />}>
+                {t('account:logout.button')}
+              </Button>
             </ConfirmModal>
           </Box>
         </Stack>

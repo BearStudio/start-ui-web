@@ -23,7 +23,7 @@ export const WithCustomParameters = () => {
       message="Custom message"
       onConfirm={() => alert('Custom Action')}
       confirmText="Custom Text"
-      confirmVariant="@danger"
+      confirmVariant="@dangerSecondary"
     >
       <Button>Trigger Popover</Button>
     </ConfirmPopover>

@@ -21,7 +21,7 @@ export const AdminBackButton = (props: AdminBackButtonProps) => {
       isEnabled={props.withConfrim ?? false}
       title={t('common:confirmDiscardChanges.title')}
       message={t('common:confirmDiscardChanges.message')}
-      confirmVariant="@danger"
+      confirmVariant="@dangerSecondary"
       confirmText={t('common:confirmDiscardChanges.confirmText')}
       cancelText={t('common:confirmDiscardChanges.cancelText')}
     >

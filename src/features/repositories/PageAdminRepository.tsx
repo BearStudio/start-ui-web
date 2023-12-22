@@ -83,7 +83,7 @@ export default function PageAdminRepository() {
                 })
               }
               confirmText={t('common:actions.delete')}
-              confirmVariant="@danger"
+              confirmVariant="@dangerSecondary"
             >
               <IconButton
                 aria-label={t('common:actions.delete')}
