@@ -30,7 +30,6 @@ export const filesRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const s3 = await getS3UploadSignedUrl({
         key: `${randomUUID()}-${input.fileName}`,
-        acl: 'public-read',
       });
       return {
         signedUrl: s3.signedUrl,
