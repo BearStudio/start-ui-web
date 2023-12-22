@@ -25,6 +25,7 @@ type UploadSignedUrlOptions = {
   acl: ObjectCannedACL;
   /** The tree structure of the file in S3 */
   key: string;
+  metadata?: Record<string, string>;
 };
 
 export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
@@ -34,6 +35,7 @@ export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
       Bucket: env.S3_BUCKET_NAME,
       Key: options.key,
       ACL: options.acl,
+      Metadata: options.metadata,
     }),
     { expiresIn: options.expiresIn ?? 3600 }
   );

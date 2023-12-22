@@ -52,16 +52,26 @@ export const AccountProfileForm = () => {
     initialValues: {
       name: account.data?.name ?? undefined,
       language: account.data?.language ?? undefined,
+      image: account.data?.image ?? undefined,
     },
     onValidSubmit: async ({ image, ...values }) => {
       try {
-        const { fileUrl } = await uploadFile.mutateAsync({
-          contentType: image.type ?? '',
-          file: image.file,
-        });
-        updateAccount.mutate({ ...values, image: fileUrl });
+        if (image?.file) {
+          const { fileUrl } = await uploadFile.mutateAsync({
+            contentType: image.type ?? '',
+            file: image?.file,
+            metadata: {
+              name: image?.name, // TODO: Improve typing
+            },
+          });
+          updateAccount.mutate({ ...values, image: fileUrl });
+        } else {
+          updateAccount.mutate(values);
+        }
       } catch {
-        form.setErrors({ image: 'Upload fail' }); // TODO translations
+        form.setErrors({
+          image: t('account:profile.feedbacks.uploadError.title'),
+        });
       }
     },
   });
@@ -77,8 +87,9 @@ export const AccountProfileForm = () => {
               <Stack spacing={4}>
                 <FieldUpload
                   name="image"
-                  label="Avatar" // TODO: translations
-                  required
+                  label={t('account:data.avatar.label')}
+                  inputText={t('account:data.avatar.inputText')}
+                  required={t('account:data.avatar.required')}
                 />
                 <FieldInput
                   name="name"
