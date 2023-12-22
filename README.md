@@ -45,7 +45,6 @@ cp .env.example .env
 
 > [!NOTE]
 > **Quick advices for local development**
-> - **Update** the **DATABASE_DOCKER_IMAGE_NAME** variable with your project name. This will prevent docker collision name if you have another Start UI project on your computer.
 > - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
 
 
@@ -56,7 +55,7 @@ pnpm install
 
 3. Setup and start the db with docker
 ```bash
-pnpm db:init
+pnpm dk:init
 ```
 > [!NOTE]
 > **Don't want to use docker?**
@@ -67,7 +66,7 @@ pnpm db:init
 
 ```bash
 # Run the database in Docker (if not already started)
-pnpm db:start
+pnpm dk:start
 # Run the development server
 pnpm dev
 ```
