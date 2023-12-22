@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuExternalLink, LuLogOut, LuUser } from 'react-icons/lu';
+import { LuExternalLink, LuLogOut, LuTrash2, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
