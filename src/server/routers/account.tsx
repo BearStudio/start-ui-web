@@ -263,7 +263,6 @@ export const accountRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const s3 = await getS3UploadSignedUrl({
         key: ctx.user.id,
-        acl: 'public-read',
         metadata: input?.metadata || undefined,
       });
       return {
