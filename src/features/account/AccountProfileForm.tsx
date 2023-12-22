@@ -28,6 +28,10 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
+  const accountAvatar = useFetchAvatar(account.data?.image || '', {
+    enabled: !!account?.data?.image,
+  });
+
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
