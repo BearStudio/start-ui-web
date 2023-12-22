@@ -63,5 +63,21 @@
   "admin": {
     "button": "Ouvrir l'interface d'administration",
     "title": "Utilisateur administrateur"
+  },
+  "deleteAccount": {
+    "button": "Supprimer mon compte",
+    "confirm": {
+      "button": "Supprimer mon compte",
+      "message": "Vous êtes sur le point de supprimer votre compte. \nCela sera permanent, soyez sûr de ce que vous faites.",
+      "title": "Supprimer mon compte"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Quelque chose s'est mal passé"
+      }
+    },
+    "validate": {
+      "button": "Supprimer mon compte"
+    }
   }
 }
