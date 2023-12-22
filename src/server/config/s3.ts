@@ -6,6 +6,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { env } from '@/env.mjs';
+import { ReadSignedUrlOutput, UploadSignedUrlOutput } from '@/lib/s3';
 
 const S3 = new S3Client({
   region: 'auto',
@@ -23,6 +24,7 @@ type UploadSignedUrlOptions = {
   expiresIn?: number;
   /** The tree structure of the file in S3 */
   key: string;
+  host?: string;
   metadata?: Record<string, string>;
 };
 
@@ -32,7 +34,9 @@ type ReadSignedUrlOptions = {
   key: string;
 };
 
-export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
+export const getS3UploadSignedUrl = async (
+  options: UploadSignedUrlOptions
+): Promise<UploadSignedUrlOutput> => {
   const signedUrl = await getSignedUrl(
     S3,
     new PutObjectCommand({
@@ -42,13 +46,17 @@ export const getS3UploadSignedUrl = async (options: UploadSignedUrlOptions) => {
     }),
     { expiresIn: options.expiresIn ?? 3600 }
   );
+
   return {
     signedUrl,
     key: options.key,
+    futureFileUrl: (options.host ? `${options.host}/` : '') + options.key,
   };
 };
 
-export const getS3ReadSignedUrl = async (options: ReadSignedUrlOptions) => {
+export const getS3ReadSignedUrl = async (
+  options: ReadSignedUrlOptions
+): Promise<ReadSignedUrlOutput> => {
   const signedUrl = await getSignedUrl(
     S3,
     new GetObjectCommand({
@@ -57,6 +65,7 @@ export const getS3ReadSignedUrl = async (options: ReadSignedUrlOptions) => {
     }),
     { expiresIn: options.expiresIn ?? 3600 }
   );
+
   return {
     signedUrl,
     key: options.key,
