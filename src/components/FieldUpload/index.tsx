@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import { Icon, Input, chakra } from '@chakra-ui/react';
+import { Icon, Input, Spinner, chakra } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 import { FiPaperclip } from 'react-icons/fi';
 
@@ -11,7 +11,7 @@ export type FieldUploadValue = {
   file?: File;
   lastModified?: number;
   lastModifiedDate?: Date;
-  name: string;
+  name?: string;
   size?: string;
   type?: string;
 };
@@ -22,6 +22,7 @@ export type FieldUploadProps<FormattedValue = FieldUploadValue> = FieldProps<
 > &
   FormGroupProps & {
     inputText?: string;
+    isLoading?: boolean;
   };
 
 export const FieldUpload = <FormattedValue = FieldUploadValue,>(
@@ -34,7 +35,15 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
     setValue,
     shouldDisplayError,
     value,
-    otherProps: { children, label, helper, inputText, ...rest },
+    otherProps: {
+      children,
+      label,
+      helper,
+      inputText,
+      isDisabled,
+      isLoading,
+      ...rest
+    },
   } = useField(props);
 
   const formGroupProps = {
@@ -65,6 +74,8 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
     });
   };
 
+  const isFieldUploadDisabled = isLoading || isDisabled;
+
   return (
     <FormGroup {...formGroupProps}>
       <Input
@@ -74,6 +85,7 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
         alignItems="center"
         isInvalid={shouldDisplayError}
         transition="0.2s"
+        isDisabled={isFieldUploadDisabled}
       >
         <chakra.input
           opacity={0}
@@ -84,9 +96,14 @@ export const FieldUpload = <FormattedValue = FieldUploadValue,>(
           type="file"
           id={id}
           onChange={handleChange}
+          disabled={isFieldUploadDisabled}
         />
-        <Icon as={FiPaperclip} mr="2" />
-        {!value ? inputText : value.name}
+        {isLoading ? (
+          <Spinner mr="2" size="sm" />
+        ) : (
+          <Icon as={FiPaperclip} mr="2" />
+        )}
+        {!isLoading && (!value ? inputText : value.name)}
       </Input>
 
       {children}

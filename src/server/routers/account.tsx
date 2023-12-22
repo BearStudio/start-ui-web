@@ -30,21 +30,7 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(z.void())
-    .output(
-      zUserAccount()
-        .omit({ image: true })
-        .extend({
-          image: z
-            .object({
-              fileUrl: z.string(),
-              lastModifiedDate: z.date(),
-              name: z.string(),
-              size: z.string(),
-              type: z.string(),
-            })
-            .nullish(),
-        })
-    )
+    .output(zUserAccount())
     .query(async ({ ctx }) => {
       ctx.logger.info('Getting user');
       const user = await ctx.db.user.findUnique({
@@ -66,26 +52,7 @@ export const accountRouter = createTRPCRouter({
         });
       }
 
-      if (user.image) {
-        const result = await fetch(user.image, { method: 'GET' });
-        const lastModifiedDateHeader = result.headers.get('Last-Modified');
-
-        return {
-          ...user,
-          image: {
-            name: result.headers.get('x-amz-meta-name') || '', // TODO: Add constant + improve typing so we will know which metadata we can add or not
-            fileUrl: user.image,
-            size: result.headers.get('Content-Length'),
-            type: result.headers.get('Content-Type'),
-            lastModifiedDate: lastModifiedDateHeader
-              ? new Date(lastModifiedDateHeader)
-              : new Date(),
-          },
-        } as TODO;
-      }
-
-      const { image, ...userToReturn } = user;
-      return userToReturn;
+      return user;
     }),
 
   update: protectedProcedure()

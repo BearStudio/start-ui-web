@@ -10,6 +10,7 @@ import { FieldSelect } from '@/components/FieldSelect';
 import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useFetchAvatar } from '@/features/account/service';
 import { useAvatarUpload } from '@/features/account/useAvatarUpload';
 import {
   AVAILABLE_LANGUAGES,
@@ -23,6 +24,10 @@ export const AccountProfileForm = () => {
   const account = trpc.account.get.useQuery(undefined, {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+  });
+
+  const accountAvatar = useFetchAvatar(account.data?.image || '', {
+    enabled: !!account?.data?.image,
   });
 
   const toastSuccess = useToastSuccess();
@@ -52,8 +57,12 @@ export const AccountProfileForm = () => {
     initialValues: {
       name: account.data?.name ?? undefined,
       language: account.data?.language ?? undefined,
-      image: account.data?.image ?? undefined,
+      image: accountAvatar.data ?? undefined,
     },
+    ready:
+      account.isSuccess &&
+      ((!!account?.data?.image && accountAvatar.isSuccess) ||
+        !account?.data?.image),
     onValidSubmit: async ({ image, ...values }) => {
       try {
         const { fileUrl } = await uploadFile.mutateAsync(image.file);
@@ -80,6 +89,7 @@ export const AccountProfileForm = () => {
                   label={t('account:data.avatar.label')}
                   inputText={t('account:data.avatar.inputText')}
                   required={t('account:data.avatar.required')}
+                  isLoading={!!account?.data?.image && accountAvatar.isFetching}
                 />
                 <FieldInput
                   name="name"
@@ -100,7 +110,9 @@ export const AccountProfileForm = () => {
                     type="submit"
                     variant="@primary"
                     isLoading={updateAccount.isLoading || uploadFile.isLoading}
-                    isDisabled={!form.isValid && form.isSubmitted}
+                    isDisabled={
+                      (!form.isValid && form.isSubmitted) || !form.isReady
+                    }
                   >
                     {t('account:profile.actions.update')}
                   </Button>
