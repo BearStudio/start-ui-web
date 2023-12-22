@@ -247,7 +247,7 @@ export const accountRouter = createTRPCRouter({
   uploadAvatarPresignedUrl: protectedProcedure()
     .meta({
       openapi: {
-        method: 'POST',
+        method: 'GET',
         path: '/accounts/avatar-upload-presigned-url',
         tags: ['accounts', 'files'],
         protect: true,

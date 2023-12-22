@@ -9,7 +9,7 @@ export const filesRouter = createTRPCRouter({
   uploadPresignedUrl: protectedProcedure()
     .meta({
       openapi: {
-        method: 'POST',
+        method: 'GET',
         path: '/files/upload-presigned-url',
         tags: ['files'],
         protect: true,
