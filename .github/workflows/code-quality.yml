@@ -1,13 +1,13 @@
-name: 🚀 Start UI [web]
+name: 🔎 Code Quality
 
 on:
   - push
   - pull_request
 
 jobs:
-  build-and-test:
+  lint-code:
     timeout-minutes: 30
-    name: Lint and Test
+    name: Lint and Type Check
     runs-on: ubuntu-latest
 
     strategy:
@@ -47,5 +47,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Lint code and types
-        run: pnpm lint
+      - name: Eslint
+        run: pnpm lint:eslint
+
+      - name: TypeScript check
+        run: pnpm lint:ts
