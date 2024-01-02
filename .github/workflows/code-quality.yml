@@ -1,8 +1,13 @@
 name: 🔎 Code Quality
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - master
+      - main
+      - develop
+      - staging
+  pull_request:
 
 jobs:
   lint-code:

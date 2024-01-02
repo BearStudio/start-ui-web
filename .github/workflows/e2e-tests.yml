@@ -1,9 +1,17 @@
 name: 🧪 E2E Tests
 on:
   push:
-    branches: [main, master]
+    branches:
+      - master
+      - main
+      - develop
+      - staging
   pull_request:
-    branches: [main, master]
+    branches:
+      - master
+      - main
+      - develop
+      - staging
 
 jobs:
   E2E:
