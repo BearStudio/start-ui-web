@@ -1,12 +1,21 @@
-name: Playwright Tests
+name: 🧪 E2E Tests
 on:
   push:
-    branches: [main, master]
+    branches:
+      - master
+      - main
+      - develop
+      - staging
   pull_request:
-    branches: [main, master, v2-going-full-stack]
+    branches:
+      - master
+      - main
+      - develop
+      - staging
 
 jobs:
   E2E:
+    name: Playwright E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
