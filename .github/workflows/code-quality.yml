@@ -52,8 +52,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Eslint
-        run: pnpm lint:eslint
+      - name: NextJS Linting
+        run: pnpm lint:next
 
       - name: TypeScript check
         run: pnpm lint:ts
