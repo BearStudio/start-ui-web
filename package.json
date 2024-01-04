@@ -18,7 +18,7 @@
     "start": "next start",
     "pretty": "prettier -w .",
     "lint": "run-p lint:*",
-    "lint:eslint": "SKIP_ENV_VALIDATION=true next lint",
+    "lint:next": "SKIP_ENV_VALIDATION=true next lint",
     "lint:ts": "pnpm build:info && tsc --noEmit",
     "storybook": "pnpm build:info && storybook dev --no-open -p 6006",
     "storybook:build": "pnpm build:info && storybook build && mv ./storybook-static ./public/storybook",
