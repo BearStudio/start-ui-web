@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorModeValue, useToken } from '@chakra-ui/react';
-import NextTopLoader from 'nextjs-toploader';
+import HolyLoader from 'holy-loader';
 
 import {
   devEnvHintColorScheme,
@@ -24,7 +24,7 @@ export const NextLoader = ({
   );
   const loaderColor = useToken('colors', loaderColorKey);
   return (
-    <NextTopLoader
+    <HolyLoader
       height={2}
       zIndex={99999}
       color={loaderColor}
