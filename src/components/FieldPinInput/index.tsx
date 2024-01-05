@@ -1,15 +1,24 @@
-import { PinInput, PinInputField, PinInputProps } from '@chakra-ui/react';
+import {
+  HStack,
+  PinInput,
+  PinInputField,
+  PinInputProps,
+} from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Value = string;
 
+type UsualPinInputProps = 'autoFocus';
+
 type FieldPinInputProps<FormattedValue = Value> = FieldProps<
   Value,
   FormattedValue
 > &
-  FormGroupProps & {
+  FormGroupProps &
+  Pick<PinInputProps, UsualPinInputProps> & {
+    length?: number;
     pinInputProps?: Omit<PinInputProps, 'children'>;
   };
 
@@ -17,7 +26,13 @@ export const FieldPinInput = <FormattedValue = Value,>(
   props: FieldPinInputProps<FormattedValue>
 ) => {
   const field = useField(props);
-  const { pinInputProps, children, ...rest } = field.otherProps;
+  const {
+    pinInputProps,
+    children,
+    autoFocus,
+    length = 6,
+    ...rest
+  } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -38,20 +53,23 @@ export const FieldPinInput = <FormattedValue = Value,>(
 
   return (
     <FormGroup {...formGroupProps}>
-      <PinInput
-        {...pinInputProps}
-        size={pinInputProps?.size}
-        value={field.value ?? ''}
-        onChange={(val) => field.setValue(val)}
-        onComplete={handleOnComplete}
-        placeholder="·"
-        isInvalid={field.shouldDisplayError}
-        id={field.id}
-      >
-        {Array.from({ length }, (_, index) => (
-          <PinInputField key={index} flex={1} />
-        ))}
-      </PinInput>
+      <HStack>
+        <PinInput
+          {...pinInputProps}
+          autoFocus={autoFocus}
+          size={pinInputProps?.size ?? 'lg'}
+          value={field.value ?? ''}
+          onChange={(val) => field.setValue(val)}
+          onComplete={handleOnComplete}
+          placeholder="·"
+          isInvalid={field.shouldDisplayError}
+          id={field.id}
+        >
+          {Array.from({ length }, (_, index) => (
+            <PinInputField key={index} flex={1} />
+          ))}
+        </PinInput>
+      </HStack>
       {children}
     </FormGroup>
   );
