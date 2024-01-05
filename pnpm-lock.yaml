@@ -90,8 +90,8 @@ dependencies:
     specifier: 10.16.15
     version: 10.16.15(react-dom@18.2.0)(react@18.2.0)
   holy-loader:
-    specifier: ^2.2.5
-    version: 2.2.5(react@18.2.0)
+    specifier: ^2.2.6
+    version: 2.2.6(react@18.2.0)
   i18next:
     specifier: 23.7.8
     version: 23.7.8
@@ -11972,8 +11972,8 @@ packages:
       react-is: 16.13.1
     dev: false
 
-  /holy-loader@2.2.5(react@18.2.0):
-    resolution: {integrity: sha512-PDIjg/zf7ChjT2njxHsEiiGS23SF/VngAENF66P3Eg7yrFMZuktJZyfJYtJ5UP4oaiqzInE8W2i92m7E+2P5QA==}
+  /holy-loader@2.2.6(react@18.2.0):
+    resolution: {integrity: sha512-c41T8nTc2+Hx2BRSTjv2EhMf+Rqj2DcKCPnWNPB2M1RDfWZvBvZbYgL8Q82oDPEz8cGPv1PvX0q7mouLK7bY1w==}
     peerDependencies:
       react: '>= 16.0.0'
     dependencies:
