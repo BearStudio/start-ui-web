@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
+import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailAddressChange from '@/emails/templates/email-address-change';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
@@ -21,9 +22,9 @@ export const accountRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: 'GET',
-        path: '/accounts/me',
+        path: '/account/me',
         protect: true,
-        tags: ['accounts'],
+        tags: ['account'],
       },
     })
     .input(z.void())
@@ -55,9 +56,9 @@ export const accountRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/accounts/me',
+        path: '/account/me',
         protect: true,
-        tags: ['accounts'],
+        tags: ['account'],
       },
     })
     .input(
@@ -86,9 +87,9 @@ export const accountRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: 'PUT',
-        path: '/accounts/update-email/',
+        path: '/account/update-email/',
         protect: true,
-        tags: ['accounts'],
+        tags: ['account'],
       },
     })
     .input(
@@ -167,9 +168,9 @@ export const accountRouter = createTRPCRouter({
     .meta({
       openapi: {
         method: 'POST',
-        path: '/accounts/update-email/',
+        path: '/account/update-email/',
         protect: true,
-        tags: ['accounts'],
+        tags: ['account'],
       },
     })
     .input(
@@ -199,6 +200,91 @@ export const accountRouter = createTRPCRouter({
         },
         data: {
           email: verificationToken.email,
+        },
+      });
+
+      await deleteUsedCode({ ctx, token: verificationToken.token });
+
+      return user;
+    }),
+
+  deleteRequest: protectedProcedure()
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/account/delete/request',
+        protect: true,
+        tags: ['account'],
+      },
+    })
+    .input(z.void())
+    .output(z.object({ token: z.string() }))
+    .mutation(async ({ ctx }) => {
+      const token = randomUUID();
+
+      // We send the email to verify the account before delete.
+      ctx.logger.info('Creating code');
+      const code = await generateCode();
+
+      ctx.logger.info('Creating verification token in database');
+      await ctx.db.verificationToken.create({
+        data: {
+          userId: ctx.user.id,
+          token,
+          email: ctx.user.email,
+          expires: dayjs()
+            .add(VALIDATION_TOKEN_EXPIRATION_IN_MINUTES, 'minutes')
+            .toDate(),
+          code: code.hashed,
+        },
+      });
+
+      ctx.logger.info('Sending email with verification code');
+      await sendEmail({
+        to: ctx.user.email,
+        subject: i18n.t('emails:deleteAccountCode.subject', {
+          lng: ctx.user.language,
+        }),
+        template: (
+          <EmailDeleteAccountCode
+            language={ctx.user.language}
+            name={ctx.user.name ?? ''}
+            code={code.readable}
+          />
+        ),
+      });
+
+      return {
+        token,
+      };
+    }),
+
+  deleteValidate: protectedProcedure()
+    .meta({
+      openapi: {
+        method: 'DELETE',
+        path: '/account/delete/validate/',
+        protect: true,
+        tags: ['account'],
+      },
+    })
+    .input(
+      z.object({
+        token: z.string().uuid(),
+        code: z.string().length(6),
+      })
+    )
+    .output(zUserAccount())
+    .mutation(async ({ ctx, input }) => {
+      const { verificationToken } = await validateCode({
+        ctx,
+        ...input,
+      });
+
+      ctx.logger.info('Delete the account');
+      const user = await ctx.db.user.delete({
+        where: {
+          id: verificationToken.userId,
         },
       });
 
