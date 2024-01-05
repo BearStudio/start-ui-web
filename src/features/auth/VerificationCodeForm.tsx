@@ -3,6 +3,7 @@ import { FormContext, useFormContext } from '@formiz/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { TRPCClientErrorLike } from '@trpc/client';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { parseAsInteger, useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { FieldPinInput } from '@/components/FieldPinInput';
@@ -11,7 +12,6 @@ import {
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { DevCodeHint } from '@/features/devtools/DevCodeHint';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 import { AppRouter } from '@/lib/trpc/types';
 
@@ -101,20 +101,16 @@ export const useOnVerificationCodeSuccess = ({
 
 export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
   const { t } = useTranslation(['auth']);
-  const searchParams = useSearchParams();
-  const searchParamsUpdater = useSearchParamsUpdater();
+  const [attempts, setAttemps] = useQueryState(
+    'attemps',
+    parseAsInteger.withDefault(0)
+  );
 
   return async (error: TRPCClientErrorLike<AppRouter>) => {
     if (error.data?.code === 'UNAUTHORIZED') {
-      const attempts = parseInt(searchParams.get('attempts') ?? '0', 10);
       const seconds = getValidationRetryDelayInSeconds(attempts);
 
-      searchParamsUpdater(
-        {
-          attempts: (attempts + 1).toString(),
-        },
-        { replace: true }
-      );
+      setAttemps((s) => s + 1);
 
       await new Promise((r) => {
         setTimeout(r, seconds * 1_000);

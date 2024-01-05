@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Flex, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import { useSearchParams } from 'next/navigation';
+import { parseAsString, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
@@ -14,14 +14,17 @@ import {
   EmailVerificationCodeModale,
   SEARCH_PARAM_VERIFY_EMAIL,
 } from '@/features/account/EmailVerificationCodeModal';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountEmailForm = () => {
   const { t } = useTranslation(['common', 'account']);
-  const searchParams = useSearchParams();
-  const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
-  const searchParamsUpdater = useSearchParamsUpdater();
+  const [searchParams, setSearchParams] = useQueryStates({
+    [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
+    token: parseAsString,
+    verifyEmail: parseAsString,
+  });
+  const verifyEmail = searchParams[SEARCH_PARAM_VERIFY_EMAIL];
+
   const account = trpc.account.get.useQuery(undefined, {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -31,15 +34,10 @@ export const AccountEmailForm = () => {
 
   const updateEmail = trpc.account.updateEmail.useMutation({
     onSuccess: async ({ token }, { email }) => {
-      searchParamsUpdater(
-        {
-          [SEARCH_PARAM_VERIFY_EMAIL]: email,
-          token,
-        },
-        {
-          replace: true,
-        }
-      );
+      setSearchParams({
+        [SEARCH_PARAM_VERIFY_EMAIL]: email,
+        token,
+      });
     },
     onError: () => {
       toastError({
