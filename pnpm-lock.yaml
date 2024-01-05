@@ -90,7 +90,7 @@ dependencies:
     specifier: 10.16.15
     version: 10.16.15(react-dom@18.2.0)(react@18.2.0)
   holy-loader:
-    specifier: ^2.2.6
+    specifier: 2.2.6
     version: 2.2.6(react@18.2.0)
   i18next:
     specifier: 23.7.8
