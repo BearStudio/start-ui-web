@@ -65,6 +65,7 @@ export const LoginForm = ({
               },
             ]}
             formatValue={(v) => v?.toLowerCase().trim()}
+            autoFocus
           />
 
           <Flex>
