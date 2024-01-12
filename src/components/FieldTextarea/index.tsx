@@ -13,7 +13,7 @@ export type FieldTextareaProps<FormattedValue = Value> = FieldProps<
 > &
   FormGroupProps &
   Pick<TextareaProps, UsualTextareaProps> & {
-    textAreaProps?: Omit<TextareaProps, UsualTextareaProps>;
+    textareaProps?: Omit<TextareaProps, UsualTextareaProps>;
   };
 
 export const FieldTextarea = <FormattedValue = Value,>(
@@ -21,7 +21,7 @@ export const FieldTextarea = <FormattedValue = Value,>(
 ) => {
   const field = useField(props);
 
-  const { textAreaProps, children, placeholder, ...rest } = field.otherProps;
+  const { textareaProps, children, placeholder, ...rest } = field.otherProps;
 
   const formGroupProps = {
     ...rest,
@@ -34,21 +34,21 @@ export const FieldTextarea = <FormattedValue = Value,>(
   return (
     <FormGroup {...formGroupProps}>
       <Textarea
-        {...textAreaProps}
+        {...textareaProps}
         placeholder={placeholder}
         id={field.id}
         value={field.value ?? ''}
         onChange={(e) => {
           field.setValue(e.target.value);
-          textAreaProps?.onChange?.(e);
+          textareaProps?.onChange?.(e);
         }}
         onFocus={(e) => {
           field.setIsTouched(false);
-          textAreaProps?.onFocus?.(e);
+          textareaProps?.onFocus?.(e);
         }}
         onBlur={(e) => {
           field.setIsTouched(true);
-          textAreaProps?.onBlur?.(e);
+          textareaProps?.onBlur?.(e);
         }}
       />
       {children}

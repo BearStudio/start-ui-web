@@ -56,7 +56,7 @@ export const TextareaProps = () => {
           helper="Please give a description to your project"
           required="Description is required"
           placeholder="Placeholder"
-          textAreaProps={{
+          textareaProps={{
             resize: 'horizontal',
           }}
         />
@@ -65,7 +65,7 @@ export const TextareaProps = () => {
           label="Resize is none"
           helper="Please give a description to your project"
           placeholder="Placeholder"
-          textAreaProps={{
+          textareaProps={{
             resize: 'none',
           }}
         />
