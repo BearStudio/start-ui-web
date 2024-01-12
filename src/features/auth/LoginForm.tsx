@@ -45,7 +45,7 @@ export const LoginForm = ({
 
   const form = useForm<{ email: string }>({
     onValidSubmit: (values) => {
-      login.mutate(values)
+      login.mutate(values);
     },
   });
 
@@ -56,7 +56,6 @@ export const LoginForm = ({
           <FieldInput
             name="email"
             size="lg"
-            placeholder={t('auth:data.email.label')}
             required={t('auth:data.email.required')}
             validations={[
               {
@@ -64,7 +63,8 @@ export const LoginForm = ({
                 message: t('auth:data.email.invalid'),
               },
             ]}
-            formatValue={(v) => v?.toLowerCase().trim()}
+            formatValue={(v) => v?.toString()?.toLowerCase().trim()}
+            placeholder={t('auth:data.email.label')}
           />
 
           <Flex>

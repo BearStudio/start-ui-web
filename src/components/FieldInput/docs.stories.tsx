@@ -14,36 +14,39 @@ export const Default = () => {
   return (
     <Formiz connect={form} autoForm>
       <Stack spacing={4}>
+        {/* 1 */}
+        <FieldInput
+          name="demo-password"
+          label="Password"
+          helper="This is an helper"
+          required="Password is required"
+          placeholder="Placeholder"
+          type="password"
+        />
+        {/* 2 */}
         <FieldInput
           name="demo-username"
           label="Username"
-          placeholder="Placeholder"
           helper="This is an helper"
           required="Username is required"
-        />
-        <FieldInput
-          name="demo-password"
-          type="password"
-          label="Password"
           placeholder="Placeholder"
-          helper="This is an helper"
-          required="Password is required"
         />
+        {/* 3 */}
         <FieldInput
           name="demo-read-only"
           label="Read Only"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isReadOnly
+          placeholder="Placeholder"
         />
         <FieldInput
           name="demo-disabled"
           label="Disabled"
           defaultValue="Value"
-          placeholder="Placeholder"
           helper="This is an helper"
           isDisabled
+          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit">Submit</Button>

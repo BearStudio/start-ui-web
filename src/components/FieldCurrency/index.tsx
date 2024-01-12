@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { InputGroup, InputRightElement, Spinner } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
@@ -6,77 +6,46 @@ import { FieldProps, useField } from '@formiz/core';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
+type UsualInputCurrencyProps = 'placeholder';
+
 export type FieldCurrencyProps<FormattedValue = number> = FieldProps<
   number,
   FormattedValue
 > &
-  Omit<FormGroupProps, 'placeholder'> &
-  Pick<
-    InputCurrencyProps,
-    'currency' | 'locale' | 'decimals' | 'placeholder'
-  > & {
-    size?: 'sm' | 'md' | 'lg';
+  FormGroupProps &
+  Pick<InputCurrencyProps, UsualInputCurrencyProps> & {
+    inputCurrencyProps?: Omit<InputCurrencyProps, UsualInputCurrencyProps>;
   };
 
 export const FieldCurrency = <FormattedValue = number,>(
   props: FieldCurrencyProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    isValidating,
-    isPristine,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const {
-    children,
-    label,
-    placeholder,
-    helper,
-    size = 'md',
-    currency,
-    locale,
-    decimals,
-    ...rest
-  } = otherProps;
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
+  const field = useField(props);
 
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  const { inputCurrencyProps, children, placeholder, ...rest } =
+    field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
     ...rest,
-  };
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
+  } satisfies FormGroupProps;
 
   return (
     <FormGroup {...formGroupProps}>
-      <InputGroup size={size}>
+      <InputGroup size={inputCurrencyProps?.size}>
         <InputCurrency
-          id={id}
-          value={value ?? undefined}
-          onChange={(newValue) => setValue(newValue ?? null)}
-          onFocus={() => setIsTouched(false)}
-          onBlur={() => setIsTouched(true)}
+          id={field.id}
+          value={field.value ?? undefined}
+          onChange={(newValue) => field.setValue(newValue ?? null)}
+          onFocus={() => field.setIsTouched(false)}
+          onBlur={() => field.setIsTouched(true)}
           placeholder={placeholder}
-          currency={currency}
-          locale={locale}
-          decimals={decimals}
+          {...inputCurrencyProps}
         />
-        {(isTouched || isSubmitted) && isValidating && (
+        {(field.isTouched || field.isSubmitted) && field.isValidating && (
           <InputRightElement>
             <Spinner size="sm" flex="none" />
           </InputRightElement>

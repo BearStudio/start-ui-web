@@ -1,77 +1,57 @@
-import { useEffect, useState } from 'react';
-
 import { Textarea, TextareaProps } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldTextareaProps<FormattedValue = string> = FieldProps<
-  string,
+type Value = TextareaProps['value'];
+
+type UsualTextareaProps = 'placeholder';
+
+export type FieldTextareaProps<FormattedValue = Value> = FieldProps<
+  Value,
   FormattedValue
 > &
-  FormGroupProps & {
-    textareaProps?: Omit<
-      TextareaProps,
-      | 'id'
-      | 'value'
-      | 'name'
-      | 'defaultValue'
-      | 'onChange'
-      | 'onBlur'
-      | 'placeholder'
-    >;
-    autoFocus?: boolean;
+  FormGroupProps &
+  Pick<TextareaProps, UsualTextareaProps> & {
+    textareaProps?: Omit<TextareaProps, UsualTextareaProps>;
   };
 
-export const FieldTextarea = <FormattedValue = string,>(
+export const FieldTextarea = <FormattedValue = Value,>(
   props: FieldTextareaProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    isPristine,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
+  const field = useField(props);
 
-  const { helper, label, placeholder, textareaProps, autoFocus, ...rest } =
-    otherProps;
+  const { textareaProps, children, placeholder, ...rest } = field.otherProps;
 
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
-
-  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
-
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
-
-  const formGroupProps: FormGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
+  const formGroupProps = {
     ...rest,
-  };
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
+  } satisfies FormGroupProps;
 
   return (
     <FormGroup {...formGroupProps}>
       <Textarea
-        id={id}
-        value={value ?? ''}
-        onChange={(e) => setValue(e.target.value)}
-        onFocus={() => setIsTouched(false)}
-        onBlur={() => setIsTouched(true)}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
         {...textareaProps}
+        placeholder={placeholder}
+        id={field.id}
+        value={field.value ?? ''}
+        onChange={(e) => {
+          field.setValue(e.target.value);
+          textareaProps?.onChange?.(e);
+        }}
+        onFocus={(e) => {
+          field.setIsTouched(false);
+          textareaProps?.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          field.setIsTouched(true);
+          textareaProps?.onBlur?.(e);
+        }}
       />
+      {children}
     </FormGroup>
   );
 };

@@ -27,9 +27,9 @@ export const Default = () => {
         <FieldDayPicker
           name="demo"
           label="Date"
-          placeholder="Select a date..."
           helper="This is an helper"
           required="Date is required"
+          placeholder="Select a date"
         />
         <Box>
           <Button type="submit">Submit</Button>

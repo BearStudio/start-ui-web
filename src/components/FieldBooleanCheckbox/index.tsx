@@ -1,70 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { Checkbox } from '@chakra-ui/react';
+import { Checkbox, CheckboxProps } from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldBooleanCheckboxProps<FormattedValue = boolean> = FieldProps<
-  boolean,
+type Value = boolean;
+
+export type FieldBooleanCheckboxProps<FormattedValue = Value> = FieldProps<
+  Value,
   FormattedValue
 > &
   FormGroupProps & {
+    checkboxProps?: CheckboxProps;
     optionLabel?: string;
-    size?: 'sm' | 'md' | 'lg';
   };
 
-export const FieldBooleanCheckbox = <FormattedValue = boolean,>(
+export const FieldBooleanCheckbox = <FormattedValue = Value,>(
   props: FieldBooleanCheckboxProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const { required } = props;
-  const {
-    children,
-    label,
-    helper,
-    optionLabel,
-    size = 'md',
-    isDisabled,
-    ...rest
-  } = otherProps;
-  const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
-
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  const field = useField(props);
+  const { children, checkboxProps, optionLabel, ...rest } = field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    isDisabled,
-    label,
-    showError,
     ...rest,
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
   };
 
   return (
     <FormGroup {...formGroupProps}>
       <Checkbox
-        id={id}
-        size={size}
-        isChecked={value ?? undefined}
-        isDisabled={isDisabled}
-        onChange={() => setValue(!value)}
+        {...checkboxProps}
+        id={field.id}
+        isChecked={field.value ?? undefined}
+        onChange={() => field.setValue(!field.value)}
       >
-        {optionLabel || <>&nbsp;</>}
+        {optionLabel ?? <>&nbsp;</>}
       </Checkbox>
       {children}
     </FormGroup>

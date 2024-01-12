@@ -1,77 +1,59 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 
-import { Radio, RadioGroup, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+  Radio,
+  RadioGroup,
+  RadioGroupProps,
+  Wrap,
+  WrapItem,
+} from '@chakra-ui/react';
 import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
 type Option = {
-  value: string | undefined;
+  value?: string;
   label?: ReactNode;
 };
 
-export type FieldRadiosProps<FormattedValue = string> = FieldProps<
-  string,
+export type FieldRadiosProps<FormattedValue = Option['value']> = FieldProps<
+  Option['value'],
   FormattedValue
 > &
   FormGroupProps & {
-    size?: 'sm' | 'md' | 'lg';
+    radioGroupProps?: RadioGroupProps;
     options?: Option[];
   };
 
-export const FieldRadios = <FormattedValue = string,>(
+export const FieldRadios = <FormattedValue = Option['value'],>(
   props: FieldRadiosProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const { required } = props;
-  const {
-    children,
-    label,
-    options = [],
-    helper,
-    size = 'md',
-    ...rest
-  } = otherProps;
-  const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
+  const field = useField(props);
 
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  const { options, radioGroupProps, children, ...rest } = field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
     ...rest,
-  };
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
+  } satisfies FormGroupProps;
 
   return (
     <FormGroup {...formGroupProps}>
       <RadioGroup
-        size={size}
-        id={id}
-        value={value ?? undefined}
-        onChange={setValue}
+        {...radioGroupProps}
+        id={field.id}
+        value={field.value ?? undefined}
+        onChange={field.setValue}
       >
         <Wrap spacing="4" overflow="visible">
-          {options.map((option) => (
+          {options?.map((option) => (
             <WrapItem key={option.value}>
               <Radio
-                id={`${id}-${option.value}`}
-                name={id}
+                id={`${field.id}-${option.value}`}
+                name={field.id}
                 value={option.value}
               >
                 {option.label ?? option.value}

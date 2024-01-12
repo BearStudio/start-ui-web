@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   IconButton,
@@ -14,70 +14,48 @@ import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-export type FieldInputProps<FormattedValue = string> = FieldProps<
-  string,
+type Value = InputProps['value'];
+
+type UsualInputProps = 'placeholder' | 'autoFocus' | 'type';
+
+export type FieldInputProps<FormattedValue = Value> = FieldProps<
+  Value,
   FormattedValue
 > &
-  Omit<FormGroupProps, 'placeholder'> &
-  Pick<InputProps, 'type' | 'placeholder'> & {
-    size?: 'sm' | 'md' | 'lg';
-    autoFocus?: boolean;
+  FormGroupProps &
+  Pick<InputProps, UsualInputProps> & {
+    inputProps?: Omit<InputProps, UsualInputProps>;
   };
 
-export const FieldInput = <FormattedValue = string,>(
+export const FieldInput = <FormattedValue = Value,>(
   props: FieldInputProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isPristine,
-    isSubmitted,
-    isValidating,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const {
-    children,
-    label,
-    type,
-    placeholder,
-    helper,
-    size = 'md',
-    autoFocus,
-    ...rest
-  } = otherProps;
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
+  const field = useField(props);
 
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  const { inputProps, children, placeholder, type, autoFocus, ...rest } =
+    field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
     ...rest,
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
   };
+
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormGroup {...formGroupProps}>
-      <InputGroup size={size}>
+      <InputGroup size={inputProps?.size}>
         <Input
-          type={showPassword ? 'text' : type || 'text'}
-          id={id}
-          value={value ?? ''}
-          onChange={(e) => setValue(e.target.value)}
-          onFocus={() => setIsTouched(false)}
-          onBlur={() => setIsTouched(true)}
+          {...inputProps}
+          type={showPassword ? 'text' : type ?? 'text'}
+          id={field.id}
+          value={field.value ?? ''}
+          onChange={(e) => field.setValue(e.target.value)}
+          onFocus={() => field.setIsTouched(false)}
+          onBlur={() => field.setIsTouched(true)}
           placeholder={placeholder ? String(placeholder) : ''}
           autoFocus={autoFocus}
         />
@@ -96,7 +74,7 @@ export const FieldInput = <FormattedValue = string,>(
           </InputLeftElement>
         )}
 
-        {(isTouched || isSubmitted) && isValidating && (
+        {(field.isTouched || field.isSubmitted) && field.isValidating && (
           <InputRightElement>
             <Spinner size="sm" flex="none" />
           </InputRightElement>

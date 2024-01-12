@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import {
   HStack,
   PinInput,
@@ -10,86 +8,69 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-type FieldPinInputProps<FormattedValue = string> = FieldProps<
-  string,
+type Value = PinInputProps['value'];
+
+type UsualPinInputProps = 'autoFocus';
+
+type FieldPinInputProps<FormattedValue = Value> = FieldProps<
+  Value,
   FormattedValue
 > &
-  Omit<FormGroupProps, 'placeholder'> &
-  Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'> & {
+  FormGroupProps &
+  Pick<PinInputProps, UsualPinInputProps> & {
     length?: number;
+    pinInputProps?: Omit<PinInputProps, 'children'>;
   };
 
-export const FieldPinInput = <FormattedValue = string,>(
+export const FieldPinInput = <FormattedValue = Value,>(
   props: FieldPinInputProps<FormattedValue>
 ) => {
+  const field = useField(props);
   const {
-    errorMessage,
-    id,
-    isValid,
-    isPristine,
-    isSubmitted,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const {
-    isDisabled,
-    label,
-    helper,
-    size = 'lg',
+    pinInputProps,
+    children,
     autoFocus,
-    onComplete,
     length = 6,
     ...rest
-  } = otherProps;
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
-
-  const showError = !isValid && ((isTouched && !isPristine) || isSubmitted);
-
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+  } = field.otherProps;
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id: `${id}-0`, // Target the first input
-    isRequired: !!required,
-    label,
-    showError,
     ...rest,
+    errorMessage: field.errorMessage,
+    id: `${field.id}-0`, // Target the first input
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
   };
 
   const handleOnComplete = (val: string) => {
     // onComplete provide the full value. If we call form.submit() on
     // complete, it will only take the first five values instead of all
-    setValue(val);
+    field.setValue(val);
 
     // Waiting for the setValue to be done.
-    setTimeout(() => onComplete?.(val), 200);
+    setTimeout(() => pinInputProps?.onComplete?.(val), 200);
   };
 
   return (
     <FormGroup {...formGroupProps}>
       <HStack>
         <PinInput
-          size={size}
-          value={value ?? ''}
-          onChange={(val) => setValue(val)}
+          {...pinInputProps}
           autoFocus={autoFocus}
+          size={pinInputProps?.size ?? 'lg'}
+          value={field.value ?? ''}
+          onChange={(val) => field.setValue(val)}
           onComplete={handleOnComplete}
           placeholder="·"
-          isInvalid={showError}
-          isDisabled={isDisabled}
-          id={id}
+          isInvalid={field.shouldDisplayError}
+          id={field.id}
         >
           {Array.from({ length }, (_, index) => (
             <PinInputField key={index} flex={1} />
           ))}
         </PinInput>
       </HStack>
+      {children}
     </FormGroup>
   );
 };

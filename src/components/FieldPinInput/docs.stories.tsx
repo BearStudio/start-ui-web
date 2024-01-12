@@ -32,7 +32,7 @@ export const OnComplete = () => {
           label="Code"
           name="code"
           helper="Completely fill the input, it will automatically submit the form"
-          onComplete={() => form.submit()}
+          pinInputProps={{ onComplete: () => form.submit() }}
         />
       </Stack>
     </Formiz>

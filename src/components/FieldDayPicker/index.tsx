@@ -12,38 +12,30 @@ import {
 } from '@/components/FieldDayPicker/utils';
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-type PickedDayPickerProps =
-  | 'autoFocus'
-  | 'dateFormat'
-  | 'dayPickerProps'
-  | 'hasTodayButton'
-  | 'inputProps'
-  | 'popperPlacement'
-  | 'placeholder'
-  | 'usePortal'
-  | 'isDisabled'
-  | 'onClose';
-
 export type FieldDayPickerPossibleFormattedValue =
   | string
   | number
   | Dayjs
   | Date;
 
+type Value = Dayjs;
+
+type UsualDayPickerProps = 'placeholder';
+
 export type DisabledDays = 'future' | 'past';
 export type FieldDayPickerProps<
-  FormattedValue extends FieldDayPickerPossibleFormattedValue = Dayjs,
-> = FieldProps<Dayjs, FormattedValue> &
-  Omit<FormGroupProps, 'onChange'> &
-  Pick<DayPickerProps, PickedDayPickerProps> & {
+  FormattedValue extends FieldDayPickerPossibleFormattedValue = Value,
+> = FieldProps<Value, FormattedValue> &
+  FormGroupProps &
+  Pick<DayPickerProps, UsualDayPickerProps> & {
+    dayPickerProps?: Partial<Omit<DayPickerProps, UsualDayPickerProps>>;
     noFormGroup?: boolean;
     invalidMessage?: string;
-    onMonthChange?(date: Date): void;
     disabledDays?: DisabledDays;
   };
 
 export const FieldDayPicker = <
-  FormattedValue extends FieldDayPickerPossibleFormattedValue = Dayjs,
+  FormattedValue extends FieldDayPickerPossibleFormattedValue = Value,
 >({
   invalidMessage,
   dayPickerProps,
@@ -66,61 +58,33 @@ export const FieldDayPicker = <
           value
             ? !isMatch(
                 dayjs(value).toDate(),
-                !dayPickerProps?.disabled
+                !dayPickerProps?.isDisabled
                   ? []
-                  : Array.isArray(dayPickerProps.disabled)
-                  ? dayPickerProps.disabled
-                  : [dayPickerProps.disabled]
+                  : Array.isArray(dayPickerProps.isDisabled)
+                    ? dayPickerProps.isDisabled
+                    : [dayPickerProps.isDisabled]
               )
             : true,
         message: invalidMessage,
-        deps: [dayPickerProps?.disabled],
+        deps: [dayPickerProps?.isDisabled],
       },
     ],
-    [invalidMessage, t, restFieldProps.validations, dayPickerProps?.disabled]
+    [invalidMessage, t, restFieldProps.validations, dayPickerProps?.isDisabled]
   );
 
-  const {
-    id,
-    shouldDisplayError,
-    setIsTouched,
-    setValue,
-    value,
-    errorMessage,
-    otherProps,
-  } = useField(restFieldProps, {
-    formatValue: (value) => (!!value ? dayjs(value) : null) as FormattedValue,
+  const field = useField(restFieldProps, {
+    formatValue: (value) => (value ? dayjs(value) : null) as FormattedValue,
     validations: getValidations(),
   });
 
-  const { required } = restFieldProps;
-
-  const {
-    label,
-    helper,
-    placeholder,
-    isDisabled,
-    inputProps,
-    noFormGroup,
-    autoFocus,
-    popperPlacement,
-    dateFormat,
-    hasTodayButton,
-    usePortal,
-    disabledDays,
-    onClose,
-    onMonthChange,
-    ...rest
-  } = otherProps;
+  const { noFormGroup, disabledDays, placeholder, ...rest } = field.otherProps;
 
   const formGroupProps = {
-    id,
-    label,
-    helper,
-    errorMessage,
-    showError: shouldDisplayError,
-    isRequired: !!required,
     ...(noFormGroup ? {} : rest),
+    id: field.id,
+    errorMessage: field.errorMessage,
+    showError: field.shouldDisplayError,
+    isRequired: field.isRequired,
   };
 
   const getDisabledFutureOrPastDaysMatcher = () => {
@@ -135,38 +99,33 @@ export const FieldDayPicker = <
   };
 
   const defaultDisabledDays = (
-    !dayPickerProps?.disabled
+    !dayPickerProps?.isDisabled
       ? [getDisabledFutureOrPastDaysMatcher()]
-      : Array.isArray(dayPickerProps.disabled)
-      ? [...dayPickerProps.disabled, getDisabledFutureOrPastDaysMatcher()]
-      : [dayPickerProps.disabled, getDisabledFutureOrPastDaysMatcher()]
+      : Array.isArray(dayPickerProps.isDisabled)
+        ? [...dayPickerProps.isDisabled, getDisabledFutureOrPastDaysMatcher()]
+        : [dayPickerProps.isDisabled, getDisabledFutureOrPastDaysMatcher()]
   ).filter(Boolean); // We cut out nullable values because the disabled prop do not accept them
 
   const content = (
     <DayPicker
       placeholder={placeholder}
-      value={!!value ? dayjs(value).toDate() : null}
-      onChange={(date) => setValue(date instanceof Date ? dayjs(date) : date)}
-      onClose={(date) => {
-        setIsTouched(true);
-        onClose?.(date);
-      }}
       dayPickerProps={{
         ...dayPickerProps,
-        disabled: defaultDisabledDays as Array<TODO>,
+        disabled: defaultDisabledDays,
+      }}
+      value={field.value ? dayjs(field.value).toDate() : null}
+      onChange={(date) => {
+        field.setValue(date instanceof Date ? dayjs(date) : date);
+        dayPickerProps?.onChange?.(date);
+      }}
+      onClose={(date) => {
+        field.setIsTouched(true);
+        dayPickerProps?.onClose?.(date);
       }}
       inputProps={{
-        id,
-        ...inputProps,
+        id: field.id,
+        ...dayPickerProps?.inputProps,
       }}
-      isDisabled={isDisabled}
-      usePortal={usePortal}
-      autoFocus={autoFocus}
-      required={!!required}
-      hasTodayButton={hasTodayButton}
-      popperPlacement={popperPlacement}
-      dateFormat={dateFormat}
-      onMonthChange={onMonthChange}
     />
   );
 

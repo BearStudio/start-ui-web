@@ -5,7 +5,6 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 
 import { Checkbox, CheckboxProps, Wrap, WrapItem } from '@chakra-ui/react';
@@ -81,8 +80,8 @@ type FieldCheckboxesProps<FormattedValue = Value[]> = FieldProps<
   Value[],
   FormattedValue
 > &
-  Omit<FormGroupProps, 'size'> &
-  Pick<CheckboxProps, 'size' | 'colorScheme'> & {
+  FormGroupProps & {
+    checkboxProps?: CheckboxProps;
     itemKey?: string;
     options?: Option[];
   };
@@ -90,30 +89,12 @@ type FieldCheckboxesProps<FormattedValue = Value[]> = FieldProps<
 export const FieldCheckboxes = <FormattedValue = Value[],>(
   props: FieldCheckboxesProps<FormattedValue>
 ) => {
-  const {
-    errorMessage,
-    id,
-    isValid,
-    isSubmitted,
-    resetKey,
-    setValue,
-    value,
-    otherProps,
-  } = useField(props);
-  const {
-    itemKey,
-    children,
-    options,
-    label,
-    helper,
-    size = 'md',
-    colorScheme,
-    isDisabled,
-    ...rest
-  } = otherProps;
+  const field = useField(props);
+  const { itemKey, children, options, checkboxProps, ...rest } =
+    field.otherProps;
 
-  const valueRef = useRef(value);
-  valueRef.current = value;
+  const valueRef = useRef(field.value);
+  valueRef.current = field.value;
   const itemKeyRef = useRef<string | undefined>(itemKey);
   if (itemKey) {
     itemKeyRef.current = itemKey;
@@ -141,7 +122,7 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
         isChecked: boolean
       ) => {
         set((state) => ({ options: [...state.options, optionToRegister] }));
-        setValue((prevValue) =>
+        field.setValue((prevValue) =>
           isChecked
             ? [...(prevValue ?? []), optionToRegister.value]
             : prevValue ?? []
@@ -154,7 +135,7 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
               !checkValuesEqual(option.value, optionToUnregister.value)
           ),
         }));
-        setValue((prevValue) => {
+        field.setValue((prevValue) => {
           const newValue = (prevValue ?? []).filter((localValue) =>
             verifyValueIsInValues(
               get().options.map(({ value: optionValue }) => optionValue) ?? [],
@@ -164,13 +145,13 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
           return newValue.length ? newValue : null;
         });
       },
-      values: value ?? [],
+      values: field.value ?? [],
       setValues: (values) =>
         set(() => ({
           values,
         })),
       toggleValue: (valueToUpdate) => {
-        setValue((prevValue) => {
+        field.setValue((prevValue) => {
           const previousValue = prevValue ?? [];
           const hasValue = verifyValueIsInValues(
             prevValue ?? [],
@@ -187,7 +168,7 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
       toggleGroups: (groups: string[]) => {
         const [allValuesInGroups, allOtherValues] =
           splitValuesByGroupsFromOptions(get().options, groups);
-        setValue((previousValue) => {
+        field.setValue((previousValue) => {
           const allOtherValuesChecked = allOtherValues.filter((otherValue) =>
             verifyValueIsInValues(previousValue ?? [], otherValue)
           );
@@ -211,25 +192,15 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
   const setStoreValues = useStore((state) => state.setValues);
 
   useEffect(() => {
-    setStoreValues(value ?? []);
-  }, [setStoreValues, value]);
-
-  const { required } = props;
-  const [isTouched, setIsTouched] = useState(false);
-  const showError = !isValid && (isTouched || isSubmitted);
-
-  useEffect(() => {
-    setIsTouched(false);
-  }, [resetKey]);
+    setStoreValues(field.value ?? []);
+  }, [setStoreValues, field.value]);
 
   const formGroupProps = {
-    errorMessage,
-    helper,
-    id,
-    isRequired: !!required,
-    label,
-    showError,
     ...rest,
+    errorMessage: field.errorMessage,
+    id: field.id,
+    isRequired: field.isRequired,
+    showError: field.shouldDisplayError,
   };
 
   return (
@@ -237,12 +208,14 @@ export const FieldCheckboxes = <FormattedValue = Value[],>(
       <FieldCheckboxesContext.Provider
         value={{
           useStore,
-          checkboxGroupProps: { size, colorScheme, isDisabled },
+          checkboxGroupProps: {
+            size: checkboxProps?.size,
+            colorScheme: checkboxProps?.colorScheme,
+            isDisabled: checkboxProps?.isDisabled,
+          },
         }}
       >
-        {children ? (
-          children
-        ) : (
+        {children ?? (
           <Wrap spacing="4" overflow="visible">
             {options?.map((option) => (
               <WrapItem key={String(option.value)}>
