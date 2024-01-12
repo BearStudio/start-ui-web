@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: $DOCKER_DATABASE_PASSWORD
 
   minio:
-    image: 'minio/minio:latest'
+    image: 'minio/minio:RELEASE.2024-01-11T07-46-16Z-cpuv1'
     ports:
       - '${DOCKER_FORWARD_MINIO_PORT:-9000}:9000'
       - '${DOCKER_FORWARD_MINIO_CONSOLE_PORT:-9090}:9090'
