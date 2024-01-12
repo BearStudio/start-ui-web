@@ -3,13 +3,13 @@ import React, { useEffect } from 'react';
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { Formiz, useForm, useFormFields } from '@formiz/core';
 import { isEmail } from '@formiz/validations';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
 import { useToastError } from '@/components/Toast';
+import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
 import { AVAILABLE_LANGUAGES, Language } from '@/lib/i18n/constants';
@@ -58,8 +58,8 @@ export default function PageRegister() {
       <Stack spacing={1}>
         <Heading size="md">{t('auth:register.title')}</Heading>
         <Button
-          as={Link}
-          href={`${APP_PATH}/login`}
+          as={LinkApp}
+          href="/login"
           variant="link"
           size="sm"
           whiteSpace="normal"

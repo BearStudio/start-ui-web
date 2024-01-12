@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 
 import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuFolderGit2, LuHome, LuUser } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
+import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
 
 const HEIGHT = 'calc(60px + env(safe-area-inset-bottom))';
@@ -38,19 +38,13 @@ export const AppNavBarMobile = (props: BoxProps) => {
         h={HEIGHT}
       >
         <Container display="flex" flexDirection="row" w="full" flex={1}>
-          <AppNavBarMobileMainMenuItem icon={LuHome} href={APP_PATH || '/'}>
+          <AppNavBarMobileMainMenuItem icon={LuHome} href="/">
             {t('app:layout.mainMenu.home')}
           </AppNavBarMobileMainMenuItem>
-          <AppNavBarMobileMainMenuItem
-            href={`${APP_PATH}/repositories`}
-            icon={LuFolderGit2}
-          >
+          <AppNavBarMobileMainMenuItem href="/repositories" icon={LuFolderGit2}>
             {t('app:layout.mainMenu.repositories')}
           </AppNavBarMobileMainMenuItem>
-          <AppNavBarMobileMainMenuItem
-            icon={LuUser}
-            href={`${APP_PATH}/account`}
-          >
+          <AppNavBarMobileMainMenuItem icon={LuUser} href="/account">
             {t('app:layout.mainMenu.account')}
           </AppNavBarMobileMainMenuItem>
         </Container>
@@ -70,13 +64,13 @@ const AppNavBarMobileMainMenuItem = ({
 }) => {
   const pathname = usePathname() ?? '';
   const isActive =
-    href === (APP_PATH || '/')
+    href === '/'
       ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(href);
+      : pathname.startsWith(`${APP_PATH}${href}`);
 
   return (
     <Flex
-      as={Link}
+      as={LinkApp}
       href={href}
       direction="column"
       justifyContent="center"

@@ -8,10 +8,10 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
@@ -41,12 +41,7 @@ export default function PageLogin() {
         </Text>
       </Stack>
 
-      <Button
-        variant="@primary"
-        size="lg"
-        as={Link}
-        href={`${APP_PATH}/register`}
-      >
+      <Button variant="@primary" size="lg" as={LinkApp} href="/register">
         {t('auth:login.actions.register')}
       </Button>
 

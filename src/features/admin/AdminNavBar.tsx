@@ -28,7 +28,6 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -46,8 +45,9 @@ import {
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
 import { useAdminLayoutContext } from '@/features/admin/AdminLayout';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { ADMIN_PATH } from '@/features/admin/constants';
-import { APP_PATH } from '@/features/app/constants';
+import { LinkApp } from '@/features/app/LinkApp';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
@@ -59,13 +59,13 @@ const AdminNavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['admin']);
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/dashboard`}>
+      <AdminNavBarMainMenuItem href="/dashboard">
         {t('admin:layout.mainMenu.dashboard')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/repositories`}>
+      <AdminNavBarMainMenuItem href="/repositories">
         {t('admin:layout.mainMenu.repositories')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem href={`${ADMIN_PATH}/management`}>
+      <AdminNavBarMainMenuItem href="/management">
         {t('admin:layout.mainMenu.management')}
       </AdminNavBarMainMenuItem>
     </Stack>
@@ -90,15 +90,15 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
         <MenuList maxW="12rem" overflow="hidden">
           <MenuGroup title={account.data?.email ?? ''} noOfLines={1}>
             <MenuItem
-              as={Link}
-              href={`${ADMIN_PATH}/account`}
+              as={LinkAdmin}
+              href="/account"
               icon={<Icon icon={LuUser} fontSize="lg" color="gray.400" />}
             >
               {t('admin:layout.accountMenu.myAccount')}
             </MenuItem>
             <MenuItem
-              as={Link}
-              href={`${ADMIN_PATH}/docs/api`}
+              as={LinkAdmin}
+              href="/docs/api"
               icon={<Icon icon={LuBookOpen} fontSize="lg" color="gray.400" />}
             >
               {t('admin:layout.accountMenu.apiDocs')}
@@ -106,8 +106,8 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
 
             {account.data?.authorizations.includes('APP') && (
               <MenuItem
-                as={Link}
-                href={APP_PATH || '/'}
+                as={LinkApp}
+                href="/"
                 target="_blank"
                 icon={
                   <Icon icon={LuExternalLink} fontSize="lg" color="gray.400" />
@@ -180,7 +180,7 @@ export const AdminNavBar = (props: BoxProps) => {
           display={{ base: 'flex', md: 'none' }}
           ms="-0.5rem"
         />
-        <Box as={Link} href={ADMIN_PATH || '/'} mx={{ base: 'auto', md: 0 }}>
+        <Box as={LinkAdmin} href="/" mx={{ base: 'auto', md: 0 }}>
           <Logo />
         </Box>
         <AdminNavBarMainMenu
@@ -204,12 +204,13 @@ const AdminNavBarMainMenuItem = ({
   const { navDrawer } = useAdminLayoutContext();
   const pathname = usePathname() ?? '';
   const isActive =
-    href === (ADMIN_PATH || '/')
+    href === '/'
       ? pathname === (ADMIN_PATH || '/')
-      : pathname.startsWith(href);
+      : pathname.startsWith(`${ADMIN_PATH}${href}`);
+
   return (
     <Box
-      as={Link}
+      as={LinkAdmin}
       href={href}
       bg="transparent"
       justifyContent="flex-start"

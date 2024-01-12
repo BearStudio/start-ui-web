@@ -12,7 +12,6 @@ import {
   Tag,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuPlus } from 'react-icons/lu';
@@ -33,7 +32,7 @@ import {
   AdminLayoutPage,
   AdminLayoutPageContent,
 } from '@/features/admin/AdminLayoutPage';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { UserStatus } from '@/features/users/UserStatus';
 import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
@@ -78,8 +77,8 @@ export default function PageAdminUsers() {
               />
             </Flex>
             <ResponsiveIconButton
-              as={Link}
-              href={`${ADMIN_PATH}/management/users/create`}
+              as={LinkAdmin}
+              href="/management/users/create"
               variant="@primary"
               size="sm"
               icon={<LuPlus />}
@@ -124,8 +123,8 @@ export default function PageAdminUsers() {
                         </Tag>
                       )}
                       <LinkOverlay
-                        as={Link}
-                        href={`${ADMIN_PATH}/management/users/${user.id}`}
+                        as={LinkAdmin}
+                        href={`/management/users/${user.id}`}
                       >
                         {user.name ?? user.email}
                       </LinkOverlay>
