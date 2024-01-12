@@ -108,8 +108,8 @@ dependencies:
     specifier: 6.9.7
     version: 6.9.7
   nuqs:
-    specifier: 1.14.0
-    version: 1.14.0(next@14.0.4)
+    specifier: 1.14.1
+    version: 1.14.1(next@14.0.4)
   pino:
     specifier: 8.16.2
     version: 8.16.2
@@ -14190,8 +14190,8 @@ packages:
     dependencies:
       boolbase: 1.0.0
 
-  /nuqs@1.14.0(next@14.0.4):
-    resolution: {integrity: sha512-bdJlLFTwowc6oA8dvhY+s52lIW3F8J6mTksIoDo414D/6P7uf1039XJiRtZXi6rk6374I7e4Pn//YjMJ2pYWbQ==}
+  /nuqs@1.14.1(next@14.0.4):
+    resolution: {integrity: sha512-UxrDrdVQrq6O37yq2OWwCh3t/K/GsCoSchTc1tWC8VOproK3/Z58KXKAwRdZN2+vAGgdwyKv2StVOaRKw16p+g==}
     peerDependencies:
       next: '>=13.4 <14.0.2 || ^14.0.3'
     dependencies:
