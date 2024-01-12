@@ -1,5 +1,7 @@
 import { ChakraProps, ThemeTypings } from '@chakra-ui/react';
 
+import { env } from '@/env.mjs';
+
 export const debugStyles = ({
   label = 'Debug',
   colorScheme = 'green',
@@ -11,7 +13,7 @@ export const debugStyles = ({
   hideLabel?: boolean;
   hideBackground?: boolean;
 } = {}): ChakraProps => {
-  if (process.env.NODE_ENV !== 'development') return {};
+  if (env.NEXT_PUBLIC_NODE_ENV !== 'development') return {};
   return {
     border: '1px solid',
     borderColor: `${colorScheme}.500`,
