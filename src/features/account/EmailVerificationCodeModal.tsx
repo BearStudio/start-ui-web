@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { Formiz, useForm } from '@formiz/core';
-import { useSearchParams } from 'next/navigation';
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
 import { useToastSuccess } from '@/components/Toast';
@@ -16,37 +16,35 @@ import {
   VerificationCodeForm,
   useOnVerificationCodeError,
 } from '@/features/auth/VerificationCodeForm';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export const SEARCH_PARAM_VERIFY_EMAIL = 'verify-email';
 
 export const EmailVerificationCodeModale = () => {
   const { t } = useTranslation(['account']);
-  const searchParams = useSearchParams();
-  const searchParamsUpdater = useSearchParamsUpdater();
-  const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
-  const token = searchParams.get('token');
+  const [searchParams, setSearchParams] = useQueryStates({
+    [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
+    token: parseAsString,
+    attempts: parseAsInteger.withDefault(0),
+    verifyEmail: parseAsString,
+  });
   const trpcUtils = trpc.useUtils();
   const toastSuccess = useToastSuccess();
 
   const onClose = () => {
     trpcUtils.account.get.reset();
-    searchParamsUpdater(
-      {
-        [SEARCH_PARAM_VERIFY_EMAIL]: null,
-        token: null,
-        attempts: null,
-      },
-      { replace: true }
-    );
+    setSearchParams({
+      [SEARCH_PARAM_VERIFY_EMAIL]: null,
+      token: null,
+      attempts: null,
+    });
   };
 
   const form = useForm<{ code: string }>({
     onValidSubmit: (values) => {
       updateEmailValidate.mutate({
         code: values.code,
-        token: token ?? '',
+        token: searchParams.token ?? '',
       });
     },
   });
@@ -69,7 +67,7 @@ export const EmailVerificationCodeModale = () => {
         <ModalBody>
           <Formiz connect={form} autoForm>
             <VerificationCodeForm
-              email={verifyEmail ?? ''}
+              email={searchParams.verifyEmail ?? ''}
               isLoading={updateEmailValidate.isLoading}
             />
           </Formiz>
