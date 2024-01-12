@@ -8,7 +8,7 @@ import { FieldProps, useField } from '@formiz/core';
 
 import { FormGroup, FormGroupProps } from '@/components/FormGroup';
 
-type Value = string;
+type Value = PinInputProps['value'];
 
 type UsualPinInputProps = 'autoFocus';
 
