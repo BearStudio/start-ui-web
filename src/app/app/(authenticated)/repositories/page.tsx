@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import PageRepositories from '@/features/repositories/PageRepositories';
 
 export default function Page() {
-  return <PageRepositories />;
+  return (
+    <Suspense>
+      <PageRepositories />
+    </Suspense>
+  );
 }

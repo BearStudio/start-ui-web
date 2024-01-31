@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { Metadata } from 'next';
 
@@ -17,9 +17,11 @@ export default async function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <Document>
-      <NextLoader />
-      {children}
-    </Document>
+    <Suspense>
+      <Document>
+        <NextLoader />
+        {children}
+      </Document>
+    </Suspense>
   );
 }

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { AppLayout } from '@/features/app/AppLayout';
 import { APP_PATH } from '@/features/app/constants';
@@ -10,11 +10,13 @@ export default function AutenticatedLayout({
   children: ReactNode;
 }) {
   return (
-    <GuardAuthenticated
-      authorizations={['APP']}
-      loginPath={`${APP_PATH}/login`}
-    >
-      <AppLayout>{children}</AppLayout>
-    </GuardAuthenticated>
+    <Suspense>
+      <GuardAuthenticated
+        authorizations={['APP']}
+        loginPath={`${APP_PATH}/login`}
+      >
+        <AppLayout>{children}</AppLayout>
+      </GuardAuthenticated>
+    </Suspense>
   );
 }

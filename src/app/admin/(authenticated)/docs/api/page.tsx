@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import dynamic from 'next/dynamic';
 
 import { LoaderFull } from '@/components/LoaderFull';
@@ -12,5 +14,9 @@ const PageApiDocumentation = dynamic(
 );
 
 export default function Page() {
-  return <PageApiDocumentation />;
+  return (
+    <Suspense>
+      <PageApiDocumentation />
+    </Suspense>
+  );
 }

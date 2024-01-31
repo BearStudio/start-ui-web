@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import PageAdminRepositoryUpdate from '@/features/repositories/PageAdminRepositoryUpdate';
 
 export default function Page() {
-  return <PageAdminRepositoryUpdate />;
+  return (
+    <Suspense>
+      <PageAdminRepositoryUpdate />
+    </Suspense>
+  );
 }

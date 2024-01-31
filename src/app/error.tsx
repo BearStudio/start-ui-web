@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import { ErrorPage } from '@/components/ErrorPage';
 
 export default function GlobalError() {
-  return <ErrorPage />;
+  return (
+    <Suspense>
+      <ErrorPage />
+    </Suspense>
+  );
 }
