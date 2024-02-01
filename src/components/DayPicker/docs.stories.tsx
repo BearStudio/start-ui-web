@@ -91,3 +91,25 @@ export const WithoutPortal = () => {
     </Stack>
   );
 };
+
+export const Format = () => {
+  const [selectedDay, setSelectedDay] = useState<Date | null>();
+  const [defaultDay, setDefaultDay] = useState<Date | null>(new Date());
+
+  return (
+    <Stack spacing={2}>
+      <Text>Date : {JSON.stringify(selectedDay)}</Text>
+      <DayPicker
+        value={selectedDay}
+        onChange={setSelectedDay}
+        dateFormat="DD MMM YYYY"
+      />
+      <Text>Date : {JSON.stringify(defaultDay)}</Text>
+      <DayPicker
+        value={defaultDay}
+        onChange={setDefaultDay}
+        dateFormat="DD MMM YYYY"
+      />
+    </Stack>
+  );
+};
