@@ -55,7 +55,7 @@ export const useDayPickerInputManagement = (
         return;
       }
       setInputValue(
-        dateValueAsDayjs.isValid() ? dateValueAsDayjs.format(DATE_FORMAT) : ''
+        dateValueAsDayjs.isValid() ? dateValueAsDayjs.format(dateFormat) : ''
       );
       return;
     }
