@@ -72,7 +72,7 @@
     "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "next": "14.0.4",
-    "nodemailer": "6.9.7",
+    "nodemailer": "6.9.9",
     "nuqs": "1.14.1",
     "pino": "8.16.2",
     "pino-pretty": "10.2.3",
