@@ -105,8 +105,8 @@ dependencies:
     specifier: 14.0.4
     version: 14.0.4(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)
   nodemailer:
-    specifier: 6.9.7
-    version: 6.9.7
+    specifier: 6.9.9
+    version: 6.9.9
   nuqs:
     specifier: 1.14.1
     version: 1.14.1(next@14.0.4)
@@ -13427,7 +13427,7 @@ packages:
       iconv-lite: 0.5.0
       jsdom: 19.0.0
       mime: 2.4.4
-      nodemailer: 6.9.7
+      nodemailer: 6.9.9
       rimraf: 3.0.2
       smtp-server: 3.11.0
       socket.io: 4.6.0
@@ -14112,8 +14112,8 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
-  /nodemailer@6.9.7:
-    resolution: {integrity: sha512-rUtR77ksqex/eZRLmQ21LKVH5nAAsVicAtAYudK7JgwenEDZ0UIQ1adUGqErz7sMkWYxWTTU1aeP2Jga6WQyJw==}
+  /nodemailer@6.9.9:
+    resolution: {integrity: sha512-dexTll8zqQoVJEZPwQAKzxxtFn0qTnjdQTchoU6Re9BUUGBJiOy3YMn/0ShTW6J5M0dfQ1NeDeRTTl4oIWgQMA==}
     engines: {node: '>=6.0.0'}
 
   /nopt@5.0.0:
