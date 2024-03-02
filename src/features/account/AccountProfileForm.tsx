@@ -7,8 +7,11 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { FieldInput } from '@/components/FieldInput';
 import { FieldSelect } from '@/components/FieldSelect';
+import { FieldUpload, FieldUploadValue } from '@/components/FieldUpload';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import { useFetchAvatar } from '@/features/account/service';
+import { useAvatarUpload } from '@/features/account/useAvatarUpload';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -23,8 +26,14 @@ export const AccountProfileForm = () => {
     refetchOnWindowFocus: false,
   });
 
+  const accountAvatar = useFetchAvatar(account.data?.image || '', {
+    enabled: !!account?.data?.image,
+  });
+
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
+
+  const uploadFile = useAvatarUpload();
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -43,14 +52,26 @@ export const AccountProfileForm = () => {
   const form = useForm<{
     name: string;
     language: string;
+    image: FieldUploadValue;
   }>({
     initialValues: {
       name: account.data?.name ?? undefined,
-
       language: account.data?.language ?? undefined,
+      image: accountAvatar.data ?? undefined,
     },
-    onValidSubmit: (values) => {
-      updateAccount.mutate(values);
+    ready:
+      account.isSuccess &&
+      ((!!account?.data?.image && accountAvatar.isSuccess) ||
+        !account?.data?.image),
+    onValidSubmit: async ({ image, ...values }) => {
+      try {
+        const { fileUrl } = await uploadFile.mutateAsync(image.file);
+        updateAccount.mutate({ ...values, image: fileUrl });
+      } catch {
+        form.setErrors({
+          image: t('account:profile.feedbacks.uploadError.title'),
+        });
+      }
     },
   });
 
@@ -63,6 +84,13 @@ export const AccountProfileForm = () => {
           <Formiz connect={form}>
             <form noValidate onSubmit={form.submit}>
               <Stack spacing={4}>
+                <FieldUpload
+                  name="image"
+                  label={t('account:data.avatar.label')}
+                  inputText={t('account:data.avatar.inputText')}
+                  required={t('account:data.avatar.required')}
+                  isLoading={!!account?.data?.image && accountAvatar.isFetching}
+                />
                 <FieldInput
                   name="name"
                   label={t('account:data.name.label')}
@@ -81,8 +109,10 @@ export const AccountProfileForm = () => {
                   <Button
                     type="submit"
                     variant="@primary"
-                    isLoading={updateAccount.isLoading}
-                    isDisabled={!form.isValid && form.isSubmitted}
+                    isLoading={updateAccount.isLoading || uploadFile.isLoading}
+                    isDisabled={
+                      (!form.isValid && form.isSubmitted) || !form.isReady
+                    }
                   >
                     {t('account:profile.actions.update')}
                   </Button>
