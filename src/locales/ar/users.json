@@ -6,7 +6,7 @@
     },
     "loadMore": {
       "button": "تحميل المزيد",
-      "display": "عرض {{محملة}} من {{total}} من المستخدمين"
+      "display": "عرض {{loaded}} من {{total}} من المستخدمين"
     }
   },
   "feedbacks": {
