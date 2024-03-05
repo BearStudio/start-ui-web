@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Flex, useBreakpointValue } from '@chakra-ui/react';
+// @ts-expect-error : @stoplight/elements types not exported properly in 8.1.0 with regards to tsconfig using "moduleResolution":"bundler"
 import { API } from '@stoplight/elements';
 import '@stoplight/elements/styles.min.css';
 
