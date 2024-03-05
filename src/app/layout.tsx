@@ -17,11 +17,11 @@ export default async function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <Suspense>
-      <Document>
+    <Document>
+      <Suspense>
         <NextLoader />
         {children}
-      </Document>
-    </Suspense>
+      </Suspense>
+    </Document>
   );
 }
