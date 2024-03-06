@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { zu } from '@/lib/zod/zod-utils';
 
 export const USER_AUTHORIZATIONS = ['APP', 'ADMIN'] as const;
 export type UserAuthorization = z.infer<ReturnType<typeof zUserAuthorization>>;
@@ -13,12 +14,14 @@ export const zUserAccountStatus = () =>
 export type User = z.infer<ReturnType<typeof zUser>>;
 export const zUser = () =>
   z.object({
-    id: z.string(),
+    id: z.string().cuid(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    name: z.string().nullish(),
-    email: z.string().trim().toLowerCase(),
+    name: zu.string.nonEmpty(z.string()).nullish(),
+    email: zu.string.email(z.string()),
     authorizations: z.array(zUserAuthorization()).catch(['APP']),
     accountStatus: zUserAccountStatus(),
-    language: z.string().default(DEFAULT_LANGUAGE_KEY),
+    language: zu.string
+      .nonEmpty(z.string().min(2))
+      .default(DEFAULT_LANGUAGE_KEY),
   });

@@ -1,3 +1,5 @@
+import { ForwardedRef, forwardRef } from 'react';
+
 import {
   AsyncCreatableProps,
   AsyncProps,
@@ -8,6 +10,7 @@ import {
   CreatableProps,
   GroupBase,
   Props,
+  SelectInstance,
 } from 'chakra-react-select';
 
 export type SelectProps<
@@ -20,14 +23,14 @@ export type SelectProps<
   | ({ type: 'async' } & AsyncProps<Option, IsMulti, Group>)
   | ({ type: 'async-creatable' } & AsyncCreatableProps<Option, IsMulti, Group>);
 
-export const Select = <
+const SelectComponent = <
   Option = unknown,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
->({
-  type = 'select',
-  ...props
-}: SelectProps<Option, IsMulti, Group>) => {
+>(
+  { type = 'select', ...props }: SelectProps<Option, IsMulti, Group>,
+  ref: ForwardedRef<SelectInstance<Option, IsMulti, Group>>
+) => {
   const Element = (() => {
     if (type === 'async-creatable') return ChakraAsyncCreatableSelect;
     if (type === 'async') return ChakraAsyncReactSelect;
@@ -37,6 +40,7 @@ export const Select = <
 
   return (
     <Element
+      ref={ref}
       colorScheme="brand"
       selectedOptionColorScheme="brand"
       useBasicStyles
@@ -69,3 +73,13 @@ export const Select = <
     />
   );
 };
+
+export const Select = fixedForwardRef(SelectComponent);
+
+// https://www.totaltypescript.com/forwardref-with-generic-components
+// eslint-disable-next-line @typescript-eslint/ban-types
+function fixedForwardRef<T, P = {}>(
+  render: (props: P, ref: React.Ref<T>) => React.ReactNode
+): (props: P & React.RefAttributes<T>) => React.ReactNode {
+  return forwardRef(render) as ExplicitAny;
+}

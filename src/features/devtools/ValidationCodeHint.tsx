@@ -5,13 +5,14 @@ import {
   AlertTitle,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useFormContext } from '@formiz/core';
+import { useFormContext } from 'react-hook-form';
 
 import { env } from '@/env.mjs';
+import { FormFieldsVerificationCode } from '@/features/auth/schemas';
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
 
 export const ValidationCodeHint = () => {
-  const form = useFormContext();
+  const form = useFormContext<FormFieldsVerificationCode>();
 
   if (env.NEXT_PUBLIC_NODE_ENV !== 'development' && !env.NEXT_PUBLIC_IS_DEMO)
     return null;
@@ -28,11 +29,7 @@ export const ValidationCodeHint = () => {
           as="button"
           type="button"
           fontWeight="bold"
-          onClick={() =>
-            form.setValues({
-              code: VALIDATION_CODE_MOCKED,
-            })
-          }
+          onClick={() => form.setValue('code', VALIDATION_CODE_MOCKED)}
         >
           {VALIDATION_CODE_MOCKED}
         </ChakraLink>

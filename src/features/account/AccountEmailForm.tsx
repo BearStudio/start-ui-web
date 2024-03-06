@@ -1,19 +1,23 @@
 import React from 'react';
 
 import { Button, Flex, Stack } from '@chakra-ui/react';
-import { Formiz, useForm, useFormFields } from '@formiz/core';
-import { isEmail } from '@formiz/validations';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { parseAsString, useQueryStates } from 'nuqs';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
-import { FieldInput } from '@/components/FieldInput';
+import { Form, FormField } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError } from '@/components/Toast';
 import {
   EmailVerificationCodeModale,
   SEARCH_PARAM_VERIFY_EMAIL,
 } from '@/features/account/EmailVerificationCodeModal';
+import {
+  FormFieldsAccountEmail,
+  zFormFieldsAccountEmail,
+} from '@/features/account/schemas';
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountEmailForm = () => {
@@ -46,21 +50,17 @@ export const AccountEmailForm = () => {
     },
   });
 
-  const form = useForm<{
-    email: string;
-  }>({
-    initialValues: {
-      email: account.data?.email ?? undefined,
-    },
-    onValidSubmit: (values) => {
-      updateEmail.mutate(values);
-    },
+  const form = useForm<FormFieldsAccountEmail>({
+    mode: 'onBlur',
+    resolver: zodResolver(zFormFieldsAccountEmail()),
+    values: account.data,
   });
 
-  const values = useFormFields({
-    connect: form,
-    selector: 'value',
-  });
+  const email = form.watch('email');
+
+  const onSubmit: SubmitHandler<FormFieldsAccountEmail> = (values) => {
+    updateEmail.mutate(values);
+  };
 
   return (
     <>
@@ -68,38 +68,30 @@ export const AccountEmailForm = () => {
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Formiz connect={form}>
-            <form noValidate onSubmit={form.submit}>
+          <Form {...form}>
+            <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
               <Stack spacing={4}>
-                <FieldInput
+                <FormField
                   name="email"
+                  type="email"
+                  control={form.control}
                   label={t('account:data.email.label')}
-                  required={t('account:data.email.required')}
-                  validations={[
-                    {
-                      handler: isEmail(),
-                      message: t('account:data.email.invalid'),
-                    },
-                  ]}
                 />
                 <Flex alignItems="center" gap={4}>
                   <Button
                     type="submit"
                     variant="@primary"
-                    isDisabled={
-                      (form.isSubmitted && !form.isValid) ||
-                      account.data.email === values.email
-                    }
+                    isDisabled={account.data.email === email}
                     isLoading={updateEmail.isLoading}
                   >
                     {t('account:email.actions.update')}
                   </Button>
-                  {account.data.email === values.email && (
+                  {account.data.email === email && (
                     <Flex fontSize="sm" color="text-dimmed">
                       {t('account:data.email.current')}
                     </Flex>
                   )}
-                  {account.data.email !== values.email && (
+                  {account.data.email !== email && (
                     <Button onClick={() => form.reset()}>
                       {t('common:actions.cancel')}
                     </Button>
@@ -107,7 +99,7 @@ export const AccountEmailForm = () => {
                 </Flex>
               </Stack>
             </form>
-          </Formiz>
+          </Form>
         </Stack>
       )}
       {!!verifyEmail && <EmailVerificationCodeModale />}

@@ -1,12 +1,21 @@
-import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
-import { FormContext, useFormContext } from '@formiz/core';
+import {
+  Button,
+  HStack,
+  Heading,
+  PinInput,
+  PinInputField,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { TRPCClientErrorLike } from '@trpc/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { parseAsInteger, useQueryState } from 'nuqs';
+import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FieldPinInput } from '@/components/FieldPinInput';
+import { FormField, FormFieldControl, FormFieldItem } from '@/components/Form';
+import { FormFieldsVerificationCode } from '@/features/auth/schemas';
 import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getValidationRetryDelayInSeconds,
@@ -18,14 +27,17 @@ import { AppRouter } from '@/lib/trpc/types';
 export type VerificationCodeFormProps = {
   email: string;
   isLoading?: boolean;
+  onComplete?: () => void;
 };
 
 export const VerificationCodeForm = ({
   email,
   isLoading,
+  onComplete,
 }: VerificationCodeFormProps) => {
   const { t } = useTranslation(['auth']);
-  const form = useFormContext();
+  const form = useFormContext<FormFieldsVerificationCode>();
+  const { isSubmitted } = form.formState;
   return (
     <Stack spacing="4">
       <Stack>
@@ -44,27 +56,45 @@ export const VerificationCodeForm = ({
           />
         </Text>
       </Stack>
-      <FieldPinInput
+      <FormField
+        type="custom"
+        control={form.control}
         name="code"
-        label={t('auth:data.verificationCode.label')}
-        helper={t('auth:data.verificationCode.helper')}
-        autoFocus
-        isDisabled={isLoading}
-        required={t('auth:data.verificationCode.required')}
-        pinInputProps={{
-          onComplete: () => {
-            // Only auto submit on first try
-            if (!form.isSubmitted) {
-              form.submit();
-            }
-          },
-        }}
+        render={({ field, fieldState }) => (
+          <FormFieldItem
+            displayRequired
+            displayError
+            label={t('auth:data.verificationCode.label')}
+            helper={t('auth:data.verificationCode.helper')}
+          >
+            <HStack>
+              <PinInput
+                autoFocus
+                size="lg"
+                onComplete={() => {
+                  // Only auto submit on first try
+                  if (!isSubmitted) {
+                    onComplete?.();
+                  }
+                }}
+                placeholder="·"
+                isInvalid={fieldState.invalid}
+                {...field}
+              >
+                {Array.from({ length: 6 }, (_, index) => (
+                  <FormFieldControl key={index}>
+                    <PinInputField flex={1} />
+                  </FormFieldControl>
+                ))}
+              </PinInput>
+            </HStack>
+          </FormFieldItem>
+        )}
       />
       <HStack spacing={8}>
         <Button
           size="lg"
           isLoading={isLoading}
-          isDisabled={form.isSubmitted && !form.isValid}
           type="submit"
           variant="@primary"
           flex={1}
@@ -99,7 +129,11 @@ export const useOnVerificationCodeSuccess = ({
   };
 };
 
-export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
+export const useOnVerificationCodeError = ({
+  onError,
+}: {
+  onError: (error: string) => void;
+}) => {
   const { t } = useTranslation(['auth']);
   const [attempts, setAttemps] = useQueryState(
     'attemps',
@@ -116,18 +150,16 @@ export const useOnVerificationCodeError = ({ form }: { form: FormContext }) => {
         setTimeout(r, seconds * 1_000);
       });
 
-      form.setErrors({
-        code: t('auth:data.verificationCode.unknown'),
-      });
+      onError(t('auth:data.verificationCode.unknown'));
 
       return;
     }
 
     if (error.data?.code === 'BAD_REQUEST') {
-      form.setErrors({ code: t('auth:data.verificationCode.invalid') });
+      onError(t('auth:data.verificationCode.invalid'));
       return;
     }
 
-    form.setErrors({ code: t('auth:data.verificationCode.unknown') });
+    onError(t('auth:data.verificationCode.unknown'));
   };
 };

@@ -1,14 +1,18 @@
 import React from 'react';
 
 import { Button, ButtonGroup, Stack } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
-import { FieldInput } from '@/components/FieldInput';
-import { FieldSelect } from '@/components/FieldSelect';
+import { Form, FormField } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
+import {
+  FormFieldsAccountProfile,
+  zFormFieldsAccountProfile,
+} from '@/features/account/schemas';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -40,19 +44,18 @@ export const AccountProfileForm = () => {
     },
   });
 
-  const form = useForm<{
-    name: string;
-    language: string;
-  }>({
-    initialValues: {
-      name: account.data?.name ?? undefined,
-
-      language: account.data?.language ?? undefined,
-    },
-    onValidSubmit: (values) => {
-      updateAccount.mutate(values);
+  const form = useForm<FormFieldsAccountProfile>({
+    mode: 'onBlur',
+    resolver: zodResolver(zFormFieldsAccountProfile()),
+    values: {
+      name: account.data?.name ?? '',
+      language: account.data?.language ?? DEFAULT_LANGUAGE_KEY,
     },
   });
+
+  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = (values) => {
+    updateAccount.mutate(values);
+  };
 
   return (
     <>
@@ -60,33 +63,34 @@ export const AccountProfileForm = () => {
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Formiz connect={form}>
-            <form noValidate onSubmit={form.submit}>
+          <Form {...form}>
+            <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
               <Stack spacing={4}>
-                <FieldInput
+                <FormField
+                  control={form.control}
                   name="name"
+                  type="text"
                   label={t('account:data.name.label')}
-                  required={t('account:data.name.required')}
                 />
-                <FieldSelect
+                <FormField
+                  control={form.control}
                   name="language"
-                  label={t('account:data.language.label')}
+                  type="select"
                   options={AVAILABLE_LANGUAGES.map(({ key }) => ({
                     label: t(`common:languages.${key}`),
                     value: key,
                   }))}
-                  defaultValue={DEFAULT_LANGUAGE_KEY}
+                  label={t('account:data.language.label')}
                 />
                 <ButtonGroup spacing={3}>
                   <Button
                     type="submit"
                     variant="@primary"
                     isLoading={updateAccount.isLoading}
-                    isDisabled={!form.isValid && form.isSubmitted}
                   >
                     {t('account:profile.actions.update')}
                   </Button>
-                  {!form.isPristine && (
+                  {form.formState.isDirty && (
                     <Button onClick={() => form.reset()}>
                       {t('common:actions.cancel')}
                     </Button>
@@ -94,7 +98,7 @@ export const AccountProfileForm = () => {
                 </ButtonGroup>
               </Stack>
             </form>
-          </Formiz>
+          </Form>
         </Stack>
       )}
     </>

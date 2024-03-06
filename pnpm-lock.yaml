@@ -44,9 +44,15 @@ dependencies:
   '@formkit/auto-animate':
     specifier: 1.0.0-beta.6
     version: 1.0.0-beta.6
+  '@hookform/resolvers':
+    specifier: 3.3.4
+    version: 3.3.4(react-hook-form@7.51.0)
   '@prisma/client':
     specifier: 5.11.0
     version: 5.11.0(prisma@5.11.0)
+  '@radix-ui/react-slot':
+    specifier: 1.0.2
+    version: 1.0.2(@types/react@18.2.67)(react@18.2.0)
   '@react-email/components':
     specifier: 0.0.15
     version: 0.0.15(@types/react@18.2.67)(react-email@2.1.0)(react@18.2.0)
@@ -134,6 +140,9 @@ dependencies:
   react-focus-lock:
     specifier: 2.11.2
     version: 2.11.2(@types/react@18.2.67)(react@18.2.0)
+  react-hook-form:
+    specifier: 7.51.0
+    version: 7.51.0(react@18.2.0)
   react-i18next:
     specifier: 14.1.0
     version: 14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0)
@@ -164,6 +173,9 @@ dependencies:
   zod:
     specifier: 3.22.4
     version: 3.22.4
+  zod-i18n-map:
+    specifier: 2.27.0
+    version: 2.27.0(i18next@23.10.1)(zod@3.22.4)
   zustand:
     specifier: 4.5.2
     version: 4.5.2(@types/react@18.2.67)(react@18.2.0)
@@ -3633,6 +3645,14 @@ packages:
       '@fortawesome/fontawesome-svg-core': 6.5.1
       prop-types: 15.8.1
       react: 18.2.0
+    dev: false
+
+  /@hookform/resolvers@3.3.4(react-hook-form@7.51.0):
+    resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.51.0(react@18.2.0)
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -15638,6 +15658,15 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.2.67)(react@18.2.0)
     dev: false
 
+  /react-hook-form@7.51.0(react@18.2.0):
+    resolution: {integrity: sha512-BggOy5j58RdhdMzzRUHGOYhSz1oeylFAv6jUSG86OvCIvlAvS7KvnRY7yoAf2pfEiPN7BesnR0xx73nEk3qIiw==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /react-i18next@14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-3KwX6LHpbvGQ+sBEntjV4sYW3Zovjjl3fpoHbUwSgFHf0uRBcbeCBLR5al6ikncI5+W0EFb71QXZmfop+J6NrQ==}
     peerDependencies:
@@ -18840,6 +18869,16 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+  /zod-i18n-map@2.27.0(i18next@23.10.1)(zod@3.22.4):
+    resolution: {integrity: sha512-ORu9XpiVh3WDiEUs5Cr9siGgnpeODoBsTIgSD8sQCH9B//f9KowlzqHUEdPYb3vFonaSH8yPvPCOFM4niwp3Sg==}
+    peerDependencies:
+      i18next: '>=21.3.0'
+      zod: '>=3.17.0'
+    dependencies:
+      i18next: 23.10.1
+      zod: 3.22.4
+    dev: false
 
   /zod-to-json-schema@3.22.3(zod@3.22.4):
     resolution: {integrity: sha512-9isG8SqRe07p+Aio2ruBZmLm2Q6Sq4EqmXOiNpDxp+7f0LV6Q/LX65fs5Nn+FV/CzfF3NLBoksXbS2jNYIfpKw==}
