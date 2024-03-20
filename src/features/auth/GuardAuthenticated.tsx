@@ -52,8 +52,8 @@ export const GuardAuthenticated = ({
   ) {
     // Check if the account has some of the requested authorizations
     return !authorizations ||
-      authorizations.some(
-        (a) => checkAuthenticated.data.authorizations?.includes(a)
+      authorizations.some((a) =>
+        checkAuthenticated.data.authorizations?.includes(a)
       ) ? (
       <>{children}</>
     ) : (
