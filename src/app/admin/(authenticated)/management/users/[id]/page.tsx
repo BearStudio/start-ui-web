@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import PageAdminUserUpdate from '@/features/users/PageAdminUserUpdate';
 
 export default function Page() {
-  return <PageAdminUserUpdate />;
+  return (
+    <Suspense>
+      <PageAdminUserUpdate />
+    </Suspense>
+  );
 }

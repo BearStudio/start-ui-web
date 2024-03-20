@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import PageAdminUsers from '@/features/users/PageAdminUsers';
 
 export default function Page() {
-  return <PageAdminUsers />;
+  return (
+    <Suspense>
+      <PageAdminUsers />
+    </Suspense>
+  );
 }

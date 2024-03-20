@@ -1,7 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import PageAdminDashboard from '@/features/admin-dashboard/PageAdminDashboard';
 
 export default function Page() {
-  return <PageAdminDashboard />;
+  return (
+    <Suspense>
+      <PageAdminDashboard />
+    </Suspense>
+  );
 }
