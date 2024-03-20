@@ -19,11 +19,12 @@ import {
   AdminLayoutPage,
   AdminLayoutPageContent,
 } from '@/features/admin/AdminLayoutPage';
+import { MarketingBento } from '@/features/demo-mode/MarketingBento';
 
 export default function PageAdminDashboard() {
   const { t } = useTranslation(['adminDashboard']);
   return (
-    <AdminLayoutPage>
+    <AdminLayoutPage containerMaxWidth="container.md">
       <AdminLayoutPageContent>
         <Heading size="md" mb="4">
           {t('adminDashboard:title')}
@@ -70,6 +71,7 @@ export default function PageAdminDashboard() {
               {t('adminDashboard:links.openIssue')}
             </Button>
           </Wrap>
+          <MarketingBento />
         </Stack>
       </AdminLayoutPageContent>
     </AdminLayoutPage>

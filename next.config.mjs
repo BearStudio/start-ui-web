@@ -11,6 +11,14 @@ const withPWA = withPWAInit({
 
 /** @type {import("next").NextConfig} */
 const config = withPWA({
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/BearStudio/**',
+      },
+    ],
+  },
   async redirects() {
     return [
       {

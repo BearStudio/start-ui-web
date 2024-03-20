@@ -1,18 +1,40 @@
 import React from 'react';
 
-import { Button, Flex, Heading, Stack, Text, Wrap } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  LinkBox,
+  LinkOverlay,
+  Stack,
+  Text,
+  Wrap,
+} from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { LuAlertCircle, LuBookOpen, LuGithub } from 'react-icons/lu';
+import {
+  LuAlertCircle,
+  LuBookOpen,
+  LuExternalLink,
+  LuGithub,
+} from 'react-icons/lu';
 
+import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
+import { ADMIN_PATH } from '@/features/admin/constants';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
+import { MarketingBento } from '@/features/demo-mode/MarketingBento';
+import { trpc } from '@/lib/trpc/client';
 
 export default function PageHome() {
-  const { t } = useTranslation(['appHome']);
+  const account = trpc.account.get.useQuery();
+  const { t } = useTranslation(['appHome', 'account']);
 
   return (
     <AppLayoutPage>
-      <Stack flex={1} spacing={4}>
+      <Stack flex={1} spacing={6}>
         <Flex
           display={{ base: 'flex', md: 'none' }}
           py={2}
@@ -32,6 +54,7 @@ export default function PageHome() {
             </Text>
           </Text>
         </Stack>
+
         <Wrap spacing="2">
           <Button
             size="sm"
@@ -58,6 +81,23 @@ export default function PageHome() {
             {t('appHome:links.openIssue')}
           </Button>
         </Wrap>
+        {account.isSuccess && account.data.authorizations.includes('ADMIN') && (
+          <Alert as={LinkBox} colorScheme="brand">
+            <AlertTitle flex="none">{t('account:admin.title')}</AlertTitle>
+            <Link
+              as={LinkOverlay}
+              ms="auto"
+              gap={2}
+              display="inline-flex"
+              href={ADMIN_PATH || '/'}
+              target="_blank"
+            >
+              {t('account:admin.button')}
+              <Icon icon={LuExternalLink} />
+            </Link>
+          </Alert>
+        )}
+        <MarketingBento />
       </Stack>
     </AppLayoutPage>
   );
