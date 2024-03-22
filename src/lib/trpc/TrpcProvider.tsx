@@ -18,6 +18,9 @@ const getBaseUrl = () => {
   return env.NEXT_PUBLIC_BASE_URL;
 };
 
+const networkMode =
+  env.NEXT_PUBLIC_NODE_ENV !== 'production' ? 'always' : undefined;
+
 export function TrpcProvider(props: { children: React.ReactNode }) {
   const [showDemo, setShowDemo] = useState(false);
 
@@ -26,8 +29,10 @@ export function TrpcProvider(props: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            networkMode:
-              env.NEXT_PUBLIC_NODE_ENV !== 'production' ? 'always' : undefined,
+            networkMode,
+          },
+          mutations: {
+            networkMode,
           },
         },
         mutationCache: new MutationCache({
