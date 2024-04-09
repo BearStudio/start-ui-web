@@ -9,7 +9,7 @@ export type FormFieldsRegister = z.infer<
   ReturnType<typeof zFormFieldsRegister>
 >;
 export const zFormFieldsRegister = () =>
-  zUser().pick({ email: true, name: true, language: true });
+  zUser().pick({ email: true, name: true, language: true }).required();
 
 export type FormFieldsVerificationCode = z.infer<
   ReturnType<typeof zFormFieldsVerificationCode>
