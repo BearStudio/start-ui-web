@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 
 import { FormHelperText } from '@chakra-ui/react';
 
-import { useFormField } from '@/components/Form/FormFieldContext';
+import { useFormField } from './FormField';
 
 export const FormFieldHelper = forwardRef<
   ElementRef<typeof FormHelperText>,

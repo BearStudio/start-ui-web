@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
 
-import { useFormField } from '@/components/Form/FormFieldContext';
+import { useFormField } from './FormField';
 
 export const FormFieldControl = forwardRef<
   ElementRef<typeof Slot>,

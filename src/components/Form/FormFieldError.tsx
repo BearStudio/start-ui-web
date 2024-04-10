@@ -5,7 +5,7 @@ import { LuAlertCircle } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
-import { useFormField } from './FormFieldContext';
+import { useFormField } from './FormField';
 
 export const FormFieldError = forwardRef<
   ElementRef<typeof FormErrorMessage>,

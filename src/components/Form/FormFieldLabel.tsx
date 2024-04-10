@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import { FormLabel, RequiredIndicator, chakra } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { useFormField } from './FormFieldContext';
+import { useFormField } from './FormField';
 
 export type FormFieldLabelProps = ComponentPropsWithoutRef<typeof FormLabel>;
 

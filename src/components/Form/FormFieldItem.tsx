@@ -3,7 +3,7 @@ import { ReactNode, createContext, forwardRef, useContext, useId } from 'react';
 import { FormControl } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 
-import { useFormFieldContext } from './FormFieldContext';
+import { useFormFieldContext } from './FormField';
 import { FormFieldError } from './FormFieldError';
 import { FormFieldHelper } from './FormFieldHelper';
 import { FormFieldLabel } from './FormFieldLabel';
@@ -48,6 +48,7 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           display="flex"
           flexDirection="column"
           isRequired={fieldContext.optionalityHint === 'required'}
+          isDisabled={fieldContext.isDisabled}
           gap={1}
         >
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
