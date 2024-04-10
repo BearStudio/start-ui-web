@@ -25,3 +25,14 @@ export const zUser = () =>
       .nonEmpty(z.string().min(2))
       .default(DEFAULT_LANGUAGE_KEY),
   });
+
+export type FormFieldUser = z.infer<ReturnType<typeof zFormFieldsUser>>;
+export const zFormFieldsUser = () =>
+  zUser()
+    .pick({
+      name: true,
+      email: true,
+      language: true,
+      authorizations: true,
+    })
+    .required();

@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { Input, InputProps } from '@chakra-ui/react';
 import {
   Controller,
@@ -44,8 +42,23 @@ type FormFieldPropsSelect<
 > = {
   type: 'select';
   options: Readonly<{
-    label: ReactNode;
+    label: string;
     value: PathValue<TFieldValues, TName>;
+  }>[];
+  placeholder?: string;
+  size?: 'sm' | 'md' | 'lg';
+  autoFocus?: boolean;
+} & FormFieldCommonProps<TFieldValues, TName>;
+
+// Multi Select props
+type FormFieldPropsMultiSelect<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
+  type: 'multi-select';
+  options: Readonly<{
+    label: string;
+    value: PathValue<TFieldValues, TName>[number];
   }>[];
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -60,6 +73,7 @@ export const FormField = <
     | FormFieldPropsCustom<TFieldValues, TName>
     | FormFieldPropsInputText<TFieldValues, TName>
     | FormFieldPropsSelect<TFieldValues, TName>
+    | FormFieldPropsMultiSelect<TFieldValues, TName>
 ) => {
   const getField = () => {
     switch (props.type) {
@@ -119,6 +133,44 @@ export const FormField = <
                       autoFocus={props.autoFocus}
                       value={selectValue}
                       onChange={(option) => onChange(option?.value)}
+                      {...fieldProps}
+                    />
+                  </FormFieldControl>
+                </FormFieldItem>
+              );
+            }}
+          />
+        );
+
+      case 'multi-select':
+        return (
+          <Controller
+            {...props}
+            render={({ field }) => {
+              const { value, onChange, ...fieldProps } = field;
+              const selectValues =
+                props.options?.filter((option) =>
+                  value.includes(option.value)
+                ) ?? undefined;
+              return (
+                <FormFieldItem
+                  label={props.label}
+                  displayRequired={props.displayRequired}
+                  helper={props.helper}
+                  displayError
+                >
+                  <FormFieldControl>
+                    <Select
+                      type="select"
+                      isMulti
+                      size={props.size}
+                      options={props.options}
+                      placeholder={props.placeholder}
+                      autoFocus={props.autoFocus}
+                      value={selectValues}
+                      onChange={(options) =>
+                        onChange(options.map((option) => option.value))
+                      }
                       {...fieldProps}
                     />
                   </FormFieldControl>
