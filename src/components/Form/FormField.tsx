@@ -1,4 +1,4 @@
-import { Input, InputProps } from '@chakra-ui/react';
+import { Input, InputProps, Textarea } from '@chakra-ui/react';
 import {
   Controller,
   ControllerProps,
@@ -16,12 +16,18 @@ import { FormFieldItem, FormFieldItemProps } from './FormFieldItem';
 type FormFieldPropsCustom<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = { type: 'custom' } & ControllerProps<TFieldValues, TName>;
+> = {
+  type: 'custom';
+  optionalityHint?: 'required' | 'optional' | false;
+} & ControllerProps<TFieldValues, TName>;
 
 type FormFieldCommonProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<FormFieldItemProps, 'children' | 'displayError'> &
+> = { optionalityHint?: 'required' | 'optional' | false } & Omit<
+  FormFieldItemProps,
+  'children' | 'displayError'
+> &
   Omit<ControllerProps<TFieldValues, TName>, 'render'>;
 
 // Input Text props
@@ -33,6 +39,18 @@ type FormFieldPropsInputText<
   placeholder?: string;
   size?: InputProps['size'];
   autoFocus?: boolean;
+} & FormFieldCommonProps<TFieldValues, TName>;
+
+// TextArea props
+type FormFieldPropsInputTextarea<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
+  type: 'textarea';
+  placeholder?: string;
+  size?: InputProps['size'];
+  autoFocus?: boolean;
+  rows?: number;
 } & FormFieldCommonProps<TFieldValues, TName>;
 
 // Select props
@@ -72,6 +90,7 @@ export const FormField = <
   props:
     | FormFieldPropsCustom<TFieldValues, TName>
     | FormFieldPropsInputText<TFieldValues, TName>
+    | FormFieldPropsInputTextarea<TFieldValues, TName>
     | FormFieldPropsSelect<TFieldValues, TName>
     | FormFieldPropsMultiSelect<TFieldValues, TName>
 ) => {
@@ -90,7 +109,6 @@ export const FormField = <
             render={({ field }) => (
               <FormFieldItem
                 label={props.label}
-                displayRequired={props.displayRequired}
                 helper={props.helper}
                 displayError
               >
@@ -100,6 +118,30 @@ export const FormField = <
                     size={props.size}
                     placeholder={props.placeholder}
                     autoFocus={props.autoFocus}
+                    {...field}
+                  />
+                </FormFieldControl>
+              </FormFieldItem>
+            )}
+          />
+        );
+
+      case 'textarea':
+        return (
+          <Controller
+            {...props}
+            render={({ field }) => (
+              <FormFieldItem
+                label={props.label}
+                helper={props.helper}
+                displayError
+              >
+                <FormFieldControl>
+                  <Textarea
+                    size={props.size}
+                    placeholder={props.placeholder}
+                    autoFocus={props.autoFocus}
+                    rows={props.rows}
                     {...field}
                   />
                 </FormFieldControl>
@@ -120,7 +162,6 @@ export const FormField = <
               return (
                 <FormFieldItem
                   label={props.label}
-                  displayRequired={props.displayRequired}
                   helper={props.helper}
                   displayError
                 >
@@ -155,7 +196,6 @@ export const FormField = <
               return (
                 <FormFieldItem
                   label={props.label}
-                  displayRequired={props.displayRequired}
                   helper={props.helper}
                   displayError
                 >
@@ -182,7 +222,9 @@ export const FormField = <
     }
   };
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
+    <FormFieldContext.Provider
+      value={{ name: props.name, optionalityHint: props.optionalityHint }}
+    >
       {getField()}
     </FormFieldContext.Provider>
   );

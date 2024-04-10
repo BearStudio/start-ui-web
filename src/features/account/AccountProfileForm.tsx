@@ -23,8 +23,7 @@ export const AccountProfileForm = () => {
   const { t } = useTranslation(['common', 'account']);
   const trpcUtils = trpc.useUtils();
   const account = trpc.account.get.useQuery(undefined, {
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const toastSuccess = useToastSuccess();

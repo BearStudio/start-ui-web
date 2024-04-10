@@ -30,8 +30,7 @@ export const AccountEmailForm = () => {
   const verifyEmail = searchParams[SEARCH_PARAM_VERIFY_EMAIL];
 
   const account = trpc.account.get.useQuery(undefined, {
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const toastError = useToastError();

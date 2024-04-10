@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { Button, Heading } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Form } from '@/components/Form';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
@@ -13,10 +15,11 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
+import { RepositoryForm } from '@/features/repositories/RepositoryForm';
 import {
-  RepositoryForm,
-  RepositoryFormFields,
-} from '@/features/repositories/RepositoryForm';
+  FormFieldsRepository,
+  zFormFieldsRepository,
+} from '@/features/repositories/schemas';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
@@ -38,7 +41,9 @@ export default function PageAdminRepositoryCreate() {
     },
     onError: (error) => {
       if (isErrorDatabaseConflict(error, 'name')) {
-        form.setErrors({ name: t('repositories:data.name.alreadyUsed') });
+        form.setError('name', {
+          message: t('repositories:data.name.alreadyUsed'),
+        });
         return;
       }
       toastError({
@@ -47,39 +52,50 @@ export default function PageAdminRepositoryCreate() {
     },
   });
 
-  const form = useForm<RepositoryFormFields>({
-    onValidSubmit: (values) => {
-      createRepository.mutate(values);
+  const form = useForm<FormFieldsRepository>({
+    resolver: zodResolver(zFormFieldsRepository()),
+    defaultValues: {
+      name: '',
+      link: '',
+      description: '',
     },
   });
 
   return (
-    <Formiz connect={form} autoForm>
-      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-        <AdminLayoutPageTopBar
-          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
-          rightActions={
-            <>
-              <AdminCancelButton withConfrim={!form.isPristine} />
-              <Button
-                type="submit"
-                variant="@primary"
-                isLoading={
-                  createRepository.isLoading || createRepository.isSuccess
-                }
-                isDisabled={!form.isValid && form.isSubmitted}
-              >
-                {t('repositories:create.action.save')}
-              </Button>
-            </>
-          }
-        >
-          <Heading size="sm">{t('repositories:create.title')}</Heading>
-        </AdminLayoutPageTopBar>
-        <AdminLayoutPageContent>
-          <RepositoryForm />
-        </AdminLayoutPageContent>
-      </AdminLayoutPage>
-    </Formiz>
+    <Form {...form}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit((values) => {
+          createRepository.mutate(values);
+        })}
+      >
+        <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+          <AdminLayoutPageTopBar
+            leftActions={
+              <AdminBackButton withConfrim={form.formState.isDirty} />
+            }
+            rightActions={
+              <>
+                <AdminCancelButton withConfrim={form.formState.isDirty} />
+                <Button
+                  type="submit"
+                  variant="@primary"
+                  isLoading={
+                    createRepository.isLoading || createRepository.isSuccess
+                  }
+                >
+                  {t('repositories:create.action.save')}
+                </Button>
+              </>
+            }
+          >
+            <Heading size="sm">{t('repositories:create.title')}</Heading>
+          </AdminLayoutPageTopBar>
+          <AdminLayoutPageContent>
+            <RepositoryForm />
+          </AdminLayoutPageContent>
+        </AdminLayoutPage>
+      </form>
+    </Form>
   );
 }

@@ -52,12 +52,12 @@ export const Default = () => {
             name="name"
             control={form.control}
             label="Name"
-            displayRequired
           />
           <FormField
             type="email"
             name="email"
             control={form.control}
+            optionalityHint="optional"
             label="Email"
           />
 
@@ -66,7 +66,6 @@ export const Default = () => {
             name="color"
             control={form.control}
             label="Color"
-            displayRequired
             options={[
               {
                 label: 'Red',
@@ -87,6 +86,7 @@ export const Default = () => {
             control={form.control}
             name="other"
             type="custom"
+            optionalityHint="optional"
             render={({ field }) => (
               <FormFieldItem>
                 <FormFieldLabel>Other (Custom)</FormFieldLabel>

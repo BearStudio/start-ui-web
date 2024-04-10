@@ -27,7 +27,7 @@ export const useFormFieldItemContext = () => {
 export type FormFieldItemProps = {
   label?: ReactNode;
   helper?: ReactNode;
-  displayRequired?: boolean;
+  requiredIndicator?: 'required' | 'optional';
   displayError?: boolean;
   children?: ReactNode;
 };
@@ -47,8 +47,8 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           isInvalid={!!fieldState.error}
           display="flex"
           flexDirection="column"
+          isRequired={fieldContext.optionalityHint === 'required'}
           gap={1}
-          isRequired={props.displayRequired}
         >
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
           {props.children}

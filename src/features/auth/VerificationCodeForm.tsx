@@ -62,7 +62,6 @@ export const VerificationCodeForm = ({
         name="code"
         render={({ field, fieldState }) => (
           <FormFieldItem
-            displayRequired
             displayError
             label={t('auth:data.verificationCode.label')}
             helper={t('auth:data.verificationCode.helper')}

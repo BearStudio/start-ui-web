@@ -35,8 +35,7 @@ export default function PageAdminUserUpdate() {
       id: params?.id?.toString() ?? '',
     },
     {
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
+      staleTime: Infinity,
     }
   );
 

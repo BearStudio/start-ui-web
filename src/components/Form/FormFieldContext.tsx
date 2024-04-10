@@ -9,6 +9,7 @@ type FormFieldContextValue<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   name: TName;
+  optionalityHint?: 'required' | 'optional' | false;
 };
 
 export const FormFieldContext = createContext<FormFieldContextValue | null>(
@@ -38,10 +39,10 @@ export const useFormField = () => {
 
   return {
     id,
-    name: fieldContext.name,
     formItemId: `${id}-form-item`,
     formHelperId: `${id}-form-item-helper`,
     formErrorId: `${id}-form-item-error`,
+    ...fieldContext,
     ...fieldState,
   };
 };
