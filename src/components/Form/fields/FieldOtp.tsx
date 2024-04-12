@@ -1,6 +1,11 @@
 import { ReactNode } from 'react';
 
-import { Input, InputProps } from '@chakra-ui/react';
+import {
+  HStack,
+  PinInput,
+  PinInputField,
+  PinInputProps,
+} from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FieldCommonProps } from '../FormField';
@@ -10,36 +15,46 @@ import { FormFieldHelper } from '../FormFieldHelper';
 import { FormFieldItem } from '../FormFieldItem';
 import { FormFieldLabel } from '../FormFieldLabel';
 
-export type FieldTextProps<
+export type FieldOtpProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  type: 'text' | 'email' | 'number' | 'tel';
+  type: 'otp';
   label?: ReactNode;
   helper?: ReactNode;
-} & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
+  length?: number;
+} & Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'> &
   FieldCommonProps<TFieldValues, TName>;
 
-export const FieldText = <
+export const FieldOtp = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: FieldTextProps<TFieldValues, TName>
+  props: FieldOtpProps<TFieldValues, TName>
 ) => {
   return (
     <Controller
       {...props}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
           <FormFieldControl>
-            <Input
-              type={props.type}
-              size={props.size}
-              placeholder={props.placeholder}
-              autoFocus={props.autoFocus}
-              {...field}
-            />
+            <HStack>
+              <PinInput
+                autoFocus={props.autoFocus}
+                size={props.size}
+                onComplete={props.onComplete}
+                placeholder="·"
+                isInvalid={fieldState.invalid}
+                {...field}
+              >
+                {Array.from({ length: props.length ?? 6 }, (_, index) => (
+                  <FormFieldControl key={index}>
+                    <PinInputField flex={1} />
+                  </FormFieldControl>
+                ))}
+              </PinInput>
+            </HStack>
           </FormFieldControl>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />

@@ -8,7 +8,8 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import { FormFieldItemProps } from './FormFieldItem';
+import { FieldOtp, FieldOtpProps } from '@/components/Form/fields/FieldOtp';
+
 import { useFormFieldItemContext } from './FormFieldItem';
 import {
   FieldMultiSelect,
@@ -30,8 +31,7 @@ type FieldCustomProps<
 export type FieldCommonProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<FormFieldItemProps, 'children' | 'displayError'> &
-  Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'>;
+> = Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'>;
 
 export const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -43,6 +43,7 @@ export const FormField = <
     | FieldTextareaProps<TFieldValues, TName>
     | FieldSelectProps<TFieldValues, TName>
     | FieldMultiSelectProps<TFieldValues, TName>
+    | FieldOtpProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
   const getField = () => {
@@ -58,6 +59,9 @@ export const FormField = <
 
       case 'textarea':
         return <FieldTextarea {...props} />;
+
+      case 'otp':
+        return <FieldOtp {...props} />;
 
       case 'select':
         return <FieldSelect {...props} />;

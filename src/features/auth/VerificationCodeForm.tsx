@@ -1,12 +1,4 @@
-import {
-  Button,
-  HStack,
-  Heading,
-  PinInput,
-  PinInputField,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { TRPCClientErrorLike } from '@trpc/client';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -14,7 +6,7 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FormField, FormFieldControl, FormFieldItem } from '@/components/Form';
+import { FormField } from '@/components/Form';
 import { FormFieldsVerificationCode } from '@/features/auth/schemas';
 import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
@@ -57,38 +49,18 @@ export const VerificationCodeForm = ({
         </Text>
       </Stack>
       <FormField
-        type="custom"
+        type="otp"
         control={form.control}
         name="code"
-        render={({ field, fieldState }) => (
-          <FormFieldItem
-            displayError
-            label={t('auth:data.verificationCode.label')}
-            helper={t('auth:data.verificationCode.helper')}
-          >
-            <HStack>
-              <PinInput
-                autoFocus
-                size="lg"
-                onComplete={() => {
-                  // Only auto submit on first try
-                  if (!isSubmitted) {
-                    onComplete?.();
-                  }
-                }}
-                placeholder="·"
-                isInvalid={fieldState.invalid}
-                {...field}
-              >
-                {Array.from({ length: 6 }, (_, index) => (
-                  <FormFieldControl key={index}>
-                    <PinInputField flex={1} />
-                  </FormFieldControl>
-                ))}
-              </PinInput>
-            </HStack>
-          </FormFieldItem>
-        )}
+        size="lg"
+        label={t('auth:data.verificationCode.label')}
+        helper={t('auth:data.verificationCode.helper')}
+        onComplete={() => {
+          // Only auto submit on first try
+          if (!isSubmitted) {
+            onComplete?.();
+          }
+        }}
       />
       <HStack spacing={8}>
         <Button

@@ -4,9 +4,6 @@ import { FormControl } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 
 import { useFormFieldContext } from './FormField';
-import { FormFieldError } from './FormFieldError';
-import { FormFieldHelper } from './FormFieldHelper';
-import { FormFieldLabel } from './FormFieldLabel';
 
 type FormItemContextValue = {
   id: string;
@@ -25,10 +22,6 @@ export const useFormFieldItemContext = () => {
 };
 
 export type FormFieldItemProps = {
-  label?: ReactNode;
-  helper?: ReactNode;
-  requiredIndicator?: 'required' | 'optional';
-  displayError?: boolean;
   children?: ReactNode;
 };
 
@@ -51,10 +44,7 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           isDisabled={fieldContext.isDisabled}
           gap={1}
         >
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
           {props.children}
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          {props.displayError && <FormFieldError />}
         </FormControl>
       </FormFieldItemContext.Provider>
     );
