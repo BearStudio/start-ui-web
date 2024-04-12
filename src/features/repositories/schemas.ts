@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -8,7 +9,13 @@ export const zRepository = () =>
     id: z.string().cuid(),
     name: zu.string.nonEmpty(z.string()),
     link: zu.string
-      .nonEmpty(z.string().min(4).includes('.'))
+      .nonEmpty(
+        z
+          .string()
+          .min(4, t('repositories:data.link.tooSmall', { min: 4 }))
+          .includes('.'),
+        'repositories:data.link.required'
+      )
       .transform((v) => (v.startsWith('http') ? v : `https://${v}`)),
     description: z.string().nullish(),
   });

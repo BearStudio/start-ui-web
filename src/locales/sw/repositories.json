@@ -31,7 +31,8 @@
     },
     "link": {
       "label": "Kiungo",
-      "required": "Kiungo kinahitajika"
+      "required": "Kiungo kinahitajika",
+      "tooSmall": "Kiungo lazima kiwe na angalau vibambo {{min}}"
     },
     "description": {
       "label": "Maelezo"

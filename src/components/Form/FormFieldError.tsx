@@ -25,7 +25,7 @@ export const FormFieldError = forwardRef<
     <FormErrorMessage m={0} ref={ref} id={formErrorId} {...props}>
       <SlideFade in offsetY={-6}>
         <Icon icon={LuAlertCircle} me="2" />
-        {String(error?.message)}
+        {!!error?.message && <span>{error.message}</span>}
       </SlideFade>
     </FormErrorMessage>
   );

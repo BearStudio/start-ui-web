@@ -21,8 +21,8 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string()),
-    email: zu.string.emailOptional(z.string()),
+    name: zu.string.nonEmpty(z.string(), 'Name is required'),
+    email: zu.string.emailOptional(z.string(), 'Email invalid'),
     color: z.enum(['red', 'green', 'blue']),
     other: zu.string.nonEmptyOptional(z.string()),
   });
@@ -48,23 +48,24 @@ export const Default = () => {
       <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
           <FormField
+            control={form.control}
             type="text"
             name="name"
-            control={form.control}
             label="Name"
           />
+
           <FormField
+            control={form.control}
             type="email"
             name="email"
-            control={form.control}
             optionalityHint="optional"
             label="Email"
           />
 
           <FormField
+            control={form.control}
             type="select"
             name="color"
-            control={form.control}
             label="Color"
             options={[
               {

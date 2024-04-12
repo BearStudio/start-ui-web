@@ -35,7 +35,8 @@
     },
     "link": {
       "label": "Link",
-      "required": "Link is required"
+      "required": "Link is required",
+      "tooSmall": "Link should be at least {{min}} characters"
     },
     "description": {
       "label": "Description"
