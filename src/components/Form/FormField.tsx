@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 import {
   Controller,
@@ -68,14 +68,18 @@ export const FormField = <
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };
+
+  const contextValue = useMemo(
+    () => ({
+      name: props.name,
+      optionalityHint: props.optionalityHint,
+      isDisabled: props.isDisabled,
+    }),
+    [props.name, props.optionalityHint, props.isDisabled]
+  );
+
   return (
-    <FormFieldContext.Provider
-      value={{
-        name: props.name,
-        optionalityHint: props.optionalityHint,
-        isDisabled: props.isDisabled,
-      }}
-    >
+    <FormFieldContext.Provider value={contextValue}>
       {getField()}
     </FormFieldContext.Provider>
   );

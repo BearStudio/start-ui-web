@@ -48,7 +48,7 @@ export const FieldOtp = <
                 isInvalid={fieldState.invalid}
                 {...field}
               >
-                {Array.from({ length: props.length ?? 6 }, (_, index) => (
+                {Array.from({ length: props.length ?? 6 }).map((_, index) => (
                   <FormFieldControl key={index}>
                     <PinInputField flex={1} />
                   </FormFieldControl>

@@ -1,4 +1,11 @@
-import { ReactNode, createContext, forwardRef, useContext, useId } from 'react';
+import {
+  ReactNode,
+  createContext,
+  forwardRef,
+  useContext,
+  useId,
+  useMemo,
+} from 'react';
 
 import { FormControl } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
@@ -33,8 +40,10 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
 
     const fieldState = getFieldState(fieldContext.name, formState);
 
+    const contextValue = useMemo(() => ({ id }), [id]);
+
     return (
-      <FormFieldItemContext.Provider value={{ id }}>
+      <FormFieldItemContext.Provider value={contextValue}>
         <FormControl
           ref={ref}
           isInvalid={!!fieldState.error}
