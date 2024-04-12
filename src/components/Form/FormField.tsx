@@ -8,16 +8,12 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import { FieldOtp, FieldOtpProps } from '@/components/Form/fields/FieldOtp';
-
+import { FieldMultiSelect, FieldMultiSelectProps } from './FieldMultiSelect';
+import { FieldOtp, FieldOtpProps } from './FieldOtp';
+import { FieldSelect, FieldSelectProps } from './FieldSelect';
+import { FieldText, FieldTextProps } from './FieldText';
+import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
 import { useFormFieldItemContext } from './FormFieldItem';
-import {
-  FieldMultiSelect,
-  FieldMultiSelectProps,
-} from './fields/FieldMultiSelect';
-import { FieldSelect, FieldSelectProps } from './fields/FieldSelect';
-import { FieldText, FieldTextProps } from './fields/FieldText';
-import { FieldTextarea, FieldTextareaProps } from './fields/FieldTextArea';
 
 type FieldCustomProps<
   TFieldValues extends FieldValues = FieldValues,
