@@ -52,6 +52,7 @@ export const FieldSelect = <
                 autoFocus={props.autoFocus}
                 value={selectValue}
                 onChange={(option) => onChange(option?.value)}
+                menuPortalTarget={document.body}
                 {...fieldProps}
               />
             </FormFieldControl>

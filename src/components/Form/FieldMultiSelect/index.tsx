@@ -56,6 +56,7 @@ export const FieldMultiSelect = <
                 onChange={(options) =>
                   onChange(options.map((option) => option.value))
                 }
+                menuPortalTarget={document.body}
                 {...fieldProps}
               />
             </FormFieldControl>
