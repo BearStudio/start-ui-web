@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 
 import {
   HStack,
@@ -8,11 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-import {
-  FieldCommonProps,
-  useFormField,
-  useFormFieldContext,
-} from '../FormField';
+import { FieldCommonProps, useFormFieldContext } from '../FormField';
 import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
@@ -27,6 +23,7 @@ export type FieldOtpProps<
   label?: ReactNode;
   helper?: ReactNode;
   length?: number;
+  autoSubmit?: boolean;
 } & Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -37,21 +34,33 @@ export const FieldOtp = <
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
   const { isDisabled } = useFormFieldContext();
+  const stackRef = useRef<HTMLDivElement>(null);
   return (
     <Controller
       {...props}
-      render={({ field, fieldState }) => (
+      render={({ field, fieldState, formState }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
           <FormFieldControl>
-            <HStack>
+            <HStack ref={stackRef}>
               <PinInput
                 autoFocus={props.autoFocus}
                 size={props.size}
-                onComplete={props.onComplete}
                 placeholder="·"
                 isInvalid={fieldState.invalid}
                 isDisabled={isDisabled}
+                onComplete={(v) => {
+                  props.onComplete?.(v);
+                  // Only auto submit on first try
+                  if (!formState.isSubmitted && props.autoSubmit) {
+                    const button = document.createElement('button');
+                    button.type = 'submit';
+                    button.style.display = 'none';
+                    stackRef.current?.append(button);
+                    button.click();
+                    button.remove();
+                  }
+                }}
                 {...field}
               >
                 {Array.from({ length: props.length ?? 6 }).map((_, index) => (

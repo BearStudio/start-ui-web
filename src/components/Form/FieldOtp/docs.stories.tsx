@@ -12,13 +12,18 @@ export default {
 };
 
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
-const zFormSchema = () =>
-  z.object({
+const zFormSchema = (options: { length?: number } = {}) => {
+  const length = options.length ?? 6;
+  return z.object({
     code: zu.string.nonEmpty(
-      z.string().min(6, 'Code is 6 digits').max(6, 'Code is 6 digits'),
+      z
+        .string()
+        .min(length, `Code is ${length} digits`)
+        .max(length, `Code is ${length} digits`),
       'Code is required'
     ),
   });
+};
 
 const formOptions = {
   mode: 'onBlur',
@@ -113,7 +118,10 @@ export const Disabled = () => {
 };
 
 export const CustomLength = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm<FormSchema>({
+    ...formOptions,
+    resolver: zodResolver(zFormSchema({ length: 4 })),
+  });
 
   return (
     <Form {...form}>
@@ -128,6 +136,34 @@ export const CustomLength = () => {
             name="code"
             label="Code"
             length={4}
+          />
+          <Box>
+            <Button type="submit" variant="@primary">
+              Submit
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    </Form>
+  );
+};
+
+export const AutoSubmit = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit((values) => alert(values.code))}
+      >
+        <Stack spacing={4} maxW="20rem">
+          <FormField
+            control={form.control}
+            type="otp"
+            name="code"
+            label="Code"
+            autoSubmit
           />
           <Box>
             <Button type="submit" variant="@primary">
