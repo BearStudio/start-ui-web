@@ -83,9 +83,6 @@ export const EmailVerificationCodeModale = () => {
                 isLoading={
                   updateEmailValidate.isLoading || updateEmailValidate.isSuccess
                 }
-                onComplete={() => {
-                  form.handleSubmit(onSubmit)();
-                }}
               />
             </form>
           </Form>

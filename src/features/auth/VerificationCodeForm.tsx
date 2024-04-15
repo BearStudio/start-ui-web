@@ -19,17 +19,15 @@ import { AppRouter } from '@/lib/trpc/types';
 export type VerificationCodeFormProps = {
   email: string;
   isLoading?: boolean;
-  onComplete?: () => void;
 };
 
 export const VerificationCodeForm = ({
   email,
   isLoading,
-  onComplete,
 }: VerificationCodeFormProps) => {
   const { t } = useTranslation(['auth']);
   const form = useFormContext<FormFieldsVerificationCode>();
-  const { isSubmitted } = form.formState;
+
   return (
     <Stack spacing="4">
       <Stack>
@@ -55,12 +53,7 @@ export const VerificationCodeForm = ({
         size="lg"
         label={t('auth:data.verificationCode.label')}
         helper={t('auth:data.verificationCode.helper')}
-        onComplete={() => {
-          // Only auto submit on first try
-          if (!isSubmitted) {
-            onComplete?.();
-          }
-        }}
+        autoSubmit
       />
       <HStack spacing={8}>
         <Button

@@ -73,9 +73,6 @@ export default function PageAdminLoginValidate() {
             <VerificationCodeForm
               email={email ?? ''}
               isLoading={validate.isLoading || validate.isSuccess}
-              onComplete={() => {
-                form.handleSubmit(onSubmit)();
-              }}
             />
           </form>
         </Form>

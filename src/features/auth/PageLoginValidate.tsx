@@ -72,9 +72,6 @@ export default function PageLoginValidate() {
           <VerificationCodeForm
             email={email ?? ''}
             isLoading={validate.isLoading || validate.isSuccess}
-            onComplete={() => {
-              form.handleSubmit(onSubmit)();
-            }}
           />
         </form>
       </Form>
