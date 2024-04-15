@@ -18,10 +18,12 @@ export type FieldSelectProps<
   type: 'select';
   label?: ReactNode;
   helper?: ReactNode;
-  options: Readonly<{
-    label: string;
-    value: PathValue<TFieldValues, TName>;
-  }>[];
+  options: Readonly<
+    Readonly<{
+      label: string;
+      value: PathValue<TFieldValues, TName>;
+    }>[]
+  >;
 } & Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 

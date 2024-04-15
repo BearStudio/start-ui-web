@@ -8,7 +8,11 @@ import {
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-import { FieldCommonProps } from '../FormField';
+import {
+  FieldCommonProps,
+  useFormField,
+  useFormFieldContext,
+} from '../FormField';
 import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
@@ -32,6 +36,7 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
+  const { isDisabled } = useFormFieldContext();
   return (
     <Controller
       {...props}
@@ -46,6 +51,7 @@ export const FieldOtp = <
                 onComplete={props.onComplete}
                 placeholder="·"
                 isInvalid={fieldState.invalid}
+                isDisabled={isDisabled}
                 {...field}
               >
                 {Array.from({ length: props.length ?? 6 }).map((_, index) => (

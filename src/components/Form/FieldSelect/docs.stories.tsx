@@ -3,19 +3,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { zu } from '@/lib/zod/zod-utils';
-
 import { Form, FormField } from '../';
 
 export default {
-  title: 'Form/FieldText',
+  title: 'Form/FieldSelect',
 };
 
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), 'Name is required'),
+    color: z.enum(['red', 'green', 'blue']),
   });
+
+const options = [
+  { label: 'Red', value: 'red' },
+  { label: 'Green', value: 'green' },
+  { label: 'Blue', value: 'blue' },
+] as const;
 
 const formOptions = {
   mode: 'onBlur',
@@ -34,10 +38,11 @@ export const Default = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="select"
+            name="color"
+            label="Colors"
             placeholder="Placeholder"
+            options={options}
           />
           <Box>
             <Button type="submit" variant="@primary">
@@ -54,7 +59,7 @@ export const DefaultValue = () => {
   const form = useForm<FormSchema>({
     ...formOptions,
     defaultValues: {
-      name: 'Default Name',
+      color: 'red',
     },
   });
 
@@ -67,9 +72,10 @@ export const DefaultValue = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="select"
+            name="color"
+            label="Colors"
+            options={options}
           />
           <Box>
             <Button type="submit" variant="@primary">
@@ -94,9 +100,10 @@ export const Disabled = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="select"
+            name="color"
+            label="Colors"
+            options={options}
             isDisabled
           />
           <Box>

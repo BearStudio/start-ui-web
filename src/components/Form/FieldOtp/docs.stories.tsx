@@ -8,13 +8,16 @@ import { zu } from '@/lib/zod/zod-utils';
 import { Form, FormField } from '../';
 
 export default {
-  title: 'Form/FieldText',
+  title: 'Form/FieldOtp',
 };
 
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), 'Name is required'),
+    code: zu.string.nonEmpty(
+      z.string().min(6, 'Code is 6 digits').max(6, 'Code is 6 digits'),
+      'Code is required'
+    ),
   });
 
 const formOptions = {
@@ -31,13 +34,12 @@ export const Default = () => {
         noValidate
         onSubmit={form.handleSubmit((values) => console.log(values))}
       >
-        <Stack spacing={4}>
+        <Stack spacing={4} maxW="20rem">
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-            placeholder="Placeholder"
+            type="otp"
+            name="code"
+            label="Code"
           />
           <Box>
             <Button type="submit" variant="@primary">
@@ -54,7 +56,7 @@ export const DefaultValue = () => {
   const form = useForm<FormSchema>({
     ...formOptions,
     defaultValues: {
-      name: 'Default Name',
+      code: '927342',
     },
   });
 
@@ -64,12 +66,12 @@ export const DefaultValue = () => {
         noValidate
         onSubmit={form.handleSubmit((values) => console.log(values))}
       >
-        <Stack spacing={4}>
+        <Stack spacing={4} maxW="20rem">
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="otp"
+            name="code"
+            label="Code"
           />
           <Box>
             <Button type="submit" variant="@primary">
@@ -91,13 +93,41 @@ export const Disabled = () => {
         noValidate
         onSubmit={form.handleSubmit((values) => console.log(values))}
       >
-        <Stack spacing={4}>
+        <Stack spacing={4} maxW="20rem">
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="otp"
+            name="code"
+            label="Code"
             isDisabled
+          />
+          <Box>
+            <Button type="submit" variant="@primary">
+              Submit
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    </Form>
+  );
+};
+
+export const CustomLength = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit((values) => console.log(values))}
+      >
+        <Stack spacing={4} maxW="12rem">
+          <FormField
+            control={form.control}
+            type="otp"
+            name="code"
+            label="Code"
+            length={4}
           />
           <Box>
             <Button type="submit" variant="@primary">

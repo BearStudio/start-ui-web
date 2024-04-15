@@ -8,13 +8,13 @@ import { zu } from '@/lib/zod/zod-utils';
 import { Form, FormField } from '../';
 
 export default {
-  title: 'Form/FieldText',
+  title: 'Form/FieldTextarea',
 };
 
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), 'Name is required'),
+    description: zu.string.nonEmpty(z.string(), 'Description is required'),
   });
 
 const formOptions = {
@@ -34,9 +34,9 @@ export const Default = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="textarea"
+            name="description"
+            label="Description"
             placeholder="Placeholder"
           />
           <Box>
@@ -54,7 +54,7 @@ export const DefaultValue = () => {
   const form = useForm<FormSchema>({
     ...formOptions,
     defaultValues: {
-      name: 'Default Name',
+      description: 'Default Description',
     },
   });
 
@@ -67,9 +67,9 @@ export const DefaultValue = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="textarea"
+            name="description"
+            label="Description"
           />
           <Box>
             <Button type="submit" variant="@primary">
@@ -94,9 +94,9 @@ export const Disabled = () => {
         <Stack spacing={4}>
           <FormField
             control={form.control}
-            type="text"
-            name="name"
-            label="Name"
+            type="textarea"
+            name="description"
+            label="Description"
             isDisabled
           />
           <Box>

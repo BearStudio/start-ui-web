@@ -18,10 +18,12 @@ export type FieldMultiSelectProps<
   type: 'multi-select';
   label?: ReactNode;
   helper?: ReactNode;
-  options: Readonly<{
-    label: string;
-    value: PathValue<TFieldValues, TName>[number];
-  }>[];
+  options: Readonly<
+    Readonly<{
+      label: string;
+      value: PathValue<TFieldValues, TName>[number];
+    }>[]
+  >;
 } & Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -37,7 +39,7 @@ export const FieldMultiSelect = <
       render={({ field }) => {
         const { value, onChange, ...fieldProps } = field;
         const selectValues =
-          props.options?.filter((option) => value.includes(option.value)) ??
+          props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
         return (
           <FormFieldItem>
