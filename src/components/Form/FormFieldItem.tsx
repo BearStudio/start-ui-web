@@ -30,6 +30,7 @@ export const useFormFieldItemContext = () => {
 
 export type FormFieldItemProps = {
   children?: ReactNode;
+  id?: string;
 };
 
 export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
@@ -51,6 +52,7 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           flexDirection="column"
           isRequired={fieldContext.optionalityHint === 'required'}
           isDisabled={fieldContext.isDisabled}
+          id={props.id}
           gap={1}
         >
           {props.children}

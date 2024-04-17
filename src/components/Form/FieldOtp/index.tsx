@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useId, useRef } from 'react';
 
 import {
   HStack,
@@ -33,14 +33,20 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
+  const id = useId();
   const { isDisabled } = useFormFieldContext();
   const stackRef = useRef<HTMLDivElement>(null);
   return (
     <Controller
       {...props}
       render={({ field, fieldState, formState }) => (
-        <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+        <FormFieldItem
+          // Target the first input
+          id={`${id}-0`}
+        >
+          {!!props.label && (
+            <FormFieldLabel htmlFor={`${id}-0`}>{props.label}</FormFieldLabel>
+          )}
           <FormFieldControl>
             <HStack ref={stackRef}>
               <PinInput
@@ -49,6 +55,8 @@ export const FieldOtp = <
                 placeholder="·"
                 isInvalid={fieldState.invalid}
                 isDisabled={isDisabled}
+                otp
+                id={id}
                 onComplete={(v) => {
                   props.onComplete?.(v);
                   // Only auto submit on first try

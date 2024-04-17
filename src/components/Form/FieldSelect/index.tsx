@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useId } from 'react';
 
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
@@ -33,6 +33,7 @@ export const FieldSelect = <
 >(
   props: FieldSelectProps<TFieldValues, TName>
 ) => {
+  const id = useId();
   return (
     <Controller
       {...props}
@@ -41,8 +42,10 @@ export const FieldSelect = <
         const selectValue =
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
-          <FormFieldItem>
-            {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          <FormFieldItem id={id}>
+            {!!props.label && (
+              <FormFieldLabel htmlFor={id}>{props.label}</FormFieldLabel>
+            )}
             <FormFieldControl>
               <Select
                 type="select"
@@ -53,6 +56,7 @@ export const FieldSelect = <
                 value={selectValue}
                 onChange={(option) => onChange(option?.value)}
                 menuPortalTarget={document.body}
+                inputId={id}
                 {...fieldProps}
               />
             </FormFieldControl>

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useId } from 'react';
 
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
@@ -33,6 +33,7 @@ export const FieldMultiSelect = <
 >(
   props: FieldMultiSelectProps<TFieldValues, TName>
 ) => {
+  const id = useId();
   return (
     <Controller
       {...props}
@@ -42,8 +43,10 @@ export const FieldMultiSelect = <
           props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
         return (
-          <FormFieldItem>
-            {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          <FormFieldItem id={id}>
+            {!!props.label && (
+              <FormFieldLabel htmlFor={id}>{props.label}</FormFieldLabel>
+            )}
             <FormFieldControl>
               <Select
                 type="select"
@@ -57,6 +60,7 @@ export const FieldMultiSelect = <
                   onChange(options.map((option) => option.value))
                 }
                 menuPortalTarget={document.body}
+                inputId={id}
                 {...fieldProps}
               />
             </FormFieldControl>

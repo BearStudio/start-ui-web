@@ -12,25 +12,25 @@ test('update value', async () => {
 
   render(
     <FormMocked
-      schema={z.object({ name: z.string() })}
-      useFormOptions={{ defaultValues: { name: '' } }}
+      schema={z.object({ description: z.string() })}
+      useFormOptions={{ defaultValues: { description: '' } }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="text"
+          type="textarea"
           control={form.control}
-          name="name"
-          label="Name"
+          name="description"
+          label="Description"
         />
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
+  const input = screen.getByLabelText<HTMLInputElement>('Description');
   await user.type(input, 'new value');
   expect(input.value).toBe('new value');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
+  expect(mockedSubmit).toHaveBeenCalledWith({ description: 'new value' });
 });
 
 test('default value', async () => {
@@ -38,26 +38,26 @@ test('default value', async () => {
   const mockedSubmit = vi.fn();
   render(
     <FormMocked
-      schema={z.object({ name: z.string() })}
+      schema={z.object({ description: z.string() })}
       useFormOptions={{
         defaultValues: {
-          name: 'default value',
+          description: 'default value',
         },
       }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="text"
+          type="textarea"
           control={form.control}
-          name="name"
-          label="Name"
+          name="description"
+          label="Description"
         />
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
+  const input = screen.getByLabelText<HTMLInputElement>('Description');
   expect(input.value).toBe('default value');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'default value' });
+  expect(mockedSubmit).toHaveBeenCalledWith({ description: 'default value' });
 });

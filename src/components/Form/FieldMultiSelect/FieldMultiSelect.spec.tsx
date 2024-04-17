@@ -6,31 +6,40 @@ import { render, screen, setupUser } from '@/tests/utils';
 import { FormField } from '..';
 import { FormMocked } from '../form-test-utils';
 
+const options = [
+  { label: 'Red', value: 'red' },
+  { label: 'Green', value: 'green' },
+  { label: 'Blue', value: 'blue' },
+] as const;
+
 test('update value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
   render(
     <FormMocked
-      schema={z.object({ name: z.string() })}
-      useFormOptions={{ defaultValues: { name: '' } }}
+      schema={z.object({ colors: z.string().array() })}
+      useFormOptions={{ defaultValues: { colors: undefined } }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="text"
+          type="multi-select"
           control={form.control}
-          name="name"
-          label="Name"
+          name="colors"
+          label="Colors"
+          options={options}
         />
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
-  await user.type(input, 'new value');
-  expect(input.value).toBe('new value');
+  const input = screen.getByLabelText<HTMLInputElement>('Colors');
+  await user.type(input, 'green');
+  await user.tab();
+  await user.type(input, 'blue');
+  await user.tab();
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
+  expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
 });
 
 test('default value', async () => {
@@ -38,26 +47,25 @@ test('default value', async () => {
   const mockedSubmit = vi.fn();
   render(
     <FormMocked
-      schema={z.object({ name: z.string() })}
+      schema={z.object({ colors: z.string().array() })}
       useFormOptions={{
         defaultValues: {
-          name: 'default value',
+          colors: ['green', 'blue'],
         },
       }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="text"
+          type="multi-select"
           control={form.control}
-          name="name"
-          label="Name"
+          name="colors"
+          label="Colors"
+          options={options}
         />
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
-  expect(input.value).toBe('default value');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'default value' });
+  expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
 });
