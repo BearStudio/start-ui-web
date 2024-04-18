@@ -8,6 +8,7 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
+import { FieldDate, FieldDateProps } from './FieldDate';
 import { FieldMultiSelect, FieldMultiSelectProps } from './FieldMultiSelect';
 import { FieldOtp, FieldOtpProps } from './FieldOtp';
 import { FieldSelect, FieldSelectProps } from './FieldSelect';
@@ -40,6 +41,7 @@ export const FormField = <
     | FieldSelectProps<TFieldValues, TName>
     | FieldMultiSelectProps<TFieldValues, TName>
     | FieldOtpProps<TFieldValues, TName>
+    | FieldDateProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
   const getField = () => {
@@ -61,6 +63,9 @@ export const FormField = <
 
       case 'select':
         return <FieldSelect {...props} />;
+
+      case 'date':
+        return <FieldDate {...props} />;
 
       case 'multi-select':
         return <FieldMultiSelect {...props} />;

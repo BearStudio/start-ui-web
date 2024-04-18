@@ -130,6 +130,7 @@
     "@typescript-eslint/eslint-plugin": "7.3.1",
     "@vitest/ui": "1.5.0",
     "cross-var": "1.1.0",
+    "date-fns": "2.3.0",
     "dotenv-cli": "7.4.1",
     "encoding": "0.1.13",
     "eslint": "8.57.0",
