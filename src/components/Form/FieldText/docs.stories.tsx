@@ -1,8 +1,10 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { LuActivity } from 'react-icons/lu';
 import { z } from 'zod';
 
+import { Icon } from '@/components/Icons';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { Form, FormField } from '../';
@@ -20,6 +22,9 @@ const zFormSchema = () =>
 const formOptions = {
   mode: 'onBlur',
   resolver: zodResolver(zFormSchema()),
+  defaultValues: {
+    name: '',
+  },
 } as const;
 
 export const Default = () => {
@@ -98,6 +103,35 @@ export const Disabled = () => {
             name="name"
             label="Name"
             isDisabled
+          />
+          <Box>
+            <Button type="submit" variant="@primary">
+              Submit
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    </Form>
+  );
+};
+
+export const StartElement = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit((values) => console.log(values))}
+      >
+        <Stack spacing={4}>
+          <FormField
+            control={form.control}
+            type="text"
+            name="name"
+            label="Name"
+            placeholder="Placeholder"
+            startElement={<Icon icon={LuActivity} />}
           />
           <Box>
             <Button type="submit" variant="@primary">

@@ -11,13 +11,12 @@ export const FormFieldLabel = forwardRef<
   ElementRef<typeof FormLabel>,
   ComponentPropsWithoutRef<typeof FormLabel>
 >((props, ref) => {
-  const { formItemId, optionalityHint } = useFormField();
+  const { optionalityHint } = useFormField();
   const { t } = useTranslation(['components']);
 
   return (
     <FormLabel
       ref={ref}
-      htmlFor={formItemId}
       m={0}
       requiredIndicator={
         optionalityHint === 'required' ? <RequiredIndicator m={0} /> : null

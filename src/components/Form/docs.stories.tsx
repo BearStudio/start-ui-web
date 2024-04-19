@@ -8,7 +8,6 @@ import { zu } from '@/lib/zod/zod-utils';
 import {
   Form,
   FormField,
-  FormFieldControl,
   FormFieldError,
   FormFieldItem,
   FormFieldLabel,
@@ -91,9 +90,7 @@ export const Default = () => {
             render={({ field }) => (
               <FormFieldItem>
                 <FormFieldLabel>Other (Custom)</FormFieldLabel>
-                <FormFieldControl>
-                  <Input {...field} />
-                </FormFieldControl>
+                <Input {...field} />
                 <FormFieldError />
               </FormFieldItem>
             )}

@@ -1,11 +1,10 @@
-import { ReactNode, useId } from 'react';
+import { ReactNode } from 'react';
 
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
 import { Select, SelectProps } from '@/components/Select';
 
 import { FieldCommonProps } from '../FormField';
-import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
 import { FormFieldItem } from '../FormFieldItem';
@@ -33,7 +32,6 @@ export const FieldSelect = <
 >(
   props: FieldSelectProps<TFieldValues, TName>
 ) => {
-  const id = useId();
   return (
     <Controller
       {...props}
@@ -42,24 +40,20 @@ export const FieldSelect = <
         const selectValue =
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
-          <FormFieldItem id={id}>
-            {!!props.label && (
-              <FormFieldLabel htmlFor={id}>{props.label}</FormFieldLabel>
-            )}
-            <FormFieldControl>
-              <Select
-                type="select"
-                size={props.size}
-                options={props.options}
-                placeholder={props.placeholder}
-                autoFocus={props.autoFocus}
-                value={selectValue}
-                onChange={(option) => onChange(option?.value)}
-                menuPortalTarget={document.body}
-                inputId={id}
-                {...fieldProps}
-              />
-            </FormFieldControl>
+          <FormFieldItem>
+            {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+            <Select
+              type="select"
+              size={props.size}
+              options={props.options}
+              placeholder={props.placeholder}
+              autoFocus={props.autoFocus}
+              value={selectValue}
+              onChange={(option) => onChange(option?.value)}
+              menuPortalTarget={document.body}
+              {...fieldProps}
+            />
+
             {!!props.helper && (
               <FormFieldHelper>{props.helper}</FormFieldHelper>
             )}

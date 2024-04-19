@@ -1,11 +1,15 @@
 import { ReactNode } from 'react';
 
+import {
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+} from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
 import { FieldCommonProps } from '../FormField';
-import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
 import { FormFieldItem } from '../FormFieldItem';
@@ -19,6 +23,8 @@ export type FieldCurrencyProps<
   label?: ReactNode;
   helper?: ReactNode;
   inCents?: boolean;
+  startElement?: ReactNode;
+  endElement?: ReactNode;
 } & Pick<
   InputCurrencyProps,
   'placeholder' | 'size' | 'autoFocus' | 'locale' | 'currency' | 'decimals'
@@ -47,7 +53,7 @@ export const FieldCurrency = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <FormFieldControl>
+          <InputGroup size={props.size}>
             <InputCurrency
               type={props.type}
               size={props.size}
@@ -64,7 +70,19 @@ export const FieldCurrency = <
               value={formatValue(field.value, 'from-cents')}
               onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
             />
-          </FormFieldControl>
+
+            {!!props.startElement && (
+              <InputLeftElement pointerEvents="none">
+                {props.startElement}
+              </InputLeftElement>
+            )}
+            {!!props.endElement && (
+              <InputRightElement pointerEvents="none">
+                {props.endElement}
+              </InputRightElement>
+            )}
+          </InputGroup>
+
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </FormFieldItem>

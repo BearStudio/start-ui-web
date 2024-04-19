@@ -127,9 +127,6 @@ export const useFormField = () => {
 
   return {
     id,
-    formItemId: `${id}-form-item`,
-    formHelperId: `${id}-form-item-helper`,
-    formErrorId: `${id}-form-item-error`,
     ...fieldContext,
     ...fieldState,
   };

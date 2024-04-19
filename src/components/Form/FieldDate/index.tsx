@@ -6,7 +6,6 @@ import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { DayPicker } from '@/components/DayPicker';
 
 import { FieldCommonProps } from '../FormField';
-import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
 import { FormFieldItem } from '../FormFieldItem';
@@ -34,9 +33,7 @@ export const FieldDate = <
       render={({ field: { ref: _ref, ...field } }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <FormFieldControl>
-            <DayPicker {...field} />
-          </FormFieldControl>
+          <DayPicker {...field} />
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </FormFieldItem>

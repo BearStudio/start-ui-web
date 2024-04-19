@@ -11,7 +11,7 @@ export const FormFieldError = forwardRef<
   ElementRef<typeof FormErrorMessage>,
   ComponentPropsWithoutRef<typeof FormErrorMessage>
 >(({ children, ...props }, ref) => {
-  const { error, formErrorId } = useFormField();
+  const { error } = useFormField();
 
   if (!error && !children) {
     return null;
@@ -22,7 +22,7 @@ export const FormFieldError = forwardRef<
   }
 
   return (
-    <FormErrorMessage m={0} ref={ref} id={formErrorId} {...props}>
+    <FormErrorMessage m={0} ref={ref} {...props}>
       <SlideFade in offsetY={-6}>
         <Icon icon={LuAlertCircle} me="2" />
         {!!error?.message && <span>{error.message}</span>}

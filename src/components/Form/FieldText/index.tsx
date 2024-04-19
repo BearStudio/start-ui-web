@@ -1,10 +1,15 @@
 import { ReactNode } from 'react';
 
-import { Input, InputProps } from '@chakra-ui/react';
+import {
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputProps,
+  InputRightElement,
+} from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FieldCommonProps } from '../FormField';
-import { FormFieldControl } from '../FormFieldControl';
 import { FormFieldError } from '../FormFieldError';
 import { FormFieldHelper } from '../FormFieldHelper';
 import { FormFieldItem } from '../FormFieldItem';
@@ -17,6 +22,8 @@ export type FieldTextProps<
   type: 'text' | 'email' | 'number' | 'tel';
   label?: ReactNode;
   helper?: ReactNode;
+  startElement?: ReactNode;
+  endElement?: ReactNode;
 } & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -32,15 +39,20 @@ export const FieldText = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <FormFieldControl>
+          <InputGroup size={props.size}>
             <Input
               type={props.type}
-              size={props.size}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
               {...field}
             />
-          </FormFieldControl>
+            {!!props.startElement && (
+              <InputLeftElement>{props.startElement}</InputLeftElement>
+            )}
+            {!!props.endElement && (
+              <InputRightElement>{props.endElement}</InputRightElement>
+            )}
+          </InputGroup>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </FormFieldItem>
