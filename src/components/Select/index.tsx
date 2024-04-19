@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef } from 'react';
+import { ForwardedRef } from 'react';
 
 import {
   AsyncCreatableProps,
@@ -12,6 +12,8 @@ import {
   Props,
   SelectInstance,
 } from 'chakra-react-select';
+
+import { fixedForwardRef } from '@/lib/utils';
 
 export type SelectProps<
   Option = unknown,
@@ -75,11 +77,3 @@ const SelectComponent = <
 };
 
 export const Select = fixedForwardRef(SelectComponent);
-
-// https://www.totaltypescript.com/forwardref-with-generic-components
-// eslint-disable-next-line @typescript-eslint/ban-types
-function fixedForwardRef<T, P = {}>(
-  render: (props: P, ref: React.Ref<T>) => React.ReactNode
-): (props: P & React.RefAttributes<T>) => React.ReactNode {
-  return forwardRef(render) as ExplicitAny;
-}
