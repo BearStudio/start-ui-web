@@ -12,6 +12,7 @@ import { FieldCurrency, FieldCurrencyProps } from './FieldCurrency';
 import { FieldDate, FieldDateProps } from './FieldDate';
 import { FieldMultiSelect, FieldMultiSelectProps } from './FieldMultiSelect';
 import { FieldOtp, FieldOtpProps } from './FieldOtp';
+import { FieldPassword, FieldPasswordProps } from './FieldPassword';
 import { FieldSelect, FieldSelectProps } from './FieldSelect';
 import { FieldText, FieldTextProps } from './FieldText';
 import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
@@ -44,6 +45,7 @@ export const FormField = <
     | FieldOtpProps<TFieldValues, TName>
     | FieldDateProps<TFieldValues, TName>
     | FieldCurrencyProps<TFieldValues, TName>
+    | FieldPasswordProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
   const getField = () => {
@@ -56,6 +58,9 @@ export const FormField = <
       case 'number':
       case 'tel':
         return <FieldText {...props} />;
+
+      case 'password':
+        return <FieldPassword {...props} />;
 
       case 'currency':
         return <FieldCurrency {...props} />;

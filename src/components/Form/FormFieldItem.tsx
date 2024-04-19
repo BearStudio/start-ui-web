@@ -54,6 +54,7 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           isDisabled={fieldContext.isDisabled}
           id={props.id}
           gap={1}
+          /* TODO: Allows custom styles */
         >
           {props.children}
         </FormControl>
