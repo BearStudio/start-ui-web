@@ -12,7 +12,7 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    color: z.enum(['red', 'green', 'blue']).array(),
+    colors: z.enum(['red', 'green', 'blue']).array(),
   });
 
 const options = [
@@ -39,7 +39,7 @@ export const Default = () => {
           <FormField
             control={form.control}
             type="multi-select"
-            name="color"
+            name="colors"
             label="Colors"
             placeholder="Placeholder"
             options={options}
@@ -59,7 +59,7 @@ export const DefaultValue = () => {
   const form = useForm<FormSchema>({
     ...formOptions,
     defaultValues: {
-      color: ['red'],
+      colors: ['red'],
     },
   });
 
@@ -73,7 +73,7 @@ export const DefaultValue = () => {
           <FormField
             control={form.control}
             type="multi-select"
-            name="color"
+            name="colors"
             label="Colors"
             options={options}
           />
@@ -101,7 +101,7 @@ export const Disabled = () => {
           <FormField
             control={form.control}
             type="multi-select"
-            name="color"
+            name="colors"
             label="Colors"
             options={options}
             isDisabled
