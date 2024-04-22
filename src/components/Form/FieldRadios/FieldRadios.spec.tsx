@@ -18,16 +18,16 @@ test('update value', async () => {
 
   render(
     <FormMocked
-      schema={z.object({ colors: z.enum(['red', 'green', 'blue']).array() })}
-      useFormOptions={{ defaultValues: { colors: undefined } }}
+      schema={z.object({ color: z.enum(['red', 'green', 'blue']) })}
+      useFormOptions={{ defaultValues: { color: undefined } }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="checkboxes"
+          type="radios"
           control={form.control}
-          name="colors"
-          label="Colors"
+          name="color"
+          label="Color"
           options={options}
         />
       )}
@@ -37,7 +37,7 @@ test('update value', async () => {
   await user.click(screen.getByLabelText('Blue'));
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
+  expect(mockedSubmit).toHaveBeenCalledWith({ color: 'blue' });
 });
 
 test('default value', async () => {
@@ -45,25 +45,25 @@ test('default value', async () => {
   const mockedSubmit = vi.fn();
   render(
     <FormMocked
-      schema={z.object({ colors: z.enum(['red', 'green', 'blue']).array() })}
+      schema={z.object({ color: z.enum(['red', 'green', 'blue']) })}
       useFormOptions={{
         defaultValues: {
-          colors: ['green', 'blue'],
+          color: 'green',
         },
       }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField
-          type="checkboxes"
+          type="radios"
           control={form.control}
-          name="colors"
-          label="Colors"
+          name="color"
+          label="Color"
           options={options}
         />
       )}
     </FormMocked>
   );
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
+  expect(mockedSubmit).toHaveBeenCalledWith({ color: 'green' });
 });
