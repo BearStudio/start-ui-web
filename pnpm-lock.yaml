@@ -35,12 +35,6 @@ dependencies:
   '@fontsource/inter':
     specifier: 5.0.17
     version: 5.0.17
-  '@formiz/core':
-    specifier: 2.2.3
-    version: 2.2.3(react@18.2.0)
-  '@formiz/validations':
-    specifier: 2.0.1
-    version: 2.0.1
   '@formkit/auto-animate':
     specifier: 1.0.0-beta.6
     version: 1.0.0-beta.6
@@ -3857,18 +3851,6 @@ packages:
 
   /@fontsource/inter@5.0.17:
     resolution: {integrity: sha512-2meBGx1kt7u5LwzGc5Sz5rka6ZDrydg6nT3x6Wkt310vHXUchIywrO8pooWMzZdHYcyFY/cv4lEpJZgMD94bCg==}
-    dev: false
-
-  /@formiz/core@2.2.3(react@18.2.0):
-    resolution: {integrity: sha512-PUM3MCRPTdbUTXeIN4OD+39NgniT/ogCPLj7qO93a8UNYD0OVkNZIdYz7Aj54qFA93BenADkaZeY5Oa0m0fJiA==}
-    peerDependencies:
-      react: '>=18'
-    dependencies:
-      react: 18.2.0
-    dev: false
-
-  /@formiz/validations@2.0.1:
-    resolution: {integrity: sha512-NZGluw3iWt7zw3oTiOwnttg7DCgB1SR0AMWVpdTYsaXDS54HwukwteaUqxii/FeGNliuRLYxtawnhMwa8YIhyA==}
     dev: false
 
   /@formkit/auto-animate@1.0.0-beta.6:
