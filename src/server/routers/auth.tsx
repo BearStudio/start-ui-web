@@ -7,7 +7,6 @@ import { z } from 'zod';
 import EmailLoginCode from '@/emails/templates/login-code';
 import { EmailLoginNotFound } from '@/emails/templates/login-not-found';
 import EmailRegisterCode from '@/emails/templates/register-code';
-import { env } from '@/env.mjs';
 import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
@@ -18,6 +17,7 @@ import {
   AUTH_COOKIE_NAME,
   deleteUsedCode,
   generateCode,
+  setAuthCookie,
   validateCode,
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
@@ -42,6 +42,13 @@ export const authRouter = createTRPCRouter({
     )
     .query(async ({ ctx }) => {
       ctx.logger.info(`User ${ctx.user ? 'is' : 'is not'} logged`);
+
+      if (ctx.user) {
+        const cookieToken = cookies().get(AUTH_COOKIE_NAME)?.value;
+        if (cookieToken) {
+          setAuthCookie(cookieToken);
+        }
+      }
 
       return {
         isAuthenticated: !!ctx.user,
@@ -165,12 +172,7 @@ export const authRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       ctx.logger.info('Set auth cookie');
-      cookies().set({
-        name: AUTH_COOKIE_NAME,
-        value: userJwt,
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-      });
+      setAuthCookie(userJwt);
 
       return {
         token: userJwt,
@@ -339,12 +341,7 @@ export const authRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       ctx.logger.info('Set auth cookie');
-      cookies().set({
-        name: AUTH_COOKIE_NAME,
-        value: userJwt,
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-      });
+      setAuthCookie(userJwt);
 
       return {
         token: userJwt,

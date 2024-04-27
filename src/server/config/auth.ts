@@ -58,6 +58,16 @@ export const getServerAuthSession = async () => {
   return zUser().pick(userPick).parse(user);
 };
 
+export const setAuthCookie = (token: string) => {
+  cookies().set({
+    name: AUTH_COOKIE_NAME,
+    value: token,
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    expires: dayjs().add(1, 'year').toDate(),
+  });
+};
+
 export const decodeJwt = (token: string) => {
   try {
     const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
