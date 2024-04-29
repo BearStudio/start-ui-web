@@ -38,7 +38,7 @@ export const FieldOtp = <
   return (
     <Controller
       {...props}
-      render={({ field, fieldState, formState }) => (
+      render={({ field: { ref, ...field }, fieldState, formState }) => (
         <FormFieldItem
           // Target the first input
           id={`${id}-0`}
@@ -69,7 +69,7 @@ export const FieldOtp = <
               {...field}
             >
               {Array.from({ length: props.length ?? 6 }).map((_, index) => (
-                <PinInputField flex={1} key={index} />
+                <PinInputField ref={ref} flex={1} key={index} />
               ))}
             </PinInput>
           </HStack>
