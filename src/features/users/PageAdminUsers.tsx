@@ -11,6 +11,7 @@ import {
   Stack,
   Tag,
   Text,
+  chakra,
 } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
@@ -141,9 +142,11 @@ export default function PageAdminUsers() {
                           key={authorization}
                           lineHeight={1}
                         >
-                          {t(
-                            `users:data.authorizations.options.${authorization}`
-                          )}
+                          <chakra.span noOfLines={1}>
+                            {t(
+                              `users:data.authorizations.options.${authorization}`
+                            )}
+                          </chakra.span>
                         </Tag>
                       ))}
                   </DataListCell>

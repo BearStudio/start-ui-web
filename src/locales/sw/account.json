@@ -20,13 +20,10 @@
   },
   "data": {
     "name": {
-      "label": "Jina",
-      "required": "Jina linahitajika"
+      "label": "Jina"
     },
     "email": {
       "label": "Barua pepe",
-      "required": " Barua pepe inahitajika",
-      "invalid": "Barua pepe ni batili",
       "current": "Hii ndiyo barua pepe yako ya sasa"
     },
     "language": {

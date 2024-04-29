@@ -54,13 +54,10 @@
   },
   "data": {
     "name": {
-      "label": "Name",
-      "required": "Name is required"
+      "label": "Name"
     },
     "email": {
       "label": "Email",
-      "required": "Email is required",
-      "invalid": "Email is invalid",
       "current": "This is your current email"
     },
     "language": {

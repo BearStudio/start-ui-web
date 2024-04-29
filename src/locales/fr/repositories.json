@@ -21,9 +21,6 @@
     }
   },
   "data": {
-    "id": {
-      "label": "ID"
-    },
     "name": {
       "label": "Nom",
       "required": "Le nom est requis",
@@ -32,7 +29,8 @@
     "link": {
       "label": "Lien",
       "required": "Le lien est requis",
-      "tooSmall": "Le lien doit contenir au moins {{min}} caractères"
+      "tooSmall": "Le lien doit contenir au moins {{min}} caractères",
+      "missingDot": "Le lien doit contenir au moins un point"
     },
     "description": {
       "label": "Description"

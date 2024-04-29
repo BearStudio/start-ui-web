@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { z } from 'zod';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
@@ -17,9 +18,28 @@ export const zUser = () =>
     id: z.string().cuid(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    name: zu.string.nonEmpty(z.string()).nullish(),
-    email: zu.string.email(z.string()),
-    authorizations: z.array(zUserAuthorization()).catch(['APP']),
+    name: zu.string
+      .nonEmpty(
+        z.string({
+          required_error: t('users:data.name.required'),
+          invalid_type_error: t('users:data.name.invalid'),
+        }),
+        {
+          required_error: t('users:data.name.required'),
+        }
+      )
+      .nullish(),
+    email: zu.string.email(z.string(), {
+      required_error: t('users:data.email.required'),
+      invalid_type_error: t('users:data.email.invalid'),
+    }),
+    authorizations: zu.array
+      .nonEmpty(
+        z.array(zUserAuthorization(), {
+          required_error: t('users:data.authorizations.required'),
+        })
+      )
+      .default(['APP']),
     accountStatus: zUserAccountStatus(),
     language: zu.string
       .nonEmpty(z.string().min(2))
