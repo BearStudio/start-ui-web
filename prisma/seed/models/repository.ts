@@ -14,7 +14,7 @@ export async function createRepositories() {
         name: 'Start UI [web]',
         link: 'https://github.com/BearStudio/start-ui-web',
         description:
-          '🚀 Start UI [web] is an opinionated UI starter with ⚛️ React, ▲ NextJS, ⚡️ Chakra UI, ⚛️ TanStack Query & 🐜 Formiz — From the 🐻 BearStudio Team',
+          '🚀 Start UI [web] is an opinionated UI starter with ⚛️ React, ▲ NextJS, ⚡️ Chakra UI, ⚛️ TanStack Query & 📋 React Hook Form — From the 🐻 BearStudio Team',
       },
     });
     createdCounter += 1;
