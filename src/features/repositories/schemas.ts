@@ -14,7 +14,9 @@ export const zRepository = () =>
           .string()
           .min(4, t('repositories:data.link.tooSmall', { min: 4 }))
           .includes('.'),
-        t('repositories:data.link.required')
+        {
+          required_error: t('repositories:data.link.required'),
+        }
       )
       .transform((v) => (v.startsWith('http') ? v : `https://${v}`)),
     description: z.string().nullish(),

@@ -14,7 +14,9 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    description: zu.string.nonEmpty(z.string(), 'Description is required'),
+    description: zu.string.nonEmpty(z.string(), {
+      required_error: 'Description is required',
+    }),
   });
 
 const formOptions = {

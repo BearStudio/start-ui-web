@@ -14,7 +14,9 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    password: zu.string.nonEmpty(z.string(), 'Password is required'),
+    password: zu.string.nonEmpty(z.string(), {
+      required_error: 'Password is required',
+    }),
   });
 
 const formOptions = {

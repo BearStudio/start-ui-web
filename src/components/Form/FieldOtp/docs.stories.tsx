@@ -20,7 +20,9 @@ const zFormSchema = (options: { length?: number } = {}) => {
         .string()
         .min(length, `Code is ${length} digits`)
         .max(length, `Code is ${length} digits`),
-      'Code is required'
+      {
+        required_error: 'Code is required',
+      }
     ),
   });
 };

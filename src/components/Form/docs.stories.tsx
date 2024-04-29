@@ -20,8 +20,13 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), 'Name is required'),
-    email: zu.string.emailOptional(z.string(), 'Email invalid'),
+    name: zu.string.nonEmpty(z.string(), {
+      required_error: 'Name is required',
+    }),
+    email: zu.string.emailOptional(z.string(), {
+      required_error: 'Email is required',
+      invalid_type_error: 'Email is invalid',
+    }),
     color: z.enum(['red', 'green', 'blue']),
     other: zu.string.nonEmptyOptional(z.string()),
   });

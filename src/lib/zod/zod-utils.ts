@@ -3,22 +3,50 @@ import { Schema, ZodArray, ZodString, z } from 'zod';
 
 export const zu = {
   string: {
-    nonEmpty(s: ZodString, message?: string) {
+    nonEmpty(
+      s: ZodString,
+      options: {
+        required_error?: string;
+      } = {}
+    ) {
       return s
         .trim()
-        .min(1, message ?? t('zod:errors.invalid_type_received_undefined'));
+        .min(
+          1,
+          options.required_error ??
+            t('zod:errors.invalid_type_received_undefined')
+        );
     },
-    nonEmptyOptional(s: ZodString, message?: string) {
+    nonEmptyOptional(
+      s: ZodString,
+      options: {
+        required_error?: string;
+      } = {}
+    ) {
       return z
         .literal('')
         .transform(() => undefined)
-        .or(zu.string.nonEmpty(s, message).optional());
+        .or(zu.string.nonEmpty(s, options).optional());
     },
-    email(s: ZodString, message?: string) {
-      return s.trim().toLowerCase().email(message);
+    email(
+      s: ZodString,
+      options: {
+        required_error?: string;
+        invalid_type_error?: string;
+      } = {}
+    ) {
+      return zu.string
+        .nonEmpty(s.toLowerCase(), options)
+        .email(options.invalid_type_error);
     },
-    emailOptional(s: ZodString, message?: string) {
-      return zu.string.nonEmptyOptional(zu.string.email(s, message), message);
+    emailOptional(
+      s: ZodString,
+      options: {
+        required_error?: string;
+        invalid_type_error?: string;
+      } = {}
+    ) {
+      return zu.string.nonEmptyOptional(zu.string.email(s, options), options);
     },
   },
   array: {
