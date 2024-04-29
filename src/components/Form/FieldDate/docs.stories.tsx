@@ -24,26 +24,21 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="date"
-            name="date"
-            label="Date"
-            placeholder="Placeholder"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="date"
+          name="date"
+          label="Date"
+          placeholder="Placeholder"
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -57,25 +52,20 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="date"
-            name="date"
-            label="Date"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="date"
+          name="date"
+          label="Date"
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -84,26 +74,21 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="date"
-            label="Date"
-            isDisabled
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="date"
+          label="Date"
+          isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };

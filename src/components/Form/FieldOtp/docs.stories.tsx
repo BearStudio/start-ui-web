@@ -36,25 +36,15 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4} maxW="20rem">
-          <FormField
-            control={form.control}
-            type="otp"
-            name="code"
-            label="Code"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField control={form.control} type="otp" name="code" label="Code" />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -68,25 +58,15 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4} maxW="20rem">
-          <FormField
-            control={form.control}
-            type="otp"
-            name="code"
-            label="Code"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField control={form.control} type="otp" name="code" label="Code" />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -95,26 +75,21 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4} maxW="20rem">
-          <FormField
-            control={form.control}
-            type="otp"
-            name="code"
-            label="Code"
-            isDisabled
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -126,26 +101,21 @@ export const CustomLength = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4} maxW="12rem">
-          <FormField
-            control={form.control}
-            type="otp"
-            name="code"
-            label="Code"
-            length={4}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="12rem">
+        <FormField
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          length={4}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -154,26 +124,21 @@ export const AutoSubmit = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => alert(values.code))}
-      >
-        <Stack spacing={4} maxW="20rem">
-          <FormField
-            control={form.control}
-            type="otp"
-            name="code"
-            label="Code"
-            autoSubmit
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          autoSubmit
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };

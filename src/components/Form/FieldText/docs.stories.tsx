@@ -33,26 +33,21 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-            placeholder="Placeholder"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+          placeholder="Placeholder"
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -66,25 +61,20 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -93,26 +83,21 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-            isDisabled
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+          isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -121,27 +106,22 @@ export const StartElement = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-            placeholder="Placeholder"
-            startElement={<Icon icon={LuActivity} />}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+          placeholder="Placeholder"
+          startElement={<Icon icon={LuActivity} />}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };

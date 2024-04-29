@@ -59,38 +59,34 @@ export default function PageAdminUserCreate() {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => {
-          createUser.mutate(values);
-        })}
-      >
-        <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-          <AdminLayoutPageTopBar
-            leftActions={
-              <AdminBackButton withConfrim={form.formState.isDirty} />
-            }
-            rightActions={
-              <>
-                <AdminCancelButton withConfrim={form.formState.isDirty} />
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={createUser.isLoading || createUser.isSuccess}
-                >
-                  {t('users:create.action.save')}
-                </Button>
-              </>
-            }
-          >
-            <Heading size="sm">{t('users:create.title')}</Heading>
-          </AdminLayoutPageTopBar>
-          <AdminLayoutPageContent>
-            <UserForm />
-          </AdminLayoutPageContent>
-        </AdminLayoutPage>
-      </form>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        createUser.mutate(values);
+      }}
+    >
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={form.formState.isDirty} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={createUser.isLoading || createUser.isSuccess}
+              >
+                {t('users:create.action.save')}
+              </Button>
+            </>
+          }
+        >
+          <Heading size="sm">{t('users:create.title')}</Heading>
+        </AdminLayoutPageTopBar>
+        <AdminLayoutPageContent>
+          <UserForm />
+        </AdminLayoutPageContent>
+      </AdminLayoutPage>
     </Form>
   );
 }

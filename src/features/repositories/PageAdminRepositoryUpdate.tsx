@@ -76,55 +76,49 @@ export default function PageAdminRepositoryUpdate() {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => {
-          if (!repository.data?.id) return;
-          updateRepository.mutate({
-            id: repository.data.id,
-            ...values,
-          });
-        })}
-      >
-        <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-          <AdminLayoutPageTopBar
-            leftActions={
-              <AdminBackButton withConfrim={form.formState.isDirty} />
-            }
-            rightActions={
-              <>
-                <AdminCancelButton withConfrim={form.formState.isDirty} />
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={
-                    updateRepository.isLoading || updateRepository.isSuccess
-                  }
-                >
-                  {t('repositories:update.action.save')}
-                </Button>
-              </>
-            }
-          >
-            <Stack flex={1} spacing={0}>
-              {repository.isLoading && (
-                <SkeletonText maxW="6rem" noOfLines={2} />
-              )}
-              {repository.isSuccess && (
-                <Heading size="sm">{repository.data?.name}</Heading>
-              )}
-            </Stack>
-          </AdminLayoutPageTopBar>
-          {!isReady && <LoaderFull />}
-          {isReady && repository.isError && <ErrorPage />}
-          {isReady && repository.isSuccess && (
-            <AdminLayoutPageContent>
-              <RepositoryForm />
-            </AdminLayoutPageContent>
-          )}
-        </AdminLayoutPage>
-      </form>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        if (!repository.data?.id) return;
+        updateRepository.mutate({
+          id: repository.data.id,
+          ...values,
+        });
+      }}
+    >
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={form.formState.isDirty} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  updateRepository.isLoading || updateRepository.isSuccess
+                }
+              >
+                {t('repositories:update.action.save')}
+              </Button>
+            </>
+          }
+        >
+          <Stack flex={1} spacing={0}>
+            {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+            {repository.isSuccess && (
+              <Heading size="sm">{repository.data?.name}</Heading>
+            )}
+          </Stack>
+        </AdminLayoutPageTopBar>
+        {!isReady && <LoaderFull />}
+        {isReady && repository.isError && <ErrorPage />}
+        {isReady && repository.isSuccess && (
+          <AdminLayoutPageContent>
+            <RepositoryForm />
+          </AdminLayoutPageContent>
+        )}
+      </AdminLayoutPage>
     </Form>
   );
 }

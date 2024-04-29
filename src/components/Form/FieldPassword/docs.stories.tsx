@@ -31,26 +31,21 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="password"
-            name="password"
-            label="Password"
-            placeholder="Placeholder"
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="password"
+          name="password"
+          label="Password"
+          placeholder="Placeholder"
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -59,26 +54,21 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="password"
-            name="password"
-            label="Password"
-            isDisabled
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="password"
+          name="password"
+          label="Password"
+          isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };

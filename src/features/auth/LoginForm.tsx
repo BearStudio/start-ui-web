@@ -54,36 +54,34 @@ export const LoginForm = ({
 
   return (
     <Box {...rest}>
-      <Form {...form}>
-        <form
-          noValidate
-          onSubmit={form.handleSubmit((values) => {
-            login.mutate(values);
-          })}
-        >
-          <Stack spacing={4}>
-            <FormField
-              type="email"
-              control={form.control}
-              name="email"
+      <Form
+        {...form}
+        onSubmit={(values) => {
+          login.mutate(values);
+        }}
+      >
+        <Stack spacing={4}>
+          <FormField
+            type="email"
+            control={form.control}
+            name="email"
+            size="lg"
+            placeholder={t('auth:data.email.label')}
+          />
+          <Flex>
+            <Button
+              isLoading={login.isLoading || login.isSuccess}
+              type="submit"
+              variant={buttonVariant}
               size="lg"
-              placeholder={t('auth:data.email.label')}
-            />
-            <Flex>
-              <Button
-                isLoading={login.isLoading || login.isSuccess}
-                type="submit"
-                variant={buttonVariant}
-                size="lg"
-                flex={1}
-              >
-                {t('auth:login.actions.login')}
-              </Button>
-            </Flex>
+              flex={1}
+            >
+              {t('auth:login.actions.login')}
+            </Button>
+          </Flex>
 
-            <LoginHint />
-          </Stack>
-        </form>
+          <LoginHint />
+        </Stack>
       </Form>
     </Box>
   );

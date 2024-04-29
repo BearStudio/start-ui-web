@@ -67,37 +67,35 @@ export const AccountEmailForm = () => {
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Form {...form}>
-            <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-              <Stack spacing={4}>
-                <FormField
-                  name="email"
-                  type="email"
-                  control={form.control}
-                  label={t('account:data.email.label')}
-                />
-                <Flex alignItems="center" gap={4}>
-                  <Button
-                    type="submit"
-                    variant="@primary"
-                    isDisabled={account.data.email === email}
-                    isLoading={updateEmail.isLoading}
-                  >
-                    {t('account:email.actions.update')}
+          <Form {...form} onSubmit={onSubmit}>
+            <Stack spacing={4}>
+              <FormField
+                name="email"
+                type="email"
+                control={form.control}
+                label={t('account:data.email.label')}
+              />
+              <Flex alignItems="center" gap={4}>
+                <Button
+                  type="submit"
+                  variant="@primary"
+                  isDisabled={account.data.email === email}
+                  isLoading={updateEmail.isLoading}
+                >
+                  {t('account:email.actions.update')}
+                </Button>
+                {account.data.email === email && (
+                  <Flex fontSize="sm" color="text-dimmed">
+                    {t('account:data.email.current')}
+                  </Flex>
+                )}
+                {account.data.email !== email && (
+                  <Button onClick={() => form.reset()}>
+                    {t('common:actions.cancel')}
                   </Button>
-                  {account.data.email === email && (
-                    <Flex fontSize="sm" color="text-dimmed">
-                      {t('account:data.email.current')}
-                    </Flex>
-                  )}
-                  {account.data.email !== email && (
-                    <Button onClick={() => form.reset()}>
-                      {t('common:actions.cancel')}
-                    </Button>
-                  )}
-                </Flex>
-              </Stack>
-            </form>
+                )}
+              </Flex>
+            </Stack>
           </Form>
         </Stack>
       )}

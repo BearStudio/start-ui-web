@@ -32,26 +32,21 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-            options={options}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+          options={options}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -65,26 +60,21 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-            options={options}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+          options={options}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -93,27 +83,22 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-            options={options}
-            isDisabled
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+          options={options}
+          isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -131,27 +116,22 @@ export const Optional = () => {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-            optionalityHint="optional"
-            options={options}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+          optionalityHint="optional"
+          options={options}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -160,27 +140,22 @@ export const Row = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-            direction="row"
-            options={options}
-          />
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+          direction="row"
+          options={options}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };
@@ -189,33 +164,28 @@ export const CustomLayout = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => console.log(values))}
-      >
-        <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="checkboxes"
-            name="colors"
-            label="Colors"
-          >
-            <SimpleGrid columns={3}>
-              {options.map((option) => (
-                <Checkbox key={option.value} value={option.value}>
-                  {option.label}
-                </Checkbox>
-              ))}
-            </SimpleGrid>
-          </FormField>
-          <Box>
-            <Button type="submit" variant="@primary">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="checkboxes"
+          name="colors"
+          label="Colors"
+        >
+          <SimpleGrid columns={3}>
+            {options.map((option) => (
+              <Checkbox key={option.value} value={option.value}>
+                {option.label}
+              </Checkbox>
+            ))}
+          </SimpleGrid>
+        </FormField>
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
     </Form>
   );
 };

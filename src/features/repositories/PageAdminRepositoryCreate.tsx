@@ -62,40 +62,36 @@ export default function PageAdminRepositoryCreate() {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => {
-          createRepository.mutate(values);
-        })}
-      >
-        <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-          <AdminLayoutPageTopBar
-            leftActions={
-              <AdminBackButton withConfrim={form.formState.isDirty} />
-            }
-            rightActions={
-              <>
-                <AdminCancelButton withConfrim={form.formState.isDirty} />
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={
-                    createRepository.isLoading || createRepository.isSuccess
-                  }
-                >
-                  {t('repositories:create.action.save')}
-                </Button>
-              </>
-            }
-          >
-            <Heading size="sm">{t('repositories:create.title')}</Heading>
-          </AdminLayoutPageTopBar>
-          <AdminLayoutPageContent>
-            <RepositoryForm />
-          </AdminLayoutPageContent>
-        </AdminLayoutPage>
-      </form>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        createRepository.mutate(values);
+      }}
+    >
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={form.formState.isDirty} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={
+                  createRepository.isLoading || createRepository.isSuccess
+                }
+              >
+                {t('repositories:create.action.save')}
+              </Button>
+            </>
+          }
+        >
+          <Heading size="sm">{t('repositories:create.title')}</Heading>
+        </AdminLayoutPageTopBar>
+        <AdminLayoutPageContent>
+          <RepositoryForm />
+        </AdminLayoutPageContent>
+      </AdminLayoutPage>
     </Form>
   );
 }

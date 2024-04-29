@@ -74,60 +74,54 @@ export default function PageAdminUserUpdate() {
   });
 
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit((values) => {
-          if (!user.data?.id) return;
-          userUpdate.mutate({
-            id: user.data.id,
-            ...values,
-          });
-        })}
-      >
-        <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
-          <AdminLayoutPageTopBar
-            leftActions={
-              <AdminBackButton withConfrim={form.formState.isDirty} />
-            }
-            rightActions={
-              <>
-                <AdminCancelButton withConfrim={form.formState.isDirty} />
-                <Button
-                  type="submit"
-                  variant="@primary"
-                  isLoading={userUpdate.isLoading || userUpdate.isSuccess}
-                >
-                  {t('users:update.action.save')}
-                </Button>
-              </>
-            }
-          >
-            {user.isLoading || user.isError ? (
-              <SkeletonText maxW="6rem" noOfLines={2} />
-            ) : (
-              <Flex
-                flexDirection={{ base: 'column', md: 'row' }}
-                alignItems={{ base: 'start', md: 'center' }}
-                rowGap={1}
-                columnGap={4}
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        if (!user.data?.id) return;
+        userUpdate.mutate({
+          id: user.data.id,
+          ...values,
+        });
+      }}
+    >
+      <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
+        <AdminLayoutPageTopBar
+          leftActions={<AdminBackButton withConfrim={form.formState.isDirty} />}
+          rightActions={
+            <>
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
+              <Button
+                type="submit"
+                variant="@primary"
+                isLoading={userUpdate.isLoading || userUpdate.isSuccess}
               >
-                <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
-                <UserStatus
-                  isActivated={user.data.accountStatus === 'ENABLED'}
-                />
-              </Flex>
-            )}
-          </AdminLayoutPageTopBar>
-          {!isReady && <LoaderFull />}
-          {isReady && user.isError && <ErrorPage />}
-          {isReady && user.isSuccess && (
-            <AdminLayoutPageContent>
-              <UserForm />
-            </AdminLayoutPageContent>
+                {t('users:update.action.save')}
+              </Button>
+            </>
+          }
+        >
+          {user.isLoading || user.isError ? (
+            <SkeletonText maxW="6rem" noOfLines={2} />
+          ) : (
+            <Flex
+              flexDirection={{ base: 'column', md: 'row' }}
+              alignItems={{ base: 'start', md: 'center' }}
+              rowGap={1}
+              columnGap={4}
+            >
+              <Heading size="sm">{user.data.name ?? user.data.email}</Heading>
+              <UserStatus isActivated={user.data.accountStatus === 'ENABLED'} />
+            </Flex>
           )}
-        </AdminLayoutPage>
-      </form>
+        </AdminLayoutPageTopBar>
+        {!isReady && <LoaderFull />}
+        {isReady && user.isError && <ErrorPage />}
+        {isReady && user.isSuccess && (
+          <AdminLayoutPageContent>
+            <UserForm />
+          </AdminLayoutPageContent>
+        )}
+      </AdminLayoutPage>
     </Form>
   );
 }

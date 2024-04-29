@@ -62,41 +62,39 @@ export const AccountProfileForm = () => {
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Form {...form}>
-            <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-              <Stack spacing={4}>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  type="text"
-                  label={t('account:data.name.label')}
-                />
-                <FormField
-                  control={form.control}
-                  name="language"
-                  type="select"
-                  options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                    label: t(`common:languages.${key}`),
-                    value: key,
-                  }))}
-                  label={t('account:data.language.label')}
-                />
-                <ButtonGroup spacing={3}>
-                  <Button
-                    type="submit"
-                    variant="@primary"
-                    isLoading={updateAccount.isLoading}
-                  >
-                    {t('account:profile.actions.update')}
+          <Form {...form} onSubmit={onSubmit}>
+            <Stack spacing={4}>
+              <FormField
+                control={form.control}
+                name="name"
+                type="text"
+                label={t('account:data.name.label')}
+              />
+              <FormField
+                control={form.control}
+                name="language"
+                type="select"
+                options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                  label: t(`common:languages.${key}`),
+                  value: key,
+                }))}
+                label={t('account:data.language.label')}
+              />
+              <ButtonGroup spacing={3}>
+                <Button
+                  type="submit"
+                  variant="@primary"
+                  isLoading={updateAccount.isLoading}
+                >
+                  {t('account:profile.actions.update')}
+                </Button>
+                {form.formState.isDirty && (
+                  <Button onClick={() => form.reset()}>
+                    {t('common:actions.cancel')}
                   </Button>
-                  {form.formState.isDirty && (
-                    <Button onClick={() => form.reset()}>
-                      {t('common:actions.cancel')}
-                    </Button>
-                  )}
-                </ButtonGroup>
-              </Stack>
-            </form>
+                )}
+              </ButtonGroup>
+            </Stack>
           </Form>
         </Stack>
       )}

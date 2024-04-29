@@ -67,13 +67,11 @@ export default function PageLoginValidate() {
         {t('common:actions.back')}
       </Button>
 
-      <Form {...form}>
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-          <VerificationCodeForm
-            email={email ?? ''}
-            isLoading={validate.isLoading || validate.isSuccess}
-          />
-        </form>
+      <Form {...form} onSubmit={onSubmit}>
+        <VerificationCodeForm
+          email={email ?? ''}
+          isLoading={validate.isLoading || validate.isSuccess}
+        />
       </Form>
     </Stack>
   );

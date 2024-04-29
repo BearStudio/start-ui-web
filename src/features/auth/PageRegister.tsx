@@ -81,50 +81,48 @@ export default function PageRegister() {
         </Button>
       </Stack>
 
-      <Form {...form}>
-        <form
-          noValidate
-          onSubmit={form.handleSubmit((values) => {
-            register.mutate(values);
-          })}
-        >
-          <Stack spacing="4">
-            <FormField
-              control={form.control}
-              type="select"
-              name="language"
-              label={t('auth:data.language.label')}
-              options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                label: t(`common:languages.${key}`),
-                value: key,
-              }))}
-            />
-            <FormField
-              control={form.control}
-              type="text"
-              name="name"
-              label={t('auth:data.name.label')}
-            />
-            <FormField
-              control={form.control}
-              type="email"
-              name="email"
-              label={t('auth:data.email.label')}
-            />
-            <Flex>
-              <Button
-                isLoading={register.isLoading}
-                type="submit"
-                variant="@primary"
-                flex={1}
-                size="lg"
-              >
-                {t('auth:register.actions.create')}
-              </Button>
-            </Flex>
-            <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
-          </Stack>
-        </form>
+      <Form
+        {...form}
+        onSubmit={(values) => {
+          register.mutate(values);
+        }}
+      >
+        <Stack spacing="4">
+          <FormField
+            control={form.control}
+            type="select"
+            name="language"
+            label={t('auth:data.language.label')}
+            options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+              label: t(`common:languages.${key}`),
+              value: key,
+            }))}
+          />
+          <FormField
+            control={form.control}
+            type="text"
+            name="name"
+            label={t('auth:data.name.label')}
+          />
+          <FormField
+            control={form.control}
+            type="email"
+            name="email"
+            label={t('auth:data.email.label')}
+          />
+          <Flex>
+            <Button
+              isLoading={register.isLoading}
+              type="submit"
+              variant="@primary"
+              flex={1}
+              size="lg"
+            >
+              {t('auth:register.actions.create')}
+            </Button>
+          </Flex>
+          <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
+        </Stack>
       </Form>
     </Stack>
   );

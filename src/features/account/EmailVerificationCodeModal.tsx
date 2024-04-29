@@ -76,15 +76,13 @@ export const EmailVerificationCodeModale = () => {
       <ModalContent>
         <ModalCloseButton />
         <ModalBody>
-          <Form {...form}>
-            <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-              <VerificationCodeForm
-                email={searchParams.verifyEmail ?? ''}
-                isLoading={
-                  updateEmailValidate.isLoading || updateEmailValidate.isSuccess
-                }
-              />
-            </form>
+          <Form {...form} onSubmit={onSubmit}>
+            <VerificationCodeForm
+              email={searchParams.verifyEmail ?? ''}
+              isLoading={
+                updateEmailValidate.isLoading || updateEmailValidate.isSuccess
+              }
+            />
           </Form>
         </ModalBody>
       </ModalContent>
