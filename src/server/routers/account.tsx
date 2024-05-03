@@ -6,7 +6,6 @@ import { z } from 'zod';
 import EmailAddressChange from '@/emails/templates/email-address-change';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
-import { zUser } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
   deleteUsedCode,
@@ -49,7 +48,7 @@ export const accountRouter = createTRPCRouter({
         });
       }
 
-      return zUserAccount().parse(user);
+      return user;
     }),
 
   update: protectedProcedure()
@@ -71,11 +70,10 @@ export const accountRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         ctx.logger.info('Updating the user');
-        const user = await ctx.db.user.update({
+        return await ctx.db.user.update({
           where: { id: ctx.user.id },
           data: input,
         });
-        return zUser().parse(user);
       } catch (e) {
         ctx.logger.warn('An error occured while updating the user');
         throw new ExtendedTRPCError({
@@ -206,6 +204,6 @@ export const accountRouter = createTRPCRouter({
 
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
-      return zUser().parse(user);
+      return user;
     }),
 });

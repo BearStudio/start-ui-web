@@ -35,7 +35,7 @@ export const usersRouter = createTRPCRouter({
         });
       }
 
-      return zUser().parse(user);
+      return user;
     }),
 
   getAll: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -105,7 +105,7 @@ export const usersRouter = createTRPCRouter({
       }
 
       return {
-        items: zUser().array().parse(items),
+        items,
         nextCursor,
         total,
       };
@@ -130,10 +130,9 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info('Creating user');
       try {
-        const user = await ctx.db.user.create({
+        return await ctx.db.user.create({
           data: input,
         });
-        return zUser().parse(user);
       } catch (e) {
         throw new ExtendedTRPCError({
           cause: e,
@@ -166,14 +165,12 @@ export const usersRouter = createTRPCRouter({
       }
 
       ctx.logger.info('Deactivating user');
-      const user = await ctx.db.user.update({
+      return await ctx.db.user.update({
         where: { id: input.id },
         data: {
           accountStatus: 'DISABLED',
         },
       });
-
-      return zUser().parse(user);
     }),
 
   activate: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -201,14 +198,12 @@ export const usersRouter = createTRPCRouter({
       }
 
       ctx.logger.info('Activating user');
-      const user = await ctx.db.user.update({
+      return await ctx.db.user.update({
         where: { id: input.id },
         data: {
           accountStatus: 'ENABLED',
         },
       });
-
-      return zUser().parse(user);
     }),
 
   updateById: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -233,11 +228,10 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info({ input }, 'Updating user');
       try {
-        const user = await ctx.db.user.update({
+        return await ctx.db.user.update({
           where: { id: input.id },
           data: input,
         });
-        return zUser().parse(user);
       } catch (e) {
         throw new ExtendedTRPCError({
           cause: e,
@@ -270,9 +264,8 @@ export const usersRouter = createTRPCRouter({
       }
 
       ctx.logger.info({ input }, 'Removing user');
-      const user = await ctx.db.user.delete({
+      return await ctx.db.user.delete({
         where: { id: input.id },
       });
-      return zUser().parse(user);
     }),
 });
