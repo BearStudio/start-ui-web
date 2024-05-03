@@ -34,10 +34,10 @@ import {
   LuBookOpen,
   LuCheck,
   LuCopy,
-  LuExternalLink,
   LuLogOut,
   LuMenu,
   LuMoon,
+  LuSmartphone,
   LuSun,
   LuUser,
 } from 'react-icons/lu';
@@ -108,9 +108,8 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
               <MenuItem
                 as={LinkApp}
                 href="/"
-                target="_blank"
                 icon={
-                  <Icon icon={LuExternalLink} fontSize="lg" color="gray.400" />
+                  <Icon icon={LuSmartphone} fontSize="lg" color="gray.400" />
                 }
               >
                 {t('admin:layout.accountMenu.openApp')}

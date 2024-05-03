@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { LuExternalLink, LuLogOut, LuUser } from 'react-icons/lu';
+import { LuArrowRight, LuLogOut, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
@@ -52,10 +52,9 @@ export default function PageHome() {
               gap={2}
               display="inline-flex"
               href={ADMIN_PATH || '/'}
-              target="_blank"
             >
               {t('account:admin.button')}
-              <Icon icon={LuExternalLink} />
+              <Icon icon={LuArrowRight} />
             </Link>
           </Alert>
         )}
