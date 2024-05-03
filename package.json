@@ -55,7 +55,6 @@
     "@formkit/auto-animate": "1.0.0-beta.6",
     "@hookform/resolvers": "3.3.4",
     "@prisma/client": "5.11.0",
-    "@radix-ui/react-slot": "1.0.2",
     "@react-email/components": "0.0.15",
     "@react-email/render": "0.0.12",
     "@stoplight/elements": "8.1.0",

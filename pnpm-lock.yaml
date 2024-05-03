@@ -44,9 +44,6 @@ dependencies:
   '@prisma/client':
     specifier: 5.11.0
     version: 5.11.0(prisma@5.11.0)
-  '@radix-ui/react-slot':
-    specifier: 1.0.2
-    version: 1.0.2(@types/react@18.2.67)(react@18.2.0)
   '@react-email/components':
     specifier: 0.0.15
     version: 0.0.15(@types/react@18.2.67)(react-email@2.1.0)(react@18.2.0)
