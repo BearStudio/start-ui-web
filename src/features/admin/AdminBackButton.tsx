@@ -7,7 +7,7 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { useRtl } from '@/hooks/useRtl';
 
 export type AdminBackButtonProps = {
-  withConfrim?: boolean;
+  withConfirm?: boolean;
 };
 
 export const AdminBackButton = (props: AdminBackButtonProps) => {
@@ -18,7 +18,7 @@ export const AdminBackButton = (props: AdminBackButtonProps) => {
     <ConfirmModal
       onConfirm={() => router.back()}
       size="lg"
-      isEnabled={props.withConfrim ?? false}
+      isEnabled={props.withConfirm ?? false}
       title={t('common:confirmDiscardChanges.title')}
       message={t('common:confirmDiscardChanges.message')}
       confirmVariant="@dangerSecondary"

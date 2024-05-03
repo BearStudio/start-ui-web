@@ -86,7 +86,7 @@ export default function PageAdminUserUpdate() {
     >
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
         <AdminLayoutPageTopBar
-          leftActions={<AdminBackButton withConfrim={form.formState.isDirty} />}
+          leftActions={<AdminBackButton withConfirm={form.formState.isDirty} />}
           rightActions={
             <>
               <AdminCancelButton withConfrim={form.formState.isDirty} />
