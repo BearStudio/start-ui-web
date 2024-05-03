@@ -49,7 +49,7 @@ export const accountRouter = createTRPCRouter({
         });
       }
 
-      return zUser().parse(user);
+      return zUserAccount().parse(user);
     }),
 
   update: protectedProcedure()
