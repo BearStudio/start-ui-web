@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
-      NEXT_PUBLIC_DEV_ENV_NAME: tests
+      NEXT_PUBLIC_ENV_NAME: tests
       DATABASE_URL: postgres://startui:startui@localhost:5432/startui
       NEXT_PUBLIC_IS_DEMO: false
       AUTH_SECRET: Replace me with `openssl rand -base64 32` generated secret

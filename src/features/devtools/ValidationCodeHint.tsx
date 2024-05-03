@@ -10,7 +10,7 @@ import { useFormContext } from '@formiz/core';
 import { env } from '@/env.mjs';
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
 
-export const DevCodeHint = () => {
+export const ValidationCodeHint = () => {
   const form = useFormContext();
 
   if (env.NEXT_PUBLIC_NODE_ENV !== 'development' && !env.NEXT_PUBLIC_IS_DEMO)

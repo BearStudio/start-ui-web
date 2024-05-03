@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
-import { DevEnvHint } from '@/features/devtools/DevEnvHint';
+import { EnvHint } from '@/features/devtools/EnvHint';
 import i18n from '@/lib/i18n/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
@@ -70,7 +70,7 @@ export const Document = ({ children }: { children: ReactNode }) => {
         <Providers>
           <TrpcProvider>
             <Viewport>{children}</Viewport>
-            <DevEnvHint />
+            <EnvHint />
             <ReactQueryDevtools initialIsOpen={false} />
           </TrpcProvider>
         </Providers>

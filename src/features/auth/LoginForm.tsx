@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FieldInput } from '@/components/FieldInput';
 import { useToastError } from '@/components/Toast';
-import { DevLoginHint } from '@/features/devtools/DevLoginHint';
+import { LoginHint } from '@/features/devtools/LoginHint';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
@@ -80,7 +80,7 @@ export const LoginForm = ({
             </Button>
           </Flex>
 
-          <DevLoginHint />
+          <LoginHint />
         </Stack>
       </Formiz>
     </Box>

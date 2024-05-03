@@ -9,7 +9,7 @@ import { useFormContext } from '@formiz/core';
 
 import { env } from '@/env.mjs';
 
-export const DevLoginHint = () => {
+export const LoginHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
 

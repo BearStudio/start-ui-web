@@ -41,9 +41,30 @@ export const env = createEnv({
       .default('false')
       .transform((v) => v === 'true'),
     NEXT_PUBLIC_BASE_URL: z.string().url(),
-
-    NEXT_PUBLIC_DEV_ENV_NAME: z.string().optional(),
-    NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME: z.string().optional(),
+    NEXT_PUBLIC_ENV_NAME: z
+      .string()
+      .optional()
+      .transform(
+        (value) =>
+          value ??
+          (process.env.NODE_ENV === 'development' ? 'LOCAL' : undefined)
+      ),
+    NEXT_PUBLIC_ENV_EMOJI: z
+      .string()
+      .emoji()
+      .optional()
+      .transform(
+        (value) =>
+          value ?? (process.env.NODE_ENV === 'development' ? '🚧' : undefined)
+      ),
+    NEXT_PUBLIC_ENV_COLOR_SCHEME: z
+      .string()
+      .optional()
+      .transform(
+        (value) =>
+          value ??
+          (process.env.NODE_ENV === 'development' ? 'warning' : 'success')
+      ),
     NEXT_PUBLIC_NODE_ENV: zNodeEnv,
   },
 
@@ -63,9 +84,9 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_VERCEL_URL
       ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL,
-    NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME:
-      process.env.NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME,
-    NEXT_PUBLIC_DEV_ENV_NAME: process.env.NEXT_PUBLIC_DEV_ENV_NAME,
+    NEXT_PUBLIC_ENV_COLOR_SCHEME: process.env.NEXT_PUBLIC_ENV_COLOR_SCHEME,
+    NEXT_PUBLIC_ENV_NAME: process.env.NEXT_PUBLIC_ENV_NAME,
+    NEXT_PUBLIC_ENV_EMOJI: process.env.NEXT_PUBLIC_ENV_EMOJI,
     NEXT_PUBLIC_IS_DEMO: process.env.NEXT_PUBLIC_IS_DEMO,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
   },

@@ -145,11 +145,12 @@ Tests are written in the `e2e` folder; there is also a `e2e/utils` folder which 
 
 ## Show hint on development environments
 
-Setup the `NEXT_PUBLIC_DEV_ENV_NAME` env variable with the name of the environment.
+Setup the `NEXT_PUBLIC_ENV_NAME` env variable with the name of the environment.
 
 ```
-NEXT_PUBLIC_DEV_ENV_NAME="staging"
-NEXT_PUBLIC_DEV_ENV_COLOR_SCHEME="teal"
+NEXT_PUBLIC_ENV_NAME="staging"
+NEXT_PUBLIC_ENV_EMOJI="🔬"
+NEXT_PUBLIC_ENV_COLOR_SCHEME="teal"
 ```
 
 ## Translations
