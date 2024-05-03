@@ -2,13 +2,12 @@ import { ReactNode } from 'react';
 
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
+import { FieldCommonProps } from '@/components/Form/FormField';
+import { FormFieldError } from '@/components/Form/FormFieldError';
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldItem } from '@/components/Form/FormFieldItem';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
-
-import { FieldCommonProps } from '../FormField';
-import { FormFieldError } from '../FormFieldError';
-import { FormFieldHelper } from '../FormFieldHelper';
-import { FormFieldItem } from '../FormFieldItem';
-import { FormFieldLabel } from '../FormFieldLabel';
 
 export type FieldSelectProps<
   TFieldValues extends FieldValues = FieldValues,

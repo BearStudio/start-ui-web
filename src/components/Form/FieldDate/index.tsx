@@ -4,12 +4,11 @@ import { InputProps } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { DayPicker } from '@/components/DayPicker';
-
-import { FieldCommonProps } from '../FormField';
-import { FormFieldError } from '../FormFieldError';
-import { FormFieldHelper } from '../FormFieldHelper';
-import { FormFieldItem } from '../FormFieldItem';
-import { FormFieldLabel } from '../FormFieldLabel';
+import { FieldCommonProps } from '@/components/Form/FormField';
+import { FormFieldError } from '@/components/Form/FormFieldError';
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldItem } from '@/components/Form/FormFieldItem';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldDateProps<
   TFieldValues extends FieldValues = FieldValues,

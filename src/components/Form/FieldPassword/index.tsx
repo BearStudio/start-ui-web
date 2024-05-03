@@ -11,11 +11,14 @@ import {
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import { FieldCommonProps, useFormFieldContext } from '../FormField';
-import { FormFieldError } from '../FormFieldError';
-import { FormFieldHelper } from '../FormFieldHelper';
-import { FormFieldItem } from '../FormFieldItem';
-import { FormFieldLabel } from '../FormFieldLabel';
+import {
+  FieldCommonProps,
+  useFormFieldContext,
+} from '@/components/Form/FormField';
+import { FormFieldError } from '@/components/Form/FormFieldError';
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldItem } from '@/components/Form/FormFieldItem';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldPasswordProps<
   TFieldValues extends FieldValues = FieldValues,

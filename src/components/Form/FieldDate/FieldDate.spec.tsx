@@ -2,10 +2,10 @@ import dayjs from 'dayjs';
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
+import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
 import { FormField } from '..';
-import { FormMocked } from '../form-test-utils';
 
 test('update value', async () => {
   const user = setupUser();

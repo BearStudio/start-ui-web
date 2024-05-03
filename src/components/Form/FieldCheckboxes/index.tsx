@@ -9,11 +9,11 @@ import {
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
-import { FieldCommonProps } from '../FormField';
-import { FormFieldError } from '../FormFieldError';
-import { FormFieldHelper } from '../FormFieldHelper';
-import { FormFieldItem } from '../FormFieldItem';
-import { FormFieldLabel } from '../FormFieldLabel';
+import { FieldCommonProps } from '@/components/Form/FormField';
+import { FormFieldError } from '@/components/Form/FormFieldError';
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldItem } from '@/components/Form/FormFieldItem';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldCheckboxesProps<
   TFieldValues extends FieldValues = FieldValues,

@@ -8,11 +8,14 @@ import {
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-import { FieldCommonProps, useFormFieldContext } from '../FormField';
-import { FormFieldError } from '../FormFieldError';
-import { FormFieldHelper } from '../FormFieldHelper';
-import { FormFieldItem } from '../FormFieldItem';
-import { FormFieldLabel } from '../FormFieldLabel';
+import {
+  FieldCommonProps,
+  useFormFieldContext,
+} from '@/components/Form/FormField';
+import { FormFieldError } from '@/components/Form/FormFieldError';
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldItem } from '@/components/Form/FormFieldItem';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldOtpProps<
   TFieldValues extends FieldValues = FieldValues,
