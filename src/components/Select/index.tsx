@@ -47,6 +47,7 @@ const SelectComponent = <
       selectedOptionColorScheme="brand"
       useBasicStyles
       styles={{ menuPortal: (provided) => ({ ...provided, zIndex: 9999 }) }}
+      menuPortalTarget={document.body}
       chakraStyles={{
         dropdownIndicator: (provided) => ({
           ...provided,
