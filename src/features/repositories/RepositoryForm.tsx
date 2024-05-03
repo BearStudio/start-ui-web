@@ -1,36 +1,37 @@
 import React from 'react';
 
 import { Stack } from '@chakra-ui/react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FieldInput } from '@/components/FieldInput';
-import { FieldTextarea } from '@/components/FieldTextarea';
-
-export type RepositoryFormFields = {
-  name: string;
-  link: string;
-  description?: string | null;
-};
+import { FormField } from '@/components/Form';
+import { FormFieldsRepository } from '@/features/repositories/schemas';
 
 export const RepositoryForm = () => {
   const { t } = useTranslation(['common', 'repositories']);
+  const form = useFormContext<FormFieldsRepository>();
 
   return (
     <Stack spacing={4}>
-      <FieldInput
+      <FormField
+        control={form.control}
+        type="text"
         name="name"
         label={t('repositories:data.name.label')}
-        required={t('repositories:data.name.required')}
       />
-      <FieldInput
+      <FormField
+        control={form.control}
+        type="text"
         name="link"
-        required={t('repositories:data.link.required')}
         label={t('repositories:data.link.label')}
       />
-      <FieldTextarea
+      <FormField
+        control={form.control}
+        type="textarea"
         name="description"
         label={t('repositories:data.description.label')}
-        textareaProps={{ rows: 6 }}
+        optionalityHint="optional"
+        rows={6}
       />
     </Stack>
   );

@@ -7,15 +7,21 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Form } from '@/components/Form';
 import { useToastSuccess } from '@/components/Toast';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
 } from '@/features/auth/VerificationCodeForm';
+import {
+  FormFieldsVerificationCode,
+  zFormFieldsVerificationCode,
+} from '@/features/auth/schemas';
 import { trpc } from '@/lib/trpc/client';
 
 export const SEARCH_PARAM_VERIFY_EMAIL = 'verify-email';
@@ -40,15 +46,16 @@ export const EmailVerificationCodeModale = () => {
     });
   };
 
-  const form = useForm<{ code: string }>({
-    onValidSubmit: (values) => {
-      updateEmailValidate.mutate({
-        code: values.code,
-        token: searchParams.token ?? '',
-      });
+  const form = useForm<FormFieldsVerificationCode>({
+    mode: 'onBlur',
+    resolver: zodResolver(zFormFieldsVerificationCode()),
+    defaultValues: {
+      code: '',
     },
   });
-  const onVerificationCodeError = useOnVerificationCodeError({ form });
+  const onVerificationCodeError = useOnVerificationCodeError({
+    onError: (error) => form.setError('code', { message: error }),
+  });
   const updateEmailValidate = trpc.account.updateEmailValidate.useMutation({
     onSuccess: async () => {
       onClose();
@@ -59,18 +66,24 @@ export const EmailVerificationCodeModale = () => {
     onError: onVerificationCodeError,
   });
 
+  const onSubmit: SubmitHandler<FormFieldsVerificationCode> = (values) => {
+    updateEmailValidate.mutate({ ...values, token: searchParams.token ?? '' });
+  };
+
   return (
     <Modal size="sm" isOpen onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
         <ModalBody>
-          <Formiz connect={form} autoForm>
+          <Form {...form} onSubmit={onSubmit}>
             <VerificationCodeForm
               email={searchParams.verifyEmail ?? ''}
-              isLoading={updateEmailValidate.isLoading}
+              isLoading={
+                updateEmailValidate.isLoading || updateEmailValidate.isSuccess
+              }
             />
-          </Formiz>
+          </Form>
         </ModalBody>
       </ModalContent>
     </Modal>

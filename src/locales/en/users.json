@@ -63,7 +63,8 @@
     },
     "name": {
       "label": "Name",
-      "required": "Name is required"
+      "required": "Name is required",
+      "invalid": "Name is invalid"
     },
     "language": {
       "label": "Language"

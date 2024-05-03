@@ -11,3 +11,14 @@ export const zUserAccount = () =>
     authorizations: true,
     language: true,
   });
+
+export type FormFieldsAccountEmail = z.infer<
+  ReturnType<typeof zFormFieldsAccountEmail>
+>;
+export const zFormFieldsAccountEmail = () => zUser().pick({ email: true });
+
+export type FormFieldsAccountProfile = z.infer<
+  ReturnType<typeof zFormFieldsAccountProfile>
+>;
+export const zFormFieldsAccountProfile = () =>
+  zUserAccount().pick({ name: true, language: true }).required();

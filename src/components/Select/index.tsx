@@ -1,3 +1,5 @@
+import { ForwardedRef } from 'react';
+
 import {
   AsyncCreatableProps,
   AsyncProps,
@@ -8,7 +10,10 @@ import {
   CreatableProps,
   GroupBase,
   Props,
+  SelectInstance,
 } from 'chakra-react-select';
+
+import { fixedForwardRef } from '@/lib/utils';
 
 export type SelectProps<
   Option = unknown,
@@ -20,14 +25,14 @@ export type SelectProps<
   | ({ type: 'async' } & AsyncProps<Option, IsMulti, Group>)
   | ({ type: 'async-creatable' } & AsyncCreatableProps<Option, IsMulti, Group>);
 
-export const Select = <
+const SelectComponent = <
   Option = unknown,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
->({
-  type = 'select',
-  ...props
-}: SelectProps<Option, IsMulti, Group>) => {
+>(
+  { type = 'select', ...props }: SelectProps<Option, IsMulti, Group>,
+  ref: ForwardedRef<SelectInstance<Option, IsMulti, Group>>
+) => {
   const Element = (() => {
     if (type === 'async-creatable') return ChakraAsyncCreatableSelect;
     if (type === 'async') return ChakraAsyncReactSelect;
@@ -37,10 +42,12 @@ export const Select = <
 
   return (
     <Element
+      ref={ref}
       colorScheme="brand"
       selectedOptionColorScheme="brand"
       useBasicStyles
       styles={{ menuPortal: (provided) => ({ ...provided, zIndex: 9999 }) }}
+      menuPortalTarget={document.body}
       chakraStyles={{
         dropdownIndicator: (provided) => ({
           ...provided,
@@ -69,3 +76,5 @@ export const Select = <
     />
   );
 };
+
+export const Select = fixedForwardRef(SelectComponent);

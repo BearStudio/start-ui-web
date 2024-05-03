@@ -8,12 +8,13 @@ import {
   Flex,
   Stack,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
-import { isEmail } from '@formiz/validations';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FieldInput } from '@/components/FieldInput';
+import { Form, FormField } from '@/components/Form';
 import { useToastError } from '@/components/Toast';
+import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginHint } from '@/features/devtools/LoginHint';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
@@ -43,34 +44,33 @@ export const LoginForm = ({
     },
   });
 
-  const form = useForm<{ email: string }>({
-    onValidSubmit: (values) => {
-      login.mutate(values);
+  const form = useForm<FormFieldsLogin>({
+    mode: 'onBlur',
+    resolver: zodResolver(zFormFieldsLogin()),
+    defaultValues: {
+      email: '',
     },
   });
 
   return (
     <Box {...rest}>
-      <Formiz autoForm connect={form}>
+      <Form
+        {...form}
+        onSubmit={(values) => {
+          login.mutate(values);
+        }}
+      >
         <Stack spacing={4}>
-          <FieldInput
+          <FormField
+            type="email"
+            control={form.control}
             name="email"
             size="lg"
-            required={t('auth:data.email.required')}
-            validations={[
-              {
-                handler: isEmail(),
-                message: t('auth:data.email.invalid'),
-              },
-            ]}
-            formatValue={(v) => v?.toString()?.toLowerCase().trim()}
             placeholder={t('auth:data.email.label')}
           />
-
           <Flex>
             <Button
               isLoading={login.isLoading || login.isSuccess}
-              isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant={buttonVariant}
               size="lg"
@@ -82,7 +82,7 @@ export const LoginForm = ({
 
           <LoginHint />
         </Stack>
-      </Formiz>
+      </Form>
     </Box>
   );
 };

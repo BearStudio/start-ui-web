@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { Button, Heading, SkeletonText, Stack } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
+import { Form } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
@@ -15,10 +17,11 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
+import { RepositoryForm } from '@/features/repositories/RepositoryForm';
 import {
-  RepositoryForm,
-  RepositoryFormFields,
-} from '@/features/repositories/RepositoryForm';
+  FormFieldsRepository,
+  zFormFieldsRepository,
+} from '@/features/repositories/schemas';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
@@ -33,8 +36,7 @@ export default function PageAdminRepositoryUpdate() {
       id: params?.id?.toString() ?? '',
     },
     {
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
+      staleTime: Infinity,
     }
   );
 
@@ -53,7 +55,9 @@ export default function PageAdminRepositoryUpdate() {
     },
     onError: (error) => {
       if (isErrorDatabaseConflict(error, 'name')) {
-        form.setErrors({ name: t('repositories:data.name.alreadyUsed') });
+        form.setError('name', {
+          message: t('repositories:data.name.alreadyUsed'),
+        });
         return;
       }
       toastError({
@@ -62,33 +66,38 @@ export default function PageAdminRepositoryUpdate() {
     },
   });
 
-  const form = useForm<RepositoryFormFields>({
-    ready: isReady,
-    initialValues: repository.data,
-    onValidSubmit: (values) => {
-      if (!repository.data?.id) return;
-      updateRepository.mutate({
-        ...repository.data,
-        ...values,
-      });
+  const form = useForm<FormFieldsRepository>({
+    resolver: zodResolver(zFormFieldsRepository()),
+    values: {
+      name: repository.data?.name ?? '',
+      link: repository.data?.link ?? '',
+      description: repository.data?.description,
     },
   });
 
   return (
-    <Formiz connect={form} autoForm>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        if (!repository.data?.id) return;
+        updateRepository.mutate({
+          id: repository.data.id,
+          ...values,
+        });
+      }}
+    >
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
         <AdminLayoutPageTopBar
-          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          leftActions={<AdminBackButton withConfirm={form.formState.isDirty} />}
           rightActions={
             <>
-              <AdminCancelButton withConfrim={!form.isPristine} />
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
               <Button
                 type="submit"
                 variant="@primary"
                 isLoading={
                   updateRepository.isLoading || updateRepository.isSuccess
                 }
-                isDisabled={!form.isValid && form.isSubmitted}
               >
                 {t('repositories:update.action.save')}
               </Button>
@@ -110,6 +119,6 @@ export default function PageAdminRepositoryUpdate() {
           </AdminLayoutPageContent>
         )}
       </AdminLayoutPage>
-    </Formiz>
+    </Form>
   );
 }

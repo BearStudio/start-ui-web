@@ -5,7 +5,7 @@ import {
   AlertTitle,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useFormContext } from '@formiz/core';
+import { useFormContext } from 'react-hook-form';
 
 import { env } from '@/env.mjs';
 
@@ -28,11 +28,7 @@ export const LoginHint = () => {
           as="button"
           type="button"
           fontWeight="bold"
-          onClick={() =>
-            form.setValues({
-              email: mockedEmail,
-            })
-          }
+          onClick={() => form.setValue('email', mockedEmail)}
         >
           {mockedEmail}
         </ChakraLink>

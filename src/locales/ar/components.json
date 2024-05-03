@@ -86,5 +86,8 @@
       "november": "نوفمبر",
       "december": "ديسمبر"
     }
+  },
+  "formField": {
+    "optional": "خياري"
   }
 }

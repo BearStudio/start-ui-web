@@ -20,13 +20,10 @@
   },
   "data": {
     "name": {
-      "label": "Nom",
-      "required": "Le nom est requis"
+      "label": "Nom"
     },
     "email": {
       "label": "Email",
-      "required": "L'email est requis",
-      "invalid": "L'email est invalide",
       "current": "Ceci est votre email actuel"
     },
     "language": {

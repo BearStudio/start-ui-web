@@ -55,6 +55,9 @@
     "placeholder": "Search...",
     "clear": "Clear Search"
   },
+  "formField": {
+    "optional": "Optional"
+  },
   "fieldDayPicker": {
     "invalidMessage": "Invalid date"
   },

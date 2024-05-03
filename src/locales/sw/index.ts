@@ -1,3 +1,5 @@
+import 'dayjs/locale/sw';
+
 import account from './account.json';
 import admin from './admin.json';
 import adminDashboard from './adminDashboard.json';

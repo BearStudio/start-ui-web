@@ -20,6 +20,11 @@ enum AccountStatus {
   NOT_VERIFIED
 }
 
+enum UserRole {
+  APP
+  ADMIN
+}
+
 model User {
   id             String        @id @default(cuid())
   createdAt      DateTime      @default(now())
@@ -28,7 +33,7 @@ model User {
   email          String        @unique
   accountStatus  AccountStatus @default(NOT_VERIFIED)
   image          String?
-  authorizations String[]      @default(["APP"])
+  authorizations UserRole[]    @default([APP])
   language       String        @default("en")
   lastLoginAt    DateTime?
 }

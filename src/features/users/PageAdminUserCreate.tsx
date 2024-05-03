@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { Button, Heading } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Form } from '@/components/Form';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
@@ -13,7 +15,9 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
-import { UserForm, UserFormFields } from '@/features/users/UserForm';
+import { UserForm } from '@/features/users/UserForm';
+import { FormFieldUser, zFormFieldsUser } from '@/features/users/schemas';
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
 import { isErrorDatabaseConflict } from '@/lib/trpc/errors';
 
@@ -35,8 +39,7 @@ export default function PageAdminUserCreate() {
     },
     onError: (error) => {
       if (isErrorDatabaseConflict(error, 'email')) {
-        form.setErrors({ email: t('users:data.email.alreadyUsed') });
-
+        form.setError('email', { message: t('users:data.email.alreadyUsed') });
         return;
       }
       toastError({
@@ -45,25 +48,33 @@ export default function PageAdminUserCreate() {
     },
   });
 
-  const form = useForm<UserFormFields>({
-    onValidSubmit: (values) => {
-      createUser.mutate(values);
+  const form = useForm<FormFieldUser>({
+    resolver: zodResolver(zFormFieldsUser()),
+    defaultValues: {
+      name: '',
+      email: '',
+      language: DEFAULT_LANGUAGE_KEY,
+      authorizations: ['APP'],
     },
   });
 
   return (
-    <Formiz connect={form} autoForm>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        createUser.mutate(values);
+      }}
+    >
       <AdminLayoutPage containerMaxWidth="container.md" showNavBar={false}>
         <AdminLayoutPageTopBar
-          leftActions={<AdminBackButton withConfrim={!form.isPristine} />}
+          leftActions={<AdminBackButton withConfirm={form.formState.isDirty} />}
           rightActions={
             <>
-              <AdminCancelButton withConfrim={!form.isPristine} />
+              <AdminCancelButton withConfrim={form.formState.isDirty} />
               <Button
                 type="submit"
                 variant="@primary"
                 isLoading={createUser.isLoading || createUser.isSuccess}
-                isDisabled={!form.isValid && form.isSubmitted}
               >
                 {t('users:create.action.save')}
               </Button>
@@ -76,6 +87,6 @@ export default function PageAdminUserCreate() {
           <UserForm />
         </AdminLayoutPageContent>
       </AdminLayoutPage>
-    </Formiz>
+    </Form>
   );
 }

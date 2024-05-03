@@ -2,7 +2,7 @@
   "name": "start-ui-web",
   "private": true,
   "version": "2.0.0",
-  "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 🐜 Formiz — From the 🐻 BearStudio Team",
+  "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 📋 React Hook Form — From the 🐻 BearStudio Team",
   "engines": {
     "node": ">=18"
   },
@@ -24,6 +24,9 @@
     "storybook:build": "pnpm build:info && storybook build && mv ./storybook-static ./public/storybook",
     "theme:generate-typing": "chakra-cli tokens ./src/theme/theme.ts",
     "theme:generate-icons": "svgr --config-file src/components/Icons/svgr.config.js src/components/Icons/svg-sources",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "test:ui": "vitest --ui",
     "e2e": "dotenv -- cross-var playwright test",
     "e2e:ui": "dotenv -- cross-var playwright test --ui",
     "dk:init": "docker compose up -d && sleep 10 && pnpm db:init",
@@ -49,9 +52,8 @@
     "@emotion/styled": "11.11.0",
     "@faker-js/faker": "8.4.1",
     "@fontsource/inter": "5.0.17",
-    "@formiz/core": "2.2.3",
-    "@formiz/validations": "2.0.1",
     "@formkit/auto-animate": "1.0.0-beta.6",
+    "@hookform/resolvers": "3.3.4",
     "@prisma/client": "5.11.0",
     "@react-email/components": "0.0.15",
     "@react-email/render": "0.0.12",
@@ -82,6 +84,7 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "4.0.13",
     "react-focus-lock": "2.11.2",
+    "react-hook-form": "7.51.0",
     "react-i18next": "14.1.0",
     "react-icons": "5.0.1",
     "react-modal-sheet": "2.2.0",
@@ -92,6 +95,7 @@
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
     "zod": "3.22.4",
+    "zod-i18n-map": "2.27.0",
     "zustand": "4.5.2"
   },
   "devDependencies": {
@@ -108,6 +112,8 @@
     "@storybook/react": "8.0.2",
     "@storybook/theming": "8.0.2",
     "@svgr/cli": "8.1.0",
+    "@testing-library/react": "14.3.0",
+    "@testing-library/user-event": "14.5.2",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/bcrypt": "5.0.2",
     "@types/jsonwebtoken": "9.0.6",
@@ -116,7 +122,10 @@
     "@types/react": "18.2.67",
     "@types/react-dom": "18.2.22",
     "@typescript-eslint/eslint-plugin": "7.3.1",
+    "@vitejs/plugin-react": "4.2.1",
+    "@vitest/ui": "1.5.0",
     "cross-var": "1.1.0",
+    "date-fns": "2.3.0",
     "dotenv-cli": "7.4.1",
     "encoding": "0.1.13",
     "eslint": "8.57.0",
@@ -124,6 +133,7 @@
     "eslint-plugin-sonarjs": "0.24.0",
     "eslint-plugin-storybook": "0.8.0",
     "husky": "9.0.11",
+    "jsdom": "24.0.0",
     "lint-staged": "15.2.2",
     "maildev": "2.1.0",
     "npm-run-all": "4.1.5",
@@ -132,7 +142,8 @@
     "storybook": "8.0.2",
     "storybook-dark-mode": "4.0.1",
     "tsx": "4.7.1",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "vitest": "1.5.0"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed/index.ts"

@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
 
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
-import { Formiz, useForm, useFormFields } from '@formiz/core';
-import { isEmail } from '@formiz/validations';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FieldInput } from '@/components/FieldInput';
-import { FieldSelect } from '@/components/FieldSelect';
+import { Form, FormField } from '@/components/Form';
 import { useToastError } from '@/components/Toast';
 import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
+import {
+  FormFieldsRegister,
+  zFormFieldsRegister,
+} from '@/features/auth/schemas';
 import { DemoRegisterHint } from '@/features/demo-mode/DemoRegisterHint';
-import { AVAILABLE_LANGUAGES, Language } from '@/lib/i18n/constants';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageRegister() {
@@ -34,24 +37,21 @@ export default function PageRegister() {
     },
   });
 
-  const form = useForm<{
-    language: string;
-    name: string;
-    email: string;
-  }>({
-    onValidSubmit: (values) => register.mutate(values),
+  const form = useForm<FormFieldsRegister>({
+    resolver: zodResolver(zFormFieldsRegister()),
+    defaultValues: {
+      name: '',
+      email: '',
+      language: i18n.language,
+    },
   });
 
-  const values = useFormFields({
-    connect: form,
-    fields: ['language'] as const,
-    selector: (field) => field.value,
-  });
+  const language = form.watch('language');
 
   // Change language based on form
   useEffect(() => {
-    i18n.changeLanguage(values?.language);
-  }, [i18n, values?.language]);
+    i18n.changeLanguage(language);
+  }, [i18n, language]);
 
   return (
     <Stack spacing={6}>
@@ -81,37 +81,38 @@ export default function PageRegister() {
         </Button>
       </Stack>
 
-      <Formiz connect={form} autoForm>
+      <Form
+        {...form}
+        onSubmit={(values) => {
+          register.mutate(values);
+        }}
+      >
         <Stack spacing="4">
-          <FieldSelect
+          <FormField
+            control={form.control}
+            type="select"
             name="language"
             label={t('auth:data.language.label')}
             options={AVAILABLE_LANGUAGES.map(({ key }) => ({
               label: t(`common:languages.${key}`),
               value: key,
             }))}
-            defaultValue={i18n.language as Language['key']}
           />
-          <FieldInput
+          <FormField
+            control={form.control}
+            type="text"
             name="name"
             label={t('auth:data.name.label')}
-            required={t('auth:data.name.required')}
           />
-          <FieldInput
+          <FormField
+            control={form.control}
+            type="email"
             name="email"
             label={t('auth:data.email.label')}
-            required={t('auth:data.email.required')}
-            validations={[
-              {
-                handler: isEmail(),
-                message: t('auth:data.email.invalid'),
-              },
-            ]}
           />
           <Flex>
             <Button
               isLoading={register.isLoading}
-              isDisabled={form.isSubmitted && !form.isValid}
               type="submit"
               variant="@primary"
               flex={1}
@@ -122,7 +123,7 @@ export default function PageRegister() {
           </Flex>
           <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
         </Stack>
-      </Formiz>
+      </Form>
     </Stack>
   );
 }

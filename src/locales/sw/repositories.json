@@ -21,9 +21,6 @@
     }
   },
   "data": {
-    "id": {
-      "label": "ID"
-    },
     "name": {
       "label": "Jina",
       "required": "Jina linahitajika",
@@ -31,7 +28,9 @@
     },
     "link": {
       "label": "Kiungo",
-      "required": "Kiungo kinahitajika"
+      "required": "Kiungo kinahitajika",
+      "tooSmall": "Kiungo lazima kiwe na angalau vibambo {{min}}",
+      "missingDot": "Kiungo batili, lazima kiwe na angalau nukta"
     },
     "description": {
       "label": "Maelezo"

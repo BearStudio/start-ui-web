@@ -2,7 +2,7 @@
   "title": "Dashboard",
   "welcome": {
     "title": "Welcome to 🚀 Start UI [web]",
-    "description": "An opinionated UI starter with React, Chakra UI, React Query & Formiz",
+    "description": "An opinionated UI starter with React, Chakra UI, React Query & React Hook Form",
     "author": "— From the <strong>BearStudio Team</strong>"
   },
   "links": {
