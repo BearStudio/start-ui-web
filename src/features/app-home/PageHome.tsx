@@ -16,8 +16,8 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import {
   LuAlertCircle,
+  LuArrowRight,
   LuBookOpen,
-  LuExternalLink,
   LuGithub,
 } from 'react-icons/lu';
 
@@ -90,10 +90,9 @@ export default function PageHome() {
               gap={2}
               display="inline-flex"
               href={ADMIN_PATH || '/'}
-              target="_blank"
             >
               {t('account:admin.button')}
-              <Icon icon={LuExternalLink} />
+              <Icon icon={LuArrowRight} />
             </Link>
           </Alert>
         )}
