@@ -3,10 +3,7 @@
 import { useColorModeValue, useToken } from '@chakra-ui/react';
 import HolyLoader from 'holy-loader';
 
-import {
-  devEnvHintColorScheme,
-  isDevEnvHintVisible,
-} from '@/features/devtools/DevEnvHint';
+import { env } from '@/env.mjs';
 
 export type NextLoaderProps = {
   darkColor?: string;
@@ -19,8 +16,12 @@ export const NextLoader = ({
   showSpinner = false,
 }: NextLoaderProps) => {
   const loaderColorKey = useColorModeValue(
-    isDevEnvHintVisible ? `${devEnvHintColorScheme}.900` : lightColor,
-    isDevEnvHintVisible ? `${devEnvHintColorScheme}.900` : darkColor
+    env.NEXT_PUBLIC_ENV_NAME
+      ? `${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.900`
+      : lightColor,
+    env.NEXT_PUBLIC_ENV_COLOR_SCHEME
+      ? `${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.900`
+      : darkColor
   );
   const loaderColor = useToken('colors', loaderColorKey);
   return (

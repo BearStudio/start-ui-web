@@ -4,9 +4,13 @@ import { Metadata } from 'next';
 
 import { Document } from '@/app/Document';
 import { NextLoader } from '@/app/NextLoader';
+import { getEnvHintTitlePrefix } from '@/features/devtools/EnvHint';
 
 export const metadata: Metadata = {
-  title: 'Start UI [web]',
+  title: {
+    template: `${getEnvHintTitlePrefix()} %s`,
+    default: `${getEnvHintTitlePrefix()} Start UI [web]`,
+  },
   applicationName: 'Start UI [web]',
   description: 'Opinionated UI starter',
 };

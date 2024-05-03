@@ -11,7 +11,7 @@ import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
-import { DevCodeHint } from '@/features/devtools/DevCodeHint';
+import { ValidationCodeHint } from '@/features/devtools/ValidationCodeHint';
 import { trpc } from '@/lib/trpc/client';
 import { AppRouter } from '@/lib/trpc/types';
 
@@ -73,7 +73,7 @@ export const VerificationCodeForm = ({
         </Button>
       </HStack>
 
-      <DevCodeHint />
+      <ValidationCodeHint />
     </Stack>
   );
 };
