@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react';
 
-import { FormControl } from '@chakra-ui/react';
+import { FormControl, FormControlProps } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 
 import { useFormFieldContext } from './FormField';
@@ -31,6 +31,7 @@ export const useFormFieldItemContext = () => {
 export type FormFieldItemProps = {
   children?: ReactNode;
   id?: string;
+  formControProps?: FormControlProps;
 };
 
 export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
@@ -54,7 +55,7 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
           isDisabled={fieldContext.isDisabled}
           id={props.id}
           gap={1}
-          /* TODO: Allows custom styles */
+          {...props.formControProps}
         >
           {props.children}
         </FormControl>
