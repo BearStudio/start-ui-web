@@ -40,6 +40,7 @@ export const Select = <
       colorScheme="brand"
       selectedOptionColorScheme="brand"
       useBasicStyles
+      styles={{ menuPortal: (provided) => ({ ...provided, zIndex: 9999 }) }}
       chakraStyles={{
         dropdownIndicator: (provided) => ({
           ...provided,
