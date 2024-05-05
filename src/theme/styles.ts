@@ -17,8 +17,6 @@ export const styles: Styles = {
       bg: 'gray.900',
     },
     body: {
-      // Prevent visual jump between pages with and without scroll
-      overflowY: 'scroll',
       WebkitTapHighlightColor: 'transparent',
       bg: 'white',
       _dark: {

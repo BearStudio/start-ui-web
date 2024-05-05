@@ -7,6 +7,7 @@ import {
   Flex,
   FlexProps,
 } from '@chakra-ui/react';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 import {
   AppLayoutContextNavDisplayed,
@@ -14,7 +15,6 @@ import {
 } from '@/features/app/AppLayout';
 
 type AppLayoutPageContextValue = {
-  noContainer: boolean;
   containerMaxWidth: ContainerProps['maxW'];
 };
 
@@ -30,9 +30,8 @@ const useAppLayoutPageContext = () => {
 };
 
 const PageContainer = ({ children, maxW, ...rest }: ContainerProps) => {
-  const { noContainer, containerMaxWidth } = useAppLayoutPageContext();
+  const { containerMaxWidth } = useAppLayoutPageContext();
 
-  if (noContainer) return <>{children}</>;
   return (
     <Container
       display="flex"
@@ -50,14 +49,14 @@ const PageContainer = ({ children, maxW, ...rest }: ContainerProps) => {
 type AppLayoutPageProps = FlexProps & {
   showNavBar?: AppLayoutContextNavDisplayed;
   containerMaxWidth?: ContainerProps['maxW'];
-  noContainer?: boolean;
+  containerProps?: ContainerProps;
   nav?: React.ReactNode;
 };
 
 export const AppLayoutPage = ({
   showNavBar = true,
-  noContainer = false,
   containerMaxWidth = 'container.md',
+  containerProps,
   children,
   ...rest
 }: AppLayoutPageProps) => {
@@ -65,23 +64,29 @@ export const AppLayoutPage = ({
 
   const value = useMemo(
     () => ({
-      noContainer,
-      containerMaxWidth: containerMaxWidth,
+      containerMaxWidth,
     }),
-    [containerMaxWidth, noContainer]
+    [containerMaxWidth]
   );
 
   return (
     <AppLayoutPageContext.Provider value={value}>
       <Flex
         position="relative"
-        zIndex="1"
-        direction="column"
-        flex="1"
         pt="safe-top"
+        as={Scrollbars}
+        direction="column"
+        flex={1}
+        __css={{
+          '& > *': {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+          },
+        }}
         {...rest}
       >
-        <PageContainer pt={4} pb={16}>
+        <PageContainer pt={4} pb={16} {...containerProps}>
           {children}
         </PageContainer>
         <Box w="full" h="0" pb="safe-bottom" />

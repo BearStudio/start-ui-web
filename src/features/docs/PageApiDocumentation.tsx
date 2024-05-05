@@ -14,8 +14,8 @@ export default function PageApiDocumentation() {
   const isMobile = useBreakpointValue({ base: true, lg: false });
 
   return (
-    <AdminLayoutPage noContainer>
-      <AdminLayoutPageContent>
+    <AdminLayoutPage containerMaxWidth="full">
+      <AdminLayoutPageContent containerProps={{ p: 0 }}>
         <Flex
           direction="column"
           position="absolute"

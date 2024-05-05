@@ -53,8 +53,6 @@ import { trpc } from '@/lib/trpc/client';
 
 import buildInfo from '../../../scripts/.build-info.json';
 
-export const ADMIN_NAV_BAR_HEIGHT = `calc(4rem + env(safe-area-inset-top))`;
-
 const AdminNavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['admin']);
   return (
@@ -155,16 +153,11 @@ export const AdminNavBar = (props: BoxProps) => {
   return (
     <Box {...props}>
       <Flex
-        zIndex="sticky"
-        position="fixed"
-        top="0"
-        insetStart="0"
-        insetEnd="0"
         color="gray.50"
         align="center"
         pt="safe-top"
         px="4"
-        h={ADMIN_NAV_BAR_HEIGHT}
+        h="calc(4rem + env(safe-area-inset-top))"
         bg="gray.800"
         boxShadow="layout"
         borderBottom="1px solid transparent"
@@ -189,7 +182,6 @@ export const AdminNavBar = (props: BoxProps) => {
         />
         <AdminNavBarAccountMenu />
       </Flex>
-      <Box h={ADMIN_NAV_BAR_HEIGHT} />
       {showDrawer && <AdminNavBarDrawer />}
     </Box>
   );
