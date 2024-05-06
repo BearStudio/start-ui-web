@@ -7,8 +7,8 @@ import EmailAddressChange from '@/emails/templates/email-address-change';
 import { env } from '@/env.mjs';
 import { zUserAccount } from '@/features/account/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
+import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
 import i18n from '@/lib/i18n/server';
-import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/lib/s3';
 import {
   deleteUsedCode,
   generateCode,

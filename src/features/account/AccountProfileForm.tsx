@@ -14,7 +14,7 @@ import {
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
 import { useAvatarUpload } from '@/features/account/useAvatarUpload';
-import { useUploadFile } from '@/hooks/useUploadFile';
+import { useAvatarFetch, useAvatarUpload } from '@/features/account/service';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -28,9 +28,7 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
-  const accountAvatar = useFetchAvatar(account.data?.image || '', {
-    enabled: !!account?.data?.image,
-  });
+  const accountAvatar = useAvatarFetch(account.data?.image || '');
 
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();

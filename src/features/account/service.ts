@@ -1,10 +1,21 @@
-import { UseQueryOptions } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import { useFileFetch } from '@/hooks/useFileFetch';
+import { trpc } from '@/lib/trpc/client';
 
-export const useFetchAvatar = (url: string, config?: UseQueryOptions) => {
-  return useFileFetch(url, ['name'], {
+import { fetchFile, uploadFile } from '../../files/utils';
+
+export const useAvatarFetch = (url: string) => {
+  return useQuery({
     queryKey: ['account', url],
-    ...config,
+    queryFn: fetchFile(url, ['name']),
+    enabled: !!url,
+  });
+};
+
+export const useAvatarUpload = () => {
+  const getPresignedUrl = trpc.account.uploadAvatarPresignedUrl.useMutation();
+  return useMutation({
+    mutationFn: uploadFile(getPresignedUrl.mutateAsync),
   });
 };

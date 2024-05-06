@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import { env } from '@/env.mjs';
-import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/lib/s3';
+import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
 import { getS3UploadSignedUrl } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 

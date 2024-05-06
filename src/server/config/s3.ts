@@ -6,7 +6,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { env } from '@/env.mjs';
-import { ReadSignedUrlOutput, UploadSignedUrlOutput } from '@/lib/s3';
+import { ReadSignedUrlOutput, UploadSignedUrlOutput } from '@/files/schemas';
 
 const S3 = new S3Client({
   region: 'auto',
