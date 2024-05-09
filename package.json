@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "Opinionated UI starter with ⚛️ React, ⚡️ Chakra UI, ⚛️ React Query & 📋 React Hook Form — From the 🐻 BearStudio Team",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "prepare": "husky",

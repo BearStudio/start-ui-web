@@ -23,7 +23,7 @@ A live read-only demonstration of what you will have when starting a project wit
 
 ## Requirements
 
-- [NodeJS](https://nodejs.org/) >=18
+- [NodeJS](https://nodejs.org/) >=20
 - [Pnpm](https://pnpm.io/)
 - [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
