@@ -34,7 +34,7 @@ export default function PageRepositories() {
       <Stack flex={1} spacing={4}>
         <Heading size="md">{t('repositories:list.title')}</Heading>
 
-        {repositories.isLoading && <LoaderFull />}
+        {repositories.isPending && <LoaderFull />}
         {repositories.isError && <ErrorPage />}
 
         {repositories.isSuccess &&

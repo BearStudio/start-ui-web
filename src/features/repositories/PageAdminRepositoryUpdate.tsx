@@ -95,7 +95,7 @@ export default function PageAdminRepositoryUpdate() {
                 type="submit"
                 variant="@primary"
                 isLoading={
-                  updateRepository.isLoading || updateRepository.isSuccess
+                  updateRepository.isPending || updateRepository.isSuccess
                 }
               >
                 {t('repositories:update.action.save')}
@@ -104,7 +104,7 @@ export default function PageAdminRepositoryUpdate() {
           }
         >
           <Stack flex={1} spacing={0}>
-            {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+            {repository.isPending && <SkeletonText maxW="6rem" noOfLines={2} />}
             {repository.isSuccess && (
               <Heading size="sm">{repository.data?.name}</Heading>
             )}

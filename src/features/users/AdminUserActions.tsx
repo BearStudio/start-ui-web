@@ -91,7 +91,7 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
   });
 
   const isLoading =
-    activateUser.isLoading || deactivateUser.isLoading || removeUser.isLoading;
+    activateUser.isPending || deactivateUser.isPending || removeUser.isPending;
 
   return (
     <Menu placement="left-start" {...rest}>

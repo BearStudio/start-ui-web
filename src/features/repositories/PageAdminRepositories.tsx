@@ -80,7 +80,7 @@ export default function PageAdminRepositories() {
           </HStack>
 
           <DataList>
-            {repositories.isLoading && <DataListLoadingState />}
+            {repositories.isPending && <DataListLoadingState />}
             {repositories.isError && (
               <DataListErrorState
                 title={t('repositories:feedbacks.loadingRepositoryError.title')}

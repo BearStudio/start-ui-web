@@ -73,7 +73,7 @@ export default function PageAdminUserCreate() {
               <Button
                 type="submit"
                 variant="@primary"
-                isLoading={createUser.isLoading || createUser.isSuccess}
+                isLoading={createUser.isPending || createUser.isSuccess}
               >
                 {t('users:create.action.save')}
               </Button>

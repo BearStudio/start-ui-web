@@ -92,14 +92,14 @@ export default function PageAdminUserUpdate() {
               <Button
                 type="submit"
                 variant="@primary"
-                isLoading={userUpdate.isLoading || userUpdate.isSuccess}
+                isLoading={userUpdate.isPending || userUpdate.isSuccess}
               >
                 {t('users:update.action.save')}
               </Button>
             </>
           }
         >
-          {user.isLoading || user.isError ? (
+          {user.isPending || user.isError ? (
             <SkeletonText maxW="6rem" noOfLines={2} />
           ) : (
             <Flex

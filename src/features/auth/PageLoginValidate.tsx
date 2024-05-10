@@ -90,7 +90,7 @@ export default function PageLoginValidate() {
       <Form {...form} onSubmit={onSubmit}>
         <VerificationCodeForm
           email={email ?? ''}
-          isLoading={validate.isLoading || validate.isSuccess}
+          isLoading={validate.isPending || validate.isSuccess}
         />
       </Form>
     </Stack>

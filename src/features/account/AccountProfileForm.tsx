@@ -62,7 +62,7 @@ export const AccountProfileForm = () => {
 
   return (
     <>
-      {account.isLoading && <LoaderFull />}
+      {account.isPending && <LoaderFull />}
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
@@ -95,7 +95,7 @@ export const AccountProfileForm = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={updateAccount.isLoading}
+                  isLoading={updateAccount.isPending}
                 >
                   {t('account:profile.actions.update')}
                 </Button>

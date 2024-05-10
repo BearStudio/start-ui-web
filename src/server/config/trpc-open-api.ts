@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { FetchHandlerOptions } from '@trpc/server/adapters/fetch';
+import type { TRPCRequestInfo } from '@trpc/server/http';
 import { IncomingMessage, ServerResponse } from 'http';
 import { OpenApiRouter } from 'trpc-openapi';
 import {
@@ -100,9 +101,20 @@ export const createOpenApiFetchHandler = async <TRouter extends OpenApiRouter>(
   const url = new URL(opts.req.url.replace(opts.endpoint, ''));
   const req: Request = await createRequestProxy(opts.req, url.toString());
 
+  /**
+   * FIXME : Temporary fix until the migration is properly done for trpc-openapi
+   */
+  const info: TRPCRequestInfo = {
+    isBatchCall: true,
+    calls: [],
+  };
   const createContext = () => {
     if (opts.createContext) {
-      return opts.createContext({ req: opts.req, resHeaders });
+      return opts.createContext({
+        req: opts.req,
+        resHeaders,
+        info,
+      });
     }
     return () => ({});
   };

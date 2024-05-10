@@ -77,7 +77,7 @@ export default function PageAdminRepositoryCreate() {
                 type="submit"
                 variant="@primary"
                 isLoading={
-                  createRepository.isLoading || createRepository.isSuccess
+                  createRepository.isPending || createRepository.isSuccess
                 }
               >
                 {t('repositories:create.action.save')}

@@ -72,7 +72,7 @@ export const LoginForm = ({
           </FormField>
           <Flex>
             <Button
-              isLoading={login.isLoading || login.isSuccess}
+              isLoading={login.isPending || login.isSuccess}
               type="submit"
               variant={buttonVariant}
               size="lg"

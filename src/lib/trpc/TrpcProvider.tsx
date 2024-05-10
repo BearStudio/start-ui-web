@@ -58,9 +58,9 @@ export function TrpcProvider(props: { children: React.ReactNode }) {
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          transformer: superjson,
         }),
       ],
-      transformer: superjson,
     })
   );
   return (

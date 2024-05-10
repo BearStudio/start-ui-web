@@ -91,7 +91,7 @@ export default function PageAdminUsers() {
           </HStack>
 
           <DataList>
-            {users.isLoading && <DataListLoadingState />}
+            {users.isPending && <DataListLoadingState />}
             {users.isError && (
               <DataListErrorState
                 title={t('users:feedbacks.loadingUserError.title')}

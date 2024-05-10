@@ -92,19 +92,19 @@ export default function PageAdminRepository() {
                 aria-label={t('common:actions.delete')}
                 icon={<LuTrash2 />}
                 isDisabled={!repository.data}
-                isLoading={repositoryRemove.isLoading}
+                isLoading={repositoryRemove.isPending}
               />
             </ConfirmModal>
           </>
         }
       >
-        {repository.isLoading && <SkeletonText maxW="6rem" noOfLines={2} />}
+        {repository.isPending && <SkeletonText maxW="6rem" noOfLines={2} />}
         {repository.isSuccess && (
           <Heading size="sm">{repository.data?.name}</Heading>
         )}
       </AdminLayoutPageTopBar>
       <AdminLayoutPageContent>
-        {repository.isLoading && <LoaderFull />}
+        {repository.isPending && <LoaderFull />}
         {repository.isError && <ErrorPage />}
         {repository.isSuccess && (
           <Card>

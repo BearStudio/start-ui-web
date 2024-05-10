@@ -77,7 +77,7 @@ export const EmailVerificationCodeModale = () => {
             <VerificationCodeForm
               email={searchParams.verifyEmail ?? ''}
               isLoading={
-                updateEmailValidate.isLoading || updateEmailValidate.isSuccess
+                updateEmailValidate.isPending || updateEmailValidate.isSuccess
               }
             />
           </Form>
