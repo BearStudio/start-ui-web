@@ -4,7 +4,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '@/env.mjs';
 import { UploadSignedUrlOutput } from '@/files/schemas';
 
-const SIGNED_URL_EXPIRATION_TIME_MS = 3600;
+const SIGNED_URL_EXPIRATION_TIME_SECONDS = 3600; // 1 hour
 
 const S3 = new S3Client({
   region: 'auto',
@@ -36,7 +36,7 @@ export const getS3UploadSignedUrl = async (
       Key: options.key,
       Metadata: options.metadata,
     }),
-    { expiresIn: options.expiresIn ?? SIGNED_URL_EXPIRATION_TIME_MS }
+    { expiresIn: options.expiresIn ?? SIGNED_URL_EXPIRATION_TIME_SECONDS }
   );
 
   return {
