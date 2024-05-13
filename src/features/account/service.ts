@@ -16,6 +16,6 @@ export const useAvatarFetch = (url: string) => {
 export const useAvatarUpload = () => {
   const getPresignedUrl = trpc.account.uploadAvatarPresignedUrl.useMutation();
   return useMutation({
-    mutationFn: (file?: File) => uploadFile(getPresignedUrl.mutateAsync, file),
+    mutationFn: (file: File) => uploadFile(getPresignedUrl.mutateAsync, file),
   });
 };

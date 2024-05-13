@@ -19,7 +19,9 @@ import { UploadSignedUrlInput } from './schemas';
   });
  */
 export const fetchFile = async (url: string, metadata?: string[]) => {
-  const fileResponse = await fetch(url);
+  const fileResponse = await fetch(url, {
+    cache: 'no-cache',
+  });
   if (!fileResponse.ok) {
     throw new Error('Could not fetch the file');
   }
@@ -57,13 +59,12 @@ export const fetchFile = async (url: string, metadata?: string[]) => {
  * @param metadata - Optional metadata for the file, which will be sent to the server when generating the presigned URL.
  *
  * @returns  A promise that resolves to an object containing the URL of the uploaded file,
- *    or undefined if no file was provided.
  *
  * @example
  * // Usage with Tanstack Query's useMutation:
  * const getPresignedUrl = trpc.routeToGetPresignedUrl.useMutation();
    const fileUpload =  useMutation({
-    mutationFn: (file?: File) => uploadFile(getPresignedUrl.mutateAsync, file),
+    mutationFn: (file: File) => uploadFile(getPresignedUrl.mutateAsync, file),
   });
  */
 export const uploadFile = async (
@@ -72,15 +73,9 @@ export const uploadFile = async (
     unknown,
     UploadSignedUrlInput | void
   >,
-  file?: File,
+  file: File,
   metadata: Record<string, string> = {}
 ) => {
-  if (!file) {
-    return {
-      fileUrl: undefined,
-    };
-  }
-
   const { signedUrl, futureFileUrl } = await getPresignedUrl({
     metadata: {
       name: file.name,
