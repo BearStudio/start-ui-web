@@ -28,6 +28,7 @@ export const AccountProfileForm = () => {
   });
 
   const accountAvatar = useAvatarFetch(account.data?.image || '');
+
   const toastSuccess = useToastSuccess();
   const toastError = useToastError();
 
@@ -83,6 +84,7 @@ export const AccountProfileForm = () => {
                 control={form.control}
                 name="image"
                 type="upload"
+                inputText={t('account:data.avatar.inputText')}
                 label={t('account:data.avatar.label')}
               />
               <FormField

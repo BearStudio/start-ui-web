@@ -19,5 +19,8 @@
     "confirmText": "Annuler les modifications",
     "message": "Vous êtes sur le point d'annuler toutes les modifications que vous avez apportées.",
     "title": "Annuler les modifications?"
+  },
+  "files": {
+    "invalid": "Le fichier doit être de type : {{acceptedTypes}}"
   }
 }

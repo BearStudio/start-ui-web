@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -13,16 +14,31 @@ export const zUploadFileType = z.enum([
 ]);
 
 export type FieldUploadValue = z.infer<ReturnType<typeof zFieldUploadValue>>;
-export const zFieldUploadValue = () =>
-  z.object({
-    fileUrl: zu.string.nonEmptyOptional(z.string()),
-    file: z.instanceof(File).optional(),
-    lastModified: z.number().optional(),
-    lastModifiedDate: z.date().optional(),
-    name: zu.string.nonEmptyOptional(z.string()),
-    size: zu.string.nonEmptyOptional(z.string()),
-    type: zu.string.nonEmptyOptional(z.string()),
-  });
+export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>
+  z
+    .object({
+      fileUrl: zu.string.nonEmptyOptional(z.string()),
+      file: z.instanceof(File).optional(),
+      lastModified: z.number().optional(),
+      lastModifiedDate: z.date().optional(),
+      name: zu.string.nonEmptyOptional(z.string()),
+      size: zu.string.nonEmptyOptional(z.string()),
+      type: zu.string.nonEmptyOptional(z.string()),
+    })
+    .refine(
+      (file) => {
+        if (!acceptedTypes || acceptedTypes.length === 0) {
+          return true;
+        }
+
+        return acceptedTypes.some((type) => file.type?.startsWith(type));
+      },
+      {
+        message: t('common:files.invalid', {
+          acceptedTypes: acceptedTypes?.join(', '),
+        }),
+      }
+    );
 
 export type UploadSignedUrlInput = z.infer<
   ReturnType<typeof zUploadSignedUrlInput>

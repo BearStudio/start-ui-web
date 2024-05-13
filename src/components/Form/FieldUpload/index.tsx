@@ -37,7 +37,6 @@ export const FieldUpload = <
 
         const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
           const file = target.files?.[0];
-          console.log('file', { file });
 
           if (!file) {
             onChange(null);
@@ -52,13 +51,10 @@ export const FieldUpload = <
             lastModifiedDate: new Date(file.lastModified),
             file,
           });
-
-          console.log('value', { value: field.value });
         };
 
         const isFieldUploadDisabled = props.isDisabled || props.isLoading;
 
-        console.log(value);
         return (
           <FormFieldItem>
             {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
