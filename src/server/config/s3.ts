@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { env } from '@/env.mjs';
-import { UploadSignedUrlOutput } from '@/files/schemas';
+import { UploadFileType, UploadSignedUrlOutput } from '@/files/schemas';
 
 const SIGNED_URL_EXPIRATION_TIME_SECONDS = 3600; // 1 hour
 
@@ -14,8 +14,6 @@ const S3 = new S3Client({
     secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 });
-
-type UploadFileType = 'image' | 'video' | 'audio' | 'blob' | 'pdf' | 'text';
 
 type UploadSignedUrlOptions = {
   allowedFileTypes?: UploadFileType[];
