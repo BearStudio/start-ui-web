@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zFieldUploadValue } from '@/files/schemas';
 
 import { Form, FormField } from '../';
+import { FieldUploadPreview } from './FieldUploadPreview';
 import { useFieldUploadFileFromUrl } from './utils';
 
 export default {
@@ -81,4 +82,34 @@ export const WithDefaultValue = () => {
   );
 };
 
-// TODO : With Preview
+export const WithPreview = () => {
+  const initialFile = useFieldUploadFileFromUrl(
+    'https://plus.unsplash.com/premium_photo-1674593231084-d8b27596b134?auto=format&fit=crop&q=60&w=800&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8'
+  );
+
+  const form = useForm<FormSchema>({
+    values: {
+      file: initialFile.data,
+    },
+    ...formOptions,
+  });
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="upload"
+          name="file"
+          label="Name"
+        />
+        <FieldUploadPreview uploaderName="file" />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
