@@ -54,6 +54,7 @@ const DocumentationWrapper = ({ children, context }) => {
 };
 
 const preview: Preview = {
+  tags: ['autodocs'],
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -74,7 +75,6 @@ const preview: Preview = {
         order: ['StyleGuide', 'Components', 'Fields', 'App Layout'],
       },
     },
-    actions: { argTypesRegex: '^on[A-Z].*' },
     darkMode: {
       dark: {
         ...themes.dark,
