@@ -72,6 +72,7 @@ export const AccountEmailForm = () => {
               <FormField
                 name="email"
                 type="email"
+                control={form.control}
                 defaultValue={account.data.email}
                 label={t('account:data.email.label')}
               />

@@ -87,17 +87,20 @@ export const AccountProfileForm = () => {
               <FormField
                 name="image"
                 type="upload"
+                control={form.control}
                 inputText={t('account:data.avatar.inputText')}
                 label={t('account:data.avatar.label')}
               />
               <FormField
                 name="name"
                 type="text"
+                control={form.control}
                 label={t('account:data.name.label')}
               />
               <FormField
                 name="language"
                 type="select"
+                control={form.control}
                 options={AVAILABLE_LANGUAGES.map(({ key }) => ({
                   label: t(`common:languages.${key}`),
                   value: key,
