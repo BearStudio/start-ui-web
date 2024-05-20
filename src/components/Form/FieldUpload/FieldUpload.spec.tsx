@@ -76,8 +76,7 @@ test('default value', async () => {
 
   // Here we can use '!' on mockFile.name to prevent TS error because we are sure it is defined
   const input = screen.getByLabelText<HTMLInputElement>(mockFile.name!);
-  await user.upload(input, mockFile.file ?? []);
-  expect(input.files ? input.files[0] : []).toBe(mockFile.file);
+  expect(input.files ? input.files[0] : []).toBe(undefined);
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ file: mockFile });
 });

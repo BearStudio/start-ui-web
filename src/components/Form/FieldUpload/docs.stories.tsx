@@ -35,12 +35,7 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="upload"
-          name="file"
-          label="Name"
-        />
+        <FormField type="upload" name="file" label="Name" />
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -66,12 +61,7 @@ export const WithDefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="upload"
-          name="file"
-          label="Name"
-        />
+        <FormField type="upload" name="file" label="Name" />
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -97,12 +87,7 @@ export const WithPreview = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="upload"
-          name="file"
-          label="Name"
-        />
+        <FormField type="upload" name="file" label="Name" />
         <FieldUploadPreview uploaderName="file" />
         <Box>
           <Button type="submit" variant="@primary">
