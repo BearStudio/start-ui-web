@@ -62,7 +62,7 @@ export const AccountProfileForm = () => {
     image,
     ...values
   }) => {
-    let fileUrl = '';
+    let fileUrl = account.data?.image;
     try {
       if (image?.file) {
         const uploadResponse = await uploadFile.mutateAsync(image?.file);
@@ -85,20 +85,17 @@ export const AccountProfileForm = () => {
           <Form {...form} onSubmit={onSubmit}>
             <Stack spacing={4}>
               <FormField
-                control={form.control}
                 name="image"
                 type="upload"
                 inputText={t('account:data.avatar.inputText')}
                 label={t('account:data.avatar.label')}
               />
               <FormField
-                control={form.control}
                 name="name"
                 type="text"
                 label={t('account:data.name.label')}
               />
               <FormField
-                control={form.control}
                 name="language"
                 type="select"
                 options={AVAILABLE_LANGUAGES.map(({ key }) => ({
