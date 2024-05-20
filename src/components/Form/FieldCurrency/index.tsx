@@ -68,8 +68,9 @@ export const FieldCurrency = <
               {...field}
               value={formatValue(field.value, 'from-cents')}
               onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
+              pl={!!props.startElement ? '2.5em' : ''}
+              pr={!!props.endElement ? '2.5em' : ''}
             />
-
             {!!props.startElement && (
               <InputLeftElement pointerEvents="none">
                 {props.startElement}
