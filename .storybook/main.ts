@@ -5,15 +5,21 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
+
   stories: ['../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
+
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     'storybook-dark-mode',
   ],
+
   staticDirs: ['../public'],
-  docs: {
-    autodocs: true,
+
+  docs: {},
+
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
   },
 };
 
