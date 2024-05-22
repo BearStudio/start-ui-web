@@ -2,8 +2,7 @@ import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
-import jwt from 'jsonwebtoken';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { randomInt } from 'node:crypto';
 
 import { env } from '@/env.mjs';
@@ -11,9 +10,9 @@ import {
   VALIDATION_CODE_MOCKED,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
-import { zUser } from '@/features/users/schemas';
-import { db } from '@/server/config/db';
 import { AppContext } from '@/server/config/trpc';
+
+import { lucia } from './lucia';
 
 export const AUTH_COOKIE_NAME = 'auth';
 
@@ -21,41 +20,42 @@ export const AUTH_COOKIE_NAME = 'auth';
  * getServerAuthSession
  */
 export const getServerAuthSession = async () => {
-  const token =
-    // Get from Headers
-    headers().get('Authorization')?.split('Bearer ')[1] ??
-    // Get from Cookies
-    cookies().get(AUTH_COOKIE_NAME)?.value;
+  const sessionId =
+    lucia.readBearerToken('Authorizations') ??
+    cookies().get(lucia.sessionCookieName)?.value;
 
-  if (!token) {
-    return null;
-  }
+  if (!sessionId)
+    return {
+      user: null,
+      session: null,
+    };
 
-  const jwtDecoded = decodeJwt(token);
+  const { user, session } = await lucia.validateSession(sessionId);
 
-  if (!jwtDecoded?.id) {
-    return null;
-  }
+  try {
+    if (session && session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+    }
 
-  const userPick = {
-    id: true,
-    name: true,
-    email: true,
-    authorizations: true,
-    language: true,
-    accountStatus: true,
-  } as const;
+    if (!session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+    }
+  } catch {}
 
-  const user = await db.user.findUnique({
-    where: { id: jwtDecoded.id, accountStatus: 'ENABLED' },
-    select: userPick,
-  });
-
-  if (!user) {
-    return null;
-  }
-
-  return zUser().pick(userPick).parse(user);
+  return {
+    user,
+    session,
+  };
 };
 
 export const setAuthCookie = (token: string) => {
@@ -66,22 +66,6 @@ export const setAuthCookie = (token: string) => {
     secure: env.NODE_ENV === 'production',
     expires: dayjs().add(1, 'year').toDate(),
   });
-};
-
-export const decodeJwt = (token: string) => {
-  try {
-    const jwtDecoded = jwt.verify(token, env.AUTH_SECRET);
-    if (
-      !jwtDecoded ||
-      typeof jwtDecoded !== 'object' ||
-      !('id' in jwtDecoded)
-    ) {
-      return null;
-    }
-    return jwtDecoded;
-  } catch {
-    return null;
-  }
 };
 
 export async function generateCode() {
@@ -103,7 +87,7 @@ export async function validateCode({
   ctx: AppContext;
   code: string;
   token: string;
-}): Promise<{ verificationToken: VerificationToken; userJwt: string }> {
+}): Promise<{ verificationToken: VerificationToken }> {
   ctx.logger.info('Removing expired verification tokens from database');
   await ctx.db.verificationToken.deleteMany({
     where: { expires: { lt: new Date() } },
@@ -169,16 +153,7 @@ export async function validateCode({
     });
   }
 
-  ctx.logger.info('Encoding JWT');
-  const userJwt = jwt.sign({ id: verificationToken.userId }, env.AUTH_SECRET);
-  if (!userJwt) {
-    ctx.logger.error('Failed to encode JWT');
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
-  return { verificationToken, userJwt };
+  return { verificationToken };
 }
 
 export async function deleteUsedCode({
@@ -196,4 +171,30 @@ export async function deleteUsedCode({
   } catch (e) {
     ctx.logger.warn('Failed to delete the used token');
   }
+}
+
+export async function createSession(userId: string) {
+  const session = await lucia.createSession(userId, {
+    expiresAt: dayjs().add(1, 'year').toDate(),
+  });
+
+  const sessionCookie = lucia.createSessionCookie(session.id);
+
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+}
+
+export async function deleteSession(sessionId: string) {
+  await lucia.invalidateSession(sessionId);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
 }

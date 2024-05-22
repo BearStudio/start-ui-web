@@ -23,6 +23,14 @@ model User {
   authorizations UserRole[]    @default([APP])
   language       String        @default("en")
   lastLoginAt    DateTime?
+  Session        Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model VerificationToken {
