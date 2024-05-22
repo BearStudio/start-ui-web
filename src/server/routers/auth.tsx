@@ -6,6 +6,7 @@ import { z } from 'zod';
 import EmailLoginCode from '@/emails/templates/login-code';
 import { EmailLoginNotFound } from '@/emails/templates/login-not-found';
 import EmailRegisterCode from '@/emails/templates/register-code';
+import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
@@ -137,7 +138,7 @@ export const authRouter = createTRPCRouter({
         description: `Failed requests will increment retry delay timeout based on the number of attempts multiplied by ${VALIDATION_RETRY_DELAY_IN_SECONDS} seconds. The number of attempts will not be returned in the response for security purposes. You will have to save the number of attemps in the client.`,
       },
     })
-    .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
+    .input(zVerificationCodeValidate())
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({
@@ -308,7 +309,7 @@ export const authRouter = createTRPCRouter({
         description: `Failed requests will increment retry delay timeout based on the number of attempts multiplied by ${VALIDATION_RETRY_DELAY_IN_SECONDS} seconds. The number of attempts will not be returned in the response for security purposes. You will have to save the number of attemps in the client.`,
       },
     })
-    .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
+    .input(zVerificationCodeValidate())
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({

@@ -6,6 +6,7 @@ import { z } from 'zod';
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailAddressChange from '@/emails/templates/email-address-change';
 import { zUserAccount } from '@/features/account/schemas';
+import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
 import {
@@ -173,12 +174,7 @@ export const accountRouter = createTRPCRouter({
         tags: ['account'],
       },
     })
-    .input(
-      z.object({
-        token: z.string().uuid(),
-        code: z.string().length(6),
-      })
-    )
+    .input(zVerificationCodeValidate())
     .output(zUserAccount())
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({
@@ -268,12 +264,7 @@ export const accountRouter = createTRPCRouter({
         tags: ['account'],
       },
     })
-    .input(
-      z.object({
-        token: z.string().uuid(),
-        code: z.string().length(6),
-      })
-    )
+    .input(zVerificationCodeValidate())
     .output(zUserAccount())
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({
