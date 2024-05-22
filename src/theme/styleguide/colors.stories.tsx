@@ -40,6 +40,7 @@ const Colors = ({ colorScheme = 'gray', ...rest }) => (
     <Color bg={`${colorScheme}.700`}>700</Color>
     <Color bg={`${colorScheme}.800`}>800</Color>
     <Color bg={`${colorScheme}.900`}>900</Color>
+    <Color bg={`${colorScheme}.950`}>950</Color>
   </HStack>
 );
 
