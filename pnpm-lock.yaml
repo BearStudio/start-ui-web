@@ -152,9 +152,6 @@ dependencies:
   react-select:
     specifier: 5.8.0
     version: 5.8.0(@types/react@18.2.67)(react-dom@18.2.0)(react@18.2.0)
-  react-use-measure:
-    specifier: 2.1.1
-    version: 2.1.1(react-dom@18.2.0)(react@18.2.0)
   sharp:
     specifier: 0.33.2
     version: 0.33.2
@@ -12593,10 +12590,6 @@ packages:
     resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
     dev: false
 
-  /debounce@1.2.1:
-    resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
-    dev: false
-
   /debounce@2.0.0:
     resolution: {integrity: sha512-xRetU6gL1VJbs85Mc4FoEGSjQxzpdxRyFhe3lmWFyy2EzydIcD4xzUvRJMD+NPDfMwKNhxa3PvsIOU32luIWeA==}
     engines: {node: '>=18'}
@@ -18649,17 +18642,6 @@ packages:
     dependencies:
       react: 18.2.0
       tslib: 2.6.2
-    dev: false
-
-  /react-use-measure@2.1.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==}
-    peerDependencies:
-      react: '>=16.13'
-      react-dom: '>=16.13'
-    dependencies:
-      debounce: 1.2.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-use@17.5.0(react-dom@18.2.0)(react@18.2.0):
