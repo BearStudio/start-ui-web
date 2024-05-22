@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
+import { parseAsString, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 import { LuTrash2 } from 'react-icons/lu';
 
@@ -9,31 +9,32 @@ import {
   AccountDeleteVerificationCodeModale,
   SEARCH_PARAM_VERIFY_EMAIL,
 } from '@/features/account/AccountDeleteVerificationCodeModal';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountDeleteButton = () => {
   const { t } = useTranslation(['account']);
 
-  const searchParamsUpdater = useSearchParamsUpdater();
-  const searchParams = useSearchParams();
+  const [searchParams, setSearchParams] = useQueryStates(
+    {
+      [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
+      token: parseAsString,
+    },
+    {
+      history: 'replace',
+    }
+  );
   const account = trpc.account.get.useQuery();
 
   const toastError = useToastError();
-  const deleteAccountValidate = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
+  const deleteAccountValidate = searchParams[SEARCH_PARAM_VERIFY_EMAIL];
 
   const deleteAccount = trpc.account.deleteRequest.useMutation({
     onSuccess: async ({ token }) => {
       if (!account.data) return;
-      searchParamsUpdater(
-        {
-          [SEARCH_PARAM_VERIFY_EMAIL]: account.data.email,
-          token,
-        },
-        {
-          replace: true,
-        }
-      );
+      setSearchParams({
+        [SEARCH_PARAM_VERIFY_EMAIL]: account.data.email,
+        token,
+      });
     },
     onError: () => {
       toastError({

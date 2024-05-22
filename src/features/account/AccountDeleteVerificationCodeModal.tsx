@@ -7,48 +7,67 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { Formiz, useForm } from '@formiz/core';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { useToastSuccess } from '@/components/Toast';
+import { Form } from '@/components/Form';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
 } from '@/features/auth/VerificationCodeForm';
-import { useSearchParamsUpdater } from '@/hooks/useSearchParamsUpdater';
 import { trpc } from '@/lib/trpc/client';
+
+import {
+  FormFieldsVerificationCode,
+  zFormFieldsVerificationCode,
+} from '../auth/schemas';
 
 export const SEARCH_PARAM_VERIFY_EMAIL = 'delete-account';
 
 export const AccountDeleteVerificationCodeModale = () => {
   const { t } = useTranslation(['account']);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const searchParamsUpdater = useSearchParamsUpdater();
-  const verifyEmail = searchParams.get(SEARCH_PARAM_VERIFY_EMAIL);
-  const token = searchParams.get('token');
+  const [searchParams, setSearchParams] = useQueryStates(
+    {
+      [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
+      token: parseAsString,
+      attempts: parseAsInteger,
+    },
+    {
+      history: 'replace',
+    }
+  );
 
   const onClose = () => {
-    searchParamsUpdater(
-      {
-        [SEARCH_PARAM_VERIFY_EMAIL]: null,
-        token: null,
-        attempts: null,
-      },
-      { replace: true }
-    );
+    setSearchParams({
+      [SEARCH_PARAM_VERIFY_EMAIL]: null,
+      token: null,
+      attempts: null,
+    });
   };
 
   const form = useForm<{ code: string }>({
-    onValidSubmit: (values) => {
-      updateEmailValidate.mutate({
-        code: values.code,
-        token: token ?? '',
-      });
+    mode: 'onBlur',
+    resolver: zodResolver(zFormFieldsVerificationCode()),
+    defaultValues: {
+      code: '',
     },
   });
-  const onVerificationCodeError = useOnVerificationCodeError({ form });
+
+  const onSubmit: SubmitHandler<FormFieldsVerificationCode> = (values) => {
+    updateEmailValidate.mutate({ ...values, token: searchParams.token ?? '' });
+  };
+
+  const onVerificationCodeError = useOnVerificationCodeError({
+    onError: (error) =>
+      form.setError('code', {
+        message: error,
+      }),
+  });
+
   const updateEmailValidate = trpc.account.deleteValidate.useMutation({
     onSuccess: async () => {
       router.replace('/');
@@ -62,15 +81,15 @@ export const AccountDeleteVerificationCodeModale = () => {
       <ModalContent>
         <ModalCloseButton />
         <ModalBody>
-          <Formiz connect={form} autoForm>
+          <Form {...form} onSubmit={onSubmit}>
             <VerificationCodeForm
-              email={verifyEmail ?? ''}
+              email={searchParams[SEARCH_PARAM_VERIFY_EMAIL] ?? ''}
               isLoading={updateEmailValidate.isLoading}
               confirmText={t('account:deleteAccount.validate.button')}
               confirmVariant="@dangerPrimary"
               autoSubmit={false}
             />
-          </Formiz>
+          </Form>
         </ModalBody>
       </ModalContent>
     </Modal>
