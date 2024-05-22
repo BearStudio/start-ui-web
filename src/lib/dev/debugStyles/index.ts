@@ -2,6 +2,18 @@ import { ChakraProps, ThemeTypings } from '@chakra-ui/react';
 
 import { env } from '@/env.mjs';
 
+/**
+ * Utility used to visually mark components to make debugging easier
+ * Usefull to see margins & padding / stacked components / overlapping components
+ * @returns Styles to apply to a chakra component
+ *
+ * @example
+ * ```tsx
+ * <Box {...debugStyles()}>
+ *   ...
+ * </Box>
+ * ```
+ */
 export const debugStyles = ({
   label = 'Debug',
   colorScheme = 'green',
