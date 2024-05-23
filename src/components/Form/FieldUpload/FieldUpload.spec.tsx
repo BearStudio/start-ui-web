@@ -17,7 +17,7 @@ const mockFile: FieldUploadValue = {
   lastModifiedDate: new Date(mockFileRaw.lastModified),
   size: mockFileRaw.size.toString(),
   type: mockFileRaw.type,
-  name: mockFileRaw.name,
+  name: mockFileRaw.name ?? '',
 };
 
 test('update value', async () => {
@@ -74,8 +74,7 @@ test('default value', async () => {
     </FormMocked>
   );
 
-  // Here we can use '!' on mockFile.name to prevent TS error because we are sure it is defined
-  const input = screen.getByLabelText<HTMLInputElement>(mockFile.name!);
+  const input = screen.getByLabelText<HTMLInputElement>(mockFile.name ?? '');
   expect(input.files ? input.files[0] : []).toBe(undefined);
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ file: mockFile });

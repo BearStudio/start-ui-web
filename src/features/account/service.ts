@@ -1,5 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { trpc } from '@/lib/trpc/client';
 

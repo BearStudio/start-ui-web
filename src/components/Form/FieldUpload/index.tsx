@@ -1,7 +1,12 @@
 import { ChangeEvent, ReactNode } from 'react';
 
-import { Icon, Spinner, chakra } from '@chakra-ui/react';
-import { Input, InputProps } from '@chakra-ui/react';
+import {
+  Icon,
+  Input,
+  type InputProps,
+  Spinner,
+  chakra,
+} from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { FiPaperclip } from 'react-icons/fi';
 
