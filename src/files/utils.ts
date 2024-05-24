@@ -1,4 +1,5 @@
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { stringify } from 'superjson';
 
 import { UploadSignedUrlInput } from './schemas';
 
@@ -71,16 +72,16 @@ export const uploadFile = async (
   getPresignedUrl: UseMutateAsyncFunction<
     { signedUrl: string; futureFileUrl: string },
     unknown,
-    UploadSignedUrlInput | void
+    UploadSignedUrlInput
   >,
   file: File,
   metadata: Record<string, string> = {}
 ) => {
   const { signedUrl, futureFileUrl } = await getPresignedUrl({
-    metadata: {
+    metadata: stringify({
       name: file.name,
       ...metadata,
-    },
+    }),
   });
 
   await fetch(signedUrl, {

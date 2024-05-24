@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
+import { parse } from 'superjson';
 import { z } from 'zod';
 
 import EmailAddressChange from '@/emails/templates/email-address-change';
@@ -226,7 +227,7 @@ export const accountRouter = createTRPCRouter({
       return await getS3UploadSignedUrl({
         key: ctx.user.id,
         host: env.S3_BUCKET_PUBLIC_URL,
-        metadata: input?.metadata || undefined,
+        metadata: parse(input?.metadata ?? ''),
       });
     }),
 });

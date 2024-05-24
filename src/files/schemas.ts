@@ -46,9 +46,9 @@ export type UploadSignedUrlInput = z.infer<
 export const zUploadSignedUrlInput = () =>
   z
     .object({
-      metadata: z.record(z.string()).nullish(),
+      metadata: z.string().optional(),
     })
-    .nullish();
+    .optional();
 
 export type UploadSignedUrlOutput = z.infer<
   ReturnType<typeof zUploadSignedUrlOutput>

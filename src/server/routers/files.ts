@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { parse } from 'superjson';
 
 import { env } from '@/env.mjs';
 import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
@@ -21,7 +22,7 @@ export const filesRouter = createTRPCRouter({
       return await getS3UploadSignedUrl({
         key: randomUUID(),
         host: env.S3_BUCKET_PUBLIC_URL,
-        metadata: input?.metadata || undefined,
+        metadata: parse(input?.metadata ?? ''),
       });
     }),
 });
