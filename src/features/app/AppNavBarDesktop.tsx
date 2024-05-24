@@ -46,6 +46,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar
+              data-testid="avatar-account"
               as={LinkApp}
               href="/account"
               size="sm"
