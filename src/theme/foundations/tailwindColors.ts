@@ -220,7 +220,7 @@ const tailwindColors = {
     900: '#7f1d1d',
     950: '#450a0a',
   },
-  warmGray: {
+  stone: {
     50: '#fafaf9',
     100: '#f5f5f4',
     200: '#e7e5e4',
@@ -233,7 +233,7 @@ const tailwindColors = {
     900: '#1c1917',
     950: '#0c0a09',
   },
-  trueGray: {
+  neutral: {
     50: '#fafafa',
     100: '#f5f5f5',
     200: '#e5e5e5',
@@ -246,7 +246,7 @@ const tailwindColors = {
     900: '#171717',
     950: '#0a0a0a',
   },
-  gray: {
+  zinc: {
     50: '#fafafa',
     100: '#f4f4f5',
     200: '#e4e4e7',
@@ -259,7 +259,7 @@ const tailwindColors = {
     900: '#18181b',
     950: '#09090b',
   },
-  coolGray: {
+  gray: {
     50: '#f9fafb',
     100: '#f3f4f6',
     200: '#e5e7eb',
@@ -272,7 +272,7 @@ const tailwindColors = {
     900: '#111827',
     950: '#030712',
   },
-  blueGray: {
+  slate: {
     50: '#f8fafc',
     100: '#f1f5f9',
     200: '#e2e8f0',

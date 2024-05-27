@@ -3,7 +3,7 @@ import tailwindColors from './tailwindColors';
 export const colors = {
   // Update me with other Tailwind colors or with https://smart-swatch.netlify.app/
   brand: tailwindColors.blue,
-  gray: tailwindColors.blueGray,
+  gray: tailwindColors.slate,
 
   success: tailwindColors.green,
   green: tailwindColors.green,
