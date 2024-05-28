@@ -39,6 +39,7 @@ export const Default = () => {
           label="Colors"
           placeholder="Placeholder"
           options={options}
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
@@ -91,6 +92,33 @@ export const Disabled = () => {
           label="Colors"
           options={options}
           isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="select"
+          name="color"
+          label="Colors"
+          placeholder="Placeholder"
+          options={options}
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

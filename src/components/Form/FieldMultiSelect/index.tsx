@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 
+import { Flex } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
-import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
+
+import { FieldCommonProps } from '../FormField';
+import { FormFieldError } from '../FormFieldError';
+import { FormFieldHelper } from '../FormFieldHelper';
+import { FormFieldItem } from '../FormFieldItem';
+import { FormFieldLabel } from '../FormFieldLabel';
 
 export type FieldMultiSelectProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -42,26 +44,26 @@ export const FieldMultiSelect = <
         return (
           <FormFieldItem>
             {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-
-            <Select
-              type="select"
-              isMulti
-              size={props.size}
-              options={props.options}
-              placeholder={props.placeholder}
-              autoFocus={props.autoFocus}
-              value={selectValues}
-              onChange={(options) =>
-                onChange(options.map((option) => option.value))
-              }
-              menuPortalTarget={document.body}
-              {...fieldProps}
-            />
-
+            <Flex direction="column" flex={1} gap={1.5}>
+              <Select
+                type="select"
+                isMulti
+                size={props.size}
+                options={props.options}
+                placeholder={props.placeholder}
+                autoFocus={props.autoFocus}
+                value={selectValues}
+                onChange={(options) =>
+                  onChange(options.map((option) => option.value))
+                }
+                menuPortalTarget={document.body}
+                {...fieldProps}
+              />
+              <FormFieldError />
+            </Flex>
             {!!props.helper && (
               <FormFieldHelper>{props.helper}</FormFieldHelper>
             )}
-            <FormFieldError />
           </FormFieldItem>
         );
       }}

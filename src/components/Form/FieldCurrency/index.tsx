@@ -1,18 +1,20 @@
 import { ReactNode } from 'react';
 
 import {
+  Flex,
   InputGroup,
   InputLeftElement,
   InputRightElement,
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
-import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
+
+import { FieldCommonProps } from '../FormField';
+import { FormFieldError } from '../FormFieldError';
+import { FormFieldHelper } from '../FormFieldHelper';
+import { FormFieldItem } from '../FormFieldItem';
+import { FormFieldLabel } from '../FormFieldLabel';
 
 export type FieldCurrencyProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -52,39 +54,41 @@ export const FieldCurrency = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <InputGroup size={props.size}>
-            <InputCurrency
-              type={props.type}
-              size={props.size}
-              placeholder={
-                typeof props.placeholder === 'number'
-                  ? formatValue(props.placeholder, 'from-cents')
-                  : props.placeholder
-              }
-              autoFocus={props.autoFocus}
-              locale={props.locale}
-              currency={props.currency}
-              decimals={props.decimals}
-              {...field}
-              value={formatValue(field.value, 'from-cents')}
-              onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
-              pl={props.startElement ? '2.5em' : undefined}
-              pr={props.endElement ? '2.5em' : undefined}
-            />
-            {!!props.startElement && (
-              <InputLeftElement pointerEvents="none">
-                {props.startElement}
-              </InputLeftElement>
-            )}
-            {!!props.endElement && (
-              <InputRightElement pointerEvents="none">
-                {props.endElement}
-              </InputRightElement>
-            )}
-          </InputGroup>
+          <Flex direction="column" flex={1} gap={1.5}>
+            <InputGroup size={props.size}>
+              <InputCurrency
+                type={props.type}
+                size={props.size}
+                placeholder={
+                  typeof props.placeholder === 'number'
+                    ? formatValue(props.placeholder, 'from-cents')
+                    : props.placeholder
+                }
+                autoFocus={props.autoFocus}
+                locale={props.locale}
+                currency={props.currency}
+                decimals={props.decimals}
+                {...field}
+                value={formatValue(field.value, 'from-cents')}
+                onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
+                pl={props.startElement ? '2.5em' : undefined}
+                pr={props.endElement ? '2.5em' : undefined}
+              />
 
+              {!!props.startElement && (
+                <InputLeftElement pointerEvents="none">
+                  {props.startElement}
+                </InputLeftElement>
+              )}
+              {!!props.endElement && (
+                <InputRightElement pointerEvents="none">
+                  {props.endElement}
+                </InputRightElement>
+              )}
+            </InputGroup>
+            <FormFieldError />
+          </Flex>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

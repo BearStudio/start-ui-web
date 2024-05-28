@@ -38,7 +38,13 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField control={form.control} type="otp" name="code" label="Code" />
+        <FormField
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          helper="Helper"
+        />
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -132,6 +138,31 @@ export const AutoSubmit = () => {
           name="code"
           label="Code"
           autoSubmit
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

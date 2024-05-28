@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import {
+  Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -24,7 +25,7 @@ export type FieldTextProps<
   helper?: ReactNode;
   startElement?: ReactNode;
   endElement?: ReactNode;
-} & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
+} & Pick<InputProps, 'placeholder' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldText = <
@@ -39,22 +40,25 @@ export const FieldText = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <InputGroup size={props.size}>
-            <Input
-              type={props.type}
-              placeholder={props.placeholder}
-              autoFocus={props.autoFocus}
-              {...field}
-            />
-            {!!props.startElement && (
-              <InputLeftElement>{props.startElement}</InputLeftElement>
-            )}
-            {!!props.endElement && (
-              <InputRightElement>{props.endElement}</InputRightElement>
-            )}
-          </InputGroup>
+          <Flex direction="column" flex={1} gap={1.5}>
+            <InputGroup size={props.size} flex={1}>
+              <Input
+                type={props.type}
+                placeholder={props.placeholder}
+                autoFocus={props.autoFocus}
+                {...field}
+              />
+              {!!props.startElement && (
+                <InputLeftElement>{props.startElement}</InputLeftElement>
+              )}
+              {!!props.endElement && (
+                <InputRightElement>{props.endElement}</InputRightElement>
+              )}
+            </InputGroup>
+            <FormFieldError />
+          </Flex>
+
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

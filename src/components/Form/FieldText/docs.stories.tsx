@@ -41,6 +41,7 @@ export const Default = () => {
           name="name"
           label="Name"
           placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
@@ -115,6 +116,32 @@ export const StartElement = () => {
           label="Name"
           placeholder="Placeholder"
           startElement={<Icon icon={LuActivity} />}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+          placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

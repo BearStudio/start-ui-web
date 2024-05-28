@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { zu } from '@/lib/zod/zod-utils';
+
 import { Form, FormField } from '../';
 
 export default {
@@ -12,7 +14,7 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    colors: z.enum(['red', 'green', 'blue']).array(),
+    colors: zu.array.nonEmpty(z.enum(['red', 'green', 'blue']).array()),
   });
 
 const options = [
@@ -39,6 +41,7 @@ export const Default = () => {
           label="Colors"
           placeholder="Placeholder"
           options={options}
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
@@ -91,6 +94,33 @@ export const Disabled = () => {
           label="Colors"
           options={options}
           isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="multi-select"
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          options={options}
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

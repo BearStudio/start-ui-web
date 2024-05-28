@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react';
 
-import { FormControl, FormControlProps } from '@chakra-ui/react';
+import { FormControl } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 
 import { useFormFieldContext } from './FormField';
@@ -31,7 +31,6 @@ export const useFormFieldItemContext = () => {
 export type FormFieldItemProps = {
   children?: ReactNode;
   id?: string;
-  formControProps?: FormControlProps;
 };
 
 export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
@@ -44,18 +43,33 @@ export const FormFieldItem = forwardRef<HTMLDivElement, FormFieldItemProps>(
 
     const contextValue = useMemo(() => ({ id }), [id]);
 
+    const getGap = () => {
+      if (fieldContext.layout !== 'row') return;
+      if (fieldContext.size === 'lg') return 5;
+      if (fieldContext.size === 'md') return 4;
+      if (fieldContext.size === 'sm') return 3;
+    };
+
     return (
       <FormFieldItemContext.Provider value={contextValue}>
         <FormControl
           ref={ref}
           isInvalid={!!fieldState.error}
           display="flex"
-          flexDirection="column"
           isRequired={fieldContext.optionalityHint === 'required'}
           isDisabled={fieldContext.isDisabled}
           id={props.id}
-          gap={1}
-          {...props.formControProps}
+          {...(fieldContext.layout === 'row'
+            ? {
+                flexDirection: 'row',
+                alignItems: 'start',
+                rowGap: 1,
+                columnGap: getGap(),
+              }
+            : {
+                flexDirection: 'column',
+                gap: 1,
+              })}
         >
           {props.children}
         </FormControl>

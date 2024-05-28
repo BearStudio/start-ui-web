@@ -39,6 +39,7 @@ export const Default = () => {
           name="password"
           label="Password"
           placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
@@ -62,6 +63,32 @@ export const Disabled = () => {
           name="password"
           label="Password"
           isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="password"
+          name="password"
+          label="Password"
+          placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

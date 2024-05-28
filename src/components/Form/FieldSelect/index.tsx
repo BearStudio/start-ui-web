@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { Flex } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
@@ -22,7 +23,7 @@ export type FieldSelectProps<
       value: PathValue<TFieldValues, TName>;
     }>[]
   >;
-} & Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'> &
+} & Pick<SelectProps, 'placeholder' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldSelect = <
@@ -41,21 +42,23 @@ export const FieldSelect = <
         return (
           <FormFieldItem>
             {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-            <Select
-              type="select"
-              size={props.size}
-              options={props.options}
-              placeholder={props.placeholder}
-              autoFocus={props.autoFocus}
-              value={selectValue}
-              onChange={(option) => onChange(option?.value)}
-              {...fieldProps}
-            />
-
+            <Flex direction="column" flex={1} gap={1.5}>
+              <Select
+                type="select"
+                size={props.size}
+                options={props.options}
+                placeholder={props.placeholder}
+                autoFocus={props.autoFocus}
+                value={selectValue}
+                onChange={(option) => onChange(option?.value)}
+                menuPortalTarget={document.body}
+                {...fieldProps}
+              />
+              <FormFieldError />
+            </Flex>
             {!!props.helper && (
               <FormFieldHelper>{props.helper}</FormFieldHelper>
             )}
-            <FormFieldError />
           </FormFieldItem>
         );
       }}
