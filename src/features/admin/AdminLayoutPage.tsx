@@ -159,8 +159,8 @@ export const AdminLayoutPageBottomBar = ({
       direction="column"
       boxShadow="layout"
       bg="white"
-      borderBottom="1px solid transparent"
-      borderBottomColor="gray.100"
+      borderTop="1px solid transparent"
+      borderTopColor="gray.100"
       {...rest}
     >
       <PageContainer py="3" {...containerProps}>
