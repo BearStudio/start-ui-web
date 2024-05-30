@@ -16,7 +16,7 @@ export default function PageLogout() {
   useEffect(() => {
     const trigger = async () => {
       if (!logout.isIdle) return;
-      await logout.mutate();
+      await logout.mutateAsync();
       queryCache.clear();
       // Optimistic Update
       trpcUtils.auth.checkAuthenticated.setData(undefined, {
