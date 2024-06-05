@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Input, InputProps, forwardRef } from '@chakra-ui/react';
-import CurrencyInput, { formatValue } from 'react-currency-input-field';
+import CurrencyInput, {
+  CurrencyInputProps,
+  formatValue,
+} from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
 
 type CustomProps = {
-  value?: number;
+  value?: number | null;
   defaultValue?: number;
   placeholder?: string | number;
   locale?: string;
   currency?: string | null;
+  suffix?: string;
   decimals?: number;
-  onChange?(value?: number): void;
+  onChange?(value: number | null): void;
 };
 
 export type InputCurrencyProps = Overwrite<InputProps, CustomProps>;
@@ -22,6 +26,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
       value = null,
       defaultValue = null,
       locale,
+      suffix,
       currency = 'EUR',
       decimals = 2,
       onChange = () => undefined,
@@ -49,10 +54,21 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
     const config = {
       intlConfig: {
         locale: locale || i18n.language,
-        currency: currency ?? undefined,
+        currency: !suffix ? currency ?? undefined : undefined,
       },
       decimalScale: decimals,
       disableAbbreviations: true,
+      suffix,
+    };
+
+    const onValueChange: CurrencyInputProps['onValueChange'] = (
+      _,
+      __,
+      params
+    ) => {
+      if (!params) return;
+      setInternalValue(params.value);
+      onChange(params.value ? params.float : null);
     };
 
     return (
@@ -62,10 +78,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
         sx={{ fontVariantNumeric: 'tabular-nums' }}
         {...config}
         value={internalValue}
-        onValueChange={(val: string) => {
-          setInternalValue(val);
-          onChange(val ? Number(val?.replace(',', '.')) : undefined);
-        }}
+        onValueChange={onValueChange}
         placeholder={
           typeof placeholder === 'number'
             ? formatValue({
