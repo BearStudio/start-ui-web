@@ -23,7 +23,9 @@ model User {
   authorizations UserRole[]    @default([APP])
   language       String        @default("en")
   lastLoginAt    DateTime?
-  Session        Session[]
+
+  // Relations
+  Session Session[]
 }
 
 model Session {

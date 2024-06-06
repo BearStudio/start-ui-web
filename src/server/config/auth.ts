@@ -1,8 +1,10 @@
+import { cache } from 'react';
+
 import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { randomInt } from 'node:crypto';
 
 import { env } from '@/env.mjs';
@@ -14,14 +16,13 @@ import { AppContext } from '@/server/config/trpc';
 
 import { lucia } from './lucia';
 
-export const AUTH_COOKIE_NAME = 'auth';
-
 /**
  * getServerAuthSession
  */
-export const getServerAuthSession = async () => {
+export const getServerAuthSession = cache(async () => {
   const sessionId =
-    lucia.readBearerToken('Authorizations') ??
+    headers().get('Authorization')?.split('Bearer ')[1] ??
+    // Get Session from cookies
     cookies().get(lucia.sessionCookieName)?.value;
 
   if (!sessionId)
@@ -56,17 +57,7 @@ export const getServerAuthSession = async () => {
     user,
     session,
   };
-};
-
-export const setAuthCookie = (token: string) => {
-  cookies().set({
-    name: AUTH_COOKIE_NAME,
-    value: token,
-    httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    expires: dayjs().add(1, 'year').toDate(),
-  });
-};
+});
 
 export async function generateCode() {
   const code =
@@ -174,9 +165,16 @@ export async function deleteUsedCode({
 }
 
 export async function createSession(userId: string) {
-  const session = await lucia.createSession(userId, {
-    expiresAt: dayjs().add(1, 'year').toDate(),
-  });
+  const session = await lucia.createSession(
+    userId,
+    {
+      // Possible to pass custom session attributes defined when declaring the Lucia instance
+    },
+    {
+      // Possible to pass custom sessionId but otherwise it will be generated
+      // sessionId: CUSTOM_SESSION_ID,
+    }
+  );
 
   const sessionCookie = lucia.createSessionCookie(session.id);
 
@@ -185,6 +183,8 @@ export async function createSession(userId: string) {
     sessionCookie.value,
     sessionCookie.attributes
   );
+
+  return session.id;
 }
 
 export async function deleteSession(sessionId: string) {
