@@ -71,7 +71,7 @@ export default function PageAdminLoginValidate() {
         <Form {...form} onSubmit={onSubmit}>
           <VerificationCodeForm
             email={email ?? ''}
-            isLoading={validate.isLoading || validate.isSuccess}
+            isLoading={validate.isPending || validate.isSuccess}
           />
         </Form>
       </CardBody>

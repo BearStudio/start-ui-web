@@ -64,7 +64,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
                   }
                 : {})}
             >
-              {account.isLoading && <Spinner size="xs" />}
+              {account.isPending && <Spinner size="xs" />}
             </Avatar>
           </HStack>
         </Container>

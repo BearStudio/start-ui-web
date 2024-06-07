@@ -63,7 +63,7 @@ export const AccountEmailForm = () => {
 
   return (
     <>
-      {account.isLoading && <LoaderFull />}
+      {account.isPending && <LoaderFull />}
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
@@ -80,7 +80,7 @@ export const AccountEmailForm = () => {
                   type="submit"
                   variant="@primary"
                   isDisabled={account.data.email === email}
-                  isLoading={updateEmail.isLoading}
+                  isLoading={updateEmail.isPending}
                 >
                   {t('account:email.actions.update')}
                 </Button>

@@ -82,7 +82,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
       <Menu placement="bottom-end" {...rest}>
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
           <Avatar size="sm" icon={<></>} name={account.data?.email ?? ''}>
-            {account.isLoading && <Spinner size="xs" />}
+            {account.isPending && <Spinner size="xs" />}
           </Avatar>
         </MenuButton>
         <MenuList maxW="12rem" overflow="hidden">

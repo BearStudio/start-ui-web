@@ -49,7 +49,7 @@ export const AdminRepositoryActions = ({
 
   return (
     <Menu placement="left-start" {...rest}>
-      <MenuButton as={ActionsButton} isLoading={repositoryRemove.isLoading} />
+      <MenuButton as={ActionsButton} isLoading={repositoryRemove.isPending} />
       <Portal>
         <MenuList>
           <MenuItem

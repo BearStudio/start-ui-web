@@ -112,7 +112,7 @@ export default function PageRegister() {
           />
           <Flex>
             <Button
-              isLoading={register.isLoading}
+              isLoading={register.isPending}
               type="submit"
               variant="@primary"
               flex={1}
