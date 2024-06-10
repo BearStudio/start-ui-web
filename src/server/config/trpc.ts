@@ -40,7 +40,7 @@ export type AppContext = Awaited<ReturnType<typeof createTRPCContext>>;
 export const createTRPCContext = async ({
   req,
 }: FetchCreateContextFnOptions) => {
-  const user = await getServerAuthSession();
+  const { session, user } = await getServerAuthSession();
 
   const apiType: 'REST' | 'TRPC' = new URL(req.url).pathname.startsWith(
     '/api/rest'
@@ -50,6 +50,7 @@ export const createTRPCContext = async ({
 
   return {
     user,
+    session,
     apiType,
     logger,
     db,
@@ -206,9 +207,9 @@ export const protectedProcedure = (
 ) =>
   publicProcedure().use(
     t.middleware(({ ctx, next }) => {
-      const user = ctx.user;
+      const { user, session } = ctx;
 
-      if (!user || user.accountStatus !== 'ENABLED') {
+      if (!user || !session || user.accountStatus !== 'ENABLED') {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
           message: user?.email,
@@ -225,7 +226,8 @@ export const protectedProcedure = (
 
       return next({
         ctx: {
-          // infers the `user` as non-nullable
+          // infers the `user` and `session `as non-null
+          session,
           user,
         },
       });
