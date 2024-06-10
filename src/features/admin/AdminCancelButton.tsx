@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfirmModal } from '@/components/ConfirmModal';
 
 export type AdminCancelButtonProps = {
-  withConfrim?: boolean;
+  withConfirm?: boolean;
 };
 
 export const AdminCancelButton = (props: AdminCancelButtonProps) => {
@@ -16,7 +16,7 @@ export const AdminCancelButton = (props: AdminCancelButtonProps) => {
     <ConfirmModal
       onConfirm={() => router.back()}
       size="lg"
-      isEnabled={props.withConfrim ?? false}
+      isEnabled={props.withConfirm ?? false}
       title={t('common:confirmDiscardChanges.title')}
       message={t('common:confirmDiscardChanges.message')}
       confirmVariant="@dangerSecondary"

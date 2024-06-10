@@ -91,7 +91,7 @@ export default function PageAdminRepositoryUpdate() {
           leftActions={<AdminBackButton withConfirm={form.formState.isDirty} />}
           rightActions={
             <>
-              <AdminCancelButton withConfrim={form.formState.isDirty} />
+              <AdminCancelButton withConfirm={form.formState.isDirty} />
               <Button
                 type="submit"
                 variant="@primary"
