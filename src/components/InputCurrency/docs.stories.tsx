@@ -89,6 +89,6 @@ export const Placeholder = () => (
 
 export const Suffix = () => (
   <Stack>
-    <InputCurrency suffix=" €/t" />
+    <InputCurrency suffix="/t" />
   </Stack>
 );

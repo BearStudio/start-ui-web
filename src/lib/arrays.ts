@@ -1,7 +1,4 @@
-const isNumber = (value: unknown): boolean =>
-  typeof parseFloat(String(value)) === 'number' &&
-  !isNaN(parseFloat(String(value))) &&
-  !isNaN(Number(value));
+import { isNumber } from '@/lib/numbers';
 
 export const sortByKey =
   (sortKey: string, sortOrder: 'asc' | 'desc' = 'asc') =>

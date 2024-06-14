@@ -32,6 +32,8 @@ export type FieldCurrencyProps<
   | 'locale'
   | 'currency'
   | 'decimals'
+  | 'fixedDecimals'
+  | 'prefix'
   | 'suffix'
 > &
   FieldCommonProps<TFieldValues, TName>;
@@ -68,15 +70,17 @@ export const FieldCurrency = <
                   : props.placeholder) ?? undefined
               }
               autoFocus={props.autoFocus}
-              locale={props.locale}
-              currency={props.currency}
-              decimals={props.decimals}
               {...field}
               value={formatValue(field.value, 'from-cents')}
               onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
               pl={props.startElement ? '2.5em' : undefined}
               pr={props.endElement ? '2.5em' : undefined}
+              prefix={props.prefix}
               suffix={props.suffix}
+              locale={props.locale}
+              currency={props.currency}
+              decimals={props.decimals}
+              fixedDecimals={props.fixedDecimals}
             />
             {!!props.startElement && (
               <InputLeftElement pointerEvents="none">
