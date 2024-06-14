@@ -25,7 +25,6 @@ import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
-import { MarketingBento } from '@/features/demo-mode/MarketingBento';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageHome() {
@@ -96,7 +95,6 @@ export default function PageHome() {
             </Link>
           </Alert>
         )}
-        <MarketingBento />
       </Stack>
     </AppLayoutPage>
   );
