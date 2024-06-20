@@ -50,7 +50,7 @@ export const FieldCurrency = <
   ) => {
     if (value === undefined || value === null) return value;
     if (props.inCents !== true) return value;
-    if (type === 'to-cents') return value * 100;
+    if (type === 'to-cents') return Math.round(value * 100);
     if (type === 'from-cents') return value / 100;
   };
 
