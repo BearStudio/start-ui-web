@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo } from 'react';
 
+import { FormLabelProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerProps,
@@ -25,8 +26,11 @@ type FieldCustomProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'custom';
-  optionalityHint?: 'required' | 'optional' | false;
-  isDisabled?: boolean;
+  optionalityHint?: FormFieldContextValue['optionalityHint'];
+  isDisabled?: FormFieldContextValue['isDisabled'];
+  size?: FormFieldContextValue['size'];
+  layout?: FormFieldContextValue['layout'];
+  rowLabelWidth?: FormFieldContextValue['rowLabelWidth'];
 } & Omit<ControllerProps<TFieldValues, TName>, 'disabled'>;
 
 export type FieldCommonProps<
@@ -38,7 +42,7 @@ export const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props:
+  baseProps:
     | FieldCustomProps<TFieldValues, TName>
     | FieldTextProps<TFieldValues, TName>
     | FieldTextareaProps<TFieldValues, TName>
@@ -52,6 +56,13 @@ export const FormField = <
     | FieldRadiosProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
+  const props = {
+    size: 'md',
+    layout: 'column',
+    rowLabelWidth: 'fit-content',
+    ...baseProps,
+  } satisfies typeof baseProps;
+
   const getField = () => {
     switch (props.type) {
       case 'custom':
@@ -99,8 +110,18 @@ export const FormField = <
       name: props.name,
       optionalityHint: props.optionalityHint,
       isDisabled: props.isDisabled,
+      layout: props.layout,
+      size: props.size,
+      rowLabelWidth: props.rowLabelWidth,
     }),
-    [props.name, props.optionalityHint, props.isDisabled]
+    [
+      props.name,
+      props.optionalityHint,
+      props.isDisabled,
+      props.layout,
+      props.size,
+      props.rowLabelWidth,
+    ]
   );
 
   return (
@@ -117,6 +138,9 @@ type FormFieldContextValue<
   name: TName;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
+  layout: 'column' | 'row';
+  size: 'lg' | 'md' | 'sm';
+  rowLabelWidth: FormLabelProps['width'];
 };
 
 export const FormFieldContext = createContext<FormFieldContextValue | null>(

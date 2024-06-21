@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Textarea, TextareaProps } from '@chakra-ui/react';
+import { Flex, Textarea, TextareaProps } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
@@ -31,15 +31,17 @@ export const FieldTextarea = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <Textarea
-            size={props.size}
-            placeholder={props.placeholder}
-            autoFocus={props.autoFocus}
-            rows={props.rows}
-            {...field}
-          />
+          <Flex direction="column" flex={1} gap={1.5}>
+            <Textarea
+              size={props.size}
+              placeholder={props.placeholder}
+              autoFocus={props.autoFocus}
+              rows={props.rows}
+              {...field}
+            />
+            <FormFieldError />
+          </Flex>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

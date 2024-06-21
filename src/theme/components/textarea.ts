@@ -15,4 +15,9 @@ export const textareaTheme = {
       };
     },
   },
+  sizes: {
+    sm: {
+      borderRadius: 'md',
+    },
+  },
 };

@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 
 import {
+  Flex,
   IconButton,
   Input,
   InputGroup,
@@ -11,14 +12,11 @@ import {
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import {
-  FieldCommonProps,
-  useFormFieldContext,
-} from '@/components/Form/FormField';
-import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
+import { FieldCommonProps, useFormFieldContext } from '../FormField';
+import { FormFieldError } from '../FormFieldError';
+import { FormFieldHelper } from '../FormFieldHelper';
+import { FormFieldItem } from '../FormFieldItem';
+import { FormFieldLabel } from '../FormFieldLabel';
 
 export type FieldPasswordProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -45,31 +43,33 @@ export const FieldPassword = <
       render={({ field }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <InputGroup size={props.size}>
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder={props.placeholder}
-              autoFocus={props.autoFocus}
-              {...field}
-            />
-            <InputLeftElement>
-              <IconButton
-                isDisabled={isDisabled}
-                onClick={() => setShowPassword((x) => !x)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'} // TODO: translation
-                display="flex"
-                size="xs"
-                fontSize="lg"
-                icon={showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}
-                variant="unstyled"
+          <Flex direction="column" flex={1} gap={1.5}>
+            <InputGroup size={props.size}>
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeholder={props.placeholder}
+                autoFocus={props.autoFocus}
+                {...field}
               />
-            </InputLeftElement>
-            {!!props.endElement && (
-              <InputRightElement>{props.endElement}</InputRightElement>
-            )}
-          </InputGroup>
+              <InputLeftElement>
+                <IconButton
+                  isDisabled={isDisabled}
+                  onClick={() => setShowPassword((x) => !x)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'} // TODO: translation
+                  display="flex"
+                  size="xs"
+                  fontSize="lg"
+                  icon={showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}
+                  variant="unstyled"
+                />
+              </InputLeftElement>
+              {!!props.endElement && (
+                <InputRightElement>{props.endElement}</InputRightElement>
+              )}
+            </InputGroup>
+            <FormFieldError />
+          </Flex>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

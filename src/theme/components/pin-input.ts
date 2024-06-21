@@ -15,4 +15,9 @@ export const pinInputTheme = {
       };
     },
   },
+  sizes: {
+    sm: {
+      borderRadius: 'md',
+    },
+  },
 };

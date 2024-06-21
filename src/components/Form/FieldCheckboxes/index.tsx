@@ -9,11 +9,11 @@ import {
 } from '@chakra-ui/react';
 import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
-import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
+import { FieldCommonProps } from '../FormField';
+import { FormFieldError } from '../FormFieldError';
+import { FormFieldHelper } from '../FormFieldHelper';
+import { FormFieldItem } from '../FormFieldItem';
+import { FormFieldLabel } from '../FormFieldLabel';
 
 export type FieldCheckboxesProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -41,30 +41,40 @@ export const FieldCheckboxes = <
 >(
   props: FieldCheckboxesProps<TFieldValues, TName>
 ) => {
+  const getMinHeight = () => {
+    if (props.layout !== 'row') return;
+    if (props.size === 'lg') return 12;
+    if (props.size === 'md') return 10;
+    if (props.size === 'sm') return 8;
+  };
+
   return (
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <CheckboxGroup size={props.size} {...field}>
-            {!!props.options && (
-              <Flex
-                columnGap={props.columnGap ?? 4}
-                rowGap={props.rowGap ?? 1.5}
-                direction={props.direction ?? 'column'}
-              >
-                {props.options.map((option) => (
-                  <Checkbox key={option.value} value={option.value}>
-                    {option.label}
-                  </Checkbox>
-                ))}
-              </Flex>
-            )}
-            {props.children}
-          </CheckboxGroup>
+          <Flex direction="column" gap={1.5}>
+            <CheckboxGroup size={props.size} {...field}>
+              {!!props.options && (
+                <Flex
+                  columnGap={props.columnGap ?? 4}
+                  rowGap={props.rowGap ?? 1.5}
+                  direction={props.direction ?? props.layout ?? 'column'}
+                  minH={getMinHeight()}
+                >
+                  {props.options.map((option) => (
+                    <Checkbox key={option.value} value={option.value}>
+                      {option.label}
+                    </Checkbox>
+                  ))}
+                </Flex>
+              )}
+              {props.children}
+            </CheckboxGroup>
+            <FormFieldError />
+          </Flex>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

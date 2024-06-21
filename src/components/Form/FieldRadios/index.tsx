@@ -41,30 +41,40 @@ export const FieldRadios = <
 >(
   props: FieldRadiosProps<TFieldValues, TName>
 ) => {
+  const getMinHeight = () => {
+    if (props.layout !== 'row') return;
+    if (props.size === 'lg') return 12;
+    if (props.size === 'md') return 10;
+    if (props.size === 'sm') return 8;
+  };
+
   return (
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <FormFieldItem>
           {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
-          <RadioGroup size={props.size} {...field}>
-            {!!props.options && (
-              <Flex
-                columnGap={props.columnGap ?? 4}
-                rowGap={props.rowGap ?? 1.5}
-                direction={props.direction ?? 'column'}
-              >
-                {props.options.map((option) => (
-                  <Radio key={option.value} value={option.value}>
-                    {option.label}
-                  </Radio>
-                ))}
-              </Flex>
-            )}
-            {props.children}
-          </RadioGroup>
+          <Flex direction="column" gap={1.5}>
+            <RadioGroup size={props.size} {...field}>
+              {!!props.options && (
+                <Flex
+                  columnGap={props.columnGap ?? 4}
+                  rowGap={props.rowGap ?? 1.5}
+                  direction={props.direction ?? props.layout ?? 'column'}
+                  minH={getMinHeight()}
+                >
+                  {props.options.map((option) => (
+                    <Radio key={option.value} value={option.value}>
+                      {option.label}
+                    </Radio>
+                  ))}
+                </Flex>
+              )}
+              {props.children}
+            </RadioGroup>
+            <FormFieldError />
+          </Flex>
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
-          <FormFieldError />
         </FormFieldItem>
       )}
     />

@@ -32,6 +32,7 @@ export const Default = () => {
           name="date"
           label="Date"
           placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
@@ -82,6 +83,32 @@ export const Disabled = () => {
           name="date"
           label="Date"
           isDisabled
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const RowLayout = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          layout="row"
+          size="sm"
+          control={form.control}
+          type="date"
+          name="date"
+          label="Date"
+          placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">
