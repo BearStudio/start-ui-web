@@ -4,7 +4,7 @@ import { AppLayout } from '@/features/app/AppLayout';
 import { APP_PATH } from '@/features/app/constants';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 
-export default function AutenticatedLayout({
+export default function AuthenticatedLayout({
   children,
 }: {
   children: ReactNode;
