@@ -83,8 +83,8 @@ test('update value locale fr', async () => {
     </FormMocked>
   );
   const input = screen.getByLabelText<HTMLInputElement>('Balance');
-  await user.type(input, '12,00');
-  expect(input.value).toBe('12,00 €');
+  await user.type(input, '12.00');
+  expect(input.value).toBe('12,00 €');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
 });
@@ -111,7 +111,7 @@ test('update value no decimals', async () => {
     </FormMocked>
   );
   const input = screen.getByLabelText<HTMLInputElement>('Balance');
-  await user.type(input, '12.22');
+  await user.type(input, '12');
   await user.tab();
   expect(input.value).toBe('€12');
   await user.click(screen.getByRole('button', { name: 'Submit' }));

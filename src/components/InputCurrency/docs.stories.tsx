@@ -9,7 +9,7 @@ export default {
 };
 
 export const Default = () => {
-  const [value, setValue] = useState<number | undefined>(1020.2);
+  const [value, setValue] = useState<number | null>(1020.2);
   return (
     <Stack>
       <InputCurrency value={value} onChange={setValue} />
@@ -20,7 +20,7 @@ export const Default = () => {
 };
 
 export const Currency = () => {
-  const [value, setValue] = useState<number | undefined>(1020.2);
+  const [value, setValue] = useState<number | null>(1020.2);
   return (
     <Stack>
       <InputCurrency
@@ -44,7 +44,7 @@ export const Currency = () => {
 };
 
 export const LocaleFR = () => {
-  const [value, setValue] = useState<number | undefined>(1020.2);
+  const [value, setValue] = useState<number | null>(1020.2);
   return (
     <Stack>
       <InputCurrency value={value} onChange={(v) => setValue(v)} locale="fr" />
@@ -84,5 +84,11 @@ export const Placeholder = () => (
     <InputCurrency placeholder={10} />
     <InputCurrency placeholder={10} currency="USD" />
     <InputCurrency placeholder="Text placeholder" />
+  </Stack>
+);
+
+export const Suffix = () => (
+  <Stack>
+    <InputCurrency suffix="/t" />
   </Stack>
 );

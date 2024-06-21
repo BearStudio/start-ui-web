@@ -1,17 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ComponentProps, useRef, useState } from 'react';
 
 import { Input, InputProps, forwardRef } from '@chakra-ui/react';
-import CurrencyInput, { formatValue } from 'react-currency-input-field';
 import { useTranslation } from 'react-i18next';
+import { NumericFormat, numericFormatter } from 'react-number-format';
+
+import { getNumberFormatInfo } from '@/lib/numbers';
 
 type CustomProps = {
-  value?: number;
-  defaultValue?: number;
+  value?: number | null;
+  defaultValue?: number | null;
   placeholder?: string | number;
   locale?: string;
   currency?: string | null;
+  prefix?: string;
+  suffix?: string;
   decimals?: number;
-  onChange?(value?: number): void;
+  fixedDecimals?: boolean;
+  onChange?(value: number | null): void;
 };
 
 export type InputCurrencyProps = Overwrite<InputProps, CustomProps>;
@@ -19,11 +24,14 @@ export type InputCurrencyProps = Overwrite<InputProps, CustomProps>;
 export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
   (
     {
-      value = null,
-      defaultValue = null,
+      value,
+      defaultValue,
       locale,
       currency = 'EUR',
+      prefix = '',
+      suffix = '',
       decimals = 2,
+      fixedDecimals = true,
       onChange = () => undefined,
       placeholder,
       ...rest
@@ -31,50 +39,77 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
     ref
   ) => {
     const { i18n } = useTranslation();
+    const {
+      decimalsSeparator,
+      groupSeparator,
+      currencyPrefix,
+      currencySuffix,
+    } = getNumberFormatInfo({
+      locale: locale ?? i18n.language,
+      currency,
+    });
 
     const [internalValue, setInternalValue] = useState(
-      String(value ?? defaultValue ?? '')
+      value ?? defaultValue ?? null
     );
-    const isFirstMount = useRef(true);
-    const internalValueRef = useRef(internalValue);
-    internalValueRef.current = internalValue;
+    const [isFocused, setIsFocused] = useState(false);
+    const tmpValueRef = useRef(internalValue);
 
-    useEffect(() => {
-      if (!isFirstMount.current && String(value) !== internalValueRef.current) {
-        setInternalValue(String(value ?? ''));
-      }
-      isFirstMount.current = false;
-    }, [value]);
-
-    const config = {
-      intlConfig: {
-        locale: locale || i18n.language,
-        currency: currency ?? undefined,
-      },
-      decimalScale: decimals,
-      disableAbbreviations: true,
+    const updateValue = (v: number | null) => {
+      setInternalValue(v);
+      onChange(v);
     };
+
+    const getNumericFormatOptions = (v: number | null) =>
+      ({
+        getInputRef: ref,
+        decimalScale: decimals,
+        fixedDecimalScale: !isFocused ? fixedDecimals : false,
+        decimalSeparator: decimalsSeparator ?? '.',
+        thousandSeparator: groupSeparator ?? ',',
+        suffix: `${currencySuffix}${suffix}`,
+        prefix: `${currencyPrefix}${prefix}`,
+        onValueChange: (values) => {
+          tmpValueRef.current = values.floatValue ?? null;
+
+          // Prevent -0 to be replaced with 0 when input is controlled
+          if (values.floatValue === 0) return;
+
+          updateValue(values.floatValue ?? null);
+        },
+      }) satisfies ComponentProps<typeof NumericFormat>;
 
     return (
       <Input
-        as={CurrencyInput}
-        ref={ref}
+        as={NumericFormat}
         sx={{ fontVariantNumeric: 'tabular-nums' }}
-        {...config}
-        value={internalValue}
-        onValueChange={(val: string) => {
-          setInternalValue(val);
-          onChange(val ? Number(val?.replace(',', '.')) : undefined);
-        }}
+        {...rest}
+        {...getNumericFormatOptions(internalValue)}
+        value={value === undefined ? undefined : value ?? ''}
+        defaultValue={defaultValue ?? undefined}
         placeholder={
           typeof placeholder === 'number'
-            ? formatValue({
-                ...config,
-                value: String(placeholder),
+            ? numericFormatter(String(placeholder), {
+                ...getNumericFormatOptions(placeholder),
+                fixedDecimalScale: fixedDecimals,
               })
             : placeholder
         }
-        {...rest}
+        onFocus={(e) => {
+          setIsFocused(true);
+          rest.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setIsFocused(false);
+          updateValue(tmpValueRef.current);
+          rest.onBlur?.(e);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            updateValue(tmpValueRef.current);
+          }
+          rest.onKeyDown?.(e);
+        }}
       />
     );
   }
