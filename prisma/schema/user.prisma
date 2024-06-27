@@ -1,16 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = []
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 enum AccountStatus {
   // User has registered and verified their email
   ENABLED
@@ -48,13 +35,4 @@ model VerificationToken {
   // Useful to change the user email. This model will contains the next user
   // email, waiting for the user to validate it.
   email         String?
-}
-
-model Repository {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String   @unique
-  link        String
-  description String?
 }
