@@ -73,6 +73,7 @@ export const AccountEmailForm = () => {
                 name="email"
                 type="email"
                 control={form.control}
+                defaultValue={account.data.email}
                 label={t('account:data.email.label')}
               />
               <Flex alignItems="center" gap={4}>

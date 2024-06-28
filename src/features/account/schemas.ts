@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
+import { zFieldUploadValue } from '@/files/schemas';
 
 export type UserAccount = z.infer<ReturnType<typeof zUserAccount>>;
 export const zUserAccount = () =>
@@ -8,6 +9,7 @@ export const zUserAccount = () =>
     id: true,
     name: true,
     email: true,
+    image: true,
     authorizations: true,
     language: true,
   });
@@ -20,5 +22,15 @@ export const zFormFieldsAccountEmail = () => zUser().pick({ email: true });
 export type FormFieldsAccountProfile = z.infer<
   ReturnType<typeof zFormFieldsAccountProfile>
 >;
+
 export const zFormFieldsAccountProfile = () =>
-  zUserAccount().pick({ name: true, language: true }).required();
+  zUser()
+    .pick({
+      name: true,
+      language: true,
+    })
+    .merge(
+      z.object({
+        image: zFieldUploadValue(['image']).optional(),
+      })
+    );

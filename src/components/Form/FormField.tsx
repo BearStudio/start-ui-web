@@ -18,6 +18,7 @@ import { FieldRadios, FieldRadiosProps } from './FieldRadios';
 import { FieldSelect, FieldSelectProps } from './FieldSelect';
 import { FieldText, FieldTextProps } from './FieldText';
 import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
+import { FieldUpload, FieldUploadProps } from './FieldUpload';
 import { useFormFieldItemContext } from './FormFieldItem';
 
 type FieldCustomProps<
@@ -50,6 +51,7 @@ export const FormField = <
     | FieldPasswordProps<TFieldValues, TName>
     | FieldCheckboxesProps<TFieldValues, TName>
     | FieldRadiosProps<TFieldValues, TName>
+    | FieldUploadProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
   const getField = () => {
@@ -90,6 +92,8 @@ export const FormField = <
       case 'radios':
         return <FieldRadios {...props} />;
 
+      case 'upload':
+        return <FieldUpload {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };

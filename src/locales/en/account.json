@@ -17,6 +17,9 @@
       },
       "updateError": {
         "title": "Update failed"
+      },
+      "uploadError": {
+        "title": "Upload failed"
       }
     },
     "actions": {
@@ -53,6 +56,11 @@
     }
   },
   "data": {
+    "avatar": {
+      "label": "Avatar",
+      "inputText": "Update avatar...",
+      "required": "Avatar is required"
+    },
     "name": {
       "label": "Name"
     },

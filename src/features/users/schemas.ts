@@ -33,6 +33,7 @@ export const zUser = () =>
       required_error: t('users:data.email.required'),
       invalid_type_error: t('users:data.email.invalid'),
     }),
+    image: z.string().url().nullish(),
     authorizations: zu.array
       .nonEmpty(
         z.array(zUserAuthorization(), {

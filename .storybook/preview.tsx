@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Box, useColorMode } from '@chakra-ui/react';
 import { Preview } from '@storybook/react';
 import { themes } from '@storybook/theming';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useDarkMode } from 'storybook-dark-mode';
 
@@ -16,6 +17,8 @@ import {
 import logoReversed from './logo-reversed.svg';
 // @ts-ignore don't want to implement a d.ts declaration for storybook only
 import logo from './logo.svg';
+
+const queryClient = new QueryClient();
 
 const DocumentationWrapper = ({ children, context }) => {
   const { i18n } = useTranslation();
@@ -91,14 +94,13 @@ const preview: Preview = {
     backgrounds: { disable: true, grid: { disable: true } },
   },
   decorators: [
-    (story, context) => (
+    (Story, context) => (
       <Providers>
-        <DocumentationWrapper context={context}>
-          {/* Calling as a function to avoid errors. Learn more at:
-           * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-           */}
-          {story(context)}
-        </DocumentationWrapper>
+        <QueryClientProvider client={queryClient}>
+          <DocumentationWrapper context={context}>
+            <Story />
+          </DocumentationWrapper>
+        </QueryClientProvider>
       </Providers>
     ),
   ],
