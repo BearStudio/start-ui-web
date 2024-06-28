@@ -52,6 +52,22 @@
       "button": "Logout"
     }
   },
+  "deleteAccount": {
+    "button": "Delete my account",
+    "confirm": {
+      "title": "Delete my account",
+      "message": "You are about to delete your account. This will be permanent, be sure of what you are doing.",
+      "button": "Delete my account"
+    },
+    "validate": {
+      "button": "Delete my account"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Something went wrong"
+      }
+    }
+  },
   "data": {
     "name": {
       "label": "Name"

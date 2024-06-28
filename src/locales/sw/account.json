@@ -63,5 +63,21 @@
   "admin": {
     "button": "Fungua Utawala",
     "title": "Mtumiaji wa msimamizi"
+  },
+  "deleteAccount": {
+    "button": "Futa akaunti yangu",
+    "confirm": {
+      "button": "Futa akaunti yangu",
+      "message": "Unakaribia kufuta akaunti yako. \nHii itakuwa ya kudumu, hakikisha unafanya nini.",
+      "title": "Futa akaunti yangu"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Hitilafu fulani imetokea"
+      }
+    },
+    "validate": {
+      "button": "Futa akaunti yangu"
+    }
   }
 }

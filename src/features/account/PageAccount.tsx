@@ -23,6 +23,7 @@ import { LuArrowRight, LuLogOut, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
+import { AccountDeleteButton } from '@/features/account/AccountDeleteButton';
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
 import { ADMIN_PATH } from '@/features/admin/constants';
@@ -102,6 +103,12 @@ export default function PageHome() {
                 {t('account:logout.button')}
               </Button>
             </ConfirmModal>
+          </Box>
+        </Stack>
+        <Stack direction={{ base: 'column', sm: 'row' }}>
+          <Box flex={0.5} />
+          <Box flex={1}>
+            <AccountDeleteButton />
           </Box>
         </Stack>
       </Stack>

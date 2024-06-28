@@ -33,5 +33,14 @@
     "intro": "This is the verification code to update your email:",
     "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
     "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
+  },
+  "deleteAccountCode": {
+    "subject": "Delete your account",
+    "preview": "Verification code to delete your account",
+    "title": "Delete your account",
+    "hello": "{{name}}, you are about to delete your account. This will be permanent, be sure of what you are doing.",
+    "intro": "This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to delete your account, you can safely ignore this email."
   }
 }

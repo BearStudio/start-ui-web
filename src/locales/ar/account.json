@@ -63,5 +63,21 @@
   "admin": {
     "button": "فتح الإدارة",
     "title": "مستخدم المشرف"
+  },
+  "deleteAccount": {
+    "button": "احذف حسابي",
+    "confirm": {
+      "button": "احذف حسابي",
+      "message": "أنت على وشك حذف حسابك. \nسيكون هذا دائمًا، تأكد مما تفعله.",
+      "title": "احذف حسابي"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "هناك خطأ ما"
+      }
+    },
+    "validate": {
+      "button": "احذف حسابي"
+    }
   }
 }

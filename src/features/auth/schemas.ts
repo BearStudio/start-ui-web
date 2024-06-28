@@ -12,16 +12,24 @@ export type FormFieldsRegister = z.infer<
 export const zFormFieldsRegister = () =>
   zUser().pick({ email: true, name: true, language: true }).required();
 
-export type FormFieldsVerificationCode = z.infer<
-  ReturnType<typeof zFormFieldsVerificationCode>
+export type VerificationCodeValidate = z.infer<
+  ReturnType<typeof zVerificationCodeValidate>
 >;
-export const zFormFieldsVerificationCode = () =>
+export const zVerificationCodeValidate = () =>
   z.object({
+    token: z.string().uuid(),
     code: z
       .string({
         invalid_type_error: t('auth:data.verificationCode.invalid'),
         required_error: t('auth:data.verificationCode.required'),
       })
-      .min(6, t('auth:data.verificationCode.invalid'))
-      .max(6, t('auth:data.verificationCode.invalid')),
+      .length(6, t('auth:data.verificationCode.invalid')),
+  });
+
+export type FormFieldsVerificationCode = z.infer<
+  ReturnType<typeof zFormFieldsVerificationCode>
+>;
+export const zFormFieldsVerificationCode = () =>
+  zVerificationCodeValidate().pick({
+    code: true,
   });
