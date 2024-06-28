@@ -60,7 +60,7 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
       onChange(v);
     };
 
-    const getNumericFormatOptions = (v: number | null) =>
+    const getNumericFormatOptions = () =>
       ({
         getInputRef: ref,
         decimalScale: decimals,
@@ -84,13 +84,13 @@ export const InputCurrency = forwardRef<InputCurrencyProps, 'input'>(
         as={NumericFormat}
         sx={{ fontVariantNumeric: 'tabular-nums' }}
         {...rest}
-        {...getNumericFormatOptions(internalValue)}
+        {...getNumericFormatOptions()}
         value={value === undefined ? undefined : value ?? ''}
         defaultValue={defaultValue ?? undefined}
         placeholder={
           typeof placeholder === 'number'
             ? numericFormatter(String(placeholder), {
-                ...getNumericFormatOptions(placeholder),
+                ...getNumericFormatOptions(),
                 fixedDecimalScale: fixedDecimals,
               })
             : placeholder
