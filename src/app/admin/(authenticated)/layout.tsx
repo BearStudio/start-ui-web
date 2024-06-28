@@ -4,7 +4,7 @@ import { AdminLayout } from '@/features/admin/AdminLayout';
 import { ADMIN_PATH } from '@/features/admin/constants';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
 
-export default function AutenticatedLayout({
+export default function AuthenticatedLayout({
   children,
 }: {
   children: ReactNode;
