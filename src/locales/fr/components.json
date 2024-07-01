@@ -89,5 +89,9 @@
   },
   "formField": {
     "optional": "Facultatif"
+  },
+  "filterPopover": {
+    "clear": "Effacer",
+    "filter": "Filtrer"
   }
 }

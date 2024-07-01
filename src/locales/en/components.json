@@ -89,5 +89,9 @@
       "november": "November",
       "december": "December"
     }
+  },
+  "filterPopover": {
+    "clear": "Clear",
+    "filter": "Filter"
   }
 }
