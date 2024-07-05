@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Button, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { SubmitHandler } from 'react-hook-form';
 import { LuChevronDown } from 'react-icons/lu';
@@ -12,7 +12,7 @@ import { FormField } from '@/components/Form';
 import { FormPopover } from '.';
 
 export default {
-  title: 'Components/FormPopover',
+  title: 'Form/FormPopover',
 };
 
 type FilterStarterFormSchema = z.infer<
@@ -59,6 +59,7 @@ export const Default = () => {
           label="Starter"
           type="select"
           name="starter"
+          size="sm"
           options={options}
         />
       )}
@@ -100,6 +101,7 @@ export const WithTriggerCustomization = () => {
           label="Starter"
           type="select"
           name="starter"
+          size="sm"
           options={options}
         />
       )}
@@ -163,6 +165,7 @@ export const WithFilterClearAndValue = () => {
           label="Starter"
           type="select"
           name="starter"
+          size="sm"
           options={options}
         />
       )}
@@ -223,8 +226,10 @@ export const WithMultiSelectAndValue = () => {
         <FormField
           // Provide the `control` so you can enjoy the `name` typings
           control={form.control}
+          label="Starters"
           type="multi-select"
           name="starters"
+          size="sm"
           options={options}
         />
       )}
@@ -299,11 +304,23 @@ export const WithDateAndValidations = () => {
             <Button onClick={onClick}>Cancel</Button>
           )}
         >
-          {() => (
-            <>
-              <FormField type="date" name="start" />
-              <FormField type="date" name="end" />
-            </>
+          {(form) => (
+            <Flex gap={2}>
+              <FormField
+                label="Start"
+                control={form.control}
+                size="sm"
+                type="date"
+                name="start"
+              />
+              <FormField
+                label="End"
+                control={form.control}
+                size="sm"
+                type="date"
+                name="end"
+              />
+            </Flex>
           )}
         </FormPopover>
       </Box>
