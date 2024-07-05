@@ -144,17 +144,22 @@ export const WithFilterClearAndValue = () => {
           ) : null}
         </Button>
       )}
-      renderFooterSecondaryAction={({ onClick }) => (
+      renderFooterSecondaryAction={({ onClose }) => (
         <Button
           variant="link"
           type="reset"
           onClick={() => {
             setValue(null);
-            onClick();
+            onClose();
           }}
           me="auto"
         >
           Clear
+        </Button>
+      )}
+      renderFooterPrimaryAction={() => (
+        <Button variant="@primary" type="submit">
+          My Custom Button
         </Button>
       )}
     >
@@ -300,8 +305,8 @@ export const WithDateAndValidations = () => {
               Range{label}
             </Button>
           )}
-          renderFooterSecondaryAction={({ onClick }) => (
-            <Button onClick={onClick}>Cancel</Button>
+          renderFooterSecondaryAction={({ onClose }) => (
+            <Button onClick={onClose}>Cancel</Button>
           )}
         >
           {(form) => (

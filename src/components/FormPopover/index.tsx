@@ -12,7 +12,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ButtonProps } from 'react-day-picker';
 import FocusLock from 'react-focus-lock';
 import { SubmitHandler, UseFormReturn, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -31,16 +30,15 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
    * on reset.
    */
   value?: z.infer<TSchema>;
+  /**
+   * Mostly the `FormField` that matches the schema you provided. Remember to
+   * give the `control` props to the `FormField`.
+   */
   children: (form: UseFormReturn<z.infer<TSchema>>) => ReactNode;
   /**
    * The schema for the form that is inside the FormPopover
    */
   schema: TSchema;
-  /**
-   * While enjoying the `reset` mode in the `with` prop, you can customize the
-   * submit button label.
-   */
-  submitLabel?: ButtonProps['children'];
   /**
    * Render the PopoverTrigger child (the ref must be forwarded).
    */
@@ -48,14 +46,18 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
   /**
    * Render the cancel button (or anything else)
    */
-  renderFooterSecondaryAction?: (params: { onClick: () => void }) => ReactNode;
+  renderFooterSecondaryAction?: (params: { onClose: () => void }) => ReactNode;
+  /**
+   * Render the submit button (or anything else)
+   */
+  renderFooterPrimaryAction?: () => ReactNode;
 };
 
 export const FormPopover = <TSchema extends z.Schema>(
   props: FormPopoverProps<TSchema>
 ) => {
   const popover = useDisclosure();
-  const { t } = useTranslation(['common', 'components']);
+  const { t } = useTranslation(['common']);
 
   const form = useForm({
     resolver: zodResolver(props.schema),
@@ -96,11 +98,15 @@ export const FormPopover = <TSchema extends z.Schema>(
 
                     <ButtonGroup size="sm" justifyContent="end">
                       {props.renderFooterSecondaryAction?.({
-                        onClick: handleOnClose,
+                        onClose: handleOnClose,
                       })}
-                      <Button type="submit" variant="@primary">
-                        {props.submitLabel ?? t('common:filter')}
-                      </Button>
+                      {props.renderFooterPrimaryAction &&
+                        props.renderFooterPrimaryAction()}
+                      {!props.renderFooterPrimaryAction && (
+                        <Button type="submit" variant="@primary">
+                          {t('common:submit')}
+                        </Button>
+                      )}
                     </ButtonGroup>
                   </Stack>
                 </Form>

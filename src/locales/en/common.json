@@ -21,5 +21,6 @@
     "cancelText": "Keep changes"
   },
   "filter": "Filter",
-  "clear": "Clear"
+  "clear": "Clear",
+  "submit": "Submit"
 }

@@ -21,5 +21,6 @@
     "title": "Annuler les modifications?"
   },
   "filter": "Filtrer",
-  "clear": "Effacer"
+  "clear": "Effacer",
+  "submit": "Soumettre"
 }
