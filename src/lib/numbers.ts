@@ -1,8 +1,3 @@
-export const isNumber = (value: unknown): boolean =>
-  typeof parseFloat(String(value)) === 'number' &&
-  !isNaN(parseFloat(String(value))) &&
-  !isNaN(Number(value));
-
 export const getNumberFormatInfo = (params: {
   locale: string;
   currency?: string | null;
