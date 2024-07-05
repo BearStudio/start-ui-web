@@ -27,9 +27,14 @@ export const Form = <TFieldValues extends FieldValues>({
     <FormProvider {...props}>
       <form
         noValidate
-        onSubmit={
-          props.onSubmit ? props.handleSubmit(props.onSubmit) : undefined
-        }
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (props.onSubmit) {
+            props.handleSubmit(props.onSubmit)(e);
+          }
+        }}
       >
         {props.children}
       </form>
