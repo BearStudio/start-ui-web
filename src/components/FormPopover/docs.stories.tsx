@@ -142,8 +142,19 @@ export const WithFilterClearAndValue = () => {
           ) : null}
         </Button>
       )}
-      with={['reset']}
-      onReset={() => setValue(null)}
+      renderFooterSecondaryAction={({ onClick }) => (
+        <Button
+          variant="link"
+          type="reset"
+          onClick={() => {
+            setValue(null);
+            onClick();
+          }}
+          me="auto"
+        >
+          Clear
+        </Button>
+      )}
     >
       {(form) => (
         <FormField
@@ -272,7 +283,6 @@ export const WithDateAndValidations = () => {
           onSubmit={handleSubmit}
           value={value}
           schema={zFilterDatesFormSchema()}
-          with={['cancel']}
           renderTrigger={({ onClick }) => (
             <Button
               variant={
@@ -284,6 +294,9 @@ export const WithDateAndValidations = () => {
             >
               Range{label}
             </Button>
+          )}
+          renderFooterSecondaryAction={({ onClick }) => (
+            <Button onClick={onClick}>Cancel</Button>
           )}
         >
           {() => (

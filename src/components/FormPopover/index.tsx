@@ -31,7 +31,6 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
    * on reset.
    */
   value?: z.infer<TSchema>;
-
   children: (form: UseFormReturn<z.infer<TSchema>>) => ReactNode;
   /**
    * The schema for the form that is inside the FormPopover
@@ -47,15 +46,9 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
    */
   renderTrigger: (params: { onClick: () => void }) => ReactNode;
   /**
-   * Using FormPopover, providing `with` prop will add button to clear or cancel
-   * the form. Clear is useful for filters, Cancel for common forms.
+   * Render the cancel button (or anything else)
    */
-  with?: Array<'reset' | 'cancel'>;
-  /**
-   * Use this callback if you want to handle a behavior on reset, which is available
-   * when the `with` prop with the `reset` value is given
-   */
-  onReset?: () => void;
+  renderFooterSecondaryAction?: (params: { onClick: () => void }) => ReactNode;
 };
 
 export const FormPopover = <TSchema extends z.Schema>(
@@ -77,11 +70,6 @@ export const FormPopover = <TSchema extends z.Schema>(
   const handleOnSubmit: SubmitHandler<TSchema> = (values) => {
     props.onSubmit(values);
     popover.onClose();
-  };
-
-  const handleOnReset = () => {
-    props.onReset?.();
-    handleOnClose();
   };
 
   const popoverBodyRef = useRef<ElementRef<'div'>>(null);
@@ -107,22 +95,9 @@ export const FormPopover = <TSchema extends z.Schema>(
                     {props.children(form)}
 
                     <ButtonGroup size="sm" justifyContent="end">
-                      {props.with?.includes('reset') && (
-                        <Button
-                          variant="link"
-                          type="reset"
-                          onClick={handleOnReset}
-                          me="auto"
-                        >
-                          {t('common:clear')}
-                        </Button>
-                      )}
-                      {props.with?.includes('cancel') && (
-                        <Button onClick={handleOnClose}>
-                          {t('common:actions.cancel')}
-                        </Button>
-                      )}
-
+                      {props.renderFooterSecondaryAction?.({
+                        onClick: handleOnClose,
+                      })}
                       <Button type="submit" variant="@primary">
                         {props.submitLabel ?? t('common:filter')}
                       </Button>
