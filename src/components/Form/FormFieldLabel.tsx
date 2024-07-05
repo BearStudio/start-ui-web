@@ -36,6 +36,7 @@ export const FormFieldLabel = forwardRef<
           </chakra.small>
         ) : null
       }
+      fontSize={props.size}
       {...props}
     />
   );

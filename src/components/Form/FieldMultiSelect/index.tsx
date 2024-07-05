@@ -41,7 +41,9 @@ export const FieldMultiSelect = <
           undefined;
         return (
           <FormFieldItem>
-            {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+            {!!props.label && (
+              <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+            )}
 
             <Select
               type="select"

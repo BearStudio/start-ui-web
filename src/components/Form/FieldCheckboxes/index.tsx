@@ -46,7 +46,9 @@ export const FieldCheckboxes = <
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
           <CheckboxGroup size={props.size} {...field}>
             {!!props.options && (
               <Flex

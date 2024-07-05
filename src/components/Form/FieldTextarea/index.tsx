@@ -30,7 +30,9 @@ export const FieldTextarea = <
       {...props}
       render={({ field }) => (
         <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
           <Textarea
             size={props.size}
             placeholder={props.placeholder}

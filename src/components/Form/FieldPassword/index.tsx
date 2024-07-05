@@ -44,7 +44,9 @@ export const FieldPassword = <
       {...props}
       render={({ field }) => (
         <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
           <InputGroup size={props.size}>
             <Input
               type={showPassword ? 'text' : 'password'}

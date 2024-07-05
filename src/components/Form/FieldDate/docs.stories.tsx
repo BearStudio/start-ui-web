@@ -31,7 +31,6 @@ export const Default = () => {
           type="date"
           name="date"
           label="Date"
-          placeholder="Placeholder"
         />
         <Box>
           <Button type="submit" variant="@primary">
