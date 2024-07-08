@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { zUser } from '@/features/users/schemas';
+import { zUser, zUserAccountStatus } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
@@ -53,6 +53,7 @@ export const usersRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
+          filterValue: zUserAccountStatus().optional(),
         })
         .default({})
     )
@@ -81,6 +82,9 @@ export const usersRouter = createTRPCRouter({
             },
           },
         ],
+        accountStatus: {
+          equals: input.filterValue,
+        },
       } satisfies Prisma.UserWhereInput;
 
       const [total, items] = await ctx.db.$transaction([

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Avatar,
@@ -14,8 +14,10 @@ import {
   chakra,
 } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
+import { SubmitHandler } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { LuPlus } from 'react-icons/lu';
+import { z } from 'zod';
 
 import {
   DataList,
@@ -27,6 +29,8 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
+import { FormField } from '@/components/Form';
+import { FormPopover } from '@/components/FormPopover';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
 import {
@@ -40,18 +44,36 @@ import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
 
+type FilterFormSchema = z.infer<ReturnType<typeof zFilterFormSchema>>;
+const zFilterFormSchema = () =>
+  z.object({
+    filter: z.string().nullable(),
+  });
+
 export default function PageAdminUsers() {
   const { t } = useTranslation(['users']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
+  const [filterValue, setFilterValue] = useState<string | null>(null);
+  const handleSubmit: SubmitHandler<FilterFormSchema> = (values) => {
+    setFilterValue(values.filter);
+  };
 
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { searchTerm },
+    { searchTerm, filterValue },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+
+  const options = ['ENABLED', 'DISABLED'].map((v) => ({
+    label:
+      v === 'DISABLED'
+        ? t('users:data.status.deactivated')
+        : t('users:data.status.activated'),
+    value: v,
+  }));
 
   return (
     <AdminLayoutPage containerMaxWidth="container.xl" nav={<AdminNav />}>
@@ -74,6 +96,27 @@ export default function PageAdminUsers() {
                 onChange={(value) => setSearchTerm(value || null)}
                 maxW={{ base: 'none', md: '20rem' }}
               />
+              <FormPopover
+                value={{
+                  filter: filterValue,
+                }}
+                onSubmit={handleSubmit}
+                schema={zFilterFormSchema()}
+                renderTrigger={({ onClick }) => (
+                  <Button onClick={onClick}>Filter {filterValue}</Button>
+                )}
+              >
+                {(form) => (
+                  <FormField
+                    control={form.control}
+                    label="Filter"
+                    type="select"
+                    name="filter"
+                    size="sm"
+                    options={options}
+                  />
+                )}
+              </FormPopover>
             </Flex>
             <ResponsiveIconButton
               as={LinkAdmin}
