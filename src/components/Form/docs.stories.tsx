@@ -23,12 +23,12 @@ const zFormSchema = () =>
     name: zu.string.nonEmpty(z.string(), {
       required_error: 'Name is required',
     }),
-    email: zu.string.emailOptional(z.string(), {
+    email: zu.string.emailNullish(z.string(), {
       required_error: 'Email is required',
       invalid_type_error: 'Email is invalid',
     }),
     color: z.enum(['red', 'green', 'blue']),
-    other: zu.string.nonEmptyOptional(z.string()),
+    other: zu.string.nonEmptyNullish(z.string()),
   });
 
 export const Default = () => {
@@ -94,7 +94,7 @@ export const Default = () => {
           render={({ field }) => (
             <FormFieldItem>
               <FormFieldLabel>Other (Custom)</FormFieldLabel>
-              <Input {...field} />
+              <Input {...field} value={field.value ?? ''} />
               <FormFieldError />
             </FormFieldItem>
           )}
@@ -174,7 +174,7 @@ export const NoHtmlForm = () => {
             render={({ field }) => (
               <FormFieldItem>
                 <FormFieldLabel>Other (Custom)</FormFieldLabel>
-                <Input {...field} />
+                <Input {...field} value={field.value ?? ''} />
                 <FormFieldError />
               </FormFieldItem>
             )}

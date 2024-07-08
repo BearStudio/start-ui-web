@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { zu } from '@/lib/zod/zod-utils';
 
 export type Repository = z.infer<ReturnType<typeof zRepository>>;
+
 export const zRepository = () =>
   z.object({
     id: z.string().cuid(),
@@ -21,7 +22,7 @@ export const zRepository = () =>
           .includes('.', { message: t('repositories:data.link.missingDot') })
       )
       .transform((v) => (v.startsWith('http') ? v : `https://${v}`)),
-    description: z.string().nullish(),
+    description: zu.string.nonEmptyNullable(z.string()),
   });
 
 export type FormFieldsRepository = z.infer<

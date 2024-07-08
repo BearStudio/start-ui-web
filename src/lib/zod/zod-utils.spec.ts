@@ -19,14 +19,29 @@ describe('zu.string', () => {
     });
   });
 
-  describe('nonEmptyOptional', () => {
+  describe('nonEmptyNullable', () => {
+    test.each([
+      { input: 'string', output: 'string', expected: true },
+      { input: undefined, expected: false },
+      { input: '', output: null, expected: true },
+      { input: null, output: null, expected: true },
+    ])('with $input should be $expected', ({ input, output, expected }) => {
+      const parsed = zu.string.nonEmptyNullable(z.string()).safeParse(input);
+      expect(parsed.success).toBe(expected);
+      if (parsed.success) {
+        expect(parsed.data).toBe(output);
+      }
+    });
+  });
+
+  describe('nonEmptyNullish', () => {
     test.each([
       { input: 'string', output: 'string', expected: true },
       { input: undefined, output: undefined, expected: true },
-      { input: '', output: undefined, expected: true },
-      { input: null, expected: false },
+      { input: '', output: null, expected: true },
+      { input: null, output: null, expected: true },
     ])('with $input should be $expected', ({ input, output, expected }) => {
-      const parsed = zu.string.nonEmptyOptional(z.string()).safeParse(input);
+      const parsed = zu.string.nonEmptyNullish(z.string()).safeParse(input);
       expect(parsed.success).toBe(expected);
       if (parsed.success) {
         expect(parsed.data).toBe(output);
@@ -50,15 +65,31 @@ describe('zu.string', () => {
     });
   });
 
-  describe('emailOptional', () => {
+  describe('emailNullable', () => {
+    test.each([
+      { input: 'name@company.com', output: 'name@company.com', expected: true },
+      { input: '', output: null, expected: true },
+      { input: null, output: null, expected: true },
+      { input: 'company.com', expected: false },
+      { input: undefined, expected: false },
+    ])('with $input should be $expected', ({ input, output, expected }) => {
+      const parsed = zu.string.emailNullable(z.string()).safeParse(input);
+      expect(parsed.success).toBe(expected);
+      if (parsed.success) {
+        expect(parsed.data).toBe(output);
+      }
+    });
+  });
+
+  describe('emailNullish', () => {
     test.each([
       { input: 'name@company.com', output: 'name@company.com', expected: true },
       { input: undefined, output: undefined, expected: true },
-      { input: '', output: undefined, expected: true },
+      { input: '', output: null, expected: true },
+      { input: null, output: null, expected: true },
       { input: 'company.com', expected: false },
-      { input: null, expected: false },
     ])('with $input should be $expected', ({ input, output, expected }) => {
-      const parsed = zu.string.emailOptional(z.string()).safeParse(input);
+      const parsed = zu.string.emailNullish(z.string()).safeParse(input);
       expect(parsed.success).toBe(expected);
       if (parsed.success) {
         expect(parsed.data).toBe(output);
@@ -83,17 +114,34 @@ describe('zu.array', () => {
       }
     });
   });
-
-  describe('nonEmptyOptional', () => {
+  describe('nonEmptyNullable', () => {
     test.each([
       { input: ['string'], output: ['string'], expected: true },
       { input: [''], output: [''], expected: true },
-      { input: [], output: undefined, expected: true },
+      { input: [], output: null, expected: true },
+      { input: undefined, expected: false },
+      { input: [2], expected: false },
+    ])('with $input should be $expected', ({ input, output, expected }) => {
+      const parsed = zu.array
+        .nonEmptyNullable(z.string().array())
+        .safeParse(input);
+      expect(parsed.success).toBe(expected);
+      if (parsed.success) {
+        expect(parsed.data).toStrictEqual(output);
+      }
+    });
+  });
+
+  describe('nonEmptyNullish', () => {
+    test.each([
+      { input: ['string'], output: ['string'], expected: true },
+      { input: [''], output: [''], expected: true },
+      { input: [], output: null, expected: true },
       { input: undefined, output: undefined, expected: true },
       { input: [2], expected: false },
     ])('with $input should be $expected', ({ input, output, expected }) => {
       const parsed = zu.array
-        .nonEmptyOptional(z.string().array())
+        .nonEmptyNullish(z.string().array())
         .safeParse(input);
       expect(parsed.success).toBe(expected);
       if (parsed.success) {
