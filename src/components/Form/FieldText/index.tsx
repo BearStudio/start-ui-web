@@ -38,7 +38,9 @@ export const FieldText = <
       {...props}
       render={({ field }) => (
         <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
           <InputGroup size={props.size}>
             <Input
               type={props.type}

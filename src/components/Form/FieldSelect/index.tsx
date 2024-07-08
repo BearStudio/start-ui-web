@@ -40,7 +40,9 @@ export const FieldSelect = <
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
           <FormFieldItem>
-            {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+            {!!props.label && (
+              <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+            )}
             <Select
               type="select"
               size={props.size}

@@ -32,7 +32,8 @@ type FieldCustomProps<
 export type FieldCommonProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'>;
+> = Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'> &
+  Required<Pick<FieldCustomProps<TFieldValues, TName>, 'control'>>;
 
 export const FormField = <
   TFieldValues extends FieldValues = FieldValues,

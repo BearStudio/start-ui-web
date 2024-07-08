@@ -46,7 +46,9 @@ export const FieldOtp = <
           // Target the first input
           id={`${id}-0`}
         >
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
 
           <HStack ref={stackRef}>
             <PinInput

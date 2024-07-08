@@ -59,7 +59,9 @@ export const FieldCurrency = <
       {...props}
       render={({ field }) => (
         <FormFieldItem>
-          {!!props.label && <FormFieldLabel>{props.label}</FormFieldLabel>}
+          {!!props.label && (
+            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+          )}
           <InputGroup size={props.size}>
             <InputCurrency
               type={props.type}
