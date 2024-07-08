@@ -17,7 +17,7 @@ export const zu = {
             t('zod:errors.invalid_type_received_undefined')
         );
     },
-    nonEmptyOptional(
+    nonEmptyNullable(
       s: ZodString,
       options: {
         required_error?: string;
@@ -25,8 +25,19 @@ export const zu = {
     ) {
       return z
         .literal('')
-        .transform(() => undefined)
-        .or(zu.string.nonEmpty(s, options).optional());
+        .transform(() => null)
+        .or(zu.string.nonEmpty(s, options).nullable());
+    },
+    nonEmptyNullish(
+      s: ZodString,
+      options: {
+        required_error?: string;
+      } = {}
+    ) {
+      return z
+        .literal('')
+        .transform(() => null)
+        .or(zu.string.nonEmpty(s, options).nullish());
     },
     email(
       s: ZodString,
@@ -39,14 +50,23 @@ export const zu = {
         .nonEmpty(s.toLowerCase(), options)
         .email(options.invalid_type_error);
     },
-    emailOptional(
+    emailNullable(
       s: ZodString,
       options: {
         required_error?: string;
         invalid_type_error?: string;
       } = {}
     ) {
-      return zu.string.nonEmptyOptional(zu.string.email(s, options), options);
+      return zu.string.nonEmptyNullable(zu.string.email(s, options), options);
+    },
+    emailNullish(
+      s: ZodString,
+      options: {
+        required_error?: string;
+        invalid_type_error?: string;
+      } = {}
+    ) {
+      return zu.string.nonEmptyNullish(zu.string.email(s, options), options);
     },
   },
   array: {
@@ -56,11 +76,17 @@ export const zu = {
         message ?? t('zod:errors.invalid_type_received_undefined')
       );
     },
-    nonEmptyOptional<T extends Schema>(a: ZodArray<T>, message?: string) {
+    nonEmptyNullable<T extends Schema>(a: ZodArray<T>, message?: string) {
       return a
-        .transform((v) => (v.length === 0 ? undefined : v))
-        .pipe(zu.array.nonEmpty(a, message).optional())
-        .optional();
+        .length(0)
+        .transform(() => null)
+        .or(zu.array.nonEmpty(a, message).nullable());
+    },
+    nonEmptyNullish<T extends Schema>(a: ZodArray<T>, message?: string) {
+      return a
+        .length(0)
+        .transform(() => null)
+        .or(zu.array.nonEmpty(a, message).nullish());
     },
   },
 } as const;

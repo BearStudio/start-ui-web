@@ -71,7 +71,7 @@ export default function PageAdminRepositoryUpdate() {
     values: {
       name: repository.data?.name ?? '',
       link: repository.data?.link ?? '',
-      description: repository.data?.description,
+      description: repository.data?.description ?? null,
     },
   });
 

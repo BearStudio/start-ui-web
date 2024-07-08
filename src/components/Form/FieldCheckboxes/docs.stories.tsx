@@ -106,7 +106,7 @@ export const Disabled = () => {
 type FormSchemaOptional = z.infer<ReturnType<typeof zFormSchemaOptional>>;
 const zFormSchemaOptional = () =>
   z.object({
-    colors: zu.array.nonEmptyOptional(z.enum(['red', 'green', 'blue']).array()),
+    colors: zu.array.nonEmptyNullish(z.enum(['red', 'green', 'blue']).array()),
   });
 
 export const Optional = () => {
