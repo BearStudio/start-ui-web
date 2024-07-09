@@ -51,14 +51,12 @@ export const usersRouter = createTRPCRouter({
       },
     })
     .input(
-      z
-        .object({
-          cursor: z.string().cuid().optional(),
-          limit: z.number().min(1).max(100).default(20),
-          searchTerm: z.string().optional(),
-          filterValue: zFilterAccountStatus(),
-        })
-        .default({})
+      z.object({
+        cursor: z.string().cuid().optional(),
+        limit: z.number().min(1).max(100).default(20),
+        searchTerm: z.string().optional(),
+        filterStatusValue: z.string().nullable(),
+      })
     )
     .output(
       z.object({
@@ -69,7 +67,9 @@ export const usersRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting users from database');
-
+      const parsedFilterStatusValue = zFilterAccountStatus().parse(
+        input.filterStatusValue
+      );
       const where = {
         OR: [
           {
@@ -86,7 +86,7 @@ export const usersRouter = createTRPCRouter({
           },
         ],
         accountStatus: {
-          equals: input.filterValue || undefined,
+          equals: parsedFilterStatusValue || undefined,
         },
       } satisfies Prisma.UserWhereInput;
 

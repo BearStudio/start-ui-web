@@ -44,8 +44,10 @@ import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
 
-type FilterFormSchema = z.infer<ReturnType<typeof zFilterFormSchema>>;
-const zFilterFormSchema = () =>
+type FilterStatusFormSchema = z.infer<
+  ReturnType<typeof zFilterStatusFormSchema>
+>;
+const zFilterStatusFormSchema = () =>
   z.object({
     filter: z.string().nullable(),
   });
@@ -53,18 +55,18 @@ const zFilterFormSchema = () =>
 export default function PageAdminUsers() {
   const { t } = useTranslation(['users']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
-  const [filterValue, setFilterValue] = useQueryState('filter', {
+  const [filterStatusValue, setFilterStatusValue] = useQueryState('status', {
     defaultValue: '',
   });
 
-  const handleSubmit: SubmitHandler<FilterFormSchema> = (values) => {
-    setFilterValue(values.filter);
+  const handleSubmit: SubmitHandler<FilterStatusFormSchema> = (values) => {
+    setFilterStatusValue(values.filter);
   };
 
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { searchTerm, filterValue },
+    { searchTerm, filterStatusValue },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
@@ -101,22 +103,26 @@ export default function PageAdminUsers() {
               />
               <FormPopover
                 value={{
-                  filter: filterValue,
+                  filter: filterStatusValue,
                 }}
                 onSubmit={handleSubmit}
-                schema={zFilterFormSchema()}
+                schema={zFilterStatusFormSchema()}
                 renderTrigger={({ onClick }) => (
                   <Button
                     onClick={onClick}
                     size="sm"
-                    variant={!!filterValue ? '@secondary' : undefined}
+                    variant={!!filterStatusValue ? '@secondary' : undefined}
                     rightIcon={<LuChevronDown />}
                   >
-                    Filter{' '}
-                    {filterValue ? (
+                    Status{' '}
+                    {filterStatusValue ? (
                       <>
                         {' '}
-                        : {options.find((o) => o.value === filterValue)?.label}
+                        :{' '}
+                        {
+                          options.find((o) => o.value === filterStatusValue)
+                            ?.label
+                        }
                       </>
                     ) : null}
                   </Button>
@@ -126,7 +132,7 @@ export default function PageAdminUsers() {
                     variant="link"
                     type="reset"
                     onClick={() => {
-                      setFilterValue(null);
+                      setFilterStatusValue(null);
                       onClose();
                     }}
                     me="auto"
@@ -138,7 +144,7 @@ export default function PageAdminUsers() {
                 {(form) => (
                   <FormField
                     control={form.control}
-                    label="Filter"
+                    label="Status"
                     type="select"
                     name="filter"
                     size="sm"
