@@ -2,9 +2,12 @@ import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { zUser, zUserAccountStatus } from '@/features/users/schemas';
+import { zUser } from '@/features/users/schemas';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
+
+const zFilterAccountStatus = () =>
+  z.enum(['DISABLED', 'ENABLED', '']).catch('');
 
 export const usersRouter = createTRPCRouter({
   getById: protectedProcedure({ authorizations: ['ADMIN'] })
@@ -53,7 +56,7 @@ export const usersRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
-          filterValue: zUserAccountStatus().optional(),
+          filterValue: zFilterAccountStatus(),
         })
         .default({})
     )
@@ -83,7 +86,7 @@ export const usersRouter = createTRPCRouter({
           },
         ],
         accountStatus: {
-          equals: input.filterValue,
+          equals: input.filterValue || undefined,
         },
       } satisfies Prisma.UserWhereInput;
 

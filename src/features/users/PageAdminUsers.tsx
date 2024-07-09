@@ -16,7 +16,7 @@ import {
 import { useQueryState } from 'nuqs';
 import { SubmitHandler } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { LuPlus } from 'react-icons/lu';
+import { LuChevronDown, LuPlus } from 'react-icons/lu';
 import { z } from 'zod';
 
 import {
@@ -53,7 +53,10 @@ const zFilterFormSchema = () =>
 export default function PageAdminUsers() {
   const { t } = useTranslation(['users']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
-  const [filterValue, setFilterValue] = useState<string | null>(null);
+  const [filterValue, setFilterValue] = useQueryState('filter', {
+    defaultValue: '',
+  });
+
   const handleSubmit: SubmitHandler<FilterFormSchema> = (values) => {
     setFilterValue(values.filter);
   };
@@ -103,7 +106,33 @@ export default function PageAdminUsers() {
                 onSubmit={handleSubmit}
                 schema={zFilterFormSchema()}
                 renderTrigger={({ onClick }) => (
-                  <Button onClick={onClick}>Filter {filterValue}</Button>
+                  <Button
+                    onClick={onClick}
+                    size="sm"
+                    variant={!!filterValue ? '@secondary' : undefined}
+                    rightIcon={<LuChevronDown />}
+                  >
+                    Filter{' '}
+                    {filterValue ? (
+                      <>
+                        {' '}
+                        : {options.find((o) => o.value === filterValue)?.label}
+                      </>
+                    ) : null}
+                  </Button>
+                )}
+                renderFooterSecondaryAction={({ onClose }) => (
+                  <Button
+                    variant="link"
+                    type="reset"
+                    onClick={() => {
+                      setFilterValue(null);
+                      onClose();
+                    }}
+                    me="auto"
+                  >
+                    Clear
+                  </Button>
                 )}
               >
                 {(form) => (
