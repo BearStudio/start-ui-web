@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuExternalLink, LuPenLine, LuTrash2 } from 'react-icons/lu';
@@ -26,8 +27,7 @@ import {
   AdminLayoutPageContent,
   AdminLayoutPageTopBar,
 } from '@/features/admin/AdminLayoutPage';
-import { LinkAdmin } from '@/features/admin/LinkAdmin';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageAdminRepository() {
@@ -45,7 +45,7 @@ export default function PageAdminRepository() {
   const repositoryRemove = trpc.repositories.removeById.useMutation({
     onSuccess: async () => {
       await trpcUtils.repositories.getAll.invalidate();
-      router.replace(`${ADMIN_PATH}/repositories`);
+      router.replace(ROUTES_REPOSITORIES.admin.root());
     },
     onError: () => {
       toastError({
@@ -64,8 +64,11 @@ export default function PageAdminRepository() {
         rightActions={
           <>
             <ResponsiveIconButton
-              as={LinkAdmin}
-              href={`/repositories/${params?.id}/update`}
+              as={Link}
+              href={ROUTES_REPOSITORIES.admin.update({
+                id: params?.id?.toString() ?? 'unknown',
+              })}
+              isDisabled={!params?.id}
               icon={<LuPenLine />}
             >
               {t('common:actions.edit')}

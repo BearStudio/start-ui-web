@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_USERS } from '@/features/users/routes';
 
 export default function Page() {
-  redirect(`${ADMIN_PATH}/management/users`);
+  redirect(ROUTES_USERS.admin.root());
 }

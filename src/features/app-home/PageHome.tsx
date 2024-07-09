@@ -23,7 +23,7 @@ import {
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ADMIN } from '@/features/admin/routes';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
 import { MarketingBento } from '@/features/demo-mode/MarketingBento';
 import { trpc } from '@/lib/trpc/client';
@@ -89,7 +89,7 @@ export default function PageHome() {
               ms="auto"
               gap={2}
               display="inline-flex"
-              href={ADMIN_PATH || '/'}
+              href={ROUTES_ADMIN.root()}
             >
               {t('account:admin.button')}
               <Icon icon={LuArrowRight} />

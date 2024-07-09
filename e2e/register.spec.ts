@@ -2,14 +2,14 @@ import { expect, test } from '@playwright/test';
 import { pageUtils } from 'e2e/utils/pageUtils';
 import { USER_EMAIL, getRandomEmail } from 'e2e/utils/users';
 
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_AUTH } from '@/features/auth/routes';
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
 import locales from '@/locales';
 
 test.describe('Register flow', () => {
   test('Success flow', async ({ page }) => {
-    await page.goto(`${APP_PATH}/register`);
-    await page.waitForURL(`**${APP_PATH}/register`);
+    await page.goto(ROUTES_AUTH.app.register());
+    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
 
     await page.getByLabel('Name').fill('Test user');
     const email = await getRandomEmail();
@@ -18,8 +18,10 @@ test.describe('Register flow', () => {
       .getByRole('button', { name: locales.en.auth.register.actions.create })
       .click();
 
-    await page.waitForURL(`**${APP_PATH}/register/**`);
-    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
+    await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
+	await page
+        .getByText('Verification code')
+        .fill(input.code ?? VALIDATION_CODE_MOCKED);
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -27,8 +29,8 @@ test.describe('Register flow', () => {
   });
 
   test('Register with existing email', async ({ page }) => {
-    await page.goto(`${APP_PATH}/register`);
-    await page.waitForURL(`**${APP_PATH}/register`);
+    await page.goto(ROUTES_AUTH.app.register());
+    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
 
     await page.getByLabel('Name').fill('Test user');
     await page.getByLabel('Email').fill(USER_EMAIL);
@@ -36,8 +38,10 @@ test.describe('Register flow', () => {
       .getByRole('button', { name: locales.en.auth.register.actions.create })
       .click();
 
-    await page.waitForURL(`**${APP_PATH}/register/**`);
-    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
+    await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
+	await page
+        .getByText('Verification code')
+        .fill(input.code ?? VALIDATION_CODE_MOCKED);
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -46,8 +50,8 @@ test.describe('Register flow', () => {
 
   test('Login with a not verified account', async ({ page }) => {
     const utils = pageUtils(page);
-    await page.goto(`${APP_PATH}/register`);
-    await page.waitForURL(`**${APP_PATH}/register`);
+    await page.goto(ROUTES_AUTH.app.register());
+    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
 
     const email = await getRandomEmail();
 

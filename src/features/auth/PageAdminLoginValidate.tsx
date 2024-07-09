@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Form } from '@/components/Form';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ADMIN } from '@/features/admin/routes';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -44,7 +44,7 @@ export default function PageAdminLoginValidate() {
   };
 
   const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: ADMIN_PATH,
+    defaultRedirect: ROUTES_ADMIN.root(),
   });
   const onVerificationCodeError = useOnVerificationCodeError({
     onError: (error) => form.setError('code', { message: error }),

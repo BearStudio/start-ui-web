@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ACCOUNT } from '@/features/account/routes';
 
 export default function Page() {
-  redirect(`${ADMIN_PATH}/account/profile`);
+  redirect(ROUTES_ACCOUNT.admin.profile());
 }

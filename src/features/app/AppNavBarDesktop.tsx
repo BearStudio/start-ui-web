@@ -9,21 +9,23 @@ import {
   HStack,
   Spinner,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuFolderGit2, LuHome } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
-import { LinkApp } from '@/features/app/LinkApp';
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_ACCOUNT } from '@/features/account/routes';
+import { ROUTES_APP } from '@/features/app/routes';
+import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
 import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {
   const { t } = useTranslation(['app']);
   const account = trpc.account.get.useQuery();
   const pathname = usePathname();
-  const isAccountActive = pathname.startsWith(`${APP_PATH}/account`);
+  const isAccountActive = pathname.startsWith(ROUTES_ACCOUNT.app.root());
 
   return (
     <Box display={{ base: 'none', md: 'block' }} {...props}>
@@ -31,23 +33,27 @@ export const AppNavBarDesktop = (props: BoxProps) => {
       <Flex align="center" pt={6} pb={2}>
         <Container maxW="container.md">
           <HStack spacing={4}>
-            <Box as={LinkApp} href="/">
+            <Box as={Link} href="/">
               <Logo />
             </Box>
             <HStack flex={1} spacing={0}>
-              <AppNavBarDesktopMainMenuItem href="/" icon={LuHome}>
+              <AppNavBarDesktopMainMenuItem
+                href={ROUTES_APP.root()}
+                isExact
+                icon={LuHome}
+              >
                 {t('app:layout.mainMenu.home')}
               </AppNavBarDesktopMainMenuItem>
               <AppNavBarDesktopMainMenuItem
-                href="/repositories"
+                href={ROUTES_REPOSITORIES.app.root()}
                 icon={LuFolderGit2}
               >
                 {t('app:layout.mainMenu.repositories')}
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar
-              as={LinkApp}
-              href="/account"
+              as={Link}
+              href={ROUTES_ACCOUNT.app.root()}
               size="sm"
               icon={<></>}
               name={account.data?.email ?? ''}
@@ -77,20 +83,19 @@ const AppNavBarDesktopMainMenuItem = ({
   children,
   href,
   icon,
+  isExact,
 }: {
   children: ReactNode;
   href: string;
+  isExact?: boolean;
   icon?: React.FC;
 }) => {
   const pathname = usePathname() ?? '';
-  const isActive =
-    href === '/'
-      ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(`${APP_PATH}${href}`);
+  const isActive = isExact ? pathname === href : pathname.startsWith(href);
 
   return (
     <Flex
-      as={LinkApp}
+      as={Link}
       href={href}
       bg="transparent"
       justifyContent="flex-start"

@@ -8,27 +8,27 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { LinkApp } from '@/features/app/LinkApp';
-import { APP_PATH } from '@/features/app/constants';
 import { LoginForm } from '@/features/auth/LoginForm';
+import { ROUTES_AUTH } from '@/features/auth/routes';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
 export default function PageLogin() {
   const { t } = useTranslation(['auth', 'common']);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleOnSuccess = (
     data: RouterOutputs['auth']['login'],
     variables: RouterInputs['auth']['login']
   ) => {
-    const urlSearchParams = new URLSearchParams(searchParams);
-    urlSearchParams.set('email', variables.email);
     router.push(
-      `${APP_PATH}/login/${data.token}?${urlSearchParams.toString()}`
+      ROUTES_AUTH.app.loginValidate({
+        token: data.token,
+        email: variables.email,
+      })
     );
   };
 
@@ -41,7 +41,12 @@ export default function PageLogin() {
         </Text>
       </Stack>
 
-      <Button variant="@primary" size="lg" as={LinkApp} href="/register">
+      <Button
+        variant="@primary"
+        size="lg"
+        as={Link}
+        href={ROUTES_AUTH.app.register()}
+      >
         {t('auth:login.actions.register')}
       </Button>
 
