@@ -51,12 +51,14 @@ export const usersRouter = createTRPCRouter({
       },
     })
     .input(
-      z.object({
-        cursor: z.string().cuid().optional(),
-        limit: z.number().min(1).max(100).default(20),
-        searchTerm: z.string().optional(),
-        filterStatusValue: z.string().nullable(),
-      })
+      z
+        .object({
+          cursor: z.string().cuid().optional(),
+          limit: z.number().min(1).max(100).default(20),
+          searchTerm: z.string().optional(),
+          filterStatusValue: z.string().optional(),
+        })
+        .default({})
     )
     .output(
       z.object({
