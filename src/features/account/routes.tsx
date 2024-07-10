@@ -3,10 +3,10 @@ import { ROUTES_APP } from '@/features/app/routes';
 
 export const ROUTES_ACCOUNT = {
   app: {
-    root: () => `${ROUTES_APP.root()}/account`,
+    root: () => `${ROUTES_APP.baseUrl()}/account`,
   },
   admin: {
-    root: () => `${ROUTES_ADMIN.root()}/account`,
+    root: () => `${ROUTES_ADMIN.baseUrl()}/account`,
     profile: () => `${ROUTES_ACCOUNT.admin.root()}/profile`,
     email: () => `${ROUTES_ACCOUNT.admin.root()}/email`,
   },
