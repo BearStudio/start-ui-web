@@ -92,7 +92,7 @@ export default function PageHome() {
             <ConfirmModal
               onConfirm={() =>
                 router.push(
-                  `${ROUTES_AUTH.logout({ redirect: ROUTES_AUTH.app.login() })}}`
+                  `${ROUTES_AUTH.logout({ redirect: ROUTES_AUTH.app.login() })}`
                 )
               }
               title={t('account:logout.confirm.title')}
