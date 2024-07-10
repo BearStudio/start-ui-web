@@ -2,6 +2,7 @@
   "you": "you",
   "list": {
     "title": "Users Management",
+    "status": "Status",
     "actions": {
       "createUser": "Create User"
     },

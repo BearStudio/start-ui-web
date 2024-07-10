@@ -44,29 +44,27 @@ import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
 
-type FilterStatusFormSchema = z.infer<
-  ReturnType<typeof zFilterStatusFormSchema>
->;
-const zFilterStatusFormSchema = () =>
+type StatusFormSchema = z.infer<ReturnType<typeof zStatusFormSchema>>;
+const zStatusFormSchema = () =>
   z.object({
-    filter: z.string().nullable(),
+    status: z.string().nullable(),
   });
 
 export default function PageAdminUsers() {
-  const { t } = useTranslation(['users']);
+  const { t } = useTranslation(['users', 'common']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
-  const [filterStatusValue, setFilterStatusValue] = useQueryState('status', {
+  const [status, setStatus] = useQueryState('status', {
     defaultValue: '',
   });
 
-  const handleSubmit: SubmitHandler<FilterStatusFormSchema> = (values) => {
-    setFilterStatusValue(values.filter);
+  const handleSubmit: SubmitHandler<StatusFormSchema> = (values) => {
+    setStatus(values.status);
   };
 
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { searchTerm, filterStatusValue },
+    { searchTerm, status },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
@@ -103,28 +101,21 @@ export default function PageAdminUsers() {
               />
               <FormPopover
                 value={{
-                  filter: filterStatusValue,
+                  status: status,
                 }}
                 onSubmit={handleSubmit}
-                schema={zFilterStatusFormSchema()}
+                schema={zStatusFormSchema()}
                 renderTrigger={({ onClick }) => (
                   <Button
                     onClick={onClick}
                     size="sm"
-                    variant={!!filterStatusValue ? '@secondary' : undefined}
+                    variant={!!status ? '@secondary' : undefined}
                     rightIcon={<LuChevronDown />}
                   >
-                    Status{' '}
-                    {filterStatusValue ? (
-                      <>
-                        {' '}
-                        :{' '}
-                        {
-                          options.find((o) => o.value === filterStatusValue)
-                            ?.label
-                        }
-                      </>
-                    ) : null}
+                    {t('users:list.status')}
+                    {status && (
+                      <> : {options.find((o) => o.value === status)?.label}</>
+                    )}
                   </Button>
                 )}
                 renderFooterSecondaryAction={({ onClose }) => (
@@ -132,21 +123,21 @@ export default function PageAdminUsers() {
                     variant="link"
                     type="reset"
                     onClick={() => {
-                      setFilterStatusValue(null);
+                      setStatus(null);
                       onClose();
                     }}
                     me="auto"
                   >
-                    Clear
+                    {t('common:clear')}
                   </Button>
                 )}
               >
                 {(form) => (
                   <FormField
                     control={form.control}
-                    label="Status"
+                    label={t('users:list.status')}
                     type="select"
-                    name="filter"
+                    name="status"
                     size="sm"
                     options={options}
                   />
