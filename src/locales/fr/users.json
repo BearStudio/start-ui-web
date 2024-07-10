@@ -44,7 +44,7 @@
     },
     "status": {
       "activated": "Activé",
-      "deactivated": "Non activé"
+      "deactivated": "Désactivé"
     },
     "name": {
       "label": "Nom",
