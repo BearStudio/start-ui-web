@@ -21,7 +21,7 @@ const DocumentationWrapper = ({ children, context, isDarkMode }) => {
   const { i18n } = useTranslation();
   const { colorMode, setColorMode } = useColorMode();
 
-  // // Update color mode
+  // Update color mode
   useEffect(() => {
     // Add timeout to prevent unsync color mode between docs and classic modes
     const timer = setTimeout(() => {
