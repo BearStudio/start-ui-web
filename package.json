@@ -52,7 +52,6 @@
     "@emotion/styled": "11.11.0",
     "@faker-js/faker": "8.4.1",
     "@fontsource/inter": "5.0.17",
-    "@formkit/auto-animate": "1.0.0-beta.6",
     "@hookform/resolvers": "3.3.4",
     "@prisma/client": "5.15.1",
     "@react-email/components": "0.0.15",
