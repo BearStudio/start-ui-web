@@ -6,6 +6,7 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
+  PopoverProps,
   PopoverTrigger,
   Portal,
   Stack,
@@ -51,6 +52,10 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
    * Render the submit button (or anything else)
    */
   renderFooterPrimaryAction?: () => ReactNode;
+  /**
+   * The Popover root element props
+   */
+  popoverProps?: PopoverProps;
 };
 
 export const FormPopover = <TSchema extends z.Schema>(
@@ -100,8 +105,7 @@ export const FormPopover = <TSchema extends z.Schema>(
                       {props.renderFooterSecondaryAction?.({
                         onClose: handleOnClose,
                       })}
-                      {props.renderFooterPrimaryAction &&
-                        props.renderFooterPrimaryAction()}
+                      {props.renderFooterPrimaryAction?.()}
                       {!props.renderFooterPrimaryAction && (
                         <Button type="submit" variant="@primary">
                           {t('common:submit')}
