@@ -36,8 +36,8 @@ export const pageUtils = (page: Page) => {
         .getByRole('button', { name: locales.en.auth.login.actions.login })
         .click();
 
-      await page.waitForURL(`**${ROUTES_AUTH.app.login()}/login/**`);
-      await page
+      await page.waitForURL(`**${ROUTES_AUTH.app.login()}/**`);
+	  await page
         .getByText('Verification code')
         .fill(input.code ?? VALIDATION_CODE_MOCKED);
     },
