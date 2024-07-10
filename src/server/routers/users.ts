@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
+import { zu } from '@/lib/zod/zod-utils';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
@@ -53,13 +54,7 @@ export const usersRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
-          status: z
-            .string()
-            .optional()
-            .transform((value) => {
-              const parsed = z.enum(['DISABLED', 'ENABLED']).safeParse(value);
-              return parsed.success ? parsed.data : '';
-            }),
+          status: zu.trpcInput.enum(z.enum(['ENABLED', 'DISABLED'])),
         })
         .default({})
     )
