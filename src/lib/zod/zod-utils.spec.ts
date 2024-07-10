@@ -150,3 +150,39 @@ describe('zu.array', () => {
     });
   });
 });
+
+describe('zu.trpcInput', () => {
+  describe('enum', () => {
+    test.each([
+      { input: 'string', output: 'string', expected: true },
+      { input: '', output: '', expected: true },
+      { input: 'other', output: undefined, expected: true }, // true is expected because 'other' is a string so the output is undefined
+      { input: undefined, output: undefined, expected: false },
+      { input: 2, output: undefined, expected: false },
+    ])('with $input should be $expected', ({ input, output, expected }) => {
+      const parsed = zu.trpcInput.enum(z.enum(['string', ''])).safeParse(input);
+      expect(parsed.success).toBe(expected);
+      if (parsed.success) {
+        expect(parsed.data).toBe(output);
+      }
+    });
+  });
+
+  describe('enumOptional', () => {
+    test.each([
+      { input: 'string', output: 'string', expected: true },
+      { input: '', output: '', expected: true },
+      { input: 'other', output: undefined, expected: true }, // true is expected because 'other' is a string so the output is undefined
+      { input: undefined, output: undefined, expected: true },
+      { input: 2, output: undefined, expected: false },
+    ])('with $input should be $expected', ({ input, output, expected }) => {
+      const parsed = zu.trpcInput
+        .enumOptional(z.enum(['string', '']))
+        .safeParse(input);
+      expect(parsed.success).toBe(expected);
+      if (parsed.success) {
+        expect(parsed.data).toBe(output);
+      }
+    });
+  });
+});
