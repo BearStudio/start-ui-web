@@ -1,3 +1,5 @@
+import { ComponentProps } from 'react';
+
 import {
   Box,
   Modal,
@@ -7,11 +9,10 @@ import {
   ModalOverlay,
   ModalProps,
 } from '@chakra-ui/react';
-import Sheet from 'react-modal-sheet';
-import { SheetProps } from 'react-modal-sheet/dist/types';
+import { Sheet } from 'react-modal-sheet';
 
 export type SheetModalProps = Pick<
-  SheetProps,
+  ComponentProps<typeof Sheet>,
   'isOpen' | 'onClose' | 'children'
 > & { size?: ModalProps['size'] };
 export const SheetModal = (props: SheetModalProps) => {

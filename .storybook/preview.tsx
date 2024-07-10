@@ -17,9 +17,8 @@ import logoReversed from './logo-reversed.svg';
 // @ts-ignore don't want to implement a d.ts declaration for storybook only
 import logo from './logo.svg';
 
-const DocumentationWrapper = ({ children, context }) => {
+const DocumentationWrapper = ({ children, context, isDarkMode }) => {
   const { i18n } = useTranslation();
-  const isDarkMode = useDarkMode();
   const { colorMode, setColorMode } = useColorMode();
 
   // Update color mode
@@ -91,16 +90,19 @@ const preview: Preview = {
     backgrounds: { disable: true, grid: { disable: true } },
   },
   decorators: [
-    (story, context) => (
-      <Providers>
-        <DocumentationWrapper context={context}>
-          {/* Calling as a function to avoid errors. Learn more at:
-           * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-           */}
-          {story(context)}
-        </DocumentationWrapper>
-      </Providers>
-    ),
+    (story, context) => {
+      const isDarkMode = useDarkMode();
+      return (
+        <Providers>
+          <DocumentationWrapper isDarkMode={isDarkMode} context={context}>
+            {/* Calling as a function to avoid errors. Learn more at:
+             * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+             */}
+            {story(context)}
+          </DocumentationWrapper>
+        </Providers>
+      );
+    },
   ],
 };
 
