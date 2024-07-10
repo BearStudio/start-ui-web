@@ -91,6 +91,12 @@ export const zu = {
   },
   trpcInput: {
     enum<T extends [string, ...string[]]>(zEnum: ZodEnum<T>) {
+      return z.string().transform((value) => {
+        const parsed = zEnum.safeParse(value);
+        return parsed.success ? parsed.data : undefined;
+      });
+    },
+    enumOptional<T extends [string, ...string[]]>(zEnum: ZodEnum<T>) {
       return z
         .string()
         .optional()

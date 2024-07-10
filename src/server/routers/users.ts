@@ -54,7 +54,7 @@ export const usersRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
-          status: zu.trpcInput.enum(z.enum(['ENABLED', 'DISABLED'])),
+          status: zu.trpcInput.enumOptional(z.enum(['ENABLED', 'DISABLED'])),
         })
         .default({})
     )
