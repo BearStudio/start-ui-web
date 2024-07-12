@@ -5,13 +5,14 @@ import { LuAlertCircle } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
 
-import { useFormField } from './FormField';
+import { useFormField, useFormFieldContext } from './FormField';
 
 export const FormFieldError = forwardRef<
   ElementRef<typeof FormErrorMessage>,
   ComponentPropsWithoutRef<typeof FormErrorMessage>
 >(({ children, ...props }, ref) => {
   const { error } = useFormField();
+  const ctx = useFormFieldContext();
 
   if (!error && !children) {
     return null;
@@ -20,7 +21,9 @@ export const FormFieldError = forwardRef<
   if (!error) {
     return <FormHelperText m={0}>{children}</FormHelperText>;
   }
-
+  if (!ctx.displayError) {
+    return null;
+  }
   return (
     <FormErrorMessage m={0} ref={ref} {...props}>
       <SlideFade in offsetY={-6}>
