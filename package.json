@@ -93,6 +93,7 @@
     "sharp": "0.33.4",
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
+    "ts-pattern": "5.2.0",
     "zod": "3.23.8",
     "zod-i18n-map": "2.27.0",
     "zustand": "4.5.4"
