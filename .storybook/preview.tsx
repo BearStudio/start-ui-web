@@ -75,16 +75,8 @@ const preview: Preview = {
       },
     },
     darkMode: {
-      dark: {
-        ...themes.dark,
-        brandImage: logoReversed.src,
-        brandTitle: 'Start UI',
-      },
-      light: {
-        ...themes.light,
-        brandImage: logo.src,
-        brandTitle: 'Start UI',
-      },
+      dark: themes.dark,
+      light: themes.light,
     },
     layout: 'fullscreen',
     backgrounds: { disable: true, grid: { disable: true } },
