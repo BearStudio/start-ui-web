@@ -27,6 +27,7 @@ type FieldCustomProps<
   type: 'custom';
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
+  displayError?: FormFieldContextValue['displayError'];
 } & Omit<ControllerProps<TFieldValues, TName>, 'disabled'>;
 
 export type FieldCommonProps<
@@ -39,7 +40,7 @@ export const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props:
+  propsWithoutDefaults:
     | FieldCustomProps<TFieldValues, TName>
     | FieldTextProps<TFieldValues, TName>
     | FieldTextareaProps<TFieldValues, TName>
@@ -53,6 +54,11 @@ export const FormField = <
     | FieldRadiosProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
 ) => {
+  const props = {
+    displayError: true,
+    ...propsWithoutDefaults,
+  };
+
   const getField = () => {
     switch (props.type) {
       case 'custom':
@@ -100,8 +106,9 @@ export const FormField = <
       name: props.name,
       optionalityHint: props.optionalityHint,
       isDisabled: props.isDisabled,
+      displayError: props.displayError,
     }),
-    [props.name, props.optionalityHint, props.isDisabled]
+    [props.name, props.optionalityHint, props.isDisabled, props.displayError]
   );
 
   return (
@@ -118,6 +125,7 @@ type FormFieldContextValue<
   name: TName;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
+  displayError?: boolean;
 };
 
 export const FormFieldContext = createContext<FormFieldContextValue | null>(
