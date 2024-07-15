@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { zUser } from '@/features/users/schemas';
+import { zu } from '@/lib/zod/zod-utils';
 import { ExtendedTRPCError } from '@/server/config/errors';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
@@ -53,6 +54,7 @@ export const usersRouter = createTRPCRouter({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
+          status: zu.trpcInput.enumOptional(z.enum(['ENABLED', 'DISABLED'])),
         })
         .default({})
     )
@@ -65,7 +67,6 @@ export const usersRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       ctx.logger.info('Getting users from database');
-
       const where = {
         OR: [
           {
@@ -81,6 +82,9 @@ export const usersRouter = createTRPCRouter({
             },
           },
         ],
+        accountStatus: {
+          equals: input.status || undefined,
+        },
       } satisfies Prisma.UserWhereInput;
 
       const [total, items] = await ctx.db.$transaction([

@@ -19,5 +19,8 @@
     "confirmText": "Annuler les modifications",
     "message": "Vous êtes sur le point d'annuler toutes les modifications que vous avez apportées.",
     "title": "Annuler les modifications?"
-  }
+  },
+  "filter": "Filtrer",
+  "clear": "Effacer",
+  "submit": "Soumettre"
 }

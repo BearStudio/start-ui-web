@@ -1,6 +1,7 @@
 {
   "list": {
     "title": "إدارة المستخدمين ",
+    "status": "الحالة",
     "actions": {
       "createUser": "إنشاء مستخدم"
     },

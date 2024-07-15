@@ -14,8 +14,10 @@ import {
   chakra,
 } from '@chakra-ui/react';
 import { useQueryState } from 'nuqs';
+import { SubmitHandler } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { LuPlus } from 'react-icons/lu';
+import { LuChevronDown, LuPlus } from 'react-icons/lu';
+import { z } from 'zod';
 
 import {
   DataList,
@@ -27,6 +29,8 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
+import { FormField } from '@/components/Form';
+import { FormPopover } from '@/components/FormPopover';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
 import {
@@ -40,18 +44,39 @@ import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
 
+type StatusFormSchema = z.infer<ReturnType<typeof zStatusFormSchema>>;
+const zStatusFormSchema = () =>
+  z.object({
+    status: z.string().nullable(),
+  });
+
 export default function PageAdminUsers() {
-  const { t } = useTranslation(['users']);
+  const { t } = useTranslation(['users', 'common']);
   const [searchTerm, setSearchTerm] = useQueryState('s', { defaultValue: '' });
+  const [status, setStatus] = useQueryState('status', {
+    defaultValue: '',
+  });
+
+  const handleSubmit: SubmitHandler<StatusFormSchema> = (values) => {
+    setStatus(values.status);
+  };
 
   const account = trpc.account.get.useQuery();
 
   const users = trpc.users.getAll.useInfiniteQuery(
-    { searchTerm },
+    { searchTerm, status },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+
+  const options = ['ENABLED', 'DISABLED'].map((v) => ({
+    label:
+      v === 'DISABLED'
+        ? t('users:data.status.deactivated')
+        : t('users:data.status.activated'),
+    value: v,
+  }));
 
   return (
     <AdminLayoutPage containerMaxWidth="container.xl" nav={<AdminNav />}>
@@ -74,6 +99,50 @@ export default function PageAdminUsers() {
                 onChange={(value) => setSearchTerm(value || null)}
                 maxW={{ base: 'none', md: '20rem' }}
               />
+              <FormPopover
+                value={{
+                  status: status,
+                }}
+                onSubmit={handleSubmit}
+                schema={zStatusFormSchema()}
+                renderTrigger={({ onClick }) => (
+                  <Button
+                    onClick={onClick}
+                    size="sm"
+                    variant={!!status ? '@secondary' : undefined}
+                    rightIcon={<LuChevronDown />}
+                  >
+                    {t('users:list.status')}
+                    {status && (
+                      <> : {options.find((o) => o.value === status)?.label}</>
+                    )}
+                  </Button>
+                )}
+                renderFooterSecondaryAction={({ onClose }) => (
+                  <Button
+                    variant="link"
+                    type="reset"
+                    onClick={() => {
+                      setStatus(null);
+                      onClose();
+                    }}
+                    me="auto"
+                  >
+                    {t('common:clear')}
+                  </Button>
+                )}
+              >
+                {(form) => (
+                  <FormField
+                    control={form.control}
+                    label={t('users:list.status')}
+                    type="select"
+                    name="status"
+                    size="sm"
+                    options={options}
+                  />
+                )}
+              </FormPopover>
             </Flex>
             <ResponsiveIconButton
               as={LinkAdmin}

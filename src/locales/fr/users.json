@@ -26,6 +26,7 @@
   },
   "list": {
     "title": "Gestion des utilisateurs",
+    "status": "Statut",
     "actions": {
       "createUser": "Créer un utilisateur"
     },

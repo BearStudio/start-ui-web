@@ -19,5 +19,8 @@
     "message": "You are about to undo all the changes you made.",
     "confirmText": "Discard changes",
     "cancelText": "Keep changes"
-  }
+  },
+  "filter": "Filter",
+  "clear": "Clear",
+  "submit": "Submit"
 }

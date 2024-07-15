@@ -26,6 +26,7 @@
   },
   "list": {
     "title": "Usimamizi wa Mtumiaji",
+    "status": "Hali",
     "actions": {
       "createUser": "Unda mtumiaji"
     },

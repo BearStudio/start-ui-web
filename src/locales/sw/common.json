@@ -19,5 +19,8 @@
     "confirmText": "Tupa mabadiliko",
     "message": "Unakaribia kutendua mabadiliko yote uliyofanya.",
     "title": "Ungependa kutupa mabadiliko?"
-  }
+  },
+  "filter": "Chuja",
+  "clear": "Wazi",
+  "submit": "Wasilisha"
 }
