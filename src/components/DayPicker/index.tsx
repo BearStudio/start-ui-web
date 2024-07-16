@@ -20,6 +20,13 @@ import { Icon } from '@/components/Icons';
 
 export type DayPickerNavigationMode = 'DAY' | 'MONTH';
 
+export type DayPickerInputProps = Omit<
+  InputProps,
+  'value' | 'onChange' | 'placeholder'
+> & {
+  'data-test'?: string;
+};
+
 export type DayPickerProps = {
   id?: string;
   value?: Date | null;
@@ -27,9 +34,7 @@ export type DayPickerProps = {
   popperPlacement?: Placement;
   dateFormat?: string;
   placeholder?: string;
-  inputProps?: Omit<InputProps, 'value' | 'onChange' | 'placeholder'> & {
-    'data-test'?: string;
-  };
+  inputProps?: DayPickerInputProps;
   dayPickerProps?: ReactDayPickerProps;
   required?: boolean;
   arePastDaysDisabled?: boolean;
