@@ -12,6 +12,7 @@ import {
   Props,
   SelectInstance,
 } from 'chakra-react-select';
+import { match } from 'ts-pattern';
 
 import { fixedForwardRef } from '@/lib/utils';
 
@@ -33,12 +34,12 @@ const SelectComponent = <
   { type = 'select', ...props }: SelectProps<Option, IsMulti, Group>,
   ref: ForwardedRef<SelectInstance<Option, IsMulti, Group>>
 ) => {
-  const Element = (() => {
-    if (type === 'async-creatable') return ChakraAsyncCreatableSelect;
-    if (type === 'async') return ChakraAsyncReactSelect;
-    if (type === 'creatable') return ChakraCreatableReactSelect;
-    return ChakraReactSelect;
-  })();
+  const Element = match(type)
+    .with('async-creatable', () => ChakraAsyncCreatableSelect)
+    .with('async', () => ChakraAsyncReactSelect)
+    .with('creatable', () => ChakraCreatableReactSelect)
+    .with('select', () => ChakraReactSelect)
+    .exhaustive();
 
   return (
     <Element
@@ -49,27 +50,31 @@ const SelectComponent = <
       styles={{ menuPortal: (provided) => ({ ...provided, zIndex: 9999 }) }}
       menuPortalTarget={document.body}
       chakraStyles={{
-        dropdownIndicator: (provided) => ({
+        dropdownIndicator: (provided, state) => ({
           ...provided,
           paddingLeft: 0,
           paddingRight: 0,
           margin: 0,
+          ...props.chakraStyles?.dropdownIndicator?.(provided, state),
         }),
-        control: (provided) => ({
+        control: (provided, state) => ({
           ...provided,
           paddingLeft: 2,
           paddingRight: 2,
+          ...props.chakraStyles?.control?.(provided, state),
         }),
-        valueContainer: (provided) => ({
+        valueContainer: (provided, state) => ({
           ...provided,
           padding: 0,
           pl: 1,
+          ...props.chakraStyles?.valueContainer?.(provided, state),
         }),
-        multiValue: (provided) => ({
+        multiValue: (provided, state) => ({
           ...provided,
           _first: {
             ml: -1,
           },
+          ...props.chakraStyles?.multiValue?.(provided, state),
         }),
       }}
       {...props}

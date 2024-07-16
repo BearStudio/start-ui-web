@@ -101,3 +101,35 @@ export const Disabled = () => {
     </Form>
   );
 };
+
+export const ChakraProps = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="multi-select"
+          name="colors"
+          label="Colors"
+          placeholder="Placeholder"
+          options={options}
+          selectProps={{
+            chakraStyles: {
+              control: (provided) => ({
+                ...provided,
+                bg: 'blue.100',
+              }),
+            },
+          }}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
