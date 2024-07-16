@@ -4,10 +4,17 @@ import {
   Checkbox,
   CheckboxGroup,
   CheckboxGroupProps,
+  CheckboxProps,
   Flex,
   FlexProps,
 } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+  PathValue,
+} from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
@@ -32,6 +39,11 @@ export type FieldCheckboxesProps<
     }>[]
   >;
   children?: ReactNode;
+  checkboxProps?: Omit<CheckboxProps, 'value' | 'children'>;
+  checkboxGroupProps?: RemoveFromType<
+    CheckboxGroupProps,
+    ControllerRenderProps
+  >;
 } & Pick<CheckboxGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -49,7 +61,11 @@ export const FieldCheckboxes = <
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
-          <CheckboxGroup size={props.size} {...field}>
+          <CheckboxGroup
+            size={props.size}
+            {...field}
+            {...props.checkboxGroupProps}
+          >
             {!!props.options && (
               <Flex
                 columnGap={props.columnGap ?? 4}
@@ -57,7 +73,11 @@ export const FieldCheckboxes = <
                 direction={props.direction ?? 'column'}
               >
                 {props.options.map((option) => (
-                  <Checkbox key={option.value} value={option.value}>
+                  <Checkbox
+                    key={option.value}
+                    value={option.value}
+                    {...props.checkboxProps}
+                  >
                     {option.label}
                   </Checkbox>
                 ))}
