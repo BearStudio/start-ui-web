@@ -125,3 +125,29 @@ export const StartElement = () => {
     </Form>
   );
 };
+
+export const ChakraProps = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="text"
+          name="name"
+          label="Name"
+          placeholder="Buzz Pawdrin"
+          inputProps={{
+            variant: 'filled',
+          }}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
