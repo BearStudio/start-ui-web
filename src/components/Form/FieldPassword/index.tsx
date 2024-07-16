@@ -8,7 +8,12 @@ import {
   InputProps,
   InputRightElement,
 } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import {
@@ -28,6 +33,7 @@ export type FieldPasswordProps<
   label?: ReactNode;
   helper?: ReactNode;
   endElement?: ReactNode;
+  inputProps?: RemoveFromType<InputProps, ControllerRenderProps>;
 } & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -53,6 +59,7 @@ export const FieldPassword = <
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
               {...field}
+              {...props.inputProps}
             />
             <InputLeftElement>
               <IconButton
