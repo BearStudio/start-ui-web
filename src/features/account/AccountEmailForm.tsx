@@ -7,7 +7,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
-import { Form, FormField } from '@/components/Form';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError } from '@/components/Toast';
 import {
@@ -69,12 +74,14 @@ export const AccountEmailForm = () => {
         <Stack spacing={4}>
           <Form {...form} onSubmit={onSubmit}>
             <Stack spacing={4}>
-              <FormField
-                name="email"
-                type="email"
-                control={form.control}
-                label={t('account:data.email.label')}
-              />
+              <FormField>
+                <FormFieldLabel>{t('account:data.email.label')}</FormFieldLabel>
+                <FormFieldController
+                  name="email"
+                  type="email"
+                  control={form.control}
+                />
+              </FormField>
               <Flex alignItems="center" gap={4}>
                 <Button
                   type="submit"

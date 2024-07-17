@@ -6,7 +6,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
-import { Form, FormField } from '@/components/Form';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError, useToastSuccess } from '@/components/Toast';
 import {
@@ -64,22 +69,29 @@ export const AccountProfileForm = () => {
         <Stack spacing={4}>
           <Form {...form} onSubmit={onSubmit}>
             <Stack spacing={4}>
-              <FormField
-                control={form.control}
-                name="name"
-                type="text"
-                label={t('account:data.name.label')}
-              />
-              <FormField
-                control={form.control}
-                name="language"
-                type="select"
-                options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-                  label: t(`common:languages.${key}`),
-                  value: key,
-                }))}
-                label={t('account:data.language.label')}
-              />
+              <FormField>
+                <FormFieldLabel>{t('account:data.name.label')}</FormFieldLabel>
+                <FormFieldController
+                  control={form.control}
+                  name="name"
+                  type="text"
+                />
+              </FormField>
+              <FormField>
+                <FormFieldLabel>
+                  {t('account:data.language.label')}
+                </FormFieldLabel>
+                <FormFieldController
+                  control={form.control}
+                  name="language"
+                  type="select"
+                  options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                    label: t(`common:languages.${key}`),
+                    value: key,
+                  }))}
+                />
+              </FormField>
+
               <ButtonGroup spacing={3}>
                 <Button
                   type="submit"
