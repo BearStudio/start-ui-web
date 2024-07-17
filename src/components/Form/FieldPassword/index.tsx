@@ -21,16 +21,12 @@ import {
   useFormFieldContext,
 } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldPasswordProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'password';
-  label?: ReactNode;
-  helper?: ReactNode;
   endElement?: ReactNode;
   inputProps?: RemoveFromType<InputProps, ControllerRenderProps>;
 } & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
@@ -49,9 +45,6 @@ export const FieldPassword = <
       {...props}
       render={({ field }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <InputGroup size={props.size}>
             <Input
               type={showPassword ? 'text' : 'password'}
@@ -76,7 +69,6 @@ export const FieldPassword = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

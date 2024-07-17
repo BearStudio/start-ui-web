@@ -18,16 +18,12 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldRadiosProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'radios';
-  label?: ReactNode;
-  helper?: ReactNode;
   rowGap?: FlexProps['rowGap'];
   columnGap?: FlexProps['columnGap'];
   direction?: FlexProps['direction'];
@@ -57,9 +53,6 @@ export const FieldRadios = <
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <RadioGroup size={props.size} {...props.radioGroupProps} {...field}>
             {!!props.options && (
               <Flex
@@ -80,7 +73,6 @@ export const FieldRadios = <
             )}
             {props.children}
           </RadioGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

@@ -1,4 +1,11 @@
-import { ElementRef, createContext, useContext, useId, useMemo } from 'react';
+import {
+  ElementRef,
+  ReactNode,
+  createContext,
+  useContext,
+  useId,
+  useMemo,
+} from 'react';
 
 import { FormControl, FormControlProps } from '@chakra-ui/react';
 import {
@@ -10,6 +17,8 @@ import {
 } from 'react-hook-form';
 import { match } from 'ts-pattern';
 
+import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
+import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { fixedForwardRef } from '@/lib/utils';
 
 import { FieldCheckboxes, FieldCheckboxesProps } from './FieldCheckboxes';
@@ -23,11 +32,16 @@ import { FieldSelect, FieldSelectProps } from './FieldSelect';
 import { FieldText, FieldTextProps } from './FieldText';
 import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
 
+type FormFieldSize = 'sm' | 'md' | 'lg';
+
 type FieldCustomProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'custom';
+  label?: ReactNode;
+  helper?: ReactNode;
+  size?: FormFieldSize;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
   displayError?: FormFieldContextValue['displayError'];
@@ -124,6 +138,7 @@ const FormFieldComponent = <
     () => ({
       id,
       name: props.name,
+      size: props.size,
       optionalityHint: props.optionalityHint,
       isDisabled: props.isDisabled,
       displayError: props.displayError,
@@ -131,6 +146,7 @@ const FormFieldComponent = <
     [
       id,
       props.name,
+      props.size,
       props.optionalityHint,
       props.isDisabled,
       props.displayError,
@@ -150,7 +166,11 @@ const FormFieldComponent = <
         gap={1}
         {...props.formControlProps}
       >
+        {!!props.label && (
+          <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
+        )}
         {getField()}
+        {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
       </FormControl>
     </FormFieldContext.Provider>
   );
@@ -164,6 +184,7 @@ type FormFieldContextValue<
 > = {
   id: string;
   name: TName;
+  size?: FormFieldSize;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
   displayError?: boolean;

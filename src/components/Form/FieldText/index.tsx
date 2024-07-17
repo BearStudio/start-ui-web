@@ -15,13 +15,8 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import {
-  FormFieldLabel,
-  FormFieldLabelProps,
-} from '@/components/Form/FormFieldLabel';
 
 export type InputRootProps = Pick<InputProps, 'placeholder' | 'autoFocus'>;
 
@@ -30,15 +25,13 @@ export type FieldTextProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'text' | 'email' | 'number' | 'tel';
-  label?: ReactNode;
-  helper?: ReactNode;
   startElement?: ReactNode;
   endElement?: ReactNode;
   inputProps?: RemoveFromType<
     RemoveFromType<InputProps, InputRootProps>,
     ControllerRenderProps
   >;
-  size?: FormFieldLabelProps['size'] & InputGroupProps['size'];
+  size?: InputGroupProps['size'];
 } & InputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -48,15 +41,14 @@ export const FieldText = <
 >(
   props: FieldTextProps<TFieldValues, TName>
 ) => {
+  const { size } = useFormField();
+
   return (
     <Controller
       {...props}
       render={({ field }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
-          <InputGroup size={props.size}>
+          <InputGroup size={props.size ?? size}>
             <Input
               type={props.type}
               placeholder={props.placeholder}
@@ -71,7 +63,6 @@ export const FieldText = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

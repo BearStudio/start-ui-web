@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { Textarea, TextareaProps } from '@chakra-ui/react';
 import {
   Controller,
@@ -10,8 +8,6 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type TextareaRootProps = Pick<
   TextareaProps,
@@ -22,8 +18,6 @@ export type FieldTextareaProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'textarea';
-  label?: ReactNode;
-  helper?: ReactNode;
   textareaProps?: RemoveFromType<
     RemoveFromType<TextareaProps, TextareaRootProps>,
     ControllerRenderProps
@@ -42,9 +36,6 @@ export const FieldTextarea = <
       {...props}
       render={({ field }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <Textarea
             size={props.size}
             placeholder={props.placeholder}
@@ -53,7 +44,6 @@ export const FieldTextarea = <
             {...props.textareaProps}
             {...field}
           />
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

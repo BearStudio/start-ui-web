@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { InputProps } from '@chakra-ui/react';
 import {
   Controller,
@@ -15,8 +13,6 @@ import {
 } from '@/components/DayPicker';
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type DayPickerInputRootProps = Pick<
   InputProps,
@@ -28,8 +24,6 @@ export type FieldDateProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'date';
-  label?: ReactNode;
-  helper?: ReactNode;
   dayPickerProps?: RemoveFromType<DayPickerProps, ControllerRenderProps>;
   dayPickerInputProps?: RemoveFromType<
     DayPickerInputProps,
@@ -49,9 +43,6 @@ export const FieldDate = <
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <DayPicker
             placeholder={props.placeholder}
             inputProps={{
@@ -62,7 +53,6 @@ export const FieldDate = <
             {...props.dayPickerProps}
             {...field}
           />
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

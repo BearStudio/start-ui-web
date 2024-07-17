@@ -41,6 +41,7 @@ export const Default = () => {
           name="name"
           label="Name"
           placeholder="Placeholder"
+          helper="Helper"
         />
         <Box>
           <Button type="submit" variant="@primary">

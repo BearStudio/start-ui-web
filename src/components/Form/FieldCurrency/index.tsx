@@ -14,8 +14,6 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
 type InputCurrencyRootProps = Pick<
@@ -36,8 +34,6 @@ export type FieldCurrencyProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'currency';
-  label?: ReactNode;
-  helper?: ReactNode;
   inCents?: boolean;
   startElement?: ReactNode;
   endElement?: ReactNode;
@@ -69,9 +65,6 @@ export const FieldCurrency = <
       {...props}
       render={({ field }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <InputGroup size={props.size}>
             <InputCurrency
               type={props.type}
@@ -106,8 +99,6 @@ export const FieldCurrency = <
               </InputRightElement>
             )}
           </InputGroup>
-
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

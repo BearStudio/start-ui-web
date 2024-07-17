@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import {
   Controller,
   ControllerRenderProps,
@@ -10,8 +8,6 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
 
 type SelectRootProps = Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'>;
@@ -21,8 +17,6 @@ export type FieldSelectProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'select';
-  label?: ReactNode;
-  helper?: ReactNode;
   options: Readonly<
     Readonly<{
       label: string;
@@ -51,9 +45,6 @@ export const FieldSelect = <
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
           <>
-            {!!props.label && (
-              <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-            )}
             <Select
               type="select"
               size={props.size}
@@ -67,10 +58,6 @@ export const FieldSelect = <
               {...props.selectProps}
               {...fieldProps}
             />
-
-            {!!props.helper && (
-              <FormFieldHelper>{props.helper}</FormFieldHelper>
-            )}
             <FormFieldError />
           </>
         );

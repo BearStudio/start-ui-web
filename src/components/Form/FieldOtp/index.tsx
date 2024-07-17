@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from 'react';
+import { useRef } from 'react';
 
 import {
   HStack,
@@ -18,8 +18,6 @@ import {
   useFormFieldContext,
 } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type PinInputRootProps = Pick<
   PinInputProps,
@@ -31,8 +29,6 @@ export type FieldOtpProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'otp';
-  label?: ReactNode;
-  helper?: ReactNode;
   length?: number;
   autoSubmit?: boolean;
   pinInputProps?: RemoveFromType<
@@ -58,10 +54,6 @@ export const FieldOtp = <
       {...props}
       render={({ field: { ref, ...field }, fieldState, formState }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
-
           <HStack ref={stackRef}>
             <PinInput
               autoFocus={props.autoFocus}
@@ -91,8 +83,6 @@ export const FieldOtp = <
               ))}
             </PinInput>
           </HStack>
-
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}

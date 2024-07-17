@@ -18,16 +18,12 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldCheckboxesProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'checkboxes';
-  label?: ReactNode;
-  helper?: ReactNode;
   rowGap?: FlexProps['rowGap'];
   columnGap?: FlexProps['columnGap'];
   direction?: FlexProps['direction'];
@@ -57,9 +53,6 @@ export const FieldCheckboxes = <
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
         <>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
           <CheckboxGroup
             size={props.size}
             {...field}
@@ -84,7 +77,6 @@ export const FieldCheckboxes = <
             )}
             {props.children}
           </CheckboxGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
         </>
       )}
