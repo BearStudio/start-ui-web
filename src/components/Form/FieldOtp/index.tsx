@@ -1,4 +1,4 @@
-import { ReactNode, useId, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 import {
   HStack,
@@ -19,7 +19,6 @@ import {
 } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type PinInputRootProps = Pick<
@@ -52,17 +51,13 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
-  const id = useId();
-  const { isDisabled } = useFormFieldContext();
+  const { isDisabled, id } = useFormFieldContext();
   const stackRef = useRef<HTMLDivElement>(null);
   return (
     <Controller
       {...props}
       render={({ field: { ref, ...field }, fieldState, formState }) => (
-        <FormFieldItem
-          // Target the first input
-          id={`${id}-0`}
-        >
+        <>
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
@@ -99,7 +94,7 @@ export const FieldOtp = <
 
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </>
       )}
     />
   );

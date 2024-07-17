@@ -5,13 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import {
-  Form,
-  FormField,
-  FormFieldError,
-  FormFieldItem,
-  FormFieldLabel,
-} from './';
+import { Form, FormField, FormFieldError, FormFieldLabel } from './';
 
 export default {
   title: 'Form/Form',
@@ -92,11 +86,11 @@ export const Default = () => {
           type="custom"
           optionalityHint="optional"
           render={({ field }) => (
-            <FormFieldItem>
+            <>
               <FormFieldLabel>Other (Custom)</FormFieldLabel>
               <Input {...field} value={field.value ?? ''} />
               <FormFieldError />
-            </FormFieldItem>
+            </>
           )}
         />
 
@@ -172,11 +166,11 @@ export const NoHtmlForm = () => {
             type="custom"
             optionalityHint="optional"
             render={({ field }) => (
-              <FormFieldItem>
+              <>
                 <FormFieldLabel>Other (Custom)</FormFieldLabel>
                 <Input {...field} value={field.value ?? ''} />
                 <FormFieldError />
-              </FormFieldItem>
+              </>
             )}
           />
 

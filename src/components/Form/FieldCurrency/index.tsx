@@ -15,7 +15,6 @@ import {
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
@@ -69,7 +68,7 @@ export const FieldCurrency = <
     <Controller
       {...props}
       render={({ field }) => (
-        <FormFieldItem>
+        <>
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
@@ -110,7 +109,7 @@ export const FieldCurrency = <
 
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </>
       )}
     />
   );

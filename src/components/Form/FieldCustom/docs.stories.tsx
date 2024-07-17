@@ -5,13 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import {
-  Form,
-  FormField,
-  FormFieldError,
-  FormFieldItem,
-  FormFieldLabel,
-} from '../';
+import { Form, FormField, FormFieldError, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldCustom',
@@ -39,7 +33,7 @@ export const Default = () => {
           name="other"
           type="custom"
           render={({ field }) => (
-            <FormFieldItem>
+            <>
               <Flex align="center" gap={4}>
                 <FormFieldLabel>Label</FormFieldLabel>
                 <Text color="text-dimmed" fontSize="sm">
@@ -51,7 +45,7 @@ export const Default = () => {
                 </Text>
               </Flex>
               <FormFieldError />
-            </FormFieldItem>
+            </>
           )}
         />
         <Box>
@@ -80,7 +74,7 @@ export const DefaultValue = () => {
           name="other"
           type="custom"
           render={({ field }) => (
-            <FormFieldItem>
+            <>
               <Flex align="center" gap={4}>
                 <FormFieldLabel>Label</FormFieldLabel>
                 <Text color="text-dimmed" fontSize="sm">
@@ -92,7 +86,7 @@ export const DefaultValue = () => {
                 </Text>
               </Flex>
               <FormFieldError />
-            </FormFieldItem>
+            </>
           )}
         />
         <Box>
@@ -117,7 +111,7 @@ export const Disabled = () => {
           type="custom"
           isDisabled
           render={({ field }) => (
-            <FormFieldItem>
+            <>
               <Flex align="center" gap={4}>
                 <FormFieldLabel>Label</FormFieldLabel>
                 <Text color="text-dimmed" fontSize="sm">
@@ -129,7 +123,7 @@ export const Disabled = () => {
                 </Text>
               </Flex>
               <FormFieldError />
-            </FormFieldItem>
+            </>
           )}
         />
         <Box>

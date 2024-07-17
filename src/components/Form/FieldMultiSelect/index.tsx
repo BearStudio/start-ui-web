@@ -11,7 +11,6 @@ import {
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
 
@@ -49,7 +48,7 @@ export const FieldMultiSelect = <
           props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
         return (
-          <FormFieldItem>
+          <>
             {!!props.label && (
               <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
             )}
@@ -76,7 +75,7 @@ export const FieldMultiSelect = <
               <FormFieldHelper>{props.helper}</FormFieldHelper>
             )}
             <FormFieldError />
-          </FormFieldItem>
+          </>
         );
       }}
     />

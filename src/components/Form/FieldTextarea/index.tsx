@@ -11,7 +11,6 @@ import {
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type TextareaRootProps = Pick<
@@ -42,7 +41,7 @@ export const FieldTextarea = <
     <Controller
       {...props}
       render={({ field }) => (
-        <FormFieldItem>
+        <>
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
@@ -56,7 +55,7 @@ export const FieldTextarea = <
           />
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </>
       )}
     />
   );

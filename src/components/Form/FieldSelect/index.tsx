@@ -11,7 +11,6 @@ import {
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
 
@@ -51,7 +50,7 @@ export const FieldSelect = <
         const selectValue =
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
-          <FormFieldItem>
+          <>
             {!!props.label && (
               <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
             )}
@@ -73,7 +72,7 @@ export const FieldSelect = <
               <FormFieldHelper>{props.helper}</FormFieldHelper>
             )}
             <FormFieldError />
-          </FormFieldItem>
+          </>
         );
       }}
     />
