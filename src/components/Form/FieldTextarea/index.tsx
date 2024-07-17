@@ -44,7 +44,7 @@ export const FieldTextarea = <
             {...props.textareaProps}
             {...field}
           />
-          <FormFieldError />
+          <FormFieldError name={props.name} control={props.control} />
         </>
       )}
     />

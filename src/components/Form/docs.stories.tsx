@@ -89,7 +89,7 @@ export const Default = () => {
             <>
               <FormFieldLabel>Other (Custom)</FormFieldLabel>
               <Input {...field} value={field.value ?? ''} />
-              <FormFieldError />
+              <FormFieldError name="other" control={form.control} />
             </>
           )}
         />
@@ -169,7 +169,7 @@ export const NoHtmlForm = () => {
               <>
                 <FormFieldLabel>Other (Custom)</FormFieldLabel>
                 <Input {...field} value={field.value ?? ''} />
-                <FormFieldError />
+                <FormFieldError name="other" control={form.control} />
               </>
             )}
           />

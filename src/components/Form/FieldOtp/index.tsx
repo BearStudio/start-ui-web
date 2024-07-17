@@ -80,7 +80,7 @@ export const FieldOtp = <
               ))}
             </PinInput>
           </HStack>
-          <FormFieldError />
+          <FormFieldError name={props.name} control={props.control} />
         </>
       )}
     />

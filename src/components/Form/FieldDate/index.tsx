@@ -53,7 +53,7 @@ export const FieldDate = <
             {...props.dayPickerProps}
             {...field}
           />
-          <FormFieldError />
+          <FormFieldError name={props.name} control={props.control} />
         </>
       )}
     />

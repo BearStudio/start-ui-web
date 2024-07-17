@@ -58,7 +58,7 @@ export const FieldSelect = <
               {...props.selectProps}
               {...fieldProps}
             />
-            <FormFieldError />
+            <FormFieldError name={props.name} control={props.control} />
           </>
         );
       }}

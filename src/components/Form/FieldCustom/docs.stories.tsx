@@ -44,7 +44,7 @@ export const Default = () => {
                   After
                 </Text>
               </Flex>
-              <FormFieldError />
+              <FormFieldError name="other" control={form.control} />
             </>
           )}
         />
@@ -85,7 +85,7 @@ export const DefaultValue = () => {
                   After
                 </Text>
               </Flex>
-              <FormFieldError />
+              <FormFieldError name="other" control={form.control} />
             </>
           )}
         />
@@ -122,7 +122,7 @@ export const Disabled = () => {
                   After
                 </Text>
               </Flex>
-              <FormFieldError />
+              <FormFieldError name="other" control={form.control} />
             </>
           )}
         />

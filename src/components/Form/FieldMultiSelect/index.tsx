@@ -60,7 +60,7 @@ export const FieldMultiSelect = <
               {...props.selectProps}
               {...field}
             />
-            <FormFieldError />
+            <FormFieldError name={props.name} control={props.control} />
           </>
         );
       }}

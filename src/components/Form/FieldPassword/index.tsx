@@ -66,7 +66,7 @@ export const FieldPassword = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError />
+          <FormFieldError name={props.name} control={props.control} />
         </>
       )}
     />

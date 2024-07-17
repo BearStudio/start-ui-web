@@ -137,7 +137,6 @@ const FormFieldComponent = <
   const contextValue = useMemo(
     () => ({
       id,
-      name: props.name,
       size: props.size,
       optionalityHint: props.optionalityHint,
       isDisabled: props.isDisabled,
@@ -145,7 +144,6 @@ const FormFieldComponent = <
     }),
     [
       id,
-      props.name,
       props.size,
       props.optionalityHint,
       props.isDisabled,
@@ -180,7 +178,6 @@ export const FormField = fixedForwardRef(FormFieldComponent);
 
 type FormFieldContextValue = {
   id: string;
-  name: string;
   size?: FormFieldSize;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
@@ -191,17 +188,17 @@ export const FormFieldContext = createContext<FormFieldContextValue | null>(
   null
 );
 
-export const useFormField = () => {
+export const useFormField = ({
+  throwException = true,
+}: {
+  throwException?: boolean;
+} = {}) => {
   const fieldContext = useContext(FormFieldContext);
-  if (!fieldContext) {
+  if (!fieldContext && throwException) {
     throw new Error('Missing <FormField /> parent component');
   }
-  const { getFieldState, formState } = useFormContext();
-
-  const fieldState = getFieldState(fieldContext.name, formState);
 
   return {
     ...fieldContext,
-    ...fieldState,
   };
 };

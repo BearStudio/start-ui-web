@@ -99,7 +99,7 @@ export const FieldCurrency = <
               </InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError />
+          <FormFieldError name={props.name} control={props.control} />
         </>
       )}
     />
