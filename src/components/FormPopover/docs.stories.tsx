@@ -1,13 +1,18 @@
 import { useState } from 'react';
 
-import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Stack, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { SubmitHandler } from 'react-hook-form';
 import { LuChevronDown } from 'react-icons/lu';
 import { P, match } from 'ts-pattern';
 import { z } from 'zod';
 
-import { FormField } from '@/components/Form';
+import {
+  FormField,
+  FormFieldController,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components/Form';
 
 import { FormPopover } from '.';
 
@@ -53,15 +58,17 @@ export const Default = () => {
       )}
     >
       {(form) => (
-        <FormField
-          // Provide the `control` so you can enjoy the `name` typings
-          control={form.control}
-          label="Starter"
-          type="select"
-          name="starter"
-          size="sm"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Starter</FormFieldLabel>
+          <FormFieldController
+            // Provide the `control` so you can enjoy the `name` typings
+            control={form.control}
+            type="select"
+            name="starter"
+            size="sm"
+            options={options}
+          />
+        </FormField>
       )}
     </FormPopover>
   );
@@ -82,7 +89,7 @@ export const WithTriggerCustomization = () => {
       schema={zFilterStarterFormSchema()}
       renderTrigger={({ onClick }) => (
         <Button
-          variant={!!value ? '@secondary' : undefined}
+          variant={value ? '@secondary' : undefined}
           rightIcon={<LuChevronDown />}
           size="sm"
           onClick={onClick}
@@ -95,15 +102,17 @@ export const WithTriggerCustomization = () => {
       )}
     >
       {(form) => (
-        <FormField
-          // Provide the `control` so you can enjoy the `name` typings
-          control={form.control}
-          label="Starter"
-          type="select"
-          name="starter"
-          size="sm"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Starter</FormFieldLabel>
+          <FormFieldController
+            // Provide the `control` so you can enjoy the `name` typings
+            control={form.control}
+            type="select"
+            name="starter"
+            size="sm"
+            options={options}
+          />
+        </FormField>
       )}
     </FormPopover>
   );
@@ -133,7 +142,7 @@ export const WithFilterClearAndValue = () => {
       schema={zFilterStarterFormSchema()}
       renderTrigger={({ onClick }) => (
         <Button
-          variant={!!value ? '@secondary' : undefined}
+          variant={value ? '@secondary' : undefined}
           rightIcon={<LuChevronDown />}
           size="sm"
           onClick={onClick}
@@ -164,15 +173,17 @@ export const WithFilterClearAndValue = () => {
       )}
     >
       {(form) => (
-        <FormField
-          // Provide the `control` so you can enjoy the `name` typings
-          control={form.control}
-          label="Starter"
-          type="select"
-          name="starter"
-          size="sm"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Starter</FormFieldLabel>
+          <FormFieldController
+            // Provide the `control` so you can enjoy the `name` typings
+            control={form.control}
+            type="select"
+            name="starter"
+            size="sm"
+            options={options}
+          />
+        </FormField>
       )}
     </FormPopover>
   );
@@ -228,15 +239,17 @@ export const WithMultiSelectAndValue = () => {
       )}
     >
       {(form) => (
-        <FormField
-          // Provide the `control` so you can enjoy the `name` typings
-          control={form.control}
-          label="Starters"
-          type="multi-select"
-          name="starters"
-          size="sm"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Starter</FormFieldLabel>
+          <FormFieldController
+            // Provide the `control` so you can enjoy the `name` typings
+            control={form.control}
+            type="multi-select"
+            name="starters"
+            size="sm"
+            options={options}
+          />
+        </FormField>
       )}
     </FormPopover>
   );
@@ -310,21 +323,29 @@ export const WithDateAndValidations = () => {
           )}
         >
           {(form) => (
-            <Flex gap={2}>
-              <FormField
-                label="Start"
-                control={form.control}
-                size="sm"
-                type="date"
-                name="start"
-              />
-              <FormField
-                label="End"
-                control={form.control}
-                size="sm"
-                type="date"
-                name="end"
-              />
+            <Flex gap={2} flexDir="column">
+              <HStack>
+                <FormField>
+                  <FormFieldLabel>Start</FormFieldLabel>
+                  <FormFieldController
+                    control={form.control}
+                    size="sm"
+                    type="date"
+                    name="start"
+                  />
+                </FormField>
+                <FormField>
+                  <FormFieldLabel>End</FormFieldLabel>
+                  <FormFieldController
+                    control={form.control}
+                    size="sm"
+                    type="date"
+                    name="end"
+                    displayError={false}
+                  />
+                </FormField>
+              </HStack>
+              <FormFieldError control={form.control} name="end" />
             </Flex>
           )}
         </FormPopover>
