@@ -45,55 +45,59 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={onSubmit}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController control={form.control} type="text" name="name" />
+        </FormField>
 
-        <FormField
-          control={form.control}
-          type="email"
-          name="email"
-          optionalityHint="optional"
-          label="Email"
-        />
+        <FormField>
+          <FormFieldLabel optionalityHint="optional">Email</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="email"
+            name="email"
+          />
+        </FormField>
 
-        <FormField
-          control={form.control}
-          type="select"
-          name="color"
-          label="Color"
-          options={[
-            {
-              label: 'Red',
-              value: 'red',
-            },
-            {
-              label: 'Green',
-              value: 'green',
-            },
-            {
-              label: 'Blue',
-              value: 'blue',
-            },
-          ]}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            options={[
+              {
+                label: 'Red',
+                value: 'red',
+              },
+              {
+                label: 'Green',
+                value: 'green',
+              },
+              {
+                label: 'Blue',
+                value: 'blue',
+              },
+            ]}
+          />
+        </FormField>
 
-        <FormField
-          control={form.control}
-          name="other"
-          type="custom"
-          optionalityHint="optional"
-          render={({ field }) => (
-            <>
-              <FormFieldLabel>Other (Custom)</FormFieldLabel>
-              <Input {...field} value={field.value ?? ''} />
-              <FormFieldError name="other" control={form.control} />
-            </>
-          )}
-        />
+        <FormField>
+          <FormFieldLabel optionalityHint="optional">
+            Other (Custom)
+          </FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            name="other"
+            type="custom"
+            render={({ field }) => (
+              <>
+                <Input {...field} value={field.value ?? ''} />
+                <FormFieldError name="other" control={form.control} />
+              </>
+            )}
+          />
+        </FormField>
 
         <Box>
           <Button type="submit" variant="@primary">
@@ -125,7 +129,8 @@ export const NoHtmlForm = () => {
     <Form {...form} noHtmlForm>
       <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <FormField label="Name">
+          <FormField>
+            <FormFieldLabel>Name</FormFieldLabel>
             <FormFieldController
               control={form.control}
               type="text"
@@ -133,7 +138,8 @@ export const NoHtmlForm = () => {
             />
           </FormField>
 
-          <FormField optionalityHint="optional" label="Email">
+          <FormField>
+            <FormFieldLabel optionalityHint="optional">Email</FormFieldLabel>
             <FormFieldController
               control={form.control}
               type="email"
@@ -141,7 +147,8 @@ export const NoHtmlForm = () => {
             />
           </FormField>
 
-          <FormField label="Color">
+          <FormField>
+            <FormFieldLabel>Color</FormFieldLabel>
             <FormFieldController
               control={form.control}
               type="select"
@@ -163,27 +170,16 @@ export const NoHtmlForm = () => {
             />
           </FormField>
 
-          <FormField
-            control={form.control}
-            name="other"
-            type="custom"
-            optionalityHint="optional"
-            render={({ field }) => (
-              <>
-                <FormFieldLabel>Other (Custom)</FormFieldLabel>
-                <Input {...field} value={field.value ?? ''} />
-                <FormFieldError name="other" control={form.control} />
-              </>
-            )}
-          >
+          <FormField>
+            <FormFieldLabel optionalityHint="optional">
+              Other (Custom)
+            </FormFieldLabel>
             <FormFieldController
               control={form.control}
               name="other"
               type="custom"
-              optionalityHint="optional"
               render={({ field }) => (
                 <>
-                  <FormFieldLabel>Other (Custom)</FormFieldLabel>
                   <Input {...field} value={field.value ?? ''} />
                   <FormFieldError name="other" control={form.control} />
                 </>
