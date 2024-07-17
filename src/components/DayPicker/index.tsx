@@ -23,9 +23,7 @@ export type DayPickerNavigationMode = 'DAY' | 'MONTH';
 export type DayPickerInputProps = Omit<
   InputProps,
   'value' | 'onChange' | 'placeholder'
-> & {
-  'data-test'?: string;
-};
+>;
 
 export type DayPickerProps = {
   id?: string;

@@ -44,8 +44,7 @@ export const FieldMultiSelect = <
   return (
     <Controller
       {...props}
-      render={({ field }) => {
-        const { value, onChange, ...fieldProps } = field;
+      render={({ field: { value, onChange, ...field } }) => {
         const selectValues =
           props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
@@ -65,12 +64,12 @@ export const FieldMultiSelect = <
               menuPortalTarget={document.body}
               options={props.options}
               onChange={(options) =>
-                // @ts-expect-error should fix the typing. This error pops when
+                // @ts-expect-error TODO should fix the typing. This error pops when
                 // we propagate the `selectProps`
                 onChange(options.map((option) => option.value))
               }
-              {...fieldProps}
               {...props.selectProps}
+              {...field}
             />
 
             {!!props.helper && (

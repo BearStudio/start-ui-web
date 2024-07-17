@@ -61,7 +61,7 @@ export const FieldRadios = <
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
-          <RadioGroup size={props.size} {...field} {...props.radioGroupProps}>
+          <RadioGroup size={props.size} {...props.radioGroupProps} {...field}>
             {!!props.options && (
               <Flex
                 columnGap={props.columnGap ?? 4}

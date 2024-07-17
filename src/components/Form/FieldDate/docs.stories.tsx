@@ -104,6 +104,9 @@ export const ChakraProps = () => {
           name="date"
           label="Date"
           autoFocus
+          dayPickerProps={{
+            arePastDaysDisabled: true,
+          }}
           dayPickerInputProps={{
             variant: 'filled',
           }}

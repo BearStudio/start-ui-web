@@ -65,8 +65,8 @@ export const FieldSelect = <
               // @ts-expect-error should fix the typing. This error pops when
               // we propagate the `selectProps`
               onChange={(option) => onChange(option?.value)}
-              {...fieldProps}
               {...props.selectProps}
+              {...fieldProps}
             />
 
             {!!props.helper && (

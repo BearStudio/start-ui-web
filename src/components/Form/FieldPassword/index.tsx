@@ -58,8 +58,8 @@ export const FieldPassword = <
               type={showPassword ? 'text' : 'password'}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
-              {...field}
               {...props.inputProps}
+              {...field}
             />
             <InputLeftElement>
               <IconButton

@@ -42,12 +42,12 @@ export type FieldCurrencyProps<
   inCents?: boolean;
   startElement?: ReactNode;
   endElement?: ReactNode;
-} & InputCurrencyRootProps & {
-    inputCurrencyProps?: RemoveFromType<
-      RemoveFromType<InputCurrencyProps, InputCurrencyRootProps>,
-      ControllerRenderProps
-    >;
-  } & FieldCommonProps<TFieldValues, TName>;
+  inputCurrencyProps?: RemoveFromType<
+    RemoveFromType<InputCurrencyProps, InputCurrencyRootProps>,
+    ControllerRenderProps
+  >;
+} & InputCurrencyRootProps &
+  FieldCommonProps<TFieldValues, TName>;
 
 export const FieldCurrency = <
   TFieldValues extends FieldValues = FieldValues,

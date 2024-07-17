@@ -62,8 +62,8 @@ export const FieldText = <
               type={props.type}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
-              {...field}
               {...props.inputProps}
+              {...field}
             />
             {!!props.startElement && (
               <InputLeftElement>{props.startElement}</InputLeftElement>

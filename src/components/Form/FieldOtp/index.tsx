@@ -88,8 +88,8 @@ export const FieldOtp = <
                   button.remove();
                 }
               }}
-              {...field}
               {...props.pinInputProps}
+              {...field}
             >
               {Array.from({ length: props.length ?? 6 }).map((_, index) => (
                 <PinInputField ref={ref} flex={1} key={index} />
