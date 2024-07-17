@@ -47,7 +47,7 @@ export const Default = () => {
               render={({ field }) => (
                 <>
                   <Input w={24} size="sm" {...field} />
-                  <FormFieldError name="other" control={form.control} />
+                  <FormFieldError />
                 </>
               )}
             />
@@ -90,7 +90,7 @@ export const DefaultValue = () => {
               render={({ field }) => (
                 <>
                   <Input w={24} size="sm" {...field} />
-                  <FormFieldError name="other" control={form.control} />
+                  <FormFieldError />
                 </>
               )}
             />
@@ -128,7 +128,7 @@ export const Disabled = () => {
               render={({ field }) => (
                 <>
                   <Input isDisabled w={24} size="sm" {...field} />
-                  <FormFieldError name="other" control={form.control} />
+                  <FormFieldError />
                 </>
               )}
             />

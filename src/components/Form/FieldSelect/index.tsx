@@ -66,11 +66,7 @@ export const FieldSelect = <
               {...props.selectProps}
               {...fieldProps}
             />
-            <FormFieldError
-              name={props.name}
-              control={props.control}
-              displayError={props.displayError}
-            />
+            <FormFieldError />
           </Flex>
         );
       }}

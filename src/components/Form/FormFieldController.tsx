@@ -1,3 +1,5 @@
+import { createContext, useMemo } from 'react';
+
 import {
   Controller,
   ControllerProps,
@@ -109,5 +111,31 @@ export const FormFieldController = <
     }
   };
 
-  return getField();
+  const displayError = 'displayError' in props ? props.displayError : undefined;
+
+  const contextValue: FormFieldControllerContextValue<TFieldValues, TName> =
+    useMemo(
+      () => ({
+        name: props.name,
+        control: props.control,
+        displayError: displayError,
+      }),
+      [props.name, props.control, displayError]
+    );
+
+  return (
+    <FormFieldControllerContext.Provider value={contextValue as ExplicitAny}>
+      {getField()}
+    </FormFieldControllerContext.Provider>
+  );
 };
+
+export type FormFieldControllerContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>> & {
+  displayError?: boolean;
+};
+
+export const FormFieldControllerContext =
+  createContext<FormFieldControllerContextValue | null>(null);

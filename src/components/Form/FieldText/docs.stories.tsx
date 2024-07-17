@@ -39,8 +39,8 @@ export const Default = () => {
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
           <FormFieldController
-            control={form.control}
             type="text"
+            control={form.control}
             name="name"
             placeholder="Buzz Pawdrin"
           />

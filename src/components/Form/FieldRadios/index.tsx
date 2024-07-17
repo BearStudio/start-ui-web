@@ -79,11 +79,7 @@ export const FieldRadios = <
             )}
             {props.children}
           </RadioGroup>
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />

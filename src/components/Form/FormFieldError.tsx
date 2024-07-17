@@ -1,4 +1,4 @@
-import { ElementRef, ReactNode } from 'react';
+import { ElementRef, ReactNode, useContext } from 'react';
 
 import { Flex, FlexProps, SlideFade } from '@chakra-ui/react';
 import {
@@ -10,39 +10,52 @@ import {
 } from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
 
+import {
+  FormFieldControllerContext,
+  FormFieldControllerContextValue,
+} from '@/components/Form/FormFieldController';
 import { Icon } from '@/components/Icons';
 import { fixedForwardRef } from '@/lib/utils';
 
 type FormFieldErrorProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<FlexProps, 'children'> &
-  Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>> & {
-    displayError?: boolean;
-    children?: (params: { error?: FieldError }) => ReactNode;
-  };
+> = Omit<FlexProps, 'children'> & {
+  children?: (params: { error?: FieldError }) => ReactNode;
+} & (
+    | Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    | {}
+  );
 
 const FormFieldErrorComponent = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  {
-    name,
-    control,
-    displayError,
-    children,
-    ...props
-  }: FormFieldErrorProps<TFieldValues, TName>,
+  { children, ...props }: FormFieldErrorProps<TFieldValues, TName>,
   ref: ElementRef<typeof Flex>
 ) => {
+  const ctx = useContext<FormFieldControllerContextValue<
+    TFieldValues,
+    TName
+  > | null>(FormFieldControllerContext as ExplicitAny);
   const { formState } = useFormContext<TFieldValues, TName>();
+  const control = 'control' in props ? props.control : ctx?.control;
+  const name = 'name' in props ? props.name : ctx?.name;
+
+  if (!control || !name) {
+    throw new Error(
+      'Missing <FormFieldController /> parent component or "control" and "name" props on <FormFieldError />'
+    );
+  }
+
   const { error } = control.getFieldState(name, formState);
 
   if (!error) {
     return null;
   }
 
-  if (displayError === false) {
+  if (ctx?.displayError === false) {
     return null;
   }
 
@@ -50,9 +63,19 @@ const FormFieldErrorComponent = <
     return children({ error });
   }
 
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    control: _,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    name: __,
+    ...rest
+  } = 'control' in props
+    ? props
+    : { ...props, control: undefined, name: undefined };
+
   return (
     <SlideFade in offsetY={-6}>
-      <Flex fontSize="sm" color="error.500" ref={ref} {...props}>
+      <Flex fontSize="sm" color="error.500" ref={ref} {...rest}>
         <Icon icon={LuAlertCircle} me="2" />
         {!!error?.message && <span>{error.message}</span>}
       </Flex>

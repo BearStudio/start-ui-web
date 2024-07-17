@@ -46,11 +46,7 @@ export const FieldTextarea = <
             {...props.textareaProps}
             {...field}
           />
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />

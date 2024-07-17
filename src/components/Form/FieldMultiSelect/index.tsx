@@ -68,11 +68,7 @@ export const FieldMultiSelect = <
               {...props.selectProps}
               {...field}
             />
-            <FormFieldError
-              name={props.name}
-              control={props.control}
-              displayError={props.displayError}
-            />
+            <FormFieldError />
           </Flex>
         );
       }}

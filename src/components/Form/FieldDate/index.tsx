@@ -55,11 +55,7 @@ export const FieldDate = <
             {...props.dayPickerProps}
             {...field}
           />
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />

@@ -93,7 +93,7 @@ export const Default = () => {
             render={({ field }) => (
               <>
                 <Input {...field} value={field.value ?? ''} />
-                <FormFieldError name="other" control={form.control} />
+                <FormFieldError />
               </>
             )}
           />
@@ -181,7 +181,7 @@ export const NoHtmlForm = () => {
               render={({ field }) => (
                 <>
                   <Input {...field} value={field.value ?? ''} />
-                  <FormFieldError name="other" control={form.control} />
+                  <FormFieldError />
                 </>
               )}
             />

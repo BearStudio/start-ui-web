@@ -68,11 +68,7 @@ export const FieldPassword = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />

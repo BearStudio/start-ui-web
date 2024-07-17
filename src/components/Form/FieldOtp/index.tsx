@@ -107,11 +107,7 @@ export const FieldOtp = <
               ))}
             </PinInput>
           </HStack>
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />

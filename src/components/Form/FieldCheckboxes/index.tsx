@@ -79,11 +79,7 @@ export const FieldCheckboxes = <
             )}
             {props.children}
           </CheckboxGroup>
-          <FormFieldError
-            name={props.name}
-            control={props.control}
-            displayError={props.displayError}
-          />
+          <FormFieldError />
         </Flex>
       )}
     />
