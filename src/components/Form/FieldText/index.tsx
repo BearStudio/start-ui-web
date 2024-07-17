@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   Input,
   InputGroup,
   InputGroupProps,
@@ -15,7 +17,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 export type InputRootProps = Pick<InputProps, 'placeholder' | 'autoFocus'>;
@@ -31,6 +33,7 @@ export type FieldTextProps<
     RemoveFromType<InputProps, InputRootProps>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
   size?: InputGroupProps['size'];
 } & InputRootProps &
   FieldCommonProps<TFieldValues, TName>;
@@ -41,15 +44,15 @@ export const FieldText = <
 >(
   props: FieldTextProps<TFieldValues, TName>
 ) => {
-  const { size } = useFormField();
-
   return (
     <Controller
       {...props}
-      render={({ field }) => (
-        <>
-          <InputGroup size={props.size ?? size}>
+      render={({ field, fieldState }) => (
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
+          <InputGroup size={props.size}>
             <Input
+              isInvalid={!!fieldState.error}
+              isDisabled={props.isDisabled}
               type={props.type}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
@@ -63,8 +66,12 @@ export const FieldText = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   InputGroup,
   InputLeftElement,
   InputRightElement,
@@ -12,7 +14,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
 
@@ -41,6 +43,7 @@ export type FieldCurrencyProps<
     RemoveFromType<InputCurrencyProps, InputCurrencyRootProps>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & InputCurrencyRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -64,7 +67,7 @@ export const FieldCurrency = <
     <Controller
       {...props}
       render={({ field }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <InputCurrency
               type={props.type}
@@ -75,9 +78,6 @@ export const FieldCurrency = <
                   : props.placeholder) ?? undefined
               }
               autoFocus={props.autoFocus}
-              {...field}
-              value={formatValue(field.value, 'from-cents')}
-              onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
               ps={props.startElement ? '2.5em' : undefined}
               pe={props.endElement ? '2.5em' : undefined}
               prefix={props.prefix}
@@ -86,7 +86,11 @@ export const FieldCurrency = <
               currency={props.currency}
               decimals={props.decimals}
               fixedDecimals={props.fixedDecimals}
+              isDisabled={props.isDisabled}
               {...props.inputCurrencyProps}
+              {...field}
+              value={formatValue(field.value, 'from-cents')}
+              onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
             />
             {!!props.startElement && (
               <InputLeftElement pointerEvents="none">
@@ -99,8 +103,12 @@ export const FieldCurrency = <
               </InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

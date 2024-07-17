@@ -1,6 +1,8 @@
 import { ReactNode, useState } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   IconButton,
   Input,
   InputGroup,
@@ -16,7 +18,7 @@ import {
 } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 export type FieldPasswordProps<
@@ -26,6 +28,7 @@ export type FieldPasswordProps<
   type: 'password';
   endElement?: ReactNode;
   inputProps?: RemoveFromType<InputProps, ControllerRenderProps>;
+  containerProps?: FlexProps;
 } & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -35,13 +38,12 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
-  const { isDisabled } = useFormField();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
       {...props}
       render={({ field }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <Input
               type={showPassword ? 'text' : 'password'}
@@ -52,7 +54,7 @@ export const FieldPassword = <
             />
             <InputLeftElement>
               <IconButton
-                isDisabled={isDisabled}
+                isDisabled={props.isDisabled}
                 onClick={() => setShowPassword((x) => !x)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'} // TODO: translation
                 display="flex"
@@ -66,8 +68,12 @@ export const FieldPassword = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldOtp',
@@ -38,7 +38,10 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField control={form.control} type="otp" name="code" label="Code" />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController type="otp" control={form.control} name="code" />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -60,7 +63,10 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField control={form.control} type="otp" name="code" label="Code" />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController type="otp" control={form.control} name="code" />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -77,13 +83,15 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField
-          control={form.control}
-          type="otp"
-          name="code"
-          label="Code"
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="code"
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -103,13 +111,15 @@ export const CustomLength = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="12rem">
-        <FormField
-          control={form.control}
-          type="otp"
-          name="code"
-          label="Code"
-          length={4}
-        />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="code"
+            length={4}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -126,13 +136,15 @@ export const AutoSubmit = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField
-          control={form.control}
-          type="otp"
-          name="code"
-          label="Code"
-          autoSubmit
-        />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="code"
+            autoSubmit
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -149,15 +161,21 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4} maxW="20rem">
-        <FormField
-          control={form.control}
-          type="otp"
-          name="code"
-          label="Code"
-          pinInputProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="code"
+            pinInputProps={{
+              focusBorderColor: 'rebeccapurple',
+            }}
+            pinInputFieldProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+        </FormField>
+
         <Box>
           <Button type="submit" variant="@primary">
             Submit

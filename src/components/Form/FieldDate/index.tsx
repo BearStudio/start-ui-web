@@ -1,4 +1,4 @@
-import { InputProps } from '@chakra-ui/react';
+import { Flex, FlexProps, InputProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -11,7 +11,7 @@ import {
   DayPickerInputProps,
   DayPickerProps,
 } from '@/components/DayPicker';
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 type DayPickerInputRootProps = Pick<
@@ -29,6 +29,7 @@ export type FieldDateProps<
     DayPickerInputProps,
     DayPickerInputRootProps
   >;
+  containerProps?: FlexProps;
 } & DayPickerInputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -42,9 +43,10 @@ export const FieldDate = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <DayPicker
             placeholder={props.placeholder}
+            isDisabled={props.isDisabled}
             inputProps={{
               size: props.size,
               autoFocus: props.autoFocus,
@@ -53,8 +55,12 @@ export const FieldDate = <
             {...props.dayPickerProps}
             {...field}
           />
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

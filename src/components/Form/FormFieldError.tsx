@@ -6,25 +6,21 @@ import {
   FieldError,
   FieldPath,
   FieldValues,
+  useFormContext,
 } from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
 
-import { useFormField } from '@/components/Form/FormField';
 import { Icon } from '@/components/Icons';
 import { fixedForwardRef } from '@/lib/utils';
 
 type FormFieldErrorProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = StrictUnion<
-  | (Omit<FlexProps, 'children'> &
-      Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>)
-  | (Required<
-      Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>
-    > & {
-      children: (params: { error?: FieldError }) => ReactNode;
-    })
->;
+> = Omit<FlexProps, 'children'> &
+  Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>> & {
+    displayError?: boolean;
+    children?: (params: { error?: FieldError }) => ReactNode;
+  };
 
 const FormFieldErrorComponent = <
   TFieldValues extends FieldValues = FieldValues,
@@ -33,19 +29,20 @@ const FormFieldErrorComponent = <
   {
     name,
     control,
+    displayError,
     children,
     ...props
   }: FormFieldErrorProps<TFieldValues, TName>,
   ref: ElementRef<typeof Flex>
 ) => {
-  const ctx = useFormField({ throwException: false });
-  const { error } = control.getFieldState(name);
+  const { formState } = useFormContext<TFieldValues, TName>();
+  const { error } = control.getFieldState(name, formState);
 
   if (!error) {
     return null;
   }
 
-  if (ctx && !ctx.displayError) {
+  if (displayError === false) {
     return null;
   }
 

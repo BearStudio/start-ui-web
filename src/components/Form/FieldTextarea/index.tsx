@@ -1,4 +1,4 @@
-import { Textarea, TextareaProps } from '@chakra-ui/react';
+import { Flex, FlexProps, Textarea, TextareaProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -6,7 +6,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 type TextareaRootProps = Pick<
@@ -22,6 +22,7 @@ export type FieldTextareaProps<
     RemoveFromType<TextareaProps, TextareaRootProps>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & TextareaRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -35,17 +36,22 @@ export const FieldTextarea = <
     <Controller
       {...props}
       render={({ field }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <Textarea
             size={props.size}
             placeholder={props.placeholder}
             autoFocus={props.autoFocus}
             rows={props.rows}
+            isDisabled={props.isDisabled}
             {...props.textareaProps}
             {...field}
           />
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

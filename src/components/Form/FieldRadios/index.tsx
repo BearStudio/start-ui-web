@@ -16,7 +16,7 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 export type FieldRadiosProps<
@@ -39,6 +39,7 @@ export type FieldRadiosProps<
     Omit<RadioGroupProps, 'children'>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & Pick<RadioGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -52,8 +53,13 @@ export const FieldRadios = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <>
-          <RadioGroup size={props.size} {...props.radioGroupProps} {...field}>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
+          <RadioGroup
+            isDisabled={props.isDisabled}
+            size={props.size}
+            {...props.radioGroupProps}
+            {...field}
+          >
             {!!props.options && (
               <Flex
                 columnGap={props.columnGap ?? 4}
@@ -73,8 +79,12 @@ export const FieldRadios = <
             )}
             {props.children}
           </RadioGroup>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

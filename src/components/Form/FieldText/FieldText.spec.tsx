@@ -1,10 +1,11 @@
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
+import { FormFieldController } from '@/components/Form/FormFieldController';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldLabel } from '..';
 
 test('update value', async () => {
   const user = setupUser();
@@ -17,12 +18,10 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="text"
-          control={form.control}
-          name="name"
-          label="Name"
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController type="text" control={form.control} name="name" />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -47,12 +46,10 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="text"
-          control={form.control}
-          name="name"
-          label="Name"
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController type="text" control={form.control} name="name" />
+        </FormField>
       )}
     </FormMocked>
   );

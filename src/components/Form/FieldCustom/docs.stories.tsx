@@ -5,7 +5,13 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField, FormFieldError, FormFieldLabel } from '../';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldError,
+  FormFieldLabel,
+} from '../';
 
 export default {
   title: 'Form/FieldCustom',
@@ -28,26 +34,28 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          name="other"
-          type="custom"
-          render={({ field }) => (
-            <>
-              <Flex align="center" gap={4}>
-                <FormFieldLabel>Label</FormFieldLabel>
-                <Text color="text-dimmed" fontSize="sm">
-                  Before
-                </Text>
-                <Input w={24} size="sm" {...field} />
-                <Text color="text-dimmed" fontSize="sm">
-                  After
-                </Text>
-              </Flex>
-              <FormFieldError name="other" control={form.control} />
-            </>
-          )}
-        />
+        <FormField>
+          <Flex align="center" gap={4}>
+            <FormFieldLabel>Label</FormFieldLabel>
+            <Text color="text-dimmed" fontSize="sm">
+              Before
+            </Text>
+            <FormFieldController
+              control={form.control}
+              name="other"
+              type="custom"
+              render={({ field }) => (
+                <>
+                  <Input w={24} size="sm" {...field} />
+                  <FormFieldError name="other" control={form.control} />
+                </>
+              )}
+            />
+            <Text color="text-dimmed" fontSize="sm">
+              After
+            </Text>
+          </Flex>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -69,26 +77,28 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          name="other"
-          type="custom"
-          render={({ field }) => (
-            <>
-              <Flex align="center" gap={4}>
-                <FormFieldLabel>Label</FormFieldLabel>
-                <Text color="text-dimmed" fontSize="sm">
-                  Before
-                </Text>
-                <Input w={24} size="sm" {...field} />
-                <Text color="text-dimmed" fontSize="sm">
-                  After
-                </Text>
-              </Flex>
-              <FormFieldError name="other" control={form.control} />
-            </>
-          )}
-        />
+        <FormField>
+          <Flex align="center" gap={4}>
+            <FormFieldLabel>Label</FormFieldLabel>
+            <Text color="text-dimmed" fontSize="sm">
+              Before
+            </Text>
+            <FormFieldController
+              control={form.control}
+              name="other"
+              type="custom"
+              render={({ field }) => (
+                <>
+                  <Input w={24} size="sm" {...field} />
+                  <FormFieldError name="other" control={form.control} />
+                </>
+              )}
+            />
+            <Text color="text-dimmed" fontSize="sm">
+              After
+            </Text>
+          </Flex>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -105,27 +115,28 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          name="other"
-          type="custom"
-          isDisabled
-          render={({ field }) => (
-            <>
-              <Flex align="center" gap={4}>
-                <FormFieldLabel>Label</FormFieldLabel>
-                <Text color="text-dimmed" fontSize="sm">
-                  Before
-                </Text>
-                <Input w={24} size="sm" {...field} />
-                <Text color="text-dimmed" fontSize="sm">
-                  After
-                </Text>
-              </Flex>
-              <FormFieldError name="other" control={form.control} />
-            </>
-          )}
-        />
+        <FormField>
+          <Flex align="center" gap={4}>
+            <FormFieldLabel>Label</FormFieldLabel>
+            <Text color="text-dimmed" fontSize="sm">
+              Before
+            </Text>
+            <FormFieldController
+              control={form.control}
+              name="other"
+              type="custom"
+              render={({ field }) => (
+                <>
+                  <Input isDisabled w={24} size="sm" {...field} />
+                  <FormFieldError name="other" control={form.control} />
+                </>
+              )}
+            />
+            <Text color="text-dimmed" fontSize="sm">
+              After
+            </Text>
+          </Flex>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

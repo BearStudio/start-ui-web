@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldRadios',
@@ -32,13 +32,15 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -60,13 +62,15 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -83,14 +87,16 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          options={options}
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -116,14 +122,15 @@ export const Optional = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          optionalityHint="optional"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel optionalityHint="optional">Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -140,14 +147,16 @@ export const Row = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          direction="row"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+            direction="row"
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -164,19 +173,21 @@ export const CustomLayout = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-        >
-          <SimpleGrid columns={3}>
-            {options.map((option) => (
-              <Radio key={option.value} value={option.value}>
-                {option.label}
-              </Radio>
-            ))}
-          </SimpleGrid>
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+          >
+            <SimpleGrid columns={3}>
+              {options.map((option) => (
+                <Radio key={option.value} value={option.value}>
+                  {option.label}
+                </Radio>
+              ))}
+            </SimpleGrid>
+          </FormFieldController>
         </FormField>
         <Box>
           <Button type="submit" variant="@primary">
@@ -194,16 +205,18 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="radios"
-          name="color"
-          label="Color"
-          options={options}
-          radioGroupProps={{
-            colorScheme: 'cyan',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+            radioGroupProps={{
+              colorScheme: 'cyan',
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

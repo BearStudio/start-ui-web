@@ -1,3 +1,4 @@
+import { Flex, FlexProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -6,7 +7,7 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { Select, SelectProps } from '@/components/Select';
 
@@ -23,6 +24,7 @@ export type FieldSelectProps<
       value: PathValue<TFieldValues, TName>;
     }>[]
   >;
+  containerProps?: FlexProps;
   selectProps?: RemoveFromType<
     RemoveFromType<Omit<SelectProps, 'options' | 'value'>, SelectRootProps>,
     ControllerRenderProps
@@ -44,7 +46,12 @@ export const FieldSelect = <
         const selectValue =
           props.options?.find((option) => option.value === value) ?? undefined;
         return (
-          <>
+          <Flex
+            flexDirection="column"
+            gap={1}
+            flex={1}
+            {...props.containerProps}
+          >
             <Select
               type="select"
               size={props.size}
@@ -52,14 +59,19 @@ export const FieldSelect = <
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
               value={selectValue}
+              isDisabled={props.isDisabled}
               // @ts-expect-error should fix the typing. This error pops when
               // we propagate the `selectProps`
               onChange={(option) => onChange(option?.value)}
               {...props.selectProps}
               {...fieldProps}
             />
-            <FormFieldError name={props.name} control={props.control} />
-          </>
+            <FormFieldError
+              name={props.name}
+              control={props.control}
+              displayError={props.displayError}
+            />
+          </Flex>
         );
       }}
     />

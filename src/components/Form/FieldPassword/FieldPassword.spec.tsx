@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 test('update value', async () => {
   const user = setupUser();
@@ -17,12 +17,14 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="password"
-          control={form.control}
-          name="password"
-          label="Password"
-        />
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -45,12 +47,14 @@ test('toggle visibility', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="password"
-          control={form.control}
-          name="password"
-          label="Password"
-        />
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+          />
+        </FormField>
       )}
     </FormMocked>
   );

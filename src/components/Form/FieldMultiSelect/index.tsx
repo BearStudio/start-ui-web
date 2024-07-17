@@ -1,3 +1,4 @@
+import { Flex, FlexProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -6,7 +7,7 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 import { Select, SelectProps } from '@/components/Select';
 
@@ -25,6 +26,7 @@ export type FieldMultiSelectProps<
     RemoveFromType<Omit<SelectProps, 'options' | 'value'>, SelectRootProps>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & SelectRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -42,7 +44,12 @@ export const FieldMultiSelect = <
           props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
         return (
-          <>
+          <Flex
+            flexDirection="column"
+            gap={1}
+            flex={1}
+            {...props.containerProps}
+          >
             <Select
               type="select"
               isMulti
@@ -52,6 +59,7 @@ export const FieldMultiSelect = <
               value={selectValues}
               menuPortalTarget={document.body}
               options={props.options}
+              isDisabled={props.isDisabled}
               onChange={(options) =>
                 // @ts-expect-error TODO should fix the typing. This error pops when
                 // we propagate the `selectProps`
@@ -60,8 +68,12 @@ export const FieldMultiSelect = <
               {...props.selectProps}
               {...field}
             />
-            <FormFieldError name={props.name} control={props.control} />
-          </>
+            <FormFieldError
+              name={props.name}
+              control={props.control}
+              displayError={props.displayError}
+            />
+          </Flex>
         );
       }}
     />

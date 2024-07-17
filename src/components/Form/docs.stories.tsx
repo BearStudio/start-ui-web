@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { FormFieldController } from '@/components/Form/FormFieldController';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { Form, FormField, FormFieldError, FormFieldLabel } from './';
@@ -124,41 +125,43 @@ export const NoHtmlForm = () => {
     <Form {...form} noHtmlForm>
       <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label="Name"
-          />
+          <FormField label="Name">
+            <FormFieldController
+              control={form.control}
+              type="text"
+              name="name"
+            />
+          </FormField>
 
-          <FormField
-            control={form.control}
-            type="email"
-            name="email"
-            optionalityHint="optional"
-            label="Email"
-          />
+          <FormField optionalityHint="optional" label="Email">
+            <FormFieldController
+              control={form.control}
+              type="email"
+              name="email"
+            />
+          </FormField>
 
-          <FormField
-            control={form.control}
-            type="select"
-            name="color"
-            label="Color"
-            options={[
-              {
-                label: 'Red',
-                value: 'red',
-              },
-              {
-                label: 'Green',
-                value: 'green',
-              },
-              {
-                label: 'Blue',
-                value: 'blue',
-              },
-            ]}
-          />
+          <FormField label="Color">
+            <FormFieldController
+              control={form.control}
+              type="select"
+              name="color"
+              options={[
+                {
+                  label: 'Red',
+                  value: 'red',
+                },
+                {
+                  label: 'Green',
+                  value: 'green',
+                },
+                {
+                  label: 'Blue',
+                  value: 'blue',
+                },
+              ]}
+            />
+          </FormField>
 
           <FormField
             control={form.control}
@@ -172,7 +175,21 @@ export const NoHtmlForm = () => {
                 <FormFieldError name="other" control={form.control} />
               </>
             )}
-          />
+          >
+            <FormFieldController
+              control={form.control}
+              name="other"
+              type="custom"
+              optionalityHint="optional"
+              render={({ field }) => (
+                <>
+                  <FormFieldLabel>Other (Custom)</FormFieldLabel>
+                  <Input {...field} value={field.value ?? ''} />
+                  <FormFieldError name="other" control={form.control} />
+                </>
+              )}
+            />
+          </FormField>
 
           <Box>
             <Button type="submit" variant="@primary">

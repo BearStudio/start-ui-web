@@ -8,15 +8,17 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { useFormField } from './FormField';
+import { useFormField } from '@/components/Form/FormField';
 
-export type FormFieldLabelProps = FormLabelProps;
+export type FormFieldLabelProps = FormLabelProps & {
+  optionalityHint?: 'required' | 'optional' | false;
+};
 
 export const FormFieldLabel = forwardRef<
   ElementRef<typeof FormLabel>,
-  FormLabelProps
->((props, ref) => {
-  const { optionalityHint } = useFormField();
+  FormFieldLabelProps
+>(({ optionalityHint, ...props }, ref) => {
+  const { size } = useFormField();
   const { t } = useTranslation(['components']);
 
   return (
@@ -41,7 +43,7 @@ export const FormFieldLabel = forwardRef<
           </chakra.small>
         ) : null
       }
-      fontSize={props.size}
+      fontSize={props.size ?? size}
       {...props}
     />
   );

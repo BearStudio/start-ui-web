@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 test('update value', async () => {
   const user = setupUser();
@@ -17,7 +17,10 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField type="otp" control={form.control} name="code" label="Code" />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController type="otp" control={form.control} name="code" />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -42,7 +45,10 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField type="otp" control={form.control} name="code" label="Code" />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController type="otp" control={form.control} name="code" />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -61,13 +67,15 @@ test('auto submit', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="otp"
-          control={form.control}
-          name="code"
-          label="Code"
-          autoSubmit
-        />
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="code"
+            autoSubmit
+          />
+        </FormField>
       )}
     </FormMocked>
   );

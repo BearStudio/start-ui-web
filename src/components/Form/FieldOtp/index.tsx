@@ -1,9 +1,12 @@
 import { ElementRef, useRef } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   HStack,
   PinInput,
   PinInputField,
+  PinInputFieldProps,
   PinInputProps,
 } from '@chakra-ui/react';
 import {
@@ -13,7 +16,8 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
+import { useFormField } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 type PinInputRootProps = Pick<
@@ -35,6 +39,8 @@ export type FieldOtpProps<
     >,
     ControllerRenderProps
   >;
+  pinInputFieldProps?: PinInputFieldProps;
+  containerProps?: FlexProps;
 } & PinInputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -44,14 +50,14 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
-  const { isDisabled, id } = useFormField();
+  const { id } = useFormField();
   const stackRef = useRef<ElementRef<'div'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
   return (
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field }, fieldState, formState }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <HStack ref={stackRef} position="relative">
             {/* Hack because Chakra generate first input with -0 suffix  */}
             <input
@@ -73,7 +79,7 @@ export const FieldOtp = <
               size={props.size}
               placeholder="·"
               isInvalid={fieldState.invalid}
-              isDisabled={isDisabled}
+              isDisabled={props.isDisabled}
               otp
               id={id}
               onComplete={(v) => {
@@ -96,12 +102,17 @@ export const FieldOtp = <
                   ref={index === 0 ? inputRef : undefined}
                   flex={1}
                   key={index}
+                  {...props.pinInputFieldProps}
                 />
               ))}
             </PinInput>
           </HStack>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );

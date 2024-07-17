@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 test('update value', async () => {
   const user = setupUser();
@@ -17,12 +17,14 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="currency"
-          control={form.control}
-          name="balance"
-          label="Balance"
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -44,13 +46,15 @@ test('update value in cents', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="currency"
-          control={form.control}
-          name="balance"
-          inCents
-          label="Balance"
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            inCents
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -72,13 +76,15 @@ test('update value locale fr', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="currency"
-          control={form.control}
-          name="balance"
-          locale="fr"
-          label="Balance"
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            locale="fr"
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -100,13 +106,15 @@ test('update value no decimals', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="currency"
-          control={form.control}
-          name="balance"
-          decimals={0}
-          label="Balance"
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            decimals={0}
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -129,12 +137,14 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="currency"
-          control={form.control}
-          name="balance"
-          label="Balance"
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+          />
+        </FormField>
       )}
     </FormMocked>
   );

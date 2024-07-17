@@ -16,7 +16,7 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 export type FieldCheckboxesProps<
@@ -39,6 +39,7 @@ export type FieldCheckboxesProps<
     CheckboxGroupProps,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & Pick<CheckboxGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -52,9 +53,10 @@ export const FieldCheckboxes = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <CheckboxGroup
             size={props.size}
+            isDisabled={props.isDisabled}
             {...field}
             {...props.checkboxGroupProps}
           >
@@ -77,8 +79,12 @@ export const FieldCheckboxes = <
             )}
             {props.children}
           </CheckboxGroup>
-          <FormFieldError name={props.name} control={props.control} />
-        </>
+          <FormFieldError
+            name={props.name}
+            control={props.control}
+            displayError={props.displayError}
+          />
+        </Flex>
       )}
     />
   );
