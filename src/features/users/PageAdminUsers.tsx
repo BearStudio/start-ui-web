@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ElementRef, useRef } from 'react';
 
 import {
   Avatar,
@@ -62,6 +62,8 @@ export default function PageAdminUsers() {
     defaultValue: '',
   });
 
+  const containerRef = useRef<ElementRef<'div'>>(null);
+
   const handleSubmit: SubmitHandler<StatusFormSchema> = (values) => {
     setStatus(values.status);
   };
@@ -94,6 +96,7 @@ export default function PageAdminUsers() {
               columnGap={4}
               alignItems={{ base: 'start', md: 'center' }}
               flex={1}
+              ref={containerRef}
             >
               <Heading flex="none" size="md">
                 {t('users:list.title')}
@@ -108,6 +111,7 @@ export default function PageAdminUsers() {
                 value={{
                   status: status,
                 }}
+                containerRef={containerRef}
                 onSubmit={handleSubmit}
                 schema={zStatusFormSchema()}
                 renderTrigger={({ onClick }) => (
@@ -142,7 +146,7 @@ export default function PageAdminUsers() {
                     <FormFieldLabel>{t('users:list.status')}</FormFieldLabel>
                     <FormFieldController
                       control={form.control}
-                      type="select"
+                      type="radios"
                       name="status"
                       size="sm"
                       options={options}
