@@ -29,7 +29,11 @@ import {
   DataListText,
 } from '@/components/DataList';
 import { DateAgo } from '@/components/DateAgo';
-import { FormField } from '@/components/Form';
+import {
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/Form';
 import { FormPopover } from '@/components/FormPopover';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
 import { SearchInput } from '@/components/SearchInput';
@@ -109,7 +113,7 @@ export default function PageAdminUsers() {
                   <Button
                     onClick={onClick}
                     size="sm"
-                    variant={!!status ? '@secondary' : undefined}
+                    variant={status ? '@secondary' : undefined}
                     rightIcon={<LuChevronDown />}
                   >
                     {t('users:list.status')}
@@ -133,14 +137,16 @@ export default function PageAdminUsers() {
                 )}
               >
                 {(form) => (
-                  <FormField
-                    control={form.control}
-                    label={t('users:list.status')}
-                    type="select"
-                    name="status"
-                    size="sm"
-                    options={options}
-                  />
+                  <FormField>
+                    <FormFieldLabel>{t('users:list.status')}</FormFieldLabel>
+                    <FormFieldController
+                      control={form.control}
+                      type="select"
+                      name="status"
+                      size="sm"
+                      options={options}
+                    />
+                  </FormField>
                 )}
               </FormPopover>
             </Flex>
