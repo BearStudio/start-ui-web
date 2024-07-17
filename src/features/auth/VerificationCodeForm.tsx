@@ -6,7 +6,12 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { FormField } from '@/components/Form';
+import {
+  FormField,
+  FormFieldController,
+  FormFieldHelper,
+  FormFieldLabel,
+} from '@/components/Form';
 import { FormFieldsVerificationCode } from '@/features/auth/schemas';
 import {
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
@@ -46,16 +51,20 @@ export const VerificationCodeForm = ({
           />
         </Text>
       </Stack>
-      <FormField
-        type="otp"
-        control={form.control}
-        name="code"
-        size="lg"
-        label={t('auth:data.verificationCode.label')}
-        helper={t('auth:data.verificationCode.helper')}
-        autoSubmit
-        autoFocus
-      />
+      <FormField>
+        <FormFieldLabel>{t('auth:data.verificationCode.label')}</FormFieldLabel>
+        <FormFieldController
+          type="otp"
+          control={form.control}
+          name="code"
+          size="lg"
+          autoSubmit
+          autoFocus
+        />
+        <FormFieldHelper>
+          {t('auth:data.verificationCode.helper')}
+        </FormFieldHelper>
+      </FormField>
       <HStack spacing={8}>
         <Button
           size="lg"

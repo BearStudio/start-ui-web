@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Form, FormField } from '@/components/Form';
+import { Form, FormField, FormFieldController } from '@/components/Form';
 import { useToastError } from '@/components/Toast';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginHint } from '@/features/devtools/LoginHint';
@@ -61,13 +61,15 @@ export const LoginForm = ({
         }}
       >
         <Stack spacing={4}>
-          <FormField
-            type="email"
-            control={form.control}
-            name="email"
-            size="lg"
-            placeholder={t('auth:data.email.label')}
-          />
+          <FormField>
+            <FormFieldController
+              type="email"
+              control={form.control}
+              name="email"
+              size="lg"
+              placeholder={t('auth:data.email.label')}
+            />
+          </FormField>
           <Flex>
             <Button
               isLoading={login.isLoading || login.isSuccess}
