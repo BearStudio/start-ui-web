@@ -16,10 +16,7 @@ import {
 } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import {
-  FieldCommonProps,
-  useFormFieldContext,
-} from '@/components/Form/FormField';
+import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 export type FieldPasswordProps<
@@ -38,7 +35,7 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
-  const { isDisabled } = useFormFieldContext();
+  const { isDisabled } = useFormField();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller

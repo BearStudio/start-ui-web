@@ -194,16 +194,11 @@ export const FormFieldContext = createContext<FormFieldContextValue | null>(
   null
 );
 
-export const useFormFieldContext = () => {
-  const ctx = useContext(FormFieldContext);
-  if (!ctx) {
+export const useFormField = () => {
+  const fieldContext = useContext(FormFieldContext);
+  if (!fieldContext) {
     throw new Error('Missing <FormField /> parent component');
   }
-  return ctx;
-};
-
-export const useFormField = () => {
-  const fieldContext = useFormFieldContext();
   const { getFieldState, formState } = useFormContext();
 
   const fieldState = getFieldState(fieldContext.name, formState);

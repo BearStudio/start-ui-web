@@ -13,10 +13,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import {
-  FieldCommonProps,
-  useFormFieldContext,
-} from '@/components/Form/FormField';
+import { FieldCommonProps, useFormField } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
 
 type PinInputRootProps = Pick<
@@ -47,7 +44,7 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
-  const { isDisabled, id } = useFormFieldContext();
+  const { isDisabled, id } = useFormField();
   const stackRef = useRef<HTMLDivElement>(null);
   return (
     <Controller
