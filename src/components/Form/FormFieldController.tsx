@@ -39,7 +39,7 @@ export type FieldCommonProps<
   isDisabled?: boolean;
 };
 
-export type FormFieldProps<
+export type FormFieldControllerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > =
@@ -60,7 +60,7 @@ export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  _props: FormFieldProps<TFieldValues, TName>
+  _props: FormFieldControllerProps<TFieldValues, TName>
 ) => {
   const { size } = useFormField();
 
