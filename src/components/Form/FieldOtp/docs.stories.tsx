@@ -142,3 +142,28 @@ export const AutoSubmit = () => {
     </Form>
   );
 };
+
+export const ChakraProps = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4} maxW="20rem">
+        <FormField
+          control={form.control}
+          type="otp"
+          name="code"
+          label="Code"
+          pinInputProps={{
+            variant: 'filled',
+          }}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};

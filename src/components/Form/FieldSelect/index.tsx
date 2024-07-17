@@ -1,6 +1,12 @@
 import { ReactNode } from 'react';
 
-import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+  PathValue,
+} from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
@@ -8,6 +14,8 @@ import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
 import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
+
+type SelectRootProps = Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'>;
 
 export type FieldSelectProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -22,7 +30,11 @@ export type FieldSelectProps<
       value: PathValue<TFieldValues, TName>;
     }>[]
   >;
-} & Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'> &
+  selectProps?: RemoveFromType<
+    RemoveFromType<Omit<SelectProps, 'options' | 'value'>, SelectRootProps>,
+    ControllerRenderProps
+  >;
+} & SelectRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldSelect = <
@@ -50,7 +62,10 @@ export const FieldSelect = <
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
               value={selectValue}
+              // @ts-expect-error should fix the typing. This error pops when
+              // we propagate the `selectProps`
               onChange={(option) => onChange(option?.value)}
+              {...props.selectProps}
               {...fieldProps}
             />
 

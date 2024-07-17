@@ -5,7 +5,12 @@ import {
   InputLeftElement,
   InputRightElement,
 } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
@@ -13,6 +18,19 @@ import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
 import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
+
+type InputCurrencyRootProps = Pick<
+  InputCurrencyProps,
+  | 'placeholder'
+  | 'size'
+  | 'autoFocus'
+  | 'locale'
+  | 'currency'
+  | 'decimals'
+  | 'fixedDecimals'
+  | 'prefix'
+  | 'suffix'
+>;
 
 export type FieldCurrencyProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -24,18 +42,11 @@ export type FieldCurrencyProps<
   inCents?: boolean;
   startElement?: ReactNode;
   endElement?: ReactNode;
-} & Pick<
-  InputCurrencyProps,
-  | 'placeholder'
-  | 'size'
-  | 'autoFocus'
-  | 'locale'
-  | 'currency'
-  | 'decimals'
-  | 'fixedDecimals'
-  | 'prefix'
-  | 'suffix'
-> &
+  inputCurrencyProps?: RemoveFromType<
+    RemoveFromType<InputCurrencyProps, InputCurrencyRootProps>,
+    ControllerRenderProps
+  >;
+} & InputCurrencyRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldCurrency = <
@@ -75,14 +86,15 @@ export const FieldCurrency = <
               {...field}
               value={formatValue(field.value, 'from-cents')}
               onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}
-              pl={props.startElement ? '2.5em' : undefined}
-              pr={props.endElement ? '2.5em' : undefined}
+              ps={props.startElement ? '2.5em' : undefined}
+              pe={props.endElement ? '2.5em' : undefined}
               prefix={props.prefix}
               suffix={props.suffix}
               locale={props.locale}
               currency={props.currency}
               decimals={props.decimals}
               fixedDecimals={props.fixedDecimals}
+              {...props.inputCurrencyProps}
             />
             {!!props.startElement && (
               <InputLeftElement pointerEvents="none">

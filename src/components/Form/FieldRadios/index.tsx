@@ -6,8 +6,15 @@ import {
   Radio,
   RadioGroup,
   RadioGroupProps,
+  RadioProps,
 } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues, PathValue } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+  PathValue,
+} from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
@@ -32,6 +39,11 @@ export type FieldRadiosProps<
     }>[]
   >;
   children?: ReactNode;
+  radioProps?: Omit<RadioProps, 'value' | 'children'>;
+  radioGroupProps?: RemoveFromType<
+    Omit<RadioGroupProps, 'children'>,
+    ControllerRenderProps
+  >;
 } & Pick<RadioGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -49,7 +61,7 @@ export const FieldRadios = <
           {!!props.label && (
             <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
           )}
-          <RadioGroup size={props.size} {...field}>
+          <RadioGroup size={props.size} {...props.radioGroupProps} {...field}>
             {!!props.options && (
               <Flex
                 columnGap={props.columnGap ?? 4}
@@ -57,7 +69,11 @@ export const FieldRadios = <
                 direction={props.direction ?? 'column'}
               >
                 {props.options.map((option) => (
-                  <Radio key={option.value} value={option.value}>
+                  <Radio
+                    key={option.value}
+                    value={option.value}
+                    {...props.radioProps}
+                  >
                     {option.label}
                   </Radio>
                 ))}

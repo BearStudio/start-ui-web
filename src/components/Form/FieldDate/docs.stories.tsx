@@ -91,3 +91,32 @@ export const Disabled = () => {
     </Form>
   );
 };
+
+export const ChakraProps = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="date"
+          name="date"
+          label="Date"
+          autoFocus
+          dayPickerProps={{
+            arePastDaysDisabled: true,
+          }}
+          dayPickerInputProps={{
+            variant: 'filled',
+          }}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};

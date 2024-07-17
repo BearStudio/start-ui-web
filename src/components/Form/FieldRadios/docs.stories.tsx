@@ -187,3 +187,29 @@ export const CustomLayout = () => {
     </Form>
   );
 };
+
+export const ChakraProps = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField
+          control={form.control}
+          type="radios"
+          name="color"
+          label="Color"
+          options={options}
+          radioGroupProps={{
+            colorScheme: 'cyan',
+          }}
+        />
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};

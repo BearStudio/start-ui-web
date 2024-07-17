@@ -1,7 +1,12 @@
 import { ReactNode } from 'react';
 
 import { Textarea, TextareaProps } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 
 import { FieldCommonProps } from '@/components/Form/FormField';
 import { FormFieldError } from '@/components/Form/FormFieldError';
@@ -9,6 +14,10 @@ import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
 import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
+type TextareaRootProps = Pick<
+  TextareaProps,
+  'placeholder' | 'size' | 'autoFocus' | 'rows'
+>;
 export type FieldTextareaProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -16,7 +25,11 @@ export type FieldTextareaProps<
   type: 'textarea';
   label?: ReactNode;
   helper?: ReactNode;
-} & Pick<TextareaProps, 'placeholder' | 'size' | 'autoFocus' | 'rows'> &
+  textareaProps?: RemoveFromType<
+    RemoveFromType<TextareaProps, TextareaRootProps>,
+    ControllerRenderProps
+  >;
+} & TextareaRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldTextarea = <
@@ -38,6 +51,7 @@ export const FieldTextarea = <
             placeholder={props.placeholder}
             autoFocus={props.autoFocus}
             rows={props.rows}
+            {...props.textareaProps}
             {...field}
           />
           {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}

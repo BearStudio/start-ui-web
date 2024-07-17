@@ -1,15 +1,20 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import { ElementRef, forwardRef } from 'react';
 
-import { FormLabel, RequiredIndicator, chakra } from '@chakra-ui/react';
+import {
+  FormLabel,
+  FormLabelProps,
+  RequiredIndicator,
+  chakra,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormField } from './FormField';
 
-export type FormFieldLabelProps = ComponentPropsWithoutRef<typeof FormLabel>;
+export type FormFieldLabelProps = FormLabelProps;
 
 export const FormFieldLabel = forwardRef<
   ElementRef<typeof FormLabel>,
-  ComponentPropsWithoutRef<typeof FormLabel>
+  FormLabelProps
 >((props, ref) => {
   const { optionalityHint } = useFormField();
   const { t } = useTranslation(['components']);

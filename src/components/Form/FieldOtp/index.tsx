@@ -6,7 +6,12 @@ import {
   PinInputField,
   PinInputProps,
 } from '@chakra-ui/react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form';
 
 import {
   FieldCommonProps,
@@ -17,6 +22,11 @@ import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
 import { FormFieldItem } from '@/components/Form/FormFieldItem';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
+type PinInputRootProps = Pick<
+  PinInputProps,
+  'size' | 'autoFocus' | 'onComplete'
+>;
+
 export type FieldOtpProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -26,7 +36,14 @@ export type FieldOtpProps<
   helper?: ReactNode;
   length?: number;
   autoSubmit?: boolean;
-} & Pick<PinInputProps, 'size' | 'autoFocus' | 'onComplete'> &
+  pinInputProps?: RemoveFromType<
+    RemoveFromType<
+      Omit<PinInputProps, 'isDisabled' | 'isInvalid' | 'children'>,
+      PinInputRootProps
+    >,
+    ControllerRenderProps
+  >;
+} & PinInputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
 export const FieldOtp = <
@@ -71,6 +88,7 @@ export const FieldOtp = <
                   button.remove();
                 }
               }}
+              {...props.pinInputProps}
               {...field}
             >
               {Array.from({ length: props.length ?? 6 }).map((_, index) => (
