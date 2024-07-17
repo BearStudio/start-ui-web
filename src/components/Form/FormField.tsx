@@ -178,12 +178,9 @@ const FormFieldComponent = <
 
 export const FormField = fixedForwardRef(FormFieldComponent);
 
-type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+type FormFieldContextValue = {
   id: string;
-  name: TName;
+  name: string;
   size?: FormFieldSize;
   optionalityHint?: 'required' | 'optional' | false;
   isDisabled?: boolean;
