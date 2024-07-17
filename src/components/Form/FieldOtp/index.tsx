@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { ElementRef, useRef } from 'react';
 
 import {
   HStack,
@@ -45,13 +45,29 @@ export const FieldOtp = <
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
   const { isDisabled, id } = useFormField();
-  const stackRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<ElementRef<'div'>>(null);
+  const inputRef = useRef<ElementRef<'input'>>(null);
   return (
     <Controller
       {...props}
-      render={({ field: { ref, ...field }, fieldState, formState }) => (
+      render={({ field: { ref: _ref, ...field }, fieldState, formState }) => (
         <>
-          <HStack ref={stackRef}>
+          <HStack ref={stackRef} position="relative">
+            {/* Hack because Chakra generate first input with -0 suffix  */}
+            <input
+              id={id}
+              onFocus={() => inputRef.current?.focus()}
+              tabIndex={-1}
+              style={{
+                opacity: 0,
+                width: 0,
+                height: 0,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            />
+            {/* End of hacky zone */}
             <PinInput
               autoFocus={props.autoFocus}
               size={props.size}
@@ -76,7 +92,11 @@ export const FieldOtp = <
               {...field}
             >
               {Array.from({ length: props.length ?? 6 }).map((_, index) => (
-                <PinInputField ref={ref} flex={1} key={index} />
+                <PinInputField
+                  ref={index === 0 ? inputRef : undefined}
+                  flex={1}
+                  key={index}
+                />
               ))}
             </PinInput>
           </HStack>

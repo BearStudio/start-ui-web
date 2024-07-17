@@ -15,7 +15,6 @@ import {
   FieldValues,
   useFormContext,
 } from 'react-hook-form';
-import { match } from 'ts-pattern';
 
 import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
@@ -130,10 +129,6 @@ const FormFieldComponent = <
     }
   };
 
-  const formControlId = match(props.type)
-    .with('otp', () => `${id}-0`)
-    .otherwise(() => id);
-
   const contextValue = useMemo(
     () => ({
       id,
@@ -160,7 +155,7 @@ const FormFieldComponent = <
         flexDirection="column"
         isRequired={props.optionalityHint === 'required'}
         isDisabled={props.isDisabled}
-        id={formControlId}
+        id={id}
         gap={1}
         {...props.formControlProps}
       >
