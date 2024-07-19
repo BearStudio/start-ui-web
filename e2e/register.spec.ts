@@ -19,10 +19,7 @@ test.describe('Register flow', () => {
       .click();
 
     await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
-	await page
-        .getByText('Verification code')
-        .fill(input.code ?? VALIDATION_CODE_MOCKED);
-
+    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
     ).not.toBeVisible();
@@ -39,10 +36,7 @@ test.describe('Register flow', () => {
       .click();
 
     await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
-	await page
-        .getByText('Verification code')
-        .fill(input.code ?? VALIDATION_CODE_MOCKED);
-
+    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
     ).toBeVisible();

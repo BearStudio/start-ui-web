@@ -37,7 +37,7 @@ export const pageUtils = (page: Page) => {
         .click();
 
       await page.waitForURL(`**${ROUTES_AUTH.app.login()}/**`);
-	  await page
+      await page
         .getByText('Verification code')
         .fill(input.code ?? VALIDATION_CODE_MOCKED);
     },
