@@ -1,36 +1,87 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import { ElementRef, ReactNode, useContext } from 'react';
 
-import { FormErrorMessage, FormHelperText, SlideFade } from '@chakra-ui/react';
+import { Flex, FlexProps, SlideFade } from '@chakra-ui/react';
+import {
+  ControllerProps,
+  FieldError,
+  FieldPath,
+  FieldValues,
+  useFormContext,
+} from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
 
+import {
+  FormFieldControllerContext,
+  FormFieldControllerContextValue,
+} from '@/components/Form/FormFieldController';
 import { Icon } from '@/components/Icons';
+import { fixedForwardRef } from '@/lib/utils';
 
-import { useFormField, useFormFieldContext } from './FormField';
+type FormFieldErrorProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = Omit<FlexProps, 'children'> & {
+  children?: (params: { error?: FieldError }) => ReactNode;
+} & (
+    | Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    | {}
+  );
 
-export const FormFieldError = forwardRef<
-  ElementRef<typeof FormErrorMessage>,
-  ComponentPropsWithoutRef<typeof FormErrorMessage>
->(({ children, ...props }, ref) => {
-  const { error } = useFormField();
-  const ctx = useFormFieldContext();
+const FormFieldErrorComponent = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  { children, ...props }: FormFieldErrorProps<TFieldValues, TName>,
+  ref: ElementRef<typeof Flex>
+) => {
+  const ctx = useContext<FormFieldControllerContextValue<
+    TFieldValues,
+    TName
+  > | null>(FormFieldControllerContext as ExplicitAny);
+  const { formState } = useFormContext<TFieldValues, TName>();
+  const control = 'control' in props ? props.control : ctx?.control;
+  const name = 'name' in props ? props.name : ctx?.name;
 
-  if (!error && !children) {
-    return null;
+  if (!control || !name) {
+    throw new Error(
+      'Missing <FormFieldController /> parent component or "control" and "name" props on <FormFieldError />'
+    );
   }
+
+  const { error } = control.getFieldState(name, formState);
 
   if (!error) {
-    return <FormHelperText m={0}>{children}</FormHelperText>;
-  }
-  if (!ctx.displayError) {
     return null;
   }
+
+  if (ctx?.displayError === false) {
+    return null;
+  }
+
+  if (children) {
+    return children({ error });
+  }
+
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    control: _,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    name: __,
+    ...rest
+  } = 'control' in props
+    ? props
+    : { ...props, control: undefined, name: undefined };
+
   return (
-    <FormErrorMessage m={0} ref={ref} {...props}>
-      <SlideFade in offsetY={-6}>
+    <SlideFade in offsetY={-6}>
+      <Flex fontSize="sm" color="error.500" ref={ref} {...rest}>
         <Icon icon={LuAlertCircle} me="2" />
         {!!error?.message && <span>{error.message}</span>}
-      </SlideFade>
-    </FormErrorMessage>
+      </Flex>
+    </SlideFade>
   );
-});
-FormFieldError.displayName = 'FormFieldError';
+};
+
+FormFieldErrorComponent.displayName = 'FormFieldError';
+export const FormFieldError = fixedForwardRef(FormFieldErrorComponent);

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 const options = [
   { label: 'Red', value: 'red' },
@@ -23,13 +23,15 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="multi-select"
-          control={form.control}
-          name="colors"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            type="multi-select"
+            control={form.control}
+            name="colors"
+            options={options}
+          />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -56,16 +58,22 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="multi-select"
-          control={form.control}
-          name="colors"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            type="multi-select"
+            control={form.control}
+            name="colors"
+            options={options}
+          />
+        </FormField>
       )}
     </FormMocked>
   );
+
+  // Checking that the default value is selected
+  expect(screen.getByText('Blue')).toBeDefined();
+
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
 });

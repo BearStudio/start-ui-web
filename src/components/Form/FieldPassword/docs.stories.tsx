@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldPassword',
@@ -33,13 +33,15 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="password"
-          name="password"
-          label="Password"
-          placeholder="Placeholder"
-        />
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+            placeholder="Placeholder"
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -56,13 +58,16 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="password"
-          name="password"
-          label="Password"
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+            placeholder="Placeholder"
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -79,16 +84,18 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="password"
-          name="password"
-          label="Password"
-          placeholder="Placeholder"
-          inputProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+            placeholder="Placeholder"
+            inputProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

@@ -16,19 +16,14 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldCheckboxesProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'checkboxes';
-  label?: ReactNode;
-  helper?: ReactNode;
   rowGap?: FlexProps['rowGap'];
   columnGap?: FlexProps['columnGap'];
   direction?: FlexProps['direction'];
@@ -44,6 +39,7 @@ export type FieldCheckboxesProps<
     CheckboxGroupProps,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & Pick<CheckboxGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -57,12 +53,10 @@ export const FieldCheckboxes = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <FormFieldItem>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <CheckboxGroup
             size={props.size}
+            isDisabled={props.isDisabled}
             {...field}
             {...props.checkboxGroupProps}
           >
@@ -85,9 +79,8 @@ export const FieldCheckboxes = <
             )}
             {props.children}
           </CheckboxGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

@@ -16,19 +16,14 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldRadiosProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'radios';
-  label?: ReactNode;
-  helper?: ReactNode;
   rowGap?: FlexProps['rowGap'];
   columnGap?: FlexProps['columnGap'];
   direction?: FlexProps['direction'];
@@ -44,6 +39,7 @@ export type FieldRadiosProps<
     Omit<RadioGroupProps, 'children'>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & Pick<RadioGroupProps, 'size'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -57,11 +53,13 @@ export const FieldRadios = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <FormFieldItem>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
-          <RadioGroup size={props.size} {...props.radioGroupProps} {...field}>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
+          <RadioGroup
+            isDisabled={props.isDisabled}
+            size={props.size}
+            {...props.radioGroupProps}
+            {...field}
+          >
             {!!props.options && (
               <Flex
                 columnGap={props.columnGap ?? 4}
@@ -81,9 +79,8 @@ export const FieldRadios = <
             )}
             {props.children}
           </RadioGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

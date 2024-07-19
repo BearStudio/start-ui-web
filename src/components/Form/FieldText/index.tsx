@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   Input,
   InputGroup,
   InputGroupProps,
@@ -15,14 +17,8 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import {
-  FormFieldLabel,
-  FormFieldLabelProps,
-} from '@/components/Form/FormFieldLabel';
 
 export type InputRootProps = Pick<InputProps, 'placeholder' | 'autoFocus'>;
 
@@ -31,15 +27,14 @@ export type FieldTextProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'text' | 'email' | 'number' | 'tel';
-  label?: ReactNode;
-  helper?: ReactNode;
   startElement?: ReactNode;
   endElement?: ReactNode;
   inputProps?: RemoveFromType<
     RemoveFromType<InputProps, InputRootProps>,
     ControllerRenderProps
   >;
-  size?: FormFieldLabelProps['size'] & InputGroupProps['size'];
+  containerProps?: FlexProps;
+  size?: InputGroupProps['size'];
 } & InputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -52,13 +47,12 @@ export const FieldText = <
   return (
     <Controller
       {...props}
-      render={({ field }) => (
-        <FormFieldItem>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
+      render={({ field, fieldState }) => (
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <Input
+              isInvalid={!!fieldState.error}
+              isDisabled={props.isDisabled}
               type={props.type}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
@@ -72,9 +66,8 @@ export const FieldText = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldDate',
@@ -26,12 +26,10 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="date"
-          name="date"
-          label="Date"
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController control={form.control} type="date" name="date" />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -53,12 +51,10 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="date"
-          name="date"
-          label="Date"
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController control={form.control} type="date" name="date" />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -75,13 +71,15 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="date"
-          label="Date"
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="date"
+            name="date"
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -98,19 +96,20 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="date"
-          name="date"
-          label="Date"
-          autoFocus
-          dayPickerProps={{
-            arePastDaysDisabled: true,
-          }}
-          dayPickerInputProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="date"
+            name="date"
+            dayPickerProps={{
+              arePastDaysDisabled: true,
+            }}
+            dayPickerInputProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

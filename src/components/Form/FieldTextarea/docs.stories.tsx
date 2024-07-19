@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldTextarea',
@@ -30,13 +30,15 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="textarea"
-          name="description"
-          label="Description"
-          placeholder="Placeholder"
-        />
+        <FormField>
+          <FormFieldLabel>Description</FormFieldLabel>
+          <FormFieldController
+            type="textarea"
+            control={form.control}
+            name="description"
+            placeholder="Placeholder"
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -58,12 +60,14 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="textarea"
-          name="description"
-          label="Description"
-        />
+        <FormField>
+          <FormFieldLabel>Description</FormFieldLabel>
+          <FormFieldController
+            type="textarea"
+            control={form.control}
+            name="description"
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -80,13 +84,15 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="textarea"
-          name="description"
-          label="Description"
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Description</FormFieldLabel>
+          <FormFieldController
+            type="textarea"
+            control={form.control}
+            name="description"
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -103,16 +109,18 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="textarea"
-          name="description"
-          label="Description"
-          placeholder="Placeholder"
-          textareaProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Description</FormFieldLabel>
+          <FormFieldController
+            type="textarea"
+            control={form.control}
+            name="description"
+            placeholder="Placeholder"
+            textareaProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

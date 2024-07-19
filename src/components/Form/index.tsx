@@ -43,7 +43,7 @@ export const Form = <TFieldValues extends FieldValues>({
 };
 
 export { FormField } from './FormField';
-export { FormFieldItem } from './FormFieldItem';
 export { FormFieldLabel } from './FormFieldLabel';
+export { FormFieldController } from './FormFieldController';
 export { FormFieldHelper } from './FormFieldHelper';
 export { FormFieldError } from './FormFieldError';

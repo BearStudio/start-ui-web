@@ -19,7 +19,7 @@ test.describe('Register flow', () => {
       .click();
 
     await page.waitForURL(`**${APP_PATH}/register/**`);
-    await page.fill('input', VALIDATION_CODE_MOCKED);
+    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -37,7 +37,7 @@ test.describe('Register flow', () => {
       .click();
 
     await page.waitForURL(`**${APP_PATH}/register/**`);
-    await page.fill('input', VALIDATION_CODE_MOCKED);
+    await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
 
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)

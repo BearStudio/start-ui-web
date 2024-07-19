@@ -6,7 +6,12 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Form, FormField } from '@/components/Form';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/Form';
 import { useToastError } from '@/components/Toast';
 import { LinkApp } from '@/features/app/LinkApp';
 import { APP_PATH } from '@/features/app/constants';
@@ -88,28 +93,37 @@ export default function PageRegister() {
         }}
       >
         <Stack spacing="4">
-          <FormField
-            control={form.control}
-            type="select"
-            name="language"
-            label={t('auth:data.language.label')}
-            options={AVAILABLE_LANGUAGES.map(({ key }) => ({
-              label: t(`common:languages.${key}`),
-              value: key,
-            }))}
-          />
-          <FormField
-            control={form.control}
-            type="text"
-            name="name"
-            label={t('auth:data.name.label')}
-          />
-          <FormField
-            control={form.control}
-            type="email"
-            name="email"
-            label={t('auth:data.email.label')}
-          />
+          <FormField>
+            <FormFieldLabel>{t('auth:data.language.label')}</FormFieldLabel>
+            <FormFieldController
+              control={form.control}
+              type="select"
+              name="language"
+              options={AVAILABLE_LANGUAGES.map(({ key }) => ({
+                label: t(`common:languages.${key}`),
+                value: key,
+              }))}
+            />
+          </FormField>
+
+          <FormField>
+            <FormFieldLabel>{t('auth:data.name.label')}</FormFieldLabel>
+            <FormFieldController
+              control={form.control}
+              type="text"
+              name="name"
+            />
+          </FormField>
+
+          <FormField>
+            <FormFieldLabel>{t('auth:data.email.label')}</FormFieldLabel>
+            <FormFieldController
+              control={form.control}
+              type="email"
+              name="email"
+            />
+          </FormField>
+
           <Flex>
             <Button
               isLoading={register.isLoading}

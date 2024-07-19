@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldCheckboxes',
@@ -34,13 +34,15 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -62,13 +64,15 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -85,14 +89,16 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          options={options}
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -118,14 +124,15 @@ export const Optional = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          optionalityHint="optional"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel optionalityHint="optional">Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -142,14 +149,16 @@ export const Row = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          direction="row"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+            direction="row"
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -166,19 +175,22 @@ export const CustomLayout = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-        >
-          <SimpleGrid columns={3}>
-            {options.map((option) => (
-              <Checkbox key={option.value} value={option.value}>
-                {option.label}
-              </Checkbox>
-            ))}
-          </SimpleGrid>
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+          >
+            {' '}
+            <SimpleGrid columns={3}>
+              {options.map((option) => (
+                <Checkbox key={option.value} value={option.value}>
+                  {option.label}
+                </Checkbox>
+              ))}
+            </SimpleGrid>
+          </FormFieldController>
         </FormField>
         <Box>
           <Button type="submit" variant="@primary">
@@ -196,14 +208,16 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="checkboxes"
-          name="colors"
-          label="Colors"
-          options={options}
-          checkboxGroupProps={{ colorScheme: 'cyan' }}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="checkboxes"
+            name="colors"
+            options={options}
+            checkboxGroupProps={{ colorScheme: 'cyan' }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

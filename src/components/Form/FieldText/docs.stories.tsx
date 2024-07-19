@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import { LuActivity } from 'react-icons/lu';
 import { z } from 'zod';
 
+import { FormFieldController } from '@/components/Form/FormFieldController';
 import { Icon } from '@/components/Icons';
 import { zu } from '@/lib/zod/zod-utils';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldText',
@@ -35,13 +36,16 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-          placeholder="Placeholder"
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            type="text"
+            control={form.control}
+            name="name"
+            placeholder="Buzz Pawdrin"
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -63,12 +67,16 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="text"
+            name="name"
+            placeholder="Buzz Pawdrin"
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -85,13 +93,17 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="text"
+            name="name"
+            placeholder="Buzz Pawdrin"
+            isDisabled
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -108,14 +120,17 @@ export const StartElement = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-          placeholder="Placeholder"
-          startElement={<Icon icon={LuActivity} />}
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="text"
+            name="name"
+            placeholder="Buzz Pawdrin"
+            startElement={<Icon icon={LuActivity} />}
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -132,16 +147,20 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="text"
-          name="name"
-          label="Name"
-          placeholder="Buzz Pawdrin"
-          inputProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="text"
+            name="name"
+            placeholder="Buzz Pawdrin"
+            inputProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
+
         <Box>
           <Button type="submit" variant="@primary">
             Submit

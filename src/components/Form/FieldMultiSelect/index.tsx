@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-
+import { Flex, FlexProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -8,11 +7,8 @@ import {
   PathValue,
 } from 'react-hook-form';
 
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 import { Select, SelectProps } from '@/components/Select';
 
 type SelectRootProps = Pick<SelectProps, 'size' | 'placeholder' | 'autoFocus'>;
@@ -22,8 +18,6 @@ export type FieldMultiSelectProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'multi-select';
-  label?: ReactNode;
-  helper?: ReactNode;
   options: ReadonlyArray<{
     label: string;
     value: PathValue<TFieldValues, TName>[number];
@@ -32,6 +26,7 @@ export type FieldMultiSelectProps<
     RemoveFromType<Omit<SelectProps, 'options' | 'value'>, SelectRootProps>,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & SelectRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -49,11 +44,12 @@ export const FieldMultiSelect = <
           props.options?.filter((option) => value?.includes(option.value)) ??
           undefined;
         return (
-          <FormFieldItem>
-            {!!props.label && (
-              <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-            )}
-
+          <Flex
+            flexDirection="column"
+            gap={1}
+            flex={1}
+            {...props.containerProps}
+          >
             <Select
               type="select"
               isMulti
@@ -63,6 +59,7 @@ export const FieldMultiSelect = <
               value={selectValues}
               menuPortalTarget={document.body}
               options={props.options}
+              isDisabled={props.isDisabled}
               onChange={(options) =>
                 // @ts-expect-error TODO should fix the typing. This error pops when
                 // we propagate the `selectProps`
@@ -71,12 +68,8 @@ export const FieldMultiSelect = <
               {...props.selectProps}
               {...field}
             />
-
-            {!!props.helper && (
-              <FormFieldHelper>{props.helper}</FormFieldHelper>
-            )}
             <FormFieldError />
-          </FormFieldItem>
+          </Flex>
         );
       }}
     />

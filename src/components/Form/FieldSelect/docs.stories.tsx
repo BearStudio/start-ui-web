@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldSelect',
@@ -32,14 +32,16 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="select"
-          name="color"
-          label="Colors"
-          placeholder="Placeholder"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            placeholder="Placeholder"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -61,13 +63,16 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="select"
-          name="color"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            placeholder="Placeholder"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -84,14 +89,17 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="select"
-          name="color"
-          label="Colors"
-          options={options}
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            placeholder="Placeholder"
+            isDisabled
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -108,22 +116,24 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="select"
-          name="color"
-          label="Colors"
-          placeholder="Placeholder"
-          options={options}
-          selectProps={{
-            chakraStyles: {
-              control: (provided) => ({
-                ...provided,
-                backgroundColor: `${form.watch('color')}.100`,
-              }),
-            },
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            placeholder="Placeholder"
+            options={options}
+            selectProps={{
+              chakraStyles: {
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: `${form.watch('color')}.100`,
+                }),
+              },
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

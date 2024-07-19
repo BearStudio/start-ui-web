@@ -38,7 +38,9 @@ export const pageUtils = (page: Page) => {
         .click();
 
       await page.waitForURL(`**${APP_PATH}/login/**`);
-      await page.fill('input', input.code ?? VALIDATION_CODE_MOCKED);
+      await page
+        .getByText('Verification code')
+        .fill(input.code ?? VALIDATION_CODE_MOCKED);
     },
 
     /**
@@ -56,7 +58,9 @@ export const pageUtils = (page: Page) => {
         .click();
 
       await page.waitForURL(`**${ADMIN_PATH}/login/**`);
-      await page.fill('input', input.code ?? VALIDATION_CODE_MOCKED);
+      await page
+        .getByText('Verification code')
+        .fill(input.code ?? VALIDATION_CODE_MOCKED);
     },
   } as const;
 };

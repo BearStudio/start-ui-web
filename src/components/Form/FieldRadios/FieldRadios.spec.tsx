@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 const options = [
   { label: 'Red', value: 'red' },
@@ -23,18 +23,24 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="radios"
-          control={form.control}
-          name="color"
-          label="Color"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+          />
+        </FormField>
       )}
     </FormMocked>
   );
   await user.click(screen.getByLabelText('Green'));
   await user.click(screen.getByLabelText('Blue'));
+
+  expect(screen.getByLabelText<HTMLInputElement>('Green').checked).toBe(false);
+  expect(screen.getByLabelText<HTMLInputElement>('Blue').checked).toBe(true);
+  expect(screen.getByLabelText<HTMLInputElement>('Red').checked).toBe(false);
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ color: 'blue' });
@@ -54,16 +60,23 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="radios"
-          control={form.control}
-          name="color"
-          label="Color"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Color</FormFieldLabel>
+          <FormFieldController
+            type="radios"
+            control={form.control}
+            name="color"
+            options={options}
+          />
+        </FormField>
       )}
     </FormMocked>
   );
+
+  expect(screen.getByLabelText<HTMLInputElement>('Green').checked).toBe(true);
+  expect(screen.getByLabelText<HTMLInputElement>('Blue').checked).toBe(false);
+  expect(screen.getByLabelText<HTMLInputElement>('Red').checked).toBe(false);
+
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ color: 'green' });
 });

@@ -3,7 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Form, FormField } from '../';
+import { zu } from '@/lib/zod/zod-utils';
+
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldMultiSelect',
@@ -12,7 +14,7 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    colors: z.enum(['red', 'green', 'blue']).array(),
+    colors: zu.array.nonEmpty(z.enum(['red', 'green', 'blue']).array()),
   });
 
 const options = [
@@ -32,14 +34,16 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="multi-select"
-          name="colors"
-          label="Colors"
-          placeholder="Placeholder"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="multi-select"
+            name="colors"
+            placeholder="Placeholder"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -61,13 +65,16 @@ export const DefaultValue = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="multi-select"
-          name="colors"
-          label="Colors"
-          options={options}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="multi-select"
+            name="colors"
+            placeholder="Placeholder"
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -84,14 +91,17 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="multi-select"
-          name="colors"
-          label="Colors"
-          options={options}
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="multi-select"
+            name="colors"
+            placeholder="Placeholder"
+            isDisabled
+            options={options}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -108,22 +118,25 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="multi-select"
-          name="colors"
-          label="Colors"
-          placeholder="Placeholder"
-          options={options}
-          selectProps={{
-            chakraStyles: {
-              control: (provided) => ({
-                ...provided,
-                bg: 'blue.100',
-              }),
-            },
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="multi-select"
+            name="colors"
+            placeholder="Placeholder"
+            isDisabled
+            options={options}
+            selectProps={{
+              chakraStyles: {
+                control: (provided) => ({
+                  ...provided,
+                  bg: 'blue.100',
+                }),
+              },
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit

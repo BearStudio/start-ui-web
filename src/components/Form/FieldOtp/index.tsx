@@ -1,9 +1,12 @@
-import { ReactNode, useId, useRef } from 'react';
+import { ElementRef, useRef } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   HStack,
   PinInput,
   PinInputField,
+  PinInputFieldProps,
   PinInputProps,
 } from '@chakra-ui/react';
 import {
@@ -13,14 +16,9 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import {
-  FieldCommonProps,
-  useFormFieldContext,
-} from '@/components/Form/FormField';
+import { useFormField } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type PinInputRootProps = Pick<
   PinInputProps,
@@ -32,8 +30,6 @@ export type FieldOtpProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'otp';
-  label?: ReactNode;
-  helper?: ReactNode;
   length?: number;
   autoSubmit?: boolean;
   pinInputProps?: RemoveFromType<
@@ -43,6 +39,8 @@ export type FieldOtpProps<
     >,
     ControllerRenderProps
   >;
+  pinInputFieldProps?: PinInputFieldProps;
+  containerProps?: FlexProps;
 } & PinInputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -52,28 +50,36 @@ export const FieldOtp = <
 >(
   props: FieldOtpProps<TFieldValues, TName>
 ) => {
-  const id = useId();
-  const { isDisabled } = useFormFieldContext();
-  const stackRef = useRef<HTMLDivElement>(null);
+  const { id } = useFormField();
+  const stackRef = useRef<ElementRef<'div'>>(null);
+  const inputRef = useRef<ElementRef<'input'>>(null);
   return (
     <Controller
       {...props}
-      render={({ field: { ref, ...field }, fieldState, formState }) => (
-        <FormFieldItem
-          // Target the first input
-          id={`${id}-0`}
-        >
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
-
-          <HStack ref={stackRef}>
+      render={({ field: { ref: _ref, ...field }, fieldState, formState }) => (
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
+          <HStack ref={stackRef} position="relative">
+            {/* Hack because Chakra generate first input with -0 suffix  */}
+            <input
+              id={id}
+              onFocus={() => inputRef.current?.focus()}
+              tabIndex={-1}
+              style={{
+                opacity: 0,
+                width: 0,
+                height: 0,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            />
+            {/* End of hacky zone */}
             <PinInput
               autoFocus={props.autoFocus}
               size={props.size}
               placeholder="·"
               isInvalid={fieldState.invalid}
-              isDisabled={isDisabled}
+              isDisabled={props.isDisabled}
               otp
               id={id}
               onComplete={(v) => {
@@ -92,14 +98,17 @@ export const FieldOtp = <
               {...field}
             >
               {Array.from({ length: props.length ?? 6 }).map((_, index) => (
-                <PinInputField ref={ref} flex={1} key={index} />
+                <PinInputField
+                  ref={index === 0 ? inputRef : undefined}
+                  flex={1}
+                  key={index}
+                  {...props.pinInputFieldProps}
+                />
               ))}
             </PinInput>
           </HStack>
-
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

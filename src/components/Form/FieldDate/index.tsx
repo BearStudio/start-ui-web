@@ -1,6 +1,4 @@
-import { ReactNode } from 'react';
-
-import { InputProps } from '@chakra-ui/react';
+import { Flex, FlexProps, InputProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -13,11 +11,8 @@ import {
   DayPickerInputProps,
   DayPickerProps,
 } from '@/components/DayPicker';
-import { FieldCommonProps } from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 type DayPickerInputRootProps = Pick<
   InputProps,
@@ -29,13 +24,12 @@ export type FieldDateProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'date';
-  label?: ReactNode;
-  helper?: ReactNode;
   dayPickerProps?: RemoveFromType<DayPickerProps, ControllerRenderProps>;
   dayPickerInputProps?: RemoveFromType<
     DayPickerInputProps,
     DayPickerInputRootProps
   >;
+  containerProps?: FlexProps;
 } & DayPickerInputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -49,12 +43,10 @@ export const FieldDate = <
     <Controller
       {...props}
       render={({ field: { ref: _ref, ...field } }) => (
-        <FormFieldItem>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <DayPicker
             placeholder={props.placeholder}
+            isDisabled={props.isDisabled}
             inputProps={{
               size: props.size,
               autoFocus: props.autoFocus,
@@ -63,9 +55,8 @@ export const FieldDate = <
             {...props.dayPickerProps}
             {...field}
           />
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

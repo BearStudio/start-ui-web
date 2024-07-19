@@ -1,6 +1,8 @@
 import { ReactNode, useState } from 'react';
 
 import {
+  Flex,
+  FlexProps,
   IconButton,
   Input,
   InputGroup,
@@ -16,24 +18,17 @@ import {
 } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import {
-  FieldCommonProps,
-  useFormFieldContext,
-} from '@/components/Form/FormField';
+import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { FormFieldHelper } from '@/components/Form/FormFieldHelper';
-import { FormFieldItem } from '@/components/Form/FormFieldItem';
-import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
 
 export type FieldPasswordProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'password';
-  label?: ReactNode;
-  helper?: ReactNode;
   endElement?: ReactNode;
   inputProps?: RemoveFromType<InputProps, ControllerRenderProps>;
+  containerProps?: FlexProps;
 } & Pick<InputProps, 'placeholder' | 'size' | 'autoFocus'> &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -43,16 +38,12 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
-  const { isDisabled } = useFormFieldContext();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
       {...props}
       render={({ field }) => (
-        <FormFieldItem>
-          {!!props.label && (
-            <FormFieldLabel size={props.size}>{props.label}</FormFieldLabel>
-          )}
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <Input
               type={showPassword ? 'text' : 'password'}
@@ -63,7 +54,7 @@ export const FieldPassword = <
             />
             <InputLeftElement>
               <IconButton
-                isDisabled={isDisabled}
+                isDisabled={props.isDisabled}
                 onClick={() => setShowPassword((x) => !x)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'} // TODO: translation
                 display="flex"
@@ -77,9 +68,8 @@ export const FieldPassword = <
               <InputRightElement>{props.endElement}</InputRightElement>
             )}
           </InputGroup>
-          {!!props.helper && <FormFieldHelper>{props.helper}</FormFieldHelper>}
           <FormFieldError />
-        </FormFieldItem>
+        </Flex>
       )}
     />
   );

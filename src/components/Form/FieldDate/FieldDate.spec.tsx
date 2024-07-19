@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { FormMocked } from '@/components/Form/form-test-utils';
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField } from '..';
+import { FormField, FormFieldController, FormFieldLabel } from '..';
 
 test('update value', async () => {
   const user = setupUser();
@@ -18,12 +18,10 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="date"
-          control={form.control}
-          name="date"
-          label="Date"
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController type="date" control={form.control} name="date" />
+        </FormField>
       )}
     </FormMocked>
   );
@@ -50,12 +48,10 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField
-          type="date"
-          control={form.control}
-          name="date"
-          label="Date"
-        />
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController type="date" control={form.control} name="date" />
+        </FormField>
       )}
     </FormMocked>
   );

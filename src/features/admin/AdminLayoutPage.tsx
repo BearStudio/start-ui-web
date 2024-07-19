@@ -71,6 +71,12 @@ export const AdminLayoutPageTopBar = ({
       bg="white"
       borderBottom="1px solid transparent"
       borderBottomColor="gray.100"
+      _dark={{
+        bg: 'gray.900',
+        color: 'white',
+        borderBottomColor: 'gray.800',
+        boxShadow: 'layout-dark',
+      }}
       {...rest}
     >
       <PageContainer

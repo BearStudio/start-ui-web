@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Icon } from '@/components/Icons';
 
-import { Form, FormField } from '../';
+import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldCurrency',
@@ -29,13 +29,15 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          placeholder={12}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -52,14 +54,16 @@ export const InCents = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          inCents
-          placeholder={1200}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            inCents
+            placeholder={1200}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -76,14 +80,16 @@ export const LocaleFr = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          locale="fr"
-          placeholder={12}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            locale="fr"
+            placeholder={12}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -100,14 +106,16 @@ export const LocaleNoDecimals = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          decimals={0}
-          placeholder={12}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            decimals={0}
+            placeholder={12}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -124,14 +132,16 @@ export const Disabled = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          placeholder={12}
-          isDisabled
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+            isDisabled
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -148,14 +158,16 @@ export const StartElement = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          placeholder={12}
-          startElement={<Icon icon={LuActivity} />}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+            startElement={<Icon icon={LuActivity} />}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
@@ -172,16 +184,18 @@ export const ChakraProps = () => {
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
       <Stack spacing={4}>
-        <FormField
-          control={form.control}
-          type="currency"
-          name="balance"
-          label="Balance"
-          placeholder={12}
-          inputCurrencyProps={{
-            variant: 'filled',
-          }}
-        />
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+            inputCurrencyProps={{
+              color: 'rebeccapurple',
+            }}
+          />
+        </FormField>
         <Box>
           <Button type="submit" variant="@primary">
             Submit
