@@ -10,4 +10,4 @@ export const ROUTES_ACCOUNT = {
     profile: () => `${ROUTES_ACCOUNT.admin.root()}/profile`,
     email: () => `${ROUTES_ACCOUNT.admin.root()}/email`,
   },
-};
+} as const;

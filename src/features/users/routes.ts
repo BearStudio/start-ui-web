@@ -7,4 +7,4 @@ export const ROUTES_USERS = {
     user: (params: { id: string }) =>
       `${ROUTES_USERS.admin.root()}/${params.id}`,
   },
-};
+} as const;

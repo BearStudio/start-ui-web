@@ -13,4 +13,4 @@ export const ROUTES_REPOSITORIES = {
     update: (params: { id: string }) =>
       `${ROUTES_REPOSITORIES.admin.root()}/${params.id}/update`,
   },
-};
+} as const;

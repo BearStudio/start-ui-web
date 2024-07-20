@@ -17,4 +17,4 @@ export const ROUTES_AUTH = {
     loginValidate: (params: { token: string; email: string }) =>
       `${ROUTES_AUTH.admin.login()}/${params.token}?email=${params.email}`,
   },
-};
+} as const;
