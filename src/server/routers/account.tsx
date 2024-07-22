@@ -5,7 +5,10 @@ import { z } from 'zod';
 
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailAddressChange from '@/emails/templates/email-address-change';
-import { zUserAccount } from '@/features/account/schemas';
+import {
+  zUserAccount,
+  zUserAccountWithEmail,
+} from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import i18n from '@/lib/i18n/server';
@@ -31,26 +34,8 @@ export const accountRouter = createTRPCRouter({
     .input(z.void())
     .output(zUserAccount())
     .query(async ({ ctx }) => {
-      ctx.logger.info('Getting user');
-      const user = await ctx.db.user.findUnique({
-        where: { id: ctx.user.id },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          authorizations: true,
-          language: true,
-        },
-      });
-
-      if (!user) {
-        ctx.logger.warn('User not found');
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-        });
-      }
-
-      return user;
+      ctx.logger.info('Return the current user');
+      return ctx.user;
     }),
 
   update: protectedProcedure()
@@ -93,11 +78,7 @@ export const accountRouter = createTRPCRouter({
         tags: ['account'],
       },
     })
-    .input(
-      zUserAccount().pick({
-        email: true,
-      })
-    )
+    .input(zUserAccountWithEmail().pick({ email: true }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
       ctx.logger.info('Checking existing email');
@@ -217,6 +198,13 @@ export const accountRouter = createTRPCRouter({
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx }) => {
       const token = randomUUID();
+
+      if (!ctx.user.email) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Something went wrong. User has no email.',
+        });
+      }
 
       // We send the email to verify the account before delete.
       ctx.logger.info('Creating code');

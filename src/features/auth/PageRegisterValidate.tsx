@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +13,6 @@ import { ROUTES_APP } from '@/features/app/routes';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
-  useOnVerificationCodeSuccess,
 } from '@/features/auth/VerificationCodeForm';
 import {
   FormFieldsVerificationCode,
@@ -27,6 +27,9 @@ export default function PageRegisterValidate() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+  const trpcUtils = trpc.useUtils();
+  const queryCache = useQueryClient();
 
   const token = params?.token?.toString() ?? '';
   const email = searchParams.get('email');
@@ -43,15 +46,21 @@ export default function PageRegisterValidate() {
     validate.mutate({ ...values, token });
   };
 
-  const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: ROUTES_APP.root(),
-  });
   const onVerificationCodeError = useOnVerificationCodeError({
     onError: (error) => form.setError('code', { message: error }),
   });
 
   const validate = trpc.auth.registerValidate.useMutation({
-    onSuccess: onVerificationCodeSuccess,
+    onSuccess: () => {
+      queryCache.clear();
+
+      // Optimistic Update
+      trpcUtils.auth.checkAuthenticated.setData(undefined, {
+        isAuthenticated: true,
+      });
+
+      router.replace(redirect || ROUTES_APP.root());
+    },
     onError: onVerificationCodeError,
   });
 

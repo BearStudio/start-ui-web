@@ -57,7 +57,9 @@ export const AccountEmailForm = () => {
   const form = useForm<FormFieldsAccountEmail>({
     mode: 'onBlur',
     resolver: zodResolver(zFormFieldsAccountEmail()),
-    values: account.data,
+    values: {
+      email: account.data?.email ?? '',
+    },
   });
 
   const email = form.watch('email');

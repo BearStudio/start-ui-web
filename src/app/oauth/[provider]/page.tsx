@@ -2,12 +2,12 @@
 
 import { Suspense } from 'react';
 
-import PageAdminLogin from '@/features/auth/PageAdminLogin';
+import PageOAuthCallback from '@/features/auth/PageOAuthCallback';
 
 export default function Page() {
   return (
     <Suspense>
-      <PageAdminLogin />
+      <PageOAuthCallback />
     </Suspense>
   );
 }

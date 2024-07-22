@@ -56,7 +56,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               href={ROUTES_ACCOUNT.app.root()}
               size="sm"
               icon={<></>}
-              name={account.data?.email ?? ''}
+              name={account.data?.name ?? account.data?.email ?? ''}
               {...(isAccountActive
                 ? {
                     ring: '2px',
