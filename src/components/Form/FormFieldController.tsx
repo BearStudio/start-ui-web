@@ -9,6 +9,7 @@ import {
 
 import { useFormField } from '@/components/Form/FormField';
 
+import { FieldCheckbox, FieldCheckboxProps } from './FieldCheckbox';
 import { FieldCheckboxes, FieldCheckboxesProps } from './FieldCheckboxes';
 import { FieldCurrency, FieldCurrencyProps } from './FieldCurrency';
 import { FieldDate, FieldDateProps } from './FieldDate';
@@ -17,6 +18,7 @@ import { FieldOtp, FieldOtpProps } from './FieldOtp';
 import { FieldPassword, FieldPasswordProps } from './FieldPassword';
 import { FieldRadios, FieldRadiosProps } from './FieldRadios';
 import { FieldSelect, FieldSelectProps } from './FieldSelect';
+import { FieldSwitch, FieldSwitchProps } from './FieldSwitch';
 import { FieldText, FieldTextProps } from './FieldText';
 import { FieldTextarea, FieldTextareaProps } from './FieldTextarea';
 
@@ -45,6 +47,8 @@ export type FormFieldControllerProps<
 > =
   | FieldCustomProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
+  | FieldCheckboxProps<TFieldValues, TName>
+  | FieldSwitchProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
   | FieldTextareaProps<TFieldValues, TName>
   | FieldSelectProps<TFieldValues, TName>
@@ -106,6 +110,12 @@ export const FormFieldController = <
 
       case 'radios':
         return <FieldRadios {...props} />;
+
+      case 'checkbox':
+        return <FieldCheckbox {...props} />;
+
+      case 'switch':
+        return <FieldSwitch {...props} />;
 
       // -- ADD NEW FIELD COMPONENT HERE --
     }

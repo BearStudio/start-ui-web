@@ -10,4 +10,5 @@ export { pinInputTheme as PinInput } from './pin-input';
 export { popoverTheme as Popover } from './popover';
 export { radioTheme as Radio } from './radio';
 export { selectTheme as Select } from './select';
+export { switchTheme as Switch } from './switch';
 export { textareaTheme as Textarea } from './textarea';
