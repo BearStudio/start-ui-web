@@ -51,7 +51,9 @@ export const getServerAuthSession = cache(async () => {
         sessionCookie.attributes
       );
     }
-  } catch {}
+  } catch {
+    // Next.js throws error when attempting to set cookies when rendering page
+  }
 
   return {
     user,
