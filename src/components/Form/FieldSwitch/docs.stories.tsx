@@ -1,4 +1,5 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -8,7 +9,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
-} from '..';
+} from '../';
 
 export default {
   title: 'Form/FieldSwitch',
@@ -17,11 +18,16 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    doit: z.boolean().default(false),
+    doit: z.literal(true),
   });
 
+const formOptions = {
+  mode: 'onBlur',
+  resolver: zodResolver(zFormSchema()),
+} as const;
+
 export const Default = () => {
-  const form = useForm<FormSchema>();
+  const form = useForm<FormSchema>(formOptions);
 
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
@@ -32,7 +38,7 @@ export const Default = () => {
             control={form.control}
             type="switch"
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -48,6 +54,7 @@ export const Default = () => {
 
 export const DefaultValues = () => {
   const form = useForm<FormSchema>({
+    ...formOptions,
     defaultValues: {
       doit: true,
     },
@@ -62,7 +69,7 @@ export const DefaultValues = () => {
             control={form.control}
             type="switch"
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -77,7 +84,7 @@ export const DefaultValues = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<FormSchema>();
+  const form = useForm<FormSchema>(formOptions);
 
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
@@ -88,8 +95,8 @@ export const Disabled = () => {
             control={form.control}
             type="switch"
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
             isDisabled
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -105,6 +112,7 @@ export const Disabled = () => {
 
 export const DisabledDefaultValues = () => {
   const form = useForm<FormSchema>({
+    ...formOptions,
     defaultValues: {
       doit: true,
     },
@@ -119,34 +127,8 @@ export const DisabledDefaultValues = () => {
             control={form.control}
             type="switch"
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
             isDisabled
-          />
-          <FormFieldHelper>Helper</FormFieldHelper>
-        </FormField>
-        <Box>
-          <Button type="submit" variant="@primary">
-            Submit
-          </Button>
-        </Box>
-      </Stack>
-    </Form>
-  );
-};
-
-export const SwitchProps = () => {
-  const form = useForm<FormSchema>();
-
-  return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
-      <Stack spacing={4}>
-        <FormField>
-          <FormFieldLabel>Should I do something?</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="switch"
-            name="doit"
-            switchProps={{ children: 'Yes, do it!', colorScheme: 'purple' }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>

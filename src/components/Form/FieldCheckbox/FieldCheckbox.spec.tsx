@@ -26,9 +26,7 @@ test('update value', async () => {
             type="checkbox"
             control={form.control}
             name="doit"
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -57,9 +55,7 @@ test('double click', async () => {
             type="checkbox"
             control={form.control}
             name="doit"
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -90,9 +86,7 @@ test('default value', async () => {
             type="checkbox"
             control={form.control}
             name="doit"
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -123,7 +117,7 @@ test('disabled', async () => {
             control={form.control}
             name="doit"
             isDisabled
-            checkboxProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
         </FormField>
       )}

@@ -1,4 +1,5 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -17,11 +18,16 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    doit: z.boolean().default(false),
+    doit: z.literal(true),
   });
 
+const formOptions = {
+  mode: 'onBlur',
+  resolver: zodResolver(zFormSchema()),
+} as const;
+
 export const Default = () => {
-  const form = useForm<FormSchema>();
+  const form = useForm<FormSchema>(formOptions);
 
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
@@ -32,9 +38,7 @@ export const Default = () => {
             control={form.control}
             type="checkbox"
             name="doit"
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -50,6 +54,7 @@ export const Default = () => {
 
 export const DefaultValues = () => {
   const form = useForm<FormSchema>({
+    ...formOptions,
     defaultValues: {
       doit: true,
     },
@@ -64,9 +69,7 @@ export const DefaultValues = () => {
             control={form.control}
             type="checkbox"
             name="doit"
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -81,7 +84,7 @@ export const DefaultValues = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<FormSchema>();
+  const form = useForm<FormSchema>(formOptions);
 
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
@@ -93,9 +96,7 @@ export const Disabled = () => {
             type="checkbox"
             name="doit"
             isDisabled
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>
@@ -111,6 +112,7 @@ export const Disabled = () => {
 
 export const DisabledDefaultValues = () => {
   const form = useForm<FormSchema>({
+    ...formOptions,
     defaultValues: {
       doit: true,
     },
@@ -126,9 +128,7 @@ export const DisabledDefaultValues = () => {
             type="checkbox"
             name="doit"
             isDisabled
-            checkboxProps={{
-              children: 'Yes, do it!',
-            }}
+            label="Yes, do it!"
           />
           <FormFieldHelper>Helper</FormFieldHelper>
         </FormField>

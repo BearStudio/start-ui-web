@@ -1,4 +1,6 @@
-import { Flex, Switch, SwitchProps } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+
+import { Flex, FlexProps, Switch, SwitchProps } from '@chakra-ui/react';
 import {
   Controller,
   ControllerRenderProps,
@@ -16,13 +18,15 @@ export type FieldSwitchProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'switch';
+  label?: ReactNode;
   switchProps?: RemoveFromType<
     RemoveFromType<
-      Omit<SwitchProps, 'isChecked' | 'isDisabled'>,
+      Omit<SwitchProps, 'isChecked' | 'isDisabled' | 'children'>,
       SwitchRootProps
     >,
     ControllerRenderProps
   >;
+  containerProps?: FlexProps;
 } & SwitchRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -36,7 +40,7 @@ export const FieldSwitch = <
     <Controller
       {...props}
       render={({ field: { value, ...field } }) => (
-        <Flex direction="column" gap={1.5}>
+        <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <Switch
             display="flex"
             alignItems="center"
@@ -45,7 +49,9 @@ export const FieldSwitch = <
             isDisabled={props.isDisabled}
             {...props.switchProps}
             {...field}
-          />
+          >
+            {props.label}
+          </Switch>
           <FormFieldError />
         </Flex>
       )}

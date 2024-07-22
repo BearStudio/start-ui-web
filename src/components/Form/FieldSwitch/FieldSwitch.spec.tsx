@@ -26,7 +26,7 @@ test('update value', async () => {
             type="switch"
             control={form.control}
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -55,7 +55,7 @@ test('double click', async () => {
             type="switch"
             control={form.control}
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -86,7 +86,7 @@ test('default value', async () => {
             type="switch"
             control={form.control}
             name="doit"
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
@@ -117,7 +117,7 @@ test('disabled', async () => {
             control={form.control}
             name="doit"
             isDisabled
-            switchProps={{ children: 'Yes, do it!' }}
+            label="Yes, do it!"
           />
         </FormField>
       )}
