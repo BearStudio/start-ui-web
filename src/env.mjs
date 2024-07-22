@@ -16,8 +16,6 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     NODE_ENV: zNodeEnv,
 
-    AUTH_SECRET: z.string(),
-
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
     LOGGER_LEVEL: z
@@ -75,7 +73,6 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    AUTH_SECRET: process.env.AUTH_SECRET,
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     LOGGER_LEVEL: process.env.LOGGER_LEVEL,

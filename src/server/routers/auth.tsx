@@ -1,6 +1,5 @@
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
-import { cookies } from 'next/headers';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
@@ -14,10 +13,10 @@ import {
 import { zUser, zUserAuthorization } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
-  AUTH_COOKIE_NAME,
+  createSession,
+  deleteSession,
   deleteUsedCode,
   generateCode,
-  setAuthCookie,
   validateCode,
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
@@ -42,13 +41,6 @@ export const authRouter = createTRPCRouter({
     )
     .query(async ({ ctx }) => {
       ctx.logger.info(`User ${ctx.user ? 'is' : 'is not'} logged`);
-
-      if (ctx.user) {
-        const cookieToken = cookies().get(AUTH_COOKIE_NAME)?.value;
-        if (cookieToken) {
-          setAuthCookie(cookieToken);
-        }
-      }
 
       return {
         isAuthenticated: !!ctx.user,
@@ -148,7 +140,7 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { verificationToken, userJwt } = await validateCode({
+      const { verificationToken } = await validateCode({
         ctx,
         ...input,
       });
@@ -171,11 +163,11 @@ export const authRouter = createTRPCRouter({
 
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
-      ctx.logger.info('Set auth cookie');
-      setAuthCookie(userJwt);
+      ctx.logger.info('Create the session');
+      const sessionId = await createSession(verificationToken.userId);
 
       return {
-        token: userJwt,
+        token: sessionId,
       };
     }),
 
@@ -191,7 +183,13 @@ export const authRouter = createTRPCRouter({
     .output(z.void())
     .mutation(async ({ ctx }) => {
       ctx.logger.info('Delete auth cookie');
-      cookies().delete('auth');
+
+      if (!ctx.session) {
+        ctx.logger.warn('No session found');
+        return;
+      }
+
+      deleteSession(ctx.session.id);
     }),
 
   register: publicProcedure()
@@ -313,7 +311,7 @@ export const authRouter = createTRPCRouter({
     .input(z.object({ code: z.string().length(6), token: z.string().uuid() }))
     .output(z.object({ token: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { verificationToken, userJwt } = await validateCode({
+      const { verificationToken } = await validateCode({
         ctx,
         ...input,
       });
@@ -340,11 +338,11 @@ export const authRouter = createTRPCRouter({
 
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
-      ctx.logger.info('Set auth cookie');
-      setAuthCookie(userJwt);
+      ctx.logger.info('Create the session');
+      const sessionId = await createSession(verificationToken.userId);
 
       return {
-        token: userJwt,
+        token: sessionId,
       };
     }),
 });

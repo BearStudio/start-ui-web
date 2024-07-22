@@ -23,16 +23,5 @@ model User {
   authorizations UserRole[]    @default([APP])
   language       String        @default("en")
   lastLoginAt    DateTime?
-}
-
-model VerificationToken {
-  userId        String
-  code          String
-  token         String   @unique
-  expires       DateTime
-  lastAttemptAt DateTime @updatedAt
-  attempts      Int      @default(0)
-  // Useful to change the user email. This model will contains the next user
-  // email, waiting for the user to validate it.
-  email         String?
+  session        Session[]
 }
