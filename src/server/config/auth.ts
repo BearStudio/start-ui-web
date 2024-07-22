@@ -34,7 +34,7 @@ export const getServerAuthSession = cache(async () => {
   const { user, session } = await lucia.validateSession(sessionId);
 
   try {
-    if (session && session.fresh) {
+    if (session?.fresh) {
       const sessionCookie = lucia.createSessionCookie(session.id);
       cookies().set(
         sessionCookie.name,
