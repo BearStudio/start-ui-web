@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({
     <Suspense>
       <GuardAuthenticated
         authorizations={['APP']}
-        loginPath={ROUTES_AUTH.app.login()}
+        loginPath={ROUTES_AUTH.login()}
       >
         <AppLayout>{children}</AppLayout>
       </GuardAuthenticated>

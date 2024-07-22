@@ -1,9 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Button, HStack, Heading, Stack, Text } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
 import { TRPCClientErrorLike } from '@trpc/client';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,7 +18,6 @@ import {
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { ValidationCodeHint } from '@/features/devtools/ValidationCodeHint';
-import { trpc } from '@/lib/trpc/client';
 import { AppRouter } from '@/lib/trpc/types';
 
 export type VerificationCodeFormProps = {
@@ -88,27 +85,6 @@ export const VerificationCodeForm = ({
       <ValidationCodeHint />
     </Stack>
   );
-};
-
-export const useOnVerificationCodeSuccess = ({
-  defaultRedirect = '/',
-}: {
-  defaultRedirect: string;
-}) => {
-  const router = useRouter();
-  const trpcUtils = trpc.useUtils();
-  const queryCache = useQueryClient();
-  const searchParams = useSearchParams();
-  return async () => {
-    queryCache.clear();
-
-    // Optimistic Update
-    trpcUtils.auth.checkAuthenticated.setData(undefined, {
-      isAuthenticated: true,
-    });
-
-    router.push(searchParams.get('redirect') || defaultRedirect || '/');
-  };
 };
 
 export const useOnVerificationCodeError = ({

@@ -25,7 +25,7 @@
     "subject": "Hakikisha akaunti yako",
     "title": "Hakikisha akaunti yako"
   },
-  "emailAddressChange": {
+  "emailUpdate": {
     "hello": "Hujambo {{jina}},",
     "ignoreHelper": "Ikiwa hukujaribu kubadilisha barua pepe yako, unaweza kupuuza barua pepe hii kwa usalama.",
     "intro": "Huu ndio nambari ya kuthibitisha ili kusasisha barua pepe yako:",
@@ -42,5 +42,21 @@
     "subject": "Futa akaunti yako",
     "title": "Futa akaunti yako",
     "validityTime": "Nambari hii itatumika kwa dakika {{expiration}} zinazofuata."
+  },
+  "emailUpdateAlreadyUsed": {
+    "hello": "Hujambo {{jina}},",
+    "ignoreHelper": "Ikiwa hukujaribu kubadilisha barua pepe yako, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "{{email}} yako tayari imetumika, huwezi kuitumia kwa akaunti nyingine.",
+    "preview": "Barua pepe yako tayari inatumiwa na akaunti nyingine",
+    "subject": "Je, unajaribu kusasisha barua pepe yako?",
+    "title": "Je, unajaribu kusasisha barua pepe yako?"
+  },
+  "registerEmailAlreadyUsed": {
+    "hello": "Hujambo {{jina}},",
+    "ignoreHelper": "Ikiwa hukujaribu kufungua akaunti, unaweza kupuuza barua pepe hii kwa usalama.",
+    "intro": "Barua pepe yako {{email}} tayari imetumika, huwezi kufungua akaunti nyingine nayo.",
+    "preview": "Barua pepe yako tayari inatumiwa na akaunti nyingine",
+    "title": "Akaunti tayari ipo",
+    "subject": "Akaunti tayari ipo"
   }
 }

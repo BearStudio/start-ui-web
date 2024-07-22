@@ -29,10 +29,11 @@ export const zUser = () =>
         }
       )
       .nullish(),
-    email: zu.string.email(z.string(), {
+    email: zu.string.emailNullish(z.string(), {
       required_error: t('users:data.email.required'),
       invalid_type_error: t('users:data.email.invalid'),
     }),
+    isEmailVerified: z.boolean(),
     authorizations: zu.array
       .nonEmpty(
         z.array(zUserAuthorization(), {
@@ -45,6 +46,17 @@ export const zUser = () =>
       .nonEmpty(z.string().min(2))
       .default(DEFAULT_LANGUAGE_KEY),
   });
+
+export type UserWithEmail = z.infer<ReturnType<typeof zUserWithEmail>>;
+export const zUserWithEmail = () =>
+  zUser()
+    .omit({ email: true })
+    .extend({
+      email: zu.string.email(z.string(), {
+        required_error: t('users:data.email.required'),
+        invalid_type_error: t('users:data.email.invalid'),
+      }),
+    });
 
 export type FormFieldUser = z.infer<ReturnType<typeof zFormFieldsUser>>;
 export const zFormFieldsUser = () =>

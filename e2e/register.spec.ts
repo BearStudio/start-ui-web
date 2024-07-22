@@ -8,8 +8,8 @@ import locales from '@/locales';
 
 test.describe('Register flow', () => {
   test('Success flow', async ({ page }) => {
-    await page.goto(ROUTES_AUTH.app.register());
-    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
+    await page.goto(ROUTES_AUTH.register());
+    await page.waitForURL(`**${ROUTES_AUTH.register()}`);
 
     await page.getByLabel('Name').fill('Test user');
     const email = await getRandomEmail();
@@ -18,7 +18,7 @@ test.describe('Register flow', () => {
       .getByRole('button', { name: locales.en.auth.register.actions.create })
       .click();
 
-    await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
+    await page.waitForURL(`**${ROUTES_AUTH.register()}/**`);
     await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -26,8 +26,8 @@ test.describe('Register flow', () => {
   });
 
   test('Register with existing email', async ({ page }) => {
-    await page.goto(ROUTES_AUTH.app.register());
-    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
+    await page.goto(ROUTES_AUTH.register());
+    await page.waitForURL(`**${ROUTES_AUTH.register()}`);
 
     await page.getByLabel('Name').fill('Test user');
     await page.getByLabel('Email').fill(USER_EMAIL);
@@ -35,7 +35,7 @@ test.describe('Register flow', () => {
       .getByRole('button', { name: locales.en.auth.register.actions.create })
       .click();
 
-    await page.waitForURL(`**${ROUTES_AUTH.app.register()}/**`);
+    await page.waitForURL(`**${ROUTES_AUTH.register()}/**`);
     await page.getByText('Verification code').fill(VALIDATION_CODE_MOCKED);
     await expect(
       page.getByText(locales.en.auth.data.verificationCode.unknown)
@@ -44,8 +44,8 @@ test.describe('Register flow', () => {
 
   test('Login with a not verified account', async ({ page }) => {
     const utils = pageUtils(page);
-    await page.goto(ROUTES_AUTH.app.register());
-    await page.waitForURL(`**${ROUTES_AUTH.app.register()}`);
+    await page.goto(ROUTES_AUTH.register());
+    await page.waitForURL(`**${ROUTES_AUTH.register()}`);
 
     const email = await getRandomEmail();
 

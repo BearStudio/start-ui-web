@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Center, Spinner } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,20 +9,25 @@ import { trpc } from '@/lib/trpc/client';
 export default function PageLogout() {
   const router = useRouter();
   const queryCache = useQueryClient();
-  const logout = trpc.auth.logout.useMutation();
-  const trpcUtils = trpc.useUtils();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const trigger = async () => {
-      if (!logout.isIdle) return;
-      await logout.mutateAsync();
+  const isTriggeredRef = useRef(false);
+  const logout = trpc.auth.logout.useMutation({
+    onSuccess: () => {
       queryCache.clear();
       // Optimistic Update
       trpcUtils.auth.checkAuthenticated.setData(undefined, {
         isAuthenticated: false,
       });
       router.replace(searchParams.get('redirect') || '/');
+    },
+  });
+  const trpcUtils = trpc.useUtils();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const trigger = async () => {
+      if (isTriggeredRef.current) return;
+      isTriggeredRef.current = true;
+      logout.mutate();
     };
     trigger();
   }, [
