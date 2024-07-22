@@ -9,6 +9,7 @@ import {
   PopoverProps,
   PopoverTrigger,
   Portal,
+  PortalProps,
   Stack,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -56,6 +57,11 @@ export type FormPopoverProps<TSchema extends z.Schema> = {
    * The Popover root element props
    */
   popoverProps?: PopoverProps;
+  /**
+   * Provide a container ref when you have some popover that goes in front of
+   * the position static navbar for example.
+   */
+  containerRef?: PortalProps['containerRef'];
 };
 
 export const FormPopover = <TSchema extends z.Schema>(
@@ -91,7 +97,7 @@ export const FormPopover = <TSchema extends z.Schema>(
       <PopoverTrigger>
         {props.renderTrigger({ onClick: popover.onOpen })}
       </PopoverTrigger>
-      <Portal>
+      <Portal containerRef={props.containerRef}>
         <PopoverContent>
           <FocusLock returnFocus persistentFocus={false}>
             <PopoverBody ref={popoverBodyRef}>
