@@ -6,6 +6,12 @@ import { z } from 'zod';
 const zNodeEnv = () =>
   z.enum(['development', 'test', 'production']).default('development');
 
+const zOptionalWithReplaceMe = () =>
+  z
+    .string()
+    .optional()
+    .transform((value) => (value === 'REPLACE ME' ? undefined : value));
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -14,6 +20,15 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: zNodeEnv(),
+
+    GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
+    GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
+
+    GOOGLE_CLIENT_ID: zOptionalWithReplaceMe(),
+    GOOGLE_CLIENT_SECRET: zOptionalWithReplaceMe(),
+
+    DISCORD_CLIENT_ID: zOptionalWithReplaceMe(),
+    DISCORD_CLIENT_SECRET: zOptionalWithReplaceMe(),
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
@@ -76,6 +91,15 @@ export const env = createEnv({
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     LOGGER_LEVEL: process.env.LOGGER_LEVEL,
     LOGGER_PRETTY: process.env.LOGGER_PRETTY,
+
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+
+    DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
+    DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
 
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_VERCEL_URL
       ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
