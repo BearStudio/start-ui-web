@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_DOCS } from '@/features/docs/routes';
 
 export default function Page() {
-  redirect(`${ADMIN_PATH}/docs/api`);
+  redirect(ROUTES_DOCS.admin.api());
 }

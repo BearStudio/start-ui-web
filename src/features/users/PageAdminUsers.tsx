@@ -13,6 +13,7 @@ import {
   Text,
   chakra,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useQueryState } from 'nuqs';
 import { SubmitHandler } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -41,9 +42,9 @@ import {
   AdminLayoutPage,
   AdminLayoutPageContent,
 } from '@/features/admin/AdminLayoutPage';
-import { LinkAdmin } from '@/features/admin/LinkAdmin';
 import { AdminNav } from '@/features/management/ManagementNav';
 import { UserStatus } from '@/features/users/UserStatus';
+import { ROUTES_USERS } from '@/features/users/routes';
 import { trpc } from '@/lib/trpc/client';
 
 import { AdminUserActions } from './AdminUserActions';
@@ -151,8 +152,8 @@ export default function PageAdminUsers() {
               </FormPopover>
             </Flex>
             <ResponsiveIconButton
-              as={LinkAdmin}
-              href="/management/users/create"
+              as={Link}
+              href={ROUTES_USERS.admin.create()}
               variant="@primary"
               size="sm"
               icon={<LuPlus />}
@@ -197,8 +198,8 @@ export default function PageAdminUsers() {
                         </Tag>
                       )}
                       <LinkOverlay
-                        as={LinkAdmin}
-                        href={`/management/users/${user.id}`}
+                        as={Link}
+                        href={ROUTES_USERS.admin.user({ id: user.id })}
                       >
                         {user.name ?? user.email}
                       </LinkOverlay>

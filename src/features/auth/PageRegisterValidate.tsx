@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Form } from '@/components/Form';
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_APP } from '@/features/app/routes';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -44,7 +44,7 @@ export default function PageRegisterValidate() {
   };
 
   const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: APP_PATH,
+    defaultRedirect: ROUTES_APP.root(),
   });
   const onVerificationCodeError = useOnVerificationCodeError({
     onError: (error) => form.setError('code', { message: error }),

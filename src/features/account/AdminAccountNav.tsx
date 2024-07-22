@@ -1,12 +1,12 @@
 import React from 'react';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuMail, LuUser } from 'react-icons/lu';
 
 import { Nav, NavGroup, NavItem } from '@/components/Nav';
-import { LinkAdmin } from '@/features/admin/LinkAdmin';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ACCOUNT } from '@/features/account/routes';
 
 export const AdminAccountNav = () => {
   const { t } = useTranslation(['account']);
@@ -16,17 +16,17 @@ export const AdminAccountNav = () => {
     <Nav>
       <NavGroup title={t('account:nav.myAccount')}>
         <NavItem
-          as={LinkAdmin}
-          href="/account/profile"
-          isActive={isActive(`${ADMIN_PATH}/account/profile`)}
+          as={Link}
+          href={ROUTES_ACCOUNT.admin.profile()}
+          isActive={isActive(ROUTES_ACCOUNT.admin.profile())}
           icon={LuUser}
         >
           {t('account:nav.profile')}
         </NavItem>
         <NavItem
-          as={LinkAdmin}
-          href="/account/email"
-          isActive={isActive(`${ADMIN_PATH}/account/email`)}
+          as={Link}
+          href={ROUTES_ACCOUNT.admin.email()}
+          isActive={isActive(ROUTES_ACCOUNT.admin.email())}
           icon={LuMail}
         >
           {t('account:nav.email')}

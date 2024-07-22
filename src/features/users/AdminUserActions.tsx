@@ -9,6 +9,7 @@ import {
   MenuProps,
   Portal,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { LuCheckCircle, LuPenLine, LuTrash2, LuXCircle } from 'react-icons/lu';
 
@@ -17,7 +18,7 @@ import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { useToastError, useToastSuccess } from '@/components/Toast';
-import { LinkAdmin } from '@/features/admin/LinkAdmin';
+import { ROUTES_USERS } from '@/features/users/routes';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterOutputs } from '@/lib/trpc/types';
 
@@ -96,8 +97,8 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
       <Portal>
         <MenuList>
           <MenuItem
-            as={LinkAdmin}
-            href={`/management/users/${user.id}`}
+            as={Link}
+            href={ROUTES_USERS.admin.user({ id: user.id })}
             icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

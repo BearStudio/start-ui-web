@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ADMIN_DASHBOARD } from '@/features/admin-dashboard/routes';
 
 export default function Page() {
-  redirect(`${ADMIN_PATH}/dashboard`);
+  redirect(ROUTES_ADMIN_DASHBOARD.admin.root());
 }

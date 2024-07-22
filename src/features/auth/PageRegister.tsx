@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,8 +14,7 @@ import {
   FormFieldLabel,
 } from '@/components/Form';
 import { useToastError } from '@/components/Toast';
-import { LinkApp } from '@/features/app/LinkApp';
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_AUTH } from '@/features/auth/routes';
 import {
   FormFieldsRegister,
   zFormFieldsRegister,
@@ -32,7 +32,10 @@ export default function PageRegister() {
   const register = trpc.auth.register.useMutation({
     onSuccess: (data, variables) => {
       router.push(
-        `${APP_PATH}/register/${data.token}?email=${variables.email}`
+        ROUTES_AUTH.app.registerValidate({
+          token: data.token,
+          email: variables.email,
+        })
       );
     },
     onError: () => {
@@ -63,8 +66,8 @@ export default function PageRegister() {
       <Stack spacing={1}>
         <Heading size="md">{t('auth:register.title')}</Heading>
         <Button
-          as={LinkApp}
-          href="/login"
+          as={Link}
+          href={ROUTES_AUTH.app.login()}
           variant="link"
           size="sm"
           whiteSpace="normal"
@@ -135,7 +138,7 @@ export default function PageRegister() {
               {t('auth:register.actions.create')}
             </Button>
           </Flex>
-          <DemoRegisterHint loginPath={`${APP_PATH}/login`} />
+          <DemoRegisterHint loginPath={ROUTES_AUTH.app.login()} />
         </Stack>
       </Form>
     </Stack>

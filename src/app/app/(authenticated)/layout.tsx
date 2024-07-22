@@ -1,8 +1,8 @@
 import { ReactNode, Suspense } from 'react';
 
 import { AppLayout } from '@/features/app/AppLayout';
-import { APP_PATH } from '@/features/app/constants';
 import { GuardAuthenticated } from '@/features/auth/GuardAuthenticated';
+import { ROUTES_AUTH } from '@/features/auth/routes';
 
 export default function AuthenticatedLayout({
   children,
@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({
     <Suspense>
       <GuardAuthenticated
         authorizations={['APP']}
-        loginPath={`${APP_PATH}/login`}
+        loginPath={ROUTES_AUTH.app.login()}
       >
         <AppLayout>{children}</AppLayout>
       </GuardAuthenticated>

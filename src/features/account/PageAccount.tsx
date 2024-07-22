@@ -25,9 +25,9 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
 import { AccountProfileForm } from '@/features/account/AccountProfileForm';
-import { ADMIN_PATH } from '@/features/admin/constants';
+import { ROUTES_ADMIN } from '@/features/admin/routes';
 import { AppLayoutPage } from '@/features/app/AppLayoutPage';
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_AUTH } from '@/features/auth/routes';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageHome() {
@@ -51,7 +51,7 @@ export default function PageHome() {
               ms="auto"
               gap={2}
               display="inline-flex"
-              href={ADMIN_PATH || '/'}
+              href={ROUTES_ADMIN.root()}
             >
               {t('account:admin.button')}
               <Icon icon={LuArrowRight} />
@@ -91,7 +91,9 @@ export default function PageHome() {
           <Box flex={1}>
             <ConfirmModal
               onConfirm={() =>
-                router.push(`/logout?redirect=${APP_PATH}/login`)
+                router.push(
+                  `${ROUTES_AUTH.logout({ redirect: ROUTES_AUTH.app.login() })}`
+                )
               }
               title={t('account:logout.confirm.title')}
               message={t('account:logout.confirm.message')}

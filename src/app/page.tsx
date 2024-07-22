@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_APP } from '@/features/app/routes';
 
 export default function Page() {
-  redirect(APP_PATH || '/');
+  redirect(ROUTES_APP.root());
 }

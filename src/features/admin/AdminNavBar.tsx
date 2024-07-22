@@ -28,6 +28,7 @@ import {
   useClipboard,
   useColorMode,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -44,10 +45,15 @@ import {
 
 import { Icon } from '@/components/Icons';
 import { Logo } from '@/components/Logo';
+import { ROUTES_ACCOUNT } from '@/features/account/routes';
+import { ROUTES_ADMIN_DASHBOARD } from '@/features/admin-dashboard/routes';
 import { useAdminLayoutContext } from '@/features/admin/AdminLayout';
-import { LinkAdmin } from '@/features/admin/LinkAdmin';
-import { ADMIN_PATH } from '@/features/admin/constants';
-import { LinkApp } from '@/features/app/LinkApp';
+import { ROUTES_ADMIN } from '@/features/admin/routes';
+import { ROUTES_APP } from '@/features/app/routes';
+import { ROUTES_AUTH } from '@/features/auth/routes';
+import { ROUTES_DOCS } from '@/features/docs/routes';
+import { ROUTES_MANAGEMENT } from '@/features/management/routes';
+import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
@@ -57,13 +63,13 @@ const AdminNavBarMainMenu = ({ ...rest }: StackProps) => {
   const { t } = useTranslation(['admin']);
   return (
     <Stack direction="row" spacing="1" {...rest}>
-      <AdminNavBarMainMenuItem href="/dashboard">
+      <AdminNavBarMainMenuItem href={ROUTES_ADMIN_DASHBOARD.admin.root()}>
         {t('admin:layout.mainMenu.dashboard')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem href="/repositories">
+      <AdminNavBarMainMenuItem href={ROUTES_REPOSITORIES.admin.root()}>
         {t('admin:layout.mainMenu.repositories')}
       </AdminNavBarMainMenuItem>
-      <AdminNavBarMainMenuItem href="/management">
+      <AdminNavBarMainMenuItem href={ROUTES_MANAGEMENT.admin.root()}>
         {t('admin:layout.mainMenu.management')}
       </AdminNavBarMainMenuItem>
     </Stack>
@@ -88,15 +94,15 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
         <MenuList maxW="12rem" overflow="hidden">
           <MenuGroup title={account.data?.email ?? ''} noOfLines={1}>
             <MenuItem
-              as={LinkAdmin}
-              href="/account"
+              as={Link}
+              href={ROUTES_ACCOUNT.admin.root()}
               icon={<Icon icon={LuUser} fontSize="lg" color="gray.400" />}
             >
               {t('admin:layout.accountMenu.myAccount')}
             </MenuItem>
             <MenuItem
-              as={LinkAdmin}
-              href="/docs/api"
+              as={Link}
+              href={ROUTES_DOCS.admin.api()}
               icon={<Icon icon={LuBookOpen} fontSize="lg" color="gray.400" />}
             >
               {t('admin:layout.accountMenu.apiDocs')}
@@ -104,8 +110,8 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
 
             {account.data?.authorizations.includes('APP') && (
               <MenuItem
-                as={LinkApp}
-                href="/"
+                as={Link}
+                href={ROUTES_APP.root()}
                 icon={
                   <Icon icon={LuSmartphone} fontSize="lg" color="gray.400" />
                 }
@@ -133,7 +139,9 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
           <MenuDivider />
           <MenuItem
             icon={<Icon icon={LuLogOut} fontSize="lg" color="gray.400" />}
-            onClick={() => router.push(`/logout?redirect=${ADMIN_PATH || ''}`)}
+            onClick={() =>
+              router.push(ROUTES_AUTH.logout({ redirect: ROUTES_ADMIN.root() }))
+            }
           >
             {t('admin:layout.accountMenu.logout')}
           </MenuItem>
@@ -172,7 +180,7 @@ export const AdminNavBar = (props: BoxProps) => {
           display={{ base: 'flex', md: 'none' }}
           ms="-0.5rem"
         />
-        <Box as={LinkAdmin} href="/" mx={{ base: 'auto', md: 0 }}>
+        <Box as={Link} href={ROUTES_ADMIN.root()} mx={{ base: 'auto', md: 0 }}>
           <Logo />
         </Box>
         <AdminNavBarMainMenu
@@ -189,19 +197,17 @@ export const AdminNavBar = (props: BoxProps) => {
 
 const AdminNavBarMainMenuItem = ({
   href,
+  isExact,
   ...rest
-}: BoxProps & { href: string }) => {
+}: BoxProps & { href: string; isExact?: boolean }) => {
   const { rtlValue } = useRtl();
   const { navDrawer } = useAdminLayoutContext();
   const pathname = usePathname() ?? '';
-  const isActive =
-    href === '/'
-      ? pathname === (ADMIN_PATH || '/')
-      : pathname.startsWith(`${ADMIN_PATH}${href}`);
+  const isActive = isExact ? pathname === href : pathname.startsWith(href);
 
   return (
     <Box
-      as={LinkAdmin}
+      as={Link}
       href={href}
       bg="transparent"
       justifyContent="flex-start"

@@ -1,13 +1,15 @@
 import React, { ReactNode } from 'react';
 
 import { Box, BoxProps, Container, Flex } from '@chakra-ui/react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuFolderGit2, LuHome, LuUser } from 'react-icons/lu';
 
 import { Icon } from '@/components/Icons';
-import { LinkApp } from '@/features/app/LinkApp';
-import { APP_PATH } from '@/features/app/constants';
+import { ROUTES_ACCOUNT } from '@/features/account/routes';
+import { ROUTES_APP } from '@/features/app/routes';
+import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
 
 const HEIGHT = 'calc(60px + env(safe-area-inset-bottom))';
 
@@ -38,13 +40,23 @@ export const AppNavBarMobile = (props: BoxProps) => {
         h={HEIGHT}
       >
         <Container display="flex" flexDirection="row" w="full" flex={1}>
-          <AppNavBarMobileMainMenuItem icon={LuHome} href="/">
+          <AppNavBarMobileMainMenuItem
+            icon={LuHome}
+            href={ROUTES_APP.root()}
+            isExact
+          >
             {t('app:layout.mainMenu.home')}
           </AppNavBarMobileMainMenuItem>
-          <AppNavBarMobileMainMenuItem href="/repositories" icon={LuFolderGit2}>
+          <AppNavBarMobileMainMenuItem
+            href={ROUTES_REPOSITORIES.app.root()}
+            icon={LuFolderGit2}
+          >
             {t('app:layout.mainMenu.repositories')}
           </AppNavBarMobileMainMenuItem>
-          <AppNavBarMobileMainMenuItem icon={LuUser} href="/account">
+          <AppNavBarMobileMainMenuItem
+            icon={LuUser}
+            href={ROUTES_ACCOUNT.app.root()}
+          >
             {t('app:layout.mainMenu.account')}
           </AppNavBarMobileMainMenuItem>
         </Container>
@@ -55,22 +67,21 @@ export const AppNavBarMobile = (props: BoxProps) => {
 
 const AppNavBarMobileMainMenuItem = ({
   href,
+  isExact,
   children,
   icon,
 }: {
   children: ReactNode;
+  isExact?: boolean;
   href: string;
   icon: React.FC;
 }) => {
   const pathname = usePathname() ?? '';
-  const isActive =
-    href === '/'
-      ? pathname === (APP_PATH || '/')
-      : pathname.startsWith(`${APP_PATH}${href}`);
+  const isActive = isExact ? pathname === href : pathname.startsWith(href);
 
   return (
     <Flex
-      as={LinkApp}
+      as={Link}
       href={href}
       direction="column"
       justifyContent="center"
