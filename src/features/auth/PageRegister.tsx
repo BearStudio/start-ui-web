@@ -13,7 +13,11 @@ import {
   FormFieldController,
   FormFieldLabel,
 } from '@/components/Form';
-import { toastCustom } from '@/components/Toast';
+import { useToastError } from '@/components/Toast';
+import {
+  OAuthLoginButtonsGrid,
+  OAuthLoginDivider,
+} from '@/features/auth/OAuthLogin';
 import { ROUTES_AUTH } from '@/features/auth/routes';
 import {
   FormFieldsRegister,
@@ -87,6 +91,10 @@ export default function PageRegister() {
           </Box>
         </Button>
       </Stack>
+
+      <OAuthLoginButtonsGrid />
+      <OAuthLoginDivider />
+
       <Form
         {...form}
         onSubmit={(values) => {
