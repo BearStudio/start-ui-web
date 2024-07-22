@@ -2,7 +2,6 @@ import { Page } from '@playwright/test';
 
 import { ROUTES_AUTH } from '@/features/auth/routes';
 import { VALIDATION_CODE_MOCKED } from '@/features/auth/utils';
-import type { RouterInputs } from '@/lib/trpc/types';
 import locales from '@/locales';
 
 /**
@@ -25,9 +24,9 @@ export const pageUtils = (page: Page) => {
     /**
      * Utility used to authenticate a user on the app
      */
-    async loginApp(input: RouterInputs['auth']['login'] & { code?: string }) {
-      await page.goto(ROUTES_AUTH.app.login());
-      await page.waitForURL(`**${ROUTES_AUTH.app.login()}`);
+    async loginApp(input: { email: string; code?: string }) {
+      await page.goto(ROUTES_AUTH.login());
+      await page.waitForURL(`**${ROUTES_AUTH.login()}`);
 
       await page
         .getByPlaceholder(locales.en.auth.data.email.label)
@@ -36,7 +35,7 @@ export const pageUtils = (page: Page) => {
         .getByRole('button', { name: locales.en.auth.login.actions.login })
         .click();
 
-      await page.waitForURL(`**${ROUTES_AUTH.app.login()}/**`);
+      await page.waitForURL(`**${ROUTES_AUTH.login()}/**`);
       await page
         .getByText('Verification code')
         .fill(input.code ?? VALIDATION_CODE_MOCKED);
@@ -45,9 +44,9 @@ export const pageUtils = (page: Page) => {
     /**
      * Utility used to authenticate an admin on the app
      */
-    async loginAdmin(input: RouterInputs['auth']['login'] & { code?: string }) {
-      await page.goto(ROUTES_AUTH.admin.login());
-      await page.waitForURL(`**${ROUTES_AUTH.admin.login()}`);
+    async loginAdmin(input: { email: string; code?: string }) {
+      await page.goto(ROUTES_AUTH.login());
+      await page.waitForURL(`**${ROUTES_AUTH.login()}`);
 
       await page
         .getByPlaceholder(locales.en.auth.data.email.label)
@@ -56,7 +55,7 @@ export const pageUtils = (page: Page) => {
         .getByRole('button', { name: locales.en.auth.login.actions.login })
         .click();
 
-      await page.waitForURL(`**${ROUTES_AUTH.admin.login()}/**`);
+      await page.waitForURL(`**${ROUTES_AUTH.login()}/**`);
       await page
         .getByText('Verification code')
         .fill(input.code ?? VALIDATION_CODE_MOCKED);

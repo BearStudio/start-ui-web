@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  Button,
-  Divider,
-  HStack,
-  Heading,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, Stack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +18,7 @@ export default function PageLogin() {
     variables: RouterInputs['auth']['login']
   ) => {
     router.push(
-      ROUTES_AUTH.app.loginValidate({
+      ROUTES_AUTH.loginValidate({
         token: data.token,
         email: variables.email,
       })
@@ -36,34 +29,29 @@ export default function PageLogin() {
     <Stack spacing={6}>
       <Stack spacing={1}>
         <Heading size="md">{t('auth:login.appTitle')}</Heading>
-        <Text fontSize="sm" color="text-dimmed">
-          {t('auth:login.appSubTitle')}
-        </Text>
-      </Stack>
-
-      <Button
-        variant="@primary"
-        size="lg"
-        as={Link}
-        href={ROUTES_AUTH.app.register()}
-      >
-        {t('auth:login.actions.register')}
-      </Button>
-
-      <HStack>
-        <Divider flex={1} />
-        <Text
-          fontSize="xs"
-          color="gray.400"
-          fontWeight="bold"
-          textTransform="uppercase"
+        <Button
+          as={Link}
+          href={ROUTES_AUTH.register()}
+          variant="link"
+          size="sm"
+          whiteSpace="normal"
+          display="inline"
+          fontWeight="normal"
+          px="0"
+          color="text-dimmed"
         >
-          {t('common:or')}
-        </Text>
-        <Divider flex={1} />
-      </HStack>
-
-      <LoginForm onSuccess={handleOnSuccess} buttonVariant="@secondary" />
+          {t('auth:login.actions.noAccount')}
+          <Box
+            as="strong"
+            ms="1"
+            color="brand.500"
+            _dark={{ color: 'brand.300' }}
+          >
+            {t('auth:login.actions.register')}
+          </Box>
+        </Button>
+      </Stack>
+      <LoginForm onSuccess={handleOnSuccess} />
     </Stack>
   );
 }

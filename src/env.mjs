@@ -3,9 +3,8 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
-const zNodeEnv = z
-  .enum(['development', 'test', 'production'])
-  .default('development');
+const zNodeEnv = () =>
+  z.enum(['development', 'test', 'production']).default('development');
 
 export const env = createEnv({
   /**
@@ -14,7 +13,7 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
-    NODE_ENV: zNodeEnv,
+    NODE_ENV: zNodeEnv(),
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
@@ -63,7 +62,7 @@ export const env = createEnv({
           value ??
           (process.env.NODE_ENV === 'development' ? 'warning' : 'success')
       ),
-    NEXT_PUBLIC_NODE_ENV: zNodeEnv,
+    NEXT_PUBLIC_NODE_ENV: zNodeEnv(),
   },
 
   /**

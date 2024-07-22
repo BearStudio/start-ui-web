@@ -24,15 +24,12 @@ import {
 } from '@/features/auth/schemas';
 import { trpc } from '@/lib/trpc/client';
 
-export const SEARCH_PARAM_VERIFY_EMAIL = 'verify-email';
-
 export const EmailVerificationCodeModale = () => {
   const { t } = useTranslation(['account']);
   const [searchParams, setSearchParams] = useQueryStates({
-    [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
+    verifyEmail: parseAsString,
     token: parseAsString,
     attempts: parseAsInteger.withDefault(0),
-    verifyEmail: parseAsString,
   });
   const trpcUtils = trpc.useUtils();
   const toastSuccess = useToastSuccess();
@@ -40,7 +37,7 @@ export const EmailVerificationCodeModale = () => {
   const onClose = () => {
     trpcUtils.account.get.reset();
     setSearchParams({
-      [SEARCH_PARAM_VERIFY_EMAIL]: null,
+      verifyEmail: null,
       token: null,
       attempts: null,
     });
