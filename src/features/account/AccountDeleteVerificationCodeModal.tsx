@@ -49,7 +49,7 @@ export const AccountDeleteVerificationCodeModale = () => {
     });
   };
 
-  const form = useForm<{ code: string }>({
+  const form = useForm<FormFieldsVerificationCode>({
     mode: 'onBlur',
     resolver: zodResolver(zFormFieldsVerificationCode()),
     defaultValues: {
