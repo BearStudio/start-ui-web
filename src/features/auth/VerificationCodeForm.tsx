@@ -66,7 +66,7 @@ export const VerificationCodeForm = ({
           control={form.control}
           name="code"
           size="lg"
-          autoSubmit
+          autoSubmit={autoSubmit}
           autoFocus
         />
         <FormFieldHelper>
