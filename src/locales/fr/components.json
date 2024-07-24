@@ -91,7 +91,7 @@
     "optional": "Facultatif"
   },
   "fieldPassword": {
-    "passwordShow": "Afficher le mot de passe",
-    "passwordHide": "Masquer le mot de passe"
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   }
 }

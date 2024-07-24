@@ -60,8 +60,8 @@ export const FieldPassword = <
                 onClick={() => setShowPassword((x) => !x)}
                 aria-label={
                   showPassword
-                    ? t('components:fieldPassword.passwordHide')
-                    : t('components:fieldPassword.passwordShow')
+                    ? t('components:fieldPassword.hidePassword')
+                    : t('components:fieldPassword.showPassword')
                 }
                 display="flex"
                 size="xs"

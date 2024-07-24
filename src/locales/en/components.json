@@ -91,7 +91,7 @@
     }
   },
   "fieldPassword": {
-    "passwordShow": "Show password",
-    "passwordHide": "Hide password"
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   }
 }

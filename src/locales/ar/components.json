@@ -91,7 +91,7 @@
     "optional": "خياري"
   },
   "fieldPassword": {
-    "passwordShow": "عرض كلمة المرور",
-    "passwordHide": "إخفاء كلمة المرور"
+    "showPassword": "عرض كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور"
   }
 }

@@ -91,7 +91,7 @@
     "optional": "Hiari"
   },
   "fieldPassword": {
-    "passwordShow": "Onyesha nenosiri",
-    "passwordHide": "Ficha nenosiri"
+    "showPassword": "Onyesha nenosiri",
+    "hidePassword": "Ficha nenosiri"
   }
 }
