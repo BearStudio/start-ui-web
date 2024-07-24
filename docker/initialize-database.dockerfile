@@ -1,10 +1,12 @@
-FROM node:20-slim
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
 COPY . .
 
-RUN apt-get update -y && apt-get install -y openssl && apt-get clean
+RUN apk upgrade --update-cache --available && \
+  apk add openssl && \
+  rm -rf /var/cache/apk/*
 RUN corepack enable
 RUN pnpm install
 
