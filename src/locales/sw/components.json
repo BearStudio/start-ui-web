@@ -89,5 +89,9 @@
   },
   "formField": {
     "optional": "Hiari"
+  },
+  "fieldPassword": {
+    "passwordShow": "Onyesha nenosiri",
+    "passwordHide": "Ficha nenosiri"
   }
 }

@@ -39,7 +39,7 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'components']);
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
@@ -60,8 +60,8 @@ export const FieldPassword = <
                 onClick={() => setShowPassword((x) => !x)}
                 aria-label={
                   showPassword
-                    ? t('password.hide', 'Hide password')
-                    : t('password.show', 'Show password')
+                    ? t('components:fieldPassword.passwordHide')
+                    : t('components:fieldPassword.passwordShow')
                 }
                 display="flex"
                 size="xs"

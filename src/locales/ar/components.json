@@ -89,5 +89,9 @@
   },
   "formField": {
     "optional": "خياري"
+  },
+  "fieldPassword": {
+    "passwordShow": "عرض كلمة المرور",
+    "passwordHide": "إخفاء كلمة المرور"
   }
 }

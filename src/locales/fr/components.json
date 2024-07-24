@@ -89,5 +89,9 @@
   },
   "formField": {
     "optional": "Facultatif"
+  },
+  "fieldPassword": {
+    "passwordShow": "Afficher le mot de passe",
+    "passwordHide": "Masquer le mot de passe"
   }
 }

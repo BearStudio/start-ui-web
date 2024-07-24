@@ -89,5 +89,9 @@
       "november": "November",
       "december": "December"
     }
+  },
+  "fieldPassword": {
+    "passwordShow": "Show password",
+    "passwordHide": "Hide password"
   }
 }
