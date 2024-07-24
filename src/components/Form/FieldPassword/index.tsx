@@ -39,7 +39,7 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
-  const { t } = useTranslation(['common', 'components']);
+  const { t } = useTranslation(['components']);
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
