@@ -16,6 +16,7 @@ import {
   FieldPath,
   FieldValues,
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import { FieldCommonProps } from '@/components/Form/FormFieldController';
@@ -38,6 +39,7 @@ export const FieldPassword = <
 >(
   props: FieldPasswordProps<TFieldValues, TName>
 ) => {
+  const { t } = useTranslation(['components']);
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Controller
@@ -56,7 +58,11 @@ export const FieldPassword = <
               <IconButton
                 isDisabled={props.isDisabled}
                 onClick={() => setShowPassword((x) => !x)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'} // TODO: translation
+                aria-label={
+                  showPassword
+                    ? t('components:fieldPassword.hidePassword')
+                    : t('components:fieldPassword.showPassword')
+                }
                 display="flex"
                 size="xs"
                 fontSize="lg"
