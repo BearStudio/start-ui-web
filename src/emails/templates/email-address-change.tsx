@@ -19,7 +19,10 @@ export const EmailAddressChange = ({
 }: EmailAddressChangeProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:emailAddressChange.preview')}>
+    <Layout
+      preview={i18n.t('emails:emailAddressChange.preview')}
+      language={language}
+    >
       <Container style={styles.container}>
         <Heading style={styles.h1}>
           {i18n.t('emails:emailAddressChange.title')}

@@ -19,7 +19,7 @@ export const EmailLoginCode = ({
 }: EmailLoginCodeProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:loginCode.preview')}>
+    <Layout preview={i18n.t('emails:loginCode.preview')} language={language}>
       <Container style={styles.container}>
         <Heading style={styles.h1}>{i18n.t('emails:loginCode.title')}</Heading>
         <Section style={styles.section}>

@@ -19,7 +19,10 @@ type EmailLoginNotFoundProps = {
 export const EmailLoginNotFound = ({ language }: EmailLoginNotFoundProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:loginNotFound.preview')}>
+    <Layout
+      preview={i18n.t('emails:loginNotFound.preview')}
+      language={language}
+    >
       <Container style={styles.container}>
         <Heading style={styles.h1}>
           {i18n.t('emails:loginNotFound.title')}

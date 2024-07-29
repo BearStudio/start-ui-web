@@ -19,7 +19,7 @@ export const EmailRegisterCode = ({
 }: EmailRegisterCodeProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:registerCode.preview')}>
+    <Layout preview={i18n.t('emails:registerCode.preview')} language={language}>
       <Container style={styles.container}>
         <Heading style={styles.h1}>
           {i18n.t('emails:registerCode.title')}

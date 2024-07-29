@@ -19,7 +19,10 @@ export const EmailDeleteAccountCode = ({
 }: EmailDeleteAccountCodeProps) => {
   i18n.changeLanguage(language);
   return (
-    <Layout preview={i18n.t('emails:deleteAccountCode.preview')}>
+    <Layout
+      preview={i18n.t('emails:deleteAccountCode.preview')}
+      language={language}
+    >
       <Container style={styles.container}>
         <Heading style={styles.h1}>
           {i18n.t('emails:deleteAccountCode.title')}
