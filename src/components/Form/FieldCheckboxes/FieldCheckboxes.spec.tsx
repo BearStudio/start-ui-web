@@ -80,3 +80,41 @@ test('default value', async () => {
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
 });
+
+test('disabled', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+  render(
+    <FormMocked
+      schema={z.object({ colors: z.enum(['red', 'green', 'blue']).array() })}
+      useFormOptions={{
+        defaultValues: {
+          colors: ['green', 'blue'],
+        },
+      }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            type="checkboxes"
+            control={form.control}
+            name="colors"
+            isDisabled
+            options={options}
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  await user.click(screen.getByLabelText('Green'));
+
+  expect(screen.getByLabelText<HTMLInputElement>('Green').checked).toBe(true);
+  expect(screen.getByLabelText<HTMLInputElement>('Blue').checked).toBe(true);
+  expect(screen.getByLabelText<HTMLInputElement>('Red').checked).toBe(false);
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ colors: ['green', 'blue'] });
+});
