@@ -20,9 +20,10 @@ test('update value', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
+            currency="EUR"
           />
         </FormField>
       )}
@@ -49,9 +50,10 @@ test('update value in cents', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
+            currency="EUR"
             inCents
           />
         </FormField>
@@ -79,9 +81,10 @@ test('update value locale fr', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
+            currency="EUR"
             locale="fr"
           />
         </FormField>
@@ -89,7 +92,7 @@ test('update value locale fr', async () => {
     </FormMocked>
   );
   const input = screen.getByLabelText<HTMLInputElement>('Balance');
-  await user.type(input, '12.00');
+  await user.type(input, '12,00');
   expect(input.value).toBe('12,00 €');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
@@ -109,10 +112,11 @@ test('update value no decimals', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
-            decimals={0}
+            currency="EUR"
+            precision={0}
           />
         </FormField>
       )}
@@ -140,9 +144,11 @@ test('default value', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
+            fixedPrecision
+            currency="EUR"
           />
         </FormField>
       )}

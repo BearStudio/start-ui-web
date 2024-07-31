@@ -20,18 +20,60 @@ export const Default = () => {
   );
 };
 
-export const Suffix = () => (
-  <Stack>
-    <InputNumber placeholder="Kilograms" suffix=" kg" />
-    <InputNumber placeholder="Kilograms" textAlign="right" suffix=" kg" />
-  </Stack>
-);
+export const Suffix = () => {
+  const [value, setValue] = useState<number | null>(null);
+  return (
+    <Stack>
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder="Kilograms"
+        suffix=" kg"
+      />
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder="Kilograms"
+        textAlign="right"
+        suffix=" kg"
+      />
+    </Stack>
+  );
+};
 
-export const Precision = () => (
-  <Stack>
-    <InputNumber placeholder="Kilograms" precision={3} />
-  </Stack>
-);
+export const Precision = () => {
+  const [value, setValue] = useState<number | null>(null);
+  return (
+    <Stack>
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder="Kilograms"
+        precision={3}
+      />
+    </Stack>
+  );
+};
+
+export const FixedPrecision = () => {
+  const [value, setValue] = useState<number | null>(201912.1);
+  return (
+    <Stack>
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        precision={2}
+        fixedPrecision
+      />
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        precision={3}
+        fixedPrecision
+      />
+    </Stack>
+  );
+};
 
 export const Currency = () => {
   const [value, setValue] = useState<number | null>(201912.12);
@@ -73,20 +115,30 @@ export const LocaleFR = () => {
   );
 };
 
-export const Placeholder = () => (
-  <Stack>
-    <InputNumber placeholder={10} />
-    <InputNumber placeholder="Text placeholder" />
-    <InputNumber placeholder={10} currency="USD" suffix="/t" />
-    <InputNumber placeholder="Text placeholder" currency="USD" suffix="/t" />
-  </Stack>
-);
-
-export const FixedDecimalScale = () => {
+export const Placeholder = () => {
+  const [value, setValue] = useState<number | null>(null);
   return (
     <Stack>
-      <InputNumber precision={2} fixedPrecision value={201912.12} />
-      <InputNumber precision={2} fixedPrecision value={201912.1} />
+      <InputNumber value={value} onChange={setValue} placeholder={10} />
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder="Text placeholder"
+      />
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder={10}
+        currency="USD"
+        suffix="/t"
+      />
+      <InputNumber
+        value={value}
+        onChange={setValue}
+        placeholder="Text placeholder"
+        currency="USD"
+        suffix="/t"
+      />
     </Stack>
   );
 };
@@ -107,6 +159,18 @@ export const Step = () => {
     <Stack>
       <InputNumber value={value} onChange={setValue} step={0.1} />
       <InputNumber value={value} onChange={setValue} step={0.5} bigStep={2} />
+      <Code>{value}</Code>
+    </Stack>
+  );
+};
+
+export const ShowButtons = () => {
+  const [value, setValue] = useState<number | null>(0);
+  return (
+    <Stack>
+      <InputNumber value={value} onChange={setValue} showButtons />
+      <InputNumber value={value} onChange={setValue} size="sm" showButtons />
+      <InputNumber value={value} onChange={setValue} size="lg" showButtons />
       <Code>{value}</Code>
     </Stack>
   );
