@@ -1,6 +1,12 @@
-import React, { ComponentProps, useRef, useState } from 'react';
+import React, { ChangeEvent, ComponentProps, useRef, useState } from 'react';
 
-import { Input, InputProps, forwardRef } from '@chakra-ui/react';
+import {
+  Input,
+  InputProps,
+  UseNumberInputProps,
+  forwardRef,
+  useNumberInput,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { NumericFormat, numericFormatter } from 'react-number-format';
 
@@ -36,7 +42,7 @@ type CustomProps = {
   onChange?(value: number | null): void;
 };
 
-export type InputNumberProps = Overwrite<InputProps, CustomProps>;
+export type InputNumberProps = Overwrite<UseNumberInputProps, CustomProps>;
 
 export const InputNumber = forwardRef<InputNumberProps, 'input'>(
   (
@@ -66,16 +72,16 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
       currency,
     });
 
+    const updateValue = (v: number | null) => {
+      setInternalValue(v);
+      onChange(v);
+    };
+
     const [internalValue, setInternalValue] = useState(
       value ?? defaultValue ?? null
     );
     const [isFocused, setIsFocused] = useState(false);
     const tmpValueRef = useRef(internalValue);
-
-    const updateValue = (v: number | null) => {
-      setInternalValue(v);
-      onChange(v);
-    };
 
     const getNumericFormatOptions = () =>
       ({
@@ -96,14 +102,39 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
         },
       }) satisfies ComponentProps<typeof NumericFormat>;
 
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+      useNumberInput({
+        defaultValue: defaultValue ?? undefined,
+        // TODO NaN quand vide
+        value: value === undefined ? undefined : value ?? undefined,
+        onChange: (_, valueAsNumber) => updateValue(valueAsNumber),
+        ...rest,
+        ...getNumericFormatOptions(),
+
+        onFocus: (e) => {
+          setIsFocused(true);
+          rest.onFocus?.(e);
+        },
+        onBlur: (e) => {
+          setIsFocused(false);
+          updateValue(tmpValueRef.current);
+          rest.onBlur?.(e);
+        },
+        // onKeyDown: (e) => {
+        //   if (e.key === 'Enter') {
+        //     updateValue(tmpValueRef.current);
+        //   }
+        //   rest.onKeyDown?.(e);
+        // },
+      });
+
+    const inputProps = getInputProps();
+
     return (
       <Input
         as={NumericFormat}
         sx={{ fontVariantNumeric: 'tabular-nums' }}
-        {...rest}
-        {...getNumericFormatOptions()}
-        value={value === undefined ? undefined : value ?? ''}
-        defaultValue={defaultValue ?? undefined}
+        {...inputProps}
         placeholder={
           typeof placeholder === 'number'
             ? numericFormatter(String(placeholder), {
@@ -112,21 +143,6 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
               })
             : placeholder
         }
-        onFocus={(e) => {
-          setIsFocused(true);
-          rest.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setIsFocused(false);
-          updateValue(tmpValueRef.current);
-          rest.onBlur?.(e);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            updateValue(tmpValueRef.current);
-          }
-          rest.onKeyDown?.(e);
-        }}
       />
     );
   }

@@ -89,12 +89,12 @@ export const FixedDecimalScale = () => {
   );
 };
 
-// export const WithMinMax = () => {
-//   const [value, setValue] = useState<number | null>(3);
-//   return (
-//     <Stack>
-//       <InputNumber value={value} onChange={setValue} min={0} max={4} />
-//       <Code>{value}</Code>
-//     </Stack>
-//   );
-// };
+export const WithMinMax = () => {
+  const [value, setValue] = useState<number | null>(3);
+  return (
+    <Stack>
+      <InputNumber value={value} onChange={setValue} min={0} max={4} />
+      <Code>{value}</Code>
+    </Stack>
+  );
+};
