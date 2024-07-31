@@ -1,62 +1,66 @@
-import React, { ChangeEvent, ComponentProps, useRef, useState } from 'react';
+import React, { ComponentProps, useRef, useState } from 'react';
 
 import {
+  Button,
+  ButtonGroup,
+  Divider,
   Input,
+  InputGroup,
+  InputGroupProps,
   InputProps,
-  UseNumberInputProps,
   forwardRef,
-  useNumberInput,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import { NumericFormat, numericFormatter } from 'react-number-format';
+import { ceil, clamp } from 'remeda';
 
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 import { getNumberFormatInfo } from '@/lib/numbers';
 
 type CustomProps = {
   value?: number | null;
   defaultValue?: number | null;
-  /**
-   * Provide a number and the placeholder will also display the currency format,
-   * prefix and suffix.
-   * Provide a string and the placeholder will display only the placeholder
-   */
   placeholder?: string | number;
   locale?: string;
-  /**
-   * Intl.NumberFormat options that will put the style as currency and set the
-   * currency code to the given value.
-   *
-   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
-   * @see https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes
-   */
   currency?: string | null;
-  /** Will be displayed before the value (and placeholder if placeholder is a number) in the input */
   prefix?: string;
-  /** Will be displayed after the value (and placeholder if placeholder is a number) in the input */
   suffix?: string;
-  /**
-   * The number of decimal points used to round the value
-   */
   precision?: number;
-  fixedDecimals?: boolean;
+  fixedPrecision?: boolean;
+  step?: number;
+  bigStep?: number;
+  min?: number;
+  max?: number;
+  clampValueOnBlur?: boolean;
+  showButtons?: boolean;
   onChange?(value: number | null): void;
+  inputGroupProps?: InputGroupProps;
 };
 
-export type InputNumberProps = Overwrite<UseNumberInputProps, CustomProps>;
+export type InputNumberProps = Overwrite<InputProps, CustomProps>;
 
 export const InputNumber = forwardRef<InputNumberProps, 'input'>(
   (
     {
+      size,
       value,
       defaultValue,
       locale,
       currency = null,
       prefix = '',
       suffix = '',
-      precision = 0,
-      fixedDecimals = true,
+      precision = 2,
+      step = 1,
+      bigStep = step * 10,
+      min,
+      max,
+      clampValueOnBlur = true,
+      fixedPrecision = false,
       onChange = () => undefined,
       placeholder,
+      showButtons = true,
+      inputGroupProps,
       ...rest
     },
     ref
@@ -68,14 +72,9 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
       currencyPrefix,
       currencySuffix,
     } = getNumberFormatInfo({
-      locale: locale ?? i18n.language,
-      currency,
+      locale: locale ?? i18n.language ?? DEFAULT_LANGUAGE_KEY,
+      currency: currency ?? 'EUR',
     });
-
-    const updateValue = (v: number | null) => {
-      setInternalValue(v);
-      onChange(v);
-    };
 
     const [internalValue, setInternalValue] = useState(
       value ?? defaultValue ?? null
@@ -83,15 +82,20 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
     const [isFocused, setIsFocused] = useState(false);
     const tmpValueRef = useRef(internalValue);
 
+    const updateValue = (v: number | null) => {
+      setInternalValue(v);
+      onChange(v);
+    };
+
     const getNumericFormatOptions = () =>
       ({
         getInputRef: ref,
         decimalScale: precision,
-        fixedDecimalScale: !isFocused ? fixedDecimals : false,
+        fixedDecimalScale: !isFocused ? fixedPrecision : false,
         decimalSeparator: decimalsSeparator ?? '.',
         thousandSeparator: groupSeparator ?? ',',
-        suffix: `${currencySuffix}${suffix}`,
-        prefix: `${currencyPrefix}${prefix}`,
+        suffix: `${currency ? currencySuffix : ''}${suffix}`,
+        prefix: `${currency ? currencyPrefix : ''}${prefix}`,
         onValueChange: (values) => {
           tmpValueRef.current = values.floatValue ?? null;
 
@@ -102,48 +106,119 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
         },
       }) satisfies ComponentProps<typeof NumericFormat>;
 
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-      useNumberInput({
-        defaultValue: defaultValue ?? undefined,
-        // TODO NaN quand vide
-        value: value === undefined ? undefined : value ?? undefined,
-        onChange: (_, valueAsNumber) => updateValue(valueAsNumber),
-        ...rest,
-        ...getNumericFormatOptions(),
-
-        onFocus: (e) => {
-          setIsFocused(true);
-          rest.onFocus?.(e);
-        },
-        onBlur: (e) => {
-          setIsFocused(false);
-          updateValue(tmpValueRef.current);
-          rest.onBlur?.(e);
-        },
-        // onKeyDown: (e) => {
-        //   if (e.key === 'Enter') {
-        //     updateValue(tmpValueRef.current);
-        //   }
-        //   rest.onKeyDown?.(e);
-        // },
-      });
-
-    const inputProps = getInputProps();
-
     return (
-      <Input
-        as={NumericFormat}
-        sx={{ fontVariantNumeric: 'tabular-nums' }}
-        {...inputProps}
-        placeholder={
-          typeof placeholder === 'number'
-            ? numericFormatter(String(placeholder), {
-                ...getNumericFormatOptions(),
-                fixedDecimalScale: fixedDecimals,
-              })
-            : placeholder
-        }
-      />
+      <InputGroup size={size} {...inputGroupProps}>
+        <Input
+          as={NumericFormat}
+          sx={{ fontVariantNumeric: 'tabular-nums' }}
+          pe={showButtons ? 8 : undefined}
+          {...rest}
+          {...getNumericFormatOptions()}
+          value={internalValue === undefined ? undefined : internalValue ?? ''}
+          defaultValue={defaultValue ?? undefined}
+          placeholder={
+            typeof placeholder === 'number'
+              ? numericFormatter(String(placeholder), {
+                  ...getNumericFormatOptions(),
+                  fixedDecimalScale: fixedPrecision,
+                })
+              : placeholder
+          }
+          onFocus={(e) => {
+            setIsFocused(true);
+            rest.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            const v = tmpValueRef.current;
+            updateValue(
+              clampValueOnBlur
+                ? v === null
+                  ? null
+                  : clamp(v, { min, max })
+                : tmpValueRef.current
+            );
+            rest.onBlur?.(e);
+          }}
+          onKeyDown={(e) => {
+            const v = tmpValueRef.current;
+
+            if (e.key === 'Enter') {
+              updateValue(v);
+            }
+            if (e.key === 'ArrowUp') {
+              updateValue(
+                clamp((v ?? 0) + (e.shiftKey ? bigStep : step), { min, max })
+              );
+            }
+            if (e.key === 'ArrowDown') {
+              updateValue(
+                clamp((v ?? 0) - (e.shiftKey ? bigStep : step), { min, max })
+              );
+            }
+            rest.onKeyDown?.(e);
+          }}
+        />
+        {showButtons && (
+          <ButtonGroup
+            zIndex={2}
+            position="absolute"
+            top={0}
+            right={0}
+            bottom={0}
+            isAttached
+            orientation="vertical"
+            variant="unstyled"
+            size="xs"
+            borderStart="1px solid"
+            borderStartColor="gray.200"
+            _dark={{
+              borderStartColor: 'gray.700',
+            }}
+          >
+            <Button
+              isDisabled={max !== undefined && (internalValue ?? 0) >= max}
+              onClick={() => {
+                updateValue(clamp((internalValue ?? 0) + step, { min, max }));
+              }}
+              display="flex"
+              borderRadius={0}
+              opacity={0.8}
+              _hover={{
+                opacity: 1,
+              }}
+              _active={{
+                transform: 'translateY(-10%)',
+              }}
+            >
+              <FaCaretUp />
+            </Button>
+            <Divider
+              borderColor="gray.200"
+              _dark={{
+                borderColor: 'gray.700',
+              }}
+            />
+            <Button
+              isDisabled={min !== undefined && (internalValue ?? 0) <= min}
+              onClick={() => {
+                updateValue(clamp((internalValue ?? 0) - step, { min, max }));
+              }}
+              display="flex"
+              borderRadius={0}
+              opacity={0.8}
+              _hover={{
+                opacity: 1,
+              }}
+              _active={{
+                transform: 'translateY(10%)',
+              }}
+            >
+              <FaCaretDown />
+            </Button>
+          </ButtonGroup>
+        )}
+      </InputGroup>
     );
   }
 );
