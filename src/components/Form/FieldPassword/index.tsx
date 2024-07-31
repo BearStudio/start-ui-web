@@ -48,6 +48,7 @@ export const FieldPassword = <
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <Input
+              isDisabled={props.isDisabled}
               type={showPassword ? 'text' : 'password'}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
