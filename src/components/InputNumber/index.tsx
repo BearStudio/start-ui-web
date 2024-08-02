@@ -1,4 +1,4 @@
-import React, { ComponentProps, useRef, useState } from 'react';
+import React, { ComponentProps, KeyboardEvent, useRef, useState } from 'react';
 
 import {
   Button,
@@ -79,24 +79,38 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
     const [isFocused, setIsFocused] = useState(false);
     const tmpValueRef = useRef(value ?? defaultValue ?? null);
 
-    const getNumericFormatOptions = () =>
-      ({
-        getInputRef: ref,
-        decimalScale: precision,
-        fixedDecimalScale: !isFocused ? fixedPrecision : false,
-        decimalSeparator: decimalsSeparator ?? '.',
-        thousandSeparator: groupSeparator ?? ',',
-        suffix: `${currency ? currencySuffix : ''}${suffix}`,
-        prefix: `${currency ? currencyPrefix : ''}${prefix}`,
-        onValueChange: (values) => {
-          tmpValueRef.current = values.floatValue ?? null;
+    const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+      const v = tmpValueRef.current;
 
-          // Prevent -0 to be replaced with 0 when input is controlled
-          if (values.floatValue === 0) return;
+      if (e.key === 'Enter') {
+        onChange(v);
+      }
+      if (e.key === 'ArrowUp') {
+        onChange(clamp((v ?? 0) + (e.shiftKey ? bigStep : step), { min, max }));
+      }
+      if (e.key === 'ArrowDown') {
+        onChange(clamp((v ?? 0) - (e.shiftKey ? bigStep : step), { min, max }));
+      }
+      rest.onKeyDown?.(e);
+    };
 
-          onChange(values.floatValue ?? null);
-        },
-      }) satisfies ComponentProps<typeof NumericFormat>;
+    const getNumericFormatOptions = {
+      getInputRef: ref,
+      decimalScale: precision,
+      fixedDecimalScale: !isFocused ? fixedPrecision : false,
+      decimalSeparator: decimalsSeparator ?? '.',
+      thousandSeparator: groupSeparator ?? ',',
+      suffix: `${currency ? currencySuffix : ''}${suffix}`,
+      prefix: `${currency ? currencyPrefix : ''}${prefix}`,
+      onValueChange: (values) => {
+        tmpValueRef.current = values.floatValue ?? null;
+
+        // Prevent -0 to be replaced with 0 when input is controlled
+        if (values.floatValue === 0) return;
+
+        onChange(values.floatValue ?? null);
+      },
+    } satisfies ComponentProps<typeof NumericFormat>;
 
     return (
       <InputGroup size={size} {...inputGroupProps}>
@@ -105,13 +119,13 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
           sx={{ fontVariantNumeric: 'tabular-nums' }}
           pe={showButtons ? 8 : undefined}
           {...rest}
-          {...getNumericFormatOptions()}
+          {...getNumericFormatOptions}
           value={value === undefined ? undefined : value ?? ''}
           defaultValue={defaultValue ?? undefined}
           placeholder={
             typeof placeholder === 'number'
               ? numericFormatter(String(placeholder), {
-                  ...getNumericFormatOptions(),
+                  ...getNumericFormatOptions,
                   fixedDecimalScale: fixedPrecision,
                 })
               : placeholder
@@ -132,24 +146,7 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
             );
             rest.onBlur?.(e);
           }}
-          onKeyDown={(e) => {
-            const v = tmpValueRef.current;
-
-            if (e.key === 'Enter') {
-              onChange(v);
-            }
-            if (e.key === 'ArrowUp') {
-              onChange(
-                clamp((v ?? 0) + (e.shiftKey ? bigStep : step), { min, max })
-              );
-            }
-            if (e.key === 'ArrowDown') {
-              onChange(
-                clamp((v ?? 0) - (e.shiftKey ? bigStep : step), { min, max })
-              );
-            }
-            rest.onKeyDown?.(e);
-          }}
+          onKeyDown={handleOnKeyDown}
         />
         {showButtons && (
           <ButtonGroup
