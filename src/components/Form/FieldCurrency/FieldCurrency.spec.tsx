@@ -153,3 +153,32 @@ test('default value', async () => {
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
 });
+
+test('disabled', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ balance: z.number() })}
+      useFormOptions={{ defaultValues: { balance: 12 } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="currency"
+            control={form.control}
+            name="balance"
+            isDisabled
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+  const input = screen.getByLabelText<HTMLInputElement>('Balance');
+  await user.type(input, '10.00');
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
+});

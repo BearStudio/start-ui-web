@@ -67,3 +67,32 @@ test('toggle visibility', async () => {
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ password: 'new value' });
 });
+
+test('disabled', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ password: z.string() })}
+      useFormOptions={{ defaultValues: { password: 'new value' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Password</FormFieldLabel>
+          <FormFieldController
+            type="password"
+            control={form.control}
+            name="password"
+            isDisabled
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+  const input = screen.getByLabelText<HTMLInputElement>('Password');
+  await user.type(input, 'another value');
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ password: 'new value' });
+});

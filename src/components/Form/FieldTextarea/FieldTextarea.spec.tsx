@@ -65,3 +65,32 @@ test('default value', async () => {
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ description: 'default value' });
 });
+
+test('disabled', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ description: z.string() })}
+      useFormOptions={{ defaultValues: { description: 'new value' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Description</FormFieldLabel>
+          <FormFieldController
+            type="textarea"
+            control={form.control}
+            name="description"
+            isDisabled
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+  const input = screen.getByLabelText<HTMLInputElement>('Description');
+  await user.type(input, 'another value');
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ description: 'new value' });
+});

@@ -60,3 +60,39 @@ test('default value', async () => {
     date: dayjs('01/01/2000').toDate(),
   });
 });
+
+test('disabled', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+  render(
+    <FormMocked
+      schema={z.object({ date: z.date() })}
+      useFormOptions={{
+        defaultValues: {
+          date: dayjs('01/01/2000').toDate(),
+        },
+      }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Date</FormFieldLabel>
+          <FormFieldController
+            type="date"
+            control={form.control}
+            name="date"
+            isDisabled
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  const input = screen.getByLabelText('Date');
+  await user.type(input, '');
+  await user.tab();
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({
+    date: dayjs('01/01/2000').toDate(),
+  });
+});
