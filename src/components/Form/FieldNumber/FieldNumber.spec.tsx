@@ -174,9 +174,10 @@ test('disabled', async () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
+            currency="EUR"
             isDisabled
           />
         </FormField>
@@ -184,7 +185,43 @@ test('disabled', async () => {
     </FormMocked>
   );
   const input = screen.getByLabelText<HTMLInputElement>('Balance');
-  await user.type(input, '10.00');
+  await user.type(input, '42.00');
+  expect(input.value).toBe('€12');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
+});
+
+test('update value using keyboard step', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ balance: z.number() })}
+      useFormOptions={{ defaultValues: { balance: 12 } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="number"
+            control={form.control}
+            name="balance"
+            currency="EUR"
+            step={1}
+            bigStep={10}
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+  const input = screen.getByLabelText<HTMLInputElement>('Balance');
+  await user.click(input);
+  await user.keyboard('[ArrowUp][ArrowUp]');
+  expect(input.value).toBe('€14');
+  await user.click(input);
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ balance: 14 });
 });

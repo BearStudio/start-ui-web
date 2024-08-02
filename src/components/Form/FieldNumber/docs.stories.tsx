@@ -48,6 +48,34 @@ export const Default = () => {
   );
 };
 
+export const DefaultValue = () => {
+  const form = useForm<FormSchema>({
+    ...formOptions,
+    defaultValues: { balance: 12 },
+  });
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="number"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+          />
+        </FormField>
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
 export const InCents = () => {
   const form = useForm<FormSchema>(formOptions);
 
