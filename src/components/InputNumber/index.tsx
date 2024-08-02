@@ -1,4 +1,4 @@
-import React, { ComponentProps, useEffect, useRef, useState } from 'react';
+import React, { ComponentProps, useRef, useState } from 'react';
 
 import {
   Button,

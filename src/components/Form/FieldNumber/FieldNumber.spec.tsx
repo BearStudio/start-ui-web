@@ -191,7 +191,7 @@ test('disabled', async () => {
   expect(mockedSubmit).toHaveBeenCalledWith({ balance: 12 });
 });
 
-test('update value using keyboard step', async () => {
+test('update value using keyboard step and big step', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
@@ -222,6 +222,8 @@ test('update value using keyboard step', async () => {
   expect(input.value).toBe('€14');
   await user.click(input);
 
+  await user.keyboard('{Shift>}[ArrowUp][ArrowUp]{/Shift}');
+
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ balance: 14 });
+  expect(mockedSubmit).toHaveBeenCalledWith({ balance: 34 });
 });
