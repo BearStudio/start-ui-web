@@ -48,7 +48,8 @@
     },
     "name": {
       "label": "Jina",
-      "required": "Jina linahitajika"
+      "required": "Jina linahitajika",
+      "invalid": "Jina ni batili"
     },
     "language": {
       "label": "Lugha"

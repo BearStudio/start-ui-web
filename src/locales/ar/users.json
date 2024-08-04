@@ -48,7 +48,8 @@
     },
     "name": {
       "label": "الإسم الاول",
-      "required": "مطلوب اسم"
+      "required": "مطلوب اسم",
+      "invalid": "الاسم غير صالح"
     },
     "language": {
       "label": "اللغة"
