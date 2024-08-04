@@ -21,7 +21,7 @@ export const useSyncAccountLanguage = () => {
 
     updateLanguage();
 
-    () => {
+    return () => {
       i18n.off('initialized', updateLanguage);
     };
   }, [account.isSuccess, account.data?.language, i18n]);
