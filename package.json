@@ -71,6 +71,7 @@
     "framer-motion": "11.2.14",
     "holy-loader": "2.3.1",
     "i18next": "23.11.5",
+    "i18next-browser-languagedetector": "8.0.0",
     "lucia": "3.2.0",
     "next": "14.2.4",
     "nodemailer": "6.9.14",
