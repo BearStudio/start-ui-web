@@ -11,9 +11,9 @@ import { useFormField } from '@/components/Form/FormField';
 
 import { FieldCheckbox, FieldCheckboxProps } from './FieldCheckbox';
 import { FieldCheckboxes, FieldCheckboxesProps } from './FieldCheckboxes';
-import { FieldCurrency, FieldCurrencyProps } from './FieldCurrency';
 import { FieldDate, FieldDateProps } from './FieldDate';
 import { FieldMultiSelect, FieldMultiSelectProps } from './FieldMultiSelect';
+import { FieldNumber, FieldNumberProps } from './FieldNumber';
 import { FieldOtp, FieldOtpProps } from './FieldOtp';
 import { FieldPassword, FieldPasswordProps } from './FieldPassword';
 import { FieldRadios, FieldRadiosProps } from './FieldRadios';
@@ -55,7 +55,7 @@ export type FormFieldControllerProps<
   | FieldMultiSelectProps<TFieldValues, TName>
   | FieldOtpProps<TFieldValues, TName>
   | FieldDateProps<TFieldValues, TName>
-  | FieldCurrencyProps<TFieldValues, TName>
+  | FieldNumberProps<TFieldValues, TName>
   | FieldPasswordProps<TFieldValues, TName>
   | FieldCheckboxesProps<TFieldValues, TName>
   | FieldRadiosProps<TFieldValues, TName>;
@@ -80,15 +80,14 @@ export const FormFieldController = <
 
       case 'text':
       case 'email':
-      case 'number':
       case 'tel':
         return <FieldText {...props} />;
 
       case 'password':
         return <FieldPassword {...props} />;
 
-      case 'currency':
-        return <FieldCurrency {...props} />;
+      case 'number':
+        return <FieldNumber {...props} />;
 
       case 'textarea':
         return <FieldTextarea {...props} />;

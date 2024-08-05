@@ -115,6 +115,9 @@ export const buttonTheme = defineStyleConfig({
     link: {
       boxShadow: 'none',
     },
+    unstyled: {
+      boxShadow: 'none',
+    },
     solid: (props) =>
       props.colorScheme === 'gray' ? variantSecondary(props) : {},
     outline: variantSecondary,
