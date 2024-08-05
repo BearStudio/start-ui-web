@@ -11,8 +11,8 @@ export const i18nConfig: InitOptions = {
   defaultNS: DEFAULT_NAMESPACE,
   ns: keys(locales[DEFAULT_LANGUAGE_KEY]),
   resources: locales,
-  lng: DEFAULT_LANGUAGE_KEY,
   fallbackLng: DEFAULT_LANGUAGE_KEY,
+  supportedLngs: keys(locales),
 
   // Fix issue with i18next types
   // https://www.i18next.com/overview/typescript#argument-of-type-defaulttfuncreturn-is-not-assignable-to-parameter-of-type-xyz
