@@ -16,51 +16,56 @@ import {
 
 import { FieldCommonProps } from '@/components/Form/FormFieldController';
 import { FormFieldError } from '@/components/Form/FormFieldError';
-import { InputCurrency, InputCurrencyProps } from '@/components/InputCurrency';
+import { InputNumber, InputNumberProps } from '@/components/InputNumber';
 
-type InputCurrencyRootProps = Pick<
-  InputCurrencyProps,
+type InputNumberRootProps = Pick<
+  InputNumberProps,
   | 'placeholder'
   | 'size'
   | 'autoFocus'
   | 'locale'
   | 'currency'
-  | 'decimals'
-  | 'fixedDecimals'
+  | 'precision'
+  | 'fixedPrecision'
   | 'prefix'
   | 'suffix'
+  | 'min'
+  | 'max'
+  | 'step'
+  | 'bigStep'
 >;
 
-export type FieldCurrencyProps<
+export type FieldNumberProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  type: 'currency';
+  type: 'number';
   inCents?: boolean;
   startElement?: ReactNode;
   endElement?: ReactNode;
-  inputCurrencyProps?: RemoveFromType<
-    RemoveFromType<InputCurrencyProps, InputCurrencyRootProps>,
+  inputNumberProps?: RemoveFromType<
+    RemoveFromType<InputNumberProps, InputNumberRootProps>,
     ControllerRenderProps
   >;
   containerProps?: FlexProps;
-} & InputCurrencyRootProps &
+} & InputNumberRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
-export const FieldCurrency = <
+export const FieldNumber = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: FieldCurrencyProps<TFieldValues, TName>
+  props: FieldNumberProps<TFieldValues, TName>
 ) => {
   const formatValue = (
     value: number | undefined | null,
     type: 'to-cents' | 'from-cents'
   ) => {
-    if (value === undefined || value === null) return value;
-    if (props.inCents !== true) return value;
+    if (value === undefined || value === null) return null;
+    if (props.inCents !== true) return value ?? null;
     if (type === 'to-cents') return Math.round(value * 100);
     if (type === 'from-cents') return value / 100;
+    return null;
   };
 
   return (
@@ -69,9 +74,7 @@ export const FieldCurrency = <
       render={({ field }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
-            <InputCurrency
-              type={props.type}
-              size={props.size}
+            <InputNumber
               placeholder={
                 (typeof props.placeholder === 'number'
                   ? formatValue(props.placeholder, 'from-cents')
@@ -84,10 +87,14 @@ export const FieldCurrency = <
               suffix={props.suffix}
               locale={props.locale}
               currency={props.currency}
-              decimals={props.decimals}
-              fixedDecimals={props.fixedDecimals}
+              precision={props.precision}
+              fixedPrecision={props.fixedPrecision}
+              min={props.min}
+              max={props.max}
+              step={props.step}
+              bigStep={props.bigStep}
               isDisabled={props.isDisabled}
-              {...props.inputCurrencyProps}
+              {...props.inputNumberProps}
               {...field}
               value={formatValue(field.value, 'from-cents')}
               onChange={(v) => field.onChange(formatValue(v, 'to-cents'))}

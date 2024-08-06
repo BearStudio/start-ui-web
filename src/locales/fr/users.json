@@ -48,7 +48,8 @@
     },
     "name": {
       "label": "Nom",
-      "required": "Le nom est requis"
+      "required": "Le nom est requis",
+      "invalid": "Le nom n'est pas valide"
     },
     "language": {
       "label": "Langue"

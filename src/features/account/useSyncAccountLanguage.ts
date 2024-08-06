@@ -12,8 +12,17 @@ export const useSyncAccountLanguage = () => {
 
   const { i18n } = useTranslation();
   useEffect(() => {
-    if (account.isSuccess) {
-      i18n.changeLanguage(account.data.language);
-    }
+    const updateLanguage = () => {
+      if (account.data?.language) {
+        i18n.changeLanguage(account.data.language);
+      }
+    };
+    i18n.on('initialized', updateLanguage);
+
+    updateLanguage();
+
+    return () => {
+      i18n.off('initialized', updateLanguage);
+    };
   }, [account.isSuccess, account.data?.language, i18n]);
 };

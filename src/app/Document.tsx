@@ -8,20 +8,15 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
 import { EnvHint } from '@/features/devtools/EnvHint';
-import i18n from '@/lib/i18n/client';
-import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { useLocale } from '@/lib/i18n/useLocale';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
 
 export const Document = ({ children }: { children: ReactNode }) => {
+  const locale = useLocale();
+
   return (
-    <html
-      lang={i18n.language}
-      dir={
-        AVAILABLE_LANGUAGES.find(({ key }) => key === i18n.language)?.dir ??
-        'ltr'
-      }
-    >
+    <html lang={locale?.lang} dir={locale?.dir}>
       <head>
         <meta
           name="viewport"

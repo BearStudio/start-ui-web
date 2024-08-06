@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { z } from 'zod';
 import { makeZodI18nMap } from 'zod-i18n-map';
@@ -13,7 +14,7 @@ import { isBrowser } from '@/lib/ssr';
 
 dayjs.locale(DEFAULT_LANGUAGE_KEY);
 
-i18n.use(initReactI18next).init(i18nConfig);
+i18n.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 
 i18n.on('languageChanged', (langKey) => {
   const language = AVAILABLE_LANGUAGES.find(({ key }) => key === langKey);

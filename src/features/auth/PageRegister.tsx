@@ -72,7 +72,6 @@ export default function PageRegister() {
           size="sm"
           whiteSpace="normal"
           display="inline"
-          textAlign="left"
           fontWeight="normal"
           px="0"
           color="text-dimmed"

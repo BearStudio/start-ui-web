@@ -26,7 +26,7 @@ export type FieldTextProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  type: 'text' | 'email' | 'number' | 'tel';
+  type: 'text' | 'email' | 'tel';
   startElement?: ReactNode;
   endElement?: ReactNode;
   inputProps?: RemoveFromType<

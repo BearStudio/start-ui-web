@@ -9,7 +9,7 @@ import { Icon } from '@/components/Icons';
 import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
-  title: 'Form/FieldCurrency',
+  title: 'Form/FieldNumber',
 };
 
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
@@ -32,7 +32,35 @@ export const Default = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
+            control={form.control}
+            name="balance"
+            placeholder={12}
+          />
+        </FormField>
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const DefaultValue = () => {
+  const form = useForm<FormSchema>({
+    ...formOptions,
+    defaultValues: { balance: 12 },
+  });
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField>
+          <FormFieldLabel>Balance</FormFieldLabel>
+          <FormFieldController
+            type="number"
             control={form.control}
             name="balance"
             placeholder={12}
@@ -57,7 +85,7 @@ export const InCents = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
             inCents
@@ -83,7 +111,7 @@ export const LocaleFr = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
             locale="fr"
@@ -109,10 +137,10 @@ export const LocaleNoDecimals = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
-            decimals={0}
+            precision={0}
             placeholder={12}
           />
         </FormField>
@@ -135,7 +163,7 @@ export const Disabled = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
             placeholder={12}
@@ -161,7 +189,7 @@ export const StartElement = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
             placeholder={12}
@@ -187,11 +215,11 @@ export const ChakraProps = () => {
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
-            type="currency"
+            type="number"
             control={form.control}
             name="balance"
             placeholder={12}
-            inputCurrencyProps={{
+            inputNumberProps={{
               color: 'rebeccapurple',
             }}
           />
