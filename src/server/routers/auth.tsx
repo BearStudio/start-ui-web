@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
@@ -6,12 +7,14 @@ import { z } from 'zod';
 import EmailLoginCode from '@/emails/templates/login-code';
 import { EmailLoginNotFound } from '@/emails/templates/login-not-found';
 import EmailRegisterCode from '@/emails/templates/register-code';
+import RegisterEmailAlreadyUsed from '@/emails/templates/register-email-already-used';
+import { zUserAccount } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
 } from '@/features/auth/utils';
-import { zUser, zUserAuthorization } from '@/features/users/schemas';
+import { zUserAuthorization, zUserWithEmail } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
   createSession,
@@ -58,7 +61,7 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(
-      zUser().pick({
+      zUserWithEmail().pick({
         email: true,
         language: true,
       })
@@ -89,8 +92,23 @@ export const authRouter = createTRPCRouter({
         };
       }
 
+      if (user.accountStatus === 'DISABLED') {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Account is disabled',
+        });
+      }
+
       if (user.accountStatus !== 'ENABLED') {
         ctx.logger.warn('Invalid user, silent error for security reasons');
+
+        await sendEmail({
+          to: input.email,
+          subject: i18n.t('emails:loginNotFound.subject', {
+            lng: input.language,
+          }),
+          template: <EmailLoginNotFound language={input.language} />,
+        });
         return {
           token,
         };
@@ -139,7 +157,7 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(zVerificationCodeValidate())
-    .output(z.object({ token: z.string() }))
+    .output(z.object({ token: z.string(), account: zUserAccount() }))
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({
         ctx,
@@ -147,10 +165,12 @@ export const authRouter = createTRPCRouter({
       });
 
       ctx.logger.info('Updating user');
+      let user: User;
       try {
-        await ctx.db.user.update({
+        user = await ctx.db.user.update({
           where: { id: verificationToken.userId, accountStatus: 'ENABLED' },
           data: {
+            isEmailVerified: true,
             lastLoginAt: new Date(),
           },
         });
@@ -168,6 +188,7 @@ export const authRouter = createTRPCRouter({
       const sessionId = await createSession(verificationToken.userId);
 
       return {
+        account: user,
         token: sessionId,
       };
     }),
@@ -202,7 +223,7 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(
-      zUser().required().pick({
+      zUserWithEmail().required().pick({
         email: true,
         name: true,
         language: true,
@@ -259,6 +280,24 @@ export const authRouter = createTRPCRouter({
         ctx.logger.error(
           'An error occured while creating or updating the user, the address may already exists, silent error for security reasons'
         );
+
+        if (user?.email) {
+          ctx.logger.info('Send an email to the already used email');
+          await sendEmail({
+            to: input.email,
+            subject: i18n.t('emails:registerEmailAlreadyUsed.subject', {
+              lng: user.language,
+            }),
+            template: (
+              <RegisterEmailAlreadyUsed
+                language={user.language}
+                name={user.name ?? ''}
+                email={input.email}
+              />
+            ),
+          });
+        }
+
         return {
           token,
         };
@@ -310,7 +349,7 @@ export const authRouter = createTRPCRouter({
       },
     })
     .input(zVerificationCodeValidate())
-    .output(z.object({ token: z.string() }))
+    .output(z.object({ token: z.string(), account: zUserAccount() }))
     .mutation(async ({ ctx, input }) => {
       const { verificationToken } = await validateCode({
         ctx,
@@ -318,13 +357,15 @@ export const authRouter = createTRPCRouter({
       });
 
       ctx.logger.info('Updating user');
+      let user: User;
       try {
-        await ctx.db.user.update({
+        user = await ctx.db.user.update({
           where: {
             id: verificationToken.userId,
             accountStatus: 'NOT_VERIFIED',
           },
           data: {
+            isEmailVerified: true,
             lastLoginAt: new Date(),
             accountStatus: 'ENABLED',
           },
@@ -343,6 +384,7 @@ export const authRouter = createTRPCRouter({
       const sessionId = await createSession(verificationToken.userId);
 
       return {
+        account: user,
         token: sessionId,
       };
     }),

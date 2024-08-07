@@ -135,7 +135,11 @@ export const usersRouter = createTRPCRouter({
       ctx.logger.info('Creating user');
       try {
         return await ctx.db.user.create({
-          data: input,
+          data: {
+            ...input,
+            accountStatus: 'ENABLED',
+            isEmailVerified: true,
+          },
         });
       } catch (e) {
         throw new ExtendedTRPCError({
