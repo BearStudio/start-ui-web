@@ -199,8 +199,56 @@ export const oauthRouter = createTRPCRouter({
         };
       }
 
-      ctx.logger.info('Creating the new user');
+      const emailAlreadyExistsUser = providerUser.email
+        ? await ctx.db.user.findFirst({
+            where: { email: providerUser.email },
+          })
+        : null;
 
+      if (emailAlreadyExistsUser?.accountStatus === 'NOT_VERIFIED') {
+        ctx.logger.info('Email already exists with an NOT_VERIFIED account');
+        ctx.logger.info('Update the NOT_VERIFIED user');
+        const updatedUser = await ctx.db.user.update({
+          where: {
+            id: emailAlreadyExistsUser.id,
+          },
+          data: {
+            name: providerUser.name ?? null,
+            language:
+              keys(locales).find((key) =>
+                (providerUser.language ?? input.language)?.startsWith(key)
+              ) ?? DEFAULT_LANGUAGE_KEY,
+            accountStatus: 'ENABLED',
+            isEmailVerified: providerUser.isEmailVerified,
+            oauth: {
+              create: {
+                provider: input.provider,
+                providerUserId: providerUser.id,
+              },
+            },
+          },
+        });
+
+        ctx.logger.info('Create the session for the updated user');
+        const sessionId = await createSession(updatedUser.id);
+
+        return {
+          account: updatedUser,
+          token: sessionId,
+        };
+      }
+
+      if (emailAlreadyExistsUser) {
+        ctx.logger.warn(
+          'The email already exists but we cannot safely take over the account (probably because the email was not verified but the account is enabled). Silent error for security reasons'
+        );
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create the account',
+        });
+      }
+
+      ctx.logger.info('Creating the new user');
       const newUser = await ctx.db.user.create({
         data: {
           email: providerUser.email ?? undefined,
