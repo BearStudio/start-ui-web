@@ -92,8 +92,23 @@ export const authRouter = createTRPCRouter({
         };
       }
 
+      if (user.accountStatus === 'DISABLED') {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Account is disabled',
+        });
+      }
+
       if (user.accountStatus !== 'ENABLED') {
         ctx.logger.warn('Invalid user, silent error for security reasons');
+
+        await sendEmail({
+          to: input.email,
+          subject: i18n.t('emails:loginNotFound.subject', {
+            lng: input.language,
+          }),
+          template: <EmailLoginNotFound language={input.language} />,
+        });
         return {
           token,
         };
