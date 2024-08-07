@@ -8,6 +8,14 @@
     "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
     "ignoreHelper": "If you didn't try to register, you can safely ignore this email."
   },
+  "registerEmailAlreadyUsed": {
+    "subject": "Account already exists",
+    "preview": "Your email is already used by another account",
+    "title": "Account already exists",
+    "hello": "Hi {{name}},",
+    "intro": "Your email {{email}} is already used, you can't create another account with it.",
+    "ignoreHelper": "If you didn't try to create an account, you can safely ignore this email."
+  },
   "loginCode": {
     "subject": "Sign in verification code",
     "preview": "Verification code to sign in",
@@ -25,13 +33,21 @@
     "button": "Try a different email",
     "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
   },
-  "emailAddressChange": {
+  "emailUpdate": {
     "subject": "Verification code",
     "preview": "Change your email",
     "title": "Your verification code",
     "hello": "Hi {{name}},",
     "intro": "This is the verification code to update your email:",
     "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
+  },
+  "emailUpdateAlreadyUsed": {
+    "subject": "Trying to update your email?",
+    "preview": "Your email is already used by another account",
+    "title": "Trying to update your email?",
+    "hello": "Hi {{name}},",
+    "intro": "Your email {{email}} is already used, you can't use it for another account.",
     "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
   },
   "deleteAccountCode": {

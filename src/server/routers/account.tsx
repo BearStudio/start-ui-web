@@ -4,7 +4,8 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
-import EmailAddressChange from '@/emails/templates/email-address-change';
+import EmailUpdateAlreadyUsed from '@/emails/templates/email-update-already-used';
+import EmailUpdateCode from '@/emails/templates/email-update-code';
 import {
   zUserAccount,
   zUserAccountWithEmail,
@@ -103,6 +104,20 @@ export const accountRouter = createTRPCRouter({
         ctx.logger.warn(
           'Email already used, silent error for security reasons'
         );
+        ctx.logger.info('Send an email to the already used email');
+        await sendEmail({
+          to: input.email,
+          subject: i18n.t('emails:emailUpdateAlreadyUsed.subject', {
+            lng: existingEmail.language,
+          }),
+          template: (
+            <EmailUpdateAlreadyUsed
+              language={existingEmail.language}
+              name={existingEmail.name ?? ''}
+              email={input.email}
+            />
+          ),
+        });
         return {
           token,
         };
@@ -129,11 +144,11 @@ export const accountRouter = createTRPCRouter({
       ctx.logger.info('Sending email with verification code');
       await sendEmail({
         to: input.email,
-        subject: i18n.t('emails:emailAddressChange.subject', {
+        subject: i18n.t('emails:emailUpdate.subject', {
           lng: ctx.user.language,
         }),
         template: (
-          <EmailAddressChange
+          <EmailUpdateCode
             language={ctx.user.language}
             name={ctx.user.name ?? ''}
             code={code.readable}

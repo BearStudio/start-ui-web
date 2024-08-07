@@ -7,6 +7,7 @@ import { z } from 'zod';
 import EmailLoginCode from '@/emails/templates/login-code';
 import { EmailLoginNotFound } from '@/emails/templates/login-not-found';
 import EmailRegisterCode from '@/emails/templates/register-code';
+import RegisterEmailAlreadyUsed from '@/emails/templates/register-email-already-used';
 import { zUserAccount } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import {
@@ -264,6 +265,24 @@ export const authRouter = createTRPCRouter({
         ctx.logger.error(
           'An error occured while creating or updating the user, the address may already exists, silent error for security reasons'
         );
+
+        if (user?.email) {
+          ctx.logger.info('Send an email to the already used email');
+          await sendEmail({
+            to: input.email,
+            subject: i18n.t('emails:registerEmailAlreadyUsed.subject', {
+              lng: user.language,
+            }),
+            template: (
+              <RegisterEmailAlreadyUsed
+                language={user.language}
+                name={user.name ?? ''}
+                email={input.email}
+              />
+            ),
+          });
+        }
+
         return {
           token,
         };
