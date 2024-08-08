@@ -5,7 +5,7 @@ import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import { cookies, headers } from 'next/headers';
-import { randomInt } from 'node:crypto';
+import { alphabet, generateRandomString } from 'oslo/crypto';
 
 import { env } from '@/env.mjs';
 import {
@@ -65,7 +65,7 @@ export async function generateCode() {
   const code =
     env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
       ? VALIDATION_CODE_MOCKED
-      : randomInt(0, 999999).toString().padStart(6, '0');
+      : generateRandomString(6, alphabet('a-z', '0-9'));
   return {
     hashed: await bcrypt.hash(code, 12),
     readable: code,
