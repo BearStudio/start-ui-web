@@ -66,7 +66,7 @@ export async function generateCode() {
   const code =
     env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
       ? VALIDATION_CODE_MOCKED
-      : generateRandomString(6, ALLOWED_CHARACTERS);
+      : generateRandomString(6, ALLOWED_CHARACTERS).toUpperCase();
   return {
     hashed: await bcrypt.hash(code, 12),
     readable: code,
