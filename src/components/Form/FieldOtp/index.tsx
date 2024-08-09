@@ -81,6 +81,7 @@ export const FieldOtp = <
               isInvalid={fieldState.invalid}
               isDisabled={props.isDisabled}
               otp
+              type="alphanumeric"
               id={id}
               onComplete={(v) => {
                 props.onComplete?.(v);
