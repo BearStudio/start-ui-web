@@ -56,11 +56,7 @@ export const FieldOtp = <
   return (
     <Controller
       {...props}
-      render={({
-        field: { ref: _ref, value, ...field },
-        fieldState,
-        formState,
-      }) => (
+      render={({ field: { ref: _ref, ...field }, fieldState, formState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <HStack ref={stackRef} position="relative">
             {/* Hack because Chakra generate first input with -0 suffix  */}
@@ -99,7 +95,6 @@ export const FieldOtp = <
                   button.remove();
                 }
               }}
-              value={value?.toUpperCase()}
               {...props.pinInputProps}
               {...field}
             >

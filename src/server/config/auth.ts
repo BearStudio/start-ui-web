@@ -9,7 +9,7 @@ import { generateRandomString } from 'oslo/crypto';
 
 import { env } from '@/env.mjs';
 import {
-  ALLOWED_CHARACTERS,
+  VALIDATION_CODE_ALLOWED_CHARACTERS,
   VALIDATION_CODE_MOCKED,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
@@ -66,7 +66,7 @@ export async function generateCode() {
   const code =
     env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
       ? VALIDATION_CODE_MOCKED
-      : generateRandomString(6, ALLOWED_CHARACTERS).toUpperCase();
+      : generateRandomString(6, VALIDATION_CODE_ALLOWED_CHARACTERS);
   return {
     hashed: await bcrypt.hash(code, 12),
     readable: code,
