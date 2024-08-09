@@ -5,10 +5,11 @@ import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import { cookies, headers } from 'next/headers';
-import { alphabet, generateRandomString } from 'oslo/crypto';
+import { generateRandomString } from 'oslo/crypto';
 
 import { env } from '@/env.mjs';
 import {
+  ALLOWED_CHARACTERS,
   VALIDATION_CODE_MOCKED,
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
@@ -65,7 +66,7 @@ export async function generateCode() {
   const code =
     env.NODE_ENV === 'development' || env.NEXT_PUBLIC_IS_DEMO
       ? VALIDATION_CODE_MOCKED
-      : generateRandomString(6, alphabet('a-z', '0-9'));
+      : generateRandomString(6, ALLOWED_CHARACTERS);
   return {
     hashed: await bcrypt.hash(code, 12),
     readable: code,
