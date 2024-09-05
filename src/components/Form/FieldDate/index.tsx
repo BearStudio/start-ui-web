@@ -42,7 +42,7 @@ export const FieldDate = <
   return (
     <Controller
       {...props}
-      render={({ field: { ref: _ref, ...field } }) => (
+      render={({ field: { ref: _ref, ...field }, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <DayPicker
             placeholder={props.placeholder}
@@ -50,6 +50,7 @@ export const FieldDate = <
             inputProps={{
               size: props.size,
               autoFocus: props.autoFocus,
+              isInvalid: !!fieldState.error,
               ...props.dayPickerInputProps,
             }}
             {...props.dayPickerProps}
