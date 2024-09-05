@@ -71,7 +71,7 @@ export const FieldNumber = <
   return (
     <Controller
       {...props}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <InputNumber
@@ -94,6 +94,7 @@ export const FieldNumber = <
               step={props.step}
               bigStep={props.bigStep}
               isDisabled={props.isDisabled}
+              isInvalid={!!fieldState.error}
               {...props.inputNumberProps}
               {...field}
               value={formatValue(field.value, 'from-cents')}
