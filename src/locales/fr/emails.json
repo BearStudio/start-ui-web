@@ -46,7 +46,7 @@
   "emailUpdateAlreadyUsed": {
     "hello": "Bonjour {{name}},",
     "ignoreHelper": "Si vous n'avez pas essayé de modifier votre adresse email, vous pouvez ignorer cet email en toute sécurité.",
-    "intro": "Votre {{email}} est déjà utilisé, vous ne pouvez pas l'utiliser pour un autre compte. ",
+    "intro": "Votre email {{email}} est déjà utilisé, vous ne pouvez pas l'utiliser pour un autre compte. ",
     "preview": "Votre email est déjà utilisé par un autre compte",
     "subject": "Vous essayez de mettre à jour votre email ?",
     "title": "Vous essayez de mettre à jour votre email ?"

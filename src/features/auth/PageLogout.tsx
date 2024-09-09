@@ -24,19 +24,10 @@ export default function PageLogout() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const trigger = async () => {
-      if (isTriggeredRef.current) return;
-      isTriggeredRef.current = true;
-      logout.mutate();
-    };
-    trigger();
-  }, [
-    searchParams,
-    queryCache,
-    router,
-    logout,
-    trpcUtils.auth.checkAuthenticated,
-  ]);
+    if (isTriggeredRef.current) return;
+    isTriggeredRef.current = true;
+    logout.mutate();
+  }, [logout]);
 
   return (
     <Center flex="1">
