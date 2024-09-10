@@ -106,7 +106,7 @@ export const DayPickerContent = forwardRef<
         style={popper.styles.popper}
         {...popper.attributes.popper}
         ref={ref}
-        zIndex={2}
+        zIndex="dayPicker"
         minW={250}
         role="dialog"
       >
