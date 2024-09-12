@@ -16,7 +16,17 @@ import { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
  * You update the `min` so the value is 5, the form (using superRefine and
  * custom issues) will tell you that the `min` should be lower than the default.
  * You update the `default` so the new value is 5.5. Without this hook, the
- * field `min` will not revalidate. With this hook, if you gave the name, it will.
+ * field `min` will not revalidate. With this hook, if you give the field name,
+ * it will.
+ *
+ * @example
+ * // Get the form
+ * const form = useFormContext<FormType>();
+ *
+ * // Subscribe to fields validation
+ * // If `default` changes, `min`, `default` and `max` will validate and trigger
+ * // error if any.
+ * useWatchToTrigger({ form, names: ['min', 'default', 'max']})
  */
 export const useWatchToTrigger = <
   TFieldValues extends FieldValues = FieldValues,
