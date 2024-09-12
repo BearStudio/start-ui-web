@@ -1,16 +1,17 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 
 import { Form } from '@/components/Form';
+import { ROUTES_ADMIN } from '@/features/admin/routes';
 import { ROUTES_APP } from '@/features/app/routes';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
-  useOnVerificationCodeSuccess,
 } from '@/features/auth/VerificationCodeForm';
 import {
   FormFieldsVerificationCode,
@@ -25,6 +26,9 @@ export default function PageLoginValidate() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+  const trpcUtils = trpc.useUtils();
+  const queryCache = useQueryClient();
 
   const token = params?.token?.toString() ?? '';
   const email = searchParams.get('email');
@@ -41,9 +45,6 @@ export default function PageLoginValidate() {
     validate.mutate({ ...values, token });
   };
 
-  const onVerificationCodeSuccess = useOnVerificationCodeSuccess({
-    defaultRedirect: ROUTES_APP.root(),
-  });
   const onVerificationCodeError = useOnVerificationCodeError({
     onError: (error) =>
       form.setError('code', {
@@ -52,7 +53,26 @@ export default function PageLoginValidate() {
   });
 
   const validate = trpc.auth.loginValidate.useMutation({
-    onSuccess: onVerificationCodeSuccess,
+    onSuccess: (data) => {
+      queryCache.clear();
+
+      // Optimistic Update
+      trpcUtils.auth.checkAuthenticated.setData(undefined, {
+        isAuthenticated: true,
+      });
+
+      if (redirect) {
+        router.replace(redirect);
+        return;
+      }
+
+      if (data.account.authorizations.includes('ADMIN')) {
+        router.replace(ROUTES_ADMIN.root());
+        return;
+      }
+
+      router.replace(ROUTES_APP.root());
+    },
     onError: onVerificationCodeError,
   });
 

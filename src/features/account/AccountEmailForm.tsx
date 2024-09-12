@@ -15,10 +15,7 @@ import {
 } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError } from '@/components/Toast';
-import {
-  EmailVerificationCodeModale,
-  SEARCH_PARAM_VERIFY_EMAIL,
-} from '@/features/account/EmailVerificationCodeModal';
+import { EmailVerificationCodeModale } from '@/features/account/EmailVerificationCodeModal';
 import {
   FormFieldsAccountEmail,
   zFormFieldsAccountEmail,
@@ -28,11 +25,9 @@ import { trpc } from '@/lib/trpc/client';
 export const AccountEmailForm = () => {
   const { t } = useTranslation(['common', 'account']);
   const [searchParams, setSearchParams] = useQueryStates({
-    [SEARCH_PARAM_VERIFY_EMAIL]: parseAsString,
-    token: parseAsString,
     verifyEmail: parseAsString,
+    token: parseAsString,
   });
-  const verifyEmail = searchParams[SEARCH_PARAM_VERIFY_EMAIL];
 
   const account = trpc.account.get.useQuery(undefined, {
     staleTime: Infinity,
@@ -43,7 +38,7 @@ export const AccountEmailForm = () => {
   const updateEmail = trpc.account.updateEmail.useMutation({
     onSuccess: async ({ token }, { email }) => {
       setSearchParams({
-        [SEARCH_PARAM_VERIFY_EMAIL]: email,
+        verifyEmail: email,
         token,
       });
     },
@@ -57,7 +52,9 @@ export const AccountEmailForm = () => {
   const form = useForm<FormFieldsAccountEmail>({
     mode: 'onBlur',
     resolver: zodResolver(zFormFieldsAccountEmail()),
-    values: account.data,
+    values: {
+      email: account.data?.email ?? '',
+    },
   });
 
   const email = form.watch('email');
@@ -106,7 +103,7 @@ export const AccountEmailForm = () => {
           </Form>
         </Stack>
       )}
-      {!!verifyEmail && <EmailVerificationCodeModale />}
+      {!!searchParams.verifyEmail && <EmailVerificationCodeModale />}
     </>
   );
 };

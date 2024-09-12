@@ -25,7 +25,7 @@
     "subject": "Vérifiez votre compte",
     "title": "Vérifiez votre compte"
   },
-  "emailAddressChange": {
+  "emailUpdate": {
     "hello": "Bonjour {{name}},",
     "ignoreHelper": "Si vous n'avez pas essayé de modifier votre adresse email, vous pouvez ignorer cet email en toute sécurité.",
     "intro": "Voici le code de vérification pour mettre à jour votre email :",
@@ -42,5 +42,21 @@
     "subject": "Supprimer votre compte",
     "title": "Supprimer votre compte",
     "validityTime": "Ce code ne sera valable que pour les prochaines {{expiration}} minutes."
+  },
+  "emailUpdateAlreadyUsed": {
+    "hello": "Bonjour {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de modifier votre adresse email, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Votre email {{email}} est déjà utilisé, vous ne pouvez pas l'utiliser pour un autre compte. ",
+    "preview": "Votre email est déjà utilisé par un autre compte",
+    "subject": "Vous essayez de mettre à jour votre email ?",
+    "title": "Vous essayez de mettre à jour votre email ?"
+  },
+  "registerEmailAlreadyUsed": {
+    "hello": "Bonjour {{name}},",
+    "ignoreHelper": "Si vous n'avez pas essayé de créer un compte, vous pouvez ignorer cet email en toute sécurité.",
+    "intro": "Votre email {{email}} est déjà utilisé, vous ne pouvez pas créer un autre compte avec.",
+    "preview": "Votre email est déjà utilisé par un autre compte",
+    "title": "Le compte existe déjà",
+    "subject": "Le compte existe déjà"
   }
 }

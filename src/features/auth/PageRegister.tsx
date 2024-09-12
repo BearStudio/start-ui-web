@@ -32,7 +32,7 @@ export default function PageRegister() {
   const register = trpc.auth.register.useMutation({
     onSuccess: (data, variables) => {
       router.push(
-        ROUTES_AUTH.app.registerValidate({
+        ROUTES_AUTH.registerValidate({
           token: data.token,
           email: variables.email,
         })
@@ -67,7 +67,7 @@ export default function PageRegister() {
         <Heading size="md">{t('auth:register.title')}</Heading>
         <Button
           as={Link}
-          href={ROUTES_AUTH.app.login()}
+          href={ROUTES_AUTH.login()}
           variant="link"
           size="sm"
           whiteSpace="normal"
@@ -87,7 +87,6 @@ export default function PageRegister() {
           </Box>
         </Button>
       </Stack>
-
       <Form
         {...form}
         onSubmit={(values) => {
@@ -137,7 +136,7 @@ export default function PageRegister() {
               {t('auth:register.actions.create')}
             </Button>
           </Flex>
-          <DemoRegisterHint loginPath={ROUTES_AUTH.app.login()} />
+          <DemoRegisterHint loginPath={ROUTES_AUTH.login()} />
         </Stack>
       </Form>
     </Stack>

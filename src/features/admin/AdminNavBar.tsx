@@ -87,12 +87,19 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
     <Box color="gray.800" _dark={{ color: 'white' }}>
       <Menu placement="bottom-end" {...rest}>
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
-          <Avatar size="sm" icon={<></>} name={account.data?.email ?? ''}>
+          <Avatar
+            size="sm"
+            icon={<></>}
+            name={account.data?.name ?? account.data?.email ?? ''}
+          >
             {account.isLoading && <Spinner size="xs" />}
           </Avatar>
         </MenuButton>
         <MenuList maxW="12rem" overflow="hidden">
-          <MenuGroup title={account.data?.email ?? ''} noOfLines={1}>
+          <MenuGroup
+            title={account.data?.name ?? account.data?.email ?? ''}
+            noOfLines={1}
+          >
             <MenuItem
               as={Link}
               href={ROUTES_ACCOUNT.admin.root()}
@@ -140,7 +147,7 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
           <MenuItem
             icon={<Icon icon={LuLogOut} fontSize="lg" color="gray.400" />}
             onClick={() =>
-              router.push(ROUTES_AUTH.logout({ redirect: ROUTES_ADMIN.root() }))
+              router.push(ROUTES_AUTH.logout({ redirect: ROUTES_AUTH.login() }))
             }
           >
             {t('admin:layout.accountMenu.logout')}

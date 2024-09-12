@@ -1,9 +1,9 @@
 enum AccountStatus {
-  // User has registered and verified their email
+  // User has registered and verified
   ENABLED
   // User has been disabled and can't login anymore
   DISABLED
-  // User did register, but has not verified their email yet.
+  // User did register, but has not been verified
   NOT_VERIFIED
 }
 
@@ -13,15 +13,16 @@ enum UserRole {
 }
 
 model User {
-  id             String        @id @default(cuid())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  name           String?
-  email          String        @unique
-  accountStatus  AccountStatus @default(NOT_VERIFIED)
-  image          String?
-  authorizations UserRole[]    @default([APP])
-  language       String        @default("en")
-  lastLoginAt    DateTime?
-  session        Session[]
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  name            String?
+  email           String?       @unique
+  isEmailVerified Boolean       @default(false)
+  accountStatus   AccountStatus @default(NOT_VERIFIED)
+  image           String?
+  authorizations  UserRole[]    @default([APP])
+  language        String        @default("en")
+  lastLoginAt     DateTime?
+  session         Session[]
 }
