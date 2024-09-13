@@ -1,4 +1,11 @@
-import { Button, Stack } from '@chakra-ui/react';
+import {
+  Button,
+  Code,
+  ListItem,
+  OrderedList,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -39,7 +46,7 @@ const formSchema = () =>
       }
     });
 
-export const WithoutHook = () => {
+export const WithHook = () => {
   const form = useForm({
     mode: 'onBlur',
     resolver: zodResolver(formSchema()),
@@ -50,9 +57,32 @@ export const WithoutHook = () => {
     },
   });
 
+  useWatchToTrigger({ form, names: ['min', 'default', 'max'] });
+
   return (
     <Form {...form}>
       <Stack>
+        <Text>
+          This is the story with the hook. You can find the story without the
+          hook below. Here is the scenario for maximal reproduction:
+        </Text>
+        <OrderedList>
+          <ListItem>
+            Set the <Code>min</Code> to 5
+          </ListItem>
+          <ListItem>The validation is updated</ListItem>
+          <ListItem>
+            Set the <Code>default</Code> to 5.5
+          </ListItem>
+          <ListItem>
+            The validation is updated even if the validation is on the{' '}
+            <Code>min</Code> field
+          </ListItem>
+          <ListItem>
+            You have to go to the <Code>min</Code> field to trigger the{' '}
+            <Code>onBlur</Code> event
+          </ListItem>
+        </OrderedList>
         <FormField>
           <FormFieldLabel>Min</FormFieldLabel>
           <FormFieldController
@@ -85,7 +115,7 @@ export const WithoutHook = () => {
   );
 };
 
-export const WithHook = () => {
+export const WithoutHook = () => {
   const form = useForm({
     mode: 'onBlur',
     resolver: zodResolver(formSchema()),
@@ -96,11 +126,27 @@ export const WithHook = () => {
     },
   });
 
-  useWatchToTrigger({ form, names: ['min', 'default', 'max'] });
-
   return (
     <Form {...form}>
       <Stack>
+        <Text>
+          This is the story without the hook. Here is the scenario for maximal
+          reproduction:
+        </Text>
+        <OrderedList>
+          <ListItem>
+            Set the <Code>min</Code> to 5
+          </ListItem>
+          <ListItem>The validation is updated only on blur</ListItem>
+          <ListItem>
+            Set the <Code>default</Code> to 5.5
+          </ListItem>
+          <ListItem>
+            The validation is not updated for the <Code>min</Code> field, that
+            is because we are in the <Code>default</Code> field. Even the blur
+            event will not trigger the validation.
+          </ListItem>
+        </OrderedList>
         <FormField>
           <FormFieldLabel>Min</FormFieldLabel>
           <FormFieldController
