@@ -4,8 +4,10 @@ import { Flex, FlexProps, SlideFade } from '@chakra-ui/react';
 import {
   ControllerProps,
   FieldError,
+  FieldErrors,
   FieldPath,
   FieldValues,
+  get,
   useFormContext,
 } from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
@@ -39,7 +41,9 @@ const FormFieldErrorComponent = <
     TFieldValues,
     TName
   > | null>(FormFieldControllerContext as ExplicitAny);
-  const { formState } = useFormContext<TFieldValues, TName>();
+  const {
+    formState: { errors },
+  } = useFormContext<TFieldValues, TName>();
   const control = 'control' in props ? props.control : ctx?.control;
   const name = 'name' in props ? props.name : ctx?.name;
 
@@ -49,7 +53,7 @@ const FormFieldErrorComponent = <
     );
   }
 
-  const { error } = control.getFieldState(name, formState);
+  const error = get<FieldErrors<TFieldValues>>(errors, name);
 
   if (!error) {
     return null;
