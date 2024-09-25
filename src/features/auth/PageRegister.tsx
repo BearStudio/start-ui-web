@@ -4,7 +4,7 @@ import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -54,7 +54,7 @@ export default function PageRegister() {
     },
   });
 
-  const language = form.watch('language');
+  const language = useWatch({ name: 'language', control: form.control });
 
   // Change language based on form
   useEffect(() => {

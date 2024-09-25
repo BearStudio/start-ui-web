@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Flex, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseAsString, useQueryStates } from 'nuqs';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
@@ -57,7 +57,7 @@ export const AccountEmailForm = () => {
     },
   });
 
-  const email = form.watch('email');
+  const email = useWatch({ name: 'email', control: form.control });
 
   const onSubmit: SubmitHandler<FormFieldsAccountEmail> = (values) => {
     updateEmail.mutate(values);

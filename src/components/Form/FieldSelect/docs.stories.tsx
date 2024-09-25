@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
@@ -112,6 +112,7 @@ export const Disabled = () => {
 
 export const ChakraProps = () => {
   const form = useForm<FormSchema>(formOptions);
+  const color = useWatch({ name: 'color', control: form.control });
 
   return (
     <Form {...form} onSubmit={(values) => console.log(values)}>
@@ -128,7 +129,7 @@ export const ChakraProps = () => {
               chakraStyles: {
                 control: (provided) => ({
                   ...provided,
-                  backgroundColor: `${form.watch('color')}.100`,
+                  backgroundColor: `${color}.100`,
                 }),
               },
             }}
