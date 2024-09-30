@@ -34,7 +34,7 @@ export const github: OAuthClient = {
     if (!githubClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing GitHub environnement variables',
+        message: 'Missing GitHub environment variables',
       });
     }
     return await githubClient.createAuthorizationURL(state, {
@@ -45,7 +45,7 @@ export const github: OAuthClient = {
     if (!githubClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing GitHub environnement variables',
+        message: 'Missing GitHub environment variables',
       });
     }
     return githubClient.validateAuthorizationCode(code);
@@ -80,7 +80,7 @@ export const github: OAuthClient = {
     }
 
     const emailsData = await emailsResponse.json();
-    ctx.logger.debug(emailsData);
+    ctx.logger.info('Retrieved emails from GitHub');
 
     ctx.logger.info('Parse the GitHub user emails');
     const emails = zGitHubEmails().safeParse(emailsData);
@@ -98,7 +98,7 @@ export const github: OAuthClient = {
     const primaryEmail = emails.data?.find((email) => email.primary) ?? null;
 
     const userData = await userResponse.json();
-    ctx.logger.debug(userData);
+    ctx.logger.info('User data retrieved from GitHub');
 
     ctx.logger.info('Parse the GitHub user');
     const gitHubUser = zGitHubUser().safeParse(userData);
