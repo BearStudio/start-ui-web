@@ -8,6 +8,7 @@ import { OAuthClient, getOAuthCallbackUrl } from '@/server/config/oauth/utils';
 const zDiscordUser = () =>
   z.object({
     id: z.string(),
+    username: z.string().nullish(),
     global_name: z.string().nullish(),
     email: z.string().email().nullish(),
     verified: z.boolean().nullish(),
@@ -29,7 +30,7 @@ export const discord: OAuthClient = {
     if (!discordClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing Discord environnement variables',
+        message: 'Missing Discord environment variables',
       });
     }
     return await discordClient.createAuthorizationURL(state, {
@@ -40,7 +41,7 @@ export const discord: OAuthClient = {
     if (!discordClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing Discord environnement variables',
+        message: 'Missing Discord environment variables',
       });
     }
     return discordClient.validateAuthorizationCode(code);
@@ -61,7 +62,7 @@ export const discord: OAuthClient = {
     }
 
     const userData = await userResponse.json();
-    ctx.logger.debug(userData);
+    ctx.logger.info('User data retrieved from Discord');
 
     ctx.logger.info('Parse the Discord user');
     const discordUser = zDiscordUser().safeParse(userData);
@@ -76,7 +77,7 @@ export const discord: OAuthClient = {
 
     return {
       id: discordUser.data.id,
-      name: discordUser.data.global_name,
+      name: discordUser.data.global_name ?? discordUser.data.username,
       email: discordUser.data.email,
       isEmailVerified: !!discordUser.data.verified,
       language: discordUser.data.locale,

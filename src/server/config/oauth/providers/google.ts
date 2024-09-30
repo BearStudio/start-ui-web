@@ -28,10 +28,15 @@ export const google: OAuthClient = {
     if (!googleClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing Google environnement variables',
+        message: 'Missing Google environment variables',
       });
     }
-    if (!codeVerifier) throw new Error('Missing codeVerifier');
+    if (!codeVerifier) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Missing codeVerifier',
+      });
+    }
     return await googleClient.createAuthorizationURL(state, codeVerifier, {
       scopes: ['email', 'profile'],
     });
@@ -40,7 +45,7 @@ export const google: OAuthClient = {
     if (!googleClient) {
       throw new TRPCError({
         code: 'NOT_IMPLEMENTED',
-        message: 'Missing Google environnement variables',
+        message: 'Missing Google environment variables',
       });
     }
     if (!codeVerifier) throw new Error('Missing codeVerifier');
@@ -65,7 +70,7 @@ export const google: OAuthClient = {
     }
 
     const userData = await userResponse.json();
-    ctx.logger.debug(userData);
+    ctx.logger.info('User data retrieved from Google');
 
     ctx.logger.info('Parse the Google user');
     const googleUser = zGoogleUser().safeParse(userData);

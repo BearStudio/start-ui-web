@@ -96,10 +96,10 @@ export const oauthRouter = createTRPCRouter({
         oAuthProvider(input.provider).shouldUseCodeVerifier &&
         !codeVerifierFromCookie.data
       ) {
-        ctx.logger.warn('Missing oAuth codeVerifier');
+        ctx.logger.warn('Invalid or expired authorization request');
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Missing oAuth codeVerifier',
+          message: 'Invalid or expired authorization request',
         });
       }
 
@@ -176,16 +176,18 @@ export const oauthRouter = createTRPCRouter({
       }
 
       if (existingUser?.accountStatus === 'DISABLED') {
+        ctx.logger.info('Account is disabled');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
-          message: 'Account is disabled',
+          message: 'Please verify your account to proceed',
         });
       }
 
       if (existingUser?.accountStatus === 'NOT_VERIFIED') {
+        ctx.logger.error('Account should not be NOT_VERIFIED at this point');
         throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Account should not be NOT_VERIFIED at this point',
+          code: 'UNAUTHORIZED',
+          message: 'Please verify your account to proceed',
         });
       }
 

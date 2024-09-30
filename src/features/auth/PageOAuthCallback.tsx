@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import {
+  notFound,
+  useParams,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -17,7 +22,9 @@ export default function PageOAuthCallback() {
   const toastError = useToastError();
   const router = useRouter();
   const isTriggeredRef = useRef(false);
-  const params = z.object({ provider: zOAuthProvider() }).parse(useParams());
+  const params = z
+    .object({ provider: zOAuthProvider() })
+    .safeParse(useParams());
   const searchParams = z
     .object({ code: z.string(), state: z.string() })
     .safeParse({
@@ -43,10 +50,14 @@ export default function PageOAuthCallback() {
       if (isTriggeredRef.current) return;
       isTriggeredRef.current = true;
 
+      if (!(params.success && searchParams.success)) {
+        notFound();
+      }
+
       validateLogin.mutate({
-        provider: params.provider,
-        code: searchParams.data?.code ?? '',
-        state: searchParams.data?.state ?? '',
+        provider: params.data.provider,
+        code: searchParams.data.code,
+        state: searchParams.data.state,
         language: i18n.language,
       });
     };
