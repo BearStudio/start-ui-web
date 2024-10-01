@@ -15,10 +15,10 @@
   },
   "or": "or",
   "confirmDiscardChanges": {
-    "title": "Discard changes?",
-    "message": "You are about to undo all the changes you made.",
-    "confirmText": "Discard changes",
-    "cancelText": "Keep changes"
+    "title": "Leave the page?",
+    "message": "You are about to leave the page without saving your changes.",
+    "confirmText": "Leave without saving",
+    "cancelText": "Stay on the page"
   },
   "filter": "Filter",
   "clear": "Clear",
