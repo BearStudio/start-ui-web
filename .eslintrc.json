@@ -5,6 +5,7 @@
     "next/core-web-vitals",
     "plugin:storybook/recommended"
   ],
+  "plugins": ["@eslint-react/eslint-plugin"],
   "rules": {
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/no-unused-vars": [
@@ -18,6 +19,10 @@
     "sonarjs/prefer-immediate-return": "warn"
   },
   "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "extends": ["plugin:@eslint-react/recommended-legacy"]
+    },
     {
       "files": ["./src/**/*.*"],
       "rules": {

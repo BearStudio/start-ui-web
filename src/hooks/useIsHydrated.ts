@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 export const useIsHydrated = () => {
   const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => {
+    // TODO @eslint-react rule
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setIsHydrated(true);
   }, []);
   return isHydrated;

@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 
 import {
   Box,
@@ -202,18 +202,44 @@ export const Pagination = ({
   isLoadingPage = false,
   ...rest
 }: PaginationProps) => {
-  const pagination = getPaginationInfo({ page, pageSize, totalItems });
+  const {
+    firstItemOnPage,
+    firstPage,
+    isFirstPage,
+    isLastPage,
+    lastItemOnPage,
+    lastPage,
+  } = getPaginationInfo({ page, pageSize, totalItems });
+  const contextValue = useMemo(
+    () => ({
+      setPage,
+      page,
+      pageSize,
+      totalItems,
+      isLoadingPage,
+      firstItemOnPage,
+      firstPage,
+      isFirstPage,
+      isLastPage,
+      lastItemOnPage,
+      lastPage,
+    }),
+    [
+      isLoadingPage,
+      page,
+      pageSize,
+      firstItemOnPage,
+      firstPage,
+      isFirstPage,
+      isLastPage,
+      lastItemOnPage,
+      lastPage,
+      setPage,
+      totalItems,
+    ]
+  );
   return (
-    <PaginationContext.Provider
-      value={{
-        setPage,
-        page,
-        pageSize,
-        totalItems,
-        isLoadingPage,
-        ...pagination,
-      }}
-    >
+    <PaginationContext.Provider value={contextValue}>
       <HStack w="full" {...rest} />
     </PaginationContext.Provider>
   );

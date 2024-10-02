@@ -46,8 +46,12 @@ export const Nav = ({ children, breakpoint = 'lg', ...rest }: NavProps) => {
   });
 
   const [active, setActive] = useState<ReactNode>(<>-</>);
+  const contextValue = useMemo(
+    () => ({ active, setActive, isMenu: !!isMenu }),
+    [active, isMenu]
+  );
   return (
-    <NavContext.Provider value={{ active, setActive, isMenu: !!isMenu }}>
+    <NavContext.Provider value={contextValue}>
       <Menu matchWidth {...rest}>
         {!isMenu && (
           <Stack spacing="1" opacity={!isHydrated ? 0 : undefined}>

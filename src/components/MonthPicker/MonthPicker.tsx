@@ -13,18 +13,21 @@ interface MonthPickerProps {
 export const MonthPicker: React.FC<
   React.PropsWithChildren<MonthPickerProps>
 > = ({
-  year = new Date().getFullYear(),
+  year,
   onMonthClick,
   onTodayButtonClick,
   onYearChange,
-  selectedMonths = [],
+  selectedMonths,
 }) => {
   return (
-    <YearProvider year={year} onYearChange={onYearChange}>
+    <YearProvider
+      year={year ?? new Date().getFullYear()}
+      onYearChange={onYearChange}
+    >
       <MonthPickerProvider
         onMonthClick={onMonthClick}
         onTodayButtonClick={onTodayButtonClick}
-        selectedMonths={selectedMonths}
+        selectedMonths={selectedMonths ?? []}
       >
         <Content />
       </MonthPickerProvider>

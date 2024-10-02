@@ -66,6 +66,8 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
 
     useEffect(() => {
       if (externalValue !== searchRef.current) {
+        // TODO @eslint-react rule
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
         setSearch(externalValue);
       }
     }, [externalValue]);

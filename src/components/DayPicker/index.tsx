@@ -48,14 +48,14 @@ export const DayPicker: FC<DayPickerProps> = ({
   id,
   value,
   onChange,
-  onClose = () => {},
+  onClose,
   popperPlacement = 'bottom-start',
   dateFormat = DATE_FORMAT,
   placeholder = 'JJ/MM/AAAA',
-  inputProps = {},
+  inputProps,
   isDisabled = false,
   autoFocus = false,
-  onMonthChange = () => {},
+  onMonthChange,
   ...rest
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,7 +69,7 @@ export const DayPicker: FC<DayPickerProps> = ({
 
   // Popper management
   const onClosePopper = () => {
-    onClose(value);
+    onClose?.(value);
     setMode('DAY');
   };
 
@@ -112,13 +112,13 @@ export const DayPicker: FC<DayPickerProps> = ({
   const { setMode, setMonth, selectMonth } = hookMonthNavigation;
 
   const handleChangeMonth = (date?: Date | null) => {
-    onMonthChange(date);
+    onMonthChange?.(date);
     setMonth(date);
   };
 
   // Change to day view once we have selected a month on the month picker
   const handleSelectMonth = (date: Date) => {
-    onMonthChange(date);
+    onMonthChange?.(date);
     selectMonth(date);
   };
 
@@ -126,7 +126,7 @@ export const DayPicker: FC<DayPickerProps> = ({
   valueRef.current = value;
 
   return (
-    <InputGroup ref={containerRef} size={size} width={inputProps.width}>
+    <InputGroup ref={containerRef} size={size} width={inputProps?.width}>
       <InputLeftElement pointerEvents="none">
         <Icon
           icon={FiCalendar}

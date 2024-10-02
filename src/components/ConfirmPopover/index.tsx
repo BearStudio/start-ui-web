@@ -50,6 +50,8 @@ export const ConfirmPopover: React.FC<
   const initialFocusRef = useRef<HTMLButtonElement>(null);
 
   if (!isEnabled) {
+    // TODO @eslint-react rule
+    // eslint-disable-next-line @eslint-react/no-clone-element
     const childrenWithOnClick = React.cloneElement(children, {
       onClick: onConfirm,
     });

@@ -12,6 +12,8 @@ export const useLocale = () => {
   }>();
 
   useEffect(() => {
+    // TODO @eslint-react rule
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setLocale({
       lang: i18n.language,
       dir:

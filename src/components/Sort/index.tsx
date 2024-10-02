@@ -39,12 +39,12 @@ type CustomProps = {
 type SortProps = Overwrite<ButtonProps, CustomProps>;
 
 export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
-  sort = { by: '', order: 'asc' },
+  sort,
   size = 'xs',
-  options = [],
-  onChange = () => undefined,
-  ascIcon = <IconSortAsc />,
-  descIcon = <IconSortDesc />,
+  options,
+  onChange,
+  ascIcon,
+  descIcon,
   ...rest
 }) => {
   const { t } = useTranslation(['components']);
@@ -52,11 +52,11 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
   const { by, order } = sort;
 
   const handleByChange = (value: SortValue['by']) => {
-    onChange({ ...sort, by: value });
+    onChange?.({ ...sort, by: value });
   };
 
   const handleOrderChange = (value: SortValue['order']) => {
-    onChange({ ...sort, order: value });
+    onChange?.({ ...sort, order: value });
   };
 
   return (
@@ -77,7 +77,9 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
         {...rest}
       >
         <Box as="span" mr="0.5">
-          {order === 'asc' ? ascIcon : descIcon}
+          {order === 'asc'
+            ? ascIcon ?? <IconSortAsc />
+            : descIcon ?? <IconSortDesc />}
         </Box>
         <Text
           as="span"
@@ -86,7 +88,7 @@ export const Sort: FC<React.PropsWithChildren<SortProps>> = ({
           fontSize={size}
           noOfLines={1}
         >
-          {options.find((option) => option?.value === by)?.label}
+          {options?.find((option) => option?.value === by)?.label}
         </Text>
       </MenuButton>
       <Portal>

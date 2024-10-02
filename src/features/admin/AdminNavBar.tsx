@@ -322,6 +322,7 @@ const AdminNavBarAccountMenuVersion = ({ ...rest }) => {
       <Flex
         role="group"
         as="button"
+        type="button"
         position="relative"
         w="full"
         textAlign="left"

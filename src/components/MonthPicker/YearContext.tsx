@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -29,6 +30,8 @@ export const YearProvider: React.FC<
   const [year, setYear] = useState(yearProp);
 
   useEffect(() => {
+    // TODO @eslint-react rule
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setYear(yearProp);
   }, [yearProp]);
 
@@ -36,14 +39,15 @@ export const YearProvider: React.FC<
     onYearChange?.(year);
   }, [onYearChange, year]);
 
+  const contextValue = useMemo(
+    () => ({
+      year,
+      setYear,
+    }),
+    [year]
+  );
+
   return (
-    <YearContext.Provider
-      value={{
-        year,
-        setYear,
-      }}
-    >
-      {children}
-    </YearContext.Provider>
+    <YearContext.Provider value={contextValue}>{children}</YearContext.Provider>
   );
 };

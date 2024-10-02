@@ -28,7 +28,7 @@ type LoginFormProps = BoxProps & {
 };
 
 export const LoginForm = ({
-  onSuccess = () => undefined,
+  onSuccess,
   buttonVariant = '@primary',
   ...rest
 }: LoginFormProps) => {

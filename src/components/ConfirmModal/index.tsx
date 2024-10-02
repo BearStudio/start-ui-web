@@ -43,12 +43,16 @@ export const ConfirmModal: React.FC<
     !title && !message ? t('components:confirmModal.heading') : title;
 
   if (!isEnabled) {
+    // TODO @eslint-react rule
+    // eslint-disable-next-line @eslint-react/no-clone-element
     const childrenWithOnClick = React.cloneElement(children, {
       onClick: onConfirm,
     });
     return <>{childrenWithOnClick}</>;
   }
 
+  // TODO @eslint-react rule
+  // eslint-disable-next-line @eslint-react/no-clone-element
   const childrenWithOnOpen = React.cloneElement(children, {
     onClick: confirmModal.onOpen,
   });
