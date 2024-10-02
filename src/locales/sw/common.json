@@ -15,10 +15,10 @@
   },
   "or": "au",
   "confirmDiscardChanges": {
-    "cancelText": "Weka mabadiliko",
-    "confirmText": "Tupa mabadiliko",
-    "message": "Unakaribia kutendua mabadiliko yote uliyofanya.",
-    "title": "Ungependa kutupa mabadiliko?"
+    "cancelText": "Kaa kwenye ukurasa",
+    "confirmText": "Ondoka bila kuhifadhi",
+    "message": "Unakaribia kuondoka kwenye ukurasa bila kuhifadhi mabadiliko yako.",
+    "title": "Ungependa kuondoka kwenye ukurasa?"
   },
   "filter": "Chuja",
   "clear": "Wazi",

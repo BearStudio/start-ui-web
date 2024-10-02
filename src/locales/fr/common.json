@@ -15,10 +15,10 @@
   },
   "or": "ou",
   "confirmDiscardChanges": {
-    "cancelText": "Garder les modifications",
-    "confirmText": "Annuler les modifications",
-    "message": "Vous êtes sur le point d'annuler toutes les modifications que vous avez apportées.",
-    "title": "Annuler les modifications?"
+    "cancelText": "Restez sur la page",
+    "confirmText": "Quitter sans sauvegarder",
+    "message": "Vous êtes sur le point de quitter la page sans sauvegarder vos modifications.",
+    "title": "Quitter la page ?"
   },
   "filter": "Filtrer",
   "clear": "Effacer",
