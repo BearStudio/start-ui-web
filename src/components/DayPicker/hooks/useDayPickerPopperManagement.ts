@@ -44,7 +44,12 @@ export const useDayPickerPopperManagement = (
   });
 
   const togglePopper = (withFocus = false) => {
-    isPopperOpen ? closePopper() : openPopper(withFocus);
+    if (isPopperOpen) {
+      closePopper();
+      return;
+    }
+
+    openPopper(withFocus);
   };
 
   // Si on click en dehors du calendrier, on le ferme

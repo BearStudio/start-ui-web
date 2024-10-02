@@ -143,7 +143,7 @@ export async function validateCode({
           },
         },
       });
-    } catch (e) {
+    } catch {
       ctx.logger.error('Failed to update token attempts');
     }
 
@@ -168,7 +168,7 @@ export async function deleteUsedCode({
     await ctx.db.verificationToken.delete({
       where: { token },
     });
-  } catch (e) {
+  } catch {
     ctx.logger.warn('Failed to delete the used token');
   }
 }
