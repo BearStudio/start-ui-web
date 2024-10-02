@@ -26,9 +26,11 @@ export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
   const toastCloseAll = toast.closeAll;
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       toastCloseAll();
     });
+
+    return () => clearTimeout(timer);
   }, [toastCloseAll]);
 
   return (

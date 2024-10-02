@@ -31,8 +31,12 @@ export const useDayPickerInputManagement = (
   // Pour mettre à jour l'input selon la value
   useEffect(() => {
     if (!!dateValue) {
+      // TODO @eslint-react rule
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setInputValue(dayjs(dateValue).format(dateFormat));
     } else {
+      // TODO @eslint-react rule
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setInputValue('');
     }
   }, [dateFormat, dateValue]);

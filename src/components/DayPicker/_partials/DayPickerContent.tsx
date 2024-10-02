@@ -134,6 +134,8 @@ export const DayPickerContent = forwardRef<
                 selected={value ?? undefined}
                 onSelect={handleDaySelect}
                 components={{
+                  // TODO @eslint-react rule
+                  // eslint-disable-next-line @eslint-react/no-nested-components
                   Caption: (props) => (
                     <Caption
                       {...props}
