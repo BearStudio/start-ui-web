@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stack, Text } from '@chakra-ui/react';
+import { Button, Stack, Text } from '@chakra-ui/react';
 
 import { SearchInput } from '.';
 
@@ -19,6 +19,9 @@ export const Controlled = () => {
     <Stack spacing={4}>
       <SearchInput value={value} onChange={setValue} />
       <Text>{value}</Text>
+      <Button onClick={() => setValue(Math.random().toString())}>
+        Update value from outside
+      </Button>
     </Stack>
   );
 };

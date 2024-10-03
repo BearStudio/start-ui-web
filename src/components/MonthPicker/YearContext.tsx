@@ -8,6 +8,8 @@ import {
   useState,
 } from 'react';
 
+import { useValueHasChanged } from '@/hooks/useValueHasChanged';
+
 type YearContextType = {
   year: number;
   setYear: Dispatch<SetStateAction<number>>;
@@ -28,12 +30,11 @@ export const YearProvider: React.FC<
   React.PropsWithChildren<YearProviderProp>
 > = ({ year: yearProp, onYearChange, children }) => {
   const [year, setYear] = useState(yearProp);
+  const yearHasChanged = useValueHasChanged(yearProp);
 
-  useEffect(() => {
-    // TODO @eslint-react rule
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+  if (yearHasChanged && yearProp !== year) {
     setYear(yearProp);
-  }, [yearProp]);
+  }
 
   useEffect(() => {
     onYearChange?.(year);

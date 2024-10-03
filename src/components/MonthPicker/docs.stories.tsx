@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box } from '@chakra-ui/react';
+import { Box, Button, Stack } from '@chakra-ui/react';
 
 import { MonthPicker } from '.';
 
@@ -17,6 +17,16 @@ export const Wrapper = () => (
 );
 
 export const InitialYear = () => <MonthPicker year={1994} />;
+
+export const UpdateYearFromOutside = () => {
+  const [year, setYear] = useState(1994);
+  return (
+    <Stack>
+      <MonthPicker year={year} onYearChange={(y) => setYear(y)} />
+      <Button onClick={() => setYear((y) => y + 1)}>Increment Year</Button>
+    </Stack>
+  );
+};
 
 export const SelectedMonth = () => (
   <MonthPicker year={2021} selectedMonths={[new Date(2021, 7)]} />
