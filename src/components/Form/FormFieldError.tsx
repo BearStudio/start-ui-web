@@ -26,7 +26,7 @@ type FormFieldErrorProps<
   children?: (params: { error?: FieldError }) => ReactNode;
 } & (
     | Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     | {}
   );
 

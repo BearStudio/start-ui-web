@@ -174,7 +174,7 @@ export const authRouter = createTRPCRouter({
             lastLoginAt: new Date(),
           },
         });
-      } catch (e) {
+      } catch {
         ctx.logger.warn('Failed to update the user, probably not enabled');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
@@ -370,7 +370,7 @@ export const authRouter = createTRPCRouter({
             accountStatus: 'ENABLED',
           },
         });
-      } catch (e) {
+      } catch {
         ctx.logger.warn('Failed to update the user, probably already verified');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
