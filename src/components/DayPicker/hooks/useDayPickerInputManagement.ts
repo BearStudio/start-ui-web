@@ -1,9 +1,10 @@
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, useState } from 'react';
 
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/components/DayPicker/constants';
 import { parseInputToDate } from '@/components/DayPicker/parseInputToDate';
+import { useValueHasChanged } from '@/hooks/useValueHasChanged';
 
 type UseDayPickerInputManagement = {
   inputValue: string;
@@ -27,15 +28,12 @@ export const useDayPickerInputManagement = (
   );
 
   const dateValueAsDayjs = dayjs(dateValue);
+  const dateFormatHasChanged = useValueHasChanged(dateFormat);
+  const dateValueHasChanged = useValueHasChanged(dateValue);
 
-  // Pour mettre à jour l'input selon la value
-  useEffect(() => {
-    if (!!dateValue) {
-      setInputValue(dayjs(dateValue).format(dateFormat));
-    } else {
-      setInputValue('');
-    }
-  }, [dateFormat, dateValue]);
+  if (dateFormatHasChanged || dateValueHasChanged) {
+    setInputValue(dateValue ? dayjs(dateValue).format(dateFormat) : '');
+  }
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.currentTarget.value);
