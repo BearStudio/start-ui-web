@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React from 'react';
 
 import {
   Alert,
@@ -6,22 +6,18 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
-  FormLabel,
-  HStack,
   Heading,
   Link,
   LinkBox,
   LinkOverlay,
   Stack,
-  Switch,
-  useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LuArrowRight, LuLogOut, LuUser } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
+import { DarkModeSwitch } from '@/components/DarkModeSwitch';
 import { Icon } from '@/components/Icons';
 import { AccountDeleteButton } from '@/features/account/AccountDeleteButton';
 import { AccountEmailForm } from '@/features/account/AccountEmailForm';
@@ -117,39 +113,3 @@ export default function PageHome() {
     </AppLayoutPage>
   );
 }
-
-const DarkModeSwitch = () => {
-  const { t } = useTranslation(['account']);
-  const { colorMode, setColorMode } = useColorMode();
-  const id = useId();
-
-  return (
-    <FormControl display="flex" alignItems="center">
-      <HStack>
-        <FormLabel
-          as={colorMode === 'light' ? 'span' : undefined}
-          opacity={colorMode !== 'light' ? 0.5 : undefined}
-          htmlFor={id}
-          mb="0"
-          mr={0}
-        >
-          {t('account:preferences.theme.light')}
-        </FormLabel>
-        <Switch
-          colorScheme="brand"
-          id={id}
-          isChecked={colorMode === 'dark'}
-          onChange={(e) => setColorMode(e.target.checked ? 'dark' : 'light')}
-        />
-        <FormLabel
-          as={colorMode === 'dark' ? 'span' : undefined}
-          opacity={colorMode !== 'dark' ? 0.5 : undefined}
-          htmlFor={id}
-          mb="0"
-        >
-          {t('account:preferences.theme.dark')}
-        </FormLabel>
-      </HStack>
-    </FormControl>
-  );
-};

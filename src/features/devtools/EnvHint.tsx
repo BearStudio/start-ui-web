@@ -1,6 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
 
 import { env } from '@/env.mjs';
+import { EnvHintDevPopover } from '@/features/devtools/EnvHintDevPopover';
 
 export const getEnvHintTitlePrefix = () => {
   if (env.NEXT_PUBLIC_ENV_EMOJI) return `${env.NEXT_PUBLIC_ENV_EMOJI} `;
@@ -13,6 +14,24 @@ export const EnvHint = () => {
     return null;
   }
 
+  const hintContent = (
+    <Text
+      position="fixed"
+      top="0"
+      insetStart="4"
+      bg={`${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.400`}
+      color={`${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.900`}
+      fontSize="0.6rem"
+      fontWeight="bold"
+      px="1"
+      borderBottomStartRadius="sm"
+      borderBottomEndRadius="sm"
+      textTransform="uppercase"
+    >
+      {env.NEXT_PUBLIC_ENV_NAME}
+    </Text>
+  );
+
   return (
     <Box
       zIndex="9999"
@@ -23,21 +42,11 @@ export const EnvHint = () => {
       h="2px"
       bg={`${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.400`}
     >
-      <Text
-        position="fixed"
-        top="0"
-        insetStart="4"
-        bg={`${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.400`}
-        color={`${env.NEXT_PUBLIC_ENV_COLOR_SCHEME}.900`}
-        fontSize="0.6rem"
-        fontWeight="bold"
-        px="1"
-        borderBottomStartRadius="sm"
-        borderBottomEndRadius="sm"
-        textTransform="uppercase"
-      >
-        {env.NEXT_PUBLIC_ENV_NAME}
-      </Text>
+      {env.NEXT_PUBLIC_NODE_ENV === 'development' ? (
+        <EnvHintDevPopover>{hintContent}</EnvHintDevPopover>
+      ) : (
+        hintContent
+      )}
     </Box>
   );
 };
