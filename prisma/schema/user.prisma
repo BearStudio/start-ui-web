@@ -13,16 +13,17 @@ enum UserRole {
 }
 
 model User {
-  id              String        @id @default(cuid())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id              String         @id @default(cuid())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   name            String?
-  email           String?       @unique
-  isEmailVerified Boolean       @default(false)
-  accountStatus   AccountStatus @default(NOT_VERIFIED)
+  email           String?        @unique
+  isEmailVerified Boolean        @default(false)
+  accountStatus   AccountStatus  @default(NOT_VERIFIED)
   image           String?
-  authorizations  UserRole[]    @default([APP])
-  language        String        @default("en")
+  authorizations  UserRole[]     @default([APP])
+  language        String         @default("en")
   lastLoginAt     DateTime?
   session         Session[]
+  oauth           OAuthAccount[]
 }

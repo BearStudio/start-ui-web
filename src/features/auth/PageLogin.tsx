@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth/LoginForm';
+import {
+  OAuthLoginButtonsGrid,
+  OAuthLoginDivider,
+} from '@/features/auth/OAuthLogin';
 import { ROUTES_AUTH } from '@/features/auth/routes';
 import type { RouterInputs, RouterOutputs } from '@/lib/trpc/types';
 
@@ -51,6 +55,10 @@ export default function PageLogin() {
           </Box>
         </Button>
       </Stack>
+
+      <OAuthLoginButtonsGrid />
+      <OAuthLoginDivider />
+
       <LoginForm onSuccess={handleOnSuccess} />
     </Stack>
   );
