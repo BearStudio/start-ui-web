@@ -52,13 +52,13 @@ export const WithDescription = () => {
   return (
     <Flex gap={4}>
       <Button size="md" onClick={() => handleOpenToast({ status: 'success' })}>
-        Success toast with descrition
+        Success toast with description
       </Button>
       <Button size="md" onClick={() => handleOpenToast({ status: 'error' })}>
-        Error toast with descrition
+        Error toast with description
       </Button>
       <Button size="md" onClick={() => handleOpenToast({ status: 'info' })}>
-        Info toast with descrition
+        Info toast with description
       </Button>
     </Flex>
   );

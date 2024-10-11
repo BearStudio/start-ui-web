@@ -9,6 +9,7 @@ import {
   Heading,
   IconButton,
 } from '@chakra-ui/react';
+import i18n from 'i18next';
 import { LuCheckCircle2, LuInfo, LuX, LuXCircle } from 'react-icons/lu';
 import { ExternalToast, toast } from 'sonner';
 import { match } from 'ts-pattern';
@@ -39,7 +40,7 @@ export const toastCustom = (params: {
         <IconButton
           zIndex={1}
           size="xs"
-          aria-label="Fermer le message"
+          aria-label={i18n.t('components:toast.closeToast')}
           icon={<LuX />}
           onClick={() => toast.dismiss(t)}
           position="absolute"
