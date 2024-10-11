@@ -89,7 +89,12 @@ export const toastCustom = (params: {
               )}
             </Flex>
             {!!params.description && (
-              <Flex direction="column" fontSize="xs" color="text-dimmed">
+              <Flex
+                direction="column"
+                fontSize="xs"
+                color="gray.600"
+                _dark={{ color: 'gray.400' }}
+              >
                 {params.description}
               </Flex>
             )}
