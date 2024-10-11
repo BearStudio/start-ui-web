@@ -70,7 +70,7 @@ export const WithActions = () => {
       status: props.status,
       title: 'This is a toast',
       actions: (
-        <Button onClick={() => toast.dismiss()}>Fermer les toasts</Button>
+        <Button onClick={() => toast.dismiss()}>Close all toasts</Button>
       ),
     });
   };
@@ -103,10 +103,10 @@ export const HideIcon = () => {
         Success toast without icon
       </Button>
       <Button size="md" onClick={() => handleOpenToast({ status: 'error' })}>
-        Error toast with without icon
+        Error toast without icon
       </Button>
       <Button size="md" onClick={() => handleOpenToast({ status: 'info' })}>
-        Info toast with without icon
+        Info toast without icon
       </Button>
     </Flex>
   );
