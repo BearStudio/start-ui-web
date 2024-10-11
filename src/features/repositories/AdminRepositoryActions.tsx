@@ -16,7 +16,7 @@ import { LuEye, LuPenLine, LuTrash2 } from 'react-icons/lu';
 import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterOutputs } from '@/lib/trpc/types';
@@ -32,14 +32,13 @@ export const AdminRepositoryActions = ({
   const { t } = useTranslation(['common', 'repositories']);
   const trpcUtils = trpc.useUtils();
 
-  const toastError = useToastError();
-
   const repositoryRemove = trpc.repositories.removeById.useMutation({
     onSuccess: async () => {
       await trpcUtils.repositories.getAll.invalidate();
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('repositories:feedbacks.deleteRepositoryError.title'),
         description: t(
           'repositories:feedbacks.deleteRepositoryError.description'
