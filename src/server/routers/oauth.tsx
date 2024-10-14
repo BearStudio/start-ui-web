@@ -179,7 +179,7 @@ export const oauthRouter = createTRPCRouter({
         ctx.logger.info('Account is disabled');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
-          message: 'Please verify your account to proceed',
+          message: 'Unable to authenticate. Please contact support if this issue persists.',
         });
       }
 
