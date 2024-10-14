@@ -124,7 +124,7 @@ export const oauthRouter = createTRPCRouter({
           ctx,
         });
         ctx.logger.debug(providerUser);
-      } catch (e) {
+      } catch {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: `Failed to retrieve the ${input.provider} user`,
