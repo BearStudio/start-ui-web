@@ -3,15 +3,6 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
-const zNodeEnv = () =>
-  z.enum(['development', 'test', 'production']).default('development');
-
-const zOptionalWithReplaceMe = () =>
-  z
-    .string()
-    .optional()
-    .transform((value) => (value === 'REPLACE ME' ? undefined : value));
-
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -116,3 +107,22 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
+
+function zNodeEnv() {
+  return z.enum(['development', 'test', 'production']).default('development');
+}
+
+function zOptionalWithReplaceMe() {
+  return z
+    .string()
+    .optional()
+    .refine(
+      (value) =>
+        // Check in prodution if the value is not REPLACE ME
+        process.env.NODE_ENV !== 'production' || value !== 'REPLACE ME',
+      {
+        message: 'Update the value "REPLACE ME" or remove the variable',
+      }
+    )
+    .transform((value) => (value === 'REPLACE ME' ? undefined : value));
+}
