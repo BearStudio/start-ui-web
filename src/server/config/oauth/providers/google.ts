@@ -48,7 +48,12 @@ export const google: OAuthClient = {
         message: 'Missing Google environment variables',
       });
     }
-    if (!codeVerifier) throw new Error('Missing codeVerifier');
+    if (!codeVerifier) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Missing codeVerifier',
+      });
+    }
     return googleClient.validateAuthorizationCode(code, codeVerifier);
   },
   getUser: async ({ accessToken, ctx }) => {

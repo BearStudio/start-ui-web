@@ -54,7 +54,7 @@ export const OAuthLoginButton = ({
 };
 
 export const OAuthLoginButtonsGrid = () => {
-  if (!OAUTH_PROVIDERS_ENABLED_ARRAY.some((p) => p.isEnabled)) return null;
+  if (!OAUTH_PROVIDERS_ENABLED_ARRAY.length) return null;
   return (
     <SimpleGrid columns={2} gap={3}>
       {OAUTH_PROVIDERS_ENABLED_ARRAY.map(({ provider }) => {
