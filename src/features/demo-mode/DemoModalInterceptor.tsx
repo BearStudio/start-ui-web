@@ -17,7 +17,6 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import { toast } from 'sonner';
 
