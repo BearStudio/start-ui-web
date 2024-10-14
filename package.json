@@ -94,6 +94,7 @@
     "react-select": "5.8.0",
     "remeda": "2.5.0",
     "sharp": "0.33.4",
+    "sonner": "1.5.0",
     "superjson": "2.2.1",
     "trpc-openapi": "1.2.0",
     "ts-pattern": "5.2.0",

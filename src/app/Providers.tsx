@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider, createLocalStorageManager } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Toaster } from 'sonner';
 
 import '@/lib/dayjs/config';
 import '@/lib/i18n/client';
@@ -28,6 +29,7 @@ export const Providers: FC<React.PropsWithChildren<unknown>> = ({
         }}
       >
         {children}
+        <Toaster position="top-right" offset={16} />
       </ChakraProvider>
     </CacheProvider>
   );

@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Form, FormField, FormFieldController } from '@/components/Form';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginHint } from '@/features/devtools/LoginHint';
 import { trpc } from '@/lib/trpc/client';
@@ -33,12 +33,12 @@ export const LoginForm = ({
   ...rest
 }: LoginFormProps) => {
   const { t } = useTranslation(['auth']);
-  const toastError = useToastError();
 
   const login = trpc.auth.login.useMutation({
     onSuccess,
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('auth:login.feedbacks.loginError.title'),
       });
     },

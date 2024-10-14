@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LuTrash2 } from 'react-icons/lu';
 
 import { ConfirmModal } from '@/components/ConfirmModal';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import {
   AccountDeleteVerificationCodeModale,
   SEARCH_PARAM_VERIFY_EMAIL,
@@ -25,7 +25,6 @@ export const AccountDeleteButton = () => {
   );
   const account = trpc.account.get.useQuery();
 
-  const toastError = useToastError();
   const deleteAccountValidate = searchParams[SEARCH_PARAM_VERIFY_EMAIL];
 
   const deleteAccount = trpc.account.deleteRequest.useMutation({
@@ -37,7 +36,8 @@ export const AccountDeleteButton = () => {
       });
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('account:deleteAccount.feedbacks.updateError.title'),
       });
     },

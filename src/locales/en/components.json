@@ -93,5 +93,8 @@
   "fieldPassword": {
     "showPassword": "Show password",
     "hidePassword": "Hide password"
+  },
+  "toast": {
+    "closeToast": "Close message"
   }
 }

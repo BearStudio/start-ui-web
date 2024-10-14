@@ -93,5 +93,8 @@
   "fieldPassword": {
     "showPassword": "Onyesha nenosiri",
     "hidePassword": "Ficha nenosiri"
+  },
+  "toast": {
+    "closeToast": "Funga ujumbe"
   }
 }

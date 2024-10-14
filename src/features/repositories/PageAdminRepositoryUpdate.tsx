@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Form } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
@@ -42,13 +42,11 @@ export default function PageAdminRepositoryUpdate() {
 
   const isReady = !repository.isFetching;
 
-  const toastSuccess = useToastSuccess();
-  const toastError = useToastError();
-
   const updateRepository = trpc.repositories.updateById.useMutation({
     onSuccess: async () => {
       await trpcUtils.repositories.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('repositories:update.feedbacks.updateSuccess.title'),
       });
       router.back();
@@ -60,7 +58,8 @@ export default function PageAdminRepositoryUpdate() {
         });
         return;
       }
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('repositories:update.feedbacks.updateError.title'),
       });
     },

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Form } from '@/components/Form';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
@@ -26,13 +26,11 @@ export default function PageAdminUserCreate() {
   const router = useRouter();
   const trpcUtils = trpc.useUtils();
 
-  const toastError = useToastError();
-  const toastSuccess = useToastSuccess();
-
   const createUser = trpc.users.create.useMutation({
     onSuccess: async () => {
       await trpcUtils.users.getAll.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('users:create.feedbacks.updateSuccess.title'),
       });
       router.back();
@@ -42,7 +40,8 @@ export default function PageAdminUserCreate() {
         form.setError('email', { message: t('users:data.email.alreadyUsed') });
         return;
       }
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('users:create.feedbacks.updateError.title'),
       });
     },

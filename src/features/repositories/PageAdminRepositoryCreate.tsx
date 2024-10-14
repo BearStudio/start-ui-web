@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Form } from '@/components/Form';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
@@ -28,13 +28,11 @@ export default function PageAdminRepositoryCreate() {
   const trpcUtils = trpc.useUtils();
   const router = useRouter();
 
-  const toastError = useToastError();
-  const toastSuccess = useToastSuccess();
-
   const createRepository = trpc.repositories.create.useMutation({
     onSuccess: async () => {
       await trpcUtils.repositories.getAll.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('repositories:create.feedbacks.updateSuccess.title'),
       });
       router.back();
@@ -46,7 +44,8 @@ export default function PageAdminRepositoryCreate() {
         });
         return;
       }
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('repositories:create.feedbacks.updateError.title'),
       });
     },

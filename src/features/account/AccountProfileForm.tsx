@@ -13,7 +13,7 @@ import {
   FormFieldLabel,
 } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
@@ -31,18 +31,17 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
-  const toastSuccess = useToastSuccess();
-  const toastError = useToastError();
-
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
       await trpcUtils.account.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('account:profile.feedbacks.updateSuccess.title'),
       });
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('account:profile.feedbacks.updateError.title'),
       });
     },

@@ -17,19 +17,17 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useToast,
 } from '@chakra-ui/react';
+import { toast } from 'sonner';
 
 export const DemoModalInterceptor = ({ onClose }: { onClose: () => void }) => {
-  const toast = useToast();
-
-  const toastCloseAll = toast.closeAll;
-
   useEffect(() => {
-    setTimeout(() => {
-      toastCloseAll();
+    const timer = setTimeout(() => {
+      toast.dismiss();
     });
-  }, [toastCloseAll]);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Modal isOpen onClose={onClose}>

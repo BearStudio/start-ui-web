@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorPage } from '@/components/ErrorPage';
 import { Form } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import { AdminCancelButton } from '@/features/admin/AdminCancelButton';
 import {
@@ -39,13 +39,11 @@ export default function PageAdminUserUpdate() {
     }
   );
 
-  const toastSuccess = useToastSuccess();
-  const toastError = useToastError();
-
   const userUpdate = trpc.users.updateById.useMutation({
     onSuccess: async () => {
       await trpcUtils.users.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('users:update.feedbacks.updateSuccess.title'),
       });
       router.back();
@@ -55,7 +53,8 @@ export default function PageAdminUserUpdate() {
         form.setError('email', { message: t('users:data.email.alreadyUsed') });
         return;
       }
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('users:update.feedbacks.updateError.title'),
       });
     },

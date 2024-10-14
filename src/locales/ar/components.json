@@ -93,5 +93,8 @@
   "fieldPassword": {
     "showPassword": "عرض كلمة المرور",
     "hidePassword": "إخفاء كلمة المرور"
+  },
+  "toast": {
+    "closeToast": "إغلاق الرسالة"
   }
 }

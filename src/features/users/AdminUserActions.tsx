@@ -17,7 +17,7 @@ import { ActionsButton } from '@/components/ActionsButton';
 import { ConfirmMenuItem } from '@/components/ConfirmMenuItem';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Icon } from '@/components/Icons';
-import { useToastError, useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { ROUTES_USERS } from '@/features/users/routes';
 import { trpc } from '@/lib/trpc/client';
 import type { RouterOutputs } from '@/lib/trpc/types';
@@ -32,13 +32,11 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
   const trpcUtils = trpc.useUtils();
   const isCurrentUser = account.data?.id === user.id;
 
-  const toastSuccess = useToastSuccess();
-  const toastError = useToastError();
-
   const activateUser = trpc.users.activate.useMutation({
     onSuccess: async ({ email, name }) => {
       await trpcUtils.users.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('users:feedbacks.activateUserSuccess.title'),
         description: t('users:feedbacks.activateUserSuccess.description', {
           login: name ?? email,
@@ -46,7 +44,8 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
       });
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('users:feedbacks.activateUserError.title'),
         description: t('users:feedbacks.activateUserError.description', {
           login: user.name ?? user.email,
@@ -57,7 +56,8 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
   const deactivateUser = trpc.users.deactivate.useMutation({
     onSuccess: async ({ email, name }) => {
       await trpcUtils.users.invalidate();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('users:feedbacks.deactivateUserSuccess.title'),
         description: t('users:feedbacks.deactivateUserSuccess.description', {
           login: name ?? email,
@@ -65,7 +65,8 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
       });
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('users:feedbacks.deactivateUserError.title'),
         description: t('users:feedbacks.deactivateUserError.description', {
           login: user.name ?? user.email,
@@ -79,7 +80,8 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
       await trpcUtils.users.getAll.invalidate();
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('users:feedbacks.deleteUserError.title'),
         description: t('users:feedbacks.deleteUserError.description', {
           login: user.name ?? user.email,

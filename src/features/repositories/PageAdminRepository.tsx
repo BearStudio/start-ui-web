@@ -20,7 +20,7 @@ import { ErrorPage } from '@/components/ErrorPage';
 import { Icon } from '@/components/Icons';
 import { LoaderFull } from '@/components/LoaderFull';
 import { ResponsiveIconButton } from '@/components/ResponsiveIconButton';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { AdminBackButton } from '@/features/admin/AdminBackButton';
 import {
   AdminLayoutPage,
@@ -33,7 +33,6 @@ import { trpc } from '@/lib/trpc/client';
 export default function PageAdminRepository() {
   const { t } = useTranslation(['common', 'repositories']);
 
-  const toastError = useToastError();
   const trpcUtils = trpc.useUtils();
 
   const router = useRouter();
@@ -48,7 +47,8 @@ export default function PageAdminRepository() {
       router.replace(ROUTES_REPOSITORIES.admin.root());
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('repositories:feedbacks.deleteRepositoryError.title'),
         description: t(
           'repositories:feedbacks.deleteRepositoryError.description'
