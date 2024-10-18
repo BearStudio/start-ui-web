@@ -13,7 +13,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Form } from '@/components/Form';
-import { useToastSuccess } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import {
   VerificationCodeForm,
   useOnVerificationCodeError,
@@ -32,7 +32,6 @@ export const EmailVerificationCodeModale = () => {
     attempts: parseAsInteger.withDefault(0),
   });
   const trpcUtils = trpc.useUtils();
-  const toastSuccess = useToastSuccess();
 
   const onClose = () => {
     trpcUtils.account.get.reset();
@@ -56,7 +55,8 @@ export const EmailVerificationCodeModale = () => {
   const updateEmailValidate = trpc.account.updateEmailValidate.useMutation({
     onSuccess: async () => {
       onClose();
-      toastSuccess({
+      toastCustom({
+        status: 'success',
         title: t('account:email.feedbacks.updateSuccess.title'),
       });
     },
