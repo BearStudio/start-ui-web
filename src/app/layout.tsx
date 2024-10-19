@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 import { Document } from '@/app/Document';
 import { NextLoader } from '@/app/NextLoader';
-import { getEnvHintTitlePrefix } from '@/features/devtools/EnvHint';
+import { getEnvHintTitlePrefix } from '@/features/devtools/AppHint';
 
 export const metadata: Metadata = {
   title: {
