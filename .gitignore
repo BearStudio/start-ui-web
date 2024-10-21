@@ -64,3 +64,4 @@ prisma/dev.db-journal
 **/public/worker-development.js*
 
 certificates
+.history
