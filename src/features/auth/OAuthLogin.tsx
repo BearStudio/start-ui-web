@@ -77,7 +77,7 @@ export const OAuthLoginButtonsGrid = () => {
 
 export const OAuthLoginDivider = () => {
   const { t } = useTranslation(['common']);
-  if (!OAUTH_PROVIDERS_ENABLED_ARRAY.some((p) => p.isEnabled)) return null;
+  if (!OAUTH_PROVIDERS_ENABLED_ARRAY.length) return null;
   return (
     <Flex alignItems="center" gap={2}>
       <Divider flex={1} />
