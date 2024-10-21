@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 
-import { OAuthProvider } from '@/lib/oauth/config';
+import { OAuthProvider } from '@/features/auth/oauth-config';
 import { discord } from '@/server/config/oauth/providers/discord';
 import { github } from '@/server/config/oauth/providers/github';
 import { google } from '@/server/config/oauth/providers/google';

@@ -15,7 +15,7 @@ import {
   OAUTH_PROVIDERS,
   OAUTH_PROVIDERS_ENABLED_ARRAY,
   OAuthProvider,
-} from '@/lib/oauth/config';
+} from '@/features/auth/oauth-config';
 import { trpc } from '@/lib/trpc/client';
 
 export const OAuthLoginButton = ({

@@ -7,8 +7,8 @@ import { z } from 'zod';
 
 import { env } from '@/env.mjs';
 import { zUserAccount } from '@/features/account/schemas';
+import { OAUTH_PROVIDERS, zOAuthProvider } from '@/features/auth/oauth-config';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
-import { OAUTH_PROVIDERS, zOAuthProvider } from '@/lib/oauth/config';
 import locales from '@/locales';
 import { createSession } from '@/server/config/auth';
 import { oAuthProvider } from '@/server/config/oauth';
@@ -179,7 +179,8 @@ export const oauthRouter = createTRPCRouter({
         ctx.logger.info('Account is disabled');
         throw new TRPCError({
           code: 'UNAUTHORIZED',
-          message: 'Unable to authenticate. Please contact support if this issue persists.',
+          message:
+            'Unable to authenticate. Please contact support if this issue persists.',
         });
       }
 

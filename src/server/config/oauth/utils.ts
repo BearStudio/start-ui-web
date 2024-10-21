@@ -1,5 +1,5 @@
 import { env } from '@/env.mjs';
-import { OAuthProvider } from '@/lib/oauth/config';
+import { OAuthProvider } from '@/features/auth/oauth-config';
 import { AppContext } from '@/server/config/trpc';
 
 export type OAuthClient = {

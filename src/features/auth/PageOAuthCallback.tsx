@@ -13,8 +13,8 @@ import { LoaderFull } from '@/components/LoaderFull';
 import { useToastError } from '@/components/Toast';
 import { ROUTES_ADMIN } from '@/features/admin/routes';
 import { ROUTES_APP } from '@/features/app/routes';
+import { zOAuthProvider } from '@/features/auth/oauth-config';
 import { ROUTES_AUTH } from '@/features/auth/routes';
-import { zOAuthProvider } from '@/lib/oauth/config';
 import { trpc } from '@/lib/trpc/client';
 
 export default function PageOAuthCallback() {
