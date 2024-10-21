@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { LoaderFull } from '@/components/LoaderFull';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { ROUTES_ADMIN } from '@/features/admin/routes';
 import { ROUTES_APP } from '@/features/app/routes';
 import { zOAuthProvider } from '@/features/auth/oauth-config';
@@ -19,7 +19,6 @@ import { trpc } from '@/lib/trpc/client';
 
 export default function PageOAuthCallback() {
   const { i18n, t } = useTranslation(['auth']);
-  const toastError = useToastError();
   const router = useRouter();
   const isTriggeredRef = useRef(false);
   const params = z
@@ -40,7 +39,10 @@ export default function PageOAuthCallback() {
       router.replace(ROUTES_APP.root());
     },
     onError: () => {
-      toastError({ title: t('auth:login.feedbacks.loginError.title') });
+      toastCustom({
+        status: 'error',
+        title: t('auth:login.feedbacks.loginError.title'),
+      });
       router.replace(ROUTES_AUTH.login());
     },
   });

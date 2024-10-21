@@ -13,7 +13,7 @@ import {
   FormFieldController,
   FormFieldLabel,
 } from '@/components/Form';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import {
   OAuthLoginButtonsGrid,
   OAuthLoginDivider,

@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@/components/Icons';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import {
   OAUTH_PROVIDERS,
   OAUTH_PROVIDERS_ENABLED_ARRAY,
@@ -26,13 +26,13 @@ export const OAuthLoginButton = ({
 } & ButtonProps) => {
   const { t } = useTranslation(['auth']);
   const router = useRouter();
-  const toastError = useToastError();
   const loginWith = trpc.oauth.createAuthorizationUrl.useMutation({
     onSuccess: (data) => {
       router.push(data.url);
     },
     onError: (error) => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('auth:login.feedbacks.oAuthError.title', {
           provider: OAUTH_PROVIDERS[provider].label,
         }),
