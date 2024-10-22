@@ -13,7 +13,11 @@ import {
   FormFieldController,
   FormFieldLabel,
 } from '@/components/Form';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
+import {
+  OAuthLoginButtonsGrid,
+  OAuthLoginDivider,
+} from '@/features/auth/OAuthLogin';
 import { ROUTES_AUTH } from '@/features/auth/routes';
 import {
   FormFieldsRegister,
@@ -26,7 +30,6 @@ import { trpc } from '@/lib/trpc/client';
 export default function PageRegister() {
   const { t, i18n } = useTranslation(['common', 'auth']);
 
-  const toastError = useToastError();
   const router = useRouter();
 
   const register = trpc.auth.register.useMutation({
@@ -39,7 +42,8 @@ export default function PageRegister() {
       );
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('auth:register.feedbacks.registrationError.title'),
       });
     },
@@ -87,6 +91,10 @@ export default function PageRegister() {
           </Box>
         </Button>
       </Stack>
+
+      <OAuthLoginButtonsGrid />
+      <OAuthLoginDivider />
+
       <Form
         {...form}
         onSubmit={(values) => {

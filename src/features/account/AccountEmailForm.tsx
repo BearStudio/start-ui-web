@@ -14,7 +14,7 @@ import {
   FormFieldLabel,
 } from '@/components/Form';
 import { LoaderFull } from '@/components/LoaderFull';
-import { useToastError } from '@/components/Toast';
+import { toastCustom } from '@/components/Toast';
 import { EmailVerificationCodeModale } from '@/features/account/EmailVerificationCodeModal';
 import {
   FormFieldsAccountEmail,
@@ -33,8 +33,6 @@ export const AccountEmailForm = () => {
     staleTime: Infinity,
   });
 
-  const toastError = useToastError();
-
   const updateEmail = trpc.account.updateEmail.useMutation({
     onSuccess: async ({ token }, { email }) => {
       setSearchParams({
@@ -43,7 +41,8 @@ export const AccountEmailForm = () => {
       });
     },
     onError: () => {
-      toastError({
+      toastCustom({
+        status: 'error',
         title: t('account:email.feedbacks.updateError.title'),
       });
     },
