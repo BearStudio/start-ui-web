@@ -14,6 +14,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { LuSearch, LuX } from 'react-icons/lu';
 
+import { useValueHasChanged } from '@/hooks/useValueHasChanged';
+
 type CustomProps = {
   value?: string;
   defaultValue?: string;
@@ -64,11 +66,10 @@ export const SearchInput = forwardRef<SearchInputProps, 'input'>(
       return () => clearTimeout(handler);
     }, [search, delay]);
 
-    useEffect(() => {
-      if (externalValue !== searchRef.current) {
-        setSearch(externalValue);
-      }
-    }, [externalValue]);
+    const externalValueHasChanged = useValueHasChanged(externalValue);
+    if (externalValueHasChanged && externalValue !== searchRef.current) {
+      setSearch(externalValue);
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(event.target.value);

@@ -179,7 +179,9 @@ export const ConfirmMenuItem = forwardRef<ConfirmMenuItemProps, 'button'>(
             },
           },
           icon: icon
-            ? React.cloneElement(icon, { color: 'transparent' })
+            ? // TODO @eslint-react rule
+              // eslint-disable-next-line @eslint-react/no-clone-element
+              React.cloneElement(icon, { color: 'transparent' })
             : icon,
         }
       : {};

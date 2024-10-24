@@ -4,8 +4,11 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
+
+import { useValueHasChanged } from '@/hooks/useValueHasChanged';
 
 type YearContextType = {
   year: number;
@@ -27,23 +30,25 @@ export const YearProvider: React.FC<
   React.PropsWithChildren<YearProviderProp>
 > = ({ year: yearProp, onYearChange, children }) => {
   const [year, setYear] = useState(yearProp);
+  const yearHasChanged = useValueHasChanged(yearProp);
 
-  useEffect(() => {
+  if (yearHasChanged && yearProp !== year) {
     setYear(yearProp);
-  }, [yearProp]);
+  }
 
   useEffect(() => {
     onYearChange?.(year);
   }, [onYearChange, year]);
 
+  const contextValue = useMemo(
+    () => ({
+      year,
+      setYear,
+    }),
+    [year]
+  );
+
   return (
-    <YearContext.Provider
-      value={{
-        year,
-        setYear,
-      }}
-    >
-      {children}
-    </YearContext.Provider>
+    <YearContext.Provider value={contextValue}>{children}</YearContext.Provider>
   );
 };
