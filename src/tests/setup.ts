@@ -1,6 +1,8 @@
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
+import '@/lib/dayjs/config';
+
 afterEach(cleanup);
 
 Object.defineProperty(window, 'matchMedia', {
