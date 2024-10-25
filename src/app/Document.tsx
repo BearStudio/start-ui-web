@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import { ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
@@ -63,11 +64,14 @@ export const Document = ({ children }: { children: ReactNode }) => {
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
         <Providers>
-          <TrpcProvider>
-            <Viewport>{children}</Viewport>
-            <EnvHint />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </TrpcProvider>
+          {/* Putting nuqs adapter here and not in providers as the testing requires another adapter */}
+          <NuqsAdapter>
+            <TrpcProvider>
+              <Viewport>{children}</Viewport>
+              <EnvHint />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </TrpcProvider>
+          </NuqsAdapter>
         </Providers>
       </body>
     </html>
