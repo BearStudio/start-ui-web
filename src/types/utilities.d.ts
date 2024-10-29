@@ -27,3 +27,9 @@ type StrictUnionHelper<T, TAll> = T extends ExplicitAny
   ? T & Partial<Record<Exclude<UnionKeys<TAll>, keyof T>, undefined>>
   : never;
 type StrictUnion<T> = StrictUnionHelper<T, T>;
+
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;

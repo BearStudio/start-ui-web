@@ -127,7 +127,7 @@
     "@types/nodemailer": "6.4.15",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@typescript-eslint/eslint-plugin": "8.8.0",
+    "@typescript-eslint/eslint-plugin": "8.12.1",
     "@vitejs/plugin-react": "4.3.1",
     "@vitest/ui": "2.0.1",
     "cross-env": "7.0.3",
@@ -149,7 +149,7 @@
     "storybook": "8.1.11",
     "storybook-dark-mode": "4.0.2",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
+    "typescript": "5.3.3",
     "vitest": "2.0.1"
   },
   "prisma": {
