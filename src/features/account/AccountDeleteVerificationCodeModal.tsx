@@ -42,11 +42,7 @@ export const AccountDeleteVerificationCodeModale = () => {
   );
 
   const onClose = () => {
-    setSearchParams({
-      [SEARCH_PARAM_VERIFY_EMAIL]: null,
-      token: null,
-      attempts: null,
-    });
+    setSearchParams(null);
   };
 
   const form = useForm<FormFieldsVerificationCode>({

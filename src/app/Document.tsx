@@ -64,7 +64,6 @@ export const Document = ({ children }: { children: ReactNode }) => {
           storageKey={COLOR_MODE_STORAGE_KEY}
         />
         <Providers>
-          {/* Putting nuqs adapter here and not in providers as the testing requires another adapter */}
           <NuqsAdapter>
             <TrpcProvider>
               <Viewport>{children}</Viewport>
