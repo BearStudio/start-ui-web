@@ -111,8 +111,8 @@ importers:
         specifier: 6.9.14
         version: 6.9.14
       nuqs:
-        specifier: 2.0.4
-        version: 2.0.4(next@14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@5.3.4(react@18.3.1))(react@18.3.1)
+        specifier: 2.1.1
+        version: 2.1.1(next@14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@5.3.4(react@18.3.1))(react@18.3.1)
       oslo:
         specifier: 1.2.1
         version: 1.2.1
@@ -7708,8 +7708,8 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
-  nuqs@2.0.4:
-    resolution: {integrity: sha512-d0GQCOHW9o04slcTe9nfTgskCT/09K5pOMXu671Y8p7d/48KEKJLzZjklWXIt3pFjYaplErMZpXiLiYo0w8uQQ==}
+  nuqs@2.1.1:
+    resolution: {integrity: sha512-iM2H8lMmhvk9bxupUs2oRle9usRNEAqppOkTMXOxD/uK85gOKAubU7T2zmPo8fnYQS4n5e/XswTiq+gLYGpy3w==}
     peerDependencies:
       '@remix-run/react': '>= 2'
       next: '>= 14.2.0'
@@ -19382,7 +19382,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@2.0.4(next@14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@5.3.4(react@18.3.1))(react@18.3.1):
+  nuqs@2.1.1(next@14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@5.3.4(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
