@@ -39,12 +39,13 @@ export const FieldCheckbox = <
   return (
     <Controller
       {...props}
-      render={({ field: { value, ...field } }) => (
+      render={({ field: { value, ...field }, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <Checkbox
             size={props.size}
             isChecked={!!value}
             isDisabled={props.isDisabled}
+            isInvalid={!!fieldState.error}
             {...props.checkboxProps}
             {...field}
           >

@@ -44,9 +44,14 @@ export const Default = () => {
               control={form.control}
               name="other"
               type="custom"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <>
-                  <Input w={24} size="sm" {...field} />
+                  <Input
+                    w={24}
+                    size="sm"
+                    {...field}
+                    isInvalid={!!fieldState.error}
+                  />
                   <FormFieldError />
                 </>
               )}

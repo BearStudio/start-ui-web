@@ -44,7 +44,7 @@ export const FieldPassword = <
   return (
     <Controller
       {...props}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <InputGroup size={props.size}>
             <Input
@@ -52,6 +52,7 @@ export const FieldPassword = <
               type={showPassword ? 'text' : 'password'}
               placeholder={props.placeholder}
               autoFocus={props.autoFocus}
+              isInvalid={!!fieldState.error}
               {...props.inputProps}
               {...field}
             />

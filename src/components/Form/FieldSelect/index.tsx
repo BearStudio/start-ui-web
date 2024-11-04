@@ -41,7 +41,7 @@ export const FieldSelect = <
   return (
     <Controller
       {...props}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         const { value, onChange, ...fieldProps } = field;
         const selectValue =
           props.options?.find((option) => option.value === value) ?? undefined;
@@ -60,6 +60,7 @@ export const FieldSelect = <
               autoFocus={props.autoFocus}
               value={selectValue}
               isDisabled={props.isDisabled}
+              isInvalid={!!fieldState.error}
               // @ts-expect-error should fix the typing. This error pops when
               // we propagate the `selectProps`
               onChange={(option) => onChange(option?.value)}
