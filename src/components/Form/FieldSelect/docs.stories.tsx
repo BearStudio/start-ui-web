@@ -12,7 +12,7 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    color: z.enum(['red', 'green', 'blue']),
+    color: z.enum(['red', 'green', 'blue']).nullish(),
   });
 
 const options = [
@@ -132,6 +132,35 @@ export const ChakraProps = () => {
                   backgroundColor: `${color}.100`,
                 }),
               },
+            }}
+          />
+        </FormField>
+        <Box>
+          <Button type="submit" variant="@primary">
+            Submit
+          </Button>
+        </Box>
+      </Stack>
+    </Form>
+  );
+};
+
+export const Clearable = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Form {...form} onSubmit={(values) => console.log(values)}>
+      <Stack spacing={4}>
+        <FormField>
+          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="color"
+            placeholder="Placeholder"
+            options={options}
+            selectProps={{
+              isClearable: true,
             }}
           />
         </FormField>

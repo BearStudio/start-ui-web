@@ -60,10 +60,17 @@ export const FieldSelect = <
               autoFocus={props.autoFocus}
               value={selectValue}
               isDisabled={props.isDisabled}
-              // @ts-expect-error should fix the typing. This error pops when
-              // we propagate the `selectProps`
-              onChange={(option) => onChange(option?.value)}
               {...props.selectProps}
+              onChange={(newValue, actionMeta) => {
+                if (actionMeta.action === 'clear') {
+                  // Set the value to null on clear
+                  onChange(null);
+                  return;
+                }
+                // @ts-expect-error TODO should fix the typing. This error pops when
+                // we propagate the `selectProps`
+                onChange(newValue?.value);
+              }}
               {...fieldProps}
             />
             <FormFieldError />
