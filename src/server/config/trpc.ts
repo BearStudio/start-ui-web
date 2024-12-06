@@ -12,7 +12,7 @@ import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { getHTTPStatusCodeFromError } from '@trpc/server/http';
 import { randomUUID } from 'node:crypto';
 import superjson from 'superjson';
-import { OpenApiMeta } from 'trpc-openapi';
+import { OpenApiMeta } from 'trpc-to-openapi';
 import { ZodError } from 'zod';
 
 import { env } from '@/env.mjs';

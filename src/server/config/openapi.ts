@@ -1,4 +1,4 @@
-import { generateOpenApiDocument } from 'trpc-openapi';
+import { generateOpenApiDocument } from 'trpc-to-openapi';
 
 import { env } from '@/env.mjs';
 import { appRouter } from '@/server/router';

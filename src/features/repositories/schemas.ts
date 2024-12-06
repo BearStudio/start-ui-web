@@ -15,16 +15,15 @@ export const zRepository = () =>
       .nonEmpty(z.string(), {
         required_error: t('repositories:data.link.required'),
       })
+      .transform((v) => (v.startsWith('http') ? v : `https://${v}`))
       .pipe(
         z
           .string()
-          .min(4, t('repositories:data.link.tooSmall', { min: 4 }))
+          .min(8, t('repositories:data.link.tooSmall', { min: 4 }))
           .includes('.', { message: t('repositories:data.link.missingDot') })
-      )
-      .transform((v) => (v.startsWith('http') ? v : `https://${v}`)),
+      ),
     description: zu.string.nonEmptyNullable(z.string()),
   });
-
 export type FormFieldsRepository = z.infer<
   ReturnType<typeof zFormFieldsRepository>
 >;
