@@ -44,7 +44,7 @@ export const OAuthLoginButton = ({
   return (
     <Button
       onClick={() => loginWith.mutate({ provider: provider })}
-      isLoading={loginWith.isLoading || loginWith.isSuccess}
+      isLoading={loginWith.isPending || loginWith.isSuccess}
       leftIcon={<Icon icon={OAUTH_PROVIDERS[provider].icon} />}
       {...rest}
     >

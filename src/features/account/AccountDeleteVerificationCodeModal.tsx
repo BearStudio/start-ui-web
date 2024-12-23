@@ -84,7 +84,7 @@ export const AccountDeleteVerificationCodeModale = () => {
           <Form {...form} onSubmit={onSubmit}>
             <VerificationCodeForm
               email={searchParams[SEARCH_PARAM_VERIFY_EMAIL] ?? ''}
-              isLoading={updateEmailValidate.isLoading}
+              isLoading={updateEmailValidate.isPending}
               confirmText={t('account:deleteAccount.validate.button')}
               confirmVariant="@dangerPrimary"
               autoSubmit={false}
