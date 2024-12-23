@@ -112,9 +112,11 @@ const loggerMiddleware = t.middleware(async (opts) => {
     apiType: opts.ctx.apiType,
   };
 
+  const rawInput = await opts.getRawInput();
+
   logger.debug(
-    { ...meta, input: await opts.getRawInput() },
-    `${(await opts.getRawInput()) ? '📨 With' : '📥 No'} input`
+    { ...meta, input: rawInput },
+    `${rawInput ? '📨 With' : '📥 No'} input`
   );
 
   // We are doing the next operation in tRPC

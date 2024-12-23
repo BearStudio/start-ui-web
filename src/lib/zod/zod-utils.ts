@@ -26,6 +26,7 @@ export const zu = {
       return z
         .literal('')
         .transform(() => null)
+        .pipe(z.null())
         .or(zu.string.nonEmpty(s, options).nullable());
     },
     nonEmptyNullish(
@@ -37,6 +38,7 @@ export const zu = {
       return z
         .literal('')
         .transform(() => null)
+        .pipe(z.null())
         .or(zu.string.nonEmpty(s, options).nullish());
     },
     email(
@@ -80,12 +82,14 @@ export const zu = {
       return a
         .length(0)
         .transform(() => null)
+        .pipe(z.null())
         .or(zu.array.nonEmpty(a, message).nullable());
     },
     nonEmptyNullish<T extends Schema>(a: ZodArray<T>, message?: string) {
       return a
         .length(0)
         .transform(() => null)
+        .pipe(z.null())
         .or(zu.array.nonEmpty(a, message).nullish());
     },
   },

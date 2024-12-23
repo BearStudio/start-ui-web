@@ -102,6 +102,7 @@
     "ts-pattern": "5.6.0",
     "zod": "3.23.8",
     "zod-i18n-map": "2.27.0",
+    "zod-openapi": "4.2.1",
     "zustand": "4.5.4"
   },
   "devDependencies": {
