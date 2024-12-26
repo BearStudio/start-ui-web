@@ -87,10 +87,20 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
         onChange(v);
       }
       if (e.key === 'ArrowUp') {
-        onChange(clamp((v ?? 0) + (e.shiftKey ? bigStep : step), { min, max }));
+        const newValue = clamp((v ?? 0) + (e.shiftKey ? bigStep : step), {
+          min,
+          max,
+        });
+        setRawInput(String(newValue));
+        onChange(newValue);
       }
       if (e.key === 'ArrowDown') {
-        onChange(clamp((v ?? 0) - (e.shiftKey ? bigStep : step), { min, max }));
+        const newValue = clamp((v ?? 0) - (e.shiftKey ? bigStep : step), {
+          min,
+          max,
+        });
+        onChange(newValue);
+        setRawInput(String(newValue));
       }
       rest.onKeyDown?.(e);
     };
