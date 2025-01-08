@@ -21,6 +21,12 @@ const config: StorybookConfig = {
   typescript: {
     reactDocgen: 'react-docgen-typescript',
   },
+
+  refs: {
+    // Disable Chakra UI storybook composition as it fetches the v3.
+    // I did not find the URL of the v2 at the moment to replace it.
+    '@chakra-ui/react': { disable: true },
+  },
 };
 
 export default config;
