@@ -17,14 +17,13 @@ import {
 import { zUserAuthorization, zUserWithEmail } from '@/features/users/schemas';
 import i18n from '@/lib/i18n/server';
 import {
-  createSession,
-  deleteSession,
   deleteUsedCode,
   generateCode,
   validateCode,
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
+import { createSession, invalidateSession } from '@/server/config/session';
 import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
 
 export const authRouter = createTRPCRouter({
@@ -211,7 +210,7 @@ export const authRouter = createTRPCRouter({
         return;
       }
 
-      deleteSession(ctx.session.id);
+      await invalidateSession(ctx.session.id);
     }),
 
   register: publicProcedure()

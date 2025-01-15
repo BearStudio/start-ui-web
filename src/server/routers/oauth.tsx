@@ -10,8 +10,8 @@ import { zUserAccount } from '@/features/account/schemas';
 import { OAUTH_PROVIDERS, zOAuthProvider } from '@/features/auth/oauth-config';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 import locales from '@/locales';
-import { createSession } from '@/server/config/auth';
 import { oAuthProvider } from '@/server/config/oauth';
+import { createSession } from '@/server/config/session';
 import { createTRPCRouter, publicProcedure } from '@/server/config/trpc';
 
 export const oauthRouter = createTRPCRouter({

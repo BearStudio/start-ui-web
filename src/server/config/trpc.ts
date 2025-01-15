@@ -17,9 +17,9 @@ import { ZodError } from 'zod';
 
 import { env } from '@/env.mjs';
 import { UserAuthorization } from '@/features/users/schemas';
-import { getServerAuthSession } from '@/server/config/auth';
 import { db } from '@/server/config/db';
 import { logger } from '@/server/config/logger';
+import { getCurrentSession } from '@/server/config/session';
 
 /**
  * 1. CONTEXT
@@ -40,7 +40,7 @@ export type AppContext = Awaited<ReturnType<typeof createTRPCContext>>;
 export const createTRPCContext = async ({
   req,
 }: FetchCreateContextFnOptions) => {
-  const { session, user } = await getServerAuthSession();
+  const { session, user } = await getCurrentSession();
 
   const apiType: 'REST' | 'TRPC' = new URL(req.url).pathname.startsWith(
     '/api/rest'
