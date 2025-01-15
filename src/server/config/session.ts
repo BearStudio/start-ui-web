@@ -27,8 +27,7 @@ export const getCurrentSession = cache(
         session: null,
       };
 
-    const result = await validateSession(token);
-    return result;
+    return await validateSession(token);
   }
 );
 
@@ -72,7 +71,7 @@ export async function validateSession(
     return { session: null, user: null };
   }
 
-  refreshSession(session.id);
+  refreshSession(session);
   return { session, user };
 }
 
@@ -81,20 +80,8 @@ export async function invalidateSession(sessionId: string): Promise<void> {
   clearSessionCookie();
 }
 
-export async function refreshSession(sessionId: string): Promise<void> {
-  const result = await db.session.findUnique({
-    where: {
-      id: sessionId,
-    },
-    include: {
-      user: true,
-    },
-  });
-  if (result === null) return;
-
-  const { user, ...session } = result;
-
-  // session expiresAt refresh based on half-life
+// session expiresAt refresh based on half-life
+export async function refreshSession(session: Session): Promise<void> {
   if (
     Date.now() >=
     session.expiresAt.getTime() - (1000 * env.SESSION_EXPIRATION_SECONDS) / 2
@@ -133,8 +120,7 @@ async function storeSessionToken(
 function createSessionToken(): string {
   const bytes = new Uint8Array(ENTROPY_BYTES_SIZE);
   crypto.getRandomValues(bytes);
-  const token = encodeBase32LowerCaseNoPadding(bytes);
-  return token;
+  return encodeBase32LowerCaseNoPadding(bytes);
 }
 
 // We store the token in a hashed format for security reasons
@@ -146,7 +132,7 @@ function setSessionTokenCookie(token: string, expiresAt: Date): void {
   cookies().set(AUTH_COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     expires: expiresAt,
     path: '/',
   });
@@ -156,7 +142,7 @@ function clearSessionCookie(): void {
   cookies().set(AUTH_COOKIE_NAME, '', {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     maxAge: 0,
     path: '/',
   });

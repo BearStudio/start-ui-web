@@ -1,10 +1,7 @@
-import { cache } from 'react';
-
 import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
-import { cookies, headers } from 'next/headers';
 import { generateRandomString } from 'oslo/crypto';
 
 import { env } from '@/env.mjs';
