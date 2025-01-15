@@ -12,7 +12,7 @@ import { env } from '@/env.mjs';
 import { db } from '@/server/config/db';
 
 const ENTROPY_BYTES_SIZE = 20;
-export const AUTH_COOKIE_NAME = 'session';
+const AUTH_COOKIE_NAME = 'session';
 
 export const getCurrentSession = cache(
   async (): Promise<SessionValidationResult> => {
