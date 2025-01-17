@@ -59,7 +59,7 @@ export async function validateSession(
   const { user, ...session } = result;
 
   if (user?.accountStatus !== 'ENABLED') {
-    clearSessionCookie();
+    invalidateSession(sessionId);
     return {
       user: null,
       session: null,
@@ -67,8 +67,7 @@ export async function validateSession(
   }
 
   if (Date.now() >= session.expiresAt.getTime()) {
-    await db.session.delete({ where: { id: sessionId } });
-    clearSessionCookie();
+    invalidateSession(sessionId);
     return { session: null, user: null };
   }
 
