@@ -7,12 +7,13 @@ import {
 } from '@oslojs/encoding';
 import { Session, User } from '@prisma/client';
 import { cookies, headers } from 'next/headers';
+import { getRandomValues } from 'node:crypto';
 
 import { env } from '@/env.mjs';
 import { db } from '@/server/config/db';
 
+export const AUTH_COOKIE_NAME = 'session';
 const ENTROPY_BYTES_SIZE = 20;
-const AUTH_COOKIE_NAME = 'session';
 
 export const getCurrentSession = cache(
   async (): Promise<SessionValidationResult> => {
@@ -71,7 +72,7 @@ export async function validateSession(
     return { session: null, user: null };
   }
 
-  refreshSession(session);
+  await refreshSession(session);
   return { session, user };
 }
 
@@ -119,7 +120,7 @@ async function storeSessionToken(
 
 function createSessionToken(): string {
   const bytes = new Uint8Array(ENTROPY_BYTES_SIZE);
-  crypto.getRandomValues(bytes);
+  getRandomValues(bytes);
   return encodeBase32LowerCaseNoPadding(bytes);
 }
 

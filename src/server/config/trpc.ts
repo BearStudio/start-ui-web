@@ -10,6 +10,7 @@ import { Prisma } from '@prisma/client';
 import { TRPCError, initTRPC } from '@trpc/server';
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { getHTTPStatusCodeFromError } from '@trpc/server/http';
+import { cookies } from 'next/headers';
 import { randomUUID } from 'node:crypto';
 import superjson from 'superjson';
 import { OpenApiMeta } from 'trpc-openapi';
@@ -19,7 +20,7 @@ import { env } from '@/env.mjs';
 import { UserAuthorization } from '@/features/users/schemas';
 import { db } from '@/server/config/db';
 import { logger } from '@/server/config/logger';
-import { getCurrentSession } from '@/server/config/session';
+import { AUTH_COOKIE_NAME, getCurrentSession } from '@/server/config/session';
 
 /**
  * 1. CONTEXT
@@ -39,6 +40,7 @@ export type AppContext = Awaited<ReturnType<typeof createTRPCContext>>;
  */
 export const createTRPCContext = async ({
   req,
+  resHeaders,
 }: FetchCreateContextFnOptions) => {
   const { session, user } = await getCurrentSession();
 
@@ -54,6 +56,8 @@ export const createTRPCContext = async ({
     apiType,
     logger,
     db,
+    req,
+    resHeaders,
   };
 };
 
@@ -207,7 +211,7 @@ export const protectedProcedure = (
 ) =>
   publicProcedure().use(
     t.middleware(({ ctx, next }) => {
-      const { user, session } = ctx;
+      const { user, session, req, resHeaders } = ctx;
 
       if (!user || !session || user.accountStatus !== 'ENABLED') {
         throw new TRPCError({
@@ -222,6 +226,15 @@ export const protectedProcedure = (
         !options.authorizations.some((a) => user.authorizations.includes(a))
       ) {
         throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      // Refresh the session cookie on GET requests by extending its expiration
+      const token = cookies().get(AUTH_COOKIE_NAME)?.value;
+      if (token && req.method === 'GET') {
+        resHeaders.append(
+          'Set-Cookie',
+          `${AUTH_COOKIE_NAME}=${token}; Path=/; Max-Age=${env.SESSION_EXPIRATION_SECONDS}; SameSite=Lax; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}`
+        );
       }
 
       return next({

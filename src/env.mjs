@@ -11,7 +11,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: zNodeEnv(),
-    SESSION_EXPIRATION_SECONDS: z.coerce.number().int(),
+    SESSION_EXPIRATION_SECONDS: z.coerce.number().int().default(2592000),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
