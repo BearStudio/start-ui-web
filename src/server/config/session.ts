@@ -33,11 +33,19 @@ export const getCurrentSession = cache(
 );
 
 export async function createSession(userId: string): Promise<string> {
-  const token = createSessionToken();
+  await clearExpiredSessions();
+
+  const token = generateSessionToken();
   const session = await storeSessionToken(token, userId);
   setSessionTokenCookie(token, session.expiresAt);
 
   return token;
+}
+
+export async function clearExpiredSessions() {
+  await db.session.deleteMany({
+    where: { expiresAt: { lt: new Date() } },
+  });
 }
 
 export async function validateSession(
@@ -117,7 +125,7 @@ async function storeSessionToken(
   return session;
 }
 
-function createSessionToken(): string {
+function generateSessionToken(): string {
   const bytes = new Uint8Array(ENTROPY_BYTES_SIZE);
   getRandomValues(bytes);
   return encodeBase32LowerCaseNoPadding(bytes);
