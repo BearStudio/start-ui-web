@@ -11,6 +11,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: zNodeEnv(),
+    SESSION_EXPIRATION_SECONDS: z.coerce.number().int().default(2592000),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
@@ -78,6 +79,7 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    SESSION_EXPIRATION_SECONDS: process.env.SESSION_EXPIRATION_SECONDS,
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     LOGGER_LEVEL: process.env.LOGGER_LEVEL,

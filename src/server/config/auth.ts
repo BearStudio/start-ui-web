@@ -1,10 +1,7 @@
-import { cache } from 'react';
-
 import { VerificationToken } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
-import { cookies, headers } from 'next/headers';
 import { generateRandomString } from 'oslo/crypto';
 
 import { env } from '@/env.mjs';
@@ -14,59 +11,6 @@ import {
   getValidationRetryDelayInSeconds,
 } from '@/features/auth/utils';
 import { AppContext } from '@/server/config/trpc';
-
-import { lucia } from './lucia';
-
-/**
- * getServerAuthSession
- */
-export const getServerAuthSession = cache(async () => {
-  const sessionId =
-    headers().get('Authorization')?.split('Bearer ')[1] ??
-    // Get Session from cookies
-    cookies().get(lucia.sessionCookieName)?.value;
-
-  if (!sessionId)
-    return {
-      user: null,
-      session: null,
-    };
-
-  const { user, session } = await lucia.validateSession(sessionId);
-
-  if (user?.accountStatus !== 'ENABLED')
-    return {
-      user: null,
-      session: null,
-    };
-
-  try {
-    if (session?.fresh) {
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-    }
-
-    if (!session) {
-      const sessionCookie = lucia.createBlankSessionCookie();
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-    }
-  } catch {
-    // Next.js throws error when attempting to set cookies when rendering page
-  }
-
-  return {
-    user,
-    session,
-  };
-});
 
 export async function generateCode() {
   const code =
@@ -171,39 +115,4 @@ export async function deleteUsedCode({
   } catch {
     ctx.logger.warn('Failed to delete the used token');
   }
-}
-
-export async function createSession(userId: string) {
-  const session = await lucia.createSession(
-    userId,
-    {
-      // Possible to pass custom session attributes defined when declaring the Lucia instance
-    },
-    {
-      // Possible to pass custom sessionId but otherwise it will be generated
-      // sessionId: CUSTOM_SESSION_ID,
-    }
-  );
-
-  const sessionCookie = lucia.createSessionCookie(session.id);
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-
-  return session.id;
-}
-
-export async function deleteSession(sessionId: string) {
-  await lucia.invalidateSession(sessionId);
-
-  const sessionCookie = lucia.createBlankSessionCookie();
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
 }
