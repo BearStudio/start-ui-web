@@ -65,7 +65,10 @@ export const accountRouter = createTRPCRouter({
         ctx.logger.info('Updating the user');
         return await ctx.db.user.update({
           where: { id: ctx.user.id },
-          data: input,
+          data: {
+            ...input,
+            image: input.image ? `${input.image}?${Date.now()}` : null,
+          },
         });
       } catch (e) {
         ctx.logger.warn('An error occured while updating the user');
