@@ -1,4 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { TRPCError } from '@trpc/server';
+import { stringify } from 'superjson';
 
 import { trpc } from '@/lib/trpc/client';
 
@@ -57,17 +59,28 @@ export const useUploadFileMutation = (
   return useMutation({
     mutationFn: async (file: File) => {
       const presignedUrlOutput = await uploadPresignedUrl.mutateAsync({
-        metadata: {
+        // Metadata is a Record<string, string> but should be serialized for trpc-openapi
+        metadata: stringify({
           name: file.name,
           ...params.getMetadata?.(file),
-        },
+        }),
+        type: 'avatar',
       });
-      await fetch(presignedUrlOutput.signedUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type },
-        body: file,
-      });
-      // TODO ERRORS
+
+      try {
+        await fetch(presignedUrlOutput.signedUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type },
+          body: file,
+        });
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unable to upload the file',
+          cause: e,
+        });
+      }
+
       return presignedUrlOutput.futureFileUrl;
     },
   });
