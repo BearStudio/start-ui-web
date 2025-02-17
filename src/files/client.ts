@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { stringify } from 'superjson';
 
 import { trpc } from '@/lib/trpc/client';
+import { RouterInputs } from '@/lib/trpc/types';
 
 /**
  * Fetches a file from the specified URL and returns file information.
@@ -51,11 +52,10 @@ export const fetchFile = async (url: string, metadata?: string[]) => {
   }, defaultFileData);
 };
 
-export const useUploadFileMutation = (
-  params: {
-    getMetadata?: (file: File) => Record<string, string>;
-  } = {}
-) => {
+export const useUploadFileMutation = (params: {
+  getMetadata?: (file: File) => Record<string, string>;
+  type: RouterInputs['files']['uploadPresignedUrl']['type'];
+}) => {
   const uploadPresignedUrl = trpc.files.uploadPresignedUrl.useMutation();
   return useMutation({
     mutationFn: async (file: File) => {
@@ -63,13 +63,13 @@ export const useUploadFileMutation = (
         // Metadata is a Record<string, string> but should be serialized for trpc-openapi
         metadata: stringify({
           name: file.name,
-          ...params.getMetadata?.(file),
+          ...params?.getMetadata?.(file),
         }),
-        type: 'avatar',
+        type: params.type,
       });
 
       try {
-        await fetch(presignedUrlOutput.signedUrl, {
+        const response = await fetch(presignedUrlOutput.signedUrl, {
           method: 'PUT',
           headers: { 'Content-Type': file.type },
           body: file,
