@@ -43,8 +43,6 @@ export const zFormFieldsAccountProfile = () =>
       name: true,
       language: true,
     })
-    .merge(
-      z.object({
-        image: zFieldUploadValue(['image']).optional(),
-      })
-    );
+    .extend({
+      image: zFieldUploadValue(['image']).optional(),
+    });
