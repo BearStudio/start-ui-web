@@ -32,10 +32,7 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
-  const accountAvatar = useAvatarFetch(account.data?.image || '');
-
-  const toastSuccess = useToastSuccess();
-  const toastError = useToastError();
+  const accountAvatar = useAvatarFetch(account.data?.image ?? '');
 
   const uploadFile = useAvatarUpload();
 
@@ -76,7 +73,7 @@ export const AccountProfileForm = () => {
         fileUrl = uploadResponse.fileUrl;
       }
       updateAccount.mutate({ ...values, image: fileUrl });
-    } catch (e) {
+    } catch {
       form.setError('image', {
         message: t('account:profile.feedbacks.uploadError.title'),
       });
