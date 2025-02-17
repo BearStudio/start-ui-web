@@ -1,20 +1,17 @@
 import { TRPCError } from '@trpc/server';
 import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
-import { parse } from 'superjson';
 import { z } from 'zod';
 
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailUpdateAlreadyUsed from '@/emails/templates/email-update-already-used';
 import EmailUpdateCode from '@/emails/templates/email-update-code';
-import { env } from '@/env.mjs';
 import {
   zUserAccount,
   zUserAccountWithEmail,
 } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
-import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
 import { isFileUrlValidBucket } from '@/files/utils';
 import i18n from '@/lib/i18n/server';
 import {
@@ -24,7 +21,6 @@ import {
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
-import { getS3UploadSignedUrl } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
@@ -305,23 +301,5 @@ export const accountRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       return user;
-    }),
-  uploadAvatarPresignedUrl: protectedProcedure()
-    .meta({
-      openapi: {
-        method: 'GET',
-        path: '/accounts/avatar-upload-presigned-url',
-        tags: ['accounts', 'files'],
-        protect: true,
-      },
-    })
-    .input(zUploadSignedUrlInput())
-    .output(zUploadSignedUrlOutput())
-    .mutation(async ({ ctx, input }) => {
-      return await getS3UploadSignedUrl({
-        key: ctx.user.id,
-        host: env.S3_BUCKET_PUBLIC_URL,
-        metadata: parse(input?.metadata ?? ''),
-      });
     }),
 });

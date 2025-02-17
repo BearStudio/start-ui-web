@@ -32,15 +32,6 @@ export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>
         }),
       }
     );
-
-export type UploadSignedUrlInput = z.infer<
-  ReturnType<typeof zUploadSignedUrlInput>
->;
-export const zUploadSignedUrlInput = () =>
-  z.object({
-    metadata: z.string().optional(),
-  });
-
 export type UploadSignedUrlOutput = z.infer<
   ReturnType<typeof zUploadSignedUrlOutput>
 >;

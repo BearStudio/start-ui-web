@@ -18,7 +18,7 @@ import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
-import { useAvatarFetch, useAvatarUpload } from '@/features/account/service';
+import { useFetchFile, useUploadFileMutation } from '@/files/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -32,8 +32,9 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
-  const accountAvatar = useAvatarFetch(account.data?.image ?? '');
-  const uploadFile = useAvatarUpload();
+  const accountAvatar = useFetchFile(account.data?.image);
+
+  const uploadAvatar = useUploadFileMutation();
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -65,13 +66,13 @@ export const AccountProfileForm = () => {
     image,
     ...values
   }) => {
-    let fileUrl = account.data?.image;
     try {
-      if (image?.file) {
-        const uploadResponse = await uploadFile.mutateAsync(image?.file);
-        fileUrl = uploadResponse.fileUrl;
-      }
-      updateAccount.mutate({ ...values, image: fileUrl });
+      updateAccount.mutate({
+        ...values,
+        image: image?.file
+          ? await uploadAvatar.mutateAsync(image.file)
+          : account.data?.image,
+      });
     } catch {
       form.setError('image', {
         message: t('account:profile.feedbacks.uploadError.title'),
@@ -126,7 +127,7 @@ export const AccountProfileForm = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={updateAccount.isLoading}
+                  isLoading={updateAccount.isLoading || uploadAvatar.isLoading}
                 >
                   {t('account:profile.actions.update')}
                 </Button>
