@@ -32,6 +32,21 @@ export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>
         }),
       }
     );
+
+export type UploadSignedUrlInput = z.infer<
+  ReturnType<typeof zUploadSignedUrlInput>
+>;
+export const zUploadSignedUrlInput = () =>
+  z.object({
+    /**
+     * Must be a string as trpc-openapi requires that attributes must be serialized
+     */
+    metadata: z.string().optional(),
+    name: z.string(),
+    fileType: z.string(),
+    size: z.number(),
+    collection: z.enum(['avatar']),
+  });
 export type UploadSignedUrlOutput = z.infer<
   ReturnType<typeof zUploadSignedUrlOutput>
 >;
