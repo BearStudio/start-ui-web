@@ -7,6 +7,7 @@ import { z } from 'zod';
 import EmailDeleteAccountCode from '@/emails/templates/delete-account-code';
 import EmailUpdateAlreadyUsed from '@/emails/templates/email-update-already-used';
 import EmailUpdateCode from '@/emails/templates/email-update-code';
+import { env } from '@/env.mjs';
 import {
   zUserAccount,
   zUserAccountWithEmail,
@@ -289,5 +290,23 @@ export const accountRouter = createTRPCRouter({
       await deleteUsedCode({ ctx, token: verificationToken.token });
 
       return user;
+    }),
+  uploadAvatarPresignedUrl: protectedProcedure()
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/accounts/avatar-upload-presigned-url',
+        tags: ['accounts', 'files'],
+        protect: true,
+      },
+    })
+    .input(zUploadSignedUrlInput())
+    .output(zUploadSignedUrlOutput())
+    .mutation(async ({ ctx, input }) => {
+      return await getS3UploadSignedUrl({
+        key: ctx.user.id,
+        host: env.S3_BUCKET_PUBLIC_URL,
+        metadata: parse(input?.metadata ?? ''),
+      });
     }),
 });
