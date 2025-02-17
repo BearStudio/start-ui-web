@@ -1,6 +1,8 @@
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
 import { stringify } from 'superjson';
 
+import { env } from '@/env.mjs';
+
 import { UploadSignedUrlInput } from './schemas';
 
 /**
@@ -51,7 +53,7 @@ export const fetchFile = async (url: string, metadata?: string[]) => {
 
 /**
  * Asynchronously uploads a file to a server using a presigned URL.
- * Designed to be used as a `mutationFn` in a `useMutation`. 
+ * Designed to be used as a `mutationFn` in a `useMutation`.
  *
  * @param getPresignedUrl
  *    - An asyncMutation that is used to obtain the presigned URL and the future URL where the file will be accessible.
@@ -93,4 +95,8 @@ export const uploadFile = async (
   return {
     fileUrl: futureFileUrl,
   } as const;
+};
+
+export const isFileUrlValidBucket = async (url: string) => {
+  return url.startsWith(env.S3_BUCKET_PUBLIC_URL);
 };

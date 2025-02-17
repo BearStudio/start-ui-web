@@ -4,14 +4,7 @@ import { z } from 'zod';
 import { zu } from '@/lib/zod/zod-utils';
 
 export type UploadFileType = z.infer<typeof zUploadFileType>;
-export const zUploadFileType = z.enum([
-  'image',
-  'video',
-  'audio',
-  'blob',
-  'pdf',
-  'text',
-]);
+export const zUploadFileType = z.enum(['image', 'application/pdf']);
 
 export type FieldUploadValue = z.infer<ReturnType<typeof zFieldUploadValue>>;
 export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>

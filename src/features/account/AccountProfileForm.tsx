@@ -33,7 +33,6 @@ export const AccountProfileForm = () => {
   });
 
   const accountAvatar = useAvatarFetch(account.data?.image ?? '');
-
   const uploadFile = useAvatarUpload();
 
   const updateAccount = trpc.account.update.useMutation({
