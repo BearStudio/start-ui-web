@@ -52,11 +52,13 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               </AppNavBarDesktopMainMenuItem>
             </HStack>
             <Avatar
+              data-testid="avatar-account"
               as={Link}
               href={ROUTES_ACCOUNT.app.root()}
               size="sm"
-              icon={<></>}
+              src={account.data?.image ?? undefined}
               name={account.data?.name ?? account.data?.email ?? ''}
+              icon={account.isLoading ? <Spinner size="xs" /> : undefined}
               {...(isAccountActive
                 ? {
                     ring: '2px',
@@ -69,9 +71,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
                     },
                   }
                 : {})}
-            >
-              {account.isLoading && <Spinner size="xs" />}
-            </Avatar>
+            />
           </HStack>
         </Container>
       </Flex>

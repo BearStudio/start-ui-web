@@ -18,6 +18,7 @@ import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
+import { useFetchFile, useUploadFileMutation } from '@/files/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -30,6 +31,10 @@ export const AccountProfileForm = () => {
   const account = trpc.account.get.useQuery(undefined, {
     staleTime: Infinity,
   });
+
+  const accountAvatar = useFetchFile(account.data?.image);
+
+  const uploadAvatar = useUploadFileMutation({ type: 'avatar' });
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
@@ -53,11 +58,26 @@ export const AccountProfileForm = () => {
     values: {
       name: account.data?.name ?? '',
       language: account.data?.language ?? DEFAULT_LANGUAGE_KEY,
+      image: accountAvatar.data ?? undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = (values) => {
-    updateAccount.mutate(values);
+  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = async ({
+    image,
+    ...values
+  }) => {
+    try {
+      updateAccount.mutate({
+        ...values,
+        image: image?.file
+          ? await uploadAvatar.mutateAsync(image.file)
+          : account.data?.image,
+      });
+    } catch {
+      form.setError('image', {
+        message: t('account:profile.feedbacks.uploadError.title'),
+      });
+    }
   };
 
   return (
@@ -68,6 +88,18 @@ export const AccountProfileForm = () => {
         <Stack spacing={4}>
           <Form {...form} onSubmit={onSubmit}>
             <Stack spacing={4}>
+              <FormField>
+                <FormFieldLabel>
+                  {t('account:data.avatar.label')}
+                </FormFieldLabel>
+                <FormFieldController
+                  name="image"
+                  type="upload"
+                  control={form.control}
+                  inputText={t('account:data.avatar.inputText')}
+                />
+              </FormField>
+
               <FormField>
                 <FormFieldLabel>{t('account:data.name.label')}</FormFieldLabel>
                 <FormFieldController
@@ -95,7 +127,7 @@ export const AccountProfileForm = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={updateAccount.isLoading}
+                  isLoading={updateAccount.isLoading || uploadAvatar.isLoading}
                 >
                   {t('account:profile.actions.update')}
                 </Button>
