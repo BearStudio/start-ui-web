@@ -15,6 +15,7 @@ import {
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import { zUploadSignedUrlInput, zUploadSignedUrlOutput } from '@/files/schemas';
+import { isFileUrlValidBucket } from '@/files/utils';
 import i18n from '@/lib/i18n/server';
 import {
   deleteUsedCode,
@@ -63,11 +64,22 @@ export const accountRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         ctx.logger.info('Updating the user');
+
+        if (input.image && !isFileUrlValidBucket(input.image)) {
+          ctx.logger.error('Avatar URL do not match S3 bucket URL');
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Avatar URL do not match S3 bucket URL',
+          });
+        }
+
         return await ctx.db.user.update({
           where: { id: ctx.user.id },
           data: {
             ...input,
-            image: input.image ? `${input.image}?${Date.now()}` : null,
+            image: input.image
+              ? `${input.image}?${Date.now()}` // Allows to update the cache when the user changes his account
+              : null,
           },
         });
       } catch (e) {

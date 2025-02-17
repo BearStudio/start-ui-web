@@ -1,7 +1,6 @@
 import { createTRPCRouter } from '@/server/config/trpc';
 import { accountRouter } from '@/server/routers/account';
 import { authRouter } from '@/server/routers/auth';
-import { filesRouter } from '@/server/routers/files';
 import { oauthRouter } from '@/server/routers/oauth';
 import { repositoriesRouter } from '@/server/routers/repositories';
 import { usersRouter } from '@/server/routers/users';
@@ -17,7 +16,6 @@ export const appRouter = createTRPCRouter({
   oauth: oauthRouter,
   repositories: repositoriesRouter,
   users: usersRouter,
-  files: filesRouter,
 });
 
 // export type definition of API
