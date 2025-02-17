@@ -12,7 +12,7 @@ import {
 } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
-import { isFileUrlValidBucket } from '@/files/utils';
+import { doesFileUrlMatchesBucket } from '@/files/utils';
 import i18n from '@/lib/i18n/server';
 import {
   deleteUsedCode,
@@ -61,7 +61,7 @@ export const accountRouter = createTRPCRouter({
       try {
         ctx.logger.info('Updating the user');
 
-        if (input.image && !isFileUrlValidBucket(input.image)) {
+        if (input.image && !doesFileUrlMatchesBucket(input.image)) {
           ctx.logger.error('Avatar URL do not match S3 bucket URL');
           throw new TRPCError({
             code: 'BAD_REQUEST',

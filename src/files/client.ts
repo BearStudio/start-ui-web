@@ -24,6 +24,7 @@ export const fetchFile = async (url: string, metadata?: string[]) => {
   const fileResponse = await fetch(url, {
     cache: 'no-cache',
   });
+
   if (!fileResponse.ok) {
     throw new Error('Could not fetch the file');
   }
