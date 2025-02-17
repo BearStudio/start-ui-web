@@ -5,11 +5,13 @@ import { Box, ChakraProps, chakra } from '@chakra-ui/react';
 export type ImageUploadProps = ChakraProps & {
   onChange: InputHTMLAttributes<HTMLInputElement>['onChange'];
   children: ReactNode;
+  accept?: string;
 };
 
 export const ImageUpload = ({
   children,
   onChange,
+  accept,
   ...props
 }: ImageUploadProps) => {
   return (
@@ -30,6 +32,7 @@ export const ImageUpload = ({
         left={0}
         width={0}
         type="file"
+        accept={accept}
         onChange={onChange}
       />
     </Box>

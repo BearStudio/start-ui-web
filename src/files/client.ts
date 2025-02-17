@@ -52,24 +52,28 @@ export const fetchFile = async (url: string, metadata?: string[]) => {
   }, defaultFileData);
 };
 
-export const useUploadFileMutation = (params: {
-  getMetadata?: (file: File) => Record<string, string>;
-  type: RouterInputs['files']['uploadPresignedUrl']['type'];
-}) => {
+export const useUploadFileMutation = (
+  collection: RouterInputs['files']['uploadPresignedUrl']['collection'],
+  params: {
+    getMetadata?: (file: File) => Record<string, string>;
+  } = {}
+) => {
   const uploadPresignedUrl = trpc.files.uploadPresignedUrl.useMutation();
   return useMutation({
     mutationFn: async (file: File) => {
       const presignedUrlOutput = await uploadPresignedUrl.mutateAsync({
         // Metadata is a Record<string, string> but should be serialized for trpc-openapi
         metadata: stringify({
-          name: file.name,
-          ...params?.getMetadata?.(file),
+          ...params.getMetadata?.(file),
         }),
-        type: params.type,
+        collection,
+        fileType: file.type,
+        size: file.size,
+        name: file.name,
       });
 
       try {
-        const response = await fetch(presignedUrlOutput.signedUrl, {
+        await fetch(presignedUrlOutput.signedUrl, {
           method: 'PUT',
           headers: { 'Content-Type': file.type },
           body: file,

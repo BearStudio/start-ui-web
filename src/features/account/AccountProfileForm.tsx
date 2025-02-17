@@ -34,7 +34,7 @@ export const AccountProfileForm = () => {
 
   const accountAvatar = useFetchFile(account.data?.image);
 
-  const uploadAvatar = useUploadFileMutation({ type: 'avatar' });
+  const uploadAvatar = useUploadFileMutation('avatar');
 
   const updateAccount = trpc.account.update.useMutation({
     onSuccess: async () => {
