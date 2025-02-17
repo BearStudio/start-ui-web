@@ -77,7 +77,6 @@ jobs:
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -112,7 +111,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm e2e
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
