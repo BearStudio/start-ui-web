@@ -20,7 +20,7 @@ const getConfiguration = (input: UploadSignedUrlInput, ctx: AppContext) => {
     .with({ collection: 'avatar' }, () => ({
       key: `avatars/${ctx.user?.id}`,
       fileTypes: ['image/png', 'image/jpg'],
-      maxSize: 10 * 1024 * 1024,
+      maxSize: 5 * 1024 * 1024, // 5MB in bytes,
     }))
     .exhaustive();
 };
