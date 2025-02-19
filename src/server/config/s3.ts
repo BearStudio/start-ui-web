@@ -54,7 +54,6 @@ export const fetchFileMetadata = async (key: string) => {
   const s3key = key.split('?')[0]; // Remove the ?timestamp
   const fileUrl = `${env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_URL}/${s3key}`;
   try {
-    console.log({ key });
     const command = new HeadObjectCommand({
       Bucket: env.S3_BUCKET_NAME,
       Key: s3key,

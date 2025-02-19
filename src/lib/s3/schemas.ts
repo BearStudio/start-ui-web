@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
+import { zFilesCollection } from '@/lib/s3/config';
 import { zu } from '@/lib/zod/zod-utils';
 
 export type UploadFileType = z.infer<typeof zUploadFileType>;
@@ -50,7 +51,7 @@ export const zUploadSignedUrlInput = () =>
     name: z.string(),
     fileType: z.string(),
     size: z.number(),
-    collection: z.enum(['avatar']),
+    collection: zFilesCollection(),
   });
 export type UploadSignedUrlOutput = z.infer<
   ReturnType<typeof zUploadSignedUrlOutput>
