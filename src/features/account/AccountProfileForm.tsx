@@ -18,11 +18,11 @@ import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
-import { useUploadFileMutation } from '@/files/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
+import { useUploadFileMutation } from '@/lib/s3/client';
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountProfileForm = () => {

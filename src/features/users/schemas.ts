@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { zFieldMetadata } from '@/files/schemas';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { zFieldMetadata } from '@/lib/s3/schemas';
 import { zu } from '@/lib/zod/zod-utils';
 
 export const USER_AUTHORIZATIONS = ['APP', 'ADMIN'] as const;

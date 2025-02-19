@@ -54,8 +54,8 @@ import { ROUTES_AUTH } from '@/features/auth/routes';
 import { ROUTES_DOCS } from '@/features/docs/routes';
 import { ROUTES_MANAGEMENT } from '@/features/management/routes';
 import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
-import { getFilePublicUrl } from '@/files/client';
 import { useRtl } from '@/hooks/useRtl';
+import { getFilePublicUrl } from '@/lib/s3/client';
 import { trpc } from '@/lib/trpc/client';
 
 import buildInfo from '../../../scripts/.build-info.json';

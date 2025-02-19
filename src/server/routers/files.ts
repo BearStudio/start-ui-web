@@ -6,7 +6,7 @@ import {
   UploadSignedUrlInput,
   zUploadSignedUrlInput,
   zUploadSignedUrlOutput,
-} from '@/files/schemas';
+} from '@/lib/s3/schemas';
 import { getS3UploadSignedUrl } from '@/server/config/s3';
 import {
   AppContext,

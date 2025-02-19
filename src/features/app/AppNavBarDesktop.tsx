@@ -19,7 +19,7 @@ import { Logo } from '@/components/Logo';
 import { ROUTES_ACCOUNT } from '@/features/account/routes';
 import { ROUTES_APP } from '@/features/app/routes';
 import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
-import { getFilePublicUrl } from '@/files/client';
+import { getFilePublicUrl } from '@/lib/s3/client';
 import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {

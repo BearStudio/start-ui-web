@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { FormFieldController } from '@/components/Form/FormFieldController';
 import { FormFieldLabel } from '@/components/Form/FormFieldLabel';
-import { FieldUploadValue, zFieldUploadValue } from '@/files/schemas';
+import { FieldUploadValue, zFieldUploadValue } from '@/lib/s3/schemas';
 import { render, screen, setupUser } from '@/tests/utils';
 
 import { FormField } from '../FormField';

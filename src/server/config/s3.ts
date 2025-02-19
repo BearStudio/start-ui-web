@@ -10,7 +10,7 @@ import {
   FieldMetadata,
   UploadFileType,
   UploadSignedUrlOutput,
-} from '@/files/schemas';
+} from '@/lib/s3/schemas';
 
 const SIGNED_URL_EXPIRATION_TIME_SECONDS = 60; // 1 minute
 

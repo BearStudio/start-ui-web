@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { zUser, zUserWithEmail } from '@/features/users/schemas';
-import { zFieldUploadValue } from '@/files/schemas';
+import { zFieldUploadValue } from '@/lib/s3/schemas';
 
 export type UserAccount = z.infer<ReturnType<typeof zUserAccount>>;
 export const zUserAccount = () =>

@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { zFieldUploadValue } from '@/files/schemas';
+import { zFieldUploadValue } from '@/lib/s3/schemas';
 
 import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 import { FieldUploadPreview } from './FieldUploadPreview';
