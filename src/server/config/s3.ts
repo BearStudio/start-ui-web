@@ -6,11 +6,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { env } from '@/env.mjs';
-import {
-  FieldMetadata,
-  UploadFileType,
-  UploadSignedUrlOutput,
-} from '@/lib/s3/schemas';
+import { FieldMetadata, UploadSignedUrlOutput } from '@/lib/s3/schemas';
 
 const SIGNED_URL_EXPIRATION_TIME_SECONDS = 60; // 1 minute
 
@@ -24,8 +20,6 @@ const S3 = new S3Client({
 });
 
 type UploadSignedUrlOptions = {
-  allowedFileTypes?: UploadFileType[];
-  expiresIn?: number;
   /** The tree structure of the file in S3 */
   key: string;
   metadata?: Record<string, string>;
@@ -41,7 +35,7 @@ export const getS3UploadSignedUrl = async (
       Key: options.key,
       Metadata: options.metadata,
     }),
-    { expiresIn: options.expiresIn ?? SIGNED_URL_EXPIRATION_TIME_SECONDS }
+    { expiresIn: SIGNED_URL_EXPIRATION_TIME_SECONDS }
   );
 
   return {
@@ -62,7 +56,7 @@ export const fetchFileMetadata = async (key: string) => {
 
     return {
       fileUrl,
-      size: fileResponse.ContentLength?.toString(),
+      size: fileResponse.ContentLength,
       type: fileResponse.ContentType,
       lastModifiedDate: fileResponse.LastModified
         ? new Date(fileResponse.LastModified)

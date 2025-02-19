@@ -20,10 +20,13 @@
     "message": "Vous êtes sur le point de quitter la page sans sauvegarder vos modifications.",
     "title": "Quitter la page ?"
   },
-  "files": {
-    "invalid": "Le fichier doit être de type : {{acceptedTypes}}"
-  },
   "filter": "Filtrer",
   "clear": "Effacer",
-  "submit": "Soumettre"
+  "submit": "Soumettre",
+  "files": {
+    "errors": {
+      "tooLarge": "Fichier trop lourd",
+      "typeNotAllowed": "Type de fichier non autorisé"
+    }
+  }
 }

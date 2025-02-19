@@ -45,5 +45,5 @@ export const zFormFieldsAccountProfile = () =>
       language: true,
     })
     .extend({
-      image: zFieldUploadValue(['image']).nullish(),
+      image: zFieldUploadValue('avatar').nullish(),
     });

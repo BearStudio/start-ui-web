@@ -21,7 +21,7 @@ export const useUploadFileMutation = (
           ...params.getMetadata?.(file),
         }),
         collection,
-        fileType: file.type,
+        type: file.type,
         size: file.size,
         name: file.name,
       });

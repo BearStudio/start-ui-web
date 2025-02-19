@@ -1,11 +1,14 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { zFilesCollection } from '@/lib/s3/config';
+import { getFieldPath } from '@/lib/form/getFieldPath';
+import {
+  FILES_COLLECTIONS_CONFIG,
+  FilesCollectionName,
+  zFilesCollectionName,
+} from '@/lib/s3/config';
+import { validateFile } from '@/lib/s3/utils';
 import { zu } from '@/lib/zod/zod-utils';
-
-export type UploadFileType = z.infer<typeof zUploadFileType>;
-export const zUploadFileType = z.enum(['image', 'application/pdf']);
 
 export type FieldMetadata = z.infer<ReturnType<typeof zFieldMetadata>>;
 export const zFieldMetadata = () =>
@@ -13,31 +16,28 @@ export const zFieldMetadata = () =>
     fileUrl: zu.string.nonEmptyNullish(z.string()),
     lastModifiedDate: z.date().optional(),
     name: zu.string.nonEmptyNullish(z.string()),
-    size: zu.string.nonEmptyNullish(z.string()),
+    size: z.coerce.number().nullish(),
     type: zu.string.nonEmptyNullish(z.string()),
   });
 
 export type FieldUploadValue = z.infer<ReturnType<typeof zFieldUploadValue>>;
-export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>
+export const zFieldUploadValue = (collection: FilesCollectionName) =>
   zFieldMetadata()
     .extend({
       file: z.instanceof(File).optional(),
       lastModified: z.number().optional(),
     })
-    .refine(
-      (file) => {
-        if (!acceptedTypes || acceptedTypes.length === 0) {
-          return true;
-        }
+    .superRefine((input, ctx) => {
+      const config = FILES_COLLECTIONS_CONFIG[collection];
+      const validateFileReturn = validateFile({ input, config });
 
-        return acceptedTypes.some((type) => file.type?.startsWith(type));
-      },
-      {
-        message: t('common:files.invalid', {
-          acceptedTypes: acceptedTypes?.join(', '),
-        }),
+      if (!validateFileReturn.success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t(`files.errors.${validateFileReturn.error.key}`),
+        });
       }
-    );
+    });
 
 export type UploadSignedUrlInput = z.infer<
   ReturnType<typeof zUploadSignedUrlInput>
@@ -49,9 +49,9 @@ export const zUploadSignedUrlInput = () =>
      */
     metadata: z.string().optional(),
     name: z.string(),
-    fileType: z.string(),
+    type: z.string(),
     size: z.number(),
-    collection: zFilesCollection(),
+    collection: zFilesCollectionName(),
   });
 export type UploadSignedUrlOutput = z.infer<
   ReturnType<typeof zUploadSignedUrlOutput>

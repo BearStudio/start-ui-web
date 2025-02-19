@@ -21,7 +21,10 @@
     "cancelText": "Stay on the page"
   },
   "files": {
-    "invalid": "Provided file must be of type : {{acceptedTypes}}"
+    "errors": {
+      "tooLarge": "File too large",
+      "typeNotAllowed": "File type not allowed"
+    }
   },
   "filter": "Filter",
   "clear": "Clear",

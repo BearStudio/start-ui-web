@@ -17,7 +17,7 @@ const mockFile: FieldUploadValue = {
   file: mockFileRaw,
   lastModified: mockFileRaw.lastModified,
   lastModifiedDate: new Date(mockFileRaw.lastModified),
-  size: mockFileRaw.size.toString(),
+  size: mockFileRaw.size,
   type: mockFileRaw.type,
   name: mockFileRaw.name ?? '',
 };
@@ -28,7 +28,7 @@ test('update value', async () => {
 
   render(
     <FormMocked
-      schema={z.object({ file: zFieldUploadValue().optional() })}
+      schema={z.object({ file: zFieldUploadValue('avatar').optional() })}
       useFormOptions={{ defaultValues: { file: undefined } }}
       onSubmit={mockedSubmit}
     >
@@ -59,7 +59,7 @@ test('default value', async () => {
 
   render(
     <FormMocked
-      schema={z.object({ file: zFieldUploadValue().optional() })}
+      schema={z.object({ file: zFieldUploadValue('avatar').optional() })}
       useFormOptions={{
         values: {
           file: mockFile,

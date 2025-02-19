@@ -16,7 +16,7 @@ export default {
 type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
-    file: zFieldUploadValue().optional(),
+    file: zFieldUploadValue('avatar').optional(),
   });
 
 const formOptions = {
