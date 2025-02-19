@@ -18,7 +18,7 @@ import {
   FormFieldsAccountProfile,
   zFormFieldsAccountProfile,
 } from '@/features/account/schemas';
-import { useFetchFile, useUploadFileMutation } from '@/files/client';
+import { useUploadFileMutation } from '@/files/client';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
@@ -31,8 +31,6 @@ export const AccountProfileForm = () => {
   const account = trpc.account.get.useQuery(undefined, {
     staleTime: Infinity,
   });
-
-  const accountAvatar = useFetchFile(account.data?.image);
 
   const uploadAvatar = useUploadFileMutation('avatar');
 
@@ -58,7 +56,7 @@ export const AccountProfileForm = () => {
     values: {
       name: account.data?.name ?? '',
       language: account.data?.language ?? DEFAULT_LANGUAGE_KEY,
-      image: accountAvatar.data ?? undefined,
+      image: account.data?.imageMetadata ?? null,
     },
   });
 

@@ -10,6 +10,7 @@ export const zUserAccount = () =>
     name: true,
     email: true,
     image: true,
+    imageMetadata: true,
     isEmailVerified: true,
     authorizations: true,
     language: true,
@@ -44,5 +45,5 @@ export const zFormFieldsAccountProfile = () =>
       language: true,
     })
     .extend({
-      image: zFieldUploadValue(['image']).optional(),
+      image: zFieldUploadValue(['image']).nullish(),
     });

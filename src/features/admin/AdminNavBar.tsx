@@ -54,6 +54,7 @@ import { ROUTES_AUTH } from '@/features/auth/routes';
 import { ROUTES_DOCS } from '@/features/docs/routes';
 import { ROUTES_MANAGEMENT } from '@/features/management/routes';
 import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
+import { getFilePublicUrl } from '@/files/client';
 import { useRtl } from '@/hooks/useRtl';
 import { trpc } from '@/lib/trpc/client';
 
@@ -89,11 +90,10 @@ const AdminNavBarAccountMenu = ({ ...rest }: Omit<MenuProps, 'children'>) => {
         <MenuButton borderRadius="full" _focusVisible={{ shadow: 'outline' }}>
           <Avatar
             size="sm"
-            src={account.data?.image ?? undefined}
+            src={getFilePublicUrl(account.data?.image)}
+            icon={account.isLoading ? <Spinner size="xs" /> : undefined}
             name={account.data?.name ?? account.data?.email ?? ''}
-          >
-            {account.isLoading && <Spinner size="xs" />}
-          </Avatar>
+          />
         </MenuButton>
         <MenuList maxW="12rem" overflow="hidden">
           <MenuGroup

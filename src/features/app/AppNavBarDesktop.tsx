@@ -19,6 +19,7 @@ import { Logo } from '@/components/Logo';
 import { ROUTES_ACCOUNT } from '@/features/account/routes';
 import { ROUTES_APP } from '@/features/app/routes';
 import { ROUTES_REPOSITORIES } from '@/features/repositories/routes';
+import { getFilePublicUrl } from '@/files/client';
 import { trpc } from '@/lib/trpc/client';
 
 export const AppNavBarDesktop = (props: BoxProps) => {
@@ -56,7 +57,7 @@ export const AppNavBarDesktop = (props: BoxProps) => {
               as={Link}
               href={ROUTES_ACCOUNT.app.root()}
               size="sm"
-              src={account.data?.image ?? undefined}
+              src={getFilePublicUrl(account.data?.image)}
               name={account.data?.name ?? account.data?.email ?? ''}
               icon={account.isLoading ? <Spinner size="xs" /> : undefined}
               {...(isAccountActive

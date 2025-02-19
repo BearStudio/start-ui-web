@@ -1,56 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { TRPCError } from '@trpc/server';
 import { stringify } from 'superjson';
 
+import { env } from '@/env.mjs';
 import { trpc } from '@/lib/trpc/client';
 import { RouterInputs } from '@/lib/trpc/types';
-
-/**
- * Fetches a file from the specified URL and returns file information.
- * Designed to be used as a `queryFn` in a `useQuery`.
- *
- * @param url The URL from which the file should be fetched.
- * @param [metadata] The metadata of the file you want to retrieve.
- * @returns A Promise that resolves to an object containing information about the file.
- *
- * @example
- * // Usage with Tanstack Query's useQuery:
- * const fileQuery = useQuery({
-    queryKey: ['fileKey', url],
-    queryFn: () => fetchFile(url, ['name']),
-    enabled: !!url,
-  });
- */
-export const fetchFile = async (url: string, metadata?: string[]) => {
-  const fileResponse = await fetch(url, {
-    cache: 'no-cache',
-  });
-
-  if (!fileResponse.ok) {
-    throw new Error('Could not fetch the file');
-  }
-
-  const lastModifiedDateHeader = fileResponse.headers.get('Last-Modified');
-  const defaultFileData = {
-    fileUrl: url,
-    size: fileResponse.headers.get('Content-Length') ?? undefined,
-    type: fileResponse.headers.get('Content-Type') ?? undefined,
-    lastModifiedDate: lastModifiedDateHeader
-      ? new Date(lastModifiedDateHeader)
-      : new Date(),
-  };
-
-  if (!metadata) {
-    return defaultFileData;
-  }
-
-  return metadata.reduce((file, metadataKey) => {
-    return {
-      ...file,
-      [metadataKey]: fileResponse.headers.get(`x-amz-meta-${metadataKey}`),
-    };
-  }, defaultFileData);
-};
 
 export const useUploadFileMutation = (
   collection: RouterInputs['files']['uploadPresignedUrl']['collection'],
@@ -86,15 +40,14 @@ export const useUploadFileMutation = (
         });
       }
 
-      return presignedUrlOutput.futureFileUrl;
+      return presignedUrlOutput.key;
     },
   });
 };
 
-export const useFetchFile = (url?: string | null) => {
-  return useQuery({
-    queryKey: ['file', url],
-    queryFn: () => (url ? fetchFile(url, ['name']) : undefined),
-    enabled: !!url,
-  });
+export const getFilePublicUrl = (key: string | null | undefined) => {
+  if (!key) {
+    return undefined;
+  }
+  return `${env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_URL}/${key}`;
 };

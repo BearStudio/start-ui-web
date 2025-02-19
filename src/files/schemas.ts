@@ -6,17 +6,22 @@ import { zu } from '@/lib/zod/zod-utils';
 export type UploadFileType = z.infer<typeof zUploadFileType>;
 export const zUploadFileType = z.enum(['image', 'application/pdf']);
 
+export type FieldMetadata = z.infer<ReturnType<typeof zFieldMetadata>>;
+export const zFieldMetadata = () =>
+  z.object({
+    fileUrl: zu.string.nonEmptyNullish(z.string()),
+    lastModifiedDate: z.date().optional(),
+    name: zu.string.nonEmptyNullish(z.string()),
+    size: zu.string.nonEmptyNullish(z.string()),
+    type: zu.string.nonEmptyNullish(z.string()),
+  });
+
 export type FieldUploadValue = z.infer<ReturnType<typeof zFieldUploadValue>>;
 export const zFieldUploadValue = (acceptedTypes?: UploadFileType[]) =>
-  z
-    .object({
-      fileUrl: zu.string.nonEmptyNullish(z.string()),
+  zFieldMetadata()
+    .extend({
       file: z.instanceof(File).optional(),
       lastModified: z.number().optional(),
-      lastModifiedDate: z.date().optional(),
-      name: zu.string.nonEmptyNullish(z.string()),
-      size: zu.string.nonEmptyNullish(z.string()),
-      type: zu.string.nonEmptyNullish(z.string()),
     })
     .refine(
       (file) => {
@@ -52,7 +57,6 @@ export type UploadSignedUrlOutput = z.infer<
 >;
 export const zUploadSignedUrlOutput = () =>
   z.object({
-    futureFileUrl: z.string(),
     key: z.string(),
     signedUrl: z.string(),
   });

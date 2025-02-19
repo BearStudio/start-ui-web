@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
+import { zFieldMetadata } from '@/files/schemas';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 import { zu } from '@/lib/zod/zod-utils';
 
@@ -33,7 +34,8 @@ export const zUser = () =>
       required_error: t('users:data.email.required'),
       invalid_type_error: t('users:data.email.invalid'),
     }),
-    image: z.string().url().nullish(),
+    image: z.string().nullish(),
+    imageMetadata: zFieldMetadata().nullish(),
     isEmailVerified: z.boolean(),
     authorizations: zu.array
       .nonEmpty(

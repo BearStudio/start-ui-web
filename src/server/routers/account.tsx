@@ -12,7 +12,6 @@ import {
 } from '@/features/account/schemas';
 import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
-import { doesFileUrlMatchesBucket } from '@/files/utils';
 import i18n from '@/lib/i18n/server';
 import {
   deleteUsedCode,
@@ -21,6 +20,7 @@ import {
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
+import { fetchFileMetadata } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
@@ -37,7 +37,13 @@ export const accountRouter = createTRPCRouter({
     .output(zUserAccount())
     .query(async ({ ctx }) => {
       ctx.logger.info('Return the current user');
-      return ctx.user;
+
+      return {
+        ...ctx.user,
+        imageMetadata: ctx.user.image
+          ? await fetchFileMetadata(ctx.user.image)
+          : undefined,
+      };
     }),
 
   update: protectedProcedure()
@@ -60,14 +66,6 @@ export const accountRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         ctx.logger.info('Updating the user');
-
-        if (input.image && !doesFileUrlMatchesBucket(input.image)) {
-          ctx.logger.error('Avatar URL do not match S3 bucket URL');
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Avatar URL do not match S3 bucket URL',
-          });
-        }
 
         return await ctx.db.user.update({
           where: { id: ctx.user.id },

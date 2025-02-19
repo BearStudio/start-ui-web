@@ -2,7 +2,6 @@ import { TRPCError } from '@trpc/server';
 import { parse } from 'superjson';
 import { match } from 'ts-pattern';
 
-import { env } from '@/env.mjs';
 import {
   UploadSignedUrlInput,
   zUploadSignedUrlInput,
@@ -19,7 +18,7 @@ const getConfiguration = (input: UploadSignedUrlInput, ctx: AppContext) => {
   return match(input)
     .with({ collection: 'avatar' }, () => ({
       key: `avatars/${ctx.user?.id}`,
-      fileTypes: ['image/png', 'image/jpg'],
+      fileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
       maxSize: 5 * 1024 * 1024, // 5MB in bytes,
     }))
     .exhaustive();
@@ -63,7 +62,6 @@ export const filesRouter = createTRPCRouter({
 
       return await getS3UploadSignedUrl({
         key: config.key,
-        host: env.S3_BUCKET_PUBLIC_URL,
         metadata: input.metadata
           ? { name: input.name, ...parse(input.metadata) }
           : undefined,
