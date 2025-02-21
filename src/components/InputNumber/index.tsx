@@ -78,6 +78,7 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
     });
     const [isFocused, setIsFocused] = useState(false);
     const tmpValueRef = useRef(value ?? defaultValue ?? null);
+    const [rawInput, setRawInput] = useState<string | undefined>(undefined);
 
     const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
       const v = tmpValueRef.current;
@@ -86,10 +87,20 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
         onChange(v);
       }
       if (e.key === 'ArrowUp') {
-        onChange(clamp((v ?? 0) + (e.shiftKey ? bigStep : step), { min, max }));
+        const newValue = clamp((v ?? 0) + (e.shiftKey ? bigStep : step), {
+          min,
+          max,
+        });
+        setRawInput(String(newValue));
+        onChange(newValue);
       }
       if (e.key === 'ArrowDown') {
-        onChange(clamp((v ?? 0) - (e.shiftKey ? bigStep : step), { min, max }));
+        const newValue = clamp((v ?? 0) - (e.shiftKey ? bigStep : step), {
+          min,
+          max,
+        });
+        onChange(newValue);
+        setRawInput(String(newValue));
       }
       rest.onKeyDown?.(e);
     };
@@ -104,10 +115,10 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
       prefix: `${currency ? currencyPrefix : ''}${prefix}`,
       onValueChange: (values) => {
         tmpValueRef.current = values.floatValue ?? null;
+        setRawInput(values.value);
 
         // Prevent -0 to be replaced with 0 when input is controlled
         if (values.floatValue === 0) return;
-
         onChange(values.floatValue ?? null);
       },
     } satisfies ComponentProps<typeof NumericFormat>;
@@ -120,7 +131,7 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
           pe={showButtons ? 8 : undefined}
           {...rest}
           {...getNumericFormatOptions}
-          value={value === undefined ? undefined : value ?? ''}
+          value={rawInput ?? (value === undefined ? undefined : value ?? '')}
           defaultValue={defaultValue ?? undefined}
           placeholder={
             typeof placeholder === 'number'
