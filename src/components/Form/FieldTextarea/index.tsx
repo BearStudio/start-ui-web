@@ -35,7 +35,7 @@ export const FieldTextarea = <
   return (
     <Controller
       {...props}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <Textarea
             size={props.size}
@@ -43,6 +43,7 @@ export const FieldTextarea = <
             autoFocus={props.autoFocus}
             rows={props.rows}
             isDisabled={props.isDisabled}
+            isInvalid={!!fieldState.error}
             {...props.textareaProps}
             {...field}
           />
