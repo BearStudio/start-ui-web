@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { t } from 'i18next';
 import { parse } from 'superjson';
 
 import { FILES_COLLECTIONS_CONFIG } from '@/lib/s3/config';

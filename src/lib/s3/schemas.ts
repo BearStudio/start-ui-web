@@ -1,7 +1,6 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { getFieldPath } from '@/lib/form/getFieldPath';
 import {
   FILES_COLLECTIONS_CONFIG,
   FilesCollectionName,
