@@ -54,8 +54,9 @@ const FormFieldErrorComponent = <
   }
 
   const error = get<FieldErrors<TFieldValues>>(errors, name);
+  const errorMessage = error?.root?.message ?? error?.message;
 
-  if (!error) {
+  if (!errorMessage) {
     return null;
   }
 
@@ -81,7 +82,7 @@ const FormFieldErrorComponent = <
     <SlideFade in offsetY={-6}>
       <Flex fontSize="sm" color="error.500" ref={ref} {...rest}>
         <Icon icon={LuAlertCircle} me="2" />
-        {!!error?.message && <span>{error.message}</span>}
+        <span>{errorMessage}</span>
       </Flex>
     </SlideFade>
   );
