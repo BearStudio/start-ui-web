@@ -76,7 +76,7 @@
     "i18next-browser-languagedetector": "8.0.0",
     "next": "14.2.4",
     "nodemailer": "6.9.14",
-    "nuqs": "1.17.4",
+    "nuqs": "2.1.1",
     "oslo": "1.2.1",
     "pino": "9.2.0",
     "pino-pretty": "11.2.1",
