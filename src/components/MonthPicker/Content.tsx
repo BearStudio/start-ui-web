@@ -5,6 +5,7 @@ import {
   GridProps,
   HTMLChakraProps,
 } from '@chakra-ui/react';
+import { t } from 'i18next';
 
 import { MonthCaption } from './MonthCaption';
 import { useMonthPickerContext } from './MonthPickerContext';
@@ -75,7 +76,7 @@ export const Content: React.FC<React.PropsWithChildren<ContentProps>> = () => {
             {...(isSelected(monthAsDate) ? selectedStyle : {})}
             {...(isToday(monthAsDate) ? todayStyle : {})}
           >
-            {month}
+            {t(month)}
           </Button>
         );
       })}
