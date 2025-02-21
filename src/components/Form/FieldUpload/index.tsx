@@ -77,7 +77,11 @@ export const FieldUpload = <
               ) : (
                 <Icon as={FiPaperclip} mr="2" />
               )}
-              {!props.isLoading && (!value ? props.inputText : value.name)}
+              {!props.isLoading && (
+                <chakra.span noOfLines={1}>
+                  {!value ? props.inputText : value.name}
+                </chakra.span>
+              )}
             </Input>
 
             <FormFieldError />
