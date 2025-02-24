@@ -11,7 +11,7 @@ export const FILES_COLLECTIONS_CONFIG = {
   avatar: {
     getKey: ({ user }) => `avatars/${user.id}`,
     allowedTypes: ['image/png', 'image/jpg', 'image/jpeg'],
-    maxSize: 1 * 1024 * 1024, // 5MB in bytes,
+    maxSize: 5 * 1024 * 1024, // 5MB in bytes,
   },
 } satisfies Record<FilesCollectionName, FilesCollectionConfig>;
 
