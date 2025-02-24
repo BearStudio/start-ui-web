@@ -22,5 +22,11 @@
   },
   "filter": "Chuja",
   "clear": "Wazi",
-  "submit": "Wasilisha"
+  "submit": "Wasilisha",
+  "files": {
+    "errors": {
+      "tooLarge": "Faili kubwa sana",
+      "typeNotAllowed": "Aina ya faili hairuhusiwi"
+    }
+  }
 }

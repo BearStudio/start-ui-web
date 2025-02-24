@@ -20,6 +20,7 @@ import {
 } from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { ExtendedTRPCError } from '@/server/config/errors';
+import { fetchFileMetadata } from '@/server/config/s3';
 import { createTRPCRouter, protectedProcedure } from '@/server/config/trpc';
 
 export const accountRouter = createTRPCRouter({
@@ -36,7 +37,17 @@ export const accountRouter = createTRPCRouter({
     .output(zUserAccount())
     .query(async ({ ctx }) => {
       ctx.logger.info('Return the current user');
-      return ctx.user;
+
+      const imageMetadataResponse = ctx.user.image
+        ? await fetchFileMetadata(ctx.user.image)
+        : undefined;
+
+      return {
+        ...ctx.user,
+        imageMetadata: imageMetadataResponse?.success
+          ? imageMetadataResponse.data
+          : undefined,
+      };
     }),
 
   update: protectedProcedure()
@@ -49,7 +60,8 @@ export const accountRouter = createTRPCRouter({
       },
     })
     .input(
-      zUserAccount().required().pick({
+      zUserAccount().pick({
+        image: true,
         name: true,
         language: true,
       })
@@ -58,9 +70,15 @@ export const accountRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         ctx.logger.info('Updating the user');
+
         return await ctx.db.user.update({
           where: { id: ctx.user.id },
-          data: input,
+          data: {
+            ...input,
+            image: input.image
+              ? `${input.image}?${Date.now()}` // Allows to update the cache when the user changes his account
+              : null,
+          },
         });
       } catch (e) {
         ctx.logger.warn('An error occured while updating the user');
