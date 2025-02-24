@@ -74,7 +74,7 @@
   "data": {
     "avatar": {
       "label": "Avatar",
-      "inputText": "Update avatar...",
+      "placeholder": "Update avatar...",
       "required": "Avatar is required"
     },
     "name": {
