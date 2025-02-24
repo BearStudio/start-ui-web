@@ -7,7 +7,6 @@ export type FilesCollectionName = z.infer<
 >;
 export const zFilesCollectionName = () => z.enum(['avatar']);
 
-// TODO Also use this config in form validation
 export const FILES_COLLECTIONS_CONFIG = {
   avatar: {
     getKey: ({ user }) => `avatars/${user.id}`,

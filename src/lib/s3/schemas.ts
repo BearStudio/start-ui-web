@@ -12,7 +12,6 @@ import { zu } from '@/lib/zod/zod-utils';
 export type FieldMetadata = z.infer<ReturnType<typeof zFieldMetadata>>;
 export const zFieldMetadata = () =>
   z.object({
-    fileUrl: zu.string.nonEmptyNullish(z.string()),
     lastModifiedDate: z.date().optional(),
     name: zu.string.nonEmptyNullish(z.string()),
     size: z.coerce.number().nullish(),
