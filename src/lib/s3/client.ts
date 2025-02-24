@@ -1,48 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
-import { TRPCError } from '@trpc/server';
 import { stringify } from 'superjson';
 
 import { env } from '@/env.mjs';
 import { trpc } from '@/lib/trpc/client';
 import { RouterInputs } from '@/lib/trpc/types';
 
-export const useUploadFileMutation = (
-  collection: RouterInputs['files']['uploadPresignedUrl']['collection'],
-  params: {
-    getMetadata?: (file: File) => Record<string, string>;
-  } = {}
-) => {
-  const uploadPresignedUrl = trpc.files.uploadPresignedUrl.useMutation();
-  return useMutation({
-    mutationFn: async (file: File) => {
-      const presignedUrlOutput = await uploadPresignedUrl.mutateAsync({
+export const uploadFile = async (params: {
+  file: File;
+  trpcClient: ReturnType<typeof trpc.useUtils>['client'];
+  collection: RouterInputs['files']['uploadPresignedUrl']['collection'];
+  metadata?: Record<string, string>;
+  onError?: (file: File, error: unknown) => void;
+}) => {
+  try {
+    const presignedUrlOutput =
+      await params.trpcClient.files.uploadPresignedUrl.mutate({
         // Metadata is a Record<string, string> but should be serialized for trpc-openapi
-        metadata: stringify({
-          ...params.getMetadata?.(file),
-        }),
-        collection,
-        type: file.type,
-        size: file.size,
-        name: file.name,
+        metadata: params.metadata ? stringify(params.metadata) : undefined,
+        collection: params.collection,
+        type: params.file.type,
+        size: params.file.size,
+        name: params.file.name,
       });
 
-      try {
-        await fetch(presignedUrlOutput.signedUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type },
-          body: file,
-        });
-      } catch (e) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Unable to upload the file',
-          cause: e,
-        });
-      }
+    const response = await fetch(presignedUrlOutput.signedUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': params.file.type },
+      body: params.file,
+    });
 
-      return presignedUrlOutput.key;
-    },
-  });
+    if (!response.ok) {
+      throw new Error('Failed to upload file');
+    }
+
+    return presignedUrlOutput.key;
+  } catch (error) {
+    params.onError?.(params.file, error);
+    throw error;
+  }
 };
 
 export const getFilePublicUrl = (key: string | null | undefined) => {
