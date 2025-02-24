@@ -38,10 +38,14 @@ export const accountRouter = createTRPCRouter({
     .query(async ({ ctx }) => {
       ctx.logger.info('Return the current user');
 
+      const imageMetadataResponse = ctx.user.image
+        ? await fetchFileMetadata(ctx.user.image)
+        : undefined;
+
       return {
         ...ctx.user,
-        imageMetadata: ctx.user.image
-          ? await fetchFileMetadata(ctx.user.image)
+        imageMetadata: imageMetadataResponse?.success
+          ? imageMetadataResponse.data
           : undefined,
       };
     }),

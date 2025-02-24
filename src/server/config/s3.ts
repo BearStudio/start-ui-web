@@ -44,9 +44,10 @@ export const getS3UploadSignedUrl = async (
   };
 };
 
-export const fetchFileMetadata = async (key: string) => {
+export const fetchFileMetadata = async (
+  key: string
+): Promise<{ success: true; data: FieldMetadata } | { success: false }> => {
   const s3key = key.split('?')[0]; // Remove the ?timestamp
-  const fileUrl = `${env.NEXT_PUBLIC_S3_BUCKET_PUBLIC_URL}/${s3key}`;
   try {
     const command = new HeadObjectCommand({
       Bucket: env.S3_BUCKET_NAME,
@@ -55,23 +56,19 @@ export const fetchFileMetadata = async (key: string) => {
     const fileResponse = await S3.send(command);
 
     return {
-      fileUrl,
-      size: fileResponse.ContentLength,
-      type: fileResponse.ContentType,
-      lastModifiedDate: fileResponse.LastModified
-        ? new Date(fileResponse.LastModified)
-        : undefined,
-      name: fileResponse.Metadata?.name,
-    } satisfies FieldMetadata;
-  } catch (e) {
-    // TODO Better error handle
-    console.error('------- ERROR ------', e);
+      success: true,
+      data: {
+        size: fileResponse.ContentLength,
+        type: fileResponse.ContentType,
+        lastModifiedDate: fileResponse.LastModified
+          ? new Date(fileResponse.LastModified)
+          : undefined,
+        name: fileResponse.Metadata?.name,
+      },
+    };
+  } catch {
     return {
-      fileUrl,
-      size: undefined,
-      type: undefined,
-      lastModifiedDate: undefined,
-      name: undefined,
-    } satisfies FieldMetadata;
+      success: false,
+    };
   }
 };
