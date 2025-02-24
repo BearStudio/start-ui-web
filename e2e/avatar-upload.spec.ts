@@ -24,12 +24,12 @@ test.describe('Avatar upload flow', () => {
 
     await page.waitForURL(`**${ROUTES_ACCOUNT.app.root()}`);
     await expect(
-      page.getByText(locales.en.account.data.avatar.inputText)
+      page.getByText(locales.en.account.data.avatar.placeholder)
     ).toBeVisible();
 
     const fileChooserPromise = page.waitForEvent('filechooser');
 
-    await page.getByText(locales.en.account.data.avatar.inputText).click();
+    await page.getByText(locales.en.account.data.avatar.placeholder).click();
 
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles('./public/android-chrome-192x192.png');

@@ -39,7 +39,7 @@ test('update value', async () => {
             type="upload"
             name="file"
             control={form.control}
-            inputText="Upload"
+            placeholder="Upload"
           />
         </FormField>
       )}

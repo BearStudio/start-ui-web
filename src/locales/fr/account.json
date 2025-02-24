@@ -24,7 +24,7 @@
   "data": {
     "avatar": {
       "label": "Avatar",
-      "inputText": "Modifier l'avatar...",
+      "placeholder": "Modifier l'avatar...",
       "required": "L'avatar est requis"
     },
     "name": {

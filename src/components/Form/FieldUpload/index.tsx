@@ -14,7 +14,6 @@ export type FieldUploadProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
   type: 'upload';
-  inputText?: string;
   isLoading?: boolean;
 } & InputRootProps &
   FieldCommonProps<TFieldValues, TName>;
@@ -78,8 +77,8 @@ export const FieldUpload = <
                 <Icon as={FiPaperclip} mr="2" />
               )}
               {!props.isLoading && (
-                <chakra.span noOfLines={1}>
-                  {!value ? props.inputText : value.name}
+                <chakra.span noOfLines={1} opacity={!value ? 0.6 : undefined}>
+                  {!value ? props.placeholder ?? '...' : value.name}
                 </chakra.span>
               )}
             </Input>

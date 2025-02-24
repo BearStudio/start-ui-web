@@ -94,7 +94,7 @@ export const AccountProfileForm = () => {
                   name="image"
                   type="upload"
                   control={form.control}
-                  inputText={t('account:data.avatar.inputText')}
+                  placeholder={t('account:data.avatar.placeholder')}
                 />
               </FormField>
 
