@@ -15,6 +15,7 @@ export type FieldUploadProps<
 > = {
   type: 'upload';
   isLoading?: boolean;
+  accept?: string;
 } & InputRootProps &
   FieldCommonProps<TFieldValues, TName>;
 
@@ -69,6 +70,7 @@ export const FieldUpload = <
                 onChange={handleChange}
                 type="file"
                 disabled={isFieldUploadDisabled}
+                accept={props.accept}
                 {...fieldProps}
               />
               {props.isLoading ? (
