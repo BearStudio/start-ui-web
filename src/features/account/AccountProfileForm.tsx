@@ -23,6 +23,7 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
 import { useUploadFileMutation } from '@/lib/s3/client';
+import { FILES_COLLECTIONS_CONFIG } from '@/lib/s3/config';
 import { trpc } from '@/lib/trpc/client';
 
 export const AccountProfileForm = () => {
@@ -95,6 +96,9 @@ export const AccountProfileForm = () => {
                   type="upload"
                   control={form.control}
                   placeholder={t('account:data.avatar.placeholder')}
+                  accept={FILES_COLLECTIONS_CONFIG['avatar'].allowedTypes.join(
+                    ','
+                  )}
                 />
               </FormField>
 
