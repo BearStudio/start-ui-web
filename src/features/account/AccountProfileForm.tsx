@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Button, ButtonGroup, Stack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorPage } from '@/components/ErrorPage';
@@ -22,7 +23,7 @@ import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
-import { useUploadFileMutation } from '@/lib/s3/client';
+import { uploadFile } from '@/lib/s3/client';
 import { FILES_COLLECTIONS_CONFIG } from '@/lib/s3/config';
 import { trpc } from '@/lib/trpc/client';
 
@@ -33,9 +34,24 @@ export const AccountProfileForm = () => {
     staleTime: Infinity,
   });
 
-  const uploadAvatar = useUploadFileMutation('avatar');
-
-  const updateAccount = trpc.account.update.useMutation({
+  const updateAccount = useMutation({
+    mutationFn: async ({ image, ...values }: FormFieldsAccountProfile) => {
+      return await trpcUtils.client.account.update.mutate({
+        ...values,
+        image: image?.file
+          ? await uploadFile({
+              trpcClient: trpcUtils.client,
+              collection: 'avatar',
+              file: image.file,
+              onError: () => {
+                form.setError('image', {
+                  message: t('account:profile.feedbacks.uploadError.title'),
+                });
+              },
+            })
+          : account.data?.image,
+      });
+    },
     onSuccess: async () => {
       await trpcUtils.account.invalidate();
       toastCustom({
@@ -61,31 +77,18 @@ export const AccountProfileForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormFieldsAccountProfile> = async ({
-    image,
-    ...values
-  }) => {
-    try {
-      updateAccount.mutate({
-        ...values,
-        image: image?.file
-          ? await uploadAvatar.mutateAsync(image.file)
-          : account.data?.image,
-      });
-    } catch {
-      form.setError('image', {
-        message: t('account:profile.feedbacks.uploadError.title'),
-      });
-    }
-  };
-
   return (
     <>
       {account.isLoading && <LoaderFull />}
       {account.isError && <ErrorPage />}
       {account.isSuccess && (
         <Stack spacing={4}>
-          <Form {...form} onSubmit={onSubmit}>
+          <Form
+            {...form}
+            onSubmit={(values) => {
+              updateAccount.mutate(values);
+            }}
+          >
             <Stack spacing={4}>
               <FormField>
                 <FormFieldLabel>
@@ -129,7 +132,7 @@ export const AccountProfileForm = () => {
                 <Button
                   type="submit"
                   variant="@primary"
-                  isLoading={updateAccount.isLoading || uploadAvatar.isLoading}
+                  isLoading={updateAccount.isLoading}
                 >
                   {t('account:profile.actions.update')}
                 </Button>

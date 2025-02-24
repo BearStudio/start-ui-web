@@ -17,7 +17,7 @@ export const validateFile = (params: {
 }): ValidateReturn => {
   if (
     params.config.maxSize &&
-    (params.input.size ?? 0) >= params.config.maxSize
+    (params.input.size ?? 0) > params.config.maxSize
   ) {
     return {
       error: {
@@ -30,7 +30,7 @@ export const validateFile = (params: {
 
   if (
     params.config.allowedTypes &&
-    !params.config.allowedTypes.includes(params.input.type ?? '')
+    !params.config.allowedTypes.includes(params.input.type?.toLowerCase() ?? '')
   ) {
     return {
       error: {
