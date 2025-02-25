@@ -32,6 +32,8 @@ const CustomIcon = ({
   name: string;
 }) => {
   const { hasCopied, onCopy } = useClipboard(name);
+  // TODO @eslint-react rule
+  // eslint-disable-next-line @eslint-react/no-clone-element
   const icon = React.cloneElement(children, { onClick: onCopy });
 
   return (

@@ -102,6 +102,7 @@ export const FieldOtp = <
                 <PinInputField
                   ref={index === 0 ? inputRef : undefined}
                   flex={1}
+                  // eslint-disable-next-line @eslint-react/no-array-index-key
                   key={index}
                   {...props.pinInputFieldProps}
                 />

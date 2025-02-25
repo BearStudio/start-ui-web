@@ -57,7 +57,7 @@ export const InputNumber = forwardRef<InputNumberProps, 'input'>(
       max,
       clampValueOnBlur = true,
       fixedPrecision = false,
-      onChange = () => undefined,
+      onChange,
       placeholder,
       showButtons = false,
       inputGroupProps,
