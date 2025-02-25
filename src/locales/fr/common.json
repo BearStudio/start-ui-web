@@ -22,5 +22,11 @@
   },
   "filter": "Filtrer",
   "clear": "Effacer",
-  "submit": "Soumettre"
+  "submit": "Soumettre",
+  "files": {
+    "errors": {
+      "tooLarge": "Fichier trop lourd",
+      "typeNotAllowed": "Type de fichier non autorisé"
+    }
+  }
 }

@@ -22,5 +22,11 @@
   },
   "filter": "منقي",
   "clear": "واضح",
-  "submit": "يُقدِّم"
+  "submit": "يُقدِّم",
+  "files": {
+    "errors": {
+      "tooLarge": "ملف كبير جدا",
+      "typeNotAllowed": "نوع الملف غير مسموح به"
+    }
+  }
 }

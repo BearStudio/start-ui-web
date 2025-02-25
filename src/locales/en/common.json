@@ -20,6 +20,12 @@
     "confirmText": "Leave without saving",
     "cancelText": "Stay on the page"
   },
+  "files": {
+    "errors": {
+      "tooLarge": "File too large",
+      "typeNotAllowed": "File type not allowed"
+    }
+  },
   "filter": "Filter",
   "clear": "Clear",
   "submit": "Submit"
