@@ -8,11 +8,6 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-next-env.d.ts
-
 # production
 /build
 /public/storybook
@@ -57,10 +52,5 @@ prisma/dev.db-journal
 /test-results/
 /playwright-report/
 /playwright/.cache/
-
-# next-pwa recommandation
-**/public/workbox-*.js*
-**/public/sw.js*
-**/public/worker-development.js*
 
 certificates

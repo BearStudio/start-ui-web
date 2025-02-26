@@ -8,9 +8,17 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "run-p dev:*",
+    "dev:app": "vinxi dev",
+    "dev:smtp": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
+
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+
+    "pretty": "prettier -w .",
+    "lint": "run-p lint:*",
+    "lint:eslint": "cross-env SKIP_ENV_VALIDATION=true eslint ./app --fix",
+    "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-slot": "1.1.2",
@@ -31,7 +39,15 @@
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.3.4",
+    "cross-env": "7.0.3",
+    "eslint": "9.21.0",
+    "eslint-plugin-sonarjs": "3.0.2",
+    "eslint-plugin-storybook": "0.11.3",
+    "jiti": "2.4.2",
+    "maildev": "2.2.1",
+    "npm-run-all": "4.1.5",
     "typescript": "5.7.3",
+    "typescript-eslint": "8.25.0",
     "vite-tsconfig-paths": "5.1.4"
   },
   "repository": {
