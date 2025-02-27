@@ -17,3 +17,19 @@ It represents our team's up-to-date stack that we use when creating web apps for
 
 - [ ] Update README
 - [ ] Update documentation
+
+# VS code setup
+
+Update your `.vscode/settings`
+
+```json
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
+}
+```
