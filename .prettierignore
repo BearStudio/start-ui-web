@@ -1,7 +1,8 @@
 .cache
 .db
 .history
-out
+output
+.vinxi
 node_modules
 package.json
 package-lock.json
