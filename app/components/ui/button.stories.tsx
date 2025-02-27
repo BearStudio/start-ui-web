@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button';
 import type { Meta } from '@storybook/react';
 import { Mail } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export default {
   title: 'Button',
@@ -16,6 +17,7 @@ export const Variants = () => {
       <Button>Default</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="destructive">Destructive</Button>
+      <Button variant="destructive-secondary">Destructive</Button>
     </div>
   );
 };

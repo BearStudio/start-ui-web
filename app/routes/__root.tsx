@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
+
 import {
-  Outlet,
-  createRootRoute,
   HeadContent,
+  Outlet,
   Scripts,
+  createRootRoute,
 } from '@tanstack/react-router';
 
 import appCss from '@/styles/app.css?url';

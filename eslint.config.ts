@@ -1,7 +1,7 @@
 import eslint from '@eslint/js';
-import tslint from 'typescript-eslint';
 import sonarjs from 'eslint-plugin-sonarjs';
 import storybook from 'eslint-plugin-storybook';
+import tslint from 'typescript-eslint';
 
 export default tslint.config(
   eslint.configs.recommended,
