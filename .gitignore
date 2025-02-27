@@ -9,6 +9,8 @@
 /coverage
 
 # production
+.output
+.vinxi
 /build
 /public/storybook
 /storybook-static
