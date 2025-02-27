@@ -70,3 +70,32 @@ export const WithIcon = () => {
     </div>
   );
 };
+
+export const Loading = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        <Button loading>Button</Button>
+        <Button size="icon" loading>
+          <Mail />
+        </Button>
+        <Button loading>
+          <Mail />
+          Button
+        </Button>
+      </div>
+      <div className="flex gap-4">
+        <Button variant="secondary" loading>
+          Button
+        </Button>
+        <Button variant="secondary" size="icon" loading>
+          <Mail />
+        </Button>
+        <Button variant="secondary" loading>
+          <Mail />
+          Button
+        </Button>
+      </div>
+    </div>
+  );
+};
