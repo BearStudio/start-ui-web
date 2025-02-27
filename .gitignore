@@ -54,3 +54,5 @@ prisma/dev.db-journal
 /playwright/.cache/
 
 certificates
+
+*storybook.log
