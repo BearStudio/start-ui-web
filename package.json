@@ -24,6 +24,7 @@
     "@radix-ui/react-slot": "1.1.2",
     "@tanstack/react-router": "1.111.7",
     "@tanstack/start": "1.111.7",
+    "@uidotdev/usehooks": "2.4.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "0.475.0",
