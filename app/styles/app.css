@@ -85,8 +85,8 @@
   --muted-foreground: var(--color-neutral-400);
   --accent: var(--color-neutral-800);
   --accent-foreground: var(--color-neutral-50);
-  --destructive: var(--color-negative-900);
-  --destructive-foreground: var(--color-negative-100);
+  --destructive: var(--color-negative-700);
+  --destructive-foreground: var(--color-white);
   --border: var(--color-neutral-800);
   --input: var(--color-neutral-800);
   --ring: var(--color-neutral-600);
