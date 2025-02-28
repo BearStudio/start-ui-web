@@ -25,6 +25,7 @@ export const Variants = () => {
 export const Sizes = () => {
   return (
     <div className="flex gap-4">
+      <Button size="xs">Extra Small</Button>
       <Button size="sm">Small</Button>
       <Button>Default</Button>
       <Button size="lg">Large</Button>
@@ -43,6 +44,9 @@ export const AsChild = () => {
 export const IconOnly = () => {
   return (
     <div className="flex gap-4">
+      <Button size="icon-xs">
+        <Mail />
+      </Button>
       <Button size="icon-sm">
         <Mail />
       </Button>
