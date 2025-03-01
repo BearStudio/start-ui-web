@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { lunalink } from '@bearstudio/lunalink';
 import {
   Menu,
   MenuButton,
@@ -100,7 +101,7 @@ export const AdminUserActions = ({ user, ...rest }: AdminUserActionProps) => {
         <MenuList>
           <MenuItem
             as={Link}
-            href={ROUTES_USERS.admin.user({ id: user.id })}
+            href={lunalink(ROUTES_USERS.admin.user(), { id: user.id })}
             icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

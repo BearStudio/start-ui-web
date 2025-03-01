@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { lunalink } from '@bearstudio/lunalink';
 import {
   Button,
   Flex,
@@ -105,7 +106,7 @@ export default function PageAdminRepositories() {
                     <DataListText fontWeight="bold">
                       <LinkOverlay
                         as={Link}
-                        href={ROUTES_REPOSITORIES.admin.repository({
+                        href={lunalink(ROUTES_REPOSITORIES.admin.repository(), {
                           id: repository.id,
                         })}
                       >

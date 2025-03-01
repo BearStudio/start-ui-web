@@ -3,14 +3,12 @@ import { ROUTES_APP } from '@/features/app/routes';
 
 export const ROUTES_REPOSITORIES = {
   app: {
-    root: () => `${ROUTES_APP.baseUrl()}/repositories`,
+    root: () => `${ROUTES_APP.baseUrl()}/repositories` as const,
   },
   admin: {
-    root: () => `${ROUTES_ADMIN.baseUrl()}/repositories`,
-    create: () => `${ROUTES_REPOSITORIES.admin.root()}/create`,
-    repository: (params: { id: string }) =>
-      `${ROUTES_REPOSITORIES.admin.root()}/${params.id}`,
-    update: (params: { id: string }) =>
-      `${ROUTES_REPOSITORIES.admin.root()}/${params.id}/update`,
+    root: () => `${ROUTES_ADMIN.baseUrl()}/repositories` as const,
+    create: () => `${ROUTES_REPOSITORIES.admin.root()}/create` as const,
+    repository: () => `${ROUTES_REPOSITORIES.admin.root()}/:id` as const,
+    update: () => `${ROUTES_REPOSITORIES.admin.root()}/:id/update` as const,
   },
 } as const;
