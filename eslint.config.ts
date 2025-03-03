@@ -28,6 +28,14 @@ export default tslint.config(
     files: ['app/**/*'],
     rules: {
       'no-process-env': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "MemberExpression[object.type='MetaProperty'][object.property.name='meta'][property.name='env']",
+          message: 'Usage of import.meta.env is not allowed.',
+        },
+      ],
     },
   },
   {
