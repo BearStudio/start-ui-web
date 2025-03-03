@@ -13,7 +13,7 @@ export const listPlanet = os
   .input(
     z.object({
       limit: z.number().int().min(1).max(100).optional(),
-      cursor: z.number().int().min(0).default(0),
+      cursor: z.number().int().min(0).optional().default(0),
     })
   )
   .output(z.array(PlanetSchema))
@@ -45,9 +45,9 @@ export const createPlanet = os
   .route({ method: 'POST', path: '/planets' })
   .input(PlanetSchema.omit({ id: true }))
   .output(PlanetSchema)
-  .handler(async () => {
+  .handler(async ({ input }) => {
     // your create code here
-    return { id: 1, name: 'name' };
+    return { id: 1, name: input.name };
   });
 
 export type Router = typeof router;

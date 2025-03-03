@@ -25,8 +25,10 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "@orpc/client": "0.45.0",
-    "@orpc/server": "0.45.0",
+    "@orpc/client": "0.45.1",
+    "@orpc/openapi": "0.45.1",
+    "@orpc/server": "0.45.1",
+    "@orpc/zod": "0.45.1",
     "@radix-ui/react-dialog": "1.1.6",
     "@radix-ui/react-slot": "1.1.2",
     "@t3-oss/env-core": "0.12.0",
