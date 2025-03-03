@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
+import { orpc } from '@/lib/orpc-client';
+
 import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/')({
@@ -12,8 +14,9 @@ function Home() {
 
   return (
     <Button
-      onClick={() => {
+      onClick={async () => {
         setState((s) => s + 1);
+        console.log((await orpc.planet.find({ id: 1 })).id);
       }}
     >
       Counter {state}
