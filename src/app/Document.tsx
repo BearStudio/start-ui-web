@@ -7,7 +7,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { Providers } from '@/app/Providers';
 import { Viewport } from '@/components/Viewport';
-import { EnvHint } from '@/features/devtools/EnvHint';
+import { env } from '@/env.mjs';
+import { AppHint } from '@/features/devtools/AppHint';
 import { useLocale } from '@/lib/i18n/useLocale';
 import { TrpcProvider } from '@/lib/trpc/TrpcProvider';
 import theme, { COLOR_MODE_STORAGE_KEY } from '@/theme';
@@ -65,8 +66,10 @@ export const Document = ({ children }: { children: ReactNode }) => {
         <Providers>
           <TrpcProvider>
             <Viewport>{children}</Viewport>
-            <EnvHint />
-            <ReactQueryDevtools initialIsOpen={false} />
+            <AppHint />
+            {env.NEXT_PUBLIC_DEV_TOOLS_ENABLED && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
           </TrpcProvider>
         </Providers>
       </body>
