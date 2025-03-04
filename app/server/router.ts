@@ -1,9 +1,14 @@
-import { ORPCError, os } from '@orpc/server';
+import {
+  InferRouterInputs,
+  InferRouterOutputs,
+  ORPCError,
+  os,
+} from '@orpc/server';
 import type { IncomingHttpHeaders } from 'node:http';
 import { z } from 'zod';
 
 const PlanetSchema = z.object({
-  id: z.number().int().min(1),
+  id: z.coerce.number().int().min(1),
   name: z.string(),
   description: z.string().optional(),
 });
@@ -11,15 +16,20 @@ const PlanetSchema = z.object({
 export const listPlanet = os
   .route({ method: 'GET', path: '/planets' })
   .input(
-    z.object({
-      limit: z.number().int().min(1).max(100).optional(),
-      cursor: z.number().int().min(0).optional().default(0),
-    })
+    z
+      .object({
+        limit: z.number().int().min(1).max(100).optional(),
+        cursor: z.number().int().min(0).optional().default(0),
+      })
+      .optional()
   )
   .output(z.array(PlanetSchema))
   .handler(async () => {
     // your list code here
-    return [{ id: 1, name: 'name' }];
+    return [
+      { id: 1, name: 'Earth' },
+      { id: 2, name: 'Mars' },
+    ];
   });
 
 export const findPlanet = os
@@ -28,13 +38,13 @@ export const findPlanet = os
   .output(PlanetSchema)
   .handler(async () => {
     // your find code here
-    return { id: 1, name: 'name' };
+    return { id: 1, name: 'Earth' };
   });
 
 export const createPlanet = os
   .$context<{ headers: IncomingHttpHeaders }>()
   .use(({ next }) => {
-    const user = { id: 1, name: 'test' };
+    const user = { id: 1, name: 'Admin' };
 
     if (user) {
       return next({ context: { user } });
@@ -47,10 +57,13 @@ export const createPlanet = os
   .output(PlanetSchema)
   .handler(async ({ input }) => {
     // your create code here
-    return { id: 1, name: input.name };
+    // eslint-disable-next-line sonarjs/pseudo-random
+    return { id: Math.floor(Math.random() * 9999), name: input.name };
   });
 
 export type Router = typeof router;
+export type Inputs = InferRouterInputs<typeof router>;
+export type Outputs = InferRouterOutputs<typeof router>;
 export const router = {
   planet: {
     list: listPlanet,
