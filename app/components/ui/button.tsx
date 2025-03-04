@@ -50,10 +50,10 @@ type ButtonProps = React.ComponentProps<'button'> &
     | { asChild: true }
   );
 
-function Button({ className, variant, size, disabled, ...props }: ButtonProps) {
-  const Comp = props.asChild ? Slot : 'button';
-
-  const loading = !props.asChild && props.loading;
+function Button(_props: ButtonProps) {
+  const { className, variant, asChild, loading, size, disabled, ...props } =
+    !_props.asChild ? _props : { ..._props, loading: false };
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
