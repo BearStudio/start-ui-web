@@ -195,7 +195,7 @@ export const ErrorState = () => {
           title="Failed to load the users"
           retry={() => alert('Retry')}
         >
-          Something wrong happen, please retry or contact the administator
+          Something wrong happened, please retry or contact the administrator
         </DataListErrorState>
       </DataList>
     </Stack>
