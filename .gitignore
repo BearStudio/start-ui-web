@@ -58,3 +58,4 @@ prisma/dev.db-journal
 certificates
 
 *storybook.log
+app.config.timestamp_*.js
