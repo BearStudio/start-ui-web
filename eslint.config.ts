@@ -1,4 +1,5 @@
 import eslint from '@eslint/js';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
 import storybook from 'eslint-plugin-storybook';
@@ -9,6 +10,7 @@ export default tslint.config(
   tslint.configs.recommended,
   sonarjs.configs.recommended,
   ...storybook.configs['flat/recommended'],
+  ...tanstackQuery.configs['flat/recommended'],
   {
     rules: {
       'react/no-unescaped-entities': 'off',
