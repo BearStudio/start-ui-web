@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { lunalink } from '@bearstudio/lunalink';
 import {
   Menu,
   MenuButton,
@@ -54,14 +55,18 @@ export const AdminRepositoryActions = ({
         <MenuList>
           <MenuItem
             as={Link}
-            href={ROUTES_REPOSITORIES.admin.repository({ id: repository.id })}
+            href={lunalink(ROUTES_REPOSITORIES.admin.repository(), {
+              id: repository.id,
+            })}
             icon={<Icon icon={LuEye} fontSize="lg" color="gray.400" />}
           >
             {t('repositories:list.actions.view')}
           </MenuItem>
           <MenuItem
             as={Link}
-            href={ROUTES_REPOSITORIES.admin.update({ id: repository.id })}
+            href={lunalink(ROUTES_REPOSITORIES.admin.update(), {
+              id: repository.id,
+            })}
             icon={<Icon icon={LuPenLine} fontSize="lg" color="gray.400" />}
           >
             {t('common:actions.edit')}

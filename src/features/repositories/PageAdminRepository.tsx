@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { lunalink } from '@bearstudio/lunalink';
 import {
   Box,
   Card,
@@ -65,8 +66,8 @@ export default function PageAdminRepository() {
           <>
             <ResponsiveIconButton
               as={Link}
-              href={ROUTES_REPOSITORIES.admin.update({
-                id: params?.id?.toString() ?? 'unknown',
+              href={lunalink(ROUTES_REPOSITORIES.admin.update(), {
+                id: params.id?.toString() ?? 'unknown',
               })}
               isDisabled={!params?.id}
               icon={<LuPenLine />}

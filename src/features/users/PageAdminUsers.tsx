@@ -1,5 +1,6 @@
 import React, { ElementRef, useRef } from 'react';
 
+import { lunalink } from '@bearstudio/lunalink';
 import {
   Avatar,
   Button,
@@ -127,7 +128,9 @@ export default function PageAdminUsers() {
                       )}
                       <LinkOverlay
                         as={Link}
-                        href={ROUTES_USERS.admin.user({ id: user.id })}
+                        href={lunalink(ROUTES_USERS.admin.user(), {
+                          id: user.id,
+                        })}
                       >
                         {user.name ?? user.email}
                       </LinkOverlay>
