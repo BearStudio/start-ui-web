@@ -15,6 +15,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - [x] Prisma
 - [x] Docker
 - [ ] Logs
+- [ ] Fields
 - [ ] Translations
 - [ ] Auth
 
