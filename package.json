@@ -42,6 +42,8 @@
     "@orpc/react-query": "0.46.0",
     "@orpc/server": "0.46.0",
     "@orpc/zod": "0.46.0",
+    "@oslojs/crypto": "1.0.1",
+    "@oslojs/encoding": "1.1.0",
     "@prisma/client": "6.4.1",
     "@radix-ui/react-dialog": "1.1.6",
     "@radix-ui/react-slot": "1.1.2",
