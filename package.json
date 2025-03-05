@@ -8,6 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "postinstall": "prisma generate --no-hints",
     "dev": "run-p env dev:*",
     "dev:app": "vinxi dev",
     "dev:smtp": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
@@ -22,7 +23,18 @@
     "pretty": "prettier -w .",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint ./app --fix",
-    "lint:ts": "tsc --noEmit"
+    "lint:ts": "tsc --noEmit",
+    "dk:init": "docker compose up -d",
+    "dk:start": "docker compose start",
+    "dk:stop": "docker compose stop",
+    "dk:clear": "docker compose down --volumes",
+    "db:init": "pnpm db:push && pnpm db:seed",
+    "db:push": "prisma db push",
+    "db:ui": "prisma studio",
+    "db:seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "jiti ./prisma/seed/index.ts"
   },
   "dependencies": {
     "@orpc/client": "0.46.0",
@@ -30,6 +42,7 @@
     "@orpc/react-query": "0.46.0",
     "@orpc/server": "0.46.0",
     "@orpc/zod": "0.46.0",
+    "@prisma/client": "6.4.1",
     "@radix-ui/react-dialog": "1.1.6",
     "@radix-ui/react-slot": "1.1.2",
     "@t3-oss/env-core": "0.12.0",
@@ -53,6 +66,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.4",
+    "@faker-js/faker": "9.5.1",
     "@storybook/addon-essentials": "8.6.0",
     "@storybook/addon-interactions": "8.6.0",
     "@storybook/addon-onboarding": "8.6.0",
@@ -75,6 +89,7 @@
     "maildev": "2.2.1",
     "npm-run-all": "4.1.5",
     "prettier-plugin-tailwindcss": "0.6.11",
+    "prisma": "6.4.1",
     "storybook": "8.6.0",
     "storybook-dark-mode": "4.0.2",
     "typescript": "5.7.3",
