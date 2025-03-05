@@ -26,7 +26,8 @@ export const envServer = createEnv({
       .default(import.meta.env.PROD ? 'false' : 'true')
       .transform((value) => value === 'true'),
   },
-  runtimeEnv: import.meta.env,
+  // eslint-disable-next-line no-process-env
+  runtimeEnv: process.env,
   emptyStringAsUndefined: true,
 });
 
