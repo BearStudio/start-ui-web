@@ -23,7 +23,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: 'postgres://${DOCKER_DATABASE_USERNAME}:${DOCKER_DATABASE_PASSWORD}@postgres:${DOCKER_DATABASE_PORT}/${DOCKER_DATABASE_NAME}'
+      DATABASE_URL: 'postgres://${DOCKER_DATABASE_USERNAME}:${DOCKER_DATABASE_PASSWORD}@postgres:5432/${DOCKER_DATABASE_NAME}'
 
   minio:
     image: 'minio/minio:RELEASE.2024-07-16T23-46-41Z-cpuv1'
