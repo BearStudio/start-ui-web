@@ -34,8 +34,9 @@ export default tslint.config(
         'error',
         {
           selector:
-            "MemberExpression[object.type='MetaProperty'][object.property.name='meta'][property.name='env']",
-          message: 'Usage of import.meta.env is not allowed.',
+            "MemberExpression[object.type='MemberExpression'][object.object.type='MetaProperty'][object.object.property.name='meta'][object.property.name='env'][property.name!=/^(DEV|PROD|MODE|SSR|BASE_URL|MANIFEST)$/]",
+          message:
+            'Custom import.meta.env variables are not allowed. Use envClient and envServer from @/app/env folder instead.',
         },
       ],
     },
