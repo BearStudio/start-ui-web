@@ -12,8 +12,8 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - [x] Setup Tailwind
 - [x] Setup Shadcn
 - [x] Setup Storybook
-- [ ] Prisma
-- [ ] Docker
+- [x] Prisma
+- [x] Docker
 - [ ] Logs
 - [ ] Translations
 - [ ] Auth

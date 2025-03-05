@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16.1
+    env_file:
+      - .env
+    ports:
+      - '${DOCKER_DATABASE_PORT:-5432}:5432'
+    environment:
+      POSTGRES_DB: $DOCKER_DATABASE_NAME
+      POSTGRES_USER: $DOCKER_DATABASE_USERNAME
+      POSTGRES_PASSWORD: $DOCKER_DATABASE_PASSWORD
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $DOCKER_DATABASE_NAME']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  initializedatabase:
+    build:
+      context: .
+      dockerfile: docker/initialize-database.dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: 'postgres://${DOCKER_DATABASE_USERNAME}:${DOCKER_DATABASE_PASSWORD}@postgres:${DOCKER_DATABASE_PORT}/${DOCKER_DATABASE_NAME}'
