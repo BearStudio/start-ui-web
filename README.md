@@ -9,9 +9,14 @@ It represents our team's up-to-date stack that we use when creating web apps for
 
 - [x] 🔥 Burn all the code
 - [x] Setup Tanstack Start
-- [ ] Setup Tailwind
-- [ ] Setup Shadcn
-- [ ] Setup Storybook
+- [x] Setup Tailwind
+- [x] Setup Shadcn
+- [x] Setup Storybook
+- [ ] Prisma
+- [ ] Docker
+- [ ] Logs
+- [ ] Translations
+- [ ] Auth
 
 ---
 
