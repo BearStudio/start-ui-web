@@ -1,5 +1,5 @@
-import 'dayjs/locale/fr';
 import zod from 'zod-i18n-map/locales/fr/zod.json';
+import 'dayjs/locale/fr';
 
 import account from './account.json';
 import admin from './admin.json';

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from '@tanstack/react-router';
 import '@/lib/dayjs/config';
-import '@/lib/i18n/client';
+import '@/lib/i18n';
 
 const queryClient = new QueryClient();
 
