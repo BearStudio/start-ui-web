@@ -20,7 +20,6 @@ model User {
   email           String?        @unique
   isEmailVerified Boolean        @default(false)
   accountStatus   AccountStatus  @default(NOT_VERIFIED)
-  image           String?
   authorizations  UserRole[]     @default([APP])
   language        String         @default("en")
   lastLoginAt     DateTime?

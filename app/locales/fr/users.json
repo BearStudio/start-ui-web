@@ -1,0 +1,101 @@
+{
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "Utilisateur activé",
+      "description": "Utilisateur \"{{login}}\" activé avec succès"
+    },
+    "deactivateUserSuccess": {
+      "title": "Utilisateur désactivé",
+      "description": "Utilisateur \"{{login}}\" désactivé avec succès"
+    },
+    "activateUserError": {
+      "title": "Échec de l'activation",
+      "description": "Échec de l'activation de l'utilisateur \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "Échec de la désactivation",
+      "description": "Échec de la désactivation de l'utilisateur \"{{login}}\""
+    },
+    "deleteUserError": {
+      "title": "Échec de la suppression",
+      "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
+    },
+    "loadingUserError": {
+      "title": "Échec du chargement des utilisateurs"
+    }
+  },
+  "list": {
+    "title": "Gestion des utilisateurs",
+    "status": "Statut",
+    "actions": {
+      "createUser": "Créer un utilisateur"
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} utilisateurs sur {{total}}"
+    }
+  },
+  "data": {
+    "email": {
+      "label": "Email",
+      "required": "L'email est requis",
+      "invalid": "L'email est invalide",
+      "alreadyUsed": "L'email est déjà utilisé"
+    },
+    "status": {
+      "activated": "Activé",
+      "deactivated": "Désactivé"
+    },
+    "name": {
+      "label": "Nom",
+      "required": "Le nom est requis",
+      "invalid": "Le nom n'est pas valide"
+    },
+    "language": {
+      "label": "Langue"
+    },
+    "authorizations": {
+      "label": "Autorisations",
+      "options": {
+        "ADMIN": "Administrateur",
+        "APP": "Application"
+      },
+      "required": "Au moins une autorisation est requise"
+    },
+    "createdAt": {
+      "ago": "Créé <dateAgo />"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Sauvegarder"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la mise à jour"
+      },
+      "updateSuccess": {
+        "title": "Mis à jour avec succès"
+      }
+    }
+  },
+  "create": {
+    "title": "Nouvel utilisateur",
+    "action": {
+      "save": "Créer"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Échec de la création"
+      },
+      "updateSuccess": {
+        "title": "Utilisateur créé avec succès"
+      }
+    }
+  },
+  "deleteModal": {
+    "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
+    "title": "Confirmer la suppression de l'utilisateur"
+  },
+  "you": "vous"
+}

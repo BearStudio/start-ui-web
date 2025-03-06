@@ -1,0 +1,100 @@
+{
+  "datalist": {
+    "retry": "أعد المحاولة",
+    "errorTitle": "هناك خطأ ما",
+    "emptyTitle": "لايوجد بيانات",
+    "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\""
+  },
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "إجراءات"
+  },
+  "confirmMenuItem": {
+    "confirmText": "انقر للتأكيد"
+  },
+  "confirmModal": {
+    "confirmText": "أكد",
+    "heading": "اهل انت متأكد ؟"
+  },
+  "confirmPopover": {
+    "confirmText": "أكد",
+    "heading": "اهل انت متأكد ؟"
+  },
+  "pagination": {
+    "firstPage": "الصفحة الأولى",
+    "prevPage": "الصفحة السابقة",
+    "lastPage": "الصفحة الأخيرة",
+    "nextPage": "الصفحة التالية",
+    "loading": "<spinner></spinner> <box>تحميل</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>",
+    "showing": "<box>يتم إظهار</box> <strong>{{firstItemOnPage}}</strong> <span>إلى</span> <strong>{{lastItemOnPage}}</strong> <span>من أصل</ span> <strong>{{totalItems}}</strong> <box>من النتائج</box>"
+  },
+  "searchInput": {
+    "placeholder": "بحث...",
+    "clear": "إمسح البحث"
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "تاريخ غير صالح"
+  },
+  "fieldMultiSelect": {
+    "noOption": "لا يوجد خيار"
+  },
+  "sort": {
+    "sortAscending": "تصاعدي",
+    "sortDescending": "تنازلي",
+    "sortBy": "الترتيب حسب",
+    "order": "أمر"
+  },
+  "errorBoundary": {
+    "actions": {
+      "expand": "أظهر التفاصيل"
+    },
+    "title": "حدث خطأ غير متوقع."
+  },
+  "errorPage": {
+    "403": {
+      "description": "عذرا ، لا يمكنك الوصول إلى هذه الصفحة.",
+      "title": "صفحة غير مصرح بها"
+    },
+    "404": {
+      "description": "رابط الصفحة غير موجود أو تم تغيير العنوان",
+      "title": "الصفحة غير موجودة"
+    },
+    "default": {
+      "description": "حدث خطأ 😞",
+      "title": "خطأ"
+    },
+    "errorCode": "Error {{code}}"
+  },
+  "dayPicker": {
+    "today": "اليوم"
+  },
+  "monthPicker": {
+    "today": "اليوم",
+    "months": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    }
+  },
+  "formField": {
+    "optional": "خياري"
+  },
+  "fieldPassword": {
+    "showPassword": "عرض كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور"
+  },
+  "toast": {
+    "closeToast": "إغلاق الرسالة"
+  }
+}

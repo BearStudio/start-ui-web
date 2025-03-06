@@ -1,10 +1,12 @@
 import { InferRouterInputs, InferRouterOutputs } from '@orpc/server';
 
-import planetsRouter from './routers/planets';
+import authRouter from './routers/auth';
+import planetRouter from './routers/planet';
 
 export type Router = typeof router;
 export type Inputs = InferRouterInputs<typeof router>;
 export type Outputs = InferRouterOutputs<typeof router>;
 export const router = {
-  planet: planetsRouter,
+  planet: planetRouter,
+  auth: authRouter,
 };

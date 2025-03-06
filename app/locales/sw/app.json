@@ -1,0 +1,9 @@
+{
+  "layout": {
+    "mainMenu": {
+      "account": "Akaunti",
+      "home": "Nyumbani",
+      "repositories": "hazina"
+    }
+  }
+}

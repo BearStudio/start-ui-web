@@ -1,0 +1,101 @@
+{
+  "list": {
+    "title": "إدارة المستخدمين ",
+    "status": "الحالة",
+    "actions": {
+      "createUser": "إنشاء مستخدم"
+    },
+    "loadMore": {
+      "button": "تحميل المزيد",
+      "display": "عرض {{loaded}} من {{total}} من المستخدمين"
+    }
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "تم تفعيل المستخدم",
+      "description": "تم  تفعيل المستخدم \"{{login}}\" بنجاح"
+    },
+    "deactivateUserSuccess": {
+      "title": "تم إلغاء تفعيل المستخدم",
+      "description": "تم  إلغاء  تفعيل المستخدم  \"{{login}}\" بنجاح"
+    },
+    "activateUserError": {
+      "title": "فشل التفعيل",
+      "description": "فشل تفعيل المستخدم \"{{login}}\""
+    },
+    "deactivateUserError": {
+      "title": "فشل إلغاء التفعيل",
+      "description": "فشل إلغاء تفعيل المستخدم \"{{login}}\""
+    },
+    "deleteUserError": {
+      "title": "فشل الحذف ",
+      "description": "فشل إزالة المستخدم \"{{login}}\""
+    },
+    "loadingUserError": {
+      "title": "فشل تحميل المستخدمين"
+    }
+  },
+  "data": {
+    "email": {
+      "label": "البريد الإلكتروني",
+      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل ",
+      "required": "البريد الإلكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صالح "
+    },
+    "status": {
+      "activated": "مفعل",
+      "deactivated": "لم يتم تفعيله"
+    },
+    "name": {
+      "label": "الإسم الاول",
+      "required": "مطلوب اسم",
+      "invalid": "الاسم غير صالح"
+    },
+    "language": {
+      "label": "اللغة"
+    },
+    "authorizations": {
+      "label": "التراخيص",
+      "options": {
+        "ADMIN": "مسؤل",
+        "APP": "برنامج"
+      },
+      "required": "مطلوب تصريح واحد على الأقل"
+    },
+    "createdAt": {
+      "ago": "تم الإنشاء <dateAgo />"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "يحفظ"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل التحديث"
+      },
+      "updateSuccess": {
+        "title": "تم التحديث بنجاح"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "فشل الإنشاء"
+      },
+      "updateSuccess": {
+        "title": "تم إنشاء المستخدم بنجاح"
+      }
+    },
+    "action": {
+      "save": "يخلق"
+    },
+    "title": "مستخدم جديد"
+  },
+  "deleteModal": {
+    "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",
+    "title": "أكد حذف المستخدم"
+  },
+  "you": "أنت"
+}

@@ -1,0 +1,70 @@
+{
+  "list": {
+    "title": "Dépôts",
+    "actions": {
+      "createRepository": "Créer un dépôt",
+      "view": "Voir"
+    },
+    "loadMore": {
+      "button": "Charger plus",
+      "display": "Affichage de {{loaded}} sur {{total}} dépôts"
+    },
+    "empty": "Aucun dépôt"
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "Échec de la suppression",
+      "description": "Échec de la suppression du dépôt"
+    },
+    "loadingRepositoryError": {
+      "title": "Échec du chargement des dépôts"
+    }
+  },
+  "data": {
+    "name": {
+      "label": "Nom",
+      "required": "Le nom est requis",
+      "alreadyUsed": "Nom déjà utilisé"
+    },
+    "link": {
+      "label": "Lien",
+      "required": "Le lien est requis",
+      "tooSmall": "Le lien doit contenir au moins {{min}} caractères",
+      "missingDot": "Le lien doit contenir au moins un point"
+    },
+    "description": {
+      "label": "Description"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Sauvegarder"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Mise à jour a échoué"
+      },
+      "updateSuccess": {
+        "title": "Mise à jour avec succès"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "La création a échoué"
+      },
+      "updateSuccess": {
+        "title": "Dépôt créé avec succès"
+      }
+    },
+    "action": {
+      "save": "Créer"
+    },
+    "title": "Nouveau dépôt"
+  },
+  "deleteModal": {
+    "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
+    "title": "Confirmer la suppression du dépôt"
+  }
+}
