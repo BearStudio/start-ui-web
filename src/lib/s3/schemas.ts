@@ -42,11 +42,11 @@ export type UploadSignedUrlInput = z.infer<
 >;
 export const zUploadSignedUrlInput = () =>
   z.object({
-    /**
-     * Must be a string as trpc-openapi requires that attributes must be serialized
-     */
-    metadata: z.string().optional(),
-    name: z.string(),
+    metadata: z.record(z.string(), z.string()).optional(),
+    name: z
+      .string()
+      .max(255)
+      .regex(/^[^/\\]*$/), // Prevent path traversal (Coderabbitai)
     type: z.string(),
     size: z.number(),
     collection: zFilesCollectionName(),

@@ -1,5 +1,3 @@
-import { stringify } from 'superjson';
-
 import { env } from '@/env.mjs';
 import { trpc } from '@/lib/trpc/client';
 import { RouterInputs } from '@/lib/trpc/types';
@@ -14,8 +12,7 @@ export const uploadFile = async (params: {
   try {
     const presignedUrlOutput =
       await params.trpcClient.files.uploadPresignedUrl.mutate({
-        // Metadata is a Record<string, string> but should be serialized for trpc-openapi
-        metadata: params.metadata ? stringify(params.metadata) : undefined,
+        metadata: params.metadata,
         collection: params.collection,
         type: params.file.type,
         size: params.file.size,

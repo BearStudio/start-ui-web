@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { parse } from 'superjson';
 
 import { FILES_COLLECTIONS_CONFIG } from '@/lib/s3/config';
 import {
@@ -44,7 +43,7 @@ export const filesRouter = createTRPCRouter({
       return await getS3UploadSignedUrl({
         key: config.getKey({ user: ctx.user }),
         metadata: input.metadata
-          ? { name: input.name, ...parse(input.metadata) }
+          ? { name: input.name, ...input.metadata }
           : undefined,
       });
     }),
