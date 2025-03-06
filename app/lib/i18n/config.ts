@@ -15,7 +15,7 @@ export const i18nConfig: InitOptions = {
   fallbackLng: DEFAULT_LANGUAGE_KEY,
   supportedLngs: keys(locales),
   detection: {
-    caches: ['localStorage', 'cookie'],
+    caches: ['cookie'],
   },
 
   // Fix issue with i18next types
