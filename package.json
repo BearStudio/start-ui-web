@@ -61,7 +61,7 @@
     "dayjs": "1.11.13",
     "i18next": "24.2.2",
     "i18next-browser-languagedetector": "8.0.4",
-    "lucide-react": "0.475.0",
+    "lucide-react": "0.476.0",
     "prettier": "3.5.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
