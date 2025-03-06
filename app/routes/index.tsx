@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import { orpc } from '@/lib/orpc-client';
+import { orpc } from '@/lib/orpc/client';
 
 import { Button } from '@/components/ui/button';
 
