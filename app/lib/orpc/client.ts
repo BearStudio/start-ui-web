@@ -4,7 +4,9 @@ import { createORPCReactQueryUtils } from '@orpc/react-query';
 import type { RouterClient } from '@orpc/server';
 
 import { envClient } from '@/env/client';
-import type { Router } from '@/server/router';
+
+import type { Router } from './types';
+
 const link = new RPCLink({
   url: `${envClient.VITE_BASE_URL}/api/rpc`,
 });

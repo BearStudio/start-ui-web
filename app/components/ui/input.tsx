@@ -2,7 +2,7 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-import { cn } from '@/lib/tailwind-utils';
+import { cn } from '@/lib/tailwind/utils';
 
 const inputVariants = cva(
   cn(
