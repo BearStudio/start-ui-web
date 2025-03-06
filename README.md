@@ -22,6 +22,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 
 ---
 
+- [ ] Deployment
 - [ ] Demo
 - [ ] Update README
 - [ ] Update documentation
