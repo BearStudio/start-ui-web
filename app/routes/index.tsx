@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
-import { useIsHydrated } from '@/hooks/useIsHydrated';
 
 import { Button } from '@/components/ui/button';
 
@@ -15,12 +14,10 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation(['common']);
   const [state, setState] = useState(1);
   const queryClient = useQueryClient();
   const planets = useQuery(orpc.planet.list.queryOptions());
-  const isHydrated = useIsHydrated();
-  const lang = isHydrated ? i18n.language : undefined;
 
   const createPlanet = useMutation(
     orpc.planet.create.mutationOptions({
@@ -43,7 +40,7 @@ function Home() {
         Counter {state}
       </Button>
       <Button
-        disabled={lang === 'fr'}
+        disabled={i18n.language === 'fr'}
         onClick={() => {
           i18n.changeLanguage('fr');
         }}
@@ -51,7 +48,7 @@ function Home() {
         FR
       </Button>
       <Button
-        disabled={lang === 'en'}
+        disabled={i18n.language === 'en'}
         onClick={() => {
           i18n.changeLanguage('en');
         }}
@@ -59,7 +56,7 @@ function Home() {
         EN
       </Button>
       <Button
-        disabled={lang === 'ar'}
+        disabled={i18n.language === 'ar'}
         onClick={() => {
           i18n.changeLanguage('ar');
         }}
@@ -85,6 +82,7 @@ function Home() {
           {planet.name}
         </Link>
       ))}
+      <p>{t('common:actions.edit')}</p>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { orpc } from '@/lib/orpc/client';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/planet/$id')({
   component: RouteComponent,
@@ -14,11 +15,13 @@ export const Route = createFileRoute('/planet/$id')({
 });
 
 function RouteComponent() {
+  const { t } = useTranslation(['common']);
   const data = Route.useLoaderData();
   return (
     <div>
       <Link to="/">Back</Link>
       Planet {data.planet.name} {data.random}
+      <p>{t('common:actions.edit')}</p>
     </div>
   );
 }
