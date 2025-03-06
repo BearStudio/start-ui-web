@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   createRootRoute,
@@ -8,6 +7,10 @@ import {
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 
+import i18n from '@/lib/i18n/client';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+
+import { Providers } from '@/providers';
 import appCss from '@/styles/app.css?url';
 
 export const Route = createRootRoute({
@@ -34,22 +37,27 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
-const queryClient = new QueryClient();
-
 function RootComponent() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <Providers>
       <RootDocument>
         <Outlet />
         <ReactQueryDevtools initialIsOpen={false} />
       </RootDocument>
-    </QueryClientProvider>
+    </Providers>
   );
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const languageConfig = AVAILABLE_LANGUAGES.find(
+    ({ key }) => key === i18n.language
+  );
   return (
-    <html>
+    <html
+      lang={i18n.language}
+      dir={languageConfig?.dir ?? 'ltr'}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>

@@ -1,0 +1,101 @@
+{
+  "you": "you",
+  "list": {
+    "title": "Users Management",
+    "status": "Status",
+    "actions": {
+      "createUser": "Create User"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} users"
+    }
+  },
+  "deleteModal": {
+    "title": "Confirm deleting the user",
+    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
+  },
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "User Activated",
+      "description": "User \"{{login}}\" activated with success"
+    },
+    "deactivateUserSuccess": {
+      "title": "User Deactivated",
+      "description": "User \"{{login}}\" deactivated with success"
+    },
+    "activateUserError": {
+      "title": "Activation Failed",
+      "description": "Fail to activate \"{{login}}\" user"
+    },
+    "deactivateUserError": {
+      "title": "Deactivation Failed",
+      "description": "Fail to deactivate \"{{login}}\" user"
+    },
+    "deleteUserError": {
+      "title": "Deletion Failed",
+      "description": "Fail to remove \"{{login}}\" user"
+    },
+    "loadingUserError": {
+      "title": "Failed to load users"
+    }
+  },
+  "data": {
+    "email": {
+      "label": "Email",
+      "alreadyUsed": "Email already used",
+      "required": "Email is required",
+      "invalid": "Email is invalid"
+    },
+    "authorizations": {
+      "label": "Authorizations",
+      "required": "At least one authorization is required",
+      "options": {
+        "APP": "App",
+        "ADMIN": "Admin"
+      }
+    },
+    "createdAt": {
+      "ago": "Created <dateAgo />"
+    },
+    "status": {
+      "activated": "Activated",
+      "deactivated": "Not Activated"
+    },
+    "name": {
+      "label": "Name",
+      "required": "Name is required",
+      "invalid": "Name is invalid"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Save"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Update failed"
+      },
+      "updateSuccess": {
+        "title": "Updated with success"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Creation failed"
+      },
+      "updateSuccess": {
+        "title": "User created with success"
+      }
+    },
+    "action": {
+      "save": "Create"
+    },
+    "title": "New User"
+  }
+}

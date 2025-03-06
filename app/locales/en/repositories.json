@@ -1,0 +1,70 @@
+{
+  "list": {
+    "title": "Repositories",
+    "empty": "No repositories",
+    "actions": {
+      "createRepository": "Create Repository",
+      "view": "View"
+    },
+    "loadMore": {
+      "button": "Load more",
+      "display": "Showing {{loaded}} of {{total}} repositories"
+    }
+  },
+  "deleteModal": {
+    "title": "Confirm deleting the repository",
+    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "Deletion Failed",
+      "description": "Fail to remove repository"
+    },
+    "loadingRepositoryError": {
+      "title": "Failed to load repositories"
+    }
+  },
+  "data": {
+    "name": {
+      "label": "Name",
+      "required": "Name is required",
+      "alreadyUsed": "Name already used"
+    },
+    "link": {
+      "label": "Link",
+      "required": "Link is required",
+      "tooSmall": "Invalid link, must be at least {{min}} characters",
+      "missingDot": "Invalid link, must contain at least a dot"
+    },
+    "description": {
+      "label": "Description"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Save"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Update failed"
+      },
+      "updateSuccess": {
+        "title": "Updated with success"
+      }
+    }
+  },
+  "create": {
+    "feedbacks": {
+      "updateError": {
+        "title": "Creation failed"
+      },
+      "updateSuccess": {
+        "title": "Repository created with success"
+      }
+    },
+    "action": {
+      "save": "Create"
+    },
+    "title": "New Repository"
+  }
+}

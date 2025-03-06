@@ -14,6 +14,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - [x] Setup Storybook
 - [x] Prisma
 - [x] Docker
+- [x] Vitest
 - [ ] Logs
 - [ ] Fields
 - [ ] Translations

@@ -1,0 +1,62 @@
+{
+  "registerCode": {
+    "subject": "Verify your account",
+    "preview": "Your verification code",
+    "title": "Verify your account",
+    "hello": "Welcome {{name}},",
+    "intro": "Your account is almost ready! This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to register, you can safely ignore this email."
+  },
+  "registerEmailAlreadyUsed": {
+    "subject": "Account already exists",
+    "preview": "Your email is already used by another account",
+    "title": "Account already exists",
+    "hello": "Hi {{name}},",
+    "intro": "Your email {{email}} is already used, you can't create another account with it.",
+    "ignoreHelper": "If you didn't try to create an account, you can safely ignore this email."
+  },
+  "loginCode": {
+    "subject": "Sign in verification code",
+    "preview": "Verification code to sign in",
+    "title": "Sign in verification code",
+    "hello": "Welcome back {{name}},",
+    "intro": "This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  },
+  "loginNotFound": {
+    "subject": "Account not found",
+    "preview": "Is this the right email?",
+    "title": "Is this the right email?",
+    "intro": "It looks like there isn't an account tied to this email address.",
+    "button": "Try a different email",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  },
+  "emailUpdate": {
+    "subject": "Verification code",
+    "preview": "Change your email",
+    "title": "Your verification code",
+    "hello": "Hi {{name}},",
+    "intro": "This is the verification code to update your email:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
+  },
+  "emailUpdateAlreadyUsed": {
+    "subject": "Trying to update your email?",
+    "preview": "Your email is already used by another account",
+    "title": "Trying to update your email?",
+    "hello": "Hi {{name}},",
+    "intro": "Your email {{email}} is already used, you can't use it for another account.",
+    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
+  },
+  "deleteAccountCode": {
+    "subject": "Delete your account",
+    "preview": "Verification code to delete your account",
+    "title": "Delete your account",
+    "hello": "{{name}}, you are about to delete your account. This will be permanent, be sure of what you are doing.",
+    "intro": "This is your verification code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to delete your account, you can safely ignore this email."
+  }
+}

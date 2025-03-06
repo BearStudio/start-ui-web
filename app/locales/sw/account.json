@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "profile": "Wasifu",
+    "myAccount": "Akaunti yangu",
+    "email": "Barua pepe"
+  },
+  "profile": {
+    "feedbacks": {
+      "updateSuccess": {
+        "title": "Imesasishwa"
+      },
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      }
+    },
+    "actions": {
+      "update": "Sasisha"
+    },
+    "title": "Maelezo ya wasifu"
+  },
+  "data": {
+    "name": {
+      "label": "Jina"
+    },
+    "email": {
+      "label": "Barua pepe",
+      "current": "Hii ndiyo barua pepe yako ya sasa"
+    },
+    "language": {
+      "label": "Lugha"
+    }
+  },
+  "email": {
+    "actions": {
+      "update": "Sasisha"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Barua pepe imesasishwa"
+      }
+    },
+    "title": "Sasisha barua pepe yako"
+  },
+  "logout": {
+    "button": "Ondoka",
+    "confirm": {
+      "button": "Ondoka",
+      "message": "Unakaribia kumaliza kipindi chako",
+      "title": "Kuondoka kwa akaunti"
+    }
+  },
+  "preferences": {
+    "theme": {
+      "dark": "Hali ya giza",
+      "light": "Hali ya mwanga"
+    },
+    "title": "Mapendeleo"
+  },
+  "title": "Akaunti",
+  "admin": {
+    "button": "Fungua Utawala",
+    "title": "Mtumiaji wa msimamizi"
+  },
+  "deleteAccount": {
+    "button": "Futa akaunti yangu",
+    "confirm": {
+      "button": "Futa akaunti yangu",
+      "message": "Unakaribia kufuta akaunti yako. \nHii itakuwa ya kudumu, hakikisha unafanya nini.",
+      "title": "Futa akaunti yangu"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Hitilafu fulani imetokea"
+      }
+    },
+    "validate": {
+      "button": "Futa akaunti yangu"
+    }
+  }
+}

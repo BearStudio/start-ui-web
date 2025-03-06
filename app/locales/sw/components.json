@@ -1,0 +1,100 @@
+{
+  "datalist": {
+    "retry": "Jaribu tena",
+    "errorTitle": "Hitilafu fulani imetokea",
+    "emptyTitle": "Hakuna Data",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\""
+  },
+  "dateAgo": {
+    "format": "siku DD MMMM YYYY, HH:mm"
+  },
+  "actionsButton": {
+    "label": "Hisa"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Bofya ili kuthibitisha"
+  },
+  "confirmModal": {
+    "confirmText": "Ili kuthibitisha",
+    "heading": "Una uhakika ?"
+  },
+  "confirmPopover": {
+    "confirmText": "Ili kuthibitisha",
+    "heading": "Una uhakika ?"
+  },
+  "pagination": {
+    "firstPage": "Ukurasa wa kawanza",
+    "lastPage": "Ukurasa wa mwisho",
+    "loading": "<spinner></spinner> <box>Chargement...</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span> \nsur</span> <strong>{{totalItems}}</strong> <box>résultats</box>",
+    "nextPage": "Ukurasa unaofuata",
+    "prevPage": "Ukurasa uliotangulia",
+    "showing": "<box>Affichage de</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span>sur</span> <strong \n>{{totalItems}}</strong> <box>résultats</box>"
+  },
+  "searchInput": {
+    "clear": "Futa utfutaji",
+    "placeholder": "Kuchunguza..."
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "Tarehe batili"
+  },
+  "fieldMultiSelect": {
+    "noOption": "Hakuna chaguo"
+  },
+  "sort": {
+    "sortAscending": "Kupanda",
+    "sortDescending": "Descendant",
+    "sortBy": "panga kwa",
+    "order": "Agizo"
+  },
+  "errorBoundary": {
+    "actions": {
+      "expand": "Onyesha maelezo"
+    },
+    "title": "Hitilafu isiyotarajiwa imetokea."
+  },
+  "errorPage": {
+    "403": {
+      "description": "Samahani, huwezi kufikia ukurasa huu.",
+      "title": "Haijaidhinishwa"
+    },
+    "404": {
+      "description": "Ukurasa haupo au url imebadilika.",
+      "title": "Ukurasa haujapatikana"
+    },
+    "default": {
+      "description": "Hitilafu fulani imetokea 😞",
+      "title": "Hitilafu"
+    },
+    "errorCode": "Hitilafu {{code}}"
+  },
+  "dayPicker": {
+    "today": "Leo"
+  },
+  "monthPicker": {
+    "today": "Leo",
+    "months": {
+      "january": "Januari",
+      "february": "Februari",
+      "march": "Machi",
+      "april": "Aprili",
+      "may": "Mei",
+      "june": "Juni",
+      "july": "Julai",
+      "august": "Agosti",
+      "september": "Septemba",
+      "october": "Oktoba",
+      "november": "Novemba",
+      "december": "Desemba"
+    }
+  },
+  "formField": {
+    "optional": "Hiari"
+  },
+  "fieldPassword": {
+    "showPassword": "Onyesha nenosiri",
+    "hidePassword": "Ficha nenosiri"
+  },
+  "toast": {
+    "closeToast": "Funga ujumbe"
+  }
+}
