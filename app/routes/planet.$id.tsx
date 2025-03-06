@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
-import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/planet/$id')({
   component: RouteComponent,
