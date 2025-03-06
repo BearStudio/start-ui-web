@@ -22,7 +22,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 
 ---
 
-- [ ] Deployment
+- [ ] Deployment (vercel)
 - [ ] Demo
 - [ ] Update README
 - [ ] Update documentation
