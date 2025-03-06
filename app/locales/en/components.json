@@ -1,0 +1,100 @@
+{
+  "datalist": {
+    "retry": "Retry",
+    "errorTitle": "Something went wrong",
+    "emptyTitle": "No Data",
+    "noResultsTitle": "No results for \"{{searchTerm}}\""
+  },
+  "dateAgo": {
+    "format": "dddd, DD MMMM YYYY, hh:mm a"
+  },
+  "actionsButton": {
+    "label": "Actions"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Click to confirm"
+  },
+  "confirmModal": {
+    "confirmText": "Confirm",
+    "heading": "Are you sure?"
+  },
+  "confirmPopover": {
+    "confirmText": "Confirm",
+    "heading": "Are you sure?"
+  },
+  "errorBoundary": {
+    "title": "An unexpected error has occurred.",
+    "actions": {
+      "expand": "Show details"
+    }
+  },
+  "errorPage": {
+    "403": {
+      "title": "Unauthorized",
+      "description": "Sorry, you can't access this page."
+    },
+    "404": {
+      "title": "Page not found",
+      "description": "The page does not exist or the url has changed."
+    },
+    "errorCode": "Error {{code}}",
+    "default": {
+      "title": "Error",
+      "description": "Something went wrong 😞"
+    }
+  },
+  "pagination": {
+    "showing": "<box>Showing</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
+    "loading": "<spinner></spinner> <box>Loading</box> <strong>{{firstItemOnPage}}</strong> <span>to</span> <strong>{{lastItemOnPage}}</strong> <span>of</span> <strong>{{totalItems}}</strong> <box>results</box>",
+    "firstPage": "First Page",
+    "prevPage": "Previous Page",
+    "lastPage": "Last Page",
+    "nextPage": "Next Page"
+  },
+  "searchInput": {
+    "placeholder": "Search...",
+    "clear": "Clear Search"
+  },
+  "formField": {
+    "optional": "Optional"
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "Invalid date"
+  },
+  "fieldMultiSelect": {
+    "noOption": "No option"
+  },
+  "sort": {
+    "sortAscending": "Ascending",
+    "sortDescending": "Descending",
+    "sortBy": "Sort by",
+    "order": "Order"
+  },
+  "dayPicker": {
+    "today": "Today"
+  },
+  "monthPicker": {
+    "today": "Today",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
+  "fieldPassword": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "toast": {
+    "closeToast": "Close message"
+  }
+}

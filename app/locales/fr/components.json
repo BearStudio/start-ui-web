@@ -1,0 +1,100 @@
+{
+  "datalist": {
+    "retry": "Réessayer",
+    "errorTitle": "Une erreur est survenue",
+    "emptyTitle": "Aucune donnée",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\""
+  },
+  "dateAgo": {
+    "format": "dddd DD MMMM YYYY, HH:mm"
+  },
+  "actionsButton": {
+    "label": "Actions"
+  },
+  "confirmMenuItem": {
+    "confirmText": "Cliquer pour confirmer"
+  },
+  "confirmModal": {
+    "confirmText": "Confirmer",
+    "heading": "Etes-vous sûr ?"
+  },
+  "confirmPopover": {
+    "confirmText": "Confirmer",
+    "heading": "Etes-vous sûr ?"
+  },
+  "errorBoundary": {
+    "title": "Une erreur inattendue est survenue.",
+    "actions": {
+      "expand": "Afficher les détails"
+    }
+  },
+  "errorPage": {
+    "403": {
+      "title": "Page non autorisée",
+      "description": "Désolé, vous ne pouvez pas accéder à cette page."
+    },
+    "404": {
+      "title": "Page introuvable",
+      "description": "La page n'existe pas ou l'URL a changé."
+    },
+    "errorCode": "Erreur {{code}}",
+    "default": {
+      "title": "Erreur",
+      "description": "Une erreur est survenue 😞"
+    }
+  },
+  "pagination": {
+    "firstPage": "Première page",
+    "lastPage": "Dernière page",
+    "loading": "<spinner></spinner> <box>Chargement...</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span> \nsur</span> <strong>{{totalItems}}</strong> <box>résultats</box>",
+    "nextPage": "Page suivante",
+    "prevPage": "Page précédente",
+    "showing": "<box>Affichage de</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span>sur</span> <strong \n>{{totalItems}}</strong> <box>résultats</box>"
+  },
+  "searchInput": {
+    "clear": "Effacer la recherche",
+    "placeholder": "Rechercher..."
+  },
+  "fieldDayPicker": {
+    "invalidMessage": "Date invalide"
+  },
+  "fieldMultiSelect": {
+    "noOption": "Aucune option"
+  },
+  "sort": {
+    "sortAscending": "Ascendant",
+    "sortDescending": "Descendant",
+    "sortBy": "Trier par",
+    "order": "Ordre"
+  },
+  "dayPicker": {
+    "today": "Aujourd'hui"
+  },
+  "monthPicker": {
+    "today": "Aujourd'hui",
+    "months": {
+      "january": "Janvier",
+      "february": "Février",
+      "march": "Mars",
+      "april": "Avril",
+      "may": "Mai",
+      "june": "Juin",
+      "july": "Juillet",
+      "august": "Août",
+      "september": "Septembre",
+      "october": "Octobre",
+      "november": "Novembre",
+      "december": "Décembre"
+    }
+  },
+  "formField": {
+    "optional": "Facultatif"
+  },
+  "fieldPassword": {
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
+  },
+  "toast": {
+    "closeToast": "Fermer le message"
+  }
+}

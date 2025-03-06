@@ -24,6 +24,9 @@
     "lint": "run-p lint:*",
     "lint:eslint": "eslint ./app --fix",
     "lint:ts": "tsc --noEmit",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "test:ui": "vitest --ui",
     "dk:init": "docker compose up -d",
     "dk:start": "docker compose start",
     "dk:stop": "docker compose stop",
@@ -55,16 +58,22 @@
     "@uidotdev/usehooks": "2.4.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "dayjs": "1.11.13",
+    "i18next": "24.2.2",
+    "i18next-browser-languagedetector": "8.0.4",
     "lucide-react": "0.475.0",
     "prettier": "3.5.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-i18next": "15.4.1",
+    "remeda": "2.21.0",
     "tailwind-merge": "3.0.2",
     "tailwindcss": "4.0.8",
     "tailwindcss-animate": "1.0.7",
     "vaul": "1.1.2",
     "vinxi": "0.5.3",
-    "zod": "3.24.2"
+    "zod": "3.24.2",
+    "zod-i18n-map": "2.27.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.4",
@@ -96,7 +105,8 @@
     "storybook-dark-mode": "4.0.2",
     "typescript": "5.7.3",
     "typescript-eslint": "8.25.0",
-    "vite-tsconfig-paths": "5.1.4"
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "3.0.7"
   },
   "repository": {
     "type": "git",

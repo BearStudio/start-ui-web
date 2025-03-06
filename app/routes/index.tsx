@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 
 import { Button } from '@/components/ui/button';
 
@@ -13,19 +15,19 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
+  const { i18n } = useTranslation();
   const [state, setState] = useState(1);
   const queryClient = useQueryClient();
   const planets = useQuery(orpc.planet.list.queryOptions());
+  const isHydrated = useIsHydrated();
+  const lang = isHydrated ? i18n.language : undefined;
 
   const createPlanet = useMutation(
     orpc.planet.create.mutationOptions({
       onSuccess: (data) => {
         queryClient.setQueryData<Outputs['planet']['list']>(
           orpc.planet.list.key({ type: 'query' }),
-          (d) => {
-            console.log({ d });
-            return [...(d ?? []), data];
-          }
+          (d) => [...(d ?? []), data]
         );
       },
     })
@@ -39,6 +41,30 @@ function Home() {
         }}
       >
         Counter {state}
+      </Button>
+      <Button
+        disabled={lang === 'fr'}
+        onClick={() => {
+          i18n.changeLanguage('fr');
+        }}
+      >
+        FR
+      </Button>
+      <Button
+        disabled={lang === 'en'}
+        onClick={() => {
+          i18n.changeLanguage('en');
+        }}
+      >
+        EN
+      </Button>
+      <Button
+        disabled={lang === 'ar'}
+        onClick={() => {
+          i18n.changeLanguage('ar');
+        }}
+      >
+        AR
       </Button>
       <Button
         loading={createPlanet.isPending}

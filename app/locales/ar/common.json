@@ -1,0 +1,32 @@
+{
+  "languages": {
+    "en": "الإنجليزية",
+    "fr": "الفرنسية",
+    "ar": "العربية",
+    "sw": "السواحيلية"
+  },
+  "actions": {
+    "activate": "تفعيل",
+    "cancel": "إلغاء",
+    "deactivate": "تعطيل",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "خلف"
+  },
+  "or": "أو",
+  "confirmDiscardChanges": {
+    "cancelText": "البقاء على الصفحة",
+    "confirmText": "الخروج دون حفظ",
+    "message": "أنت على وشك مغادرة الصفحة دون حفظ التغييرات.",
+    "title": "ترك الصفحة؟"
+  },
+  "filter": "منقي",
+  "clear": "واضح",
+  "submit": "يُقدِّم",
+  "files": {
+    "errors": {
+      "tooLarge": "ملف كبير جدا",
+      "typeNotAllowed": "نوع الملف غير مسموح به"
+    }
+  }
+}

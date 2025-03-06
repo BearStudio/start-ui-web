@@ -1,0 +1,101 @@
+{
+  "feedbacks": {
+    "activateUserSuccess": {
+      "title": "Mtumiaji aliyeamilishwa",
+      "description": "Mtumiaji \"{{login}}\" imewezeshwa"
+    },
+    "deactivateUserSuccess": {
+      "title": "Mtumiaji aliyezimwa",
+      "description": "Mtumiaji \"{{login}}\" imezimwa"
+    },
+    "activateUserError": {
+      "title": "Imeshindwa kuwezesha",
+      "description": "Imeshindwa kuwezesha mtumiaji \"{{ingia}}\""
+    },
+    "deactivateUserError": {
+      "title": "Imeshindwa kuzima",
+      "description": "Imeshindwa kulemaza mtumiaji \"{{ingia}}\""
+    },
+    "deleteUserError": {
+      "title": "Imeshindwa kufuta",
+      "description": "Imeshindwa kufuta mtumiaji \"{{ingia}}\""
+    },
+    "loadingUserError": {
+      "title": "Imeshindwa kupakia watumiaji"
+    }
+  },
+  "list": {
+    "title": "Usimamizi wa Mtumiaji",
+    "status": "Hali",
+    "actions": {
+      "createUser": "Unda mtumiaji"
+    },
+    "loadMore": {
+      "button": "Pakia zaidi",
+      "display": "Inaonyesha watumiaji {{loaded}} kati ya {{total}}"
+    }
+  },
+  "data": {
+    "email": {
+      "label": "Barua pepe",
+      "required": "Barua pepe inahitajika",
+      "invalid": "Barua pepe ni batili",
+      "alreadyUsed": "Anwani ya barua pepe tayari inatumika"
+    },
+    "status": {
+      "activated": "Imewashwa",
+      "deactivated": "Isiyotumika"
+    },
+    "name": {
+      "label": "Jina",
+      "required": "Jina linahitajika",
+      "invalid": "Jina ni batili"
+    },
+    "language": {
+      "label": "Lugha"
+    },
+    "authorizations": {
+      "label": "Uidhinishaji",
+      "options": {
+        "ADMIN": "Msimamizi",
+        "APP": "Programu"
+      },
+      "required": "Angalau idhini moja inahitajika"
+    },
+    "createdAt": {
+      "ago": "Imeundwa <dateAgo />"
+    }
+  },
+  "update": {
+    "action": {
+      "save": "Hifadhi"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Usasishaji haukufaulu"
+      },
+      "updateSuccess": {
+        "title": "Imesasishwa"
+      }
+    }
+  },
+  "create": {
+    "title": "Mtumiaji Mpya",
+    "action": {
+      "save": "Unda"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "Uundaji umeshindwa"
+      },
+      "updateSuccess": {
+        "title": "Utilisateur créé avec succès"
+      }
+    }
+  },
+  "deleteModal": {
+    "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
+    "title": "Thibitisha kufuta mtumiaji"
+  },
+  "you": "wewe"
+}

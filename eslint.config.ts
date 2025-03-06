@@ -13,6 +13,7 @@ export default tslint.config(
   ...tanstackQuery.configs['flat/recommended'],
   {
     rules: {
+      'sonarjs/todo-tag': 'warn',
       'react/no-unescaped-entities': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
