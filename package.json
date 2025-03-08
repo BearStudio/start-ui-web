@@ -128,5 +128,15 @@
   "bugs": {
     "url": "https://github.com/bearstudio/start-ui-web/issues"
   },
-  "homepage": "https://github.com/bearstudio/start-ui-web#readme"
+  "homepage": "https://github.com/bearstudio/start-ui-web#readme",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ]
+  }
 }
