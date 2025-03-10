@@ -3,9 +3,10 @@ import nodemailer from 'nodemailer';
 import type { MailOptions } from 'nodemailer/lib/sendmail-transport';
 import { ReactElement } from 'react';
 
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 // eslint-disable-next-line sonarjs/no-clear-text-protocols
 const transport = nodemailer.createTransport(envServer.EMAIL_SERVER);
