@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { zUserAuthorization } from '@/features/user/schemas';
 import { publicProcedure } from '@/server/config/orpc';
 
 const tags = ['auth'];
@@ -15,11 +16,11 @@ export default {
     .output(
       z.object({
         isAuthenticated: z.boolean(),
-        // authorizations: z.array(zUserAuthorization()).optional(),
+        authorizations: z.array(zUserAuthorization()).optional(),
       })
     )
     .handler(({ context }) => {
-      // TODO Logger
+      context.logger.info(`User ${context.user ? 'is' : 'is not'} logged`);
       return {
         isAuthenticated: !!context.user,
         authorizations: context.user?.authorizations,
