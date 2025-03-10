@@ -7,12 +7,23 @@ import i18n from '@/lib/i18n';
 
 import EmailLoginCode from '@/emails/templates/login-code';
 import EmailLoginNotFound from '@/emails/templates/login-not-found';
-import { VALIDATION_TOKEN_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
+import {
+  VALIDATION_RETRY_DELAY_IN_SECONDS,
+  VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
+} from '@/features/auth/utils';
 import { zUserAuthorization, zUserWithEmail } from '@/features/user/schemas';
-import { generateCode } from '@/server/config/auth';
+import {
+  deleteUsedCode,
+  generateCode,
+  validateCode,
+} from '@/server/config/auth';
 import { sendEmail } from '@/server/config/email';
 import { getUserLanguage } from '@/server/config/i18n';
 import { publicProcedure } from '@/server/config/orpc';
+import { zVerificationCodeValidate } from '@/features/auth/schemas';
+import { zUserAccount } from '@/features/account/schemas';
+import { createSession } from '@/server/config/session';
+import { User } from '@prisma/client';
 
 const tags = ['auth'];
 
@@ -39,6 +50,11 @@ export default {
     }),
 
   login: publicProcedure
+    .route({
+      method: 'POST',
+      path: '/auth/login',
+      tags,
+    })
     .input(
       zUserWithEmail().pick({
         email: true,
@@ -130,6 +146,52 @@ export default {
 
       return {
         token,
+      };
+    }),
+
+  loginValidate: publicProcedure
+    .route({
+      method: 'POST',
+      path: '/auth/login/validate/{token}',
+      tags,
+      description: `Failed requests will increment retry delay timeout based on the number of attempts multiplied by ${VALIDATION_RETRY_DELAY_IN_SECONDS} seconds. The number of attempts will not be returned in the response for security purposes. You will have to save the number of attemps in the client.`,
+    })
+    .input(zVerificationCodeValidate())
+    .output(z.object({ token: z.string(), account: zUserAccount() }))
+    .handler(async ({ context, input }) => {
+      const { verificationToken } = await validateCode({
+        logger: context.logger,
+        ...input,
+      });
+
+      context.logger.info('Updating user');
+      let user: User;
+      try {
+        user = await context.db.user.update({
+          where: { id: verificationToken.userId, accountStatus: 'ENABLED' },
+          data: {
+            isEmailVerified: true,
+            lastLoginAt: new Date(),
+          },
+        });
+      } catch {
+        context.logger.warn('Failed to update the user, probably not enabled');
+        throw new ORPCError('UNAUTHORIZED', {
+          message: 'Failed to authenticate the user',
+        });
+      }
+
+      await deleteUsedCode({
+        logger: context.logger,
+        token: verificationToken.token,
+      });
+
+      context.logger.info('Create the session');
+      const sessionId = await createSession(verificationToken.userId);
+
+      return {
+        account: user,
+        token: sessionId,
       };
     }),
 };
