@@ -168,6 +168,9 @@ importers:
       '@tanstack/eslint-plugin-query':
         specifier: 5.66.1
         version: 5.66.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
+      '@tanstack/eslint-plugin-router':
+        specifier: 1.114.10
+        version: 1.114.10(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
       '@types/bcrypt':
         specifier: 5.0.2
         version: 5.0.2
@@ -2176,6 +2179,11 @@ packages:
 
   '@tanstack/eslint-plugin-query@5.66.1':
     resolution: {integrity: sha512-pYMVTGgJ7yPk9Rm6UWEmbY6TX0EmMmxJqYkthgeDCwEznToy2m+W928nUODFirtZBZlhBsqHy33LO0kyTlgf0w==}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+
+  '@tanstack/eslint-plugin-router@1.114.10':
+    resolution: {integrity: sha512-3aSQfw0coJTjaAzHszmgzNrYu+4hQFQKT5PlcCKHFY/wMTQEoXmVzDkgNtNSbNT8h3D1BHVVygPT2ck8rSJVhw==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
@@ -7999,6 +8007,14 @@ snapshots:
       - yaml
 
   '@tanstack/eslint-plugin-query@5.66.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
+      eslint: 9.21.0(jiti@2.4.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@tanstack/eslint-plugin-router@1.114.10(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
       '@typescript-eslint/utils': 8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3)
       eslint: 9.21.0(jiti@2.4.2)

@@ -10,85 +10,137 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as IndexImport } from './routes/index';
-import { Route as PlanetIdImport } from './routes/planet.$id';
+import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as IndexImport } from './routes/index'
+import { Route as PlanetIdImport } from './routes/planet.$id'
+import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
 
 // Create/Update Routes
+
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const PlanetIdRoute = PlanetIdImport.update({
   id: '/planet/$id',
   path: '/planet/$id',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const AuthenticatedDemoIndexRoute = AuthenticatedDemoIndexImport.update({
+  id: '/demo/',
+  path: '/demo/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
     '/planet/$id': {
-      id: '/planet/$id';
-      path: '/planet/$id';
-      fullPath: '/planet/$id';
-      preLoaderRoute: typeof PlanetIdImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/planet/$id'
+      path: '/planet/$id'
+      fullPath: '/planet/$id'
+      preLoaderRoute: typeof PlanetIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/demo/': {
+      id: '/_authenticated/demo/'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof AuthenticatedDemoIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDemoIndexRoute: typeof AuthenticatedDemoIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDemoIndexRoute: AuthenticatedDemoIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/planet/$id': typeof PlanetIdRoute;
+  '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/planet/$id': typeof PlanetIdRoute
+  '/demo': typeof AuthenticatedDemoIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/planet/$id': typeof PlanetIdRoute;
+  '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/planet/$id': typeof PlanetIdRoute
+  '/demo': typeof AuthenticatedDemoIndexRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  '/': typeof IndexRoute;
-  '/planet/$id': typeof PlanetIdRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/planet/$id': typeof PlanetIdRoute
+  '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/planet/$id';
-  fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/planet/$id';
-  id: '__root__' | '/' | '/planet/$id';
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '' | '/planet/$id' | '/demo'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '' | '/planet/$id' | '/demo'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/planet/$id'
+    | '/_authenticated/demo/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  PlanetIdRoute: typeof PlanetIdRoute;
+  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  PlanetIdRoute: typeof PlanetIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   PlanetIdRoute: PlanetIdRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -97,14 +149,25 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated",
         "/planet/$id"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/demo/"
+      ]
+    },
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
+    },
+    "/_authenticated/demo/": {
+      "filePath": "_authenticated/demo/index.tsx",
+      "parent": "/_authenticated"
     }
   }
 }
