@@ -1,4 +1,5 @@
 import { ORPCError } from '@orpc/client';
+import { User } from '@prisma/client';
 import dayjs from 'dayjs';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -7,6 +8,8 @@ import i18n from '@/lib/i18n';
 
 import EmailLoginCode from '@/emails/templates/login-code';
 import EmailLoginNotFound from '@/emails/templates/login-not-found';
+import { zUserAccount } from '@/features/account/schemas';
+import { zVerificationCodeValidate } from '@/features/auth/schemas';
 import {
   VALIDATION_RETRY_DELAY_IN_SECONDS,
   VALIDATION_TOKEN_EXPIRATION_IN_MINUTES,
@@ -20,10 +23,7 @@ import {
 import { sendEmail } from '@/server/config/email';
 import { getUserLanguage } from '@/server/config/i18n';
 import { publicProcedure } from '@/server/config/orpc';
-import { zVerificationCodeValidate } from '@/features/auth/schemas';
-import { zUserAccount } from '@/features/account/schemas';
 import { createSession } from '@/server/config/session';
-import { User } from '@prisma/client';
 
 const tags = ['auth'];
 
