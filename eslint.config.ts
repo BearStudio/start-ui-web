@@ -1,6 +1,6 @@
 import eslint from '@eslint/js';
-import tanstackRouter from '@tanstack/eslint-plugin-router';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
+import tanstackRouter from '@tanstack/eslint-plugin-router';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
 import storybook from 'eslint-plugin-storybook';

@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
+import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -12,9 +14,16 @@ import { Outputs } from '@/server/router';
 
 export const Route = createFileRoute('/')({
   component: Home,
+  validateSearch: zodValidator(
+    z.object({
+      redirect: fallback(z.string().optional(), ''),
+    })
+  ),
 });
 
 function Home() {
+  const router = useRouter();
+  const search = Route.useSearch();
   const { i18n, t } = useTranslation(['common']);
   const [state, setState] = useState(1);
   const [code, setCode] = useState('');
@@ -38,13 +47,24 @@ function Home() {
       onSuccess: (data) => {
         console.log(data);
         setToken(data.token);
+        setCode('000000');
       },
     })
   );
 
   const loginValidate = useMutation(
     orpc.auth.loginValidate.mutationOptions({
-      onSuccess: console.log,
+      onSuccess: async () => {
+        if (!search.redirect) {
+          router.navigate({ to: '/demo' });
+          return;
+        }
+        const redirectUrl = new URL(search.redirect);
+        router.navigate({
+          to: redirectUrl.pathname,
+          search: Object.fromEntries(redirectUrl.searchParams),
+        });
+      },
     })
   );
 
@@ -118,6 +138,7 @@ function Home() {
         </Link>
       ))}
       <p>{t('common:actions.edit')}</p>
+      <Link to="/demo">Demo</Link>
     </div>
   );
 }

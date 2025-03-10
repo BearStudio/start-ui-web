@@ -57,6 +57,7 @@
     "@tanstack/react-query-devtools": "5.67.1",
     "@tanstack/react-router": "1.111.7",
     "@tanstack/start": "1.111.7",
+    "@tanstack/zod-adapter": "1.114.12",
     "@uidotdev/usehooks": "2.4.1",
     "bcrypt": "5.1.1",
     "class-variance-authority": "0.7.1",
