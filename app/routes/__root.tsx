@@ -8,22 +8,16 @@ import {
 import { createServerFn } from '@tanstack/start';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getCookie } from 'vinxi/http';
 
 import i18n from '@/lib/i18n';
-import {
-  AVAILABLE_LANGUAGES,
-  DEFAULT_LANGUAGE_KEY,
-} from '@/lib/i18n/constants';
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 import { Providers } from '@/providers';
+import { getUserLanguage } from '@/server/config/i18n';
 import appCss from '@/styles/app.css?url';
 
 const getI18nCookie = createServerFn({ method: 'GET' }).handler(() => {
-  const cookieValue = getCookie('i18next');
-  return AVAILABLE_LANGUAGES.some((l) => l.key === cookieValue)
-    ? cookieValue
-    : DEFAULT_LANGUAGE_KEY;
+  return getUserLanguage();
 });
 
 export const Route = createRootRoute({
