@@ -21,6 +21,12 @@ const getI18nCookie = createServerFn({ method: 'GET' }).handler(() => {
 });
 
 export const Route = createRootRoute({
+  loader: async () => {
+    if (import.meta.env.SSR) {
+      i18n.changeLanguage(await getI18nCookie());
+    }
+  },
+  component: RootComponent,
   head: () => ({
     meta: [
       {
@@ -80,12 +86,6 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  component: RootComponent,
-  loader: async () => {
-    if (import.meta.env.SSR) {
-      i18n.changeLanguage(await getI18nCookie());
-    }
-  },
 });
 
 function RootComponent() {

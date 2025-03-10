@@ -21,7 +21,7 @@ const random: RandomReader = {
 
 export async function generateCode() {
   const code =
-    import.meta.dev || envClient.VITE_IS_DEMO
+    import.meta.env.DEV || envClient.VITE_IS_DEMO
       ? VALIDATION_CODE_MOCKED
       : generateRandomString(random, VALIDATION_CODE_ALLOWED_CHARACTERS, 6);
   return {

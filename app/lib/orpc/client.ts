@@ -11,6 +11,6 @@ const link = new RPCLink({
   url: `${envClient.VITE_BASE_URL}/api/rpc`,
 });
 
-export const orpcClient: RouterClient<Router> = createORPCClient(link);
+const orpcClient: RouterClient<Router> = createORPCClient(link);
 
 export const orpc = createORPCReactQueryUtils(orpcClient);
