@@ -30,6 +30,12 @@ function Home() {
     })
   );
 
+  const login = useMutation(
+    orpc.auth.login.mutationOptions({
+      onSuccess: console.log,
+    })
+  );
+
   return (
     <div>
       <Button
@@ -70,6 +76,14 @@ function Home() {
         }}
       >
         Create Planet
+      </Button>
+      <Button
+        loading={login.isPending}
+        onClick={() => {
+          login.mutate({ email: 'admin@admin.com' });
+        }}
+      >
+        Login
       </Button>
       <h2>Planets</h2>
       {planets.isLoading && <div>Loading...</div>}

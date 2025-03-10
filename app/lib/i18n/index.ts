@@ -10,7 +10,7 @@ import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 i18n.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 
-const loadLanguage = (langKey) => {
+const loadLanguage = (langKey: string) => {
   dayjs.locale(langKey);
   z.setErrorMap(makeZodI18nMap());
 };
