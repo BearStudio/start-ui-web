@@ -3,6 +3,7 @@ import { generateRandomString, RandomReader } from '@oslojs/crypto/random';
 import { VerificationToken } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
+import { Logger } from 'pino';
 
 import { envClient } from '@/env/client';
 import {
@@ -10,6 +11,7 @@ import {
   VALIDATION_CODE_ALLOWED_CHARACTERS,
   VALIDATION_CODE_MOCKED,
 } from '@/features/auth/utils';
+import { db } from '@/server/config/db';
 
 const random: RandomReader = {
   read(bytes) {
@@ -29,28 +31,28 @@ export async function generateCode() {
 }
 
 export async function validateCode({
-  context,
+  logger,
   code,
   token,
 }: {
-  context: TODO;
+  logger: Logger;
   code: string;
   token: string;
 }): Promise<{ verificationToken: VerificationToken }> {
-  context.logger.info('Removing expired verification tokens from database');
-  await context.db.verificationToken.deleteMany({
+  logger.info('Removing expired verification tokens from database');
+  await db.verificationToken.deleteMany({
     where: { expires: { lt: new Date() } },
   });
 
-  context.logger.info('Checking if verification token exists');
-  const verificationToken = await context.db.verificationToken.findUnique({
+  logger.info('Checking if verification token exists');
+  const verificationToken = await db.verificationToken.findUnique({
     where: {
       token,
     },
   });
 
   if (!verificationToken) {
-    context.logger.warn('Verification token does not exist');
+    logger.warn('Verification token does not exist');
     throw new ORPCError('UNAUTHORIZED', {
       message: 'Failed to authenticate the user',
     });
@@ -60,27 +62,27 @@ export async function validateCode({
     verificationToken.attempts
   );
 
-  context.logger.info('Check last attempt date');
+  logger.info('Check last attempt date');
   if (
     dayjs().isBefore(
       dayjs(verificationToken.lastAttemptAt).add(retryDelayInSeconds, 'seconds')
     )
   ) {
-    context.logger.warn('Last attempt was to close');
+    logger.warn('Last attempt was to close');
     throw new ORPCError('UNAUTHORIZED', {
       message: 'Failed to authenticate the user',
     });
   }
 
-  context.logger.info('Checking code');
+  logger.info('Checking code');
   const isCodeValid = await bcrypt.compare(code, verificationToken.code);
 
   if (!isCodeValid) {
-    context.logger.warn('Invalid code');
+    logger.warn('Invalid code');
 
     try {
-      context.logger.info('Updating token attempts');
-      await context.db.verificationToken.update({
+      logger.info('Updating token attempts');
+      await db.verificationToken.update({
         where: {
           token,
         },
@@ -91,7 +93,7 @@ export async function validateCode({
         },
       });
     } catch {
-      context.logger.error('Failed to update token attempts');
+      logger.error('Failed to update token attempts');
     }
 
     throw new ORPCError('UNAUTHORIZED', {
@@ -103,18 +105,18 @@ export async function validateCode({
 }
 
 export async function deleteUsedCode({
-  context,
+  logger,
   token,
 }: {
-  context: TODO;
+  logger: Logger;
   token: string;
 }) {
-  context.logger.info('Deleting used token');
+  logger.info('Deleting used token');
   try {
-    await context.db.verificationToken.delete({
+    await db.verificationToken.delete({
       where: { token },
     });
   } catch {
-    context.logger.warn('Failed to delete the used token');
+    logger.warn('Failed to delete the used token');
   }
 }
