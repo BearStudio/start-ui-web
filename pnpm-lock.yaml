@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       '@orpc/client':
-        specifier: 0.46.0
-        version: 0.46.0
+        specifier: 0.47.0
+        version: 0.47.0
       '@orpc/openapi':
-        specifier: 0.46.0
-        version: 0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+        specifier: 0.47.0
+        version: 0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@orpc/react-query':
-        specifier: 0.46.0
-        version: 0.46.0(@orpc/client@0.46.0)(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)
+        specifier: 0.47.0
+        version: 0.47.0(@orpc/client@0.47.0)(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)
       '@orpc/server':
-        specifier: 0.46.0
-        version: 0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+        specifier: 0.47.0
+        version: 0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@orpc/zod':
-        specifier: 0.46.0
-        version: 0.46.0(@orpc/contract@0.46.0)(@orpc/openapi@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))(@orpc/server@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))
+        specifier: 0.47.0
+        version: 0.47.0(@orpc/contract@0.47.0)(@orpc/server@0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@oslojs/crypto':
         specifier: 1.0.1
         version: 1.0.1
@@ -1243,49 +1243,48 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@orpc/client@0.46.0':
-    resolution: {integrity: sha512-zfEJWv9jX1/LYcW8vSH8z4e4sUPsj24SwL1tJYPkRUTQqbNvjqDbSPK2wrD5YaaejJPIj3GF78OVSLkYNjV7xA==}
+  '@orpc/client@0.47.0':
+    resolution: {integrity: sha512-60nua9H1EATguRcwzC+izmGksK9HOOHS16aiCYiFCpyTnUBk3+hvmcsaCT9KQDaosAez309E51kzm0QHzQkpTA==}
 
-  '@orpc/contract@0.46.0':
-    resolution: {integrity: sha512-7L89HPRO0WYoejoBEZ4bCZ1Vfk1Molza2PRIjoFXNYVFr/KwtjKQdDmzx7aI8pNaAoKZRzjINsxJcXifYNkdZA==}
+  '@orpc/contract@0.47.0':
+    resolution: {integrity: sha512-oMXSWo4pNi0+uFrX9aIY4nEsc4HZnhRkixiBBXXRSo4RrFg2Nl61AvBwfg3Dq6PPYKx8WwJfnTOtoOpzJYKFWA==}
 
-  '@orpc/openapi-client@0.46.0':
-    resolution: {integrity: sha512-udNHLOGy2UJmhGuhRbuNCM2ImbZev9H5E8fXOPilMexrqtOssBeC7LS7kvcT94RUiKkNY8+db10lLXd/oPmbqQ==}
+  '@orpc/openapi-client@0.47.0':
+    resolution: {integrity: sha512-xylKCoO8alrY1bPVCPJZ8mD95vUdp5dP9+1QvwFChPeC+JaXTrUYscYTWzHC93LtS0vrz7vGy5opU/9dV0n57w==}
 
-  '@orpc/openapi@0.46.0':
-    resolution: {integrity: sha512-CLX55uKD5i3wkqmgQg6KtYzVNRAInef7Kt+7QUeYJTV51IyhZW8pdf0j8beb4antaL5qDB2SEBchvW7gkimmeg==}
+  '@orpc/openapi@0.47.0':
+    resolution: {integrity: sha512-bPNba4s2TGrqw/h/7CmztSLHHhtzLgTTgoriiv4/pJDNQo93o1l6NfBAmm/oRiEmIk2tST7hwQJErN2eLg1wCA==}
 
-  '@orpc/react-query@0.46.0':
-    resolution: {integrity: sha512-3CV/0tx+51e2dAB0tzwWMUHTUi6eudzBsv3g6vIIs+U1LGzNzFXw2sep97LDNVQIdThyiAOJQtDnnw2u8UgqRg==}
+  '@orpc/react-query@0.47.0':
+    resolution: {integrity: sha512-8laL6lod3zDNJma0fmz8iZTqtn87DKQN//RwoTbqWyIRWyc2XMoL3E5nT6GCX4+kLDe+t+xZiubobof9mezSbg==}
     peerDependencies:
-      '@orpc/client': 0.46.0
+      '@orpc/client': 0.47.0
       '@tanstack/react-query': '>=5.59.0'
       react: '>=18.3.0'
 
-  '@orpc/server@0.46.0':
-    resolution: {integrity: sha512-cHsEbqScykviqVBth7lmrnOJP/+jEn+yVIwCG/AxLS6iM5B/G/hIRNzx4o+WcSntMCPypKtD+0mn9ErMOnSgqg==}
+  '@orpc/server@0.47.0':
+    resolution: {integrity: sha512-1M8A3ZJ2JkXPBcj9eaEWwVomva+r7kwY/Aid8D+GBYzZIE6mNpfbd1QZII3G4cQOwf8OQ8qnoJIkws1GN0pTzw==}
     peerDependencies:
       hono: '>=4.6.0'
       next: '>=14.0.0'
 
-  '@orpc/shared@0.46.0':
-    resolution: {integrity: sha512-H7hRitLmJLUu6c6TRCTP1gs7779CFP19PnrVyNDpizw4c5rfW1Q3iZ0wYG1Wj1nmilvuz9IjAfB1sAV+Sj+vwQ==}
+  '@orpc/shared@0.47.0':
+    resolution: {integrity: sha512-feSAU+dQqidsCjKZAliTHvKDjUHNYRADuW3Rh9QHMQw9FwJ5Xpm2Vlxwyceh35UP+qJ7evaFntpMDD41LOy1tA==}
 
-  '@orpc/standard-server-fetch@0.46.0':
-    resolution: {integrity: sha512-ATU5HqSQ0ttwNLGwFQcoAhnm14aVuLSmwPftawoS4AUaMF6lWEAUuJ3B2YUvwlb4tCWfwyfiX8CznH+2E9fjRQ==}
+  '@orpc/standard-server-fetch@0.47.0':
+    resolution: {integrity: sha512-zoMgniiTO7FwvfWidDu8AGHxKpq8+N/umRjdtNniNtbQI2R9ll1sQXGdN6C03HjYLDDh+BK2uVyoDM8gIPNGlg==}
 
-  '@orpc/standard-server-node@0.46.0':
-    resolution: {integrity: sha512-wrZ83/R+wKgyhwulKRAQ1zuoAP8OOfwYgTv+z0ltZYZwlpDqJPYCmU/sYlHhs8nD78EbI7nscLa6UWfEM7jdQA==}
+  '@orpc/standard-server-node@0.47.0':
+    resolution: {integrity: sha512-eV47//aa1QeGWXslk2emcJ3MgyoPYvQwe0zw1qhmT96kqWdc66d/miErOQOA8gYSKslFUl0AdJEc69HWODTlqQ==}
 
-  '@orpc/standard-server@0.46.0':
-    resolution: {integrity: sha512-rXuIZyTkZUJ2EKPqEdt9XZQ5ziJMf1rRHE7yEe40HWE2TqGRaxfw28fFpdCUXRD7shLXlkUq30Fn4K3eSlBnjA==}
+  '@orpc/standard-server@0.47.0':
+    resolution: {integrity: sha512-QJD1Ek0TXo1OERX9tSa+V9pGRw3un7njYAvHSkokQLzGvyl5kRdOSXLLzDlmjm3g2+5E5AYipSGpk6NW7EztfA==}
 
-  '@orpc/zod@0.46.0':
-    resolution: {integrity: sha512-5bzC70Y9OgryCBAoiEKu0F5Yht2R2siCgUl43MSHE7/z/1tHmObg/kr0waNjjk1UpdTyQSLQaAT4tw0jrh/Aug==}
+  '@orpc/zod@0.47.0':
+    resolution: {integrity: sha512-D8BJV9Khp4PN9I2wKsolEgUoSrDX2JrgYFoe8mQN4HNMiihNyGDNh7Mj/EU0HBKcgpBko3RgAMMSN1DkyiHySw==}
     peerDependencies:
-      '@orpc/contract': 0.46.0
-      '@orpc/openapi': 0.46.0
-      '@orpc/server': 0.46.0
+      '@orpc/contract': 0.47.0
+      '@orpc/server': 0.47.0
 
   '@oslojs/asn1@1.0.0':
     resolution: {integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==}
@@ -4683,14 +4682,14 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
+  openapi-types@12.1.3:
+    resolution: {integrity: sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==}
+
   openapi-typescript@7.6.1:
     resolution: {integrity: sha512-F7RXEeo/heF3O9lOXo2bNjCOtfp7u+D6W3a3VNEH2xE6v+fxLtn5nq0uvUcA1F5aT+CMhNeC5Uqtg5tlXFX/ag==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
-
-  openapi3-ts@4.4.0:
-    resolution: {integrity: sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -7072,91 +7071,92 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.16.0
 
-  '@orpc/client@0.46.0':
+  '@orpc/client@0.47.0':
     dependencies:
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
-      '@orpc/standard-server-fetch': 0.46.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
+      '@orpc/standard-server-fetch': 0.47.0
 
-  '@orpc/contract@0.46.0':
+  '@orpc/contract@0.47.0':
     dependencies:
-      '@orpc/client': 0.46.0
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
+      '@orpc/client': 0.47.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
       '@standard-schema/spec': 1.0.0
 
-  '@orpc/openapi-client@0.46.0':
+  '@orpc/openapi-client@0.47.0':
     dependencies:
-      '@orpc/client': 0.46.0
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
+      '@orpc/client': 0.47.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
 
-  '@orpc/openapi@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+  '@orpc/openapi@0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      '@orpc/client': 0.46.0
-      '@orpc/contract': 0.46.0
-      '@orpc/openapi-client': 0.46.0
-      '@orpc/server': 0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
-      '@orpc/standard-server-fetch': 0.46.0
-      '@orpc/standard-server-node': 0.46.0
+      '@orpc/client': 0.47.0
+      '@orpc/contract': 0.47.0
+      '@orpc/openapi-client': 0.47.0
+      '@orpc/server': 0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
+      '@orpc/standard-server-fetch': 0.47.0
+      '@orpc/standard-server-node': 0.47.0
       json-schema-typed: 8.0.1
-      openapi3-ts: 4.4.0
+      openapi-types: 12.1.3
       rou3: 0.5.1
     transitivePeerDependencies:
       - hono
       - next
 
-  '@orpc/react-query@0.46.0(@orpc/client@0.46.0)(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)':
+  '@orpc/react-query@0.47.0(@orpc/client@0.47.0)(@tanstack/react-query@5.67.1(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@orpc/client': 0.46.0
-      '@orpc/shared': 0.46.0
+      '@orpc/client': 0.47.0
+      '@orpc/shared': 0.47.0
       '@tanstack/react-query': 5.67.1(react@19.0.0)
       react: 19.0.0
 
-  '@orpc/server@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+  '@orpc/server@0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      '@orpc/client': 0.46.0
-      '@orpc/contract': 0.46.0
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
-      '@orpc/standard-server-fetch': 0.46.0
-      '@orpc/standard-server-node': 0.46.0
+      '@orpc/client': 0.47.0
+      '@orpc/contract': 0.47.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
+      '@orpc/standard-server-fetch': 0.47.0
+      '@orpc/standard-server-node': 0.47.0
       hono: 4.7.2
       next: 15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  '@orpc/shared@0.46.0':
+  '@orpc/shared@0.47.0':
     dependencies:
       radash: 12.1.0
       type-fest: 4.36.0
 
-  '@orpc/standard-server-fetch@0.46.0':
+  '@orpc/standard-server-fetch@0.47.0':
     dependencies:
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
 
-  '@orpc/standard-server-node@0.46.0':
+  '@orpc/standard-server-node@0.47.0':
     dependencies:
-      '@orpc/shared': 0.46.0
-      '@orpc/standard-server': 0.46.0
+      '@orpc/shared': 0.47.0
+      '@orpc/standard-server': 0.47.0
 
-  '@orpc/standard-server@0.46.0':
+  '@orpc/standard-server@0.47.0':
     dependencies:
-      '@orpc/shared': 0.46.0
+      '@orpc/shared': 0.47.0
       '@tinyhttp/content-disposition': 2.2.2
 
-  '@orpc/zod@0.46.0(@orpc/contract@0.46.0)(@orpc/openapi@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))(@orpc/server@0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))':
+  '@orpc/zod@0.47.0(@orpc/contract@0.47.0)(@orpc/server@0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)))(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      '@orpc/contract': 0.46.0
-      '@orpc/openapi': 0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
-      '@orpc/server': 0.46.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
-      '@orpc/shared': 0.46.0
-      '@standard-schema/spec': 1.0.0
+      '@orpc/contract': 0.47.0
+      '@orpc/openapi': 0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@orpc/server': 0.47.0(hono@4.7.2)(next@15.2.0(@babel/core@7.24.7)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@orpc/shared': 0.47.0
       escape-string-regexp: 5.0.0
-      json-schema-typed: 8.0.1
       wildcard-match: 5.1.4
       zod: 3.24.2
+    transitivePeerDependencies:
+      - hono
+      - next
 
   '@oslojs/asn1@1.0.0':
     dependencies:
@@ -11386,6 +11386,8 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
+  openapi-types@12.1.3: {}
+
   openapi-typescript@7.6.1(typescript@5.7.3):
     dependencies:
       '@redocly/openapi-core': 1.30.0(supports-color@9.4.0)
@@ -11395,10 +11397,6 @@ snapshots:
       supports-color: 9.4.0
       typescript: 5.7.3
       yargs-parser: 21.1.1
-
-  openapi3-ts@4.4.0:
-    dependencies:
-      yaml: 2.7.0
 
   optionator@0.9.4:
     dependencies:
@@ -13027,7 +13025,8 @@ snapshots:
   yaml@1.10.2:
     optional: true
 
-  yaml@2.7.0: {}
+  yaml@2.7.0:
+    optional: true
 
   yargs-parser@21.1.1: {}
 
