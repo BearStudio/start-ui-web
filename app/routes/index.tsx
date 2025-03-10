@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { orpc } from '@/lib/orpc/client';
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 import { Outputs } from '@/server/router';
 
@@ -16,6 +17,8 @@ export const Route = createFileRoute('/')({
 function Home() {
   const { i18n, t } = useTranslation(['common']);
   const [state, setState] = useState(1);
+  const [code, setCode] = useState('');
+  const [token, setToken] = useState('');
   const queryClient = useQueryClient();
   const planets = useQuery(orpc.planet.list.queryOptions());
 
@@ -32,6 +35,15 @@ function Home() {
 
   const login = useMutation(
     orpc.auth.login.mutationOptions({
+      onSuccess: (data) => {
+        console.log(data);
+        setToken(data.token);
+      },
+    })
+  );
+
+  const loginValidate = useMutation(
+    orpc.auth.loginValidate.mutationOptions({
       onSuccess: console.log,
     })
   );
@@ -84,6 +96,15 @@ function Home() {
         }}
       >
         Login
+      </Button>
+      <Input value={code} onChange={(e) => setCode(e.currentTarget.value)} />
+      <Button
+        loading={loginValidate.isPending}
+        onClick={() => {
+          loginValidate.mutate({ code, token });
+        }}
+      >
+        Validate Login
       </Button>
       <h2>Planets</h2>
       {planets.isLoading && <div>Loading...</div>}
