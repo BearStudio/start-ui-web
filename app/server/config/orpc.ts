@@ -1,5 +1,6 @@
 import { ORPCError, os } from '@orpc/server';
 
+import { db } from '@/server/config/db';
 import { logger } from '@/server/config/logger';
 import { getCurrentSession } from '@/server/config/session';
 
@@ -11,6 +12,7 @@ const authMiddleware = os.middleware(async ({ next }) => {
       user,
       session,
       logger,
+      db,
     },
   });
 });

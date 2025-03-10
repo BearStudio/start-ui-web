@@ -1,7 +1,6 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 import { zu } from '@/lib/zod/zod-utils';
 
 export const USER_AUTHORIZATIONS = ['APP', 'ADMIN'] as const;
@@ -42,9 +41,7 @@ export const zUser = () =>
       )
       .default(['APP']),
     accountStatus: zUserAccountStatus(),
-    language: zu.string
-      .nonEmpty(z.string().min(2))
-      .default(DEFAULT_LANGUAGE_KEY),
+    language: zu.string.nonEmpty(z.string().min(2)).optional(),
   });
 
 export type UserWithEmail = z.infer<ReturnType<typeof zUserWithEmail>>;
