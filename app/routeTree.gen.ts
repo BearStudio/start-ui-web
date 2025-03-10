@@ -15,6 +15,7 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PlanetIdImport } from './routes/planet.$id'
 import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
+import { Route as AuthenticatedDemo2IndexImport } from './routes/_authenticated/demo-2/index'
 
 // Create/Update Routes
 
@@ -38,6 +39,12 @@ const PlanetIdRoute = PlanetIdImport.update({
 const AuthenticatedDemoIndexRoute = AuthenticatedDemoIndexImport.update({
   id: '/demo/',
   path: '/demo/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedDemo2IndexRoute = AuthenticatedDemo2IndexImport.update({
+  id: '/demo-2/',
+  path: '/demo-2/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -66,6 +73,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanetIdImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/demo-2/': {
+      id: '/_authenticated/demo-2/'
+      path: '/demo-2'
+      fullPath: '/demo-2'
+      preLoaderRoute: typeof AuthenticatedDemo2IndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/demo/': {
       id: '/_authenticated/demo/'
       path: '/demo'
@@ -79,10 +93,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDemo2IndexRoute: typeof AuthenticatedDemo2IndexRoute
   AuthenticatedDemoIndexRoute: typeof AuthenticatedDemoIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDemo2IndexRoute: AuthenticatedDemo2IndexRoute,
   AuthenticatedDemoIndexRoute: AuthenticatedDemoIndexRoute,
 }
 
@@ -94,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
 }
 
@@ -101,6 +118,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
 }
 
@@ -109,19 +127,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/_authenticated/demo-2/': typeof AuthenticatedDemo2IndexRoute
   '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/planet/$id' | '/demo'
+  fullPaths: '/' | '' | '/planet/$id' | '/demo-2' | '/demo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/planet/$id' | '/demo'
+  to: '/' | '' | '/planet/$id' | '/demo-2' | '/demo'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/planet/$id'
+    | '/_authenticated/demo-2/'
     | '/_authenticated/demo/'
   fileRoutesById: FileRoutesById
 }
@@ -159,11 +179,16 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
+        "/_authenticated/demo-2/",
         "/_authenticated/demo/"
       ]
     },
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
+    },
+    "/_authenticated/demo-2/": {
+      "filePath": "_authenticated/demo-2/index.tsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/demo/": {
       "filePath": "_authenticated/demo/index.tsx",
