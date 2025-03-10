@@ -12,7 +12,7 @@ export const logger = envServer.LOGGER_PRETTY
       options,
       pretty({
         ignore:
-          'scope,type,path,pid,hostname,requestId,durationMs,userId,apiType,errorCode,errorMessage',
+          'scope,type,path,pid,hostname,requestId,durationMs,userId,errorCode,errorMessage',
         messageFormat: (log, messageKey) => {
           const {
             requestId,
@@ -22,7 +22,6 @@ export const logger = envServer.LOGGER_PRETTY
             durationMs,
             message,
             userId,
-            apiType,
             errorCode,
             errorMessage,
           } = z
@@ -44,11 +43,6 @@ export const logger = envServer.LOGGER_PRETTY
                 .optional()
                 .catch(undefined)
                 .transform((v) => (v ? gray(`(${v})`) : '')),
-              apiType: z
-                .enum(['REST', 'TRPC'])
-                .optional()
-                .catch(undefined)
-                .transform((v) => (v ? gray(`[${v}] `) : '')),
               type: z
                 .string()
                 .optional()
@@ -88,7 +82,7 @@ export const logger = envServer.LOGGER_PRETTY
             errorCode || errorMessage ? `· ${errorCode}${errorMessage}` : '';
 
           return black(
-            `${apiType}${userId}${requestId}${type}${path}· ${message}${error}${scope}${durationMs}`
+            `${userId}${requestId}${type}${path}· ${message}${error}${scope}${durationMs}`
           );
         },
       })
