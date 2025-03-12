@@ -90,12 +90,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <Providers>
-      <RootDocument>
+    <RootDocument>
+      <Providers>
         <Outlet />
         <ReactQueryDevtools initialIsOpen={false} />
-      </RootDocument>
-    </Providers>
+      </Providers>
+    </RootDocument>
   );
 }
 
