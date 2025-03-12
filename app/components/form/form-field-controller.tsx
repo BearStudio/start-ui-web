@@ -6,6 +6,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
+import { FieldOtp, FieldOtpProps } from './field-otp';
 import { FieldText, FieldTextProps } from './field-text';
 import { useFormField } from './form-field';
 
@@ -36,7 +37,8 @@ export type FormFieldControllerProps<
 > =
   | FieldCustomProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
-  | FieldTextProps<TFieldValues, TName>;
+  | FieldTextProps<TFieldValues, TName>
+  | FieldOtpProps<TFieldValues, TName>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
@@ -60,6 +62,9 @@ export const FormFieldController = <
       case 'email':
       case 'tel':
         return <FieldText {...props} />;
+
+      case 'otp':
+        return <FieldOtp {...props} />;
 
       // -- ADD NEW FIELD COMPONENT HERE --
     }
