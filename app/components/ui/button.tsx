@@ -1,6 +1,6 @@
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -65,7 +65,7 @@ function Button(_props: ButtonProps) {
       {loading ? (
         <>
           <span className="absolute inset-0 flex items-center justify-center">
-            <Loader2 className="animate-spin" />
+            <Loader2Icon className="animate-spin" />
           </span>
           <span className="flex items-center justify-center gap-2 opacity-0">
             {props.children}

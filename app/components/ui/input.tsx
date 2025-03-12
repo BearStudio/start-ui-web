@@ -6,7 +6,7 @@ import { cn } from '@/lib/tailwind/utils';
 
 const inputVariants = cva(
   cn(
-    'relative flex w-full min-w-0 items-center rounded-md border border-input bg-background/80 text-base text-foreground shadow-xs transition-[color,box-shadow] md:text-sm',
+    'relative flex w-full min-w-0 items-center overflow-hidden rounded-md border border-input bg-background/80 text-base text-foreground shadow-xs transition-[color,box-shadow] md:text-sm',
     'selection:bg-primary selection:text-primary-foreground',
     '[&>input]:placeholder:text-muted-foreground',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
@@ -18,7 +18,7 @@ const inputVariants = cva(
       size: {
         default: 'h-9 [&>div]:px-2.5 [&>input]:px-3',
         sm: 'h-8 [&>div]:px-2 [&>input]:px-2.5',
-        lg: 'h-10 [&>div]:px-3 [&>input]:px-4',
+        lg: 'h-10 md:text-base [&>div]:px-3 [&>input]:px-4',
       },
     },
     defaultVariants: {
@@ -27,7 +27,25 @@ const inputVariants = cva(
   }
 );
 
-type InputProps = Omit<React.ComponentProps<'input'>, 'size'> &
+type InputProps = Pick<
+  React.ComponentProps<'input'>,
+  | 'type'
+  | 'className'
+  | 'placeholder'
+  | 'id'
+  | 'value'
+  | 'defaultValue'
+  | 'disabled'
+  | 'readOnly'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'autoFocus'
+  | 'autoCapitalize'
+  | 'autoComplete'
+  | 'autoCorrect'
+  | 'onBlur'
+  | 'onChange'
+> &
   VariantProps<typeof inputVariants> & {
     startElement?: React.ReactNode;
     endElement?: React.ReactNode;
@@ -64,6 +82,7 @@ function Input({
         </div>
       )}
       <input
+        {...props}
         type={type}
         data-slot="input"
         className={cn(
@@ -75,7 +94,6 @@ function Input({
           paddingLeft: startElementWidth ?? undefined,
           paddingRight: endElementWidth ?? undefined,
         }}
-        {...props}
       />
       {!!endElement && (
         <div
