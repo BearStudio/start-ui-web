@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react';
-import { Mail } from 'lucide-react';
+import { MailIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,18 +34,18 @@ export const StartEndElements = () => {
   return (
     <div className="flex flex-col gap-4">
       <Input
-        startElement={<Mail />}
+        startElement={<MailIcon />}
         defaultValue="Icon start"
         placeholder="Placeholder..."
       />
       <Input
-        endElement={<Mail />}
+        endElement={<MailIcon />}
         defaultValue="Icon end"
         placeholder="Placeholder..."
       />
       <Input
-        startElement={<Mail />}
-        endElement={<Mail />}
+        startElement={<MailIcon />}
+        endElement={<MailIcon />}
         defaultValue="Icon start and end"
         placeholder="Placeholder..."
       />
@@ -87,6 +87,47 @@ export const InputAndButton = () => {
           placeholder="Placeholder..."
           endElement={
             <Button type="submit" size="xs" className="-mr-1.5">
+              Submit
+            </Button>
+          }
+        />
+      </form>
+      <form
+        className="flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert('submitted');
+        }}
+      >
+        <Input size="sm" placeholder="Placeholder..." />
+        <Button size="sm" type="submit">
+          Submit
+        </Button>
+      </form>
+      <form
+        className="flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert('submitted');
+        }}
+      >
+        <Input size="lg" placeholder="Placeholder..." />
+        <Button size="lg" type="submit">
+          Submit
+        </Button>
+      </form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert('submitted');
+        }}
+      >
+        <Input
+          className="pr-1"
+          placeholder="Placeholder..."
+          size="lg"
+          endElement={
+            <Button type="submit" size="sm" className="-mr-2">
               Submit
             </Button>
           }
