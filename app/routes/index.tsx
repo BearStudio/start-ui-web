@@ -81,6 +81,7 @@ function Home() {
         </Button>
         {AVAILABLE_LANGUAGES.map(({ key }) => (
           <Button
+            key={key}
             className="uppercase"
             variant="secondary"
             disabled={i18n.language === key}
@@ -132,7 +133,7 @@ function Home() {
       </div>
       <p>This is a translated string: {t('common:actions.edit')}</p>
       <Link to="/demo">Demo</Link>
-      <div></div>
+      <Link to="/login">Login page</Link>
     </div>
   );
 }
