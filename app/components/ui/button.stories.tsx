@@ -18,6 +18,7 @@ export const Variants = () => {
       <Button variant="secondary">Secondary</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="destructive-secondary">Destructive</Button>
+      <Button variant="link">Link</Button>
     </div>
   );
 };
@@ -96,6 +97,18 @@ export const Loading = () => {
           <MailIcon />
         </Button>
         <Button variant="secondary" loading>
+          <MailIcon />
+          Button
+        </Button>
+      </div>
+      <div className="flex gap-4">
+        <Button variant="link" loading>
+          Button
+        </Button>
+        <Button variant="link" size="icon" loading>
+          <MailIcon />
+        </Button>
+        <Button variant="link" loading>
           <MailIcon />
           Button
         </Button>

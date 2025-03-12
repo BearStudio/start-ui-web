@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { orpc } from '@/lib/orpc/client';
 
 import { Button } from '@/components/ui/button';
@@ -69,46 +70,36 @@ function Home() {
   );
 
   return (
-    <div>
-      <Button
-        onClick={async () => {
-          setState((s) => s + 1);
-        }}
-      >
-        Counter {state}
-      </Button>
-      <Button
-        disabled={i18n.language === 'fr'}
-        onClick={() => {
-          i18n.changeLanguage('fr');
-        }}
-      >
-        FR
-      </Button>
-      <Button
-        disabled={i18n.language === 'en'}
-        onClick={() => {
-          i18n.changeLanguage('en');
-        }}
-      >
-        EN
-      </Button>
-      <Button
-        disabled={i18n.language === 'ar'}
-        onClick={() => {
-          i18n.changeLanguage('ar');
-        }}
-      >
-        AR
-      </Button>
-      <Button
-        loading={createPlanet.isPending}
-        onClick={() => {
-          createPlanet.mutate({ name: 'Hello' });
-        }}
-      >
-        Create Planet
-      </Button>
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex gap-4">
+        <Button
+          onClick={async () => {
+            setState((s) => s + 1);
+          }}
+        >
+          Counter {state}
+        </Button>
+        {AVAILABLE_LANGUAGES.map(({ key }) => (
+          <Button
+            className="uppercase"
+            variant="secondary"
+            disabled={i18n.language === key}
+            onClick={() => {
+              i18n.changeLanguage(key);
+            }}
+          >
+            {key}
+          </Button>
+        ))}
+        <Button
+          loading={createPlanet.isPending}
+          onClick={() => {
+            createPlanet.mutate({ name: 'Hello' });
+          }}
+        >
+          Create Planet
+        </Button>
+      </div>
       <Button
         loading={login.isPending}
         onClick={() => {
@@ -126,19 +117,22 @@ function Home() {
       >
         Validate Login
       </Button>
-      <h2>Planets</h2>
-      {planets.isLoading && <div>Loading...</div>}
-      {planets.data?.map((planet) => (
-        <Link
-          key={planet.id}
-          to="/planet/$id"
-          params={{ id: planet.id.toString() }}
-        >
-          {planet.name}
-        </Link>
-      ))}
-      <p>{t('common:actions.edit')}</p>
+      <h2 className="font-bold">Planets</h2>
+      <div className="flex gap-4">
+        {planets.isLoading && <div>Loading...</div>}
+        {planets.data?.map((planet) => (
+          <Link
+            key={planet.id}
+            to="/planet/$id"
+            params={{ id: planet.id.toString() }}
+          >
+            {planet.name}
+          </Link>
+        ))}
+      </div>
+      <p>This is a translated string: {t('common:actions.edit')}</p>
       <Link to="/demo">Demo</Link>
+      <div></div>
     </div>
   );
 }
