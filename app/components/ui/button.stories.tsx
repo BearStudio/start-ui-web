@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react';
-import { Mail } from 'lucide-react';
+import { MailIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -45,16 +45,16 @@ export const IconOnly = () => {
   return (
     <div className="flex gap-4">
       <Button size="icon-xs">
-        <Mail />
+        <MailIcon />
       </Button>
       <Button size="icon-sm">
-        <Mail />
+        <MailIcon />
       </Button>
       <Button size="icon">
-        <Mail />
+        <MailIcon />
       </Button>
       <Button size="icon-lg">
-        <Mail />
+        <MailIcon />
       </Button>
     </div>
   );
@@ -64,12 +64,12 @@ export const WithIcon = () => {
   return (
     <div className="flex gap-4">
       <Button>
-        <Mail />
+        <MailIcon />
         Button
       </Button>
       <Button>
         Button
-        <Mail />
+        <MailIcon />
       </Button>
     </div>
   );
@@ -81,10 +81,10 @@ export const Loading = () => {
       <div className="flex gap-4">
         <Button loading>Button</Button>
         <Button size="icon" loading>
-          <Mail />
+          <MailIcon />
         </Button>
         <Button loading>
-          <Mail />
+          <MailIcon />
           Button
         </Button>
       </div>
@@ -93,10 +93,10 @@ export const Loading = () => {
           Button
         </Button>
         <Button variant="secondary" size="icon" loading>
-          <Mail />
+          <MailIcon />
         </Button>
         <Button variant="secondary" loading>
-          <Mail />
+          <MailIcon />
           Button
         </Button>
       </div>
