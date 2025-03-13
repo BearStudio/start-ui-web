@@ -13,17 +13,15 @@ import { Button } from '@/components/ui/button';
 
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 
-export const LoginForm = (
-  {
-    onSuccess = () => undefined,
-    ...rest
-  }: ComponentProps<'div'> & {
-    onSuccess?: (
-      data: Outputs['auth']['login'],
-      variables: Inputs['auth']['login']
-    ) => void;
-  } /* TODO */
-) => {
+export const LoginForm = ({
+  onSuccess = () => undefined,
+  ...rest
+}: ComponentProps<'div'> & {
+  onSuccess?: (
+    data: Outputs['auth']['login'],
+    variables: Inputs['auth']['login']
+  ) => void;
+}) => {
   const { t } = useTranslation(['auth']);
 
   const login = useMutation(
