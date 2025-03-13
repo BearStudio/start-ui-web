@@ -25,7 +25,7 @@ export default function PageLogin() {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <h1 className="text-xl">{t('auth:login.appTitle')}</h1>
         <Button variant="link" size="sm" className="w-fit" asChild>
