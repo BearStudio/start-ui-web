@@ -18,7 +18,7 @@ import { Route as PlanetIdImport } from './routes/planet.$id'
 import { Route as PublicOnlyLoginIndexImport } from './routes/_public-only/login.index'
 import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
 import { Route as AuthenticatedDemo2IndexImport } from './routes/_authenticated/demo-2/index'
-import { Route as PublicOnlyLoginValidateImport } from './routes/_public-only/login.validate'
+import { Route as PublicOnlyLoginVerifyIndexImport } from './routes/_public-only/login.verify.index'
 
 // Create/Update Routes
 
@@ -62,11 +62,13 @@ const AuthenticatedDemo2IndexRoute = AuthenticatedDemo2IndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const PublicOnlyLoginValidateRoute = PublicOnlyLoginValidateImport.update({
-  id: '/login/validate',
-  path: '/login/validate',
-  getParentRoute: () => PublicOnlyRoute,
-} as any)
+const PublicOnlyLoginVerifyIndexRoute = PublicOnlyLoginVerifyIndexImport.update(
+  {
+    id: '/login/verify/',
+    path: '/login/verify/',
+    getParentRoute: () => PublicOnlyRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -100,13 +102,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanetIdImport
       parentRoute: typeof rootRoute
     }
-    '/_public-only/login/validate': {
-      id: '/_public-only/login/validate'
-      path: '/login/validate'
-      fullPath: '/login/validate'
-      preLoaderRoute: typeof PublicOnlyLoginValidateImport
-      parentRoute: typeof PublicOnlyImport
-    }
     '/_authenticated/demo-2/': {
       id: '/_authenticated/demo-2/'
       path: '/demo-2'
@@ -126,6 +121,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof PublicOnlyLoginIndexImport
+      parentRoute: typeof PublicOnlyImport
+    }
+    '/_public-only/login/verify/': {
+      id: '/_public-only/login/verify/'
+      path: '/login/verify'
+      fullPath: '/login/verify'
+      preLoaderRoute: typeof PublicOnlyLoginVerifyIndexImport
       parentRoute: typeof PublicOnlyImport
     }
   }
@@ -148,13 +150,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface PublicOnlyRouteChildren {
-  PublicOnlyLoginValidateRoute: typeof PublicOnlyLoginValidateRoute
   PublicOnlyLoginIndexRoute: typeof PublicOnlyLoginIndexRoute
+  PublicOnlyLoginVerifyIndexRoute: typeof PublicOnlyLoginVerifyIndexRoute
 }
 
 const PublicOnlyRouteChildren: PublicOnlyRouteChildren = {
-  PublicOnlyLoginValidateRoute: PublicOnlyLoginValidateRoute,
   PublicOnlyLoginIndexRoute: PublicOnlyLoginIndexRoute,
+  PublicOnlyLoginVerifyIndexRoute: PublicOnlyLoginVerifyIndexRoute,
 }
 
 const PublicOnlyRouteWithChildren = PublicOnlyRoute._addFileChildren(
@@ -165,20 +167,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/login/validate': typeof PublicOnlyLoginValidateRoute
   '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
   '/login': typeof PublicOnlyLoginIndexRoute
+  '/login/verify': typeof PublicOnlyLoginVerifyIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/login/validate': typeof PublicOnlyLoginValidateRoute
   '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
   '/login': typeof PublicOnlyLoginIndexRoute
+  '/login/verify': typeof PublicOnlyLoginVerifyIndexRoute
 }
 
 export interface FileRoutesById {
@@ -187,10 +189,10 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public-only': typeof PublicOnlyRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/_public-only/login/validate': typeof PublicOnlyLoginValidateRoute
   '/_authenticated/demo-2/': typeof AuthenticatedDemo2IndexRoute
   '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
   '/_public-only/login/': typeof PublicOnlyLoginIndexRoute
+  '/_public-only/login/verify/': typeof PublicOnlyLoginVerifyIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -199,29 +201,29 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/planet/$id'
-    | '/login/validate'
     | '/demo-2'
     | '/demo'
     | '/login'
+    | '/login/verify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/planet/$id'
-    | '/login/validate'
     | '/demo-2'
     | '/demo'
     | '/login'
+    | '/login/verify'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/_public-only'
     | '/planet/$id'
-    | '/_public-only/login/validate'
     | '/_authenticated/demo-2/'
     | '/_authenticated/demo/'
     | '/_public-only/login/'
+    | '/_public-only/login/verify/'
   fileRoutesById: FileRoutesById
 }
 
@@ -268,16 +270,12 @@ export const routeTree = rootRoute
     "/_public-only": {
       "filePath": "_public-only.tsx",
       "children": [
-        "/_public-only/login/validate",
-        "/_public-only/login/"
+        "/_public-only/login/",
+        "/_public-only/login/verify/"
       ]
     },
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
-    },
-    "/_public-only/login/validate": {
-      "filePath": "_public-only/login.validate.tsx",
-      "parent": "/_public-only"
     },
     "/_authenticated/demo-2/": {
       "filePath": "_authenticated/demo-2/index.tsx",
@@ -289,6 +287,10 @@ export const routeTree = rootRoute
     },
     "/_public-only/login/": {
       "filePath": "_public-only/login.index.tsx",
+      "parent": "/_public-only"
+    },
+    "/_public-only/login/verify/": {
+      "filePath": "_public-only/login.verify.index.tsx",
       "parent": "/_public-only"
     }
   }

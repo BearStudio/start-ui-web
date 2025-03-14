@@ -1,6 +1,6 @@
 import { createAPIFileRoute } from '@tanstack/start/api';
 
-import { previewEmailRoute } from '@/server/config/email';
+import { previewEmailRoute } from '@/server/email';
 
 export const APIRoute = createAPIFileRoute('/api/dev/email/$template')({
   GET: ({ request, params }) => {
