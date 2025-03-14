@@ -1,36 +1,23 @@
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { orpc } from '@/lib/orpc/client';
+import { authClient } from '@/lib/auth/client';
 
-export const GuardPublicOnly = ({
-  children,
-
-  redirect,
-}: {
-  children?: ReactNode;
-
-  redirect: string;
-}) => {
-  const checkAuthenticated = useQuery(
-    orpc.auth.checkAuthenticated.queryOptions({
-      gcTime: 0, // Prevent cache issue
-    })
-  );
+export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
+  const session = authClient.useSession();
   const router = useRouter();
 
-  if (checkAuthenticated.isLoading) {
+  if (session.isPending) {
     return <div>Loading...</div>; // TODO
   }
 
-  if (checkAuthenticated.isError) {
+  if (session.error) {
     return <div>Something wrong happened</div>; // TODO
   }
 
-  if (checkAuthenticated.data?.isAuthenticated) {
+  if (session.data?.user) {
     router.navigate({
-      to: redirect,
+      to: '/',
       replace: true,
     });
     return null;

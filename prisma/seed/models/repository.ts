@@ -1,15 +1,15 @@
-import { prisma } from '../utils';
+import { db } from '@/server/db';
 
 export async function createRepositories() {
   console.log(`⏳ Seeding repositories`);
 
   let createdCounter = 0;
-  const existingCount = await prisma.repository.count();
+  const existingCount = await db.repository.count();
 
   if (
-    !(await prisma.repository.findUnique({ where: { name: 'Start UI [web]' } }))
+    !(await db.repository.findUnique({ where: { name: 'Start UI [web]' } }))
   ) {
-    await prisma.repository.create({
+    await db.repository.create({
       data: {
         name: 'Start UI [web]',
         link: 'https://github.com/BearStudio/start-ui-web',
@@ -21,11 +21,11 @@ export async function createRepositories() {
   }
 
   if (
-    !(await prisma.repository.findUnique({
+    !(await db.repository.findUnique({
       where: { name: 'Start UI [native]' },
     }))
   ) {
-    await prisma.repository.create({
+    await db.repository.create({
       data: {
         name: 'Start UI [native]',
         link: 'https://github.com/BearStudio/start-ui-native',

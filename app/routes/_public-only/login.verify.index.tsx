@@ -2,14 +2,13 @@ import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import PageLoginValidate from '@/features/auth/page-login-validate';
+import PageLoginVerify from '@/features/auth/page-login-verify';
 
-export const Route = createFileRoute('/_public-only/login/validate')({
+export const Route = createFileRoute('/_public-only/login/verify/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
-      redirect: fallback(z.string().optional(), ''),
-      token: z.string(),
+      redirect: fallback(z.string(), '').optional(),
       email: z.string().email(),
     })
   ),
@@ -17,5 +16,5 @@ export const Route = createFileRoute('/_public-only/login/validate')({
 
 function RouteComponent() {
   const search = Route.useSearch();
-  return <PageLoginValidate search={search} />;
+  return <PageLoginVerify search={search} />;
 }

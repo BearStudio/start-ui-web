@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_public-only')({
 
 function RouteComponent() {
   return (
-    <GuardPublicOnly redirect="/">
+    <GuardPublicOnly>
       <Outlet />
     </GuardPublicOnly>
   );

@@ -1,46 +1,29 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { orpc } from '@/lib/orpc/client';
-import { Outputs } from '@/lib/orpc/types';
-
-import { UserAuthorization } from '@/features/user/schemas';
+import { authClient } from '@/lib/auth/client';
 
 export const GuardAuthenticated = ({
   children,
-  authorizations,
-  redirect,
+  allowedRoles,
 }: {
   children?: ReactNode;
-  authorizations?: UserAuthorization[];
-  redirect: string;
+  allowedRoles?: Array<'user' | 'admin'>; // TODO get types from better auth
 }) => {
-  const queryClient = useQueryClient();
-  const checkAuthenticated = useQuery(
-    orpc.auth.checkAuthenticated.queryOptions({
-      gcTime: 0, // Prevent cache issue
-    })
-  );
+  const session = authClient.useSession();
   const router = useRouter();
 
-  if (checkAuthenticated.isLoading) {
+  if (session.isPending) {
     return <div>Loading...</div>; // TODO
   }
 
-  if (checkAuthenticated.isError) {
+  if (session.error) {
     return <div>Something wrong happened</div>; // TODO
   }
 
-  if (!checkAuthenticated.data?.isAuthenticated) {
-    queryClient.setQueryData<Outputs['auth']['checkAuthenticated']>(
-      orpc.auth.checkAuthenticated.key({ type: 'query' }),
-      {
-        isAuthenticated: false,
-      }
-    );
+  if (!session.data?.user) {
     router.navigate({
-      to: redirect,
+      to: '/login',
       replace: true,
       search: {
         redirect: location.href,
@@ -50,25 +33,16 @@ export const GuardAuthenticated = ({
   }
 
   // If no requested authorizations, check the isAuthenticated
-  if (!authorizations && checkAuthenticated.data.isAuthenticated) {
+  if (!allowedRoles) {
     return <>{children}</>;
   }
 
-  if (
-    checkAuthenticated.data?.authorizations &&
-    checkAuthenticated.data?.isAuthenticated
-  ) {
-    // Check if the account has some of the requested authorizations
-    return !authorizations ||
-      authorizations.some((a) =>
-        checkAuthenticated.data.authorizations?.includes(a)
-      ) ? (
-      <>{children}</>
-    ) : (
-      <div>Unauthorized</div> // TODO
-    );
-  }
-
-  // Not supposed to be there
-  return <div>Something wrong happened</div>;
+  // Check if the account has some of the requested authorizations
+  return allowedRoles.includes(
+    session.data?.user.role as unknown as ExplicitAny // Better check here with the better auth lib
+  ) ? (
+    <>{children}</>
+  ) : (
+    <div>Unauthorized</div> // TODO
+  );
 };

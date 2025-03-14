@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 function RouteComponent() {
   return (
-    <GuardAuthenticated redirect="/login">
+    <GuardAuthenticated>
       <Outlet />
     </GuardAuthenticated>
   );
