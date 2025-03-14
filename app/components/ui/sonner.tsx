@@ -3,7 +3,7 @@ import { Toaster as Sonner, ToasterProps } from 'sonner';
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      theme={'light' as ToasterProps['theme']} // TODO
+      theme={'light' as ToasterProps['theme']} // TODO Handle dark mode and add documentation in storybook
       className="toaster group"
       position="top-right"
       offset={16}

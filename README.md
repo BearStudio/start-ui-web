@@ -17,7 +17,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 - [x] Vitest
 - [ ] Logs
 - [ ] Fields
-- [ ] Translations
+- [x] Translations
 - [ ] Auth
 
 ---

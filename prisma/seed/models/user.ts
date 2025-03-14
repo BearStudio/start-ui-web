@@ -1,46 +1,46 @@
 import { faker } from '@faker-js/faker';
 
-import { emphasis, prisma } from '../utils';
+import { db } from '@/server/db';
+
+import { emphasis } from '../utils';
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
 
   let createdCounter = 0;
-  const existingCount = await prisma.user.count();
+  const existingCount = await db.user.count();
 
   await Promise.all(
     Array.from({ length: Math.max(0, 98 - existingCount) }, async () => {
-      await prisma.user.create({
+      await db.user.create({
         data: {
           name: faker.person.fullName(),
           email: faker.internet.email().toLowerCase(),
-          accountStatus: 'ENABLED',
+          emailVerified: true,
         },
       });
       createdCounter += 1;
     })
   );
 
-  if (!(await prisma.user.findUnique({ where: { email: 'user@user.com' } }))) {
-    await prisma.user.create({
+  if (!(await db.user.findUnique({ where: { email: 'user@user.com' } }))) {
+    await db.user.create({
       data: {
         name: 'User',
         email: 'user@user.com',
-        accountStatus: 'ENABLED',
+        emailVerified: true,
       },
     });
     createdCounter += 1;
   }
 
-  if (
-    !(await prisma.user.findUnique({ where: { email: 'admin@admin.com' } }))
-  ) {
-    await prisma.user.create({
+  if (!(await db.user.findUnique({ where: { email: 'admin@admin.com' } }))) {
+    await db.user.create({
       data: {
         name: 'Admin',
         email: 'admin@admin.com',
-        authorizations: ['APP', 'ADMIN'],
-        accountStatus: 'ENABLED',
+        emailVerified: true,
+        role: 'admin',
       },
     });
     createdCounter += 1;

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { publicProcedure } from '@/server/config/orpc';
+import { publicProcedure } from '@/server/orpc';
 
 const tags = ['planet'];
 

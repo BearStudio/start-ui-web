@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const envServer = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
+    BETTER_AUTH_SECRET: z.string(),
     SESSION_EXPIRATION_SECONDS: z.coerce.number().int().default(2592000),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),

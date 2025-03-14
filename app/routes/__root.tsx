@@ -13,7 +13,7 @@ import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 import { Providers } from '@/providers';
-import { getUserLanguage } from '@/server/config/i18n';
+import { getUserLanguage } from '@/server/i18n';
 import appCss from '@/styles/app.css?url';
 
 const getI18nCookie = createServerFn({ method: 'GET' }).handler(() => {

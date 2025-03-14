@@ -3,6 +3,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { authClient } from '@/lib/auth/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { orpc } from '@/lib/orpc/client';
 
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
+  const session = authClient.useSession();
   const { i18n, t } = useTranslation(['common']);
   const [state, setState] = useState(1);
   const queryClient = useQueryClient();
@@ -79,7 +81,14 @@ function Home() {
       </div>
       <p>This is a translated string: {t('common:actions.edit')}</p>
       <Link to="/demo">Demo</Link>
-      <Link to="/login">Login page</Link>
+      {session.data?.user ? (
+        <div>
+          {session.data.user.email}
+          <Button onClick={() => authClient.signOut()}>Logout</Button>
+        </div>
+      ) : (
+        <Link to="/login">Login page</Link>
+      )}
     </div>
   );
 }
