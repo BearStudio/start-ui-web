@@ -26,7 +26,7 @@ const base = os
     const start = Date.now();
     const meta = {
       path: path.join('.'),
-      type: procedure['~orpc'].route.method, // TODO This looks internal,
+      type: procedure['~orpc'].route.method,
       requestId: randomUUID(),
       userId: context.user?.id,
     };
@@ -35,16 +35,19 @@ const base = os
 
     loggerForMiddleWare.info('Before');
 
+    try {
     const result = await next({
       context: { logger: loggerForMiddleWare },
     });
 
     loggerForMiddleWare.info({ durationMs: Date.now() - start }, 'After');
 
-    // TODO how to handle errors: onError helper or by hand?
-    // TODO can we use the powerful helper to better manage logs? https://orpc.unnoq.com/docs/middleware#built-in-middlewares
-
     return result;
+    } catch (error) {
+      loggerForMiddleWare.error(error);
+
+      throw error;
+    }
   });
 
 export const publicProcedure = base;
