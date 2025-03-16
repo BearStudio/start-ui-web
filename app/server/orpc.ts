@@ -1,5 +1,6 @@
 import { ORPCError, os } from '@orpc/server';
 import { randomUUID } from 'node:crypto';
+import { entries } from 'remeda';
 import { getHeaders } from 'vinxi/http';
 
 import { auth } from '@/server/auth';
@@ -10,8 +11,15 @@ const base = os
   .$context<Record<never, never>>()
   // Auth
   .use(async ({ next }) => {
+    const headers = new Headers();
+    entries(getHeaders()).forEach(([key, value]) => {
+      if (value) {
+        headers.append(key, value);
+      }
+    });
+
     const session = await auth.api.getSession({
-      headers: (await getHeaders()) as unknown as TODO, // TODO Update the types here
+      headers,
     });
 
     return await next({
@@ -36,13 +44,13 @@ const base = os
     loggerForMiddleWare.info('Before');
 
     try {
-    const result = await next({
-      context: { logger: loggerForMiddleWare },
-    });
+      const result = await next({
+        context: { logger: loggerForMiddleWare },
+      });
 
-    loggerForMiddleWare.info({ durationMs: Date.now() - start }, 'After');
+      loggerForMiddleWare.info({ durationMs: Date.now() - start }, 'After');
 
-    return result;
+      return result;
     } catch (error) {
       loggerForMiddleWare.error(error);
 
