@@ -1,6 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, emailOTP } from 'better-auth/plugins';
+import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 
 import i18n from '@/lib/i18n';
 
@@ -19,6 +19,9 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   plugins: [
+    openAPI({
+      disableDefaultReference: true, // Use custom exposition in /routes/api folder
+    }),
     admin(),
     emailOTP({
       disableSignUp: false,
