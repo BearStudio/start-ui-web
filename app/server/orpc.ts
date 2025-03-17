@@ -1,26 +1,18 @@
 import { ORPCError, os } from '@orpc/server';
+import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { randomUUID } from 'node:crypto';
-import { entries } from 'remeda';
-import { getHeaders } from 'vinxi/http';
 
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';
+import { getHeaders } from '@/server/utils';
 
 const base = os
-  .$context<Record<never, never>>()
+  .$context<ResponseHeadersPluginContext>()
   // Auth
   .use(async ({ next }) => {
-    const headers = new Headers();
-    entries(getHeaders()).forEach(([key, value]) => {
-      if (value) {
-        headers.append(key, value);
-      }
-    });
+    const session = await auth.api.getSession({ headers: getHeaders() });
 
-    const session = await auth.api.getSession({
-      headers,
-    });
 
     return await next({
       context: {
