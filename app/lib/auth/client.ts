@@ -3,7 +3,14 @@ import { createAuthClient } from 'better-auth/react';
 
 import { envClient } from '@/env/client';
 
+import { permissions } from './permissions';
+
 export const authClient = createAuthClient({
   baseURL: `${envClient.VITE_BASE_URL}/api/auth`,
-  plugins: [adminClient(), emailOTPClient()],
+  plugins: [
+    adminClient({
+      ...permissions,
+    }),
+    emailOTPClient(),
+  ],
 });
