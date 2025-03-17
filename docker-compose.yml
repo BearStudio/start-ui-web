@@ -14,13 +14,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  initializedatabase:
-    build:
-      context: .
-      dockerfile: docker/initialize-database.dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: 'postgres://${DOCKER_DATABASE_USERNAME}:${DOCKER_DATABASE_PASSWORD}@postgres:5432/${DOCKER_DATABASE_NAME}'
