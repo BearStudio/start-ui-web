@@ -5,6 +5,22 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
+# Install
+
+```
+cp .env.example .env
+pnpm install # Install dependencies
+pnpm dk:init # Init docker
+pnpm db:init # Init the db
+```
+
+# Run
+
+```
+pnpm dk:start # Only if your docker is not running
+pnpm dev
+```
+
 # Work in progress 3.0.0
 
 - [x] 🔥 Burn all the code

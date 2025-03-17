@@ -1,7 +1,7 @@
 import { db } from '@/server/db';
 
-import { createRepositories } from './models/repository';
-import { createUsers } from './models/user';
+import { createRepositories } from './repository';
+import { createUsers } from './user';
 
 async function main() {
   await createRepositories();
