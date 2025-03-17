@@ -40,7 +40,10 @@ Update your `.vscode/settings`
     ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cn\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "i18n-ally.localesPaths": ["app/locales"],
+  "i18n-ally.localesPaths": [
+    "app/locales",
+    "node_modules/zod-i18n-map/locales"
+  ],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.enabledFrameworks": ["general", "react", "i18next"],
   "i18n-ally.namespace": true,
