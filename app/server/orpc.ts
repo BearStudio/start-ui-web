@@ -2,6 +2,8 @@ import { ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { randomUUID } from 'node:crypto';
 
+import { Permission } from '@/lib/auth/client';
+
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';
@@ -12,7 +14,6 @@ const base = os
   // Auth
   .use(async ({ next }) => {
     const session = await auth.api.getSession({ headers: getHeaders() });
-
 
     return await next({
       context: {
@@ -50,18 +51,38 @@ const base = os
     }
   });
 
-export const publicProcedure = base;
+export const publicProcedure = () => base;
 
-export const protectedProcedure = base.use(async ({ context, next }) => {
-  const { user } = context;
+export const protectedProcedure = ({
+  permission,
+}: {
+  permission: Permission;
+}) =>
+  base.use(async ({ context, next }) => {
+    const { user } = context;
 
-  if (!user) {
-    throw new ORPCError('UNAUTHORIZED');
-  }
+    if (!user) {
+      throw new ORPCError('UNAUTHORIZED');
+    }
 
-  return await next({
-    context: {
-      user,
-    },
+    const userHasPermission = await auth.api.userHasPermission({
+      body: {
+        userId: user.id,
+        permission,
+      },
+    });
+
+    if (userHasPermission.error) {
+      throw new ORPCError('INTERNAL_SERVER_ERROR');
+    }
+
+    if (!userHasPermission.success) {
+      throw new ORPCError('FORBIDDEN');
+    }
+
+    return await next({
+      context: {
+        user,
+      },
+    });
   });
-});

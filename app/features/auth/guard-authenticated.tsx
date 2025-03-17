@@ -1,15 +1,15 @@
 import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { authClient } from '@/lib/auth/client';
+import { authClient, Permission } from '@/lib/auth/client';
 import { ROLE } from '@/lib/auth/permissions';
 
 export const GuardAuthenticated = ({
   children,
-  allowedRoles,
+  permission,
 }: {
   children?: ReactNode;
-  allowedRoles?: ROLE[];
+  permission?: Permission;
 }) => {
   const session = authClient.useSession();
   const router = useRouter();
@@ -34,12 +34,17 @@ export const GuardAuthenticated = ({
   }
 
   // Allows if no allowedRoles restriction
-  if (!allowedRoles) {
+  if (!permission) {
     return <>{children}</>;
   }
 
-  // Allows if the user role is one of the allowedRoles
-  if (allowedRoles.includes(session.data.user.role as ROLE)) {
+  // Allows if the user as the permission
+  if (
+    authClient.admin.checkRolePermission({
+      role: session.data.user.role as ROLE,
+      permission,
+    })
+  ) {
     return <>{children}</>;
   }
 
