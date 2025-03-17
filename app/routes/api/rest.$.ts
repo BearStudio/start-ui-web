@@ -1,12 +1,12 @@
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { onError } from '@orpc/server';
-import { CORSPlugin } from '@orpc/server/plugins';
+import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
 import { createAPIFileRoute } from '@tanstack/start/api';
 
 import { router } from '@/server/router';
 
 const handler = new OpenAPIHandler(router, {
-  plugins: [new CORSPlugin()],
+  plugins: [new CORSPlugin(), new ResponseHeadersPlugin()],
   interceptors: [
     onError((error) => {
       console.error(error);
