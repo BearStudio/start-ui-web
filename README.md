@@ -163,7 +163,10 @@ Create or edit the `.vscode/settings.json` file with the following settings:
 
 ```json
 {
-  "i18n-ally.localesPaths": ["src/locales"],
+  "i18n-ally.localesPaths": [
+    "src/locales",
+    "node_modules/zod-i18n-map/locales"
+  ],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.enabledFrameworks": ["general", "react", "i18next"],
   "i18n-ally.namespace": true,
