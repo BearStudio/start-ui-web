@@ -11,7 +11,7 @@ const PlanetSchema = z.object({
 });
 
 export default {
-  list: publicProcedure
+  list: publicProcedure()
     .route({
       method: 'GET',
       path: '/planets',
@@ -34,7 +34,7 @@ export default {
         { id: 3, name: `User ${context.user?.id ?? 'unknown'}` },
       ];
     }),
-  find: publicProcedure
+  find: publicProcedure()
     .route({ method: 'GET', path: '/planets/{id}', tags })
     .input(z.object({ id: z.coerce.number().int().min(1) }))
     .output(PlanetSchema)
@@ -42,7 +42,7 @@ export default {
       // your find code here
       return { id: 1, name: 'Earth' };
     }),
-  create: publicProcedure
+  create: publicProcedure()
     .route({ method: 'POST', path: '/planets', tags })
     .input(PlanetSchema.omit({ id: true }))
     .output(PlanetSchema)

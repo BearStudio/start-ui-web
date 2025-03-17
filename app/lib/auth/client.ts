@@ -14,3 +14,7 @@ export const authClient = createAuthClient({
     emailOTPClient(),
   ],
 });
+
+export type Permission = Parameters<
+  typeof authClient.admin.hasPermission
+>['0']['permission'];
