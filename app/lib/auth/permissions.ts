@@ -12,7 +12,7 @@ const ac = createAccessControl(statement);
 
 const user = ac.newRole({
   apps: ['app'],
-  repository: ['read', 'create', 'update', 'delete'],
+  repository: ['read'],
 });
 
 const admin = ac.newRole({
