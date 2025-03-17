@@ -1,10 +1,12 @@
 import { onError } from '@orpc/server';
 import { RPCHandler } from '@orpc/server/fetch';
+import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
 import { createAPIFileRoute } from '@tanstack/start/api';
 
 import { router } from '@/server/router';
 
 const handler = new RPCHandler(router, {
+  plugins: [new CORSPlugin(), new ResponseHeadersPlugin()],
   interceptors: [
     onError((error) => {
       console.error(error);
