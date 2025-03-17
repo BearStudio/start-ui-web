@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { db } from '@/server/db';
 
-import { emphasis } from '../utils';
+import { emphasis } from './_utils';
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
