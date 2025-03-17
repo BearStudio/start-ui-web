@@ -2,13 +2,14 @@ import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
 import { authClient } from '@/lib/auth/client';
+import { ROLE } from '@/lib/auth/permissions';
 
 export const GuardAuthenticated = ({
   children,
   allowedRoles,
 }: {
   children?: ReactNode;
-  allowedRoles?: Array<'user' | 'admin'>; // TODO get types from better auth
+  allowedRoles?: ROLE[];
 }) => {
   const session = authClient.useSession();
   const router = useRouter();
@@ -32,17 +33,17 @@ export const GuardAuthenticated = ({
     return null;
   }
 
-  // If no requested authorizations, check the isAuthenticated
+  // Allows if no allowedRoles restriction
   if (!allowedRoles) {
     return <>{children}</>;
   }
 
-  // Check if the account has some of the requested authorizations
-  return allowedRoles.includes(
-    session.data?.user.role as unknown as ExplicitAny // Better check here with the better auth lib
-  ) ? (
-    <>{children}</>
-  ) : (
+  // Allows if the user role is one of the allowedRoles
+  if (allowedRoles.includes(session.data.user.role as ROLE)) {
+    return <>{children}</>;
+  }
+
+  return (
     <div>Unauthorized</div> // TODO
   );
 };

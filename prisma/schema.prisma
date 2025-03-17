@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  user
+  admin
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -21,7 +26,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role       String?
+  role       UserRole?
   banned     Boolean?
   banReason  String?
   banExpires DateTime?

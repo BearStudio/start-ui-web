@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 
+import { permissions } from '@/lib/auth/permissions';
 import i18n from '@/lib/i18n';
 
 import EmailLoginCode from '@/emails/templates/login-code';
@@ -22,7 +23,9 @@ export const auth = betterAuth({
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api folder
     }),
-    admin(),
+    admin({
+      ...permissions,
+    }),
     emailOTP({
       disableSignUp: false,
       expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
