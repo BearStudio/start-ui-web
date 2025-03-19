@@ -1,13 +1,17 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
+import { zu } from '@/lib/zod/zod-utils';
+
 export type FormFieldsLogin = z.infer<ReturnType<typeof zFormFieldsLogin>>;
 export const zFormFieldsLogin = () =>
   z.object({
-    email: z.string({
-      required_error: t('users:data.email.required'),
-      invalid_type_error: t('users:data.email.invalid'),
-    }),
+    email: zu.string.nonEmpty(
+      z.string({
+        required_error: t('users:data.email.required'),
+        invalid_type_error: t('users:data.email.invalid'),
+      })
+    ),
   });
 
 export type FormFieldsLoginVerify = z.infer<
