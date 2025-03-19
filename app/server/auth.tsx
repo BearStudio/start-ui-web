@@ -7,6 +7,7 @@ import i18n from '@/lib/i18n';
 
 import EmailLoginCode from '@/emails/templates/login-code';
 import { envClient } from '@/env/client';
+import { envServer } from '@/env/server';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
@@ -16,6 +17,10 @@ import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/i18n';
 
 export const auth = betterAuth({
+  session: {
+    expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
+    updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
+  },
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
