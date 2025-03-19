@@ -5,7 +5,8 @@ export const envServer = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     BETTER_AUTH_SECRET: z.string(),
-    SESSION_EXPIRATION_SECONDS: z.coerce.number().int().default(2592000),
+    SESSION_EXPIRATION_IN_SECONDS: z.coerce.number().int().default(2592000), // 30 days by default
+    SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().default(86400), // 1 day by default
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
