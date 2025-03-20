@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -13,6 +13,7 @@ import {
   FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
+import { onSubmit } from '@/components/form/docst.utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -38,10 +39,6 @@ export const Default = () => {
       other: '',
     },
   });
-
-  const onSubmit: SubmitHandler<FormSchema> = (values) => {
-    console.log(values);
-  };
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -82,10 +79,6 @@ export const NoHtmlForm = () => {
       other: '',
     },
   });
-
-  const onSubmit: SubmitHandler<FormSchema> = (values) => {
-    console.log(values);
-  };
 
   return (
     <Form {...form} noHtmlForm>
