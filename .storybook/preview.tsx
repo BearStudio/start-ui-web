@@ -1,0 +1,84 @@
+import type { Preview } from '@storybook/react';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDarkMode } from 'storybook-dark-mode';
+
+import '@/styles/app.css';
+import './preview.css';
+
+import {
+  AVAILABLE_LANGUAGES,
+  DEFAULT_LANGUAGE_KEY,
+} from '../app/lib/i18n/constants';
+import i18nGlobal from '../app/lib/i18n/index';
+import { useInitTheme } from '../app/lib/theme/client';
+import { Providers } from '../app/providers';
+
+const DocumentationWrapper = ({ children, isDarkMode, context }) => {
+  const { i18n } = useTranslation();
+  const { updateTheme } = useInitTheme(isDarkMode ? 'dark' : null);
+
+  // Update color mode
+  useEffect(() => {
+    updateTheme(isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  // Update language
+  useEffect(() => {
+    i18n.changeLanguage(context.globals.locale);
+    const languageConfig = AVAILABLE_LANGUAGES.find(
+      ({ key }) => key === context.globals.locale
+    );
+    if (languageConfig) {
+      document.documentElement.lang = languageConfig.key;
+      document.documentElement.dir = languageConfig.dir ?? 'ltr';
+      document.documentElement.style.fontSize = `${(languageConfig.fontScale ?? 1) * 100}%`;
+    }
+  }, [context.globals.locale]);
+
+  return <>{children}</>;
+};
+
+const preview: Preview = {
+  tags: ['autodocs'],
+  parameters: {
+    backgrounds: {
+      disable: true,
+      grid: { disable: true },
+    },
+    darkMode: {
+      stylePreview: true,
+    },
+  },
+  globalTypes: {
+    locale: {
+      name: 'Locale',
+      description: 'Internationalization locale',
+      defaultValue: DEFAULT_LANGUAGE_KEY,
+      toolbar: {
+        icon: 'globe',
+        items: AVAILABLE_LANGUAGES.map(({ key }) => ({
+          value: key,
+          title: i18nGlobal.t(`languages.${String(key)}`, { lng: 'en' }),
+        })),
+      },
+    },
+  },
+  decorators: [
+    (story, context) => {
+      const isDarkMode = useDarkMode();
+      return (
+        <Providers>
+          <DocumentationWrapper isDarkMode={isDarkMode} context={context}>
+            {/* Calling as a function to avoid errors. Learn more at:
+             * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+             */}
+            {story(context)}
+          </DocumentationWrapper>
+        </Providers>
+      );
+    },
+  ],
+};
+
+export default preview;

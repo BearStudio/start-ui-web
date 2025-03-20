@@ -126,9 +126,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
   return (
     <html
+      className={theme}
       lang={i18n.language}
       dir={languageConfig?.dir ?? 'ltr'}
-      className={theme}
       style={{
         fontSize: languageConfig?.fontScale
           ? `${languageConfig.fontScale * 100}%`
