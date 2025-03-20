@@ -36,9 +36,9 @@ const buttonVariants = cva(
     },
     compoundVariants: [
       {
-        variant: 'link',
+        variant: ['link'],
         size: ['xs', 'sm', 'default', 'lg'],
-        class: 'px-0',
+        class: 'px-0 has-[>svg]:px-0',
       },
     ],
     defaultVariants: {
