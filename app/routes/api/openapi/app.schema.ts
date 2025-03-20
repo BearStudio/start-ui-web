@@ -1,7 +1,7 @@
 import { OpenAPIGenerator } from '@orpc/openapi';
 import { ZodToJsonSchemaConverter } from '@orpc/zod';
-import { json } from '@tanstack/start';
-import { createAPIFileRoute } from '@tanstack/start/api';
+import { json } from '@tanstack/react-start';
+import { createAPIFileRoute } from '@tanstack/react-start/api';
 
 import { envClient } from '@/env/client';
 import { router } from '@/server/router';
