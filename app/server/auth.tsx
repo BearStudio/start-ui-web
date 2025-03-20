@@ -25,22 +25,10 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   socialProviders: {
-    discord: {
-      enabled: !!(
-        envServer.DISCORD_CLIENT_ID && envServer.DISCORD_CLIENT_SECRET
-      ),
-      clientId: envServer.DISCORD_CLIENT_ID!,
-      clientSecret: envServer.DISCORD_CLIENT_SECRET!,
-    },
     github: {
       enabled: !!(envServer.GITHUB_CLIENT_ID && envServer.GITHUB_CLIENT_SECRET),
       clientId: envServer.GITHUB_CLIENT_ID!,
       clientSecret: envServer.GITHUB_CLIENT_SECRET!,
-    },
-    google: {
-      enabled: !!(envServer.GOOGLE_CLIENT_ID && envServer.GOOGLE_CLIENT_SECRET),
-      clientId: envServer.GOOGLE_CLIENT_ID!,
-      clientSecret: envServer.GOOGLE_CLIENT_SECRET!,
     },
   },
   plugins: [

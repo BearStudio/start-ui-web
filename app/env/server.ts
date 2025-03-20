@@ -1,6 +1,9 @@
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
+// eslint-disable-next-line no-process-env
+const isProd = process.env.NODE_ENV === 'production';
+
 export const envServer = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
@@ -10,12 +13,6 @@ export const envServer = createEnv({
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
-
-    GOOGLE_CLIENT_ID: zOptionalWithReplaceMe(),
-    GOOGLE_CLIENT_SECRET: zOptionalWithReplaceMe(),
-
-    DISCORD_CLIENT_ID: zOptionalWithReplaceMe(),
-    DISCORD_CLIENT_SECRET: zOptionalWithReplaceMe(),
 
     EMAIL_SERVER: z.string().url(),
     EMAIL_FROM: z.string(),
@@ -40,7 +37,7 @@ function zOptionalWithReplaceMe() {
     .refine(
       (value) =>
         // Check in prodution if the value is not REPLACE ME
-        !import.meta.env.PROD || value !== 'REPLACE ME',
+        !isProd || value !== 'REPLACE ME',
       {
         message: 'Update the value "REPLACE ME" or remove the variable',
       }
