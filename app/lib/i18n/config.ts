@@ -13,6 +13,8 @@ export const i18nConfig: InitOptions = {
   supportedLngs: keys(locales),
   detection: {
     caches: ['cookie'],
+    cookieMinutes: 43200, // 30 days
+    cookieOptions: { path: '/', sameSite: 'lax' },
   },
 
   // Fix issue with i18next types
