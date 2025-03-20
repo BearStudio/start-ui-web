@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { FormFieldController } from '@/components/form';
+import { onSubmit } from '@/components/form/docst.utils';
 import { Button } from '@/components/ui/button';
 
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
@@ -34,7 +35,7 @@ export const Default = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
+    <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
@@ -63,7 +64,7 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
+    <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
@@ -87,7 +88,7 @@ export const Disabled = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
+    <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
@@ -112,7 +113,7 @@ export const StartElement = () => {
   const form = useForm<FormSchema>(formOptions);
 
   return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
+    <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
