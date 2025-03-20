@@ -1,30 +1,46 @@
+import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getCookie } from 'vinxi/http';
+import { z } from 'zod';
 
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { useInitTheme } from '@/lib/theme/client';
+import { THEME_COOKIE_NAME, themes } from '@/lib/theme/config';
 
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/i18n';
 import appCss from '@/styles/app.css?url';
 
-const getI18nCookie = createServerFn({ method: 'GET' }).handler(() => {
-  return getUserLanguage();
+const initApp = createServerFn({ method: 'GET' }).handler(() => {
+  return {
+    language: getUserLanguage(),
+    theme: z
+      .enum(themes)
+      .nullable()
+      .catch(null)
+      .parse(getCookie(THEME_COOKIE_NAME)),
+  };
 });
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   loader: async () => {
+    const { language, theme } = await initApp();
     if (import.meta.env.SSR) {
-      i18n.changeLanguage(await getI18nCookie());
+      i18n.changeLanguage(language);
     }
+    return { theme };
   },
   component: RootComponent,
   head: () => ({
@@ -101,6 +117,9 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
+  const data = Route.useLoaderData();
+  const { theme } = useInitTheme(data.theme);
+
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language
   );
@@ -109,6 +128,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     <html
       lang={i18n.language}
       dir={languageConfig?.dir ?? 'ltr'}
+      className={theme}
       style={{
         fontSize: languageConfig?.fontScale
           ? `${languageConfig.fontScale * 100}%`
