@@ -4,6 +4,8 @@ import { ReactNode } from 'react';
 import { authClient, Permission } from '@/lib/auth/client';
 import { ROLE } from '@/lib/auth/permissions';
 
+import { Spinner } from '@/components/ui/spinner';
+
 export const GuardAuthenticated = ({
   children,
   permission,
@@ -15,7 +17,7 @@ export const GuardAuthenticated = ({
   const router = useRouter();
 
   if (session.isPending) {
-    return <div>Loading...</div>; // TODO
+    return <Spinner full className="opacity-60" />;
   }
 
   if (session.error) {
