@@ -1,11 +1,20 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 
+import { queryClient } from '@/providers';
+
 import { routeTree } from './routeTree.gen';
 
 export function createRouter() {
   return createTanStackRouter({
-    routeTree,
+    context: {
+      queryClient,
+    },
+    defaultPreload: 'intent',
+    // Since we're using React Query, we don't want loader calls to ever be stale
+    // This will ensure that the loader is always called when the route is preloaded or visited
+    defaultPreloadStaleTime: 0,
     scrollRestoration: true,
+    routeTree,
   });
 }
 
