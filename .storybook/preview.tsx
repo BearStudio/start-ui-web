@@ -36,12 +36,13 @@ const DocumentationWrapper = ({ children, isDarkMode, context }) => {
     }
   }, [context.globals.locale]);
 
-  return <>{children}</>;
+  return <div id="preview-container">{children}</div>;
 };
 
 const preview: Preview = {
   tags: ['autodocs'],
   parameters: {
+    layout: 'padded',
     backgrounds: {
       disable: true,
       grid: { disable: true },
