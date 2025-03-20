@@ -7,10 +7,6 @@ export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
   const session = authClient.useSession();
   const router = useRouter();
 
-  if (session.isPending) {
-    return <div>Loading...</div>; // TODO
-  }
-
   if (session.error) {
     return <div>Something wrong happened</div>; // TODO
   }
