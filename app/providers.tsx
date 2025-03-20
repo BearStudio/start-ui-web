@@ -5,7 +5,7 @@ import '@/lib/i18n';
 
 import { Toaster } from '@/components/ui/sonner';
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export const Providers = (props: { children: ReactNode }) => {
   return (
