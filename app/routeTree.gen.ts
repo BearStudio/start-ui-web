@@ -15,6 +15,7 @@ import { Route as PublicOnlyImport } from './routes/_public-only'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PlanetIdImport } from './routes/planet.$id'
+import { Route as PublicOnlyLoginImport } from './routes/_public-only/login'
 import { Route as PublicOnlyLoginIndexImport } from './routes/_public-only/login.index'
 import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
 import { Route as AuthenticatedDemo2IndexImport } from './routes/_authenticated/demo-2/index'
@@ -44,10 +45,16 @@ const PlanetIdRoute = PlanetIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicOnlyLoginIndexRoute = PublicOnlyLoginIndexImport.update({
-  id: '/login/',
-  path: '/login/',
+const PublicOnlyLoginRoute = PublicOnlyLoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => PublicOnlyRoute,
+} as any)
+
+const PublicOnlyLoginIndexRoute = PublicOnlyLoginIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicOnlyLoginRoute,
 } as any)
 
 const AuthenticatedDemoIndexRoute = AuthenticatedDemoIndexImport.update({
@@ -64,9 +71,9 @@ const AuthenticatedDemo2IndexRoute = AuthenticatedDemo2IndexImport.update({
 
 const PublicOnlyLoginVerifyIndexRoute = PublicOnlyLoginVerifyIndexImport.update(
   {
-    id: '/login/verify/',
-    path: '/login/verify/',
-    getParentRoute: () => PublicOnlyRoute,
+    id: '/verify/',
+    path: '/verify/',
+    getParentRoute: () => PublicOnlyLoginRoute,
   } as any,
 )
 
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicOnlyImport
       parentRoute: typeof rootRoute
     }
+    '/_public-only/login': {
+      id: '/_public-only/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicOnlyLoginImport
+      parentRoute: typeof PublicOnlyImport
+    }
     '/planet/$id': {
       id: '/planet/$id'
       path: '/planet/$id'
@@ -118,17 +132,17 @@ declare module '@tanstack/react-router' {
     }
     '/_public-only/login/': {
       id: '/_public-only/login/'
-      path: '/login'
-      fullPath: '/login'
+      path: '/'
+      fullPath: '/login/'
       preLoaderRoute: typeof PublicOnlyLoginIndexImport
-      parentRoute: typeof PublicOnlyImport
+      parentRoute: typeof PublicOnlyLoginImport
     }
     '/_public-only/login/verify/': {
       id: '/_public-only/login/verify/'
-      path: '/login/verify'
+      path: '/verify'
       fullPath: '/login/verify'
       preLoaderRoute: typeof PublicOnlyLoginVerifyIndexImport
-      parentRoute: typeof PublicOnlyImport
+      parentRoute: typeof PublicOnlyLoginImport
     }
   }
 }
@@ -149,14 +163,26 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface PublicOnlyRouteChildren {
+interface PublicOnlyLoginRouteChildren {
   PublicOnlyLoginIndexRoute: typeof PublicOnlyLoginIndexRoute
   PublicOnlyLoginVerifyIndexRoute: typeof PublicOnlyLoginVerifyIndexRoute
 }
 
-const PublicOnlyRouteChildren: PublicOnlyRouteChildren = {
+const PublicOnlyLoginRouteChildren: PublicOnlyLoginRouteChildren = {
   PublicOnlyLoginIndexRoute: PublicOnlyLoginIndexRoute,
   PublicOnlyLoginVerifyIndexRoute: PublicOnlyLoginVerifyIndexRoute,
+}
+
+const PublicOnlyLoginRouteWithChildren = PublicOnlyLoginRoute._addFileChildren(
+  PublicOnlyLoginRouteChildren,
+)
+
+interface PublicOnlyRouteChildren {
+  PublicOnlyLoginRoute: typeof PublicOnlyLoginRouteWithChildren
+}
+
+const PublicOnlyRouteChildren: PublicOnlyRouteChildren = {
+  PublicOnlyLoginRoute: PublicOnlyLoginRouteWithChildren,
 }
 
 const PublicOnlyRouteWithChildren = PublicOnlyRoute._addFileChildren(
@@ -166,10 +192,11 @@ const PublicOnlyRouteWithChildren = PublicOnlyRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
+  '/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
   '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
-  '/login': typeof PublicOnlyLoginIndexRoute
+  '/login/': typeof PublicOnlyLoginIndexRoute
   '/login/verify': typeof PublicOnlyLoginVerifyIndexRoute
 }
 
@@ -188,6 +215,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public-only': typeof PublicOnlyRouteWithChildren
+  '/_public-only/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
   '/_authenticated/demo-2/': typeof AuthenticatedDemo2IndexRoute
   '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
@@ -200,10 +228,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/login'
     | '/planet/$id'
     | '/demo-2'
     | '/demo'
-    | '/login'
+    | '/login/'
     | '/login/verify'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -219,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/_public-only'
+    | '/_public-only/login'
     | '/planet/$id'
     | '/_authenticated/demo-2/'
     | '/_authenticated/demo/'
@@ -270,6 +300,13 @@ export const routeTree = rootRoute
     "/_public-only": {
       "filePath": "_public-only.tsx",
       "children": [
+        "/_public-only/login"
+      ]
+    },
+    "/_public-only/login": {
+      "filePath": "_public-only/login.tsx",
+      "parent": "/_public-only",
+      "children": [
         "/_public-only/login/",
         "/_public-only/login/verify/"
       ]
@@ -287,11 +324,11 @@ export const routeTree = rootRoute
     },
     "/_public-only/login/": {
       "filePath": "_public-only/login.index.tsx",
-      "parent": "/_public-only"
+      "parent": "/_public-only/login"
     },
     "/_public-only/login/verify/": {
       "filePath": "_public-only/login.verify.index.tsx",
-      "parent": "/_public-only"
+      "parent": "/_public-only/login"
     }
   }
 }

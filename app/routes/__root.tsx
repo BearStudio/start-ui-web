@@ -6,7 +6,7 @@ import {
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getCookie } from 'vinxi/http';
