@@ -1,12 +1,12 @@
-import { Toaster as Sonner, ToasterProps } from 'sonner';
+import { Toaster, ToasterProps } from 'sonner';
 
 import { useTheme } from '@/lib/theme/client';
 import { DEFAULT_THEME } from '@/lib/theme/config';
 
-const Toaster = ({ ...props }: ToasterProps) => {
+export const Sonner = ({ ...props }: ToasterProps) => {
   const { theme } = useTheme();
   return (
-    <Sonner
+    <Toaster
       theme={theme ?? DEFAULT_THEME}
       className="toaster group"
       position="top-right"
@@ -26,5 +26,3 @@ const Toaster = ({ ...props }: ToasterProps) => {
     />
   );
 };
-
-export { Toaster };

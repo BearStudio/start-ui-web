@@ -1,46 +1,37 @@
 import { Meta } from '@storybook/react';
-import { ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import { Toaster } from '@/components/ui/sonner';
+import { Sonner } from '@/components/ui/sonner';
 
 export default {
-  title: 'Toaster',
+  title: 'Sonner',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Find everything about sonner in [Sonner docs](https://sonner.emilkowal.ski/toast)',
+      },
+    },
+  },
   decorators: [
     (Story) => (
       <div>
         <Story />
-        <Toaster />
+        <Sonner />
       </div>
     ),
   ],
-} satisfies Meta<typeof Toaster>;
+} satisfies Meta<typeof Sonner>;
 
 export const Default = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <p>
-        Find everything about sonner in{' '}
-        <Button asChild variant="link">
-          <a
-            href="https://sonner.emilkowal.ski/toast"
-            target="_blank"
-            rel="noreferrer"
-          >
-            the dedicated documentation <ExternalLink />
-          </a>
-        </Button>
-      </p>
-      <div>
-        <Button
-          onClick={() =>
-            toast('Hey there, thanks for checking out Start UI! [web]')
-          }
-        >
-          Show toast
-        </Button>
-      </div>
-    </div>
+    <Button
+      onClick={() =>
+        toast.success('Hey there, thanks for checking out Start UI! [web]')
+      }
+    >
+      Show toast
+    </Button>
   );
 };
