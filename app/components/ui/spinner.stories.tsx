@@ -12,7 +12,7 @@ export const Default = () => {
 
 export const Full = () => {
   return (
-    <div className="flex h-48 flex-col">
+    <div className="flex h-48 w-full flex-1 flex-col">
       <Spinner full />
     </div>
   );
