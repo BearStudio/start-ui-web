@@ -26,7 +26,7 @@ export const useInitTheme = (initialTheme: Theme | null) => {
       updateTheme(theme);
     }
     // Update the cookie
-    document.cookie = `${THEME_COOKIE_NAME}=${theme};max-age=2592000;samesite=strict`;
+    document.cookie = `${THEME_COOKIE_NAME}=${theme};max-age=2592000;samesite=lax`;
   }, [theme]);
 
   return {
