@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { authClient } from '@/lib/auth/client';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { orpc } from '@/lib/orpc/client';
+import { useTheme } from '@/lib/theme/client';
 
 import { Button } from '@/components/ui/button';
 
@@ -16,6 +17,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
+  const { theme, setTheme } = useTheme();
   const session = authClient.useSession();
   const { i18n, t } = useTranslation(['common']);
   const [state, setState] = useState(1);
@@ -89,6 +91,15 @@ function Home() {
       ) : (
         <Link to="/login">Login page</Link>
       )}
+      <div>
+        <Button
+          onClick={() => {
+            setTheme(theme === 'dark' ? 'light' : 'dark');
+          }}
+        >
+          Toggle
+        </Button>
+      </div>
     </div>
   );
 }

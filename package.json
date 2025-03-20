@@ -81,7 +81,8 @@
     "vaul": "1.1.2",
     "vinxi": "0.5.3",
     "zod": "3.24.2",
-    "zod-i18n-map": "2.27.0"
+    "zod-i18n-map": "2.27.0",
+    "zustand": "5.0.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.6",
