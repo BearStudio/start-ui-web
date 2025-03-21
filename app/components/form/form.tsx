@@ -9,7 +9,7 @@ type FormProps<TFieldValues extends FieldValues> = StrictUnion<
   | (FormProviderProps<TFieldValues> & {
       noHtmlForm?: false;
       onSubmit?: SubmitHandler<TFieldValues>;
-      formClassName?: string;
+      className?: string;
     })
   | (FormProviderProps<TFieldValues> & {
       noHtmlForm: true;
@@ -18,7 +18,7 @@ type FormProps<TFieldValues extends FieldValues> = StrictUnion<
 
 export const Form = <TFieldValues extends FieldValues>({
   noHtmlForm = false,
-  formClassName,
+  className,
   ...props
 }: FormProps<TFieldValues>) => {
   if (noHtmlForm) {
@@ -39,7 +39,7 @@ export const Form = <TFieldValues extends FieldValues>({
             console.warn('Missing onSubmit method on <Form>');
           }
         }}
-        className={formClassName}
+        className={className}
       >
         {props.children}
       </form>

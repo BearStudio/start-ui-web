@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
+import { Link, useRouter } from '@tanstack/react-router';
+import { ArrowLeftIcon } from 'lucide-react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -24,18 +25,57 @@ export default function PageLoginVerify({
   const router = useRouter();
 
   const form = useForm<FormFieldsLoginVerify>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: zodResolver(zFormFieldsLoginVerify()),
     defaultValues: {
       otp: '',
     },
   });
 
+  const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
+    otp,
+  }) => {
+    const { error } = await authClient.signIn.emailOtp({
+      email: search.email,
+      otp,
+    });
+
+    if (error) {
+      toast.error(error.message || 'Error'); // TODO Better Errors
+      form.setError('otp', {
+        message: 'Invalid code', // TODO translation
+      });
+      return;
+    }
+
+    if (search.redirect) {
+      const redirectUrl = new URL(search.redirect);
+      router.navigate({
+        replace: true,
+        to: redirectUrl.pathname,
+        search: Object.fromEntries(redirectUrl.searchParams),
+      });
+      return;
+    }
+
+    router.navigate({
+      to: '/',
+    });
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl">{t('auth:validate.title')}</h1>
-        <p className="text-sm">
+    <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <Button asChild variant="link">
+          <Link to="/login">
+            <ArrowLeftIcon />
+            {t('common:actions.back')}
+          </Link>
+        </Button>
+        <h1 className="text-lg font-bold text-balance">
+          {t('auth:validate.title')}
+        </h1>
+        <p className="text-sm text-balance text-muted-foreground">
           <Trans
             t={t}
             i18nKey="auth:validate.description"
@@ -49,62 +89,23 @@ export default function PageLoginVerify({
           />
         </p>
       </div>
-
-      <Form
-        {...form}
-        onSubmit={async ({ otp }) => {
-          const { error } = await authClient.signIn.emailOtp({
-            email: search.email,
-            otp,
-          });
-
-          if (error) {
-            toast.error(error.message || 'Error'); // TODO Better Errors
-            return;
-          }
-
-          if (search.redirect) {
-            const redirectUrl = new URL(search.redirect);
-            router.navigate({
-              replace: true,
-              to: redirectUrl.pathname,
-              search: Object.fromEntries(redirectUrl.searchParams),
-            });
-            return;
-          }
-
-          router.navigate({
-            to: '/',
-          });
-        }}
-      >
-        <div className="flex flex-col gap-4">
-          <FormField>
-            <FormFieldController
-              type="otp"
-              control={form.control}
-              name="otp"
-              size="lg"
-              maxLength={6}
-              autoSubmit
-              autoFocus
-              placeholder={t('auth:data.verificationCode.label')}
-            />
-          </FormField>
-
-          <div>
-            <Button
-              loading={form.formState.isSubmitting}
-              type="submit"
-              size="lg"
-              className="flex-1"
-            >
-              {t('auth:validate.actions.confirm')}
-            </Button>
-          </div>
-          {/* <LoginHint /> TODO */}
-        </div>
-      </Form>
-    </div>
+      <div className="grid gap-4">
+        <FormField>
+          <FormFieldController
+            type="otp"
+            control={form.control}
+            name="otp"
+            size="lg"
+            maxLength={6}
+            autoSubmit
+            autoFocus
+            placeholder={t('auth:data.verificationCode.label')}
+          />
+        </FormField>
+        <Button loading={form.formState.isSubmitting} type="submit" size="lg">
+          {t('auth:validate.actions.confirm')}
+        </Button>
+      </div>
+    </Form>
   );
 }
