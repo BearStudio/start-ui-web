@@ -4,14 +4,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { authClient } from '@/lib/auth/client';
-import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { orpc } from '@/lib/orpc/client';
 import { useTheme } from '@/lib/theme/client';
 
 import { Button } from '@/components/ui/button';
+import { LocalSwitcher } from '@/components/ui/local-switcher';
 
 import { Outputs } from '@/server/router';
-import { LocalSwitcher } from '@/components/ui/local-switcher';
 
 export const Route = createFileRoute('/')({
   component: Home,
