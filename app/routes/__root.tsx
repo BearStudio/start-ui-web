@@ -17,6 +17,8 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
 import { THEME_COOKIE_NAME, themes } from '@/lib/theme/config';
 
+import { PageErrorBoundary } from '@/components/page-error-boundary';
+
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/i18n';
 import appCss from '@/styles/app.css?url';
@@ -41,6 +43,13 @@ export const Route = createRootRouteWithContext<{
       i18n.changeLanguage(language);
     }
     return { theme };
+  },
+  errorComponent: (props) => {
+    return (
+      <RootDocument>
+        <PageErrorBoundary {...props} />
+      </RootDocument>
+    );
   },
   component: RootComponent,
   head: () => ({
