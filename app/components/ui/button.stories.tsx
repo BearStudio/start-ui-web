@@ -18,6 +18,7 @@ export const Variants = () => {
       <Button variant="secondary">Secondary</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="destructive-secondary">Destructive</Button>
+      <Button variant="ghost">Ghost</Button>
       <Button variant="link">Link</Button>
     </div>
   );
