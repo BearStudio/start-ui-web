@@ -17,9 +17,9 @@ const inputOTPVariants = cva(
   {
     variants: {
       size: {
-        default: 'size-9',
+        default: 'h-9 w-10',
         sm: 'size-8',
-        lg: 'size-10 md:text-base',
+        lg: 'h-10 w-11 md:text-base',
       },
     },
     defaultVariants: {
