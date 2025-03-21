@@ -39,7 +39,7 @@ export const auth = betterAuth({
       ...permissions,
     }),
     emailOTP({
-      disableSignUp: false,
+      disableSignUp: true,
       expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
       // Use predictable mocked code in dev and demo
       ...(import.meta.env.DEV || envClient.VITE_IS_DEMO

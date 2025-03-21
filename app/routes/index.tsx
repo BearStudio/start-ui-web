@@ -24,6 +24,16 @@ function Home() {
   const queryClient = useQueryClient();
   const planets = useQuery(orpc.planet.list.queryOptions());
 
+  const signOut = useMutation({
+    mutationFn: async () => {
+      const response = await authClient.signOut();
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+      return response.data;
+    },
+  });
+
   const createPlanet = useMutation(
     orpc.planet.create.mutationOptions({
       onSuccess: (data) => {
@@ -86,7 +96,12 @@ function Home() {
       {session.data?.user ? (
         <div>
           {session.data.user.email}
-          <Button onClick={() => authClient.signOut()}>Logout</Button>
+          <Button
+            onClick={() => signOut.mutate()}
+            loading={signOut.isPending || signOut.isSuccess}
+          >
+            Logout
+          </Button>
         </div>
       ) : (
         <Link to="/login">Login page</Link>
