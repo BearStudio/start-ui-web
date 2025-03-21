@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { FormFieldController } from '@/components/form';
-import { onSubmit } from '@/components/form/docst.utils';
+import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';

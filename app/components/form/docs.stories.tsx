@@ -13,7 +13,7 @@ import {
   FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
-import { onSubmit } from '@/components/form/docst.utils';
+import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
