@@ -1,6 +1,19 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { Meta } from '@storybook/react';
+import { useForm } from 'react-hook-form';
 import { useDisclosure } from 'react-use-disclosure';
+import { z } from 'zod';
 
+import { zu } from '@/lib/zod/zod-utils';
+
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldHelper,
+  FormFieldLabel,
+} from '@/components/form';
+import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -27,18 +40,76 @@ export const Controlled = () => {
   const popover = useDisclosure();
 
   return (
-    <>
+    <div className="flex gap-8">
       <Popover
         open={popover.isOpen}
         onOpenChange={(open) => popover.toggle(open)}
       >
-        <PopoverTrigger asChild>
-          <Button>Click me</Button>
-        </PopoverTrigger>
+        <PopoverTrigger>The popover will mount here</PopoverTrigger>
         <PopoverContent>The content</PopoverContent>
       </Popover>
 
-      <Button onClick={() => popover.open()}>Open the popover</Button>
-    </>
+      <Button variant="secondary" onClick={() => popover.open()}>
+        Open the popover
+      </Button>
+    </div>
+  );
+};
+
+type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
+const zFormSchema = () =>
+  z.object({
+    name: zu.string.nonEmpty(z.string(), {
+      required_error: 'Name is required',
+    }),
+  });
+
+const formOptions = {
+  mode: 'onBlur',
+  resolver: zodResolver(zFormSchema()),
+  defaultValues: {
+    name: '',
+  },
+} as const;
+
+export const WithForm = () => {
+  const form = useForm<FormSchema>(formOptions);
+
+  return (
+    <Popover
+      onOpenChange={(open) => {
+        if (!open) {
+          // Using setTimeout to prioritize the closing of the popover instead
+          // of the reset. We are resetting because a required input should reset
+          // itself in a popover
+          setTimeout(() => {
+            form.reset();
+          });
+        }
+      }}
+    >
+      <PopoverTrigger asChild>
+        <Button>Info</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Form {...form} onSubmit={onSubmit}>
+          <div className="flex flex-col gap-4">
+            <FormField>
+              <FormFieldLabel>Name</FormFieldLabel>
+              <FormFieldController
+                type="text"
+                control={form.control}
+                name="name"
+                placeholder="Buzz Pawdrin"
+              />
+              <FormFieldHelper>Help</FormFieldHelper>
+            </FormField>
+            <div>
+              <Button type="submit">Submit</Button>
+            </div>
+          </div>
+        </Form>
+      </PopoverContent>
+    </Popover>
   );
 };
