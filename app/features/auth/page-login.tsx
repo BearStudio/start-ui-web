@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -38,42 +38,43 @@ export default function PageLogin({
   });
 
   const form = useForm<FormFieldsLogin>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: zodResolver(zFormFieldsLogin()),
     defaultValues: {
       email: '',
     },
   });
 
+  const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
+    const { error } = await authClient.emailOtp.sendVerificationOtp({
+      email,
+      type: 'sign-in',
+    });
+
+    if (error) {
+      toast.error(error.message || 'Error'); // TODO Better Errors
+      return;
+    }
+
+    router.navigate({
+      to: '/login/verify',
+      search: {
+        redirect: search.redirect,
+        email,
+      },
+    });
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl">{t('auth:login.appTitle')}</h1>
+    <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <p className="text-sm text-balance text-muted-foreground">
+          Enter your email below to login to your account
+        </p>
       </div>
-
-      <Form
-        {...form}
-        onSubmit={async ({ email }) => {
-          const { error } = await authClient.emailOtp.sendVerificationOtp({
-            email,
-            type: 'sign-in',
-          });
-
-          if (error) {
-            toast.error(error.message || 'Error'); // TODO Better Errors
-            return;
-          }
-
-          router.navigate({
-            to: '/login/verify',
-            search: {
-              redirect: search.redirect,
-              email,
-            },
-          });
-        }}
-      >
-        <div className="flex flex-col gap-4">
+      <div className="grid gap-6">
+        <div className="grid gap-4">
           <FormField>
             <FormFieldController
               type="email"
@@ -83,44 +84,40 @@ export default function PageLogin({
               placeholder={t('auth:data.email.label')}
             />
           </FormField>
-
-          {/* <LoginHint /> TODO */}
-
-          <div>
-            <Button
-              loading={form.formState.isSubmitting}
-              type="submit"
-              size="lg"
-              className="flex-1"
-            >
-              {t('auth:login.actions.login')}
-            </Button>
-          </div>
+          <Button
+            loading={form.formState.isSubmitting}
+            type="submit"
+            size="lg"
+            className="w-full"
+          >
+            {t('auth:login.actions.login')}
+          </Button>
         </div>
-      </Form>
-      <div className="flex flex-wrap gap-4">
+        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
         <Button
+          className="w-full"
+          variant="secondary"
           loading={
             social.variables === 'github' &&
             (social.isPending || social.isSuccess)
           }
           type="button"
+          size="lg"
           onClick={() => social.mutate('github')}
         >
-          GitHub
-        </Button>
-
-        <Button
-          loading={
-            social.variables === 'apple' &&
-            (social.isPending || social.isSuccess)
-          }
-          type="button"
-          onClick={() => social.mutate('apple')}
-        >
-          Apple (not enabled)
+          Login with GitHub
         </Button>
       </div>
-    </div>
+      <div className="text-center text-sm">
+        Don&apos;t have an account?{' '}
+        <a href="#" className="underline underline-offset-4">
+          Sign up
+        </a>
+      </div>
+    </Form>
   );
 }
