@@ -90,7 +90,7 @@ export default function PageLogin({
             size="lg"
             className="w-full"
           >
-            {t('auth:login.actions.login')}
+            Login with email
           </Button>
         </div>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
