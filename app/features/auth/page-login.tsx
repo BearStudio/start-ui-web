@@ -100,21 +100,21 @@ export default function PageLogin({
       </Form>
       <div className="flex flex-wrap gap-4">
         <Button
-          loading={social.isPending}
+          loading={
+            social.variables === 'github' &&
+            (social.isPending || social.isSuccess)
+          }
           type="button"
           onClick={() => social.mutate('github')}
         >
           GitHub
         </Button>
+
         <Button
-          loading={social.isPending}
-          type="button"
-          onClick={() => social.mutate('discord')}
-        >
-          Discord
-        </Button>
-        <Button
-          loading={social.isPending}
+          loading={
+            social.variables === 'apple' &&
+            (social.isPending || social.isSuccess)
+          }
           type="button"
           onClick={() => social.mutate('apple')}
         >
