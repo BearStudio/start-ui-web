@@ -64,20 +64,20 @@ const zFormSchema = () =>
     }),
   });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-  defaultValues: {
-    name: '',
-  },
-} as const;
-
 export const WithForm = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm<FormSchema>({
+    mode: 'onSubmit',
+    resolver: zodResolver(zFormSchema()),
+    defaultValues: {
+      name: '',
+    },
+  });
+  const popover = useDisclosure();
 
   return (
     <Popover
       onOpenChange={(open) => {
+        popover.toggle(open);
         if (!open) {
           // Using setTimeout to prioritize the closing of the popover instead
           // of the reset. We are resetting because a required input should reset
@@ -87,12 +87,20 @@ export const WithForm = () => {
           });
         }
       }}
+      open={popover.isOpen}
     >
       <PopoverTrigger asChild>
         <Button>Info</Button>
       </PopoverTrigger>
       <PopoverContent>
-        <Form {...form} onSubmit={onSubmit}>
+        <Form
+          {...form}
+          onSubmit={(values) => {
+            onSubmit(values);
+            popover.close();
+            form.reset();
+          }}
+        >
           <div className="flex flex-col gap-4">
             <FormField>
               <FormFieldLabel>Name</FormFieldLabel>
