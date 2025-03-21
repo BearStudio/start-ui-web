@@ -35,7 +35,7 @@ export const LocalSwitcher = () => {
           <ChevronsUpDownIcon className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-36 p-0">
         <Command>
           {AVAILABLE_LANGUAGES.length > 6 && (
             <CommandInput placeholder="Search language..." />
