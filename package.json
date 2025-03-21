@@ -60,6 +60,7 @@
     "better-auth": "1.2.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "cmdk": "1.0.0",
     "colorette": "2.0.20",
     "dayjs": "1.11.13",
     "i18next": "24.2.3",

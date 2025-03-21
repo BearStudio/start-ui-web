@@ -11,6 +11,7 @@ import { useTheme } from '@/lib/theme/client';
 import { Button } from '@/components/ui/button';
 
 import { Outputs } from '@/server/router';
+import { LocalSwitcher } from '@/components/ui/local-switcher';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/')({
 function Home() {
   const { theme, setTheme } = useTheme();
   const session = authClient.useSession();
-  const { i18n, t } = useTranslation(['common']);
+  const { t } = useTranslation(['common']);
   const [state, setState] = useState(1);
   const queryClient = useQueryClient();
   const planets = useQuery(orpc.planet.list.queryOptions());
@@ -55,19 +56,7 @@ function Home() {
         >
           Counter {state}
         </Button>
-        {AVAILABLE_LANGUAGES.map(({ key }) => (
-          <Button
-            key={key}
-            className="uppercase"
-            variant="secondary"
-            disabled={i18n.language === key}
-            onClick={() => {
-              i18n.changeLanguage(key);
-            }}
-          >
-            {key}
-          </Button>
-        ))}
+        <LocalSwitcher />
         <Button
           loading={createPlanet.isPending}
           onClick={() => {
