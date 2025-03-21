@@ -12,6 +12,13 @@
     "paths": {
       "@/*": ["./app/*"]
     },
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "plugins": [
+      {
+        "name": "ts-plugin-sort-import-suggestions",
+        "moveUpPatterns": ["@/", "\\.{1,2}/"],
+        "moveDownPatterns": ["lucide-react", "@radix-ui", "@react-email"]
+      }
+    ]
   }
 }
