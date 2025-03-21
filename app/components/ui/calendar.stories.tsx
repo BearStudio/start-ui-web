@@ -6,6 +6,14 @@ import { Calendar } from '@/components/ui/calendar';
 
 export default {
   title: 'Calendar',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Calendar component uses [React Day Picker](https://daypicker.dev/) behind the scene. Most of its implementation is inspired by [shadcn and Luca Ziegler Félix](https://date-picker.luca-felix.com/).',
+      },
+    },
+  },
 } satisfies Meta<typeof Calendar>;
 
 export const Default = () => {
@@ -33,4 +41,21 @@ export const Controlled = () => {
       }
     />
   );
+};
+
+export const WithStartAndEndMonths = () => {
+  return (
+    <Calendar
+      startMonth={dayjs().startOf('year').subtract(2, 'months').toDate()}
+      endMonth={dayjs().endOf('year').add(2, 'months').toDate()}
+    />
+  );
+};
+
+export const MultipleMonths = () => {
+  return <Calendar numberOfMonths={3} />;
+};
+
+export const Dropdowns = () => {
+  return <Calendar captionLayout="dropdown" />;
 };

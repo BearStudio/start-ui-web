@@ -140,6 +140,9 @@ importers:
       tailwindcss-animate:
         specifier: 1.0.7
         version: 1.0.7(tailwindcss@4.0.14)
+      ts-pattern:
+        specifier: 5.6.2
+        version: 5.6.2
       vaul:
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@19.0.4(@types/react@19.0.11))(@types/react@19.0.11)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -5959,6 +5962,9 @@ packages:
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
+
+  ts-pattern@5.6.2:
+    resolution: {integrity: sha512-d4IxJUXROL5NCa3amvMg6VQW2HVtZYmUTPfvVtO7zJWGYLJ+mry9v2OmYm+z67aniQoQ8/yFNadiEwtNS9qQiw==}
 
   ts-plugin-sort-import-suggestions@1.0.4:
     resolution: {integrity: sha512-85n5lm2OQQ+b7aRNK9omU1gmjMNXRsgeLwojm5u4OSY5sVBkAHTcgMQPEeHMNlyyfFW0uXnwgqAU0pNfhD96Bw==}
@@ -12895,6 +12901,8 @@ snapshots:
       typescript: 5.8.2
 
   ts-dedent@2.2.0: {}
+
+  ts-pattern@5.6.2: {}
 
   ts-plugin-sort-import-suggestions@1.0.4: {}
 

@@ -1,9 +1,12 @@
 'use client';
 
-// https://date-picker.luca-felix.com/
-
 import dayjs from 'dayjs';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+} from 'lucide-react';
 import * as React from 'react';
 import {
   DayPicker,
@@ -12,6 +15,7 @@ import {
   labelPrevious,
   useDayPicker,
 } from 'react-day-picker';
+import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -104,7 +108,7 @@ function Calendar({
     props.captionClassName
   );
   const _captionLabelClassName = cn(
-    'truncate text-sm font-medium',
+    'flex items-center justify-center gap-1 truncate text-sm font-medium',
     props.captionLabelClassName
   );
   const buttonNavClassName = buttonVariants({
@@ -198,10 +202,23 @@ function Calendar({
         outside: _outsideClassName,
         disabled: _disabledClassName,
         hidden: _hiddenClassName,
+
+        dropdowns: cn('flex flex-1 justify-between [&>span]:flex'),
+        dropdown: cn(
+          'cursor-inherit leading-inherit absolute inset-0 m-0 w-full appearance-none border-none p-0 opacity-0'
+        ),
+        dropdown_root: cn('relative'),
       }}
       components={{
         Chevron: ({ orientation }) => {
-          const Icon = orientation === 'left' ? ChevronLeft : ChevronRight;
+          const Icon = match(orientation)
+            .with('left', () => ChevronLeft)
+            .with('right', () => ChevronRight)
+            .with('down', () => ChevronDown)
+            .with('up', () => ChevronUp)
+            .with(undefined, () => ChevronDown)
+            .exhaustive();
+
           return <Icon className="h-4 w-4" />;
         },
         Nav: ({ className }) => (
