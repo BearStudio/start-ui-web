@@ -9,3 +9,7 @@ export default {
 export const Default = () => {
   return <LocalSwitcher />;
 };
+
+export const IconOnly = () => {
+  return <LocalSwitcher iconOnly />;
+};

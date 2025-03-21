@@ -1,16 +1,14 @@
-import { CheckIcon, ChevronsUpDownIcon, LanguagesIcon } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { CheckIcon, ChevronsUpDownIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useDisclosure } from 'react-use-disclosure';
 
-import { AVAILABLE_LANGUAGES, LanguageKey } from '@/lib/i18n/constants';
 import { cn } from '@/lib/tailwind/utils';
+import { useTheme } from '@/lib/theme/client';
+import { DEFAULT_THEME, Theme, themes } from '@/lib/theme/config';
 
 import { Button } from '@/components/ui/button';
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
@@ -20,8 +18,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
-  const { i18n, t } = useTranslation(['common']);
+export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
+  const { theme, setTheme } = useTheme();
   const popover = useDisclosure();
   return (
     <Popover
@@ -35,39 +33,37 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
           role="combobox"
           aria-expanded={popover.isOpen}
         >
-          <LanguagesIcon className="opacity-50" />
+          {theme === 'dark' ? (
+            <MoonIcon className="opacity-50" />
+          ) : (
+            <SunIcon className="opacity-50" />
+          )}
           <span className={cn(props.iconOnly && 'sr-only')}>
-            {t(`common:languages.${i18n.language as LanguageKey}`)}
+            {theme ?? DEFAULT_THEME} {/* TODO translation */}
           </span>
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-36 p-0">
+      <PopoverContent className="w-24 p-0">
         <Command>
-          {AVAILABLE_LANGUAGES.length > 6 && (
-            <CommandInput placeholder="Search language..." />
-          )}
           <CommandList>
-            <CommandEmpty>No language found</CommandEmpty>
             <CommandGroup>
-              {AVAILABLE_LANGUAGES.map((language) => (
+              {themes.map((item) => (
                 <CommandItem
-                  key={language.key}
-                  value={language.key}
+                  key={item}
+                  value={item}
                   onSelect={(currentValue) => {
-                    i18n.changeLanguage(currentValue);
+                    setTheme(currentValue as Theme);
                     popover.close();
                   }}
                 >
                   <CheckIcon
                     className={cn(
                       'mr-2 size-4',
-                      i18n.language === language.key
-                        ? 'opacity-100'
-                        : 'opacity-0'
+                      theme === item ? 'opacity-100' : 'opacity-0'
                     )}
                   />
-                  {t(`common:languages.${language.key}`)}
+                  {item} {/* TODO translation */}
                 </CommandItem>
               ))}
             </CommandGroup>
