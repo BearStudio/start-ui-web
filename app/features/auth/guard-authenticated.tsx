@@ -20,8 +20,14 @@ export const GuardAuthenticated = ({
     return <Spinner full className="opacity-60" />;
   }
 
-  if (session.error) {
-    return <div>Something wrong happened</div>; // TODO
+  if (session.error && session.error.status > 0) {
+    return (
+      <div>
+        <p>Something wrong happened (auth guard)</p>
+        <p>{session.error.message}</p>
+        <pre>{JSON.stringify(session.error, null, 2)}</pre>
+      </div>
+    ); // TODO
   }
 
   if (!session.data?.user) {
