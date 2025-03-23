@@ -289,13 +289,13 @@ function Nav({
     if (navView === 'years') {
       return (
         (startMonth &&
-          dayjs(new Date(displayYears.from - 1, 0, 1)).diff(
-            startMonth,
-            'days'
-          ) < 0) ||
+          dayjs((displayYears.from - 1).toString())
+            .startOf('year')
+            .isBefore(startMonth)) ||
         (endMonth &&
-          dayjs(new Date(displayYears.from - 1, 0, 1)).diff(endMonth, 'days') >
-            0)
+          dayjs((displayYears.from - 1).toString())
+            .startOf('year')
+            .isAfter(endMonth))
       );
     }
     return !previousMonth;
@@ -305,10 +305,13 @@ function Nav({
     if (navView === 'years') {
       return (
         (startMonth &&
-          dayjs(new Date(displayYears.to + 1, 0, 1)).diff(startMonth, 'days') <
-            0) ||
+          dayjs((displayYears.to + 1).toString())
+            .startOf('year')
+            .isBefore(startMonth)) ||
         (endMonth &&
-          dayjs(new Date(displayYears.to + 1, 0, 1)).diff(endMonth, 'days') > 0)
+          dayjs((displayYears.to + 1).toString())
+            .startOf('year')
+            .isAfter(endMonth))
       );
     }
     return !nextMonth;
