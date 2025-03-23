@@ -79,7 +79,8 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const { i18n } = useTranslation();
-  const locale = REACT_DAY_PICKER_LOCALE_MAP[i18n.language] ?? enUS;
+
+  const locale = REACT_DAY_PICKER_LOCALE_MAP[i18n?.language] ?? enUS;
 
   const [navView, setNavView] = React.useState<NavView>('days');
   const [displayYears, setDisplayYears] = React.useState<{
