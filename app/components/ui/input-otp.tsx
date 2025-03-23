@@ -53,7 +53,11 @@ function InputOTP({
           'flex w-fit items-center gap-2 has-disabled:opacity-50',
           containerClassName
         )}
-        className={cn('disabled:cursor-not-allowed', className)}
+        className={cn(
+          '!text-base', // Prevent zoom on iOS (no impact on visual render)
+          'disabled:cursor-not-allowed',
+          className
+        )}
         {...props}
       />
     </InputOTPContext.Provider>
