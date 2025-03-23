@@ -15,11 +15,15 @@ import {
   labelPrevious,
   useDayPicker,
 } from 'react-day-picker';
+import { enUS } from 'react-day-picker/locale';
+import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+
+import { REACT_DAY_PICKER_LOCALE_MAP } from '@/locales/react-day-picker';
 
 export type CalendarProps = DayPickerProps & {
   /**
@@ -74,6 +78,9 @@ function Calendar({
   numberOfMonths,
   ...props
 }: CalendarProps) {
+  const { i18n } = useTranslation();
+  const locale = REACT_DAY_PICKER_LOCALE_MAP[i18n.language] ?? enUS;
+
   const [navView, setNavView] = React.useState<NavView>('days');
   const [displayYears, setDisplayYears] = React.useState<{
     from: number;
@@ -174,6 +181,7 @@ function Calendar({
 
   return (
     <DayPicker
+      locale={locale}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       style={{
