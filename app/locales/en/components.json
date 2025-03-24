@@ -1,1 +1,7 @@
-{}
+{
+  "pageErrorBoundary": {
+    "title": "Something went wrong",
+    "tryAgain": "Try Again",
+    "goBack": "Go Back"
+  }
+}

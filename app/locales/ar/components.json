@@ -1,1 +1,7 @@
-{}
+{
+  "pageErrorBoundary": {
+    "title": "حدث خطأ ما",
+    "tryAgain": "حاول مرة أخرى",
+    "goBack": "رجوع"
+  }
+}
