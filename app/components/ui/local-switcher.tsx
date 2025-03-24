@@ -30,6 +30,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
     >
       <PopoverTrigger asChild>
         <Button
+          type="button"
           variant={props.iconOnly ? 'ghost' : 'link'}
           size={props.iconOnly ? 'icon' : 'default'}
           role="combobox"
