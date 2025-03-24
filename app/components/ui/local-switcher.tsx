@@ -43,7 +43,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-36 p-0">
+      <PopoverContent className="w-fit p-0">
         <Command>
           {AVAILABLE_LANGUAGES.length > 6 && (
             <CommandInput placeholder="Search language..." />
@@ -62,7 +62,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
                 >
                   <CheckIcon
                     className={cn(
-                      'mr-2 size-4',
+                      'size-4',
                       i18n.language === language.key
                         ? 'opacity-100'
                         : 'opacity-0'

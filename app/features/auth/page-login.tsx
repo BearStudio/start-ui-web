@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -52,7 +52,11 @@ export default function PageLogin({
     });
 
     if (error) {
-      toast.error(error.message || 'Error'); // TODO Better Errors
+      toast.error(
+        t(
+          `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+        )
+      );
       return;
     }
 
@@ -68,9 +72,9 @@ export default function PageLogin({
   return (
     <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <h1 className="text-2xl font-bold">{t('auth:pageLogin.title')}</h1>
         <p className="text-sm text-balance text-muted-foreground">
-          Enter your email below to login to your account
+          {t('auth:pageLogin.description')}
         </p>
       </div>
       <div className="grid gap-6">
@@ -81,7 +85,7 @@ export default function PageLogin({
               control={form.control}
               name="email"
               size="lg"
-              placeholder={t('auth:data.email.label')}
+              placeholder={t('auth:fields.email.label')}
             />
           </FormField>
           <Button
@@ -90,12 +94,12 @@ export default function PageLogin({
             size="lg"
             className="w-full"
           >
-            Login with email
+            {t('auth:pageLogin.loginWithEmail')}
           </Button>
         </div>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            Or continue with
+            {t('auth:pageLogin.spacer')}
           </span>
         </div>
         <Button
@@ -109,15 +113,15 @@ export default function PageLogin({
           size="lg"
           onClick={() => social.mutate('github')}
         >
-          Login with GitHub
+          {t('auth:pageLogin.loginWithSocial', { provider: 'GitHub' })}
         </Button>
       </div>
-      <div className="text-center text-sm">
-        Don&apos;t have an account?{' '}
-        <a href="#" className="underline underline-offset-4">
-          Sign up
-        </a>
-      </div>
+      <Link to="/" className="group text-center text-sm">
+        {t('auth:pageLogin.noAccount')}{' '}
+        <span className="font-bold underline-offset-4 group-hover:underline">
+          {t('auth:pageLogin.signup')}
+        </span>
+      </Link>
     </Form>
   );
 }
