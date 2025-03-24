@@ -2,12 +2,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 
-import { Form, FormField, FormFieldController } from '@/components/form';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -41,9 +46,13 @@ export default function PageLoginVerify({
     });
 
     if (error) {
-      toast.error(error.message || 'Error'); // TODO Better Errors
+      toast.error(
+        t(
+          `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+        )
+      );
       form.setError('otp', {
-        message: 'Invalid code', // TODO translation
+        message: t('auth:fields.otp.invalid'),
       });
       return;
     }
@@ -67,7 +76,7 @@ export default function PageLoginVerify({
     <Form
       {...form}
       onSubmit={submitHandler}
-      className="flex flex-col gap-6 pb-12"
+      className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-2">
         <Button asChild variant="link">
@@ -77,31 +86,29 @@ export default function PageLoginVerify({
           </Link>
         </Button>
         <h1 className="text-lg font-bold text-balance">
-          Verification {/* TODO translation */}
+          {t('auth:pageLoginVerify.title')}
         </h1>
         <p className="text-sm text-balance text-muted-foreground">
-          If you have an account, we have sent a code to{' '}
-          <strong>{search.email}</strong>. Enter it below.
-          {/* TODO translation */}
-          {/* <Trans
+          <Trans
             t={t}
-            i18nKey="auth:validate.description"
+            i18nKey="auth:pageLoginVerify.description"
             values={{
               email: search.email,
-              expiration: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
             }}
             components={{
               b: <strong />,
             }}
-          /> */}
+          />
         </p>
         <p className="text-xs text-muted-foreground">
-          The code expires shortly ({AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES}{' '}
-          minutes).
+          {t('auth:pageLoginVerify.expireHint', {
+            expiration: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
+          })}
         </p>
       </div>
       <div className="grid gap-4">
         <FormField>
+          <FormFieldLabel>{t('auth:fields.otp.label')}</FormFieldLabel>
           <FormFieldController
             type="otp"
             control={form.control}
@@ -110,11 +117,10 @@ export default function PageLoginVerify({
             maxLength={6}
             autoSubmit
             autoFocus
-            placeholder={t('auth:data.verificationCode.label')}
           />
         </FormField>
         <Button loading={form.formState.isSubmitting} type="submit" size="lg">
-          {t('auth:validate.actions.confirm')}
+          {t('auth:pageLoginVerify.confirm')}
         </Button>
       </div>
     </Form>

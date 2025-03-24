@@ -1,29 +1,16 @@
-import 'dayjs/locale/sw';
+import zod from 'zod-i18n-map/locales/en/zod.json'; // Using English as fallback since Swahili is not available in zod-i18n-map
+import 'dayjs/locale/sw'; // If available, otherwise use 'dayjs/locale/en'
 
-import account from './account.json';
-import admin from './admin.json';
-import adminDashboard from './adminDashboard.json';
-import app from './app.json';
-import appHome from './appHome.json';
 import auth from './auth.json';
 import common from './common.json';
 import components from './components.json';
 import emails from './emails.json';
-import management from './management.json';
-import repositories from './repositories.json';
-import users from './users.json';
-
+import repository from './repository.json';
 export default {
-  account,
-  admin,
-  adminDashboard,
-  app,
-  appHome,
   auth,
   common,
   components,
   emails,
-  management,
-  repositories,
-  users,
+  repository,
+  zod,
 } as const;
