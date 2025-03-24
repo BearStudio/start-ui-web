@@ -34,7 +34,7 @@ export const previewEmailRoute = async (
 ) => {
   let Email;
   try {
-    const EmailModule = await import(`../../emails/templates/${template}.tsx`);
+    const EmailModule = await import(`../emails/templates/${template}.tsx`);
     Email = EmailModule.default;
   } catch {
     return new Response('Template not found', {

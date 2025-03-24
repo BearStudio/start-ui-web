@@ -1,4 +1,5 @@
 import { CheckIcon, ChevronsUpDownIcon, MoonIcon, SunIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useDisclosure } from 'react-use-disclosure';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -19,6 +20,7 @@ import {
 } from '@/components/ui/popover';
 
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
+  const { t } = useTranslation(['common']);
   const { theme, setTheme } = useTheme();
   const popover = useDisclosure();
   return (
@@ -40,12 +42,12 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
             <SunIcon className="opacity-50" />
           )}
           <span className={cn(props.iconOnly && 'sr-only')}>
-            {theme ?? DEFAULT_THEME} {/* TODO translation */}
+            {t(`common:themes.${theme ?? DEFAULT_THEME}`)}
           </span>
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-24 p-0">
+      <PopoverContent className="w-fit p-0">
         <Command>
           <CommandList>
             <CommandGroup>
@@ -60,11 +62,11 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
                 >
                   <CheckIcon
                     className={cn(
-                      'mr-2 size-4',
+                      'size-4',
                       theme === item ? 'opacity-100' : 'opacity-0'
                     )}
                   />
-                  {item} {/* TODO translation */}
+                  {t(`common:themes.${item}`)}
                 </CommandItem>
               ))}
             </CommandGroup>

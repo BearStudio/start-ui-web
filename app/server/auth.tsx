@@ -33,7 +33,7 @@ export const auth = betterAuth({
   },
   plugins: [
     openAPI({
-      disableDefaultReference: true, // Use custom exposition in /routes/api folder
+      disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
     admin({
       ...permissions,
@@ -52,13 +52,7 @@ export const auth = betterAuth({
           subject: i18n.t('emails:loginCode.subject', {
             lng: getUserLanguage(),
           }),
-          template: (
-            <EmailLoginCode
-              language={getUserLanguage()}
-              name={''} // TODO better handling? should we check if the user exist?
-              code={otp}
-            />
-          ),
+          template: <EmailLoginCode language={getUserLanguage()} code={otp} />,
         });
       },
     }),

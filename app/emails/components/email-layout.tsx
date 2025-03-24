@@ -5,13 +5,15 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 import { styles } from '@/emails/styles';
 
-interface LayoutProps {
+export const EmailLayout = ({
+  preview,
+  children,
+  language,
+}: {
   preview: string;
   children: ReactNode;
   language: string;
-}
-
-export const Layout = ({ preview, children, language }: LayoutProps) => {
+}) => {
   return (
     <Html
       lang={language}

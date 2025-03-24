@@ -5,28 +5,14 @@
     "ar": "Arabic",
     "sw": "Swahili"
   },
+  "themes": {
+    "light": "Light",
+    "dark": "Dark"
+  },
   "actions": {
     "back": "Back",
-    "activate": "Activate",
     "cancel": "Cancel",
-    "deactivate": "Deactivate",
     "delete": "Delete",
     "edit": "Edit"
-  },
-  "or": "or",
-  "confirmDiscardChanges": {
-    "title": "Leave the page?",
-    "message": "You are about to leave the page without saving your changes.",
-    "confirmText": "Leave without saving",
-    "cancelText": "Stay on the page"
-  },
-  "files": {
-    "errors": {
-      "tooLarge": "File too large",
-      "typeNotAllowed": "File type not allowed"
-    }
-  },
-  "filter": "Filter",
-  "clear": "Clear",
-  "submit": "Submit"
+  }
 }

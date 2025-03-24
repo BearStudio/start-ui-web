@@ -1,32 +1,18 @@
 {
   "languages": {
-    "en": "Anglais",
-    "fr": "Français",
-    "ar": "Arabe",
-    "sw": "Swahili"
+    "en": "Kiingereza",
+    "fr": "Kifaransa",
+    "ar": "Kiarabu",
+    "sw": "Kiswahili"
+  },
+  "themes": {
+    "light": "Mwanga",
+    "dark": "Giza"
   },
   "actions": {
-    "activate": "Wezesha",
-    "cancel": "Kughairi",
-    "deactivate": "Zima",
-    "delete": "Ili kufuta",
-    "edit": "Hariri",
-    "back": "Nyuma"
-  },
-  "or": "au",
-  "confirmDiscardChanges": {
-    "cancelText": "Kaa kwenye ukurasa",
-    "confirmText": "Ondoka bila kuhifadhi",
-    "message": "Unakaribia kuondoka kwenye ukurasa bila kuhifadhi mabadiliko yako.",
-    "title": "Ungependa kuondoka kwenye ukurasa?"
-  },
-  "filter": "Chuja",
-  "clear": "Wazi",
-  "submit": "Wasilisha",
-  "files": {
-    "errors": {
-      "tooLarge": "Faili kubwa sana",
-      "typeNotAllowed": "Aina ya faili hairuhusiwi"
-    }
+    "back": "Rudi",
+    "cancel": "Ghairi",
+    "delete": "Futa",
+    "edit": "Hariri"
   }
 }

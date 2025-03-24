@@ -8,8 +8,8 @@ export const zFormFieldsLogin = () =>
   z.object({
     email: zu.string.email(
       z.string({
-        required_error: t('users:data.email.required'),
-        invalid_type_error: t('users:data.email.invalid'),
+        required_error: t('auth:fields.email.required'),
+        invalid_type_error: t('auth:fields.email.invalid'),
       })
     ),
   });
@@ -21,8 +21,8 @@ export const zFormFieldsLoginVerify = () =>
   z.object({
     otp: z
       .string({
-        invalid_type_error: t('auth:data.verificationCode.invalid'),
-        required_error: t('auth:data.verificationCode.required'),
+        invalid_type_error: t('auth:fields.otp.invalid'),
+        required_error: t('auth:fields.otp.required'),
       })
-      .length(6, t('auth:data.verificationCode.invalid')),
+      .length(6, t('auth:fields.otp.invalidLength')),
   });

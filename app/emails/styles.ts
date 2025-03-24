@@ -26,6 +26,7 @@ export const styles = {
     color: theme.colors.primary,
     fontFamily: theme.fontFamily.sans,
     textDecoration: 'underline',
+    textUnderlineOffset: 4,
   },
   button: {
     fontSize: '14px',
@@ -51,16 +52,15 @@ export const styles = {
   },
   code: {
     display: 'inline-block',
-    padding: '12px 16px',
+    padding: '16px 18px',
     wordBreak: 'break-all',
     letterSpacing: '2px',
     margin: '8px 0',
     fontSize: '32px',
     fontFamily: theme.fontFamily.code,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: theme.colors.primary,
     borderRadius: '5px',
-    border: '1px solid #eee',
-    color: theme.colors.text,
+    color: theme.colors.white,
   },
   footer: {
     color: theme.colors.textMuted,

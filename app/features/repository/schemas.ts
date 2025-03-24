@@ -9,17 +9,17 @@ export const zRepository = () =>
   z.object({
     id: z.string().cuid(),
     name: zu.string.nonEmpty(z.string(), {
-      required_error: t('repositories:data.name.required'),
+      required_error: t('repository:fields.name.required'),
     }),
     link: zu.string
       .nonEmpty(z.string(), {
-        required_error: t('repositories:data.link.required'),
+        required_error: t('repository:fields.link.required'),
       })
       .pipe(
         z
           .string()
-          .min(4, t('repositories:data.link.tooSmall', { min: 4 }))
-          .includes('.', { message: t('repositories:data.link.missingDot') })
+          .min(4, t('repository:fields.link.tooSmall', { min: 4 }))
+          .includes('.', { message: t('repository:fields.link.missingDot') })
       )
       .transform((v) => (v.startsWith('http') ? v : `https://${v}`)),
     description: zu.string.nonEmptyNullable(z.string()),
