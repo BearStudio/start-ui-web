@@ -73,7 +73,6 @@ export const AppLayoutPage = ({
     <AppLayoutPageContext.Provider value={value}>
       <Flex
         position="relative"
-        pt="safe-top"
         as={Scrollbars}
         direction="column"
         flex={1}
@@ -86,7 +85,7 @@ export const AppLayoutPage = ({
         }}
         {...rest}
       >
-        <PageContainer pt={4} pb={16} {...containerProps}>
+        <PageContainer mt="safe-top" pt={4} pb={16} {...containerProps}>
           {children}
         </PageContainer>
         <Box w="full" h="0" pb="safe-bottom" />

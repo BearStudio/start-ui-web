@@ -12,7 +12,7 @@ export const Viewport = (props: FlexProps) => {
       // Allows new units used if supported
       style={{
         maxWidth: '100dvw',
-        minHeight: '100dvh',
+        minHeight: '100lvh',
       }}
       {...props}
     />

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 
 import { Document } from '@/app/Document';
 import { NextLoader } from '@/app/NextLoader';
@@ -13,6 +13,12 @@ export const metadata: Metadata = {
   },
   applicationName: 'Start UI [web]',
   description: 'Opinionated UI starter',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default async function RootLayout({
