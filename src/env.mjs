@@ -69,6 +69,16 @@ export const env = createEnv({
           value ??
           (process.env.NODE_ENV === 'development' ? 'warning' : 'success')
       ),
+    NEXT_PUBLIC_DEV_TOOLS_ENABLED: z
+      .enum(['true', 'false'])
+      .optional()
+      .transform((value) => {
+        if (value) {
+          return value === 'true';
+        }
+
+        return process.env.NODE_ENV === 'development' ? true : false;
+      }),
     NEXT_PUBLIC_NODE_ENV: zNodeEnv(),
   },
 
@@ -100,6 +110,7 @@ export const env = createEnv({
     NEXT_PUBLIC_ENV_COLOR_SCHEME: process.env.NEXT_PUBLIC_ENV_COLOR_SCHEME,
     NEXT_PUBLIC_ENV_NAME: process.env.NEXT_PUBLIC_ENV_NAME,
     NEXT_PUBLIC_ENV_EMOJI: process.env.NEXT_PUBLIC_ENV_EMOJI,
+    NEXT_PUBLIC_DEV_TOOLS_ENABLED: process.env.NEXT_PUBLIC_DEV_TOOLS_ENABLED,
     NEXT_PUBLIC_IS_DEMO: process.env.NEXT_PUBLIC_IS_DEMO,
     NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
   },
