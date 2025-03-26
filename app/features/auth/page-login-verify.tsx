@@ -20,6 +20,7 @@ import {
   zFormFieldsLoginVerify,
 } from '@/features/auth/schemas';
 import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
+import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
 
 export default function PageLoginVerify({
   search,
@@ -124,6 +125,7 @@ export default function PageLoginVerify({
         <Button loading={form.formState.isSubmitting} type="submit" size="lg">
           {t('auth:pageLoginVerify.confirm')}
         </Button>
+        <LoginEmailOtpHint />
       </div>
     </Form>
   );
