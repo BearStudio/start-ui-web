@@ -8,7 +8,7 @@ export const Sonner = ({ ...props }: ToasterProps) => {
   return (
     <Toaster
       theme={theme ?? DEFAULT_THEME}
-      className="toaster group"
+      className="toaster group mt-safe-top"
       position="top-right"
       offset={16}
       toastOptions={{

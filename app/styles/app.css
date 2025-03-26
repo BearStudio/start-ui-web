@@ -32,6 +32,11 @@
   --color-negative-800: oklch(0.444 0.177 26.899);
   --color-negative-900: oklch(0.396 0.141 25.723);
   --color-negative-950: oklch(0.258 0.092 26.042);
+
+  --spacing-safe-top: env(safe-area-inset-top);
+  --spacing-safe-bottom: env(safe-area-inset-bottom);
+  --spacing-safe-left: env(safe-area-inset-left);
+  --spacing-safe-right: env(safe-area-inset-right);
 }
 
 :root {
