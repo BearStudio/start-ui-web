@@ -69,14 +69,12 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
                     )}
                   />
                   <span className="flex flex-col">
-                    <span>
-                      {t(`common:languages.${language.key}`, {
-                        lng: language.key,
-                      })}
-                    </span>
+                    <span>{t(`common:languages.${language.key}`)}</span>
                     {language.key !== i18n.language && (
                       <span className="text-xs text-muted-foreground">
-                        {t(`common:languages.${language.key}`)}
+                        {t(`common:languages.${language.key}`, {
+                          lng: language.key,
+                        })}
                       </span>
                     )}
                   </span>
