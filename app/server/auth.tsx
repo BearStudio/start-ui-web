@@ -14,7 +14,7 @@ import {
 } from '@/features/auth/utils';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
-import { getUserLanguage } from '@/server/i18n';
+import { getUserLanguage } from '@/server/utils';
 
 export const auth = betterAuth({
   session: {

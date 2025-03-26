@@ -9,28 +9,21 @@ import {
 import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getCookie } from 'vinxi/http';
-import { z } from 'zod';
 
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
-import { THEME_COOKIE_NAME, themes } from '@/lib/theme/config';
 
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
 import { Providers } from '@/providers';
-import { getUserLanguage } from '@/server/i18n';
+import { getUserLanguage, getUserTheme } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
 
 const initApp = createServerFn({ method: 'GET' }).handler(() => {
   return {
     language: getUserLanguage(),
-    theme: z
-      .enum(themes)
-      .nullable()
-      .catch(null)
-      .parse(getCookie(THEME_COOKIE_NAME)),
+    theme: getUserTheme(),
   };
 });
 
