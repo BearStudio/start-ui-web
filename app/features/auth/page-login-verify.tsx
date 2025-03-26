@@ -29,6 +29,7 @@ export default function PageLoginVerify({
 }) {
   const { t } = useTranslation(['auth', 'common']);
   const router = useRouter();
+  const session = authClient.useSession();
 
   const form = useForm<FormFieldsLoginVerify>({
     mode: 'onSubmit',
@@ -59,6 +60,9 @@ export default function PageLoginVerify({
       });
       return;
     }
+
+    // Refetch session to update guards
+    session.refetch();
 
     if (search.redirect) {
       const redirectUrl = new URL(search.redirect);
