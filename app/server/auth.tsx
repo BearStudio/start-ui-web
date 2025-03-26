@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
+import { match } from 'ts-pattern';
 
 import { permissions } from '@/lib/auth/permissions';
 import i18n from '@/lib/i18n';
@@ -45,15 +46,30 @@ export const auth = betterAuth({
       ...(import.meta.env.DEV || envClient.VITE_IS_DEMO
         ? { generateOTP: () => AUTH_EMAIL_OTP_MOCKED }
         : undefined),
-      async sendVerificationOTP({ email, otp }) {
-        // TODO handle type
-        await sendEmail({
-          to: email,
-          subject: i18n.t('emails:loginCode.subject', {
-            lng: getUserLanguage(),
-          }),
-          template: <EmailLoginCode language={getUserLanguage()} code={otp} />,
-        });
+      async sendVerificationOTP({ email, otp, type }) {
+        await match(type)
+          .with('sign-in', async () => {
+            await sendEmail({
+              to: email,
+              subject: i18n.t('emails:loginCode.subject', {
+                lng: getUserLanguage(),
+              }),
+              template: (
+                <EmailLoginCode language={getUserLanguage()} code={otp} />
+              ),
+            });
+          })
+          .with('email-verification', async () => {
+            throw new Error(
+              'email-verification email not implemented, update the /app/server/auth.tsx file'
+            );
+          })
+          .with('forget-password', async () => {
+            throw new Error(
+              'forget-password email not implemented, update the /app/server/auth.tsx file'
+            );
+          })
+          .exhaustive();
       },
     }),
   ],
