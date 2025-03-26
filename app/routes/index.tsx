@@ -46,63 +46,66 @@ function Home() {
   );
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex gap-4">
-        <Button
-          onClick={async () => {
-            setState((s) => s + 1);
-          }}
-        >
-          Counter {state}
-        </Button>
-        <LocalSwitcher />
-        <Button
-          loading={createPlanet.isPending}
-          onClick={() => {
-            createPlanet.mutate({ name: 'Hello' });
-          }}
-        >
-          Create Planet
-        </Button>
-      </div>
-
-      <h2 className="font-bold">Planets</h2>
-      <div className="flex gap-4">
-        {planets.isLoading && <div>Loading...</div>}
-        {planets.data?.map((planet) => (
-          <Link
-            key={planet.id}
-            to="/planet/$id"
-            params={{ id: planet.id.toString() }}
-          >
-            {planet.name}
-          </Link>
-        ))}
-      </div>
-      <p>This is a translated string: {t('common:actions.edit')}</p>
-      <Link to="/demo">Demo</Link>
-      {session.data?.user ? (
-        <div>
-          {session.data.user.email}
+    <>
+      <div className="h-safe-top w-full" />
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex gap-4">
           <Button
-            onClick={() => signOut.mutate()}
-            loading={signOut.isPending || signOut.isSuccess}
+            onClick={async () => {
+              setState((s) => s + 1);
+            }}
           >
-            Logout
+            Counter {state}
+          </Button>
+          <LocalSwitcher />
+          <Button
+            loading={createPlanet.isPending}
+            onClick={() => {
+              createPlanet.mutate({ name: 'Hello' });
+            }}
+          >
+            Create Planet
           </Button>
         </div>
-      ) : (
-        <Link to="/login">Login page</Link>
-      )}
-      <div>
-        <Button
-          onClick={() => {
-            setTheme(theme === 'dark' ? 'light' : 'dark');
-          }}
-        >
-          Toggle
-        </Button>
+
+        <h2 className="font-bold">Planets</h2>
+        <div className="flex gap-4">
+          {planets.isLoading && <div>Loading...</div>}
+          {planets.data?.map((planet) => (
+            <Link
+              key={planet.id}
+              to="/planet/$id"
+              params={{ id: planet.id.toString() }}
+            >
+              {planet.name}
+            </Link>
+          ))}
+        </div>
+        <p>This is a translated string: {t('common:actions.edit')}</p>
+        <Link to="/demo">Demo</Link>
+        {session.data?.user ? (
+          <div>
+            {session.data.user.email}
+            <Button
+              onClick={() => signOut.mutate()}
+              loading={signOut.isPending || signOut.isSuccess}
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <Link to="/login">Login page</Link>
+        )}
+        <div>
+          <Button
+            onClick={() => {
+              setTheme(theme === 'dark' ? 'light' : 'dark');
+            }}
+          >
+            Toggle
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
