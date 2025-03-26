@@ -1,40 +1,29 @@
 import { CheckIcon, ChevronsUpDownIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useDisclosure } from 'react-use-disclosure';
 
 import { cn } from '@/lib/tailwind/utils';
 import { useTheme } from '@/lib/theme/client';
-import { DEFAULT_THEME, Theme, themes } from '@/lib/theme/config';
+import { DEFAULT_THEME, themes } from '@/lib/theme/config';
 
 import { Button } from '@/components/ui/button';
 import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);
   const { theme, setTheme } = useTheme();
-  const popover = useDisclosure();
+
   return (
-    <Popover
-      open={popover.isOpen}
-      onOpenChange={(isOpen) => popover.toggle(isOpen)}
-    >
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
           type="button"
           variant={props.iconOnly ? 'ghost' : 'link'}
           size={props.iconOnly ? 'icon' : 'default'}
-          role="combobox"
-          aria-expanded={popover.isOpen}
         >
           {theme === 'dark' ? (
             <MoonIcon className="opacity-50" />
@@ -46,33 +35,25 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
           </span>
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-fit p-0">
-        <Command>
-          <CommandList>
-            <CommandGroup>
-              {themes.map((item) => (
-                <CommandItem
-                  key={item}
-                  value={item}
-                  onSelect={(currentValue) => {
-                    setTheme(currentValue as Theme);
-                    popover.close();
-                  }}
-                >
-                  <CheckIcon
-                    className={cn(
-                      'size-4',
-                      theme === item ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                  {t(`common:themes.${item}`)}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {themes.map((item) => (
+          <DropdownMenuItem
+            key={item}
+            onClick={() => {
+              setTheme(item);
+            }}
+          >
+            <CheckIcon
+              className={cn(
+                'mt-0.5 size-4 self-start',
+                theme === item ? 'opacity-100' : 'opacity-0'
+              )}
+            />
+            {t(`common:themes.${item}`)}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
