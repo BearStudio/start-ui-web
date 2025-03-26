@@ -16,6 +16,7 @@ import { useInitTheme } from '@/lib/theme/client';
 
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
+import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage, getUserTheme } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
@@ -55,7 +56,7 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: 'Start UI [web]',
+        title: `${getEnvHintTitlePrefix()} Start UI [web]`,
       },
       {
         name: 'apple-mobile-web-app-status-bar-style',
@@ -142,6 +143,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
       <body className="flex min-h-lvh flex-col">
         {children}
+        <EnvHint />
         <Scripts />
       </body>
     </html>

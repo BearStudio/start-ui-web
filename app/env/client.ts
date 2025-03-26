@@ -21,12 +21,10 @@ export const envClient = createEnv({
       .emoji()
       .optional()
       .transform((value) => value ?? (import.meta.env.DEV ? '🚧' : undefined)),
-    VITE_ENV_COLOR_SCHEME: z
+    VITE_ENV_COLOR: z
       .string()
       .optional()
-      .transform(
-        (value) => value ?? (import.meta.env.DEV ? 'warning' : 'success')
-      ),
+      .transform((value) => value ?? (import.meta.env.DEV ? 'gold' : 'plum')),
   },
   runtimeEnv: import.meta.env,
   emptyStringAsUndefined: true,
