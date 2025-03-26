@@ -48,7 +48,9 @@ export default function PageLoginVerify({
     if (error) {
       toast.error(
         t(
-          `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+          error.code
+            ? `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+            : 'auth:errorCode.UNKNOWN_ERROR'
         )
       );
       form.setError('otp', {
