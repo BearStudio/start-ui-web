@@ -62,13 +62,24 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
                 >
                   <CheckIcon
                     className={cn(
-                      'size-4',
+                      'mt-0.5 size-4 self-start',
                       i18n.language === language.key
                         ? 'opacity-100'
                         : 'opacity-0'
                     )}
                   />
-                  {t(`common:languages.${language.key}`)}
+                  <span className="flex flex-col">
+                    <span>
+                      {t(`common:languages.${language.key}`, {
+                        lng: language.key,
+                      })}
+                    </span>
+                    {language.key !== i18n.language && (
+                      <span className="text-xs text-muted-foreground">
+                        {t(`common:languages.${language.key}`)}
+                      </span>
+                    )}
+                  </span>
                 </CommandItem>
               ))}
             </CommandGroup>
