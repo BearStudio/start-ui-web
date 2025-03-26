@@ -1,0 +1,35 @@
+name: 🧪 Tests
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+      - staging
+  pull_request:
+
+jobs:
+  tests:
+    timeout-minutes: 10
+    name: ⚛️ Components Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run unit tests
+        run: pnpm run test:ci
