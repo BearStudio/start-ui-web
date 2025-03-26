@@ -17,7 +17,10 @@ export const getUserLanguage = (input?: string) => {
   const value =
     input ??
     getCookie('i18next') ??
-    getHeaders().get('accept-language')?.split('-')?.[0];
+    getHeaders()
+      .get('accept-language')
+      ?.split(',')?.[0] // Get the first language ar,en-US -> ar
+      ?.split('-')?.[0]; // Get the first part en-US -> en
 
   const language = AVAILABLE_LANGUAGES.some((l) => l.key === value)
     ? value!
