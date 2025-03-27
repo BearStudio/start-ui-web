@@ -1,17 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Link, useRouter } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
 
 import { Form, FormField, FormFieldController } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
+
+const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
+  ? ('auth:pageLoginWithSignUp' as const)
+  : ('auth:pageLogin' as const);
 
 export default function PageLogin({
   search,
@@ -75,9 +80,11 @@ export default function PageLogin({
   return (
     <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">{t('auth:pageLogin.title')}</h1>
+        <h1 className="text-2xl font-bold">
+          {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
+        </h1>
         <p className="text-sm text-balance text-muted-foreground">
-          {t('auth:pageLogin.description')}
+          {t(`${I18N_KEY_PAGE_PREFIX}.description`)}
         </p>
       </div>
       <div className="grid gap-6">
@@ -97,13 +104,13 @@ export default function PageLogin({
             size="lg"
             className="w-full"
           >
-            {t('auth:pageLogin.loginWithEmail')}
+            {t(`${I18N_KEY_PAGE_PREFIX}.loginWithEmail`)}
           </Button>
           <LoginEmailHint />
         </div>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            {t('auth:pageLogin.spacer')}
+            {t(`${I18N_KEY_PAGE_PREFIX}.spacer`)}
           </span>
         </div>
         <Button
@@ -117,15 +124,9 @@ export default function PageLogin({
           size="lg"
           onClick={() => social.mutate('github')}
         >
-          {t('auth:pageLogin.loginWithSocial', { provider: 'GitHub' })}
+          {t(`${I18N_KEY_PAGE_PREFIX}.loginWithSocial`, { provider: 'GitHub' })}
         </Button>
       </div>
-      <Link to="/" className="group text-center text-sm">
-        {t('auth:pageLogin.noAccount')}{' '}
-        <span className="font-bold underline-offset-4 group-hover:underline">
-          {t('auth:pageLogin.signup')}
-        </span>
-      </Link>
     </Form>
   );
 }

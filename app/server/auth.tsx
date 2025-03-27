@@ -12,7 +12,8 @@ import { envServer } from '@/env/server';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
-} from '@/features/auth/utils';
+  AUTH_SIGNUP_ENABLED,
+} from '@/lib/auth/config';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
@@ -30,6 +31,7 @@ export const auth = betterAuth({
       enabled: !!(envServer.GITHUB_CLIENT_ID && envServer.GITHUB_CLIENT_SECRET),
       clientId: envServer.GITHUB_CLIENT_ID!,
       clientSecret: envServer.GITHUB_CLIENT_SECRET!,
+      disableImplicitSignUp: !AUTH_SIGNUP_ENABLED,
     },
   },
   plugins: [
@@ -40,7 +42,7 @@ export const auth = betterAuth({
       ...permissions,
     }),
     emailOTP({
-      disableSignUp: true,
+      disableSignUp: !AUTH_SIGNUP_ENABLED,
       expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
       // Use predictable mocked code in dev and demo
       ...(import.meta.env.DEV || envClient.VITE_IS_DEMO
