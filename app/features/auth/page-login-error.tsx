@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -10,13 +11,18 @@ export default function PageLoginError({
 }: {
   search: { error?: string };
 }) {
+  const { t } = useTranslation(['auth']);
   if (search.error === 'signup_disabled') {
     return (
       <Wrapper>
         <Alert>
           <AlertCircleIcon />
-          <AlertTitle>Account not found</AlertTitle>
-          <AlertDescription>You need an account to login</AlertDescription>
+          <AlertTitle>
+            {t('auth:pageLoginError.signup_disabled.title')}
+          </AlertTitle>
+          <AlertDescription>
+            {t('auth:pageLoginError.signup_disabled.description')}
+          </AlertDescription>
         </Alert>
       </Wrapper>
     );
@@ -26,9 +32,11 @@ export default function PageLoginError({
       <Wrapper>
         <Alert>
           <AlertCircleIcon />
-          <AlertTitle>Access Denied</AlertTitle>
+          <AlertTitle>
+            {t('auth:pageLoginError.access_denied.title')}
+          </AlertTitle>
           <AlertDescription>
-            Not able to login, please try again
+            {t('auth:pageLoginError.access_denied.description')}
           </AlertDescription>
         </Alert>
       </Wrapper>
@@ -38,8 +46,10 @@ export default function PageLoginError({
     <Wrapper>
       <Alert variant="destructive">
         <AlertCircleIcon />
-        <AlertTitle>Something went wrong</AlertTitle>
-        <AlertDescription>Failed to login, please try again</AlertDescription>
+        <AlertTitle>{t('auth:pageLoginError.unknown_error.title')}</AlertTitle>
+        <AlertDescription>
+          {t('auth:pageLoginError.unknown_error.description')}
+        </AlertDescription>
       </Alert>
     </Wrapper>
   );
