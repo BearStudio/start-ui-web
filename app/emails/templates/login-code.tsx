@@ -1,11 +1,11 @@
 import { Container, Heading, Section, Text } from '@react-email/components';
 
+import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/lib/auth/config';
 import i18n from '@/lib/i18n';
 
 import { EmailFooter } from '@/emails/components/email-footer';
 import { EmailLayout } from '@/emails/components/email-layout';
 import { styles } from '@/emails/styles';
-import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/lib/auth/config';
 
 export const EmailLoginCode = (props: { language: string; code: string }) => {
   i18n.changeLanguage(props.language);
