@@ -1,10 +1,11 @@
 import { TerminalIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
+import { AUTH_EMAIL_OTP_MOCKED } from '@/lib/auth/config';
+
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 import { envClient } from '@/env/client';
-import { AUTH_EMAIL_OTP_MOCKED } from '@/features/auth/utils';
 
 export const LoginEmailHint = () => {
   const form = useFormContext();
@@ -21,7 +22,7 @@ export const LoginEmailHint = () => {
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
       <AlertDescription className="flex text-sm leading-4">
-        You can sign in with{' '}
+        You can login with{' '}
         <button
           type="button"
           className="cursor-pointer font-medium text-primary underline underline-offset-4 hover:no-underline"

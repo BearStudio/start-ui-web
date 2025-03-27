@@ -6,6 +6,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import {
+  AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
+  AUTH_SIGNUP_ENABLED,
+} from '@/lib/auth/config';
 
 import {
   Form,
@@ -19,8 +23,11 @@ import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
 } from '@/features/auth/schemas';
-import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/features/auth/utils';
 import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
+
+const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
+  ? ('auth:pageLoginVerifyWithSignUp' as const)
+  : ('auth:pageLoginVerify' as const);
 
 export default function PageLoginVerify({
   search,
@@ -93,12 +100,12 @@ export default function PageLoginVerify({
           </Link>
         </Button>
         <h1 className="text-lg font-bold text-balance">
-          {t('auth:pageLoginVerify.title')}
+          {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
         </h1>
-        <p className="text-sm text-balance text-muted-foreground">
+        <p className="text-sm text-balance break-words text-muted-foreground">
           <Trans
             t={t}
-            i18nKey="auth:pageLoginVerify.description"
+            i18nKey={`${I18N_KEY_PAGE_PREFIX}.description`}
             values={{
               email: search.email,
             }}
@@ -108,7 +115,7 @@ export default function PageLoginVerify({
           />
         </p>
         <p className="text-xs text-muted-foreground">
-          {t('auth:pageLoginVerify.expireHint', {
+          {t(`${I18N_KEY_PAGE_PREFIX}.expireHint`, {
             expiration: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
           })}
         </p>
@@ -127,7 +134,7 @@ export default function PageLoginVerify({
           />
         </FormField>
         <Button loading={form.formState.isSubmitting} type="submit" size="lg">
-          {t('auth:pageLoginVerify.confirm')}
+          {t(`${I18N_KEY_PAGE_PREFIX}.confirm`)}
         </Button>
         <LoginEmailOtpHint />
       </div>
