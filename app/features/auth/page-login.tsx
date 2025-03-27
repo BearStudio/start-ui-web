@@ -32,6 +32,7 @@ export default function PageLogin({
       const response = await authClient.signIn.social({
         provider,
         callbackURL: search.redirect ?? '/',
+        errorCallbackURL: '/login/error',
       });
       if (response.error) {
         throw new Error(response.error.message);
