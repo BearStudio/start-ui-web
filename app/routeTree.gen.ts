@@ -19,6 +19,7 @@ import { Route as PublicOnlyLoginImport } from './routes/_public-only/login'
 import { Route as PublicOnlyLoginIndexImport } from './routes/_public-only/login.index'
 import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
 import { Route as AuthenticatedDemo2IndexImport } from './routes/_authenticated/demo-2/index'
+import { Route as PublicOnlyLoginErrorImport } from './routes/_public-only/login.error'
 import { Route as PublicOnlyLoginVerifyIndexImport } from './routes/_public-only/login.verify.index'
 
 // Create/Update Routes
@@ -69,6 +70,12 @@ const AuthenticatedDemo2IndexRoute = AuthenticatedDemo2IndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const PublicOnlyLoginErrorRoute = PublicOnlyLoginErrorImport.update({
+  id: '/error',
+  path: '/error',
+  getParentRoute: () => PublicOnlyLoginRoute,
+} as any)
+
 const PublicOnlyLoginVerifyIndexRoute = PublicOnlyLoginVerifyIndexImport.update(
   {
     id: '/verify/',
@@ -115,6 +122,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/planet/$id'
       preLoaderRoute: typeof PlanetIdImport
       parentRoute: typeof rootRoute
+    }
+    '/_public-only/login/error': {
+      id: '/_public-only/login/error'
+      path: '/error'
+      fullPath: '/login/error'
+      preLoaderRoute: typeof PublicOnlyLoginErrorImport
+      parentRoute: typeof PublicOnlyLoginImport
     }
     '/_authenticated/demo-2/': {
       id: '/_authenticated/demo-2/'
@@ -164,11 +178,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface PublicOnlyLoginRouteChildren {
+  PublicOnlyLoginErrorRoute: typeof PublicOnlyLoginErrorRoute
   PublicOnlyLoginIndexRoute: typeof PublicOnlyLoginIndexRoute
   PublicOnlyLoginVerifyIndexRoute: typeof PublicOnlyLoginVerifyIndexRoute
 }
 
 const PublicOnlyLoginRouteChildren: PublicOnlyLoginRouteChildren = {
+  PublicOnlyLoginErrorRoute: PublicOnlyLoginErrorRoute,
   PublicOnlyLoginIndexRoute: PublicOnlyLoginIndexRoute,
   PublicOnlyLoginVerifyIndexRoute: PublicOnlyLoginVerifyIndexRoute,
 }
@@ -194,6 +210,7 @@ export interface FileRoutesByFullPath {
   '': typeof PublicOnlyRouteWithChildren
   '/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/login/error': typeof PublicOnlyLoginErrorRoute
   '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
   '/login/': typeof PublicOnlyLoginIndexRoute
@@ -204,6 +221,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/login/error': typeof PublicOnlyLoginErrorRoute
   '/demo-2': typeof AuthenticatedDemo2IndexRoute
   '/demo': typeof AuthenticatedDemoIndexRoute
   '/login': typeof PublicOnlyLoginIndexRoute
@@ -217,6 +235,7 @@ export interface FileRoutesById {
   '/_public-only': typeof PublicOnlyRouteWithChildren
   '/_public-only/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
+  '/_public-only/login/error': typeof PublicOnlyLoginErrorRoute
   '/_authenticated/demo-2/': typeof AuthenticatedDemo2IndexRoute
   '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
   '/_public-only/login/': typeof PublicOnlyLoginIndexRoute
@@ -230,6 +249,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/planet/$id'
+    | '/login/error'
     | '/demo-2'
     | '/demo'
     | '/login/'
@@ -239,6 +259,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/planet/$id'
+    | '/login/error'
     | '/demo-2'
     | '/demo'
     | '/login'
@@ -250,6 +271,7 @@ export interface FileRouteTypes {
     | '/_public-only'
     | '/_public-only/login'
     | '/planet/$id'
+    | '/_public-only/login/error'
     | '/_authenticated/demo-2/'
     | '/_authenticated/demo/'
     | '/_public-only/login/'
@@ -307,12 +329,17 @@ export const routeTree = rootRoute
       "filePath": "_public-only/login.tsx",
       "parent": "/_public-only",
       "children": [
+        "/_public-only/login/error",
         "/_public-only/login/",
         "/_public-only/login/verify/"
       ]
     },
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
+    },
+    "/_public-only/login/error": {
+      "filePath": "_public-only/login.error.tsx",
+      "parent": "/_public-only/login"
     },
     "/_authenticated/demo-2/": {
       "filePath": "_authenticated/demo-2/index.tsx",
