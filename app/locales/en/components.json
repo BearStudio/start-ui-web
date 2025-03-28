@@ -3,5 +3,8 @@
     "title": "Something went wrong",
     "tryAgain": "Try Again",
     "goBack": "Go Back"
+  },
+  "datePickerButton": {
+    "pickADate": "Pick a date"
   }
 }

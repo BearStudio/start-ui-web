@@ -3,5 +3,8 @@
     "title": "Kuna hitilafu imetokea",
     "tryAgain": "Jaribu tena",
     "goBack": "Rudi nyuma"
+  },
+  "datePickerButton": {
+    "pickADate": "Chagua tarehe"
   }
 }
