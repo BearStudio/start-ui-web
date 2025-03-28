@@ -30,3 +30,11 @@ export const zFormFieldsLoginVerify = () =>
       })
       .length(6, t('auth:fields.otp.invalidLength')),
   });
+
+export type FormFieldsOnboarding = z.infer<
+  ReturnType<typeof zFormFieldsOnboarding>
+>;
+export const zFormFieldsOnboarding = () =>
+  z.object({
+    name: zu.string.nonEmpty(z.string()),
+  });

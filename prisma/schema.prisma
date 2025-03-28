@@ -26,10 +26,11 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role       UserRole?
-  banned     Boolean?
-  banReason  String?
-  banExpires DateTime?
+  role         UserRole?
+  banned       Boolean?
+  banReason    String?
+  banExpires   DateTime?
+  onboardingAt DateTime?
 
   @@unique([email])
   @@map("user")

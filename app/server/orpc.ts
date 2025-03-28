@@ -56,13 +56,21 @@ export const publicProcedure = () => base;
 export const protectedProcedure = ({
   permission,
 }: {
-  permission: Permission;
+  permission: Permission | null;
 }) =>
   base.use(async ({ context, next }) => {
     const { user } = context;
 
     if (!user) {
       throw new ORPCError('UNAUTHORIZED');
+    }
+
+    if (!permission) {
+      return await next({
+        context: {
+          user,
+        },
+      });
     }
 
     const userHasPermission = await auth.api.userHasPermission({

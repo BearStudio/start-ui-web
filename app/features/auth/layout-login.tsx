@@ -7,7 +7,10 @@ import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 
 import image from './layout-login-image.jpg';
 
-export const LayoutLogin = (props: { children?: ReactNode }) => {
+export const LayoutLogin = (props: {
+  children?: ReactNode;
+  footer?: ReactNode;
+}) => {
   return (
     <div className="flex flex-1 pt-safe-top pb-safe-bottom">
       <div className="flex w-full flex-1 flex-col gap-4 p-6 md:p-10">
@@ -23,6 +26,7 @@ export const LayoutLogin = (props: { children?: ReactNode }) => {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">{props.children}</div>
         </div>
+        {props.footer}
       </div>
       <div className="relative hidden w-full flex-1 items-center justify-center bg-muted lg:flex">
         <img

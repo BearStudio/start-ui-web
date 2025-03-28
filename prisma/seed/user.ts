@@ -29,6 +29,7 @@ export async function createUsers() {
         name: 'User',
         email: 'user@user.com',
         emailVerified: true,
+        onboardingAt: new Date(),
       },
     });
     createdCounter += 1;
@@ -41,6 +42,7 @@ export async function createUsers() {
         email: 'admin@admin.com',
         emailVerified: true,
         role: 'admin',
+        onboardingAt: new Date(),
       },
     });
     createdCounter += 1;

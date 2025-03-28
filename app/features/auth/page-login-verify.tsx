@@ -93,7 +93,7 @@ export default function PageLoginVerify({
       onSubmit={submitHandler}
       className="flex flex-col gap-4 pb-12"
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <Button asChild variant="link">
           <Link to="/login">
             <ArrowLeftIcon />
