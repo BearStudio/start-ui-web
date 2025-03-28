@@ -1,5 +1,11 @@
 import { entries } from 'remeda';
-import { getHeaders as vinxiGetHeaders,setHeader } from 'vinxi/http';
+import {
+  getCookie,
+  getHeaders as vinxiGetHeaders,
+  setCookie,
+  setHeader,
+} from 'vinxi/http';
+import { z } from 'zod';
 
 export const getHeaders = () => {
   const headers = new Headers();
@@ -10,9 +16,6 @@ export const getHeaders = () => {
   });
   return headers;
 };
-
-import { getCookie, setCookie } from 'vinxi/http';
-import { z } from 'zod';
 
 import {
   AVAILABLE_LANGUAGES,
