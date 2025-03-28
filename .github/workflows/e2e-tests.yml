@@ -1,0 +1,92 @@
+name: 🧪 E2E Tests
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+      - staging
+      - ivan/restart # TODO remove me on final merge on main
+  pull_request:
+
+jobs:
+  E2E:
+    name: Playwright E2E Tests
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      VITE_BASE_URL: http://localhost:3000
+      VITE_ENV_NAME: tests
+      DATABASE_URL: postgres://startui:startui@localhost:5432/startui
+      VITE_IS_DEMO: false
+      BETTER_AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
+      EMAIL_SERVER: smtp://username:password@localhost:1025
+      EMAIL_FROM: Start UI <noreply@example.com>
+    services:
+      postgres:
+        image: postgres
+
+        env:
+          POSTGRES_PASSWORD: startui
+          POSTGRES_USER: startui
+          POSTGRES_DB: startui
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-${{ env.cache-name }}-
+            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright Browsers
+        run: pnpm playwright install --with-deps
+
+      - name: Migrate database
+        run: pnpm db:push
+
+      - name: Add default data into database
+        run: pnpm db:seed
+
+      - name: Run Playwright tests
+        run: pnpm e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

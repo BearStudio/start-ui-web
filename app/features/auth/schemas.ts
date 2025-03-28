@@ -10,7 +10,11 @@ export const zFormFieldsLogin = () =>
       z.string({
         required_error: t('auth:fields.email.required'),
         invalid_type_error: t('auth:fields.email.invalid'),
-      })
+      }),
+      {
+        required_error: t('auth:fields.email.required'),
+        invalid_type_error: t('auth:fields.email.invalid'),
+      }
     ),
   });
 

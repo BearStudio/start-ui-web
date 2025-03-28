@@ -15,6 +15,7 @@ import {
   Form,
   FormField,
   FormFieldController,
+  FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
@@ -114,11 +115,6 @@ export default function PageLoginVerify({
             }}
           />
         </p>
-        <p className="text-xs text-muted-foreground">
-          {t(`${I18N_KEY_PAGE_PREFIX}.expireHint`, {
-            expiration: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
-          })}
-        </p>
       </div>
       <div className="grid gap-4">
         <FormField>
@@ -132,6 +128,11 @@ export default function PageLoginVerify({
             autoSubmit
             autoFocus
           />
+          <FormFieldHelper className="text-xs">
+            {t(`${I18N_KEY_PAGE_PREFIX}.expireHint`, {
+              expiration: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
+            })}
+          </FormFieldHelper>
         </FormField>
         <Button loading={form.formState.isSubmitting} type="submit" size="lg">
           {t(`${I18N_KEY_PAGE_PREFIX}.confirm`)}
