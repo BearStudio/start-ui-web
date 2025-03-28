@@ -18,6 +18,7 @@ import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
 
+export type Auth = typeof auth;
 export const auth = betterAuth({
   session: {
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
@@ -26,6 +27,13 @@ export const auth = betterAuth({
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
+  user: {
+    additionalFields: {
+      onboardingAt: {
+        type: 'date',
+      },
+    },
+  },
   onAPIError: {
     throw: true,
     errorURL: '/login/error',

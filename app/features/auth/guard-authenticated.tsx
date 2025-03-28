@@ -5,6 +5,7 @@ import { authClient, Permission } from '@/lib/auth/client';
 import { ROLE } from '@/lib/auth/permissions';
 
 import { Spinner } from '@/components/ui/spinner';
+import { PageOnboarding } from '@/features/auth/page-onboarding';
 
 export const GuardAuthenticated = ({
   children,
@@ -41,22 +42,21 @@ export const GuardAuthenticated = ({
     return null;
   }
 
-  // Allows if no allowedRoles restriction
-  if (!permission) {
-    return <>{children}</>;
-  }
-
-  // Allows if the user as the permission
+  // Unauthorized if the user permission do not match
   if (
-    authClient.admin.checkRolePermission({
+    permission &&
+    !authClient.admin.checkRolePermission({
       role: session.data.user.role as ROLE,
       permission,
     })
   ) {
-    return <>{children}</>;
+    return <div>Unauthorized</div>; // TODO
   }
 
-  return (
-    <div>Unauthorized</div> // TODO
-  );
+  // Check if onboarding is done
+  if (!session.data.user.onboardingAt) {
+    return <PageOnboarding />;
+  }
+
+  return <>{children}</>;
 };
