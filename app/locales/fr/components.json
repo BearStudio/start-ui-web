@@ -3,5 +3,8 @@
     "title": "Une erreur s'est produite",
     "tryAgain": "Réessayer",
     "goBack": "Retour"
+  },
+  "datePickerButton": {
+    "pickADate": "Choisir une date"
   }
 }
