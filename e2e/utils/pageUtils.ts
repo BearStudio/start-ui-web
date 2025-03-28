@@ -22,6 +22,13 @@ import { FileRouteTypes } from '@/routeTree.gen';
  */
 export const pageUtils = (page: Page) => {
   return {
+    async goto(url: string) {
+      await page.goto(url);
+      // Wait for JS to load
+      await page.waitForURL('**', {
+        waitUntil: 'networkidle',
+      });
+    },
     /**
      * Utility used to authenticate a user on the app
      */
