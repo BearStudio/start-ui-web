@@ -1,8 +1,10 @@
+/* eslint-disable no-process-env */
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
-// eslint-disable-next-line no-process-env
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV
+  ? process.env.NODE_ENV === 'production'
+  : import.meta.env?.PROD;
 
 export const envServer = createEnv({
   server: {
@@ -25,7 +27,6 @@ export const envServer = createEnv({
       .default(import.meta.env.PROD ? 'false' : 'true')
       .transform((value) => value === 'true'),
   },
-  // eslint-disable-next-line no-process-env
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
 });
