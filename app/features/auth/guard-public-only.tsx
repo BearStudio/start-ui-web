@@ -3,12 +3,19 @@ import { ReactNode } from 'react';
 
 import { authClient } from '@/lib/auth/client';
 
+import { Spinner } from '@/components/ui/spinner';
+import { LayoutLogin } from '@/features/auth/layout-login';
+
 export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
   const session = authClient.useSession();
   const router = useRouter();
 
   if (session.isPending) {
-    return <>{children}</>;
+    return (
+      <LayoutLogin>
+        <Spinner full className="opacity-60" />
+      </LayoutLogin>
+    );
   }
 
   if (session.error && session.error.status > 0) {
