@@ -5,13 +5,11 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import {
   Dialog,
   DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from '@/components/ui/dialog';
-import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogOverlay,
   DialogPortal,
   DialogTitle,
