@@ -1,9 +1,9 @@
 import type { Meta } from '@storybook/react';
 import { MailIcon } from 'lucide-react';
 
+import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { onSubmit } from '@/components/form/docs.utils';
 
 export default {
   title: 'Input',
