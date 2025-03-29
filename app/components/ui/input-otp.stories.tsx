@@ -1,11 +1,11 @@
 import type { Meta } from '@storybook/react';
 
+import { onSubmit } from '@/components/form/docs.utils';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { onSubmit } from '@/components/form/docs.utils';
 
 export default {
   title: 'InputOTP',
