@@ -5,6 +5,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { onSubmit } from '@/components/form/docs.utils';
 
 export default {
   title: 'InputOTP',
@@ -12,7 +13,7 @@ export default {
 
 export const Default = () => {
   return (
-    <InputOTP maxLength={6} onComplete={(value) => alert(value)}>
+    <InputOTP maxLength={6} onComplete={onSubmit}>
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -27,7 +28,7 @@ export const Default = () => {
 
 export const Invalid = () => {
   return (
-    <InputOTP aria-invalid maxLength={6} onComplete={(value) => alert(value)}>
+    <InputOTP aria-invalid maxLength={6} onComplete={onSubmit}>
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -42,7 +43,7 @@ export const Invalid = () => {
 
 export const Disabled = () => {
   return (
-    <InputOTP disabled maxLength={6} onComplete={(value) => alert(value)}>
+    <InputOTP disabled maxLength={6} onComplete={onSubmit}>
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -58,7 +59,7 @@ export const Disabled = () => {
 export const Sizes = () => {
   return (
     <div className="flex flex-col gap-4">
-      <InputOTP size="sm" maxLength={6} onComplete={(value) => alert(value)}>
+      <InputOTP size="sm" maxLength={6} onComplete={onSubmit}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
@@ -68,7 +69,7 @@ export const Sizes = () => {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
-      <InputOTP maxLength={6} onComplete={(value) => alert(value)}>
+      <InputOTP maxLength={6} onComplete={onSubmit}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
@@ -78,7 +79,7 @@ export const Sizes = () => {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
-      <InputOTP size="lg" maxLength={6} onComplete={(value) => alert(value)}>
+      <InputOTP size="lg" maxLength={6} onComplete={onSubmit}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
