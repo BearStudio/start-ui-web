@@ -3,6 +3,7 @@ import { MailIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { onSubmit } from '@/components/form/docs.utils';
 
 export default {
   title: 'Input',
@@ -70,7 +71,7 @@ export const InputAndButton = () => {
         className="flex gap-2"
         onSubmit={(e) => {
           e.preventDefault();
-          alert('submitted');
+          onSubmit('Submitted');
         }}
       >
         <Input placeholder="Placeholder..." />
@@ -79,7 +80,7 @@ export const InputAndButton = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          alert('submitted');
+          onSubmit('Submitted');
         }}
       >
         <Input
@@ -96,7 +97,7 @@ export const InputAndButton = () => {
         className="flex gap-2"
         onSubmit={(e) => {
           e.preventDefault();
-          alert('submitted');
+          onSubmit('Submitted');
         }}
       >
         <Input size="sm" placeholder="Placeholder..." />
@@ -108,7 +109,7 @@ export const InputAndButton = () => {
         className="flex gap-2"
         onSubmit={(e) => {
           e.preventDefault();
-          alert('submitted');
+          onSubmit('Submitted');
         }}
       >
         <Input size="lg" placeholder="Placeholder..." />
@@ -119,7 +120,7 @@ export const InputAndButton = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          alert('submitted');
+          onSubmit('Submitted');
         }}
       >
         <Input
