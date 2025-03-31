@@ -2,7 +2,7 @@ import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
 import { authClient, Permission } from '@/lib/auth/client';
-import { ROLE } from '@/lib/auth/permissions';
+import { Role } from '@/lib/auth/permissions';
 
 import { Spinner } from '@/components/ui/spinner';
 
@@ -47,7 +47,7 @@ export const GuardAuthenticated = ({
   if (
     permissionApps &&
     !authClient.admin.checkRolePermission({
-      role: session.data.user.role as ROLE,
+      role: session.data.user.role as Role,
       permission: {
         apps: permissionApps,
       },

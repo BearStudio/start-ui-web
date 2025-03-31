@@ -4,7 +4,7 @@ import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 
 const statement = {
   ...defaultStatements,
-  apps: ['app', 'admin'],
+  apps: ['app', 'manager'],
   repository: ['read', 'create', 'update', 'delete'],
 } as const;
 
@@ -17,11 +17,11 @@ const user = ac.newRole({
 
 const admin = ac.newRole({
   ...adminAc.statements,
-  apps: ['app', 'admin'],
+  apps: ['app', 'manager'],
   repository: ['read', 'create', 'update', 'delete'],
 });
 
-export type ROLE = keyof typeof roles;
+export type Role = keyof typeof roles;
 const roles = {
   admin,
   user,

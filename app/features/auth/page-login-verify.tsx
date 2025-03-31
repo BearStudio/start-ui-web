@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useRouter } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -36,7 +36,6 @@ export default function PageLoginVerify({
   search: { redirect?: string; email: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
-  const router = useRouter();
   const session = authClient.useSession();
 
   const form = useForm<FormFieldsLoginVerify>({
@@ -69,22 +68,8 @@ export default function PageLoginVerify({
       return;
     }
 
-    // Refetch session to update guards
+    // Refetch session to update guards and redirect
     session.refetch();
-
-    if (search.redirect) {
-      const redirectUrl = new URL(search.redirect);
-      router.navigate({
-        replace: true,
-        to: redirectUrl.pathname,
-        search: Object.fromEntries(redirectUrl.searchParams),
-      });
-      return;
-    }
-
-    router.navigate({
-      to: '/',
-    });
   };
 
   return (

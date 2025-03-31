@@ -11,27 +11,34 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ManagerImport } from './routes/manager'
+import { Route as AppImport } from './routes/app'
 import { Route as PublicOnlyImport } from './routes/_public-only'
-import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as PublicIndexImport } from './routes/public.index'
+import { Route as ManagerIndexImport } from './routes/manager/index'
+import { Route as AppIndexImport } from './routes/app/index'
 import { Route as PlanetIdImport } from './routes/planet.$id'
 import { Route as PublicOnlyLoginImport } from './routes/_public-only/login'
 import { Route as PublicOnlyLoginIndexImport } from './routes/_public-only/login.index'
-import { Route as AuthenticatedDemoIndexImport } from './routes/_authenticated/demo/index'
-import { Route as AuthenticatedDemo2IndexImport } from './routes/_authenticated/demo-2/index'
 import { Route as PublicOnlyLoginErrorImport } from './routes/_public-only/login.error'
 import { Route as PublicOnlyLoginVerifyIndexImport } from './routes/_public-only/login.verify.index'
 
 // Create/Update Routes
 
-const PublicOnlyRoute = PublicOnlyImport.update({
-  id: '/_public-only',
+const ManagerRoute = ManagerImport.update({
+  id: '/manager',
+  path: '/manager',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedRoute = AuthenticatedImport.update({
-  id: '/_authenticated',
+const AppRoute = AppImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PublicOnlyRoute = PublicOnlyImport.update({
+  id: '/_public-only',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -41,10 +48,16 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicIndexRoute = PublicIndexImport.update({
-  id: '/public/',
-  path: '/public/',
-  getParentRoute: () => rootRoute,
+const ManagerIndexRoute = ManagerIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ManagerRoute,
+} as any)
+
+const AppIndexRoute = AppIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const PlanetIdRoute = PlanetIdImport.update({
@@ -63,18 +76,6 @@ const PublicOnlyLoginIndexRoute = PublicOnlyLoginIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PublicOnlyLoginRoute,
-} as any)
-
-const AuthenticatedDemoIndexRoute = AuthenticatedDemoIndexImport.update({
-  id: '/demo/',
-  path: '/demo/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-
-const AuthenticatedDemo2IndexRoute = AuthenticatedDemo2IndexImport.update({
-  id: '/demo-2/',
-  path: '/demo-2/',
-  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const PublicOnlyLoginErrorRoute = PublicOnlyLoginErrorImport.update({
@@ -102,18 +103,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
-    }
     '/_public-only': {
       id: '/_public-only'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof PublicOnlyImport
+      parentRoute: typeof rootRoute
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
+    '/manager': {
+      id: '/manager'
+      path: '/manager'
+      fullPath: '/manager'
+      preLoaderRoute: typeof ManagerImport
       parentRoute: typeof rootRoute
     }
     '/_public-only/login': {
@@ -130,12 +138,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanetIdImport
       parentRoute: typeof rootRoute
     }
-    '/public/': {
-      id: '/public/'
-      path: '/public'
-      fullPath: '/public'
-      preLoaderRoute: typeof PublicIndexImport
-      parentRoute: typeof rootRoute
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/manager/': {
+      id: '/manager/'
+      path: '/'
+      fullPath: '/manager/'
+      preLoaderRoute: typeof ManagerIndexImport
+      parentRoute: typeof ManagerImport
     }
     '/_public-only/login/error': {
       id: '/_public-only/login/error'
@@ -143,20 +158,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/login/error'
       preLoaderRoute: typeof PublicOnlyLoginErrorImport
       parentRoute: typeof PublicOnlyLoginImport
-    }
-    '/_authenticated/demo-2/': {
-      id: '/_authenticated/demo-2/'
-      path: '/demo-2'
-      fullPath: '/demo-2'
-      preLoaderRoute: typeof AuthenticatedDemo2IndexImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/demo/': {
-      id: '/_authenticated/demo/'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof AuthenticatedDemoIndexImport
-      parentRoute: typeof AuthenticatedImport
     }
     '/_public-only/login/': {
       id: '/_public-only/login/'
@@ -176,20 +177,6 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
-
-interface AuthenticatedRouteChildren {
-  AuthenticatedDemo2IndexRoute: typeof AuthenticatedDemo2IndexRoute
-  AuthenticatedDemoIndexRoute: typeof AuthenticatedDemoIndexRoute
-}
-
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedDemo2IndexRoute: AuthenticatedDemo2IndexRoute,
-  AuthenticatedDemoIndexRoute: AuthenticatedDemoIndexRoute,
-}
-
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
-)
 
 interface PublicOnlyLoginRouteChildren {
   PublicOnlyLoginErrorRoute: typeof PublicOnlyLoginErrorRoute
@@ -219,15 +206,37 @@ const PublicOnlyRouteWithChildren = PublicOnlyRoute._addFileChildren(
   PublicOnlyRouteChildren,
 )
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface ManagerRouteChildren {
+  ManagerIndexRoute: typeof ManagerIndexRoute
+}
+
+const ManagerRouteChildren: ManagerRouteChildren = {
+  ManagerIndexRoute: ManagerIndexRoute,
+}
+
+const ManagerRouteWithChildren =
+  ManagerRoute._addFileChildren(ManagerRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/manager': typeof ManagerRouteWithChildren
   '/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/public': typeof PublicIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/manager/': typeof ManagerIndexRoute
   '/login/error': typeof PublicOnlyLoginErrorRoute
-  '/demo-2': typeof AuthenticatedDemo2IndexRoute
-  '/demo': typeof AuthenticatedDemoIndexRoute
   '/login/': typeof PublicOnlyLoginIndexRoute
   '/login/verify': typeof PublicOnlyLoginVerifyIndexRoute
 }
@@ -236,10 +245,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PublicOnlyRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/public': typeof PublicIndexRoute
+  '/app': typeof AppIndexRoute
+  '/manager': typeof ManagerIndexRoute
   '/login/error': typeof PublicOnlyLoginErrorRoute
-  '/demo-2': typeof AuthenticatedDemo2IndexRoute
-  '/demo': typeof AuthenticatedDemoIndexRoute
   '/login': typeof PublicOnlyLoginIndexRoute
   '/login/verify': typeof PublicOnlyLoginVerifyIndexRoute
 }
@@ -247,14 +255,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public-only': typeof PublicOnlyRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/manager': typeof ManagerRouteWithChildren
   '/_public-only/login': typeof PublicOnlyLoginRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/public/': typeof PublicIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/manager/': typeof ManagerIndexRoute
   '/_public-only/login/error': typeof PublicOnlyLoginErrorRoute
-  '/_authenticated/demo-2/': typeof AuthenticatedDemo2IndexRoute
-  '/_authenticated/demo/': typeof AuthenticatedDemoIndexRoute
   '/_public-only/login/': typeof PublicOnlyLoginIndexRoute
   '/_public-only/login/verify/': typeof PublicOnlyLoginVerifyIndexRoute
 }
@@ -264,12 +272,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/app'
+    | '/manager'
     | '/login'
     | '/planet/$id'
-    | '/public'
+    | '/app/'
+    | '/manager/'
     | '/login/error'
-    | '/demo-2'
-    | '/demo'
     | '/login/'
     | '/login/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -277,23 +286,22 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/planet/$id'
-    | '/public'
+    | '/app'
+    | '/manager'
     | '/login/error'
-    | '/demo-2'
-    | '/demo'
     | '/login'
     | '/login/verify'
   id:
     | '__root__'
     | '/'
-    | '/_authenticated'
     | '/_public-only'
+    | '/app'
+    | '/manager'
     | '/_public-only/login'
     | '/planet/$id'
-    | '/public/'
+    | '/app/'
+    | '/manager/'
     | '/_public-only/login/error'
-    | '/_authenticated/demo-2/'
-    | '/_authenticated/demo/'
     | '/_public-only/login/'
     | '/_public-only/login/verify/'
   fileRoutesById: FileRoutesById
@@ -301,18 +309,18 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   PublicOnlyRoute: typeof PublicOnlyRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
+  ManagerRoute: typeof ManagerRouteWithChildren
   PlanetIdRoute: typeof PlanetIdRoute
-  PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   PublicOnlyRoute: PublicOnlyRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
+  ManagerRoute: ManagerRouteWithChildren,
   PlanetIdRoute: PlanetIdRoute,
-  PublicIndexRoute: PublicIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -326,26 +334,31 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_authenticated",
         "/_public-only",
-        "/planet/$id",
-        "/public/"
+        "/app",
+        "/manager",
+        "/planet/$id"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_authenticated": {
-      "filePath": "_authenticated.tsx",
-      "children": [
-        "/_authenticated/demo-2/",
-        "/_authenticated/demo/"
-      ]
-    },
     "/_public-only": {
       "filePath": "_public-only.tsx",
       "children": [
         "/_public-only/login"
+      ]
+    },
+    "/app": {
+      "filePath": "app.tsx",
+      "children": [
+        "/app/"
+      ]
+    },
+    "/manager": {
+      "filePath": "manager.tsx",
+      "children": [
+        "/manager/"
       ]
     },
     "/_public-only/login": {
@@ -360,20 +373,17 @@ export const routeTree = rootRoute
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
     },
-    "/public/": {
-      "filePath": "public.index.tsx"
+    "/app/": {
+      "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/manager/": {
+      "filePath": "manager/index.tsx",
+      "parent": "/manager"
     },
     "/_public-only/login/error": {
       "filePath": "_public-only/login.error.tsx",
       "parent": "/_public-only/login"
-    },
-    "/_authenticated/demo-2/": {
-      "filePath": "_authenticated/demo-2/index.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/demo/": {
-      "filePath": "_authenticated/demo/index.tsx",
-      "parent": "/_authenticated"
     },
     "/_public-only/login/": {
       "filePath": "_public-only/login.index.tsx",
