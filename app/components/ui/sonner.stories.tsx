@@ -14,14 +14,6 @@ export default {
       },
     },
   },
-  decorators: [
-    (Story) => (
-      <div>
-        <Story />
-        <Sonner />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof Sonner>;
 
 export const Default = () => {
