@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { authClient } from '@/lib/auth/client';
+import { WithPermission } from '@/lib/auth/WithPermission';
 import { orpc } from '@/lib/orpc/client';
 import { useTheme } from '@/lib/theme/client';
 
@@ -12,7 +13,6 @@ import { LocalSwitcher } from '@/components/ui/local-switcher';
 
 import { useSignOut } from '@/features/auth/utils';
 import { Outputs } from '@/server/router';
-import { WithPermission } from '@/lib/auth/WithPermission';
 
 export const Route = createFileRoute('/')({
   component: Home,

@@ -219,6 +219,8 @@ function Calendar({
         dropdown_root: cn('relative'),
       }}
       components={{
+        // TODO extract this
+        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
         Chevron: ({ orientation }) => {
           const Icon = match(orientation)
             .with('left', () => ChevronLeft)
@@ -230,6 +232,8 @@ function Calendar({
 
           return <Icon className="h-4 w-4" />;
         },
+        // TODO extract this
+        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
         Nav: ({ className }) => (
           <Nav
             className={className}
@@ -241,6 +245,8 @@ function Calendar({
             onPrevClick={onPrevClick}
           />
         ),
+        // TODO extract this
+        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
         CaptionLabel: (props) => (
           <CaptionLabel
             showYearSwitcher={showYearSwitcher}
@@ -250,6 +256,8 @@ function Calendar({
             {...props}
           />
         ),
+        // TODO extract this
+        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
         MonthGrid: ({ className, children, ...props }) => (
           <MonthGrid
             className={className}

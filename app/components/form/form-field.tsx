@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useId, useMemo } from 'react';
+import { createContext, ReactNode, use, useId, useMemo } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -26,11 +26,11 @@ export const FormField = (props: FormFieldProps) => {
   );
 
   return (
-    <FormFieldContext.Provider value={contextValue}>
+    <FormFieldContext value={contextValue}>
       <div className={cn('flex flex-col gap-1.5', props.className)}>
         {props.children}
       </div>
-    </FormFieldContext.Provider>
+    </FormFieldContext>
   );
 };
 
@@ -46,7 +46,7 @@ export const FormFieldContext = createContext<FormFieldContextValue | null>(
 );
 
 export const useFormField = () => {
-  const fieldContext = useContext(FormFieldContext);
+  const fieldContext = use(FormFieldContext);
   if (!fieldContext) {
     throw new Error('Missing <FormField /> parent component');
   }

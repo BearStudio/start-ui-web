@@ -82,5 +82,5 @@ export const useRedirectAfterLogin = () => {
     };
 
     exec();
-  }, [searchRedirect, session.isPending, session.data]);
+  }, [searchRedirect, session.isPending, session.data, router]);
 };
