@@ -15,16 +15,20 @@ export const MainNavDesktop = () => {
         }}
       />
       <div
-        className="fixed top-0 right-0 left-0 flex items-center gap-4 border-b border-b-neutral-100 bg-white px-4 pt-safe-top shadow-layout dark:border-b-neutral-800 dark:bg-neutral-900"
+        className="fixed top-0 right-0 left-0 flex items-center border-b border-b-neutral-100 bg-white pt-safe-top shadow-layout dark:border-b-neutral-800 dark:bg-neutral-900"
         style={{ height: HEIGHT }}
       >
-        <Logo className="w-24" />
-        <div className="flex gap-2">
-          {MAIN_NAV_LINKS.map(({ label, ...item }) => (
-            <Item key={item.linkOptions.to} {...item}>
-              {label}
-            </Item>
-          ))}
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4">
+          <Link to="/app">
+            <Logo className="w-24" />
+          </Link>
+          <div className="flex gap-0.5">
+            {MAIN_NAV_LINKS.map(({ label, ...item }) => (
+              <Item key={item.linkOptions.to} {...item}>
+                {label}
+              </Item>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -47,7 +51,7 @@ const Item = (props: {
         exact: props.exact,
         ...props.linkOptions.activeOptions,
       }}
-      className="flex items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
+      className="flex items-center justify-center gap-2 rounded-md px-2.5 py-2 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
     >
       <Icon className="size-4 opacity-60 [.active_&]:hidden" />
       <IconActive className="hidden size-4 [.active_&]:block" />
