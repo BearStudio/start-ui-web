@@ -1,11 +1,12 @@
-import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
 import { authClient } from '@/lib/auth/client';
 
+import { useRedirectAfterLogin } from '@/features/auth/utils';
+
 export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
   const session = authClient.useSession();
-  const router = useRouter();
+  useRedirectAfterLogin();
 
   if (session.isPending) {
     return <>{children}</>;
@@ -22,10 +23,6 @@ export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
   }
 
   if (session.data?.user) {
-    router.navigate({
-      to: '/',
-      replace: true,
-    });
     return null;
   }
 
