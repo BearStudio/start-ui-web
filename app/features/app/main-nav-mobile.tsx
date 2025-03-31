@@ -41,10 +41,10 @@ const Item = (props: {
         exact: props.exact,
         ...props.linkOptions.activeOptions,
       }}
-      className="flex flex-1 flex-col items-center justify-center text-neutral-500 transition dark:text-neutral-400 [&.active]:text-neutral-800 dark:[&.active]:text-white"
+      className="flex flex-1 flex-col items-center justify-center text-neutral-500 transition dark:text-neutral-400 [&.active]:text-primary"
     >
       <Icon className="size-5 opacity-60 transition [.active_&]:opacity-100" />
-      <span className="text-2xs font-medium">{props.children}</span>
+      <span className="text-2xs font-medium transition">{props.children}</span>
     </Link>
   );
 };
