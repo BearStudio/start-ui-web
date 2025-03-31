@@ -20,6 +20,7 @@ import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage, getUserTheme } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
+import { PageError } from '@/components/page-error';
 
 const initApp = createServerFn({ method: 'GET' }).handler(() => {
   return {
@@ -38,6 +39,7 @@ export const Route = createRootRouteWithContext<{
     }
     return { theme };
   },
+  notFoundComponent: () => <PageError errorCode={404} />,
   errorComponent: (props) => {
     return (
       <RootDocument>
@@ -141,7 +143,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <HeadContent />
       </head>
-      <body className="flex min-h-lvh flex-col">
+      <body className="flex min-h-dvh flex-col">
         {children}
         <EnvHint />
         <Scripts />

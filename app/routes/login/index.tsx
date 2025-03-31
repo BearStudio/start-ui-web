@@ -6,7 +6,7 @@ import { PageErrorBoundary } from '@/components/page-error-boundary';
 
 import PageLogin from '@/features/auth/page-login';
 
-export const Route = createFileRoute('/_public-only/login/')({
+export const Route = createFileRoute('/login/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
