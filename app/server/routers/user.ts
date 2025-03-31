@@ -21,7 +21,7 @@ export default {
         where: { id: context.user.id },
         data: {
           ...input,
-          onboardingAt: new Date(),
+          onboardedAt: new Date(),
         },
       });
     }),

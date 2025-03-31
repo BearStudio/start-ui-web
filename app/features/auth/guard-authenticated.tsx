@@ -5,6 +5,7 @@ import { authClient, Permission } from '@/lib/auth/client';
 import { ROLE } from '@/lib/auth/permissions';
 
 import { Spinner } from '@/components/ui/spinner';
+
 import { PageOnboarding } from '@/features/auth/page-onboarding';
 
 export const GuardAuthenticated = ({
@@ -54,7 +55,7 @@ export const GuardAuthenticated = ({
   }
 
   // Check if onboarding is done
-  if (!session.data.user.onboardingAt) {
+  if (!session.data.user.onboardedAt) {
     return <PageOnboarding />;
   }
 
