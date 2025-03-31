@@ -8,7 +8,7 @@ export const Route = createFileRoute('/app/')({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-1 flex-col gap-4">
       <h1>APP</h1>
       <WithPermission
         permission={{ apps: ['manager'] }}

@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { authClient, Permission } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
 
+import { PageError } from '@/components/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
 import { PageOnboarding } from '@/features/auth/page-onboarding';
@@ -23,13 +24,7 @@ export const GuardAuthenticated = ({
   }
 
   if (session.error && session.error.status > 0) {
-    return (
-      <div>
-        <p>Something wrong happened (auth guard)</p>
-        <p>{session.error.message}</p>
-        <pre>{JSON.stringify(session.error, null, 2)}</pre>
-      </div>
-    ); // TODO
+    return <PageError />;
   }
 
   if (!session.data?.user) {
@@ -53,7 +48,7 @@ export const GuardAuthenticated = ({
       },
     })
   ) {
-    return <div>Unauthorized</div>; // TODO
+    return <PageError errorCode={403} />;
   }
 
   // Check if onboarding is done

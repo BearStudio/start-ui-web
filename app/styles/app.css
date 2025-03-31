@@ -37,6 +37,8 @@
   --spacing-safe-bottom: env(safe-area-inset-bottom);
   --spacing-safe-left: env(safe-area-inset-left);
   --spacing-safe-right: env(safe-area-inset-right);
+
+  --text-2xs: 0.625rem;
 }
 
 :root {
@@ -155,6 +157,10 @@
   }
   body {
     @apply bg-background text-foreground;
+
+    @media all and (display-mode: standalone) {
+      height: 100lvh; /* Force full height on iOS standalone */
+    }
   }
 }
 
