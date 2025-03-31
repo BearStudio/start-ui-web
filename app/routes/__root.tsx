@@ -14,13 +14,13 @@ import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
 
+import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
 import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage, getUserTheme } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
-import { PageError } from '@/components/page-error';
 
 const initApp = createServerFn({ method: 'GET' }).handler(() => {
   return {

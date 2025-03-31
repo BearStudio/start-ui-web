@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { create } from 'zustand';
 
 import { DEFAULT_THEME, Theme, THEME_COOKIE_NAME } from '@/lib/theme/config';
@@ -17,9 +17,12 @@ export const useInitTheme = (initialTheme: Theme | null) => {
   const store = useThemeStore();
   const theme = store.theme ?? initialTheme ?? DEFAULT_THEME;
 
-  const updateTheme = (newTheme: Theme | null) => {
-    store.setTheme(newTheme);
-  };
+  const updateTheme = useCallback(
+    (newTheme: Theme | null) => {
+      store.setTheme(newTheme);
+    },
+    [store]
+  );
 
   useEffect(() => {
     if (theme !== store.theme) {
@@ -27,7 +30,7 @@ export const useInitTheme = (initialTheme: Theme | null) => {
     }
     // Update the cookie
     document.cookie = `${THEME_COOKIE_NAME}=${theme};max-age=2592000;samesite=lax;path=/`;
-  }, [theme]);
+  }, [theme, store.theme, updateTheme]);
 
   return {
     theme,

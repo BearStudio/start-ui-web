@@ -83,9 +83,9 @@ export const FormFieldController = <
     );
 
   return (
-    <FormFieldControllerContext.Provider value={contextValue as ExplicitAny}>
+    <FormFieldControllerContext value={contextValue as ExplicitAny}>
       {getField()}
-    </FormFieldControllerContext.Provider>
+    </FormFieldControllerContext>
   );
 };
 

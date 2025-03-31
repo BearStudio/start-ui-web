@@ -1,6 +1,8 @@
 import eslint from '@eslint/js';
+import react from '@eslint-react/eslint-plugin';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
 import tanstackRouter from '@tanstack/eslint-plugin-router';
+import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
 import storybook from 'eslint-plugin-storybook';
@@ -13,6 +15,8 @@ export default tslint.config(
   ...storybook.configs['flat/recommended'],
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],
+  react.configs['recommended-typescript'],
+  reactHooks.configs['recommended-latest'],
   {
     rules: {
       'sonarjs/todo-tag': 'warn',
