@@ -1,7 +1,14 @@
 import type { SVGProps } from 'react';
 
+import { cn } from '@/lib/tailwind/utils';
+
 export const Logo = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 512 116" fill="none" {...props}>
+  <svg
+    viewBox="0 0 512 116"
+    fill="none"
+    {...props}
+    className={cn('text-primary', props.className)}
+  >
     <title>Start UI</title>
     <path
       fill="currentColor"
