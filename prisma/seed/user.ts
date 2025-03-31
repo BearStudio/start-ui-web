@@ -17,6 +17,7 @@ export async function createUsers() {
           name: faker.person.fullName(),
           email: faker.internet.email().toLowerCase(),
           emailVerified: true,
+          role: 'user',
         },
       });
       createdCounter += 1;
@@ -30,6 +31,7 @@ export async function createUsers() {
         email: 'user@user.com',
         emailVerified: true,
         onboardedAt: new Date(),
+        role: 'user',
       },
     });
     createdCounter += 1;
