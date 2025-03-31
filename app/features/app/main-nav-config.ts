@@ -1,11 +1,20 @@
 import { ReactNode, ValidateLinkOptions } from '@tanstack/react-router';
-import { GitBranchIcon, HomeIcon, UserRoundIcon } from 'lucide-react';
 import { FC } from 'react';
+
+import {
+  IconGitBranchDuotone,
+  IconGitBranchFill,
+  IconHouseDuotone,
+  IconHouseFill,
+  IconUserCircleDuotone,
+  IconUserCircleFill,
+} from '@/components/icons/generated';
 
 export const MAIN_NAV_LINKS = [
   {
     label: 'Home',
-    icon: HomeIcon,
+    icon: IconHouseDuotone,
+    iconActive: IconHouseFill,
     linkOptions: {
       to: '/app',
     },
@@ -13,14 +22,16 @@ export const MAIN_NAV_LINKS = [
   },
   {
     label: 'Repositories',
-    icon: GitBranchIcon,
+    icon: IconGitBranchDuotone,
+    iconActive: IconGitBranchFill,
     linkOptions: {
       to: '/app/repository',
     },
   },
   {
     label: 'Account',
-    icon: UserRoundIcon,
+    icon: IconUserCircleDuotone,
+    iconActive: IconUserCircleFill,
     linkOptions: {
       to: '/app/account',
     },
@@ -28,6 +39,7 @@ export const MAIN_NAV_LINKS = [
 ] satisfies Array<{
   label: ReactNode;
   icon: FC<{ className?: string }>;
+  iconActive?: FC<{ className?: string }>;
   linkOptions: ValidateLinkOptions;
   exact?: boolean;
 }>;
