@@ -10,19 +10,19 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ManagerImport } from './routes/manager'
-import { Route as LoginImport } from './routes/login'
-import { Route as AppImport } from './routes/app'
-import { Route as IndexImport } from './routes/index'
-import { Route as ManagerIndexImport } from './routes/manager/index'
-import { Route as LoginIndexImport } from './routes/login/index'
-import { Route as AppIndexImport } from './routes/app/index'
-import { Route as PlanetIdImport } from './routes/planet.$id'
-import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
-import { Route as LoginErrorIndexImport } from './routes/login/error.index'
-import { Route as AppRepositoryIndexImport } from './routes/app/repository.index'
-import { Route as AppAccountIndexImport } from './routes/app/account.index'
+import { Route as rootRoute } from './routes/__root';
+import { Route as ManagerImport } from './routes/manager';
+import { Route as LoginImport } from './routes/login';
+import { Route as AppImport } from './routes/app';
+import { Route as IndexImport } from './routes/index';
+import { Route as ManagerIndexImport } from './routes/manager/index';
+import { Route as LoginIndexImport } from './routes/login/index';
+import { Route as AppIndexImport } from './routes/app/index';
+import { Route as PlanetIdImport } from './routes/planet.$id';
+import { Route as LoginVerifyIndexImport } from './routes/login/verify.index';
+import { Route as LoginErrorIndexImport } from './routes/login/error.index';
+import { Route as AppRepositoryIndexImport } from './routes/app/repository.index';
+import { Route as AppAccountIndexImport } from './routes/app/account.index';
 
 // Create/Update Routes
 
@@ -30,251 +30,251 @@ const ManagerRoute = ManagerImport.update({
   id: '/manager',
   path: '/manager',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AppRoute = AppImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const ManagerIndexRoute = ManagerIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ManagerRoute,
-} as any)
+} as any);
 
 const LoginIndexRoute = LoginIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LoginRoute,
-} as any)
+} as any);
 
 const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 
 const PlanetIdRoute = PlanetIdImport.update({
   id: '/planet/$id',
   path: '/planet/$id',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const LoginVerifyIndexRoute = LoginVerifyIndexImport.update({
   id: '/verify/',
   path: '/verify/',
   getParentRoute: () => LoginRoute,
-} as any)
+} as any);
 
 const LoginErrorIndexRoute = LoginErrorIndexImport.update({
   id: '/error/',
   path: '/error/',
   getParentRoute: () => LoginRoute,
-} as any)
+} as any);
 
 const AppRepositoryIndexRoute = AppRepositoryIndexImport.update({
   id: '/repository/',
   path: '/repository/',
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 
 const AppAccountIndexRoute = AppAccountIndexImport.update({
   id: '/account/',
   path: '/account/',
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/app';
+      path: '/app';
+      fullPath: '/app';
+      preLoaderRoute: typeof AppImport;
+      parentRoute: typeof rootRoute;
+    };
     '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
     '/manager': {
-      id: '/manager'
-      path: '/manager'
-      fullPath: '/manager'
-      preLoaderRoute: typeof ManagerImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/manager';
+      path: '/manager';
+      fullPath: '/manager';
+      preLoaderRoute: typeof ManagerImport;
+      parentRoute: typeof rootRoute;
+    };
     '/planet/$id': {
-      id: '/planet/$id'
-      path: '/planet/$id'
-      fullPath: '/planet/$id'
-      preLoaderRoute: typeof PlanetIdImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/planet/$id';
+      path: '/planet/$id';
+      fullPath: '/planet/$id';
+      preLoaderRoute: typeof PlanetIdImport;
+      parentRoute: typeof rootRoute;
+    };
     '/app/': {
-      id: '/app/'
-      path: '/'
-      fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexImport
-      parentRoute: typeof AppImport
-    }
+      id: '/app/';
+      path: '/';
+      fullPath: '/app/';
+      preLoaderRoute: typeof AppIndexImport;
+      parentRoute: typeof AppImport;
+    };
     '/login/': {
-      id: '/login/'
-      path: '/'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexImport
-      parentRoute: typeof LoginImport
-    }
+      id: '/login/';
+      path: '/';
+      fullPath: '/login/';
+      preLoaderRoute: typeof LoginIndexImport;
+      parentRoute: typeof LoginImport;
+    };
     '/manager/': {
-      id: '/manager/'
-      path: '/'
-      fullPath: '/manager/'
-      preLoaderRoute: typeof ManagerIndexImport
-      parentRoute: typeof ManagerImport
-    }
+      id: '/manager/';
+      path: '/';
+      fullPath: '/manager/';
+      preLoaderRoute: typeof ManagerIndexImport;
+      parentRoute: typeof ManagerImport;
+    };
     '/app/account/': {
-      id: '/app/account/'
-      path: '/account'
-      fullPath: '/app/account'
-      preLoaderRoute: typeof AppAccountIndexImport
-      parentRoute: typeof AppImport
-    }
+      id: '/app/account/';
+      path: '/account';
+      fullPath: '/app/account';
+      preLoaderRoute: typeof AppAccountIndexImport;
+      parentRoute: typeof AppImport;
+    };
     '/app/repository/': {
-      id: '/app/repository/'
-      path: '/repository'
-      fullPath: '/app/repository'
-      preLoaderRoute: typeof AppRepositoryIndexImport
-      parentRoute: typeof AppImport
-    }
+      id: '/app/repository/';
+      path: '/repository';
+      fullPath: '/app/repository';
+      preLoaderRoute: typeof AppRepositoryIndexImport;
+      parentRoute: typeof AppImport;
+    };
     '/login/error/': {
-      id: '/login/error/'
-      path: '/error'
-      fullPath: '/login/error'
-      preLoaderRoute: typeof LoginErrorIndexImport
-      parentRoute: typeof LoginImport
-    }
+      id: '/login/error/';
+      path: '/error';
+      fullPath: '/login/error';
+      preLoaderRoute: typeof LoginErrorIndexImport;
+      parentRoute: typeof LoginImport;
+    };
     '/login/verify/': {
-      id: '/login/verify/'
-      path: '/verify'
-      fullPath: '/login/verify'
-      preLoaderRoute: typeof LoginVerifyIndexImport
-      parentRoute: typeof LoginImport
-    }
+      id: '/login/verify/';
+      path: '/verify';
+      fullPath: '/login/verify';
+      preLoaderRoute: typeof LoginVerifyIndexImport;
+      parentRoute: typeof LoginImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppAccountIndexRoute: typeof AppAccountIndexRoute
-  AppRepositoryIndexRoute: typeof AppRepositoryIndexRoute
+  AppIndexRoute: typeof AppIndexRoute;
+  AppAccountIndexRoute: typeof AppAccountIndexRoute;
+  AppRepositoryIndexRoute: typeof AppRepositoryIndexRoute;
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppAccountIndexRoute: AppAccountIndexRoute,
   AppRepositoryIndexRoute: AppRepositoryIndexRoute,
-}
+};
 
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren);
 
 interface LoginRouteChildren {
-  LoginIndexRoute: typeof LoginIndexRoute
-  LoginErrorIndexRoute: typeof LoginErrorIndexRoute
-  LoginVerifyIndexRoute: typeof LoginVerifyIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute;
+  LoginErrorIndexRoute: typeof LoginErrorIndexRoute;
+  LoginVerifyIndexRoute: typeof LoginVerifyIndexRoute;
 }
 
 const LoginRouteChildren: LoginRouteChildren = {
   LoginIndexRoute: LoginIndexRoute,
   LoginErrorIndexRoute: LoginErrorIndexRoute,
   LoginVerifyIndexRoute: LoginVerifyIndexRoute,
-}
+};
 
-const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
+const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren);
 
 interface ManagerRouteChildren {
-  ManagerIndexRoute: typeof ManagerIndexRoute
+  ManagerIndexRoute: typeof ManagerIndexRoute;
 }
 
 const ManagerRouteChildren: ManagerRouteChildren = {
   ManagerIndexRoute: ManagerIndexRoute,
-}
+};
 
 const ManagerRouteWithChildren =
-  ManagerRoute._addFileChildren(ManagerRouteChildren)
+  ManagerRoute._addFileChildren(ManagerRouteChildren);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
-  '/login': typeof LoginRouteWithChildren
-  '/manager': typeof ManagerRouteWithChildren
-  '/planet/$id': typeof PlanetIdRoute
-  '/app/': typeof AppIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/manager/': typeof ManagerIndexRoute
-  '/app/account': typeof AppAccountIndexRoute
-  '/app/repository': typeof AppRepositoryIndexRoute
-  '/login/error': typeof LoginErrorIndexRoute
-  '/login/verify': typeof LoginVerifyIndexRoute
+  '/': typeof IndexRoute;
+  '/app': typeof AppRouteWithChildren;
+  '/login': typeof LoginRouteWithChildren;
+  '/manager': typeof ManagerRouteWithChildren;
+  '/planet/$id': typeof PlanetIdRoute;
+  '/app/': typeof AppIndexRoute;
+  '/login/': typeof LoginIndexRoute;
+  '/manager/': typeof ManagerIndexRoute;
+  '/app/account': typeof AppAccountIndexRoute;
+  '/app/repository': typeof AppRepositoryIndexRoute;
+  '/login/error': typeof LoginErrorIndexRoute;
+  '/login/verify': typeof LoginVerifyIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/planet/$id': typeof PlanetIdRoute
-  '/app': typeof AppIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/manager': typeof ManagerIndexRoute
-  '/app/account': typeof AppAccountIndexRoute
-  '/app/repository': typeof AppRepositoryIndexRoute
-  '/login/error': typeof LoginErrorIndexRoute
-  '/login/verify': typeof LoginVerifyIndexRoute
+  '/': typeof IndexRoute;
+  '/planet/$id': typeof PlanetIdRoute;
+  '/app': typeof AppIndexRoute;
+  '/login': typeof LoginIndexRoute;
+  '/manager': typeof ManagerIndexRoute;
+  '/app/account': typeof AppAccountIndexRoute;
+  '/app/repository': typeof AppRepositoryIndexRoute;
+  '/login/error': typeof LoginErrorIndexRoute;
+  '/login/verify': typeof LoginVerifyIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
-  '/login': typeof LoginRouteWithChildren
-  '/manager': typeof ManagerRouteWithChildren
-  '/planet/$id': typeof PlanetIdRoute
-  '/app/': typeof AppIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/manager/': typeof ManagerIndexRoute
-  '/app/account/': typeof AppAccountIndexRoute
-  '/app/repository/': typeof AppRepositoryIndexRoute
-  '/login/error/': typeof LoginErrorIndexRoute
-  '/login/verify/': typeof LoginVerifyIndexRoute
+  __root__: typeof rootRoute;
+  '/': typeof IndexRoute;
+  '/app': typeof AppRouteWithChildren;
+  '/login': typeof LoginRouteWithChildren;
+  '/manager': typeof ManagerRouteWithChildren;
+  '/planet/$id': typeof PlanetIdRoute;
+  '/app/': typeof AppIndexRoute;
+  '/login/': typeof LoginIndexRoute;
+  '/manager/': typeof ManagerIndexRoute;
+  '/app/account/': typeof AppAccountIndexRoute;
+  '/app/repository/': typeof AppRepositoryIndexRoute;
+  '/login/error/': typeof LoginErrorIndexRoute;
+  '/login/verify/': typeof LoginVerifyIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
     | '/app'
@@ -287,8 +287,8 @@ export interface FileRouteTypes {
     | '/app/account'
     | '/app/repository'
     | '/login/error'
-    | '/login/verify'
-  fileRoutesByTo: FileRoutesByTo
+    | '/login/verify';
+  fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
     | '/planet/$id'
@@ -298,7 +298,7 @@ export interface FileRouteTypes {
     | '/app/account'
     | '/app/repository'
     | '/login/error'
-    | '/login/verify'
+    | '/login/verify';
   id:
     | '__root__'
     | '/'
@@ -312,16 +312,16 @@ export interface FileRouteTypes {
     | '/app/account/'
     | '/app/repository/'
     | '/login/error/'
-    | '/login/verify/'
-  fileRoutesById: FileRoutesById
+    | '/login/verify/';
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRouteWithChildren
-  LoginRoute: typeof LoginRouteWithChildren
-  ManagerRoute: typeof ManagerRouteWithChildren
-  PlanetIdRoute: typeof PlanetIdRoute
+  IndexRoute: typeof IndexRoute;
+  AppRoute: typeof AppRouteWithChildren;
+  LoginRoute: typeof LoginRouteWithChildren;
+  ManagerRoute: typeof ManagerRouteWithChildren;
+  PlanetIdRoute: typeof PlanetIdRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -330,11 +330,11 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRouteWithChildren,
   ManagerRoute: ManagerRouteWithChildren,
   PlanetIdRoute: PlanetIdRoute,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
