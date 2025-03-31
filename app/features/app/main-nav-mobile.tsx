@@ -32,8 +32,10 @@ const Item = (props: {
   exact?: boolean;
   children?: ReactNode;
   icon: FC<{ className?: string }>;
+  iconActive?: FC<{ className?: string }>;
 }) => {
   const Icon = props.icon;
+  const IconActive = props.iconActive ?? props.icon;
   return (
     <Link
       {...props.linkOptions}
@@ -41,10 +43,11 @@ const Item = (props: {
         exact: props.exact,
         ...props.linkOptions.activeOptions,
       }}
-      className="flex flex-1 flex-col items-center justify-center text-neutral-500 transition dark:text-neutral-400 [&.active]:text-primary"
+      className="flex flex-1 flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 [&.active]:text-primary"
     >
-      <Icon className="size-5 opacity-60 transition [.active_&]:opacity-100" />
-      <span className="text-2xs font-medium transition">{props.children}</span>
+      <Icon className="size-6 opacity-60 [.active_&]:hidden" />
+      <IconActive className="hidden size-6 [.active_&]:block" />
+      <span className="text-2xs font-medium">{props.children}</span>
     </Link>
   );
 };
