@@ -10,10 +10,10 @@ import { PageOnboarding } from '@/features/auth/page-onboarding';
 
 export const GuardAuthenticated = ({
   children,
-  permission,
+  permissionApps,
 }: {
   children?: ReactNode;
-  permission?: Permission;
+  permissionApps?: Permission['apps'];
 }) => {
   const session = authClient.useSession();
   const router = useRouter();
@@ -45,10 +45,12 @@ export const GuardAuthenticated = ({
 
   // Unauthorized if the user permission do not match
   if (
-    permission &&
+    permissionApps &&
     !authClient.admin.checkRolePermission({
       role: session.data.user.role as ROLE,
-      permission,
+      permission: {
+        apps: permissionApps,
+      },
     })
   ) {
     return <div>Unauthorized</div>; // TODO

@@ -8,11 +8,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 function RouteComponent() {
   return (
-    <GuardAuthenticated
-      permission={{
-        apps: ['app'],
-      }}
-    >
+    <GuardAuthenticated permissionApps={['app']}>
       <Outlet />
     </GuardAuthenticated>
   );
