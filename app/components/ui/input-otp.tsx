@@ -29,7 +29,7 @@ const inputOTPVariants = cva(
 );
 
 const useInputOTPContext = () => {
-  const ctx = React.useContext(InputOTPContext);
+  const ctx = React.use(InputOTPContext);
   if (!ctx) {
     throw new Error('Missing <InputOTP /> parent component');
   }
@@ -43,10 +43,17 @@ function InputOTP({
   ...props
 }: Omit<React.ComponentProps<typeof OTPInput>, 'size'> &
   VariantProps<typeof inputOTPVariants> & { children: ReactNode }) {
+  const invalid = !!props['aria-invalid'];
+  const value = React.useMemo(
+    () => ({
+      size,
+      invalid,
+    }),
+    [size, invalid]
+  );
+
   return (
-    <InputOTPContext.Provider
-      value={{ size, invalid: !!props['aria-invalid'] }}
-    >
+    <InputOTPContext value={value}>
       <OTPInput
         data-slot="input-otp"
         containerClassName={cn(
@@ -60,7 +67,7 @@ function InputOTP({
         )}
         {...props}
       />
-    </InputOTPContext.Provider>
+    </InputOTPContext>
   );
 }
 
@@ -83,7 +90,7 @@ function InputOTPSlot({
 }) {
   const ctx = useInputOTPContext();
   const { char, hasFakeCaret, isActive } =
-    React.useContext(OTPInputContextFromLib)?.slots[index] ?? {};
+    React.use(OTPInputContextFromLib)?.slots[index] ?? {};
 
   return (
     <div

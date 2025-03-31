@@ -1,5 +1,5 @@
 import { AlertCircleIcon } from 'lucide-react';
-import { ComponentProps, ReactNode, useContext } from 'react';
+import { ComponentProps, ReactNode, use } from 'react';
 import {
   ControllerProps,
   FieldError,
@@ -39,7 +39,7 @@ export const FormFieldError = <
   ...props
 }: FormFieldErrorProps<TFieldValues, TName>) => {
   const fieldCtx = useFormField();
-  const controllerCtx = useContext<FormFieldControllerContextValue<
+  const controllerCtx = use<FormFieldControllerContextValue<
     TFieldValues,
     TName
   > | null>(FormFieldControllerContext as ExplicitAny);

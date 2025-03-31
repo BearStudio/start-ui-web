@@ -13,7 +13,7 @@ import { Form } from '.';
 export const FormMocked = <T extends Schema>({
   children,
   schema,
-  useFormOptions = {},
+  useFormOptions,
   onSubmit,
 }: {
   children(options: { form: UseFormReturn<z.infer<T>> }): ReactNode;

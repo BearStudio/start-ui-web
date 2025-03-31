@@ -1,6 +1,7 @@
+import { ReactNode } from 'react';
+
 import { authClient, Permission } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
-import { ReactNode } from 'react';
 
 export const WithPermission = (props: {
   permission: Permission;

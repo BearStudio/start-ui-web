@@ -1,5 +1,8 @@
 import { UserRole } from '@prisma/client';
-import { createAccessControl, Role } from 'better-auth/plugins/access';
+import {
+  createAccessControl,
+  Role as BetterAuthRole,
+} from 'better-auth/plugins/access';
 import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 
 const statement = {
@@ -25,7 +28,7 @@ export type Role = keyof typeof roles;
 const roles = {
   admin,
   user,
-} satisfies Record<UserRole, Role>;
+} satisfies Record<UserRole, BetterAuthRole>;
 
 export const permissions = {
   ac,

@@ -94,6 +94,7 @@ export const FieldOtp = <
           >
             <InputOTPGroup>
               {Array.from({ length: rest.maxLength }).map((_, index) => (
+                // eslint-disable-next-line @eslint-react/no-array-index-key
                 <InputOTPSlot index={index} key={index} />
               ))}
             </InputOTPGroup>
