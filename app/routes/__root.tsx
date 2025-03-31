@@ -10,6 +10,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { authClient } from '@/lib/auth/client';
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
@@ -32,6 +33,13 @@ const initApp = createServerFn({ method: 'GET' }).handler(() => {
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  beforeLoad: async () => {
+    // Warm up auth session in Dev
+    // Prevent error on first load
+    if (import.meta.env.DEV) {
+      await authClient.getSession();
+    }
+  },
   loader: async () => {
     const { language, theme } = await initApp();
     if (import.meta.env.SSR) {
