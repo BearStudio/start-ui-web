@@ -25,7 +25,7 @@ export const LoginEmailHint = () => {
         You can login with{' '}
         <button
           type="button"
-          className="cursor-pointer font-medium text-primary underline underline-offset-4 hover:no-underline"
+          className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
           onClick={() => form.setValue('email', mockedEmail)}
         >
           {mockedEmail}
@@ -52,7 +52,7 @@ export const LoginEmailOtpHint = () => {
         Use the code{' '}
         <button
           type="button"
-          className="cursor-pointer font-medium text-primary underline underline-offset-4 hover:no-underline"
+          className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
           onClick={() => form.setValue('otp', AUTH_EMAIL_OTP_MOCKED)}
         >
           {AUTH_EMAIL_OTP_MOCKED}

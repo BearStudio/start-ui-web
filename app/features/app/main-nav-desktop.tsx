@@ -45,10 +45,10 @@ const Item = (props: {
         exact: props.exact,
         ...props.linkOptions.activeOptions,
       }}
-      className="flex items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-neutral-800 dark:[&.active]:text-white"
+      className="flex items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
     >
       <Icon className="size-4 opacity-60 transition [.active_&]:opacity-100" />
-      <span className="text-sm font-medium">{props.children}</span>
+      <span className="text-sm font-medium transition">{props.children}</span>
     </Link>
   );
 };
