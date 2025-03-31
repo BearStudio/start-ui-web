@@ -21,6 +21,8 @@ import { Route as AppIndexImport } from './routes/app/index'
 import { Route as PlanetIdImport } from './routes/planet.$id'
 import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
 import { Route as LoginErrorIndexImport } from './routes/login/error.index'
+import { Route as AppRepositoryIndexImport } from './routes/app/repository.index'
+import { Route as AppAccountIndexImport } from './routes/app/account.index'
 
 // Create/Update Routes
 
@@ -84,6 +86,18 @@ const LoginErrorIndexRoute = LoginErrorIndexImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 
+const AppRepositoryIndexRoute = AppRepositoryIndexImport.update({
+  id: '/repository/',
+  path: '/repository/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAccountIndexRoute = AppAccountIndexImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -144,6 +158,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerIndexImport
       parentRoute: typeof ManagerImport
     }
+    '/app/account/': {
+      id: '/app/account/'
+      path: '/account'
+      fullPath: '/app/account'
+      preLoaderRoute: typeof AppAccountIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/app/repository/': {
+      id: '/app/repository/'
+      path: '/repository'
+      fullPath: '/app/repository'
+      preLoaderRoute: typeof AppRepositoryIndexImport
+      parentRoute: typeof AppImport
+    }
     '/login/error/': {
       id: '/login/error/'
       path: '/error'
@@ -165,10 +193,14 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppAccountIndexRoute: typeof AppAccountIndexRoute
+  AppRepositoryIndexRoute: typeof AppRepositoryIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppAccountIndexRoute: AppAccountIndexRoute,
+  AppRepositoryIndexRoute: AppRepositoryIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -207,6 +239,8 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/app/account': typeof AppAccountIndexRoute
+  '/app/repository': typeof AppRepositoryIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
 }
@@ -217,6 +251,8 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
   '/manager': typeof ManagerIndexRoute
+  '/app/account': typeof AppAccountIndexRoute
+  '/app/repository': typeof AppRepositoryIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
 }
@@ -231,6 +267,8 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/app/account/': typeof AppAccountIndexRoute
+  '/app/repository/': typeof AppRepositoryIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
   '/login/verify/': typeof LoginVerifyIndexRoute
 }
@@ -246,6 +284,8 @@ export interface FileRouteTypes {
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/app/account'
+    | '/app/repository'
     | '/login/error'
     | '/login/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -255,6 +295,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
+    | '/app/account'
+    | '/app/repository'
     | '/login/error'
     | '/login/verify'
   id:
@@ -267,6 +309,8 @@ export interface FileRouteTypes {
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/app/account/'
+    | '/app/repository/'
     | '/login/error/'
     | '/login/verify/'
   fileRoutesById: FileRoutesById
@@ -311,7 +355,9 @@ export const routeTree = rootRoute
     "/app": {
       "filePath": "app.tsx",
       "children": [
-        "/app/"
+        "/app/",
+        "/app/account/",
+        "/app/repository/"
       ]
     },
     "/login": {
@@ -342,6 +388,14 @@ export const routeTree = rootRoute
     "/manager/": {
       "filePath": "manager/index.tsx",
       "parent": "/manager"
+    },
+    "/app/account/": {
+      "filePath": "app/account.index.tsx",
+      "parent": "/app"
+    },
+    "/app/repository/": {
+      "filePath": "app/repository.index.tsx",
+      "parent": "/app"
     },
     "/login/error/": {
       "filePath": "login/error.index.tsx",

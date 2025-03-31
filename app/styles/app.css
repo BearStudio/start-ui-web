@@ -39,6 +39,9 @@
   --spacing-safe-right: env(safe-area-inset-right);
 
   --text-2xs: 0.625rem;
+
+  --shadow-layout:
+    0 0 40px -5px rgb(0 0 0 / 0.05), 0 0 20px -6px rgb(0 0 0 / 0.05);
 }
 
 :root {
