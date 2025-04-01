@@ -7,12 +7,23 @@ import {
   ChevronRight,
   ChevronUp,
 } from 'lucide-react';
-import * as React from 'react';
 import {
+  ComponentProps,
+  createContext,
+  Dispatch,
+  SetStateAction,
+  use,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  ChevronProps,
   DayPicker,
   type DayPickerProps,
   labelNext,
   labelPrevious,
+  MonthGridProps,
+  NavProps,
   useDayPicker,
 } from 'react-day-picker';
 import { enUS } from 'react-day-picker/locale';
@@ -63,6 +74,34 @@ export type CalendarProps = DayPickerProps & {
 };
 
 type NavView = 'days' | 'years';
+type DisplayYears = { from: number; to: number };
+
+type CalendarContextType = {
+  displayYears: DisplayYears;
+  setDisplayYears: Dispatch<SetStateAction<DisplayYears>>;
+  navView: NavView;
+  setNavView: Dispatch<React.SetStateAction<NavView>>;
+  showYearSwitcher: boolean;
+};
+const CalendarContext = createContext<CalendarContextType>({
+  displayYears: { from: 0, to: 0 },
+  setDisplayYears: () => {},
+  navView: 'days',
+  setNavView: () => {},
+  showYearSwitcher: true,
+});
+
+const ChevronWrapper = ({ orientation }: ChevronProps) => {
+  const Icon = match(orientation)
+    .with('left', () => ChevronLeft)
+    .with('right', () => ChevronRight)
+    .with('down', () => ChevronDown)
+    .with('up', () => ChevronUp)
+    .with(undefined, () => ChevronDown)
+    .exhaustive();
+
+  return <Icon className="h-4 w-4" />;
+};
 
 /**
  * A custom calendar component built on top of react-day-picker.
@@ -82,12 +121,9 @@ function Calendar({
 
   const locale = REACT_DAY_PICKER_LOCALE_MAP[i18n?.language] ?? enUS;
 
-  const [navView, setNavView] = React.useState<NavView>('days');
-  const [displayYears, setDisplayYears] = React.useState<{
-    from: number;
-    to: number;
-  }>(
-    React.useMemo(() => {
+  const [navView, setNavView] = useState<NavView>('days');
+  const [displayYears, setDisplayYears] = useState<DisplayYears>(
+    useMemo(() => {
       const currentYear = new Date().getFullYear();
       return {
         from: currentYear - Math.floor(yearRange / 2 - 1),
@@ -95,8 +131,6 @@ function Calendar({
       };
     }, [yearRange])
   );
-
-  const { onPrevClick, startMonth, endMonth } = props;
 
   const columnsDisplayed = navView === 'years' ? 1 : numberOfMonths;
 
@@ -180,127 +214,79 @@ function Calendar({
   );
   const _hiddenClassName = cn('invisible flex-1', props.hiddenClassName);
 
+  const contextValue = useMemo(
+    () => ({
+      displayYears,
+      setDisplayYears,
+      navView,
+      setNavView,
+      showYearSwitcher,
+    }),
+    [displayYears, navView, showYearSwitcher]
+  );
+
   return (
-    <DayPicker
-      locale={locale}
-      showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
-      style={{
-        width: 248.8 * (columnsDisplayed ?? 1) + 'px',
-      }}
-      classNames={{
-        months: _monthsClassName,
-        month_caption: _monthCaptionClassName,
-        weekdays: _weekdaysClassName,
-        weekday: _weekdayClassName,
-        month: _monthClassName,
-        caption: _captionClassName,
-        caption_label: _captionLabelClassName,
-        button_next: _buttonNextClassName,
-        button_previous: _buttonPreviousClassName,
-        nav: _navClassName,
-        month_grid: _monthGridClassName,
-        week: _weekClassName,
-        day: _dayClassName,
-        day_button: _dayButtonClassName,
-        range_start: _rangeStartClassName,
-        range_middle: _rangeMiddleClassName,
-        range_end: _rangeEndClassName,
-        selected: _selectedClassName,
-        today: _todayClassName,
-        outside: _outsideClassName,
-        disabled: _disabledClassName,
-        hidden: _hiddenClassName,
+    <CalendarContext value={contextValue}>
+      <DayPicker
+        locale={locale}
+        showOutsideDays={showOutsideDays}
+        className={cn('p-3', className)}
+        style={{
+          width: 248.8 * (columnsDisplayed ?? 1) + 'px',
+        }}
+        classNames={{
+          months: _monthsClassName,
+          month_caption: _monthCaptionClassName,
+          weekdays: _weekdaysClassName,
+          weekday: _weekdayClassName,
+          month: _monthClassName,
+          caption: _captionClassName,
+          caption_label: _captionLabelClassName,
+          button_next: _buttonNextClassName,
+          button_previous: _buttonPreviousClassName,
+          nav: _navClassName,
+          month_grid: _monthGridClassName,
+          week: _weekClassName,
+          day: _dayClassName,
+          day_button: _dayButtonClassName,
+          range_start: _rangeStartClassName,
+          range_middle: _rangeMiddleClassName,
+          range_end: _rangeEndClassName,
+          selected: _selectedClassName,
+          today: _todayClassName,
+          outside: _outsideClassName,
+          disabled: _disabledClassName,
+          hidden: _hiddenClassName,
 
-        dropdowns: cn('flex flex-1 justify-between [&>span]:flex'),
-        dropdown: cn(
-          'cursor-inherit leading-inherit absolute inset-0 m-0 w-full appearance-none border-none p-0 opacity-0'
-        ),
-        dropdown_root: cn('relative'),
-      }}
-      components={{
-        // TODO extract this
-        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
-        Chevron: ({ orientation }) => {
-          const Icon = match(orientation)
-            .with('left', () => ChevronLeft)
-            .with('right', () => ChevronRight)
-            .with('down', () => ChevronDown)
-            .with('up', () => ChevronUp)
-            .with(undefined, () => ChevronDown)
-            .exhaustive();
-
-          return <Icon className="h-4 w-4" />;
-        },
-        // TODO extract this
-        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
-        Nav: ({ className }) => (
-          <Nav
-            className={className}
-            displayYears={displayYears}
-            navView={navView}
-            setDisplayYears={setDisplayYears}
-            startMonth={startMonth}
-            endMonth={endMonth}
-            onPrevClick={onPrevClick}
-          />
-        ),
-        // TODO extract this
-        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
-        CaptionLabel: (props) => (
-          <CaptionLabel
-            showYearSwitcher={showYearSwitcher}
-            navView={navView}
-            setNavView={setNavView}
-            displayYears={displayYears}
-            {...props}
-          />
-        ),
-        // TODO extract this
-        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
-        MonthGrid: ({ className, children, ...props }) => (
-          <MonthGrid
-            className={className}
-            displayYears={displayYears}
-            startMonth={startMonth}
-            endMonth={endMonth}
-            navView={navView}
-            setNavView={setNavView}
-            {...props}
-          >
-            {children}
-          </MonthGrid>
-        ),
-      }}
-      numberOfMonths={columnsDisplayed}
-      {...props}
-    />
+          dropdowns: cn('flex flex-1 justify-between [&>span]:flex'),
+          dropdown: cn(
+            'cursor-inherit leading-inherit absolute inset-0 m-0 w-full appearance-none border-none p-0 opacity-0'
+          ),
+          dropdown_root: cn('relative'),
+        }}
+        components={{
+          Chevron: ChevronWrapper,
+          Nav,
+          CaptionLabel,
+          MonthGrid,
+        }}
+        numberOfMonths={columnsDisplayed}
+        {...props}
+      />
+    </CalendarContext>
   );
 }
 Calendar.displayName = 'Calendar';
 
-function Nav({
-  className,
-  navView,
-  startMonth,
-  endMonth,
-  displayYears,
-  setDisplayYears,
-  onPrevClick,
-  onNextClick,
-}: {
-  className?: string;
-  navView: NavView;
-  startMonth?: Date;
-  endMonth?: Date;
-  displayYears: { from: number; to: number };
-  setDisplayYears: React.Dispatch<
-    React.SetStateAction<{ from: number; to: number }>
-  >;
-  onPrevClick?: (date: Date) => void;
-  onNextClick?: (date: Date) => void;
-}) {
-  const { nextMonth, previousMonth, goToMonth } = useDayPicker();
+function Nav({ className }: NavProps) {
+  const {
+    nextMonth,
+    previousMonth,
+    goToMonth,
+    dayPickerProps: { startMonth, endMonth, onPrevClick, onNextClick },
+  } = useDayPicker();
+
+  const { displayYears, setDisplayYears, navView } = use(CalendarContext);
 
   const isPreviousDisabled = (() => {
     if (navView === 'years') {
@@ -334,7 +320,7 @@ function Nav({
     return !nextMonth;
   })();
 
-  const handlePreviousClick = React.useCallback(() => {
+  const handlePreviousClick = () => {
     if (!previousMonth) return;
     if (navView === 'years') {
       setDisplayYears((prev) => ({
@@ -352,9 +338,9 @@ function Nav({
     }
     goToMonth(previousMonth);
     onPrevClick?.(previousMonth);
-  }, [previousMonth, goToMonth]);
+  };
 
-  const handleNextClick = React.useCallback(() => {
+  const handleNextClick = () => {
     if (!nextMonth) return;
     if (navView === 'years') {
       setDisplayYears((prev) => ({
@@ -372,7 +358,8 @@ function Nav({
     }
     goToMonth(nextMonth);
     onNextClick?.(nextMonth);
-  }, [goToMonth, nextMonth]);
+  };
+
   return (
     <nav className={cn('flex items-center', className)}>
       <Button
@@ -412,19 +399,10 @@ function Nav({
   );
 }
 
-function CaptionLabel({
-  children,
-  showYearSwitcher,
-  navView,
-  setNavView,
-  displayYears,
-  ...props
-}: {
-  showYearSwitcher?: boolean;
-  navView: NavView;
-  setNavView: React.Dispatch<React.SetStateAction<NavView>>;
-  displayYears: { from: number; to: number };
-} & React.HTMLAttributes<HTMLSpanElement>) {
+function CaptionLabel({ children, ...props }: ComponentProps<'span'>) {
+  const { setNavView, navView, displayYears, showYearSwitcher } =
+    use(CalendarContext);
+
   if (!showYearSwitcher) return <span {...props}>{children}</span>;
   return (
     <Button
@@ -443,34 +421,15 @@ function CaptionLabel({
 function MonthGrid({
   className,
   children,
-  displayYears,
-  startMonth,
-  endMonth,
-  navView,
-  setNavView,
+
   ...props
-}: {
-  className?: string;
-  children: React.ReactNode;
-  displayYears: { from: number; to: number };
-  startMonth?: Date;
-  endMonth?: Date;
-  navView: NavView;
-  setNavView: React.Dispatch<React.SetStateAction<NavView>>;
-} & React.TableHTMLAttributes<HTMLTableElement>) {
+}: MonthGridProps) {
+  const { navView } = use(CalendarContext);
+
   if (navView === 'years') {
-    return (
-      <YearGrid
-        displayYears={displayYears}
-        startMonth={startMonth}
-        endMonth={endMonth}
-        setNavView={setNavView}
-        navView={navView}
-        className={className}
-        {...props}
-      />
-    );
+    return <YearGrid className={className} {...props} />;
   }
+
   return (
     <table className={className} {...props}>
       {children}
@@ -478,23 +437,14 @@ function MonthGrid({
   );
 }
 
-function YearGrid({
-  className,
-  displayYears,
-  startMonth,
-  endMonth,
-  setNavView,
-  navView,
-  ...props
-}: {
-  className?: string;
-  displayYears: { from: number; to: number };
-  startMonth?: Date;
-  endMonth?: Date;
-  setNavView: React.Dispatch<React.SetStateAction<NavView>>;
-  navView: NavView;
-} & React.HTMLAttributes<HTMLDivElement>) {
-  const { goToMonth, selected } = useDayPicker();
+function YearGrid({ className, ...props }: MonthGridProps) {
+  const { displayYears, setNavView, navView } = use(CalendarContext);
+
+  const {
+    goToMonth,
+    selected,
+    dayPickerProps: { startMonth, endMonth },
+  } = useDayPicker();
 
   return (
     <div className={cn('grid grid-cols-4 gap-y-2', className)} {...props}>
