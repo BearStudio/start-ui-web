@@ -12,7 +12,10 @@ export const LayoutLogin = (props: {
   footer?: ReactNode;
 }) => {
   return (
-    <div className="flex flex-1 pt-safe-top pb-safe-bottom">
+    <div
+      className="flex flex-1 pt-safe-top pb-safe-bottom"
+      data-testid="layout-login"
+    >
       <div className="flex w-full flex-1 flex-col gap-4 p-6 md:p-10">
         <div className="flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2 font-medium">
