@@ -7,21 +7,23 @@ test.describe('Login flow', () => {
     const utils = pageUtils(page);
     await utils.goto('/login');
     await utils.login({ email: ADMIN_EMAIL });
-    await page.waitForURL('/');
+    await page.waitForURL('/manager');
+    await expect(page.getByTestId('layout-manager')).toBeVisible();
   });
 
   test('Login as user', async ({ page }) => {
     const utils = pageUtils(page);
     await utils.goto('/login');
     await utils.login({ email: USER_EMAIL });
-    await page.waitForURL('/');
+    await page.waitForURL('/app');
+    await expect(page.getByTestId('layout-app')).toBeVisible();
   });
 
   test('Login with redirect', async ({ page }) => {
     const utils = pageUtils(page);
-    await utils.goto('/demo');
+    await utils.goto('/app');
     await utils.login({ email: ADMIN_EMAIL });
-    await page.waitForURL('/demo');
-    await expect(page.getByText('/demo/')).toBeVisible();
+    await page.waitForURL('/app');
+    await expect(page.getByTestId('layout-app')).toBeVisible();
   });
 });
