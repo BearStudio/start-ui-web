@@ -11,6 +11,7 @@ import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
 import { Form, FormField, FormFieldController } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { useMascot } from '@/features/auth/mascot-store';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
@@ -40,6 +41,7 @@ export default function PageLogin({
       return response.data;
     },
     onError: (error) => {
+      form.setError('email', { message: error.message });
       toast.error(error.message);
     },
   });
@@ -51,6 +53,9 @@ export default function PageLogin({
       email: '',
     },
   });
+
+  const { isValid, isSubmitted } = form.formState;
+  useMascot({ initialState: 'default', isError: !isValid && isSubmitted });
 
   const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
     const { error } = await authClient.emailOtp.sendVerificationOtp({
