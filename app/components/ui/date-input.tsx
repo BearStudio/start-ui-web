@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { parseStringToDate } from '@/lib/dayjs/parseStringToDate';
+import { parseStringToDate } from '@/lib/dayjs/parse-string-to-date';
 
 import { Input } from '@/components/ui/input';
 
