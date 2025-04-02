@@ -5,6 +5,8 @@ import { describe, expect, it, vitest } from 'vitest';
 import { Calendar } from './calendar';
 
 vitest.mock('react-i18next', () => ({
+  // This is a mock, we name it as the hook we want to mock
+  // eslint-disable-next-line @eslint-react/hooks-extra/no-unnecessary-use-prefix
   useTranslation: () => ({ t: (key: ExplicitAny) => key }),
 }));
 
