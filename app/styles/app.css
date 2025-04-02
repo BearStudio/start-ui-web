@@ -183,3 +183,19 @@
     animation: caret-blink 1.25s ease-out infinite;
   }
 }
+
+@layer components {
+  @keyframes float-in-space {
+    0%,
+    100% {
+      transform: translate(-10px, 10px) rotate(-2deg);
+    }
+    50% {
+      transform: translate(20px, -20px) rotate(5deg);
+    }
+  }
+
+  .animate-float-in-space {
+    animation: float-in-space 8s ease-in-out infinite;
+  }
+}
