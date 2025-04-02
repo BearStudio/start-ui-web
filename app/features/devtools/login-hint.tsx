@@ -21,7 +21,7 @@ export const LoginEmailHint = () => {
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
-      <AlertDescription className="flex text-sm leading-4">
+      <AlertDescription className="flex flex-wrap text-sm leading-4">
         You can login with{' '}
         <button
           type="button"
