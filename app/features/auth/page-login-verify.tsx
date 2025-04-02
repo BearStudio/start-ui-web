@@ -47,7 +47,7 @@ export default function PageLoginVerify({
     },
   });
   const { isValid, isSubmitted } = form.formState;
-  useMascot({ initialState: 'default', isError: !isValid && isSubmitted });
+  useMascot({ isError: !isValid && isSubmitted });
 
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,

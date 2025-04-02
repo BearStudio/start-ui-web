@@ -14,10 +14,10 @@ const useMascotStore = create<MascotStoreState>()((set) => ({
 }));
 
 export const useMascot = ({
-  initialState,
+  initialState = 'default',
   isError,
 }: {
-  initialState: State;
+  initialState?: State;
   isError?: boolean;
 }) => {
   const setState = useMascotStore((s) => s.setState);
