@@ -26,7 +26,11 @@ export const LoginEmailHint = () => {
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          onClick={() => form.setValue('email', mockedEmail)}
+          onClick={() =>
+            form.setValue('email', mockedEmail, {
+              shouldValidate: true,
+            })
+          }
         >
           {mockedEmail}
         </button>
@@ -53,7 +57,11 @@ export const LoginEmailOtpHint = () => {
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          onClick={() => form.setValue('otp', AUTH_EMAIL_OTP_MOCKED)}
+          onClick={() =>
+            form.setValue('otp', AUTH_EMAIL_OTP_MOCKED, {
+              shouldValidate: true,
+            })
+          }
         >
           {AUTH_EMAIL_OTP_MOCKED}
         </button>
