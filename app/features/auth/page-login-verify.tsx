@@ -20,6 +20,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { useMascot } from '@/features/auth/mascot-store';
 import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
@@ -45,6 +46,8 @@ export default function PageLoginVerify({
       otp: '',
     },
   });
+  const { isValid, isSubmitted } = form.formState;
+  useMascot({ initialState: 'default', isError: !isValid && isSubmitted });
 
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,
