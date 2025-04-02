@@ -6,6 +6,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
 import storybook from 'eslint-plugin-storybook';
+import unicorn from 'eslint-plugin-unicorn';
 import tslint from 'typescript-eslint';
 
 export default tslint.config(
@@ -38,6 +39,20 @@ export default tslint.config(
       'sonarjs/no-duplicate-string': 'off',
       'sonarjs/cognitive-complexity': ['warn', 50],
       'sonarjs/prefer-immediate-return': 'warn',
+    },
+  },
+  {
+    plugins: {
+      unicorn,
+    },
+    rules: {
+      'unicorn/filename-case': [
+        'error',
+        {
+          case: 'kebabCase',
+          ignore: ['^routeTree\\.gen\\.ts$', '^Icon(.*)\\.tsx'],
+        },
+      ],
     },
   },
   {
