@@ -65,11 +65,11 @@ export default function PageLogin({
 
     if (error) {
       toast.error(
-        t(
-          error.code
-            ? `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
-            : 'auth:errorCode.UNKNOWN_ERROR'
-        )
+        error.code
+          ? t(
+              `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+            )
+          : error.message
       );
       return;
     }
