@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { describe, expect, it } from 'vitest';
 
-import { parseStringToDate } from '@/lib/dayjs/parseStringToDate';
+import { parseStringToDate } from '@/lib/dayjs/parse-string-to-date';
 
 describe('parseStringToDate', () => {
   const FORMAT = 'DD/MM/YYYY';

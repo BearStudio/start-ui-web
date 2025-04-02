@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { authClient } from '@/lib/auth/client';
-import { WithPermission } from '@/lib/auth/WithPermission';
+import { WithPermission } from '@/lib/auth/with-permission';
 import { orpc } from '@/lib/orpc/client';
 import { useTheme } from '@/lib/theme/client';
 
