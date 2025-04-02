@@ -1,10 +1,32 @@
 {
   "pageErrorBoundary": {
-    "title": "Something went wrong",
+    "title": "ERROR",
+    "description": "Something went wrong",
     "tryAgain": "Try Again",
-    "goBack": "Go Back"
+    "goBack": "Back",
+    "goHome": "Home"
   },
   "datePickerButton": {
     "pickADate": "Pick a date"
+  },
+  "pageError": {
+    "403": {
+      "title": "403",
+      "description": "You don't have access to this page"
+    },
+    "404": {
+      "title": "404",
+      "description": "This page could not be found"
+    },
+    "500": {
+      "title": "500",
+      "description": "Something went wrong"
+    },
+    "goHome": "Home",
+    "goBack": "Back",
+    "unknown": {
+      "title": "ERROR",
+      "description": "Something went wrong"
+    }
   }
 }

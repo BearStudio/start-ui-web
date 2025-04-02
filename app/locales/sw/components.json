@@ -1,10 +1,32 @@
 {
   "pageErrorBoundary": {
-    "title": "Kuna hitilafu imetokea",
+    "title": "Kosa",
     "tryAgain": "Jaribu tena",
-    "goBack": "Rudi nyuma"
+    "goBack": "Rudi nyuma",
+    "description": "Kitu kilienda vibaya",
+    "goHome": "Nyumbani"
   },
   "datePickerButton": {
     "pickADate": "Chagua tarehe"
+  },
+  "pageError": {
+    "403": {
+      "description": "Huna ufikiaji wa ukurasa huu",
+      "title": "403"
+    },
+    "404": {
+      "description": "Ukurasa huu haukuweza kupatikana",
+      "title": "404"
+    },
+    "500": {
+      "description": "Kitu kilienda vibaya",
+      "title": "500"
+    },
+    "unknown": {
+      "description": "Kitu kilienda vibaya",
+      "title": "Kosa"
+    },
+    "goBack": "Nyuma",
+    "goHome": "Nyumbani"
   }
 }
