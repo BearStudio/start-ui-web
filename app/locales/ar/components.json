@@ -1,10 +1,32 @@
 {
   "pageErrorBoundary": {
-    "title": "حدث خطأ ما",
+    "title": "خطأ",
     "tryAgain": "حاول مرة أخرى",
-    "goBack": "رجوع"
+    "goBack": "رجوع",
+    "description": "حدث خطأ ما",
+    "goHome": "بيت"
   },
   "datePickerButton": {
     "pickADate": "اختر موعدًا"
+  },
+  "pageError": {
+    "403": {
+      "description": "ليس لديك حق الوصول إلى هذه الصفحة",
+      "title": "403"
+    },
+    "404": {
+      "description": "لا يمكن العثور على هذه الصفحة",
+      "title": "404"
+    },
+    "500": {
+      "description": "حدث خطأ ما",
+      "title": "500"
+    },
+    "unknown": {
+      "description": "حدث خطأ ما",
+      "title": "خطأ"
+    },
+    "goBack": "خلف",
+    "goHome": "بيت"
   }
 }

@@ -1,10 +1,32 @@
 {
   "pageErrorBoundary": {
-    "title": "Une erreur s'est produite",
+    "title": "ERREUR",
     "tryAgain": "Réessayer",
-    "goBack": "Retour"
+    "goBack": "Retour",
+    "description": "Quelque chose s'est mal passé",
+    "goHome": "Accueil"
   },
   "datePickerButton": {
     "pickADate": "Choisir une date"
+  },
+  "pageError": {
+    "403": {
+      "description": "Vous n'avez pas accès à cette page",
+      "title": "403"
+    },
+    "404": {
+      "description": "Cette page est introuvable",
+      "title": "404"
+    },
+    "500": {
+      "description": "Quelque chose s'est mal passé",
+      "title": "500"
+    },
+    "unknown": {
+      "description": "Quelque chose s'est mal passé",
+      "title": "ERREUR"
+    },
+    "goBack": "Retour",
+    "goHome": "Accueil"
   }
 }
