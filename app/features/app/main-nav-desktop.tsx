@@ -14,7 +14,7 @@ export const MainNavDesktop = () => {
           height: HEIGHT,
         }}
       />
-      <div
+      <header
         className="fixed top-0 right-0 left-0 flex items-center border-b border-b-neutral-100 bg-white pt-safe-top shadow-layout dark:border-b-neutral-800 dark:bg-neutral-900"
         style={{ height: HEIGHT }}
       >
@@ -22,15 +22,15 @@ export const MainNavDesktop = () => {
           <Link to="/app">
             <Logo className="w-24" />
           </Link>
-          <div className="flex gap-0.5">
+          <nav className="flex gap-0.5">
             {MAIN_NAV_LINKS.map(({ label, ...item }) => (
               <Item key={item.linkOptions.to} {...item}>
                 {label}
               </Item>
             ))}
-          </div>
+          </nav>
         </div>
-      </div>
+      </header>
     </div>
   );
 };
