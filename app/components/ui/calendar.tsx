@@ -76,15 +76,24 @@ export type CalendarProps = DayPickerProps & {
 type NavView = 'days' | 'years';
 type DisplayYears = { from: number; to: number };
 
+const getDisplayYearsInitialValue = (yearRange: number) => {
+  const currentYear = new Date().getFullYear();
+  return {
+    from: currentYear - Math.floor(yearRange / 2 - 1),
+    to: currentYear + Math.ceil(yearRange / 2),
+  };
+};
+
 type CalendarContextType = {
   displayYears: DisplayYears;
   setDisplayYears: Dispatch<SetStateAction<DisplayYears>>;
   navView: NavView;
-  setNavView: Dispatch<React.SetStateAction<NavView>>;
+  setNavView: Dispatch<SetStateAction<NavView>>;
   showYearSwitcher: boolean;
 };
+
 const CalendarContext = createContext<CalendarContextType>({
-  displayYears: { from: 0, to: 0 },
+  displayYears: getDisplayYearsInitialValue(12),
   setDisplayYears: () => {},
   navView: 'days',
   setNavView: () => {},
@@ -109,7 +118,7 @@ const ChevronWrapper = ({ orientation }: ChevronProps) => {
  * @default yearRange 12
  * @returns
  */
-function Calendar({
+export function Calendar({
   className,
   showOutsideDays = true,
   showYearSwitcher = true,
@@ -123,13 +132,7 @@ function Calendar({
 
   const [navView, setNavView] = useState<NavView>('days');
   const [displayYears, setDisplayYears] = useState<DisplayYears>(
-    useMemo(() => {
-      const currentYear = new Date().getFullYear();
-      return {
-        from: currentYear - Math.floor(yearRange / 2 - 1),
-        to: currentYear + Math.ceil(yearRange / 2),
-      };
-    }, [yearRange])
+    getDisplayYearsInitialValue(yearRange)
   );
 
   const columnsDisplayed = navView === 'years' ? 1 : numberOfMonths;
@@ -276,7 +279,6 @@ function Calendar({
     </CalendarContext>
   );
 }
-Calendar.displayName = 'Calendar';
 
 function Nav({ className }: NavProps) {
   const {
@@ -288,8 +290,9 @@ function Nav({ className }: NavProps) {
 
   const { displayYears, setDisplayYears, navView } = use(CalendarContext);
 
-  const isPreviousDisabled = (() => {
-    if (navView === 'years') {
+  const isPreviousDisabled = match(navView)
+    .with('days', () => !previousMonth)
+    .with('years', () => {
       return (
         (startMonth &&
           dayjs((displayYears.from - 1).toString())
@@ -300,12 +303,12 @@ function Nav({ className }: NavProps) {
             .startOf('year')
             .isAfter(endMonth))
       );
-    }
-    return !previousMonth;
-  })();
+    })
+    .exhaustive();
 
-  const isNextDisabled = (() => {
-    if (navView === 'years') {
+  const isNextDisabled = match(navView)
+    .with('days', () => !nextMonth)
+    .with('years', () => {
       return (
         (startMonth &&
           dayjs((displayYears.to + 1).toString())
@@ -316,9 +319,8 @@ function Nav({ className }: NavProps) {
             .startOf('year')
             .isAfter(endMonth))
       );
-    }
-    return !nextMonth;
-  })();
+    })
+    .exhaustive();
 
   const handlePreviousClick = () => {
     if (!previousMonth) return;
@@ -418,12 +420,7 @@ function CaptionLabel({ children, ...props }: ComponentProps<'span'>) {
   );
 }
 
-function MonthGrid({
-  className,
-  children,
-
-  ...props
-}: MonthGridProps) {
+function MonthGrid({ className, children, ...props }: MonthGridProps) {
   const { navView } = use(CalendarContext);
 
   if (navView === 'years') {
@@ -491,5 +488,3 @@ function YearGrid({ className, ...props }: MonthGridProps) {
     </div>
   );
 }
-
-export { Calendar };
