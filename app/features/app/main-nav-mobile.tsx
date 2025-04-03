@@ -13,7 +13,7 @@ export const MainNavMobile = () => {
           height: HEIGHT,
         }}
       />
-      <div
+      <nav
         className="fixed right-0 bottom-0 left-0 flex border-t border-t-neutral-100 bg-white px-4 pb-safe-bottom shadow-layout dark:border-t-neutral-800 dark:bg-neutral-900"
         style={{ height: HEIGHT }}
       >
@@ -22,7 +22,7 @@ export const MainNavMobile = () => {
             {label}
           </Item>
         ))}
-      </div>
+      </nav>
     </div>
   );
 };
