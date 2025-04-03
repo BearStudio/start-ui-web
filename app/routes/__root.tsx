@@ -66,7 +66,11 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: `${getEnvHintTitlePrefix()} Start UI [web]`,
+        title: `${getEnvHintTitlePrefix()} Start UI`,
+      },
+      {
+        name: 'apple-mobile-web-app-title',
+        content: 'Start UI',
       },
       {
         name: 'apple-mobile-web-app-status-bar-style',
@@ -76,14 +80,6 @@ export const Route = createRootRouteWithContext<{
         name: 'mobile-web-app-capable',
         content: 'yes',
       },
-      {
-        name: 'msapplication-TileColor',
-        content: '#000',
-      },
-      {
-        name: 'theme-color',
-        content: '#000',
-      },
     ],
     links: [
       {
@@ -91,28 +87,19 @@ export const Route = createRootRouteWithContext<{
         href: appCss,
       },
       {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/favicon-96x96.png',
+        sizes: '96x96',
+      },
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'shortcut icon', href: '/favicon.ico' },
+      {
         rel: 'apple-touch-icon',
         sizes: '180x180',
         href: '/apple-touch-icon.png',
       },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '32x32',
-        href: '/favicon-32x32.png',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '16x16',
-        href: '/favicon-16x16.png',
-      },
       { rel: 'manifest', href: '/site.webmanifest' },
-      {
-        rel: 'mask-icon',
-        href: '/safari-pinned-tab.svg',
-        color: '#000',
-      },
     ],
   }),
 });
