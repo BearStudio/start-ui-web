@@ -9,6 +9,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -89,9 +90,11 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-      <main className="flex flex-1 flex-col p-4">
-        <SidebarTrigger />
-      </main>
+      <SidebarInset>
+        <main className="flex flex-1 flex-col p-4">
+          <SidebarTrigger />
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }
