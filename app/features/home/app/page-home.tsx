@@ -23,7 +23,6 @@ export const PageHome = () => {
         >
           <Link to="/manager">Go to Manager</Link>
         </WithPermission>
-        <Link to="/">Go to Home (public)</Link>
       </PageLayoutContent>
     </PageLayout>
   );
