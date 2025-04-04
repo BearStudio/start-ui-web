@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
-import { useMascot } from '@/features/auth/mascot-store';
+import { useMascot } from '@/features/auth/mascot';
 
 export default function PageLoginError({
   search,

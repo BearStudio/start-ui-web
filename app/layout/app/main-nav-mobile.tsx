@@ -1,7 +1,7 @@
 import { Link, ValidateLinkOptions } from '@tanstack/react-router';
 import { FC, ReactNode } from 'react';
 
-import { MAIN_NAV_LINKS } from '@/features/app/main-nav-config';
+import { MAIN_NAV_LINKS } from '@/layout/app/main-nav-config';
 
 const HEIGHT = 'calc(64px + env(safe-area-inset-bottom))';
 
@@ -14,7 +14,7 @@ export const MainNavMobile = () => {
         }}
       />
       <nav
-        className="fixed right-0 bottom-0 left-0 flex border-t border-t-neutral-100 bg-white px-4 pb-safe-bottom shadow-layout dark:border-t-neutral-800 dark:bg-neutral-900"
+        className="fixed right-0 bottom-0 left-0 flex border-t border-t-neutral-100 bg-white px-4 pb-safe-bottom dark:border-t-neutral-800 dark:bg-neutral-900"
         style={{ height: HEIGHT }}
       >
         {MAIN_NAV_LINKS.map(({ label, ...item }) => (

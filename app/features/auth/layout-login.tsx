@@ -5,7 +5,7 @@ import { Logo } from '@/components/brand/logo';
 import { LocalSwitcher } from '@/components/ui/local-switcher';
 import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 
-import { useMascotState } from '@/features/auth/mascot-store';
+import { useMascotState } from '@/features/auth/mascot';
 
 import image from './layout-login-image.jpg';
 import mascot from './mascot.png';
