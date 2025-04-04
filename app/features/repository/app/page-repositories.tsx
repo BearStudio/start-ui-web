@@ -1,0 +1,267 @@
+import { Link } from '@tanstack/react-router';
+
+import {
+  PageLayout,
+  PageLayoutContent,
+  PageLayoutTopBar,
+} from '@/layout/app/page-layout';
+
+export const PageRepositories = () => {
+  return (
+    <PageLayout>
+      <PageLayoutTopBar>
+        <h1 className="overflow-hidden text-base font-bold text-ellipsis">
+          Repositories
+        </h1>
+      </PageLayoutTopBar>
+      <PageLayoutContent>
+        <Link to="/app/repositories/$id" params={{ id: '1' }}>
+          Go to Repo 1
+        </Link>
+        START
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
+        aliquid officia suscipit iste, labore cum distinctio. Harum voluptate
+        modi, reiciendis quasi, ab velit asperiores, quod quia et consectetur
+        minus?
+        <br />
+        END
+      </PageLayoutContent>
+    </PageLayout>
+  );
+};

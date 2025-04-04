@@ -20,7 +20,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
-import { useMascot } from '@/features/auth/mascot-store';
+import { useMascot } from '@/features/auth/mascot';
 import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,

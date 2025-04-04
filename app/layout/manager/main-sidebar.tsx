@@ -19,7 +19,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-export const SidebarManager = (props: { children?: ReactNode }) => {
+export const MainSidebar = (props: { children?: ReactNode }) => {
   const matchRoute = useMatchRoute();
   return (
     <SidebarProvider>
@@ -45,9 +45,9 @@ export const SidebarManager = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={!!matchRoute({ to: '/manager/repository' })}
+                    isActive={!!matchRoute({ to: '/manager/repositories' })}
                   >
-                    <Link to="/manager/repository">
+                    <Link to="/manager/repositories">
                       <IconGitBranch />
                       <span>Repositories</span>
                     </Link>
