@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 export const PageLayoutContainer = (props: {
   children?: ReactNode;
   className?: string;
@@ -18,7 +20,8 @@ export const PageLayoutContainer = (props: {
   );
 };
 
-const TOPBAT_HEIGHT = 'calc(52px + env(safe-area-inset-top))';
+const TOPBAT_HEIGHT =
+  'calc(var(--page-layout-topbar-height, 64px) + env(safe-area-inset-top))';
 
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
@@ -31,7 +34,7 @@ export const PageLayoutTopBar = (props: {
   return (
     <div
       className={cn(
-        'flex min-w-0 flex-col items-end justify-center border-b border-b-neutral-100 bg-white pt-safe-top dark:border-b-neutral-800 dark:bg-neutral-900',
+        'z-10 flex min-w-0 flex-col items-end justify-center border-b border-b-neutral-200 bg-white pt-safe-top max-md:pt-2 md:-mt-1 md:[--page-layout-topbar-height:52px] dark:border-b-neutral-800 dark:bg-neutral-900',
         props.className
       )}
       style={{
@@ -66,18 +69,21 @@ export const PageLayoutContent = (props: {
 }) => {
   return (
     <div className="relative flex flex-1 flex-col">
-      <div
-        // TODO component scroll from shadcn
-        className="absolute inset-0 flex flex-1 flex-col overflow-auto"
-      >
-        {props.noContainer ? (
-          props.children
-        ) : (
-          <PageLayoutContainer className={cn('py-4', props.containerClassName)}>
-            {props.children}
-          </PageLayoutContainer>
-        )}
-        <div className="h-safe-bottom w-full" />
+      <div className="absolute inset-0">
+        <ScrollArea className="h-full">
+          <div className="flex flex-1 flex-col">
+            {props.noContainer ? (
+              props.children
+            ) : (
+              <PageLayoutContainer
+                className={cn('py-4', props.containerClassName)}
+              >
+                {props.children}
+              </PageLayoutContainer>
+            )}
+          </div>
+          <div className="h-safe-bottom w-full" />
+        </ScrollArea>
       </div>
     </div>
   );
