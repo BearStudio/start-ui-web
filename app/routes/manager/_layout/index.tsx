@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { WithPermission } from '@/lib/auth/with-permission';
 
-export const Route = createFileRoute('/manager/')({
+export const Route = createFileRoute('/manager/_layout/')({
   component: RouteComponent,
 });
 

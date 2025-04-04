@@ -1,0 +1,100 @@
+import { ReactNode } from 'react';
+
+import { cn } from '@/lib/tailwind/utils';
+
+export const PageLayoutContainer = (props: {
+  children?: ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div
+      className={cn(
+        'mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col px-4',
+        props.className
+      )}
+    >
+      {props.children}
+    </div>
+  );
+};
+
+const TOPBAT_HEIGHT = 'calc(52px + env(safe-area-inset-top))';
+
+export const PageLayoutTopBar = (props: {
+  children?: ReactNode;
+  className?: string;
+  leftActions?: ReactNode;
+  rightActions?: ReactNode;
+  isConfirmDiscardChanges?: boolean;
+  containerClassName?: string;
+}) => {
+  return (
+    <div
+      className={cn(
+        'flex min-w-0 flex-col items-end justify-center border-b border-b-neutral-100 bg-white pt-safe-top dark:border-b-neutral-800 dark:bg-neutral-900',
+        props.className
+      )}
+      style={{
+        height: TOPBAT_HEIGHT,
+      }}
+    >
+      <PageLayoutContainer
+        className={cn(
+          'flex-0 items-center justify-center',
+          props.containerClassName
+        )}
+      >
+        <div className="flex w-full min-w-0 items-center justify-center gap-4">
+          {!!props.leftActions && (
+            <div className="flex items-center gap-3">{props.leftActions}</div>
+          )}
+          <div className="min-w-0 flex-1">{props.children}</div>
+          {!!props.rightActions && (
+            <div className="flex items-center gap-3">{props.rightActions}</div>
+          )}
+        </div>
+      </PageLayoutContainer>
+    </div>
+  );
+};
+
+export const PageLayoutContent = (props: {
+  noContainer?: boolean;
+  children?: ReactNode;
+  className?: string;
+  containerClassName?: string;
+}) => {
+  return (
+    <div className="relative flex flex-1 flex-col">
+      <div
+        // TODO component scroll from shadcn
+        className="absolute inset-0 flex flex-1 flex-col overflow-auto"
+      >
+        {props.noContainer ? (
+          props.children
+        ) : (
+          <PageLayoutContainer className={cn('py-4', props.containerClassName)}>
+            {props.children}
+          </PageLayoutContainer>
+        )}
+        <div className="h-safe-bottom w-full" />
+      </div>
+    </div>
+  );
+};
+
+export const PageLayout = (props: {
+  children?: ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div
+      className={cn(
+        'flex flex-1 flex-col bg-neutral-50 dark:bg-neutral-950',
+        props.className
+      )}
+    >
+      {props.children}
+    </div>
+  );
+};

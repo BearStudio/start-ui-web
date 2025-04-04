@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { LayoutLogin } from '@/features/auth/layout-login';
-import { useMascot } from '@/features/auth/mascot-store';
+import { useMascot } from '@/features/auth/mascot';
 import {
   FormFieldsOnboarding,
   zFormFieldsOnboarding,

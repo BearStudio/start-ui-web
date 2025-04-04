@@ -15,16 +15,20 @@ import { Route as ManagerImport } from './routes/manager'
 import { Route as LoginImport } from './routes/login'
 import { Route as AppImport } from './routes/app'
 import { Route as IndexImport } from './routes/index'
-import { Route as ManagerIndexImport } from './routes/manager/index'
 import { Route as LoginIndexImport } from './routes/login/index'
-import { Route as AppIndexImport } from './routes/app/index'
 import { Route as PlanetIdImport } from './routes/planet.$id'
-import { Route as ManagerUserIndexImport } from './routes/manager/user.index'
-import { Route as ManagerRepositoryIndexImport } from './routes/manager/repository.index'
+import { Route as ManagerLayoutImport } from './routes/manager/_layout'
+import { Route as AppLayoutDesktopOnlyImport } from './routes/app/_layout-desktop-only'
+import { Route as AppLayoutImport } from './routes/app/_layout'
+import { Route as ManagerLayoutIndexImport } from './routes/manager/_layout/index'
 import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
 import { Route as LoginErrorIndexImport } from './routes/login/error.index'
-import { Route as AppRepositoryIndexImport } from './routes/app/repository.index'
-import { Route as AppAccountIndexImport } from './routes/app/account.index'
+import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
+import { Route as ManagerLayoutUserIndexImport } from './routes/manager/_layout/user.index'
+import { Route as ManagerLayoutRepositoriesIndexImport } from './routes/manager/_layout/repositories.index'
+import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
+import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
+import { Route as AppLayoutDesktopOnlyRepositoriesIdIndexImport } from './routes/app/_layout-desktop-only/repositories.$id.index'
 
 // Create/Update Routes
 
@@ -52,22 +56,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ManagerIndexRoute = ManagerIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ManagerRoute,
-} as any)
-
 const LoginIndexRoute = LoginIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LoginRoute,
-} as any)
-
-const AppIndexRoute = AppIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppRoute,
 } as any)
 
 const PlanetIdRoute = PlanetIdImport.update({
@@ -76,16 +68,25 @@ const PlanetIdRoute = PlanetIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ManagerUserIndexRoute = ManagerUserIndexImport.update({
-  id: '/user/',
-  path: '/user/',
+const ManagerLayoutRoute = ManagerLayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => ManagerRoute,
 } as any)
 
-const ManagerRepositoryIndexRoute = ManagerRepositoryIndexImport.update({
-  id: '/repository/',
-  path: '/repository/',
-  getParentRoute: () => ManagerRoute,
+const AppLayoutDesktopOnlyRoute = AppLayoutDesktopOnlyImport.update({
+  id: '/_layout-desktop-only',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppLayoutRoute = AppLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const ManagerLayoutIndexRoute = ManagerLayoutIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ManagerLayoutRoute,
 } as any)
 
 const LoginVerifyIndexRoute = LoginVerifyIndexImport.update({
@@ -100,17 +101,45 @@ const LoginErrorIndexRoute = LoginErrorIndexImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 
-const AppRepositoryIndexRoute = AppRepositoryIndexImport.update({
-  id: '/repository/',
-  path: '/repository/',
-  getParentRoute: () => AppRoute,
+const AppLayoutIndexRoute = AppLayoutIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppLayoutRoute,
 } as any)
 
-const AppAccountIndexRoute = AppAccountIndexImport.update({
+const ManagerLayoutUserIndexRoute = ManagerLayoutUserIndexImport.update({
+  id: '/user/',
+  path: '/user/',
+  getParentRoute: () => ManagerLayoutRoute,
+} as any)
+
+const ManagerLayoutRepositoriesIndexRoute =
+  ManagerLayoutRepositoriesIndexImport.update({
+    id: '/repositories/',
+    path: '/repositories/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
+
+const AppLayoutRepositoriesIndexRoute = AppLayoutRepositoriesIndexImport.update(
+  {
+    id: '/repositories/',
+    path: '/repositories/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any,
+)
+
+const AppLayoutAccountIndexRoute = AppLayoutAccountIndexImport.update({
   id: '/account/',
   path: '/account/',
-  getParentRoute: () => AppRoute,
+  getParentRoute: () => AppLayoutRoute,
 } as any)
+
+const AppLayoutDesktopOnlyRepositoriesIdIndexRoute =
+  AppLayoutDesktopOnlyRepositoriesIdIndexImport.update({
+    id: '/repositories/$id/',
+    path: '/repositories/$id/',
+    getParentRoute: () => AppLayoutDesktopOnlyRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -144,19 +173,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerImport
       parentRoute: typeof rootRoute
     }
+    '/app/_layout': {
+      id: '/app/_layout'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AppLayoutImport
+      parentRoute: typeof AppImport
+    }
+    '/app/_layout-desktop-only': {
+      id: '/app/_layout-desktop-only'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AppLayoutDesktopOnlyImport
+      parentRoute: typeof AppImport
+    }
+    '/manager/_layout': {
+      id: '/manager/_layout'
+      path: ''
+      fullPath: '/manager'
+      preLoaderRoute: typeof ManagerLayoutImport
+      parentRoute: typeof ManagerImport
+    }
     '/planet/$id': {
       id: '/planet/$id'
       path: '/planet/$id'
       fullPath: '/planet/$id'
       preLoaderRoute: typeof PlanetIdImport
       parentRoute: typeof rootRoute
-    }
-    '/app/': {
-      id: '/app/'
-      path: '/'
-      fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexImport
-      parentRoute: typeof AppImport
     }
     '/login/': {
       id: '/login/'
@@ -165,26 +208,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof LoginImport
     }
-    '/manager/': {
-      id: '/manager/'
+    '/app/_layout/': {
+      id: '/app/_layout/'
       path: '/'
-      fullPath: '/manager/'
-      preLoaderRoute: typeof ManagerIndexImport
-      parentRoute: typeof ManagerImport
-    }
-    '/app/account/': {
-      id: '/app/account/'
-      path: '/account'
-      fullPath: '/app/account'
-      preLoaderRoute: typeof AppAccountIndexImport
-      parentRoute: typeof AppImport
-    }
-    '/app/repository/': {
-      id: '/app/repository/'
-      path: '/repository'
-      fullPath: '/app/repository'
-      preLoaderRoute: typeof AppRepositoryIndexImport
-      parentRoute: typeof AppImport
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppLayoutIndexImport
+      parentRoute: typeof AppLayoutImport
     }
     '/login/error/': {
       id: '/login/error/'
@@ -200,35 +229,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginVerifyIndexImport
       parentRoute: typeof LoginImport
     }
-    '/manager/repository/': {
-      id: '/manager/repository/'
-      path: '/repository'
-      fullPath: '/manager/repository'
-      preLoaderRoute: typeof ManagerRepositoryIndexImport
-      parentRoute: typeof ManagerImport
+    '/manager/_layout/': {
+      id: '/manager/_layout/'
+      path: '/'
+      fullPath: '/manager/'
+      preLoaderRoute: typeof ManagerLayoutIndexImport
+      parentRoute: typeof ManagerLayoutImport
     }
-    '/manager/user/': {
-      id: '/manager/user/'
+    '/app/_layout/account/': {
+      id: '/app/_layout/account/'
+      path: '/account'
+      fullPath: '/app/account'
+      preLoaderRoute: typeof AppLayoutAccountIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/app/_layout/repositories/': {
+      id: '/app/_layout/repositories/'
+      path: '/repositories'
+      fullPath: '/app/repositories'
+      preLoaderRoute: typeof AppLayoutRepositoriesIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/manager/_layout/repositories/': {
+      id: '/manager/_layout/repositories/'
+      path: '/repositories'
+      fullPath: '/manager/repositories'
+      preLoaderRoute: typeof ManagerLayoutRepositoriesIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
+    '/manager/_layout/user/': {
+      id: '/manager/_layout/user/'
       path: '/user'
       fullPath: '/manager/user'
-      preLoaderRoute: typeof ManagerUserIndexImport
-      parentRoute: typeof ManagerImport
+      preLoaderRoute: typeof ManagerLayoutUserIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
+    '/app/_layout-desktop-only/repositories/$id/': {
+      id: '/app/_layout-desktop-only/repositories/$id/'
+      path: '/repositories/$id'
+      fullPath: '/app/repositories/$id'
+      preLoaderRoute: typeof AppLayoutDesktopOnlyRepositoriesIdIndexImport
+      parentRoute: typeof AppLayoutDesktopOnlyImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppLayoutRouteChildren {
+  AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutAccountIndexRoute: typeof AppLayoutAccountIndexRoute
+  AppLayoutRepositoriesIndexRoute: typeof AppLayoutRepositoriesIndexRoute
+}
+
+const AppLayoutRouteChildren: AppLayoutRouteChildren = {
+  AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutAccountIndexRoute: AppLayoutAccountIndexRoute,
+  AppLayoutRepositoriesIndexRoute: AppLayoutRepositoriesIndexRoute,
+}
+
+const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
+  AppLayoutRouteChildren,
+)
+
+interface AppLayoutDesktopOnlyRouteChildren {
+  AppLayoutDesktopOnlyRepositoriesIdIndexRoute: typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
+}
+
+const AppLayoutDesktopOnlyRouteChildren: AppLayoutDesktopOnlyRouteChildren = {
+  AppLayoutDesktopOnlyRepositoriesIdIndexRoute:
+    AppLayoutDesktopOnlyRepositoriesIdIndexRoute,
+}
+
+const AppLayoutDesktopOnlyRouteWithChildren =
+  AppLayoutDesktopOnlyRoute._addFileChildren(AppLayoutDesktopOnlyRouteChildren)
+
 interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppAccountIndexRoute: typeof AppAccountIndexRoute
-  AppRepositoryIndexRoute: typeof AppRepositoryIndexRoute
+  AppLayoutRoute: typeof AppLayoutRouteWithChildren
+  AppLayoutDesktopOnlyRoute: typeof AppLayoutDesktopOnlyRouteWithChildren
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppAccountIndexRoute: AppAccountIndexRoute,
-  AppRepositoryIndexRoute: AppRepositoryIndexRoute,
+  AppLayoutRoute: AppLayoutRouteWithChildren,
+  AppLayoutDesktopOnlyRoute: AppLayoutDesktopOnlyRouteWithChildren,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -247,16 +330,28 @@ const LoginRouteChildren: LoginRouteChildren = {
 
 const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
+interface ManagerLayoutRouteChildren {
+  ManagerLayoutIndexRoute: typeof ManagerLayoutIndexRoute
+  ManagerLayoutRepositoriesIndexRoute: typeof ManagerLayoutRepositoriesIndexRoute
+  ManagerLayoutUserIndexRoute: typeof ManagerLayoutUserIndexRoute
+}
+
+const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
+  ManagerLayoutIndexRoute: ManagerLayoutIndexRoute,
+  ManagerLayoutRepositoriesIndexRoute: ManagerLayoutRepositoriesIndexRoute,
+  ManagerLayoutUserIndexRoute: ManagerLayoutUserIndexRoute,
+}
+
+const ManagerLayoutRouteWithChildren = ManagerLayoutRoute._addFileChildren(
+  ManagerLayoutRouteChildren,
+)
+
 interface ManagerRouteChildren {
-  ManagerIndexRoute: typeof ManagerIndexRoute
-  ManagerRepositoryIndexRoute: typeof ManagerRepositoryIndexRoute
-  ManagerUserIndexRoute: typeof ManagerUserIndexRoute
+  ManagerLayoutRoute: typeof ManagerLayoutRouteWithChildren
 }
 
 const ManagerRouteChildren: ManagerRouteChildren = {
-  ManagerIndexRoute: ManagerIndexRoute,
-  ManagerRepositoryIndexRoute: ManagerRepositoryIndexRoute,
-  ManagerUserIndexRoute: ManagerUserIndexRoute,
+  ManagerLayoutRoute: ManagerLayoutRouteWithChildren,
 }
 
 const ManagerRouteWithChildren =
@@ -264,33 +359,35 @@ const ManagerRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
+  '/app': typeof AppLayoutDesktopOnlyRouteWithChildren
   '/login': typeof LoginRouteWithChildren
-  '/manager': typeof ManagerRouteWithChildren
+  '/manager': typeof ManagerLayoutRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
-  '/manager/': typeof ManagerIndexRoute
-  '/app/account': typeof AppAccountIndexRoute
-  '/app/repository': typeof AppRepositoryIndexRoute
+  '/app/': typeof AppLayoutIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
-  '/manager/repository': typeof ManagerRepositoryIndexRoute
-  '/manager/user': typeof ManagerUserIndexRoute
+  '/manager/': typeof ManagerLayoutIndexRoute
+  '/app/account': typeof AppLayoutAccountIndexRoute
+  '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
+  '/manager/user': typeof ManagerLayoutUserIndexRoute
+  '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppLayoutIndexRoute
+  '/manager': typeof ManagerLayoutIndexRoute
   '/planet/$id': typeof PlanetIdRoute
-  '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
-  '/manager': typeof ManagerIndexRoute
-  '/app/account': typeof AppAccountIndexRoute
-  '/app/repository': typeof AppRepositoryIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
-  '/manager/repository': typeof ManagerRepositoryIndexRoute
-  '/manager/user': typeof ManagerUserIndexRoute
+  '/app/account': typeof AppLayoutAccountIndexRoute
+  '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
+  '/manager/user': typeof ManagerLayoutUserIndexRoute
+  '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -299,16 +396,20 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRouteWithChildren
   '/manager': typeof ManagerRouteWithChildren
+  '/app/_layout': typeof AppLayoutRouteWithChildren
+  '/app/_layout-desktop-only': typeof AppLayoutDesktopOnlyRouteWithChildren
+  '/manager/_layout': typeof ManagerLayoutRouteWithChildren
   '/planet/$id': typeof PlanetIdRoute
-  '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
-  '/manager/': typeof ManagerIndexRoute
-  '/app/account/': typeof AppAccountIndexRoute
-  '/app/repository/': typeof AppRepositoryIndexRoute
+  '/app/_layout/': typeof AppLayoutIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
   '/login/verify/': typeof LoginVerifyIndexRoute
-  '/manager/repository/': typeof ManagerRepositoryIndexRoute
-  '/manager/user/': typeof ManagerUserIndexRoute
+  '/manager/_layout/': typeof ManagerLayoutIndexRoute
+  '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
+  '/app/_layout/repositories/': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/_layout/repositories/': typeof ManagerLayoutRepositoriesIndexRoute
+  '/manager/_layout/user/': typeof ManagerLayoutUserIndexRoute
+  '/app/_layout-desktop-only/repositories/$id/': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -319,44 +420,50 @@ export interface FileRouteTypes {
     | '/login'
     | '/manager'
     | '/planet/$id'
-    | '/app/'
     | '/login/'
-    | '/manager/'
-    | '/app/account'
-    | '/app/repository'
+    | '/app/'
     | '/login/error'
     | '/login/verify'
-    | '/manager/repository'
+    | '/manager/'
+    | '/app/account'
+    | '/app/repositories'
+    | '/manager/repositories'
     | '/manager/user'
+    | '/app/repositories/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/planet/$id'
     | '/app'
-    | '/login'
     | '/manager'
-    | '/app/account'
-    | '/app/repository'
+    | '/planet/$id'
+    | '/login'
     | '/login/error'
     | '/login/verify'
-    | '/manager/repository'
+    | '/app/account'
+    | '/app/repositories'
+    | '/manager/repositories'
     | '/manager/user'
+    | '/app/repositories/$id'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/login'
     | '/manager'
+    | '/app/_layout'
+    | '/app/_layout-desktop-only'
+    | '/manager/_layout'
     | '/planet/$id'
-    | '/app/'
     | '/login/'
-    | '/manager/'
-    | '/app/account/'
-    | '/app/repository/'
+    | '/app/_layout/'
     | '/login/error/'
     | '/login/verify/'
-    | '/manager/repository/'
-    | '/manager/user/'
+    | '/manager/_layout/'
+    | '/app/_layout/account/'
+    | '/app/_layout/repositories/'
+    | '/manager/_layout/repositories/'
+    | '/manager/_layout/user/'
+    | '/app/_layout-desktop-only/repositories/$id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -399,9 +506,8 @@ export const routeTree = rootRoute
     "/app": {
       "filePath": "app.tsx",
       "children": [
-        "/app/",
-        "/app/account/",
-        "/app/repository/"
+        "/app/_layout",
+        "/app/_layout-desktop-only"
       ]
     },
     "/login": {
@@ -415,33 +521,44 @@ export const routeTree = rootRoute
     "/manager": {
       "filePath": "manager.tsx",
       "children": [
-        "/manager/",
-        "/manager/repository/",
-        "/manager/user/"
+        "/manager/_layout"
+      ]
+    },
+    "/app/_layout": {
+      "filePath": "app/_layout.tsx",
+      "parent": "/app",
+      "children": [
+        "/app/_layout/",
+        "/app/_layout/account/",
+        "/app/_layout/repositories/"
+      ]
+    },
+    "/app/_layout-desktop-only": {
+      "filePath": "app/_layout-desktop-only.tsx",
+      "parent": "/app",
+      "children": [
+        "/app/_layout-desktop-only/repositories/$id/"
+      ]
+    },
+    "/manager/_layout": {
+      "filePath": "manager/_layout.tsx",
+      "parent": "/manager",
+      "children": [
+        "/manager/_layout/",
+        "/manager/_layout/repositories/",
+        "/manager/_layout/user/"
       ]
     },
     "/planet/$id": {
       "filePath": "planet.$id.tsx"
     },
-    "/app/": {
-      "filePath": "app/index.tsx",
-      "parent": "/app"
-    },
     "/login/": {
       "filePath": "login/index.tsx",
       "parent": "/login"
     },
-    "/manager/": {
-      "filePath": "manager/index.tsx",
-      "parent": "/manager"
-    },
-    "/app/account/": {
-      "filePath": "app/account.index.tsx",
-      "parent": "/app"
-    },
-    "/app/repository/": {
-      "filePath": "app/repository.index.tsx",
-      "parent": "/app"
+    "/app/_layout/": {
+      "filePath": "app/_layout/index.tsx",
+      "parent": "/app/_layout"
     },
     "/login/error/": {
       "filePath": "login/error.index.tsx",
@@ -451,13 +568,29 @@ export const routeTree = rootRoute
       "filePath": "login/verify.index.tsx",
       "parent": "/login"
     },
-    "/manager/repository/": {
-      "filePath": "manager/repository.index.tsx",
-      "parent": "/manager"
+    "/manager/_layout/": {
+      "filePath": "manager/_layout/index.tsx",
+      "parent": "/manager/_layout"
     },
-    "/manager/user/": {
-      "filePath": "manager/user.index.tsx",
-      "parent": "/manager"
+    "/app/_layout/account/": {
+      "filePath": "app/_layout/account.index.tsx",
+      "parent": "/app/_layout"
+    },
+    "/app/_layout/repositories/": {
+      "filePath": "app/_layout/repositories.index.tsx",
+      "parent": "/app/_layout"
+    },
+    "/manager/_layout/repositories/": {
+      "filePath": "manager/_layout/repositories.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/manager/_layout/user/": {
+      "filePath": "manager/_layout/user.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/app/_layout-desktop-only/repositories/$id/": {
+      "filePath": "app/_layout-desktop-only/repositories.$id.index.tsx",
+      "parent": "/app/_layout-desktop-only"
     }
   }
 }

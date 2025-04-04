@@ -11,7 +11,7 @@ import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
 import { Form, FormField, FormFieldController } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
-import { useMascot } from '@/features/auth/mascot-store';
+import { useMascot } from '@/features/auth/mascot';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 

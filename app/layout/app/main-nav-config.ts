@@ -25,7 +25,7 @@ export const MAIN_NAV_LINKS = [
     icon: IconGitBranchDuotone,
     iconActive: IconGitBranchFill,
     linkOptions: {
-      to: '/app/repository',
+      to: '/app/repositories',
     },
   },
   {
