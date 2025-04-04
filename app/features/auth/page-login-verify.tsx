@@ -63,7 +63,7 @@ export default function PageLoginVerify({
           ? t(
               `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
             )
-          : error.message
+          : error.message || t('auth:errorCode.UNKNOWN_ERROR')
       );
       form.setError('otp', {
         message: t('auth:fields.otp.invalid'),
