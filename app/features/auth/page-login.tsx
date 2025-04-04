@@ -69,7 +69,7 @@ export default function PageLogin({
           ? t(
               `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
             )
-          : error.message
+          : error.message || t('auth:errorCode.UNKNOWN_ERROR')
       );
       return;
     }

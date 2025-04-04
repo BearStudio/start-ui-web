@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import { ArrowLeftIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +13,15 @@ export const PageRepository = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar
+        leftActions={
+          <Button size="icon-sm" variant="secondary" asChild>
+            <Link to="..">
+              {/** TODO translation */}
+              <span className="sr-only">Back</span>
+              <ArrowLeftIcon />
+            </Link>
+          </Button>
+        }
         rightActions={
           <>
             <Button size="sm" variant="secondary" asChild>
