@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useRouter } from '@tanstack/react-router';
 
 const SIDEBAR_BREAKPOINT = 768;
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
@@ -164,6 +165,15 @@ function Sidebar({
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const unsub = router?.subscribe('onBeforeRouteMount', () => {
+      setOpenMobile(false);
+    });
+
+    return () => unsub?.();
+  });
 
   React.useEffect(() => {
     return () => {
@@ -514,17 +524,14 @@ function SidebarMenuButton({
   size = 'default',
   tooltip,
   className,
-  onClick,
-  closeMobileOnClick,
   ...props
 }: React.ComponentProps<'button'> & {
   asChild?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-  closeMobileOnClick?: boolean;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : 'button';
-  const { isMobile, state, setOpenMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
 
   const button = (
     <Comp
@@ -534,12 +541,6 @@ function SidebarMenuButton({
       data-active={isActive}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
-      onClick={(...params) => {
-        if (closeMobileOnClick) {
-          setOpenMobile(false); // Close the mobile drawer
-        }
-        onClick?.(...params);
-      }}
     />
   );
 
