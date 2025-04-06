@@ -187,7 +187,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) bg-sidebar p-0 pt-safe-top text-sidebar-foreground [&>button]:hidden"
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
@@ -196,8 +196,9 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
+            <SheetTitle>Sidebar</SheetTitle> {/* TODO translations */}
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            {/* TODO translations */}
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
@@ -503,14 +504,17 @@ function SidebarMenuButton({
   size = 'default',
   tooltip,
   className,
+  onClick,
+  closeMobileOnClick,
   ...props
 }: React.ComponentProps<'button'> & {
   asChild?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+  closeMobileOnClick?: boolean;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : 'button';
-  const { isMobile, state } = useSidebar();
+  const { isMobile, state, setOpenMobile } = useSidebar();
 
   const button = (
     <Comp
@@ -520,6 +524,12 @@ function SidebarMenuButton({
       data-active={isActive}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
+      onClick={(...params) => {
+        if (closeMobileOnClick) {
+          setOpenMobile(false); // Close the mobile drawer
+        }
+        onClick?.(...params);
+      }}
     />
   );
 

@@ -16,7 +16,7 @@ export function Default() {
         </p>
       </div>
       <Separator />
-      <div className="flex items-center gap-4 text-sm">
+      <div className="flex gap-4 text-sm">
         <div>Blog</div>
         <Separator orientation="vertical" />
         <div>Docs</div>
