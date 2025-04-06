@@ -1,12 +1,11 @@
 'use client';
 
+import { Link } from '@tanstack/react-router';
 import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
+  ChevronsUpDownIcon,
+  CircleUserIcon,
+  LogOutIcon,
+  MonitorSmartphoneIcon,
 } from 'lucide-react';
 
 import { authClient } from '@/lib/auth/client';
@@ -27,14 +26,23 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Spinner } from '@/components/ui/spinner';
+
+import { useSignOut } from '@/features/auth/utils';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
+  const signOut = useSignOut();
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
     name: session.data?.user.name,
+    initials: session.data?.user.name
+      ?.split(' ')
+      .slice(0, 2)
+      .map((s) => s[0])
+      .join(''),
     email: session.data?.user.email,
   };
 
@@ -47,15 +55,18 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="size-8">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback>{user.initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              {signOut.isPending ? (
+                <Spinner className="ml-auto size-4" />
+              ) : (
+                <ChevronsUpDownIcon className="ml-auto size-4" />
+              )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -66,41 +77,38 @@ export function NavUser() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+                <Avatar className="size-8">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback>{user.initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem asChild>
+                <Link to="/manager/account">
+                  <CircleUserIcon />
+                  Account
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
+              <DropdownMenuItem asChild>
+                <Link to="/app">
+                  <MonitorSmartphoneIcon />
+                  Open App
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
+            <DropdownMenuItem onClick={() => signOut.mutate()}>
+              <LogOutIcon />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
