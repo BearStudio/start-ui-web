@@ -26,7 +26,7 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-auto">
+              <SidebarMenuButton asChild className="h-auto" closeMobileOnClick>
                 <Link to="/manager">
                   <span>
                     <Logo className="w-24" />
@@ -45,6 +45,7 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
                   <SidebarMenuButton
                     asChild
                     isActive={!!matchRoute({ to: '/manager/dashboard' })}
+                    closeMobileOnClick
                   >
                     <Link to="/manager/dashboard">
                       <LayoutDashboardIcon />
@@ -56,6 +57,7 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
                   <SidebarMenuButton
                     asChild
                     isActive={!!matchRoute({ to: '/manager/repositories' })}
+                    closeMobileOnClick
                   >
                     <Link to="/manager/repositories">
                       <IconGitBranch />
@@ -73,9 +75,10 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={!!matchRoute({ to: '/manager/user' })}
+                    isActive={!!matchRoute({ to: '/manager/users' })}
+                    closeMobileOnClick
                   >
-                    <Link to="/manager/user">
+                    <Link to="/manager/users">
                       <UsersIcon />
                       <span>Users</span>
                     </Link>

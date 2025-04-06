@@ -24,7 +24,7 @@ import { Route as ManagerLayoutIndexImport } from './routes/manager/_layout/inde
 import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
 import { Route as LoginErrorIndexImport } from './routes/login/error.index'
 import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
-import { Route as ManagerLayoutUserIndexImport } from './routes/manager/_layout/user.index'
+import { Route as ManagerLayoutUsersIndexImport } from './routes/manager/_layout/users.index'
 import { Route as ManagerLayoutRepositoriesIndexImport } from './routes/manager/_layout/repositories.index'
 import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_layout/dashboard.index'
 import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
@@ -109,9 +109,9 @@ const AppLayoutIndexRoute = AppLayoutIndexImport.update({
   getParentRoute: () => AppLayoutRoute,
 } as any)
 
-const ManagerLayoutUserIndexRoute = ManagerLayoutUserIndexImport.update({
-  id: '/user/',
-  path: '/user/',
+const ManagerLayoutUsersIndexRoute = ManagerLayoutUsersIndexImport.update({
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
 
@@ -280,11 +280,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutRepositoriesIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
-    '/manager/_layout/user/': {
-      id: '/manager/_layout/user/'
-      path: '/user'
-      fullPath: '/manager/user'
-      preLoaderRoute: typeof ManagerLayoutUserIndexImport
+    '/manager/_layout/users/': {
+      id: '/manager/_layout/users/'
+      path: '/users'
+      fullPath: '/manager/users'
+      preLoaderRoute: typeof ManagerLayoutUsersIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
     '/app/_layout-desktop-only/repositories/$id/': {
@@ -364,7 +364,7 @@ interface ManagerLayoutRouteChildren {
   ManagerLayoutIndexRoute: typeof ManagerLayoutIndexRoute
   ManagerLayoutDashboardIndexRoute: typeof ManagerLayoutDashboardIndexRoute
   ManagerLayoutRepositoriesIndexRoute: typeof ManagerLayoutRepositoriesIndexRoute
-  ManagerLayoutUserIndexRoute: typeof ManagerLayoutUserIndexRoute
+  ManagerLayoutUsersIndexRoute: typeof ManagerLayoutUsersIndexRoute
   ManagerLayoutRepositoriesIdIndexRoute: typeof ManagerLayoutRepositoriesIdIndexRoute
 }
 
@@ -372,7 +372,7 @@ const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutIndexRoute: ManagerLayoutIndexRoute,
   ManagerLayoutDashboardIndexRoute: ManagerLayoutDashboardIndexRoute,
   ManagerLayoutRepositoriesIndexRoute: ManagerLayoutRepositoriesIndexRoute,
-  ManagerLayoutUserIndexRoute: ManagerLayoutUserIndexRoute,
+  ManagerLayoutUsersIndexRoute: ManagerLayoutUsersIndexRoute,
   ManagerLayoutRepositoriesIdIndexRoute: ManagerLayoutRepositoriesIdIndexRoute,
 }
 
@@ -406,7 +406,7 @@ export interface FileRoutesByFullPath {
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
-  '/manager/user': typeof ManagerLayoutUserIndexRoute
+  '/manager/users': typeof ManagerLayoutUsersIndexRoute
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
@@ -423,7 +423,7 @@ export interface FileRoutesByTo {
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
-  '/manager/user': typeof ManagerLayoutUserIndexRoute
+  '/manager/users': typeof ManagerLayoutUsersIndexRoute
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
@@ -447,7 +447,7 @@ export interface FileRoutesById {
   '/app/_layout/repositories/': typeof AppLayoutRepositoriesIndexRoute
   '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
   '/manager/_layout/repositories/': typeof ManagerLayoutRepositoriesIndexRoute
-  '/manager/_layout/user/': typeof ManagerLayoutUserIndexRoute
+  '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
   '/app/_layout-desktop-only/repositories/$id/': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/_layout/repositories/$id/': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
@@ -469,7 +469,7 @@ export interface FileRouteTypes {
     | '/app/repositories'
     | '/manager/dashboard'
     | '/manager/repositories'
-    | '/manager/user'
+    | '/manager/users'
     | '/app/repositories/$id'
     | '/manager/repositories/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -485,7 +485,7 @@ export interface FileRouteTypes {
     | '/app/repositories'
     | '/manager/dashboard'
     | '/manager/repositories'
-    | '/manager/user'
+    | '/manager/users'
     | '/app/repositories/$id'
     | '/manager/repositories/$id'
   id:
@@ -507,7 +507,7 @@ export interface FileRouteTypes {
     | '/app/_layout/repositories/'
     | '/manager/_layout/dashboard/'
     | '/manager/_layout/repositories/'
-    | '/manager/_layout/user/'
+    | '/manager/_layout/users/'
     | '/app/_layout-desktop-only/repositories/$id/'
     | '/manager/_layout/repositories/$id/'
   fileRoutesById: FileRoutesById
@@ -593,7 +593,7 @@ export const routeTree = rootRoute
         "/manager/_layout/",
         "/manager/_layout/dashboard/",
         "/manager/_layout/repositories/",
-        "/manager/_layout/user/",
+        "/manager/_layout/users/",
         "/manager/_layout/repositories/$id/"
       ]
     },
@@ -636,8 +636,8 @@ export const routeTree = rootRoute
       "filePath": "manager/_layout/repositories.index.tsx",
       "parent": "/manager/_layout"
     },
-    "/manager/_layout/user/": {
-      "filePath": "manager/_layout/user.index.tsx",
+    "/manager/_layout/users/": {
+      "filePath": "manager/_layout/users.index.tsx",
       "parent": "/manager/_layout"
     },
     "/app/_layout-desktop-only/repositories/$id/": {
