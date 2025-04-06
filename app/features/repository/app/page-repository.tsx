@@ -31,10 +31,8 @@ export const PageRepository = () => {
           </>
         }
       >
-        <h1 className="flex items-center gap-2 text-base font-bold">
-          <span className="flex-1 overflow-hidden text-ellipsis">
-            Repo name
-          </span>
+        <h1 className="overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap">
+          Repo name
         </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>

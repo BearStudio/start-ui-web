@@ -26,8 +26,10 @@ import { Route as LoginErrorIndexImport } from './routes/login/error.index'
 import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
 import { Route as ManagerLayoutUserIndexImport } from './routes/manager/_layout/user.index'
 import { Route as ManagerLayoutRepositoriesIndexImport } from './routes/manager/_layout/repositories.index'
+import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_layout/dashboard.index'
 import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
 import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
+import { Route as ManagerLayoutRepositoriesIdIndexImport } from './routes/manager/_layout/repositories.$id.index'
 import { Route as AppLayoutDesktopOnlyRepositoriesIdIndexImport } from './routes/app/_layout-desktop-only/repositories.$id.index'
 
 // Create/Update Routes
@@ -120,6 +122,13 @@ const ManagerLayoutRepositoriesIndexRoute =
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
 
+const ManagerLayoutDashboardIndexRoute =
+  ManagerLayoutDashboardIndexImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
+
 const AppLayoutRepositoriesIndexRoute = AppLayoutRepositoriesIndexImport.update(
   {
     id: '/repositories/',
@@ -133,6 +142,13 @@ const AppLayoutAccountIndexRoute = AppLayoutAccountIndexImport.update({
   path: '/account/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
+
+const ManagerLayoutRepositoriesIdIndexRoute =
+  ManagerLayoutRepositoriesIdIndexImport.update({
+    id: '/repositories/$id/',
+    path: '/repositories/$id/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
 
 const AppLayoutDesktopOnlyRepositoriesIdIndexRoute =
   AppLayoutDesktopOnlyRepositoriesIdIndexImport.update({
@@ -250,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutRepositoriesIndexImport
       parentRoute: typeof AppLayoutImport
     }
+    '/manager/_layout/dashboard/': {
+      id: '/manager/_layout/dashboard/'
+      path: '/dashboard'
+      fullPath: '/manager/dashboard'
+      preLoaderRoute: typeof ManagerLayoutDashboardIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
     '/manager/_layout/repositories/': {
       id: '/manager/_layout/repositories/'
       path: '/repositories'
@@ -270,6 +293,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/repositories/$id'
       preLoaderRoute: typeof AppLayoutDesktopOnlyRepositoriesIdIndexImport
       parentRoute: typeof AppLayoutDesktopOnlyImport
+    }
+    '/manager/_layout/repositories/$id/': {
+      id: '/manager/_layout/repositories/$id/'
+      path: '/repositories/$id'
+      fullPath: '/manager/repositories/$id'
+      preLoaderRoute: typeof ManagerLayoutRepositoriesIdIndexImport
+      parentRoute: typeof ManagerLayoutImport
     }
   }
 }
@@ -332,14 +362,18 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
 interface ManagerLayoutRouteChildren {
   ManagerLayoutIndexRoute: typeof ManagerLayoutIndexRoute
+  ManagerLayoutDashboardIndexRoute: typeof ManagerLayoutDashboardIndexRoute
   ManagerLayoutRepositoriesIndexRoute: typeof ManagerLayoutRepositoriesIndexRoute
   ManagerLayoutUserIndexRoute: typeof ManagerLayoutUserIndexRoute
+  ManagerLayoutRepositoriesIdIndexRoute: typeof ManagerLayoutRepositoriesIdIndexRoute
 }
 
 const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutIndexRoute: ManagerLayoutIndexRoute,
+  ManagerLayoutDashboardIndexRoute: ManagerLayoutDashboardIndexRoute,
   ManagerLayoutRepositoriesIndexRoute: ManagerLayoutRepositoriesIndexRoute,
   ManagerLayoutUserIndexRoute: ManagerLayoutUserIndexRoute,
+  ManagerLayoutRepositoriesIdIndexRoute: ManagerLayoutRepositoriesIdIndexRoute,
 }
 
 const ManagerLayoutRouteWithChildren = ManagerLayoutRoute._addFileChildren(
@@ -370,9 +404,11 @@ export interface FileRoutesByFullPath {
   '/manager/': typeof ManagerLayoutIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/user': typeof ManagerLayoutUserIndexRoute
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
+  '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -385,9 +421,11 @@ export interface FileRoutesByTo {
   '/login/verify': typeof LoginVerifyIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/user': typeof ManagerLayoutUserIndexRoute
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
+  '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -407,9 +445,11 @@ export interface FileRoutesById {
   '/manager/_layout/': typeof ManagerLayoutIndexRoute
   '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
   '/app/_layout/repositories/': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
   '/manager/_layout/repositories/': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/_layout/user/': typeof ManagerLayoutUserIndexRoute
   '/app/_layout-desktop-only/repositories/$id/': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
+  '/manager/_layout/repositories/$id/': typeof ManagerLayoutRepositoriesIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -427,9 +467,11 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/app/account'
     | '/app/repositories'
+    | '/manager/dashboard'
     | '/manager/repositories'
     | '/manager/user'
     | '/app/repositories/$id'
+    | '/manager/repositories/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -441,9 +483,11 @@ export interface FileRouteTypes {
     | '/login/verify'
     | '/app/account'
     | '/app/repositories'
+    | '/manager/dashboard'
     | '/manager/repositories'
     | '/manager/user'
     | '/app/repositories/$id'
+    | '/manager/repositories/$id'
   id:
     | '__root__'
     | '/'
@@ -461,9 +505,11 @@ export interface FileRouteTypes {
     | '/manager/_layout/'
     | '/app/_layout/account/'
     | '/app/_layout/repositories/'
+    | '/manager/_layout/dashboard/'
     | '/manager/_layout/repositories/'
     | '/manager/_layout/user/'
     | '/app/_layout-desktop-only/repositories/$id/'
+    | '/manager/_layout/repositories/$id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -545,8 +591,10 @@ export const routeTree = rootRoute
       "parent": "/manager",
       "children": [
         "/manager/_layout/",
+        "/manager/_layout/dashboard/",
         "/manager/_layout/repositories/",
-        "/manager/_layout/user/"
+        "/manager/_layout/user/",
+        "/manager/_layout/repositories/$id/"
       ]
     },
     "/planet/$id": {
@@ -580,6 +628,10 @@ export const routeTree = rootRoute
       "filePath": "app/_layout/repositories.index.tsx",
       "parent": "/app/_layout"
     },
+    "/manager/_layout/dashboard/": {
+      "filePath": "manager/_layout/dashboard.index.tsx",
+      "parent": "/manager/_layout"
+    },
     "/manager/_layout/repositories/": {
       "filePath": "manager/_layout/repositories.index.tsx",
       "parent": "/manager/_layout"
@@ -591,6 +643,10 @@ export const routeTree = rootRoute
     "/app/_layout-desktop-only/repositories/$id/": {
       "filePath": "app/_layout-desktop-only/repositories.$id.index.tsx",
       "parent": "/app/_layout-desktop-only"
+    },
+    "/manager/_layout/repositories/$id/": {
+      "filePath": "manager/_layout/repositories.$id.index.tsx",
+      "parent": "/manager/_layout"
     }
   }
 }
