@@ -4,6 +4,7 @@ import { WithPermission } from '@/lib/auth/with-permission';
 
 import { Logo } from '@/components/brand/logo';
 
+import { MarketingBento } from '@/features/demo-mode/marketing-bento';
 import {
   PageLayout,
   PageLayoutContent,
@@ -17,12 +18,15 @@ export const PageHome = () => {
         <Logo className="mx-auto w-24" />
       </PageLayoutTopBar>
       <PageLayoutContent>
-        <WithPermission
-          permission={{ apps: ['manager'] }}
-          fallback={<span>No Manager access</span>}
-        >
-          <Link to="/manager">Go to Manager</Link>
-        </WithPermission>
+        <div className="flex flex-1 flex-col gap-4">
+          <WithPermission
+            permission={{ apps: ['manager'] }}
+            fallback={<span>No Manager access</span>}
+          >
+            <Link to="/manager">Go to Manager</Link>
+          </WithPermission>
+          <MarketingBento />
+        </div>
       </PageLayoutContent>
     </PageLayout>
   );
