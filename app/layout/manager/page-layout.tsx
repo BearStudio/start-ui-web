@@ -4,7 +4,7 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 
 export const PageLayoutContainer = (props: {
   children?: ReactNode;
@@ -29,15 +29,32 @@ export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
   containerClassName?: string;
+  backButton?: ReactNode;
 }) => {
+  const { open, isMobile } = useSidebar();
   return (
     <header
       className="flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900"
       style={{ height: TOPBAT_HEIGHT }}
     >
-      <div className="flex h-14 items-center gap-2">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
+      <div className="flex h-14 items-center gap-4">
+        {(!open || (isMobile && !props.backButton) || !!props.backButton) && (
+          <div className="flex items-center gap-3">
+            {(!open || (isMobile && !props.backButton)) && (
+              <>
+                <SidebarTrigger className="-mx-1" />
+                <Separator orientation="vertical" className="h-4" />
+              </>
+            )}
+            {!!props.backButton && (
+              <>
+                <div className="-mx-1">{props.backButton}</div>
+                <Separator orientation="vertical" className="h-4" />
+              </>
+            )}
+          </div>
+        )}
+
         {props.children}
       </div>
     </header>

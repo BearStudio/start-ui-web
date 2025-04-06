@@ -1,5 +1,10 @@
 import { Link, useMatchRoute } from '@tanstack/react-router';
-import { LayoutDashboardIcon, UsersIcon } from 'lucide-react';
+import {
+  LayoutDashboardIcon,
+  PanelLeftIcon,
+  UsersIcon,
+  XIcon,
+} from 'lucide-react';
 import { ReactNode } from 'react';
 
 import { Logo } from '@/components/brand/logo';
@@ -7,6 +12,7 @@ import { IconGitBranch } from '@/components/icons/generated';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -16,25 +22,42 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-export const MainSidebar = (props: { children?: ReactNode }) => {
+import { NavUser } from '@/layout/manager/nav-user';
+
+export const NavSidebar = (props: { children?: ReactNode }) => {
   const matchRoute = useMatchRoute();
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-auto" closeMobileOnClick>
-                <Link to="/manager">
-                  <span>
-                    <Logo className="w-24" />
-                  </span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <div className="flex items-center">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className="h-auto"
+                  closeMobileOnClick
+                >
+                  <Link to="/manager">
+                    <span>
+                      <Logo className="w-24" />
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarTrigger
+              icon={
+                <>
+                  <XIcon className="md:hidden" />
+                  <PanelLeftIcon className="hidden md:block" />
+                </>
+              }
+            />
+          </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
@@ -88,6 +111,9 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+        <SidebarFooter>
+          <NavUser />
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>{props.children}</SidebarInset>
     </SidebarProvider>

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 import {
   PageLayout,
@@ -14,26 +15,20 @@ export const PageRepository = () => {
     <PageLayout>
       <PageLayoutTopBar
         leftActions={
-          <Button size="icon-sm" variant="secondary" asChild>
-            <Link to="..">
-              {/** TODO translation */}
-              <span className="sr-only">Back</span>
-              <ArrowLeftIcon />
-            </Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            <div className="-mx-1">
+              <Button asChild variant="ghost" size="icon-sm">
+                <Link to="..">
+                  <ArrowLeftIcon />
+                </Link>
+              </Button>
+            </div>
+            <Separator orientation="vertical" className="h-4" />
+          </div>
         }
-        rightActions={
-          <>
-            <Button size="sm" variant="secondary" asChild>
-              <Link to="..">Cancel</Link>
-            </Button>
-            <Button size="sm">Save</Button>
-          </>
-        }
+        rightActions={<Button size="sm">Save</Button>}
       >
-        <h1 className="overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap">
-          Repo name
-        </h1>
+        <h1 className="text-base font-medium md:text-sm">Repo name</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         START
