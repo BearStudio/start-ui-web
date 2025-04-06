@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { authClient } from '@/lib/auth/client';
 
 import { PageError } from '@/components/page-error';
+import { Spinner } from '@/components/ui/spinner';
 
 import { useRedirectAfterLogin } from '@/features/auth/utils';
 
@@ -11,7 +12,7 @@ export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
   useRedirectAfterLogin();
 
   if (session.isPending) {
-    return <>{children}</>;
+    return <Spinner full />;
   }
 
   if (session.error && session.error.status > 0) {
