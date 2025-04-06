@@ -44,7 +44,7 @@
 }
 
 :root {
-  --background: var(--color-neutral-50);
+  --background: var(--color-white);
   --foreground: var(--color-neutral-950);
   --card: oklch(1 0 0);
   --card-foreground: var(--color-neutral-950);
@@ -160,7 +160,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neutral-50 text-foreground dark:bg-neutral-950;
 
     @media all and (display-mode: standalone) {
       height: 100lvh; /* Force full height on iOS standalone */
