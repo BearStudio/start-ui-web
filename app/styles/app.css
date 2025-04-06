@@ -45,7 +45,7 @@
 
 :root {
   --background: var(--color-neutral-50);
-  --foreground: var(--color-neutral-900);
+  --foreground: var(--color-neutral-950);
   --card: oklch(1 0 0);
   --card-foreground: var(--color-neutral-950);
   --popover: oklch(1 0 0);
@@ -55,7 +55,7 @@
   --secondary: var(--color-neutral-100);
   --secondary-foreground: var(--color-neutral-900);
   --muted: var(--color-neutral-100);
-  --muted-foreground: var(--color-neutral-500);
+  --muted-foreground: var(--color-neutral-600);
   --accent: var(--color-neutral-100);
   --accent-foreground: var(--color-neutral-900);
   --destructive: var(--color-negative-600);
@@ -93,7 +93,7 @@
   --secondary: var(--color-neutral-800);
   --secondary-foreground: var(--color-neutral-50);
   --muted: var(--color-neutral-900);
-  --muted-foreground: var(--color-neutral-400);
+  --muted-foreground: var(--color-neutral-300);
   --accent: var(--color-neutral-800);
   --accent-foreground: var(--color-neutral-50);
   --destructive: var(--color-negative-700);

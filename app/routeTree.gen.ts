@@ -27,6 +27,7 @@ import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
 import { Route as ManagerLayoutUsersIndexImport } from './routes/manager/_layout/users.index'
 import { Route as ManagerLayoutRepositoriesIndexImport } from './routes/manager/_layout/repositories.index'
 import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_layout/dashboard.index'
+import { Route as ManagerLayoutAccountIndexImport } from './routes/manager/_layout/account.index'
 import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
 import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
 import { Route as ManagerLayoutRepositoriesIdIndexImport } from './routes/manager/_layout/repositories.$id.index'
@@ -128,6 +129,12 @@ const ManagerLayoutDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
+
+const ManagerLayoutAccountIndexRoute = ManagerLayoutAccountIndexImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => ManagerLayoutRoute,
+} as any)
 
 const AppLayoutRepositoriesIndexRoute = AppLayoutRepositoriesIndexImport.update(
   {
@@ -266,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutRepositoriesIndexImport
       parentRoute: typeof AppLayoutImport
     }
+    '/manager/_layout/account/': {
+      id: '/manager/_layout/account/'
+      path: '/account'
+      fullPath: '/manager/account'
+      preLoaderRoute: typeof ManagerLayoutAccountIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
     '/manager/_layout/dashboard/': {
       id: '/manager/_layout/dashboard/'
       path: '/dashboard'
@@ -362,6 +376,7 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
 interface ManagerLayoutRouteChildren {
   ManagerLayoutIndexRoute: typeof ManagerLayoutIndexRoute
+  ManagerLayoutAccountIndexRoute: typeof ManagerLayoutAccountIndexRoute
   ManagerLayoutDashboardIndexRoute: typeof ManagerLayoutDashboardIndexRoute
   ManagerLayoutRepositoriesIndexRoute: typeof ManagerLayoutRepositoriesIndexRoute
   ManagerLayoutUsersIndexRoute: typeof ManagerLayoutUsersIndexRoute
@@ -370,6 +385,7 @@ interface ManagerLayoutRouteChildren {
 
 const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutIndexRoute: ManagerLayoutIndexRoute,
+  ManagerLayoutAccountIndexRoute: ManagerLayoutAccountIndexRoute,
   ManagerLayoutDashboardIndexRoute: ManagerLayoutDashboardIndexRoute,
   ManagerLayoutRepositoriesIndexRoute: ManagerLayoutRepositoriesIndexRoute,
   ManagerLayoutUsersIndexRoute: ManagerLayoutUsersIndexRoute,
@@ -404,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/manager/': typeof ManagerLayoutIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/account': typeof ManagerLayoutAccountIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
@@ -421,6 +438,7 @@ export interface FileRoutesByTo {
   '/login/verify': typeof LoginVerifyIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
   '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/account': typeof ManagerLayoutAccountIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
   '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
@@ -445,6 +463,7 @@ export interface FileRoutesById {
   '/manager/_layout/': typeof ManagerLayoutIndexRoute
   '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
   '/app/_layout/repositories/': typeof AppLayoutRepositoriesIndexRoute
+  '/manager/_layout/account/': typeof ManagerLayoutAccountIndexRoute
   '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
   '/manager/_layout/repositories/': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
@@ -467,6 +486,7 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/app/account'
     | '/app/repositories'
+    | '/manager/account'
     | '/manager/dashboard'
     | '/manager/repositories'
     | '/manager/users'
@@ -483,6 +503,7 @@ export interface FileRouteTypes {
     | '/login/verify'
     | '/app/account'
     | '/app/repositories'
+    | '/manager/account'
     | '/manager/dashboard'
     | '/manager/repositories'
     | '/manager/users'
@@ -505,6 +526,7 @@ export interface FileRouteTypes {
     | '/manager/_layout/'
     | '/app/_layout/account/'
     | '/app/_layout/repositories/'
+    | '/manager/_layout/account/'
     | '/manager/_layout/dashboard/'
     | '/manager/_layout/repositories/'
     | '/manager/_layout/users/'
@@ -591,6 +613,7 @@ export const routeTree = rootRoute
       "parent": "/manager",
       "children": [
         "/manager/_layout/",
+        "/manager/_layout/account/",
         "/manager/_layout/dashboard/",
         "/manager/_layout/repositories/",
         "/manager/_layout/users/",
@@ -627,6 +650,10 @@ export const routeTree = rootRoute
     "/app/_layout/repositories/": {
       "filePath": "app/_layout/repositories.index.tsx",
       "parent": "/app/_layout"
+    },
+    "/manager/_layout/account/": {
+      "filePath": "manager/_layout/account.index.tsx",
+      "parent": "/manager/_layout"
     },
     "/manager/_layout/dashboard/": {
       "filePath": "manager/_layout/dashboard.index.tsx",
