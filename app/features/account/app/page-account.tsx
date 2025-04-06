@@ -17,9 +17,7 @@ export const PageAccount = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="overflow-hidden text-base font-bold text-ellipsis">
-          Account
-        </h1>
+        <h1 className="text-base font-medium md:text-sm">Account</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex gap-4">

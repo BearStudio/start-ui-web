@@ -5,24 +5,12 @@ import {
   PageLayoutContent,
   PageLayoutTopBar,
 } from '@/layout/manager/page-layout';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb';
 
 export const PageRepositories = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Repositories</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <h1 className="text-base font-medium md:text-sm">Repositories</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <Link to="/manager/repositories/$id" params={{ id: '1' }}>

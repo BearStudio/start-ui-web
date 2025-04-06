@@ -1,13 +1,7 @@
 import { Link } from '@tanstack/react-router';
+import { ArrowLeftIcon } from 'lucide-react';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 
 import {
   PageLayout,
@@ -18,20 +12,16 @@ import {
 export const PageRepository = () => {
   return (
     <PageLayout>
-      <PageLayoutTopBar>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink asChild>
-                <Link to="..">Repositories</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Repo name</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+      <PageLayoutTopBar
+        backButton={
+          <Button asChild variant="ghost" size="icon-sm">
+            <Link to="..">
+              <ArrowLeftIcon />
+            </Link>
+          </Button>
+        }
+      >
+        <h1 className="text-base font-medium md:text-sm">Repo name</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         START

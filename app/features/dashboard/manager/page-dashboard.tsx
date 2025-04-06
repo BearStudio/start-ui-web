@@ -3,13 +3,6 @@ import { Link } from '@tanstack/react-router';
 import { WithPermission } from '@/lib/auth/with-permission';
 
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb';
-
-import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
@@ -19,13 +12,7 @@ export const PageDashboard = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <h1 className="text-base font-medium md:text-sm">Dashboard</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <WithPermission
