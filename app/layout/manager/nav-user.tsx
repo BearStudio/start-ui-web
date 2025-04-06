@@ -34,6 +34,7 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
   const signOut = useSignOut();
+  const { setOpenMobile } = useSidebar();
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
@@ -92,7 +93,10 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to="/manager/account">
+                <Link
+                  to="/manager/account"
+                  onClick={() => setOpenMobile(false)}
+                >
                   <CircleUserIcon />
                   Account
                 </Link>
