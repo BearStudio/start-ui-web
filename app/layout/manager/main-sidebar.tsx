@@ -1,5 +1,5 @@
 import { Link, useMatchRoute } from '@tanstack/react-router';
-import { UsersIcon } from 'lucide-react';
+import { LayoutDashboardIcon, UsersIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 
 import { Logo } from '@/components/brand/logo';
@@ -16,7 +16,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 
 export const MainSidebar = (props: { children?: ReactNode }) => {
@@ -42,6 +41,17 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
             <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={!!matchRoute({ to: '/manager/dashboard' })}
+                  >
+                    <Link to="/manager/dashboard">
+                      <LayoutDashboardIcon />
+                      <span>Dashboard</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
@@ -76,12 +86,7 @@ export const MainSidebar = (props: { children?: ReactNode }) => {
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-      <main className="relative flex flex-1 flex-col">
-        <SidebarInset>
-          <SidebarTrigger className="absolute top-2 left-2 z-10" />
-          {props.children}
-        </SidebarInset>
-      </main>
+      <SidebarInset>{props.children}</SidebarInset>
     </SidebarProvider>
   );
 };

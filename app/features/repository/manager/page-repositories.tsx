@@ -4,7 +4,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
-} from '@/layout/app/page-layout';
+} from '@/layout/manager/page-layout';
 
 export const PageRepositories = () => {
   return (
@@ -15,7 +15,7 @@ export const PageRepositories = () => {
         </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        <Link to="/app/repositories/$id" params={{ id: '1' }}>
+        <Link to="/manager/repositories/$id" params={{ id: '1' }}>
           Go to Repo 1
         </Link>
         START

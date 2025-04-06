@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export const PageLayoutContainer = (props: {
   children?: ReactNode;
@@ -34,7 +35,7 @@ export const PageLayoutTopBar = (props: {
   return (
     <div
       className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top max-md:pt-2 md:-mt-1 md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
+        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top max-md:pt-2 dark:border-b-neutral-800 dark:bg-neutral-900',
         props.className
       )}
       style={{
@@ -45,12 +46,17 @@ export const PageLayoutTopBar = (props: {
         className={cn('justify-end py-2', props.containerClassName)}
       >
         <div className="flex min-h-8 w-full min-w-0 items-center justify-center gap-4">
+          <SidebarTrigger />
           {!!props.leftActions && (
-            <div className="flex items-center gap-2">{props.leftActions}</div>
+            <div className="flex min-w-0 items-center gap-2">
+              {props.leftActions}
+            </div>
           )}
           <div className="min-w-0 flex-1">{props.children}</div>
           {!!props.rightActions && (
-            <div className="flex items-center gap-2">{props.rightActions}</div>
+            <div className="flex min-w-0 items-center gap-2">
+              {props.rightActions}
+            </div>
           )}
         </div>
       </PageLayoutContainer>
