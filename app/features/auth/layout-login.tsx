@@ -18,7 +18,7 @@ export const LayoutLogin = (props: {
   const mascotState = useMascotState();
   return (
     <div
-      className="flex flex-1 pt-safe-top pb-safe-bottom"
+      className="flex flex-1 bg-white pt-safe-top pb-safe-bottom dark:bg-neutral-950"
       data-testid="layout-login"
     >
       <div className="flex w-full flex-1 flex-col gap-4 p-6 max-md:overflow-hidden md:p-10">
