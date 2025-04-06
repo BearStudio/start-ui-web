@@ -104,7 +104,13 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to="/app">
+                <Link
+                  to="/app"
+                  onClick={() => {
+                    //@ts-expect-error Remove the 'pointer-events: none' from the sidebar
+                    document.body.style.pointerEvents = null;
+                  }}
+                >
                   <MonitorSmartphoneIcon />
                   Open App
                 </Link>
