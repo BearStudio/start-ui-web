@@ -165,6 +165,13 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
+  React.useEffect(() => {
+    return () => {
+      //@ts-expect-error Remove the 'pointer-events: none' from the sidebar
+      document.body.style.pointerEvents = null;
+    };
+  }, []);
+
   if (collapsible === 'none') {
     return (
       <div
