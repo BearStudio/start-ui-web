@@ -44,8 +44,8 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: var(--color-neutral-950);
+  --background: var(--color-neutral-50);
+  --foreground: var(--color-neutral-900);
   --card: oklch(1 0 0);
   --card-foreground: var(--color-neutral-950);
   --popover: oklch(1 0 0);
@@ -69,7 +69,7 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
-  --sidebar: var(--color-neutral-50);
+  --sidebar: var(--color-white);
   --sidebar-foreground: var(--color-neutral-950);
   --sidebar-primary: var(--color-neutral-900);
   --sidebar-primary-foreground: var(--color-neutral-50);

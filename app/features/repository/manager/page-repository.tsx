@@ -1,23 +1,41 @@
 import { Link } from '@tanstack/react-router';
+import { ArrowLeftIcon } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
-} from '@/layout/app/page-layout';
+} from '@/layout/manager/page-layout';
 
-export const PageRepositories = () => {
+export const PageRepository = () => {
   return (
     <PageLayout>
-      <PageLayoutTopBar>
+      <PageLayoutTopBar
+        leftActions={
+          <Button size="icon-sm" variant="secondary" asChild>
+            <Link to="..">
+              {/** TODO translation */}
+              <span className="sr-only">Back</span>
+              <ArrowLeftIcon />
+            </Link>
+          </Button>
+        }
+        rightActions={
+          <>
+            <Button size="sm" variant="secondary" asChild>
+              <Link to="..">Cancel</Link>
+            </Button>
+            <Button size="sm">Save</Button>
+          </>
+        }
+      >
         <h1 className="overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap">
-          Repositories
+          Repo name
         </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        <Link to="/app/repositories/$id" params={{ id: '1' }}>
-          Go to Repo 1
-        </Link>
         START
         <br />
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut velit
