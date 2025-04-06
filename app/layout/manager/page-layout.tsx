@@ -29,15 +29,19 @@ export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
   containerClassName?: string;
+  actions?: ReactNode;
   backButton?: ReactNode;
 }) => {
   const { open, isMobile } = useSidebar();
   return (
     <header
-      className="flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900"
+      className={cn(
+        'flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900',
+        props.className
+      )}
       style={{ height: TOPBAT_HEIGHT }}
     >
-      <div className="flex h-14 items-center gap-4">
+      <div className="flex h-14 flex-1 items-center gap-4">
         {(!open || (isMobile && !props.backButton) || !!props.backButton) && (
           <div className="flex items-center gap-3">
             {(!open || (isMobile && !props.backButton)) && (
@@ -54,8 +58,12 @@ export const PageLayoutTopBar = (props: {
             )}
           </div>
         )}
-
-        {props.children}
+        <div className={cn('flex min-w-0 flex-1', props.containerClassName)}>
+          {props.children}
+        </div>
+        {!!props.actions && (
+          <div className="flex items-center gap-2">{props.actions}</div>
+        )}
       </div>
     </header>
   );
