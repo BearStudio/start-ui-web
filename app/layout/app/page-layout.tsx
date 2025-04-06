@@ -28,7 +28,6 @@ export const PageLayoutTopBar = (props: {
   className?: string;
   leftActions?: ReactNode;
   rightActions?: ReactNode;
-  isConfirmDiscardChanges?: boolean;
   containerClassName?: string;
 }) => {
   return (

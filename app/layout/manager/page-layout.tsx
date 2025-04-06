@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export const PageLayoutContainer = (props: {
@@ -27,40 +28,19 @@ const TOPBAT_HEIGHT =
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
-  leftActions?: ReactNode;
-  rightActions?: ReactNode;
-  isConfirmDiscardChanges?: boolean;
   containerClassName?: string;
 }) => {
   return (
-    <div
-      className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top max-md:pt-2 dark:border-b-neutral-800 dark:bg-neutral-900',
-        props.className
-      )}
-      style={{
-        height: TOPBAT_HEIGHT,
-      }}
+    <header
+      className="flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900"
+      style={{ height: TOPBAT_HEIGHT }}
     >
-      <PageLayoutContainer
-        className={cn('justify-end py-2', props.containerClassName)}
-      >
-        <div className="flex min-h-8 w-full min-w-0 items-center justify-center gap-4">
-          <SidebarTrigger />
-          {!!props.leftActions && (
-            <div className="flex min-w-0 items-center gap-2">
-              {props.leftActions}
-            </div>
-          )}
-          <div className="min-w-0 flex-1">{props.children}</div>
-          {!!props.rightActions && (
-            <div className="flex min-w-0 items-center gap-2">
-              {props.rightActions}
-            </div>
-          )}
-        </div>
-      </PageLayoutContainer>
-    </div>
+      <div className="flex h-14 items-center gap-2">
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        {props.children}
+      </div>
+    </header>
   );
 };
 

@@ -5,24 +5,29 @@ import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-function Separator({
+const Separator = ({
+  ref,
   className,
   orientation = 'horizontal',
   decorative = true,
   ...props
-}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
-  return (
-    <SeparatorPrimitive.Root
-      data-slot="separator-root"
-      decorative={decorative}
-      orientation={orientation}
-      className={cn(
-        'shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px',
-        className
-      )}
-      {...props}
-    />
-  );
-}
+}: React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> & {
+  ref?: React.RefObject<React.ComponentRef<
+    typeof SeparatorPrimitive.Root
+  > | null>;
+}) => (
+  <SeparatorPrimitive.Root
+    ref={ref}
+    decorative={decorative}
+    orientation={orientation}
+    className={cn(
+      'shrink-0 bg-border',
+      orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-auto w-[1px]',
+      className
+    )}
+    {...props}
+  />
+);
+Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 export { Separator };
