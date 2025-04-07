@@ -45,8 +45,10 @@ type InputProps = Pick<
   | 'autoCorrect'
   | 'onBlur'
   | 'onChange'
+  | 'onKeyDown'
 > &
   VariantProps<typeof inputVariants> & {
+    ref?: React.RefObject<HTMLInputElement | null>;
     startElement?: React.ReactNode;
     endElement?: React.ReactNode;
     inputClassName?: string;
@@ -61,6 +63,7 @@ const startEndElementClassNames = (className?: string) =>
   );
 
 function Input({
+  ref,
   className,
   inputClassName,
   type,
@@ -83,6 +86,7 @@ function Input({
       )}
       <input
         {...props}
+        ref={ref}
         type={type}
         data-slot="input"
         className={cn(
