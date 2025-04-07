@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 import {
   PageLayout,
@@ -20,7 +21,17 @@ export const PageRepository = () => {
             </Link>
           </Button>
         }
-        actions={<Button size="sm">Save</Button>}
+        actions={
+          <>
+            <ResponsiveIconButton variant="ghost" label="Delete">
+              <Trash2Icon />
+            </ResponsiveIconButton>
+            <Button size="sm" variant="secondary">
+              <PencilLineIcon />
+              Edit
+            </Button>
+          </>
+        }
       >
         <h1 className="text-base font-medium md:text-sm">Repo name</h1>
       </PageLayoutTopBar>

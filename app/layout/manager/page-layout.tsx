@@ -13,7 +13,7 @@ export const PageLayoutContainer = (props: {
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col px-4',
+        'mx-auto flex w-full max-w-7xl min-w-0 flex-1 flex-col px-4',
         props.className
       )}
     >

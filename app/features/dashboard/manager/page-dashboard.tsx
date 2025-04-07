@@ -11,7 +11,7 @@ export const PageDashboard = () => {
       <PageLayoutTopBar>
         <h1 className="text-base font-medium md:text-sm">Dashboard</h1>
       </PageLayoutTopBar>
-      <PageLayoutContent>
+      <PageLayoutContent containerClassName="max-w-4xl">
         <MarketingBento />
       </PageLayoutContent>
     </PageLayout>

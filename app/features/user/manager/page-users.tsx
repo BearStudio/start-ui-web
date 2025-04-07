@@ -1,7 +1,7 @@
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
-import { PageLayoutContent } from '@/layout/app/page-layout';
+import { PageLayoutContent } from '@/layout/manager/page-layout';
 import { PageLayout, PageLayoutTopBar } from '@/layout/manager/page-layout';
 
 export const PageUsers = () => {

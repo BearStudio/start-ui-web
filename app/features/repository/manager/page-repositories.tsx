@@ -23,7 +23,7 @@ export const PageRepositories = () => {
       >
         <h1 className="overflow-hidden text-base font-medium text-ellipsis md:text-sm">
           Repositories
-        </h1>{' '}
+        </h1>
         <SearchButton className="-mx-2 md:hidden" size="icon-sm" />
         <SearchInput size="sm" className="max-w-2xs max-md:hidden" />
       </PageLayoutTopBar>
