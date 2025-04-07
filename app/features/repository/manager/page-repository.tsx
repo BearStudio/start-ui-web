@@ -51,7 +51,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
       >
         <h1 className="min-w-0 text-base font-medium md:text-sm">
           {match(getUiState())
-            .with('pending', () => <Skeleton className="h-4 w-48" />) // TODO Design
+            .with('pending', () => <Skeleton className="h-4 w-48" />)
             .with('error', () => 'ERROR') // TODO translation
             .with('default', () => <>{repository.data?.name}</>)
             .exhaustive()}

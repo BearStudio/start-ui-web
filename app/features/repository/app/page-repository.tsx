@@ -1,8 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
+import { match } from 'ts-pattern';
+
+import { orpc } from '@/lib/orpc/client';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import {
   PageLayout,
@@ -10,7 +15,17 @@ import {
   PageLayoutTopBar,
 } from '@/layout/app/page-layout';
 
-export const PageRepository = () => {
+export const PageRepository = (props: { params: { id: string } }) => {
+  const repository = useQuery(
+    orpc.repository.getById.queryOptions({ input: { id: props.params.id } })
+  );
+
+  const getUiState = () => {
+    if (repository.status === 'pending') return 'pending';
+    if (repository.status === 'error') return 'error';
+    return 'default';
+  };
+
   return (
     <PageLayout>
       <PageLayoutTopBar
@@ -28,7 +43,13 @@ export const PageRepository = () => {
         }
         rightActions={<Button size="sm">Save</Button>}
       >
-        <h1 className="text-base font-medium md:text-sm">Repo name</h1>
+        <h1 className="min-w-0 text-base font-medium md:text-sm">
+          {match(getUiState())
+            .with('pending', () => <Skeleton className="h-4 w-48" />)
+            .with('error', () => 'ERROR') // TODO translation
+            .with('default', () => <>{repository.data?.name}</>)
+            .exhaustive()}
+        </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>...</PageLayoutContent>
     </PageLayout>
