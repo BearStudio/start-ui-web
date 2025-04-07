@@ -7,5 +7,6 @@ export const Route = createFileRoute('/manager/_layout/repositories/$id/')({
 });
 
 function RouteComponent() {
-  return <PageRepository />;
+  const params = Route.useParams();
+  return <PageRepository params={params} />;
 }

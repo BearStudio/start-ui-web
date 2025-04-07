@@ -17,5 +17,6 @@ export const Route = createFileRoute('/manager/_layout/repositories/')({
 });
 
 function RouteComponent() {
-  return <PageRepositories />;
+  const search = Route.useSearch();
+  return <PageRepositories search={search} />;
 }
