@@ -7,6 +7,7 @@ import { useValueHasChanged } from '@/hooks/use-value-has-changed';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 
 type CustomProps = {
   value?: string;
@@ -14,6 +15,7 @@ type CustomProps = {
   onChange?(value?: string): void;
   delay?: number;
   clearLabel?: string;
+  loading?: boolean;
 };
 
 type SearchInputProps = Overwrite<ComponentProps<typeof Input>, CustomProps>;
@@ -27,6 +29,7 @@ export const SearchInput = ({
   placeholder,
   clearLabel,
   disabled = false,
+  loading = false,
   ...rest
 }: SearchInputProps & { ref?: React.RefObject<HTMLInputElement | null> }) => {
   const { t } = useTranslation(['components']);
@@ -70,6 +73,25 @@ export const SearchInput = ({
     rest.onKeyDown?.(event);
   };
 
+  const getEndElement = () => {
+    if (loading) return <Spinner />;
+    if (!disabled && search)
+      return (
+        <Button
+          onClick={handleClear}
+          variant="ghost"
+          size="icon-xs"
+          className="-mr-1.5"
+        >
+          <span className="sr-only">
+            {clearLabel ?? t('components:searchInput.clear')}
+          </span>
+          <XIcon />
+        </Button>
+      );
+    return <SearchIcon className={cn(disabled && 'opacity-30')} />;
+  };
+
   return (
     <Input
       {...rest}
@@ -79,23 +101,7 @@ export const SearchInput = ({
       placeholder={placeholder ?? t('components:searchInput.placeholder')}
       onKeyDown={handleEscape}
       disabled={disabled}
-      endElement={
-        !disabled && search ? (
-          <Button
-            onClick={handleClear}
-            variant="ghost"
-            size="icon-xs"
-            className="-mr-1.5"
-          >
-            <span className="sr-only">
-              {clearLabel ?? t('components:searchInput.clear')}
-            </span>
-            <XIcon />
-          </Button>
-        ) : (
-          <SearchIcon className={cn(disabled && 'opacity-30')} />
-        )
-      }
+      endElement={getEndElement()}
     />
   );
 };

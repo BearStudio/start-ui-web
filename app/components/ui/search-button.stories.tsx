@@ -61,6 +61,10 @@ export function Disabled() {
   return <SearchButton disabled />;
 }
 
+export function Loading() {
+  return <SearchButton loading />;
+}
+
 export function Sizes() {
   return (
     <div className="flex gap-4">
