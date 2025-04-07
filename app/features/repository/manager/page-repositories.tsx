@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Link, useRouter, useSearch } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
-import { ReactNode } from 'react';
+import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -17,12 +17,25 @@ import {
   PageLayoutTopBar,
 } from '@/layout/manager/page-layout';
 
-export const PageRepositories = () => {
-  const search = useSearch({ from: '/manager/_layout/repositories/' });
+export const PageRepositories = (props: {
+  search: { searchTerm?: string };
+}) => {
+  const router = useRouter();
+
+  const searchInputProps = {
+    value: props.search.searchTerm ?? '',
+    onChange: (value: string) =>
+      router.navigate({
+        to: '.',
+        search: { searchTerm: value },
+        replace: true,
+      }),
+  };
+
   const repositories = useInfiniteQuery(
     orpc.repository.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
-        searchTerm: search.searchTerm,
+        searchTerm: props.search.searchTerm,
         cursor,
       }),
       initialPageParam: undefined,
@@ -31,62 +44,16 @@ export const PageRepositories = () => {
     })
   );
 
-  if (repositories.status === 'pending') {
-    return <PageWrapper>Loading...</PageWrapper>; // TODO Design
-  }
+  const items = repositories.data?.pages.flatMap((p) => p.items) ?? [];
 
-  if (repositories.status === 'error') {
-    return (
-      <PageWrapper>
-        <PageError />
-      </PageWrapper>
-    );
-  }
-
-  if (!repositories.data.pages.flatMap((p) => p.items).length) {
-    return <PageWrapper>No Repo</PageWrapper>; // TODO Design
-  }
-
-  return (
-    <PageWrapper>
-      {repositories.data.pages
-        .flatMap((p) => p.items)
-        .map((item) => (
-          <Link
-            key={item.id}
-            to="/manager/repositories/$id"
-            params={{ id: item.id }}
-          >
-            Repo: {item.name}
-          </Link>
-        ))}
-      {repositories.hasNextPage && (
-        <Button
-          type="button"
-          size="sm"
-          variant="link"
-          onClick={() => repositories.fetchNextPage()}
-          loading={repositories.isFetchingNextPage}
-        >
-          Load more
-        </Button>
-      )}
-    </PageWrapper>
-  );
-};
-
-const PageWrapper = (props: { children?: ReactNode }) => {
-  const search = useSearch({ from: '/manager/_layout/repositories/' });
-  const router = useRouter();
-
-  const searchProps = {
-    value: search.searchTerm ?? '',
-    onChange: (value: string) =>
-      router.navigate({
-        to: '.',
-        search: { searchTerm: value },
-        replace: true,
-      }),
+  const getUiState = () => {
+    if (repositories.status === 'pending') return 'pending';
+    if (repositories.status === 'error') return 'error';
+    if (!items.length && props.search.searchTerm) {
+      return 'empty-search';
+    }
+    if (!items.length) return 'empty';
+    return 'default';
   };
 
   return (
@@ -102,17 +69,50 @@ const PageWrapper = (props: { children?: ReactNode }) => {
           Repositories
         </h1>
         <SearchButton
-          {...searchProps}
+          {...searchInputProps}
           className="-mx-2 md:hidden"
           size="icon-sm"
         />
         <SearchInput
-          {...searchProps}
+          {...searchInputProps}
           size="sm"
           className="max-w-2xs max-md:hidden"
         />
       </PageLayoutTopBar>
-      <PageLayoutContent>{props.children}</PageLayoutContent>
+      <PageLayoutContent>
+        {match(getUiState())
+          .with('pending', () => <>Loading...</>) // TODO Design
+          .with('error', () => <PageError />)
+          .with('empty', () => <>No Repo</>) // TODO Design
+          .with('empty-search', () => (
+            <>No Repo found for {props.search.searchTerm}</>
+          )) // TODO Design
+          .with('default', () => (
+            <>
+              {items.map((item) => (
+                <Link
+                  key={item.id}
+                  to="/manager/repositories/$id"
+                  params={{ id: item.id }}
+                >
+                  Repo: {item.name}
+                </Link>
+              ))}
+              {repositories.hasNextPage && (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="link"
+                  onClick={() => repositories.fetchNextPage()}
+                  loading={repositories.isFetchingNextPage}
+                >
+                  Load more
+                </Button>
+              )}
+            </>
+          ))
+          .exhaustive()}
+      </PageLayoutContent>
     </PageLayout>
   );
 };
