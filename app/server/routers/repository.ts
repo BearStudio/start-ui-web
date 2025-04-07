@@ -1,3 +1,4 @@
+import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
@@ -69,5 +70,37 @@ export default {
         nextCursor,
         total,
       };
+    }),
+
+  getById: protectedProcedure({
+    permission: {
+      repository: ['read'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/repositories/{id}',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .output(zRepository())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Getting repository');
+      const repository = await context.db.repository.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!repository) {
+        context.logger.warn(
+          'Unable to find repository with the provided input'
+        );
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return repository;
     }),
 };
