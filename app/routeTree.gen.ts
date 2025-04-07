@@ -16,7 +16,6 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AppImport } from './routes/app'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
-import { Route as PlanetIdImport } from './routes/planet.$id'
 import { Route as ManagerLayoutImport } from './routes/manager/_layout'
 import { Route as AppLayoutDesktopOnlyImport } from './routes/app/_layout-desktop-only'
 import { Route as AppLayoutImport } from './routes/app/_layout'
@@ -63,12 +62,6 @@ const LoginIndexRoute = LoginIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LoginRoute,
-} as any)
-
-const PlanetIdRoute = PlanetIdImport.update({
-  id: '/planet/$id',
-  path: '/planet/$id',
-  getParentRoute: () => rootRoute,
 } as any)
 
 const ManagerLayoutRoute = ManagerLayoutImport.update({
@@ -216,13 +209,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/manager'
       preLoaderRoute: typeof ManagerLayoutImport
       parentRoute: typeof ManagerImport
-    }
-    '/planet/$id': {
-      id: '/planet/$id'
-      path: '/planet/$id'
-      fullPath: '/planet/$id'
-      preLoaderRoute: typeof PlanetIdImport
-      parentRoute: typeof rootRoute
     }
     '/login/': {
       id: '/login/'
@@ -412,7 +398,6 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppLayoutDesktopOnlyRouteWithChildren
   '/login': typeof LoginRouteWithChildren
   '/manager': typeof ManagerLayoutRouteWithChildren
-  '/planet/$id': typeof PlanetIdRoute
   '/login/': typeof LoginIndexRoute
   '/app/': typeof AppLayoutIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
@@ -432,7 +417,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppLayoutIndexRoute
   '/manager': typeof ManagerLayoutIndexRoute
-  '/planet/$id': typeof PlanetIdRoute
   '/login': typeof LoginIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
@@ -455,7 +439,6 @@ export interface FileRoutesById {
   '/app/_layout': typeof AppLayoutRouteWithChildren
   '/app/_layout-desktop-only': typeof AppLayoutDesktopOnlyRouteWithChildren
   '/manager/_layout': typeof ManagerLayoutRouteWithChildren
-  '/planet/$id': typeof PlanetIdRoute
   '/login/': typeof LoginIndexRoute
   '/app/_layout/': typeof AppLayoutIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
@@ -478,7 +461,6 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
-    | '/planet/$id'
     | '/login/'
     | '/app/'
     | '/login/error'
@@ -497,7 +479,6 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/manager'
-    | '/planet/$id'
     | '/login'
     | '/login/error'
     | '/login/verify'
@@ -518,7 +499,6 @@ export interface FileRouteTypes {
     | '/app/_layout'
     | '/app/_layout-desktop-only'
     | '/manager/_layout'
-    | '/planet/$id'
     | '/login/'
     | '/app/_layout/'
     | '/login/error/'
@@ -540,7 +520,6 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRouteWithChildren
   ManagerRoute: typeof ManagerRouteWithChildren
-  PlanetIdRoute: typeof PlanetIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -548,7 +527,6 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRouteWithChildren,
   ManagerRoute: ManagerRouteWithChildren,
-  PlanetIdRoute: PlanetIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -564,8 +542,7 @@ export const routeTree = rootRoute
         "/",
         "/app",
         "/login",
-        "/manager",
-        "/planet/$id"
+        "/manager"
       ]
     },
     "/": {
@@ -619,9 +596,6 @@ export const routeTree = rootRoute
         "/manager/_layout/users/",
         "/manager/_layout/repositories/$id/"
       ]
-    },
-    "/planet/$id": {
-      "filePath": "planet.$id.tsx"
     },
     "/login/": {
       "filePath": "login/index.tsx",
