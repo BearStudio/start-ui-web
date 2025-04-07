@@ -30,7 +30,7 @@ export const PageOnboarding = () => {
   const signOut = useSignOut();
 
   const submitOnboarding = useMutation(
-    orpc.user.submitOnboarding.mutationOptions({
+    orpc.account.submitOnboarding.mutationOptions({
       onSuccess: (_, variables) => {
         toast.success(`Welcome ${variables.name}`);
         session.refetch();
