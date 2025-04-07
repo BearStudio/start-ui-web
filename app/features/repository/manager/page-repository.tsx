@@ -8,6 +8,7 @@ import { orpc } from '@/lib/orpc/client';
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import {
   PageLayout,
@@ -48,9 +49,9 @@ export const PageRepository = (props: { params: { id: string } }) => {
           </>
         }
       >
-        <h1 className="text-base font-medium md:text-sm">
+        <h1 className="min-w-0 text-base font-medium md:text-sm">
           {match(getUiState())
-            .with('pending', () => <>Loading...</>) // TODO Design
+            .with('pending', () => <Skeleton className="h-4 w-48" />) // TODO Design
             .with('error', () => 'ERROR') // TODO translation
             .with('default', () => <>{repository.data?.name}</>)
             .exhaustive()}
