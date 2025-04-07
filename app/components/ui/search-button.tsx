@@ -12,15 +12,18 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { SearchInput } from '@/components/ui/search-input';
+import { Spinner } from '@/components/ui/spinner';
 
 type Props = Omit<ComponentProps<typeof Button>, 'children' | 'onChange'> &
   Pick<ComponentProps<typeof SearchInput>, 'value' | 'onChange'> & {
+    loading?: boolean;
     inputProps?: Omit<ComponentProps<typeof SearchInput>, 'value' | 'onChange'>;
   };
 
 const SearchButtonComponent = ({
   value,
   onChange,
+  loading,
   inputProps,
   ...props
 }: Props) => {
@@ -40,7 +43,7 @@ const SearchButtonComponent = ({
     >
       <DrawerTrigger asChild>
         <Button type="button" size="icon" variant="ghost" {...props}>
-          <SearchIcon />
+          {loading ? <Spinner /> : <SearchIcon />}
           <span className="sr-only">Search</span> {/* TODO translation */}
         </Button>
       </DrawerTrigger>
