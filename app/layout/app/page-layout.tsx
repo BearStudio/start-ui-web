@@ -43,7 +43,7 @@ export const PageLayoutTopBar = (props: {
       <PageLayoutContainer
         className={cn('justify-end py-2', props.containerClassName)}
       >
-        <div className="flex min-h-8 w-full min-w-0 items-center justify-center gap-4">
+        <div className="flex h-10 w-full min-w-0 items-center justify-center gap-4">
           {!!props.leftActions && (
             <div className="flex items-center gap-2">{props.leftActions}</div>
           )}
