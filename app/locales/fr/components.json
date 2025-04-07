@@ -28,5 +28,9 @@
     },
     "goBack": "Retour",
     "goHome": "Accueil"
+  },
+  "searchInput": {
+    "clear": "Effacer la recherche",
+    "placeholder": "Rechercher..."
   }
 }

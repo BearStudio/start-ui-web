@@ -28,5 +28,9 @@
     },
     "goBack": "Nyuma",
     "goHome": "Nyumbani"
+  },
+  "searchInput": {
+    "clear": "Utaftaji wazi",
+    "placeholder": "Tafuta ..."
   }
 }
