@@ -28,5 +28,9 @@
       "title": "ERROR",
       "description": "Something went wrong"
     }
+  },
+  "searchInput": {
+    "clear": "Clear search",
+    "placeholder": "Search..."
   }
 }

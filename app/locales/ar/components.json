@@ -28,5 +28,9 @@
     },
     "goBack": "خلف",
     "goHome": "بيت"
+  },
+  "searchInput": {
+    "clear": "بحث واضح",
+    "placeholder": "يبحث..."
   }
 }
