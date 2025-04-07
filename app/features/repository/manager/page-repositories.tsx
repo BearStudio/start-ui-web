@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router';
 
+import { SearchInput } from '@/components/ui/search-input';
+
 import {
   PageLayout,
   PageLayoutContent,
@@ -11,6 +13,10 @@ export const PageRepositories = () => {
     <PageLayout>
       <PageLayoutTopBar>
         <h1 className="text-base font-medium md:text-sm">Repositories</h1>
+        <SearchInput
+          size="sm"
+          className="max-w-2xs transition-all focus-within:max-w-lg"
+        />
       </PageLayoutTopBar>
       <PageLayoutContent>
         <Link to="/manager/repositories/$id" params={{ id: '1' }}>

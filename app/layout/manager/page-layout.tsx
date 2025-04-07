@@ -58,7 +58,12 @@ export const PageLayoutTopBar = (props: {
             )}
           </div>
         )}
-        <div className={cn('flex min-w-0 flex-1', props.containerClassName)}>
+        <div
+          className={cn(
+            'flex min-w-0 flex-1 items-center gap-4',
+            props.containerClassName
+          )}
+        >
           {props.children}
         </div>
         {!!props.actions && (
