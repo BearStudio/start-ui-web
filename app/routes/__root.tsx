@@ -14,6 +14,7 @@ import { authClient } from '@/lib/auth/client';
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
+import { DEFAULT_THEME } from '@/lib/theme/config';
 
 import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
@@ -43,11 +44,12 @@ export const Route = createRootRouteWithContext<{
     }
   },
   loader: async () => {
-    const { language, theme } = await initApp();
+    // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
+      const { language, theme } = await initApp();
       i18n.changeLanguage(language);
+      return { theme };
     }
-    return { theme };
   },
   notFoundComponent: () => <PageError errorCode={404} />,
   errorComponent: (props) => {
@@ -120,7 +122,7 @@ function RootComponent() {
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
   const data = Route.useLoaderData();
-  const { theme } = useInitTheme(data.theme);
+  const { theme } = useInitTheme(data?.theme || DEFAULT_THEME);
 
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language
