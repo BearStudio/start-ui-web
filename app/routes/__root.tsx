@@ -14,7 +14,6 @@ import { authClient } from '@/lib/auth/client';
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { useInitTheme } from '@/lib/theme/client';
-import { DEFAULT_THEME } from '@/lib/theme/config';
 
 import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
@@ -122,7 +121,7 @@ function RootComponent() {
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
   const data = Route.useLoaderData();
-  const { theme } = useInitTheme(data?.theme || DEFAULT_THEME);
+  const { theme } = useInitTheme(data?.theme ?? null);
 
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language
