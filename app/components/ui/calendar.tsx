@@ -131,7 +131,7 @@ export function Calendar({
   const locale = REACT_DAY_PICKER_LOCALE_MAP[i18n?.language] ?? enUS;
 
   const [navView, setNavView] = useState<NavView>('days');
-  const [displayYears, setDisplayYears] = useState<DisplayYears>(
+  const [displayYears, setDisplayYears] = useState<DisplayYears>(() =>
     getDisplayYearsInitialValue(yearRange)
   );
 
