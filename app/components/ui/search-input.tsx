@@ -67,6 +67,7 @@ export const SearchInput = ({
     if (event?.key?.toLowerCase() === 'escape') {
       handleClear();
     }
+    rest.onKeyDown?.(event);
   };
 
   return (
