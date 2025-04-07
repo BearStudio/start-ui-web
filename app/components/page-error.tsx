@@ -45,9 +45,7 @@ const PageErrorContent = (props: {
     <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-4">
       <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1 text-center md:flex-row">
         <h1 className="text-2xl font-bold md:text-xl">{props.title}</h1>
-        <div className="hidden h-8 md:block">
-          <Separator orientation="vertical" />
-        </div>
+        <Separator orientation="vertical" className="hidden h-8 md:block" />
         {!!props.description && (
           <p className="text-sm text-muted-foreground">{props.description}</p>
         )}
