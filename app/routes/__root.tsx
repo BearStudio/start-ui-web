@@ -30,13 +30,15 @@ const initApp = createServerFn({ method: 'GET' }).handler(() => {
   };
 });
 
+let devWarmUpDone = false;
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   beforeLoad: async () => {
     // Warm up auth session in Dev
     // Prevent error on first load
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV && !devWarmUpDone) {
+      devWarmUpDone = true;
       await authClient.getSession();
     }
   },
