@@ -65,7 +65,7 @@ export const PageRepositories = (props: {
           </ResponsiveIconButton>
         }
       >
-        <h1 className="overflow-hidden text-base font-medium text-ellipsis md:text-sm">
+        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
           Repositories
         </h1>
         <SearchButton

@@ -33,7 +33,7 @@ export const PageLayoutTopBar = (props: {
   return (
     <div
       className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top max-md:pt-2 md:-mt-1 md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
+        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-1 md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
         props.className
       )}
       style={{
@@ -43,7 +43,7 @@ export const PageLayoutTopBar = (props: {
       <PageLayoutContainer
         className={cn('justify-end py-2', props.containerClassName)}
       >
-        <div className="flex h-10 w-full min-w-0 items-center justify-center gap-4">
+        <div className="flex h-10 w-full min-w-0 items-center justify-center gap-4 pt-2">
           {!!props.leftActions && (
             <div className="flex items-center gap-2">{props.leftActions}</div>
           )}

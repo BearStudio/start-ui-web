@@ -41,7 +41,7 @@ export const PageLayoutTopBar = (props: {
       )}
       style={{ height: TOPBAT_HEIGHT }}
     >
-      <div className="flex h-14 min-w-0 flex-1 items-center gap-4">
+      <div className="flex h-14 min-w-0 flex-1 items-center gap-4 rtl:h-11">
         {(!open || (isMobile && !props.backButton) || !!props.backButton) && (
           <div className="flex items-center gap-3">
             {(!open || (isMobile && !props.backButton)) && (
@@ -60,7 +60,7 @@ export const PageLayoutTopBar = (props: {
         )}
         <div
           className={cn(
-            'flex min-w-32 flex-1 items-center gap-4',
+            'flex min-w-24 flex-1 items-center gap-4',
             props.containerClassName
           )}
         >

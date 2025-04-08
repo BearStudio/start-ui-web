@@ -50,7 +50,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
               icon={
                 <>
                   <XIcon className="md:hidden" />
-                  <PanelLeftIcon className="hidden md:block" />
+                  <PanelLeftIcon className="hidden md:block rtl:rotate-180" />
                 </>
               }
             />

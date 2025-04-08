@@ -63,7 +63,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
           </ResponsiveIconButton>
         }
       >
-        <h1 className="overflow-hidden text-base font-medium text-ellipsis md:text-sm">
+        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
           Users
         </h1>
         <SearchButton
