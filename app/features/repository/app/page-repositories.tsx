@@ -37,7 +37,9 @@ export const PageRepositories = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="text-base font-medium md:text-sm">Repositories</h1>
+        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
+          Repositories
+        </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         {match(getUiState())

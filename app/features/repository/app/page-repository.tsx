@@ -32,7 +32,12 @@ export const PageRepository = (props: { params: { id: string } }) => {
         leftActions={
           <div className="flex items-center gap-3">
             <div className="-mx-1">
-              <Button asChild variant="ghost" size="icon-sm">
+              <Button
+                asChild
+                variant="ghost"
+                size="icon-sm"
+                className="rtl:rotate-180"
+              >
                 <Link to="..">
                   <ArrowLeftIcon />
                 </Link>
@@ -43,7 +48,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
         }
         rightActions={<Button size="sm">Save</Button>}
       >
-        <h1 className="min-w-0 text-base font-medium md:text-sm">
+        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
           {match(getUiState())
             .with('pending', () => <Skeleton className="h-4 w-48" />)
             .with('error', () => 'ERROR') // TODO translation
