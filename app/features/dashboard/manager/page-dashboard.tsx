@@ -9,7 +9,9 @@ export const PageDashboard = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="text-base font-medium md:text-sm">Dashboard</h1>
+        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
+          Dashboard
+        </h1>
       </PageLayoutTopBar>
       <PageLayoutContent containerClassName="max-w-4xl">
         <MarketingBento />
