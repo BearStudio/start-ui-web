@@ -13,6 +13,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
 export const PageRepository = (props: { params: { id: string } }) => {
@@ -48,13 +49,13 @@ export const PageRepository = (props: { params: { id: string } }) => {
         }
         rightActions={<Button size="sm">Save</Button>}
       >
-        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
+        <PageLayoutTopBarTitle>
           {match(getUiState())
             .with('pending', () => <Skeleton className="h-4 w-48" />)
             .with('error', () => 'ERROR') // TODO translation
             .with('default', () => <>{repository.data?.name}</>)
             .exhaustive()}
-        </h1>
+        </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>...</PageLayoutContent>
     </PageLayout>

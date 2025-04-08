@@ -15,6 +15,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
 export const PageRepositories = (props: {
@@ -60,14 +61,12 @@ export const PageRepositories = (props: {
     <PageLayout>
       <PageLayoutTopBar
         actions={
-          <ResponsiveIconButton label="New Repo" size="sm">
+          <ResponsiveIconButton label="New Repo" variant="secondary" size="sm">
             <PlusIcon />
           </ResponsiveIconButton>
         }
       >
-        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
-          Repositories
-        </h1>
+        <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"

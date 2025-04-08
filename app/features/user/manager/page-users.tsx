@@ -15,6 +15,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
@@ -58,14 +59,12 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         actions={
-          <ResponsiveIconButton label="New Repo" size="sm">
+          <ResponsiveIconButton label="New User" variant="secondary" size="sm">
             <PlusIcon />
           </ResponsiveIconButton>
         }
       >
-        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
-          Users
-        </h1>
+        <PageLayoutTopBarTitle>Users</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
