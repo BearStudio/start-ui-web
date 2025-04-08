@@ -74,6 +74,22 @@ export const PageLayoutTopBar = (props: {
   );
 };
 
+export const PageLayoutTopBarTitle = (props: {
+  children?: ReactNode;
+  className?: string;
+}) => {
+  return (
+    <h1
+      className={cn(
+        'min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm',
+        props.className
+      )}
+    >
+      {props.children}
+    </h1>
+  );
+};
+
 export const PageLayoutContent = (props: {
   noContainer?: boolean;
   children?: ReactNode;

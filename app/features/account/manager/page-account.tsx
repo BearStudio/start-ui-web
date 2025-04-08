@@ -5,13 +5,14 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
 export const PageAccount = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="text-base font-medium md:text-sm">Account</h1>
+        <PageLayoutTopBarTitle>Account</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex gap-4">
