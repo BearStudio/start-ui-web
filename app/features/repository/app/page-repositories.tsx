@@ -11,6 +11,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
 export const PageRepositories = () => {
@@ -37,9 +38,7 @@ export const PageRepositories = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm">
-          Repositories
-        </h1>
+        <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         {match(getUiState())
