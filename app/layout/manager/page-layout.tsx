@@ -81,7 +81,7 @@ export const PageLayoutTopBarTitle = (props: {
   return (
     <h1
       className={cn(
-        'min-w-0 overflow-hidden text-base font-medium text-ellipsis whitespace-nowrap md:text-sm',
+        'min-w-0 truncate text-base font-medium md:text-sm',
         props.className
       )}
     >

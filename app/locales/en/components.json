@@ -32,5 +32,11 @@
   "searchInput": {
     "clear": "Clear search",
     "placeholder": "Search..."
+  },
+  "datalist": {
+    "retry": "Retry",
+    "errorTitle": "Something went wrong",
+    "emptyTitle": "No Data",
+    "noResultsTitle": "No results for \"{{searchTerm}}\""
   }
 }
