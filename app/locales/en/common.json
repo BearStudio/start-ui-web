@@ -6,6 +6,7 @@
     "sw": "Swahili"
   },
   "themes": {
+    "system": "System (auto)",
     "light": "Light",
     "dark": "Dark"
   },

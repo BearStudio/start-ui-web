@@ -13,20 +13,18 @@ import { useTranslation } from 'react-i18next';
 import { authClient } from '@/lib/auth/client';
 import i18n from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
-import { useInitTheme } from '@/lib/theme/client';
 
 import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
 import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
-import { getUserLanguage, getUserTheme } from '@/server/utils';
+import { getUserLanguage } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
 
-const initApp = createServerFn({ method: 'GET' }).handler(() => {
+const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
   return {
     language: getUserLanguage(),
-    theme: getUserTheme(),
   };
 });
 
@@ -45,9 +43,8 @@ export const Route = createRootRouteWithContext<{
   loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
-      const { language, theme } = await initApp();
+      const { language } = await initSsrApp();
       i18n.changeLanguage(language);
-      return { theme };
     }
   },
   notFoundComponent: () => <PageError errorCode={404} />,
@@ -120,8 +117,6 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
-  const data = Route.useLoaderData();
-  const { theme } = useInitTheme(data?.theme ?? null);
 
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language
@@ -129,7 +124,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
   return (
     <html
-      className={theme}
+      suppressHydrationWarning
       lang={i18n.language}
       dir={languageConfig?.dir ?? 'ltr'}
       style={{
