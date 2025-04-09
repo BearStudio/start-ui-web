@@ -66,6 +66,7 @@
     "@uidotdev/usehooks": "2.4.1",
     "bcrypt": "5.1.1",
     "better-auth": "1.2.5",
+    "boring-avatars": "1.11.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "cmdk": "1.0.0",

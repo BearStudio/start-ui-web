@@ -50,11 +50,6 @@ export function NavUser() {
   const user = {
     avatar: session.data?.user.image ?? undefined,
     name: session.data?.user.name,
-    initials: session.data?.user.name
-      ?.split(' ')
-      .slice(0, 2)
-      .map((s) => s[0])
-      .join(''),
     email: session.data?.user.email,
   };
 
@@ -69,7 +64,7 @@ export function NavUser() {
             >
               <Avatar className="size-8">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback>{user.initials}</AvatarFallback>
+                <AvatarFallback variant="boring" name={user.name} />
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
@@ -91,7 +86,7 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="size-8">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>{user.initials}</AvatarFallback>
+                  <AvatarFallback variant="boring" name={user.name} />
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>

@@ -29,13 +29,6 @@ export default {
   title: 'DataList',
 };
 
-const getInitials = (name: string) =>
-  name
-    ?.split(' ')
-    .slice(0, 2)
-    .map((s) => s[0])
-    .join('');
-
 const data = [
   {
     id: 1,
@@ -86,7 +79,7 @@ export const Default = () => (
         <DataListRow key={user.id} withHover>
           <DataListCell className="flex-none">
             <Avatar>
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+              <AvatarFallback variant="boring" name={user.name} />
             </Avatar>
           </DataListCell>
           <DataListCell>
@@ -140,7 +133,7 @@ export const WithHeader = () => (
         <DataListRow key={user.id} withHover>
           <DataListCell className="w-12 flex-none">
             <Avatar>
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+              <AvatarFallback variant="boring" name={user.name} />
             </Avatar>
           </DataListCell>
           <DataListCell>
