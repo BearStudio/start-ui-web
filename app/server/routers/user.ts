@@ -1,3 +1,4 @@
+import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
@@ -69,5 +70,35 @@ export default {
         nextCursor,
         total,
       };
+    }),
+
+  getById: protectedProcedure({
+    permission: {
+      user: ['list'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/users/{id}',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string().cuid(),
+      })
+    )
+    .output(zUser())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Getting user');
+      const user = await context.db.user.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!user) {
+        context.logger.warn('Unable to find user with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return user;
     }),
 };
