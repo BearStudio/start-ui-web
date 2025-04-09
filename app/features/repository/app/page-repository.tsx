@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useCanGoBack } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
@@ -17,6 +18,8 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageRepository = (props: { params: { id: string } }) => {
+  const canGoBack = useCanGoBack();
+  const router = useRouter();
   const repository = useQuery(
     orpc.repository.getById.queryOptions({ input: { id: props.params.id } })
   );
@@ -39,7 +42,15 @@ export const PageRepository = (props: { params: { id: string } }) => {
                 size="icon-sm"
                 className="rtl:rotate-180"
               >
-                <Link to="..">
+                <Link
+                  to=".."
+                  onClick={(e) => {
+                    if (canGoBack) {
+                      e.preventDefault();
+                      router.history.back();
+                    }
+                  }}
+                >
                   <ArrowLeftIcon />
                 </Link>
               </Button>
