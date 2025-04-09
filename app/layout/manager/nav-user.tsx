@@ -6,7 +6,13 @@ import {
   CircleUserIcon,
   LogOutIcon,
   MonitorSmartphoneIcon,
+  MoonIcon,
+  SunIcon,
+  SunMoonIcon,
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
+import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
 
@@ -17,6 +23,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -27,14 +35,17 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
+import { themes } from '@/components/ui/theme-switcher';
 
 import { useSignOut } from '@/features/auth/utils';
 
 export function NavUser() {
+  const { t } = useTranslation(['common']);
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
   const signOut = useSignOut();
   const { setOpenMobile } = useSidebar();
+  const { theme, setTheme } = useTheme();
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
@@ -102,6 +113,29 @@ export function NavUser() {
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+              {themes.map((item) => (
+                <DropdownMenuRadioItem
+                  key={item}
+                  value={item}
+                  icon={match(theme as (typeof themes)[number])
+                    .with('system', () => (
+                      <SunMoonIcon className="text-muted-foreground" />
+                    ))
+                    .with('light', () => (
+                      <SunIcon className="text-muted-foreground" />
+                    ))
+                    .with('dark', () => (
+                      <MoonIcon className="text-muted-foreground" />
+                    ))
+                    .exhaustive()}
+                >
+                  {t(`common:themes.${item}`)}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link to="/app">

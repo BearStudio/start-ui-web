@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react';
+import { useTheme } from 'next-themes';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -11,17 +12,16 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '../app/lib/i18n/constants';
 import i18nGlobal from '../app/lib/i18n/index';
-import { useInitTheme } from '../app/lib/theme/client';
 import { Providers } from '../app/providers';
 
 const DocumentationWrapper = ({ children, isDarkMode, context }) => {
   const { i18n } = useTranslation();
-  const { updateTheme } = useInitTheme(isDarkMode ? 'dark' : null);
+  const { setTheme } = useTheme();
 
   // Update color mode
   useEffect(() => {
-    updateTheme(isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+    setTheme(isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode, setTheme]);
 
   // Update language
   useEffect(() => {
