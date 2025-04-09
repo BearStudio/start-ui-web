@@ -102,13 +102,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
                       <Avatar>
-                        <AvatarFallback>
-                          {item.name
-                            ?.split(' ')
-                            .slice(0, 2)
-                            .map((s) => s[0])
-                            .join('')}
-                        </AvatarFallback>
+                        <AvatarFallback variant="boring" name={item.name} />
                       </Avatar>
                     </DataListCell>
                     <DataListCell>
