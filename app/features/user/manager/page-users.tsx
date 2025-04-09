@@ -1,12 +1,21 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useRouter } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { PageError } from '@/components/page-error';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+  DataList,
+  DataListCell,
+  DataListEmptyState,
+  DataListErrorState,
+  DataListLoadingState,
+  DataListRow,
+  DataListText,
+} from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
@@ -76,33 +85,70 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
           className="max-w-2xs max-md:hidden"
         />
       </PageLayoutTopBar>
-      <PageLayoutContent>
-        {match(getUiState())
-          .with('pending', () => <>Loading...</>) // TODO Design
-          .with('error', () => <PageError />)
-          .with('empty', () => <>No Repo</>) // TODO Design
-          .with('empty-search', () => (
-            <>No Repo found for {props.search.searchTerm}</>
-          )) // TODO Design
-          .with('default', () => (
-            <>
-              {items.map((item) => (
-                <div key={item.id}>User: {item.name ?? item.email}</div>
-              ))}
-              {users.hasNextPage && (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="link"
-                  onClick={() => users.fetchNextPage()}
-                  loading={users.isFetchingNextPage}
-                >
-                  Load more
-                </Button>
-              )}
-            </>
-          ))
-          .exhaustive()}
+      <PageLayoutContent className="pb-20">
+        <DataList>
+          {match(getUiState())
+            .with('pending', () => <DataListLoadingState />)
+            .with('error', () => (
+              <DataListErrorState retry={() => users.refetch()} />
+            ))
+            .with('empty', () => <DataListEmptyState />)
+            .with('empty-search', () => (
+              <DataListEmptyState searchTerm={props.search.searchTerm} />
+            ))
+            .with('default', () => (
+              <>
+                {items.map((item) => (
+                  <DataListRow key={item.id} withHover>
+                    <DataListCell className="flex-none">
+                      <Avatar>
+                        <AvatarFallback>
+                          {item.name
+                            ?.split(' ')
+                            .slice(0, 2)
+                            .map((s) => s[0])
+                            .join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                    </DataListCell>
+                    <DataListCell>
+                      <DataListText className="font-medium">
+                        <Link
+                          to="/manager/users" // TODO link
+                        >
+                          {item.name}
+                          <span className="absolute inset-0" />
+                        </Link>
+                      </DataListText>
+                      <DataListText className="text-xs text-muted-foreground">
+                        {item.email}
+                      </DataListText>
+                    </DataListCell>
+                  </DataListRow>
+                ))}
+                <DataListRow>
+                  <DataListCell className="flex-none">
+                    <Button
+                      type="button"
+                      size="xs"
+                      variant="secondary"
+                      disabled={!users.hasNextPage}
+                      onClick={() => users.fetchNextPage()}
+                      loading={users.isFetchingNextPage}
+                    >
+                      Load more
+                    </Button>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-xs text-muted-foreground">
+                      Showing {items.length} of {users.data?.pages[0]?.total}
+                    </DataListText>
+                  </DataListCell>
+                </DataListRow>
+              </>
+            ))
+            .exhaustive()}
+        </DataList>{' '}
       </PageLayoutContent>
     </PageLayout>
   );
