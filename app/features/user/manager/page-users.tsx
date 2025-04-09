@@ -113,9 +113,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                     </DataListCell>
                     <DataListCell>
                       <DataListText className="font-medium">
-                        <Link
-                          to="/manager/users" // TODO link
-                        >
+                        <Link to="/manager/users/$id" params={{ id: item.id }}>
                           {item.name}
                           <span className="absolute inset-0" />
                         </Link>
