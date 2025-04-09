@@ -7,7 +7,8 @@
   },
   "themes": {
     "light": "Mwanga",
-    "dark": "Giza"
+    "dark": "Giza",
+    "system": "System (Auto)"
   },
   "actions": {
     "back": "Rudi",

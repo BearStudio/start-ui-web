@@ -3,9 +3,7 @@ import {
   getCookie,
   getHeaders as vinxiGetHeaders,
   setCookie,
-  setHeader,
 } from 'vinxi/http';
-import { z } from 'zod';
 
 export const getHeaders = () => {
   const headers = new Headers();
@@ -21,7 +19,6 @@ import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
 } from '@/lib/i18n/constants';
-import { DEFAULT_THEME, THEME_COOKIE_NAME, themes } from '@/lib/theme/config';
 
 /**
  * Retrieves the user's language preference.
@@ -45,18 +42,4 @@ export const getUserLanguage = (input?: string) => {
   setCookie('i18next', language);
 
   return language;
-};
-
-export const getUserTheme = () => {
-  setHeader('Accept-CH', 'Sec-CH-Prefers-Color-Scheme');
-  setHeader('Vary', 'Sec-CH-Prefers-Color-Scheme');
-  setHeader('Critical-CH', 'Sec-CH-Prefers-Color-Scheme');
-
-  const cookie = getCookie(THEME_COOKIE_NAME);
-  const header = getHeaders().get('sec-ch-prefers-color-scheme');
-
-  return z
-    .enum(themes)
-    .catch(DEFAULT_THEME)
-    .parse(cookie ?? header);
 };
