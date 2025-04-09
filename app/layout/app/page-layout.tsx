@@ -83,7 +83,7 @@ export const PageLayoutContent = (props: {
     <div className="relative flex flex-1 flex-col">
       <div className="absolute inset-0">
         <ScrollArea className="h-full">
-          <div className="flex flex-1 flex-col">
+          <div className={cn('flex flex-1 flex-col', props.className)}>
             {props.noContainer ? (
               props.children
             ) : (
