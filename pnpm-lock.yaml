@@ -86,6 +86,9 @@ importers:
       better-auth:
         specifier: 1.2.5
         version: 1.2.5(typescript@5.8.2)
+      boring-avatars:
+        specifier: 1.11.2
+        version: 1.11.2
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -3517,6 +3520,9 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+
+  boring-avatars@1.11.2:
+    resolution: {integrity: sha512-3+wkwPeObwS4R37FGXMYViqc4iTrIRj5yzfX9Qy4mnpZ26sX41dGMhsAgmKks1r/uufY1pl4vpgzMWHYfJRb2A==}
 
   boxen@7.1.1:
     resolution: {integrity: sha512-2hCgjEmP8YLWQ130n2FerGv7rYpfBmnmp9Uy2Le1vge6X3gZIfSmEzP5QTDElFxcvVcXlEn8Aq6MU/PZygIOog==}
@@ -11025,6 +11031,8 @@ snapshots:
       - supports-color
 
   boolbase@1.0.0: {}
+
+  boring-avatars@1.11.2: {}
 
   boxen@7.1.1:
     dependencies:

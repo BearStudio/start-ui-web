@@ -1,4 +1,5 @@
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import BoringAvatarComponent from 'boring-avatars';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -32,19 +33,89 @@ function AvatarImage({
   );
 }
 
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+function AvatarFallback(
+  props: Omit<
+    React.ComponentProps<typeof AvatarPrimitive.Fallback>,
+    'children'
+  > &
+    StrictUnion<
+      | {
+          name: string;
+          variant: 'initials';
+        }
+      | {
+          name?: string;
+          variant: 'boring';
+        }
+      | {
+          variant?: 'default' | undefined;
+          children?: React.ReactNode;
+        }
+    >
+) {
+  if (props.variant === undefined || props.variant === 'default') {
+    const { variant, children, className, ...rest } = props;
+
+    return (
+      <AvatarPrimitive.Fallback
+        data-slot="avatar-fallback"
+        className={cn(
+          'flex size-full items-center justify-center rounded-full bg-black/5 text-xs uppercase dark:bg-white/10',
+          className
+        )}
+        {...rest}
+      >
+        {children}
+      </AvatarPrimitive.Fallback>
+    );
+  }
+
+  if (props.variant === 'initials') {
+    const { variant, name, className, ...rest } = props;
+    return (
+      <AvatarPrimitive.Fallback
+        data-slot="avatar-fallback"
+        className={cn(
+          'flex size-full items-center justify-center rounded-full bg-black/5 text-xs uppercase dark:bg-white/10',
+          className
+        )}
+        {...rest}
+      >
+        {name
+          ?.split(' ')
+          .slice(0, 2)
+          .map((s) => s[0])
+          .join('')}
+      </AvatarPrimitive.Fallback>
+    );
+  }
+
+  const { variant, name, className, ...rest } = props;
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        'flex size-full items-center justify-center rounded-full bg-black/5 text-xs uppercase dark:bg-white/10',
+        'flex size-full items-center justify-center rounded-full',
         className
       )}
-      {...props}
-    />
+      asChild
+      {...rest}
+    >
+      <BoringAvatarComponent
+        variant="marble"
+        name={name}
+        colors={[
+          '#FCD34D',
+          '#F59E0B',
+          '#FD6243',
+          '#DF74EE',
+          '#8364F4',
+          '#6AB7E0',
+          '#92EFCD',
+          '#32CC91',
+        ]}
+      />
+    </AvatarPrimitive.Fallback>
   );
 }
 
