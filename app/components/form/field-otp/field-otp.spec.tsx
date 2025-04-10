@@ -124,5 +124,5 @@ test('disabled', async () => {
   await user.click(input);
   await user.paste('123456');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
+  expect(mockedSubmit).toHaveBeenCalledWith({ code: undefined });
 });

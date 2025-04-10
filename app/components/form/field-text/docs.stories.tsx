@@ -84,7 +84,12 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm(formOptions);
+  const form = useForm({
+    ...formOptions,
+    defaultValues: {
+      name: 'Default Value',
+    },
+  });
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -97,6 +102,36 @@ export const Disabled = () => {
             name="name"
             placeholder="Buzz Pawdrin"
             disabled
+          />
+          <FormFieldHelper>Help</FormFieldHelper>
+        </FormField>
+        <div>
+          <Button type="submit">Submit</Button>
+        </div>
+      </div>
+    </Form>
+  );
+};
+
+export const ReadOnly = () => {
+  const form = useForm({
+    ...formOptions,
+    defaultValues: {
+      name: 'Default Value',
+    },
+  });
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="text"
+            name="name"
+            placeholder="Buzz Pawdrin"
+            readOnly
           />
           <FormFieldHelper>Help</FormFieldHelper>
         </FormField>
