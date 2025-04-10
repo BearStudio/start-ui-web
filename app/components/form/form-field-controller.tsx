@@ -10,6 +10,10 @@ import {
   FieldDateInput,
   FieldDateInputProps,
 } from '@/components/form/field-date-input';
+import {
+  FieldDatePicker,
+  FieldDatePickerProps,
+} from '@/components/form/field-date-picker';
 
 import { FieldOtp, FieldOtpProps } from './field-otp';
 import { FieldText, FieldTextProps } from './field-text';
@@ -43,6 +47,7 @@ export type FormFieldControllerProps<
   | FieldCustomProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
   | FieldDateInputProps<TFieldValues, TName>
+  | FieldDatePickerProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
   | FieldOtpProps<TFieldValues, TName>;
 
@@ -74,6 +79,9 @@ export const FormFieldController = <
 
       case 'date':
         return <FieldDateInput {...props} />;
+
+      case 'date-picker':
+        return <FieldDatePicker {...props} />;
 
       // -- ADD NEW FIELD COMPONENT HERE --
     }
