@@ -1,11 +1,12 @@
 import type { Meta } from '@storybook/react';
+import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useDisclosure } from 'react-use-disclosure';
 
 import { onSubmit } from '@/components/form/docs.utils';
+import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { DateInput } from '@/components/ui/date-input';
-import { DatePickerButton } from '@/components/ui/date-picker-button';
 import {
   Popover,
   PopoverContent,
@@ -20,6 +21,12 @@ export const Default = () => {
   return <DateInput onChange={onSubmit} />;
 };
 
+export const ExternalState = () => {
+  const [date, setDate] = useState<Date | null>(null);
+
+  return <DateInput onChange={(date) => setDate(date)} value={date} />;
+};
+
 export const WithPicker = () => {
   const [date, setDate] = useState<Date | null>(null);
   const datePicker = useDisclosure();
@@ -27,15 +34,17 @@ export const WithPicker = () => {
   return (
     <DateInput
       className="pr-1"
-      placeholder="Placeholder..."
       onChange={(date) => setDate(date)}
+      value={date}
       endElement={
         <Popover
           open={datePicker.isOpen}
           onOpenChange={(open) => datePicker.toggle(open)}
         >
           <PopoverTrigger asChild>
-            <DatePickerButton />
+            <Button size="icon-xs" className="-mr-1.5">
+              <CalendarIcon />
+            </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
@@ -45,6 +54,7 @@ export const WithPicker = () => {
                 setDate(date ?? null);
                 datePicker.close();
               }}
+              defaultMonth={date ?? undefined}
               autoFocus
             />
           </PopoverContent>

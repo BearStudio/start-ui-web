@@ -85,21 +85,24 @@ export const DateInput = ({
   value,
   format = 'DD/MM/YYYY',
   ...props
-}: Omit<ComponentProps<typeof Input>, 'onChange'> & {
+}: Omit<ComponentProps<typeof Input>, 'onChange' | 'value'> & {
   onChange: (date: Date | null) => void;
   format?: string;
   value?: Date | null;
 }) => {
-  const t = useDatePickerInputManagement({
+  const datePickerInputManagement = useDatePickerInputManagement({
     dateFormat: format,
     onChange,
+    dateValue: value,
   });
 
   return (
     <Input
-      onBlur={(e) => t.handleInputBlur(e.target.value)}
-      onChange={t.handleInputChange}
-      value={value ? dayjs(value).format(format) : t.inputValue}
+      onBlur={(e) => datePickerInputManagement.handleInputBlur(e.target.value)}
+      onChange={datePickerInputManagement.handleInputChange}
+      value={
+        datePickerInputManagement.inputValue ?? dayjs(value).format(format)
+      }
       placeholder={format}
       {...props}
     />
