@@ -13,7 +13,6 @@ export default {
   title: 'Form/FieldOtp',
 };
 
-type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = (options: { length?: number } = {}) => {
   const length = options.length ?? 6;
   return z.object({
@@ -35,7 +34,7 @@ const formOptions = {
 } as const;
 
 export const Default = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -58,7 +57,7 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     ...formOptions,
     defaultValues: {
       code: '927342',
@@ -86,7 +85,7 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -110,7 +109,7 @@ export const Disabled = () => {
 };
 
 export const CustomLength = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     ...formOptions,
     resolver: zodResolver(zFormSchema({ length: 4 })),
   });
@@ -136,7 +135,7 @@ export const CustomLength = () => {
 };
 
 export const AutoSubmit = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>

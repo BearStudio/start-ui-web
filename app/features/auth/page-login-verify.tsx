@@ -39,7 +39,7 @@ export default function PageLoginVerify({
   const { t } = useTranslation(['auth', 'common']);
   const session = authClient.useSession();
 
-  const form = useForm<FormFieldsLoginVerify>({
+  const form = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(zFormFieldsLoginVerify()),
     defaultValues: {
