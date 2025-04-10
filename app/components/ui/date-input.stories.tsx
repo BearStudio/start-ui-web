@@ -33,7 +33,6 @@ export const WithPicker = () => {
 
   return (
     <DateInput
-      className="pr-1"
       onChange={(date) => setDate(date)}
       value={date}
       endElement={
