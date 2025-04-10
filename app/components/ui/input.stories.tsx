@@ -21,6 +21,10 @@ export const Disabled = () => {
   return <Input disabled placeholder="Placeholder..." />;
 };
 
+export const ReadOnly = () => {
+  return <Input readOnly placeholder="Placeholder..." />;
+};
+
 export const Sizes = () => {
   return (
     <div className="flex flex-col gap-4">

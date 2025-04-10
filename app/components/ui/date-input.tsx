@@ -20,7 +20,7 @@ type UseDayPickerInputManagement = {
 type UseDayPickerInputManagementParams = {
   dateValue?: Date | null;
   dateFormat: string;
-  onChange: (newDate: Date | null, updateMonth?: boolean) => void;
+  onChange: (newDate: Date | null) => void;
 };
 export const useDatePickerInputManagement = (
   params: UseDayPickerInputManagementParams
@@ -46,7 +46,7 @@ export const useDatePickerInputManagement = (
     const date = dayjs(e.currentTarget.value, dateFormat);
     if (date.isValid()) {
       const dateValue = date.startOf('day').toDate();
-      onChange(dateValue, true);
+      onChange(dateValue);
     }
   };
 
@@ -84,6 +84,7 @@ export const useDatePickerInputManagement = (
 
 export const DateInput = ({
   onChange,
+  onBlur,
   value,
   format = 'DD/MM/YYYY',
   ...props
@@ -100,7 +101,10 @@ export const DateInput = ({
 
   return (
     <Input
-      onBlur={(e) => datePickerInputManagement.handleInputBlur(e.target.value)}
+      onBlur={(e) => {
+        datePickerInputManagement.handleInputBlur(e.target.value);
+        onBlur?.(e);
+      }}
       onChange={datePickerInputManagement.handleInputChange}
       value={
         datePickerInputManagement.inputValue ?? dayjs(value).format(format)
