@@ -85,5 +85,34 @@ test('disabled', async () => {
   const input = screen.getByLabelText<HTMLInputElement>('Name');
   await user.type(input, 'another value');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ name: undefined });
+});
+
+test('readOnly', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ name: z.string() })}
+      useFormOptions={{ defaultValues: { name: 'new value' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldController
+            type="text"
+            control={form.control}
+            name="name"
+            readOnly
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+  const input = screen.getByLabelText<HTMLInputElement>('Name');
+  await user.type(input, 'another value');
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });
