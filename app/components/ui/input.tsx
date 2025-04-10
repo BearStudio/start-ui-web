@@ -12,8 +12,7 @@ const inputVariants = cva(
     '[&>input]:placeholder:text-muted-foreground',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
     'has-[[aria-invalid]]:border-destructive has-[[aria-invalid]]:ring-destructive/20 dark:has-[[aria-invalid]]:ring-destructive/40',
-    'has-disabled:opacity-50',
-    'has-read-only:opacity-50'
+    'has-disabled:opacity-50'
   ),
   {
     variants: {
@@ -94,7 +93,7 @@ function Input({
         className={cn(
           'flex h-full w-full outline-none',
           'disabled:cursor-not-allowed',
-          'read-only:cursor-not-allowed',
+          'read-only:cursor-not-allowed read-only:opacity-50',
           inputClassName
         )}
         style={{
