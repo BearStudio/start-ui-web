@@ -33,8 +33,10 @@ export const useDatePickerInputManagement = (
   // To update the state if the value of the format change
   useEffect(() => {
     if (dateValue) {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setInputValue(dayjs(dateValue).format(dateFormat));
     } else {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
       setInputValue('');
     }
   }, [dateFormat, dateValue]);
@@ -67,9 +69,9 @@ export const useDatePickerInputManagement = (
     const isNewValue = !date.isSame(dateValue, 'date');
     if (!isNewValue) {
       setInputValue(date.format('DD/MM/YYYY'));
-      // Pour éviter le problème de non sélection quand :
-      // * L'input est focus avec une valeur déjà sélectionnée
-      // * On clique directement sur une nouvelle date
+      // To avoid the issue of non-selection when:
+      // * The input is focused with an already selected value
+      // * A new date is clicked directly
       return;
     }
 
