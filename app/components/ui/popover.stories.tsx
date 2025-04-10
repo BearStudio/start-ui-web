@@ -56,7 +56,6 @@ export const Controlled = () => {
   );
 };
 
-type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
     name: zu.string.nonEmpty(z.string(), {
@@ -65,7 +64,7 @@ const zFormSchema = () =>
   });
 
 export const WithForm = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(zFormSchema()),
     defaultValues: {
