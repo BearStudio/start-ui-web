@@ -15,7 +15,6 @@ export default {
   title: 'Form/FieldText',
 };
 
-type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
     name: zu.string.nonEmpty(z.string(), {
@@ -32,7 +31,7 @@ const formOptions = {
 } as const;
 
 export const Default = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -56,7 +55,7 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     ...formOptions,
     defaultValues: {
       name: 'Default Name',
@@ -85,7 +84,7 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>
@@ -110,7 +109,7 @@ export const Disabled = () => {
 };
 
 export const StartElement = () => {
-  const form = useForm<FormSchema>(formOptions);
+  const form = useForm(formOptions);
 
   return (
     <Form {...form} onSubmit={onSubmit}>

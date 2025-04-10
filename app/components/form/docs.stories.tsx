@@ -21,7 +21,6 @@ export default {
   title: 'Form/Form',
 } satisfies Meta<typeof Form>;
 
-type FormSchema = z.infer<ReturnType<typeof zFormSchema>>;
 const zFormSchema = () =>
   z.object({
     name: zu.string.nonEmpty(z.string(), {
@@ -31,7 +30,7 @@ const zFormSchema = () =>
   });
 
 export const Default = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     mode: 'onBlur',
     resolver: zodResolver(zFormSchema()),
     defaultValues: {
@@ -71,7 +70,7 @@ export const Default = () => {
 };
 
 export const NoHtmlForm = () => {
-  const form = useForm<FormSchema>({
+  const form = useForm({
     mode: 'onBlur',
     resolver: zodResolver(zFormSchema()),
     defaultValues: {

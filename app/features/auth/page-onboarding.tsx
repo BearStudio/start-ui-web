@@ -18,10 +18,7 @@ import { Button } from '@/components/ui/button';
 
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
-import {
-  FormFieldsOnboarding,
-  zFormFieldsOnboarding,
-} from '@/features/auth/schemas';
+import { zFormFieldsOnboarding } from '@/features/auth/schemas';
 import { useSignOut } from '@/features/auth/utils';
 
 export const PageOnboarding = () => {
@@ -38,7 +35,7 @@ export const PageOnboarding = () => {
     })
   );
 
-  const form = useForm<FormFieldsOnboarding>({
+  const form = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(zFormFieldsOnboarding()),
     values: {

@@ -46,7 +46,7 @@ export default function PageLogin({
     },
   });
 
-  const form = useForm<FormFieldsLogin>({
+  const form = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(zFormFieldsLogin()),
     defaultValues: {
