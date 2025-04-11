@@ -8,7 +8,8 @@ It represents our team's up-to-date stack that we use when creating web apps for
 # Install
 
 ```
-cp .env.example .env
+cp .env.example .env # Setup your env variables
+cp .vscode/settings.example.json .vscode/settings.json  # (Optionnal) Setup your VS Code
 pnpm install # Install dependencies
 pnpm dk:init # Init docker
 pnpm db:init # Init the db
@@ -43,29 +44,3 @@ pnpm dev
 - [ ] Demo
 - [ ] Update README
 - [ ] Update documentation
-
-# VS code setup
-
-Update your `.vscode/settings`
-
-```json
-{
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cn\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-  "i18n-ally.localesPaths": [
-    "app/locales",
-    "node_modules/zod-i18n-map/locales"
-  ],
-  "i18n-ally.keystyle": "nested",
-  "i18n-ally.enabledFrameworks": ["general", "react", "i18next"],
-  "i18n-ally.namespace": true,
-  "i18n-ally.defaultNamespace": "common",
-  "i18n-ally.extract.autoDetect": true,
-  "i18n-ally.keysInUse": ["common.languages.*"]
-}
-```
