@@ -1,4 +1,5 @@
 import { Combobox } from '@ark-ui/react/combobox';
+import { faker } from '@faker-js/faker';
 import { Meta } from '@storybook/react';
 import { ArrowDown } from 'lucide-react';
 
@@ -33,6 +34,10 @@ const astrobears = [
     value: 'ridepaw',
     label: 'Sally Ridepaw',
   },
+  {
+    value: 'michaelpawanderson',
+    label: 'Michael Paw Anderson',
+  },
 ];
 
 export const Default = () => {
@@ -59,10 +64,19 @@ export const Multiple = () => {
   return <Select options={astrobears} multiple />;
 };
 
+export const Creatable = () => {
+  return <Select options={astrobears} allowCustomValue />;
+};
+
 export const Customization = () => {
   return (
     <Select
       options={astrobears}
+      createListCollectionOptions={{
+        itemToString(item) {
+          return 'Preffix ' + item.label + ' suffix';
+        },
+      }}
       inputProps={{
         endElement: (
           <Combobox.Trigger asChild>
@@ -75,4 +89,13 @@ export const Customization = () => {
       }}
     />
   );
+};
+
+const lotsOfOptions = Array.from({ length: 100_000 }, () => ({
+  label: `${faker.person.firstName()} ${faker.person.lastName()}`,
+  value: window.crypto.randomUUID(),
+}));
+
+export const LotsOfOptions = () => {
+  return <Select options={lotsOfOptions} />;
 };
