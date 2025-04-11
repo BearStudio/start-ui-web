@@ -7,6 +7,8 @@ import { Portal } from '@ark-ui/react/portal';
 import { ChevronDown, X } from 'lucide-react';
 import { ComponentProps, useMemo, useState } from 'react';
 
+import { cn } from '@/lib/tailwind/utils';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -22,17 +24,25 @@ type SelectProps<Option extends OptionBase> = Omit<
   InputPropsRoot & {
     options: Array<Option>;
     inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
+    createListCollectionOptions?: Omit<
+      Parameters<typeof createListCollection<Option>>[0],
+      'items'
+    >;
   };
 
 export const Select = <Option extends OptionBase>({
   inputProps,
   placeholder = 'Select...', // TODO Translation
   options,
+  createListCollectionOptions,
   ...props
 }: SelectProps<Option>) => {
   const [items, setItems] = useState(options);
 
-  const collection = useMemo(() => createListCollection({ items }), [items]);
+  const collection = useMemo(
+    () => createListCollection({ items, ...createListCollectionOptions }),
+    [createListCollectionOptions, items]
+  );
 
   const handleInputChange = (details: Combobox.InputValueChangeDetails) => {
     setItems(
@@ -42,10 +52,18 @@ export const Select = <Option extends OptionBase>({
     );
   };
 
+  const handleOpenChange = (details: Combobox.OpenChangeDetails) => {
+    if (details.open) {
+      setItems(options);
+    }
+  };
+
   return (
     <Combobox.Root
       collection={collection}
       onInputValueChange={handleInputChange}
+      onOpenChange={handleOpenChange}
+      onValueChange={console.log}
       {...props}
     >
       <Combobox.Control>
@@ -72,16 +90,28 @@ export const Select = <Option extends OptionBase>({
       </Combobox.Control>
       <Portal>
         <Combobox.Positioner>
-          <Combobox.Content>
-            <Combobox.ItemGroup>
-              <Combobox.ItemGroupLabel>Frameworks</Combobox.ItemGroupLabel>
-              {collection.items.map((item) => (
-                <Combobox.Item key={item.value} item={item}>
-                  <Combobox.ItemText>{item.label}</Combobox.ItemText>
-                  <Combobox.ItemIndicator>✓</Combobox.ItemIndicator>
-                </Combobox.Item>
-              ))}
-            </Combobox.ItemGroup>
+          <Combobox.Content className="z-10 rounded-md bg-white p-1 shadow dark:bg-neutral-900">
+            {collection.items.length === 0 && (
+              <div className="p-4">No results found</div> // TODO translate
+            )}
+            {collection.items.length !== 0 && (
+              <Combobox.ItemGroup>
+                {collection.items.slice(0, 20).map((item) => (
+                  <Combobox.Item
+                    key={item.value}
+                    item={item}
+                    className={cn(
+                      'flex cursor-pointer gap-1 rounded-sm px-2 py-0.5 data-[disabled]:opacity-50',
+                      'data-[highlighted]:bg-neutral-50 dark:data-[highlighted]:bg-neutral-800',
+                      'data-[state=checked]:bg-neutral-100 dark:data-[state=checked]:bg-neutral-700',
+                      'hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                    )}
+                  >
+                    <Combobox.ItemText>{item.label}</Combobox.ItemText>
+                  </Combobox.Item>
+                ))}
+              </Combobox.ItemGroup>
+            )}
           </Combobox.Content>
         </Combobox.Positioner>
       </Portal>
