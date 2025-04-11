@@ -105,6 +105,7 @@ function AvatarFallback(
         <BoringAvatarComponent
           variant="marble"
           name={name}
+          className="size-full"
           colors={[
             '#FCD34D',
             '#F59E0B',
