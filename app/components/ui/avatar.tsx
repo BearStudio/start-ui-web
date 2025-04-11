@@ -44,7 +44,7 @@ function AvatarFallback(
           variant: 'initials';
         }
       | {
-          name?: string;
+          name: string;
           variant: 'boring';
         }
       | {
@@ -101,20 +101,29 @@ function AvatarFallback(
       asChild
       {...rest}
     >
-      <BoringAvatarComponent
-        variant="marble"
-        name={name}
-        colors={[
-          '#FCD34D',
-          '#F59E0B',
-          '#FD6243',
-          '#DF74EE',
-          '#8364F4',
-          '#6AB7E0',
-          '#92EFCD',
-          '#32CC91',
-        ]}
-      />
+      <>
+        <BoringAvatarComponent
+          variant="marble"
+          name={name}
+          colors={[
+            '#FCD34D',
+            '#F59E0B',
+            '#FD6243',
+            '#DF74EE',
+            '#8364F4',
+            '#6AB7E0',
+            '#92EFCD',
+            '#32CC91',
+          ]}
+        />
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-black uppercase mix-blend-overlay">
+          {name
+            ?.split(' ')
+            .slice(0, 2)
+            .map((s) => s[0])
+            .join('')}
+        </span>
+      </>
     </AvatarPrimitive.Fallback>
   );
 }
