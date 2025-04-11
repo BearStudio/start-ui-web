@@ -14,7 +14,7 @@ export const DataList = ({
   return (
     <div
       className={cn(
-        'relative flex min-h-[8rem] w-full flex-col overflow-x-auto overflow-y-hidden rounded-sm border bg-white dark:bg-neutral-900',
+        'relative flex w-full flex-col overflow-x-auto overflow-y-hidden rounded-sm border bg-white dark:bg-neutral-900',
         className
       )}
       {...props}
@@ -102,7 +102,7 @@ export const DataListEmptyState = ({
   const { t } = useTranslation(['components']);
   return (
     <DataListRow className="flex-1">
-      <DataListCell className="flex-1 items-center justify-center text-sm text-muted-foreground">
+      <DataListCell className="flex-1 items-center justify-center py-4 text-sm text-muted-foreground">
         {searchTerm ? (
           <div>
             {t('components:datalist.noResultsTitle', {
@@ -129,7 +129,7 @@ export const DataListErrorState = ({
   const { t } = useTranslation(['components']);
   return (
     <DataListRow className="flex-1">
-      <DataListCell className="text-center">
+      <DataListCell className="flex flex-col items-center justify-center py-4 text-center">
         <div className="flex w-full items-center justify-center gap-2 text-sm font-medium">
           <CircleAlertIcon className="size-4 text-muted-foreground" />
           {title ?? t('components:datalist.errorTitle')}

@@ -19,4 +19,15 @@ export const zUser = () =>
     image: z.string().nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    onboardedAt: z.date().nullish(),
+  });
+
+export type Session = z.infer<ReturnType<typeof zSession>>;
+export const zSession = () =>
+  z.object({
+    id: z.string(),
+    token: z.string(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    expiresAt: z.date(),
   });
