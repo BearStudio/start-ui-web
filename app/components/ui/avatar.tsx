@@ -101,7 +101,7 @@ function AvatarFallback(
       asChild
       {...rest}
     >
-      <>
+      <div>
         <BoringAvatarComponent
           variant="marble"
           name={name}
@@ -123,7 +123,7 @@ function AvatarFallback(
             .map((s) => s[0])
             .join('')}
         </span>
-      </>
+      </div>
     </AvatarPrimitive.Fallback>
   );
 }
