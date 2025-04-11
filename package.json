@@ -156,6 +156,20 @@
   "prisma": {
     "seed": "npx tsx prisma/seed/index.ts"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@fortawesome/fontawesome-common-types",
+      "@fortawesome/fontawesome-svg-core",
+      "@prisma/client",
+      "@prisma/engines",
+      "bcrypt",
+      "core-js",
+      "core-js-pure",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bearstudio/start-ui-web.git"
