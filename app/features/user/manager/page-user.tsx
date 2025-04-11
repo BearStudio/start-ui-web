@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
-import { ArrowLeftIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 
+import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
@@ -18,41 +18,20 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUser = (props: { params: { id: string } }) => {
-  const canGoBack = useCanGoBack();
-  const router = useRouter();
   const user = useQuery(
     orpc.user.getById.queryOptions({ input: { id: props.params.id } })
   );
 
-  const getUiState = () => {
+  const uiState = (() => {
     if (user.status === 'pending') return 'pending';
     if (user.status === 'error') return 'error';
     return 'default';
-  };
+  })();
 
   return (
     <PageLayout>
       <PageLayoutTopBar
-        backButton={
-          <Button
-            asChild
-            variant="ghost"
-            size="icon-sm"
-            className="rtl:rotate-180"
-          >
-            <Link
-              to=".."
-              onClick={(e) => {
-                if (canGoBack) {
-                  e.preventDefault();
-                  router.history.back();
-                }
-              }}
-            >
-              <ArrowLeftIcon />
-            </Link>
-          </Button>
-        }
+        backButton={<BackButton />}
         actions={
           <>
             <ResponsiveIconButton variant="ghost" label="Delete">
@@ -66,7 +45,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         }
       >
         <PageLayoutTopBarTitle>
-          {match(getUiState())
+          {match(uiState)
             .with('pending', () => <Skeleton className="h-4 w-48" />)
             .with('error', () => 'ERROR') // TODO translation
             .with('default', () => <>{user.data?.name}</>)
@@ -74,7 +53,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(getUiState())
+        {match(uiState)
           .with('pending', () => <>Loading...</>) // TODO Design
           .with('error', () => <PageError />)
           .with('default', () => <>{user.data?.name}</>)

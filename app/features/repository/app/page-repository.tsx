@@ -1,11 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link, useCanGoBack } from '@tanstack/react-router';
-import { useRouter } from '@tanstack/react-router';
-import { ArrowLeftIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 
+import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -18,17 +16,15 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageRepository = (props: { params: { id: string } }) => {
-  const canGoBack = useCanGoBack();
-  const router = useRouter();
   const repository = useQuery(
     orpc.repository.getById.queryOptions({ input: { id: props.params.id } })
   );
 
-  const getUiState = () => {
+  const uiState = (() => {
     if (repository.status === 'pending') return 'pending';
     if (repository.status === 'error') return 'error';
     return 'default';
-  };
+  })();
 
   return (
     <PageLayout>
@@ -36,24 +32,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
         leftActions={
           <div className="flex items-center gap-3">
             <div className="-mx-1">
-              <Button
-                asChild
-                variant="ghost"
-                size="icon-sm"
-                className="rtl:rotate-180"
-              >
-                <Link
-                  to=".."
-                  onClick={(e) => {
-                    if (canGoBack) {
-                      e.preventDefault();
-                      router.history.back();
-                    }
-                  }}
-                >
-                  <ArrowLeftIcon />
-                </Link>
-              </Button>
+              <BackButton />
             </div>
             <Separator orientation="vertical" className="h-4" />
           </div>
@@ -61,7 +40,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
         rightActions={<Button size="sm">Save</Button>}
       >
         <PageLayoutTopBarTitle>
-          {match(getUiState())
+          {match(uiState)
             .with('pending', () => <Skeleton className="h-4 w-48" />)
             .with('error', () => 'ERROR') // TODO translation
             .with('default', () => <>{repository.data?.name}</>)

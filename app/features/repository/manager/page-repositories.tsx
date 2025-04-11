@@ -56,7 +56,7 @@ export const PageRepositories = (props: {
 
   const items = repositories.data?.pages.flatMap((p) => p.items) ?? [];
 
-  const getUiState = () => {
+  const uiState = (() => {
     if (repositories.status === 'pending') return 'pending';
     if (repositories.status === 'error') return 'error';
     if (!items.length && props.search.searchTerm) {
@@ -64,7 +64,7 @@ export const PageRepositories = (props: {
     }
     if (!items.length) return 'empty';
     return 'default';
-  };
+  })();
 
   return (
     <PageLayout>
@@ -89,7 +89,7 @@ export const PageRepositories = (props: {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(getUiState())
+          {match(uiState)
             .with('pending', () => <DataListLoadingState />)
             .with('error', () => (
               <DataListErrorState retry={() => repositories.refetch()} />
