@@ -1,0 +1,11 @@
+onlyBuiltDependencies:
+  - '@fortawesome/fontawesome-common-types'
+  - '@fortawesome/fontawesome-svg-core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - bcrypt
+  - core-js
+  - core-js-pure
+  - esbuild
+  - prisma
+  - sharp
