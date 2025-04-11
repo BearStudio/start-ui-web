@@ -54,7 +54,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
 
   const items = users.data?.pages.flatMap((p) => p.items) ?? [];
 
-  const getUiState = () => {
+  const uiState = (() => {
     if (users.status === 'pending') return 'pending';
     if (users.status === 'error') return 'error';
     if (!items.length && props.search.searchTerm) {
@@ -62,7 +62,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     }
     if (!items.length) return 'empty';
     return 'default';
-  };
+  })();
 
   return (
     <PageLayout>
@@ -87,7 +87,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(getUiState())
+          {match(uiState)
             .with('pending', () => <DataListLoadingState />)
             .with('error', () => (
               <DataListErrorState retry={() => users.refetch()} />
