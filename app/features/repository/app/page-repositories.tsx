@@ -28,12 +28,12 @@ export const PageRepositories = () => {
 
   const items = repositories.data?.pages.flatMap((p) => p.items) ?? [];
 
-  const getUiState = () => {
+  const uiState = (() => {
     if (repositories.status === 'pending') return 'pending';
     if (repositories.status === 'error') return 'error';
     if (!items.length) return 'empty';
     return 'default';
-  };
+  })();
 
   return (
     <PageLayout>
@@ -41,7 +41,7 @@ export const PageRepositories = () => {
         <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(getUiState())
+        {match(uiState)
           .with('pending', () => <>Loading...</>) // TODO Design
           .with('error', () => <PageError />)
           .with('empty', () => <>No Repo</>) // TODO Design
