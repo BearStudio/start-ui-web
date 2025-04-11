@@ -140,7 +140,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
               </>
             ))
             .exhaustive()}
-        </DataList>{' '}
+        </DataList>
       </PageLayoutContent>
     </PageLayout>
   );

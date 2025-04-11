@@ -2,7 +2,7 @@ import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
-import { zUser } from '@/features/user/schemas';
+import { zSession, zUser } from '@/features/user/schemas';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['user'];
@@ -21,7 +21,7 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
+          cursor: z.string().optional(),
           limit: z.number().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
         })
@@ -30,7 +30,7 @@ export default {
     .output(
       z.object({
         items: z.array(zUser()),
-        nextCursor: z.string().cuid().optional(),
+        nextCursor: z.string().optional(),
         total: z.number(),
       })
     )
@@ -84,7 +84,7 @@ export default {
     })
     .input(
       z.object({
-        id: z.string().cuid(),
+        id: z.string(),
       })
     )
     .output(zUser())
@@ -100,5 +100,64 @@ export default {
       }
 
       return user;
+    }),
+
+  getUserSessions: protectedProcedure({
+    permission: {
+      session: ['list'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/users/{id}/sessions',
+      tags,
+    })
+    .input(
+      z.object({
+        userId: z.string(),
+        cursor: z.string().optional(),
+        limit: z.number().min(1).max(100).default(20),
+      })
+    )
+    .output(
+      z.object({
+        items: z.array(zSession()),
+        nextCursor: z.string().optional(),
+        total: z.number(),
+      })
+    )
+    .handler(async ({ context, input }) => {
+      context.logger.info('Getting user sessions from database');
+
+      const where = {
+        userId: input.userId,
+      } satisfies Prisma.SessionWhereInput;
+
+      const [total, items] = await context.db.$transaction([
+        context.db.session.count({
+          where,
+        }),
+        context.db.session.findMany({
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
+          orderBy: {
+            createdAt: 'desc',
+          },
+          where,
+        }),
+      ]);
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+        total,
+      };
     }),
 };
