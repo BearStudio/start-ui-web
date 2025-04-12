@@ -97,7 +97,7 @@ export const PageUser = (props: { params: { id: string } }) => {
             <div className="flex flex-col gap-4">
               <Card>
                 <CardHeader>
-                  <div className="flex gap-3">
+                  <div className="flex items-center gap-3">
                     <Avatar>
                       <AvatarFallback
                         variant="boring"

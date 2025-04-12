@@ -1,9 +1,6 @@
-import { authClient } from '@/lib/auth/client';
-
 import { Button } from '@/components/ui/button';
-import { LocalSwitcher } from '@/components/ui/local-switcher';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 
+import { AccountUserCard } from '@/features/account/account-user-card';
 import { useSignOut } from '@/features/auth/utils';
 import {
   PageLayout,
@@ -12,7 +9,6 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageAccount = () => {
-  const session = authClient.useSession();
   const signOut = useSignOut();
   return (
     <PageLayout>
@@ -20,12 +16,10 @@ export const PageAccount = () => {
         <h1 className="text-base font-medium md:text-sm">Account</h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        <div className="flex gap-4">
-          <LocalSwitcher />
-          <ThemeSwitcher />
+        <div className="flex flex-col gap-4">
+          <AccountUserCard />
 
           <div>
-            {session.data?.user.email}
             <Button
               onClick={() => signOut.mutate()}
               loading={signOut.isPending || signOut.isSuccess}
