@@ -1,6 +1,4 @@
-import { LocalSwitcher } from '@/components/ui/local-switcher';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
-
+import { AccountUserCard } from '@/features/account/account-user-card';
 import {
   PageLayout,
   PageLayoutContent,
@@ -15,9 +13,8 @@ export const PageAccount = () => {
         <PageLayoutTopBarTitle>Account</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        <div className="flex gap-4">
-          <LocalSwitcher />
-          <ThemeSwitcher />
+        <div className="flex flex-col gap-4">
+          <AccountUserCard />
         </div>
       </PageLayoutContent>
     </PageLayout>
