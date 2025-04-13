@@ -60,10 +60,6 @@ export const IsError = () => {
   return <Select options={astrobears} invalid />;
 };
 
-export const Multiple = () => {
-  return <Select options={astrobears} multiple />;
-};
-
 export const Creatable = () => {
   return <Select options={astrobears} allowCustomValue />;
 };
