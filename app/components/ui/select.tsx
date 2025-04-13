@@ -35,6 +35,7 @@ export const Select = <Option extends OptionBase>({
   placeholder = 'Select...', // TODO Translation
   options,
   createListCollectionOptions,
+  onOpenChange,
   ...props
 }: SelectProps<Option>) => {
   const [items, setItems] = useState(options);
@@ -53,6 +54,8 @@ export const Select = <Option extends OptionBase>({
   };
 
   const handleOpenChange = (details: Combobox.OpenChangeDetails) => {
+    onOpenChange?.(details);
+
     if (details.open) {
       setItems(options);
     }
