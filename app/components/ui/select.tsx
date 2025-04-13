@@ -5,12 +5,13 @@ import {
 } from '@ark-ui/react/combobox';
 import { Portal } from '@ark-ui/react/portal';
 import { ChevronDown, X } from 'lucide-react';
-import { ComponentProps, useMemo, useState } from 'react';
+import { ComponentProps, ReactNode, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { isNonNullish, isNullish } from 'remeda';
 
 type OptionBase = { value: string; label: string };
 
@@ -28,6 +29,7 @@ type SelectProps<Option extends OptionBase> = Omit<
       Parameters<typeof createListCollection<Option>>[0],
       'items'
     >;
+    renderEmpty?: (search: string) => ReactNode;
   };
 
 export const Select = <Option extends OptionBase>({
@@ -36,9 +38,12 @@ export const Select = <Option extends OptionBase>({
   options,
   createListCollectionOptions,
   onOpenChange,
+  onInputValueChange,
+  renderEmpty,
   ...props
 }: SelectProps<Option>) => {
   const [items, setItems] = useState(options);
+  const [search, setSearch] = useState('');
 
   const collection = useMemo(
     () => createListCollection({ items, ...createListCollectionOptions }),
@@ -46,6 +51,10 @@ export const Select = <Option extends OptionBase>({
   );
 
   const handleInputChange = (details: Combobox.InputValueChangeDetails) => {
+    onInputValueChange?.(details);
+
+    setSearch(details.inputValue);
+
     setItems(
       options.filter((item) =>
         item.label.toLowerCase().includes(details.inputValue.toLowerCase())
@@ -94,9 +103,12 @@ export const Select = <Option extends OptionBase>({
       <Portal>
         <Combobox.Positioner>
           <Combobox.Content className="z-10 rounded-md bg-white p-1 shadow dark:bg-neutral-900">
-            {collection.items.length === 0 && (
+            {collection.items.length === 0 && isNullish(renderEmpty) && (
               <div className="p-4">No results found</div> // TODO translate
             )}
+            {collection.items.length === 0 &&
+              isNonNullish(renderEmpty) &&
+              renderEmpty(search)}
             {collection.items.length !== 0 && (
               <Combobox.ItemGroup>
                 {collection.items.slice(0, 20).map((item) => (

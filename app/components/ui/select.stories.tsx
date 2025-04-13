@@ -83,6 +83,11 @@ export const Customization = () => {
         ),
         inputClassName: cn('data-[state=open]:bg-[#C0FFEE]'),
       }}
+      renderEmpty={(search) => (
+        <div className="bg-negative-100">
+          This is empty and your search is {search}
+        </div>
+      )}
     />
   );
 };
