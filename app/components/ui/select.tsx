@@ -7,8 +7,10 @@ import { Portal } from '@ark-ui/react/portal';
 import { ChevronDown, X } from 'lucide-react';
 import { ComponentProps, ReactNode, useMemo, useState } from 'react';
 import { isNonNullish, isNullish } from 'remeda';
+import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
+import { getUiState } from '@/lib/ui-state';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,6 +72,15 @@ export const Select = <Option extends OptionBase>({
     }
   };
 
+  const ui = getUiState((set) => {
+    if (collection.items.length === 0 && isNullish(renderEmpty))
+      return set('empty');
+    if (collection.items.length === 0 && isNonNullish(renderEmpty))
+      return set('empty-override', { renderEmpty });
+    if (collection.items.length !== 0) return set('default');
+    return set('default');
+  });
+
   return (
     <Combobox.Root
       collection={collection}
@@ -104,30 +115,33 @@ export const Select = <Option extends OptionBase>({
       <Portal>
         <Combobox.Positioner>
           <Combobox.Content className="z-10 rounded-md bg-white p-1 shadow dark:bg-neutral-900">
-            {collection.items.length === 0 && isNullish(renderEmpty) && (
-              <div className="p-4">No results found</div> // TODO translate
-            )}
-            {collection.items.length === 0 &&
-              isNonNullish(renderEmpty) &&
-              renderEmpty(search)}
-            {collection.items.length !== 0 && (
-              <Combobox.ItemGroup>
-                {collection.items.slice(0, 20).map((item) => (
-                  <Combobox.Item
-                    key={item.value}
-                    item={item}
-                    className={cn(
-                      'flex cursor-pointer gap-1 rounded-sm px-2 py-0.5 data-[disabled]:opacity-50',
-                      'data-[highlighted]:bg-neutral-50 dark:data-[highlighted]:bg-neutral-800',
-                      'data-[state=checked]:bg-neutral-100 dark:data-[state=checked]:bg-neutral-700',
-                      'hover:bg-neutral-50 dark:hover:bg-neutral-800'
-                    )}
-                  >
-                    <Combobox.ItemText>{item.label}</Combobox.ItemText>
-                  </Combobox.Item>
-                ))}
-              </Combobox.ItemGroup>
-            )}
+            {match(ui.state)
+              .with(
+                ui.with('empty'),
+                () => <div className="p-4">No results found</div> // TODO translate
+              )
+              .with(ui.with('empty-override'), ({ renderEmpty }) =>
+                renderEmpty(search)
+              )
+              .with(ui.with('default'), () => (
+                <Combobox.ItemGroup>
+                  {collection.items.slice(0, 20).map((item) => (
+                    <Combobox.Item
+                      key={item.value}
+                      item={item}
+                      className={cn(
+                        'flex cursor-pointer gap-1 rounded-sm px-2 py-0.5 data-[disabled]:opacity-50',
+                        'data-[highlighted]:bg-neutral-50 dark:data-[highlighted]:bg-neutral-800',
+                        'data-[state=checked]:bg-neutral-100 dark:data-[state=checked]:bg-neutral-700',
+                        'hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                      )}
+                    >
+                      <Combobox.ItemText>{item.label}</Combobox.ItemText>
+                    </Combobox.Item>
+                  ))}
+                </Combobox.ItemGroup>
+              ))
+              .exhaustive()}
           </Combobox.Content>
         </Combobox.Positioner>
       </Portal>
