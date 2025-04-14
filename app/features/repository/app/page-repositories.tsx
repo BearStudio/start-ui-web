@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
 
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,7 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageRepositories = () => {
-  const repositories = useInfiniteQuery(
+  const repositoriesQuery = useInfiniteQuery(
     orpc.repository.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
         cursor,
@@ -26,14 +27,14 @@ export const PageRepositories = () => {
     })
   );
 
-  const items = repositories.data?.pages.flatMap((p) => p.items) ?? [];
+  const ui = getUiState((set) => {
+    if (repositoriesQuery.status === 'pending') return set('pending');
+    if (repositoriesQuery.status === 'error') return set('error');
 
-  const uiState = (() => {
-    if (repositories.status === 'pending') return 'pending';
-    if (repositories.status === 'error') return 'error';
-    if (!items.length) return 'empty';
-    return 'default';
-  })();
+    const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
+    if (!items.length) return set('empty');
+    return set('default', { items });
+  });
 
   return (
     <PageLayout>
@@ -41,11 +42,11 @@ export const PageRepositories = () => {
         <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(uiState)
-          .with('pending', () => <>Loading...</>) // TODO Design
-          .with('error', () => <PageError />)
-          .with('empty', () => <>No Repo</>) // TODO Design
-          .with('default', () => (
+        {match(ui.state)
+          .with(ui.with('pending'), () => <>Loading...</>) // TODO Design
+          .with(ui.with('error'), () => <PageError />)
+          .with(ui.with('empty'), () => <>No Repo</>) // TODO Design
+          .with(ui.with('default'), ({ items }) => (
             <>
               {items.map((item) => (
                 <Link
@@ -56,13 +57,13 @@ export const PageRepositories = () => {
                   Repo: {item.name}
                 </Link>
               ))}
-              {repositories.hasNextPage && (
+              {repositoriesQuery.hasNextPage && (
                 <Button
                   type="button"
                   size="sm"
                   variant="link"
-                  onClick={() => repositories.fetchNextPage()}
-                  loading={repositories.isFetchingNextPage}
+                  onClick={() => repositoriesQuery.fetchNextPage()}
+                  loading={repositoriesQuery.isFetchingNextPage}
                 >
                   Load more
                 </Button>
