@@ -4,6 +4,7 @@ import { PlusIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -40,7 +41,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       }),
   };
 
-  const users = useInfiniteQuery(
+  const usersQuery = useInfiniteQuery(
     orpc.user.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
         searchTerm: props.search.searchTerm,
@@ -52,17 +53,16 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     })
   );
 
-  const items = users.data?.pages.flatMap((p) => p.items) ?? [];
-
-  const uiState = (() => {
-    if (users.status === 'pending') return 'pending';
-    if (users.status === 'error') return 'error';
+  const ui = getUiState((set) => {
+    if (usersQuery.status === 'pending') return set('pending');
+    if (usersQuery.status === 'error') return set('error');
+    const items = usersQuery.data?.pages.flatMap((p) => p.items) ?? [];
     if (!items.length && props.search.searchTerm) {
-      return 'empty-search';
+      return set('empty-search', { searchTerm: props.search.searchTerm });
     }
-    if (!items.length) return 'empty';
-    return 'default';
-  })();
+    if (!items.length) return set('empty');
+    return set('default', { items });
+  });
 
   return (
     <PageLayout>
@@ -87,16 +87,16 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(uiState)
-            .with('pending', () => <DataListLoadingState />)
-            .with('error', () => (
-              <DataListErrorState retry={() => users.refetch()} />
+          {match(ui.state)
+            .with(ui.with('pending'), () => <DataListLoadingState />)
+            .with(ui.with('error'), () => (
+              <DataListErrorState retry={() => usersQuery.refetch()} />
             ))
-            .with('empty', () => <DataListEmptyState />)
-            .with('empty-search', () => (
-              <DataListEmptyState searchTerm={props.search.searchTerm} />
+            .with(ui.with('empty'), () => <DataListEmptyState />)
+            .with(ui.with('empty-search'), ({ searchTerm }) => (
+              <DataListEmptyState searchTerm={searchTerm} />
             ))
-            .with('default', () => (
+            .with(ui.with('default'), ({ items }) => (
               <>
                 {items.map((item) => (
                   <DataListRow key={item.id} withHover>
@@ -124,16 +124,17 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                       type="button"
                       size="xs"
                       variant="secondary"
-                      disabled={!users.hasNextPage}
-                      onClick={() => users.fetchNextPage()}
-                      loading={users.isFetchingNextPage}
+                      disabled={!usersQuery.hasNextPage}
+                      onClick={() => usersQuery.fetchNextPage()}
+                      loading={usersQuery.isFetchingNextPage}
                     >
                       Load more
                     </Button>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of {users.data?.pages[0]?.total}
+                      Showing {items.length} of{' '}
+                      {usersQuery.data?.pages[0]?.total}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>

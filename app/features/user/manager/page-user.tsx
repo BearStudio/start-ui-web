@@ -13,6 +13,7 @@ import { authClient } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
 import { WithPermission } from '@/lib/auth/with-permission';
 import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
@@ -46,21 +47,22 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUser = (props: { params: { id: string } }) => {
-  const user = useQuery(
+  const userQuery = useQuery(
     orpc.user.getById.queryOptions({ input: { id: props.params.id } })
   );
 
-  const uiState = (() => {
-    if (user.status === 'pending') return 'pending';
+  const ui = getUiState((set) => {
+    if (userQuery.status === 'pending') return set('pending');
     if (
-      user.status === 'error' &&
-      user.error instanceof ORPCError &&
-      user.error.code === 'NOT_FOUND'
+      userQuery.status === 'error' &&
+      userQuery.error instanceof ORPCError &&
+      userQuery.error.code === 'NOT_FOUND'
     )
-      return 'not-found';
-    if (user.status === 'error') return 'error';
-    return 'default';
-  })();
+      return set('not-found');
+    if (userQuery.status === 'error') return set('error');
+
+    return set('default', { user: userQuery.data });
+  });
 
   return (
     <PageLayout>
@@ -79,49 +81,48 @@ export const PageUser = (props: { params: { id: string } }) => {
         }
       >
         <PageLayoutTopBarTitle>
-          {match(uiState)
-            .with('pending', () => <Skeleton className="h-4 w-48" />)
-            .with('not-found', 'error', () => (
+          {match(ui.state)
+            .with(ui.with('pending'), () => <Skeleton className="h-4 w-48" />)
+            .with(ui.with('not-found'), ui.with('error'), () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .with('default', () => <>{user.data?.name || user.data?.email}</>)
+            .with(ui.with('default'), ({ user }) => (
+              <>{user.name || user.email}</>
+            ))
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(uiState)
-          .with('pending', () => <Spinner full />)
-          .with('not-found', () => <PageError errorCode={404} />)
-          .with('error', () => <PageError />)
-          .with('default', () => (
+        {match(ui.state)
+          .with(ui.with('pending'), () => <Spinner full />)
+          .with(ui.with('not-found'), () => <PageError errorCode={404} />)
+          .with(ui.with('error'), () => <PageError />)
+          .with(ui.with('default'), ({ user }) => (
             <div className="flex flex-col gap-4">
               <Card>
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarFallback
-                        variant="boring"
-                        name={user.data?.name ?? ''}
-                      />
+                      <AvatarFallback variant="boring" name={user.name ?? ''} />
                     </Avatar>
                     <div className="flex flex-col gap-0.5">
                       <CardTitle>
-                        {user.data?.name || (
+                        {user.name || (
                           <span className="text-xs text-muted-foreground">
                             N/A
                           </span>
                         )}
                       </CardTitle>
-                      <CardDescription>{user.data?.email}</CardDescription>
+                      <CardDescription>{user.email}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    {user.data?.onboardedAt ? (
+                    {user.onboardedAt ? (
                       <>
                         Onboarding done on{' '}
-                        {dayjs(user.data.onboardedAt).format(
+                        {dayjs(user.onboardedAt).format(
                           'DD/MM/YYYY [at] HH:mm'
                         )}
                       </>
@@ -145,7 +146,7 @@ const UserSessions = (props: { userId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
 
-  const sessions = useInfiniteQuery(
+  const sessionsQuery = useInfiniteQuery(
     orpc.user.getUserSessions.infiniteOptions({
       enabled: currentSession.data?.user.role
         ? authClient.admin.checkRolePermission({
@@ -201,14 +202,17 @@ const UserSessions = (props: { userId: string }) => {
     },
   });
 
-  const items = sessions.data?.pages.flatMap((p) => p.items) ?? [];
+  const ui = getUiState((set) => {
+    if (sessionsQuery.status === 'pending') return set('pending');
+    if (sessionsQuery.status === 'error') return set('error');
 
-  const uiState = (() => {
-    if (sessions.status === 'pending') return 'pending';
-    if (sessions.status === 'error') return 'error';
-    if (!items.length) return 'empty';
-    return 'default';
-  })();
+    const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
+    if (!items.length) return set('empty');
+    return set('default', {
+      items,
+    });
+  });
+
   return (
     <WithPermission permission={{ session: ['list'] }}>
       <DataList>
@@ -224,7 +228,8 @@ const UserSessions = (props: { userId: string }) => {
                 size="sm"
                 variant="secondary"
                 disabled={
-                  currentSession.data?.user.id === props.userId || !items.length
+                  currentSession.data?.user.id === props.userId ||
+                  ui.is('empty')
                 }
                 loading={revokeAllSessions.isPending}
                 onClick={() => {
@@ -238,15 +243,15 @@ const UserSessions = (props: { userId: string }) => {
             </DataListCell>
           </WithPermission>
         </DataListRow>
-        {match(uiState)
-          .with('pending', () => <DataListLoadingState />)
-          .with('error', () => (
-            <DataListErrorState retry={() => sessions.refetch()} />
+        {match(ui.state)
+          .with(ui.with('pending'), () => <DataListLoadingState />)
+          .with(ui.with('error'), () => (
+            <DataListErrorState retry={() => sessionsQuery.refetch()} />
           ))
-          .with('empty', () => (
+          .with(ui.with('empty'), () => (
             <DataListEmptyState>No user sessions</DataListEmptyState>
           ))
-          .with('default', () => (
+          .with(ui.with('default'), ({ items }) => (
             <>
               {items.map((item) => (
                 <DataListRow
@@ -294,16 +299,17 @@ const UserSessions = (props: { userId: string }) => {
                     type="button"
                     size="xs"
                     variant="secondary"
-                    disabled={!sessions.hasNextPage}
-                    onClick={() => sessions.fetchNextPage()}
-                    loading={sessions.isFetchingNextPage}
+                    disabled={!sessionsQuery.hasNextPage}
+                    onClick={() => sessionsQuery.fetchNextPage()}
+                    loading={sessionsQuery.isFetchingNextPage}
                   >
                     Load more
                   </Button>
                 </DataListCell>
                 <DataListCell>
                   <DataListText className="text-xs text-muted-foreground">
-                    Showing {items.length} of {sessions.data?.pages[0]?.total}
+                    Showing {items.length} of{' '}
+                    {sessionsQuery.data?.pages[0]?.total}
                   </DataListText>
                 </DataListCell>
               </DataListRow>

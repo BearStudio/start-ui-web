@@ -4,6 +4,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
@@ -24,18 +25,17 @@ export const PageRepository = (props: { params: { id: string } }) => {
     orpc.repository.getById.queryOptions({ input: { id: props.params.id } })
   );
 
-  const uiState = (() => {
-    if (repository.status === 'pending') return 'pending';
+  const ui = getUiState((set) => {
+    if (repository.status === 'pending') return set('pending');
     if (
       repository.status === 'error' &&
       repository.error instanceof ORPCError &&
       repository.error.code === 'NOT_FOUND'
     )
-      return 'not-found';
-    if (repository.status === 'error') return 'error';
-
-    return 'default';
-  })();
+      return set('not-found');
+    if (repository.status === 'error') return set('error');
+    return set('default', { repository: repository.data });
+  });
 
   return (
     <PageLayout>
@@ -51,21 +51,23 @@ export const PageRepository = (props: { params: { id: string } }) => {
         rightActions={<Button size="sm">Save</Button>}
       >
         <PageLayoutTopBarTitle>
-          {match(uiState)
-            .with('pending', () => <Skeleton className="h-4 w-48" />)
-            .with('not-found', 'error', () => (
+          {match(ui.state)
+            .with(ui.with('pending'), () => <Skeleton className="h-4 w-48" />)
+            .with(ui.with('not-found'), ui.with('error'), () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .with('default', () => <>{repository.data?.name}</>)
+            .with(ui.with('default'), ({ repository }) => (
+              <>{repository.name}</>
+            ))
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(uiState)
-          .with('pending', () => <Spinner full />)
-          .with('not-found', () => <PageError errorCode={404} />)
-          .with('error', () => <PageError />)
-          .with('default', () => <>{repository.data?.name}</>)
+        {match(ui.state)
+          .with(ui.with('pending'), () => <Spinner full />)
+          .with(ui.with('not-found'), () => <PageError errorCode={404} />)
+          .with(ui.with('error'), () => <PageError />)
+          .with(ui.with('default'), ({ repository }) => <>{repository.name}</>)
           .exhaustive()}
       </PageLayoutContent>
     </PageLayout>

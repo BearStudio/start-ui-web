@@ -4,6 +4,7 @@ import { BookMarkedIcon, PlusIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -42,7 +43,7 @@ export const PageRepositories = (props: {
       }),
   };
 
-  const repositories = useInfiniteQuery(
+  const repositoriesQuery = useInfiniteQuery(
     orpc.repository.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
         searchTerm: props.search.searchTerm,
@@ -54,17 +55,18 @@ export const PageRepositories = (props: {
     })
   );
 
-  const items = repositories.data?.pages.flatMap((p) => p.items) ?? [];
+  const ui = getUiState((set) => {
+    if (repositoriesQuery.status === 'pending') return set('pending');
+    if (repositoriesQuery.status === 'error') return set('error');
 
-  const uiState = (() => {
-    if (repositories.status === 'pending') return 'pending';
-    if (repositories.status === 'error') return 'error';
+    const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
     if (!items.length && props.search.searchTerm) {
-      return 'empty-search';
+      return set('empty-search', { searchTerm: props.search.searchTerm });
     }
-    if (!items.length) return 'empty';
-    return 'default';
-  })();
+    if (!items.length) return set('empty');
+
+    return set('default', { items });
+  });
 
   return (
     <PageLayout>
@@ -89,16 +91,16 @@ export const PageRepositories = (props: {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(uiState)
-            .with('pending', () => <DataListLoadingState />)
-            .with('error', () => (
-              <DataListErrorState retry={() => repositories.refetch()} />
+          {match(ui.state)
+            .with(ui.with('pending'), () => <DataListLoadingState />)
+            .with(ui.with('error'), () => (
+              <DataListErrorState retry={() => repositoriesQuery.refetch()} />
             ))
-            .with('empty', () => <DataListEmptyState />)
-            .with('empty-search', () => (
-              <DataListEmptyState searchTerm={props.search.searchTerm} />
+            .with(ui.with('empty'), () => <DataListEmptyState />)
+            .with(ui.with('empty-search'), ({ searchTerm }) => (
+              <DataListEmptyState searchTerm={searchTerm} />
             ))
-            .with('default', () => (
+            .with(ui.with('default'), ({ items }) => (
               <>
                 {items.map((item) => (
                   <DataListRow key={item.id} withHover>
@@ -131,9 +133,9 @@ export const PageRepositories = (props: {
                       type="button"
                       size="xs"
                       variant="secondary"
-                      disabled={!repositories.hasNextPage}
-                      onClick={() => repositories.fetchNextPage()}
-                      loading={repositories.isFetchingNextPage}
+                      disabled={!repositoriesQuery.hasNextPage}
+                      onClick={() => repositoriesQuery.fetchNextPage()}
+                      loading={repositoriesQuery.isFetchingNextPage}
                     >
                       Load more
                     </Button>
@@ -141,7 +143,7 @@ export const PageRepositories = (props: {
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
                       Showing {items.length} of{' '}
-                      {repositories.data?.pages[0]?.total}
+                      {repositoriesQuery.data?.pages[0]?.total}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>
