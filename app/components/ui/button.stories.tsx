@@ -117,3 +117,26 @@ export const Loading = () => {
     </div>
   );
 };
+
+export const Disabled = () => {
+  return (
+    <div className="flex gap-4">
+      <Button disabled>Default</Button>
+      <Button disabled variant="secondary">
+        Secondary
+      </Button>
+      <Button disabled variant="destructive">
+        Destructive
+      </Button>
+      <Button disabled variant="destructive-secondary">
+        Destructive
+      </Button>
+      <Button disabled variant="ghost">
+        Ghost
+      </Button>
+      <Button disabled variant="link">
+        Link
+      </Button>
+    </div>
+  );
+};
