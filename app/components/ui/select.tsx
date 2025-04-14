@@ -20,12 +20,23 @@ type OptionBase = { value: string; label: string };
 type InputProps = ComponentProps<typeof Input>;
 type InputPropsRoot = Pick<InputProps, 'placeholder'>;
 
-type SelectProps<Option extends OptionBase> = Omit<
-  ComboboxRootProps<Option>,
-  'collection'
+/**
+ * We override how Ark UI handle select, has this is a "single" select and it is
+ * easier to plug as is with React Hook Form
+ */
+type ControlProps = {
+  value?: string;
+  defaultValue?: string;
+  /** Listen for all the changes: new value, value change, clear */
+  onChange?: (value: string | null | undefined) => void;
+};
+
+type SelectProps<Option extends OptionBase> = Overwrite<
+  Omit<ComboboxRootProps<Option>, 'collection'>,
+  ControlProps
 > &
   InputPropsRoot & {
-    options: Array<Option>;
+    options: ReadonlyArray<Option>;
     inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
     createListCollectionOptions?: Omit<
       Parameters<typeof createListCollection<Option>>[0],
@@ -42,6 +53,9 @@ export const Select = <Option extends OptionBase>({
   onOpenChange,
   onInputValueChange,
   renderEmpty,
+  onChange,
+  value,
+  defaultValue,
   ...props
 }: SelectProps<Option>) => {
   const [items, setItems] = useState(options);
@@ -72,6 +86,14 @@ export const Select = <Option extends OptionBase>({
     }
   };
 
+  const handleOnValueChange = (details: Combobox.ValueChangeDetails) => {
+    if (details.value.length) {
+      onChange?.(details.value.at(0));
+    }
+
+    props.onValueChange?.(details);
+  };
+
   const ui = getUiState((set) => {
     if (collection.items.length === 0 && isNullish(renderEmpty))
       return set('empty');
@@ -86,8 +108,10 @@ export const Select = <Option extends OptionBase>({
       collection={collection}
       onInputValueChange={handleInputChange}
       onOpenChange={handleOpenChange}
-      onValueChange={console.log}
+      onValueChange={handleOnValueChange}
       openOnClick
+      value={value ? [value] : undefined}
+      defaultValue={defaultValue ? [defaultValue] : undefined}
       {...props}
     >
       <Combobox.Control>
@@ -95,7 +119,12 @@ export const Select = <Option extends OptionBase>({
           <Input
             endElement={
               <div className="flex gap-1">
-                <Combobox.ClearTrigger asChild>
+                <Combobox.ClearTrigger
+                  onClick={() => {
+                    onChange?.(null);
+                  }}
+                  asChild
+                >
                   <Button variant="ghost" size="icon-xs">
                     <X />
                   </Button>
