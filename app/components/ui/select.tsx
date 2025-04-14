@@ -6,12 +6,12 @@ import {
 import { Portal } from '@ark-ui/react/portal';
 import { ChevronDown, X } from 'lucide-react';
 import { ComponentProps, ReactNode, useMemo, useState } from 'react';
+import { isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { isNonNullish, isNullish } from 'remeda';
 
 type OptionBase = { value: string; label: string };
 
@@ -76,6 +76,7 @@ export const Select = <Option extends OptionBase>({
       onInputValueChange={handleInputChange}
       onOpenChange={handleOpenChange}
       onValueChange={console.log}
+      openOnClick
       {...props}
     >
       <Combobox.Control>
