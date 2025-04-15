@@ -233,7 +233,7 @@ export const protectedProcedure = (
       if (token && req.method === 'GET') {
         resHeaders.append(
           'Set-Cookie',
-          `${AUTH_COOKIE_NAME}=${token}; Path=/; Expires=${session.expiresAt}; SameSite=Lax; HttpOnly; Secure=${env.NODE_ENV === 'production'}`
+          `${AUTH_COOKIE_NAME}=${token}; Path=/; Expires=${session.expiresAt.toUTCString()}; SameSite=Lax; HttpOnly; Secure=${env.NODE_ENV === 'production'}`
         );
       }
 
