@@ -8,6 +8,7 @@ import {
 
 import { cn } from '@/lib/tailwind/utils';
 
+import { FormFieldError } from '@/components/form';
 import { useFormField } from '@/components/form/form-field';
 import { FieldCommonProps } from '@/components/form/form-field-controller';
 import { Select } from '@/components/ui/select';
@@ -72,6 +73,7 @@ export const FieldSelect = <
             {...rest}
             {...field}
           />
+          <FormFieldError />
         </div>
       )}
     />
