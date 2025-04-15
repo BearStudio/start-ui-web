@@ -36,6 +36,7 @@ const formOptions = {
 export const Default = () => {
   const form = useForm(formOptions);
 
+  // TODO: the form error does not pop
   return (
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
@@ -57,14 +58,12 @@ export const Default = () => {
 
 export const DefaultValue = () => {
   const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
-    mode: 'onBlur',
-    resolver: zodResolver(zFormSchema()),
+    ...formOptions,
     defaultValues: {
       color: 'blue',
     },
   });
 
-  // TODO This story does not work as expected yet (it should fill the input)
   return (
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
@@ -85,12 +84,16 @@ export const DefaultValue = () => {
   );
 };
 
-// TODO This story does not work as expected yet (it should not block the form submit)
 export const Disabled = () => {
-  const form = useForm(formOptions);
+  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+    ...formOptions,
+    defaultValues: {
+      color: 'blue',
+    },
+  });
 
   return (
-    <Form {...form} onSubmit={(values) => console.log(values)}>
+    <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Colors</FormFieldLabel>
