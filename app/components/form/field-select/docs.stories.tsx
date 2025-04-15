@@ -36,7 +36,6 @@ const formOptions = {
 export const Default = () => {
   const form = useForm(formOptions);
 
-  // TODO: the form error does not pop
   return (
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
