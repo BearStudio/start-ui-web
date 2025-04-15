@@ -112,6 +112,7 @@ export const Select = <Option extends OptionBase>({
       openOnClick
       value={value ? [value] : undefined}
       defaultValue={defaultValue ? [defaultValue] : undefined}
+      inputValue={options.find((o) => o.value === value)?.label}
       {...props}
     >
       <Combobox.Control>
