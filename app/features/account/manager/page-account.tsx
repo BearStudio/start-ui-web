@@ -1,5 +1,5 @@
-import { AccountDisplayPreferences } from '@/features/account/account-display-preferences';
-import { AccountUserCard } from '@/features/account/account-user-card';
+import { DisplayPreferences } from '@/features/account/display-preferences';
+import { UserCard } from '@/features/account/user-card';
 import {
   PageLayout,
   PageLayoutContent,
@@ -15,8 +15,8 @@ export const PageAccount = () => {
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex flex-col gap-4">
-          <AccountUserCard />
-          <AccountDisplayPreferences />
+          <UserCard />
+          <DisplayPreferences />
         </div>
       </PageLayoutContent>
     </PageLayout>
