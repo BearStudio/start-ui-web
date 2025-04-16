@@ -45,7 +45,7 @@ export const Default = () => {
 };
 
 export const WithDefaultValue = () => {
-  return <Select options={astrobears} defaultValue={['pawdrin']} />;
+  return <Select options={astrobears} defaultValue={'pawdrin'} />;
 };
 
 export const Placeholder = () => {
