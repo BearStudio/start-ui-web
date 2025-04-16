@@ -7,7 +7,10 @@ import { EmailFooter } from '@/emails/components/email-footer';
 import { EmailLayout } from '@/emails/components/email-layout';
 import { styles } from '@/emails/styles';
 
-export const EmailLoginCode = (props: { language: string; code: string }) => {
+export const TemplateLoginCode = (props: {
+  language: string;
+  code: string;
+}) => {
   i18n.changeLanguage(props.language);
   return (
     <EmailLayout
@@ -33,4 +36,4 @@ export const EmailLoginCode = (props: { language: string; code: string }) => {
   );
 };
 
-export default EmailLoginCode;
+export default TemplateLoginCode;

@@ -22,3 +22,12 @@ export function Variants() {
     </div>
   );
 }
+
+export function Sizes() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Badge>Default</Badge>
+      <Badge size="sm">Small</Badge>
+    </div>
+  );
+}

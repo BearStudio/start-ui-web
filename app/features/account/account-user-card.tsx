@@ -1,6 +1,7 @@
 import { authClient } from '@/lib/auth/client';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -29,6 +30,11 @@ export const AccountUserCard = () => {
               )}
             </CardTitle>
             <CardDescription className="truncate">
+              {session.data?.user.emailVerified === false && (
+                <Badge variant="warning" size="sm" className="me-2">
+                  Not verified
+                </Badge>
+              )}
               {session.data?.user.email}
             </CardDescription>
           </div>
