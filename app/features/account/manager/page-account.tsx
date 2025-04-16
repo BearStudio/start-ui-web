@@ -1,3 +1,4 @@
+import { AccountUpdateEmail } from '@/features/account/account-update-email';
 import { AccountUserCard } from '@/features/account/account-user-card';
 import {
   PageLayout,
@@ -15,6 +16,7 @@ export const PageAccount = () => {
       <PageLayoutContent>
         <div className="flex flex-col gap-4">
           <AccountUserCard />
+          <AccountUpdateEmail />
         </div>
       </PageLayoutContent>
     </PageLayout>
