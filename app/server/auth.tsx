@@ -11,7 +11,7 @@ import {
 import { permissions } from '@/lib/auth/permissions';
 import i18n from '@/lib/i18n';
 
-import EmailLoginCode from '@/emails/templates/login-code';
+import TemplateLoginCode from '@/emails/templates/login-code';
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
 import { db } from '@/server/db';
@@ -69,7 +69,7 @@ export const auth = betterAuth({
                 lng: getUserLanguage(),
               }),
               template: (
-                <EmailLoginCode language={getUserLanguage()} code={otp} />
+                <TemplateLoginCode language={getUserLanguage()} code={otp} />
               ),
             });
           })
