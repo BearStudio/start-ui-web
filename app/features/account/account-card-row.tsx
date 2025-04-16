@@ -10,7 +10,7 @@ export const AccountCardRow = (props: {
   return (
     <div
       className={cn(
-        'relative flex gap-x-4 gap-y-2 border-t px-4 py-4 text-sm max-sm:flex-col',
+        'relative flex gap-x-4 gap-y-1.5 border-t px-4 py-4 text-sm max-sm:flex-col',
         props.className
       )}
     >
