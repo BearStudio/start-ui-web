@@ -111,7 +111,7 @@ export function Calendar({
     props.classNames?.range_middle
   );
   const _selectedClassName = cn(
-    '[&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground',
+    '[&>button]:bg-primary [&>button]:font-medium [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground',
     props.classNames?.selected
   );
   const _todayClassName = cn(
@@ -119,11 +119,11 @@ export function Calendar({
     props.classNames?.today
   );
   const _outsideClassName = cn(
-    'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
+    'day-outside text-muted-foreground opacity-80 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
     props.classNames?.outside
   );
   const _disabledClassName = cn(
-    'text-muted-foreground opacity-50',
+    'text-muted-foreground opacity-60',
     props.classNames?.disabled
   );
   const _hiddenClassName = cn('invisible flex-1', props.classNames?.hidden);
