@@ -113,6 +113,7 @@ export const Select = <Option extends OptionBase>({
       value={value ? [value] : undefined}
       defaultValue={defaultValue ? [defaultValue] : undefined}
       inputValue={options.find((o) => o.value === value)?.label}
+      inputBehavior="autohighlight"
       {...props}
     >
       <Combobox.Control>
