@@ -10,9 +10,9 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { useFormField } from '@/components/form/form-field';
 import { FieldCommonProps } from '@/components/form/form-field-controller';
-import { DateInput } from '@/components/ui/date-input';
+import { DatePicker } from '@/components/ui/date-picker';
 
-export type FieldDateInputProps<
+export type FieldDateProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = FieldCommonProps<TFieldValues, TName> & {
@@ -20,17 +20,17 @@ export type FieldDateInputProps<
   containerProps?: ComponentProps<'div'>;
 } & RemoveFromType<
     Omit<
-      ComponentProps<typeof DateInput>,
+      ComponentProps<typeof DatePicker>,
       'id' | 'aria-invalid' | 'aria-describedby'
     >,
     ControllerRenderProps
   >;
 
-export const FieldDateInput = <
+export const FieldDate = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: FieldDateInputProps<TFieldValues, TName>
+  props: FieldDateProps<TFieldValues, TName>
 ) => {
   const {
     name,
@@ -60,7 +60,7 @@ export const FieldDateInput = <
             containerProps?.className
           )}
         >
-          <DateInput
+          <DatePicker
             id={ctx.id}
             aria-invalid={fieldState.error ? true : undefined}
             aria-describedby={

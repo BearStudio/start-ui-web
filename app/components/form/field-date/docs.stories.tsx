@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '..';
 
 export default {
-  title: 'Form/FieldDatePicker',
+  title: 'Form/FieldDate',
 };
 
 const zFormSchema = () =>
@@ -34,7 +34,7 @@ export const Default = () => {
         <FormField>
           <FormFieldLabel>Date</FormFieldLabel>
           <FormFieldController
-            type="date-picker"
+            type="date"
             control={form.control}
             name="date"
             placeholder="DD/MM/YYYY"
@@ -58,7 +58,7 @@ export const CalendarCustomization = () => {
         <FormField>
           <FormFieldLabel>Date</FormFieldLabel>
           <FormFieldController
-            type="date-picker"
+            type="date"
             control={form.control}
             name="date"
             placeholder="DD/MM/YYYY"
