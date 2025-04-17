@@ -59,3 +59,9 @@ export const MultipleMonths = () => {
 export const Dropdowns = () => {
   return <Calendar captionLayout="dropdown" />;
 };
+
+export const DisabledSelected = () => {
+  const date = dayjs().set('date', 8).toDate();
+
+  return <Calendar mode="single" selected={date} disabled={date} />;
+};
