@@ -11,14 +11,11 @@ vitest.mock('react-i18next', () => ({
 }));
 
 describe('Calendar', () => {
-  it('should render with previous, next and year selection button by default', () => {
+  it('should render with previous and next button by default', () => {
     render(<Calendar />);
 
     expect(screen.getByLabelText('Go to the Previous Month')).toBeDefined();
     expect(screen.getByLabelText('Go to the Next Month')).toBeDefined();
-    expect(
-      screen.getByRole('button', { name: dayjs().format('MMMM YYYY') })
-    ).toBeDefined();
   });
 
   it('should render without button date when uncontrolled', () => {
