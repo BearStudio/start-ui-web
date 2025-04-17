@@ -12,42 +12,49 @@ import {
 } from '@/components/ui/popover';
 
 type DatePickerProps = ComponentProps<typeof DateInput> & {
+  noCalendar?: boolean;
   calendarProps?: Omit<
     ComponentProps<typeof Calendar>,
     'onSelect' | 'selected' | 'mode'
   >;
 };
 
-export const DatePicker = ({ calendarProps, ...props }: DatePickerProps) => {
+export const DatePicker = ({
+  calendarProps,
+  noCalendar = false,
+  ...props
+}: DatePickerProps) => {
   const datePicker = useDisclosure();
 
   return (
     <DateInput
       {...props}
       endElement={
-        <Popover
-          open={datePicker.isOpen}
-          onOpenChange={(open) => datePicker.toggle(open)}
-        >
-          <PopoverTrigger asChild>
-            <Button size="icon-xs" className="-mr-1.5">
-              <CalendarIcon />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={props.value ?? undefined}
-              onSelect={(date) => {
-                props.onChange(date ?? null);
-                datePicker.close();
-              }}
-              defaultMonth={props.value ?? undefined}
-              autoFocus
-              {...calendarProps}
-            />
-          </PopoverContent>
-        </Popover>
+        noCalendar ? null : (
+          <Popover
+            open={datePicker.isOpen}
+            onOpenChange={(open) => datePicker.toggle(open)}
+          >
+            <PopoverTrigger asChild>
+              <Button size="icon-xs" variant="secondary" className="-mr-1.5">
+                <CalendarIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={props.value ?? undefined}
+                onSelect={(date) => {
+                  props.onChange(date ?? null);
+                  datePicker.close();
+                }}
+                defaultMonth={props.value ?? undefined}
+                autoFocus
+                {...calendarProps}
+              />
+            </PopoverContent>
+          </Popover>
+        )
       }
     />
   );
