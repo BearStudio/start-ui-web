@@ -15,6 +15,14 @@ import {
 
 export default {
   title: 'DateInput',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'If you are looking at a date input with picker, take a look at the DatePicker component, designed for user to select a date. This component is here to handle auto-format of a date from an input.',
+      },
+    },
+  },
 } satisfies Meta<typeof DateInput>;
 
 export const Default = () => {
