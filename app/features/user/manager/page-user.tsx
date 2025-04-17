@@ -36,6 +36,7 @@ import {
   DataListText,
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -45,7 +46,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const userQuery = useQuery(
