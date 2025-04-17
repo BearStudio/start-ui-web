@@ -4,6 +4,7 @@ import { afterEach, vi } from 'vitest';
 import { expect } from 'vitest';
 import * as matchers from 'vitest-axe/matchers';
 import '@/lib/dayjs/config';
+import '@testing-library/jest-dom/vitest';
 import 'vitest-axe/extend-expect';
 
 expect.extend(matchers);
