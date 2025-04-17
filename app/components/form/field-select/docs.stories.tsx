@@ -19,13 +19,42 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    color: z.enum(['red', 'green', 'blue']),
+    bear: z.enum([
+      'bearstrong',
+      'pawdrin',
+      'grizzlyrin',
+      'jemibear',
+      'ridepaw',
+      'michaelpawanderson',
+    ]),
   });
 
 const options = [
-  { label: 'Red', value: 'red' },
-  { label: 'Green', value: 'green' },
-  { label: 'Blue', value: 'blue' },
+  {
+    value: 'bearstrong',
+    label: 'Bearstrong',
+  },
+  {
+    value: 'pawdrin',
+    label: 'Buzz Pawdrin',
+  },
+  {
+    value: 'grizzlyrin',
+    label: 'Yuri Grizzlyrin',
+  },
+  {
+    value: 'jemibear',
+    label: 'Mae Jemibear',
+    disabled: true,
+  },
+  {
+    value: 'ridepaw',
+    label: 'Sally Ridepaw',
+  },
+  {
+    value: 'michaelpawanderson',
+    label: 'Michael Paw Anderson',
+  },
 ] as const;
 
 const formOptions = {
@@ -40,11 +69,11 @@ export const Default = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
             type="select"
-            name="color"
+            name="bear"
             placeholder="Placeholder"
             options={options}
           />
@@ -59,7 +88,7 @@ export const DefaultValue = () => {
   const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
     ...formOptions,
     defaultValues: {
-      color: 'blue',
+      bear: 'pawdrin',
     },
   });
 
@@ -67,11 +96,11 @@ export const DefaultValue = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
             type="select"
-            name="color"
+            name="bear"
             placeholder="Placeholder"
             options={options}
           />
@@ -87,7 +116,7 @@ export const Disabled = () => {
   const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
     ...formOptions,
     defaultValues: {
-      color: 'blue',
+      bear: 'michaelpawanderson',
     },
   });
 
@@ -95,11 +124,11 @@ export const Disabled = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Colors</FormFieldLabel>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
             type="select"
-            name="color"
+            name="bear"
             placeholder="Placeholder"
             disabled
             options={options}
