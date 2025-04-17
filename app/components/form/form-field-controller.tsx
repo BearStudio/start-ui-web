@@ -6,8 +6,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-import { FieldDateInput, FieldDateInputProps } from './field-date-input';
-import { FieldDatePicker, FieldDatePickerProps } from './field-date-picker';
+import { FieldDate, FieldDateProps } from './field-date';
 import { FieldOtp, FieldOtpProps } from './field-otp';
 import { FieldSelect, FieldSelectProps } from './field-select';
 import { FieldText, FieldTextProps } from './field-text';
@@ -41,8 +40,7 @@ export type FormFieldControllerProps<
   | FieldCustomProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
   | FieldSelectProps<TFieldValues, TName>
-  | FieldDateInputProps<TFieldValues, TName>
-  | FieldDatePickerProps<TFieldValues, TName>
+  | FieldDateProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
   | FieldOtpProps<TFieldValues, TName>;
 
@@ -73,10 +71,7 @@ export const FormFieldController = <
         return <FieldOtp {...props} />;
 
       case 'date':
-        return <FieldDateInput {...props} />;
-
-      case 'date-picker':
-        return <FieldDatePicker {...props} />;
+        return <FieldDate {...props} />;
 
       case 'select':
         return <FieldSelect {...props} />;
