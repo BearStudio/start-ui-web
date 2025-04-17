@@ -2,11 +2,10 @@ import { expect, test, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 import { z } from 'zod';
 
-import { FormMocked } from '@/components/form/form-test-utils';
-
-import { render, screen, setupUser } from '@/tests/utils';
+import { render, screen, setupUser, waitFor } from '@/tests/utils';
 
 import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormMocked } from '../form-test-utils';
 
 const options = [
   {
@@ -64,4 +63,92 @@ test('should have no a11y violations', async () => {
   const results = await axe(container);
 
   expect(results).toHaveNoViolations();
+});
+
+test('should open on click', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ bear: z.string() })}
+      useFormOptions={{ defaultValues: { bear: '' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => {
+        return (
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="select"
+              control={form.control}
+              name="bear"
+              options={options}
+            />
+          </FormField>
+        );
+      }}
+    </FormMocked>
+  );
+
+  const option = screen.getByRole('option', {
+    hidden: true,
+    name: 'Buzz Pawdrin',
+  });
+  expect(option).not.toBeVisible();
+
+  const input = screen.getByLabelText<HTMLInputElement>('Bearstronaut');
+  expect(input).toHaveAttribute('aria-expanded', 'false');
+  await user.click(input);
+
+  expect(input).toHaveAttribute('aria-expanded', 'true');
+  expect(option).toBeVisible();
+});
+
+test('update value using arrows', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ bear: z.string() })}
+      useFormOptions={{ defaultValues: { bear: '' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => {
+        return (
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="select"
+              control={form.control}
+              name="bear"
+              options={options}
+            />
+          </FormField>
+        );
+      }}
+    </FormMocked>
+  );
+
+  const option = screen.getByRole('option', {
+    hidden: true,
+    name: 'Buzz Pawdrin',
+  });
+  expect(option).not.toBeVisible();
+
+  const input = screen.getByLabelText<HTMLInputElement>('Bearstronaut');
+  expect(input).toBeDefined();
+  expect(input.name).toBe('bear');
+
+  await user.click(input);
+  await user.keyboard('{ArrowDown}');
+  await user.keyboard('{ArrowDown}');
+  expect(option).toHaveAttribute('aria-selected', 'true');
+  await user.keyboard('{Enter}');
+  await waitFor(() => expect(option).not.toBeVisible());
+  expect(input.value).toBe('Buzz Pawdrin');
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });

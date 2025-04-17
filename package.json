@@ -115,6 +115,7 @@
     "@tailwindcss/postcss": "4.0.14",
     "@tanstack/eslint-plugin-query": "5.68.0",
     "@tanstack/eslint-plugin-router": "1.114.12",
+    "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.2.0",
     "@testing-library/user-event": "14.6.1",
     "@types/bcrypt": "5.0.2",

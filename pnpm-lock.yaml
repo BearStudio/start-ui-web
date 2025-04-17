@@ -228,6 +228,9 @@ importers:
       '@tanstack/eslint-plugin-router':
         specifier: 1.114.12
         version: 1.114.12(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
+      '@testing-library/jest-dom':
+        specifier: 6.6.3
+        version: 6.6.3
       '@testing-library/react':
         specifier: 16.2.0
         version: 16.2.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.4(@types/react@19.0.11))(@types/react@19.0.11)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -314,7 +317,7 @@ importers:
         version: 5.1.4(typescript@5.8.2)(vite@6.2.0(@types/node@20.14.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0))
       vitest:
         specifier: 3.0.9
-        version: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
+        version: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
       vitest-axe:
         specifier: 0.1.0
         version: 0.1.0(vitest@3.0.9)
@@ -340,10 +343,6 @@ packages:
 
   '@asamuzakjp/css-color@2.8.3':
     resolution: {integrity: sha512-GIc76d9UI1hCvOATjZPyHFmE5qhRccp3/zGfMPapK3jBi+yocEzp6BBB0UnfRYP9NP4FANqUZYb0hnfs3TM3hw==}
-
-  '@babel/code-frame@7.24.7':
-    resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/code-frame@7.26.2':
     resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
@@ -459,10 +458,6 @@ packages:
 
   '@babel/helpers@7.26.9':
     resolution: {integrity: sha512-Mz/4+y8udxBKdmzt/UjPACs4G3j5SshJJEFFKxlCGPydG4JAHXxjWjAwjd09tf6oINvl1VfMJo+nB7H2YKQ0dA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/highlight@7.24.7':
-    resolution: {integrity: sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/parser@7.24.7':
@@ -3017,6 +3012,10 @@ packages:
     resolution: {integrity: sha512-xGGHpBXYSHUUr6XsKBfs85TWlYKpTc37cSBBVrXcib2MkHLboWlkClhWF37JKlDb9KEq3dHs+f2xR7XJEWGBxA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
 
+  '@testing-library/jest-dom@6.6.3':
+    resolution: {integrity: sha512-IteBhl4XqYNkM54f4ejhLRJiZNqcSCoXUOG2CPK7qbD322KjQozM4kHQOfkG2oln9b9HTYqs+Sae8vBATubxxA==}
+    engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
+
   '@testing-library/react@16.2.0':
     resolution: {integrity: sha512-2cSskAvA1QNtKc8Y9VJQRv0tm3hLVgxRGDB+KYhIaPQJ1I+RHbhIXcM+zClKXzMes/wshsMVzf4B9vS4IZpqDQ==}
     engines: {node: '>=18'}
@@ -4920,6 +4919,10 @@ packages:
   h3@1.15.1:
     resolution: {integrity: sha512-+ORaOBttdUm1E2Uu/obAyCguiI7MbBvsLTndc3gyK3zU+SYLoZXlyCP9Xgy0gikkGufFLTZXCXD6+4BsufnmHA==}
 
+  happy-dom@17.4.4:
+    resolution: {integrity: sha512-/Pb0ctk3HTZ5xEL3BZ0hK1AqDSAUuRQitOmROPHhfUYEWpmTImwfD8vFDGADmMAX0JYgbcgxWoLFKtsWhcpuVA==}
+    engines: {node: '>=18.0.0'}
+
   has-bigints@1.1.0:
     resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
     engines: {node: '>= 0.4'}
@@ -6029,9 +6032,6 @@ packages:
 
   perfect-freehand@1.2.2:
     resolution: {integrity: sha512-eh31l019WICQ03pkF3FSzHxB8n07ItqIQ++G5UV8JX0zVOXzgTGCqnRR0jJ2h9U8/2uW4W4mtGJELt9kEV0CFQ==}
-
-  picocolors@1.0.1:
-    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -7450,6 +7450,10 @@ packages:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
 
+  whatwg-mimetype@3.0.0:
+    resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
+    engines: {node: '>=12'}
+
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
     engines: {node: '>=18'}
@@ -7702,16 +7706,11 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
-  '@babel/code-frame@7.24.7':
-    dependencies:
-      '@babel/highlight': 7.24.7
-      picocolors: 1.0.1
-
   '@babel/code-frame@7.26.2':
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.24.7': {}
 
@@ -7720,7 +7719,7 @@ snapshots:
   '@babel/core@7.24.7':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@babel/code-frame': 7.24.7
+      '@babel/code-frame': 7.26.2
       '@babel/generator': 7.24.7
       '@babel/helper-compilation-targets': 7.24.7
       '@babel/helper-module-transforms': 7.24.7(@babel/core@7.24.7)
@@ -7872,13 +7871,6 @@ snapshots:
       '@babel/template': 7.26.9
       '@babel/types': 7.26.9
 
-  '@babel/highlight@7.24.7':
-    dependencies:
-      '@babel/helper-validator-identifier': 7.25.9
-      chalk: 2.4.2
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
-
   '@babel/parser@7.24.7':
     dependencies:
       '@babel/types': 7.24.7
@@ -7933,7 +7925,7 @@ snapshots:
 
   '@babel/template@7.24.7':
     dependencies:
-      '@babel/code-frame': 7.24.7
+      '@babel/code-frame': 7.26.2
       '@babel/parser': 7.24.7
       '@babel/types': 7.24.7
 
@@ -7945,7 +7937,7 @@ snapshots:
 
   '@babel/traverse@7.24.7':
     dependencies:
-      '@babel/code-frame': 7.24.7
+      '@babel/code-frame': 7.26.2
       '@babel/generator': 7.24.7
       '@babel/helper-environment-visitor': 7.24.7
       '@babel/helper-function-name': 7.24.7
@@ -10678,7 +10670,7 @@ snapshots:
   '@testing-library/dom@10.4.0':
     dependencies:
       '@babel/code-frame': 7.26.2
-      '@babel/runtime': 7.26.9
+      '@babel/runtime': 7.26.10
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       chalk: 4.1.2
@@ -10687,6 +10679,16 @@ snapshots:
       pretty-format: 27.5.1
 
   '@testing-library/jest-dom@6.5.0':
+    dependencies:
+      '@adobe/css-tools': 4.4.2
+      aria-query: 5.3.2
+      chalk: 3.0.0
+      css.escape: 1.5.1
+      dom-accessibility-api: 0.6.3
+      lodash: 4.17.21
+      redent: 3.0.0
+
+  '@testing-library/jest-dom@6.6.3':
     dependencies:
       '@adobe/css-tools': 4.4.2
       aria-query: 5.3.2
@@ -11093,7 +11095,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.12
       tinyrainbow: 2.0.0
-      vitest: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
+      vitest: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
 
   '@vitest/utils@2.0.5':
     dependencies:
@@ -13276,6 +13278,12 @@ snapshots:
       ufo: 1.5.4
       uncrypto: 0.1.3
 
+  happy-dom@17.4.4:
+    dependencies:
+      webidl-conversions: 7.0.0
+      whatwg-mimetype: 3.0.0
+    optional: true
+
   has-bigints@1.1.0: {}
 
   has-flag@3.0.0: {}
@@ -14415,8 +14423,6 @@ snapshots:
   perfect-debounce@1.0.0: {}
 
   perfect-freehand@1.2.2: {}
-
-  picocolors@1.0.1: {}
 
   picocolors@1.1.1: {}
 
@@ -15895,9 +15901,9 @@ snapshots:
       dom-accessibility-api: 0.5.16
       lodash-es: 4.17.21
       redent: 3.0.0
-      vitest: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
+      vitest: 3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0)
 
-  vitest@3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0):
+  vitest@3.0.9(@types/node@20.14.10)(@vitest/ui@3.0.9)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@24.1.3)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0):
     dependencies:
       '@vitest/expect': 3.0.9
       '@vitest/mocker': 3.0.9(vite@6.2.0(@types/node@20.14.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.26.0)(tsx@4.19.3)(yaml@2.7.0))
@@ -15922,6 +15928,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.10
       '@vitest/ui': 3.0.9(vitest@3.0.9)
+      happy-dom: 17.4.4
       jsdom: 24.1.3
     transitivePeerDependencies:
       - jiti
@@ -15952,6 +15959,9 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+
+  whatwg-mimetype@3.0.0:
+    optional: true
 
   whatwg-mimetype@4.0.0: {}
 
