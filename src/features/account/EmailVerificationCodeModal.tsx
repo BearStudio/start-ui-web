@@ -35,11 +35,7 @@ export const EmailVerificationCodeModale = () => {
 
   const onClose = () => {
     trpcUtils.account.get.reset();
-    setSearchParams({
-      verifyEmail: null,
-      token: null,
-      attempts: null,
-    });
+    setSearchParams(null);
   };
 
   const form = useForm<FormFieldsVerificationCode>({
