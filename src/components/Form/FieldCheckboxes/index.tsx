@@ -52,7 +52,7 @@ export const FieldCheckboxes = <
   return (
     <Controller
       {...props}
-      render={({ field: { ref: _ref, ...field } }) => (
+      render={({ field: { ref: _ref, ...field }, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <CheckboxGroup
             size={props.size}
@@ -70,6 +70,7 @@ export const FieldCheckboxes = <
                   <Checkbox
                     key={option.value}
                     value={option.value}
+                    isInvalid={!!fieldState.error}
                     {...props.checkboxProps}
                   >
                     {option.label}
