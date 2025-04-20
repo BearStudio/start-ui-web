@@ -11,14 +11,13 @@ import {
 import { permissions } from '@/lib/auth/permissions';
 import i18n from '@/lib/i18n';
 
-import TemplateChangeEmail from '@/emails/templates/change-email';
 import TemplateLoginCode from '@/emails/templates/login-code';
-import TemplateVerifyEmail from '@/emails/templates/verify-email';
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
+import TemplateChangeEmail from '@/emails/templates/change-email';
 
 export type Auth = typeof auth;
 export const auth = betterAuth({
@@ -34,37 +33,6 @@ export const auth = betterAuth({
       onboardedAt: {
         type: 'date',
       },
-    },
-    changeEmail: {
-      enabled: true,
-      async sendChangeEmailVerification({ user, newEmail, url }) {
-        await sendEmail({
-          to: user.email, // verification email must be sent to the current user email to approve the change
-          subject: i18n.t('emails:changeEmail.subject', {
-            lng: getUserLanguage(),
-          }),
-          template: (
-            <TemplateChangeEmail
-              language={getUserLanguage()}
-              url={url}
-              newEmail={newEmail}
-            />
-          ),
-        });
-      },
-    },
-  },
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: i18n.t('emails:verifyEmail.subject', {
-          lng: getUserLanguage(),
-        }),
-        template: (
-          <TemplateVerifyEmail language={getUserLanguage()} url={url} />
-        ),
-      });
     },
   },
   onAPIError: {
@@ -107,9 +75,15 @@ export const auth = betterAuth({
             });
           })
           .with('email-verification', async () => {
-            throw new Error(
-              'email-verification email not implemented, update the /app/server/auth.tsx file'
-            );
+            await sendEmail({
+              to: email,
+              subject: i18n.t('emails:changeEmail.subject', {
+                lng: getUserLanguage(),
+              }),
+              template: (
+                <TemplateChangeEmail language={getUserLanguage()} code={otp} />
+              ),
+            });
           })
           .with('forget-password', async () => {
             throw new Error(

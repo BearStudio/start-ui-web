@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { authClient } from '@/lib/auth/client';
+import { orpc } from '@/lib/orpc/client';
 
 import {
   Form,
@@ -23,17 +25,27 @@ import {
 } from '@/components/ui/responsive-drawer';
 
 import {
-  FormFieldsAccountUpdateName,
-  zFormFieldsAccountUpdateName,
+  FormFieldsAccountChangeEmail,
+  zFormFieldsAccountChangeEmail,
 } from '@/features/account/schemas';
 
-export const UpdateNameDrawer = (props: { children: ReactNode }) => {
+export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const session = authClient.useSession();
-  const form = useForm<FormFieldsAccountUpdateName>({
-    resolver: zodResolver(zFormFieldsAccountUpdateName()),
+
+  const changeEmail = useMutation(
+    orpc.account.changeEmailInit.mutationOptions({
+      onSuccess: () => {
+        form.reset();
+        setOpen(false);
+      },
+    })
+  );
+
+  const form = useForm<FormFieldsAccountChangeEmail>({
+    resolver: zodResolver(zFormFieldsAccountChangeEmail()),
     values: {
-      name: session.data?.user.name ?? '',
+      email: session.data?.user.email ?? '',
     },
   });
 
@@ -46,29 +58,26 @@ export const UpdateNameDrawer = (props: { children: ReactNode }) => {
       <ResponsiveDrawerContent>
         <Form
           {...form}
-          onSubmit={async ({ name }) => {
-            // TODO Errors
-            await authClient.updateUser({
-              name,
+          onSubmit={async ({ email }) => {
+            changeEmail.mutate({
+              email,
             });
-            form.reset();
-            setOpen(false);
           }}
           className="flex flex-col md:gap-4"
         >
           <ResponsiveDrawerHeader>
-            <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
+            <ResponsiveDrawerTitle>Update your email</ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription className="sr-only">
-              Form to update your name
+              Form to update your email
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerBody>
             <FormField>
-              <FormFieldLabel className="sr-only">Name</FormFieldLabel>
+              <FormFieldLabel className="sr-only">Email</FormFieldLabel>
               <FormFieldController
                 control={form.control}
-                type="text"
-                name="name"
+                type="email"
+                name="email"
               />
             </FormField>
           </ResponsiveDrawerBody>
