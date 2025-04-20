@@ -54,7 +54,7 @@ export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
   });
 
   return (
-    <ResponsiveDrawer open={open} onOpenChange={setOpen}>
+    <ResponsiveDrawer open={open} onOpenChange={setOpen} autoFocus>
       <ResponsiveDrawerTrigger asChild>
         {props.children}
       </ResponsiveDrawerTrigger>
@@ -67,7 +67,7 @@ export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
               email,
             });
           }}
-          className="flex flex-col md:gap-4"
+          className="flex flex-col sm:gap-4"
         >
           <ResponsiveDrawerHeader>
             <ResponsiveDrawerTitle>Update your email</ResponsiveDrawerTitle>
