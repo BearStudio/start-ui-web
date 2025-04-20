@@ -38,7 +38,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   });
 
   return (
-    <ResponsiveDrawer open={open} onOpenChange={setOpen}>
+    <ResponsiveDrawer open={open} onOpenChange={setOpen} autoFocus>
       <ResponsiveDrawerTrigger asChild>
         {props.children}
       </ResponsiveDrawerTrigger>
@@ -54,7 +54,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
             form.reset();
             setOpen(false);
           }}
-          className="flex flex-col md:gap-4"
+          className="flex flex-col sm:gap-4"
         >
           <ResponsiveDrawerHeader>
             <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
