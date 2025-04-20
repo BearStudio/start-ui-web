@@ -3,6 +3,15 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
+export type Otp = z.infer<ReturnType<typeof zOtp>>;
+export const zOtp = () =>
+  z
+    .string({
+      invalid_type_error: t('auth:fields.otp.invalid'),
+      required_error: t('auth:fields.otp.required'),
+    })
+    .length(6, t('auth:fields.otp.invalidLength'));
+
 export type FormFieldsLogin = z.infer<ReturnType<typeof zFormFieldsLogin>>;
 export const zFormFieldsLogin = () =>
   z.object({
@@ -23,12 +32,7 @@ export type FormFieldsLoginVerify = z.infer<
 >;
 export const zFormFieldsLoginVerify = () =>
   z.object({
-    otp: z
-      .string({
-        invalid_type_error: t('auth:fields.otp.invalid'),
-        required_error: t('auth:fields.otp.required'),
-      })
-      .length(6, t('auth:fields.otp.invalidLength')),
+    otp: zOtp(),
   });
 
 export type FormFieldsOnboarding = z.infer<

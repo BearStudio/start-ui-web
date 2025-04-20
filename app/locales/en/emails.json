@@ -7,18 +7,13 @@
     "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
     "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
   },
+
   "changeEmail": {
-    "subject": "Approve email change",
-    "preview": "Link to allows email update",
-    "title": "Your verification link",
-    "intro": "To update your email, click this link (or copy into your browser):",
-    "ignoreHelper": "If you didn't update your email, you can safely ignore this email."
-  },
-  "verifyEmail": {
-    "subject": "Verify your email",
-    "preview": "Link for email verification",
-    "title": "Your verification link",
-    "intro": "To verify your email, click this link (or copy into your browser):",
-    "ignoreHelper": "If you didn't try to verify your email, you can safely ignore this email."
+    "subject": "Your in verification code",
+    "preview": "Verify your identity to change your email",
+    "title": "Your verification code",
+    "intro": "To verify change your email, enter the following code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
   }
 }

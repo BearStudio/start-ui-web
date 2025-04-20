@@ -10,10 +10,10 @@ export const zFormFieldsAccountUpdateName = () =>
     name: zu.string.nonEmpty(z.string()),
   });
 
-export type FormFieldsAccountUpdateEmail = z.infer<
-  ReturnType<typeof zFormFieldsAccountUpdateEmail>
+export type FormFieldsAccountChangeEmail = z.infer<
+  ReturnType<typeof zFormFieldsAccountChangeEmail>
 >;
-export const zFormFieldsAccountUpdateEmail = () =>
+export const zFormFieldsAccountChangeEmail = () =>
   z.object({
     email: zu.string.email(z.string()),
   });
