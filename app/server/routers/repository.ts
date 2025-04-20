@@ -2,7 +2,7 @@ import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
-import { zRepository } from '@/features/repository/schemas';
+import { zRepository } from '@/features/repository/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['repositories'];

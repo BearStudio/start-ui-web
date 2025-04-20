@@ -12,7 +12,7 @@ import { Form, FormField, FormFieldController } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { useMascot } from '@/features/auth/mascot';
-import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schemas';
+import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED

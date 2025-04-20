@@ -1,7 +1,7 @@
 import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
-import { zFormFieldsOnboarding, zOtp } from '@/features/auth/schemas';
+import { zFormFieldsOnboarding, zOtp } from '@/features/auth/schema';
 import { auth } from '@/server/auth';
 import { protectedProcedure } from '@/server/orpc';
 
