@@ -23,17 +23,17 @@ import {
 } from '@/components/ui/responsive-drawer';
 
 import {
-  FormFieldsAccountUpdateEmail,
-  zFormFieldsAccountUpdateEmail,
+  FormFieldsAccountUpdateName,
+  zFormFieldsAccountUpdateName,
 } from '@/features/account/schemas';
 
-export const UpdateEmailDrawer = (props: { children: ReactNode }) => {
+export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const session = authClient.useSession();
-  const form = useForm<FormFieldsAccountUpdateEmail>({
-    resolver: zodResolver(zFormFieldsAccountUpdateEmail()),
+  const form = useForm<FormFieldsAccountUpdateName>({
+    resolver: zodResolver(zFormFieldsAccountUpdateName()),
     values: {
-      email: session.data?.user.email ?? '',
+      name: session.data?.user.name ?? '',
     },
   });
 
@@ -46,11 +46,10 @@ export const UpdateEmailDrawer = (props: { children: ReactNode }) => {
       <ResponsiveDrawerContent>
         <Form
           {...form}
-          onSubmit={async ({ email }) => {
+          onSubmit={async ({ name }) => {
             // TODO Errors
-            await authClient.changeEmail({
-              newEmail: email,
-              callbackURL: window.location.href,
+            await authClient.updateUser({
+              name,
             });
             form.reset();
             setOpen(false);
@@ -58,18 +57,18 @@ export const UpdateEmailDrawer = (props: { children: ReactNode }) => {
           className="flex flex-col md:gap-4"
         >
           <ResponsiveDrawerHeader>
-            <ResponsiveDrawerTitle>Update your email</ResponsiveDrawerTitle>
+            <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription className="sr-only">
-              Form to update your email
+              Form to update your name
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerBody>
             <FormField>
-              <FormFieldLabel className="sr-only">Email</FormFieldLabel>
+              <FormFieldLabel className="sr-only">Name</FormFieldLabel>
               <FormFieldController
                 control={form.control}
-                type="email"
-                name="email"
+                type="text"
+                name="name"
               />
             </FormField>
           </ResponsiveDrawerBody>
