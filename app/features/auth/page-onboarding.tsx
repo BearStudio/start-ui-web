@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button';
 
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
-import { zFormFieldsOnboarding } from '@/features/auth/schemas';
+import { zFormFieldsOnboarding } from '@/features/auth/schema';
 import { useSignOut } from '@/features/auth/utils';
 
 export const PageOnboarding = () => {
