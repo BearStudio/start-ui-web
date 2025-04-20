@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
-import { ChangeEmailDrawer } from '@/features/account/change-email-drawer';
+import { ChangeEmailInitDrawer } from '@/features/account/change-email-init-drawer';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { useSignOut } from '@/features/auth/utils';
 
@@ -71,13 +71,13 @@ export const UserCard = () => {
             <span className="text-xs text-muted-foreground">N/A</span>
           )}
         </p>
-        <ChangeEmailDrawer>
+        <ChangeEmailInitDrawer>
           <Button variant="ghost" size="icon-sm" className="-my-1.5">
             <PenLineIcon />
             <span className="sr-only">Modify</span>
             <span className="absolute inset-0" />
           </Button>
-        </ChangeEmailDrawer>
+        </ChangeEmailInitDrawer>
       </AccountCardRow>
     </Card>
   );
