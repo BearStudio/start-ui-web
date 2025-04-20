@@ -24,7 +24,7 @@ import { useMascot } from '@/features/auth/mascot';
 import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
-} from '@/features/auth/schemas';
+} from '@/features/auth/schema';
 import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED

@@ -25,7 +25,7 @@ import {
 import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
-} from '@/features/account/schemas';
+} from '@/features/account/schema';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);

@@ -27,7 +27,7 @@ import {
 import {
   FormFieldsAccountChangeEmail,
   zFormFieldsAccountChangeEmail,
-} from '@/features/account/schemas';
+} from '@/features/account/schema';
 
 export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -36,8 +36,12 @@ export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
   const changeEmail = useMutation(
     orpc.account.changeEmailInit.mutationOptions({
       onSuccess: () => {
+        // TODO handle next screen
         form.reset();
         setOpen(false);
+      },
+      onError: () => {
+        // TODO Handle errors
       },
     })
   );
