@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ReactNode, useState } from 'react';
+import { useRouter, useSearch } from '@tanstack/react-router';
+import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { authClient } from '@/lib/auth/client';
@@ -28,7 +29,8 @@ import {
 } from '@/features/account/schema';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const search = useSearch({ strict: false });
   const session = authClient.useSession();
   const form = useForm<FormFieldsAccountUpdateName>({
     resolver: zodResolver(zFormFieldsAccountUpdateName()),
@@ -38,7 +40,19 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   });
 
   return (
-    <ResponsiveDrawer open={open} onOpenChange={setOpen} autoFocus>
+    <ResponsiveDrawer
+      open={search.state === 'change-name'}
+      onOpenChange={(open) =>
+        router.navigate({
+          replace: true,
+          to: '.',
+          search: {
+            state: open ? 'change-name' : '',
+          },
+        })
+      }
+      autoFocus
+    >
       <ResponsiveDrawerTrigger asChild>
         {props.children}
       </ResponsiveDrawerTrigger>
@@ -52,7 +66,13 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
               name,
             });
             form.reset();
-            setOpen(false);
+            router.navigate({
+              replace: true,
+              to: '.',
+              search: {
+                state: '',
+              },
+            });
           }}
           className="flex flex-col sm:gap-4"
         >

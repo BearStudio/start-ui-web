@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { useRouter, useSearch } from '@tanstack/react-router';
+import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { authClient } from '@/lib/auth/client';
@@ -29,16 +30,16 @@ import {
   zFormFieldsAccountChangeEmail,
 } from '@/features/account/schema';
 
-export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+export const ChangeEmailInitDrawer = (props: { children: ReactNode }) => {
+  const router = useRouter();
+  const search = useSearch({ strict: false });
   const session = authClient.useSession();
 
-  const changeEmail = useMutation(
+  const changeEmailInit = useMutation(
     orpc.account.changeEmailInit.mutationOptions({
       onSuccess: () => {
         // TODO handle next screen
         form.reset();
-        setOpen(false);
       },
       onError: () => {
         // TODO Handle errors
@@ -54,7 +55,19 @@ export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
   });
 
   return (
-    <ResponsiveDrawer open={open} onOpenChange={setOpen} autoFocus>
+    <ResponsiveDrawer
+      open={search.state === 'change-email-init'}
+      onOpenChange={(open) =>
+        router.navigate({
+          replace: true,
+          to: '.',
+          search: {
+            state: open ? 'change-email-init' : '',
+          },
+        })
+      }
+      autoFocus
+    >
       <ResponsiveDrawerTrigger asChild>
         {props.children}
       </ResponsiveDrawerTrigger>
@@ -63,7 +76,7 @@ export const ChangeEmailDrawer = (props: { children: ReactNode }) => {
         <Form
           {...form}
           onSubmit={async ({ email }) => {
-            changeEmail.mutate({
+            changeEmailInit.mutate({
               email,
             });
           }}
