@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-import { WithPermission } from '@/lib/auth/with-permission';
+import { WithPermission } from '@/features/auth/with-permission';
 
 import { Logo } from '@/components/brand/logo';
 
