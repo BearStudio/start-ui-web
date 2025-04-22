@@ -32,7 +32,6 @@ const SearchButtonComponent = ({
 
   return (
     <Drawer
-      repositionInputs={false}
       direction="top"
       autoFocus
       open={open}
