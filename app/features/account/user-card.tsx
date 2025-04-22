@@ -47,22 +47,26 @@ export const UserCard = () => {
         </CardAction>
       </CardHeader>
 
-      <AccountCardRow label="Name">
-        <p className="flex-1 truncate">
+      <AccountCardRow label="Name" className="group">
+        <p className="flex-1 truncate underline-offset-4 group-hover:underline">
           {session.data?.user.name || (
             <span className="text-xs text-muted-foreground">N/A</span>
           )}
         </p>
         <ChangeNameDrawer>
-          <Button variant="ghost" size="icon-sm" className="-my-1.5">
-            <PenLineIcon />
-            <span className="sr-only">Modify</span>
+          <button type="button" className="cursor-pointer">
+            <Button asChild variant="ghost" size="icon-sm" className="-my-1.5">
+              <span>
+                <PenLineIcon />
+                <span className="sr-only">Change your name</span>
+              </span>
+            </Button>
             <span className="absolute inset-0" />
-          </Button>
+          </button>
         </ChangeNameDrawer>
       </AccountCardRow>
-      <AccountCardRow label="Email">
-        <p className="flex-1 truncate">
+      <AccountCardRow label="Email" className="group">
+        <p className="flex-1 truncate underline-offset-4 group-hover:underline">
           {!session.data?.user.emailVerified && (
             <Badge size="sm" variant="warning" className="me-2">
               Not Verified
@@ -73,11 +77,15 @@ export const UserCard = () => {
           )}
         </p>
         <ChangeEmailInitDrawer>
-          <Button variant="ghost" size="icon-sm" className="-my-1.5">
-            <PenLineIcon />
-            <span className="sr-only">Modify</span>
+          <button type="button" className="cursor-pointer">
+            <Button asChild variant="ghost" size="icon-sm" className="-my-1.5">
+              <span>
+                <PenLineIcon />
+                <span className="sr-only">Change your email</span>
+              </span>
+            </Button>
             <span className="absolute inset-0" />
-          </Button>
+          </button>
         </ChangeEmailInitDrawer>
         <ChangeEmailVerifyDrawer />
       </AccountCardRow>
