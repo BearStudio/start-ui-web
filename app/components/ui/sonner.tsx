@@ -8,7 +8,18 @@ export const Sonner = ({ ...props }: ToasterProps) => {
       theme={theme === 'dark' ? 'dark' : 'light'}
       className="toaster group mt-safe-top"
       position="top-right"
-      offset={16}
+      offset={{
+        top: 'calc(16px + env(safe-area-inset-top))',
+        bottom: 'calc(16px + env(safe-area-inset-bottom))',
+        left: 'calc(16px + env(safe-area-inset-left))',
+        right: 'calc(16px + env(safe-area-inset-right))',
+      }}
+      mobileOffset={{
+        top: 'calc(8px + env(safe-area-inset-top))',
+        bottom: 'calc(8px + env(safe-area-inset-bottom))',
+        left: 'calc(8px + env(safe-area-inset-left))',
+        right: 'calc(8px + env(safe-area-inset-right))',
+      }}
       toastOptions={{
         classNames: {
           toast:
