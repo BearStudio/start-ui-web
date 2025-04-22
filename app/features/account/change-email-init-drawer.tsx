@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
@@ -29,7 +30,6 @@ import {
   FormFieldsAccountChangeEmailInit,
   zFormFieldsAccountChangeEmailInit,
 } from '@/features/account/schema';
-import { toast } from 'sonner';
 
 export const ChangeEmailInitDrawer = (props: { children: ReactNode }) => {
   const router = useRouter();
@@ -73,7 +73,6 @@ export const ChangeEmailInitDrawer = (props: { children: ReactNode }) => {
           },
         });
       }}
-      autoFocus
     >
       <ResponsiveDrawerTrigger asChild>
         {props.children}

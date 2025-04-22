@@ -76,7 +76,6 @@ export const ChangeEmailVerifyDrawer = () => {
           },
         });
       }}
-      autoFocus
     >
       <ResponsiveDrawerContent className="sm:max-w-xs">
         <Form
@@ -106,6 +105,7 @@ export const ChangeEmailVerifyDrawer = () => {
                 size="lg"
                 maxLength={6}
                 autoSubmit
+                autoFocus
               />
               <FormFieldHelper>
                 The code expires shortly ({AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES}{' '}

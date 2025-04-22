@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 
@@ -28,7 +29,6 @@ import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
 } from '@/features/account/schema';
-import { toast } from 'sonner';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const router = useRouter();
@@ -74,7 +74,6 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
           },
         })
       }
-      autoFocus
     >
       <ResponsiveDrawerTrigger asChild>
         {props.children}
