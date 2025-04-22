@@ -9,6 +9,7 @@ import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeEmailInitDrawer } from '@/features/account/change-email-init-drawer';
+import { ChangeEmailVerifyDrawer } from '@/features/account/change-email-verify-drawer';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { useSignOut } from '@/features/auth/utils';
 
@@ -78,6 +79,7 @@ export const UserCard = () => {
             <span className="absolute inset-0" />
           </Button>
         </ChangeEmailInitDrawer>
+        <ChangeEmailVerifyDrawer />
       </AccountCardRow>
     </Card>
   );

@@ -11,10 +11,11 @@ export const Route = createFileRoute('/app/_layout/account/')({
       state: z
         .enum(['', 'change-name', 'change-email-init', 'change-email-verify'])
         .default(''),
+      newEmail: z.string().default(''),
     })
   ),
   search: {
-    middlewares: [stripSearchParams({ state: '' })],
+    middlewares: [stripSearchParams({ state: '', newEmail: '' })],
   },
 });
 
