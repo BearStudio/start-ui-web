@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,6 +28,7 @@ import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
 } from '@/features/account/schema';
+import { toast } from 'sonner';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const router = useRouter();
@@ -37,6 +39,27 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
     values: {
       name: session.data?.user.name ?? '',
     },
+  });
+
+  const updateUser = useMutation({
+    mutationFn: async (variables: { name: string }) => {
+      await authClient.updateUser({
+        name: variables.name,
+      });
+      await session.refetch();
+    },
+    onSuccess: () => {
+      toast.success('Name updated');
+      form.reset();
+      router.navigate({
+        replace: true,
+        to: '.',
+        search: {
+          state: '',
+        },
+      });
+    },
+    onError: () => toast.error('Failed to update your name'),
   });
 
   return (
@@ -57,22 +80,11 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
         {props.children}
       </ResponsiveDrawerTrigger>
 
-      <ResponsiveDrawerContent>
+      <ResponsiveDrawerContent className="sm:max-w-xs">
         <Form
           {...form}
           onSubmit={async ({ name }) => {
-            // TODO Errors
-            await authClient.updateUser({
-              name,
-            });
-            form.reset();
-            router.navigate({
-              replace: true,
-              to: '.',
-              search: {
-                state: '',
-              },
-            });
+            updateUser.mutate({ name });
           }}
           className="flex flex-col sm:gap-4"
         >
@@ -89,11 +101,18 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
                 control={form.control}
                 type="text"
                 name="name"
+                size="lg"
+                autoFocus
               />
             </FormField>
           </ResponsiveDrawerBody>
           <ResponsiveDrawerFooter>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              loading={updateUser.isPending}
+            >
               Update
             </Button>
           </ResponsiveDrawerFooter>

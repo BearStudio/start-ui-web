@@ -35,8 +35,6 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting users from database');
-
       const where = {
         name: {
           contains: input.searchTerm,
@@ -44,6 +42,7 @@ export default {
         },
       } satisfies Prisma.UserWhereInput;
 
+      context.logger.info('Getting users from database');
       const [total, items] = await context.db.$transaction([
         context.db.user.count({
           where,
@@ -127,12 +126,11 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting user sessions from database');
-
       const where = {
         userId: input.userId,
       } satisfies Prisma.SessionWhereInput;
 
+      context.logger.info('Getting user sessions from database');
       const [total, items] = await context.db.$transaction([
         context.db.session.count({
           where,

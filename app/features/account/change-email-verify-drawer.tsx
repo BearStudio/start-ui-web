@@ -1,16 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
-import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/lib/auth/config';
 import { orpc } from '@/lib/orpc/client';
 
 import {
   Form,
   FormField,
   FormFieldController,
+  FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
@@ -22,93 +24,93 @@ import {
   ResponsiveDrawerFooter,
   ResponsiveDrawerHeader,
   ResponsiveDrawerTitle,
-  ResponsiveDrawerTrigger,
 } from '@/components/ui/responsive-drawer';
 
 import {
-  FormFieldsAccountChangeEmailInit,
-  zFormFieldsAccountChangeEmailInit,
+  FormFieldsAccountChangeEmailVerify,
+  zFormFieldsAccountChangeEmailVerify,
 } from '@/features/account/schema';
-import { toast } from 'sonner';
 
-export const ChangeEmailInitDrawer = (props: { children: ReactNode }) => {
+export const ChangeEmailVerifyDrawer = () => {
+  const session = authClient.useSession();
   const router = useRouter();
   const search = useSearch({ strict: false });
-  const session = authClient.useSession();
 
-  const changeEmailInit = useMutation(
-    orpc.account.changeEmailInit.mutationOptions({
-      onSuccess: (_, { email }) => {
+  const changeEmailVerify = useMutation(
+    orpc.account.changeEmailVerify.mutationOptions({
+      onSuccess: async () => {
+        await session.refetch();
+        toast.success('Email updated');
         router.navigate({
           replace: true,
           to: '.',
           search: {
-            state: 'change-email-verify',
-            newEmail: email,
+            state: '',
           },
         });
         form.reset();
       },
-      onError: () => toast.error('Failed to send verification email'),
+      onError: () => {
+        form.setError('otp', { message: 'Invalid code' });
+      },
     })
   );
 
-  const form = useForm<FormFieldsAccountChangeEmailInit>({
-    resolver: zodResolver(zFormFieldsAccountChangeEmailInit()),
-    values: {
-      email: session.data?.user.email ?? '',
+  const form = useForm<FormFieldsAccountChangeEmailVerify>({
+    resolver: zodResolver(zFormFieldsAccountChangeEmailVerify()),
+    defaultValues: {
+      otp: '',
     },
   });
 
   return (
     <ResponsiveDrawer
-      open={search.state === 'change-email-init'}
+      open={search.state === 'change-email-verify'}
       onOpenChange={(open) => {
         form.reset();
         router.navigate({
           replace: true,
           to: '.',
           search: {
-            state: open ? 'change-email-init' : '',
+            state: open ? 'change-email-verify' : '',
           },
         });
       }}
       autoFocus
     >
-      <ResponsiveDrawerTrigger asChild>
-        {props.children}
-      </ResponsiveDrawerTrigger>
-
       <ResponsiveDrawerContent className="sm:max-w-xs">
         <Form
           {...form}
-          onSubmit={async ({ email }) => {
-            if (email === session.data?.user.email) {
-              form.setError('email', { message: 'This is your current email' });
-              return;
-            }
-            changeEmailInit.mutate({
-              email,
+          onSubmit={async ({ otp }) => {
+            changeEmailVerify.mutate({
+              otp,
+              email: search.newEmail ?? '',
             });
           }}
           className="flex flex-col sm:gap-4"
         >
           <ResponsiveDrawerHeader>
-            <ResponsiveDrawerTitle>Update your email</ResponsiveDrawerTitle>
+            <ResponsiveDrawerTitle>Verification</ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription>
-              An email will be sent to validate your new email.
+              We have sent a code to <strong>{search.newEmail}</strong>. Enter
+              it below.
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerBody>
             <FormField>
-              <FormFieldLabel>Your new email</FormFieldLabel>
+              <FormFieldLabel>Verification code</FormFieldLabel>
               <FormFieldController
                 control={form.control}
-                type="email"
-                name="email"
+                type="otp"
+                name="otp"
                 size="lg"
-                autoFocus
+                maxLength={6}
+                autoSubmit
               />
+              <FormFieldHelper>
+                The code expires shortly ({AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES}{' '}
+                minutes)
+              </FormFieldHelper>
             </FormField>
           </ResponsiveDrawerBody>
           <ResponsiveDrawerFooter>
@@ -116,9 +118,9 @@ export const ChangeEmailInitDrawer = (props: { children: ReactNode }) => {
               type="submit"
               className="w-full"
               size="lg"
-              loading={changeEmailInit.isPending}
+              loading={changeEmailVerify.isPending}
             >
-              Send Verification Code
+              Confirm
             </Button>
           </ResponsiveDrawerFooter>
         </Form>

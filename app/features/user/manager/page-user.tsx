@@ -11,7 +11,7 @@ import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
-import { WithPermission } from '@/lib/auth/with-permission';
+import { WithPermission } from '@/features/auth/with-permission';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
