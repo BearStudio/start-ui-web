@@ -11,7 +11,6 @@ import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
-import { WithPermission } from '@/features/auth/with-permission';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
@@ -36,10 +35,10 @@ import {
   DataListText,
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
+import { WithPermission } from '@/features/auth/with-permission';
 import {
   PageLayout,
   PageLayoutContent,
@@ -160,9 +159,10 @@ const UserSessions = (props: { userId: string }) => {
       input: (cursor: string | undefined) => ({
         userId: props.userId,
         cursor,
+        limit: 5,
       }),
+      maxPages: 10,
       initialPageParam: undefined,
-      maxPages: 1,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     })
   );
@@ -244,81 +244,80 @@ const UserSessions = (props: { userId: string }) => {
             </DataListCell>
           </WithPermission>
         </DataListRow>
-        <ScrollArea className="max-h-80">
-          {match(ui.state)
-            .with(ui.with('pending'), () => <DataListLoadingState />)
-            .with(ui.with('error'), () => (
-              <DataListErrorState retry={() => sessionsQuery.refetch()} />
-            ))
-            .with(ui.with('empty'), () => (
-              <DataListEmptyState>No user sessions</DataListEmptyState>
-            ))
-            .with(ui.with('default'), ({ items }) => (
-              <>
-                {items.map((item) => (
-                  <DataListRow
-                    key={item.id}
-                    className="max-md:flex-col max-md:py-2 max-md:[&>div]:py-1"
-                  >
-                    <DataListCell>
-                      <DataListText>Session {item.token}</DataListText>
-                    </DataListCell>
-                    <DataListCell>
-                      <DataListText className="text-muted-foreground">
-                        Updated {dayjs(item.updatedAt).fromNow()}
-                      </DataListText>
-                    </DataListCell>
-                    <DataListCell>
-                      <DataListText className="text-muted-foreground">
-                        Expires {dayjs().to(item.expiresAt)}
-                      </DataListText>
-                    </DataListCell>
-                    <WithPermission permission={{ session: ['revoke'] }}>
-                      <DataListCell className="flex-none">
-                        <Button
-                          type="button"
-                          size="xs"
-                          variant="secondary"
-                          disabled={
-                            currentSession.data?.session.token === item.token
-                          }
-                          loading={revokeSession.isPending}
-                          onClick={() => {
-                            revokeSession.mutate({
-                              sessionToken: item.token,
-                            });
-                          }}
-                        >
-                          Revoke
-                        </Button>
-                      </DataListCell>
-                    </WithPermission>
-                  </DataListRow>
-                ))}
-                <DataListRow>
-                  <DataListCell className="flex-none">
-                    <Button
-                      type="button"
-                      size="xs"
-                      variant="secondary"
-                      disabled={!sessionsQuery.hasNextPage}
-                      onClick={() => sessionsQuery.fetchNextPage()}
-                      loading={sessionsQuery.isFetchingNextPage}
-                    >
-                      Load more
-                    </Button>
+
+        {match(ui.state)
+          .with(ui.with('pending'), () => <DataListLoadingState />)
+          .with(ui.with('error'), () => (
+            <DataListErrorState retry={() => sessionsQuery.refetch()} />
+          ))
+          .with(ui.with('empty'), () => (
+            <DataListEmptyState>No user sessions</DataListEmptyState>
+          ))
+          .with(ui.with('default'), ({ items }) => (
+            <>
+              {items.map((item) => (
+                <DataListRow
+                  key={item.id}
+                  className="max-md:flex-col max-md:py-2 max-md:[&>div]:py-1"
+                >
+                  <DataListCell>
+                    <DataListText>Session {item.token}</DataListText>
                   </DataListCell>
                   <DataListCell>
-                    <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of{' '}
-                      {sessionsQuery.data?.pages[0]?.total}
+                    <DataListText className="text-muted-foreground">
+                      Updated {dayjs(item.updatedAt).fromNow()}
                     </DataListText>
                   </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-muted-foreground">
+                      Expires {dayjs().to(item.expiresAt)}
+                    </DataListText>
+                  </DataListCell>
+                  <WithPermission permission={{ session: ['revoke'] }}>
+                    <DataListCell className="flex-none">
+                      <Button
+                        type="button"
+                        size="xs"
+                        variant="secondary"
+                        disabled={
+                          currentSession.data?.session.token === item.token
+                        }
+                        loading={revokeSession.isPending}
+                        onClick={() => {
+                          revokeSession.mutate({
+                            sessionToken: item.token,
+                          });
+                        }}
+                      >
+                        Revoke
+                      </Button>
+                    </DataListCell>
+                  </WithPermission>
                 </DataListRow>
-              </>
-            ))
-            .exhaustive()}
-        </ScrollArea>
+              ))}
+              <DataListRow>
+                <DataListCell className="flex-none">
+                  <Button
+                    type="button"
+                    size="xs"
+                    variant="secondary"
+                    disabled={!sessionsQuery.hasNextPage}
+                    onClick={() => sessionsQuery.fetchNextPage()}
+                    loading={sessionsQuery.isFetchingNextPage}
+                  >
+                    Load more
+                  </Button>
+                </DataListCell>
+                <DataListCell>
+                  <DataListText className="text-xs text-muted-foreground">
+                    Showing {items.length} of{' '}
+                    {sessionsQuery.data?.pages[0]?.total}
+                  </DataListText>
+                </DataListCell>
+              </DataListRow>
+            </>
+          ))
+          .exhaustive()}
       </DataList>
     </WithPermission>
   );
