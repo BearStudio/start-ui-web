@@ -64,7 +64,9 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={!!matchRoute({ to: '/manager/dashboard' })}
+                    isActive={
+                      !!matchRoute({ to: '/manager/dashboard', fuzzy: true })
+                    }
                   >
                     <Link to="/manager/dashboard">
                       <LayoutDashboardIcon />
@@ -75,7 +77,9 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={!!matchRoute({ to: '/manager/repositories' })}
+                    isActive={
+                      !!matchRoute({ to: '/manager/repositories', fuzzy: true })
+                    }
                   >
                     <Link to="/manager/repositories">
                       <IconGitBranch />
@@ -93,7 +97,9 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
-                    isActive={!!matchRoute({ to: '/manager/users' })}
+                    isActive={
+                      !!matchRoute({ to: '/manager/users', fuzzy: true })
+                    }
                   >
                     <Link to="/manager/users">
                       <UsersIcon />
