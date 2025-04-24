@@ -6,21 +6,5 @@
     "intro": "To verify you identity, enter the following code:",
     "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
     "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
-  },
-
-  "changeEmail": {
-    "subject": "Your verification code",
-    "preview": "Verify your identity to change your email",
-    "title": "Your verification code",
-    "intro": "To verify change your email, enter the following code:",
-    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
-    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
-  },
-  "emailAlreadyUsed": {
-    "subject": "Trying to update your email?",
-    "preview": "Your email is already used by another account",
-    "title": "Trying to update your email?",
-    "content": "Your email {{email}} is already used, you can't use it for another account.",
-    "ignoreHelper": "If you didn't try to change your email, you can safely ignore this email."
   }
 }

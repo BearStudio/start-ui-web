@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router';
 
-import { WithPermission } from '@/features/auth/with-permission';
-
 import { Logo } from '@/components/brand/logo';
 
+import { WithPermission } from '@/features/auth/with-permission';
 import { MarketingBento } from '@/features/demo-mode/marketing-bento';
 import {
   PageLayout,

@@ -17,7 +17,7 @@ export const AccountCardRow = (props: {
       <h5 className="w-48 flex-none font-medium max-sm:text-xs max-sm:text-muted-foreground">
         {props.label}
       </h5>
-      <div className="flex flex-1 gap-4">{props.children}</div>
+      <div className="flex min-w-0 flex-1 flex-col">{props.children}</div>
     </div>
   );
 };

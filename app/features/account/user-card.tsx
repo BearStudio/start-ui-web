@@ -8,8 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
-import { ChangeEmailInitDrawer } from '@/features/account/change-email-init-drawer';
-import { ChangeEmailVerifyDrawer } from '@/features/account/change-email-verify-drawer';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { useSignOut } from '@/features/auth/utils';
 
@@ -48,25 +46,32 @@ export const UserCard = () => {
       </CardHeader>
 
       <AccountCardRow label="Name" className="group">
-        <p className="flex-1 truncate underline-offset-4 group-hover:underline">
-          {session.data?.user.name || (
-            <span className="text-xs text-muted-foreground">N/A</span>
-          )}
-        </p>
-        <ChangeNameDrawer>
-          <button type="button" className="cursor-pointer">
-            <Button asChild variant="ghost" size="icon-sm" className="-my-1.5">
-              <span>
-                <PenLineIcon />
-                <span className="sr-only">Change your name</span>
-              </span>
-            </Button>
-            <span className="absolute inset-0" />
-          </button>
-        </ChangeNameDrawer>
+        <div className="flex">
+          <p className="truncate underline-offset-4 group-hover:underline">
+            {session.data?.user.name || (
+              <span className="text-xs text-muted-foreground">N/A</span>
+            )}
+          </p>
+          <ChangeNameDrawer>
+            <button type="button" className="cursor-pointer">
+              <Button
+                asChild
+                variant="ghost"
+                size="icon-xs"
+                className="-my-1.5"
+              >
+                <span>
+                  <PenLineIcon />
+                  <span className="sr-only">Change your name</span>
+                </span>
+              </Button>
+              <span className="absolute inset-0" />
+            </button>
+          </ChangeNameDrawer>
+        </div>
       </AccountCardRow>
-      <AccountCardRow label="Email" className="group">
-        <p className="flex-1 truncate underline-offset-4 group-hover:underline">
+      <AccountCardRow label="Email">
+        <p className="flex-1 truncate underline-offset-4">
           {!session.data?.user.emailVerified && (
             <Badge size="sm" variant="warning" className="me-2">
               Not Verified
@@ -76,18 +81,6 @@ export const UserCard = () => {
             <span className="text-xs text-muted-foreground">N/A</span>
           )}
         </p>
-        <ChangeEmailInitDrawer>
-          <button type="button" className="cursor-pointer">
-            <Button asChild variant="ghost" size="icon-sm" className="-my-1.5">
-              <span>
-                <PenLineIcon />
-                <span className="sr-only">Change your email</span>
-              </span>
-            </Button>
-            <span className="absolute inset-0" />
-          </button>
-        </ChangeEmailInitDrawer>
-        <ChangeEmailVerifyDrawer />
       </AccountCardRow>
     </Card>
   );
