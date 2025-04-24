@@ -65,15 +65,16 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   return (
     <ResponsiveDrawer
       open={search.state === 'change-name'}
-      onOpenChange={(open) =>
+      onOpenChange={(open) => {
+        form.reset();
         router.navigate({
           replace: true,
           to: '.',
           search: {
             state: open ? 'change-name' : '',
           },
-        })
-      }
+        });
+      }}
     >
       <ResponsiveDrawerTrigger asChild>
         {props.children}
