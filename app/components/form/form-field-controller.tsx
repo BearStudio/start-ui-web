@@ -6,6 +6,8 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
+import { FieldNumber, FieldNumberProps } from '@/components/form/field-number';
+
 import { FieldDate, FieldDateProps } from './field-date';
 import { FieldOtp, FieldOtpProps } from './field-otp';
 import { FieldSelect, FieldSelectProps } from './field-select';
@@ -39,6 +41,7 @@ export type FormFieldControllerProps<
 > =
   | FieldCustomProps<TFieldValues, TName>
   // -- ADD NEW FIELD PROPS TYPE HERE --
+  | FieldNumberProps<TFieldValues, TName>
   | FieldSelectProps<TFieldValues, TName>
   | FieldDateProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
@@ -75,6 +78,9 @@ export const FormFieldController = <
 
       case 'select':
         return <FieldSelect {...props} />;
+
+      case 'number':
+        return <FieldNumber {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };
