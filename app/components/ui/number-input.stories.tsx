@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import { NumberInput } from '@/components/ui/number-input';
 
@@ -47,28 +48,46 @@ export const FixedPrecision = () => {
 };
 
 export const Currency = () => {
-  const value = '201912.12';
+  const [value, setValue] = useState('2025.04');
 
   return (
     <div className="flex flex-col gap-2">
       <NumberInput
         formatOptions={{ style: 'currency', currency: 'EUR' }}
-        value={value}
+        defaultValue={value}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
       />
       <NumberInput
         formatOptions={{ style: 'currency', currency: 'GBP' }}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
         value={value}
       />
       <NumberInput
         formatOptions={{ style: 'currency', currency: 'USD' }}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
         value={value}
       />
+      <code>
+        <pre>{value}</pre>
+      </code>
     </div>
   );
 };
 
 export const Locale = () => {
-  const value = '201912.12';
+  const [value, setValue] = useState('2025.04');
 
   return (
     <div className="flex flex-col gap-2">
@@ -84,16 +103,31 @@ export const Locale = () => {
           currency: 'EUR',
         }}
         value={value}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
       />
       <NumberInput
         locale="fr"
         formatOptions={{ style: 'currency', currency: 'GBP' }}
         value={value}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
       />
       <NumberInput
         locale="fr"
         formatOptions={{ style: 'currency', currency: 'USD' }}
         value={value}
+        onValueChange={(details) => {
+          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
+            setValue(details.valueAsNumber.toString());
+          }
+        }}
       />
     </div>
   );
