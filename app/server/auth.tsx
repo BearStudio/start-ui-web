@@ -17,7 +17,6 @@ import { envServer } from '@/env/server';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
-import TemplateChangeEmail from '@/emails/templates/change-email';
 
 export type Auth = typeof auth;
 export const auth = betterAuth({
@@ -75,15 +74,9 @@ export const auth = betterAuth({
             });
           })
           .with('email-verification', async () => {
-            await sendEmail({
-              to: email,
-              subject: i18n.t('emails:changeEmail.subject', {
-                lng: getUserLanguage(),
-              }),
-              template: (
-                <TemplateChangeEmail language={getUserLanguage()} code={otp} />
-              ),
-            });
+            throw new Error(
+              'email-verification email not implemented, update the /app/server/auth.tsx file'
+            );
           })
           .with('forget-password', async () => {
             throw new Error(
