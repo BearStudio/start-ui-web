@@ -4,6 +4,7 @@ import {
   Role as BetterAuthRole,
 } from 'better-auth/plugins/access';
 import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
+import { z } from 'zod';
 
 const statement = {
   ...defaultStatements,
@@ -27,6 +28,7 @@ const admin = ac.newRole({
   repository: ['read', 'create', 'update', 'delete'],
 });
 
+export const zRole: () => z.ZodType<Role> = () => z.enum(['admin', 'user']);
 export type Role = keyof typeof roles;
 const roles = {
   admin,

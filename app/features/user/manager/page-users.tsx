@@ -1,9 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
 import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { cn } from '@/lib/tailwind/utils';
 import { getUiState } from '@/lib/ui-state';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -27,6 +29,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { Badge } from '@/components/ui/badge';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
@@ -68,8 +71,15 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         actions={
-          <ResponsiveIconButton label="New User" variant="secondary" size="sm">
-            <PlusIcon />
+          <ResponsiveIconButton
+            asChild
+            label="New User"
+            variant="secondary"
+            size="sm"
+          >
+            <Link to="/manager/users/new">
+              <PlusIcon />
+            </Link>
           </ResponsiveIconButton>
         }
       >
@@ -102,7 +112,10 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
                       <Avatar>
-                        <AvatarFallback variant="boring" name={item.name} />
+                        <AvatarFallback
+                          variant="boring"
+                          name={item.name ?? ''}
+                        />
                       </Avatar>
                     </DataListCell>
                     <DataListCell>
@@ -114,6 +127,29 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                       </DataListText>
                       <DataListText className="text-xs text-muted-foreground">
                         {item.email}
+                      </DataListText>
+                    </DataListCell>
+                    <DataListCell className="flex-[0.5] max-sm:hidden">
+                      <Badge
+                        variant={
+                          item.role === 'admin' ? 'default' : 'secondary'
+                        }
+                      >
+                        {item.role ?? '-'}
+                      </Badge>
+                    </DataListCell>
+                    <DataListCell className="flex-[0.5] max-sm:hidden">
+                      <DataListText
+                        className={cn(
+                          'text-xs text-muted-foreground',
+                          !item.onboardedAt && 'opacity-60'
+                        )}
+                      >
+                        {item.onboardedAt ? (
+                          <>Onboarded {dayjs(item.onboardedAt).fromNow()}</>
+                        ) : (
+                          'Not onboarded'
+                        )}
                       </DataListText>
                     </DataListCell>
                   </DataListRow>

@@ -29,9 +29,11 @@ import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_la
 import { Route as ManagerLayoutAccountIndexImport } from './routes/manager/_layout/account.index'
 import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
 import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
+import { Route as ManagerLayoutUsersNewIndexImport } from './routes/manager/_layout/users.new.index'
 import { Route as ManagerLayoutUsersIdIndexImport } from './routes/manager/_layout/users.$id.index'
 import { Route as ManagerLayoutRepositoriesIdIndexImport } from './routes/manager/_layout/repositories.$id.index'
 import { Route as AppLayoutDesktopOnlyRepositoriesIdIndexImport } from './routes/app/_layout-desktop-only/repositories.$id.index'
+import { Route as ManagerLayoutUsersIdUpdateIndexImport } from './routes/manager/_layout/users.$id.update.index'
 
 // Create/Update Routes
 
@@ -144,6 +146,14 @@ const AppLayoutAccountIndexRoute = AppLayoutAccountIndexImport.update({
   getParentRoute: () => AppLayoutRoute,
 } as any)
 
+const ManagerLayoutUsersNewIndexRoute = ManagerLayoutUsersNewIndexImport.update(
+  {
+    id: '/users/new/',
+    path: '/users/new/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any,
+)
+
 const ManagerLayoutUsersIdIndexRoute = ManagerLayoutUsersIdIndexImport.update({
   id: '/users/$id/',
   path: '/users/$id/',
@@ -162,6 +172,13 @@ const AppLayoutDesktopOnlyRepositoriesIdIndexRoute =
     id: '/repositories/$id/',
     path: '/repositories/$id/',
     getParentRoute: () => AppLayoutDesktopOnlyRoute,
+  } as any)
+
+const ManagerLayoutUsersIdUpdateIndexRoute =
+  ManagerLayoutUsersIdUpdateIndexImport.update({
+    id: '/users/$id/update/',
+    path: '/users/$id/update/',
+    getParentRoute: () => ManagerLayoutRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -315,6 +332,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutUsersIdIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
+    '/manager/_layout/users/new/': {
+      id: '/manager/_layout/users/new/'
+      path: '/users/new'
+      fullPath: '/manager/users/new'
+      preLoaderRoute: typeof ManagerLayoutUsersNewIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
+    '/manager/_layout/users/$id/update/': {
+      id: '/manager/_layout/users/$id/update/'
+      path: '/users/$id/update'
+      fullPath: '/manager/users/$id/update'
+      preLoaderRoute: typeof ManagerLayoutUsersIdUpdateIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
   }
 }
 
@@ -382,6 +413,8 @@ interface ManagerLayoutRouteChildren {
   ManagerLayoutUsersIndexRoute: typeof ManagerLayoutUsersIndexRoute
   ManagerLayoutRepositoriesIdIndexRoute: typeof ManagerLayoutRepositoriesIdIndexRoute
   ManagerLayoutUsersIdIndexRoute: typeof ManagerLayoutUsersIdIndexRoute
+  ManagerLayoutUsersNewIndexRoute: typeof ManagerLayoutUsersNewIndexRoute
+  ManagerLayoutUsersIdUpdateIndexRoute: typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
 const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
@@ -392,6 +425,8 @@ const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutUsersIndexRoute: ManagerLayoutUsersIndexRoute,
   ManagerLayoutRepositoriesIdIndexRoute: ManagerLayoutRepositoriesIdIndexRoute,
   ManagerLayoutUsersIdIndexRoute: ManagerLayoutUsersIdIndexRoute,
+  ManagerLayoutUsersNewIndexRoute: ManagerLayoutUsersNewIndexRoute,
+  ManagerLayoutUsersIdUpdateIndexRoute: ManagerLayoutUsersIdUpdateIndexRoute,
 }
 
 const ManagerLayoutRouteWithChildren = ManagerLayoutRoute._addFileChildren(
@@ -428,6 +463,8 @@ export interface FileRoutesByFullPath {
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -446,6 +483,8 @@ export interface FileRoutesByTo {
   '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
 export interface FileRoutesById {
@@ -471,6 +510,8 @@ export interface FileRoutesById {
   '/app/_layout-desktop-only/repositories/$id/': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
   '/manager/_layout/repositories/$id/': typeof ManagerLayoutRepositoriesIdIndexRoute
   '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -494,6 +535,8 @@ export interface FileRouteTypes {
     | '/app/repositories/$id'
     | '/manager/repositories/$id'
     | '/manager/users/$id'
+    | '/manager/users/new'
+    | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -511,6 +554,8 @@ export interface FileRouteTypes {
     | '/app/repositories/$id'
     | '/manager/repositories/$id'
     | '/manager/users/$id'
+    | '/manager/users/new'
+    | '/manager/users/$id/update'
   id:
     | '__root__'
     | '/'
@@ -534,6 +579,8 @@ export interface FileRouteTypes {
     | '/app/_layout-desktop-only/repositories/$id/'
     | '/manager/_layout/repositories/$id/'
     | '/manager/_layout/users/$id/'
+    | '/manager/_layout/users/new/'
+    | '/manager/_layout/users/$id/update/'
   fileRoutesById: FileRoutesById
 }
 
@@ -617,7 +664,9 @@ export const routeTree = rootRoute
         "/manager/_layout/repositories/",
         "/manager/_layout/users/",
         "/manager/_layout/repositories/$id/",
-        "/manager/_layout/users/$id/"
+        "/manager/_layout/users/$id/",
+        "/manager/_layout/users/new/",
+        "/manager/_layout/users/$id/update/"
       ]
     },
     "/login/": {
@@ -674,6 +723,14 @@ export const routeTree = rootRoute
     },
     "/manager/_layout/users/$id/": {
       "filePath": "manager/_layout/users.$id.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/manager/_layout/users/new/": {
+      "filePath": "manager/_layout/users.new.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/manager/_layout/users/$id/update/": {
+      "filePath": "manager/_layout/users.$id.update.index.tsx",
       "parent": "/manager/_layout"
     }
   }
