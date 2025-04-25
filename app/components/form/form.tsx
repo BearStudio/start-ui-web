@@ -1,3 +1,4 @@
+import { cn } from '@/lib/tailwind/utils';
 import {
   FieldValues,
   FormProvider,
@@ -39,7 +40,7 @@ export const Form = <TFieldValues extends FieldValues>({
             console.warn('Missing onSubmit method on <Form>');
           }
         }}
-        className={className}
+        className={cn('flex flex-1 flex-col', className)}
       >
         {props.children}
       </form>
