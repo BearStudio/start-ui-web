@@ -1,7 +1,8 @@
-import { Slot, Slottable } from '@radix-ui/react-slot';
+import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
+import { cloneAsChild } from '@/lib/clone-as-child';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Spinner } from '@/components/ui/spinner';
@@ -50,18 +51,21 @@ const buttonVariants = cva(
 );
 
 type ButtonProps = React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> &
-  (
-    | {
-        asChild?: false;
-        loading?: boolean;
-      }
-    | { asChild: true }
-  );
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean;
+    asChild?: boolean;
+  };
 
-function Button(_props: ButtonProps) {
-  const { className, variant, asChild, loading, size, disabled, ...props } =
-    !_props.asChild ? _props : { ..._props, loading: false };
+function Button({
+  className,
+  children,
+  variant,
+  asChild,
+  size,
+  disabled,
+  loading,
+  ...props
+}: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
 
   return (
@@ -71,18 +75,27 @@ function Button(_props: ButtonProps) {
       disabled={loading || disabled}
       {...props}
     >
-      {loading ? (
-        <>
-          <span className="absolute inset-0 flex items-center justify-center">
-            <Spinner />
-          </span>
-          <span className="flex items-center justify-center gap-2 opacity-0">
-            {props.children}
-          </span>
-        </>
-      ) : (
-        <Slottable>{props.children}</Slottable>
-      )}
+      {cloneAsChild({
+        children,
+        asChild,
+        render: (child) => (
+          <>
+            {!!loading && (
+              <span className="absolute inset-0 flex items-center justify-center">
+                <Spinner />
+              </span>
+            )}
+            <span
+              className={cn(
+                'flex items-center justify-center gap-2',
+                loading && 'opacity-0'
+              )}
+            >
+              {child}
+            </span>
+          </>
+        ),
+      })}
     </Comp>
   );
 }
