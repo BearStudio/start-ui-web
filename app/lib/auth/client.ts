@@ -21,6 +21,6 @@ export const authClient = createAuthClient({
   ],
 });
 
-export type Permission = Parameters<
-  typeof authClient.admin.hasPermission
->['0']['permission'];
+export type Permission = NonNullable<
+  Parameters<typeof authClient.admin.hasPermission>['0']['permission']
+>;
