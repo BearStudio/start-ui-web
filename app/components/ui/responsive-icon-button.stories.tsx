@@ -55,3 +55,13 @@ export function Variants() {
     </div>
   );
 }
+
+export function AsChild() {
+  return (
+    <ResponsiveIconButton label="Add" asChild>
+      <a href="/">
+        <PlusIcon />
+      </a>
+    </ResponsiveIconButton>
+  );
+}

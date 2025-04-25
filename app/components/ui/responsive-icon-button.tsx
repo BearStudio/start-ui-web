@@ -1,38 +1,39 @@
-import { ReactNode } from '@tanstack/react-router';
-import { ComponentProps } from 'react';
+import { ComponentProps, ReactElement, ReactNode } from 'react';
 
+import { cloneAsChild } from '@/lib/clone-as-child';
+import { cn } from '@/lib/tailwind/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 import { Button } from '@/components/ui/button';
 
 export const ResponsiveIconButton = ({
-  size,
+  size = 'default',
   children,
   label,
   breakpoint,
   ...props
 }: Omit<ComponentProps<typeof Button>, 'size' | 'children'> & {
-  children: ReactNode;
+  children: ReactElement<{ children?: ReactNode }>;
   label: ReactNode;
   size?: 'sm' | 'default' | 'lg';
   breakpoint?: number;
 }) => {
   const isMobile = useIsMobile(breakpoint);
+  const buttonIconSize =
+    size === 'default' ? 'icon' : (`icon-${size}` as const);
+  const buttonSize = isMobile ? buttonIconSize : size;
 
-  if (isMobile) {
-    return (
-      <Button
-        {...props}
-        size={!size || size === 'default' ? 'icon' : `icon-${size}`}
-      >
-        {children}
-        <span className="sr-only">{label}</span>
-      </Button>
-    );
-  }
   return (
-    <Button size={size} {...props}>
-      {children} <span>{label}</span>
+    <Button size={buttonSize} {...props}>
+      {cloneAsChild({
+        children,
+        asChild: props.asChild,
+        render: (child) => (
+          <>
+            {child} <span className={cn(isMobile && 'sr-only')}>{label}</span>
+          </>
+        ),
+      })}
     </Button>
   );
 };
