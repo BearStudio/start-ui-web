@@ -1,21 +1,25 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
+import { zRole } from '@/lib/auth/permissions';
 import { zu } from '@/lib/zod/zod-utils';
 
 export type User = z.infer<ReturnType<typeof zUser>>;
 export const zUser = () =>
   z.object({
     id: z.string(),
-    name: z.string({
-      required_error: t('user:fields.name.required'),
-      invalid_type_error: t('user:fields.name.invalid'),
-    }),
+    name: zu.string.nonEmptyNullish(
+      z.string({
+        required_error: t('user:fields.name.required'),
+        invalid_type_error: t('user:fields.name.invalid'),
+      })
+    ),
     email: zu.string.email(z.string(), {
       required_error: t('user:fields.email.required'),
       invalid_type_error: t('user:fields.email.invalid'),
     }),
     emailVerified: z.boolean(),
+    role: zRole().nullish(),
     image: z.string().nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -30,4 +34,11 @@ export const zSession = () =>
     createdAt: z.date(),
     updatedAt: z.date(),
     expiresAt: z.date(),
+  });
+
+export type FormFieldUser = z.infer<ReturnType<typeof zFormFieldUser>>;
+export const zFormFieldUser = () =>
+  zUser().pick({
+    name: true,
+    email: true,
   });

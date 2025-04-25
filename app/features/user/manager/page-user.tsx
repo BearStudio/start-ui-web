@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { match } from 'ts-pattern';
@@ -45,6 +46,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { Badge } from '@/components/ui/badge';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const userQuery = useQuery(
@@ -70,12 +72,14 @@ export const PageUser = (props: { params: { id: string } }) => {
         backButton={<BackButton />}
         actions={
           <>
-            <ResponsiveIconButton variant="ghost" label="Delete">
+            <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
               <Trash2Icon />
             </ResponsiveIconButton>
-            <Button size="sm" variant="secondary">
-              <PencilLineIcon />
-              Edit
+            <Button size="sm" variant="secondary" asChild>
+              <Link to="/manager/users/$id/update" params={props.params}>
+                <PencilLineIcon />
+                Edit
+              </Link>
             </Button>
           </>
         }
@@ -118,18 +122,25 @@ export const PageUser = (props: { params: { id: string } }) => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {user.onboardedAt ? (
-                      <>
-                        Onboarding done on{' '}
-                        {dayjs(user.onboardedAt).format(
-                          'DD/MM/YYYY [at] HH:mm'
-                        )}
-                      </>
-                    ) : (
-                      <>Not onboarded</>
-                    )}
-                  </p>
+                  <div className="flex items-center gap-4">
+                    <Badge
+                      variant={user.role === 'admin' ? 'default' : 'secondary'}
+                    >
+                      {user.role ?? '-'}
+                    </Badge>
+                    <p className="text-sm text-muted-foreground">
+                      {user.onboardedAt ? (
+                        <>
+                          Onboarded on{' '}
+                          {dayjs(user.onboardedAt).format(
+                            'DD/MM/YYYY [at] HH:mm'
+                          )}
+                        </>
+                      ) : (
+                        <>Not onboarded</>
+                      )}
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 

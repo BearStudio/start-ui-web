@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { Schema, z, ZodArray, ZodEnum, ZodString } from 'zod';
+import { Schema, z, ZodArray, ZodString } from 'zod';
 
 export const zu = {
   string: {
@@ -87,23 +87,6 @@ export const zu = {
         .length(0)
         .transform(() => null)
         .or(zu.array.nonEmpty(a, message).nullish());
-    },
-  },
-  trpcInput: {
-    enum<T extends [string, ...string[]]>(zEnum: ZodEnum<T>) {
-      return z.string().transform((value) => {
-        const parsed = zEnum.safeParse(value);
-        return parsed.success ? parsed.data : undefined;
-      });
-    },
-    enumOptional<T extends [string, ...string[]]>(zEnum: ZodEnum<T>) {
-      return z
-        .string()
-        .optional()
-        .transform((value) => {
-          const parsed = zEnum.safeParse(value);
-          return parsed.success ? parsed.data : undefined;
-        });
     },
   },
 } as const;
