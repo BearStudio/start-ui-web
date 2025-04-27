@@ -18,6 +18,7 @@ import { getUiState } from '@/lib/ui-state';
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -46,7 +47,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { Badge } from '@/components/ui/badge';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const userQuery = useQuery(

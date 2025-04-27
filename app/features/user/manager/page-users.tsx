@@ -9,6 +9,7 @@ import { cn } from '@/lib/tailwind/utils';
 import { getUiState } from '@/lib/ui-state';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DataList,
@@ -29,7 +30,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { Badge } from '@/components/ui/badge';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();

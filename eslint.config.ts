@@ -47,6 +47,7 @@ export default tslint.config(
     plugins: {
       unicorn,
     },
+    ignores: ['app/routes/**/*.*'],
     rules: {
       'unicorn/filename-case': [
         'error',
