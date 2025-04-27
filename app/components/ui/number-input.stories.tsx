@@ -36,47 +36,37 @@ export const Readonly = () => {
 };
 
 export const MinMax = () => {
-  return <NumberInput min={0} max={10} defaultValue="4" />;
+  return <NumberInput min={0} max={10} defaultValue={4} />;
 };
 
 export const Precision = () => {
-  return <NumberInput formatOptions={{ maximumFractionDigits: 3 }} />;
+  return <NumberInput format={{ maximumFractionDigits: 3 }} />;
 };
 
 export const FixedPrecision = () => {
-  return <NumberInput formatOptions={{ minimumFractionDigits: 3 }} />;
+  return <NumberInput format={{ minimumFractionDigits: 3 }} />;
 };
 
 export const Currency = () => {
-  const [value, setValue] = useState('2025.04');
+  const [value, setValue] = useState<number | null>(2025.04);
 
   return (
     <div className="flex flex-col gap-2">
       <NumberInput
-        formatOptions={{ style: 'currency', currency: 'EUR' }}
-        defaultValue={value}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
-        }}
+        format={{ style: 'currency', currency: 'EUR' }}
+        defaultValue={value ?? undefined}
+        onValueChange={(v) => setValue(v)}
       />
       <NumberInput
-        formatOptions={{ style: 'currency', currency: 'GBP' }}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
+        format={{ style: 'currency', currency: 'GBP' }}
+        onValueChange={(v) => {
+          setValue(v);
         }}
         value={value}
       />
       <NumberInput
-        formatOptions={{ style: 'currency', currency: 'USD' }}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
-        }}
+        format={{ style: 'currency', currency: 'USD' }}
+        onValueChange={(v) => setValue(v)}
         value={value}
       />
       <code>
@@ -87,7 +77,7 @@ export const Currency = () => {
 };
 
 export const Locale = () => {
-  const [value, setValue] = useState('2025.04');
+  const [value, setValue] = useState<number | null>(2025.04);
 
   return (
     <div className="flex flex-col gap-2">
@@ -98,36 +88,24 @@ export const Locale = () => {
       </p>
       <NumberInput
         locale="fr"
-        formatOptions={{
+        format={{
           style: 'currency',
           currency: 'EUR',
         }}
         value={value}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
-        }}
+        onValueChange={(v) => setValue(v)}
       />
       <NumberInput
         locale="fr"
-        formatOptions={{ style: 'currency', currency: 'GBP' }}
+        format={{ style: 'currency', currency: 'GBP' }}
         value={value}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
-        }}
+        onValueChange={(v) => setValue(v)}
       />
       <NumberInput
         locale="fr"
-        formatOptions={{ style: 'currency', currency: 'USD' }}
+        format={{ style: 'currency', currency: 'USD' }}
         value={value}
-        onValueChange={(details) => {
-          if (details.valueAsNumber && !isNaN(details.valueAsNumber)) {
-            setValue(details.valueAsNumber.toString());
-          }
-        }}
+        onValueChange={(v) => setValue(v)}
       />
     </div>
   );
