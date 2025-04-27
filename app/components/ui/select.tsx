@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 type OptionBase = { value: string; label: string };
 
 type InputProps = ComponentProps<typeof Input>;
-type InputPropsRoot = Pick<InputProps, 'placeholder'>;
+type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size'>;
 
 /**
  * We override how Ark UI handle select, has this is a "single" select and it is
@@ -49,6 +49,7 @@ type SelectProps<Option extends OptionBase> = Overwrite<
 export const Select = <Option extends OptionBase>({
   withClearButton,
   inputProps,
+  size,
   placeholder = 'Select...', // TODO Translation
   options,
   createListCollectionOptions,
@@ -121,6 +122,7 @@ export const Select = <Option extends OptionBase>({
       <Combobox.Control>
         <Combobox.Input asChild>
           <Input
+            size={size}
             endElement={
               <div className="flex gap-1">
                 {!!withClearButton && (
@@ -159,16 +161,16 @@ export const Select = <Option extends OptionBase>({
                 renderEmpty(search)
               )
               .with(ui.with('default'), () => (
-                <Combobox.ItemGroup>
+                <Combobox.ItemGroup className="flex flex-col gap-0.5">
                   {collection.items.slice(0, 20).map((item) => (
                     <Combobox.Item
                       key={item.value}
                       item={item}
                       className={cn(
-                        'flex cursor-pointer gap-1 rounded-sm px-2 py-0.5 data-[disabled]:opacity-50',
+                        'flex cursor-pointer gap-1 rounded-sm px-3 py-1.5 data-[disabled]:opacity-50',
                         'data-[highlighted]:bg-neutral-50 dark:data-[highlighted]:bg-neutral-800',
                         'data-[state=checked]:bg-neutral-100 dark:data-[state=checked]:bg-neutral-700',
-                        'hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                        'text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800'
                       )}
                     >
                       <Combobox.ItemText>{item.label}</Combobox.ItemText>

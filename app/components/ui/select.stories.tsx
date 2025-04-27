@@ -54,6 +54,16 @@ export const WithClearButton = () => {
   );
 };
 
+export const Sizes = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <Select options={astrobears} defaultValue={'pawdrin'} size="sm" />
+      <Select options={astrobears} defaultValue={'pawdrin'} />
+      <Select options={astrobears} defaultValue={'pawdrin'} size="lg" />
+    </div>
+  );
+};
+
 export const Placeholder = () => {
   return <Select options={astrobears} placeholder="Please select an option" />;
 };
