@@ -36,6 +36,7 @@ type SelectProps<Option extends OptionBase> = Overwrite<
   ControlProps
 > &
   InputPropsRoot & {
+    withClearButton?: boolean;
     options: ReadonlyArray<Option>;
     inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
     createListCollectionOptions?: Omit<
@@ -46,6 +47,7 @@ type SelectProps<Option extends OptionBase> = Overwrite<
   };
 
 export const Select = <Option extends OptionBase>({
+  withClearButton,
   inputProps,
   placeholder = 'Select...', // TODO Translation
   options,
@@ -121,16 +123,18 @@ export const Select = <Option extends OptionBase>({
           <Input
             endElement={
               <div className="flex gap-1">
-                <Combobox.ClearTrigger
-                  onClick={() => {
-                    onChange?.(null);
-                  }}
-                  asChild
-                >
-                  <Button variant="ghost" size="icon-xs">
-                    <X />
-                  </Button>
-                </Combobox.ClearTrigger>
+                {!!withClearButton && (
+                  <Combobox.ClearTrigger
+                    onClick={() => {
+                      onChange?.(null);
+                    }}
+                    asChild
+                  >
+                    <Button variant="ghost" size="icon-xs">
+                      <X />
+                    </Button>
+                  </Combobox.ClearTrigger>
+                )}
                 <Combobox.Trigger asChild>
                   <Button variant="ghost" className="-me-1.5" size="icon-xs">
                     <ChevronDown />
