@@ -1,10 +1,11 @@
-import { cn } from '@/lib/tailwind/utils';
 import {
   FieldValues,
   FormProvider,
   FormProviderProps,
   SubmitHandler,
 } from 'react-hook-form';
+
+import { cn } from '@/lib/tailwind/utils';
 
 type FormProps<TFieldValues extends FieldValues> = StrictUnion<
   | (FormProviderProps<TFieldValues> & {
