@@ -28,7 +28,8 @@ const admin = ac.newRole({
   repository: ['read', 'create', 'update', 'delete'],
 });
 
-export const zRole: () => z.ZodType<Role> = () => z.enum(['admin', 'user']);
+export const rolesNames = ['admin', 'user'] as const;
+export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
 export type Role = keyof typeof roles;
 const roles = {
   admin,
