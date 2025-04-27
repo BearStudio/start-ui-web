@@ -48,6 +48,12 @@ export const WithDefaultValue = () => {
   return <Select options={astrobears} defaultValue={'pawdrin'} />;
 };
 
+export const WithClearButton = () => {
+  return (
+    <Select options={astrobears} defaultValue={'pawdrin'} withClearButton />
+  );
+};
+
 export const Placeholder = () => {
   return <Select options={astrobears} placeholder="Please select an option" />;
 };
