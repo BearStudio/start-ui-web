@@ -1,4 +1,3 @@
-import { NumberInputValueChangeDetails } from '@ark-ui/react/number-input';
 import { ComponentProps } from 'react';
 import {
   Controller,
@@ -75,13 +74,8 @@ export const FieldNumber = <
               }
               {...rest}
               {...fieldProps}
-              onValueChange={(details: NumberInputValueChangeDetails) => {
-                if (isNaN(details.valueAsNumber)) {
-                  field.onChange(null);
-                  return;
-                }
-
-                field.onChange(details.valueAsNumber);
+              onValueChange={(value) => {
+                onChange(value);
               }}
             />
             <FormFieldError />

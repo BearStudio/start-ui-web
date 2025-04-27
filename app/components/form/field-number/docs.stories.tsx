@@ -94,7 +94,7 @@ export const Currency = () => {
             control={form.control}
             name="balance"
             placeholder="Bearcoin"
-            formatOptions={{
+            format={{
               style: 'currency',
               currency: 'EUR',
             }}
