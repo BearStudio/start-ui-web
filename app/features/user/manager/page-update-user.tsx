@@ -5,6 +5,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { match } from 'ts-pattern';
 
+import { rolesNames } from '@/lib/auth/permissions';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
@@ -37,6 +38,7 @@ export const PageUpdateUser = (props: { params: { id: string } }) => {
     values: {
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
+      role: userQuery.data?.role ?? 'user',
     },
   });
 
@@ -96,6 +98,18 @@ export const PageUpdateUser = (props: { params: { id: string } }) => {
                     type="email"
                     control={form.control}
                     name="email"
+                  />
+                </FormField>
+                <FormField>
+                  <FormFieldLabel>Role</FormFieldLabel>
+                  <FormFieldController
+                    type="select"
+                    control={form.control}
+                    name="role"
+                    options={rolesNames.map((role) => ({
+                      label: role,
+                      value: role,
+                    }))}
                   />
                 </FormField>
               </div>
