@@ -38,5 +38,10 @@
     "errorTitle": "Something went wrong",
     "emptyTitle": "No Data",
     "noResultsTitle": "No results for \"{{searchTerm}}\""
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Cancel",
+    "confirmText": "Confirm",
+    "heading": "Are you sure?"
   }
 }
