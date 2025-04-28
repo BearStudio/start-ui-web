@@ -86,7 +86,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
           onSubmit={async ({ name }) => {
             updateUser.mutate({ name });
           }}
-          className="flex flex-col sm:gap-4"
+          className="flex flex-col gap-4"
         >
           <ResponsiveDrawerHeader>
             <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
