@@ -15,6 +15,7 @@ import {
   DataListErrorState,
   DataListLoadingState,
   DataListRow,
+  DataListRowResults,
   DataListText,
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
@@ -59,13 +60,18 @@ export const PageRepositories = (props: {
     if (repositoriesQuery.status === 'pending') return set('pending');
     if (repositoriesQuery.status === 'error') return set('error');
 
+    const searchTerm = props.search.searchTerm;
     const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length && props.search.searchTerm) {
-      return set('empty-search', { searchTerm: props.search.searchTerm });
+    if (!items.length && searchTerm) {
+      return set('empty-search', { searchTerm });
     }
     if (!items.length) return set('empty');
 
-    return set('default', { items });
+    return set('default', {
+      items,
+      searchTerm,
+      total: repositoriesQuery.data.pages[0]?.total ?? 0,
+    });
   });
 
   return (
@@ -100,8 +106,22 @@ export const PageRepositories = (props: {
             .with(ui.with('empty-search'), ({ searchTerm }) => (
               <DataListEmptyState searchTerm={searchTerm} />
             ))
-            .with(ui.with('default'), ({ items }) => (
+            .with(ui.with('default'), ({ items, searchTerm, total }) => (
               <>
+                {!!searchTerm && (
+                  <DataListRowResults
+                    withClearButton
+                    onClear={() => {
+                      router.navigate({
+                        to: '.',
+                        search: { searchTerm: '' },
+                        replace: true,
+                      });
+                    }}
+                  >
+                    {total} results for "{searchTerm}"
+                  </DataListRowResults>
+                )}
                 {items.map((item) => (
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
@@ -142,8 +162,7 @@ export const PageRepositories = (props: {
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of{' '}
-                      {repositoriesQuery.data?.pages[0]?.total}
+                      Showing {items.length} of {total}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>

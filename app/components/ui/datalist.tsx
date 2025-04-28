@@ -1,4 +1,4 @@
-import { CircleAlertIcon, LucideRefreshCw } from 'lucide-react';
+import { CircleAlertIcon, LucideRefreshCw, XIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -149,6 +149,38 @@ export const DataListErrorState = ({
             )}
           </div>
         )}
+      </DataListCell>
+    </DataListRow>
+  );
+};
+
+export const DataListRowResults = (props: {
+  children?: ReactNode;
+  className?: string;
+  withClearButton?: boolean;
+  onClear?: () => void;
+}) => {
+  return (
+    <DataListRow className={cn(props.className)}>
+      <DataListCell className="py-1 pr-0">
+        <div className="flex w-full items-center gap-1">
+          <DataListText className="flex-1 text-xs text-muted-foreground">
+            {props.children}
+          </DataListText>
+          {!!props.withClearButton && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={() => {
+                props.onClear?.();
+              }}
+            >
+              <XIcon />
+              Clear
+            </Button>
+          )}
+        </div>
       </DataListCell>
     </DataListRow>
   );

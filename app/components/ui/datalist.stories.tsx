@@ -14,6 +14,7 @@ import {
   DataListErrorState,
   DataListLoadingState,
   DataListRow,
+  DataListRowResults,
   DataListText,
   DataListTextHeader,
 } from '@/components/ui/datalist';
@@ -219,6 +220,50 @@ export const ErrorState = () => {
     </div>
   );
 };
+
+export const RowResults = () => (
+  <DataList>
+    <DataListRowResults withClearButton onClear={() => alert('Clear')}>
+      4 results for "Search term"
+    </DataListRowResults>
+    {data.map((user) => {
+      return (
+        <DataListRow key={user.id} withHover>
+          <DataListCell className="flex-none">
+            <Avatar>
+              <AvatarFallback variant="boring" name={user.name} />
+            </Avatar>
+          </DataListCell>
+          <DataListCell>
+            <DataListText className="font-medium">
+              <a href="#">
+                {user.name}
+                {/* Row hitzone for link */}
+                <span className="absolute inset-0" />
+              </a>
+            </DataListText>
+            <DataListText className="text-muted-foreground">
+              {user.email}
+            </DataListText>
+          </DataListCell>
+          <DataListCell className="max-sm:hidden">
+            <DataListText className="text-muted-foreground">
+              {user.job}
+            </DataListText>
+          </DataListCell>
+          <DataListCell className="max-md:hidden">
+            <DataListText className="text-muted-foreground">
+              {user.role}
+            </DataListText>
+          </DataListCell>
+          <DataListCell className="flex-none items-end">
+            <ExampleMenu />
+          </DataListCell>
+        </DataListRow>
+      );
+    })}
+  </DataList>
+);
 
 const ExampleMenu = () => {
   return (
