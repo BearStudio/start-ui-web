@@ -51,6 +51,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           // Invalidate Users list
           queryClient.invalidateQueries({
             queryKey: orpc.user.getAll.key(),
+            type: 'all',
           }),
         ]);
 

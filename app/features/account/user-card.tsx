@@ -37,7 +37,7 @@ export const UserCard = () => {
           <ConfirmResponsiveDrawer
             onConfirm={async () => signOut.mutateAsync()}
             title="Account logout"
-            message="You are about to end your session"
+            description="You are about to end your session"
             confirmText={
               <>
                 <LogOutIcon />
