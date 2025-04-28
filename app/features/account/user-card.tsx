@@ -10,6 +10,7 @@ import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { useSignOut } from '@/features/auth/utils';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 
 export const UserCard = () => {
   const session = authClient.useSession();
@@ -33,15 +34,26 @@ export const UserCard = () => {
           </div>
         </div>
         <CardAction>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => signOut.mutate()}
-            loading={signOut.isPending || signOut.isSuccess}
+          <ConfirmResponsiveDrawer
+            onConfirm={async () => signOut.mutateAsync()}
+            title="Account logout"
+            message="You are about to end your session"
+            confirmText={
+              <>
+                <LogOutIcon />
+                Logout
+              </>
+            }
           >
-            <LogOutIcon />
-            Logout
-          </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              loading={signOut.isPending || signOut.isSuccess}
+            >
+              <LogOutIcon />
+              Logout
+            </Button>
+          </ConfirmResponsiveDrawer>
         </CardAction>
       </CardHeader>
 
