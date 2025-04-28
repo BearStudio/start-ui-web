@@ -3,7 +3,6 @@ import {
   ComponentProps,
   ReactElement,
   ReactNode,
-  useEffect,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +24,7 @@ export const ConfirmResponsiveDrawer = (props: {
   children: ReactElement<{ onClick: () => void }>;
   title?: ReactNode;
   message?: ReactNode;
-  onConfirm: () => void | Promise<void>;
+  onConfirm: () => unknown | Promise<unknown>;
   confirmText?: ReactNode;
   confirmVariant?: ComponentProps<typeof Button>['variant'];
   cancelText?: ReactNode;
