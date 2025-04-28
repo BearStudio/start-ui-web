@@ -6,11 +6,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { useSignOut } from '@/features/auth/utils';
-import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 
 export const UserCard = () => {
   const session = authClient.useSession();
@@ -58,7 +58,7 @@ export const UserCard = () => {
       </CardHeader>
 
       <AccountCardRow label="Name">
-        <div className="flex">
+        <div className="flex gap-1">
           <p className="truncate underline-offset-4">
             {session.data?.user.name || (
               <span className="text-xs text-muted-foreground">N/A</span>
