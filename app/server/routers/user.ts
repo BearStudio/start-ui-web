@@ -166,7 +166,7 @@ export default {
   })
     .route({
       method: 'POST',
-      path: '/users/{id}/update',
+      path: '/users/{id}',
       tags,
     })
     .input(
@@ -201,6 +201,49 @@ export default {
             email: input.email,
             // Set email as verified if admin changed the email
             emailVerified: currentUser.email !== input.email ? true : undefined,
+          },
+        });
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            message: error.message,
+            data: error.meta,
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
+
+  create: protectedProcedure({
+    permission: {
+      user: ['create'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/users',
+      tags,
+    })
+    .input(
+      zUser().pick({
+        name: true,
+        email: true,
+        role: true,
+      })
+    )
+    .output(zUser())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Create user');
+      try {
+        return await context.db.user.create({
+          data: {
+            email: input.email,
+            emailVerified: true,
+            name: input.name ?? '',
+            role: input.role ?? 'user',
           },
         });
       } catch (error: unknown) {

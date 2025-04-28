@@ -21,7 +21,12 @@ export const FormUser = (props: { userId?: string }) => {
     <div className="flex flex-col gap-4">
       <FormField>
         <FormFieldLabel>Name</FormFieldLabel>
-        <FormFieldController type="text" control={form.control} name="name" />
+        <FormFieldController
+          type="text"
+          control={form.control}
+          name="name"
+          autoFocus
+        />
       </FormField>
       <FormField>
         <FormFieldLabel>Email</FormFieldLabel>

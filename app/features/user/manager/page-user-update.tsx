@@ -41,6 +41,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
         if (data.id === session.data?.user.id) {
           session.refetch();
         }
+
         await Promise.all([
           // Invalidate User
           queryClient.invalidateQueries({
@@ -104,7 +105,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   const formIsDirty = form.formState.isDirty;
   useBlocker({
     shouldBlockFn: () => {
-      if (!formIsDirty) return false;
+      if (!formIsDirty || userUpdate.isSuccess) return false;
       const shouldLeave = confirm('Are you sure you want to leave?');
       return !shouldLeave;
     },
