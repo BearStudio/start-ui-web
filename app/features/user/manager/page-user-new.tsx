@@ -1,6 +1,19 @@
-import { BackButton } from '@/components/back-button';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ORPCError } from '@orpc/client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
+import { orpc } from '@/lib/orpc/client';
+
+import { BackButton } from '@/components/back-button';
+import { Form } from '@/components/form';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+
+import { FormUser } from '@/features/user/manager/form-user';
+import { zFormFieldsUser } from '@/features/user/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -9,19 +22,91 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUserNew = () => {
-  return (
-    <PageLayout>
-      <PageLayoutTopBar
-        backButton={<BackButton />}
-        actions={
-          <>
-            <Button size="sm">Create</Button>
-          </>
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
+  const queryClient = useQueryClient();
+  const form = useForm({
+    resolver: zodResolver(zFormFieldsUser()),
+    values: {
+      name: '',
+      email: '',
+      role: 'user',
+    },
+  });
+
+  const userCreate = useMutation(
+    orpc.user.create.mutationOptions({
+      onSuccess: async () => {
+        // Invalidate Users list
+        await queryClient.invalidateQueries({
+          queryKey: orpc.user.getAll.key(),
+          type: 'all',
+        });
+
+        // Redirect
+        if (canGoBack) {
+          router.history.back();
+        } else {
+          router.navigate({ to: '..', replace: true });
         }
-      >
-        <PageLayoutTopBarTitle>New User</PageLayoutTopBarTitle>
-      </PageLayoutTopBar>
-      <PageLayoutContent>TODO</PageLayoutContent>
-    </PageLayout>
+      },
+      onError: (error) => {
+        if (
+          error instanceof ORPCError &&
+          error.code === 'CONFLICT' &&
+          error.data?.target?.includes('email')
+        ) {
+          form.setError('email', {
+            message: 'Email already used',
+          });
+          return;
+        }
+
+        toast.error('Failed to update user');
+      },
+    })
+  );
+
+  const formIsDirty = form.formState.isDirty;
+  useBlocker({
+    shouldBlockFn: () => {
+      if (!formIsDirty || userCreate.isSuccess) return false;
+      const shouldLeave = confirm('Are you sure you want to leave?');
+      return !shouldLeave;
+    },
+  });
+
+  return (
+    <Form
+      {...form}
+      onSubmit={async (values) => {
+        userCreate.mutate(values);
+      }}
+    >
+      <PageLayout>
+        <PageLayoutTopBar
+          backButton={<BackButton />}
+          actions={
+            <Button
+              size="sm"
+              type="submit"
+              className="min-w-20"
+              loading={userCreate.isPending}
+            >
+              Create
+            </Button>
+          }
+        >
+          <PageLayoutTopBarTitle>New User</PageLayoutTopBarTitle>
+        </PageLayoutTopBar>
+        <PageLayoutContent>
+          <Card>
+            <CardContent>
+              <FormUser />
+            </CardContent>
+          </Card>
+        </PageLayoutContent>
+      </PageLayout>
+    </Form>
   );
 };
