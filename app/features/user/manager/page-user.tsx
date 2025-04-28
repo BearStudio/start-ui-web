@@ -5,9 +5,10 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { toast } from 'sonner';
 import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
@@ -27,6 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 import {
   DataList,
   DataListCell,
@@ -49,9 +51,44 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUser = (props: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
   const userQuery = useQuery(
-    orpc.user.getById.queryOptions({ input: { id: props.params.id } })
+    orpc.user.getById.queryOptions({
+      input: { id: props.params.id },
+    })
   );
+
+  const deleteUser = async () => {
+    const response = await authClient.admin.removeUser({
+      userId: props.params.id,
+    });
+
+    if (response.error) {
+      toast.error('Failed to delete the user');
+      return;
+    }
+
+    await Promise.all([
+      // Invalidate users list
+      queryClient.invalidateQueries({
+        queryKey: orpc.user.getAll.key(),
+        type: 'all',
+      }),
+      // Remove user from cache
+      queryClient.removeQueries({
+        queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
+      }),
+    ]);
+
+    // Redirect
+    if (canGoBack) {
+      router.history.back();
+    } else {
+      router.navigate({ to: '..', replace: true });
+    }
+  };
 
   const ui = getUiState((set) => {
     if (userQuery.status === 'pending') return set('pending');
@@ -72,9 +109,29 @@ export const PageUser = (props: { params: { id: string } }) => {
         backButton={<BackButton />}
         actions={
           <>
-            <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
-              <Trash2Icon />
-            </ResponsiveIconButton>
+            <WithPermission
+              permission={{
+                user: ['delete'],
+              }}
+            >
+              <ConfirmResponsiveDrawer
+                onConfirm={() => deleteUser()}
+                title={`Delete ${userQuery.data?.name ?? userQuery.data?.email ?? 'user'}`}
+                description={
+                  <>
+                    You are about to permanently delete this user.{' '}
+                    <strong>This action cannot be undone.</strong> Please
+                    confirm your decision carefully.
+                  </>
+                }
+                confirmText="Delete"
+                confirmVariant="destructive"
+              >
+                <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
+                  <Trash2Icon />
+                </ResponsiveIconButton>
+              </ConfirmResponsiveDrawer>
+            </WithPermission>
           </>
         }
       >

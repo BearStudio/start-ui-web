@@ -20,7 +20,7 @@ export function WithCustomProps() {
   return (
     <ConfirmResponsiveDrawer
       title="ConfirmModal Title"
-      message="Custom message"
+      description="Custom message"
       onConfirm={() => alert('Custom Action')}
       confirmText="Custom Text"
       confirmVariant="destructive"

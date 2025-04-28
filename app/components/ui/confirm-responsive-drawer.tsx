@@ -23,7 +23,7 @@ export const ConfirmResponsiveDrawer = (props: {
   enabled?: boolean;
   children: ReactElement<{ onClick: () => void }>;
   title?: ReactNode;
-  message?: ReactNode;
+  description?: ReactNode;
   onConfirm: () => unknown | Promise<unknown>;
   confirmText?: ReactNode;
   confirmVariant?: ComponentProps<typeof Button>['variant'];
@@ -34,7 +34,7 @@ export const ConfirmResponsiveDrawer = (props: {
   const { close, open, isOpen } = useDisclosure();
 
   const displayHeading =
-    !props.title && !props.message
+    !props.title && !props.description
       ? t('components:confirmResponsiveDrawer.heading')
       : props.title;
 
@@ -93,7 +93,7 @@ export const ConfirmResponsiveDrawer = (props: {
           <ResponsiveDrawerHeader>
             <ResponsiveDrawerTitle>{displayHeading}</ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription>
-              {props.message}
+              {props.description}
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerFooter>
