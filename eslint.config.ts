@@ -21,6 +21,7 @@ export default tslint.config(
   {
     rules: {
       'sonarjs/todo-tag': 'warn',
+      'sonarjs/no-redundant-jump': 'off',
       'react/no-unescaped-entities': 'off',
       'no-unreachable': 'error',
       'sonarjs/no-nested-functions': 'off',

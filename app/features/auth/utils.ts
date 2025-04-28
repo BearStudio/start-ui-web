@@ -44,8 +44,8 @@ export const useRedirectAfterLogin = () => {
       const userRole = session.data?.user.role;
 
       if (!userRole) {
-        console.log('no role');
         router.navigate({
+          replace: true,
           to: '/',
         });
         return;
@@ -60,6 +60,7 @@ export const useRedirectAfterLogin = () => {
         })
       ) {
         router.navigate({
+          replace: true,
           to: '/manager',
         });
         return;
@@ -74,12 +75,14 @@ export const useRedirectAfterLogin = () => {
         })
       ) {
         router.navigate({
+          replace: true,
           to: '/app',
         });
         return;
       }
 
       router.navigate({
+        replace: true,
         to: '/',
       });
     };
