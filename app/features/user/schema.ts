@@ -36,8 +36,8 @@ export const zSession = () =>
     expiresAt: z.date(),
   });
 
-export type FormFieldUser = z.infer<ReturnType<typeof zFormFieldUser>>;
-export const zFormFieldUser = () =>
+export type FormFieldsUser = z.infer<ReturnType<typeof zFormFieldsUser>>;
+export const zFormFieldsUser = () =>
   zUser().pick({
     name: true,
     email: true,

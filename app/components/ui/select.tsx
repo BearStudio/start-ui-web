@@ -138,7 +138,12 @@ export const Select = <Option extends OptionBase>({
                   </Combobox.ClearTrigger>
                 )}
                 <Combobox.Trigger asChild>
-                  <Button variant="ghost" className="-me-1.5" size="icon-xs">
+                  <Button
+                    variant="ghost"
+                    disabled={props.disabled || props.readOnly}
+                    className="-me-1.5"
+                    size="icon-xs"
+                  >
                     <ChevronDown />
                   </Button>
                 </Combobox.Trigger>

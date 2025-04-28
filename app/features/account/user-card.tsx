@@ -45,9 +45,9 @@ export const UserCard = () => {
         </CardAction>
       </CardHeader>
 
-      <AccountCardRow label="Name" className="group">
+      <AccountCardRow label="Name">
         <div className="flex">
-          <p className="truncate underline-offset-4 group-hover:underline">
+          <p className="truncate underline-offset-4">
             {session.data?.user.name || (
               <span className="text-xs text-muted-foreground">N/A</span>
             )}
@@ -62,7 +62,7 @@ export const UserCard = () => {
               >
                 <span>
                   <PenLineIcon />
-                  <span className="sr-only">Change your name</span>
+                  <span className="sr-only">Update your name</span>
                 </span>
               </Button>
               <span className="absolute inset-0" />

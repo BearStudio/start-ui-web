@@ -158,4 +158,62 @@ export default {
         total,
       };
     }),
+
+  updateById: protectedProcedure({
+    permission: {
+      user: ['set-role'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/users/{id}/update',
+      tags,
+    })
+    .input(
+      zUser().pick({
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      })
+    )
+    .output(zUser())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Getting current user email');
+      const currentUser = await context.db.user.findUnique({
+        where: { id: input.id },
+        select: { email: true },
+      });
+
+      if (!currentUser) {
+        context.logger.warn('Unable to find user with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      context.logger.info('Update user');
+      try {
+        return await context.db.user.update({
+          where: { id: input.id },
+          data: {
+            name: input.name ?? '',
+            // Prevent to change role of the connected user
+            role: context.user.id === input.id ? undefined : input.role,
+            email: input.email,
+            // Set email as verified if admin changed the email
+            emailVerified: currentUser.email !== input.email ? true : undefined,
+          },
+        });
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            message: error.message,
+            data: error.meta,
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 };
