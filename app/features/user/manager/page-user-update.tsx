@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -26,7 +26,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageUpdateUser = (props: { params: { id: string } }) => {
+export const PageUserUpdate = (props: { params: { id: string } }) => {
   const router = useRouter();
   const session = authClient.useSession();
   const canGoBack = useCanGoBack();
@@ -98,6 +98,15 @@ export const PageUpdateUser = (props: { params: { id: string } }) => {
     if (userQuery.status === 'error') return set('error');
 
     return set('default', { user: userQuery.data });
+  });
+
+  const formIsDirty = form.formState.isDirty;
+  useBlocker({
+    shouldBlockFn: () => {
+      if (!formIsDirty) return false;
+      const shouldLeave = confirm('Are you sure you want to leave?');
+      return !shouldLeave;
+    },
   });
 
   return (
