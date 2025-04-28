@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageNewUser } from '@/features/user/manager/page-new-user';
+import { PageUserNew } from '@/features/user/manager/page-user-new';
 
 export const Route = createFileRoute('/manager/_layout/users/new/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <PageNewUser />;
+  return <PageUserNew />;
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageUpdateUser } from '@/features/user/manager/page-update-user';
+import { PageUserUpdate } from '@/features/user/manager/page-user-update';
 
 export const Route = createFileRoute('/manager/_layout/users/$id/update/')({
   component: RouteComponent,
@@ -8,5 +8,5 @@ export const Route = createFileRoute('/manager/_layout/users/$id/update/')({
 
 function RouteComponent() {
   const params = Route.useParams();
-  return <PageUpdateUser params={params} />;
+  return <PageUserUpdate params={params} />;
 }
