@@ -8,7 +8,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageNewUser = () => {
+export const PageUserNew = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar
