@@ -103,7 +103,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                     <Avatar>
                       <AvatarFallback variant="boring" name={user.name ?? ''} />
                     </Avatar>
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-1 flex-col gap-0.5">
                       <CardTitle>
                         {user.name || (
                           <span className="text-xs text-muted-foreground">
@@ -113,6 +113,21 @@ export const PageUser = (props: { params: { id: string } }) => {
                       </CardTitle>
                       <CardDescription>{user.email}</CardDescription>
                     </div>
+                    <WithPermission permission={{ user: ['set-role'] }}>
+                      <Link
+                        to="/manager/users/$id/update"
+                        params={props.params}
+                        className="-m-2 self-start"
+                      >
+                        <Button size="icon-sm" variant="ghost" asChild>
+                          <span>
+                            <PencilLineIcon />
+                            <span className="sr-only"></span>
+                          </span>
+                        </Button>
+                        <span className="absolute inset-0" />
+                      </Link>
+                    </WithPermission>
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
@@ -135,22 +150,6 @@ export const PageUser = (props: { params: { id: string } }) => {
                       )}
                     </p>
                   </div>
-
-                  <WithPermission permission={{ user: ['set-role'] }}>
-                    <Link
-                      to="/manager/users/$id/update"
-                      params={props.params}
-                      className="-m-2"
-                    >
-                      <Button size="xs" variant="ghost" asChild>
-                        <span>
-                          <PencilLineIcon />
-                          Edit user
-                        </span>
-                      </Button>
-                      <span className="absolute inset-0" />
-                    </Link>
-                  </WithPermission>
                 </CardContent>
               </Card>
 
