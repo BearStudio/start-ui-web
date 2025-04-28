@@ -48,7 +48,11 @@ export const PageRepository = (props: { params: { id: string } }) => {
             <Separator orientation="vertical" className="h-4" />
           </div>
         }
-        rightActions={<Button size="sm">Save</Button>}
+        rightActions={
+          <Button size="sm" className="min-w-20">
+            Save
+          </Button>
+        }
       >
         <PageLayoutTopBarTitle>
           {match(ui.state)

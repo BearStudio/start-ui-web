@@ -95,13 +95,15 @@ export const DataListLoadingState = () => {
 export const DataListEmptyState = ({
   children,
   searchTerm,
+  className,
 }: {
   children?: ReactNode;
   searchTerm?: string;
+  className?: string;
 }) => {
   const { t } = useTranslation(['components']);
   return (
-    <DataListRow className="flex-1">
+    <DataListRow className={cn('flex-1', className)}>
       <DataListCell className="flex-1 items-center justify-center py-4 text-sm text-muted-foreground">
         {searchTerm ? (
           <div>
@@ -121,14 +123,16 @@ export const DataListErrorState = ({
   title,
   children,
   retry,
+  className,
 }: {
   title?: ReactNode;
   children?: ReactNode;
+  className?: string;
   retry?: () => void;
 }) => {
   const { t } = useTranslation(['components']);
   return (
-    <DataListRow className="flex-1">
+    <DataListRow className={cn('flex-1', className)}>
       <DataListCell className="flex flex-col items-center justify-center py-4 text-center">
         <div className="flex w-full items-center justify-center gap-2 text-sm font-medium">
           <CircleAlertIcon className="size-4 text-muted-foreground" />

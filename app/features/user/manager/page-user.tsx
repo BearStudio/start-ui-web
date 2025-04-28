@@ -75,12 +75,6 @@ export const PageUser = (props: { params: { id: string } }) => {
             <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
               <Trash2Icon />
             </ResponsiveIconButton>
-            <Button size="sm" variant="secondary" asChild>
-              <Link to="/manager/users/$id/update" params={props.params}>
-                <PencilLineIcon />
-                Edit
-              </Link>
-            </Button>
           </>
         }
       >
@@ -102,8 +96,8 @@ export const PageUser = (props: { params: { id: string } }) => {
           .with(ui.with('not-found'), () => <PageError errorCode={404} />)
           .with(ui.with('error'), () => <PageError />)
           .with(ui.with('default'), ({ user }) => (
-            <div className="flex flex-col gap-4">
-              <Card>
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
+              <Card className="relative flex-1">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <Avatar>
@@ -121,7 +115,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col gap-4">
                   <div className="flex items-center gap-4">
                     <Badge
                       variant={user.role === 'admin' ? 'default' : 'secondary'}
@@ -141,10 +135,28 @@ export const PageUser = (props: { params: { id: string } }) => {
                       )}
                     </p>
                   </div>
+
+                  <WithPermission permission={{ user: ['set-role'] }}>
+                    <Link
+                      to="/manager/users/$id/update"
+                      params={props.params}
+                      className="-m-2"
+                    >
+                      <Button size="xs" variant="ghost" asChild>
+                        <span>
+                          <PencilLineIcon />
+                          Edit user
+                        </span>
+                      </Button>
+                      <span className="absolute inset-0" />
+                    </Link>
+                  </WithPermission>
                 </CardContent>
               </Card>
 
-              <UserSessions userId={props.params.id} />
+              <div className="flex flex-2 flex-col">
+                <UserSessions userId={props.params.id} />
+              </div>
             </div>
           ))
           .exhaustive()}
@@ -262,7 +274,9 @@ const UserSessions = (props: { userId: string }) => {
             <DataListErrorState retry={() => sessionsQuery.refetch()} />
           ))
           .with(ui.with('empty'), () => (
-            <DataListEmptyState>No user sessions</DataListEmptyState>
+            <DataListEmptyState className="min-h-20">
+              No user sessions
+            </DataListEmptyState>
           ))
           .with(ui.with('default'), ({ items }) => (
             <>

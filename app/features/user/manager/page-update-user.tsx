@@ -1,26 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { match } from 'ts-pattern';
 
-import { rolesNames } from '@/lib/auth/permissions';
+import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
-import {
-  Form,
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/components/form';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { zFormFieldUser } from '@/features/user/schema';
+import { FormUser } from '@/features/user/manager/form-user';
+import { zFormFieldsUser } from '@/features/user/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -29,12 +27,59 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUpdateUser = (props: { params: { id: string } }) => {
+  const router = useRouter();
+  const session = authClient.useSession();
+  const canGoBack = useCanGoBack();
+  const queryClient = useQueryClient();
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({ input: { id: props.params.id } })
   );
+  const userUpdate = useMutation(
+    orpc.user.updateById.mutationOptions({
+      onSuccess: async (data) => {
+        // Update session if user is the connected user
+        if (data.id === session.data?.user.id) {
+          session.refetch();
+        }
+        await Promise.all([
+          // Invalidate User
+          queryClient.invalidateQueries({
+            queryKey: orpc.user.getById.key({
+              input: { id: props.params.id },
+            }),
+          }),
+          // Invalidate Users list
+          queryClient.invalidateQueries({
+            queryKey: orpc.user.getAll.key(),
+          }),
+        ]);
+
+        // Redirect
+        if (canGoBack) {
+          router.history.back();
+        } else {
+          router.navigate({ to: '..', replace: true });
+        }
+      },
+      onError: (error) => {
+        if (
+          error instanceof ORPCError &&
+          error.code === 'CONFLICT' &&
+          error.data?.target?.includes('email')
+        ) {
+          form.setError('email', {
+            message: 'Email already used',
+          });
+          return;
+        }
+
+        toast.error('Failed to update user');
+      },
+    })
+  );
 
   const form = useForm({
-    resolver: zodResolver(zFormFieldUser()),
+    resolver: zodResolver(zFormFieldsUser()),
     values: {
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
@@ -56,16 +101,24 @@ export const PageUpdateUser = (props: { params: { id: string } }) => {
   });
 
   return (
-    <Form {...form}>
+    <Form
+      {...form}
+      onSubmit={(values) => {
+        userUpdate.mutate({ id: props.params.id, ...values });
+      }}
+    >
       <PageLayout>
         <PageLayoutTopBar
           backButton={<BackButton />}
           actions={
-            <>
-              <Button size="sm" type="submit">
-                Update
-              </Button>
-            </>
+            <Button
+              size="sm"
+              type="submit"
+              className="min-w-20"
+              loading={userUpdate.isPending}
+            >
+              Save
+            </Button>
           }
         >
           <PageLayoutTopBarTitle>
@@ -83,36 +136,7 @@ export const PageUpdateUser = (props: { params: { id: string } }) => {
         <PageLayoutContent>
           <Card>
             <CardContent>
-              <div className="flex flex-col gap-4">
-                <FormField>
-                  <FormFieldLabel>Name</FormFieldLabel>
-                  <FormFieldController
-                    type="text"
-                    control={form.control}
-                    name="name"
-                  />
-                </FormField>
-                <FormField>
-                  <FormFieldLabel>Email</FormFieldLabel>
-                  <FormFieldController
-                    type="email"
-                    control={form.control}
-                    name="email"
-                  />
-                </FormField>
-                <FormField>
-                  <FormFieldLabel>Role</FormFieldLabel>
-                  <FormFieldController
-                    type="select"
-                    control={form.control}
-                    name="role"
-                    options={rolesNames.map((role) => ({
-                      label: role,
-                      value: role,
-                    }))}
-                  />
-                </FormField>
-              </div>
+              <FormUser userId={props.params.id} />
             </CardContent>
           </Card>
         </PageLayoutContent>

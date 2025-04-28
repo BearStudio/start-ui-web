@@ -75,6 +75,7 @@ export default function PageLogin({
     }
 
     router.navigate({
+      replace: true,
       to: '/login/verify',
       search: {
         redirect: search.redirect,
