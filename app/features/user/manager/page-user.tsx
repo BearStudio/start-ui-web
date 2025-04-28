@@ -54,6 +54,7 @@ export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const canGoBack = useCanGoBack();
+  const session = authClient.useSession();
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({
       input: { id: props.params.id },
@@ -109,29 +110,35 @@ export const PageUser = (props: { params: { id: string } }) => {
         backButton={<BackButton />}
         actions={
           <>
-            <WithPermission
-              permission={{
-                user: ['delete'],
-              }}
-            >
-              <ConfirmResponsiveDrawer
-                onConfirm={() => deleteUser()}
-                title={`Delete ${userQuery.data?.name ?? userQuery.data?.email ?? 'user'}`}
-                description={
-                  <>
-                    You are about to permanently delete this user.{' '}
-                    <strong>This action cannot be undone.</strong> Please
-                    confirm your decision carefully.
-                  </>
-                }
-                confirmText="Delete"
-                confirmVariant="destructive"
+            {session.data?.user.id !== props.params.id && (
+              <WithPermission
+                permission={{
+                  user: ['delete'],
+                }}
               >
-                <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
-                  <Trash2Icon />
-                </ResponsiveIconButton>
-              </ConfirmResponsiveDrawer>
-            </WithPermission>
+                <ConfirmResponsiveDrawer
+                  onConfirm={() => deleteUser()}
+                  title={`Delete ${userQuery.data?.name ?? userQuery.data?.email ?? 'user'}`}
+                  description={
+                    <>
+                      You are about to permanently delete this user.{' '}
+                      <strong>This action cannot be undone.</strong> Please
+                      confirm your decision carefully.
+                    </>
+                  }
+                  confirmText="Delete"
+                  confirmVariant="destructive"
+                >
+                  <ResponsiveIconButton
+                    variant="ghost"
+                    label="Delete"
+                    size="sm"
+                  >
+                    <Trash2Icon />
+                  </ResponsiveIconButton>
+                </ConfirmResponsiveDrawer>
+              </WithPermission>
+            )}
           </>
         }
       >
