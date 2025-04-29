@@ -30,7 +30,10 @@ type UiState<
     ) => React.ReactNode,
     __matched?: boolean,
     render?: () => React.ReactNode
-  ) => UiState<Status, Data> & { render: () => React.ReactNode };
+  ) => UiState<Exclude<Status, S>, Data> &
+    (Exclude<Status, S> extends never
+      ? { render: () => React.ReactNode }
+      : void);
 };
 
 export const getUiState = <
@@ -73,7 +76,7 @@ export const getUiState = <
           : isMatchingArray(status as Array<Status>)
       ) {
         return {
-          ...uiState,
+          ...(uiState as ExplicitAny),
           __matched: true,
           render: () => handler(state as ExplicitAny),
           match: (status, _handler) =>
