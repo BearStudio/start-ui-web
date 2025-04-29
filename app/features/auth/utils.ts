@@ -1,23 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import { authClient } from '@/lib/auth/client';
 import { Role } from '@/lib/auth/permissions';
-
-export const useSignOut = () => {
-  const router = useRouter();
-  return useMutation({
-    mutationFn: async () => {
-      const response = await authClient.signOut();
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      router.navigate({ to: '/' });
-      return response.data;
-    },
-  });
-};
 
 export const useRedirectAfterLogin = () => {
   const search = useSearch({ strict: false });

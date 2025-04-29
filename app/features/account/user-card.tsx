@@ -6,15 +6,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
-import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
-import { useSignOut } from '@/features/auth/utils';
+import { ConfirmLogout } from '@/features/auth/confirm-logout';
 
 export const UserCard = () => {
   const session = authClient.useSession();
-  const signOut = useSignOut();
   return (
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">
@@ -34,26 +32,12 @@ export const UserCard = () => {
           </div>
         </div>
         <CardAction>
-          <ConfirmResponsiveDrawer
-            onConfirm={async () => signOut.mutateAsync()}
-            title="Account logout"
-            description="You are about to end your session"
-            confirmText={
-              <>
-                <LogOutIcon />
-                Logout
-              </>
-            }
-          >
-            <Button
-              size="sm"
-              variant="ghost"
-              loading={signOut.isPending || signOut.isSuccess}
-            >
+          <ConfirmLogout>
+            <Button size="sm" variant="ghost">
               <LogOutIcon />
-              Logout
+              Logout {/* TODO translations */}
             </Button>
-          </ConfirmResponsiveDrawer>
+          </ConfirmLogout>
         </CardAction>
       </CardHeader>
 
