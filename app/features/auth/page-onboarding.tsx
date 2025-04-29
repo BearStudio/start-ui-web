@@ -16,15 +16,14 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { ConfirmLogout } from '@/features/auth/confirm-logout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
-import { useSignOut } from '@/features/auth/utils';
 
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
   const session = authClient.useSession();
-  const signOut = useSignOut();
 
   const submitOnboarding = useMutation(
     orpc.account.submitOnboarding.mutationOptions({
@@ -55,16 +54,12 @@ export const PageOnboarding = () => {
               email: session.data?.user.email,
             })}
           </p>
-          <Button
-            size="xs"
-            variant="link"
-            className="opacity-80"
-            loading={signOut.isPending || signOut.isSuccess}
-            onClick={() => signOut.mutate()}
-          >
-            <LogOutIcon />
-            {t('auth:pageOnboarding.signOut')}
-          </Button>
+          <ConfirmLogout>
+            <Button size="xs" variant="link" className="opacity-80">
+              <LogOutIcon />
+              {t('auth:pageOnboarding.signOut')}
+            </Button>
+          </ConfirmLogout>
         </div>
       }
     >

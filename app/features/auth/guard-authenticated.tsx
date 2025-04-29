@@ -38,6 +38,11 @@ export const GuardAuthenticated = ({
     return null;
   }
 
+  // Check if onboarding is done
+  if (!session.data.user.onboardedAt) {
+    return <PageOnboarding />;
+  }
+
   // Unauthorized if the user permission do not match
   if (
     permissionApps &&
@@ -49,11 +54,6 @@ export const GuardAuthenticated = ({
     })
   ) {
     return <PageError errorCode={403} />;
-  }
-
-  // Check if onboarding is done
-  if (!session.data.user.onboardedAt) {
-    return <PageOnboarding />;
   }
 
   return <>{children}</>;
