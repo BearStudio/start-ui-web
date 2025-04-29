@@ -22,7 +22,12 @@ type UiState<
   } & Data;
   match: <S extends Status>(
     status: Array<S>,
-    handler: (data: Data) => React.ReactNode,
+    handler: (
+      data: Omit<
+        Extract<UiState<Status, Data>['state'], { __status: S }>,
+        '__status'
+      >
+    ) => React.ReactNode,
     __matched?: boolean,
     render?: () => React.ReactNode
   ) => UiState<Status, Data> & { render: () => React.ReactNode };
@@ -63,9 +68,11 @@ export const getUiState = <
         return {
           ...uiState,
           __matched: true,
-          render: () => handler(state),
+          render: () => handler(state as ExplicitAny),
           match: (status, _handler) =>
-            uiState.match(status, _handler, true, () => handler(uiState.state)),
+            uiState.match(status, _handler, true, () =>
+              handler(uiState.state as ExplicitAny)
+            ),
         };
       }
 
