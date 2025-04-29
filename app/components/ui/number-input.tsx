@@ -15,6 +15,7 @@ type NumberInputProps = ComponentProps<typeof NumberField.Root> &
   InputPropsRoot & {
     inputProps?: Omit<RemoveFromType<InputProps, InputPropsRoot>, 'endElement'>;
     buttons?: 'classic' | 'mobile';
+    inCents?: boolean;
   };
 
 export const NumberInput = ({

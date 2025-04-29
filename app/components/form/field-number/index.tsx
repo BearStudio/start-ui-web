@@ -5,6 +5,7 @@ import {
   FieldPath,
   FieldValues,
 } from 'react-hook-form';
+import { isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -20,6 +21,7 @@ export type FieldNumberProps<
 > = FieldCommonProps<TFieldValues, TName> & {
   type: 'number';
   containerProps?: ComponentProps<'div'>;
+  inCents?: boolean;
 } & RemoveFromType<
     Omit<
       ComponentProps<typeof NumberInput>,
@@ -42,10 +44,22 @@ export const FieldNumber = <
     shouldUnregister,
     control,
     containerProps,
+    inCents,
     ...rest
   } = props;
 
   const ctx = useFormField();
+
+  const formatValue = (
+    value: number | undefined | null,
+    type: 'to-cents' | 'from-cents'
+  ) => {
+    if (isNullish(value)) return null;
+    if (inCents !== true) return value ?? null;
+    if (type === 'to-cents') return Math.round(value * 100);
+    if (type === 'from-cents') return value / 100;
+    return null;
+  };
 
   return (
     <Controller
@@ -55,7 +69,7 @@ export const FieldNumber = <
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
       render={({ field, fieldState }) => {
-        const { onChange, ...fieldProps } = field;
+        const { onChange, value, ...fieldProps } = field;
         return (
           <div
             {...containerProps}
@@ -74,8 +88,9 @@ export const FieldNumber = <
               }
               {...rest}
               {...fieldProps}
+              value={formatValue(value, 'from-cents')}
               onValueChange={(value) => {
-                onChange(value);
+                onChange(formatValue(value, 'to-cents'));
               }}
             />
             <FormFieldError />

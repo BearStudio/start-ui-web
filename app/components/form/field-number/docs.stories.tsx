@@ -98,6 +98,7 @@ export const Currency = () => {
               style: 'currency',
               currency: 'EUR',
             }}
+            inCents
           />
           <FormFieldHelper>Help</FormFieldHelper>
         </FormField>
