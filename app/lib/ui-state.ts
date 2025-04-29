@@ -21,7 +21,7 @@ type UiState<
     __status: Status;
   } & Data;
   match: <S extends Status>(
-    status: Array<S>,
+    status: S | Array<S>,
     handler: (
       data: Omit<
         Extract<UiState<Status, Data>['state'], { __status: S }>,
@@ -51,7 +51,10 @@ export const getUiState = <
     };
   });
 
-  const isMatching = <S extends Status>(
+  const isMatching = <S extends Status>(status: Status): status is S =>
+    status === state.__status;
+
+  const isMatchingArray = <S extends Status>(
     status: Array<Status>
   ): status is Array<S> => status.includes(state.__status);
 
@@ -64,7 +67,11 @@ export const getUiState = <
       return state.__status === status;
     },
     match: (status, handler, __matched = false, render = () => null) => {
-      if (!__matched && isMatching(status)) {
+      if (
+        !__matched && typeof status === 'string'
+          ? isMatching(status)
+          : isMatchingArray(status as Array<Status>)
+      ) {
         return {
           ...uiState,
           __matched: true,
