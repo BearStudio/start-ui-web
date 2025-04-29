@@ -34,16 +34,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Spinner } from '@/components/ui/spinner';
 import { themes } from '@/components/ui/theme-switcher';
 
-import { useSignOut } from '@/features/auth/utils';
+import { ConfirmLogout } from '@/features/auth/confirm-logout';
 
 export function NavUser() {
   const { t } = useTranslation(['common']);
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
-  const signOut = useSignOut();
   const { setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
 
@@ -69,11 +67,7 @@ export function NavUser() {
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
               </div>
-              {signOut.isPending ? (
-                <Spinner className="ml-auto size-4" />
-              ) : (
-                <ChevronsUpDownIcon className="ml-auto size-4" />
-              )}
+              <ChevronsUpDownIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -140,10 +134,16 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut.mutate()}>
-              <LogOutIcon />
-              Log out
-            </DropdownMenuItem>
+            <ConfirmLogout>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <LogOutIcon />
+                Log out
+              </DropdownMenuItem>
+            </ConfirmLogout>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
