@@ -18,6 +18,7 @@ const base = os
     return await next({
       context: {
         user: session?.user,
+        session: session?.session,
         db,
       },
     });
@@ -59,9 +60,9 @@ export const protectedProcedure = ({
   permission: Permission | null;
 }) =>
   base.use(async ({ context, next }) => {
-    const { user } = context;
+    const { user, session } = context;
 
-    if (!user) {
+    if (!user || !session) {
       throw new ORPCError('UNAUTHORIZED');
     }
 
@@ -69,6 +70,7 @@ export const protectedProcedure = ({
       return await next({
         context: {
           user,
+          session,
         },
       });
     }
@@ -91,6 +93,7 @@ export const protectedProcedure = ({
     return await next({
       context: {
         user,
+        session,
       },
     });
   });

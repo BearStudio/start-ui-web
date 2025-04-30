@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { protectedProcedure } from '@/server/orpc';
+import { auth } from '@/server/auth';
+import { getHeaders } from '@/server/utils';
 
 const tags = ['user'];
 
@@ -99,64 +101,6 @@ export default {
       }
 
       return user;
-    }),
-
-  getUserSessions: protectedProcedure({
-    permission: {
-      session: ['list'],
-    },
-  })
-    .route({
-      method: 'GET',
-      path: '/users/{id}/sessions',
-      tags,
-    })
-    .input(
-      z.object({
-        userId: z.string(),
-        cursor: z.string().optional(),
-        limit: z.number().min(1).max(100).default(20),
-      })
-    )
-    .output(
-      z.object({
-        items: z.array(zSession()),
-        nextCursor: z.string().optional(),
-        total: z.number(),
-      })
-    )
-    .handler(async ({ context, input }) => {
-      const where = {
-        userId: input.userId,
-      } satisfies Prisma.SessionWhereInput;
-
-      context.logger.info('Getting user sessions from database');
-      const [total, items] = await context.db.$transaction([
-        context.db.session.count({
-          where,
-        }),
-        context.db.session.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            createdAt: 'desc',
-          },
-          where,
-        }),
-      ]);
-
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
-      }
-
-      return {
-        items,
-        nextCursor,
-        total,
-      };
     }),
 
   updateById: protectedProcedure({
@@ -256,6 +200,183 @@ export default {
             data: error.meta,
           });
         }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
+
+  delete: protectedProcedure({
+    permission: {
+      user: ['delete'],
+    },
+  })
+    .route({
+      method: 'DELETE',
+      path: '/users/{id}',
+      tags,
+    })
+    .input(
+      zUser().pick({
+        id: true,
+      })
+    )
+    .output(z.void())
+    .handler(async ({ context, input }) => {
+      if (context.user.id === input.id) {
+        context.logger.warn('Prevent to delete the current connected user');
+        throw new ORPCError('BAD_REQUEST', {
+          message: 'You cannot delete yourself',
+        });
+      }
+
+      context.logger.info('Delete user');
+      const response = await auth.api.removeUser({
+        body: {
+          userId: input.id,
+        },
+        headers: getHeaders(),
+      });
+
+      if (!response.success) {
+        context.logger.error('Failed to delete the user');
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
+
+  getUserSessions: protectedProcedure({
+    permission: {
+      session: ['list'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/users/{id}/sessions',
+      tags,
+    })
+    .input(
+      z.object({
+        userId: z.string(),
+        cursor: z.string().optional(),
+        limit: z.number().min(1).max(100).default(20),
+      })
+    )
+    .output(
+      z.object({
+        items: z.array(zSession()),
+        nextCursor: z.string().optional(),
+        total: z.number(),
+      })
+    )
+    .handler(async ({ context, input }) => {
+      const where = {
+        userId: input.userId,
+      } satisfies Prisma.SessionWhereInput;
+
+      context.logger.info('Getting user sessions from database');
+      const [total, items] = await context.db.$transaction([
+        context.db.session.count({
+          where,
+        }),
+        context.db.session.findMany({
+          // Get an extra item at the end which we'll use as next cursor
+          take: input.limit + 1,
+          cursor: input.cursor ? { id: input.cursor } : undefined,
+          orderBy: {
+            createdAt: 'desc',
+          },
+          where,
+        }),
+      ]);
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+        total,
+      };
+    }),
+
+  revokeUserSessions: protectedProcedure({
+    permission: {
+      session: ['revoke'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/users/{id}/sessions/revoke',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .output(z.void())
+    .handler(async ({ context, input }) => {
+      if (context.user.id === input.id) {
+        context.logger.warn(
+          'Prevent to revoke all sesssions of the current connected user'
+        );
+        throw new ORPCError('BAD_REQUEST', {
+          message: 'You cannot revoke all your sessions',
+        });
+      }
+
+      context.logger.info('Revoke all user sessions');
+      const response = await auth.api.revokeUserSessions({
+        body: {
+          userId: input.id,
+        },
+        headers: getHeaders(),
+      });
+
+      if (!response.success) {
+        context.logger.error('Failed to revoke all the user sessions');
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
+
+  revokeUserSession: protectedProcedure({
+    permission: {
+      session: ['revoke'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/users/{id}/sessions/{sessionToken}/revoke',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string(),
+        sessionToken: z.string(),
+      })
+    )
+    .output(z.void())
+    .handler(async ({ context, input }) => {
+      if (context.session.token === input.sessionToken) {
+        context.logger.warn(
+          'Prevent to revoke the current connected user session'
+        );
+        throw new ORPCError('BAD_REQUEST', {
+          message: 'You cannot revoke your current session',
+        });
+      }
+
+      context.logger.info('Revoke user session');
+      const response = await auth.api.revokeUserSession({
+        body: {
+          sessionToken: input.sessionToken,
+        },
+        headers: getHeaders(),
+      });
+
+      if (!response.success) {
+        context.logger.error('Failed to revoke the user session');
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),

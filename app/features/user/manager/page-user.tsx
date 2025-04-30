@@ -12,7 +12,6 @@ import { toast } from 'sonner';
 import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
-import { Role } from '@/lib/auth/permissions';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
@@ -62,32 +61,28 @@ export const PageUser = (props: { params: { id: string } }) => {
   );
 
   const deleteUser = async () => {
-    const response = await authClient.admin.removeUser({
-      userId: props.params.id,
-    });
+    try {
+      await orpc.user.delete.call({ id: props.params.id });
+      await Promise.all([
+        // Invalidate users list
+        queryClient.invalidateQueries({
+          queryKey: orpc.user.getAll.key(),
+          type: 'all',
+        }),
+        // Remove user from cache
+        queryClient.removeQueries({
+          queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
+        }),
+      ]);
 
-    if (response.error) {
+      // Redirect
+      if (canGoBack) {
+        router.history.back();
+      } else {
+        router.navigate({ to: '..', replace: true });
+      }
+    } catch {
       toast.error('Failed to delete the user');
-      return;
-    }
-
-    await Promise.all([
-      // Invalidate users list
-      queryClient.invalidateQueries({
-        queryKey: orpc.user.getAll.key(),
-        type: 'all',
-      }),
-      // Remove user from cache
-      queryClient.removeQueries({
-        queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
-      }),
-    ]);
-
-    // Redirect
-    if (canGoBack) {
-      router.history.back();
-    } else {
-      router.navigate({ to: '..', replace: true });
     }
   };
 
@@ -218,7 +213,9 @@ export const PageUser = (props: { params: { id: string } }) => {
               </Card>
 
               <div className="flex flex-2 flex-col">
-                <UserSessions userId={props.params.id} />
+                <WithPermission permission={{ session: ['list'] }}>
+                  <UserSessions userId={props.params.id} />
+                </WithPermission>
               </div>
             </div>
           ))
@@ -229,19 +226,8 @@ export const PageUser = (props: { params: { id: string } }) => {
 };
 
 const UserSessions = (props: { userId: string }) => {
-  const queryClient = useQueryClient();
-  const currentSession = authClient.useSession();
-
   const sessionsQuery = useInfiniteQuery(
     orpc.user.getUserSessions.infiniteOptions({
-      enabled: currentSession.data?.user.role
-        ? authClient.admin.checkRolePermission({
-            role: currentSession.data.user.role as Role,
-            permission: {
-              session: ['list'],
-            },
-          })
-        : false,
       input: (cursor: string | undefined) => ({
         userId: props.userId,
         cursor,
@@ -252,42 +238,6 @@ const UserSessions = (props: { userId: string }) => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     })
   );
-
-  const revokeAllSessions = useMutation({
-    mutationFn: async ({ userId }: { userId: string }) => {
-      const response = await authClient.admin.revokeUserSessions({
-        userId,
-      });
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      await queryClient.invalidateQueries({
-        queryKey: orpc.user.getUserSessions.key({
-          input: { userId: props.userId },
-          type: 'infinite',
-        }),
-      });
-      return response.data;
-    },
-  });
-
-  const revokeSession = useMutation({
-    mutationFn: async ({ sessionToken }: { sessionToken: string }) => {
-      const response = await authClient.admin.revokeUserSession({
-        sessionToken,
-      });
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      await queryClient.invalidateQueries({
-        queryKey: orpc.user.getUserSessions.key({
-          input: { userId: props.userId },
-          type: 'infinite',
-        }),
-      });
-      return response.data;
-    },
-  });
 
   const ui = getUiState((set) => {
     if (sessionsQuery.status === 'pending') return set('pending');
@@ -310,23 +260,9 @@ const UserSessions = (props: { userId: string }) => {
 
           <WithPermission permission={{ session: ['revoke'] }}>
             <DataListCell className="flex-none">
-              <Button
-                type="button"
-                size="sm"
-                variant="secondary"
-                disabled={
-                  currentSession.data?.user.id === props.userId ||
-                  ui.is('empty')
-                }
-                loading={revokeAllSessions.isPending}
-                onClick={() => {
-                  revokeAllSessions.mutate({
-                    userId: props.userId,
-                  });
-                }}
-              >
-                Revoke all
-              </Button>
+              {ui.is('default') && (
+                <RevokeAllSessionsButton userId={props.userId} />
+              )}
             </DataListCell>
           </WithPermission>
         </DataListRow>
@@ -363,22 +299,10 @@ const UserSessions = (props: { userId: string }) => {
                   </DataListCell>
                   <WithPermission permission={{ session: ['revoke'] }}>
                     <DataListCell className="flex-none">
-                      <Button
-                        type="button"
-                        size="xs"
-                        variant="secondary"
-                        disabled={
-                          currentSession.data?.session.token === item.token
-                        }
-                        loading={revokeSession.isPending}
-                        onClick={() => {
-                          revokeSession.mutate({
-                            sessionToken: item.token,
-                          });
-                        }}
-                      >
-                        Revoke
-                      </Button>
+                      <RevokeSessionButton
+                        userId={props.userId}
+                        sessionToken={item.token}
+                      />
                     </DataListCell>
                   </WithPermission>
                 </DataListRow>
@@ -408,5 +332,82 @@ const UserSessions = (props: { userId: string }) => {
           .exhaustive()}
       </DataList>
     </WithPermission>
+  );
+};
+
+const RevokeAllSessionsButton = (props: { userId: string }) => {
+  const queryClient = useQueryClient();
+  const currentSession = authClient.useSession();
+  const revokeAllSessions = useMutation(
+    orpc.user.revokeUserSessions.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: orpc.user.getUserSessions.key({
+            input: { userId: props.userId },
+            type: 'infinite',
+          }),
+        });
+      },
+      onError: () => {
+        toast.error('Failed to revoke all sessions');
+      },
+    })
+  );
+
+  return (
+    <Button
+      type="button"
+      size="xs"
+      variant="secondary"
+      disabled={currentSession.data?.user.id === props.userId}
+      loading={revokeAllSessions.isPending}
+      onClick={() => {
+        revokeAllSessions.mutate({
+          id: props.userId,
+        });
+      }}
+    >
+      Revoke all
+    </Button>
+  );
+};
+
+const RevokeSessionButton = (props: {
+  userId: string;
+  sessionToken: string;
+}) => {
+  const queryClient = useQueryClient();
+  const currentSession = authClient.useSession();
+  const revokeSession = useMutation(
+    orpc.user.revokeUserSession.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: orpc.user.getUserSessions.key({
+            input: { userId: props.userId },
+            type: 'infinite',
+          }),
+        });
+      },
+      onError: () => {
+        toast.error('Failed to revoke sessions');
+      },
+    })
+  );
+  return (
+    <Button
+      type="button"
+      size="xs"
+      variant="secondary"
+      disabled={currentSession.data?.session.token === props.sessionToken}
+      loading={revokeSession.isPending}
+      onClick={() => {
+        revokeSession.mutate({
+          id: props.userId,
+          sessionToken: props.sessionToken,
+        });
+      }}
+    >
+      Revoke
+    </Button>
   );
 };
