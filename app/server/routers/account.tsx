@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
-import { protectedProcedure } from '@/server/orpc';
 import { zUser } from '@/features/user/schema';
+import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['account'];
 
