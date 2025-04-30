@@ -9,7 +9,6 @@ import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
-import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
@@ -140,23 +139,21 @@ export const PageUser = (props: { params: { id: string } }) => {
         }
       >
         <PageLayoutTopBarTitle>
-          {match(ui.state)
-            .with(ui.with('pending'), () => <Skeleton className="h-4 w-48" />)
-            .with(ui.with('not-found'), ui.with('error'), () => (
+          {ui
+            .match('pending', () => <Skeleton className="h-4 w-48" />)
+            .match(['not-found', 'error'], () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .with(ui.with('default'), ({ user }) => (
-              <>{user.name || user.email}</>
-            ))
-            .exhaustive()}
+            .match('default', ({ user }) => <>{user.name || user.email}</>)
+            .render()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(ui.state)
-          .with(ui.with('pending'), () => <Spinner full />)
-          .with(ui.with('not-found'), () => <PageError errorCode={404} />)
-          .with(ui.with('error'), () => <PageError />)
-          .with(ui.with('default'), ({ user }) => (
+        {ui
+          .match('pending', () => <Spinner full />)
+          .match('not-found', () => <PageError errorCode={404} />)
+          .match('error', () => <PageError />)
+          .match('default', ({ user }) => (
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
               <Card className="relative flex-1">
                 <CardHeader>
@@ -221,7 +218,7 @@ export const PageUser = (props: { params: { id: string } }) => {
               </div>
             </div>
           ))
-          .exhaustive()}
+          .render()}
       </PageLayoutContent>
     </PageLayout>
   );
@@ -268,18 +265,17 @@ const UserSessions = (props: { userId: string }) => {
             </DataListCell>
           </WithPermissions>
         </DataListRow>
-
-        {match(ui.state)
-          .with(ui.with('pending'), () => <DataListLoadingState />)
-          .with(ui.with('error'), () => (
+        {ui
+          .match('pending', () => <DataListLoadingState />)
+          .match('error', () => (
             <DataListErrorState retry={() => sessionsQuery.refetch()} />
           ))
-          .with(ui.with('empty'), () => (
+          .match('empty', () => (
             <DataListEmptyState className="min-h-20">
               No user sessions
             </DataListEmptyState>
           ))
-          .with(ui.with('default'), ({ items }) => (
+          .match('default', ({ items }) => (
             <>
               {items.map((item) => (
                 <DataListRow
@@ -331,7 +327,7 @@ const UserSessions = (props: { userId: string }) => {
               </DataListRow>
             </>
           ))
-          .exhaustive()}
+          .render()}
       </DataList>
     </WithPermissions>
   );

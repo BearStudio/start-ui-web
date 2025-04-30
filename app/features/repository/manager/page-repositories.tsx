@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { BookMarkedIcon, PlusIcon } from 'lucide-react';
-import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
@@ -97,16 +96,16 @@ export const PageRepositories = (props: {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(ui.state)
-            .with(ui.with('pending'), () => <DataListLoadingState />)
-            .with(ui.with('error'), () => (
+          {ui
+            .match('pending', () => <DataListLoadingState />)
+            .match('error', () => (
               <DataListErrorState retry={() => repositoriesQuery.refetch()} />
             ))
-            .with(ui.with('empty'), () => <DataListEmptyState />)
-            .with(ui.with('empty-search'), ({ searchTerm }) => (
+            .match('empty', () => <DataListEmptyState />)
+            .match('empty-search', ({ searchTerm }) => (
               <DataListEmptyState searchTerm={searchTerm} />
             ))
-            .with(ui.with('default'), ({ items, searchTerm, total }) => (
+            .match('default', ({ items, searchTerm, total }) => (
               <>
                 {!!searchTerm && (
                   <DataListRowResults
@@ -168,7 +167,7 @@ export const PageRepositories = (props: {
                 </DataListRow>
               </>
             ))
-            .exhaustive()}
+            .render()}
         </DataList>
       </PageLayoutContent>
     </PageLayout>

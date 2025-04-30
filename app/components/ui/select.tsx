@@ -7,7 +7,6 @@ import { Portal } from '@ark-ui/react/portal';
 import { ChevronDown, X } from 'lucide-react';
 import { ComponentProps, ReactNode, useMemo, useState } from 'react';
 import { isNonNullish, isNullish } from 'remeda';
-import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 import { getUiState } from '@/lib/ui-state';
@@ -157,15 +156,10 @@ export const Select = <Option extends OptionBase>({
       <Portal>
         <Combobox.Positioner>
           <Combobox.Content className="z-10 rounded-md bg-white p-1 shadow dark:bg-neutral-900">
-            {match(ui.state)
-              .with(
-                ui.with('empty'),
-                () => <div className="p-4">No results found</div> // TODO translate
-              )
-              .with(ui.with('empty-override'), ({ renderEmpty }) =>
-                renderEmpty(search)
-              )
-              .with(ui.with('default'), () => (
+            {ui
+              .match('empty', () => <div className="p-4">No results found</div>)
+              .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
+              .match('default', () => (
                 <Combobox.ItemGroup className="flex flex-col gap-0.5">
                   {collection.items.slice(0, 20).map((item) => (
                     <Combobox.Item
@@ -183,7 +177,7 @@ export const Select = <Option extends OptionBase>({
                   ))}
                 </Combobox.ItemGroup>
               ))
-              .exhaustive()}
+              .render()}
           </Combobox.Content>
         </Combobox.Positioner>
       </Portal>

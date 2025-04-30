@@ -11,11 +11,6 @@ type UiState<
   Status extends AvailableStatus,
   Data extends Record<string, unknown>,
 > = {
-  with: <S extends Status>(
-    status: S
-  ) => {
-    __status: S;
-  };
   is: <S extends Status>(status: S) => boolean;
   state: {
     __status: Status;
@@ -30,10 +25,9 @@ type UiState<
     ) => React.ReactNode,
     __matched?: boolean,
     render?: () => React.ReactNode
-  ) => UiState<Exclude<Status, S>, Data> &
-    (Exclude<Status, S> extends never
-      ? { render: () => React.ReactNode }
-      : void);
+  ) => Exclude<Status, S> extends never
+    ? { render: () => React.ReactNode }
+    : Pick<UiState<Exclude<Status, S>, Data>, 'match'>;
 };
 
 export const getUiState = <
@@ -63,9 +57,6 @@ export const getUiState = <
 
   const uiState: UiState<Status, Data> = {
     state,
-    with: (status) => ({
-      __status: status,
-    }),
     is: (status) => {
       return state.__status === status;
     },
