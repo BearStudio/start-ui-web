@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
@@ -41,69 +40,36 @@ export const PageRepositories = () => {
       <PageLayoutTopBar>
         <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
-      <PageLayoutContent className="flex">
-        <div className="flex flex-1">
-          {ui
-            .match('pending', () => <>Loading...</>)
-            .match('error', () => <PageError />)
-            .match('empty', () => <>No repo</>)
-            .match('default', ({ items }) => (
-              <>
-                {items.map((item) => (
-                  <Link
-                    key={item.id}
-                    to="/app/repositories/$id"
-                    params={{ id: item.id }}
-                  >
-                    Repo: {item.name}
-                  </Link>
-                ))}
-                {repositoriesQuery.hasNextPage && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="link"
-                    onClick={() => repositoriesQuery.fetchNextPage()}
-                    loading={repositoriesQuery.isFetchingNextPage}
-                  >
-                    Load more
-                  </Button>
-                )}
-              </>
-            ))
-            .render()}
-        </div>
-        <div className="flex flex-1">
-          {match(ui.state)
-            .with(ui.with('pending'), () => <>Loading...</>) // TODO Design
-            .with(ui.with('error'), () => <PageError />)
-            .with(ui.with('empty'), () => <>No Repo</>) // TODO Design
-            .with(ui.with('default'), ({ items }) => (
-              <>
-                {items.map((item) => (
-                  <Link
-                    key={item.id}
-                    to="/app/repositories/$id"
-                    params={{ id: item.id }}
-                  >
-                    Repo: {item.name}
-                  </Link>
-                ))}
-                {repositoriesQuery.hasNextPage && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="link"
-                    onClick={() => repositoriesQuery.fetchNextPage()}
-                    loading={repositoriesQuery.isFetchingNextPage}
-                  >
-                    Load more
-                  </Button>
-                )}
-              </>
-            ))
-            .exhaustive()}
-        </div>
+      <PageLayoutContent>
+        {ui
+          .match('pending', () => <>Loading...</>)
+          .match('error', () => <PageError />)
+          .match('empty', () => <>No repo</>)
+          .match('default', ({ items }) => (
+            <>
+              {items.map((item) => (
+                <Link
+                  key={item.id}
+                  to="/app/repositories/$id"
+                  params={{ id: item.id }}
+                >
+                  Repo: {item.name}
+                </Link>
+              ))}
+              {repositoriesQuery.hasNextPage && (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="link"
+                  onClick={() => repositoriesQuery.fetchNextPage()}
+                  loading={repositoriesQuery.isFetchingNextPage}
+                >
+                  Load more
+                </Button>
+              )}
+            </>
+          ))
+          .render()}
       </PageLayoutContent>
     </PageLayout>
   );
