@@ -3,8 +3,8 @@ import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
-import { protectedProcedure } from '@/server/orpc';
 import { auth } from '@/server/auth';
+import { protectedProcedure } from '@/server/orpc';
 import { getHeaders } from '@/server/utils';
 
 const tags = ['user'];
