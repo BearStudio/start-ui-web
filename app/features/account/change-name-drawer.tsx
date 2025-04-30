@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { orpc } from '@/lib/orpc/client';
 
 import {
   Form,
@@ -41,26 +42,23 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
     },
   });
 
-  const updateUser = useMutation({
-    mutationFn: async (variables: { name: string }) => {
-      await authClient.updateUser({
-        name: variables.name,
-      });
-      await session.refetch();
-    },
-    onSuccess: () => {
-      toast.success('Name updated');
-      form.reset();
-      router.navigate({
-        replace: true,
-        to: '.',
-        search: {
-          state: '',
-        },
-      });
-    },
-    onError: () => toast.error('Failed to update your name'),
-  });
+  const updateUser = useMutation(
+    orpc.account.updateInfo.mutationOptions({
+      onSuccess: async () => {
+        await session.refetch();
+        toast.success('Name updated');
+        form.reset();
+        router.navigate({
+          replace: true,
+          to: '.',
+          search: {
+            state: '',
+          },
+        });
+      },
+      onError: () => toast.error('Failed to update your name'),
+    })
+  );
 
   return (
     <ResponsiveDrawer
