@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 
 import { Permission } from '@/lib/auth/client';
 
+import { envClient } from '@/env/client';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';
@@ -23,6 +24,7 @@ const base = os
       },
     });
   })
+
   // Logger
   .use(async ({ next, context, procedure, path }) => {
     const start = Date.now();
@@ -46,10 +48,28 @@ const base = os
 
       return result;
     } catch (error) {
-      loggerForMiddleWare.error(error);
+      const logLevel = (() => {
+        if (!(error instanceof ORPCError)) return 'error';
+        if (error.message === 'DEMO_MODE_ENABLED') return 'info';
+        const errorCode = error.status;
+        if (errorCode >= 500) return 'error';
+        if (errorCode >= 400) return 'warn';
+        if (errorCode >= 300) return 'info';
+        return 'error';
+      })();
 
+      loggerForMiddleWare[logLevel](error);
       throw error;
     }
+  })
+  // Demo Mode
+  .use(async ({ next, procedure }) => {
+    if (envClient.VITE_IS_DEMO && procedure['~orpc'].route.method !== 'GET') {
+      throw new ORPCError('METHOD_NOT_SUPPORTED', {
+        message: 'DEMO_MODE_ENABLED',
+      });
+    }
+    return await next();
   });
 
 export const publicProcedure = () => base;

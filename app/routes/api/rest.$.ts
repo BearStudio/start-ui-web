@@ -1,5 +1,4 @@
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
-import { onError } from '@orpc/server';
 import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
 import { createAPIFileRoute } from '@tanstack/react-start/api';
 
@@ -7,11 +6,6 @@ import { router } from '@/server/router';
 
 const handler = new OpenAPIHandler(router, {
   plugins: [new CORSPlugin(), new ResponseHeadersPlugin()],
-  interceptors: [
-    onError((error) => {
-      console.error(error);
-    }),
-  ],
 });
 
 async function handle({ request }: { request: Request }) {
