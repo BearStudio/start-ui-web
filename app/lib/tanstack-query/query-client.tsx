@@ -1,7 +1,4 @@
-import { ORPCError } from '@orpc/client';
-import { MutationCache, QueryClient } from '@tanstack/react-query';
-
-import { openDemoModeDrawer } from '@/features/demo-mode/demo-mode-drawer';
+import { QueryClient } from '@tanstack/react-query';
 
 const networkMode = import.meta.dev ? 'always' : undefined;
 
@@ -14,11 +11,4 @@ export const queryClient = new QueryClient({
       networkMode,
     },
   },
-  mutationCache: new MutationCache({
-    onError: (error) => {
-      if (error instanceof ORPCError && error.message === 'DEMO_MODE_ENABLED') {
-        openDemoModeDrawer();
-      }
-    },
-  }),
 });
