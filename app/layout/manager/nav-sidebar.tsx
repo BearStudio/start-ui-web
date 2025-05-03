@@ -25,6 +25,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
+import { WithPermissions } from '@/features/auth/with-permission';
 import { NavUser } from '@/layout/manager/nav-user';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
@@ -90,26 +91,34 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>Configuration</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={
-                      !!matchRoute({ to: '/manager/users', fuzzy: true })
-                    }
-                  >
-                    <Link to="/manager/users">
-                      <UsersIcon />
-                      <span>Users</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <WithPermissions
+            permissions={[
+              {
+                user: ['list'],
+              },
+            ]}
+          >
+            <SidebarGroup>
+              <SidebarGroupLabel>Configuration</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={
+                        !!matchRoute({ to: '/manager/users', fuzzy: true })
+                      }
+                    >
+                      <Link to="/manager/users">
+                        <UsersIcon />
+                        <span>Users</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </WithPermissions>
         </SidebarContent>
         <SidebarFooter>
           <NavUser />
