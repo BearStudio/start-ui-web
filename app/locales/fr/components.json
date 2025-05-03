@@ -32,5 +32,16 @@
   "searchInput": {
     "clear": "Effacer la recherche",
     "placeholder": "Rechercher..."
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Annuler",
+    "confirmText": "Confirmer",
+    "heading": "Êtes-vous sûr?"
+  },
+  "datalist": {
+    "emptyTitle": "Aucune donnée",
+    "errorTitle": "Une erreur s'est produite",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
+    "retry": "Réessayer"
   }
 }

@@ -1,0 +1,15 @@
+{
+  "fields": {
+    "email": {
+      "invalid": "Email non valide",
+      "label": "Email",
+      "required": "L'email est requis"
+    },
+    "name": {
+      "invalid": "Le nom n'est pas valide",
+      "label": "Nom",
+      "onboardingLabel": "Quel est votre nom?",
+      "required": "Le nom est requis"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "fields": {
+    "email": {
+      "invalid": "Barua pepe ni batili",
+      "label": "Barua pepe",
+      "required": "Barua pepe inahitajika"
+    },
+    "name": {
+      "invalid": "Jina sio batili",
+      "label": "Jina",
+      "onboardingLabel": "Jina lako ni nani?",
+      "required": "Jina linahitajika"
+    }
+  }
+}
