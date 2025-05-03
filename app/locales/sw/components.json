@@ -32,5 +32,16 @@
   "searchInput": {
     "clear": "Utaftaji wazi",
     "placeholder": "Tafuta ..."
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Ghairi",
+    "confirmText": "Thibitisha",
+    "heading": "Una uhakika?"
+  },
+  "datalist": {
+    "emptyTitle": "Hakuna data",
+    "errorTitle": "Kitu kilienda vibaya",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
+    "retry": "Jaribu tena"
   }
 }
