@@ -6,6 +6,11 @@ const isProd = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'production'
   : import.meta.env?.PROD;
 
+const skipValidation = process.env.SKIP_ENV_VALIDATION
+  ? !!process.env.SKIP_ENV_VALIDATION
+  : // eslint-disable-next-line no-restricted-syntax
+    !!import.meta.env?.SKIP_ENV_VALIDATION;
+
 export const envServer = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
@@ -29,6 +34,7 @@ export const envServer = createEnv({
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
+  skipValidation,
 });
 
 function zOptionalWithReplaceMe() {
