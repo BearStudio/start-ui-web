@@ -41,7 +41,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
-import { WithPermission } from '@/features/auth/with-permission';
+import { WithPermissions } from '@/features/auth/with-permission';
 import {
   PageLayout,
   PageLayoutContent,
@@ -106,10 +106,12 @@ export const PageUser = (props: { params: { id: string } }) => {
         actions={
           <>
             {session.data?.user.id !== props.params.id && (
-              <WithPermission
-                permission={{
-                  user: ['delete'],
-                }}
+              <WithPermissions
+                permissions={[
+                  {
+                    user: ['delete'],
+                  },
+                ]}
               >
                 <ConfirmResponsiveDrawer
                   onConfirm={() => deleteUser()}
@@ -132,7 +134,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                     <Trash2Icon />
                   </ResponsiveIconButton>
                 </ConfirmResponsiveDrawer>
-              </WithPermission>
+              </WithPermissions>
             )}
           </>
         }
@@ -172,7 +174,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                       </CardTitle>
                       <CardDescription>{user.email}</CardDescription>
                     </div>
-                    <WithPermission permission={{ user: ['set-role'] }}>
+                    <WithPermissions permissions={[{ user: ['set-role'] }]}>
                       <Link
                         to="/manager/users/$id/update"
                         params={props.params}
@@ -186,7 +188,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                         </Button>
                         <span className="absolute inset-0" />
                       </Link>
-                    </WithPermission>
+                    </WithPermissions>
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
@@ -213,9 +215,9 @@ export const PageUser = (props: { params: { id: string } }) => {
               </Card>
 
               <div className="flex flex-2 flex-col">
-                <WithPermission permission={{ session: ['list'] }}>
+                <WithPermissions permissions={[{ session: ['list'] }]}>
                   <UserSessions userId={props.params.id} />
-                </WithPermission>
+                </WithPermissions>
               </div>
             </div>
           ))
@@ -251,20 +253,20 @@ const UserSessions = (props: { userId: string }) => {
   });
 
   return (
-    <WithPermission permission={{ session: ['list'] }}>
+    <WithPermissions permissions={[{ session: ['list'] }]}>
       <DataList>
         <DataListRow>
           <DataListCell>
             <h2 className="text-sm font-medium">User Sessions</h2>
           </DataListCell>
 
-          <WithPermission permission={{ session: ['revoke'] }}>
+          <WithPermissions permissions={[{ session: ['revoke'] }]}>
             <DataListCell className="flex-none">
               {ui.is('default') && (
                 <RevokeAllSessionsButton userId={props.userId} />
               )}
             </DataListCell>
-          </WithPermission>
+          </WithPermissions>
         </DataListRow>
 
         {match(ui.state)
@@ -297,14 +299,14 @@ const UserSessions = (props: { userId: string }) => {
                       Expires {dayjs().to(item.expiresAt)}
                     </DataListText>
                   </DataListCell>
-                  <WithPermission permission={{ session: ['revoke'] }}>
+                  <WithPermissions permissions={[{ session: ['revoke'] }]}>
                     <DataListCell className="flex-none">
                       <RevokeSessionButton
                         userId={props.userId}
                         sessionToken={item.token}
                       />
                     </DataListCell>
-                  </WithPermission>
+                  </WithPermissions>
                 </DataListRow>
               ))}
               <DataListRow>
@@ -331,7 +333,7 @@ const UserSessions = (props: { userId: string }) => {
           ))
           .exhaustive()}
       </DataList>
-    </WithPermission>
+    </WithPermissions>
   );
 };
 
