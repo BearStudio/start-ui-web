@@ -1,6 +1,7 @@
 import { expect, Page } from '@playwright/test';
 
 import { AUTH_EMAIL_OTP_MOCKED, AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 import locales from '@/locales';
 import { FileRouteTypes } from '@/routeTree.gen';
@@ -31,16 +32,18 @@ export const pageUtils = (page: Page) => {
       await page.waitForURL(`**${routeLogin}**`);
 
       await expect(
-        page.getByText(locales.en.auth.pageLoginWithSignUp.title)
+        page.getByText(
+          locales[DEFAULT_LANGUAGE_KEY].auth.pageLoginWithSignUp.title
+        )
       ).toBeVisible();
 
       await page
-        .getByPlaceholder(locales.en.auth.fields.email.label)
+        .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.fields.email.label)
         .fill(input.email);
 
       await page
         .getByRole('button', {
-          name: locales.en.auth[
+          name: locales[DEFAULT_LANGUAGE_KEY].auth[
             AUTH_SIGNUP_ENABLED ? 'pageLoginWithSignUp' : 'pageLogin'
           ].loginWithEmail,
         })
@@ -48,7 +51,7 @@ export const pageUtils = (page: Page) => {
 
       await page.waitForURL(`**${routeLoginVerify}**`);
       await page
-        .getByText(locales.en.auth.fields.otp.label)
+        .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.fields.otp.label)
         .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
     },
   } as const;
