@@ -1,6 +1,6 @@
 import { NumberField } from '@base-ui-components/react';
 import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
-import { ComponentProps } from 'react';
+import { ComponentProps, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
@@ -27,8 +27,10 @@ export const NumberInput = ({
   locale,
   buttons,
   className,
+  onKeyDown,
   ...props
 }: NumberInputProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { i18n } = useTranslation();
   const buttonSize = match(size)
     .with('default', undefined, null, () => 'icon' as const)
@@ -39,7 +41,20 @@ export const NumberInput = ({
   const _locale = locale ?? i18n.language;
 
   return (
-    <NumberField.Root {...props} locale={_locale} className={cn(className)}>
+    <NumberField.Root
+      invalid={!!ariaInvalid}
+      {...props}
+      locale={_locale}
+      className={cn(className)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          // Make sure that the value is updated when pressing enter
+          inputRef.current?.blur();
+          inputRef.current?.focus();
+        }
+        onKeyDown?.(e);
+      }}
+    >
       <NumberField.Group className="flex gap-2">
         {buttons === 'mobile' && (
           <NumberField.Decrement
@@ -51,6 +66,7 @@ export const NumberInput = ({
         <NumberField.Input
           render={
             <Input
+              ref={inputRef}
               endElement={
                 buttons === 'classic' && (
                   <NumberField.Group className="flex flex-col">
@@ -65,7 +81,6 @@ export const NumberInput = ({
               }
               size={size}
               placeholder={placeholder}
-              aria-invalid={ariaInvalid}
               {...inputProps}
             />
           }
