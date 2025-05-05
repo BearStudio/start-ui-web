@@ -5,7 +5,6 @@ import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { match } from 'ts-pattern';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
@@ -133,14 +132,12 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           }
         >
           <PageLayoutTopBarTitle>
-            {match(ui.state)
-              .with(ui.with('pending'), () => <Skeleton className="h-4 w-48" />)
-              .with(ui.with('not-found'), ui.with('error'), () => (
+            {ui
+              .match('pending', () => <Skeleton className="h-4 w-48" />)
+              .match(['not-found', 'error'], () => (
                 <AlertCircleIcon className="size-4 text-muted-foreground" />
               ))
-              .with(ui.with('default'), ({ user }) => (
-                <>{user.name || user.email}</>
-              ))
+              .match('default', ({ user }) => <>{user.name || user.email}</>)
               .exhaustive()}
           </PageLayoutTopBarTitle>
         </PageLayoutTopBar>

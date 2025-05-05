@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
@@ -42,11 +41,11 @@ export const PageRepositories = () => {
         <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(ui.state)
-          .with(ui.with('pending'), () => <>Loading...</>) // TODO Design
-          .with(ui.with('error'), () => <PageError />)
-          .with(ui.with('empty'), () => <>No Repo</>) // TODO Design
-          .with(ui.with('default'), ({ items }) => (
+        {ui
+          .match('pending', () => <>Loading...</>)
+          .match('error', () => <PageError />)
+          .match('empty', () => <>No repo</>)
+          .match('default', ({ items }) => (
             <>
               {items.map((item) => (
                 <Link

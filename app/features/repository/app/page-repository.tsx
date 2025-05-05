@@ -1,7 +1,6 @@
 import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
-import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
@@ -55,23 +54,21 @@ export const PageRepository = (props: { params: { id: string } }) => {
         }
       >
         <PageLayoutTopBarTitle>
-          {match(ui.state)
-            .with(ui.with('pending'), () => <Skeleton className="h-4 w-48" />)
-            .with(ui.with('not-found'), ui.with('error'), () => (
+          {ui
+            .match('pending', () => <Skeleton className="h-4 w-48" />)
+            .match(['not-found', 'error'], () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .with(ui.with('default'), ({ repository }) => (
-              <>{repository.name}</>
-            ))
+            .match('default', ({ repository }) => <>{repository.name}</>)
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
-        {match(ui.state)
-          .with(ui.with('pending'), () => <Spinner full />)
-          .with(ui.with('not-found'), () => <PageError errorCode={404} />)
-          .with(ui.with('error'), () => <PageError />)
-          .with(ui.with('default'), ({ repository }) => <>{repository.name}</>)
+        {ui
+          .match('pending', () => <Spinner full />)
+          .match('not-found', () => <PageError errorCode={404} />)
+          .match('error', () => <PageError />)
+          .match('default', ({ repository }) => <>{repository.name}</>)
           .exhaustive()}
       </PageLayoutContent>
     </PageLayout>
