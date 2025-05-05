@@ -15,8 +15,8 @@ const badgeVariants = cva(
           'border-transparent bg-negative-100 text-negative-800 dark:bg-negative-500/25 dark:text-negative-100',
         warning:
           'border-transparent bg-warning-100 text-warning-800 dark:bg-warning-500/25 dark:text-warning-100',
-        success:
-          'border-transparent bg-success-100 text-success-800 dark:bg-success-500/25 dark:text-success-100',
+        positive:
+          'border-transparent bg-positive-100 text-positive-800 dark:bg-positive-500/25 dark:text-positive-100',
         outline: 'text-foreground',
       },
       size: {

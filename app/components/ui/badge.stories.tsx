@@ -17,7 +17,7 @@ export function Variants() {
       <Badge variant="secondary">Secondary</Badge>
       <Badge variant="negative">Negative</Badge>
       <Badge variant="warning">Warning</Badge>
-      <Badge variant="success">Success</Badge>
+      <Badge variant="positive">Positive</Badge>
       <Badge variant="outline">Outline</Badge>
     </div>
   );
