@@ -1,5 +1,18 @@
 import dayjs from 'dayjs';
 
+const spacers = [' ', '.', '/', '-', '_'];
+const DD_MM = (year?: 'YY' | 'YYYY') => {
+  return spacers.flatMap((spacer) => {
+    const yearFormat = year ? `${spacer}${year}` : '';
+    return [
+      `D${spacer}M${yearFormat}`,
+      `DD${spacer}M${yearFormat}`,
+      `D${spacer}MM${yearFormat}`,
+      `DD${spacer}MM${yearFormat}`,
+    ];
+  });
+};
+
 export const parseStringToDate = (
   input: string,
   extraFormats: Array<string> = []
@@ -8,22 +21,14 @@ export const parseStringToDate = (
     input,
     [
       ...extraFormats,
+      'D',
       'DD',
       'DDMM',
-      'DD/MM',
-      'DD-MM',
-      'DD.MM',
-      'DD MM',
       'DDMMYY',
-      'DD/MM/YY',
-      'DD-MM-YY',
-      'DD.MM.YY',
-      'DD MM YY',
       'DDMMYYYY',
-      'DD/MM/YYYY',
-      'DD-MM-YYYY',
-      'DD.MM.YYYY',
-      'DD MM YYYY',
+      ...DD_MM(),
+      ...DD_MM('YY'),
+      ...DD_MM('YYYY'),
     ],
     true
   ).toDate();
