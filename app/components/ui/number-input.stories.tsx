@@ -15,6 +15,10 @@ export const Placeholder = () => {
   return <NumberInput placeholder="Enter a number" />;
 };
 
+export const Invalid = () => {
+  return <NumberInput aria-invalid />;
+};
+
 export const Disabled = () => {
   return (
     <div className="flex flex-col gap-2">
@@ -31,6 +35,16 @@ export const Readonly = () => {
       <NumberInput readOnly />
       <NumberInput readOnly buttons="classic" />
       <NumberInput readOnly buttons="mobile" />
+    </div>
+  );
+};
+
+export const Sizes = () => {
+  return (
+    <div className="flex flex-col gap-2">
+      <NumberInput size="sm" />
+      <NumberInput />
+      <NumberInput size="lg" />
     </div>
   );
 };
