@@ -2,6 +2,7 @@ import { NumberField } from '@base-ui-components/react';
 import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
+import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -9,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 type InputProps = ComponentProps<typeof Input>;
-type InputPropsRoot = Pick<InputProps, 'placeholder'>;
+type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size' | 'aria-invalid'>;
 
 type NumberInputProps = ComponentProps<typeof NumberField.Root> &
   InputPropsRoot & {
@@ -19,7 +20,9 @@ type NumberInputProps = ComponentProps<typeof NumberField.Root> &
   };
 
 export const NumberInput = ({
+  'aria-invalid': ariaInvalid,
   inputProps,
+  size,
   placeholder,
   locale,
   buttons,
@@ -27,6 +30,11 @@ export const NumberInput = ({
   ...props
 }: NumberInputProps) => {
   const { i18n } = useTranslation();
+  const buttonSize = match(size)
+    .with('default', undefined, null, () => 'icon' as const)
+    .with('sm', () => 'icon-sm' as const)
+    .with('lg', () => 'icon-lg' as const)
+    .exhaustive();
 
   const _locale = locale ?? i18n.language;
 
@@ -35,7 +43,7 @@ export const NumberInput = ({
       <NumberField.Group className="flex gap-2">
         {buttons === 'mobile' && (
           <NumberField.Decrement
-            render={<Button variant="secondary" size="icon" />}
+            render={<Button variant="secondary" size={buttonSize} />}
           >
             <Minus />
           </NumberField.Decrement>
@@ -55,14 +63,16 @@ export const NumberInput = ({
                   </NumberField.Group>
                 )
               }
+              size={size}
               placeholder={placeholder}
+              aria-invalid={ariaInvalid}
               {...inputProps}
             />
           }
         />
         {buttons === 'mobile' && (
           <NumberField.Increment
-            render={<Button variant="secondary" size="icon" />}
+            render={<Button variant="secondary" size={buttonSize} />}
           >
             <Plus />
           </NumberField.Increment>
