@@ -85,6 +85,7 @@ export const useDatePickerInputManagement = (
 export const DateInput = ({
   onChange,
   onBlur,
+  onKeyDown,
   value,
   format = 'DD/MM/YYYY',
   ...props
@@ -104,6 +105,12 @@ export const DateInput = ({
       onBlur={(e) => {
         datePickerInputManagement.handleInputBlur(e.target.value);
         onBlur?.(e);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          datePickerInputManagement.handleInputBlur(e.currentTarget.value);
+        }
+        onKeyDown?.(e);
       }}
       onChange={datePickerInputManagement.handleInputChange}
       value={
