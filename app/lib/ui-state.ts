@@ -66,9 +66,10 @@ export const getUiState = <
     },
     match: (status, handler, __matched = false, render = () => null) => {
       if (
-        !__matched && typeof status === 'string'
+        !__matched &&
+        (typeof status === 'string'
           ? isMatching(status)
-          : isMatchingArray(status as Array<Status>)
+          : isMatchingArray(status as Array<Status>))
       ) {
         return {
           ...(uiState as ExplicitAny),
