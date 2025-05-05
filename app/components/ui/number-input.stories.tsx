@@ -137,3 +137,13 @@ export const ShowButtons = () => {
     </div>
   );
 };
+
+export const Controlled = () => {
+  const [value, setValue] = useState<number | null>(10);
+  return (
+    <div>
+      <NumberInput value={value} onValueChange={(v) => setValue(v)} />
+      <p>Value: {value}</p>
+    </div>
+  );
+};
