@@ -2,7 +2,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
-import { match } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
@@ -103,16 +102,16 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
-          {match(ui.state)
-            .with(ui.with('pending'), () => <DataListLoadingState />)
-            .with(ui.with('error'), () => (
+          {ui
+            .match('pending', () => <DataListLoadingState />)
+            .match('error', () => (
               <DataListErrorState retry={() => usersQuery.refetch()} />
             ))
-            .with(ui.with('empty'), () => <DataListEmptyState />)
-            .with(ui.with('empty-search'), ({ searchTerm }) => (
+            .match('empty', () => <DataListEmptyState />)
+            .match('empty-search', ({ searchTerm }) => (
               <DataListEmptyState searchTerm={searchTerm} />
             ))
-            .with(ui.with('default'), ({ items, searchTerm, total }) => (
+            .match('default', ({ items, searchTerm, total }) => (
               <>
                 {!!searchTerm && (
                   <DataListRowResults
