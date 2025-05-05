@@ -44,17 +44,17 @@
   --color-warning-900: oklch(0.414 0.112 45.904);
   --color-warning-950: oklch(0.279 0.077 45.635);
 
-  --color-success-50: oklch(0.982 0.018 155.826);
-  --color-success-100: oklch(0.962 0.044 156.743);
-  --color-success-200: oklch(0.925 0.084 155.995);
-  --color-success-300: oklch(0.871 0.15 154.449);
-  --color-success-400: oklch(0.792 0.209 151.711);
-  --color-success-500: oklch(0.723 0.219 149.579);
-  --color-success-600: oklch(0.627 0.194 149.214);
-  --color-success-700: oklch(0.527 0.154 150.069);
-  --color-success-800: oklch(0.448 0.119 151.328);
-  --color-success-900: oklch(0.393 0.095 152.535);
-  --color-success-950: oklch(0.266 0.065 152.934);
+  --color-positive-50: oklch(0.982 0.018 155.826);
+  --color-positive-100: oklch(0.962 0.044 156.743);
+  --color-positive-200: oklch(0.925 0.084 155.995);
+  --color-positive-300: oklch(0.871 0.15 154.449);
+  --color-positive-400: oklch(0.792 0.209 151.711);
+  --color-positive-500: oklch(0.723 0.219 149.579);
+  --color-positive-600: oklch(0.627 0.194 149.214);
+  --color-positive-700: oklch(0.527 0.154 150.069);
+  --color-positive-800: oklch(0.448 0.119 151.328);
+  --color-positive-900: oklch(0.393 0.095 152.535);
+  --color-positive-950: oklch(0.266 0.065 152.934);
 
   --spacing-safe-top: env(safe-area-inset-top);
   --spacing-safe-bottom: env(safe-area-inset-bottom);
