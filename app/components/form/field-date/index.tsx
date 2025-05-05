@@ -10,6 +10,7 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { useFormField } from '@/components/form/form-field';
 import { FieldCommonProps } from '@/components/form/form-field-controller';
+import { FormFieldError } from '@/components/form/form-field-error';
 import { DatePicker } from '@/components/ui/date-picker';
 
 export type FieldDateProps<
@@ -71,6 +72,7 @@ export const FieldDate = <
             {...rest}
             {...field}
           />
+          <FormFieldError />
         </div>
       )}
     />
