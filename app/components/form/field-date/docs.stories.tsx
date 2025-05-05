@@ -14,14 +14,14 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    date: z.date().nullable(),
+    date: z.date(),
   });
 
 const formOptions = {
   mode: 'onBlur',
   resolver: zodResolver(zFormSchema()),
   defaultValues: {
-    date: null,
+    date: null as unknown as Date,
   },
 } as const;
 
