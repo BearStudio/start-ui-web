@@ -24,10 +24,14 @@ type UiState<
       >
     ) => React.ReactNode,
     __matched?: boolean,
-    render?: () => React.ReactNode
-  ) => Exclude<Status, S> extends never
-    ? { render: () => React.ReactNode }
-    : Pick<UiState<Exclude<Status, S>, Data>, 'match'>;
+    run?: () => React.ReactNode
+  ) => {
+    nonExhaustive: () => React.ReactNode;
+  } & (Exclude<Status, S> extends never
+    ? {
+        exhaustive: () => React.ReactNode;
+      }
+    : Pick<UiState<Exclude<Status, S>, Data>, 'match'>);
 };
 
 export const getUiState = <
@@ -69,7 +73,8 @@ export const getUiState = <
         return {
           ...(uiState as ExplicitAny),
           __matched: true,
-          render: () => handler(state as ExplicitAny),
+          exhaustive: () => handler(state as ExplicitAny),
+          nonExhaustive: () => handler(state as ExplicitAny),
           match: (status, _handler) =>
             uiState.match(status, _handler, true, () =>
               handler(uiState.state as ExplicitAny)
@@ -80,7 +85,8 @@ export const getUiState = <
       return {
         ...uiState,
         __matched,
-        render,
+        exhaustive: render,
+        nonExhaustive: render,
         match: (status, handler) =>
           uiState.match(status, handler, __matched, render),
       };

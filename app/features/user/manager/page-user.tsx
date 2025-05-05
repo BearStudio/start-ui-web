@@ -145,7 +145,7 @@ export const PageUser = (props: { params: { id: string } }) => {
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
             .match('default', ({ user }) => <>{user.name || user.email}</>)
-            .render()}
+            .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
@@ -218,7 +218,7 @@ export const PageUser = (props: { params: { id: string } }) => {
               </div>
             </div>
           ))
-          .render()}
+          .exhaustive()}
       </PageLayoutContent>
     </PageLayout>
   );
@@ -327,7 +327,7 @@ const UserSessions = (props: { userId: string }) => {
               </DataListRow>
             </>
           ))
-          .render()}
+          .exhaustive()}
       </DataList>
     </WithPermissions>
   );

@@ -167,7 +167,7 @@ export const PageRepositories = (props: {
                 </DataListRow>
               </>
             ))
-            .render()}
+            .exhaustive()}
         </DataList>
       </PageLayoutContent>
     </PageLayout>

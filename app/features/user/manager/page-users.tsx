@@ -194,7 +194,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                 </DataListRow>
               </>
             ))
-            .render()}
+            .exhaustive()}
         </DataList>
       </PageLayoutContent>
     </PageLayout>

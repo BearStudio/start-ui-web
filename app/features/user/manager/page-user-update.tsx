@@ -138,7 +138,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
                 <AlertCircleIcon className="size-4 text-muted-foreground" />
               ))
               .match('default', ({ user }) => <>{user.name || user.email}</>)
-              .render()}
+              .exhaustive()}
           </PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>

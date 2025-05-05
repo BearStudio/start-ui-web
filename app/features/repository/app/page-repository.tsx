@@ -60,7 +60,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
             .match('default', ({ repository }) => <>{repository.name}</>)
-            .render()}
+            .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
@@ -69,7 +69,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
           .match('not-found', () => <PageError errorCode={404} />)
           .match('error', () => <PageError />)
           .match('default', ({ repository }) => <>{repository.name}</>)
-          .render()}
+          .exhaustive()}
       </PageLayoutContent>
     </PageLayout>
   );

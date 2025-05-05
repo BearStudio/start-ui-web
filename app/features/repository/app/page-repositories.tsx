@@ -69,7 +69,7 @@ export const PageRepositories = () => {
               )}
             </>
           ))
-          .render()}
+          .exhaustive()}
       </PageLayoutContent>
     </PageLayout>
   );

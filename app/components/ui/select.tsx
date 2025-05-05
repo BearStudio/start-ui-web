@@ -177,7 +177,7 @@ export const Select = <Option extends OptionBase>({
                   ))}
                 </Combobox.ItemGroup>
               ))
-              .render()}
+              .exhaustive()}
           </Combobox.Content>
         </Combobox.Positioner>
       </Portal>
