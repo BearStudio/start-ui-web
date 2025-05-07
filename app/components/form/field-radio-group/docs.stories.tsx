@@ -163,7 +163,6 @@ export const WithDisabledOption = () => {
             type="radio-group"
             name="bear"
             options={optionsWithDisabled}
-            className="flex-row gap-4"
           />
         </FormField>
         <div>
