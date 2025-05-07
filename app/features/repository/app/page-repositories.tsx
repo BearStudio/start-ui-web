@@ -58,7 +58,6 @@ export const PageRepositories = () => {
               ))}
               {repositoriesQuery.hasNextPage && (
                 <Button
-                  type="button"
                   size="sm"
                   variant="link"
                   onClick={() => repositoriesQuery.fetchNextPage()}

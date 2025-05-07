@@ -19,7 +19,6 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
           variant={props.iconOnly ? 'ghost' : 'link'}
           size={props.iconOnly ? 'icon' : 'default'}
         >

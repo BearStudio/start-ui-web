@@ -189,7 +189,7 @@ export const EmptyState = () => {
         <DataListEmptyState>
           <div className="flex flex-col items-center justify-center gap-x-2 gap-y-1">
             <p className="self-center">Let&apos;s add your first user</p>
-            <Button type="button" variant="ghost" size="sm">
+            <Button variant="ghost" size="sm">
               <PlusIcon />
               New User
             </Button>
@@ -269,7 +269,7 @@ const ExampleMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button type="button" size="icon-sm" variant="ghost" className="-m-1">
+        <Button size="icon-sm" variant="ghost" className="-m-1">
           <EllipsisIcon />
         </Button>
       </DropdownMenuTrigger>

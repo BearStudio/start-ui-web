@@ -98,18 +98,12 @@ export const ConfirmResponsiveDrawer = (props: {
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerFooter>
             <ResponsiveDrawerClose asChild>
-              <Button
-                type="button"
-                size="lg"
-                variant="secondary"
-                className="max-sm:w-full"
-              >
+              <Button size="lg" variant="secondary" className="max-sm:w-full">
                 {props.cancelText ??
                   t('components:confirmResponsiveDrawer.cancelText')}
               </Button>
             </ResponsiveDrawerClose>
             <Button
-              type="button"
               size="lg"
               variant={props.confirmVariant ?? 'default'}
               className="max-sm:w-full"

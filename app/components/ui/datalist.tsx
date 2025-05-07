@@ -142,7 +142,7 @@ export const DataListErrorState = ({
           <div className="flex w-full flex-col items-center gap-x-2 gap-y-1 text-muted-foreground">
             {!!children && <div className="text-sm">{children}</div>}
             {!!retry && (
-              <Button type="button" variant="ghost" size="sm" onClick={retry}>
+              <Button variant="ghost" size="sm" onClick={retry}>
                 <LucideRefreshCw />
                 {t('components:datalist.retry')}
               </Button>
@@ -169,7 +169,6 @@ export const DataListRowResults = (props: {
           </DataListText>
           {!!props.withClearButton && (
             <Button
-              type="button"
               variant="ghost"
               size="xs"
               onClick={() => {

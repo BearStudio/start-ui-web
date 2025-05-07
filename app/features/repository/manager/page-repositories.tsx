@@ -149,7 +149,6 @@ export const PageRepositories = (props: {
                 <DataListRow>
                   <DataListCell className="flex-none">
                     <Button
-                      type="button"
                       size="xs"
                       variant="secondary"
                       disabled={!repositoriesQuery.hasNextPage}

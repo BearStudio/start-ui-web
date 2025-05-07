@@ -41,7 +41,7 @@ const SearchButtonComponent = ({
       }}
     >
       <DrawerTrigger asChild>
-        <Button type="button" size="icon" variant="ghost" {...props}>
+        <Button size="icon" variant="ghost" {...props}>
           {loading ? <Spinner /> : <SearchIcon />}
           <span className="sr-only">Search</span> {/* TODO translation */}
         </Button>
