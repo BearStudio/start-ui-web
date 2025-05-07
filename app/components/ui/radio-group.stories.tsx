@@ -3,35 +3,13 @@ import type { Meta } from '@storybook/react';
 import { Radio, RadioGroup } from '@/components/ui/radio-group';
 
 export default {
-  title: 'Radio Group',
+  title: 'RadioGroup',
 } satisfies Meta<typeof RadioGroup>;
 
 const astrobears = [
-  {
-    value: 'bearstrong',
-    label: 'Bearstrong',
-  },
-  {
-    value: 'pawdrin',
-    label: 'Buzz Pawdrin',
-  },
-  {
-    value: 'grizzlyrin',
-    label: 'Yuri Grizzlyrin',
-  },
-  {
-    value: 'jemibear',
-    label: 'Mae Jemibear',
-    disabled: true,
-  },
-  {
-    value: 'ridepaw',
-    label: 'Sally Ridepaw',
-  },
-  {
-    value: 'michaelpawanderson',
-    label: 'Michael Paw Anderson',
-  },
+  { value: 'bearstrong', label: 'Bearstrong' },
+  { value: 'pawdrin', label: 'Buzz Pawdrin' },
+  { value: 'grizzlyrin', label: 'Yuri Grizzlyrin' },
 ] as const;
 
 export const Default = () => {
