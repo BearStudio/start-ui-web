@@ -209,7 +209,6 @@ function Nav({ className }: NavProps) {
       <Button
         variant="secondary"
         className="absolute left-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
-        type="button"
         tabIndex={isPreviousDisabled ? undefined : -1}
         disabled={isPreviousDisabled}
         aria-label={labelPrevious(previousMonth)}
@@ -221,7 +220,6 @@ function Nav({ className }: NavProps) {
       <Button
         variant="secondary"
         className="absolute right-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
-        type="button"
         tabIndex={isNextDisabled ? undefined : -1}
         disabled={isNextDisabled}
         aria-label={labelNext(nextMonth)}

@@ -11,7 +11,7 @@ export default {
 export function Default() {
   return (
     <ConfirmResponsiveDrawer onConfirm={() => alert('Custom Action')}>
-      <Button type="button">Confirm</Button>
+      <Button>Confirm</Button>
     </ConfirmResponsiveDrawer>
   );
 }
@@ -25,7 +25,7 @@ export function WithCustomProps() {
       confirmText="Custom Text"
       confirmVariant="destructive"
     >
-      <Button type="button">Trigger Modal</Button>
+      <Button>Trigger Modal</Button>
     </ConfirmResponsiveDrawer>
   );
 }
@@ -46,7 +46,7 @@ export function EnabledProps() {
         onConfirm={() => alert('Custom Action')}
         enabled={enabled}
       >
-        <Button type="button">{enabled ? 'Confirm' : 'Without confirm'}</Button>
+        <Button>{enabled ? 'Confirm' : 'Without confirm'}</Button>
       </ConfirmResponsiveDrawer>
     </div>
   );
@@ -57,7 +57,7 @@ export function WithPromise() {
     <ConfirmResponsiveDrawer
       onConfirm={async () => new Promise((r) => setTimeout(r, 2000))}
     >
-      <Button type="button">Confirm</Button>
+      <Button>Confirm</Button>
     </ConfirmResponsiveDrawer>
   );
 }

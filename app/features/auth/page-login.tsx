@@ -127,7 +127,6 @@ export default function PageLogin({
             social.variables === 'github' &&
             (social.isPending || social.isSuccess)
           }
-          type="button"
           size="lg"
           onClick={() => social.mutate('github')}
         >

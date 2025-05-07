@@ -308,7 +308,6 @@ const UserSessions = (props: { userId: string }) => {
               <DataListRow>
                 <DataListCell className="flex-none">
                   <Button
-                    type="button"
                     size="xs"
                     variant="secondary"
                     disabled={!sessionsQuery.hasNextPage}
@@ -354,7 +353,6 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
 
   return (
     <Button
-      type="button"
       size="xs"
       variant="secondary"
       disabled={currentSession.data?.user.id === props.userId}
@@ -393,7 +391,6 @@ const RevokeSessionButton = (props: {
   );
   return (
     <Button
-      type="button"
       size="xs"
       variant="secondary"
       disabled={currentSession.data?.session.token === props.sessionToken}

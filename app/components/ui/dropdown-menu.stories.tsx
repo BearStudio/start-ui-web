@@ -18,9 +18,7 @@ export const Default = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" type="button">
-          Open
-        </Button>
+        <Button variant="secondary">Open</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>

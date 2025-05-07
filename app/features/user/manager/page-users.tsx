@@ -176,7 +176,6 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                 <DataListRow>
                   <DataListCell className="flex-none">
                     <Button
-                      type="button"
                       size="xs"
                       variant="secondary"
                       disabled={!usersQuery.hasNextPage}
