@@ -50,7 +50,7 @@ function Radio({
         htmlFor={value}
         {...labelProps}
         className={cn(
-          'cursor-pointer peer-disabled:cursor-not-allowed',
+          'cursor-pointer text-xs peer-disabled:cursor-not-allowed',
           labelProps?.className
         )}
       >
@@ -60,3 +60,4 @@ function Radio({
   );
 }
 export { Radio, RadioGroup };
+export type { RadioGroupProps, RadioProps };
