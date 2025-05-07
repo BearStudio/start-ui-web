@@ -1,4 +1,5 @@
 import { ComponentProps, ReactElement, ReactNode } from 'react';
+import { match } from 'ts-pattern';
 
 import { cloneAsChild } from '@/lib/clone-as-child';
 import { cn } from '@/lib/tailwind/utils';
@@ -15,12 +16,16 @@ export const ResponsiveIconButton = ({
 }: Omit<ComponentProps<typeof Button>, 'size' | 'children'> & {
   children: ReactElement<{ children?: ReactNode }>;
   label: ReactNode;
-  size?: 'sm' | 'default' | 'lg';
+  size?: 'xs' | 'sm' | 'default' | 'lg';
   breakpoint?: number;
 }) => {
   const isMobile = useIsMobile(breakpoint);
-  const buttonIconSize =
-    size === 'default' ? 'icon' : (`icon-${size}` as const);
+  const buttonIconSize = match(size)
+    .with('default', () => 'icon' as const)
+    .with('xs', () => 'icon-xs' as const)
+    .with('sm', () => 'icon-sm' as const)
+    .with('lg', () => 'icon-lg' as const)
+    .exhaustive();
   const buttonSize = isMobile ? buttonIconSize : size;
 
   return (
