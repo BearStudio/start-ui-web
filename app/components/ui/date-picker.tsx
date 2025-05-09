@@ -45,7 +45,7 @@ export const DatePicker = ({
                 mode="single"
                 selected={props.value ?? undefined}
                 onSelect={(date) => {
-                  props.onChange(date ?? null);
+                  props.onChange?.(date ?? null);
                   datePicker.close();
                 }}
                 defaultMonth={props.value ?? undefined}

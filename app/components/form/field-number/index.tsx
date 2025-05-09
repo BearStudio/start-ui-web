@@ -1,10 +1,5 @@
 import { ComponentProps } from 'react';
-import {
-  Controller,
-  ControllerRenderProps,
-  FieldPath,
-  FieldValues,
-} from 'react-hook-form';
+import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -12,23 +7,21 @@ import { cn } from '@/lib/tailwind/utils';
 import { NumberInput } from '@/components/ui/number-input';
 
 import { useFormField } from '../form-field';
-import { FieldCommonProps } from '../form-field-controller';
+import { FieldProps } from '../form-field-controller';
 import { FormFieldError } from '../form-field-error';
 
 export type FieldNumberProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FieldCommonProps<TFieldValues, TName> & {
-  type: 'number';
-  containerProps?: ComponentProps<'div'>;
-  inCents?: boolean;
-} & RemoveFromType<
-    Omit<
-      ComponentProps<typeof NumberInput>,
-      'id' | 'aria-invalid' | 'aria-describedby'
-    >,
-    ControllerRenderProps
-  >;
+> = FieldProps<
+  TFieldValues,
+  TName,
+  {
+    type: 'number';
+    containerProps?: ComponentProps<'div'>;
+    inCents?: boolean;
+  } & ComponentProps<typeof NumberInput>
+>;
 
 export const FieldNumber = <
   TFieldValues extends FieldValues = FieldValues,
@@ -91,6 +84,11 @@ export const FieldNumber = <
               value={formatValue(value, 'from-cents')}
               onValueChange={(value) => {
                 onChange(formatValue(value, 'to-cents'));
+                rest.onValueChange?.(value);
+              }}
+              onBlur={(e) => {
+                field.onBlur();
+                rest.onBlur?.(e);
               }}
             />
             <FormFieldError />

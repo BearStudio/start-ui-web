@@ -1,32 +1,25 @@
 import { ComponentProps } from 'react';
-import {
-  Controller,
-  ControllerRenderProps,
-  FieldPath,
-  FieldValues,
-} from 'react-hook-form';
+import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Input } from '@/components/ui/input';
 
 import { useFormField } from '../form-field';
-import { FieldCommonProps } from '../form-field-controller';
+import { FieldProps } from '../form-field-controller';
 import { FormFieldError } from '../form-field-error';
 
 export type FieldTextProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FieldCommonProps<TFieldValues, TName> & {
-  type: 'text' | 'email' | 'tel';
-  containerProps?: ComponentProps<'div'>;
-} & RemoveFromType<
-    Omit<
-      ComponentProps<typeof Input>,
-      'id' | 'aria-invalid' | 'aria-describedby'
-    >,
-    ControllerRenderProps
-  >;
+> = FieldProps<
+  TFieldValues,
+  TName,
+  {
+    type: 'text' | 'email' | 'tel';
+    containerProps?: ComponentProps<'div'>;
+  } & ComponentProps<typeof Input>
+>;
 
 export const FieldText = <
   TFieldValues extends FieldValues = FieldValues,
@@ -72,6 +65,14 @@ export const FieldText = <
             }
             {...rest}
             {...field}
+            onChange={(e) => {
+              field.onChange(e);
+              rest.onChange?.(e);
+            }}
+            onBlur={(e) => {
+              field.onBlur();
+              rest.onBlur?.(e);
+            }}
           />
           <FormFieldError />
         </div>

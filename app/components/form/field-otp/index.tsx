@@ -1,10 +1,5 @@
 import { ComponentProps, ComponentRef, useRef } from 'react';
-import {
-  Controller,
-  ControllerRenderProps,
-  FieldPath,
-  FieldValues,
-} from 'react-hook-form';
+import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -15,23 +10,21 @@ import {
 } from '@/components/ui/input-otp';
 
 import { useFormField } from '../form-field';
-import { FieldCommonProps } from '../form-field-controller';
+import { FieldProps } from '../form-field-controller';
 import { FormFieldError } from '../form-field-error';
 
 export type FieldOtpProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FieldCommonProps<TFieldValues, TName> & {
-  type: 'otp';
-  autoSubmit?: boolean;
-  containerProps?: ComponentProps<'div'>;
-} & RemoveFromType<
-    Omit<
-      ComponentProps<typeof InputOTP>,
-      'id' | 'aria-invalid' | 'aria-describedby' | 'children'
-    >,
-    ControllerRenderProps
-  >;
+> = FieldProps<
+  TFieldValues,
+  TName,
+  {
+    type: 'otp';
+    autoSubmit?: boolean;
+    containerProps?: ComponentProps<'div'>;
+  } & Omit<ComponentProps<typeof InputOTP>, 'children'>
+>;
 
 export const FieldOtp = <
   TFieldValues extends FieldValues = FieldValues,
@@ -91,6 +84,14 @@ export const FieldOtp = <
             }}
             {...rest}
             {...field}
+            onChange={(e) => {
+              field.onChange(e);
+              rest.onChange?.(e);
+            }}
+            onBlur={(e) => {
+              field.onBlur();
+              rest.onBlur?.(e);
+            }}
           >
             <InputOTPGroup>
               {Array.from({ length: rest.maxLength }).map((_, index) => (

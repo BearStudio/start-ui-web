@@ -90,13 +90,13 @@ export const DateInput = ({
   format = 'DD/MM/YYYY',
   ...props
 }: Omit<ComponentProps<typeof Input>, 'onChange' | 'value'> & {
-  onChange: (date: Date | null) => void;
+  onChange?: (date: Date | null) => void;
   format?: string;
   value?: Date | null;
 }) => {
   const datePickerInputManagement = useDatePickerInputManagement({
     dateFormat: format,
-    onChange,
+    onChange: onChange ?? (() => undefined),
     dateValue: value,
   });
 
