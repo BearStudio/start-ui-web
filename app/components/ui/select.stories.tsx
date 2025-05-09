@@ -7,6 +7,8 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
+import { useState } from 'react';
+import { ComboboxButton } from '@headlessui/react';
 
 export default {
   title: 'Select',
@@ -14,34 +16,44 @@ export default {
 
 const astrobears = [
   {
-    value: 'bearstrong',
+    id: 'bearstrong',
     label: 'Bearstrong',
   },
   {
-    value: 'pawdrin',
+    id: 'pawdrin',
     label: 'Buzz Pawdrin',
   },
   {
-    value: 'grizzlyrin',
+    id: 'grizzlyrin',
     label: 'Yuri Grizzlyrin',
   },
   {
-    value: 'jemibear',
+    id: 'jemibear',
     label: 'Mae Jemibear',
     disabled: true,
   },
   {
-    value: 'ridepaw',
+    id: 'ridepaw',
     label: 'Sally Ridepaw',
   },
   {
-    value: 'michaelpawanderson',
+    id: 'michaelpawanderson',
     label: 'Michael Paw Anderson',
   },
-];
+] as const;
+
+type Bear = (typeof astrobears)[number];
 
 export const Default = () => {
-  return <Select options={astrobears} />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      value={bear ?? undefined}
+      onChange={(v) => setBear(v)}
+    />
+  );
 };
 
 export const WithDefaultValue = () => {
@@ -49,8 +61,22 @@ export const WithDefaultValue = () => {
 };
 
 export const WithClearButton = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
   return (
     <Select options={astrobears} defaultValue={'pawdrin'} withClearButton />
+  );
+};
+
+export const AllowCustomValue = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      allowCustomValue
+      options={astrobears}
+      value={bear ?? undefined}
+      onChange={(v) => setBear(v)}
+    />
   );
 };
 
@@ -76,26 +102,24 @@ export const IsError = () => {
   return <Select options={astrobears} invalid />;
 };
 
-export const Creatable = () => {
-  return <Select options={astrobears} allowCustomValue />;
-};
+// export const Creatable = () => {
+//   return <Select options={astrobears} allowCustomValue />;
+// };
 
 export const Customization = () => {
   return (
     <Select
       options={astrobears}
-      createListCollectionOptions={{
-        itemToString(item) {
-          return 'Preffix ' + item.label + ' suffix';
-        },
-      }}
       inputProps={{
         endElement: (
-          <Combobox.Trigger asChild>
-            <Button variant="ghost" className="-me-1.5" size="icon-xs">
-              <ArrowDown />
-            </Button>
-          </Combobox.Trigger>
+          <ComboboxButton
+            as={Button}
+            variant="ghost"
+            className="-me-1.5"
+            size="icon-xs"
+          >
+            <ArrowDown />
+          </ComboboxButton>
         ),
         inputClassName: cn('data-[state=open]:bg-[#C0FFEE]'),
       }}
@@ -110,7 +134,7 @@ export const Customization = () => {
 
 const lotsOfOptions = Array.from({ length: 100_000 }, () => ({
   label: `${faker.person.firstName()} ${faker.person.lastName()}`,
-  value: window.crypto.randomUUID(),
+  id: window.crypto.randomUUID(),
 }));
 
 export const LotsOfOptions = () => {
