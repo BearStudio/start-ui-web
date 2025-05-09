@@ -27,13 +27,15 @@ type FieldCustomProps<
 > &
   Required<Pick<ControllerProps<TFieldValues, TName>, 'control'>>;
 
-export type FieldCommonProps<
+type CustomProps = object;
+export type FieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TProps extends CustomProps = CustomProps,
 > = Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'> & {
   size?: FormFieldSize;
   displayError?: boolean;
-};
+} & Omit<TProps, 'value' | 'ref' | 'id' | 'aria-invalid' | 'aria-describedby'>;
 
 export type FormFieldControllerProps<
   TFieldValues extends FieldValues = FieldValues,
