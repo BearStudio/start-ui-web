@@ -17,37 +17,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 type OptionBase = { id: string; label: string; disabled?: boolean };
+type TValueBase = OptionBase | null;
 
 type InputProps = ComponentProps<typeof Input>;
 type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size'>;
 
-type SelectProps<
-  TValue extends OptionBase,
-  TMultiple extends boolean | undefined,
-> = ComboboxProps<TValue, TMultiple> &
+type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
   InputPropsRoot & {
     withClearButton?: boolean;
-    options: ReadonlyArray<TValue>;
+    options: ReadonlyArray<OptionBase>;
     inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
     renderEmpty?: (search: string) => ReactNode;
     allowCustomValue?: boolean;
   };
 
-export const Select = <TValue extends OptionBase>({
+export const Select = <TValue extends TValueBase>({
   withClearButton,
   inputProps,
   size,
   placeholder = 'Select...', // TODO Translation
   options,
-  // createListCollectionOptions,
-  // onOpenChange,
   renderEmpty,
   onChange,
   value,
   defaultValue,
   allowCustomValue = false,
   ...props
-}: SelectProps<TValue, false>) => {
+}: SelectProps<TValue>) => {
   const [items, setItems] = useState(options);
   const [search, setSearch] = useState('');
 
@@ -61,9 +57,7 @@ export const Select = <TValue extends OptionBase>({
     );
   };
 
-  const handleOnValueChange: SelectProps<TValue, false>['onChange'] = (
-    value
-  ) => {
+  const handleOnValueChange: SelectProps<TValue>['onChange'] = (value) => {
     setSearch('');
     onChange?.(value);
   };

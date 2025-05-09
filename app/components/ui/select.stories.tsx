@@ -1,14 +1,13 @@
-import { Combobox } from '@ark-ui/react/combobox';
 import { faker } from '@faker-js/faker';
+import { ComboboxButton } from '@headlessui/react';
 import { Meta } from '@storybook/react';
 import { ArrowDown } from 'lucide-react';
+import { useState } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
-import { useState } from 'react';
-import { ComboboxButton } from '@headlessui/react';
 
 export default {
   title: 'Select',
@@ -48,22 +47,31 @@ export const Default = () => {
   const [bear, setBear] = useState<Bear | null>(null);
 
   return (
-    <Select
-      options={astrobears}
-      value={bear ?? undefined}
-      onChange={(v) => setBear(v)}
-    />
+    <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
   );
 };
 
 export const WithDefaultValue = () => {
-  return <Select options={astrobears} defaultValue={'pawdrin'} />;
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
+  return (
+    <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+  );
 };
 
 export const WithClearButton = () => {
   const [bear, setBear] = useState<Bear | null>(null);
+
   return (
-    <Select options={astrobears} defaultValue={'pawdrin'} withClearButton />
+    <Select
+      options={astrobears}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      withClearButton
+    />
   );
 };
 
@@ -74,18 +82,30 @@ export const AllowCustomValue = () => {
     <Select
       allowCustomValue
       options={astrobears}
-      value={bear ?? undefined}
+      value={bear}
       onChange={(v) => setBear(v)}
     />
   );
 };
 
 export const Sizes = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
   return (
     <div className="flex flex-col gap-4">
-      <Select options={astrobears} defaultValue={'pawdrin'} size="sm" />
-      <Select options={astrobears} defaultValue={'pawdrin'} />
-      <Select options={astrobears} defaultValue={'pawdrin'} size="lg" />
+      <Select
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+        size="sm"
+      />
+      <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+      <Select
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+        size="lg"
+      />
     </div>
   );
 };
@@ -102,9 +122,18 @@ export const IsError = () => {
   return <Select options={astrobears} invalid />;
 };
 
-// export const Creatable = () => {
-//   return <Select options={astrobears} allowCustomValue />;
-// };
+export const Creatable = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      allowCustomValue
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
+};
 
 export const Customization = () => {
   return (
