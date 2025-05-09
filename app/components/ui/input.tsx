@@ -47,6 +47,7 @@ type InputProps = Pick<
   | 'onBlur'
   | 'onChange'
   | 'onKeyDown'
+  | 'inputMode'
 > &
   VariantProps<typeof inputVariants> & {
     ref?: RefCallBack | React.RefObject<HTMLInputElement | null>;
