@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { ComboboxButton } from '@headlessui/react';
 import { Meta } from '@storybook/react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { ComboboxOption, Select } from '@/components/ui/select';
 
 export default {
   title: 'Select',
@@ -47,7 +47,36 @@ export const Default = () => {
   const [bear, setBear] = useState<Bear | null>(null);
 
   return (
-    <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+    <div className="flex flex-col gap-2">
+      <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+      <div className="text-sm">
+        Selected value: <pre>{JSON.stringify(bear)}</pre>
+      </div>
+    </div>
+  );
+};
+
+export const RenderOption = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      renderOption={(option) => (
+        <ComboboxOption
+          value={option}
+          key={option.id}
+          className="group relative"
+        >
+          <span>{option.label}</span>
+          <span className="absolute inset-y-0 right-0 hidden items-center pe-4 group-data-[selected]:flex">
+            <CheckIcon className="size-5" aria-hidden="true" />
+          </span>
+        </ComboboxOption>
+      )}
+    />
   );
 };
 
@@ -63,7 +92,10 @@ export const WithDefaultValue = () => {
 };
 
 export const WithClearButton = () => {
-  const [bear, setBear] = useState<Bear | null>(null);
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
 
   return (
     <Select
@@ -111,15 +143,42 @@ export const Sizes = () => {
 };
 
 export const Placeholder = () => {
-  return <Select options={astrobears} placeholder="Please select an option" />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      placeholder="Please select an option"
+    />
+  );
 };
 
 export const Disabled = () => {
-  return <Select options={astrobears} disabled />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      disabled
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
 };
 
 export const IsError = () => {
-  return <Select options={astrobears} invalid />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      invalid
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
 };
 
 export const Creatable = () => {

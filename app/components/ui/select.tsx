@@ -1,8 +1,10 @@
+'use client';
+
 import {
   Combobox,
   ComboboxButton,
   ComboboxInput,
-  ComboboxOption,
+  ComboboxOption as HeadlessComboboxOption,
   ComboboxOptions,
   ComboboxProps,
 } from '@headlessui/react';
@@ -24,11 +26,15 @@ type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size'>;
 
 type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
   InputPropsRoot & {
+    /** Allow user to clear the select using a button */
     withClearButton?: boolean;
     options: ReadonlyArray<OptionBase>;
     inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
+    /** Override the way the empty state is displayed */
     renderEmpty?: (search: string) => ReactNode;
+    /** Allow the user to provide a custom value */
     allowCustomValue?: boolean;
+    renderOption?: (option: OptionBase) => ReactNode;
   };
 
 export const Select = <TValue extends TValueBase>({
@@ -38,6 +44,7 @@ export const Select = <TValue extends TValueBase>({
   placeholder = 'Select...', // TODO Translation
   options,
   renderEmpty,
+  renderOption,
   onChange,
   value,
   defaultValue,
@@ -75,6 +82,10 @@ export const Select = <TValue extends TValueBase>({
       return set('empty-override', { renderEmpty });
     }
 
+    if (items.length !== 0 && isNonNullish(renderOption)) {
+      return set('render-option', { renderOption });
+    }
+
     if (items.length !== 0) {
       return set('default');
     }
@@ -88,78 +99,91 @@ export const Select = <TValue extends TValueBase>({
       value={value ?? null}
       onChange={(v) => handleOnValueChange(v)}
       onClose={() => setSearch('')}
-      // defaultValue={defaultValue ? [defaultValue] : undefined}
-      // inputValue={options.find((o) => o.value === value)?.label}
-      // inputBehavior="autohighlight"
       {...props}
     >
-      <ComboboxInput
-        as={Input}
-        size={size}
-        // TODO)) Check for the correct type here
-        // @ts-expect-error Check for the correct type here
-        displayValue={(item) => item?.label}
-        onChange={handleInputChange}
-        placeholder={placeholder}
-        endElement={
-          <div className="flex gap-1">
-            {!!withClearButton && value && (
-              <Button
+      <div className="relative">
+        <ComboboxInput
+          as={Input}
+          size={size}
+          // TODO)) Check for the correct type here
+          // @ts-expect-error Check for the correct type here
+          displayValue={(item) => item?.label}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          endElement={
+            <div className="flex gap-1">
+              {!!withClearButton && value && (
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => {
+                    onChange?.(null);
+                  }}
+                >
+                  <X />
+                </Button>
+              )}
+              <ComboboxButton
+                as={Button}
                 variant="ghost"
+                disabled={props.disabled}
+                className="-me-1.5"
                 size="icon-xs"
-                onClick={() => {
-                  onChange?.(null);
-                }}
               >
-                <X />
-              </Button>
-            )}
-            <ComboboxButton
-              as={Button}
-              variant="ghost"
-              // disabled={props.disabled || props.readOnly}
-              className="-me-1.5"
-              size="icon-xs"
-            >
-              <ChevronDown />
-            </ComboboxButton>
-          </div>
-        }
-        {...inputProps}
-      />
+                <ChevronDown aria-hidden="true" />
+              </ComboboxButton>
+            </div>
+          }
+          {...inputProps}
+        />
 
-      <ComboboxOptions
-        anchor="bottom"
-        className="z-10 w-96 rounded-md bg-white p-1 shadow empty:invisible dark:bg-neutral-900"
-      >
-        {ui
-          .match('empty', () => <div className="p-4">No results found</div>)
-          .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
-          .match('create-search', ({ search }) => (
-            <ComboboxOption value={{ id: search, label: search }}>
-              Create <span className="font-bold">{search}</span>
-            </ComboboxOption>
-          ))
-          .match('default', () =>
-            items.map((item) => (
-              <ComboboxOption
-                key={item.id}
-                value={item}
-                disabled={item.disabled}
-                className={cn(
-                  'flex cursor-pointer gap-1 rounded-sm px-3 py-1.5',
-                  'data-[focus]:bg-neutral-50 dark:data-[focus]:bg-neutral-800',
-                  'data-[selected]:bg-neutral-100 data-[selected]:font-medium dark:data-[selected]:bg-neutral-700',
-                  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-                  'text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800'
-                )}
-              >
-                {item.label}
+        <ComboboxOptions
+          anchor="bottom start"
+          className="absolute z-10 mt-1 w-(--input-width) overflow-auto rounded-md bg-white p-1 shadow empty:invisible dark:bg-neutral-900"
+        >
+          {ui
+            .match('empty', () => <div className="p-4">No results found</div>)
+            .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
+            .match('create-search', ({ search }) => (
+              <ComboboxOption value={{ id: search, label: search }}>
+                Create <span className="font-bold">{search}</span>
               </ComboboxOption>
             ))
-          )
-          .exhaustive()}
-      </ComboboxOptions>
+            .match('render-option', ({ renderOption }) =>
+              items.map((item) => renderOption(item))
+            )
+            .match('default', () =>
+              items.map((item) => (
+                <HeadlessComboboxOption
+                  key={item.id}
+                  value={item}
+                  disabled={item.disabled}
+                >
+                  {item.label}
+                </HeadlessComboboxOption>
+              ))
+            )
+            .exhaustive()}
+        </ComboboxOptions>
+      </div>
     </Combobox>
   );
 };
+
+export function ComboboxOption({
+  ...props
+}: ComponentProps<typeof HeadlessComboboxOption>) {
+  return (
+    <HeadlessComboboxOption
+      {...props}
+      className={cn(
+        'flex cursor-pointer gap-1 rounded-sm px-3 py-1.5',
+        'data-[focus]:bg-neutral-50 dark:data-[focus]:bg-neutral-800',
+        'data-[selected]:bg-neutral-100 data-[selected]:font-medium dark:data-[selected]:bg-neutral-700',
+        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+        'text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800',
+        props.className
+      )}
+    />
+  );
+}
