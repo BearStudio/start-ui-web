@@ -60,7 +60,7 @@ export const FieldRadioGroup = <
       disabled={disabled}
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, ...field }, fieldState }) => (
+      render={({ field: { onChange, onBlur, ...field }, fieldState }) => (
         <div
           {...containerProps}
           className={cn(
@@ -82,9 +82,10 @@ export const FieldRadioGroup = <
           >
             {options.map((option) => (
               <Radio
-                key={option.value}
+                key={`${ctx.id}-${option.value}`}
                 value={option.value}
                 disabled={option.disabled}
+                onBlur={onBlur}
               >
                 {option.label}
               </Radio>

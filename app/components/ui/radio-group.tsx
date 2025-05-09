@@ -28,6 +28,8 @@ function Radio({
   children,
   ...props
 }: RadioProps) {
+  const _radioId = React.useId();
+
   return (
     <div
       {...containerProps}
@@ -38,7 +40,7 @@ function Radio({
           'peer aspect-square h-4 w-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
-        id={value}
+        id={_radioId}
         value={value}
         {...props}
       >
@@ -47,7 +49,7 @@ function Radio({
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
       <label
-        htmlFor={value}
+        htmlFor={_radioId}
         {...labelProps}
         className={cn(
           'cursor-pointer text-xs peer-disabled:cursor-not-allowed',
