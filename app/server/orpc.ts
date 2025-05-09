@@ -1,6 +1,7 @@
 import { ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { randomUUID } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 
 import { Permission } from '@/lib/auth/client';
 
@@ -8,13 +9,23 @@ import { envClient } from '@/env/client';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';
+import { timingStore } from '@/server/timing-store';
 import { getHeaders } from '@/server/utils';
 
 const base = os
   .$context<ResponseHeadersPluginContext>()
   // Auth
-  .use(async ({ next }) => {
+  .use(async ({ next, context }) => {
+    const start = performance.now();
+
     const session = await auth.api.getSession({ headers: getHeaders() });
+
+    const duration = performance.now() - start;
+
+    context.resHeaders?.append(
+      'Server-Timing',
+      `auth;dur=${duration.toFixed(2)}`
+    );
 
     return await next({
       context: {
@@ -27,7 +38,7 @@ const base = os
 
   // Logger
   .use(async ({ next, context, procedure, path }) => {
-    const start = Date.now();
+    const start = performance.now();
     const meta = {
       path: path.join('.'),
       type: procedure['~orpc'].route.method,
@@ -44,7 +55,12 @@ const base = os
         context: { logger: loggerForMiddleWare },
       });
 
-      loggerForMiddleWare.info({ durationMs: Date.now() - start }, 'After');
+      const duration = performance.now() - start;
+      loggerForMiddleWare.info({ durationMs: duration }, 'After');
+      context.resHeaders?.append(
+        'Server-Timing',
+        `global;dur=${duration.toFixed(2)}`
+      );
 
       return result;
     } catch (error) {
@@ -61,6 +77,27 @@ const base = os
       loggerForMiddleWare[logLevel](error);
       throw error;
     }
+  })
+  // Middleware to add database Server Timing header
+  .use(async ({ next, context }) => {
+    return timingStore.run({ prisma: [] }, async () => {
+      const result = await next();
+
+      // Add the Server-Timing header if there are timings
+      const serverTimingHeader = timingStore
+        .getStore()
+        ?.prisma.map(
+          (timing) =>
+            `db-${timing.model}-${timing.operation};dur=${timing.duration.toFixed(2)}`
+        )
+        .join(', ');
+
+      if (serverTimingHeader) {
+        context.resHeaders?.append('Server-Timing', serverTimingHeader);
+      }
+
+      return result;
+    });
   })
   // Demo Mode
   .use(async ({ next, procedure }) => {
