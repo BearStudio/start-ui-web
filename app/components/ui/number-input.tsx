@@ -80,6 +80,7 @@ export const NumberInput = ({
                 )
               }
               size={size}
+              type="number"
               placeholder={placeholder}
               {...inputProps}
             />
