@@ -42,6 +42,7 @@
   "dependencies": {
     "@ark-ui/react": "5.5.0",
     "@base-ui-components/react": "1.0.0-alpha.8",
+    "@headlessui/react": "2.2.2",
     "@hookform/resolvers": "5.0.1",
     "@orpc/client": "1.2.0",
     "@orpc/openapi": "1.2.0",
@@ -174,6 +175,7 @@
       "@parcel/watcher",
       "@prisma/client",
       "@prisma/engines",
+      "@tailwindcss/oxide",
       "esbuild",
       "prisma",
       "sharp"
