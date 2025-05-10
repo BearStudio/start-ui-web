@@ -41,7 +41,7 @@ export const Select = <TValue extends TValueBase>({
   withClearButton,
   inputProps,
   size,
-  placeholder = 'Select...', // TODO Translation
+  placeholder = 'Select...', // TODO)) Translation
   options,
   renderEmpty,
   renderOption,
@@ -67,6 +67,14 @@ export const Select = <TValue extends TValueBase>({
   const handleOnValueChange: SelectProps<TValue>['onChange'] = (value) => {
     setSearch('');
     onChange?.(value);
+  };
+
+  /**
+   * On close, reset the search and items so they are back to the original state
+   */
+  const handleOnClose = () => {
+    setSearch('');
+    setItems(options);
   };
 
   const ui = getUiState((set) => {
@@ -98,7 +106,7 @@ export const Select = <TValue extends TValueBase>({
       immediate
       value={value ?? null}
       onChange={(v) => handleOnValueChange(v)}
-      onClose={() => setSearch('')}
+      onClose={handleOnClose}
       {...props}
     >
       <div className="relative">
@@ -142,7 +150,7 @@ export const Select = <TValue extends TValueBase>({
           className="absolute z-10 mt-1 w-(--input-width) overflow-auto rounded-md bg-white p-1 shadow empty:invisible dark:bg-neutral-900"
         >
           {ui
-            .match('empty', () => <div className="p-4">No results found</div>)
+            .match('empty', () => <div className="p-4">No results found</div>) // TODO)) Translation
             .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
             .match('create-search', ({ search }) => (
               <ComboboxOption value={{ id: search, label: search }}>
@@ -154,13 +162,13 @@ export const Select = <TValue extends TValueBase>({
             )
             .match('default', () =>
               items.map((item) => (
-                <HeadlessComboboxOption
+                <ComboboxOption
                   key={item.id}
                   value={item}
                   disabled={item.disabled}
                 >
                   {item.label}
-                </HeadlessComboboxOption>
+                </ComboboxOption>
               ))
             )
             .exhaustive()}

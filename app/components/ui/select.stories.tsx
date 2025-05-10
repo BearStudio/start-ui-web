@@ -111,12 +111,17 @@ export const AllowCustomValue = () => {
   const [bear, setBear] = useState<Bear | null>(null);
 
   return (
-    <Select
-      allowCustomValue
-      options={astrobears}
-      value={bear}
-      onChange={(v) => setBear(v)}
-    />
+    <div className="flex flex-col gap-2">
+      <Select
+        allowCustomValue
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+      />
+      <div className="text-sm">
+        Selected value: <pre>{JSON.stringify(bear)}</pre>
+      </div>
+    </div>
   );
 };
 
@@ -174,20 +179,7 @@ export const IsError = () => {
   return (
     <Select
       options={astrobears}
-      invalid
-      value={bear}
-      onChange={(v) => setBear(v)}
-    />
-  );
-};
-
-export const Creatable = () => {
-  const [bear, setBear] = useState<Bear | null>(null);
-
-  return (
-    <Select
-      options={astrobears}
-      allowCustomValue
+      inputProps={{ 'aria-invalid': true }}
       value={bear}
       onChange={(v) => setBear(v)}
     />
@@ -195,6 +187,8 @@ export const Creatable = () => {
 };
 
 export const Customization = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
   return (
     <Select
       options={astrobears}
@@ -211,20 +205,26 @@ export const Customization = () => {
         ),
         inputClassName: cn('data-[state=open]:bg-[#C0FFEE]'),
       }}
+      value={bear}
+      onChange={(v) => setBear(v)}
       renderEmpty={(search) => (
-        <div className="bg-negative-100">
-          This is empty and your search is {search}
+        <div className="flex h-20 items-center justify-center text-sm text-muted-foreground">
+          This is empty and your search is "{search}"
         </div>
       )}
     />
   );
 };
 
-const lotsOfOptions = Array.from({ length: 100_000 }, () => ({
+const lotsOfOptions = Array.from({ length: 1_000 }, () => ({
   label: `${faker.person.firstName()} ${faker.person.lastName()}`,
   id: window.crypto.randomUUID(),
 }));
 
 export const LotsOfOptions = () => {
-  return <Select options={lotsOfOptions} />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select options={lotsOfOptions} value={bear} onChange={(v) => setBear(v)} />
+  );
 };
