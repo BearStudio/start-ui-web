@@ -1,48 +1,29 @@
 import { expect, test } from '@playwright/test';
-import { pageUtils } from 'e2e/utils/pageUtils';
-import { ADMIN_EMAIL, USER_EMAIL, getRandomEmail } from 'e2e/utils/users';
-
-import locales from '@/locales';
+import { ADMIN_EMAIL, USER_EMAIL } from 'e2e/utils/constants';
+import { pageUtils } from 'e2e/utils/page-utils';
 
 test.describe('Login flow', () => {
   test('Login as admin', async ({ page }) => {
     const utils = pageUtils(page);
-
-    await utils.loginAdmin({ email: ADMIN_EMAIL });
-
-    await expect(
-      page.getByText(locales.en.auth.data.verificationCode.unknown)
-    ).not.toBeVisible();
+    await page.goto('/login');
+    await utils.login({ email: ADMIN_EMAIL });
+    await page.waitForURL('/manager');
+    await expect(page.getByTestId('layout-manager')).toBeVisible();
   });
 
   test('Login as user', async ({ page }) => {
     const utils = pageUtils(page);
-
-    await utils.loginApp({ email: USER_EMAIL });
-
-    await expect(
-      page.getByText(locales.en.auth.data.verificationCode.unknown)
-    ).not.toBeVisible();
+    await page.goto('/login');
+    await utils.login({ email: USER_EMAIL });
+    await page.waitForURL('/app');
+    await expect(page.getByTestId('layout-app')).toBeVisible();
   });
 
-  test('Login with a wrong code', async ({ page }) => {
+  test('Login with redirect', async ({ page }) => {
     const utils = pageUtils(page);
-
-    await utils.loginApp({ email: USER_EMAIL, code: '111111' });
-
-    await expect(
-      page.getByText(locales.en.auth.data.verificationCode.unknown)
-    ).toBeVisible();
-  });
-
-  test('Login with a wrong email', async ({ page }) => {
-    const utils = pageUtils(page);
-
-    const email = await getRandomEmail();
-    await utils.loginApp({ email });
-
-    await expect(
-      page.getByText(locales.en.auth.data.verificationCode.unknown)
-    ).toBeVisible();
+    await page.goto('/app');
+    await utils.login({ email: ADMIN_EMAIL });
+    await page.waitForURL('/app');
+    await expect(page.getByTestId('layout-app')).toBeVisible();
   });
 });

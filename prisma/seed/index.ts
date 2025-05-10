@@ -1,6 +1,7 @@
-import { createRepositories } from 'prisma/seed/models/repository';
-import { createUsers } from 'prisma/seed/models/user';
-import { prisma } from 'prisma/seed/utils';
+import { db } from '@/server/db';
+
+import { createRepositories } from './repository';
+import { createUsers } from './user';
 
 async function main() {
   await createRepositories();
@@ -13,5 +14,5 @@ main()
     process.exit(1);
   })
   .finally(() => {
-    prisma.$disconnect();
+    db.$disconnect();
   });

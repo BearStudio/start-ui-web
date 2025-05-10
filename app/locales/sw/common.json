@@ -1,0 +1,19 @@
+{
+  "languages": {
+    "en": "Kiingereza",
+    "fr": "Kifaransa",
+    "ar": "Kiarabu",
+    "sw": "Kiswahili"
+  },
+  "themes": {
+    "light": "Mwanga",
+    "dark": "Giza",
+    "system": "System (Auto)"
+  },
+  "actions": {
+    "back": "Rudi",
+    "cancel": "Ghairi",
+    "delete": "Futa",
+    "edit": "Hariri"
+  }
+}

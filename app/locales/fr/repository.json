@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "name": {
+      "label": "Nom",
+      "required": "Le nom est requis",
+      "alreadyUsed": "Nom déjà utilisé"
+    },
+    "link": {
+      "label": "Lien",
+      "required": "Le lien est requis",
+      "tooSmall": "Lien invalide, doit contenir au moins {{min}} caractères",
+      "missingDot": "Lien invalide, doit contenir au moins un point"
+    },
+    "description": {
+      "label": "Description"
+    }
+  }
+}
