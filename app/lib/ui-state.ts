@@ -22,7 +22,7 @@ type UiState<
         Extract<UiState<Status, Data>['state'], { __status: S }>,
         '__status'
       >
-    ) => React.ReactNode,
+    ) => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode),
     __matched?: boolean,
     run?: () => React.ReactNode
   ) => {

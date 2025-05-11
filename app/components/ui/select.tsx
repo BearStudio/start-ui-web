@@ -10,7 +10,7 @@ import {
 } from '@headlessui/react';
 import { ChevronDown, X } from 'lucide-react';
 import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
-import { isNonNullish, isNullish } from 'remeda';
+import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 import { getUiState } from '@/lib/ui-state';
@@ -34,7 +34,9 @@ type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
     renderEmpty?: (search: string) => ReactNode;
     /** Allow the user to provide a custom value */
     allowCustomValue?: boolean;
+    /** Allow you to provide custom ComboboxOption */
     renderOption?: (option: OptionBase) => ReactNode;
+    mode?: 'default' | 'virtual';
   };
 
 export const Select = <TValue extends TValueBase>({
@@ -49,19 +51,13 @@ export const Select = <TValue extends TValueBase>({
   value,
   defaultValue,
   allowCustomValue = false,
+  mode = 'default',
   ...props
 }: SelectProps<TValue>) => {
-  const [items, setItems] = useState(options);
   const [search, setSearch] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-
-    setItems(
-      options.filter((item) =>
-        item.label.toLowerCase().includes(event.target.value.toLowerCase())
-      )
-    );
   };
 
   const handleOnValueChange: SelectProps<TValue>['onChange'] = (value) => {
@@ -74,8 +70,11 @@ export const Select = <TValue extends TValueBase>({
    */
   const handleOnClose = () => {
     setSearch('');
-    setItems(options);
   };
+
+  const items = options.filter((item) =>
+    item.label.toLowerCase().includes(search.toLowerCase())
+  );
 
   const ui = getUiState((set) => {
     if (items.length === 0 && allowCustomValue && search.length > 0) {
@@ -88,6 +87,10 @@ export const Select = <TValue extends TValueBase>({
 
     if (items.length === 0 && isNonNullish(renderEmpty)) {
       return set('empty-override', { renderEmpty });
+    }
+
+    if (mode === 'virtual' && !isEmpty(items)) {
+      return set('virtual');
     }
 
     if (items.length !== 0 && isNonNullish(renderOption)) {
@@ -107,6 +110,11 @@ export const Select = <TValue extends TValueBase>({
       value={value ?? null}
       onChange={(v) => handleOnValueChange(v)}
       onClose={handleOnClose}
+      virtual={
+        mode === 'virtual' && isNonNullish(items) && !isEmpty(items)
+          ? { options: items, disabled: (o) => o?.disabled }
+          : undefined
+      }
       {...props}
     >
       <div className="relative">
@@ -157,6 +165,9 @@ export const Select = <TValue extends TValueBase>({
                 Create <span className="font-bold">{search}</span>
               </ComboboxOption>
             ))
+            .match('virtual', () => ({ option }: { option: OptionBase }) => (
+              <ComboboxOption value={option}>{option.label}</ComboboxOption>
+            ))
             .match('render-option', ({ renderOption }) =>
               items.map((item) => renderOption(item))
             )
@@ -188,7 +199,7 @@ export function ComboboxOption({
         'flex cursor-pointer gap-1 rounded-sm px-3 py-1.5',
         'data-[focus]:bg-neutral-50 dark:data-[focus]:bg-neutral-800',
         'data-[selected]:bg-neutral-100 data-[selected]:font-medium dark:data-[selected]:bg-neutral-700',
-        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
         'text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800',
         props.className
       )}
