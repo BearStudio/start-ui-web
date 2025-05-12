@@ -33,7 +33,7 @@ export const DemoModeDrawer = () => {
 
   return (
     <ResponsiveDrawer open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
-      <ResponsiveDrawerContent>
+      <ResponsiveDrawerContent dir="ltr">
         <ResponsiveDrawerHeader>
           <ResponsiveDrawerTitle>👋 Demo Mode</ResponsiveDrawerTitle>
           <ResponsiveDrawerDescription>

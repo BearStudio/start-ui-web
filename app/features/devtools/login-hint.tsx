@@ -16,7 +16,7 @@ export const LoginEmailHint = () => {
   }
 
   return (
-    <Alert>
+    <Alert dir="ltr">
       <TerminalIcon className="size-4" />
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
@@ -47,7 +47,7 @@ export const LoginEmailOtpHint = () => {
   }
 
   return (
-    <Alert>
+    <Alert dir="ltr">
       <TerminalIcon className="size-4" />
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
