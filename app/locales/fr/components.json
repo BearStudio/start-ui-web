@@ -46,5 +46,8 @@
   },
   "searchButton": {
     "label": "Rechercher"
+  },
+  "sidebar": {
+    "titleSrOnly": "Barre de navigation"
   }
 }

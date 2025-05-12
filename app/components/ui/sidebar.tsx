@@ -3,6 +3,7 @@ import { useRouter } from '@tanstack/react-router';
 import { cva, VariantProps } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -164,6 +165,7 @@ function Sidebar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
+  const { t } = useTranslation(['components']);
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   const router = useRouter();
 
@@ -213,9 +215,8 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle> {/* TODO translations */}
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-            {/* TODO translations */}
+            <SheetTitle>{t('components:sidebar.titleSrOnly')}</SheetTitle>
+            <SheetDescription></SheetDescription>
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>

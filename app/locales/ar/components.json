@@ -46,5 +46,8 @@
   },
   "searchButton": {
     "label": "يبحث"
+  },
+  "sidebar": {
+    "titleSrOnly": "الشريط الجانبي"
   }
 }
