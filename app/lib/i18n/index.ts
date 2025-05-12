@@ -6,15 +6,13 @@ import { z } from 'zod';
 import { makeZodI18nMap } from 'zod-i18n-map';
 
 import { i18nConfig } from '@/lib/i18n/config';
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 i18n.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 
-const loadLanguage = (langKey: string) => {
+export const syncLanguage = (langKey: string) => {
   dayjs.locale(langKey);
   z.setErrorMap(makeZodI18nMap());
 };
 
-loadLanguage(DEFAULT_LANGUAGE_KEY);
-i18n.on('languageChanged', (langKey) => loadLanguage(langKey));
+i18n.on('languageChanged', (langKey) => syncLanguage(langKey));
 export default i18n;
