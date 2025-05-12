@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "application": "طلب",
+    "configuration": "إعدادات",
+    "dashboard": "لوحة القيادة",
+    "repositories": "المستودعات",
+    "users": "المستخدمون",
+    "account": "حساب",
+    "home": "بيت"
+  }
+}

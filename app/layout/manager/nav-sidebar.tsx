@@ -6,6 +6,7 @@ import {
   XIcon,
 } from 'lucide-react';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
 import { IconGitBranch } from '@/components/icons/generated';
@@ -29,6 +30,7 @@ import { WithPermissions } from '@/features/auth/with-permission';
 import { NavUser } from '@/layout/manager/nav-user';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
+  const { t } = useTranslation(['layout']);
   const matchRoute = useMatchRoute();
   return (
     <SidebarProvider>
@@ -59,7 +61,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('layout:nav.application')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
@@ -71,7 +73,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                   >
                     <Link to="/manager/dashboard">
                       <LayoutDashboardIcon />
-                      <span>Dashboard</span>
+                      <span>{t('layout:nav.dashboard')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -84,7 +86,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                   >
                     <Link to="/manager/repositories">
                       <IconGitBranch />
-                      <span>Repositories</span>
+                      <span>{t('layout:nav.repositories')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -99,7 +101,9 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
             ]}
           >
             <SidebarGroup>
-              <SidebarGroupLabel>Configuration</SidebarGroupLabel>
+              <SidebarGroupLabel>
+                {t('layout:nav.configuration')}
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
@@ -111,7 +115,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                     >
                       <Link to="/manager/users">
                         <UsersIcon />
-                        <span>Users</span>
+                        <span>{t('layout:nav.users')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

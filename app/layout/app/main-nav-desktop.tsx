@@ -1,11 +1,13 @@
 import { Link, ValidateLinkOptions } from '@tanstack/react-router';
 import { FC, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
 
 import { MAIN_NAV_LINKS } from '@/layout/app/main-nav-config';
 
 export const MainNavDesktop = () => {
+  const { t } = useTranslation(['layout']);
   const HEIGHT = 'calc(56px + env(safe-area-inset-top))';
   return (
     <div className="hidden md:flex">
@@ -23,9 +25,9 @@ export const MainNavDesktop = () => {
             <Logo className="w-24" />
           </Link>
           <nav className="flex gap-0.5">
-            {MAIN_NAV_LINKS.map(({ label, ...item }) => (
+            {MAIN_NAV_LINKS.map(({ labelTranslationKey, ...item }) => (
               <Item key={item.linkOptions.to} {...item}>
-                {label}
+                {t(labelTranslationKey)}
               </Item>
             ))}
           </nav>

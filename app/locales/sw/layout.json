@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "application": "Maombi",
+    "configuration": "Usanidi",
+    "dashboard": "Dashibodi",
+    "repositories": "Hazina",
+    "users": "Watumiaji",
+    "account": "Akaunti",
+    "home": "Nyumbani"
+  }
+}

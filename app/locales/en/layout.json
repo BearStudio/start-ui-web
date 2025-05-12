@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "home": "Home",
+    "application": "Application",
+    "dashboard": "Dashboard",
+    "repositories": "Code Repositories",
+    "configuration": "Configuration",
+    "users": "Users",
+    "account": "Account"
+  }
+}
