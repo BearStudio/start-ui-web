@@ -1,4 +1,4 @@
-import { ReactNode, ValidateLinkOptions } from '@tanstack/react-router';
+import { ValidateLinkOptions } from '@tanstack/react-router';
 import { FC } from 'react';
 
 import {
@@ -12,32 +12,32 @@ import {
 
 export const MAIN_NAV_LINKS = [
   {
-    label: 'Home',
+    labelTranslationKey: 'layout:nav.home',
     icon: IconHouseDuotone,
     iconActive: IconHouseFill,
     linkOptions: {
       to: '/app',
     },
     exact: true,
-  },
+  } as const,
   {
-    label: 'Repositories',
+    labelTranslationKey: 'layout:nav.repositories',
     icon: IconGitBranchDuotone,
     iconActive: IconGitBranchFill,
     linkOptions: {
       to: '/app/repositories',
     },
-  },
+  } as const,
   {
-    label: 'Account',
+    labelTranslationKey: 'layout:nav.account',
     icon: IconUserCircleDuotone,
     iconActive: IconUserCircleFill,
     linkOptions: {
       to: '/app/account',
     },
-  },
+  } as const,
 ] satisfies Array<{
-  label: ReactNode;
+  labelTranslationKey: string;
   icon: FC<{ className?: string }>;
   iconActive?: FC<{ className?: string }>;
   linkOptions: ValidateLinkOptions;
