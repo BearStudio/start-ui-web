@@ -6,6 +6,9 @@
     "repositories": "Dépôts de code",
     "users": "Utilisateurs",
     "account": "Compte",
-    "home": "Accueil"
+    "home": "Accueil",
+    "apiDocumentation": "Documentation API",
+    "logout": "Déconnexion",
+    "openApp": "Ouvrir l'application"
   }
 }

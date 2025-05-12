@@ -6,6 +6,9 @@
     "repositories": "Code Repositories",
     "configuration": "Configuration",
     "users": "Users",
-    "account": "Account"
+    "account": "Account",
+    "openApp": "Open App",
+    "apiDocumentation": "API Documentation",
+    "logout": "Logout"
   }
 }
