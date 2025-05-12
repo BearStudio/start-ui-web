@@ -46,5 +46,8 @@
   },
   "searchButton": {
     "label": "Tafuta"
+  },
+  "sidebar": {
+    "titleSrOnly": "Pembeni"
   }
 }

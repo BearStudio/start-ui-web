@@ -46,5 +46,8 @@
   },
   "searchButton": {
     "label": "Search"
+  },
+  "sidebar": {
+    "titleSrOnly": "Sidebar"
   }
 }
