@@ -6,29 +6,8 @@ on:
   pull_request:
 
 jobs:
-  setup:
-    name: 📦 Setup dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-          cache: 'pnpm'
-
-      - name: Install deps
-        run: pnpm install
-
   typescriptChecker:
     name: 🟦 TypeScript Checker
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -52,7 +31,6 @@ jobs:
 
   linter:
     name: 🧹 Linter
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -76,7 +54,6 @@ jobs:
 
   tests:
     name: 🔬 Tests
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
