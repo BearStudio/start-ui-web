@@ -249,7 +249,7 @@ export default {
   })
     .route({
       method: 'GET',
-      path: '/users/{id}/sessions',
+      path: '/users/{userId}/sessions',
       tags,
     })
     .input(
