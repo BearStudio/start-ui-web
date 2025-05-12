@@ -43,5 +43,8 @@
     "errorTitle": "Une erreur s'est produite",
     "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
     "retry": "Réessayer"
+  },
+  "searchButton": {
+    "label": "Rechercher"
   }
 }

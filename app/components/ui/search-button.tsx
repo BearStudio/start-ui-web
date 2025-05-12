@@ -1,5 +1,6 @@
 import { SearchIcon } from 'lucide-react';
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,15 +19,17 @@ type Props = Omit<ComponentProps<typeof Button>, 'children' | 'onChange'> &
   Pick<ComponentProps<typeof SearchInput>, 'value' | 'onChange'> & {
     loading?: boolean;
     inputProps?: Omit<ComponentProps<typeof SearchInput>, 'value' | 'onChange'>;
-  };
+  } & { label?: ReactNode };
 
 const SearchButtonComponent = ({
   value,
   onChange,
   loading,
   inputProps,
+  label,
   ...props
 }: Props) => {
+  const { t } = useTranslation(['components']);
   const [open, setOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
 
@@ -43,12 +46,16 @@ const SearchButtonComponent = ({
       <DrawerTrigger asChild>
         <Button size="icon" variant="ghost" {...props}>
           {loading ? <Spinner /> : <SearchIcon />}
-          <span className="sr-only">Search</span> {/* TODO translation */}
+          <span className="sr-only">
+            {label || t('components:searchButton.label')}
+          </span>
         </Button>
       </DrawerTrigger>
       <DrawerContent className="pt-safe-top">
         <DrawerHeader className="sr-only">
-          <DrawerTitle>Search</DrawerTitle> {/* TODO translation */}
+          <DrawerTitle>
+            {label || t('components:searchButton.label')}
+          </DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         <DrawerBody className="py-4">
