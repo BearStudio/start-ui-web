@@ -48,6 +48,7 @@
     "label": "Tafuta"
   },
   "sidebar": {
-    "titleSrOnly": "Pembeni"
+    "title": "Pembeni",
+    "toggle": "Kubadilisha kando ya pembeni"
   }
 }

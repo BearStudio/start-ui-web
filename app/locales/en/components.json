@@ -48,6 +48,7 @@
     "label": "Search"
   },
   "sidebar": {
-    "titleSrOnly": "Sidebar"
+    "title": "Sidebar",
+    "toggle": "Toggle Sidebar"
   }
 }
