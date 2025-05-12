@@ -1,10 +1,5 @@
 import { faker } from '@faker-js/faker';
-import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOptions,
-} from '@headlessui/react';
+import { ComboboxButton } from '@headlessui/react';
 import { Meta } from '@storybook/react';
 import { ArrowDown, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -12,7 +7,6 @@ import { useState } from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ComboboxOption, Select } from '@/components/ui/select';
 
 export default {
@@ -228,13 +222,15 @@ const lotsOfOptions = Array.from({ length: 10_000 }, () => ({
 }));
 
 export const LotsOfOptions = () => {
-  const [bear, setBear] = useState<Bear | null>(null);
+  const [person, setPerson] = useState<{ id: string; label: string } | null>(
+    null
+  );
 
   return (
     <Select
       options={lotsOfOptions}
-      value={bear}
-      onChange={(v) => setBear(v)}
+      value={person}
+      onChange={(v) => setPerson(v)}
       mode="virtual"
     />
   );

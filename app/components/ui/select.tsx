@@ -28,14 +28,18 @@ type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
   InputPropsRoot & {
     /** Allow user to clear the select using a button */
     withClearButton?: boolean;
-    options: ReadonlyArray<OptionBase>;
-    inputProps?: RemoveFromType<InputProps, InputPropsRoot>;
+    options: ReadonlyArray<NonNullable<TValue>>;
+    inputProps?: Omit<
+      RemoveFromType<InputProps, InputPropsRoot>,
+      // Removing the defaultValue from the input to avoid conflict with ComboboxInput type
+      'defaultValue'
+    >;
     /** Override the way the empty state is displayed */
     renderEmpty?: (search: string) => ReactNode;
     /** Allow the user to provide a custom value */
     allowCustomValue?: boolean;
     /** Allow you to provide custom ComboboxOption */
-    renderOption?: (option: OptionBase) => ReactNode;
+    renderOption?: (option: NonNullable<TValue>) => ReactNode;
     mode?: 'default' | 'virtual';
   };
 
@@ -49,7 +53,6 @@ export const Select = <TValue extends TValueBase>({
   renderOption,
   onChange,
   value,
-  defaultValue,
   allowCustomValue = false,
   mode = 'default',
   ...props
@@ -112,18 +115,17 @@ export const Select = <TValue extends TValueBase>({
       onClose={handleOnClose}
       virtual={
         mode === 'virtual' && isNonNullish(items) && !isEmpty(items)
-          ? { options: items, disabled: (o) => o?.disabled }
+          ? { options: items, disabled: (o) => o?.disabled ?? false }
           : undefined
       }
       {...props}
     >
       <div className="relative">
-        <ComboboxInput
+        {/* Setting the type so we have type check and typings for the displayValue prop */}
+        <ComboboxInput<TValue, typeof Input>
           as={Input}
           size={size}
-          // TODO)) Check for the correct type here
-          // @ts-expect-error Check for the correct type here
-          displayValue={(item) => item?.label}
+          displayValue={(item) => item?.label ?? ''}
           onChange={handleInputChange}
           placeholder={placeholder}
           endElement={
