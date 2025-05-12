@@ -215,7 +215,7 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>{t('components:sidebar.titleSrOnly')}</SheetTitle>
+            <SheetTitle>{t('components:sidebar.title')}</SheetTitle>
             <SheetDescription></SheetDescription>
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
@@ -280,6 +280,7 @@ function SidebarTrigger({
 }: React.ComponentProps<typeof Button> & {
   icon?: React.ReactNode;
 }) {
+  const { t } = useTranslation(['components']);
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -296,7 +297,7 @@ function SidebarTrigger({
       {...props}
     >
       {icon ?? <PanelLeftIcon className="rtl:rotate-180" />}
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{t('components:sidebar.toggle')}</span>
     </Button>
   );
 }

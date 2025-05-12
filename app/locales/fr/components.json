@@ -48,6 +48,7 @@
     "label": "Rechercher"
   },
   "sidebar": {
-    "titleSrOnly": "Barre de navigation"
+    "title": "Barre de navigation",
+    "toggle": "Afficher ou masquer la navigation"
   }
 }
