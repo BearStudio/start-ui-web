@@ -43,5 +43,8 @@
     "errorTitle": "Kitu kilienda vibaya",
     "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
     "retry": "Jaribu tena"
+  },
+  "searchButton": {
+    "label": "Tafuta"
   }
 }

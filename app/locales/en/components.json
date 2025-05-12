@@ -43,5 +43,8 @@
     "cancelText": "Cancel",
     "confirmText": "Confirm",
     "heading": "Are you sure?"
+  },
+  "searchButton": {
+    "label": "Search"
   }
 }

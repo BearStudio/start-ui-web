@@ -43,5 +43,8 @@
     "errorTitle": "حدث خطأ ما",
     "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\"",
     "retry": "إعادة المحاولة"
+  },
+  "searchButton": {
+    "label": "يبحث"
   }
 }
