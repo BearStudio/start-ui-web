@@ -24,7 +24,7 @@ type UiState<
       >
     ) => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode),
     __matched?: boolean,
-    run?: () => React.ReactNode
+    run?: () => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode)
   ) => {
     nonExhaustive: () => React.ReactNode;
   } & (Exclude<Status, S> extends never
@@ -77,9 +77,9 @@ export const getUiState = <
           exhaustive: () => handler(state as ExplicitAny),
           nonExhaustive: () => handler(state as ExplicitAny),
           match: (status, _handler) =>
-            uiState.match(status, _handler, true, () =>
-              handler(uiState.state as ExplicitAny)
-            ),
+            uiState.match(status, _handler, true, () => {
+              return handler(uiState.state as ExplicitAny);
+            }),
         };
       }
 

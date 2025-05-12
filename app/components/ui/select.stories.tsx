@@ -161,12 +161,31 @@ export const Placeholder = () => {
 };
 
 export const Disabled = () => {
-  const [bear, setBear] = useState<Bear | null>(null);
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
 
   return (
     <Select
       options={astrobears}
       disabled
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
+};
+
+export const ReadOnly = () => {
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
+  return (
+    <Select
+      options={astrobears}
+      readOnly
       value={bear}
       onChange={(v) => setBear(v)}
     />
@@ -179,7 +198,7 @@ export const IsError = () => {
   return (
     <Select
       options={astrobears}
-      inputProps={{ 'aria-invalid': true }}
+      aria-invalid
       value={bear}
       onChange={(v) => setBear(v)}
     />

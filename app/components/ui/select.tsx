@@ -22,7 +22,10 @@ type OptionBase = { id: string; label: string; disabled?: boolean };
 type TValueBase = OptionBase | null;
 
 type InputProps = ComponentProps<typeof Input>;
-type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size'>;
+type InputPropsRoot = Pick<
+  InputProps,
+  'placeholder' | 'size' | 'aria-invalid' | 'aria-describedby' | 'readOnly'
+>;
 
 type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
   InputPropsRoot & {
@@ -54,6 +57,9 @@ export const Select = <TValue extends TValueBase>({
   onChange,
   value,
   allowCustomValue = false,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  readOnly,
   mode = 'default',
   ...props
 }: SelectProps<TValue>) => {
@@ -118,6 +124,7 @@ export const Select = <TValue extends TValueBase>({
           ? { options: items, disabled: (o) => o?.disabled ?? false }
           : undefined
       }
+      disabled={props.disabled || readOnly}
       {...props}
     >
       <div className="relative">
@@ -128,6 +135,8 @@ export const Select = <TValue extends TValueBase>({
           displayValue={(item) => item?.label ?? ''}
           onChange={handleInputChange}
           placeholder={placeholder}
+          aria-invalid={ariaInvalid}
+          aria-describedby={ariaDescribedBy}
           endElement={
             <div className="flex gap-1">
               {!!withClearButton && value && (

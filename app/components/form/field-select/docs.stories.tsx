@@ -31,28 +31,28 @@ const zFormSchema = () =>
 
 const options = [
   {
-    value: 'bearstrong',
+    id: 'bearstrong',
     label: 'Bearstrong',
   },
   {
-    value: 'pawdrin',
+    id: 'pawdrin',
     label: 'Buzz Pawdrin',
   },
   {
-    value: 'grizzlyrin',
+    id: 'grizzlyrin',
     label: 'Yuri Grizzlyrin',
   },
   {
-    value: 'jemibear',
+    id: 'jemibear',
     label: 'Mae Jemibear',
     disabled: true,
   },
   {
-    value: 'ridepaw',
+    id: 'ridepaw',
     label: 'Sally Ridepaw',
   },
   {
-    value: 'michaelpawanderson',
+    id: 'michaelpawanderson',
     label: 'Michael Paw Anderson',
   },
 ] as const;
@@ -131,6 +131,35 @@ export const Disabled = () => {
             name="bear"
             placeholder="Placeholder"
             disabled
+            options={options}
+          />
+        </FormField>
+
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
+  );
+};
+
+export const ReadOnly = () => {
+  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+    ...formOptions,
+    defaultValues: {
+      bear: 'michaelpawanderson',
+    },
+  });
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="bear"
+            placeholder="Placeholder"
+            readOnly
             options={options}
           />
         </FormField>
