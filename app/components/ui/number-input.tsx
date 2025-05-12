@@ -42,7 +42,7 @@ export const NumberInput = ({
 
   return (
     <NumberField.Root
-      invalid={!!ariaInvalid}
+      invalid={ariaInvalid ? true : undefined}
       {...props}
       locale={_locale}
       className={cn(className)}
