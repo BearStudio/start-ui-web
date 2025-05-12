@@ -7,10 +7,8 @@ on:
 
 jobs:
   setup:
-    name: Setup dependencies
+    name: 📦 Setup dependencies
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-deps.outputs.cache-hit }}
     steps:
       - uses: actions/checkout@v3
 
@@ -25,19 +23,11 @@ jobs:
           node-version: 'lts/*'
           cache: 'pnpm'
 
-      - name: Cache dependencies
-        id: cache-deps
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: Install deps
         run: pnpm install
 
   typescriptChecker:
+    name: 🟦 TypeScript Checker
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -53,12 +43,6 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
-
-      - name: Restore deps
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install deps
         run: pnpm install
@@ -67,6 +51,7 @@ jobs:
         run: pnpm run lint:ts
 
   linter:
+    name: 🧹 Linter
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -82,12 +67,6 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
-
-      - name: Restore deps
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install deps
         run: pnpm install
@@ -96,6 +75,7 @@ jobs:
         run: pnpm run lint:eslint
 
   tests:
+    name: 🔬 Tests
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -111,12 +91,6 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
-
-      - name: Restore deps
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install deps
         run: pnpm install
