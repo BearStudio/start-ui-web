@@ -2,6 +2,7 @@
 
 import { Link } from '@tanstack/react-router';
 import {
+  BookOpenIcon,
   ChevronsUpDownIcon,
   CircleUserIcon,
   LogOutIcon,
@@ -37,9 +38,10 @@ import {
 import { themes } from '@/components/ui/theme-switcher';
 
 import { ConfirmLogout } from '@/features/auth/confirm-logout';
+import { WithPermissions } from '@/features/auth/with-permission';
 
 export function NavUser() {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'layout']);
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
   const { setOpenMobile } = useSidebar();
@@ -98,7 +100,7 @@ export function NavUser() {
                   onClick={() => setOpenMobile(false)}
                 >
                   <CircleUserIcon />
-                  Account
+                  {t('layout:nav.account')}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -126,11 +128,29 @@ export function NavUser() {
             </DropdownMenuRadioGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              <WithPermissions
+                permissions={[
+                  {
+                    apps: ['app'],
+                  },
+                ]}
+              >
+                <DropdownMenuItem asChild>
+                  <Link to="/app">
+                    <MonitorSmartphoneIcon />
+                    {t('layout:nav.openApp')}
+                  </Link>
+                </DropdownMenuItem>
+              </WithPermissions>
               <DropdownMenuItem asChild>
-                <Link to="/app">
-                  <MonitorSmartphoneIcon />
-                  Open App
-                </Link>
+                <a
+                  href="/api/openapi/app"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <BookOpenIcon />
+                  {t('layout:nav.apiDocumentation')}
+                </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -141,7 +161,7 @@ export function NavUser() {
                 }}
               >
                 <LogOutIcon />
-                Log out
+                {t('layout:nav.logout')}
               </DropdownMenuItem>
             </ConfirmLogout>
           </DropdownMenuContent>

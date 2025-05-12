@@ -6,6 +6,9 @@
     "repositories": "المستودعات",
     "users": "المستخدمون",
     "account": "حساب",
-    "home": "بيت"
+    "home": "بيت",
+    "apiDocumentation": "وثائق API",
+    "logout": "تسجيل الخروج",
+    "openApp": "افتح التطبيق"
   }
 }
