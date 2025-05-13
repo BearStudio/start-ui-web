@@ -1,18 +1,18 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
+import { useAppForm } from '@/lib/form/config';
 
-import { Form, FormField, FormFieldController } from '@/components/form';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { useMascot } from '@/features/auth/mascot';
-import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
+import { zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
@@ -41,51 +41,52 @@ export default function PageLogin({
       return response.data;
     },
     onError: (error) => {
-      form.setError('email', { message: error.message });
+      // form.setErrorMap('email', { message: error.message });
       toast.error(error.message);
     },
   });
 
-  const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsLogin()),
+  const form = useAppForm({
     defaultValues: {
       email: '',
     },
+    validators: { onSubmit: zFormFieldsLogin() },
+    onSubmit: async ({ value }) => {
+      const { error } = await authClient.emailOtp.sendVerificationOtp({
+        email: value.email,
+        type: 'sign-in',
+      });
+
+      if (error) {
+        toast.error(
+          error.code
+            ? t(
+                `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+              )
+            : error.message || t('auth:errorCode.UNKNOWN_ERROR')
+        );
+        return;
+      }
+
+      router.navigate({
+        replace: true,
+        to: '/login/verify',
+        search: {
+          redirect: search.redirect,
+          email: value.email,
+        },
+      });
+    },
   });
 
-  const { isValid, isSubmitted } = form.formState;
+  const { isValid, isSubmitted } = useStore(form.store, (state) => ({
+    isValid: state.isValid,
+    isSubmitted: state.submissionAttempts > 0,
+  }));
   useMascot({ isError: !isValid && isSubmitted });
 
-  const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
-    const { error } = await authClient.emailOtp.sendVerificationOtp({
-      email,
-      type: 'sign-in',
-    });
-
-    if (error) {
-      toast.error(
-        error.code
-          ? t(
-              `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
-            )
-          : error.message || t('auth:errorCode.UNKNOWN_ERROR')
-      );
-      return;
-    }
-
-    router.navigate({
-      replace: true,
-      to: '/login/verify',
-      search: {
-        redirect: search.redirect,
-        email,
-      },
-    });
-  };
-
   return (
-    <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
+    <Form form={form} className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
@@ -96,17 +97,20 @@ export default function PageLogin({
       </div>
       <div className="grid gap-6">
         <div className="grid gap-4">
-          <FormField>
-            <FormFieldController
-              type="email"
-              control={form.control}
-              name="email"
-              size="lg"
-              placeholder={t('auth:fields.email.label')}
-            />
-          </FormField>
+          <form.AppField name="email">
+            {(field) => (
+              <field.FormField>
+                <field.FieldText
+                  type="email"
+                  size="lg"
+                  placeholder={t('auth:fields.email.label')}
+                />
+              </field.FormField>
+            )}
+          </form.AppField>
+
           <Button
-            loading={form.formState.isSubmitting}
+            loading={form.state.isSubmitting}
             type="submit"
             size="lg"
             className="w-full"

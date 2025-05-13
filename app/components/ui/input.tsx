@@ -28,7 +28,7 @@ const inputVariants = cva(
   }
 );
 
-type InputProps = Pick<
+export type InputProps = Pick<
   React.ComponentProps<'input'>,
   | 'type'
   | 'className'
