@@ -6,11 +6,6 @@ const isProd = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'production'
   : import.meta.env?.PROD;
 
-const skipValidation = process.env.SKIP_ENV_VALIDATION
-  ? !!process.env.SKIP_ENV_VALIDATION
-  : // eslint-disable-next-line no-restricted-syntax
-    !!import.meta.env?.SKIP_ENV_VALIDATION;
-
 export const envServer = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
@@ -26,15 +21,15 @@ export const envServer = createEnv({
 
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
-      .default(import.meta.env.PROD ? 'error' : 'info'),
+      .default(isProd ? 'error' : 'info'),
     LOGGER_PRETTY: z
       .enum(['true', 'false'])
-      .default(import.meta.env.PROD ? 'false' : 'true')
+      .default(isProd ? 'false' : 'true')
       .transform((value) => value === 'true'),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-  skipValidation,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
 
 function zOptionalWithReplaceMe() {
