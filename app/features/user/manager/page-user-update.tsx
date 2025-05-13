@@ -14,8 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { FormUser } from '@/features/user/manager/form-user';
-import { zFormFieldsUser } from '@/features/user/schema';
+import { FormUser, formUserOptions } from '@/features/user/manager/form-user';
 import {
   PageLayout,
   PageLayoutContent,
@@ -78,14 +77,14 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   );
 
   const form = useAppForm({
-    validators: { onSubmit: zFormFieldsUser() },
+    ...formUserOptions,
     defaultValues: {
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
       role: userQuery.data?.role ?? 'user',
     },
-    onSubmit: (values) => {
-      userUpdate.mutate({ id: props.params.id, ...values });
+    onSubmit: ({ value }) => {
+      userUpdate.mutate({ id: props.params.id, ...value });
     },
   });
 

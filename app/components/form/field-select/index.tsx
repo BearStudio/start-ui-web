@@ -25,8 +25,6 @@ export default function FieldSelect(
     };
   });
 
-  console.log({ field });
-
   const { containerProps, ...rest } = props;
 
   return (
