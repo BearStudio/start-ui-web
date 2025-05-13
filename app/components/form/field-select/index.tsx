@@ -33,7 +33,6 @@ export default function FieldSelect(
       className={cn('flex flex-1 flex-col gap-1', containerProps?.className)}
     >
       <Select
-        ids={{ input: meta.id }}
         invalid={meta.error ? true : undefined}
         aria-invalid={meta.error ? true : undefined}
         aria-describedby={
@@ -42,7 +41,9 @@ export default function FieldSelect(
             : `${meta.descriptionId} ${meta.errorId}`
         }
         {...rest}
-        value={rest.options.find((option) => option.id === field.value) ?? null}
+        value={
+          rest.options.find((option) => option.id === field.state.value) ?? null
+        }
         onChange={(e) => {
           field.handleChange(e ? e.id : null);
           rest.onChange?.(e);
