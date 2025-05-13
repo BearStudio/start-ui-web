@@ -2,14 +2,22 @@
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
+const envMetaOrProcess: Record<string, string> = import.meta.env ?? process.env;
+
 const isDev = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'development'
   : import.meta.env?.DEV;
 
-const skipValidation = process.env.SKIP_ENV_VALIDATION
-  ? !!process.env.SKIP_ENV_VALIDATION
-  : // eslint-disable-next-line no-restricted-syntax
-    !!import.meta.env?.SKIP_ENV_VALIDATION;
+const getBaseUrl = () => {
+  const vercelUrl =
+    envMetaOrProcess.VITE_VERCEL_BRANCH_URL ?? envMetaOrProcess.VITE_VERCEL_URL;
+
+  if (vercelUrl) {
+    return `https://${vercelUrl}`;
+  }
+
+  return envMetaOrProcess.VITE_BASE_URL;
+};
 
 export const envClient = createEnv({
   clientPrefix: 'VITE_',
@@ -34,7 +42,10 @@ export const envClient = createEnv({
       .optional()
       .transform((value) => value ?? (isDev ? 'gold' : 'plum')),
   },
-  runtimeEnv: import.meta.env,
+  runtimeEnv: {
+    ...envMetaOrProcess,
+    VITE_BASE_URL: getBaseUrl(),
+  },
   emptyStringAsUndefined: true,
-  skipValidation,
+  skipValidation: !!envMetaOrProcess.SKIP_ENV_VALIDATION,
 });
