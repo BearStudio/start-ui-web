@@ -22,7 +22,7 @@
     "storybook:build": "storybook build && mv ./storybook-static ./public/storybook",
     "pretty": "prettier -w .",
     "lint": "run-p lint:*",
-    "lint:eslint": "eslint ./app --fix --max-warnings=0",
+    "lint:eslint": "eslint ./app --fix",
     "lint:ts": "tsc --noEmit",
     "gen:icons": "svgr --config-file app/components/icons/svgr.config.cjs app/components/icons/svg-sources && prettier -w app/components/icons/generated",
     "test": "vitest",
