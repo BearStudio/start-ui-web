@@ -9,11 +9,13 @@ const isDev = process.env.NODE_ENV
   : import.meta.env?.DEV;
 
 const getBaseUrl = () => {
-  const vercelUrl =
-    envMetaOrProcess.VITE_VERCEL_BRANCH_URL ?? envMetaOrProcess.VITE_VERCEL_URL;
+  const vercelUrlPreviewUrl =
+    envMetaOrProcess.VITE_VERCEL_ENV === 'preview'
+      ? envMetaOrProcess.VITE_VERCEL_BRANCH_URL
+      : null;
 
-  if (vercelUrl) {
-    return `https://${vercelUrl}`;
+  if (vercelUrlPreviewUrl) {
+    return `https://${vercelUrlPreviewUrl}`;
   }
 
   return envMetaOrProcess.VITE_BASE_URL;
