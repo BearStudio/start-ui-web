@@ -34,6 +34,7 @@ export const FieldSelect = <
     shouldUnregister,
     type,
     containerProps,
+    options,
     ...rest
   } = props;
 
@@ -46,37 +47,46 @@ export const FieldSelect = <
       disabled={disabled}
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
-      render={({ field, fieldState }) => (
-        <div
-          {...containerProps}
-          className={cn(
-            'flex flex-1 flex-col gap-1',
-            containerProps?.className
-          )}
-        >
-          <Select
-            ids={{ input: ctx.id }}
-            invalid={fieldState.error ? true : undefined}
-            aria-invalid={fieldState.error ? true : undefined}
-            aria-describedby={
-              !fieldState.error
-                ? ctx.descriptionId
-                : `${ctx.descriptionId} ${ctx.errorId}`
-            }
-            {...rest}
-            {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              rest.onChange?.(e);
-            }}
-            onBlur={(e) => {
-              field.onBlur();
-              rest.onBlur?.(e);
-            }}
-          />
-          <FormFieldError />
-        </div>
-      )}
+      render={({ field, fieldState }) => {
+        return (
+          <div
+            {...containerProps}
+            className={cn(
+              'flex flex-1 flex-col gap-1',
+              containerProps?.className
+            )}
+          >
+            <Select
+              invalid={fieldState.error ? true : undefined}
+              aria-invalid={fieldState.error ? true : undefined}
+              aria-describedby={
+                !fieldState.error
+                  ? ctx.descriptionId
+                  : `${ctx.descriptionId} ${ctx.errorId}`
+              }
+              {...rest}
+              {...field}
+              options={options}
+              value={
+                options.find((option) => option.id === field.value) ?? null
+              }
+              onChange={(e) => {
+                field.onChange(e ? e.id : null);
+                rest.onChange?.(e);
+              }}
+              inputProps={{
+                id: ctx.id,
+                onBlur: (e) => {
+                  field.onBlur();
+                  rest.inputProps?.onBlur?.(e);
+                },
+                ...rest.inputProps,
+              }}
+            />
+            <FormFieldError />
+          </div>
+        );
+      }}
     />
   );
 };

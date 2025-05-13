@@ -1,12 +1,13 @@
-import { Combobox } from '@ark-ui/react/combobox';
 import { faker } from '@faker-js/faker';
+import { ComboboxButton } from '@headlessui/react';
 import { Meta } from '@storybook/react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, CheckIcon } from 'lucide-react';
+import { useState } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { ComboboxOption, Select } from '@/components/ui/select';
 
 export default {
   title: 'Select',
@@ -14,105 +15,242 @@ export default {
 
 const astrobears = [
   {
-    value: 'bearstrong',
+    id: 'bearstrong',
     label: 'Bearstrong',
   },
   {
-    value: 'pawdrin',
+    id: 'pawdrin',
     label: 'Buzz Pawdrin',
   },
   {
-    value: 'grizzlyrin',
+    id: 'grizzlyrin',
     label: 'Yuri Grizzlyrin',
   },
   {
-    value: 'jemibear',
+    id: 'jemibear',
     label: 'Mae Jemibear',
     disabled: true,
   },
   {
-    value: 'ridepaw',
+    id: 'ridepaw',
     label: 'Sally Ridepaw',
   },
   {
-    value: 'michaelpawanderson',
+    id: 'michaelpawanderson',
     label: 'Michael Paw Anderson',
   },
-];
+] as const;
+
+type Bear = (typeof astrobears)[number];
 
 export const Default = () => {
-  return <Select options={astrobears} />;
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+      <div className="text-sm">
+        Selected value: <pre>{JSON.stringify(bear)}</pre>
+      </div>
+    </div>
+  );
+};
+
+export const RenderOption = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      renderOption={(option) => (
+        <ComboboxOption
+          value={option}
+          key={option.id}
+          className="group relative"
+        >
+          <span>{option.label}</span>
+          <span className="absolute inset-y-0 right-0 hidden items-center pe-4 group-data-[selected]:flex">
+            <CheckIcon className="size-5" aria-hidden="true" />
+          </span>
+        </ComboboxOption>
+      )}
+    />
+  );
 };
 
 export const WithDefaultValue = () => {
-  return <Select options={astrobears} defaultValue={'pawdrin'} />;
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
+  return (
+    <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+  );
 };
 
 export const WithClearButton = () => {
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
   return (
-    <Select options={astrobears} defaultValue={'pawdrin'} withClearButton />
+    <Select
+      options={astrobears}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      withClearButton
+    />
+  );
+};
+
+export const AllowCustomValue = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Select
+        allowCustomValue
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+      />
+      <div className="text-sm">
+        Selected value: <pre>{JSON.stringify(bear)}</pre>
+      </div>
+    </div>
   );
 };
 
 export const Sizes = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
   return (
     <div className="flex flex-col gap-4">
-      <Select options={astrobears} defaultValue={'pawdrin'} size="sm" />
-      <Select options={astrobears} defaultValue={'pawdrin'} />
-      <Select options={astrobears} defaultValue={'pawdrin'} size="lg" />
+      <Select
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+        size="sm"
+      />
+      <Select options={astrobears} value={bear} onChange={(v) => setBear(v)} />
+      <Select
+        options={astrobears}
+        value={bear}
+        onChange={(v) => setBear(v)}
+        size="lg"
+      />
     </div>
   );
 };
 
 export const Placeholder = () => {
-  return <Select options={astrobears} placeholder="Please select an option" />;
-};
+  const [bear, setBear] = useState<Bear | null>(null);
 
-export const Disabled = () => {
-  return <Select options={astrobears} disabled />;
-};
-
-export const IsError = () => {
-  return <Select options={astrobears} invalid />;
-};
-
-export const Creatable = () => {
-  return <Select options={astrobears} allowCustomValue />;
-};
-
-export const Customization = () => {
   return (
     <Select
       options={astrobears}
-      createListCollectionOptions={{
-        itemToString(item) {
-          return 'Preffix ' + item.label + ' suffix';
-        },
-      }}
+      value={bear}
+      onChange={(v) => setBear(v)}
+      placeholder="Please select an option"
+    />
+  );
+};
+
+export const Disabled = () => {
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
+  return (
+    <Select
+      options={astrobears}
+      disabled
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
+};
+
+export const ReadOnly = () => {
+  const [bear, setBear] = useState<Bear | null>({
+    id: 'bearstrong',
+    label: 'Bearstrong',
+  });
+
+  return (
+    <Select
+      options={astrobears}
+      readOnly
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
+};
+
+export const IsError = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
+      aria-invalid
+      value={bear}
+      onChange={(v) => setBear(v)}
+    />
+  );
+};
+
+export const Customization = () => {
+  const [bear, setBear] = useState<Bear | null>(null);
+
+  return (
+    <Select
+      options={astrobears}
       inputProps={{
         endElement: (
-          <Combobox.Trigger asChild>
-            <Button variant="ghost" className="-me-1.5" size="icon-xs">
-              <ArrowDown />
-            </Button>
-          </Combobox.Trigger>
+          <ComboboxButton
+            as={Button}
+            variant="ghost"
+            className="-me-1.5"
+            size="icon-xs"
+          >
+            <ArrowDown />
+          </ComboboxButton>
         ),
         inputClassName: cn('data-[state=open]:bg-[#C0FFEE]'),
       }}
+      value={bear}
+      onChange={(v) => setBear(v)}
       renderEmpty={(search) => (
-        <div className="bg-negative-100">
-          This is empty and your search is {search}
+        <div className="flex h-20 items-center justify-center text-sm text-muted-foreground">
+          This is empty and your search is "{search}"
         </div>
       )}
     />
   );
 };
 
-const lotsOfOptions = Array.from({ length: 100_000 }, () => ({
+const lotsOfOptions = Array.from({ length: 10_000 }, () => ({
   label: `${faker.person.firstName()} ${faker.person.lastName()}`,
-  value: window.crypto.randomUUID(),
+  id: window.crypto.randomUUID(),
 }));
 
 export const LotsOfOptions = () => {
-  return <Select options={lotsOfOptions} />;
+  const [person, setPerson] = useState<{ id: string; label: string } | null>(
+    null
+  );
+
+  return (
+    <Select
+      options={lotsOfOptions}
+      value={person}
+      onChange={(v) => setPerson(v)}
+      mode="virtual"
+    />
+  );
 };
