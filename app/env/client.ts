@@ -6,11 +6,17 @@ const isDev = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'development'
   : import.meta.env?.DEV;
 
-const getVercelUrl = () => {
-  const envUrl =
+const getBaseUrl = () => {
+  const vercelUrl =
     // eslint-disable-next-line no-restricted-syntax
     import.meta.env?.VITE_VERCEL_BRANCH_URL ?? import.meta.env?.VITE_VERCEL_URL;
-  return envUrl ? `https://${envUrl}` : null;
+
+  if (vercelUrl) {
+    return `https://${vercelUrl}`;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  return import.meta.env?.VITE_BASE_URL;
 };
 
 const skipValidation = process.env.SKIP_ENV_VALIDATION
@@ -21,10 +27,7 @@ const skipValidation = process.env.SKIP_ENV_VALIDATION
 export const envClient = createEnv({
   clientPrefix: 'VITE_',
   client: {
-    VITE_BASE_URL: z
-      .string()
-      .url()
-      .transform((v) => getVercelUrl() ?? v),
+    VITE_BASE_URL: z.string().url(),
     VITE_IS_DEMO: z
       .enum(['true', 'false'])
       .optional()
@@ -46,7 +49,8 @@ export const envClient = createEnv({
   },
   runtimeEnv: {
     ...import.meta.env,
-  },
+    VITE_BASE_URL: getBaseUrl(),
+  } as ExplicitAny,
   emptyStringAsUndefined: true,
   skipValidation,
 });
