@@ -1,15 +1,17 @@
+import { useFormContext } from '@/lib/form/context';
+
 export const Form = (
   props: React.PropsWithChildren<{
     className?: string;
-    form: { handleSubmit(): Promise<void> };
   }>
 ) => {
+  const form = useFormContext();
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        await props.form.handleSubmit();
+        await form.handleSubmit();
       }}
       noValidate
       className={props.className}

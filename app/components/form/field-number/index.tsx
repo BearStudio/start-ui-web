@@ -1,47 +1,29 @@
+import { useStore } from '@tanstack/react-form';
 import { ComponentProps } from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { isNullish } from 'remeda';
 
+import { useFieldContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
+import { FormFieldError } from '@/components/form';
 import { NumberInput } from '@/components/ui/number-input';
 
-import { useFormField } from '../form-field';
-import { FieldProps } from '../form-field-controller';
-import { FormFieldError } from '../form-field-error';
-
-export type FieldNumberProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  {
-    type: 'number';
+export default function FieldNumber(
+  props: ComponentProps<typeof NumberInput> & {
     containerProps?: ComponentProps<'div'>;
     inCents?: boolean;
-  } & ComponentProps<typeof NumberInput>
->;
+  }
+) {
+  const { containerProps, inCents, ...rest } = props;
 
-export const FieldNumber = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(
-  props: FieldNumberProps<TFieldValues, TName>
-) => {
-  const {
-    name,
-    type,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    control,
-    containerProps,
-    inCents,
-    ...rest
-  } = props;
+  const field = useFieldContext<number | undefined | null>();
 
-  const ctx = useFormField();
+  const meta = useStore(field.store, (state) => ({
+    id: state.meta.id,
+    descriptionId: state.meta.descriptionId,
+    errorId: state.meta.errorId,
+    error: state.meta.errors[0],
+  }));
 
   const formatValue = (
     value: number | undefined | null,
@@ -55,46 +37,30 @@ export const FieldNumber = <
   };
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field, fieldState }) => {
-        const { onChange, value, ...fieldProps } = field;
-        return (
-          <div
-            {...containerProps}
-            className={cn(
-              'flex flex-1 flex-col gap-1',
-              containerProps?.className
-            )}
-          >
-            <NumberInput
-              id={ctx.id}
-              aria-invalid={fieldState.error ? true : undefined}
-              aria-describedby={
-                !fieldState.error
-                  ? `${ctx.descriptionId}`
-                  : `${ctx.descriptionId} ${ctx.errorId}`
-              }
-              {...rest}
-              {...fieldProps}
-              value={formatValue(value, 'from-cents')}
-              onValueChange={(value) => {
-                onChange(formatValue(value, 'to-cents'));
-                rest.onValueChange?.(value);
-              }}
-              onBlur={(e) => {
-                field.onBlur();
-                rest.onBlur?.(e);
-              }}
-            />
-            <FormFieldError />
-          </div>
-        );
-      }}
-    />
+    <div
+      {...containerProps}
+      className={cn('flex flex-1 flex-col gap-1', containerProps?.className)}
+    >
+      <NumberInput
+        id={meta.id}
+        aria-invalid={meta.error ? true : undefined}
+        aria-describedby={
+          !meta.error
+            ? `${meta.descriptionId}`
+            : `${meta.descriptionId} ${meta.errorId}`
+        }
+        {...rest}
+        value={formatValue(field.state.value, 'from-cents')}
+        onValueChange={(value) => {
+          field.handleChange(formatValue(value, 'to-cents'));
+          rest.onValueChange?.(value);
+        }}
+        onBlur={(e) => {
+          field.handleBlur();
+          rest.onBlur?.(e);
+        }}
+      />
+      <FormFieldError />
+    </div>
   );
-};
+}

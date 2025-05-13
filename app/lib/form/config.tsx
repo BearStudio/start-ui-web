@@ -3,38 +3,33 @@ import { lazy } from 'react';
 
 import { fieldContext, formContext } from '@/lib/form/context';
 
-import { FormField, FormFieldLabel } from '@/components/form';
+import {
+  Form,
+  FormField,
+  FormFieldError,
+  FormFieldHelper,
+  FormFieldLabel,
+} from '@/components/form';
 
 const FieldText = lazy(() => import('@/components/form/field-text'));
-
-export const Form = (
-  props: React.PropsWithChildren<{
-    className?: string;
-    form: { handleSubmit(): Promise<void> };
-  }>
-) => {
-  return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        await props.form.handleSubmit();
-      }}
-      noValidate
-      className={props.className}
-    >
-      {props.children}
-    </form>
-  );
-};
+const FieldSelect = lazy(() => import('@/components/form/field-select'));
+const FieldDate = lazy(() => import('@/components/form/field-date'));
+const FieldNumber = lazy(() => import('@/components/form/field-number'));
+const FieldOtp = lazy(() => import('@/components/form/field-otp'));
 
 export const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
-    FieldText,
     FormFieldLabel,
     FormField,
+    FormFieldHelper,
+    FormFieldError,
+    FieldText,
+    FieldSelect,
+    FieldDate,
+    FieldNumber,
+    FieldOtp,
   },
-  formComponents: {},
+  formComponents: { Form },
   fieldContext,
   formContext,
 });

@@ -1,92 +1,58 @@
+import { useStore } from '@tanstack/react-form';
 import { ComponentProps } from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
+import { useFieldContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
 import { FormFieldError } from '@/components/form';
-import { useFormField } from '@/components/form/form-field';
-import { FieldProps } from '@/components/form/form-field-controller';
 import { Select } from '@/components/ui/select';
 
-export type FieldSelectProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  {
-    type: 'select';
+export default function FieldSelect(
+  props: ComponentProps<typeof Select> & {
     containerProps?: ComponentProps<'div'>;
-  } & ComponentProps<typeof Select>
->;
+  }
+) {
+  const field = useFieldContext<string | null | undefined>();
 
-export const FieldSelect = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(
-  props: FieldSelectProps<TFieldValues, TName>
-) => {
-  const {
-    name,
-    control,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    type,
-    containerProps,
-    options,
-    ...rest
-  } = props;
+  const meta = useStore(field.store, (state) => ({
+    id: state.meta.id,
+    descriptionId: state.meta.descriptionId,
+    errorId: state.meta.errorId,
+    error: state.meta.errors[0],
+  }));
 
-  const ctx = useFormField();
+  const { containerProps, ...rest } = props;
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field, fieldState }) => {
-        return (
-          <div
-            {...containerProps}
-            className={cn(
-              'flex flex-1 flex-col gap-1',
-              containerProps?.className
-            )}
-          >
-            <Select
-              invalid={fieldState.error ? true : undefined}
-              aria-invalid={fieldState.error ? true : undefined}
-              aria-describedby={
-                !fieldState.error
-                  ? ctx.descriptionId
-                  : `${ctx.descriptionId} ${ctx.errorId}`
-              }
-              {...rest}
-              {...field}
-              options={options}
-              value={
-                options.find((option) => option.id === field.value) ?? null
-              }
-              onChange={(e) => {
-                field.onChange(e ? e.id : null);
-                rest.onChange?.(e);
-              }}
-              inputProps={{
-                id: ctx.id,
-                onBlur: (e) => {
-                  field.onBlur();
-                  rest.inputProps?.onBlur?.(e);
-                },
-                ...rest.inputProps,
-              }}
-            />
-            <FormFieldError />
-          </div>
-        );
-      }}
-    />
+    <div
+      {...containerProps}
+      className={cn('flex flex-1 flex-col gap-1', containerProps?.className)}
+    >
+      <Select
+        ids={{ input: meta.id }}
+        invalid={meta.error ? true : undefined}
+        aria-invalid={meta.error ? true : undefined}
+        aria-describedby={
+          !meta.error
+            ? meta.descriptionId
+            : `${meta.descriptionId} ${meta.errorId}`
+        }
+        {...rest}
+        value={rest.options.find((option) => option.id === field.value) ?? null}
+        onChange={(e) => {
+          field.handleChange(e ? e.id : null);
+          rest.onChange?.(e);
+        }}
+        inputProps={{
+          id: meta.id,
+          onBlur: (e) => {
+            field.handleBlur();
+            rest.inputProps?.onBlur?.(e);
+          },
+          ...rest.inputProps,
+        }}
+      />
+      <FormFieldError />
+    </div>
   );
-};
+}

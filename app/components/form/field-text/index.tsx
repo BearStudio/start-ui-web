@@ -1,11 +1,15 @@
 import { useStore } from '@tanstack/react-form';
+import { ComponentProps } from 'react';
 
 import { useFieldContext } from '@/lib/form/context';
+import { cn } from '@/lib/tailwind/utils';
 
 import { FormFieldError } from '@/components/form';
 import { Input, InputProps } from '@/components/ui/input';
 
-export default function FieldText(props: InputProps) {
+export default function FieldText(
+  props: InputProps & { containerProps?: ComponentProps<'div'> }
+) {
   const field = useFieldContext<string>();
 
   const meta = useStore(field.store, (state) => ({
@@ -15,8 +19,13 @@ export default function FieldText(props: InputProps) {
     error: state.meta.errors[0],
   }));
 
+  const { containerProps, ...componentProps } = props;
+
   return (
-    <>
+    <div
+      {...containerProps}
+      className={cn('flex flex-1 flex-col gap-1', containerProps?.className)}
+    >
       <Input
         id={meta.id}
         aria-invalid={meta.error ? true : undefined}
@@ -25,7 +34,7 @@ export default function FieldText(props: InputProps) {
             ? `${meta.descriptionId}`
             : `${meta.descriptionId} ${meta.errorId}`
         }
-        {...props}
+        {...componentProps}
         value={field.state.value}
         onChange={(e) => {
           field.handleChange(e.target.value);
@@ -37,6 +46,6 @@ export default function FieldText(props: InputProps) {
         }}
       />
       <FormFieldError />
-    </>
+    </div>
   );
 }

@@ -8,7 +8,6 @@ import { authClient } from '@/lib/auth/client';
 import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
-import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { ConfirmLogout } from '@/features/auth/confirm-logout';
@@ -61,7 +60,7 @@ export const PageOnboarding = () => {
         </div>
       }
     >
-      <Form form={form} className="flex flex-col gap-4 pb-12">
+      <form.Form className="flex flex-col gap-4 pb-12">
         <div className="flex flex-col gap-1">
           <h1 className="text-lg font-bold text-balance">
             {t('auth:pageOnboarding.title')}
@@ -88,7 +87,7 @@ export const PageOnboarding = () => {
         >
           {t('auth:pageOnboarding.submit')}
         </Button>
-      </Form>
+      </form.Form>
     </LayoutLogin>
   );
 };

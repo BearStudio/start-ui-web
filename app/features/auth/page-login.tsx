@@ -8,7 +8,6 @@ import { authClient } from '@/lib/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
 import { useAppForm } from '@/lib/form/config';
 
-import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { useMascot } from '@/features/auth/mascot';
@@ -86,7 +85,7 @@ export default function PageLogin({
   useMascot({ isError: !isValid && isSubmitted });
 
   return (
-    <Form form={form} className="flex flex-col gap-6">
+    <form.Form className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
@@ -137,6 +136,6 @@ export default function PageLogin({
           {t(`${I18N_KEY_PAGE_PREFIX}.loginWithSocial`, { provider: 'GitHub' })}
         </Button>
       </div>
-    </Form>
+    </form.Form>
   );
 }
