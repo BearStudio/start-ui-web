@@ -41,7 +41,7 @@ export const FormUser = (props: { userId?: string }) => {
           readOnly={isCurrentUser}
           options={rolesNames.map((role) => ({
             label: role,
-            value: role,
+            id: role,
           }))}
         />
         {isCurrentUser && (
