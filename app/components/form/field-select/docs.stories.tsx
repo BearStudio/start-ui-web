@@ -51,31 +51,35 @@ const options = [
   },
 ] as const;
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zFormSchema(),
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onSubmit: zFormSchema() },
   onSubmit,
   defaultValues: { bear: '' },
-} as const;
+};
 
 export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.Form>
-      <div className="flex flex-col gap-4">
-        <form.AppField name="bear">
-          {(field) => (
-            <field.FormField>
-              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-              <field.FieldSelect placeholder="Placeholder" options={options} />
-            </field.FormField>
-          )}
-        </form.AppField>
+    <form.AppForm>
+      <form.Form>
+        <div className="flex flex-col gap-4">
+          <form.AppField name="bear">
+            {(field) => (
+              <field.FormField>
+                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+                <field.FieldSelect
+                  placeholder="Placeholder"
+                  options={options}
+                />
+              </field.FormField>
+            )}
+          </form.AppField>
 
-        <Button type="submit">Submit</Button>
-      </div>
-    </form.Form>
+          <Button type="submit">Submit</Button>
+        </div>
+      </form.Form>
+    </form.AppForm>
   );
 };
 
@@ -83,54 +87,56 @@ export const DefaultValue = () => {
   const form = useAppForm({
     ...formOptions,
     defaultValues: {
-      bear: 'pawdrin',
+      bear: 'bearstrong',
     },
   });
 
   return (
-    <form.Form>
-      <div className="flex flex-col gap-4">
-        <form.AppField name="bear">
-          {(field) => (
-            <field.FormField>
-              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-              <field.FieldSelect placeholder="Placeholder" options={options} />
-            </field.FormField>
-          )}
-        </form.AppField>
-        <Button type="submit">Submit</Button>
-      </div>
-    </form.Form>
+    <form.AppForm>
+      <form.Form>
+        <div className="flex flex-col gap-4">
+          <form.AppField name="bear">
+            {(field) => (
+              <field.FormField>
+                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+                <field.FieldSelect
+                  placeholder="Placeholder"
+                  options={options}
+                />
+              </field.FormField>
+            )}
+          </form.AppField>
+          <Button type="submit">Submit</Button>
+        </div>
+      </form.Form>
+    </form.AppForm>
   );
 };
 
 export const Disabled = () => {
-  const form = useAppForm({
-    ...formOptions,
-    defaultValues: {
-      bear: 'michaelpawanderson',
-    },
-  });
+  const form = useAppForm(formOptions);
 
   return (
-    <form.Form>
-      <div className="flex flex-col gap-4">
-        <form.AppField name="bear">
-          {(field) => (
-            <field.FormField>
-              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-              <field.FieldSelect
-                placeholder="Placeholder"
-                options={options}
-                disabled
-              />
-            </field.FormField>
-          )}
-        </form.AppField>
+    <form.AppForm>
+      <form.Form>
+        <div className="flex flex-col gap-4">
+          <form.AppField name="bear">
+            {(field) => (
+              <field.FormField>
+                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+                <field.FieldSelect
+                  placeholder="Placeholder"
+                  options={options}
+                  disabled
+                />
+              </field.FormField>
+            )}
+          </form.AppField>
 
-        <Button type="submit">Submit</Button>
-      </div>
-    </form.Form>
+          <Button type="submit">Submit</Button>
+        </div>
+      </form.Form>
+    </form.AppForm>
   );
 };
 

@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 test('update value', async () => {
@@ -17,15 +16,14 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
+        <form.AppField name="otp">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -50,15 +48,14 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
+        <form.AppField name="otp">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -77,16 +74,14 @@ test('auto submit', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            autoSubmit
-          />
-        </FormField>
+        <form.AppField name="otp">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} autoSubmit />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -107,16 +102,14 @@ test('disabled', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            disabled
-          />
-        </FormField>
+        <form.AppField name="otp">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} disabled />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );

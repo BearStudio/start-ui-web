@@ -127,7 +127,6 @@
     "cross-env": "7.0.3",
     "dotenv-cli": "8.0.0",
     "eslint": "9.26.0",
-    "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-sonarjs": "3.0.2",
     "eslint-plugin-storybook": "0.12.0",

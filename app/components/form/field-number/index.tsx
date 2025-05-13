@@ -6,6 +6,7 @@ import { useFieldContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
 import { FormFieldError } from '@/components/form';
+import { FieldContextMeta } from '@/components/form/form-field';
 import { NumberInput } from '@/components/ui/number-input';
 
 export default function FieldNumber(
@@ -18,12 +19,15 @@ export default function FieldNumber(
 
   const field = useFieldContext<number | undefined | null>();
 
-  const meta = useStore(field.store, (state) => ({
-    id: state.meta.id,
-    descriptionId: state.meta.descriptionId,
-    errorId: state.meta.errorId,
-    error: state.meta.errors[0],
-  }));
+  const meta = useStore(field.store, (state) => {
+    const fieldMeta = state.meta as FieldContextMeta;
+    return {
+      id: fieldMeta.id,
+      descriptionId: fieldMeta.descriptionId,
+      errorId: fieldMeta.errorId,
+      error: fieldMeta.errors[0],
+    };
+  });
 
   const formatValue = (
     value: number | undefined | null,

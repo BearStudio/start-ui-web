@@ -4,6 +4,7 @@ import { ComponentProps } from 'react';
 import { useFieldContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
+import { FieldContextMeta } from '@/components/form/form-field';
 import { FormFieldError } from '@/components/form/form-field-error';
 import { DatePicker } from '@/components/ui/date-picker';
 
@@ -14,14 +15,17 @@ export default function FieldDate(
 ) {
   const { containerProps, ...rest } = props;
 
-  const field = useFieldContext();
+  const field = useFieldContext<Date | null | undefined>();
 
-  const meta = useStore(field.store, (state) => ({
-    id: state.meta.id,
-    descriptionId: state.meta.descriptionId,
-    errorId: state.meta.errorId,
-    error: state.meta.errors[0],
-  }));
+  const meta = useStore(field.store, (state) => {
+    const fieldMeta = state.meta as FieldContextMeta;
+    return {
+      id: fieldMeta.id,
+      descriptionId: fieldMeta.descriptionId,
+      errorId: fieldMeta.errorId,
+      error: fieldMeta.errors[0],
+    };
+  });
 
   return (
     <div
@@ -37,7 +41,7 @@ export default function FieldDate(
             : `${meta.descriptionId} ${meta.errorId}`
         }
         {...rest}
-        {...field}
+        value={field.state.value}
         onChange={(e) => {
           field.handleChange(e);
           rest.onChange?.(e);

@@ -5,35 +5,35 @@ import { cn } from '@/lib/tailwind/utils';
 
 type FormFieldSize = 'sm' | 'default' | 'lg';
 
-type FormFieldProps = {
-  id?: string;
-  size?: FormFieldSize;
-  children?: ReactNode;
-  className?: string;
-};
-
-export type FieldContextMeta = {
+export type FieldContextMeta = ReturnType<
+  ReturnType<typeof useFieldContext>['getMeta']
+> & {
   id: string;
   descriptionId: string;
   errorId: string;
   size?: FormFieldSize;
 };
 
-export const FormField = (props: FormFieldProps) => {
+export const FormField = (props: {
+  id?: string;
+  size?: FormFieldSize;
+  children?: ReactNode;
+  className?: string;
+}) => {
   const _id = useId();
   const id = props.id ?? _id;
 
-  const ctx = useFieldContext();
+  const field = useFieldContext();
 
   useEffect(() => {
-    ctx.setMeta((meta) => ({
+    field.setMeta((meta) => ({
       ...meta,
       id,
       descriptionId: `${id}-description`,
       errorId: `${id}-error`,
       size: props.size,
     }));
-  }, [ctx, id, props.size]);
+  }, [field.setMeta, id, props.size]);
 
   return (
     <div className={cn('flex flex-col gap-1.5', props.className)}>

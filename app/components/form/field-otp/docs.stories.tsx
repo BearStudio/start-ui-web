@@ -25,12 +25,11 @@ const zFormSchema = (options: { length?: number } = {}) => {
   });
 };
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zFormSchema(),
-  defaultValues: { code: '' as string },
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onBlur: zFormSchema() },
+  defaultValues: { code: '' },
   onSubmit,
-} as const;
+};
 
 export const Default = () => {
   const form = useAppForm(formOptions);

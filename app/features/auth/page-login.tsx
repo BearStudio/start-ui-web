@@ -40,7 +40,9 @@ export default function PageLogin({
       return response.data;
     },
     onError: (error) => {
-      // form.setErrorMap('email', { message: error.message });
+      form.setErrorMap({
+        onSubmit: { fields: { email: error.message } },
+      });
       toast.error(error.message);
     },
   });

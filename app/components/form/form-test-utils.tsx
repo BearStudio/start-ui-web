@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { Schema, z } from 'zod';
+import { Schema } from 'zod';
 
-import { Form } from '.';
+import { useAppForm } from '@/lib/form/config';
 
 export const FormMocked = <T extends Schema>({
   children,
@@ -9,25 +9,22 @@ export const FormMocked = <T extends Schema>({
   useFormOptions,
   onSubmit,
 }: {
-  children(options: { form: UseFormReturn<z.infer<T>> }): ReactNode;
+  children(options: { form: ReturnType<typeof useAppForm> }): ReactNode;
   schema: T;
-  useFormOptions?: UseFormProps<z.infer<T>>;
-  onSubmit?: SubmitHandler<z.infer<T>>;
+  useFormOptions?: Parameters<typeof useAppForm>[0];
+  onSubmit?: Parameters<typeof useAppForm>[0]['onSubmit'];
 }) => {
-  const form = useForm({
-    mode: 'onBlur',
-    resolver: zodResolver(schema),
+  const form = useAppForm({
+    validators: { onBlur: schema },
     ...useFormOptions,
+    onSubmit,
   });
   return (
-    <Form
-      {...form}
-      onSubmit={
-        onSubmit ? form.handleSubmit((values) => onSubmit(values)) : undefined
-      }
-    >
-      {children({ form })}
-      <button type="submit">Submit</button>
-    </Form>
+    <form.AppForm>
+      <form.Form>
+        {children({ form })}
+        <button type="submit">Submit</button>
+      </form.Form>
+    </form.AppForm>
   );
 };
