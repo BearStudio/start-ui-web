@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { envClient } from '@/env/client';
 
 export const LoginEmailHint = () => {
-  // const form = useFormContext();
+  const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
 
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
@@ -26,11 +26,7 @@ export const LoginEmailHint = () => {
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          // onClick={() =>
-          // form.setFieldValue('email', mockedEmail, {
-          //   shouldValidate: true,
-          // })
-          // }
+          onClick={() => form.setFieldValue('email', () => mockedEmail)}
         >
           {mockedEmail}
         </button>
@@ -40,7 +36,7 @@ export const LoginEmailHint = () => {
 };
 
 export const LoginEmailOtpHint = () => {
-  // const form = useFormContext();
+  const form = useFormContext();
 
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
@@ -57,11 +53,7 @@ export const LoginEmailOtpHint = () => {
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          // onClick={() =>
-          // form.setFieldValue('otp', AUTH_EMAIL_OTP_MOCKED, {
-          //   shouldValidate: true,
-          // })
-          // }
+          onClick={() => form.setFieldValue('otp', () => AUTH_EMAIL_OTP_MOCKED)}
         >
           {AUTH_EMAIL_OTP_MOCKED}
         </button>

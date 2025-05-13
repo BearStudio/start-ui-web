@@ -85,57 +85,61 @@ export default function PageLogin({
   useMascot({ isError: !isValid && isSubmitted });
 
   return (
-    <form.Form className="flex flex-col gap-6">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">
-          {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
-        </h1>
-        <p className="text-sm text-balance text-muted-foreground">
-          {t(`${I18N_KEY_PAGE_PREFIX}.description`)}
-        </p>
-      </div>
-      <div className="grid gap-6">
-        <div className="grid gap-4">
-          <form.AppField name="email">
-            {(field) => (
-              <field.FormField>
-                <field.FieldText
-                  type="email"
-                  size="lg"
-                  placeholder={t('auth:fields.email.label')}
-                />
-              </field.FormField>
-            )}
-          </form.AppField>
+    <form.AppForm>
+      <form.Form className="flex flex-col gap-6">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">
+            {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
+          </h1>
+          <p className="text-sm text-balance text-muted-foreground">
+            {t(`${I18N_KEY_PAGE_PREFIX}.description`)}
+          </p>
+        </div>
+        <div className="grid gap-6">
+          <div className="grid gap-4">
+            <form.AppField name="email">
+              {(field) => (
+                <field.FormField>
+                  <field.FieldText
+                    type="email"
+                    size="lg"
+                    placeholder={t('auth:fields.email.label')}
+                  />
+                </field.FormField>
+              )}
+            </form.AppField>
 
+            <Button
+              loading={form.state.isSubmitting}
+              type="submit"
+              size="lg"
+              className="w-full"
+            >
+              {t(`${I18N_KEY_PAGE_PREFIX}.loginWithEmail`)}
+            </Button>
+            <LoginEmailHint />
+          </div>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+              {t(`${I18N_KEY_PAGE_PREFIX}.spacer`)}
+            </span>
+          </div>
           <Button
-            loading={form.state.isSubmitting}
-            type="submit"
-            size="lg"
             className="w-full"
+            variant="secondary"
+            loading={
+              social.variables === 'github' &&
+              (social.isPending || social.isSuccess)
+            }
+            size="lg"
+            onClick={() => social.mutate('github')}
           >
-            {t(`${I18N_KEY_PAGE_PREFIX}.loginWithEmail`)}
+            {t(`${I18N_KEY_PAGE_PREFIX}.loginWithSocial`, {
+              provider: 'GitHub',
+            })}
           </Button>
-          <LoginEmailHint />
         </div>
-        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-          <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            {t(`${I18N_KEY_PAGE_PREFIX}.spacer`)}
-          </span>
-        </div>
-        <Button
-          className="w-full"
-          variant="secondary"
-          loading={
-            social.variables === 'github' &&
-            (social.isPending || social.isSuccess)
-          }
-          size="lg"
-          onClick={() => social.mutate('github')}
-        >
-          {t(`${I18N_KEY_PAGE_PREFIX}.loginWithSocial`, { provider: 'GitHub' })}
-        </Button>
-      </div>
-    </form.Form>
+      </form.Form>
+    </form.AppForm>
   );
 }
