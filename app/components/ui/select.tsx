@@ -24,7 +24,12 @@ type TValueBase = OptionBase | null;
 type InputProps = ComponentProps<typeof Input>;
 type InputPropsRoot = Pick<
   InputProps,
-  'placeholder' | 'size' | 'aria-invalid' | 'aria-describedby' | 'readOnly'
+  | 'placeholder'
+  | 'size'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'readOnly'
+  | 'autoFocus'
 >;
 
 type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
@@ -56,6 +61,7 @@ export const Select = <TValue extends TValueBase>({
   renderOption,
   onChange,
   value,
+  autoFocus,
   allowCustomValue = false,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
@@ -134,6 +140,7 @@ export const Select = <TValue extends TValueBase>({
           size={size}
           displayValue={(item) => item?.label ?? ''}
           onChange={handleInputChange}
+          autoFocus={autoFocus}
           placeholder={placeholder}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
