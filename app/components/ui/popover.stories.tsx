@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { useAppForm } from '@/lib/form/config';
 import { zu } from '@/lib/zod/zod-utils';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -88,7 +89,7 @@ export const WithForm = () => {
         <Button>Info</Button>
       </PopoverTrigger>
       <PopoverContent>
-        <form.Form>
+        <Form form={form}>
           <div className="flex flex-col gap-4">
             <form.AppField name="name">
               {(field) => (
@@ -104,7 +105,7 @@ export const WithForm = () => {
               <Button type="submit">Submit</Button>
             </div>
           </div>
-        </form.Form>
+        </Form>
       </PopoverContent>
     </Popover>
   );

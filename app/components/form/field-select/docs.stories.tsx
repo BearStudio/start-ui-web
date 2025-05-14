@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { useAppForm } from '@/lib/form/config';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
@@ -61,25 +62,20 @@ export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="bear">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-                <field.FieldSelect
-                  placeholder="Placeholder"
-                  options={options}
-                />
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect placeholder="Placeholder" options={options} />
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <Button type="submit">Submit</Button>
-        </div>
-      </form.Form>
-    </form.AppForm>
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
   );
 };
 
@@ -92,24 +88,19 @@ export const DefaultValue = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="bear">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-                <field.FieldSelect
-                  placeholder="Placeholder"
-                  options={options}
-                />
-              </field.FormField>
-            )}
-          </form.AppField>
-          <Button type="submit">Submit</Button>
-        </div>
-      </form.Form>
-    </form.AppForm>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect placeholder="Placeholder" options={options} />
+            </field.FormField>
+          )}
+        </form.AppField>
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
   );
 };
 
@@ -117,26 +108,24 @@ export const Disabled = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="bear">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-                <field.FieldSelect
-                  placeholder="Placeholder"
-                  options={options}
-                  disabled
-                />
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect
+                placeholder="Placeholder"
+                options={options}
+                disabled
+              />
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <Button type="submit">Submit</Button>
-        </div>
-      </form.Form>
-    </form.AppForm>
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
   );
 };
 
@@ -149,25 +138,23 @@ export const ReadOnly = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="bear">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
-                <field.FieldSelect
-                  placeholder="Placeholder"
-                  options={options}
-                  readOnly
-                />
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect
+                placeholder="Placeholder"
+                options={options}
+                readOnly
+              />
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <Button type="submit">Submit</Button>
-        </div>
-      </form.Form>
-    </form.AppForm>
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
   );
 };

@@ -8,7 +8,6 @@ import { lazy } from 'react';
 import { fieldContext, formContext } from '@/lib/form/context';
 
 import {
-  Form,
   FormField,
   FormFieldError,
   FormFieldHelper,
@@ -33,7 +32,7 @@ const { useAppForm, withForm: _withForm } = createFormHook({
     FieldNumber,
     FieldOtp,
   },
-  formComponents: { Form },
+  formComponents: {},
   fieldContext,
   formContext,
 });

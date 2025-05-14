@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { useAppForm } from '@/lib/form/config';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -26,24 +27,22 @@ export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="date">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Date</field.FormFieldLabel>
-                <field.FieldDate placeholder="DD/MM/YYYY" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate placeholder="DD/MM/YYYY" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -54,24 +53,22 @@ export const DefaultValue = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="date">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Date</field.FormFieldLabel>
-                <field.FieldDate placeholder="DD/MM/YYYY" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate placeholder="DD/MM/YYYY" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -79,28 +76,26 @@ export const CalendarCustomization = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="date">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Date</field.FormFieldLabel>
-                <field.FieldDate
-                  placeholder="DD/MM/YYYY"
-                  calendarProps={{
-                    startMonth: new Date(),
-                  }}
-                />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate
+                placeholder="DD/MM/YYYY"
+                calendarProps={{
+                  startMonth: new Date(),
+                }}
+              />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };

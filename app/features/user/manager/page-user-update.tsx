@@ -10,6 +10,7 @@ import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -112,41 +113,39 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <PageLayout>
-          <PageLayoutTopBar
-            backButton={<BackButton />}
-            actions={
-              <Button
-                size="sm"
-                type="submit"
-                className="min-w-20"
-                loading={userUpdate.isPending}
-              >
-                Save
-              </Button>
-            }
-          >
-            <PageLayoutTopBarTitle>
-              {ui
-                .match('pending', () => <Skeleton className="h-4 w-48" />)
-                .match(['not-found', 'error'], () => (
-                  <AlertCircleIcon className="size-4 text-muted-foreground" />
-                ))
-                .match('default', ({ user }) => <>{user.name || user.email}</>)
-                .exhaustive()}
-            </PageLayoutTopBarTitle>
-          </PageLayoutTopBar>
-          <PageLayoutContent>
-            <Card>
-              <CardContent>
-                <FormUser form={form} userId={props.params.id} />
-              </CardContent>
-            </Card>
-          </PageLayoutContent>
-        </PageLayout>
-      </form.Form>
-    </form.AppForm>
+    <Form form={form}>
+      <PageLayout>
+        <PageLayoutTopBar
+          backButton={<BackButton />}
+          actions={
+            <Button
+              size="sm"
+              type="submit"
+              className="min-w-20"
+              loading={userUpdate.isPending}
+            >
+              Save
+            </Button>
+          }
+        >
+          <PageLayoutTopBarTitle>
+            {ui
+              .match('pending', () => <Skeleton className="h-4 w-48" />)
+              .match(['not-found', 'error'], () => (
+                <AlertCircleIcon className="size-4 text-muted-foreground" />
+              ))
+              .match('default', ({ user }) => <>{user.name || user.email}</>)
+              .exhaustive()}
+          </PageLayoutTopBarTitle>
+        </PageLayoutTopBar>
+        <PageLayoutContent>
+          <Card>
+            <CardContent>
+              <FormUser form={form} userId={props.params.id} />
+            </CardContent>
+          </Card>
+        </PageLayoutContent>
+      </PageLayout>
+    </Form>
   );
 };

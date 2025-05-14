@@ -32,7 +32,7 @@ export const Default = () => {
   });
 
   return (
-    <form.Form>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <form.AppField name="name">
           {(field) => (
@@ -63,6 +63,6 @@ export const Default = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.Form>
+    </Form>
   );
 };

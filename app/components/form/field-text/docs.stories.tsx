@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { useAppForm } from '@/lib/form/config';
 import { zu } from '@/lib/zod/zod-utils';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -30,25 +31,23 @@ export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Name</field.FormFieldLabel>
-                <field.FieldText placeholder="Buzz Pawdrin" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -61,24 +60,22 @@ export const DefaultValue = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Name</field.FormFieldLabel>
-                <field.FieldText type="text" placeholder="Buzz Pawdrin" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText type="text" placeholder="Buzz Pawdrin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -91,25 +88,23 @@ export const Disabled = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Name</field.FormFieldLabel>
-                <field.FieldText placeholder="Buzz Pawdrin" disabled />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" disabled />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -122,25 +117,23 @@ export const ReadOnly = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Name</field.FormFieldLabel>
-                <field.FieldText placeholder="Buzz Pawdrin" readOnly />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" readOnly />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
 
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -148,27 +141,25 @@ export const StartElement = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Name</field.FormFieldLabel>
-                <field.FieldText
-                  placeholder="Buzz Pawdrin"
-                  startElement={<ActivityIcon />}
-                />
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText
+                placeholder="Buzz Pawdrin"
+                startElement={<ActivityIcon />}
+              />
 
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };

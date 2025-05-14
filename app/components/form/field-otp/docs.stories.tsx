@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { useAppForm } from '@/lib/form/config';
 import { zu } from '@/lib/zod/zod-utils';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -35,7 +36,7 @@ export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <form.AppField name="code">
           {(field) => (
@@ -50,7 +51,7 @@ export const Default = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.AppForm>
+    </Form>
   );
 };
 
@@ -63,7 +64,7 @@ export const DefaultValue = () => {
   });
 
   return (
-    <form.AppForm>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <form.AppField name="code">
           {(field) => (
@@ -77,7 +78,7 @@ export const DefaultValue = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.AppForm>
+    </Form>
   );
 };
 
@@ -85,7 +86,7 @@ export const Disabled = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <form.AppField name="code">
           {(field) => (
@@ -99,7 +100,7 @@ export const Disabled = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.AppForm>
+    </Form>
   );
 };
 
@@ -110,7 +111,7 @@ export const CustomLength = () => {
   });
 
   return (
-    <form.AppForm>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <form.AppField name="code">
           {(field) => (
@@ -124,7 +125,7 @@ export const CustomLength = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.AppForm>
+    </Form>
   );
 };
 
@@ -132,7 +133,7 @@ export const AutoSubmit = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <form.AppField name="code">
           {(field) => (
@@ -146,6 +147,6 @@ export const AutoSubmit = () => {
           <Button type="submit">Submit</Button>
         </div>
       </div>
-    </form.AppForm>
+    </Form>
   );
 };

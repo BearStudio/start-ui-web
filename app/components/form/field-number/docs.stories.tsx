@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { useAppForm } from '@/lib/form/config';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import FieldNumber from '@/components/form/field-number';
 import { Button } from '@/components/ui/button';
@@ -26,24 +27,22 @@ export const Default = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="balance">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Balance</field.FormFieldLabel>
-                <field.FieldNumber placeholder="Bearcoin" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -56,24 +55,22 @@ export const DefaultValue = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="balance">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Balance</field.FormFieldLabel>
-                <field.FieldNumber placeholder="Bearcoin" />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -81,31 +78,29 @@ export const Currency = () => {
   const form = useAppForm(formOptions);
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="balance">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Balance</field.FormFieldLabel>
-                <field.FieldNumber
-                  placeholder="Bearcoin"
-                  format={{
-                    style: 'currency',
-                    currency: 'EUR',
-                  }}
-                  inCents
-                />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber
+                placeholder="Bearcoin"
+                format={{
+                  style: 'currency',
+                  currency: 'EUR',
+                }}
+                inCents
+              />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -113,24 +108,22 @@ export const Disabled = () => {
   const form = useAppForm({ ...formOptions, defaultValues: { balance: 42 } });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="balance">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Balance</field.FormFieldLabel>
-                <field.FieldNumber placeholder="Bearcoin" disabled />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" disabled />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };
 
@@ -138,23 +131,21 @@ export const ReadOnly = () => {
   const form = useAppForm({ ...formOptions, defaultValues: { balance: 42 } });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <div className="flex flex-col gap-4">
-          <form.AppField name="balance">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>Balance</field.FormFieldLabel>
-                <field.FieldNumber placeholder="Bearcoin" readOnly />
-                <field.FormFieldHelper>Help</field.FormFieldHelper>
-              </field.FormField>
-            )}
-          </form.AppField>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" readOnly />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
         </div>
-      </form.Form>
-    </form.AppForm>
+      </div>
+    </Form>
   );
 };

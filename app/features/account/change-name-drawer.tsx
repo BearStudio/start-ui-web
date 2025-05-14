@@ -7,6 +7,7 @@ import { authClient } from '@/lib/auth/client';
 import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import {
   ResponsiveDrawer,
@@ -72,38 +73,36 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
       </ResponsiveDrawerTrigger>
 
       <ResponsiveDrawerContent className="sm:max-w-xs">
-        <form.AppForm>
-          <form.Form className="flex flex-col gap-4">
-            <ResponsiveDrawerHeader>
-              <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
-              <ResponsiveDrawerDescription className="sr-only">
-                Form to update your name
-              </ResponsiveDrawerDescription>
-            </ResponsiveDrawerHeader>
-            <ResponsiveDrawerBody>
-              <form.AppField name="name">
-                {(field) => (
-                  <field.FormField>
-                    <field.FormFieldLabel className="sr-only">
-                      Name
-                    </field.FormFieldLabel>
-                    <field.FieldText size="lg" autoFocus />
-                  </field.FormField>
-                )}
-              </form.AppField>
-            </ResponsiveDrawerBody>
-            <ResponsiveDrawerFooter>
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                loading={updateUser.isPending}
-              >
-                Update
-              </Button>
-            </ResponsiveDrawerFooter>
-          </form.Form>
-        </form.AppForm>
+        <Form form={form} className="flex flex-col gap-4">
+          <ResponsiveDrawerHeader>
+            <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
+            <ResponsiveDrawerDescription className="sr-only">
+              Form to update your name
+            </ResponsiveDrawerDescription>
+          </ResponsiveDrawerHeader>
+          <ResponsiveDrawerBody>
+            <form.AppField name="name">
+              {(field) => (
+                <field.FormField>
+                  <field.FormFieldLabel className="sr-only">
+                    Name
+                  </field.FormFieldLabel>
+                  <field.FieldText size="lg" autoFocus />
+                </field.FormField>
+              )}
+            </form.AppField>
+          </ResponsiveDrawerBody>
+          <ResponsiveDrawerFooter>
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              loading={updateUser.isPending}
+            >
+              Update
+            </Button>
+          </ResponsiveDrawerFooter>
+        </Form>
       </ResponsiveDrawerContent>
     </ResponsiveDrawer>
   );

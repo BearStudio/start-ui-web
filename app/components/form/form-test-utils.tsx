@@ -3,6 +3,8 @@ import { Schema } from 'zod';
 
 import { useAppForm } from '@/lib/form/config';
 
+import { Form } from '@/components/form';
+
 export const FormMocked = <T extends Schema>({
   children,
   schema,
@@ -20,11 +22,9 @@ export const FormMocked = <T extends Schema>({
     onSubmit,
   });
   return (
-    <form.AppForm>
-      <form.Form>
-        {children({ form })}
-        <button type="submit">Submit</button>
-      </form.Form>
-    </form.AppForm>
+    <Form form={form}>
+      {children({ form })}
+      <button type="submit">Submit</button>
+    </Form>
   );
 };

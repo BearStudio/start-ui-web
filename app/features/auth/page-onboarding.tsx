@@ -8,6 +8,7 @@ import { authClient } from '@/lib/auth/client';
 import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { ConfirmLogout } from '@/features/auth/confirm-logout';
@@ -60,36 +61,34 @@ export const PageOnboarding = () => {
         </div>
       }
     >
-      <form.AppForm>
-        <form.Form className="flex flex-col gap-4 pb-12">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-lg font-bold text-balance">
-              {t('auth:pageOnboarding.title')}
-            </h1>
-            <p className="text-sm text-balance break-words text-muted-foreground">
-              {t('auth:pageOnboarding.description')}
-            </p>
-          </div>
+      <Form form={form} className="flex flex-col gap-4 pb-12">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-lg font-bold text-balance">
+            {t('auth:pageOnboarding.title')}
+          </h1>
+          <p className="text-sm text-balance break-words text-muted-foreground">
+            {t('auth:pageOnboarding.description')}
+          </p>
+        </div>
 
-          <form.AppField name="name">
-            {(field) => (
-              <field.FormField>
-                <field.FormFieldLabel>
-                  {t('auth:fields.name.onboardingLabel')}
-                </field.FormFieldLabel>
-                <field.FieldText size="lg" />
-              </field.FormField>
-            )}
-          </form.AppField>
-          <Button
-            type="submit"
-            size="lg"
-            loading={submitOnboarding.isPending || submitOnboarding.isSuccess}
-          >
-            {t('auth:pageOnboarding.submit')}
-          </Button>
-        </form.Form>
-      </form.AppForm>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>
+                {t('auth:fields.name.onboardingLabel')}
+              </field.FormFieldLabel>
+              <field.FieldText size="lg" />
+            </field.FormField>
+          )}
+        </form.AppField>
+        <Button
+          type="submit"
+          size="lg"
+          loading={submitOnboarding.isPending || submitOnboarding.isSuccess}
+        >
+          {t('auth:pageOnboarding.submit')}
+        </Button>
+      </Form>
     </LayoutLogin>
   );
 };

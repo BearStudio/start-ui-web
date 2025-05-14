@@ -7,6 +7,7 @@ import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -78,33 +79,31 @@ export const PageUserNew = () => {
   });
 
   return (
-    <form.AppForm>
-      <form.Form>
-        <PageLayout>
-          <PageLayoutTopBar
-            backButton={<BackButton />}
-            actions={
-              <Button
-                size="sm"
-                type="submit"
-                className="min-w-20"
-                loading={userCreate.isPending}
-              >
-                Create
-              </Button>
-            }
-          >
-            <PageLayoutTopBarTitle>New User</PageLayoutTopBarTitle>
-          </PageLayoutTopBar>
-          <PageLayoutContent>
-            <Card>
-              <CardContent>
-                <FormUser form={form} />
-              </CardContent>
-            </Card>
-          </PageLayoutContent>
-        </PageLayout>
-      </form.Form>
-    </form.AppForm>
+    <Form form={form}>
+      <PageLayout>
+        <PageLayoutTopBar
+          backButton={<BackButton />}
+          actions={
+            <Button
+              size="sm"
+              type="submit"
+              className="min-w-20"
+              loading={userCreate.isPending}
+            >
+              Create
+            </Button>
+          }
+        >
+          <PageLayoutTopBarTitle>New User</PageLayoutTopBarTitle>
+        </PageLayoutTopBar>
+        <PageLayoutContent>
+          <Card>
+            <CardContent>
+              <FormUser form={form} />
+            </CardContent>
+          </Card>
+        </PageLayoutContent>
+      </PageLayout>
+    </Form>
   );
 };
