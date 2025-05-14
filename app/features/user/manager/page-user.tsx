@@ -151,7 +151,7 @@ export const PageUser = (props: { params: { id: string } }) => {
       <PageLayoutContent>
         {ui
           .match('pending', () => <Spinner full />)
-          .match('not-found', () => <PageError errorCode={404} />)
+          .match('not-found', () => <PageError error="404" />)
           .match('error', () => <PageError />)
           .match('default', ({ user }) => (
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
