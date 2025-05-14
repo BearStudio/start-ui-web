@@ -10,7 +10,8 @@ import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { FormUser, formUserOptions } from '@/features/user/manager/form-user';
+import { FormUser } from '@/features/user/manager/form-user';
+import { FormFieldsUser, zFormFieldsUser } from '@/features/user/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -23,7 +24,12 @@ export const PageUserNew = () => {
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useAppForm({
-    ...formUserOptions,
+    validators: { onSubmit: zFormFieldsUser() },
+    defaultValues: {
+      name: '',
+      email: '',
+      role: 'user',
+    } satisfies FormFieldsUser as FormFieldsUser, // "as" to prevent type issue with validator
     onSubmit: async ({ value }) => {
       userCreate.mutate(value);
     },

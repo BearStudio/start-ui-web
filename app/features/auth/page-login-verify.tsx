@@ -110,7 +110,7 @@ export default function PageLoginVerify({
           <Button loading={form.state.isSubmitting} type="submit" size="lg">
             {t(`${I18N_KEY_PAGE_PREFIX}.confirm`)}
           </Button>
-          <LoginEmailOtpHint form={form} />
+          <LoginEmailOtpHint />
         </div>
       </form.Form>
     </form.AppForm>

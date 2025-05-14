@@ -1,24 +1,13 @@
-import { formOptions } from '@tanstack/react-form';
-
 import { authClient } from '@/lib/auth/client';
-import { rolesNames, zRole } from '@/lib/auth/permissions';
+import { rolesNames } from '@/lib/auth/permissions';
 import { withForm } from '@/lib/form/config';
 
 import { FormFieldHelper } from '@/components/form';
 
-export const formUserOptions = formOptions({
-  // TODO fix type to reactivate validators
-  // validators: { onSubmit: zFormFieldsUser() },
-  defaultValues: {
-    name: '',
-    email: '',
-    role: zRole().parse('user'),
-  },
-});
+import { FormFieldsUser } from '@/features/user/schema';
 
-export const FormUser = withForm({
-  ...formUserOptions,
-  props: { userId: undefined } as { userId?: string },
+export const FormUser = withForm<FormFieldsUser, { userId?: string }>({
+  props: { userId: undefined },
   render: ({ form, userId }) => {
     const session = authClient.useSession();
     const isCurrentUser = userId === session.data?.user.id;

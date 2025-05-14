@@ -8,7 +8,7 @@ export type User = z.infer<ReturnType<typeof zUser>>;
 export const zUser = () =>
   z.object({
     id: z.string(),
-    name: zu.string.nonEmptyNullish(
+    name: zu.string.nonEmpty(
       z.string({
         required_error: t('user:fields.name.required'),
         invalid_type_error: t('user:fields.name.invalid'),

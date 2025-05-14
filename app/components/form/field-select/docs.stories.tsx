@@ -141,7 +141,7 @@ export const Disabled = () => {
 };
 
 export const ReadOnly = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       bear: 'michaelpawanderson',
@@ -149,22 +149,25 @@ export const ReadOnly = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            readOnly
-            options={options}
-          />
-        </FormField>
+    <form.AppForm>
+      <form.Form>
+        <div className="flex flex-col gap-4">
+          <form.AppField name="bear">
+            {(field) => (
+              <field.FormField>
+                <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+                <field.FieldSelect
+                  placeholder="Placeholder"
+                  options={options}
+                  readOnly
+                />
+              </field.FormField>
+            )}
+          </form.AppField>
 
-        <Button type="submit">Submit</Button>
-      </div>
-    </Form>
+          <Button type="submit">Submit</Button>
+        </div>
+      </form.Form>
+    </form.AppForm>
   );
 };
