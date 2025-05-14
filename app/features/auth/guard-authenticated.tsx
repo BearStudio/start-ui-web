@@ -53,7 +53,7 @@ export const GuardAuthenticated = ({
       },
     })
   ) {
-    return <PageError errorCode={403} />;
+    return <PageError error="403" />;
   }
 
   return <>{children}</>;

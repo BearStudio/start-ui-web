@@ -1,39 +1,34 @@
-import { Link, ReactNode } from '@tanstack/react-router';
 import { HomeIcon, Undo2Icon } from 'lucide-react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
-export const PageError = (props: { errorCode?: number }) => {
+export const PageError = (props: { error?: '403' | '404' | '500' }) => {
   const { t } = useTranslation(['components']);
 
-  return match(props.errorCode)
-    .with(403, () => (
+  return match(props.error)
+    .with('403', () => (
       <PageErrorContent
         title={t('components:pageError.403.title')}
         description={t('components:pageError.403.description')}
       />
     ))
-    .with(404, () => (
+    .with('404', () => (
       <PageErrorContent
         title={t('components:pageError.404.title')}
         description={t('components:pageError.404.description')}
       />
     ))
-    .with(500, () => (
+    .with('500', undefined, () => (
       <PageErrorContent
         title={t('components:pageError.500.title')}
         description={t('components:pageError.500.description')}
       />
     ))
-    .otherwise(() => (
-      <PageErrorContent
-        title={t('components:pageError.unknown.title')}
-        description={t('components:pageError.unknown.description')}
-      />
-    ));
+    .exhaustive();
 };
 
 const PageErrorContent = (props: {
@@ -52,8 +47,8 @@ const PageErrorContent = (props: {
       </div>
       <div className="flex gap-4">
         <Button asChild variant="link" className="text-muted-foreground">
-          <Link
-            to="/"
+          <a
+            href="/"
             onClick={(e) => {
               e.preventDefault();
               window.history.back();
@@ -61,13 +56,13 @@ const PageErrorContent = (props: {
           >
             <Undo2Icon className="opacity-60" />
             {t('components:pageError.goBack')}
-          </Link>
+          </a>
         </Button>
         <Button asChild variant="link" className="text-muted-foreground">
-          <Link to="/">
+          <a href="/">
             <HomeIcon className="opacity-60" />
             {t('components:pageError.goHome')}
-          </Link>
+          </a>
         </Button>
       </div>
     </div>

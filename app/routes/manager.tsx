@@ -6,7 +6,7 @@ import { GuardAuthenticated } from '@/features/auth/guard-authenticated';
 
 export const Route = createFileRoute('/manager')({
   component: RouteComponent,
-  notFoundComponent: () => <PageError errorCode={404} />,
+  notFoundComponent: () => <PageError error="404" />,
 });
 
 function RouteComponent() {

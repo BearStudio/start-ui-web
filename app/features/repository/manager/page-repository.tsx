@@ -65,7 +65,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
       <PageLayoutContent>
         {ui
           .match('pending', () => <Spinner full />)
-          .match('not-found', () => <PageError errorCode={404} />)
+          .match('not-found', () => <PageError error="404" />)
           .match('error', () => <PageError />)
           .match('default', ({ repository }) => <>{repository.name}</>)
           .exhaustive()}

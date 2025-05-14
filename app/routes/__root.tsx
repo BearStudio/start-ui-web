@@ -47,7 +47,7 @@ export const Route = createRootRouteWithContext<{
       i18n.changeLanguage(language);
     }
   },
-  notFoundComponent: () => <PageError errorCode={404} />,
+  notFoundComponent: () => <PageError error="404" />,
   errorComponent: (props) => {
     return (
       <RootDocument>
