@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
+import { defaultFromQuery, getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
@@ -88,18 +88,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     },
   });
 
-  const ui = getUiState((set) => {
-    if (userQuery.status === 'pending') return set('pending');
-    if (
-      userQuery.status === 'error' &&
-      userQuery.error instanceof ORPCError &&
-      userQuery.error.code === 'NOT_FOUND'
-    )
-      return set('not-found');
-    if (userQuery.status === 'error') return set('error');
-
-    return set('default', { user: userQuery.data });
-  });
+  const ui = getUiState(defaultFromQuery(userQuery));
 
   const formIsDirty = form.formState.isDirty;
   useBlocker({
@@ -137,7 +126,9 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
               .match(['not-found', 'error'], () => (
                 <AlertCircleIcon className="size-4 text-muted-foreground" />
               ))
-              .match('default', ({ user }) => <>{user.name || user.email}</>)
+              .match('default', ({ data: user }) => (
+                <>{user.name || user.email}</>
+              ))
               .exhaustive()}
           </PageLayoutTopBarTitle>
         </PageLayoutTopBar>
