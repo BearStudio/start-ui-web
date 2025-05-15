@@ -1,4 +1,3 @@
-import { ORPCError } from '@orpc/client';
 import {
   useInfiniteQuery,
   useMutation,
@@ -12,7 +11,11 @@ import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
+import {
+  defaultFromInfiniteQuery,
+  defaultFromQuery,
+  getUiState,
+} from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
@@ -85,18 +88,7 @@ export const PageUser = (props: { params: { id: string } }) => {
     }
   };
 
-  const ui = getUiState((set) => {
-    if (userQuery.status === 'pending') return set('pending');
-    if (
-      userQuery.status === 'error' &&
-      userQuery.error instanceof ORPCError &&
-      userQuery.error.code === 'NOT_FOUND'
-    )
-      return set('not-found');
-    if (userQuery.status === 'error') return set('error');
-
-    return set('default', { user: userQuery.data });
-  });
+  const ui = getUiState(defaultFromQuery(userQuery));
 
   return (
     <PageLayout>
@@ -144,7 +136,9 @@ export const PageUser = (props: { params: { id: string } }) => {
             .match(['not-found', 'error'], () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .match('default', ({ user }) => <>{user.name || user.email}</>)
+            .match('default', ({ data: user }) => (
+              <>{user.name || user.email}</>
+            ))
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
@@ -153,7 +147,7 @@ export const PageUser = (props: { params: { id: string } }) => {
           .match('pending', () => <Spinner full />)
           .match('not-found', () => <PageError error="404" />)
           .match('error', () => <PageError />)
-          .match('default', ({ user }) => (
+          .match('default', ({ data: user }) => (
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
               <Card className="relative flex-1">
                 <CardHeader>
@@ -238,16 +232,7 @@ const UserSessions = (props: { userId: string }) => {
     })
   );
 
-  const ui = getUiState((set) => {
-    if (sessionsQuery.status === 'pending') return set('pending');
-    if (sessionsQuery.status === 'error') return set('error');
-
-    const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length) return set('empty');
-    return set('default', {
-      items,
-    });
-  });
+  const ui = getUiState(defaultFromInfiniteQuery(sessionsQuery));
 
   return (
     <WithPermissions permissions={[{ session: ['list'] }]}>

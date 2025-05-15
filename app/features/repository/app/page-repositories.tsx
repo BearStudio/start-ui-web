@@ -2,7 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
+import { defaultFromInfiniteQuery, getUiState } from '@/lib/ui-state';
 
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
@@ -26,14 +26,7 @@ export const PageRepositories = () => {
     })
   );
 
-  const ui = getUiState((set) => {
-    if (repositoriesQuery.status === 'pending') return set('pending');
-    if (repositoriesQuery.status === 'error') return set('error');
-
-    const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length) return set('empty');
-    return set('default', { items });
-  });
+  const ui = getUiState(defaultFromInfiniteQuery(repositoriesQuery));
 
   return (
     <PageLayout>

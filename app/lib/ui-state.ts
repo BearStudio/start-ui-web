@@ -1,3 +1,6 @@
+import { ORPCError } from '@orpc/client';
+import { UseInfiniteQueryResult, UseQueryResult } from '@tanstack/react-query';
+
 type AvailableStatus =
   | 'pending'
   | 'not-found'
@@ -34,16 +37,21 @@ type UiState<
     : Pick<UiState<Exclude<Status, S>, Data>, 'match'>);
 };
 
-export const getUiState = <
+type GetState<
   Status extends AvailableStatus,
   Data extends Record<string, unknown>,
+> = (
+  set: <S extends AvailableStatus, SData extends Record<string, unknown>>(
+    status: S,
+    data?: SData
+  ) => { __status: S } & SData
+) => { __status: Status } & Data;
+
+export const getUiState = <
+  Status extends AvailableStatus = AvailableStatus,
+  Data extends Record<string, unknown> = Record<string, unknown>,
 >(
-  getState: (
-    set: <S extends AvailableStatus, D extends Record<string, unknown>>(
-      status: S,
-      data?: D
-    ) => { __status: S } & D
-  ) => { __status: Status } & Data
+  getState: GetState<Status, Data>
 ): UiState<Status, Data> => {
   const state = getState((status, data = {} as ExplicitAny) => {
     return {
@@ -96,3 +104,46 @@ export const getUiState = <
 
   return uiState;
 };
+
+export const defaultFromQuery =
+  <Data>(
+    query: UseQueryResult<Data>
+  ): GetState<'pending' | 'error' | 'not-found' | 'default', { data: Data }> =>
+  (set) => {
+    if (query.status === 'pending') return set('pending');
+    if (
+      query.status === 'error' &&
+      query.error instanceof ORPCError &&
+      query.error.code === 'NOT_FOUND'
+    )
+      return set('not-found');
+    if (query.status === 'error') return set('error');
+    return set('default', { data: query.data });
+  };
+
+export const defaultFromInfiniteQuery =
+  <Data>(
+    query: UseInfiniteQueryResult<{
+      pages: { items: Data[] }[];
+    }>
+  ): GetState<'pending' | 'error' | 'default' | 'empty', { items: Data[] }> =>
+  (set) => {
+    if (query.isLoading) {
+      return set('pending');
+    }
+    if (query.isError) {
+      return set('error');
+    }
+    if (!query.isFetched) {
+      return set('waiting');
+    }
+
+    const items = query.data?.pages?.flatMap((p) => p.items) ?? [];
+    if (!items.length) {
+      return set('empty');
+    }
+
+    return set('default', {
+      items,
+    });
+  };
