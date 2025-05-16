@@ -15,16 +15,21 @@ type UiState<
   state: {
     __status: Status;
   } & Data;
-  match: <S extends Status>(
+  match: <
+    S extends Status,
+    SData = Omit<
+      Extract<UiState<Status, Data>['state'], { __status: S }>,
+      '__status'
+    >,
+  >(
     status: S | Array<S>,
     handler: (
-      data: Omit<
-        Extract<UiState<Status, Data>['state'], { __status: S }>,
-        '__status'
-      >
+      data: SData
     ) => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode),
     __matched?: boolean,
-    run?: () => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode)
+    render?: () =>
+      | React.ReactNode
+      | ((...args: ExplicitAny[]) => React.ReactNode)
   ) => {
     nonExhaustive: () => React.ReactNode;
   } & (Exclude<Status, S> extends never
@@ -39,10 +44,10 @@ export const getUiState = <
   Data extends Record<string, unknown>,
 >(
   getState: (
-    set: <S extends AvailableStatus, D extends Record<string, unknown>>(
+    set: <S extends AvailableStatus, SData extends Record<string, unknown>>(
       status: S,
-      data?: D
-    ) => { __status: S } & D
+      data?: SData
+    ) => { __status: S } & SData
   ) => { __status: Status } & Data
 ): UiState<Status, Data> => {
   const state = getState((status, data = {} as ExplicitAny) => {
@@ -72,22 +77,18 @@ export const getUiState = <
           : isMatchingArray(status as Array<Status>))
       ) {
         return {
-          ...(uiState as ExplicitAny),
-          __matched: true,
-          exhaustive: () => handler(state as ExplicitAny),
-          nonExhaustive: () => handler(state as ExplicitAny),
+          exhaustive: () => handler(state as ExplicitAny) as React.ReactNode,
+          nonExhaustive: () => handler(state as ExplicitAny) as React.ReactNode,
           match: (status, _handler) =>
-            uiState.match(status, _handler, true, () => {
-              return handler(uiState.state as ExplicitAny);
-            }),
+            uiState.match(status, _handler, true, () =>
+              handler(uiState.state as ExplicitAny)
+            ),
         };
       }
 
       return {
-        ...uiState,
-        __matched,
-        exhaustive: render,
-        nonExhaustive: render,
+        exhaustive: render as () => React.ReactNode,
+        nonExhaustive: render as () => React.ReactNode,
         match: (status, handler) =>
           uiState.match(status, handler, __matched, render),
       };
