@@ -1,0 +1,10 @@
+{
+  "loginCode": {
+    "subject": "Your verification code",
+    "preview": "Verify your identity",
+    "title": "Your verification code",
+    "intro": "To verify you identity, enter the following code:",
+    "validityTime": "This code will only be valid for the next {{expiration}} minutes.",
+    "ignoreHelper": "If you didn't try to sign in, you can safely ignore this email."
+  }
+}

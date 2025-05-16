@@ -1,0 +1,54 @@
+{
+  "pageErrorBoundary": {
+    "title": "Kosa",
+    "tryAgain": "Jaribu tena",
+    "goBack": "Rudi nyuma",
+    "description": "Kitu kilienda vibaya",
+    "goHome": "Nyumbani"
+  },
+  "datePickerButton": {
+    "pickADate": "Chagua tarehe"
+  },
+  "pageError": {
+    "403": {
+      "description": "Huna ufikiaji wa ukurasa huu",
+      "title": "403"
+    },
+    "404": {
+      "description": "Ukurasa huu haukuweza kupatikana",
+      "title": "404"
+    },
+    "500": {
+      "description": "Kitu kilienda vibaya",
+      "title": "500"
+    },
+    "unknown": {
+      "description": "Kitu kilienda vibaya",
+      "title": "Kosa"
+    },
+    "goBack": "Nyuma",
+    "goHome": "Nyumbani"
+  },
+  "searchInput": {
+    "clear": "Utaftaji wazi",
+    "placeholder": "Tafuta ..."
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Ghairi",
+    "confirmText": "Thibitisha",
+    "heading": "Una uhakika?"
+  },
+  "datalist": {
+    "emptyTitle": "Hakuna data",
+    "errorTitle": "Kitu kilienda vibaya",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
+    "retry": "Jaribu tena"
+  },
+  "searchButton": {
+    "label": "Tafuta"
+  },
+  "sidebar": {
+    "title": "Pembeni",
+    "toggle": "Kubadilisha kando ya pembeni"
+  }
+}

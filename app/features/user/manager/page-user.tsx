@@ -1,0 +1,408 @@
+import { ORPCError } from '@orpc/client';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { authClient } from '@/lib/auth/client';
+import { orpc } from '@/lib/orpc/client';
+import { getUiState } from '@/lib/ui-state';
+
+import { BackButton } from '@/components/back-button';
+import { PageError } from '@/components/page-error';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
+import {
+  DataList,
+  DataListCell,
+  DataListEmptyState,
+  DataListErrorState,
+  DataListLoadingState,
+  DataListRow,
+  DataListText,
+} from '@/components/ui/datalist';
+import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
+
+import { WithPermissions } from '@/features/auth/with-permission';
+import {
+  PageLayout,
+  PageLayoutContent,
+  PageLayoutTopBar,
+  PageLayoutTopBarTitle,
+} from '@/layout/manager/page-layout';
+
+export const PageUser = (props: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
+  const session = authClient.useSession();
+  const userQuery = useQuery(
+    orpc.user.getById.queryOptions({
+      input: { id: props.params.id },
+    })
+  );
+
+  const deleteUser = async () => {
+    try {
+      await orpc.user.delete.call({ id: props.params.id });
+      await Promise.all([
+        // Invalidate users list
+        queryClient.invalidateQueries({
+          queryKey: orpc.user.getAll.key(),
+          type: 'all',
+        }),
+        // Remove user from cache
+        queryClient.removeQueries({
+          queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
+        }),
+      ]);
+
+      // Redirect
+      if (canGoBack) {
+        router.history.back();
+      } else {
+        router.navigate({ to: '..', replace: true });
+      }
+    } catch {
+      toast.error('Failed to delete the user');
+    }
+  };
+
+  const ui = getUiState((set) => {
+    if (userQuery.status === 'pending') return set('pending');
+    if (
+      userQuery.status === 'error' &&
+      userQuery.error instanceof ORPCError &&
+      userQuery.error.code === 'NOT_FOUND'
+    )
+      return set('not-found');
+    if (userQuery.status === 'error') return set('error');
+
+    return set('default', { user: userQuery.data });
+  });
+
+  return (
+    <PageLayout>
+      <PageLayoutTopBar
+        backButton={<BackButton />}
+        actions={
+          <>
+            {session.data?.user.id !== props.params.id && (
+              <WithPermissions
+                permissions={[
+                  {
+                    user: ['delete'],
+                  },
+                ]}
+              >
+                <ConfirmResponsiveDrawer
+                  onConfirm={() => deleteUser()}
+                  title={`Delete ${userQuery.data?.name ?? userQuery.data?.email ?? 'user'}`}
+                  description={
+                    <>
+                      You are about to permanently delete this user.{' '}
+                      <strong>This action cannot be undone.</strong> Please
+                      confirm your decision carefully.
+                    </>
+                  }
+                  confirmText="Delete"
+                  confirmVariant="destructive"
+                >
+                  <ResponsiveIconButton
+                    variant="ghost"
+                    label="Delete"
+                    size="sm"
+                  >
+                    <Trash2Icon />
+                  </ResponsiveIconButton>
+                </ConfirmResponsiveDrawer>
+              </WithPermissions>
+            )}
+          </>
+        }
+      >
+        <PageLayoutTopBarTitle>
+          {ui
+            .match('pending', () => <Skeleton className="h-4 w-48" />)
+            .match(['not-found', 'error'], () => (
+              <AlertCircleIcon className="size-4 text-muted-foreground" />
+            ))
+            .match('default', ({ user }) => <>{user.name || user.email}</>)
+            .exhaustive()}
+        </PageLayoutTopBarTitle>
+      </PageLayoutTopBar>
+      <PageLayoutContent>
+        {ui
+          .match('pending', () => <Spinner full />)
+          .match('not-found', () => <PageError error="404" />)
+          .match('error', () => <PageError />)
+          .match('default', ({ user }) => (
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
+              <Card className="relative flex-1">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarFallback variant="boring" name={user.name ?? ''} />
+                    </Avatar>
+                    <div className="flex flex-1 flex-col gap-0.5">
+                      <CardTitle>
+                        {user.name || (
+                          <span className="text-xs text-muted-foreground">
+                            N/A
+                          </span>
+                        )}
+                      </CardTitle>
+                      <CardDescription>{user.email}</CardDescription>
+                    </div>
+                    <WithPermissions permissions={[{ user: ['set-role'] }]}>
+                      <Link
+                        to="/manager/users/$id/update"
+                        params={props.params}
+                        className="-m-2 self-start"
+                      >
+                        <Button size="icon-sm" variant="ghost" asChild>
+                          <span>
+                            <PencilLineIcon />
+                            <span className="sr-only"></span>
+                          </span>
+                        </Button>
+                        <span className="absolute inset-0" />
+                      </Link>
+                    </WithPermissions>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <div className="flex items-center gap-4">
+                    <Badge
+                      variant={user.role === 'admin' ? 'default' : 'secondary'}
+                    >
+                      {user.role ?? '-'}
+                    </Badge>
+                    <p className="text-sm text-muted-foreground">
+                      {user.onboardedAt ? (
+                        <>
+                          Onboarded on{' '}
+                          {dayjs(user.onboardedAt).format(
+                            'DD/MM/YYYY [at] HH:mm'
+                          )}
+                        </>
+                      ) : (
+                        <>Not onboarded</>
+                      )}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex flex-2 flex-col">
+                <WithPermissions permissions={[{ session: ['list'] }]}>
+                  <UserSessions userId={props.params.id} />
+                </WithPermissions>
+              </div>
+            </div>
+          ))
+          .exhaustive()}
+      </PageLayoutContent>
+    </PageLayout>
+  );
+};
+
+const UserSessions = (props: { userId: string }) => {
+  const sessionsQuery = useInfiniteQuery(
+    orpc.user.getUserSessions.infiniteOptions({
+      input: (cursor: string | undefined) => ({
+        userId: props.userId,
+        cursor,
+        limit: 5,
+      }),
+      maxPages: 10,
+      initialPageParam: undefined,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    })
+  );
+
+  const ui = getUiState((set) => {
+    if (sessionsQuery.status === 'pending') return set('pending');
+    if (sessionsQuery.status === 'error') return set('error');
+
+    const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
+    if (!items.length) return set('empty');
+    return set('default', {
+      items,
+    });
+  });
+
+  return (
+    <WithPermissions permissions={[{ session: ['list'] }]}>
+      <DataList>
+        <DataListRow>
+          <DataListCell>
+            <h2 className="text-sm font-medium">User Sessions</h2>
+          </DataListCell>
+
+          <WithPermissions permissions={[{ session: ['revoke'] }]}>
+            <DataListCell className="flex-none">
+              {ui.is('default') && (
+                <RevokeAllSessionsButton userId={props.userId} />
+              )}
+            </DataListCell>
+          </WithPermissions>
+        </DataListRow>
+        {ui
+          .match('pending', () => <DataListLoadingState />)
+          .match('error', () => (
+            <DataListErrorState retry={() => sessionsQuery.refetch()} />
+          ))
+          .match('empty', () => (
+            <DataListEmptyState className="min-h-20">
+              No user sessions
+            </DataListEmptyState>
+          ))
+          .match('default', ({ items }) => (
+            <>
+              {items.map((item) => (
+                <DataListRow
+                  key={item.id}
+                  className="max-md:flex-col max-md:py-2 max-md:[&>div]:py-1"
+                >
+                  <DataListCell>
+                    <DataListText>Session {item.token}</DataListText>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-muted-foreground">
+                      Updated {dayjs(item.updatedAt).fromNow()}
+                    </DataListText>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-muted-foreground">
+                      Expires {dayjs().to(item.expiresAt)}
+                    </DataListText>
+                  </DataListCell>
+                  <WithPermissions permissions={[{ session: ['revoke'] }]}>
+                    <DataListCell className="flex-none">
+                      <RevokeSessionButton
+                        userId={props.userId}
+                        sessionToken={item.token}
+                      />
+                    </DataListCell>
+                  </WithPermissions>
+                </DataListRow>
+              ))}
+              <DataListRow>
+                <DataListCell className="flex-none">
+                  <Button
+                    size="xs"
+                    variant="secondary"
+                    disabled={!sessionsQuery.hasNextPage}
+                    onClick={() => sessionsQuery.fetchNextPage()}
+                    loading={sessionsQuery.isFetchingNextPage}
+                  >
+                    Load more
+                  </Button>
+                </DataListCell>
+                <DataListCell>
+                  <DataListText className="text-xs text-muted-foreground">
+                    Showing {items.length} of{' '}
+                    {sessionsQuery.data?.pages[0]?.total}
+                  </DataListText>
+                </DataListCell>
+              </DataListRow>
+            </>
+          ))
+          .exhaustive()}
+      </DataList>
+    </WithPermissions>
+  );
+};
+
+const RevokeAllSessionsButton = (props: { userId: string }) => {
+  const queryClient = useQueryClient();
+  const currentSession = authClient.useSession();
+  const revokeAllSessions = useMutation(
+    orpc.user.revokeUserSessions.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: orpc.user.getUserSessions.key({
+            input: { userId: props.userId },
+            type: 'infinite',
+          }),
+        });
+      },
+      onError: () => {
+        toast.error('Failed to revoke all sessions');
+      },
+    })
+  );
+
+  return (
+    <Button
+      size="xs"
+      variant="secondary"
+      disabled={currentSession.data?.user.id === props.userId}
+      loading={revokeAllSessions.isPending}
+      onClick={() => {
+        revokeAllSessions.mutate({
+          id: props.userId,
+        });
+      }}
+    >
+      Revoke all
+    </Button>
+  );
+};
+
+const RevokeSessionButton = (props: {
+  userId: string;
+  sessionToken: string;
+}) => {
+  const queryClient = useQueryClient();
+  const currentSession = authClient.useSession();
+  const revokeSession = useMutation(
+    orpc.user.revokeUserSession.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: orpc.user.getUserSessions.key({
+            input: { userId: props.userId },
+            type: 'infinite',
+          }),
+        });
+      },
+      onError: () => {
+        toast.error('Failed to revoke sessions');
+      },
+    })
+  );
+  return (
+    <Button
+      size="xs"
+      variant="secondary"
+      disabled={currentSession.data?.session.token === props.sessionToken}
+      loading={revokeSession.isPending}
+      onClick={() => {
+        revokeSession.mutate({
+          id: props.userId,
+          sessionToken: props.sessionToken,
+        });
+      }}
+    >
+      Revoke
+    </Button>
+  );
+};
