@@ -1,3 +1,5 @@
+import React from 'react';
+
 type AvailableStatus =
   | 'pending'
   | 'not-found'
@@ -6,6 +8,13 @@ type AvailableStatus =
   | 'empty'
   | 'default'
   | (string & {}); // Allows extra status
+
+type UiStateError<Message extends string> = null | {
+  __error__: Message;
+};
+
+type NonExhaustiveError<Message extends string = ''> = UiStateError<Message>;
+type ExhaustiveError<Message extends string = ''> = UiStateError<Message>;
 
 type UiState<
   Status extends AvailableStatus,
@@ -27,6 +36,8 @@ type UiState<
       data: SData
     ) => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode)
   ) => React.ReactNode;
+  exhaustive: () => ExhaustiveError<`\`exhaustive()\` should be use after \`match\``>;
+  nonExhaustive: () => NonExhaustiveError<`\`nonExhaustive()\` should be use after \`match\``>;
   match: <
     S extends Status,
     SData = Omit<
@@ -47,8 +58,12 @@ type UiState<
   } & (Exclude<Status, S> extends never
     ? {
         exhaustive: () => React.ReactNode;
+        match: () => ExhaustiveError<'All status are already matched'>;
       }
-    : Pick<UiState<Exclude<Status, S>, Data>, 'match'>);
+    : {
+        exhaustive: () => ExhaustiveError<`${Exclude<Status, S>} is missing to use \`exhaustive()\``>;
+        match: UiState<Exclude<Status, S>, Data>['match'];
+      });
 };
 
 export const getUiState = <
@@ -91,6 +106,8 @@ export const getUiState = <
       }
       return null;
     },
+    nonExhaustive: () => null,
+    exhaustive: () => null,
     match: (status, handler, __matched = false, render = () => null) => {
       if (
         !__matched &&
@@ -109,11 +126,11 @@ export const getUiState = <
       }
 
       return {
-        exhaustive: render as () => React.ReactNode,
-        nonExhaustive: render as () => React.ReactNode,
-        match: (status, handler) =>
+        exhaustive: () => render() as React.ReactNode,
+        nonExhaustive: () => render() as React.ReactNode,
+        match: (status: Status, handler: TODO) =>
           uiState.match(status, handler, __matched, render),
-      };
+      } as ExplicitAny;
     },
   };
 
