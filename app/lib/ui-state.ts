@@ -15,6 +15,18 @@ type UiState<
   state: {
     __status: Status;
   } & Data;
+  when: <
+    S extends Status,
+    SData = Omit<
+      Extract<UiState<Status, Data>['state'], { __status: S }>,
+      '__status'
+    >,
+  >(
+    status: S | Array<S>,
+    handler: (
+      data: SData
+    ) => React.ReactNode | ((...args: ExplicitAny[]) => React.ReactNode)
+  ) => React.ReactNode;
   match: <
     S extends Status,
     SData = Omit<
@@ -68,6 +80,16 @@ export const getUiState = <
     state,
     is: (status) => {
       return state.__status === status;
+    },
+    when: (status, handler) => {
+      if (
+        typeof status === 'string'
+          ? isMatching(status)
+          : isMatchingArray(status as Array<Status>)
+      ) {
+        return handler(state as ExplicitAny) as React.ReactNode;
+      }
+      return null;
     },
     match: (status, handler, __matched = false, render = () => null) => {
       if (
