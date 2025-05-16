@@ -14,3 +14,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  seed:
+    image: node:20-slim
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgres://${DOCKER_DATABASE_USERNAME}:${DOCKER_DATABASE_PASSWORD}@postgres:${DOCKER_DATABASE_PORT}/${DOCKER_DATABASE_NAME}"
+    profiles:
+      - init # Make sure to run seeds only when running pnpm dk:init
+    working_dir: /home/node/app
+    volumes:
+    - ./:/home/node/app
+    command: /bin/sh -c 'corepack enable && pnpm i && pnpm db:init'
