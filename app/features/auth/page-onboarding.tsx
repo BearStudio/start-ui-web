@@ -1,25 +1,19 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { LogOutIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
-import {
-  Form,
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/components/form';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { ConfirmLogout } from '@/features/auth/confirm-logout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
-import { zFormFieldsOnboarding } from '@/features/auth/schema';
 
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
@@ -37,15 +31,16 @@ export const PageOnboarding = () => {
     })
   );
 
-  const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsOnboarding()),
-    values: {
+  const form = useAppForm({
+    defaultValues: {
       name: session.data?.user.name ?? '',
     },
   });
 
-  const { isValid, isSubmitted } = form.formState;
+  const { isValid, isSubmitted } = useStore(form.store, (state) => ({
+    isValid: state.isValid,
+    isSubmitted: state.isSubmitted,
+  }));
   useMascot({ isError: !isValid && isSubmitted });
 
   return (
@@ -66,13 +61,7 @@ export const PageOnboarding = () => {
         </div>
       }
     >
-      <Form
-        {...form}
-        onSubmit={(values) => {
-          submitOnboarding.mutate(values);
-        }}
-        className="flex flex-col gap-4 pb-12"
-      >
+      <Form form={form} className="flex flex-col gap-4 pb-12">
         <div className="flex flex-col gap-1">
           <h1 className="text-lg font-bold text-balance">
             {t('auth:pageOnboarding.title')}
@@ -82,17 +71,16 @@ export const PageOnboarding = () => {
           </p>
         </div>
 
-        <FormField>
-          <FormFieldLabel>
-            {t('auth:fields.name.onboardingLabel')}
-          </FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            size="lg"
-          />
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>
+                {t('auth:fields.name.onboardingLabel')}
+              </field.FormFieldLabel>
+              <field.FieldText size="lg" />
+            </field.FormField>
+          )}
+        </form.AppField>
         <Button
           type="submit"
           size="lg"

@@ -1,15 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ActivityIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useAppForm } from '@/lib/form/config';
 import { zu } from '@/lib/zod/zod-utils';
 
-import { FormFieldController } from '@/components/form';
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-
-import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldText',
@@ -22,30 +19,30 @@ const zFormSchema = () =>
     }),
   });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onBlur: zFormSchema() },
   defaultValues: {
     name: '',
   },
-} as const;
+  onSubmit,
+};
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            placeholder="Buzz Pawdrin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -55,7 +52,7 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       name: 'Default Name',
@@ -63,18 +60,17 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="text"
-            name="name"
-            placeholder="Buzz Pawdrin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText type="text" placeholder="Buzz Pawdrin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -84,7 +80,7 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       name: 'Default Value',
@@ -92,19 +88,18 @@ export const Disabled = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="text"
-            name="name"
-            placeholder="Buzz Pawdrin"
-            disabled
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" disabled />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -114,7 +109,7 @@ export const Disabled = () => {
 };
 
 export const ReadOnly = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       name: 'Default Value',
@@ -122,19 +117,18 @@ export const ReadOnly = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="text"
-            name="name"
-            placeholder="Buzz Pawdrin"
-            readOnly
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText placeholder="Buzz Pawdrin" readOnly />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -144,22 +138,24 @@ export const ReadOnly = () => {
 };
 
 export const StartElement = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="text"
-            name="name"
-            placeholder="Buzz Pawdrin"
-            startElement={<ActivityIcon />}
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText
+                placeholder="Buzz Pawdrin"
+                startElement={<ActivityIcon />}
+              />
+
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>

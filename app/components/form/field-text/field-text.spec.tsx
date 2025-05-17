@@ -3,8 +3,6 @@ import { z } from 'zod';
 
 import { render, screen, setupUser } from '@/tests/utils';
 
-import { FormField, FormFieldLabel } from '..';
-import { FormFieldController } from '../form-field-controller';
 import { FormMocked } from '../form-test-utils';
 
 test('update value', async () => {
@@ -18,10 +16,14 @@ test('update value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -46,10 +48,14 @@ test('default value', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -70,15 +76,14 @@ test('disabled', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            disabled
-          />
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText disabled />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );
@@ -99,15 +104,14 @@ test('readOnly', async () => {
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            readOnly
-          />
-        </FormField>
+        <form.AppField name="name">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Name</field.FormFieldLabel>
+              <field.FieldText readOnly />
+            </field.FormField>
+          )}
+        </form.AppField>
       )}
     </FormMocked>
   );

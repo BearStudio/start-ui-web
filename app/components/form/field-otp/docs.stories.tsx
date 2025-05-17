@@ -1,13 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useAppForm } from '@/lib/form/config';
 import { zu } from '@/lib/zod/zod-utils';
 
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-
-import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldOtp',
@@ -28,26 +26,27 @@ const zFormSchema = (options: { length?: number } = {}) => {
   });
 };
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-} as const;
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onBlur: zFormSchema() },
+  defaultValues: { code: '' },
+  onSubmit,
+};
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
+        <form.AppField name="code">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} />
+            </field.FormField>
+          )}
+        </form.AppField>
+
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -57,7 +56,7 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       code: '927342',
@@ -65,17 +64,16 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
+        <form.AppField name="code">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} />
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -85,21 +83,19 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            disabled
-          />
-        </FormField>
+        <form.AppField name="code">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} disabled />
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -109,23 +105,22 @@ export const Disabled = () => {
 };
 
 export const CustomLength = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
-    resolver: zodResolver(zFormSchema({ length: 4 })),
+    validators: { onSubmit: zFormSchema({ length: 4 }) },
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={4}
-          />
-        </FormField>
+        <form.AppField name="code">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={4} />
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -135,21 +130,19 @@ export const CustomLength = () => {
 };
 
 export const AutoSubmit = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            autoSubmit
-          />
-        </FormField>
+        <form.AppField name="code">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Code</field.FormFieldLabel>
+              <field.FieldOtp maxLength={6} autoSubmit />
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>

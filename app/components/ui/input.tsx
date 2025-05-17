@@ -1,7 +1,6 @@
 import { useMeasure } from '@uidotdev/usehooks';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import { RefCallBack } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -28,7 +27,7 @@ const inputVariants = cva(
   }
 );
 
-type InputProps = Pick<
+export type InputProps = Pick<
   React.ComponentProps<'input'>,
   | 'type'
   | 'className'
@@ -50,7 +49,7 @@ type InputProps = Pick<
   | 'inputMode'
 > &
   VariantProps<typeof inputVariants> & {
-    ref?: RefCallBack | React.RefObject<HTMLInputElement | null>;
+    ref?: React.RefObject<HTMLInputElement | null>;
     startElement?: React.ReactNode;
     endElement?: React.ReactNode;
     inputClassName?: string;

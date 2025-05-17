@@ -1,12 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { FormFieldController } from '@/components/form';
+import { useAppForm } from '@/lib/form/config';
+
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-
-import { Form, FormField, FormFieldHelper, FormFieldLabel } from '..';
 
 export default {
   title: 'Form/FieldDate',
@@ -17,30 +15,55 @@ const zFormSchema = () =>
     date: z.date(),
   });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onSubmit: zFormSchema() },
   defaultValues: {
     date: null as unknown as Date,
   },
-} as const;
+  onSubmit,
+};
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Date</FormFieldLabel>
-          <FormFieldController
-            type="date"
-            control={form.control}
-            name="date"
-            placeholder="DD/MM/YYYY"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate placeholder="DD/MM/YYYY" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
+        <div>
+          <Button type="submit">Submit</Button>
+        </div>
+      </div>
+    </Form>
+  );
+};
+
+export const DefaultValue = () => {
+  const form = useAppForm({
+    ...formOptions,
+    defaultValues: { date: new Date() },
+  });
+
+  return (
+    <Form form={form}>
+      <div className="flex flex-col gap-4">
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate placeholder="DD/MM/YYYY" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -50,24 +73,25 @@ export const Default = () => {
 };
 
 export const CalendarCustomization = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Date</FormFieldLabel>
-          <FormFieldController
-            type="date"
-            control={form.control}
-            name="date"
-            placeholder="DD/MM/YYYY"
-            calendarProps={{
-              startMonth: new Date(),
-            }}
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="date">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Date</field.FormFieldLabel>
+              <field.FieldDate
+                placeholder="DD/MM/YYYY"
+                calendarProps={{
+                  startMonth: new Date(),
+                }}
+              />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>

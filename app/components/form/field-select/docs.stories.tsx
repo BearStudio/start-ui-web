@@ -1,14 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import {
-  Form,
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/components/form';
+import { useAppForm } from '@/lib/form/config';
+
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
@@ -57,27 +52,27 @@ const options = [
   },
 ] as const;
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-} as const;
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onSubmit: zFormSchema() },
+  onSubmit,
+  defaultValues: { bear: '' },
+};
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            options={options}
-          />
-        </FormField>
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect placeholder="Placeholder" options={options} />
+            </field.FormField>
+          )}
+        </form.AppField>
+
         <Button type="submit">Submit</Button>
       </div>
     </Form>
@@ -85,27 +80,24 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
-      bear: 'pawdrin',
+      bear: 'bearstrong',
     },
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            options={options}
-          />
-        </FormField>
-
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect placeholder="Placeholder" options={options} />
+            </field.FormField>
+          )}
+        </form.AppField>
         <Button type="submit">Submit</Button>
       </div>
     </Form>
@@ -113,27 +105,23 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
-    ...formOptions,
-    defaultValues: {
-      bear: 'michaelpawanderson',
-    },
-  });
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            disabled
-            options={options}
-          />
-        </FormField>
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect
+                placeholder="Placeholder"
+                options={options}
+                disabled
+              />
+            </field.FormField>
+          )}
+        </form.AppField>
 
         <Button type="submit">Submit</Button>
       </div>
@@ -142,7 +130,7 @@ export const Disabled = () => {
 };
 
 export const ReadOnly = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       bear: 'michaelpawanderson',
@@ -150,19 +138,20 @@ export const ReadOnly = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            readOnly
-            options={options}
-          />
-        </FormField>
+        <form.AppField name="bear">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Bearstronaut</field.FormFieldLabel>
+              <field.FieldSelect
+                placeholder="Placeholder"
+                options={options}
+                readOnly
+              />
+            </field.FormField>
+          )}
+        </form.AppField>
 
         <Button type="submit">Submit</Button>
       </div>

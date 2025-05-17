@@ -1,19 +1,13 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { ReactNode } from 'react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
-import {
-  Form,
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/components/form';
+import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import {
   ResponsiveDrawer,
@@ -26,19 +20,19 @@ import {
   ResponsiveDrawerTrigger,
 } from '@/components/ui/responsive-drawer';
 
-import {
-  FormFieldsAccountUpdateName,
-  zFormFieldsAccountUpdateName,
-} from '@/features/account/schema';
+import { zFormFieldsAccountUpdateName } from '@/features/account/schema';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const router = useRouter();
   const search = useSearch({ strict: false });
   const session = authClient.useSession();
-  const form = useForm<FormFieldsAccountUpdateName>({
-    resolver: zodResolver(zFormFieldsAccountUpdateName()),
-    values: {
+  const form = useAppForm({
+    validators: { onSubmit: zFormFieldsAccountUpdateName() },
+    defaultValues: {
       name: session.data?.user.name ?? '',
+    },
+    onSubmit: async ({ value }) => {
+      updateUser.mutate({ name: value.name });
     },
   });
 
@@ -79,13 +73,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
       </ResponsiveDrawerTrigger>
 
       <ResponsiveDrawerContent className="sm:max-w-xs">
-        <Form
-          {...form}
-          onSubmit={async ({ name }) => {
-            updateUser.mutate({ name });
-          }}
-          className="flex flex-col gap-4"
-        >
+        <Form form={form} className="flex flex-col gap-4">
           <ResponsiveDrawerHeader>
             <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription className="sr-only">
@@ -93,16 +81,16 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerBody>
-            <FormField>
-              <FormFieldLabel className="sr-only">Name</FormFieldLabel>
-              <FormFieldController
-                control={form.control}
-                type="text"
-                name="name"
-                size="lg"
-                autoFocus
-              />
-            </FormField>
+            <form.AppField name="name">
+              {(field) => (
+                <field.FormField>
+                  <field.FormFieldLabel className="sr-only">
+                    Name
+                  </field.FormFieldLabel>
+                  <field.FieldText size="lg" autoFocus />
+                </field.FormField>
+              )}
+            </form.AppField>
           </ResponsiveDrawerBody>
           <ResponsiveDrawerFooter>
             <Button

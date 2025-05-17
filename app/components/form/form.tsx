@@ -1,50 +1,27 @@
-import {
-  FieldValues,
-  FormProvider,
-  FormProviderProps,
-  SubmitHandler,
-} from 'react-hook-form';
+import { AnyFormApi } from '@tanstack/react-form';
 
+import { formContext as FormContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
-type FormProps<TFieldValues extends FieldValues> = StrictUnion<
-  | (FormProviderProps<TFieldValues> & {
-      noHtmlForm?: false;
-      onSubmit?: SubmitHandler<TFieldValues>;
-      className?: string;
-    })
-  | (FormProviderProps<TFieldValues> & {
-      noHtmlForm: true;
-    })
->;
-
-export const Form = <TFieldValues extends FieldValues>({
-  noHtmlForm = false,
-  className,
-  ...props
-}: FormProps<TFieldValues>) => {
-  if (noHtmlForm) {
-    return <FormProvider {...props} />;
-  }
-
+export const Form = (
+  props: React.PropsWithChildren<{
+    form: AnyFormApi;
+    className?: string;
+  }>
+) => {
   return (
-    <FormProvider {...props}>
+    <FormContext value={props.form}>
       <form
-        noValidate
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           e.stopPropagation();
-
-          if (props.onSubmit) {
-            props.handleSubmit(props.onSubmit)(e);
-          } else {
-            console.warn('Missing onSubmit method on <Form>');
-          }
+          await props.form.handleSubmit();
         }}
-        className={cn('flex flex-1 flex-col', className)}
+        noValidate
+        className={cn('flex flex-1 flex-col', props.className)}
       >
         {props.children}
       </form>
-    </FormProvider>
+    </FormContext>
   );
 };

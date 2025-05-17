@@ -1,10 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
@@ -13,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { FormUser } from '@/features/user/manager/form-user';
-import { zFormFieldsUser } from '@/features/user/schema';
+import { FormFieldsUser, zFormFieldsUser } from '@/features/user/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -25,12 +24,15 @@ export const PageUserNew = () => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
+  const form = useAppForm({
+    validators: { onSubmit: zFormFieldsUser() },
+    defaultValues: {
       name: '',
       email: '',
       role: 'user',
+    } satisfies FormFieldsUser as FormFieldsUser, // "as" to prevent type issue with validator
+    onSubmit: async ({ value }) => {
+      userCreate.mutate(value);
     },
   });
 
@@ -56,8 +58,8 @@ export const PageUserNew = () => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('email')
         ) {
-          form.setError('email', {
-            message: 'Email already used',
+          form.setErrorMap({
+            onSubmit: { fields: { email: 'Email already used' } },
           });
           return;
         }
@@ -67,7 +69,7 @@ export const PageUserNew = () => {
     })
   );
 
-  const formIsDirty = form.formState.isDirty;
+  const formIsDirty = form.state.isDirty;
   useBlocker({
     shouldBlockFn: () => {
       if (!formIsDirty || userCreate.isSuccess) return false;
@@ -77,12 +79,7 @@ export const PageUserNew = () => {
   });
 
   return (
-    <Form
-      {...form}
-      onSubmit={async (values) => {
-        userCreate.mutate(values);
-      }}
-    >
+    <Form form={form}>
       <PageLayout>
         <PageLayoutTopBar
           backButton={<BackButton />}
@@ -102,7 +99,7 @@ export const PageUserNew = () => {
         <PageLayoutContent>
           <Card>
             <CardContent>
-              <FormUser />
+              <FormUser form={form} />
             </CardContent>
           </Card>
         </PageLayoutContent>

@@ -1,17 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import {
-  Form,
-  FormField,
-  FormFieldController,
-  FormFieldHelper,
-  FormFieldLabel,
-} from '@/components/form';
+import { useAppForm } from '@/lib/form/config';
+
+import { Form } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
-import { FieldNumber } from '@/components/form/field-number';
+import FieldNumber from '@/components/form/field-number';
 import { Button } from '@/components/ui/button';
 
 export default {
@@ -23,27 +17,27 @@ const zFormSchema = () =>
     balance: z.number().min(0),
   });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-} as const;
+const formOptions: Parameters<typeof useAppForm>[0] = {
+  validators: { onBlur: zFormSchema() },
+  onSubmit,
+  defaultValues: { balance: 0 },
+};
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -53,7 +47,7 @@ export const Default = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm({
+  const form = useAppForm({
     ...formOptions,
     defaultValues: {
       balance: 30,
@@ -61,18 +55,17 @@ export const DefaultValue = () => {
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -82,26 +75,27 @@ export const DefaultValue = () => {
 };
 
 export const Currency = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm(formOptions);
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-            format={{
-              style: 'currency',
-              currency: 'EUR',
-            }}
-            inCents
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber
+                placeholder="Bearcoin"
+                format={{
+                  style: 'currency',
+                  currency: 'EUR',
+                }}
+                inCents
+              />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -111,22 +105,20 @@ export const Currency = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
+  const form = useAppForm({ ...formOptions, defaultValues: { balance: 42 } });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            disabled
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" disabled />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>
@@ -136,22 +128,20 @@ export const Disabled = () => {
 };
 
 export const ReadOnly = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
+  const form = useAppForm({ ...formOptions, defaultValues: { balance: 42 } });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            readOnly
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
+        <form.AppField name="balance">
+          {(field) => (
+            <field.FormField>
+              <field.FormFieldLabel>Balance</field.FormFieldLabel>
+              <field.FieldNumber placeholder="Bearcoin" readOnly />
+              <field.FormFieldHelper>Help</field.FormFieldHelper>
+            </field.FormField>
+          )}
+        </form.AppField>
         <div>
           <Button type="submit">Submit</Button>
         </div>

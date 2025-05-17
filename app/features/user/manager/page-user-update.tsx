@@ -1,12 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
+import { useAppForm } from '@/lib/form/config';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
@@ -17,7 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { FormUser } from '@/features/user/manager/form-user';
-import { zFormFieldsUser } from '@/features/user/schema';
+import { FormFieldsUser, zFormFieldsUser } from '@/features/user/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -68,8 +67,8 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('email')
         ) {
-          form.setError('email', {
-            message: 'Email already used',
+          form.setErrorMap({
+            onSubmit: { fields: { email: 'Email already used' } },
           });
           return;
         }
@@ -79,12 +78,15 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     })
   );
 
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
+  const form = useAppForm({
+    validators: { onSubmit: zFormFieldsUser() },
+    defaultValues: {
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
       role: userQuery.data?.role ?? 'user',
+    } satisfies FormFieldsUser as FormFieldsUser, // "as" to prevent type issue with validator
+    onSubmit: ({ value }) => {
+      userUpdate.mutate({ id: props.params.id, ...value });
     },
   });
 
@@ -101,7 +103,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     return set('default', { user: userQuery.data });
   });
 
-  const formIsDirty = form.formState.isDirty;
+  const formIsDirty = form.state.isDirty;
   useBlocker({
     shouldBlockFn: () => {
       if (!formIsDirty || userUpdate.isSuccess) return false;
@@ -111,12 +113,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   });
 
   return (
-    <Form
-      {...form}
-      onSubmit={(values) => {
-        userUpdate.mutate({ id: props.params.id, ...values });
-      }}
-    >
+    <Form form={form}>
       <PageLayout>
         <PageLayoutTopBar
           backButton={<BackButton />}
@@ -144,7 +141,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
         <PageLayoutContent>
           <Card>
             <CardContent>
-              <FormUser userId={props.params.id} />
+              <FormUser form={form} userId={props.params.id} />
             </CardContent>
           </Card>
         </PageLayoutContent>

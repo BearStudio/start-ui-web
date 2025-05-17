@@ -1,54 +1,43 @@
-import { createContext, ReactNode, use, useId, useMemo } from 'react';
+import { ReactNode, useEffect, useId } from 'react';
 
+import { useFieldContext } from '@/lib/form/context';
 import { cn } from '@/lib/tailwind/utils';
 
 type FormFieldSize = 'sm' | 'default' | 'lg';
 
-type FormFieldProps = {
-  id?: string;
-  size?: FormFieldSize;
-  children?: ReactNode;
-  className?: string;
-};
-
-export const FormField = (props: FormFieldProps) => {
-  const _id = useId();
-  const id = props.id ?? _id;
-
-  const contextValue = useMemo(
-    () => ({
-      id,
-      descriptionId: `${id}-description`,
-      errorId: `${id}-error`,
-      size: props.size,
-    }),
-    [id, props.size]
-  );
-
-  return (
-    <FormFieldContext value={contextValue}>
-      <div className={cn('flex flex-col gap-1.5', props.className)}>
-        {props.children}
-      </div>
-    </FormFieldContext>
-  );
-};
-
-type FormFieldContextValue = {
+export type FieldContextMeta = ReturnType<
+  ReturnType<typeof useFieldContext>['getMeta']
+> & {
   id: string;
   descriptionId: string;
   errorId: string;
   size?: FormFieldSize;
 };
 
-export const FormFieldContext = createContext<FormFieldContextValue | null>(
-  null
-);
+export const FormField = (props: {
+  id?: string;
+  size?: FormFieldSize;
+  children?: ReactNode;
+  className?: string;
+}) => {
+  const _id = useId();
+  const id = props.id ?? _id;
 
-export const useFormField = () => {
-  const fieldContext = use(FormFieldContext);
-  if (!fieldContext) {
-    throw new Error('Missing <FormField /> parent component');
-  }
-  return fieldContext;
+  const field = useFieldContext();
+
+  useEffect(() => {
+    field.setMeta((meta) => ({
+      ...meta,
+      id,
+      descriptionId: `${id}-description`,
+      errorId: `${id}-error`,
+      size: props.size,
+    }));
+  }, [field.setMeta, id, props.size]);
+
+  return (
+    <div className={cn('flex flex-col gap-1.5', props.className)}>
+      {props.children}
+    </div>
+  );
 };
