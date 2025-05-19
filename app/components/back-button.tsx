@@ -1,6 +1,7 @@
 import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { ComponentProps } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 
@@ -11,6 +12,7 @@ export const BackButton = ({
 }: ComponentProps<typeof Button> & {
   linkProps?: Partial<Omit<ComponentProps<typeof Link>, 'children'>>;
 }) => {
+  const { t } = useTranslation(['components']);
   const canGoBack = useCanGoBack();
   const router = useRouter();
 
@@ -26,7 +28,12 @@ export const BackButton = ({
         }}
         {...linkProps}
       >
-        {children ?? <ArrowLeftIcon className="rtl:rotate-180" />}
+        {children ?? (
+          <>
+            <ArrowLeftIcon className="rtl:rotate-180" />
+            <span className="sr-only">{t('components:backButton.label')}</span>
+          </>
+        )}
       </Link>
     </Button>
   );

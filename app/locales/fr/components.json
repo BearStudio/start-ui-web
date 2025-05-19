@@ -50,5 +50,8 @@
   "sidebar": {
     "title": "Barre de navigation",
     "toggle": "Afficher ou masquer la navigation"
+  },
+  "backButton": {
+    "label": "Retour"
   }
 }
