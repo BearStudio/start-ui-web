@@ -24,15 +24,15 @@ import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
 import { Route as LoginErrorIndexImport } from './routes/login/error.index'
 import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
 import { Route as ManagerLayoutUsersIndexImport } from './routes/manager/_layout/users.index'
-import { Route as ManagerLayoutRepositoriesIndexImport } from './routes/manager/_layout/repositories.index'
 import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_layout/dashboard.index'
+import { Route as ManagerLayoutBooksIndexImport } from './routes/manager/_layout/books.index'
 import { Route as ManagerLayoutAccountIndexImport } from './routes/manager/_layout/account.index'
-import { Route as AppLayoutRepositoriesIndexImport } from './routes/app/_layout/repositories.index'
+import { Route as AppLayoutBooksIndexImport } from './routes/app/_layout/books.index'
 import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
 import { Route as ManagerLayoutUsersNewIndexImport } from './routes/manager/_layout/users.new.index'
 import { Route as ManagerLayoutUsersIdIndexImport } from './routes/manager/_layout/users.$id.index'
-import { Route as ManagerLayoutRepositoriesIdIndexImport } from './routes/manager/_layout/repositories.$id.index'
-import { Route as AppLayoutDesktopOnlyRepositoriesIdIndexImport } from './routes/app/_layout-desktop-only/repositories.$id.index'
+import { Route as ManagerLayoutBooksIdIndexImport } from './routes/manager/_layout/books.$id.index'
+import { Route as AppLayoutDesktopOnlyBooksIdIndexImport } from './routes/app/_layout-desktop-only/books.$id.index'
 import { Route as ManagerLayoutUsersIdUpdateIndexImport } from './routes/manager/_layout/users.$id.update.index'
 
 // Create/Update Routes
@@ -112,13 +112,6 @@ const ManagerLayoutUsersIndexRoute = ManagerLayoutUsersIndexImport.update({
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
 
-const ManagerLayoutRepositoriesIndexRoute =
-  ManagerLayoutRepositoriesIndexImport.update({
-    id: '/repositories/',
-    path: '/repositories/',
-    getParentRoute: () => ManagerLayoutRoute,
-  } as any)
-
 const ManagerLayoutDashboardIndexRoute =
   ManagerLayoutDashboardIndexImport.update({
     id: '/dashboard/',
@@ -126,19 +119,23 @@ const ManagerLayoutDashboardIndexRoute =
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
 
+const ManagerLayoutBooksIndexRoute = ManagerLayoutBooksIndexImport.update({
+  id: '/books/',
+  path: '/books/',
+  getParentRoute: () => ManagerLayoutRoute,
+} as any)
+
 const ManagerLayoutAccountIndexRoute = ManagerLayoutAccountIndexImport.update({
   id: '/account/',
   path: '/account/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
 
-const AppLayoutRepositoriesIndexRoute = AppLayoutRepositoriesIndexImport.update(
-  {
-    id: '/repositories/',
-    path: '/repositories/',
-    getParentRoute: () => AppLayoutRoute,
-  } as any,
-)
+const AppLayoutBooksIndexRoute = AppLayoutBooksIndexImport.update({
+  id: '/books/',
+  path: '/books/',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
 
 const AppLayoutAccountIndexRoute = AppLayoutAccountIndexImport.update({
   id: '/account/',
@@ -160,17 +157,16 @@ const ManagerLayoutUsersIdIndexRoute = ManagerLayoutUsersIdIndexImport.update({
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
 
-const ManagerLayoutRepositoriesIdIndexRoute =
-  ManagerLayoutRepositoriesIdIndexImport.update({
-    id: '/repositories/$id/',
-    path: '/repositories/$id/',
-    getParentRoute: () => ManagerLayoutRoute,
-  } as any)
+const ManagerLayoutBooksIdIndexRoute = ManagerLayoutBooksIdIndexImport.update({
+  id: '/books/$id/',
+  path: '/books/$id/',
+  getParentRoute: () => ManagerLayoutRoute,
+} as any)
 
-const AppLayoutDesktopOnlyRepositoriesIdIndexRoute =
-  AppLayoutDesktopOnlyRepositoriesIdIndexImport.update({
-    id: '/repositories/$id/',
-    path: '/repositories/$id/',
+const AppLayoutDesktopOnlyBooksIdIndexRoute =
+  AppLayoutDesktopOnlyBooksIdIndexImport.update({
+    id: '/books/$id/',
+    path: '/books/$id/',
     getParentRoute: () => AppLayoutDesktopOnlyRoute,
   } as any)
 
@@ -276,11 +272,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutAccountIndexImport
       parentRoute: typeof AppLayoutImport
     }
-    '/app/_layout/repositories/': {
-      id: '/app/_layout/repositories/'
-      path: '/repositories'
-      fullPath: '/app/repositories'
-      preLoaderRoute: typeof AppLayoutRepositoriesIndexImport
+    '/app/_layout/books/': {
+      id: '/app/_layout/books/'
+      path: '/books'
+      fullPath: '/app/books'
+      preLoaderRoute: typeof AppLayoutBooksIndexImport
       parentRoute: typeof AppLayoutImport
     }
     '/manager/_layout/account/': {
@@ -290,18 +286,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutAccountIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
+    '/manager/_layout/books/': {
+      id: '/manager/_layout/books/'
+      path: '/books'
+      fullPath: '/manager/books'
+      preLoaderRoute: typeof ManagerLayoutBooksIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
     '/manager/_layout/dashboard/': {
       id: '/manager/_layout/dashboard/'
       path: '/dashboard'
       fullPath: '/manager/dashboard'
       preLoaderRoute: typeof ManagerLayoutDashboardIndexImport
-      parentRoute: typeof ManagerLayoutImport
-    }
-    '/manager/_layout/repositories/': {
-      id: '/manager/_layout/repositories/'
-      path: '/repositories'
-      fullPath: '/manager/repositories'
-      preLoaderRoute: typeof ManagerLayoutRepositoriesIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
     '/manager/_layout/users/': {
@@ -311,18 +307,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutUsersIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
-    '/app/_layout-desktop-only/repositories/$id/': {
-      id: '/app/_layout-desktop-only/repositories/$id/'
-      path: '/repositories/$id'
-      fullPath: '/app/repositories/$id'
-      preLoaderRoute: typeof AppLayoutDesktopOnlyRepositoriesIdIndexImport
+    '/app/_layout-desktop-only/books/$id/': {
+      id: '/app/_layout-desktop-only/books/$id/'
+      path: '/books/$id'
+      fullPath: '/app/books/$id'
+      preLoaderRoute: typeof AppLayoutDesktopOnlyBooksIdIndexImport
       parentRoute: typeof AppLayoutDesktopOnlyImport
     }
-    '/manager/_layout/repositories/$id/': {
-      id: '/manager/_layout/repositories/$id/'
-      path: '/repositories/$id'
-      fullPath: '/manager/repositories/$id'
-      preLoaderRoute: typeof ManagerLayoutRepositoriesIdIndexImport
+    '/manager/_layout/books/$id/': {
+      id: '/manager/_layout/books/$id/'
+      path: '/books/$id'
+      fullPath: '/manager/books/$id'
+      preLoaderRoute: typeof ManagerLayoutBooksIdIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
     '/manager/_layout/users/$id/': {
@@ -354,13 +350,13 @@ declare module '@tanstack/react-router' {
 interface AppLayoutRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
   AppLayoutAccountIndexRoute: typeof AppLayoutAccountIndexRoute
-  AppLayoutRepositoriesIndexRoute: typeof AppLayoutRepositoriesIndexRoute
+  AppLayoutBooksIndexRoute: typeof AppLayoutBooksIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppLayoutIndexRoute: AppLayoutIndexRoute,
   AppLayoutAccountIndexRoute: AppLayoutAccountIndexRoute,
-  AppLayoutRepositoriesIndexRoute: AppLayoutRepositoriesIndexRoute,
+  AppLayoutBooksIndexRoute: AppLayoutBooksIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
@@ -368,12 +364,11 @@ const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
 )
 
 interface AppLayoutDesktopOnlyRouteChildren {
-  AppLayoutDesktopOnlyRepositoriesIdIndexRoute: typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
+  AppLayoutDesktopOnlyBooksIdIndexRoute: typeof AppLayoutDesktopOnlyBooksIdIndexRoute
 }
 
 const AppLayoutDesktopOnlyRouteChildren: AppLayoutDesktopOnlyRouteChildren = {
-  AppLayoutDesktopOnlyRepositoriesIdIndexRoute:
-    AppLayoutDesktopOnlyRepositoriesIdIndexRoute,
+  AppLayoutDesktopOnlyBooksIdIndexRoute: AppLayoutDesktopOnlyBooksIdIndexRoute,
 }
 
 const AppLayoutDesktopOnlyRouteWithChildren =
@@ -408,10 +403,10 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 interface ManagerLayoutRouteChildren {
   ManagerLayoutIndexRoute: typeof ManagerLayoutIndexRoute
   ManagerLayoutAccountIndexRoute: typeof ManagerLayoutAccountIndexRoute
+  ManagerLayoutBooksIndexRoute: typeof ManagerLayoutBooksIndexRoute
   ManagerLayoutDashboardIndexRoute: typeof ManagerLayoutDashboardIndexRoute
-  ManagerLayoutRepositoriesIndexRoute: typeof ManagerLayoutRepositoriesIndexRoute
   ManagerLayoutUsersIndexRoute: typeof ManagerLayoutUsersIndexRoute
-  ManagerLayoutRepositoriesIdIndexRoute: typeof ManagerLayoutRepositoriesIdIndexRoute
+  ManagerLayoutBooksIdIndexRoute: typeof ManagerLayoutBooksIdIndexRoute
   ManagerLayoutUsersIdIndexRoute: typeof ManagerLayoutUsersIdIndexRoute
   ManagerLayoutUsersNewIndexRoute: typeof ManagerLayoutUsersNewIndexRoute
   ManagerLayoutUsersIdUpdateIndexRoute: typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -420,10 +415,10 @@ interface ManagerLayoutRouteChildren {
 const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutIndexRoute: ManagerLayoutIndexRoute,
   ManagerLayoutAccountIndexRoute: ManagerLayoutAccountIndexRoute,
+  ManagerLayoutBooksIndexRoute: ManagerLayoutBooksIndexRoute,
   ManagerLayoutDashboardIndexRoute: ManagerLayoutDashboardIndexRoute,
-  ManagerLayoutRepositoriesIndexRoute: ManagerLayoutRepositoriesIndexRoute,
   ManagerLayoutUsersIndexRoute: ManagerLayoutUsersIndexRoute,
-  ManagerLayoutRepositoriesIdIndexRoute: ManagerLayoutRepositoriesIdIndexRoute,
+  ManagerLayoutBooksIdIndexRoute: ManagerLayoutBooksIdIndexRoute,
   ManagerLayoutUsersIdIndexRoute: ManagerLayoutUsersIdIndexRoute,
   ManagerLayoutUsersNewIndexRoute: ManagerLayoutUsersNewIndexRoute,
   ManagerLayoutUsersIdUpdateIndexRoute: ManagerLayoutUsersIdUpdateIndexRoute,
@@ -455,13 +450,13 @@ export interface FileRoutesByFullPath {
   '/login/verify': typeof LoginVerifyIndexRoute
   '/manager/': typeof ManagerLayoutIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
-  '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/app/books': typeof AppLayoutBooksIndexRoute
   '/manager/account': typeof ManagerLayoutAccountIndexRoute
+  '/manager/books': typeof ManagerLayoutBooksIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
-  '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
-  '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
+  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -475,13 +470,13 @@ export interface FileRoutesByTo {
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
   '/app/account': typeof AppLayoutAccountIndexRoute
-  '/app/repositories': typeof AppLayoutRepositoriesIndexRoute
+  '/app/books': typeof AppLayoutBooksIndexRoute
   '/manager/account': typeof ManagerLayoutAccountIndexRoute
+  '/manager/books': typeof ManagerLayoutBooksIndexRoute
   '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/repositories': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
-  '/app/repositories/$id': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
-  '/manager/repositories/$id': typeof ManagerLayoutRepositoriesIdIndexRoute
+  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -502,13 +497,13 @@ export interface FileRoutesById {
   '/login/verify/': typeof LoginVerifyIndexRoute
   '/manager/_layout/': typeof ManagerLayoutIndexRoute
   '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
-  '/app/_layout/repositories/': typeof AppLayoutRepositoriesIndexRoute
+  '/app/_layout/books/': typeof AppLayoutBooksIndexRoute
   '/manager/_layout/account/': typeof ManagerLayoutAccountIndexRoute
+  '/manager/_layout/books/': typeof ManagerLayoutBooksIndexRoute
   '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/_layout/repositories/': typeof ManagerLayoutRepositoriesIndexRoute
   '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
-  '/app/_layout-desktop-only/repositories/$id/': typeof AppLayoutDesktopOnlyRepositoriesIdIndexRoute
-  '/manager/_layout/repositories/$id/': typeof ManagerLayoutRepositoriesIdIndexRoute
+  '/app/_layout-desktop-only/books/$id/': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/_layout/books/$id/': typeof ManagerLayoutBooksIdIndexRoute
   '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -527,13 +522,13 @@ export interface FileRouteTypes {
     | '/login/verify'
     | '/manager/'
     | '/app/account'
-    | '/app/repositories'
+    | '/app/books'
     | '/manager/account'
+    | '/manager/books'
     | '/manager/dashboard'
-    | '/manager/repositories'
     | '/manager/users'
-    | '/app/repositories/$id'
-    | '/manager/repositories/$id'
+    | '/app/books/$id'
+    | '/manager/books/$id'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/users/$id/update'
@@ -546,13 +541,13 @@ export interface FileRouteTypes {
     | '/login/error'
     | '/login/verify'
     | '/app/account'
-    | '/app/repositories'
+    | '/app/books'
     | '/manager/account'
+    | '/manager/books'
     | '/manager/dashboard'
-    | '/manager/repositories'
     | '/manager/users'
-    | '/app/repositories/$id'
-    | '/manager/repositories/$id'
+    | '/app/books/$id'
+    | '/manager/books/$id'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/users/$id/update'
@@ -571,13 +566,13 @@ export interface FileRouteTypes {
     | '/login/verify/'
     | '/manager/_layout/'
     | '/app/_layout/account/'
-    | '/app/_layout/repositories/'
+    | '/app/_layout/books/'
     | '/manager/_layout/account/'
+    | '/manager/_layout/books/'
     | '/manager/_layout/dashboard/'
-    | '/manager/_layout/repositories/'
     | '/manager/_layout/users/'
-    | '/app/_layout-desktop-only/repositories/$id/'
-    | '/manager/_layout/repositories/$id/'
+    | '/app/_layout-desktop-only/books/$id/'
+    | '/manager/_layout/books/$id/'
     | '/manager/_layout/users/$id/'
     | '/manager/_layout/users/new/'
     | '/manager/_layout/users/$id/update/'
@@ -644,14 +639,14 @@ export const routeTree = rootRoute
       "children": [
         "/app/_layout/",
         "/app/_layout/account/",
-        "/app/_layout/repositories/"
+        "/app/_layout/books/"
       ]
     },
     "/app/_layout-desktop-only": {
       "filePath": "app/_layout-desktop-only.tsx",
       "parent": "/app",
       "children": [
-        "/app/_layout-desktop-only/repositories/$id/"
+        "/app/_layout-desktop-only/books/$id/"
       ]
     },
     "/manager/_layout": {
@@ -660,10 +655,10 @@ export const routeTree = rootRoute
       "children": [
         "/manager/_layout/",
         "/manager/_layout/account/",
+        "/manager/_layout/books/",
         "/manager/_layout/dashboard/",
-        "/manager/_layout/repositories/",
         "/manager/_layout/users/",
-        "/manager/_layout/repositories/$id/",
+        "/manager/_layout/books/$id/",
         "/manager/_layout/users/$id/",
         "/manager/_layout/users/new/",
         "/manager/_layout/users/$id/update/"
@@ -693,32 +688,32 @@ export const routeTree = rootRoute
       "filePath": "app/_layout/account.index.tsx",
       "parent": "/app/_layout"
     },
-    "/app/_layout/repositories/": {
-      "filePath": "app/_layout/repositories.index.tsx",
+    "/app/_layout/books/": {
+      "filePath": "app/_layout/books.index.tsx",
       "parent": "/app/_layout"
     },
     "/manager/_layout/account/": {
       "filePath": "manager/_layout/account.index.tsx",
       "parent": "/manager/_layout"
     },
-    "/manager/_layout/dashboard/": {
-      "filePath": "manager/_layout/dashboard.index.tsx",
+    "/manager/_layout/books/": {
+      "filePath": "manager/_layout/books.index.tsx",
       "parent": "/manager/_layout"
     },
-    "/manager/_layout/repositories/": {
-      "filePath": "manager/_layout/repositories.index.tsx",
+    "/manager/_layout/dashboard/": {
+      "filePath": "manager/_layout/dashboard.index.tsx",
       "parent": "/manager/_layout"
     },
     "/manager/_layout/users/": {
       "filePath": "manager/_layout/users.index.tsx",
       "parent": "/manager/_layout"
     },
-    "/app/_layout-desktop-only/repositories/$id/": {
-      "filePath": "app/_layout-desktop-only/repositories.$id.index.tsx",
+    "/app/_layout-desktop-only/books/$id/": {
+      "filePath": "app/_layout-desktop-only/books.$id.index.tsx",
       "parent": "/app/_layout-desktop-only"
     },
-    "/manager/_layout/repositories/$id/": {
-      "filePath": "manager/_layout/repositories.$id.index.tsx",
+    "/manager/_layout/books/$id/": {
+      "filePath": "manager/_layout/books.$id.index.tsx",
       "parent": "/manager/_layout"
     },
     "/manager/_layout/users/$id/": {

@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import { BookMarkedIcon, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
+import { IconBookOpen } from '@/components/icons/generated';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,9 +29,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageRepositories = (props: {
-  search: { searchTerm?: string };
-}) => {
+export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
 
   const searchInputProps = {
@@ -43,8 +42,8 @@ export const PageRepositories = (props: {
       }),
   };
 
-  const repositoriesQuery = useInfiniteQuery(
-    orpc.repository.getAll.infiniteOptions({
+  const booksQuery = useInfiniteQuery(
+    orpc.book.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
         searchTerm: props.search.searchTerm,
         cursor,
@@ -56,11 +55,11 @@ export const PageRepositories = (props: {
   );
 
   const ui = getUiState((set) => {
-    if (repositoriesQuery.status === 'pending') return set('pending');
-    if (repositoriesQuery.status === 'error') return set('error');
+    if (booksQuery.status === 'pending') return set('pending');
+    if (booksQuery.status === 'error') return set('error');
 
     const searchTerm = props.search.searchTerm;
-    const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
+    const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
     if (!items.length && searchTerm) {
       return set('empty-search', { searchTerm });
     }
@@ -69,7 +68,7 @@ export const PageRepositories = (props: {
     return set('default', {
       items,
       searchTerm,
-      total: repositoriesQuery.data.pages[0]?.total ?? 0,
+      total: booksQuery.data.pages[0]?.total ?? 0,
     });
   });
 
@@ -82,7 +81,7 @@ export const PageRepositories = (props: {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>Books</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
@@ -99,7 +98,7 @@ export const PageRepositories = (props: {
           {ui
             .match('pending', () => <DataListLoadingState />)
             .match('error', () => (
-              <DataListErrorState retry={() => repositoriesQuery.refetch()} />
+              <DataListErrorState retry={() => booksQuery.refetch()} />
             ))
             .match('empty', () => <DataListEmptyState />)
             .match('empty-search', ({ searchTerm }) => (
@@ -126,22 +125,19 @@ export const PageRepositories = (props: {
                     <DataListCell className="flex-none">
                       <Avatar>
                         <AvatarFallback>
-                          <BookMarkedIcon className="size-4 text-muted-foreground" />
+                          <IconBookOpen className="size-4 text-muted-foreground" />
                         </AvatarFallback>
                       </Avatar>
                     </DataListCell>
                     <DataListCell>
                       <DataListText className="font-medium">
-                        <Link
-                          to="/manager/repositories/$id"
-                          params={{ id: item.id }}
-                        >
-                          {item.name}
+                        <Link to="/manager/books/$id" params={{ id: item.id }}>
+                          {item.title}
                           <span className="absolute inset-0" />
                         </Link>
                       </DataListText>
                       <DataListText className="text-xs text-muted-foreground">
-                        {item.link}
+                        {item.author}
                       </DataListText>
                     </DataListCell>
                   </DataListRow>
@@ -151,9 +147,9 @@ export const PageRepositories = (props: {
                     <Button
                       size="xs"
                       variant="secondary"
-                      disabled={!repositoriesQuery.hasNextPage}
-                      onClick={() => repositoriesQuery.fetchNextPage()}
-                      loading={repositoriesQuery.isFetchingNextPage}
+                      disabled={!booksQuery.hasNextPage}
+                      onClick={() => booksQuery.fetchNextPage()}
+                      loading={booksQuery.isFetchingNextPage}
                     >
                       Load more
                     </Button>

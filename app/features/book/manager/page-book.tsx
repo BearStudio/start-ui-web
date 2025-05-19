@@ -19,21 +19,21 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageRepository = (props: { params: { id: string } }) => {
-  const repositoryQuery = useQuery(
-    orpc.repository.getById.queryOptions({ input: { id: props.params.id } })
+export const PageBook = (props: { params: { id: string } }) => {
+  const bookQuery = useQuery(
+    orpc.book.getById.queryOptions({ input: { id: props.params.id } })
   );
 
   const ui = getUiState((set) => {
-    if (repositoryQuery.status === 'pending') return set('pending');
+    if (bookQuery.status === 'pending') return set('pending');
     if (
-      repositoryQuery.status === 'error' &&
-      repositoryQuery.error instanceof ORPCError &&
-      repositoryQuery.error.code === 'NOT_FOUND'
+      bookQuery.status === 'error' &&
+      bookQuery.error instanceof ORPCError &&
+      bookQuery.error.code === 'NOT_FOUND'
     )
       return set('not-found');
-    if (repositoryQuery.status === 'error') return set('error');
-    return set('default', { repository: repositoryQuery.data });
+    if (bookQuery.status === 'error') return set('error');
+    return set('default', { book: bookQuery.data });
   });
 
   return (
@@ -58,7 +58,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
             .match(['not-found', 'error'], () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .match('default', ({ repository }) => <>{repository.name}</>)
+            .match('default', ({ book }) => <>{book.title}</>)
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
@@ -67,7 +67,7 @@ export const PageRepository = (props: { params: { id: string } }) => {
           .match('pending', () => <Spinner full />)
           .match('not-found', () => <PageError error="404" />)
           .match('error', () => <PageError />)
-          .match('default', ({ repository }) => <>{repository.name}</>)
+          .match('default', ({ book }) => <>{book.title}</>)
           .exhaustive()}
       </PageLayoutContent>
     </PageLayout>

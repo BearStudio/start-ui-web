@@ -14,9 +14,9 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
-export const PageRepositories = () => {
-  const repositoriesQuery = useInfiniteQuery(
-    orpc.repository.getAll.infiniteOptions({
+export const PageBooks = () => {
+  const booksQuery = useInfiniteQuery(
+    orpc.book.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
         cursor,
       }),
@@ -27,10 +27,10 @@ export const PageRepositories = () => {
   );
 
   const ui = getUiState((set) => {
-    if (repositoriesQuery.status === 'pending') return set('pending');
-    if (repositoriesQuery.status === 'error') return set('error');
+    if (booksQuery.status === 'pending') return set('pending');
+    if (booksQuery.status === 'error') return set('error');
 
-    const items = repositoriesQuery.data?.pages.flatMap((p) => p.items) ?? [];
+    const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
     if (!items.length) return set('empty');
     return set('default', { items });
   });
@@ -38,30 +38,30 @@ export const PageRepositories = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <PageLayoutTopBarTitle>Repositories</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>Books</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         {ui
           .match('pending', () => <>Loading...</>)
           .match('error', () => <PageError />)
-          .match('empty', () => <>No repo</>)
+          .match('empty', () => <>No books</>)
           .match('default', ({ items }) => (
             <>
               {items.map((item) => (
                 <Link
                   key={item.id}
-                  to="/app/repositories/$id"
+                  to="/app/books/$id"
                   params={{ id: item.id }}
                 >
-                  Repo: {item.name}
+                  Repo: {item.title}
                 </Link>
               ))}
-              {repositoriesQuery.hasNextPage && (
+              {booksQuery.hasNextPage && (
                 <Button
                   size="sm"
                   variant="link"
-                  onClick={() => repositoriesQuery.fetchNextPage()}
-                  loading={repositoriesQuery.isFetchingNextPage}
+                  onClick={() => booksQuery.fetchNextPage()}
+                  loading={booksQuery.isFetchingNextPage}
                 >
                   Load more
                 </Button>

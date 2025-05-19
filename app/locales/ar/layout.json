@@ -3,12 +3,12 @@
     "application": "طلب",
     "configuration": "إعدادات",
     "dashboard": "لوحة القيادة",
-    "repositories": "المستودعات",
     "users": "المستخدمون",
     "account": "حساب",
     "home": "بيت",
     "apiDocumentation": "وثائق API",
     "logout": "تسجيل الخروج",
-    "openApp": "افتح التطبيق"
+    "openApp": "افتح التطبيق",
+    "books": "كتب"
   }
 }
