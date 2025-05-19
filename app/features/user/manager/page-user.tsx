@@ -259,9 +259,9 @@ const UserSessions = (props: { userId: string }) => {
 
           <WithPermissions permissions={[{ session: ['revoke'] }]}>
             <DataListCell className="flex-none">
-              {ui.is('default') && (
+              {ui.when('default', () => (
                 <RevokeAllSessionsButton userId={props.userId} />
-              )}
+              ))}
             </DataListCell>
           </WithPermissions>
         </DataListRow>
