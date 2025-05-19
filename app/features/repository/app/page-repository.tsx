@@ -7,7 +7,6 @@ import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
@@ -46,11 +45,6 @@ export const PageRepository = (props: { params: { id: string } }) => {
             </div>
             <Separator orientation="vertical" className="h-4" />
           </div>
-        }
-        rightActions={
-          <Button size="sm" className="min-w-20">
-            Save
-          </Button>
         }
       >
         <PageLayoutTopBarTitle>
