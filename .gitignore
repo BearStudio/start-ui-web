@@ -42,7 +42,7 @@ yarn-error.log*
 .vercel
 
 # Build info
-.build-info.json
+build-info.gen.json
 
 # Prisma
 prisma/dev.db

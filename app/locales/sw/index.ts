@@ -1,7 +1,8 @@
-import zod from 'zod-i18n-map/locales/en/zod.json' assert { type: 'json' }; // Using English as fallback since Swahili is not available in zod-i18n-map
-import 'dayjs/locale/sw.js'; // If available, otherwise use 'dayjs/locale/en'
+import zod from 'zod-i18n-map/locales/en/zod.json' assert { type: 'json' };
+import 'dayjs/locale/en.js';
 
 import auth from './auth.json' assert { type: 'json' };
+import buildInfo from './build-info.json' assert { type: 'json' };
 import common from './common.json' assert { type: 'json' };
 import components from './components.json' assert { type: 'json' };
 import emails from './emails.json' assert { type: 'json' };
@@ -11,6 +12,7 @@ import user from './user.json' assert { type: 'json' };
 
 export default {
   auth,
+  buildInfo,
   common,
   components,
   emails,
