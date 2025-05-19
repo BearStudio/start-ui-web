@@ -39,6 +39,8 @@ import { themes } from '@/components/ui/theme-switcher';
 
 import { ConfirmLogout } from '@/features/auth/confirm-logout';
 import { WithPermissions } from '@/features/auth/with-permission';
+import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
+import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 
 export function NavUser() {
   const { t } = useTranslation(['common', 'layout']);
@@ -164,6 +166,17 @@ export function NavUser() {
                 {t('layout:nav.logout')}
               </DropdownMenuItem>
             </ConfirmLogout>
+            <DropdownMenuSeparator />
+            <BuildInfoDrawer>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+                className="py-1 text-xs text-muted-foreground"
+              >
+                <BuildInfoVersion />
+              </DropdownMenuItem>
+            </BuildInfoDrawer>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

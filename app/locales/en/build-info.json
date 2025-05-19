@@ -1,0 +1,5 @@
+{
+  "versionLabel": "Version {{version}}",
+  "copyToClipboard": "Copy version info",
+  "copiedToClipboard": "Version info copied to clipboard"
+}
