@@ -50,5 +50,8 @@
   "sidebar": {
     "title": "Pembeni",
     "toggle": "Kubadilisha kando ya pembeni"
+  },
+  "backButton": {
+    "label": "Nyuma"
   }
 }

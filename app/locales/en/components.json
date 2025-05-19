@@ -50,5 +50,8 @@
   "sidebar": {
     "title": "Sidebar",
     "toggle": "Toggle Sidebar"
+  },
+  "backButton": {
+    "label": "Back"
   }
 }
