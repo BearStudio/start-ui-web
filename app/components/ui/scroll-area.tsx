@@ -5,8 +5,13 @@ import { cn } from '@/lib/tailwind/utils';
 function ScrollArea({
   className,
   children,
+  orientation,
   ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+}: React.ComponentProps<typeof ScrollAreaPrimitive.Root> &
+  Pick<
+    React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
+    'orientation'
+  >) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
@@ -19,7 +24,7 @@ function ScrollArea({
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
-      <ScrollBar />
+      <ScrollBar orientation={orientation} />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   );
