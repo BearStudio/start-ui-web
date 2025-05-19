@@ -2,6 +2,7 @@ import { NumberField } from '@base-ui-components/react';
 import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
 import { ComponentProps, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { mergeRefs } from 'react-merge-refs';
 import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -17,6 +18,8 @@ type NumberInputProps = ComponentProps<typeof NumberField.Root> &
     inputProps?: Omit<RemoveFromType<InputProps, InputPropsRoot>, 'endElement'>;
     buttons?: 'classic' | 'mobile';
     inCents?: boolean;
+  } & {
+    ref?: React.Ref<HTMLInputElement | null>;
   };
 
 export const NumberInput = ({
@@ -28,6 +31,7 @@ export const NumberInput = ({
   buttons,
   className,
   onKeyDown,
+  ref,
   ...props
 }: NumberInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +70,7 @@ export const NumberInput = ({
         <NumberField.Input
           render={
             <Input
-              ref={inputRef}
+              ref={mergeRefs([ref, inputRef])}
               endElement={
                 buttons === 'classic' && (
                   <NumberField.Group className="flex flex-col">
