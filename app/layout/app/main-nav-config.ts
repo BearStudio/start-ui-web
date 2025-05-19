@@ -2,8 +2,8 @@ import { ValidateLinkOptions } from '@tanstack/react-router';
 import { FC } from 'react';
 
 import {
-  IconGitBranchDuotone,
-  IconGitBranchFill,
+  IconBookOpenDuotone,
+  IconBookOpenFill,
   IconHouseDuotone,
   IconHouseFill,
   IconUserCircleDuotone,
@@ -21,11 +21,11 @@ export const MAIN_NAV_LINKS = [
     exact: true,
   } as const,
   {
-    labelTranslationKey: 'layout:nav.repositories',
-    icon: IconGitBranchDuotone,
-    iconActive: IconGitBranchFill,
+    labelTranslationKey: 'layout:nav.books',
+    icon: IconBookOpenDuotone,
+    iconActive: IconBookOpenFill,
     linkOptions: {
-      to: '/app/repositories',
+      to: '/app/books',
     },
   } as const,
   {

@@ -1,23 +1,23 @@
-import zod from 'zod-i18n-map/locales/en/zod.json' assert { type: 'json' };
-import 'dayjs/locale/en.js';
+import zod from 'zod-i18n-map/locales/fr/zod.json' assert { type: 'json' };
+import 'dayjs/locale/fr.js';
 
 import auth from './auth.json' assert { type: 'json' };
+import book from './book.json' assert { type: 'json' };
 import buildInfo from './build-info.json' assert { type: 'json' };
 import common from './common.json' assert { type: 'json' };
 import components from './components.json' assert { type: 'json' };
 import emails from './emails.json' assert { type: 'json' };
 import layout from './layout.json' assert { type: 'json' };
-import repository from './repository.json' assert { type: 'json' };
 import user from './user.json' assert { type: 'json' };
 
 export default {
   auth,
+  book,
   buildInfo,
   common,
   components,
   emails,
   layout,
-  repository,
   user,
   zod,
 } as const;

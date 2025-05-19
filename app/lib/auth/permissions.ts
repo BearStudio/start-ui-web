@@ -10,7 +10,7 @@ const statement = {
   ...defaultStatements,
   account: ['read', 'update'],
   apps: ['app', 'manager'],
-  repository: ['read', 'create', 'update', 'delete'],
+  book: ['read', 'create', 'update', 'delete'],
 } as const;
 
 const ac = createAccessControl(statement);
@@ -18,14 +18,14 @@ const ac = createAccessControl(statement);
 const user = ac.newRole({
   account: ['update'],
   apps: ['app'],
-  repository: ['read'],
+  book: ['read'],
 });
 
 const admin = ac.newRole({
   ...adminAc.statements,
   account: ['update'],
   apps: ['app', 'manager'],
-  repository: ['read', 'create', 'update', 'delete'],
+  book: ['read', 'create', 'update', 'delete'],
 });
 
 export const rolesNames = ['admin', 'user'] as const;

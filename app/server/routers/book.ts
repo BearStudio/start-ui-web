@@ -2,20 +2,20 @@ import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
-import { zRepository } from '@/features/repository/schema';
+import { zBook } from '@/features/book/schema';
 import { protectedProcedure } from '@/server/orpc';
 
-const tags = ['repositories'];
+const tags = ['books'];
 
 export default {
   getAll: protectedProcedure({
     permission: {
-      repository: ['read'],
+      book: ['read'],
     },
   })
     .route({
       method: 'GET',
-      path: '/repositories',
+      path: '/books',
       tags,
     })
     .input(
@@ -29,31 +29,31 @@ export default {
     )
     .output(
       z.object({
-        items: z.array(zRepository()),
+        items: z.array(zBook()),
         nextCursor: z.string().cuid().optional(),
         total: z.number(),
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting repositories from database');
+      context.logger.info('Getting books from database');
 
       const where = {
-        name: {
+        title: {
           contains: input.searchTerm,
           mode: 'insensitive',
         },
-      } satisfies Prisma.RepositoryWhereInput;
+      } satisfies Prisma.BookWhereInput;
 
       const [total, items] = await context.db.$transaction([
-        context.db.repository.count({
+        context.db.book.count({
           where,
         }),
-        context.db.repository.findMany({
+        context.db.book.findMany({
           // Get an extra item at the end which we'll use as next cursor
           take: input.limit + 1,
           cursor: input.cursor ? { id: input.cursor } : undefined,
           orderBy: {
-            name: 'asc',
+            title: 'asc',
           },
           where,
         }),
@@ -74,12 +74,12 @@ export default {
 
   getById: protectedProcedure({
     permission: {
-      repository: ['read'],
+      book: ['read'],
     },
   })
     .route({
       method: 'GET',
-      path: '/repositories/{id}',
+      path: '/books/{id}',
       tags,
     })
     .input(
@@ -87,20 +87,18 @@ export default {
         id: z.string().cuid(),
       })
     )
-    .output(zRepository())
+    .output(zBook())
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting repository');
-      const repository = await context.db.repository.findUnique({
+      context.logger.info('Getting book');
+      const book = await context.db.book.findUnique({
         where: { id: input.id },
       });
 
-      if (!repository) {
-        context.logger.warn(
-          'Unable to find repository with the provided input'
-        );
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return repository;
+      return book;
     }),
 };

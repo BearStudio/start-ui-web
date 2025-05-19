@@ -3,12 +3,12 @@
     "application": "Application",
     "configuration": "Configuration",
     "dashboard": "Tableau de bord",
-    "repositories": "Dépôts de code",
     "users": "Utilisateurs",
     "account": "Compte",
     "home": "Accueil",
     "apiDocumentation": "Documentation API",
     "logout": "Déconnexion",
-    "openApp": "Ouvrir l'application"
+    "openApp": "Ouvrir l'application",
+    "books": "Livres"
   }
 }

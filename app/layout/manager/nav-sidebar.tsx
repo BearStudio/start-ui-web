@@ -9,7 +9,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
-import { IconGitBranch } from '@/components/icons/generated';
+import { IconBookOpen } from '@/components/icons/generated';
 import {
   Sidebar,
   SidebarContent,
@@ -81,12 +81,12 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                   <SidebarMenuButton
                     asChild
                     isActive={
-                      !!matchRoute({ to: '/manager/repositories', fuzzy: true })
+                      !!matchRoute({ to: '/manager/books', fuzzy: true })
                     }
                   >
-                    <Link to="/manager/repositories">
-                      <IconGitBranch />
-                      <span>{t('layout:nav.repositories')}</span>
+                    <Link to="/manager/books">
+                      <IconBookOpen />
+                      <span>{t('layout:nav.books')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

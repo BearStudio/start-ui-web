@@ -1,10 +1,10 @@
 import { db } from '@/server/db';
 
-import { createRepositories } from './repository';
+import { createBooks } from './book';
 import { createUsers } from './user';
 
 async function main() {
-  await createRepositories();
+  await createBooks();
   await createUsers();
 }
 

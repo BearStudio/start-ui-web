@@ -3,12 +3,12 @@
     "application": "Maombi",
     "configuration": "Usanidi",
     "dashboard": "Dashibodi",
-    "repositories": "Hazina",
     "users": "Watumiaji",
     "account": "Akaunti",
     "home": "Nyumbani",
     "apiDocumentation": "Nyaraka za API",
     "logout": "Kuingia",
-    "openApp": "Fungua programu"
+    "openApp": "Fungua programu",
+    "books": "Vitabu"
   }
 }
