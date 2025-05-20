@@ -101,4 +101,48 @@ export default {
 
       return book;
     }),
+
+  create: protectedProcedure({
+    permission: {
+      book: ['create'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/books',
+      tags,
+    })
+    .input(
+      zBook().pick({
+        title: true,
+        author: true,
+        genre: true,
+        publisher: true,
+      })
+    )
+    .output(zBook())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Create book');
+      try {
+        return await context.db.book.create({
+          data: {
+            title: input.title,
+            author: input.author,
+            genre: input.genre,
+            publisher: input.publisher,
+          },
+        });
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            message: error.message,
+            data: error.meta,
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 };
