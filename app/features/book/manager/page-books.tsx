@@ -76,7 +76,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         actions={
-          <ResponsiveIconButton label="New Repo" variant="secondary" size="sm">
+          <ResponsiveIconButton label="New Book" variant="secondary" size="sm">
             <PlusIcon />
           </ResponsiveIconButton>
         }
@@ -139,6 +139,20 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       <DataListText className="text-xs text-muted-foreground">
                         {item.author}
                       </DataListText>
+                    </DataListCell>
+                    <DataListCell>
+                      {item.genre && (
+                        <DataListText className="text-xs text-muted-foreground">
+                          {item.genre}
+                        </DataListText>
+                      )}
+                    </DataListCell>
+                    <DataListCell>
+                      {item.publisher && (
+                        <DataListText className="text-xs text-muted-foreground">
+                          {item.publisher}
+                        </DataListText>
+                      )}
                     </DataListCell>
                   </DataListRow>
                 ))}

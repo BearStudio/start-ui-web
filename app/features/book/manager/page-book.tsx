@@ -58,7 +58,11 @@ export const PageBook = (props: { params: { id: string } }) => {
             .match(['not-found', 'error'], () => (
               <AlertCircleIcon className="size-4 text-muted-foreground" />
             ))
-            .match('default', ({ book }) => <>{book.title}</>)
+            .match('default', ({ book }) => (
+              <>
+                {book.title} - {book.author}
+              </>
+            ))
             .exhaustive()}
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
