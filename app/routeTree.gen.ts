@@ -31,6 +31,7 @@ import { Route as AppLayoutBooksIndexImport } from './routes/app/_layout/books.i
 import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
 import { Route as ManagerLayoutUsersNewIndexImport } from './routes/manager/_layout/users.new.index'
 import { Route as ManagerLayoutUsersIdIndexImport } from './routes/manager/_layout/users.$id.index'
+import { Route as ManagerLayoutBooksNewIndexImport } from './routes/manager/_layout/books.new.index'
 import { Route as ManagerLayoutBooksIdIndexImport } from './routes/manager/_layout/books.$id.index'
 import { Route as AppLayoutDesktopOnlyBooksIdIndexImport } from './routes/app/_layout-desktop-only/books.$id.index'
 import { Route as ManagerLayoutUsersIdUpdateIndexImport } from './routes/manager/_layout/users.$id.update.index'
@@ -156,6 +157,14 @@ const ManagerLayoutUsersIdIndexRoute = ManagerLayoutUsersIdIndexImport.update({
   path: '/users/$id/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
+
+const ManagerLayoutBooksNewIndexRoute = ManagerLayoutBooksNewIndexImport.update(
+  {
+    id: '/books/new/',
+    path: '/books/new/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any,
+)
 
 const ManagerLayoutBooksIdIndexRoute = ManagerLayoutBooksIdIndexImport.update({
   id: '/books/$id/',
@@ -321,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutBooksIdIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
+    '/manager/_layout/books/new/': {
+      id: '/manager/_layout/books/new/'
+      path: '/books/new'
+      fullPath: '/manager/books/new'
+      preLoaderRoute: typeof ManagerLayoutBooksNewIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
     '/manager/_layout/users/$id/': {
       id: '/manager/_layout/users/$id/'
       path: '/users/$id'
@@ -407,6 +423,7 @@ interface ManagerLayoutRouteChildren {
   ManagerLayoutDashboardIndexRoute: typeof ManagerLayoutDashboardIndexRoute
   ManagerLayoutUsersIndexRoute: typeof ManagerLayoutUsersIndexRoute
   ManagerLayoutBooksIdIndexRoute: typeof ManagerLayoutBooksIdIndexRoute
+  ManagerLayoutBooksNewIndexRoute: typeof ManagerLayoutBooksNewIndexRoute
   ManagerLayoutUsersIdIndexRoute: typeof ManagerLayoutUsersIdIndexRoute
   ManagerLayoutUsersNewIndexRoute: typeof ManagerLayoutUsersNewIndexRoute
   ManagerLayoutUsersIdUpdateIndexRoute: typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -419,6 +436,7 @@ const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutDashboardIndexRoute: ManagerLayoutDashboardIndexRoute,
   ManagerLayoutUsersIndexRoute: ManagerLayoutUsersIndexRoute,
   ManagerLayoutBooksIdIndexRoute: ManagerLayoutBooksIdIndexRoute,
+  ManagerLayoutBooksNewIndexRoute: ManagerLayoutBooksNewIndexRoute,
   ManagerLayoutUsersIdIndexRoute: ManagerLayoutUsersIdIndexRoute,
   ManagerLayoutUsersNewIndexRoute: ManagerLayoutUsersNewIndexRoute,
   ManagerLayoutUsersIdUpdateIndexRoute: ManagerLayoutUsersIdUpdateIndexRoute,
@@ -457,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
   '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -477,6 +496,7 @@ export interface FileRoutesByTo {
   '/manager/users': typeof ManagerLayoutUsersIndexRoute
   '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -504,6 +524,7 @@ export interface FileRoutesById {
   '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
   '/app/_layout-desktop-only/books/$id/': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
   '/manager/_layout/books/$id/': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/_layout/books/new/': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
   '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
@@ -529,6 +550,7 @@ export interface FileRouteTypes {
     | '/manager/users'
     | '/app/books/$id'
     | '/manager/books/$id'
+    | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/users/$id/update'
@@ -548,6 +570,7 @@ export interface FileRouteTypes {
     | '/manager/users'
     | '/app/books/$id'
     | '/manager/books/$id'
+    | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/users/$id/update'
@@ -573,6 +596,7 @@ export interface FileRouteTypes {
     | '/manager/_layout/users/'
     | '/app/_layout-desktop-only/books/$id/'
     | '/manager/_layout/books/$id/'
+    | '/manager/_layout/books/new/'
     | '/manager/_layout/users/$id/'
     | '/manager/_layout/users/new/'
     | '/manager/_layout/users/$id/update/'
@@ -659,6 +683,7 @@ export const routeTree = rootRoute
         "/manager/_layout/dashboard/",
         "/manager/_layout/users/",
         "/manager/_layout/books/$id/",
+        "/manager/_layout/books/new/",
         "/manager/_layout/users/$id/",
         "/manager/_layout/users/new/",
         "/manager/_layout/users/$id/update/"
@@ -714,6 +739,10 @@ export const routeTree = rootRoute
     },
     "/manager/_layout/books/$id/": {
       "filePath": "manager/_layout/books.$id.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/manager/_layout/books/new/": {
+      "filePath": "manager/_layout/books.new.index.tsx",
       "parent": "/manager/_layout"
     },
     "/manager/_layout/users/$id/": {

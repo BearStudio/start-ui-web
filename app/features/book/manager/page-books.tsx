@@ -76,8 +76,15 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         actions={
-          <ResponsiveIconButton label="New Book" variant="secondary" size="sm">
-            <PlusIcon />
+          <ResponsiveIconButton
+            asChild
+            label="New Book"
+            variant="secondary"
+            size="sm"
+          >
+            <Link to="/manager/books/new">
+              <PlusIcon />
+            </Link>
           </ResponsiveIconButton>
         }
       >
