@@ -62,7 +62,7 @@ export const PageUserNew = () => {
           return;
         }
 
-        toast.error('Failed to update user');
+        toast.error('Failed to create user');
       },
     })
   );
