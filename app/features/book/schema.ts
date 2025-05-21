@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
+import { zGenre } from '@/features/genre/schema';
+
 export type Book = z.infer<ReturnType<typeof zBook>>;
 
 export const zBook = () =>
@@ -12,7 +14,7 @@ export const zBook = () =>
       required_error: t('book:fields.title.required'),
     }),
     author: zu.string.nonEmpty(z.string()),
-    genre: zu.string.nonEmptyNullish(z.string()),
+    genre: zGenre().nullish(),
     publisher: zu.string.nonEmptyNullish(z.string()),
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -20,4 +22,6 @@ export const zBook = () =>
 
 export type FormFieldsBook = z.infer<ReturnType<typeof zFormFieldsBook>>;
 export const zFormFieldsBook = () =>
-  zBook().pick({ title: true, author: true, genre: true, publisher: true });
+  zBook()
+    .pick({ title: true, author: true, publisher: true })
+    .extend({ genre: z.string().cuid() });

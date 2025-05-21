@@ -56,6 +56,7 @@ export default {
             title: 'asc',
           },
           where,
+          include: { genre: true },
         }),
       ]);
 
@@ -113,12 +114,13 @@ export default {
       tags,
     })
     .input(
-      zBook().pick({
-        title: true,
-        author: true,
-        genre: true,
-        publisher: true,
-      })
+      zBook()
+        .pick({
+          title: true,
+          author: true,
+          publisher: true,
+        })
+        .extend({ genre: z.string().cuid() })
     )
     .output(zBook())
     .handler(async ({ context, input }) => {
@@ -128,7 +130,7 @@ export default {
           data: {
             title: input.title,
             author: input.author,
-            genre: input.genre,
+            genreId: input.genre ?? undefined,
             publisher: input.publisher,
           },
         });
