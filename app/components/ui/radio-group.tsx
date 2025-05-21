@@ -1,7 +1,7 @@
 'use client';
 
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { Circle } from 'lucide-react';
+import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -26,9 +26,11 @@ function Radio({
   className,
   value,
   children,
+  id,
   ...props
 }: RadioProps) {
-  const _radioId = React.useId();
+  const _id = React.useId();
+  const radioId = id ?? _id;
 
   return (
     <div
@@ -40,7 +42,7 @@ function Radio({
           'peer aspect-square h-4 w-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
-        id={_radioId}
+        id={radioId}
         value={value}
         {...props}
       >
@@ -49,7 +51,7 @@ function Radio({
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
       <label
-        htmlFor={_radioId}
+        htmlFor={radioId}
         {...labelProps}
         className={cn(
           'cursor-pointer text-xs peer-disabled:cursor-not-allowed',
@@ -61,5 +63,13 @@ function Radio({
     </div>
   );
 }
-export { Radio, RadioGroup };
+
+/**
+ * Component holding the radio button.
+ *
+ * @see https://www.radix-ui.com/primitives/docs/components/radio-group
+ */
+const RadioItem = RadioGroupPrimitive.Item;
+
+export { Radio, RadioGroup, RadioItem };
 export type { RadioGroupProps, RadioProps };
