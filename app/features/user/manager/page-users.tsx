@@ -1,3 +1,4 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
@@ -5,7 +6,6 @@ import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
-import { getUiState } from '@/lib/ui-state';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';

@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-alpha.8",
+    "@bearstudio/ui-state": "1.0.0",
     "@headlessui/react": "2.2.2",
     "@hookform/resolvers": "5.0.1",
     "@orpc/client": "1.2.0",

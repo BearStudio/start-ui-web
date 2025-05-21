@@ -1,5 +1,6 @@
 'use client';
 
+import { getUiState } from '@bearstudio/ui-state';
 import {
   Combobox,
   ComboboxButton,
@@ -13,7 +14,6 @@ import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
 import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
-import { getUiState } from '@/lib/ui-state';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
