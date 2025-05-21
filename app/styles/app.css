@@ -62,6 +62,9 @@
   --spacing-safe-right: env(safe-area-inset-right);
 
   --text-2xs: 0.625rem;
+
+  --breakpoint-2xs: 24rem;
+  --breakpoint-xs: 32rem;
 }
 
 :root {
