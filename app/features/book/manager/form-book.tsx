@@ -1,4 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
+
+import { orpc } from '@/lib/orpc/client';
 
 import {
   FormField,
@@ -10,6 +13,8 @@ import { FormFieldsBook } from '@/features/book/schema';
 
 export const FormBook = () => {
   const form = useFormContext<FormFieldsBook>();
+
+  const genresQuery = useQuery(orpc.genre.getAll.queryOptions());
 
   return (
     <div className="flex flex-col gap-4">
@@ -29,7 +34,15 @@ export const FormBook = () => {
 
       <FormField>
         <FormFieldLabel>Genre</FormFieldLabel>
-        <FormFieldController type="text" control={form.control} name="genre" />
+        <FormFieldController
+          type="select"
+          control={form.control}
+          name="genre"
+          options={(genresQuery.data?.items ?? []).map((genre) => ({
+            id: genre.id,
+            label: genre.name,
+          }))}
+        />
       </FormField>
 
       <FormField>

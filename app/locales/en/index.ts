@@ -7,6 +7,7 @@ import buildInfo from './build-info.json' assert { type: 'json' };
 import common from './common.json' assert { type: 'json' };
 import components from './components.json' assert { type: 'json' };
 import emails from './emails.json' assert { type: 'json' };
+import genre from './genre.json' assert { type: 'json' };
 import layout from './layout.json' assert { type: 'json' };
 import user from './user.json' assert { type: 'json' };
 
@@ -17,6 +18,7 @@ export default {
   common,
   components,
   emails,
+  genre,
   layout,
   user,
   zod,

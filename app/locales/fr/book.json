@@ -1,3 +1,7 @@
 {
-  "fields": {}
+  "fields": {
+    "title": {
+      "alreadyUsed": "Titre déjà utilisé avec le même auteur"
+    }
+  }
 }

@@ -150,7 +150,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                     <DataListCell>
                       {item.genre && (
                         <DataListText className="text-xs text-muted-foreground">
-                          {item.genre}
+                          {item.genre.name}
                         </DataListText>
                       )}
                     </DataListCell>

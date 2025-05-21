@@ -89,9 +89,39 @@ model Book {
   updatedAt DateTime @updatedAt
   title     String
   author    String
-  genre     String?
+  genre     Genre?   @relation(fields: [genreId], references: [id])
+  genreId   String
   publisher String?
 
   @@unique([title, author])
   @@map("book")
+}
+
+model Author {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  @@map("author")
+}
+
+model Genre {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  color     String
+  Book      Book[]
+
+  @@map("genre")
+}
+
+model Publisher {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  @@map("publisher")
 }

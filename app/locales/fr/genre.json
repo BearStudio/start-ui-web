@@ -1,0 +1,9 @@
+{
+  "fields": {
+    "name": {
+      "alreadyUsed": "Le genre existe déjà",
+      "label": "Nom",
+      "required": "Le nom est requis"
+    }
+  }
+}
