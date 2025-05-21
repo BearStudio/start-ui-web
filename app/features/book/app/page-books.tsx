@@ -7,6 +7,7 @@ import { getUiState } from '@/lib/ui-state';
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
 
+import { BookCover } from '@/features/book/book-cover';
 import {
   PageLayout,
   PageLayoutContent,
@@ -46,27 +47,32 @@ export const PageBooks = () => {
           .match('error', () => <PageError />)
           .match('empty', () => <>No books</>)
           .match('default', ({ items }) => (
-            <>
-              {items.map((item) => (
-                <Link
-                  key={item.id}
-                  to="/app/books/$id"
-                  params={{ id: item.id }}
-                >
-                  Repo: {item.title}
-                </Link>
-              ))}
+            <div className="flex flex-col gap-4 pb-20">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {items.map((item) => (
+                  <Link
+                    key={item.id}
+                    to="/app/books/$id"
+                    params={{ id: item.id }}
+                    className="group"
+                  >
+                    <BookCover
+                      book={item}
+                      className="transition duration-500 group-hover:-translate-y-2 group-hover:rotate-1"
+                    />
+                  </Link>
+                ))}
+              </div>
               {booksQuery.hasNextPage && (
                 <Button
-                  size="sm"
-                  variant="link"
+                  variant="ghost"
                   onClick={() => booksQuery.fetchNextPage()}
                   loading={booksQuery.isFetchingNextPage}
                 >
                   Load more
                 </Button>
               )}
-            </>
+            </div>
           ))
           .exhaustive()}
       </PageLayoutContent>
