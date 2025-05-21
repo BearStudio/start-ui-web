@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { CheckIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -9,6 +9,7 @@ import { zu } from '@/lib/zod/zod-utils';
 import { FormFieldController } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
+import { RadioItem } from '@/components/ui/radio-group';
 
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
@@ -189,30 +190,31 @@ export const RenderOption = () => {
             type="radio-group"
             name="bear"
             options={options}
-            renderRadio={(option, { field }) => {
-              const _radioId = `radio-card-${option.value}`;
+            renderRadio={({ radio, controller: { field } }) => {
+              const radioId = `radio-card-${radio.value}`;
 
               return (
                 <label
-                  htmlFor={_radioId}
+                  htmlFor={radioId}
                   className={cn(
-                    'relative flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors',
-                    'hover:bg-muted/50',
-                    'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none',
-                    option.checked
+                    'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none hover:bg-muted/50',
+                    radio.checked
                       ? 'border-primary bg-primary/5'
                       : 'border-border'
                   )}
                 >
-                  <RadioGroupPrimitive.Item
-                    id={_radioId}
-                    className="sr-only"
-                    value={option.value}
-                    disabled={option.disabled}
+                  <RadioItem
+                    id={radioId}
+                    className="peer sr-only"
+                    value={radio.value}
+                    disabled={radio.disabled}
                     onBlur={field.onBlur}
                   />
                   <div className="flex flex-col gap-1">
-                    <span className="font-medium">{option.label}</span>
+                    <span className="font-medium">{radio.label}</span>
+                  </div>
+                  <div className="rounded-full bg-primary p-1 opacity-0 peer-data-[state=checked]:opacity-100">
+                    <CheckIcon className="h-4 w-4 text-primary-foreground" />
                   </div>
                 </label>
               );

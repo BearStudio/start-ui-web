@@ -30,12 +30,12 @@ export type FieldRadioGroupProps<
 > = FieldProps<TFieldValues, TName> & {
   type: 'radio-group';
   options: Array<RadioOptionProps>;
-  renderRadio?: (
-    radioOptions: RadioOptionProps & { checked: boolean },
-    fieldOptions: Parameters<
+  renderRadio?: (options: {
+    radio: RadioOptionProps & { checked: boolean };
+    controller: Parameters<
       Pick<ControllerProps<TFieldValues, TName>, 'render'>['render']
-    >[0]
-  ) => ReactNode;
+    >[0];
+  }) => ReactNode;
   containerProps?: ComponentProps<'div'>;
 } & RemoveFromType<
     Omit<
@@ -110,13 +110,13 @@ export const FieldRadioGroup = <
               {ui
                 .match('render-radio', ({ renderRadio }) =>
                   options.map((option) =>
-                    renderRadio(
-                      {
+                    renderRadio({
+                      radio: {
                         ...option,
                         checked: option.value === field.value,
                       },
-                      controllerRenderOptions
-                    )
+                      controller: controllerRenderOptions,
+                    })
                   )
                 )
                 .match('default', () =>
