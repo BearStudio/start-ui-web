@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { cn } from '@/lib/tailwind/utils';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { FormFieldController } from '@/components/form';
@@ -163,6 +165,58 @@ export const WithDisabledOption = () => {
             type="radio-group"
             name="bear"
             options={optionsWithDisabled}
+          />
+        </FormField>
+        <div>
+          <Button type="submit">Submit</Button>
+        </div>
+      </div>
+    </Form>
+  );
+};
+
+export const RenderOption = () => {
+  const form = useForm(formOptions);
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
+          <FormFieldController
+            control={form.control}
+            type="radio-group"
+            name="bear"
+            options={options}
+            renderRadio={(option, { field }) => {
+              const _radioId = `radio-card-${option.value}`;
+
+              return (
+                <label
+                  htmlFor={_radioId}
+                  className={cn(
+                    'relative flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors',
+                    'hover:bg-muted/50',
+                    'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none',
+                    option.checked
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border'
+                  )}
+                >
+                  <RadioGroupPrimitive.Item
+                    id={_radioId}
+                    className="sr-only"
+                    value={option.value}
+                    disabled={option.disabled}
+                    onBlur={field.onBlur}
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="font-medium">{option.label}</span>
+                  </div>
+                </label>
+              );
+            }}
           />
         </FormField>
         <div>
