@@ -93,6 +93,7 @@ export default {
       context.logger.info('Getting book');
       const book = await context.db.book.findUnique({
         where: { id: input.id },
+        include: { genre: true },
       });
 
       if (!book) {
