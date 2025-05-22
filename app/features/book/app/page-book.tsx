@@ -86,7 +86,7 @@ export const PageBook = (props: { params: { id: string } }) => {
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
                           Genre
                         </dt>
-                        <dd className="flex-1">{book.genre}</dd>
+                        <dd className="flex-1">{book.genre?.name}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">

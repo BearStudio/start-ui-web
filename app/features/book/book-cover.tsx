@@ -13,7 +13,7 @@ export const BookCover = (props: {
         props.className
       )}
       style={{
-        background: '#333', // TODO get color from genre
+        background: props.book.genre?.color ?? '#333',
       }}
     >
       <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-r from-black/0 to-black/10 bg-blend-screen" />
@@ -28,7 +28,9 @@ export const BookCover = (props: {
         <div className="flex flex-col">
           <p className="text-xs opacity-60">By {props.book.author}</p>
           {!!props.book.genre && (
-            <p className="text-2xs capitalize opacity-60">{props.book.genre}</p>
+            <p className="text-2xs capitalize opacity-60">
+              {props.book.genre.name}
+            </p>
           )}
         </div>
       </div>
