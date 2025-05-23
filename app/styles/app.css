@@ -63,8 +63,14 @@
 
   --text-2xs: 0.625rem;
 
-  --breakpoint-2xs: 24rem;
-  --breakpoint-xs: 32rem;
+  --breakpoint-2xs: 24rem; /* 384px */
+  --breakpoint-xs: 32rem; /* 512px */
+  /* Tailwind --breakpoint-sm: 40rem; (640px) */
+
+  --container-6xs: 4rem; /* 64px */
+  --container-5xs: 8rem; /* 128px */
+  --container-4xs: 12rem; /* 192px */
+  /* Tailwind --container-3xs: 16rem; (256px) */
 }
 
 :root {
