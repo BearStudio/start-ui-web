@@ -5,8 +5,6 @@ import { PlusIcon } from 'lucide-react';
 import { orpc } from '@/lib/orpc/client';
 import { getUiState } from '@/lib/ui-state';
 
-import { IconBookOpen } from '@/components/icons/generated';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DataList,
@@ -22,6 +20,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
+import { BookCover } from '@/features/book/book-cover';
 import {
   PageLayout,
   PageLayoutContent,
@@ -130,11 +129,9 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                 {items.map((item) => (
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
-                      <Avatar>
-                        <AvatarFallback>
-                          <IconBookOpen className="size-4 text-muted-foreground" />
-                        </AvatarFallback>
-                      </Avatar>
+                      <div aria-hidden>
+                        <BookCover book={item} variant="tiny" />
+                      </div>
                     </DataListCell>
                     <DataListCell>
                       <DataListText className="font-medium">
