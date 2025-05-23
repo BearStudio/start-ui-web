@@ -8,27 +8,27 @@ export async function createBooks() {
   const existingGenres = await db.genre.findMany();
 
   const genres = [
-    'Adventure',
-    'Business',
-    'Classic',
-    'Drama',
-    'Fantasy',
-    'Mythology',
-    'Poetry',
-    'Romance',
-    'Science Fiction',
-    'Thriller',
-  ];
+    ['Adventure', '#9F0712'],
+    ['Business', '#973C00'],
+    ['Classic', '#3C6300'],
+    ['Drama', '#006045'],
+    ['Fantasy', '#005F78'],
+    ['Mythology', '#193CB8'],
+    ['Poetry', '#5D0EC0'],
+    ['Romance', '#6E11B0'],
+    ['Science Fiction', '#8A0194'],
+    ['Thriller', '#A50036'],
+  ] as const;
 
   const result = await db.genre.createMany({
     data: genres
       .filter(
-        (genre) =>
+        ([genre]) =>
           !existingGenres
             .map((existingGenre) => existingGenre.name)
             .includes(genre)
       )
-      .map((name) => ({ name, color: faker.color.rgb() })),
+      .map(([name, color]) => ({ name, color })),
   });
   console.log(
     `✅ ${existingGenres.length} existing genres 👉 ${result.count} genres created`
