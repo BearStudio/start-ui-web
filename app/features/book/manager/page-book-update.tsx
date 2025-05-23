@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -22,21 +22,24 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageBookNew = () => {
+export const PageBookUpdate = (props: { params: { id: string } }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
+  const bookQuery = useQuery(
+    orpc.book.getById.queryOptions({ input: { id: props.params.id } })
+  );
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
-      title: '',
-      author: '',
-      genreId: '',
-      publisher: '',
+      title: bookQuery.data?.title ?? '',
+      author: bookQuery.data?.author ?? '',
+      genreId: bookQuery.data?.genre?.id ?? null!,
+      publisher: bookQuery.data?.publisher ?? '',
     },
   });
 
-  const bookCreate = useMutation(
+  const bookUpdate = useMutation(
     orpc.book.create.mutationOptions({
       onSuccess: async () => {
         // Invalidate Users list
@@ -64,7 +67,7 @@ export const PageBookNew = () => {
           return;
         }
 
-        toast.error('Failed to create a book');
+        toast.error('Failed to update the book');
       },
     })
   );
@@ -72,7 +75,7 @@ export const PageBookNew = () => {
   const formIsDirty = form.formState.isDirty;
   useBlocker({
     shouldBlockFn: () => {
-      if (!formIsDirty || bookCreate.isSuccess) return false;
+      if (!formIsDirty || bookUpdate.isSuccess) return false;
       const shouldLeave = confirm('Are you sure you want to leave?');
       return !shouldLeave;
     },
@@ -82,7 +85,7 @@ export const PageBookNew = () => {
     <Form
       {...form}
       onSubmit={async (values) => {
-        bookCreate.mutate(values);
+        bookUpdate.mutate(values);
       }}
     >
       <PageLayout>
@@ -93,13 +96,13 @@ export const PageBookNew = () => {
               size="sm"
               type="submit"
               className="min-w-20"
-              loading={bookCreate.isPending}
+              loading={bookUpdate.isPending}
             >
-              Create
+              Update
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>New Book</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>Update Book</PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">

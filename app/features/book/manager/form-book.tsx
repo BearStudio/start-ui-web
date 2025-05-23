@@ -37,7 +37,7 @@ export const FormBook = () => {
         <FormFieldController
           type="select"
           control={form.control}
-          name="genre"
+          name="genreId"
           options={(genresQuery.data?.items ?? []).map((genre) => ({
             id: genre.id,
             label: genre.name,

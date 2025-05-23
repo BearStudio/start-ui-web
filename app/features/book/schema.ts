@@ -24,4 +24,4 @@ export type FormFieldsBook = z.infer<ReturnType<typeof zFormFieldsBook>>;
 export const zFormFieldsBook = () =>
   zBook()
     .pick({ title: true, author: true, publisher: true })
-    .extend({ genre: z.string().cuid() });
+    .extend({ genreId: z.string().nonempty() });

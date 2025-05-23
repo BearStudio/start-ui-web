@@ -98,7 +98,10 @@ export const PageBook = (props: { params: { id: string } }) => {
                   </CardContent>
                 </Card>
               </div>
-              <div className="mx-auto w-full max-w-64 min-w-48 flex-1">
+              <div
+                aria-hidden
+                className="mx-auto w-full max-w-64 min-w-48 flex-1"
+              >
                 <BookCover book={book} />
               </div>
             </div>

@@ -35,6 +35,7 @@ import { Route as ManagerLayoutBooksNewIndexImport } from './routes/manager/_lay
 import { Route as ManagerLayoutBooksIdIndexImport } from './routes/manager/_layout/books.$id.index'
 import { Route as AppLayoutDesktopOnlyBooksIdIndexImport } from './routes/app/_layout-desktop-only/books.$id.index'
 import { Route as ManagerLayoutUsersIdUpdateIndexImport } from './routes/manager/_layout/users.$id.update.index'
+import { Route as ManagerLayoutBooksIdUpdateIndexImport } from './routes/manager/_layout/books.$id.update.index'
 
 // Create/Update Routes
 
@@ -183,6 +184,13 @@ const ManagerLayoutUsersIdUpdateIndexRoute =
   ManagerLayoutUsersIdUpdateIndexImport.update({
     id: '/users/$id/update/',
     path: '/users/$id/update/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
+
+const ManagerLayoutBooksIdUpdateIndexRoute =
+  ManagerLayoutBooksIdUpdateIndexImport.update({
+    id: '/books/$id/update/',
+    path: '/books/$id/update/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
 
@@ -351,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLayoutUsersNewIndexImport
       parentRoute: typeof ManagerLayoutImport
     }
+    '/manager/_layout/books/$id/update/': {
+      id: '/manager/_layout/books/$id/update/'
+      path: '/books/$id/update'
+      fullPath: '/manager/books/$id/update'
+      preLoaderRoute: typeof ManagerLayoutBooksIdUpdateIndexImport
+      parentRoute: typeof ManagerLayoutImport
+    }
     '/manager/_layout/users/$id/update/': {
       id: '/manager/_layout/users/$id/update/'
       path: '/users/$id/update'
@@ -426,6 +441,7 @@ interface ManagerLayoutRouteChildren {
   ManagerLayoutBooksNewIndexRoute: typeof ManagerLayoutBooksNewIndexRoute
   ManagerLayoutUsersIdIndexRoute: typeof ManagerLayoutUsersIdIndexRoute
   ManagerLayoutUsersNewIndexRoute: typeof ManagerLayoutUsersNewIndexRoute
+  ManagerLayoutBooksIdUpdateIndexRoute: typeof ManagerLayoutBooksIdUpdateIndexRoute
   ManagerLayoutUsersIdUpdateIndexRoute: typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
@@ -439,6 +455,7 @@ const ManagerLayoutRouteChildren: ManagerLayoutRouteChildren = {
   ManagerLayoutBooksNewIndexRoute: ManagerLayoutBooksNewIndexRoute,
   ManagerLayoutUsersIdIndexRoute: ManagerLayoutUsersIdIndexRoute,
   ManagerLayoutUsersNewIndexRoute: ManagerLayoutUsersNewIndexRoute,
+  ManagerLayoutBooksIdUpdateIndexRoute: ManagerLayoutBooksIdUpdateIndexRoute,
   ManagerLayoutUsersIdUpdateIndexRoute: ManagerLayoutUsersIdUpdateIndexRoute,
 }
 
@@ -478,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
@@ -499,6 +517,7 @@ export interface FileRoutesByTo {
   '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
@@ -527,6 +546,7 @@ export interface FileRoutesById {
   '/manager/_layout/books/new/': typeof ManagerLayoutBooksNewIndexRoute
   '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
   '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/_layout/books/$id/update/': typeof ManagerLayoutBooksIdUpdateIndexRoute
   '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
 }
 
@@ -553,6 +573,7 @@ export interface FileRouteTypes {
     | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
+    | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -573,6 +594,7 @@ export interface FileRouteTypes {
     | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
+    | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   id:
     | '__root__'
@@ -599,6 +621,7 @@ export interface FileRouteTypes {
     | '/manager/_layout/books/new/'
     | '/manager/_layout/users/$id/'
     | '/manager/_layout/users/new/'
+    | '/manager/_layout/books/$id/update/'
     | '/manager/_layout/users/$id/update/'
   fileRoutesById: FileRoutesById
 }
@@ -686,6 +709,7 @@ export const routeTree = rootRoute
         "/manager/_layout/books/new/",
         "/manager/_layout/users/$id/",
         "/manager/_layout/users/new/",
+        "/manager/_layout/books/$id/update/",
         "/manager/_layout/users/$id/update/"
       ]
     },
@@ -751,6 +775,10 @@ export const routeTree = rootRoute
     },
     "/manager/_layout/users/new/": {
       "filePath": "manager/_layout/users.new.index.tsx",
+      "parent": "/manager/_layout"
+    },
+    "/manager/_layout/books/$id/update/": {
+      "filePath": "manager/_layout/books.$id.update.index.tsx",
       "parent": "/manager/_layout"
     },
     "/manager/_layout/users/$id/update/": {

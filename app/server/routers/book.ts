@@ -121,7 +121,7 @@ export default {
           author: true,
           publisher: true,
         })
-        .extend({ genre: z.string().cuid() })
+        .extend({ genreId: z.string().nonempty() })
     )
     .output(zBook())
     .handler(async ({ context, input }) => {
@@ -131,8 +131,55 @@ export default {
           data: {
             title: input.title,
             author: input.author,
-            genreId: input.genre ?? undefined,
+            genreId: input.genreId ?? undefined,
             publisher: input.publisher,
+          },
+        });
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            message: error.message,
+            data: error.meta,
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
+
+  updateById: protectedProcedure({
+    permission: {
+      book: ['update'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/books/{id}',
+      tags,
+    })
+    .input(
+      zBook()
+        .pick({
+          id: true,
+          title: true,
+          author: true,
+          publisher: true,
+        })
+        .extend({ genreId: z.string().nonempty() })
+    )
+    .output(zBook())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Update book');
+      try {
+        return await context.db.book.update({
+          where: { id: input.id },
+          data: {
+            title: input.title,
+            author: input.author,
+            genreId: input.genreId,
+            publisher: input.publisher ?? null,
           },
         });
       } catch (error: unknown) {
