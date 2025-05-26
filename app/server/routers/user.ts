@@ -7,7 +7,7 @@ import { auth } from '@/server/auth';
 import { protectedProcedure } from '@/server/orpc';
 import { getHeaders } from '@/server/utils';
 
-const tags = ['user'];
+const tags = ['users'];
 
 export default {
   getAll: protectedProcedure({
@@ -25,7 +25,7 @@ export default {
         .object({
           cursor: z.string().optional(),
           limit: z.number().min(1).max(100).default(20),
-          searchTerm: z.string().optional(),
+          searchTerm: z.string().trim().optional().default(''),
         })
         .default({})
     )
@@ -38,10 +38,20 @@ export default {
     )
     .handler(async ({ context, input }) => {
       const where = {
-        name: {
-          contains: input.searchTerm,
-          mode: 'insensitive',
-        },
+        OR: [
+          {
+            name: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        ],
       } satisfies Prisma.UserWhereInput;
 
       context.logger.info('Getting users from database');
