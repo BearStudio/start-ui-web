@@ -1,8 +1,8 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
 
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';

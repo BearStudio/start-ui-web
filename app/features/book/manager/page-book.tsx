@@ -1,10 +1,10 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';

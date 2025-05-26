@@ -1,3 +1,4 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import {
   useInfiniteQuery,
@@ -12,7 +13,6 @@ import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
