@@ -2,7 +2,6 @@ import { Link, useMatchRoute } from '@tanstack/react-router';
 import { ArrowRightIcon } from 'lucide-react';
 
 import { authClient } from '@/lib/auth/client';
-import { Role } from '@/lib/auth/permissions';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+
+import { Role } from '@/features/auth/permissions';
 
 export const DemoAppSwitch = () => {
   const session = authClient.useSession();

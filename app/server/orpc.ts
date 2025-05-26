@@ -3,9 +3,8 @@ import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
-import { Permission } from '@/lib/auth/client';
-
 import { envClient } from '@/env/client';
+import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';

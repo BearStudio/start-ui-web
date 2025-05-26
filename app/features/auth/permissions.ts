@@ -6,6 +6,8 @@ import {
 import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 import { z } from 'zod';
 
+import { authClient } from '@/lib/auth/client';
+
 const statement = {
   ...defaultStatements,
   account: ['read', 'update'],
@@ -43,3 +45,7 @@ export const permissions = {
   ac,
   roles,
 };
+
+export type Permission = NonNullable<
+  Parameters<typeof authClient.admin.hasPermission>['0']['permission']
+>;

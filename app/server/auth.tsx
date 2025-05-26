@@ -8,12 +8,12 @@ import {
   AUTH_EMAIL_OTP_MOCKED,
   AUTH_SIGNUP_ENABLED,
 } from '@/lib/auth/config';
-import { permissions } from '@/lib/auth/permissions';
 import i18n from '@/lib/i18n';
 
 import TemplateLoginCode from '@/emails/templates/login-code';
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
+import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
