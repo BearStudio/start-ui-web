@@ -23,7 +23,7 @@ export default {
         .object({
           cursor: z.string().cuid().optional(),
           limit: z.number().min(1).max(100).default(20),
-          searchTerm: z.string().optional(),
+          searchTerm: z.string().trim().optional().default(''),
         })
         .default({})
     )
@@ -38,10 +38,20 @@ export default {
       context.logger.info('Getting books from database');
 
       const where = {
-        title: {
-          contains: input.searchTerm,
-          mode: 'insensitive',
-        },
+        OR: [
+          {
+            title: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+          {
+            author: {
+              contains: input.searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        ],
       } satisfies Prisma.BookWhereInput;
 
       const [total, items] = await context.db.$transaction([
