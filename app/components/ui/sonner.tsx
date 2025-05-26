@@ -7,7 +7,7 @@ export const Sonner = ({ ...props }: ToasterProps) => {
     <Toaster
       theme={theme === 'dark' ? 'dark' : 'light'}
       className="toaster group mt-safe-top"
-      position="top-right"
+      position="top-center"
       offset={{
         top: 'calc(16px + env(safe-area-inset-top))',
         bottom: 'calc(16px + env(safe-area-inset-bottom))',

@@ -195,4 +195,31 @@ export default {
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),
+
+  deleteById: protectedProcedure({
+    permission: {
+      user: ['delete'],
+    },
+  })
+    .route({
+      method: 'DELETE',
+      path: '/books/{id}',
+      tags,
+    })
+    .input(
+      zBook().pick({
+        id: true,
+      })
+    )
+    .output(z.void())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Delete book');
+      try {
+        await context.db.book.delete({
+          where: { id: input.id },
+        });
+      } catch {
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 };

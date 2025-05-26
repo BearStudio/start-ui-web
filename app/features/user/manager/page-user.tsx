@@ -61,7 +61,7 @@ export const PageUser = (props: { params: { id: string } }) => {
 
   const deleteUser = async () => {
     try {
-      await orpc.user.delete.call({ id: props.params.id });
+      await orpc.user.deleteById.call({ id: props.params.id });
       await Promise.all([
         // Invalidate users list
         queryClient.invalidateQueries({
@@ -73,6 +73,8 @@ export const PageUser = (props: { params: { id: string } }) => {
           queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
         }),
       ]);
+
+      toast.success('User deleted');
 
       // Redirect
       if (canGoBack) {
