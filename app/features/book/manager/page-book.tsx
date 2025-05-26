@@ -1,8 +1,10 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
-import { useQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link, useRouter } from '@tanstack/react-router';
+import { useCanGoBack } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -10,10 +12,12 @@ import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/page-error';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
+import { WithPermissions } from '@/features/auth/with-permission';
 import { BookCover } from '@/features/book/book-cover';
 import {
   PageLayout,
@@ -23,6 +27,9 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBook = (props: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
   const bookQuery = useQuery(
     orpc.book.getById.queryOptions({ input: { id: props.params.id } })
   );
@@ -39,15 +46,65 @@ export const PageBook = (props: { params: { id: string } }) => {
     return set('default', { book: bookQuery.data });
   });
 
+  const deleteBook = async () => {
+    try {
+      await orpc.book.deleteById.call({ id: props.params.id });
+      await Promise.all([
+        // Invalidate books list
+        queryClient.invalidateQueries({
+          queryKey: orpc.book.getAll.key(),
+          type: 'all',
+        }),
+        // Remove user from cache
+        queryClient.removeQueries({
+          queryKey: orpc.book.getById.key({ input: { id: props.params.id } }),
+        }),
+      ]);
+
+      toast.success('Book deleted');
+
+      // Redirect
+      if (canGoBack) {
+        router.history.back();
+      } else {
+        router.navigate({ to: '..', replace: true });
+      }
+    } catch {
+      toast.error('Failed to book the user');
+    }
+  };
+
   return (
     <PageLayout>
       <PageLayoutTopBar
         backButton={<BackButton />}
         actions={
           <>
-            <ResponsiveIconButton variant="ghost" label="Delete">
-              <Trash2Icon />
-            </ResponsiveIconButton>
+            <WithPermissions
+              permissions={[
+                {
+                  book: ['delete'],
+                },
+              ]}
+            >
+              <ConfirmResponsiveDrawer
+                onConfirm={() => deleteBook()}
+                title={`Delete ${bookQuery.data?.title}`}
+                description={
+                  <>
+                    You are about to permanently delete this book.{' '}
+                    <strong>This action cannot be undone.</strong> Please
+                    confirm your decision carefully.
+                  </>
+                }
+                confirmText="Delete"
+                confirmVariant="destructive"
+              >
+                <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
+                  <Trash2Icon />
+                </ResponsiveIconButton>
+              </ConfirmResponsiveDrawer>
+            </WithPermissions>
             <Button asChild size="sm" variant="secondary">
               <Link
                 to="/manager/books/$id/update"

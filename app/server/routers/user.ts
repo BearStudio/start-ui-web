@@ -204,7 +204,7 @@ export default {
       }
     }),
 
-  delete: protectedProcedure({
+  deleteById: protectedProcedure({
     permission: {
       user: ['delete'],
     },
