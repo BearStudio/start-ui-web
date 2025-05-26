@@ -1,8 +1,6 @@
-import { Link } from '@tanstack/react-router';
-
 import { Logo } from '@/components/brand/logo';
 
-import { WithPermissions } from '@/features/auth/with-permission';
+import { DemoAppSwitch } from '@/features/demo-mode/demo-app-switch';
 import { MarketingBento } from '@/features/demo-mode/marketing-bento';
 import {
   PageLayout,
@@ -18,12 +16,7 @@ export const PageHome = () => {
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex flex-1 flex-col gap-4">
-          <WithPermissions
-            permissions={[{ apps: ['manager'] }]}
-            fallback={<span>No Manager access</span>}
-          >
-            <Link to="/manager">Go to Manager</Link>
-          </WithPermissions>
+          <DemoAppSwitch />
           <MarketingBento />
         </div>
       </PageLayoutContent>

@@ -1,3 +1,4 @@
+import { DemoAppSwitch } from '@/features/demo-mode/demo-app-switch';
 import { MarketingBento } from '@/features/demo-mode/marketing-bento';
 import {
   PageLayout,
@@ -13,7 +14,10 @@ export const PageDashboard = () => {
         <PageLayoutTopBarTitle>Dashboard</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent containerClassName="max-w-4xl">
-        <MarketingBento />
+        <div className="flex flex-col gap-4">
+          <DemoAppSwitch />
+          <MarketingBento />
+        </div>
       </PageLayoutContent>
     </PageLayout>
   );
