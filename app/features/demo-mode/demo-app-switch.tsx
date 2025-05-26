@@ -43,7 +43,8 @@ export const DemoAppSwitch = () => {
       <Link to="/app" className="flex-1" disabled={!hasAppAccess}>
         <Card
           className={cn(
-            currentApp === 'app' && 'ring-2 ring-offset-2',
+            currentApp === 'app' &&
+              'ring-2 ring-offset-2 ring-offset-background',
             !hasAppAccess && 'cursor-not-allowed'
           )}
         >
@@ -74,7 +75,8 @@ export const DemoAppSwitch = () => {
       <Link to="/manager" className="flex-1" disabled={!hasManagerAccess}>
         <Card
           className={cn(
-            currentApp === 'manager' && 'ring-2 ring-offset-2',
+            currentApp === 'manager' &&
+              'ring-2 ring-offset-2 ring-offset-background',
             !hasManagerAccess && 'cursor-not-allowed'
           )}
         >
