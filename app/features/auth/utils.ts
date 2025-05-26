@@ -2,7 +2,8 @@ import { useRouter, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import { authClient } from '@/lib/auth/client';
-import { Role } from '@/lib/auth/permissions';
+
+import { Role } from '@/features/auth/permissions';
 
 export const useRedirectAfterLogin = () => {
   const search = useSearch({ strict: false });

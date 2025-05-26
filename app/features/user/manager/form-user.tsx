@@ -1,7 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 
 import { authClient } from '@/lib/auth/client';
-import { rolesNames } from '@/lib/auth/permissions';
 
 import {
   FormField,
@@ -10,6 +9,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 
+import { rolesNames } from '@/features/auth/permissions';
 import { FormFieldsUser } from '@/features/user/schema';
 
 export const FormUser = (props: { userId?: string }) => {

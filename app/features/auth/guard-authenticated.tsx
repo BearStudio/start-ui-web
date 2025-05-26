@@ -1,13 +1,13 @@
 import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { authClient, Permission } from '@/lib/auth/client';
-import { Role } from '@/lib/auth/permissions';
+import { authClient } from '@/lib/auth/client';
 
 import { PageError } from '@/components/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
 import { PageOnboarding } from '@/features/auth/page-onboarding';
+import { Permission, Role } from '@/features/auth/permissions';
 
 export const GuardAuthenticated = ({
   children,
