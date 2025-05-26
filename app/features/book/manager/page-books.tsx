@@ -1,9 +1,9 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
 
 import { Button } from '@/components/ui/button';
 import {

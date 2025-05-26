@@ -1,3 +1,4 @@
+import { getUiState } from '@bearstudio/ui-state';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -8,7 +9,6 @@ import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
-import { getUiState } from '@/lib/ui-state';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
