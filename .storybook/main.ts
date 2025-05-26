@@ -1,32 +1,30 @@
-import { StorybookConfig } from '@storybook/nextjs';
+import type { StorybookConfig } from '@storybook/react-vite';
+import path from 'node:path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 const config: StorybookConfig = {
+  stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    'storybook-dark-mode',
+    '@storybook/addon-a11y',
+  ],
   framework: {
-    name: '@storybook/nextjs',
+    name: '@storybook/react-vite',
     options: {},
   },
-
-  stories: ['../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
-
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    'storybook-dark-mode',
-  ],
-
-  staticDirs: ['../public'],
-
-  docs: {},
-
-  typescript: {
-    reactDocgen: 'react-docgen-typescript',
-  },
-
-  refs: {
-    // Disable Chakra UI storybook composition as it fetches the v3.
-    // I did not find the URL of the v2 at the moment to replace it.
-    '@chakra-ui/react': { disable: true },
+  viteFinal: async (config) => {
+    if (!config.plugins) {
+      config.plugins = [];
+    }
+    config.plugins.push(
+      /** @see https://github.com/aleclarson/vite-tsconfig-paths */
+      tsconfigPaths({
+        projects: [path.resolve(path.dirname(__dirname), 'tsconfig.json')],
+      })
+    );
+    return config;
   },
 };
-
 export default config;

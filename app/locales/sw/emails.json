@@ -1,0 +1,10 @@
+{
+  "loginCode": {
+    "subject": "Msimbo wako wa uthibitishaji",
+    "preview": "Thibitisha utambulisho wako",
+    "title": "Msimbo wako wa uthibitishaji",
+    "intro": "Ili kuthibitisha utambulisho wako, ingiza msimbo ufuatao:",
+    "validityTime": "Msimbo huu utakuwa halali kwa dakika {{expiration}} zijazo tu.",
+    "ignoreHelper": "Ikiwa hukujaribu kuingia, unaweza kupuuza barua pepe hii kwa usalama."
+  }
+}

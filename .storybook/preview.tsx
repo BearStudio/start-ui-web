@@ -1,59 +1,56 @@
+import type { Preview } from '@storybook/react';
+import { useTheme } from 'next-themes';
 import React, { useEffect } from 'react';
-
-import { Box, useColorMode } from '@chakra-ui/react';
-import { Preview } from '@storybook/react';
-import { themes } from '@storybook/theming';
 import { useTranslation } from 'react-i18next';
 import { useDarkMode } from 'storybook-dark-mode';
 
-import { Providers } from '../src/app/Providers';
-import i18nGlobal from '../src/lib/i18n/client';
+import '@/styles/app.css';
+import './preview.css';
+
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
-} from '../src/lib/i18n/constants';
-// @ts-ignore don't want to implement a d.ts declaration for storybook only
-import logoReversed from './logo-reversed.svg';
-// @ts-ignore don't want to implement a d.ts declaration for storybook only
-import logo from './logo.svg';
+} from '../app/lib/i18n/constants';
+import i18nGlobal from '../app/lib/i18n/index';
+import { Providers } from '../app/providers';
 
-const DocumentationWrapper = ({ children, context, isDarkMode }) => {
+const DocumentationWrapper = ({ children, isDarkMode, context }) => {
   const { i18n } = useTranslation();
-  const { colorMode, setColorMode } = useColorMode();
+  const { setTheme } = useTheme();
 
   // Update color mode
   useEffect(() => {
-    // Add timeout to prevent unsync color mode between docs and classic modes
-    const timer = setTimeout(() => {
-      if (isDarkMode) {
-        setColorMode('dark');
-      } else {
-        setColorMode('light');
-      }
-    });
-    return () => clearTimeout(timer);
-  }, [isDarkMode]);
+    setTheme(isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode, setTheme]);
 
   // Update language
   useEffect(() => {
     i18n.changeLanguage(context.globals.locale);
+    const languageConfig = AVAILABLE_LANGUAGES.find(
+      ({ key }) => key === context.globals.locale
+    );
+    if (languageConfig) {
+      document.documentElement.lang = languageConfig.key;
+      document.documentElement.dir = languageConfig.dir ?? 'ltr';
+      document.documentElement.style.fontSize = `${(languageConfig.fontScale ?? 1) * 100}%`;
+    }
   }, [context.globals.locale]);
 
-  return (
-    <Box
-      id="start-ui-storybook-wrapper"
-      p="4"
-      pb="8"
-      bg={colorMode === 'dark' ? 'gray.900' : 'white'}
-      flex="1"
-    >
-      {children}
-    </Box>
-  );
+  return <div id="preview-container">{children}</div>;
 };
 
 const preview: Preview = {
   tags: ['autodocs'],
+  parameters: {
+    layout: 'padded',
+    backgrounds: {
+      disable: true,
+      grid: { disable: true },
+    },
+    darkMode: {
+      stylePreview: true,
+    },
+  },
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -63,23 +60,10 @@ const preview: Preview = {
         icon: 'globe',
         items: AVAILABLE_LANGUAGES.map(({ key }) => ({
           value: key,
-          title: i18nGlobal.t(`languages.${String(key)}`),
+          title: i18nGlobal.t(`languages.${String(key)}`, { lng: 'en' }),
         })),
       },
     },
-  },
-  parameters: {
-    options: {
-      storySort: {
-        order: ['StyleGuide', 'Components', 'Fields', 'App Layout'],
-      },
-    },
-    darkMode: {
-      dark: themes.dark,
-      light: themes.light,
-    },
-    layout: 'fullscreen',
-    backgrounds: { disable: true, grid: { disable: true } },
   },
   decorators: [
     (story, context) => {
