@@ -65,7 +65,7 @@ export const PageBook = (props: { params: { id: string } }) => {
           .match('not-found', () => <PageError error="404" />)
           .match('error', () => <PageError />)
           .match('default', ({ book }) => (
-            <div className="flex flex-col gap-8 xs:flex-row-reverse">
+            <div className="flex flex-col gap-8 xs:flex-row">
               <div className="flex-2">
                 <Card className="py-1">
                   <CardContent>

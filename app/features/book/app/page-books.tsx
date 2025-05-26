@@ -43,9 +43,24 @@ export const PageBooks = () => {
       </PageLayoutTopBar>
       <PageLayoutContent>
         {ui
-          .match('pending', () => <>Loading...</>)
+          .match('pending', () => (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <BookCover
+                  // eslint-disable-next-line @eslint-react/no-array-index-key
+                  key={index}
+                  book={{}}
+                  className="animate-pulse opacity-10"
+                />
+              ))}
+            </div>
+          ))
           .match('error', () => <PageError />)
-          .match('empty', () => <>No books</>)
+          .match('empty', () => (
+            <div className="flex flex-1 text-sm text-muted-foreground">
+              No books available
+            </div>
+          ))
           .match('default', ({ items }) => (
             <div className="flex flex-col gap-4 pb-20">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -62,14 +77,24 @@ export const PageBooks = () => {
                     />
                   </Link>
                 ))}
+                {booksQuery.isFetchingNextPage &&
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <BookCover
+                      // eslint-disable-next-line @eslint-react/no-array-index-key
+                      key={index}
+                      book={{}}
+                      className="animate-pulse opacity-10"
+                    />
+                  ))}
               </div>
+
               {booksQuery.hasNextPage && (
                 <Button
                   variant="ghost"
                   onClick={() => booksQuery.fetchNextPage()}
                   loading={booksQuery.isFetchingNextPage}
                 >
-                  Load more
+                  Load more books
                 </Button>
               )}
             </div>
