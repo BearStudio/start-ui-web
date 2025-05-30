@@ -16,7 +16,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
-import { ConfirmLogout } from '@/features/auth/confirm-logout';
+import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
@@ -59,12 +59,12 @@ export const PageOnboarding = () => {
               email: session.data?.user.email,
             })}
           </p>
-          <ConfirmLogout>
+          <ConfirmSignOut>
             <Button size="xs" variant="link" className="opacity-80">
               <LogOutIcon />
-              {t('auth:pageOnboarding.signOut')}
+              {t('auth:signOut.action')}
             </Button>
-          </ConfirmLogout>
+          </ConfirmSignOut>
         </div>
       }
     >

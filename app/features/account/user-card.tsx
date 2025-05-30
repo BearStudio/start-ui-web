@@ -1,4 +1,5 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { authClient } from '@/lib/auth/client';
 
@@ -9,9 +10,11 @@ import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
-import { ConfirmLogout } from '@/features/auth/confirm-logout';
+import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 
+// TODO translations
 export const UserCard = () => {
+  const { t } = useTranslation(['auth']);
   const session = authClient.useSession();
   return (
     <Card className="gap-0 p-0">
@@ -32,12 +35,12 @@ export const UserCard = () => {
           </div>
         </div>
         <CardAction>
-          <ConfirmLogout>
+          <ConfirmSignOut>
             <Button size="sm" variant="ghost">
               <LogOutIcon />
-              Logout {/* TODO translations */}
+              {t('auth:signOut.action')}
             </Button>
-          </ConfirmLogout>
+          </ConfirmSignOut>
         </CardAction>
       </CardHeader>
 

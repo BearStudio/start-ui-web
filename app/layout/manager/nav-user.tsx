@@ -37,13 +37,13 @@ import {
 } from '@/components/ui/sidebar';
 import { themes } from '@/components/ui/theme-switcher';
 
-import { ConfirmLogout } from '@/features/auth/confirm-logout';
+import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { WithPermissions } from '@/features/auth/with-permission';
 import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
 import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 
 export function NavUser() {
-  const { t } = useTranslation(['common', 'layout']);
+  const { t } = useTranslation(['common', 'auth', 'layout']);
   const { isMobile } = useSidebar();
   const session = authClient.useSession();
   const { setOpenMobile } = useSidebar();
@@ -156,16 +156,16 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <ConfirmLogout>
+            <ConfirmSignOut>
               <DropdownMenuItem
                 onSelect={(e) => {
                   e.preventDefault();
                 }}
               >
                 <LogOutIcon />
-                {t('layout:nav.logout')}
+                {t('auth:signOut.action')}
               </DropdownMenuItem>
-            </ConfirmLogout>
+            </ConfirmSignOut>
             <DropdownMenuSeparator />
             <BuildInfoDrawer>
               <DropdownMenuItem
