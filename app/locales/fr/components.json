@@ -53,5 +53,10 @@
   },
   "backButton": {
     "label": "Retour"
+  },
+  "select": {
+    "placeholder": "Sélectionner...",
+    "create": "Créer \"{{searchTerm}}\"",
+    "noResultsFound": "Aucun résultat trouvé"
   }
 }

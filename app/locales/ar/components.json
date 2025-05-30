@@ -53,5 +53,10 @@
   },
   "backButton": {
     "label": "خلف"
+  },
+  "select": {
+    "placeholder": "يختار...",
+    "create": "إنشاء \"{{searchTerm}}\"",
+    "noResultsFound": "لم يتم العثور على نتائج"
   }
 }

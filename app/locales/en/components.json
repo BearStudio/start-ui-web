@@ -53,5 +53,10 @@
   },
   "backButton": {
     "label": "Back"
+  },
+  "select": {
+    "placeholder": "Select...",
+    "noResultsFound": "No results found",
+    "create": "Create \"{{searchTerm}}\""
   }
 }
