@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@/lib/db/generated/client';
 
 import { envServer } from '@/env/server';
 import { timingStore } from '@/server/timing-store';

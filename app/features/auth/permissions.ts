@@ -1,4 +1,3 @@
-import { UserRole } from '@prisma/client';
 import {
   createAccessControl,
   Role as BetterAuthRole,
@@ -7,6 +6,7 @@ import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 import { z } from 'zod';
 
 import { authClient } from '@/lib/auth/client';
+import { UserRole } from '@/lib/db/generated';
 
 const statement = {
   ...defaultStatements,

@@ -18,6 +18,7 @@ export default tslint.config(
   ...tanstackQuery.configs['flat/recommended'],
   react.configs['recommended-typescript'],
   reactHooks.configs['recommended-latest'],
+  { ignores: ['app/lib/db/generated/**/*.*'] },
   {
     rules: {
       'sonarjs/todo-tag': 'warn',
