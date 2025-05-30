@@ -11,6 +11,7 @@ import {
 } from '@headlessui/react';
 import { ChevronDown, X } from 'lucide-react';
 import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -55,7 +56,7 @@ export const Select = <TValue extends TValueBase>({
   withClearButton,
   inputProps,
   size,
-  placeholder = 'Select...', // TODO)) Translation
+  placeholder,
   options,
   renderEmpty,
   renderOption,
@@ -69,6 +70,7 @@ export const Select = <TValue extends TValueBase>({
   mode = 'default',
   ...props
 }: SelectProps<TValue>) => {
+  const { t } = useTranslation(['components']);
   const [search, setSearch] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +143,7 @@ export const Select = <TValue extends TValueBase>({
           displayValue={(item) => item?.label ?? ''}
           onChange={handleInputChange}
           autoFocus={autoFocus}
-          placeholder={placeholder}
+          placeholder={placeholder ?? t('components:select.placeholder')}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
           endElement={
@@ -176,11 +178,13 @@ export const Select = <TValue extends TValueBase>({
           className="absolute z-10 mt-1 w-(--input-width) overflow-auto rounded-md bg-white p-1 shadow empty:invisible dark:bg-neutral-900"
         >
           {ui
-            .match('empty', () => <div className="p-4">No results found</div>) // TODO)) Translation
+            .match('empty', () => (
+              <div className="p-4">{t('components:select.noResultsFound')}</div>
+            ))
             .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
             .match('create-search', ({ search }) => (
               <ComboboxOption value={{ id: search, label: search }}>
-                Create <span className="font-bold">{search}</span>
+                {t('components:select.create', { searchTerm: search })}
               </ComboboxOption>
             ))
             .match('virtual', () => ({ option }: { option: OptionBase }) => (

@@ -1,7 +1,9 @@
 {
   "fields": {
     "title": {
-      "alreadyUsed": "Titre déjà utilisé avec le même auteur"
+      "alreadyUsed": "Titre déjà utilisé avec le même auteur",
+      "label": "Titre",
+      "required": "Le titre est requis"
     }
   }
 }

@@ -53,5 +53,10 @@
   },
   "backButton": {
     "label": "Nyuma"
+  },
+  "select": {
+    "placeholder": "Chagua ...",
+    "create": "Unda \"{{searchTerm}}\"",
+    "noResultsFound": "Hakuna matokeo yaliyopatikana"
   }
 }
