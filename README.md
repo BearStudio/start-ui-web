@@ -30,7 +30,7 @@ A live read-only demonstration of what you will have when starting a project wit
 ## Getting Started
 
 ```bash
-pnpm create start-ui --web myApp
+pnpm create start-ui -t web myApp
 ```
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
