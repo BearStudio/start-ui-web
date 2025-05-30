@@ -21,26 +21,3 @@ pnpm db:init # Init the db
 pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```
-
-# Work in progress 3.0.0
-
-- [x] 🔥 Burn all the code
-- [x] Setup Tanstack Start
-- [x] Setup Tailwind
-- [x] Setup Shadcn
-- [x] Setup Storybook
-- [x] Prisma
-- [x] Docker
-- [x] Vitest
-- [x] Open API /api/openapi/app & /api/openapi/auth
-- [ ] Logs
-- [ ] Fields
-- [x] Translations
-- [ ] Auth
-
----
-
-- [ ] Deployment (vercel)
-- [ ] Demo
-- [ ] Update README
-- [ ] Update documentation
