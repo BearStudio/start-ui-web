@@ -28,11 +28,13 @@ export const PageOnboarding = () => {
   const submitOnboarding = useMutation(
     orpc.account.submitOnboarding.mutationOptions({
       onSuccess: (_, variables) => {
-        toast.success(`Welcome ${variables.name}`); // TODO translations
+        toast.success(
+          t('auth:pageOnboarding.successMessage', { name: variables.name })
+        );
         session.refetch();
       },
       onError: () => {
-        toast.error('Failed to finish onboarding'); // TODO translations
+        toast.error(t('auth:pageOnboarding.errorMessage'));
       },
     })
   );
