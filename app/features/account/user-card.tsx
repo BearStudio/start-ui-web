@@ -12,9 +12,8 @@ import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 
-// TODO translations
 export const UserCard = () => {
-  const { t } = useTranslation(['auth']);
+  const { t } = useTranslation(['auth', 'account']);
   const session = authClient.useSession();
   return (
     <Card className="gap-0 p-0">
@@ -29,7 +28,7 @@ export const UserCard = () => {
           <div className="flex min-w-0 flex-col gap-0.5">
             <CardTitle className="truncate">
               {session.data?.user.name || session.data?.user.email || (
-                <span className="text-xs text-muted-foreground">N/A</span>
+                <span className="text-xs text-muted-foreground">--</span>
               )}
             </CardTitle>
           </div>
@@ -44,11 +43,11 @@ export const UserCard = () => {
         </CardAction>
       </CardHeader>
 
-      <AccountCardRow label="Name">
+      <AccountCardRow label={t('account:userCard.name.label')}>
         <div className="flex gap-1">
           <p className="truncate underline-offset-4">
             {session.data?.user.name || (
-              <span className="text-xs text-muted-foreground">N/A</span>
+              <span className="text-xs text-muted-foreground">--</span>
             )}
           </p>
           <ChangeNameDrawer>
@@ -61,7 +60,9 @@ export const UserCard = () => {
               >
                 <span>
                   <PenLineIcon />
-                  <span className="sr-only">Update your name</span>
+                  <span className="sr-only">
+                    {t('account:userCard.name.updateAction')}
+                  </span>
                 </span>
               </Button>
               <span className="absolute inset-0" />
@@ -69,15 +70,15 @@ export const UserCard = () => {
           </ChangeNameDrawer>
         </div>
       </AccountCardRow>
-      <AccountCardRow label="Email">
+      <AccountCardRow label={t('account:userCard.email.label')}>
         <p className="flex-1 truncate underline-offset-4">
           {!session.data?.user.emailVerified && (
             <Badge size="sm" variant="warning" className="me-2">
-              Not Verified
+              {t('account:userCard.email.notVerified')}
             </Badge>
           )}
           {session.data?.user.email || (
-            <span className="text-xs text-muted-foreground">N/A</span>
+            <span className="text-xs text-muted-foreground">--</span>
           )}
         </p>
       </AccountCardRow>
