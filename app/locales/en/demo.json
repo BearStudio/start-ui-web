@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "title": "Welcome to Start UI [web]",
+    "description": "An opinionated frontend starter created & maintained by the BearStudio Team and other contributors. It represents our team's up-to-date stack that we use when creating web apps for our clients.",
+    "documentation": "Documentation",
+    "openIssue": "Open Issue"
+  },
+  "appSwitch": {
+    "youAreHere": "You are here",
+    "noAccess": "Access Denied",
+    "app": {
+      "title": "App",
+      "description": "A simple, mobile-first application",
+      "goTo": "Go to /app"
+    },
+    "manager": {
+      "title": "Manager",
+      "description": "An advanced, admin-style application",
+      "goTo": "Go to /manager"
+    }
+  }
+}

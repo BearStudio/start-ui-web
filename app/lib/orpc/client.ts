@@ -4,7 +4,7 @@ import { createORPCReactQueryUtils } from '@orpc/react-query';
 import type { RouterClient } from '@orpc/server';
 
 import { envClient } from '@/env/client';
-import { openDemoModeDrawer } from '@/features/demo-mode/demo-mode-drawer';
+import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
 
 import type { Router } from './types';
 

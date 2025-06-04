@@ -1,7 +1,8 @@
 import { Logo } from '@/components/brand/logo';
 
-import { DemoAppSwitch } from '@/features/demo-mode/demo-app-switch';
-import { MarketingBento } from '@/features/demo-mode/marketing-bento';
+import { DemoAppSwitch } from '@/features/demo/demo-app-switch';
+import { DemoMarketingBento } from '@/features/demo/demo-marketing-bento';
+import { DemoWelcome } from '@/features/demo/demo-welcome';
 import {
   PageLayout,
   PageLayoutContent,
@@ -16,8 +17,9 @@ export const PageHome = () => {
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex flex-1 flex-col gap-4">
+          <DemoWelcome />
           <DemoAppSwitch />
-          <MarketingBento />
+          <DemoMarketingBento />
         </div>
       </PageLayoutContent>
     </PageLayout>

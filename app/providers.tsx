@@ -10,7 +10,7 @@ import { Sonner } from '@/components/ui/sonner';
 import {
   DemoModeDrawer,
   useIsDemoModeDrawerVisible,
-} from '@/features/demo-mode/demo-mode-drawer';
+} from '@/features/demo/demo-mode-drawer';
 
 export const Providers = (props: { children: ReactNode }) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
