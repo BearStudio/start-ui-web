@@ -1,5 +1,15 @@
 {
   "displayPreferences": {
     "title": "تفضيلات العرض"
+  },
+  "userCard": {
+    "name": {
+      "label": "الاسم",
+      "updateAction": "تحديث اسمك"
+    },
+    "email": {
+      "label": "البريد الإلكتروني",
+      "notVerified": "غير مؤكد"
+    }
   }
 }

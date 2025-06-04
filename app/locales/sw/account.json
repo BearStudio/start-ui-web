@@ -1,5 +1,15 @@
 {
   "displayPreferences": {
     "title": "Mapendeleo ya Onyesho"
+  },
+  "userCard": {
+    "name": {
+      "label": "Jina",
+      "updateAction": "Badilisha jina lako"
+    },
+    "email": {
+      "label": "Barua pepe",
+      "notVerified": "Haijathibitishwa"
+    }
   }
 }

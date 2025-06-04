@@ -1,5 +1,15 @@
 {
   "displayPreferences": {
     "title": "Display Preferences"
+  },
+  "userCard": {
+    "name": {
+      "label": "Name",
+      "updateAction": "Update your name"
+    },
+    "email": {
+      "label": "Email",
+      "notVerified": "Not Verified"
+    }
   }
 }
