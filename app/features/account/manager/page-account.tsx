@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@/components/ui/button';
 
 import { DisplayPreferences } from '@/features/account/display-preferences';
@@ -12,10 +14,11 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageAccount = () => {
+  const { t } = useTranslation(['account']);
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <PageLayoutTopBarTitle>Account</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>{t('account:title')}</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex flex-col gap-4">
