@@ -33,7 +33,7 @@ export const PageLayoutTopBar = (props: {
   return (
     <div
       className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-1 md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
+        'z-10 flex min-w-0 flex-col items-center justify-end overflow-hidden border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-px md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
         props.className
       )}
       style={{
