@@ -1,25 +1,20 @@
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 
 export const DemoWelcome = () => {
   const { t } = useTranslation(['demo']);
   return (
-    <Card className="border-transparent bg-transparent">
-      <CardHeader>
-        <CardTitle>{t('demo:welcome.title')}</CardTitle>
-        <CardDescription className="max-w-prose">
+    <div className="flex flex-col gap-3 py-3">
+      <div className="flex flex-col gap-1">
+        <h2 className="leading-none font-semibold">
+          {t('demo:welcome.title')}
+        </h2>
+        <p className="max-w-prose text-sm text-muted-foreground">
           {t('demo:welcome.description')}
-        </CardDescription>
-      </CardHeader>
-      <CardFooter className="pt-2">
+        </p>
+      </div>
+      <div>
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="secondary" size="xs">
             <a href="https://github.com/BearStudio/start-ui-web">GitHub</a>
@@ -35,7 +30,7 @@ export const DemoWelcome = () => {
             </a>
           </Button>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
