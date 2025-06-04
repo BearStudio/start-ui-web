@@ -124,7 +124,7 @@ export function NavUser() {
                     ))
                     .exhaustive()}
                 >
-                  {t(`common:themes.${item}`)}
+                  {t(`common:themes.values.${item}`)}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>

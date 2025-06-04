@@ -1,14 +1,20 @@
 {
   "languages": {
-    "en": "الإنجليزية",
-    "fr": "الفرنسية",
-    "ar": "العربية",
-    "sw": "السواحلية"
+    "values": {
+      "en": "الإنجليزية",
+      "fr": "الفرنسية",
+      "ar": "العربية",
+      "sw": "السواحلية"
+    },
+    "label": "لغة"
   },
   "themes": {
-    "light": "فاتح",
-    "dark": "داكن",
-    "system": "System (Auto)"
+    "values": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "System (Auto)"
+    },
+    "label": "سمة"
   },
   "actions": {
     "back": "رجوع",

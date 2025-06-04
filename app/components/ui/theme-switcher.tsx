@@ -50,9 +50,9 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
             .exhaustive()}
           <span className={cn(props.iconOnly && 'sr-only')}>
             {match(theme as (typeof themes)[number])
-              .with('system', () => t('common:themes.system'))
-              .with('light', () => t('common:themes.light'))
-              .with('dark', () => t('common:themes.dark'))
+              .with('system', () => t('common:themes.values.system'))
+              .with('light', () => t('common:themes.values.light'))
+              .with('dark', () => t('common:themes.values.dark'))
               .exhaustive()}
           </span>
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
@@ -72,7 +72,7 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
                 theme === item ? 'opacity-100' : 'opacity-0'
               )}
             />
-            {t(`common:themes.${item}`)}
+            {t(`common:themes.values.${item}`)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
