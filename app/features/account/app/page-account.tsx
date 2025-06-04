@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@/components/ui/button';
 
 import { DisplayPreferences } from '@/features/account/display-preferences';
@@ -11,10 +13,13 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageAccount = () => {
+  const { t } = useTranslation(['account']);
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <h1 className="text-base font-medium md:text-sm">Account</h1>
+        <h1 className="text-base font-medium md:text-sm">
+          {t('account:title')}
+        </h1>
       </PageLayoutTopBar>
       <PageLayoutContent>
         <div className="flex flex-col gap-4">
