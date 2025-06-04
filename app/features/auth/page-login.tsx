@@ -8,7 +8,12 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
 
-import { Form, FormField, FormFieldController } from '@/components/form';
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/form';
 import { Button } from '@/components/ui/button';
 
 import { useMascot } from '@/features/auth/mascot';
@@ -97,6 +102,9 @@ export default function PageLogin({
       <div className="grid gap-6">
         <div className="grid gap-4">
           <FormField>
+            <FormFieldLabel className="sr-only">
+              {t('auth:fields.email.label')}
+            </FormFieldLabel>
             <FormFieldController
               type="email"
               control={form.control}
