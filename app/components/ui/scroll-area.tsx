@@ -1,4 +1,5 @@
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -12,9 +13,11 @@ function ScrollArea({
     React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
     'orientation'
   >) {
+  const { i18n } = useTranslation();
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
+      dir={i18n.dir()}
       className={cn('relative', className)}
       {...props}
     >
