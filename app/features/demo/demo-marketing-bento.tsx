@@ -1,4 +1,4 @@
-export const MarketingBento = () => {
+export const DemoMarketingBento = () => {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
       <div className="row-span-2 aspect-[0.7] overflow-hidden rounded-md bg-black/20">
