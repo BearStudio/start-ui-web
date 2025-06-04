@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
@@ -32,6 +33,7 @@ import {
 } from '@/features/account/schema';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
+  const { t } = useTranslation(['account']);
   const router = useRouter();
   const search = useSearch({ strict: false });
   const session = authClient.useSession();
@@ -46,7 +48,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
     orpc.account.updateInfo.mutationOptions({
       onSuccess: async () => {
         await session.refetch();
-        toast.success('Name updated');
+        toast.success(t('account:changeNameDrawer.successMessage'));
         form.reset();
         router.navigate({
           replace: true,
@@ -56,7 +58,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
           },
         });
       },
-      onError: () => toast.error('Failed to update your name'),
+      onError: () => toast.error(t('account:changeNameDrawer.errorMessage')),
     })
   );
 
@@ -87,14 +89,18 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
           className="flex flex-col gap-4"
         >
           <ResponsiveDrawerHeader>
-            <ResponsiveDrawerTitle>Update your name</ResponsiveDrawerTitle>
+            <ResponsiveDrawerTitle>
+              {t('account:changeNameDrawer.title')}
+            </ResponsiveDrawerTitle>
             <ResponsiveDrawerDescription className="sr-only">
-              Form to update your name
+              {t('account:changeNameDrawer.description')}
             </ResponsiveDrawerDescription>
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerBody>
             <FormField>
-              <FormFieldLabel className="sr-only">Name</FormFieldLabel>
+              <FormFieldLabel className="sr-only">
+                {t('account:changeNameDrawer.label')}
+              </FormFieldLabel>
               <FormFieldController
                 control={form.control}
                 type="text"
@@ -111,7 +117,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
               size="lg"
               loading={updateUser.isPending}
             >
-              Update
+              {t('account:changeNameDrawer.submitButton')}
             </Button>
           </ResponsiveDrawerFooter>
         </Form>
