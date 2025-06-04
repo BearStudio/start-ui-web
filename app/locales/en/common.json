@@ -1,14 +1,20 @@
 {
   "languages": {
-    "en": "English",
-    "fr": "French",
-    "ar": "Arabic",
-    "sw": "Swahili"
+    "label": "Language",
+    "values": {
+      "en": "English",
+      "fr": "French",
+      "ar": "Arabic",
+      "sw": "Swahili"
+    }
   },
   "themes": {
-    "system": "System (auto)",
-    "light": "Light",
-    "dark": "Dark"
+    "label": "Theme",
+    "values": {
+      "system": "System (auto)",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "actions": {
     "back": "Back",

@@ -24,7 +24,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
         >
           <LanguagesIcon className="opacity-50" />
           <span className={cn(props.iconOnly && 'sr-only')}>
-            {t(`common:languages.${i18n.language as LanguageKey}`)}
+            {t(`common:languages.values.${i18n.language as LanguageKey}`)}
           </span>
           {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
         </Button>
@@ -44,10 +44,10 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
               )}
             />
             <span className="flex flex-col">
-              <span>{t(`common:languages.${language.key}`)}</span>
+              <span>{t(`common:languages.values.${language.key}`)}</span>
               {language.key !== i18n.language && (
                 <span className="text-xs text-muted-foreground">
-                  {t(`common:languages.${language.key}`, {
+                  {t(`common:languages.values.${language.key}`, {
                     lng: language.key,
                   })}
                 </span>

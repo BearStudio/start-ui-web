@@ -1,14 +1,20 @@
 {
   "languages": {
-    "en": "Kiingereza",
-    "fr": "Kifaransa",
-    "ar": "Kiarabu",
-    "sw": "Kiswahili"
+    "values": {
+      "en": "Kiingereza",
+      "fr": "Kifaransa",
+      "ar": "Kiarabu",
+      "sw": "Kiswahili"
+    },
+    "label": "Lugha"
   },
   "themes": {
-    "light": "Mwanga",
-    "dark": "Giza",
-    "system": "System (Auto)"
+    "values": {
+      "light": "Mwanga",
+      "dark": "Giza",
+      "system": "System (Auto)"
+    },
+    "label": "Mada"
   },
   "actions": {
     "back": "Rudi",
