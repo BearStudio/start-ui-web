@@ -13,8 +13,8 @@ export const EnvHint = () => {
 
   return (
     <div
-      className="fixed top-0 right-0 left-0 z-[9999] h-0.5"
-      style={{ background: envClient.VITE_ENV_COLOR }}
+      className="pointer-events-none fixed inset-0 z-[9999] border-4"
+      style={{ borderColor: envClient.VITE_ENV_COLOR }}
     >
       <p
         className="fixed top-0 left-4 rounded-b-xs px-1 text-[0.6rem] font-bold text-black uppercase"
