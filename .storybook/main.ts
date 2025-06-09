@@ -5,10 +5,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    'storybook-dark-mode',
+    '@vueless/storybook-dark-mode',
     '@storybook/addon-a11y',
+    '@storybook/addon-docs',
   ],
   framework: {
     name: '@storybook/react-vite',
