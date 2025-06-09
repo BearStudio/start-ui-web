@@ -21,3 +21,20 @@ pnpm db:init # Init the db
 pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```
+
+# FAQ
+
+<details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
+<p>
+You probably have updated your branch with lefthook installed instead of husky. Follow these steps to fix
+your hooks issue:
+<ul>
+  <li><code>git config --unset core.hooksPath</code></li>
+  <li><code>rm -rf ./.husky</code></li>
+  <li><code>pnpm install</code></li>
+</ul>
+
+From now husky should have been removed; and lefthook should run your hooks correctly.
+</p>
+</details> 
+
