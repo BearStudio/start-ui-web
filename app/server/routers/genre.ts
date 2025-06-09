@@ -1,5 +1,6 @@
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+
+import { Prisma } from '@/lib/prisma/generated/client';
 
 import { zGenre } from '@/features/genre/schema';
 import { protectedProcedure } from '@/server/orpc';

@@ -1,6 +1,7 @@
 import { ORPCError } from '@orpc/client';
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+
+import type { Prisma } from '@/lib/prisma/generated/client';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';

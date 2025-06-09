@@ -47,6 +47,7 @@ build-info.gen.json
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
+app/lib/prisma/generated/
 
 # Emails
 .react-email

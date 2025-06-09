@@ -2,7 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  // [NOTE]
+  // prisma-client-js doesn't works well with bundler and ESM
+  // Prisma recommend to use prisma-client generator
+  // see https://www.prisma.io/docs/orm/prisma-schema/overview/generators#prisma-client-early-access
+  // **Note that this generator is in early-access**
+  provider = "prisma-client"
+  output   = "../app/lib/prisma/generated/client"
 }
 
 datasource db {
