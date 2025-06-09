@@ -41,7 +41,6 @@ const DocumentationWrapper = ({ children, isDarkMode, context }) => {
 };
 
 const preview: Preview = {
-  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     backgrounds: {
@@ -51,12 +50,17 @@ const preview: Preview = {
     darkMode: {
       stylePreview: true,
     },
+    docs: {
+      codePanel: true,
+    },
+  },
+  initialGlobals: {
+    locale: DEFAULT_LANGUAGE_KEY,
   },
   globalTypes: {
     locale: {
       name: 'Locale',
       description: 'Internationalization locale',
-      defaultValue: DEFAULT_LANGUAGE_KEY,
       toolbar: {
         icon: 'globe',
         items: AVAILABLE_LANGUAGES.map(({ key }) => ({
