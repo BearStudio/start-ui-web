@@ -27,7 +27,7 @@ export const PageBookNew = () => {
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useForm({
-    resolver: zodResolver(zFormFieldsBook()),
+    resolver: zodResolver(zFormFieldsBook().omit({ id: true })),
     values: {
       title: '',
       author: '',

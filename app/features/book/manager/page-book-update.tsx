@@ -32,6 +32,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
+      id: bookQuery.data?.id ?? '',
       title: bookQuery.data?.title ?? '',
       author: bookQuery.data?.author ?? '',
       genreId: bookQuery.data?.genre?.id ?? null!,
@@ -40,7 +41,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   });
 
   const bookUpdate = useMutation(
-    orpc.book.create.mutationOptions({
+    orpc.book.updateById.mutationOptions({
       onSuccess: async () => {
         // Invalidate Users list
         await queryClient.invalidateQueries({
