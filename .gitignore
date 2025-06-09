@@ -25,6 +25,7 @@
 .eslintcache
 .db
 tsconfig.tsbuildinfo
+.husky
 
 # debug
 npm-debug.log*
