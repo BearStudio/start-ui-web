@@ -125,7 +125,6 @@ export const ChakraProps = () => {
             type="multi-select"
             name="colors"
             placeholder="Placeholder"
-            isDisabled
             options={options}
             selectProps={{
               chakraStyles: {
