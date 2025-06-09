@@ -9,6 +9,7 @@ generator client {
   // **Note that this generator is in early-access**
   provider = "prisma-client"
   output   = "../app/lib/prisma/generated/client"
+  runtime  = "vercel"
 }
 
 datasource db {
