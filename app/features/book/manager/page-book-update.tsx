@@ -40,7 +40,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   });
 
   const bookUpdate = useMutation(
-    orpc.book.create.mutationOptions({
+    orpc.book.updateById.mutationOptions({
       onSuccess: async () => {
         // Invalidate Users list
         await queryClient.invalidateQueries({
@@ -85,7 +85,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     <Form
       {...form}
       onSubmit={async (values) => {
-        bookUpdate.mutate(values);
+        bookUpdate.mutate({ id: props.params.id, ...values });
       }}
     >
       <PageLayout>
