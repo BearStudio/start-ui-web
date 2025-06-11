@@ -32,7 +32,6 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
-      id: bookQuery.data?.id ?? '',
       title: bookQuery.data?.title ?? '',
       author: bookQuery.data?.author ?? '',
       genreId: bookQuery.data?.genre?.id ?? null!,
@@ -86,7 +85,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     <Form
       {...form}
       onSubmit={async (values) => {
-        bookUpdate.mutate(values);
+        bookUpdate.mutate({ id: props.params.id, ...values });
       }}
     >
       <PageLayout>
