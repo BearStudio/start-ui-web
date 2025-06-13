@@ -13,7 +13,7 @@ export const EnvHint = () => {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[9999] border-4"
+      className="pointer-events-none fixed inset-0 z-[9999] border-t-4"
       style={{ borderColor: envClient.VITE_ENV_COLOR }}
     >
       <p
