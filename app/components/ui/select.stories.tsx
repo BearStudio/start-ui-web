@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { ComboboxButton } from '@headlessui/react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { ArrowDown, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
 
 import { Logo } from '@/components/brand/logo';

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 

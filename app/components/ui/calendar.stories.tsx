@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 

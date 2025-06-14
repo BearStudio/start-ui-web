@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import { PlusIcon } from 'lucide-react';
 
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
