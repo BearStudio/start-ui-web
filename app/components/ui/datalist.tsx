@@ -160,6 +160,8 @@ export const DataListRowResults = (props: {
   withClearButton?: boolean;
   onClear?: () => void;
 }) => {
+  const { t } = useTranslation(['components']);
+
   return (
     <DataListRow className={cn(props.className)}>
       <DataListCell className="py-1 pr-0">
@@ -176,7 +178,7 @@ export const DataListRowResults = (props: {
               }}
             >
               <XIcon />
-              Clear
+              {t('components:datalist.clear')}
             </Button>
           )}
         </div>

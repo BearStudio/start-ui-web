@@ -42,7 +42,8 @@
     "emptyTitle": "Aucune donnée",
     "errorTitle": "Une erreur s'est produite",
     "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "clear": "Effacer"
   },
   "searchButton": {
     "label": "Rechercher"
