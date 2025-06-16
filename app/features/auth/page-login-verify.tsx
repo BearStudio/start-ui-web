@@ -66,7 +66,7 @@ export default function PageLoginVerify({
           : error.message || t('auth:errorCode.UNKNOWN_ERROR')
       );
       form.setError('otp', {
-        message: t('auth:fields.otp.invalid'),
+        message: t('auth:common.otp.invalid'),
       });
       return;
     }
@@ -106,7 +106,7 @@ export default function PageLoginVerify({
       </div>
       <div className="grid gap-4">
         <FormField>
-          <FormFieldLabel>{t('auth:fields.otp.label')}</FormFieldLabel>
+          <FormFieldLabel>{t('auth:common.otp.label')}</FormFieldLabel>
           <FormFieldController
             type="otp"
             control={form.control}

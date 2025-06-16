@@ -11,13 +11,13 @@ export const zUser = () =>
     id: z.string(),
     name: zu.string.nonEmptyNullish(
       z.string({
-        required_error: t('user:fields.name.required'),
-        invalid_type_error: t('user:fields.name.invalid'),
+        required_error: t('user:common.name.required'),
+        invalid_type_error: t('user:common.name.invalid'),
       })
     ),
     email: zu.string.email(z.string(), {
-      required_error: t('user:fields.email.required'),
-      invalid_type_error: t('user:fields.email.invalid'),
+      required_error: t('user:common.email.required'),
+      invalid_type_error: t('user:common.email.invalid'),
     }),
     emailVerified: z.boolean(),
     role: zRole().nullish(),

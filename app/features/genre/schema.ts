@@ -9,7 +9,7 @@ export const zGenre = () =>
   z.object({
     id: z.string().cuid(),
     name: zu.string.nonEmpty(z.string(), {
-      required_error: t('genre:fields.name.required'),
+      required_error: t('genre:common.name.required'),
     }),
     color: z.string().length(7),
     createdAt: z.date(),

@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "email": {
       "invalid": "Email non valide",
       "label": "Email",
@@ -8,8 +8,38 @@
     "name": {
       "invalid": "Le nom n'est pas valide",
       "label": "Nom",
-      "onboardingLabel": "Quel est votre nom?",
-      "required": "Le nom est requis"
+      "onboardingLabel": "Quel est votre nom ?",
+      "required": "Le nom est requis",
+      "notAvailable": "N/D"
+    },
+    "onboardingStatus": {
+      "notOnboarded": "Non onboardé",
+      "onboardedAt": "Onboardé {{time}}"
+    }
+  },
+  "manager": {
+    "list": {
+      "title": "Utilisateurs",
+      "newButton": "Nouvel utilisateur",
+      "loadMore": "Charger plus",
+      "showing": "Affichage de {{count}} sur {{total}}",
+      "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
+    },
+    "detail": {
+      "userDeleted": "Utilisateur supprimé",
+      "deleteError": "Échec de la suppression de l'utilisateur",
+      "confirmDeleteTitle": "Supprimer {{user}}",
+      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement cet utilisateur. Cette action ne peut pas être annulée.",
+      "revokeAllSessions": "Révoquer tout",
+      "revokeAllError": "Échec de la révocation de toutes les sessions",
+      "revokeSession": "Révoquer",
+      "revokeError": "Échec de la révocation de la session",
+      "userSessions": "Sessions utilisateur",
+      "noSessions": "Aucune session utilisateur",
+      "session": "Session {{token}}",
+      "sessionUpdated": "Mise à jour {{time}}",
+      "sessionExpires": "Expire {{time}}",
+      "editUser": "Modifier l'utilisateur"
     }
   }
 }

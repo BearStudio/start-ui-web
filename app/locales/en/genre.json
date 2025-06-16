@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "name": {
       "label": "Name",
       "required": "Name is required",

@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "email": {
       "invalid": "Barua pepe ni batili",
       "label": "Barua pepe",
@@ -9,7 +9,37 @@
       "invalid": "Jina sio batili",
       "label": "Jina",
       "onboardingLabel": "Jina lako ni nani?",
-      "required": "Jina linahitajika"
+      "required": "Jina linahitajika",
+      "notAvailable": "Haupo"
+    },
+    "onboardingStatus": {
+      "notOnboarded": "Hajaandikishwa",
+      "onboardedAt": "Aliandikishwa {{time}}"
+    }
+  },
+  "manager": {
+    "list": {
+      "title": "Watumiaji",
+      "newButton": "Mtumiaji Mpya",
+      "loadMore": "Pakia zaidi",
+      "showing": "Inaonyesha {{count}} kati ya {{total}}",
+      "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
+    },
+    "detail": {
+      "userDeleted": "Mtumiaji amefutwa",
+      "deleteError": "Imeshindwa kufuta mtumiaji",
+      "confirmDeleteTitle": "Futa {{user}}",
+      "confirmDeleteDescription": "Unakaribia kufuta mtumiaji huyu kabisa. Kitendo hiki hakiwezi kutenduliwa.",
+      "revokeAllSessions": "Batilisha zote",
+      "revokeAllError": "Imeshindwa kubatilisha vipindi vyote",
+      "revokeSession": "Batilisha",
+      "revokeError": "Imeshindwa kubatilisha kipindi",
+      "userSessions": "Vipindi vya Mtumiaji",
+      "noSessions": "Hakuna vipindi vya mtumiaji",
+      "session": "Kipindi {{token}}",
+      "sessionUpdated": "Imesasishwa {{time}}",
+      "sessionExpires": "Inaisha {{time}}",
+      "editUser": "Hariri mtumiaji"
     }
   }
 }

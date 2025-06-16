@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "title": {
       "alreadyUsed": "Titre déjà utilisé avec le même auteur",
       "label": "Titre",

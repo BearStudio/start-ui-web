@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "title": {
       "label": "Kichwa",
       "required": "Kichwa kinahitajika",

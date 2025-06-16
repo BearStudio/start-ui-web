@@ -9,6 +9,7 @@ import {
 import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { authClient } from '@/lib/auth/client';
@@ -53,6 +54,7 @@ export const PageUser = (props: { params: { id: string } }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const session = authClient.useSession();
+  const { t } = useTranslation(['user', 'common']);
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({
       input: { id: props.params.id },
@@ -74,7 +76,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         }),
       ]);
 
-      toast.success('User deleted');
+      toast.success(t('user:manager.detail.userDeleted'));
 
       // Redirect
       if (canGoBack) {
@@ -83,7 +85,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         router.navigate({ to: '..', replace: true });
       }
     } catch {
-      toast.error('Failed to delete the user');
+      toast.error(t('user:manager.detail.deleteError'));
     }
   };
 
@@ -116,20 +118,18 @@ export const PageUser = (props: { params: { id: string } }) => {
               >
                 <ConfirmResponsiveDrawer
                   onConfirm={() => deleteUser()}
-                  title={`Delete ${userQuery.data?.name ?? userQuery.data?.email ?? 'user'}`}
-                  description={
-                    <>
-                      You are about to permanently delete this user.{' '}
-                      <strong>This action cannot be undone.</strong> Please
-                      confirm your decision carefully.
-                    </>
-                  }
-                  confirmText="Delete"
+                  title={t('user:manager.detail.confirmDeleteTitle', {
+                    user: userQuery.data?.name ?? userQuery.data?.email ?? '--',
+                  })}
+                  description={t(
+                    'user:manager.detail.confirmDeleteDescription'
+                  )}
+                  confirmText={t('common:actions.delete')}
                   confirmVariant="destructive"
                 >
                   <ResponsiveIconButton
                     variant="ghost"
-                    label="Delete"
+                    label={t('common:actions.delete')}
                     size="sm"
                   >
                     <Trash2Icon />
@@ -167,7 +167,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                       <CardTitle>
                         {user.name || (
                           <span className="text-xs text-muted-foreground">
-                            N/A
+                            {t('user:common.name.notAvailable')}
                           </span>
                         )}
                       </CardTitle>
@@ -182,7 +182,9 @@ export const PageUser = (props: { params: { id: string } }) => {
                         <Button size="icon-sm" variant="ghost" asChild>
                           <span>
                             <PencilLineIcon />
-                            <span className="sr-only"></span>
+                            <span className="sr-only">
+                              {t('user:manager.detail.editUser')}
+                            </span>
                           </span>
                         </Button>
                         <span className="absolute inset-0" />
@@ -200,13 +202,14 @@ export const PageUser = (props: { params: { id: string } }) => {
                     <p className="text-sm text-muted-foreground">
                       {user.onboardedAt ? (
                         <>
-                          Onboarded on{' '}
-                          {dayjs(user.onboardedAt).format(
-                            'DD/MM/YYYY [at] HH:mm'
-                          )}
+                          {t('user:common.onboardingStatus.onboardedAt', {
+                            time: dayjs(user.onboardedAt).format(
+                              'DD/MM/YYYY [at] HH:mm'
+                            ),
+                          })}
                         </>
                       ) : (
-                        <>Not onboarded</>
+                        <>{t('user:common.onboardingStatus.notOnboarded')}</>
                       )}
                     </p>
                   </div>
@@ -227,6 +230,7 @@ export const PageUser = (props: { params: { id: string } }) => {
 };
 
 const UserSessions = (props: { userId: string }) => {
+  const { t } = useTranslation(['user']);
   const sessionsQuery = useInfiniteQuery(
     orpc.user.getUserSessions.infiniteOptions({
       input: (cursor: string | undefined) => ({
@@ -256,7 +260,9 @@ const UserSessions = (props: { userId: string }) => {
       <DataList>
         <DataListRow>
           <DataListCell>
-            <h2 className="text-sm font-medium">User Sessions</h2>
+            <h2 className="text-sm font-medium">
+              {t('user:manager.detail.userSessions')}
+            </h2>
           </DataListCell>
 
           <WithPermissions permissions={[{ session: ['revoke'] }]}>
@@ -274,7 +280,7 @@ const UserSessions = (props: { userId: string }) => {
           ))
           .match('empty', () => (
             <DataListEmptyState className="min-h-20">
-              No user sessions
+              {t('user:manager.detail.noSessions')}
             </DataListEmptyState>
           ))
           .match('default', ({ items }) => (
@@ -285,16 +291,22 @@ const UserSessions = (props: { userId: string }) => {
                   className="max-md:flex-col max-md:py-2 max-md:[&>div]:py-1"
                 >
                   <DataListCell>
-                    <DataListText>Session {item.token}</DataListText>
-                  </DataListCell>
-                  <DataListCell>
-                    <DataListText className="text-muted-foreground">
-                      Updated {dayjs(item.updatedAt).fromNow()}
+                    <DataListText>
+                      {t('user:manager.detail.session', { token: item.token })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-muted-foreground">
-                      Expires {dayjs().to(item.expiresAt)}
+                      {t('user:manager.detail.sessionUpdated', {
+                        time: dayjs(item.updatedAt).fromNow(),
+                      })}
+                    </DataListText>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-muted-foreground">
+                      {t('user:manager.detail.sessionExpires', {
+                        time: dayjs().to(item.expiresAt),
+                      })}
                     </DataListText>
                   </DataListCell>
                   <WithPermissions permissions={[{ session: ['revoke'] }]}>
@@ -316,13 +328,15 @@ const UserSessions = (props: { userId: string }) => {
                     onClick={() => sessionsQuery.fetchNextPage()}
                     loading={sessionsQuery.isFetchingNextPage}
                   >
-                    Load more
+                    {t('user:manager.list.loadMore')}
                   </Button>
                 </DataListCell>
                 <DataListCell>
                   <DataListText className="text-xs text-muted-foreground">
-                    Showing {items.length} of{' '}
-                    {sessionsQuery.data?.pages[0]?.total}
+                    {t('user:manager.list.showing', {
+                      count: items.length,
+                      total: sessionsQuery.data?.pages[0]?.total,
+                    })}
                   </DataListText>
                 </DataListCell>
               </DataListRow>
@@ -337,6 +351,7 @@ const UserSessions = (props: { userId: string }) => {
 const RevokeAllSessionsButton = (props: { userId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
+  const { t } = useTranslation(['user']);
   const revokeAllSessions = useMutation(
     orpc.user.revokeUserSessions.mutationOptions({
       onSuccess: async () => {
@@ -348,7 +363,7 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
         });
       },
       onError: () => {
-        toast.error('Failed to revoke all sessions');
+        toast.error(t('user:manager.detail.revokeAllError'));
       },
     })
   );
@@ -365,7 +380,7 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
         });
       }}
     >
-      Revoke all
+      {t('user:manager.detail.revokeAllSessions')}
     </Button>
   );
 };
@@ -376,6 +391,7 @@ const RevokeSessionButton = (props: {
 }) => {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
+  const { t } = useTranslation(['user']);
   const revokeSession = useMutation(
     orpc.user.revokeUserSession.mutationOptions({
       onSuccess: async () => {
@@ -387,7 +403,7 @@ const RevokeSessionButton = (props: {
         });
       },
       onError: () => {
-        toast.error('Failed to revoke sessions');
+        toast.error(t('user:manager.detail.revokeError'));
       },
     })
   );
@@ -404,7 +420,7 @@ const RevokeSessionButton = (props: {
         });
       }}
     >
-      Revoke
+      {t('user:manager.detail.revokeSession')}
     </Button>
   );
 };

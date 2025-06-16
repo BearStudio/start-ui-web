@@ -103,14 +103,14 @@ export default function PageLogin({
         <div className="grid gap-4">
           <FormField>
             <FormFieldLabel className="sr-only">
-              {t('auth:fields.email.label')}
+              {t('auth:common.email.label')}
             </FormFieldLabel>
             <FormFieldController
               type="email"
               control={form.control}
               name="email"
               size="lg"
-              placeholder={t('auth:fields.email.label')}
+              placeholder={t('auth:common.email.label')}
             />
           </FormField>
           <Button

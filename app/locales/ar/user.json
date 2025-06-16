@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "email": {
       "invalid": "البريد الإلكتروني غير صالح",
       "label": "بريد إلكتروني",
@@ -9,7 +9,37 @@
       "invalid": "الاسم غير صالح",
       "label": "اسم",
       "onboardingLabel": "ما اسمك؟",
-      "required": "الاسم مطلوب"
+      "required": "الاسم مطلوب",
+      "notAvailable": "غير متوفر"
+    },
+    "onboardingStatus": {
+      "notOnboarded": "غير مسجل",
+      "onboardedAt": "تم التسجيل {{time}}"
+    }
+  },
+  "manager": {
+    "list": {
+      "title": "المستخدمون",
+      "newButton": "مستخدم جديد",
+      "loadMore": "تحميل المزيد",
+      "showing": "عرض {{count}} من {{total}}",
+      "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
+    },
+    "detail": {
+      "userDeleted": "تم حذف المستخدم",
+      "deleteError": "فشل في حذف المستخدم",
+      "confirmDeleteTitle": "حذف {{user}}",
+      "confirmDeleteDescription": "أنت على وشك حذف هذا المستخدم نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+      "revokeAllSessions": "إلغاء الجميع",
+      "revokeAllError": "فشل في إلغاء جميع الجلسات",
+      "revokeSession": "إلغاء",
+      "revokeError": "فشل في إلغاء الجلسة",
+      "userSessions": "جلسات المستخدم",
+      "noSessions": "لا توجد جلسات للمستخدم",
+      "session": "جلسة {{token}}",
+      "sessionUpdated": "تم التحديث {{time}}",
+      "sessionExpires": "تنتهي {{time}}",
+      "editUser": "تعديل المستخدم"
     }
   }
 }
