@@ -37,7 +37,8 @@
     "retry": "Retry",
     "errorTitle": "Something went wrong",
     "emptyTitle": "No Data",
-    "noResultsTitle": "No results for \"{{searchTerm}}\""
+    "noResultsTitle": "No results for \"{{searchTerm}}\"",
+    "clear": "Clear"
   },
   "confirmResponsiveDrawer": {
     "cancelText": "Cancel",

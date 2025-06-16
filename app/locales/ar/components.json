@@ -42,7 +42,8 @@
     "emptyTitle": "لا توجد بيانات",
     "errorTitle": "حدث خطأ ما",
     "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\"",
-    "retry": "إعادة المحاولة"
+    "retry": "إعادة المحاولة",
+    "clear": "مسح"
   },
   "searchButton": {
     "label": "يبحث"

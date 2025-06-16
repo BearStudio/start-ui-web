@@ -42,7 +42,8 @@
     "emptyTitle": "Hakuna data",
     "errorTitle": "Kitu kilienda vibaya",
     "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
-    "retry": "Jaribu tena"
+    "retry": "Jaribu tena",
+    "clear": "Futa"
   },
   "searchButton": {
     "label": "Tafuta"
