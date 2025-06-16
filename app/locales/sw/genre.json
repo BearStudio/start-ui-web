@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "name": {
       "alreadyUsed": "Aina tayari ipo",
       "label": "Jina",

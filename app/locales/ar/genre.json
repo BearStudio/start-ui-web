@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "name": {
       "alreadyUsed": "النوع موجود بالفعل",
       "label": "اسم",

@@ -11,7 +11,7 @@ export const zBook = () =>
   z.object({
     id: z.string().cuid(),
     title: zu.string.nonEmpty(z.string(), {
-      required_error: t('book:fields.title.required'),
+      required_error: t('book:common.title.required'),
     }),
     author: zu.string.nonEmpty(z.string()),
     genre: zGenre().nullish(),

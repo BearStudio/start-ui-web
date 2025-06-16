@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "email": {
       "label": "Email",
       "required": "Email is required",
@@ -9,7 +9,37 @@
       "onboardingLabel": "What is your name?",
       "label": "Name",
       "required": "Name is required",
-      "invalid": "Name is invalid"
+      "invalid": "Name is invalid",
+      "notAvailable": "N/A"
+    },
+    "onboardingStatus": {
+      "notOnboarded": "Not onboarded",
+      "onboardedAt": "Onboarded {{time}}"
+    }
+  },
+  "manager": {
+    "list": {
+      "title": "Users",
+      "newButton": "New User",
+      "loadMore": "Load more",
+      "showing": "Showing {{count}} of {{total}}",
+      "searchResults": "{{total}} results for \"{{searchTerm}}\""
+    },
+    "detail": {
+      "userDeleted": "User deleted",
+      "deleteError": "Failed to delete the user",
+      "confirmDeleteTitle": "Delete {{user}}",
+      "confirmDeleteDescription": "You are about to permanently delete this user. This action cannot be undone.",
+      "revokeAllSessions": "Revoke all",
+      "revokeAllError": "Failed to revoke all sessions",
+      "revokeSession": "Revoke",
+      "revokeError": "Failed to revoke session",
+      "userSessions": "User Sessions",
+      "noSessions": "No user sessions",
+      "session": "Session {{token}}",
+      "sessionUpdated": "Updated {{time}}",
+      "sessionExpires": "Expires {{time}}",
+      "editUser": "Edit user"
     }
   }
 }

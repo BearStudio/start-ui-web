@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "title": {
       "label": "عنوان",
       "required": "العنوان مطلوب",

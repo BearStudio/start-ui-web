@@ -3,6 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
@@ -32,6 +33,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
+  const { t } = useTranslation(['user']);
   const router = useRouter();
 
   const searchInputProps = {
@@ -78,7 +80,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
         actions={
           <ResponsiveIconButton
             asChild
-            label="New User"
+            label={t('user:manager.list.newButton')}
             variant="secondary"
             size="sm"
           >
@@ -88,7 +90,9 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Users</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>
+          {t('user:manager.list.title')}
+        </PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
@@ -124,7 +128,10 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                       });
                     }}
                   >
-                    {total} results for "{searchTerm}"
+                    {t('user:manager.list.searchResults', {
+                      total,
+                      searchTerm,
+                    })}
                   </DataListRowResults>
                 )}
                 {items.map((item) => (
@@ -165,9 +172,13 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                         )}
                       >
                         {item.onboardedAt ? (
-                          <>Onboarded {dayjs(item.onboardedAt).fromNow()}</>
+                          <>
+                            {t('user:common.onboardingStatus.onboardedAt', {
+                              time: dayjs(item.onboardedAt).fromNow(),
+                            })}
+                          </>
                         ) : (
-                          'Not onboarded'
+                          t('user:common.onboardingStatus.notOnboarded')
                         )}
                       </DataListText>
                     </DataListCell>
@@ -182,12 +193,15 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                       onClick={() => usersQuery.fetchNextPage()}
                       loading={usersQuery.isFetchingNextPage}
                     >
-                      Load more
+                      {t('user:manager.list.loadMore')}
                     </Button>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of {total}
+                      {t('user:manager.list.showing', {
+                        count: items.length,
+                        total,
+                      })}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>

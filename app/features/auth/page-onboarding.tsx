@@ -86,7 +86,7 @@ export const PageOnboarding = () => {
 
         <FormField>
           <FormFieldLabel>
-            {t('auth:fields.name.onboardingLabel')}
+            {t('auth:common.name.onboardingLabel')}
           </FormFieldLabel>
           <FormFieldController
             type="text"

@@ -38,7 +38,7 @@ export const pageUtils = (page: Page) => {
       ).toBeVisible();
 
       await page
-        .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.fields.email.label)
+        .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label)
         .fill(input.email);
 
       await page
@@ -51,7 +51,7 @@ export const pageUtils = (page: Page) => {
 
       await page.waitForURL(`**${routeLoginVerify}**`);
       await page
-        .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.fields.otp.label)
+        .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
         .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
     },
   } as const;

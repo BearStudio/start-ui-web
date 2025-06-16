@@ -1,5 +1,5 @@
 {
-  "fields": {
+  "common": {
     "title": {
       "label": "Title",
       "required": "Title is required",
