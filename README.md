@@ -1,9 +1,20 @@
 <h1 align="center"><img src=".github/assets/thumbnail.png" alt="Start UI Web" /></h1>
 
-[![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
-
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
+
+
+# Technologies
+
+<div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
+
+# Getting Started
+
+```bash
+pnpm create start-ui -t web -b v3-main myApp
+```
+
+That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
 # Install
 
@@ -22,6 +33,7 @@ pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```
 
+
 # FAQ
 
 <details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
@@ -36,5 +48,4 @@ your hooks issue:
 
 From now husky should have been removed; and lefthook should run your hooks correctly.
 </p>
-</details> 
-
+</details>
