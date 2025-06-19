@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';

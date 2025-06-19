@@ -5,7 +5,7 @@ import tanstackRouter from '@tanstack/eslint-plugin-router';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
-import storybook from 'eslint-plugin-storybook';
+import * as storybook from 'eslint-plugin-storybook';
 import unicorn from 'eslint-plugin-unicorn';
 import tslint from 'typescript-eslint';
 
@@ -13,6 +13,7 @@ export default tslint.config(
   eslint.configs.recommended,
   tslint.configs.recommended,
   sonarjs.configs.recommended,
+  // @ts-expect-error not sure it is related to https://github.com/storybookjs/eslint-plugin-storybook/issues/209 but quite similar
   ...storybook.configs['flat/recommended'],
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],

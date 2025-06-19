@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import { MailIcon } from 'lucide-react';
 
 import { onSubmit } from '@/components/form/docs.utils';
