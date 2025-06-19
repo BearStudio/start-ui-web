@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useDisclosure } from 'react-use-disclosure';

@@ -1,11 +1,11 @@
-import type { Preview } from '@storybook/react';
+import { useEffect } from 'react';
+
+import type { Preview } from '@storybook/react-vite';
+import { useDarkMode } from '@vueless/storybook-dark-mode';
 import { useTheme } from 'next-themes';
-import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDarkMode } from 'storybook-dark-mode';
 
 import '@/styles/app.css';
-import './preview.css';
 
 import {
   AVAILABLE_LANGUAGES,
@@ -13,6 +13,7 @@ import {
 } from '../app/lib/i18n/constants';
 import i18nGlobal from '../app/lib/i18n/index';
 import { Providers } from '../app/providers';
+import './preview.css';
 
 const DocumentationWrapper = ({ children, isDarkMode, context }) => {
   const { i18n } = useTranslation();
@@ -40,7 +41,6 @@ const DocumentationWrapper = ({ children, isDarkMode, context }) => {
 };
 
 const preview: Preview = {
-  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     backgrounds: {
@@ -50,12 +50,17 @@ const preview: Preview = {
     darkMode: {
       stylePreview: true,
     },
+    docs: {
+      codePanel: true,
+    },
+  },
+  initialGlobals: {
+    locale: DEFAULT_LANGUAGE_KEY,
   },
   globalTypes: {
     locale: {
       name: 'Locale',
       description: 'Internationalization locale',
-      defaultValue: DEFAULT_LANGUAGE_KEY,
       toolbar: {
         icon: 'globe',
         items: AVAILABLE_LANGUAGES.map(({ key }) => ({
