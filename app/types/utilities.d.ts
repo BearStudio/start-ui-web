@@ -28,3 +28,10 @@ type StrictUnionHelper<T, TAll> = T extends ExplicitAny
   ? T & Partial<Record<Exclude<UnionKeys<TAll>, keyof T>, undefined>>
   : never;
 type StrictUnion<T> = StrictUnionHelper<T, T>;
+
+/**
+ * Clean up type for better DX
+ */
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
