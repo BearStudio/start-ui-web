@@ -18,7 +18,7 @@ That will scaffold a new folder with the latest version of 🚀 Start UI <small>
 
 # Install
 
-```
+```bash
 cp .env.example .env # Setup your env variables
 cp .vscode/settings.example.json .vscode/settings.json  # (Optionnal) Setup your VS Code
 pnpm install # Install dependencies
@@ -28,7 +28,7 @@ pnpm db:init # Init the db
 
 # Run
 
-```
+```bash
 pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```

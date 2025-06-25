@@ -163,8 +163,9 @@ export default {
           error.code === 'P2002'
         ) {
           throw new ORPCError('CONFLICT', {
-            message: error.message,
-            data: error.meta,
+            data: {
+              target: error.meta?.target,
+            },
           });
         }
         throw new ORPCError('INTERNAL_SERVER_ERROR');
@@ -206,8 +207,9 @@ export default {
           error.code === 'P2002'
         ) {
           throw new ORPCError('CONFLICT', {
-            message: error.message,
-            data: error.meta,
+            data: {
+              target: error.meta?.target,
+            },
           });
         }
         throw new ORPCError('INTERNAL_SERVER_ERROR');
