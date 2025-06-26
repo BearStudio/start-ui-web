@@ -76,7 +76,7 @@ export default tslint.config(
     },
   },
   {
-    files: ['**/*.stories.tsx', './src/locales/**/*'],
+    files: ['**/*.stories.tsx', './app/locales/**/*'],
     rules: {
       'import/no-anonymous-default-export': 'off',
     },

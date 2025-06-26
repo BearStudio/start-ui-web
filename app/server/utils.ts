@@ -1,9 +1,9 @@
-import { entries } from 'remeda';
 import {
   getCookie,
   getHeaders as vinxiGetHeaders,
   setCookie,
-} from 'vinxi/http';
+} from '@tanstack/react-start/server';
+import { entries } from 'remeda';
 
 export const getHeaders = () => {
   const headers = new Headers();

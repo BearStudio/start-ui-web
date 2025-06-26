@@ -1,10 +1,12 @@
 import { json } from '@tanstack/react-start';
-import { createAPIFileRoute } from '@tanstack/react-start/api';
+import { createServerFileRoute } from '@tanstack/react-start/server';
 
 import { envClient } from '@/env/client';
 import { auth } from '@/server/auth';
 
-export const APIRoute = createAPIFileRoute('/api/openapi/auth/schema')({
+export const ServerRoute = createServerFileRoute(
+  '/api/openapi/auth/schema'
+).methods({
   GET: async () => {
     const spec = await auth.api.generateOpenAPISchema();
     spec.info.title = 'Auth API';
