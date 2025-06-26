@@ -1,5 +1,26 @@
-import { createAPIFileRoute } from '@tanstack/react-start/api';
+import { RPCHandler } from '@orpc/server/fetch';
+import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
+import { createServerFileRoute } from '@tanstack/react-start/server';
 
-import { APIRoute as BaseAPIRoute } from './rpc.$';
+import { router } from '@/server/router';
 
-export const APIRoute = createAPIFileRoute('/api/rpc')(BaseAPIRoute.methods);
+const handler = new RPCHandler(router, {
+  plugins: [new CORSPlugin(), new ResponseHeadersPlugin()],
+});
+
+async function handle({ request }: { request: Request }) {
+  const { response } = await handler.handle(request, {
+    prefix: '/api/rpc',
+    context: {}, // Provide initial context if needed
+  });
+
+  return response ?? new Response('Not Found', { status: 404 });
+}
+
+export const ServerRoute = createServerFileRoute('/api/rpc').methods({
+  GET: handle,
+  POST: handle,
+  PUT: handle,
+  PATCH: handle,
+  DELETE: handle,
+});

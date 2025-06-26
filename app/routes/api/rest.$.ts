@@ -1,6 +1,6 @@
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
-import { createAPIFileRoute } from '@tanstack/react-start/api';
+import { createServerFileRoute } from '@tanstack/react-start/server';
 
 import { router } from '@/server/router';
 
@@ -17,7 +17,7 @@ async function handle({ request }: { request: Request }) {
   return response ?? new Response('Not Found', { status: 404 });
 }
 
-export const APIRoute = createAPIFileRoute('/api/rest/$')({
+export const ServerRoute = createServerFileRoute('/api/rest/$').methods({
   GET: handle,
   POST: handle,
   PUT: handle,

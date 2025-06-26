@@ -12,7 +12,7 @@
     "paths": {
       "@/*": ["./app/*"]
     },
-    "typeRoots": ["node_modules/@types", "src/types"],
+    "typeRoots": ["node_modules/@types", "app/types"],
     "plugins": [
       {
         "name": "ts-plugin-sort-import-suggestions",

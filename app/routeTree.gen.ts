@@ -8,375 +8,724 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { createServerRootRoute } from '@tanstack/react-start/server'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ManagerImport } from './routes/manager'
-import { Route as LoginImport } from './routes/login'
-import { Route as AppImport } from './routes/app'
-import { Route as IndexImport } from './routes/index'
-import { Route as LoginIndexImport } from './routes/login/index'
-import { Route as ManagerLayoutImport } from './routes/manager/_layout'
-import { Route as AppLayoutDesktopOnlyImport } from './routes/app/_layout-desktop-only'
-import { Route as AppLayoutImport } from './routes/app/_layout'
-import { Route as ManagerLayoutIndexImport } from './routes/manager/_layout/index'
-import { Route as LoginVerifyIndexImport } from './routes/login/verify.index'
-import { Route as LoginErrorIndexImport } from './routes/login/error.index'
-import { Route as AppLayoutIndexImport } from './routes/app/_layout/index'
-import { Route as ManagerLayoutUsersIndexImport } from './routes/manager/_layout/users.index'
-import { Route as ManagerLayoutDashboardIndexImport } from './routes/manager/_layout/dashboard.index'
-import { Route as ManagerLayoutBooksIndexImport } from './routes/manager/_layout/books.index'
-import { Route as ManagerLayoutAccountIndexImport } from './routes/manager/_layout/account.index'
-import { Route as AppLayoutBooksIndexImport } from './routes/app/_layout/books.index'
-import { Route as AppLayoutAccountIndexImport } from './routes/app/_layout/account.index'
-import { Route as ManagerLayoutUsersNewIndexImport } from './routes/manager/_layout/users.new.index'
-import { Route as ManagerLayoutUsersIdIndexImport } from './routes/manager/_layout/users.$id.index'
-import { Route as ManagerLayoutBooksNewIndexImport } from './routes/manager/_layout/books.new.index'
-import { Route as ManagerLayoutBooksIdIndexImport } from './routes/manager/_layout/books.$id.index'
-import { Route as AppLayoutDesktopOnlyBooksIdIndexImport } from './routes/app/_layout-desktop-only/books.$id.index'
-import { Route as ManagerLayoutUsersIdUpdateIndexImport } from './routes/manager/_layout/users.$id.update.index'
-import { Route as ManagerLayoutBooksIdUpdateIndexImport } from './routes/manager/_layout/books.$id.update.index'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as ManagerRouteImport } from './routes/manager'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as ManagerLayoutRouteImport } from './routes/manager/_layout'
+import { Route as AppLayoutDesktopOnlyRouteImport } from './routes/app/_layout-desktop-only'
+import { Route as AppLayoutRouteImport } from './routes/app/_layout'
+import { Route as ManagerLayoutIndexRouteImport } from './routes/manager/_layout/index'
+import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.index'
+import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
+import { Route as AppLayoutIndexRouteImport } from './routes/app/_layout/index'
+import { Route as ManagerLayoutUsersIndexRouteImport } from './routes/manager/_layout/users.index'
+import { Route as ManagerLayoutDashboardIndexRouteImport } from './routes/manager/_layout/dashboard.index'
+import { Route as ManagerLayoutBooksIndexRouteImport } from './routes/manager/_layout/books.index'
+import { Route as ManagerLayoutAccountIndexRouteImport } from './routes/manager/_layout/account.index'
+import { Route as AppLayoutBooksIndexRouteImport } from './routes/app/_layout/books.index'
+import { Route as AppLayoutAccountIndexRouteImport } from './routes/app/_layout/account.index'
+import { Route as ManagerLayoutUsersNewIndexRouteImport } from './routes/manager/_layout/users.new.index'
+import { Route as ManagerLayoutUsersIdIndexRouteImport } from './routes/manager/_layout/users.$id.index'
+import { Route as ManagerLayoutBooksNewIndexRouteImport } from './routes/manager/_layout/books.new.index'
+import { Route as ManagerLayoutBooksIdIndexRouteImport } from './routes/manager/_layout/books.$id.index'
+import { Route as AppLayoutDesktopOnlyBooksIdIndexRouteImport } from './routes/app/_layout-desktop-only/books.$id.index'
+import { Route as ManagerLayoutUsersIdUpdateIndexRouteImport } from './routes/manager/_layout/users.$id.update.index'
+import { Route as ManagerLayoutBooksIdUpdateIndexRouteImport } from './routes/manager/_layout/books.$id.update.index'
+import { ServerRoute as ApiRpcServerRouteImport } from './routes/api/rpc'
+import { ServerRoute as ApiRestServerRouteImport } from './routes/api/rest'
+import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api/rpc.$'
+import { ServerRoute as ApiRestSplatServerRouteImport } from './routes/api/rest.$'
+import { ServerRoute as ApiOpenapiAuthServerRouteImport } from './routes/api/openapi/auth'
+import { ServerRoute as ApiOpenapiAppServerRouteImport } from './routes/api/openapi/app'
+import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
+import { ServerRoute as ApiOpenapiAuthSchemaServerRouteImport } from './routes/api/openapi/auth.schema'
+import { ServerRoute as ApiOpenapiAppSchemaServerRouteImport } from './routes/api/openapi/app.schema'
+import { ServerRoute as ApiDevEmailTemplateServerRouteImport } from './routes/api/dev.email.$template'
 
-// Create/Update Routes
+const rootServerRouteImport = createServerRootRoute()
 
-const ManagerRoute = ManagerImport.update({
+const ManagerRoute = ManagerRouteImport.update({
   id: '/manager',
   path: '/manager',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppRoute = AppImport.update({
+const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginIndexRoute = LoginIndexImport.update({
+const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LoginRoute,
 } as any)
-
-const ManagerLayoutRoute = ManagerLayoutImport.update({
+const ManagerLayoutRoute = ManagerLayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => ManagerRoute,
 } as any)
-
-const AppLayoutDesktopOnlyRoute = AppLayoutDesktopOnlyImport.update({
+const AppLayoutDesktopOnlyRoute = AppLayoutDesktopOnlyRouteImport.update({
   id: '/_layout-desktop-only',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppLayoutRoute = AppLayoutImport.update({
+const AppLayoutRoute = AppLayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => AppRoute,
 } as any)
-
-const ManagerLayoutIndexRoute = ManagerLayoutIndexImport.update({
+const ManagerLayoutIndexRoute = ManagerLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
-
-const LoginVerifyIndexRoute = LoginVerifyIndexImport.update({
+const LoginVerifyIndexRoute = LoginVerifyIndexRouteImport.update({
   id: '/verify/',
   path: '/verify/',
   getParentRoute: () => LoginRoute,
 } as any)
-
-const LoginErrorIndexRoute = LoginErrorIndexImport.update({
+const LoginErrorIndexRoute = LoginErrorIndexRouteImport.update({
   id: '/error/',
   path: '/error/',
   getParentRoute: () => LoginRoute,
 } as any)
-
-const AppLayoutIndexRoute = AppLayoutIndexImport.update({
+const AppLayoutIndexRoute = AppLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-
-const ManagerLayoutUsersIndexRoute = ManagerLayoutUsersIndexImport.update({
+const ManagerLayoutUsersIndexRoute = ManagerLayoutUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
-
 const ManagerLayoutDashboardIndexRoute =
-  ManagerLayoutDashboardIndexImport.update({
+  ManagerLayoutDashboardIndexRouteImport.update({
     id: '/dashboard/',
     path: '/dashboard/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
-
-const ManagerLayoutBooksIndexRoute = ManagerLayoutBooksIndexImport.update({
+const ManagerLayoutBooksIndexRoute = ManagerLayoutBooksIndexRouteImport.update({
   id: '/books/',
   path: '/books/',
   getParentRoute: () => ManagerLayoutRoute,
 } as any)
-
-const ManagerLayoutAccountIndexRoute = ManagerLayoutAccountIndexImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => ManagerLayoutRoute,
-} as any)
-
-const AppLayoutBooksIndexRoute = AppLayoutBooksIndexImport.update({
+const ManagerLayoutAccountIndexRoute =
+  ManagerLayoutAccountIndexRouteImport.update({
+    id: '/account/',
+    path: '/account/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
+const AppLayoutBooksIndexRoute = AppLayoutBooksIndexRouteImport.update({
   id: '/books/',
   path: '/books/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-
-const AppLayoutAccountIndexRoute = AppLayoutAccountIndexImport.update({
+const AppLayoutAccountIndexRoute = AppLayoutAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-
-const ManagerLayoutUsersNewIndexRoute = ManagerLayoutUsersNewIndexImport.update(
-  {
+const ManagerLayoutUsersNewIndexRoute =
+  ManagerLayoutUsersNewIndexRouteImport.update({
     id: '/users/new/',
     path: '/users/new/',
     getParentRoute: () => ManagerLayoutRoute,
-  } as any,
-)
-
-const ManagerLayoutUsersIdIndexRoute = ManagerLayoutUsersIdIndexImport.update({
-  id: '/users/$id/',
-  path: '/users/$id/',
-  getParentRoute: () => ManagerLayoutRoute,
-} as any)
-
-const ManagerLayoutBooksNewIndexRoute = ManagerLayoutBooksNewIndexImport.update(
-  {
+  } as any)
+const ManagerLayoutUsersIdIndexRoute =
+  ManagerLayoutUsersIdIndexRouteImport.update({
+    id: '/users/$id/',
+    path: '/users/$id/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
+const ManagerLayoutBooksNewIndexRoute =
+  ManagerLayoutBooksNewIndexRouteImport.update({
     id: '/books/new/',
     path: '/books/new/',
     getParentRoute: () => ManagerLayoutRoute,
-  } as any,
-)
-
-const ManagerLayoutBooksIdIndexRoute = ManagerLayoutBooksIdIndexImport.update({
-  id: '/books/$id/',
-  path: '/books/$id/',
-  getParentRoute: () => ManagerLayoutRoute,
-} as any)
-
+  } as any)
+const ManagerLayoutBooksIdIndexRoute =
+  ManagerLayoutBooksIdIndexRouteImport.update({
+    id: '/books/$id/',
+    path: '/books/$id/',
+    getParentRoute: () => ManagerLayoutRoute,
+  } as any)
 const AppLayoutDesktopOnlyBooksIdIndexRoute =
-  AppLayoutDesktopOnlyBooksIdIndexImport.update({
+  AppLayoutDesktopOnlyBooksIdIndexRouteImport.update({
     id: '/books/$id/',
     path: '/books/$id/',
     getParentRoute: () => AppLayoutDesktopOnlyRoute,
   } as any)
-
 const ManagerLayoutUsersIdUpdateIndexRoute =
-  ManagerLayoutUsersIdUpdateIndexImport.update({
+  ManagerLayoutUsersIdUpdateIndexRouteImport.update({
     id: '/users/$id/update/',
     path: '/users/$id/update/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
-
 const ManagerLayoutBooksIdUpdateIndexRoute =
-  ManagerLayoutBooksIdUpdateIndexImport.update({
+  ManagerLayoutBooksIdUpdateIndexRouteImport.update({
     id: '/books/$id/update/',
     path: '/books/$id/update/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
+const ApiRpcServerRoute = ApiRpcServerRouteImport.update({
+  id: '/api/rpc',
+  path: '/api/rpc',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiRestServerRoute = ApiRestServerRouteImport.update({
+  id: '/api/rest',
+  path: '/api/rest',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiRpcSplatServerRoute = ApiRpcSplatServerRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => ApiRpcServerRoute,
+} as any)
+const ApiRestSplatServerRoute = ApiRestSplatServerRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => ApiRestServerRoute,
+} as any)
+const ApiOpenapiAuthServerRoute = ApiOpenapiAuthServerRouteImport.update({
+  id: '/api/openapi/auth',
+  path: '/api/openapi/auth',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiOpenapiAppServerRoute = ApiOpenapiAppServerRouteImport.update({
+  id: '/api/openapi/app',
+  path: '/api/openapi/app',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiOpenapiAuthSchemaServerRoute =
+  ApiOpenapiAuthSchemaServerRouteImport.update({
+    id: '/schema',
+    path: '/schema',
+    getParentRoute: () => ApiOpenapiAuthServerRoute,
+  } as any)
+const ApiOpenapiAppSchemaServerRoute =
+  ApiOpenapiAppSchemaServerRouteImport.update({
+    id: '/schema',
+    path: '/schema',
+    getParentRoute: () => ApiOpenapiAppServerRoute,
+  } as any)
+const ApiDevEmailTemplateServerRoute =
+  ApiDevEmailTemplateServerRouteImport.update({
+    id: '/api/dev/email/$template',
+    path: '/api/dev/email/$template',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/app': typeof AppLayoutDesktopOnlyRouteWithChildren
+  '/login': typeof LoginRouteWithChildren
+  '/manager': typeof ManagerLayoutRouteWithChildren
+  '/login/': typeof LoginIndexRoute
+  '/app/': typeof AppLayoutIndexRoute
+  '/login/error': typeof LoginErrorIndexRoute
+  '/login/verify': typeof LoginVerifyIndexRoute
+  '/manager/': typeof ManagerLayoutIndexRoute
+  '/app/account': typeof AppLayoutAccountIndexRoute
+  '/app/books': typeof AppLayoutBooksIndexRoute
+  '/manager/account': typeof ManagerLayoutAccountIndexRoute
+  '/manager/books': typeof ManagerLayoutBooksIndexRoute
+  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
+  '/manager/users': typeof ManagerLayoutUsersIndexRoute
+  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
+  '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
+  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/app': typeof AppLayoutIndexRoute
+  '/manager': typeof ManagerLayoutIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/login/error': typeof LoginErrorIndexRoute
+  '/login/verify': typeof LoginVerifyIndexRoute
+  '/app/account': typeof AppLayoutAccountIndexRoute
+  '/app/books': typeof AppLayoutBooksIndexRoute
+  '/manager/account': typeof ManagerLayoutAccountIndexRoute
+  '/manager/books': typeof ManagerLayoutBooksIndexRoute
+  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
+  '/manager/users': typeof ManagerLayoutUsersIndexRoute
+  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
+  '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
+  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/login': typeof LoginRouteWithChildren
+  '/manager': typeof ManagerRouteWithChildren
+  '/app/_layout': typeof AppLayoutRouteWithChildren
+  '/app/_layout-desktop-only': typeof AppLayoutDesktopOnlyRouteWithChildren
+  '/manager/_layout': typeof ManagerLayoutRouteWithChildren
+  '/login/': typeof LoginIndexRoute
+  '/app/_layout/': typeof AppLayoutIndexRoute
+  '/login/error/': typeof LoginErrorIndexRoute
+  '/login/verify/': typeof LoginVerifyIndexRoute
+  '/manager/_layout/': typeof ManagerLayoutIndexRoute
+  '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
+  '/app/_layout/books/': typeof AppLayoutBooksIndexRoute
+  '/manager/_layout/account/': typeof ManagerLayoutAccountIndexRoute
+  '/manager/_layout/books/': typeof ManagerLayoutBooksIndexRoute
+  '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
+  '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
+  '/app/_layout-desktop-only/books/$id/': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
+  '/manager/_layout/books/$id/': typeof ManagerLayoutBooksIdIndexRoute
+  '/manager/_layout/books/new/': typeof ManagerLayoutBooksNewIndexRoute
+  '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
+  '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
+  '/manager/_layout/books/$id/update/': typeof ManagerLayoutBooksIdUpdateIndexRoute
+  '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/login'
+    | '/manager'
+    | '/login/'
+    | '/app/'
+    | '/login/error'
+    | '/login/verify'
+    | '/manager/'
+    | '/app/account'
+    | '/app/books'
+    | '/manager/account'
+    | '/manager/books'
+    | '/manager/dashboard'
+    | '/manager/users'
+    | '/app/books/$id'
+    | '/manager/books/$id'
+    | '/manager/books/new'
+    | '/manager/users/$id'
+    | '/manager/users/new'
+    | '/manager/books/$id/update'
+    | '/manager/users/$id/update'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/app'
+    | '/manager'
+    | '/login'
+    | '/login/error'
+    | '/login/verify'
+    | '/app/account'
+    | '/app/books'
+    | '/manager/account'
+    | '/manager/books'
+    | '/manager/dashboard'
+    | '/manager/users'
+    | '/app/books/$id'
+    | '/manager/books/$id'
+    | '/manager/books/new'
+    | '/manager/users/$id'
+    | '/manager/users/new'
+    | '/manager/books/$id/update'
+    | '/manager/users/$id/update'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/login'
+    | '/manager'
+    | '/app/_layout'
+    | '/app/_layout-desktop-only'
+    | '/manager/_layout'
+    | '/login/'
+    | '/app/_layout/'
+    | '/login/error/'
+    | '/login/verify/'
+    | '/manager/_layout/'
+    | '/app/_layout/account/'
+    | '/app/_layout/books/'
+    | '/manager/_layout/account/'
+    | '/manager/_layout/books/'
+    | '/manager/_layout/dashboard/'
+    | '/manager/_layout/users/'
+    | '/app/_layout-desktop-only/books/$id/'
+    | '/manager/_layout/books/$id/'
+    | '/manager/_layout/books/new/'
+    | '/manager/_layout/users/$id/'
+    | '/manager/_layout/users/new/'
+    | '/manager/_layout/books/$id/update/'
+    | '/manager/_layout/users/$id/update/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRouteWithChildren
+  ManagerRoute: typeof ManagerRouteWithChildren
+}
+export interface FileServerRoutesByFullPath {
+  '/api/rest': typeof ApiRestServerRouteWithChildren
+  '/api/rpc': typeof ApiRpcServerRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatServerRoute
+  '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
+}
+export interface FileServerRoutesByTo {
+  '/api/rest': typeof ApiRestServerRouteWithChildren
+  '/api/rpc': typeof ApiRpcServerRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatServerRoute
+  '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
+}
+export interface FileServerRoutesById {
+  __root__: typeof rootServerRouteImport
+  '/api/rest': typeof ApiRestServerRouteWithChildren
+  '/api/rpc': typeof ApiRpcServerRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatServerRoute
+  '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
+}
+export interface FileServerRouteTypes {
+  fileServerRoutesByFullPath: FileServerRoutesByFullPath
+  fullPaths:
+    | '/api/rest'
+    | '/api/rpc'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
+  fileServerRoutesByTo: FileServerRoutesByTo
+  to:
+    | '/api/rest'
+    | '/api/rpc'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
+  id:
+    | '__root__'
+    | '/api/rest'
+    | '/api/rpc'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
+  fileServerRoutesById: FileServerRoutesById
+}
+export interface RootServerRouteChildren {
+  ApiRestServerRoute: typeof ApiRestServerRouteWithChildren
+  ApiRpcServerRoute: typeof ApiRpcServerRouteWithChildren
+  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiOpenapiAppServerRoute: typeof ApiOpenapiAppServerRouteWithChildren
+  ApiOpenapiAuthServerRoute: typeof ApiOpenapiAuthServerRouteWithChildren
+  ApiDevEmailTemplateServerRoute: typeof ApiDevEmailTemplateServerRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
+    '/manager': {
+      id: '/manager'
+      path: '/manager'
+      fullPath: '/manager'
+      preLoaderRoute: typeof ManagerRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/manager': {
-      id: '/manager'
-      path: '/manager'
-      fullPath: '/manager'
-      preLoaderRoute: typeof ManagerImport
-      parentRoute: typeof rootRoute
-    }
-    '/app/_layout': {
-      id: '/app/_layout'
-      path: ''
+    '/app': {
+      id: '/app'
+      path: '/app'
       fullPath: '/app'
-      preLoaderRoute: typeof AppLayoutImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/app/_layout-desktop-only': {
-      id: '/app/_layout-desktop-only'
-      path: ''
-      fullPath: '/app'
-      preLoaderRoute: typeof AppLayoutDesktopOnlyImport
-      parentRoute: typeof AppImport
-    }
-    '/manager/_layout': {
-      id: '/manager/_layout'
-      path: ''
-      fullPath: '/manager'
-      preLoaderRoute: typeof ManagerLayoutImport
-      parentRoute: typeof ManagerImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/login/': {
       id: '/login/'
       path: '/'
       fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexImport
-      parentRoute: typeof LoginImport
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof LoginRoute
     }
-    '/app/_layout/': {
-      id: '/app/_layout/'
-      path: '/'
-      fullPath: '/app/'
-      preLoaderRoute: typeof AppLayoutIndexImport
-      parentRoute: typeof AppLayoutImport
+    '/manager/_layout': {
+      id: '/manager/_layout'
+      path: ''
+      fullPath: '/manager'
+      preLoaderRoute: typeof ManagerLayoutRouteImport
+      parentRoute: typeof ManagerRoute
     }
-    '/login/error/': {
-      id: '/login/error/'
-      path: '/error'
-      fullPath: '/login/error'
-      preLoaderRoute: typeof LoginErrorIndexImport
-      parentRoute: typeof LoginImport
+    '/app/_layout-desktop-only': {
+      id: '/app/_layout-desktop-only'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AppLayoutDesktopOnlyRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/login/verify/': {
-      id: '/login/verify/'
-      path: '/verify'
-      fullPath: '/login/verify'
-      preLoaderRoute: typeof LoginVerifyIndexImport
-      parentRoute: typeof LoginImport
+    '/app/_layout': {
+      id: '/app/_layout'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AppLayoutRouteImport
+      parentRoute: typeof AppRoute
     }
     '/manager/_layout/': {
       id: '/manager/_layout/'
       path: '/'
       fullPath: '/manager/'
-      preLoaderRoute: typeof ManagerLayoutIndexImport
-      parentRoute: typeof ManagerLayoutImport
+      preLoaderRoute: typeof ManagerLayoutIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/app/_layout/account/': {
-      id: '/app/_layout/account/'
-      path: '/account'
-      fullPath: '/app/account'
-      preLoaderRoute: typeof AppLayoutAccountIndexImport
-      parentRoute: typeof AppLayoutImport
+    '/login/verify/': {
+      id: '/login/verify/'
+      path: '/verify'
+      fullPath: '/login/verify'
+      preLoaderRoute: typeof LoginVerifyIndexRouteImport
+      parentRoute: typeof LoginRoute
     }
-    '/app/_layout/books/': {
-      id: '/app/_layout/books/'
-      path: '/books'
-      fullPath: '/app/books'
-      preLoaderRoute: typeof AppLayoutBooksIndexImport
-      parentRoute: typeof AppLayoutImport
+    '/login/error/': {
+      id: '/login/error/'
+      path: '/error'
+      fullPath: '/login/error'
+      preLoaderRoute: typeof LoginErrorIndexRouteImport
+      parentRoute: typeof LoginRoute
     }
-    '/manager/_layout/account/': {
-      id: '/manager/_layout/account/'
-      path: '/account'
-      fullPath: '/manager/account'
-      preLoaderRoute: typeof ManagerLayoutAccountIndexImport
-      parentRoute: typeof ManagerLayoutImport
-    }
-    '/manager/_layout/books/': {
-      id: '/manager/_layout/books/'
-      path: '/books'
-      fullPath: '/manager/books'
-      preLoaderRoute: typeof ManagerLayoutBooksIndexImport
-      parentRoute: typeof ManagerLayoutImport
-    }
-    '/manager/_layout/dashboard/': {
-      id: '/manager/_layout/dashboard/'
-      path: '/dashboard'
-      fullPath: '/manager/dashboard'
-      preLoaderRoute: typeof ManagerLayoutDashboardIndexImport
-      parentRoute: typeof ManagerLayoutImport
+    '/app/_layout/': {
+      id: '/app/_layout/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppLayoutIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
     }
     '/manager/_layout/users/': {
       id: '/manager/_layout/users/'
       path: '/users'
       fullPath: '/manager/users'
-      preLoaderRoute: typeof ManagerLayoutUsersIndexImport
-      parentRoute: typeof ManagerLayoutImport
+      preLoaderRoute: typeof ManagerLayoutUsersIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/app/_layout-desktop-only/books/$id/': {
-      id: '/app/_layout-desktop-only/books/$id/'
-      path: '/books/$id'
-      fullPath: '/app/books/$id'
-      preLoaderRoute: typeof AppLayoutDesktopOnlyBooksIdIndexImport
-      parentRoute: typeof AppLayoutDesktopOnlyImport
+    '/manager/_layout/dashboard/': {
+      id: '/manager/_layout/dashboard/'
+      path: '/dashboard'
+      fullPath: '/manager/dashboard'
+      preLoaderRoute: typeof ManagerLayoutDashboardIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/manager/_layout/books/$id/': {
-      id: '/manager/_layout/books/$id/'
-      path: '/books/$id'
-      fullPath: '/manager/books/$id'
-      preLoaderRoute: typeof ManagerLayoutBooksIdIndexImport
-      parentRoute: typeof ManagerLayoutImport
+    '/manager/_layout/books/': {
+      id: '/manager/_layout/books/'
+      path: '/books'
+      fullPath: '/manager/books'
+      preLoaderRoute: typeof ManagerLayoutBooksIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/manager/_layout/books/new/': {
-      id: '/manager/_layout/books/new/'
-      path: '/books/new'
-      fullPath: '/manager/books/new'
-      preLoaderRoute: typeof ManagerLayoutBooksNewIndexImport
-      parentRoute: typeof ManagerLayoutImport
+    '/manager/_layout/account/': {
+      id: '/manager/_layout/account/'
+      path: '/account'
+      fullPath: '/manager/account'
+      preLoaderRoute: typeof ManagerLayoutAccountIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/manager/_layout/users/$id/': {
-      id: '/manager/_layout/users/$id/'
-      path: '/users/$id'
-      fullPath: '/manager/users/$id'
-      preLoaderRoute: typeof ManagerLayoutUsersIdIndexImport
-      parentRoute: typeof ManagerLayoutImport
+    '/app/_layout/books/': {
+      id: '/app/_layout/books/'
+      path: '/books'
+      fullPath: '/app/books'
+      preLoaderRoute: typeof AppLayoutBooksIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
+    '/app/_layout/account/': {
+      id: '/app/_layout/account/'
+      path: '/account'
+      fullPath: '/app/account'
+      preLoaderRoute: typeof AppLayoutAccountIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
     }
     '/manager/_layout/users/new/': {
       id: '/manager/_layout/users/new/'
       path: '/users/new'
       fullPath: '/manager/users/new'
-      preLoaderRoute: typeof ManagerLayoutUsersNewIndexImport
-      parentRoute: typeof ManagerLayoutImport
+      preLoaderRoute: typeof ManagerLayoutUsersNewIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
-    '/manager/_layout/books/$id/update/': {
-      id: '/manager/_layout/books/$id/update/'
-      path: '/books/$id/update'
-      fullPath: '/manager/books/$id/update'
-      preLoaderRoute: typeof ManagerLayoutBooksIdUpdateIndexImport
-      parentRoute: typeof ManagerLayoutImport
+    '/manager/_layout/users/$id/': {
+      id: '/manager/_layout/users/$id/'
+      path: '/users/$id'
+      fullPath: '/manager/users/$id'
+      preLoaderRoute: typeof ManagerLayoutUsersIdIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
+    }
+    '/manager/_layout/books/new/': {
+      id: '/manager/_layout/books/new/'
+      path: '/books/new'
+      fullPath: '/manager/books/new'
+      preLoaderRoute: typeof ManagerLayoutBooksNewIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
+    }
+    '/manager/_layout/books/$id/': {
+      id: '/manager/_layout/books/$id/'
+      path: '/books/$id'
+      fullPath: '/manager/books/$id'
+      preLoaderRoute: typeof ManagerLayoutBooksIdIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
+    }
+    '/app/_layout-desktop-only/books/$id/': {
+      id: '/app/_layout-desktop-only/books/$id/'
+      path: '/books/$id'
+      fullPath: '/app/books/$id'
+      preLoaderRoute: typeof AppLayoutDesktopOnlyBooksIdIndexRouteImport
+      parentRoute: typeof AppLayoutDesktopOnlyRoute
     }
     '/manager/_layout/users/$id/update/': {
       id: '/manager/_layout/users/$id/update/'
       path: '/users/$id/update'
       fullPath: '/manager/users/$id/update'
-      preLoaderRoute: typeof ManagerLayoutUsersIdUpdateIndexImport
-      parentRoute: typeof ManagerLayoutImport
+      preLoaderRoute: typeof ManagerLayoutUsersIdUpdateIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
+    }
+    '/manager/_layout/books/$id/update/': {
+      id: '/manager/_layout/books/$id/update/'
+      path: '/books/$id/update'
+      fullPath: '/manager/books/$id/update'
+      preLoaderRoute: typeof ManagerLayoutBooksIdUpdateIndexRouteImport
+      parentRoute: typeof ManagerLayoutRoute
     }
   }
 }
-
-// Create and export the route tree
+declare module '@tanstack/react-start/server' {
+  interface ServerFileRoutesByPath {
+    '/api/rpc': {
+      id: '/api/rpc'
+      path: '/api/rpc'
+      fullPath: '/api/rpc'
+      preLoaderRoute: typeof ApiRpcServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/rest': {
+      id: '/api/rest'
+      path: '/api/rest'
+      fullPath: '/api/rest'
+      preLoaderRoute: typeof ApiRestServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatServerRouteImport
+      parentRoute: typeof ApiRpcServerRoute
+    }
+    '/api/rest/$': {
+      id: '/api/rest/$'
+      path: '/$'
+      fullPath: '/api/rest/$'
+      preLoaderRoute: typeof ApiRestSplatServerRouteImport
+      parentRoute: typeof ApiRestServerRoute
+    }
+    '/api/openapi/auth': {
+      id: '/api/openapi/auth'
+      path: '/api/openapi/auth'
+      fullPath: '/api/openapi/auth'
+      preLoaderRoute: typeof ApiOpenapiAuthServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/openapi/app': {
+      id: '/api/openapi/app'
+      path: '/api/openapi/app'
+      fullPath: '/api/openapi/app'
+      preLoaderRoute: typeof ApiOpenapiAppServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/openapi/auth/schema': {
+      id: '/api/openapi/auth/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/auth/schema'
+      preLoaderRoute: typeof ApiOpenapiAuthSchemaServerRouteImport
+      parentRoute: typeof ApiOpenapiAuthServerRoute
+    }
+    '/api/openapi/app/schema': {
+      id: '/api/openapi/app/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/app/schema'
+      preLoaderRoute: typeof ApiOpenapiAppSchemaServerRouteImport
+      parentRoute: typeof ApiOpenapiAppServerRoute
+    }
+    '/api/dev/email/$template': {
+      id: '/api/dev/email/$template'
+      path: '/api/dev/email/$template'
+      fullPath: '/api/dev/email/$template'
+      preLoaderRoute: typeof ApiDevEmailTemplateServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+  }
+}
 
 interface AppLayoutRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
@@ -474,164 +823,51 @@ const ManagerRouteChildren: ManagerRouteChildren = {
 const ManagerRouteWithChildren =
   ManagerRoute._addFileChildren(ManagerRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/app': typeof AppLayoutDesktopOnlyRouteWithChildren
-  '/login': typeof LoginRouteWithChildren
-  '/manager': typeof ManagerLayoutRouteWithChildren
-  '/login/': typeof LoginIndexRoute
-  '/app/': typeof AppLayoutIndexRoute
-  '/login/error': typeof LoginErrorIndexRoute
-  '/login/verify': typeof LoginVerifyIndexRoute
-  '/manager/': typeof ManagerLayoutIndexRoute
-  '/app/account': typeof AppLayoutAccountIndexRoute
-  '/app/books': typeof AppLayoutBooksIndexRoute
-  '/manager/account': typeof ManagerLayoutAccountIndexRoute
-  '/manager/books': typeof ManagerLayoutBooksIndexRoute
-  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/users': typeof ManagerLayoutUsersIndexRoute
-  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
-  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
-  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
-  '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
-  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
-  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
-  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
+interface ApiRestServerRouteChildren {
+  ApiRestSplatServerRoute: typeof ApiRestSplatServerRoute
 }
 
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/app': typeof AppLayoutIndexRoute
-  '/manager': typeof ManagerLayoutIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/login/error': typeof LoginErrorIndexRoute
-  '/login/verify': typeof LoginVerifyIndexRoute
-  '/app/account': typeof AppLayoutAccountIndexRoute
-  '/app/books': typeof AppLayoutBooksIndexRoute
-  '/manager/account': typeof ManagerLayoutAccountIndexRoute
-  '/manager/books': typeof ManagerLayoutBooksIndexRoute
-  '/manager/dashboard': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/users': typeof ManagerLayoutUsersIndexRoute
-  '/app/books/$id': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
-  '/manager/books/$id': typeof ManagerLayoutBooksIdIndexRoute
-  '/manager/books/new': typeof ManagerLayoutBooksNewIndexRoute
-  '/manager/users/$id': typeof ManagerLayoutUsersIdIndexRoute
-  '/manager/users/new': typeof ManagerLayoutUsersNewIndexRoute
-  '/manager/books/$id/update': typeof ManagerLayoutBooksIdUpdateIndexRoute
-  '/manager/users/$id/update': typeof ManagerLayoutUsersIdUpdateIndexRoute
+const ApiRestServerRouteChildren: ApiRestServerRouteChildren = {
+  ApiRestSplatServerRoute: ApiRestSplatServerRoute,
 }
 
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
-  '/login': typeof LoginRouteWithChildren
-  '/manager': typeof ManagerRouteWithChildren
-  '/app/_layout': typeof AppLayoutRouteWithChildren
-  '/app/_layout-desktop-only': typeof AppLayoutDesktopOnlyRouteWithChildren
-  '/manager/_layout': typeof ManagerLayoutRouteWithChildren
-  '/login/': typeof LoginIndexRoute
-  '/app/_layout/': typeof AppLayoutIndexRoute
-  '/login/error/': typeof LoginErrorIndexRoute
-  '/login/verify/': typeof LoginVerifyIndexRoute
-  '/manager/_layout/': typeof ManagerLayoutIndexRoute
-  '/app/_layout/account/': typeof AppLayoutAccountIndexRoute
-  '/app/_layout/books/': typeof AppLayoutBooksIndexRoute
-  '/manager/_layout/account/': typeof ManagerLayoutAccountIndexRoute
-  '/manager/_layout/books/': typeof ManagerLayoutBooksIndexRoute
-  '/manager/_layout/dashboard/': typeof ManagerLayoutDashboardIndexRoute
-  '/manager/_layout/users/': typeof ManagerLayoutUsersIndexRoute
-  '/app/_layout-desktop-only/books/$id/': typeof AppLayoutDesktopOnlyBooksIdIndexRoute
-  '/manager/_layout/books/$id/': typeof ManagerLayoutBooksIdIndexRoute
-  '/manager/_layout/books/new/': typeof ManagerLayoutBooksNewIndexRoute
-  '/manager/_layout/users/$id/': typeof ManagerLayoutUsersIdIndexRoute
-  '/manager/_layout/users/new/': typeof ManagerLayoutUsersNewIndexRoute
-  '/manager/_layout/books/$id/update/': typeof ManagerLayoutBooksIdUpdateIndexRoute
-  '/manager/_layout/users/$id/update/': typeof ManagerLayoutUsersIdUpdateIndexRoute
+const ApiRestServerRouteWithChildren = ApiRestServerRoute._addFileChildren(
+  ApiRestServerRouteChildren,
+)
+
+interface ApiRpcServerRouteChildren {
+  ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
 }
 
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/app'
-    | '/login'
-    | '/manager'
-    | '/login/'
-    | '/app/'
-    | '/login/error'
-    | '/login/verify'
-    | '/manager/'
-    | '/app/account'
-    | '/app/books'
-    | '/manager/account'
-    | '/manager/books'
-    | '/manager/dashboard'
-    | '/manager/users'
-    | '/app/books/$id'
-    | '/manager/books/$id'
-    | '/manager/books/new'
-    | '/manager/users/$id'
-    | '/manager/users/new'
-    | '/manager/books/$id/update'
-    | '/manager/users/$id/update'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/app'
-    | '/manager'
-    | '/login'
-    | '/login/error'
-    | '/login/verify'
-    | '/app/account'
-    | '/app/books'
-    | '/manager/account'
-    | '/manager/books'
-    | '/manager/dashboard'
-    | '/manager/users'
-    | '/app/books/$id'
-    | '/manager/books/$id'
-    | '/manager/books/new'
-    | '/manager/users/$id'
-    | '/manager/users/new'
-    | '/manager/books/$id/update'
-    | '/manager/users/$id/update'
-  id:
-    | '__root__'
-    | '/'
-    | '/app'
-    | '/login'
-    | '/manager'
-    | '/app/_layout'
-    | '/app/_layout-desktop-only'
-    | '/manager/_layout'
-    | '/login/'
-    | '/app/_layout/'
-    | '/login/error/'
-    | '/login/verify/'
-    | '/manager/_layout/'
-    | '/app/_layout/account/'
-    | '/app/_layout/books/'
-    | '/manager/_layout/account/'
-    | '/manager/_layout/books/'
-    | '/manager/_layout/dashboard/'
-    | '/manager/_layout/users/'
-    | '/app/_layout-desktop-only/books/$id/'
-    | '/manager/_layout/books/$id/'
-    | '/manager/_layout/books/new/'
-    | '/manager/_layout/users/$id/'
-    | '/manager/_layout/users/new/'
-    | '/manager/_layout/books/$id/update/'
-    | '/manager/_layout/users/$id/update/'
-  fileRoutesById: FileRoutesById
+const ApiRpcServerRouteChildren: ApiRpcServerRouteChildren = {
+  ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
 }
 
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRouteWithChildren
-  LoginRoute: typeof LoginRouteWithChildren
-  ManagerRoute: typeof ManagerRouteWithChildren
+const ApiRpcServerRouteWithChildren = ApiRpcServerRoute._addFileChildren(
+  ApiRpcServerRouteChildren,
+)
+
+interface ApiOpenapiAppServerRouteChildren {
+  ApiOpenapiAppSchemaServerRoute: typeof ApiOpenapiAppSchemaServerRoute
 }
+
+const ApiOpenapiAppServerRouteChildren: ApiOpenapiAppServerRouteChildren = {
+  ApiOpenapiAppSchemaServerRoute: ApiOpenapiAppSchemaServerRoute,
+}
+
+const ApiOpenapiAppServerRouteWithChildren =
+  ApiOpenapiAppServerRoute._addFileChildren(ApiOpenapiAppServerRouteChildren)
+
+interface ApiOpenapiAuthServerRouteChildren {
+  ApiOpenapiAuthSchemaServerRoute: typeof ApiOpenapiAuthSchemaServerRoute
+}
+
+const ApiOpenapiAuthServerRouteChildren: ApiOpenapiAuthServerRouteChildren = {
+  ApiOpenapiAuthSchemaServerRoute: ApiOpenapiAuthSchemaServerRoute,
+}
+
+const ApiOpenapiAuthServerRouteWithChildren =
+  ApiOpenapiAuthServerRoute._addFileChildren(ApiOpenapiAuthServerRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -639,152 +875,17 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRouteWithChildren,
   ManagerRoute: ManagerRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/app",
-        "/login",
-        "/manager"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/app": {
-      "filePath": "app.tsx",
-      "children": [
-        "/app/_layout",
-        "/app/_layout-desktop-only"
-      ]
-    },
-    "/login": {
-      "filePath": "login.tsx",
-      "children": [
-        "/login/",
-        "/login/error/",
-        "/login/verify/"
-      ]
-    },
-    "/manager": {
-      "filePath": "manager.tsx",
-      "children": [
-        "/manager/_layout"
-      ]
-    },
-    "/app/_layout": {
-      "filePath": "app/_layout.tsx",
-      "parent": "/app",
-      "children": [
-        "/app/_layout/",
-        "/app/_layout/account/",
-        "/app/_layout/books/"
-      ]
-    },
-    "/app/_layout-desktop-only": {
-      "filePath": "app/_layout-desktop-only.tsx",
-      "parent": "/app",
-      "children": [
-        "/app/_layout-desktop-only/books/$id/"
-      ]
-    },
-    "/manager/_layout": {
-      "filePath": "manager/_layout.tsx",
-      "parent": "/manager",
-      "children": [
-        "/manager/_layout/",
-        "/manager/_layout/account/",
-        "/manager/_layout/books/",
-        "/manager/_layout/dashboard/",
-        "/manager/_layout/users/",
-        "/manager/_layout/books/$id/",
-        "/manager/_layout/books/new/",
-        "/manager/_layout/users/$id/",
-        "/manager/_layout/users/new/",
-        "/manager/_layout/books/$id/update/",
-        "/manager/_layout/users/$id/update/"
-      ]
-    },
-    "/login/": {
-      "filePath": "login/index.tsx",
-      "parent": "/login"
-    },
-    "/app/_layout/": {
-      "filePath": "app/_layout/index.tsx",
-      "parent": "/app/_layout"
-    },
-    "/login/error/": {
-      "filePath": "login/error.index.tsx",
-      "parent": "/login"
-    },
-    "/login/verify/": {
-      "filePath": "login/verify.index.tsx",
-      "parent": "/login"
-    },
-    "/manager/_layout/": {
-      "filePath": "manager/_layout/index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/app/_layout/account/": {
-      "filePath": "app/_layout/account.index.tsx",
-      "parent": "/app/_layout"
-    },
-    "/app/_layout/books/": {
-      "filePath": "app/_layout/books.index.tsx",
-      "parent": "/app/_layout"
-    },
-    "/manager/_layout/account/": {
-      "filePath": "manager/_layout/account.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/books/": {
-      "filePath": "manager/_layout/books.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/dashboard/": {
-      "filePath": "manager/_layout/dashboard.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/users/": {
-      "filePath": "manager/_layout/users.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/app/_layout-desktop-only/books/$id/": {
-      "filePath": "app/_layout-desktop-only/books.$id.index.tsx",
-      "parent": "/app/_layout-desktop-only"
-    },
-    "/manager/_layout/books/$id/": {
-      "filePath": "manager/_layout/books.$id.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/books/new/": {
-      "filePath": "manager/_layout/books.new.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/users/$id/": {
-      "filePath": "manager/_layout/users.$id.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/users/new/": {
-      "filePath": "manager/_layout/users.new.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/books/$id/update/": {
-      "filePath": "manager/_layout/books.$id.update.index.tsx",
-      "parent": "/manager/_layout"
-    },
-    "/manager/_layout/users/$id/update/": {
-      "filePath": "manager/_layout/users.$id.update.index.tsx",
-      "parent": "/manager/_layout"
-    }
-  }
+const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiRestServerRoute: ApiRestServerRouteWithChildren,
+  ApiRpcServerRoute: ApiRpcServerRouteWithChildren,
+  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiOpenapiAppServerRoute: ApiOpenapiAppServerRouteWithChildren,
+  ApiOpenapiAuthServerRoute: ApiOpenapiAuthServerRouteWithChildren,
+  ApiDevEmailTemplateServerRoute: ApiDevEmailTemplateServerRoute,
 }
-ROUTE_MANIFEST_END */
+export const serverRouteTree = rootServerRouteImport
+  ._addFileChildren(rootServerRouteChildren)
+  ._addFileTypes<FileServerRouteTypes>()
