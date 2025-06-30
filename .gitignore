@@ -60,3 +60,5 @@ certificates
 
 *storybook.log
 app.config.timestamp_*.js
+.tanstack
+.nitro

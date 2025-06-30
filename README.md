@@ -33,7 +33,6 @@ pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```
 
-
 # FAQ
 
 <details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
