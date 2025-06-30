@@ -18,15 +18,4 @@ export default defineConfig({
       },
     }),
   ],
-
-  // server: {
-  //   routeRules: {
-  //     '/storybook': {
-  //       redirect: {
-  //         to: '/storybook/index.html',
-  //         statusCode: 301,
-  //       },
-  //     },
-  //   },
-  // },
 });
