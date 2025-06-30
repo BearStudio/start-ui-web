@@ -12,7 +12,6 @@ export default defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tanstackStart({
-      target: process.env.DEPLOY_TARGET ?? 'node-server',
       tsr: {
         srcDirectory: 'app',
         routesDirectory: 'app/routes',
