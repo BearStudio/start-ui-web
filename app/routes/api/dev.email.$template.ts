@@ -1,8 +1,10 @@
-import { createAPIFileRoute } from '@tanstack/react-start/api';
+import { createServerFileRoute } from '@tanstack/react-start/server';
 
 import { previewEmailRoute } from '@/server/email';
 
-export const APIRoute = createAPIFileRoute('/api/dev/email/$template')({
+export const ServerRoute = createServerFileRoute(
+  '/api/dev/email/$template'
+).methods({
   GET: ({ request, params }) => {
     // Allows debug only in development
     if (import.meta.env.PROD) {

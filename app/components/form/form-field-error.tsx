@@ -83,7 +83,7 @@ export const FormFieldError = <
     <div
       id={fieldCtx.errorId}
       className={cn(
-        'flex gap-1 text-sm text-negative-600 animate-in slide-in-from-top-1 dark:text-negative-400',
+        'flex animate-in gap-1 text-sm text-negative-600 slide-in-from-top-1 dark:text-negative-400',
         className
       )}
       {...rest}
