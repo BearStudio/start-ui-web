@@ -33,6 +33,23 @@ pnpm dk:start # Only if your docker is not running
 pnpm dev
 ```
 
+# Deploy App
+
+Set up a database using [Neon](https://neon.com) or any preferred Postgres provider.
+Configure all required environment variables as specified in the `.env.example` file.
+
+## Node Server
+
+```
+pnpm build
+pnpm start
+```
+
+## Vercel
+
+Use the "Vite" setup and just add a `DEPLOY_TARGET` environment variable with the value `vercel`.
+
+
 
 # FAQ
 

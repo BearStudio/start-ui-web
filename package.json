@@ -13,7 +13,6 @@
     "dev:app": "pnpm gen:build-info && vite dev",
     "dev:smtp": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
     "build": "cross-env NODE_ENV=production run-p env gen:build-info && vite build",
-    "build:vercel": "run-p env gen:build-info && vite build --preset vercel",
     "start": "dotenv -- node .output/server/index.mjs",
     "env": "run-p env:*",
     "env:client": "dotenv -- node ./run-jiti ./app/env/client.ts",
