@@ -36,8 +36,6 @@ import { Route as ManagerLayoutBooksIdIndexRouteImport } from './routes/manager/
 import { Route as AppLayoutDesktopOnlyBooksIdIndexRouteImport } from './routes/app/_layout-desktop-only/books.$id.index'
 import { Route as ManagerLayoutUsersIdUpdateIndexRouteImport } from './routes/manager/_layout/users.$id.update.index'
 import { Route as ManagerLayoutBooksIdUpdateIndexRouteImport } from './routes/manager/_layout/books.$id.update.index'
-import { ServerRoute as ApiRpcServerRouteImport } from './routes/api/rpc'
-import { ServerRoute as ApiRestServerRouteImport } from './routes/api/rest'
 import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api/rpc.$'
 import { ServerRoute as ApiRestSplatServerRouteImport } from './routes/api/rest.$'
 import { ServerRoute as ApiOpenapiAuthServerRouteImport } from './routes/api/openapi/auth'
@@ -180,25 +178,15 @@ const ManagerLayoutBooksIdUpdateIndexRoute =
     path: '/books/$id/update/',
     getParentRoute: () => ManagerLayoutRoute,
   } as any)
-const ApiRpcServerRoute = ApiRpcServerRouteImport.update({
-  id: '/api/rpc',
-  path: '/api/rpc',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiRestServerRoute = ApiRestServerRouteImport.update({
-  id: '/api/rest',
-  path: '/api/rest',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
 const ApiRpcSplatServerRoute = ApiRpcSplatServerRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => ApiRpcServerRoute,
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiRestSplatServerRoute = ApiRestSplatServerRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => ApiRestServerRoute,
+  id: '/api/rest/$',
+  path: '/api/rest/$',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiOpenapiAuthServerRoute = ApiOpenapiAuthServerRouteImport.update({
   id: '/api/openapi/auth',
@@ -389,8 +377,6 @@ export interface RootRouteChildren {
   ManagerRoute: typeof ManagerRouteWithChildren
 }
 export interface FileServerRoutesByFullPath {
-  '/api/rest': typeof ApiRestServerRouteWithChildren
-  '/api/rpc': typeof ApiRpcServerRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
   '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
@@ -401,8 +387,6 @@ export interface FileServerRoutesByFullPath {
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
 }
 export interface FileServerRoutesByTo {
-  '/api/rest': typeof ApiRestServerRouteWithChildren
-  '/api/rpc': typeof ApiRpcServerRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
   '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
@@ -414,8 +398,6 @@ export interface FileServerRoutesByTo {
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
-  '/api/rest': typeof ApiRestServerRouteWithChildren
-  '/api/rpc': typeof ApiRpcServerRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
   '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
@@ -428,8 +410,6 @@ export interface FileServerRoutesById {
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
   fullPaths:
-    | '/api/rest'
-    | '/api/rpc'
     | '/api/auth/$'
     | '/api/openapi/app'
     | '/api/openapi/auth'
@@ -440,8 +420,6 @@ export interface FileServerRouteTypes {
     | '/api/openapi/auth/schema'
   fileServerRoutesByTo: FileServerRoutesByTo
   to:
-    | '/api/rest'
-    | '/api/rpc'
     | '/api/auth/$'
     | '/api/openapi/app'
     | '/api/openapi/auth'
@@ -452,8 +430,6 @@ export interface FileServerRouteTypes {
     | '/api/openapi/auth/schema'
   id:
     | '__root__'
-    | '/api/rest'
-    | '/api/rpc'
     | '/api/auth/$'
     | '/api/openapi/app'
     | '/api/openapi/auth'
@@ -465,11 +441,11 @@ export interface FileServerRouteTypes {
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
-  ApiRestServerRoute: typeof ApiRestServerRouteWithChildren
-  ApiRpcServerRoute: typeof ApiRpcServerRouteWithChildren
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
   ApiOpenapiAppServerRoute: typeof ApiOpenapiAppServerRouteWithChildren
   ApiOpenapiAuthServerRoute: typeof ApiOpenapiAuthServerRouteWithChildren
+  ApiRestSplatServerRoute: typeof ApiRestSplatServerRoute
+  ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
   ApiDevEmailTemplateServerRoute: typeof ApiDevEmailTemplateServerRoute
 }
 
@@ -654,33 +630,19 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
-    '/api/rpc': {
-      id: '/api/rpc'
-      path: '/api/rpc'
-      fullPath: '/api/rpc'
-      preLoaderRoute: typeof ApiRpcServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/rest': {
-      id: '/api/rest'
-      path: '/api/rest'
-      fullPath: '/api/rest'
-      preLoaderRoute: typeof ApiRestServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
     '/api/rpc/$': {
       id: '/api/rpc/$'
-      path: '/$'
+      path: '/api/rpc/$'
       fullPath: '/api/rpc/$'
       preLoaderRoute: typeof ApiRpcSplatServerRouteImport
-      parentRoute: typeof ApiRpcServerRoute
+      parentRoute: typeof rootServerRouteImport
     }
     '/api/rest/$': {
       id: '/api/rest/$'
-      path: '/$'
+      path: '/api/rest/$'
       fullPath: '/api/rest/$'
       preLoaderRoute: typeof ApiRestSplatServerRouteImport
-      parentRoute: typeof ApiRestServerRoute
+      parentRoute: typeof rootServerRouteImport
     }
     '/api/openapi/auth': {
       id: '/api/openapi/auth'
@@ -823,30 +785,6 @@ const ManagerRouteChildren: ManagerRouteChildren = {
 const ManagerRouteWithChildren =
   ManagerRoute._addFileChildren(ManagerRouteChildren)
 
-interface ApiRestServerRouteChildren {
-  ApiRestSplatServerRoute: typeof ApiRestSplatServerRoute
-}
-
-const ApiRestServerRouteChildren: ApiRestServerRouteChildren = {
-  ApiRestSplatServerRoute: ApiRestSplatServerRoute,
-}
-
-const ApiRestServerRouteWithChildren = ApiRestServerRoute._addFileChildren(
-  ApiRestServerRouteChildren,
-)
-
-interface ApiRpcServerRouteChildren {
-  ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
-}
-
-const ApiRpcServerRouteChildren: ApiRpcServerRouteChildren = {
-  ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
-}
-
-const ApiRpcServerRouteWithChildren = ApiRpcServerRoute._addFileChildren(
-  ApiRpcServerRouteChildren,
-)
-
 interface ApiOpenapiAppServerRouteChildren {
   ApiOpenapiAppSchemaServerRoute: typeof ApiOpenapiAppSchemaServerRoute
 }
@@ -879,11 +817,11 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiRestServerRoute: ApiRestServerRouteWithChildren,
-  ApiRpcServerRoute: ApiRpcServerRouteWithChildren,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
   ApiOpenapiAppServerRoute: ApiOpenapiAppServerRouteWithChildren,
   ApiOpenapiAuthServerRoute: ApiOpenapiAuthServerRouteWithChildren,
+  ApiRestSplatServerRoute: ApiRestSplatServerRoute,
+  ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
   ApiDevEmailTemplateServerRoute: ApiDevEmailTemplateServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
