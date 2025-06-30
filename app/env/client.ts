@@ -6,7 +6,7 @@ const envMetaOrProcess: Record<string, string> = import.meta.env ?? process.env;
 
 const isDev = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'development'
-  : import.meta.env.DEV;
+  : import.meta.env?.DEV;
 
 const getBaseUrl = () => {
   const vercelUrlPreviewUrl =
