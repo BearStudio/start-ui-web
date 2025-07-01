@@ -76,9 +76,9 @@
 :root {
   --background: var(--color-white);
   --foreground: var(--color-neutral-950);
-  --card: oklch(1 0 0);
+  --card: var(--color-white);
   --card-foreground: var(--color-neutral-950);
-  --popover: oklch(1 0 0);
+  --popover: var(--color-white);
   --popover-foreground: var(--color-neutral-950);
   --primary: var(--color-neutral-900);
   --primary-foreground: var(--color-neutral-50);
@@ -190,7 +190,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-neutral-50 text-foreground dark:bg-neutral-950;
+    @apply text-foreground bg-neutral-50 dark:bg-neutral-950;
 
     @media all and (display-mode: standalone) {
       height: 100lvh; /* Force full height on iOS standalone */
