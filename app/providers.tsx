@@ -7,6 +7,7 @@ import { QueryClientProvider } from '@/lib/tanstack-query/provider';
 
 import { Sonner } from '@/components/ui/sonner';
 
+import { envClient } from '@/env/client';
 import {
   DemoModeDrawer,
   useIsDemoModeDrawerVisible,
@@ -23,7 +24,7 @@ export const Providers = (props: { children: ReactNode }) => {
       <QueryClientProvider>
         {props.children}
         {!isDemoModeDrawerVisible && <Sonner />}
-        <DemoModeDrawer />
+        {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
       </QueryClientProvider>
     </ThemeProvider>
   );
