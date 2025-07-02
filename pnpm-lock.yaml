@@ -14,6 +14,9 @@ importers:
       '@bearstudio/ui-state':
         specifier: 1.0.2
         version: 1.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@better-auth/expo':
+        specifier: 1.2.10
+        version: 1.2.10(better-auth@1.2.7)
       '@fontsource-variable/inter':
         specifier: 5.2.6
         version: 5.2.6
@@ -608,6 +611,11 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
+
+  '@better-auth/expo@1.2.10':
+    resolution: {integrity: sha512-wMnYtDGF5W37Kuq7OY3/mudlWbbvxLMX0zoOMgB/icx3mReD6dv3hfpuVPoNQxT/dl/R+Rj7dvJ3b5Rk4CI3NA==}
+    peerDependencies:
+      better-auth: 1.2.10
 
   '@better-auth/utils@0.2.4':
     resolution: {integrity: sha512-ayiX87Xd5sCHEplAdeMgwkA0FgnXsEZBgDn890XHHwSWNqqRZDYOq3uj2Ei2leTv1I2KbG5HHn60Ah1i2JWZjQ==}
@@ -8201,6 +8209,13 @@ snapshots:
     dependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
+
+  '@better-auth/expo@1.2.10(better-auth@1.2.7)':
+    dependencies:
+      '@better-fetch/fetch': 1.1.18
+      better-auth: 1.2.7
+      better-call: 1.0.9
+      zod: 3.24.4
 
   '@better-auth/utils@0.2.4':
     dependencies:

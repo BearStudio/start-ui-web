@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
+import { expo } from '@better-auth/expo';
 
 import i18n from '@/lib/i18n';
 
@@ -17,6 +18,7 @@ import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 
 export type Auth = typeof auth;
 export const auth = betterAuth({
@@ -24,6 +26,7 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
+  trustedOrigins: ['start-ui-native://', 'start-ui-native://*'],
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
@@ -46,7 +49,9 @@ export const auth = betterAuth({
       disableImplicitSignUp: !AUTH_SIGNUP_ENABLED,
     },
   },
+
   plugins: [
+    expo(),
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
