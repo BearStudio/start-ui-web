@@ -18,7 +18,6 @@ import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
-import { inferAdditionalFields } from 'better-auth/client/plugins';
 
 export type Auth = typeof auth;
 export const auth = betterAuth({
