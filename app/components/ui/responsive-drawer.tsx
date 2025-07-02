@@ -33,7 +33,11 @@ const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = (
   props: ComponentProps<typeof Drawer | typeof Dialog>
-) => (useIsMobile(BREAKPOINT) ? <Drawer {...props} /> : <Dialog {...props} />);
+) => (
+  <Drawer {...props}>
+    <Dialog {...props} />
+  </Drawer>
+);
 
 export const ResponsiveDrawerTrigger = (
   props: ComponentProps<typeof DrawerTrigger | typeof DialogTrigger>
