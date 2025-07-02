@@ -52,7 +52,7 @@ export const FieldRadios = <
   return (
     <Controller
       {...props}
-      render={({ field: { ref: _ref, ...field } }) => (
+      render={({ field: { ref: _ref, ...field }, fieldState }) => (
         <Flex flexDirection="column" gap={1} flex={1} {...props.containerProps}>
           <RadioGroup
             isDisabled={props.isDisabled}
@@ -70,6 +70,7 @@ export const FieldRadios = <
                   <Radio
                     key={option.value}
                     value={option.value}
+                    isInvalid={!!fieldState.error}
                     {...props.radioProps}
                   >
                     {option.label}
