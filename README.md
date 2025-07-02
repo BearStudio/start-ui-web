@@ -2,6 +2,9 @@
 
 [![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
 
+> [!NOTE]  
+> **The next version of Start UI is in active development**. Track the progress in the [Start UI v3 Pull Request](https://github.com/BearStudio/start-ui-web/pull/572).
+
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
