@@ -1,6 +1,6 @@
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ReactNode } from '@tanstack/react-router';
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
+import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/tailwind/utils';
 
