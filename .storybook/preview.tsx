@@ -34,7 +34,7 @@ const DocumentationWrapper = ({ children, isDarkMode, context }) => {
       document.documentElement.dir = languageConfig.dir ?? 'ltr';
       document.documentElement.style.fontSize = `${(languageConfig.fontScale ?? 1) * 100}%`;
     }
-  }, [context.globals.locale]);
+  }, [context.globals.locale, i18n]);
 
   return <div id="preview-container">{children}</div>;
 };
@@ -64,7 +64,9 @@ const preview: Preview = {
         icon: 'globe',
         items: AVAILABLE_LANGUAGES.map(({ key }) => ({
           value: key,
-          title: i18nGlobal.t(`languages.${String(key)}`, { lng: 'en' }),
+          title: i18nGlobal.t(`common:languages.values.${String(key)}`, {
+            lng: 'en',
+          }),
         })),
       },
     },
