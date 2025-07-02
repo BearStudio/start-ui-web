@@ -1,9 +1,14 @@
 @import 'tailwindcss' source('../');
 @import 'tw-animate-css';
 
+@import '@fontsource-variable/inter';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-sans:
+    'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --color-*: initial;
   --color-white: #fff;
   --color-black: #000;
@@ -190,7 +195,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply text-foreground bg-neutral-50 dark:bg-neutral-950;
+    @apply bg-neutral-50 text-foreground dark:bg-neutral-950;
 
     @media all and (display-mode: standalone) {
       height: 100lvh; /* Force full height on iOS standalone */
