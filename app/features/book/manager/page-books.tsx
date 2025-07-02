@@ -28,8 +28,11 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
+import { useTranslation } from 'react-i18next';
+
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
+  const { t } = useTranslation(['layout', 'user']);
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -87,7 +90,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Books</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>{t('layout:nav.books')}</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
@@ -169,12 +172,15 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       onClick={() => booksQuery.fetchNextPage()}
                       loading={booksQuery.isFetchingNextPage}
                     >
-                      Load more
+                      {t('user:manager.list.loadMore')}
                     </Button>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of {total}
+                      {t('user:manager.list.showing', {
+                        count: items.length,
+                        total
+                      })}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>
