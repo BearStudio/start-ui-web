@@ -19,7 +19,8 @@
   "actions": {
     "back": "Back",
     "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit"
+    "delete": "Delete {{title}}",
+    "edit": "Edit",
+    "update": "Update"
   }
 }

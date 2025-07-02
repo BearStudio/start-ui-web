@@ -2,6 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -30,6 +31,7 @@ import {
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
+  const { t } = useTranslation(['book']);
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -77,7 +79,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
         actions={
           <ResponsiveIconButton
             asChild
-            label="New Book"
+            label={t('book:manager.new.title')}
             variant="secondary"
             size="sm"
           >
@@ -87,7 +89,9 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Books</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>
+          {t('book:manager.list.title')}
+        </PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
@@ -123,7 +127,10 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       });
                     }}
                   >
-                    {total} results for "{searchTerm}"
+                    {t('book:manager.list.searchResults', {
+                      total,
+                      searchTerm,
+                    })}
                   </DataListRowResults>
                 )}
                 {items.map((item) => (
@@ -169,12 +176,15 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       onClick={() => booksQuery.fetchNextPage()}
                       loading={booksQuery.isFetchingNextPage}
                     >
-                      Load more
+                      {t('book:manager.list.loadMore')}
                     </Button>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      Showing {items.length} of {total}
+                      {t('book:manager.list.showing', {
+                        count: items.length,
+                        total,
+                      })}
                     </DataListText>
                   </DataListCell>
                 </DataListRow>

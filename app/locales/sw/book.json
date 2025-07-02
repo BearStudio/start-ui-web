@@ -4,6 +4,48 @@
       "label": "Kichwa",
       "required": "Kichwa kinahitajika",
       "alreadyUsed": "Kichwa tayari kinatumika na mwandishi huyo huyo"
+    },
+    "author": {
+      "label": "Mwandishi"
+    },
+    "genre": {
+      "label": "Aina"
+    },
+    "publisher": {
+      "label": "Mchapishaji"
+    },
+    "newButton": {
+      "label": "Kitabu Kipya"
+    },
+    "createButton": {
+      "label": "Unda"
+    },
+    "notFound": "Hakuna vitabu vinavyopatikana",
+    "loadMore": "Pakia vitabu zaidi",
+    "byCapitalized": "Na"
+  },
+  "app": {
+    "list": {
+      "title": "Vitabu"
+    }
+  },
+  "manager": {
+    "toast": {
+      "deleted": "Kitabu kimefutwa",
+      "deleteError": "Imeshindwa kufuta kitabu hicho"
+    },
+    "list": {
+      "title": "Vitabu",
+      "deleteBookWarning": "Unakaribia kufuta kitabu hiki milele. <strong>Kitendo hiki hakiwezi kubatilishwa.</strong> Tafadhali thibitisha uamuzi wako kwa makini.",
+      "loadMore": "Pakia zaidi",
+      "showing": "Inaonyesha {{count}} kati ya {{total}}",
+      "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
+    },
+    "new": {
+      "title": "Kitabu Kipya"
+    },
+    "update": {
+      "title": "Sasisha Kitabu"
     }
   }
 }

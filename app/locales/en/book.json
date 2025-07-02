@@ -4,6 +4,48 @@
       "label": "Title",
       "required": "Title is required",
       "alreadyUsed": "Title already used with the same author"
+    },
+    "author": {
+      "label": "Author"
+    },
+    "genre": {
+      "label": "Genre"
+    },
+    "publisher": {
+      "label": "Publisher"
+    },
+    "newButton": {
+      "label": "New Book"
+    },
+    "createButton": {
+      "label": "Create"
+    },
+    "notFound": "No books available",
+    "loadMore": "Load more books",
+    "byCapitalized": "By"
+  },
+  "app": {
+    "list": {
+      "title": "Books"
+    }
+  },
+  "manager": {
+    "toast": {
+      "deleted": "Book deleted",
+      "deleteError": "Failed to delete the book"
+    },
+    "list": {
+      "title": "Books",
+      "deleteBookWarning": "You are about to permanently delete this book. <strong>This action cannot be undone.</strong> Please confirm your decision carefully.",
+      "loadMore": "Load more",
+      "showing": "Showing {{count}} of {{total}}",
+      "searchResults": "{{total}} results for \"{{searchTerm}}\""
+    },
+    "new": {
+      "title": "New Book"
+    },
+    "update": {
+      "title": "Update Book"
     }
   }
 }
