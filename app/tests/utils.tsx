@@ -2,9 +2,10 @@ import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactElement } from 'react';
 
+import { Providers } from '@/providers';
+
 const WithProviders = ({ children }: { children: React.ReactNode }) => {
-  // [TODO]: Add providers once CI is properly set up.
-  return children;
+  return <Providers>{children}</Providers>;
 };
 
 const customRender = (
