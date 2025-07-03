@@ -4,6 +4,15 @@
       "label": "عنوان",
       "required": "العنوان مطلوب",
       "alreadyUsed": "العنوان المستخدم بالفعل مع نفس المؤلف"
+    },
+    "author": {
+      "label": "مؤلف"
+    },
+    "genre": {
+      "label": "النوع"
+    },
+    "publisher": {
+      "label": "الناشر"
     }
   },
   "manager": {

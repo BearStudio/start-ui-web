@@ -4,6 +4,15 @@
       "alreadyUsed": "Titre déjà utilisé avec le même auteur",
       "label": "Titre",
       "required": "Le titre est requis"
+    },
+    "author": {
+      "label": "Auteur"
+    },
+    "genre": {
+      "label": "Genre"
+    },
+    "publisher": {
+      "label": "Éditeur"
     }
   },
   "manager": {
