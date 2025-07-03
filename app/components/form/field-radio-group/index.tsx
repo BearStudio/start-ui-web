@@ -54,7 +54,7 @@ export const FieldRadioGroup = <
       disabled={disabled}
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
-      render={({ field: { onBlur, onChange, ...field }, fieldState }) => {
+      render={({ field: { onChange, value, ...field }, fieldState }) => {
         return (
           <div
             {...containerProps}
@@ -66,18 +66,15 @@ export const FieldRadioGroup = <
             <RadioGroup
               id={ctx.id}
               aria-invalid={fieldState.error ? true : undefined}
-              /**
-               * RadioGroup is a div with role `radiogroup`. the label's `for` is not working and we need to explicitly set the ARIA attribute.
-               */
               aria-labelledby={ctx.labelId}
               aria-describedby={
                 !fieldState.error
                   ? `${ctx.descriptionId}`
                   : `${ctx.descriptionId} ${ctx.errorId}`
               }
-              {...rest}
+              value={value}
               onValueChange={onChange}
-              {...field}
+              {...rest}
             >
               {options.map(({ label, ...option }) => {
                 const radioId = `${ctx.id}-${option.value}`;
@@ -87,7 +84,7 @@ export const FieldRadioGroup = <
                     <React.Fragment key={radioId}>
                       {renderOption({
                         label,
-                        onBlur,
+                        ...field,
                         ...option,
                       })}
                     </React.Fragment>
@@ -95,7 +92,7 @@ export const FieldRadioGroup = <
                 }
 
                 return (
-                  <Radio key={radioId} onBlur={onBlur} {...option}>
+                  <Radio key={radioId} {...field} {...option}>
                     {label}
                   </Radio>
                 );

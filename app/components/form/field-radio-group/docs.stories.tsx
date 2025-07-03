@@ -233,13 +233,9 @@ export const WithCustomRadio = () => {
             type="radio-group"
             name="bear"
             options={options}
-            renderOption={({ value, label, id, key }) => {
+            renderOption={({ label, ...props }) => {
               // We can then customize the render of our field's radios
-              return (
-                <CardRadio value={value} id={id} key={key}>
-                  {label}
-                </CardRadio>
-              );
+              return <CardRadio {...props}>{label}</CardRadio>;
             }}
           />
         </FormField>
