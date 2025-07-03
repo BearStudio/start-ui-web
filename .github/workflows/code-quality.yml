@@ -82,4 +82,4 @@ jobs:
         run: pnpm install
 
       - name: Run tests
-        run: pnpm run test:ci
+        run: SKIP_ENV_VALIDATION=true pnpm run test:ci
