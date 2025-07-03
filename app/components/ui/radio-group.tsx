@@ -1,75 +1,48 @@
-'use client';
-
+import { Radio as RadioPrimitive } from '@base-ui-components/react/radio';
+import { RadioGroup as RadioGroupPrimitive } from '@base-ui-components/react/radio-group';
 import { Circle } from 'lucide-react';
-import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-type RadioGroupProps = React.ComponentProps<typeof RadioGroupPrimitive.Root>;
-function RadioGroup({ className, ...props }: RadioGroupProps) {
+export type RadioGroupProps = RadioGroupPrimitive.Props;
+export function RadioGroup({ className, ...rest }: RadioGroupProps) {
   return (
-    <RadioGroupPrimitive.Root
+    <RadioGroupPrimitive
       className={cn('flex flex-col gap-2', className)}
-      {...props}
+      {...rest}
     />
   );
 }
 
-type RadioProps = React.ComponentProps<typeof RadioGroupPrimitive.Item> & {
-  containerProps?: React.ComponentProps<'div'>;
-  labelProps?: React.ComponentProps<'label'>;
+export type RadioProps = RadioPrimitive.Root.Props & {
+  /**
+   * By default, the radio is wrapped in a `<label>`. Set to `false` if you do not want it.
+   */
+  noLabel?: boolean;
 };
-function Radio({
-  containerProps,
-  labelProps,
-  className,
-  value,
-  children,
-  id,
-  ...props
-}: RadioProps) {
-  const _id = React.useId();
-  const radioId = id ?? _id;
+export function Radio({ children, className, noLabel, ...rest }: RadioProps) {
+  const Comp = noLabel ? React.Fragment : 'label';
 
+  const compProps = noLabel
+    ? {}
+    : {
+        className: 'flex items-center gap-2',
+      };
   return (
-    <div
-      {...containerProps}
-      className={cn('flex items-center space-x-2', containerProps?.className)}
-    >
-      <RadioGroupPrimitive.Item
+    <Comp {...compProps}>
+      <RadioPrimitive.Root
         className={cn(
-          'peer aspect-square h-4 w-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'peer size-5 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
-        id={radioId}
-        value={value}
-        {...props}
+        {...rest}
       >
-        <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-          <Circle className="h-2.5 w-2.5 fill-current text-current" />
-        </RadioGroupPrimitive.Indicator>
-      </RadioGroupPrimitive.Item>
-      <label
-        htmlFor={radioId}
-        {...labelProps}
-        className={cn(
-          'cursor-pointer text-xs peer-disabled:cursor-not-allowed',
-          labelProps?.className
-        )}
-      >
-        {children}
-      </label>
-    </div>
+        <RadioPrimitive.Indicator className="flex items-center justify-center">
+          <Circle className="size-3 fill-current text-current" />
+        </RadioPrimitive.Indicator>
+      </RadioPrimitive.Root>
+      {children}
+    </Comp>
   );
 }
-
-/**
- * Component holding the radio button.
- *
- * @see https://www.radix-ui.com/primitives/docs/components/radio-group
- */
-const RadioItem = RadioGroupPrimitive.Item;
-
-export { Radio, RadioGroup, RadioItem };
-export type { RadioGroupProps, RadioProps };

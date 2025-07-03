@@ -1,27 +1,20 @@
-import { getUiState } from '@bearstudio/ui-state';
-import { ReactNode } from '@tanstack/react-router';
-import { ComponentProps } from 'react';
-import {
-  Controller,
-  ControllerProps,
-  ControllerRenderProps,
-  FieldPath,
-  FieldValues,
-} from 'react-hook-form';
-import { isNonNullish } from 'remeda';
+import * as React from 'react';
+import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Radio, RadioGroup } from '@/components/ui/radio-group';
+import { FormFieldError } from '@/components/form';
+import { useFormField } from '@/components/form/form-field';
+import { FieldProps } from '@/components/form/form-field-controller';
+import {
+  Radio,
+  RadioGroup,
+  RadioGroupProps,
+  RadioProps,
+} from '@/components/ui/radio-group';
 
-import { useFormField } from '../form-field';
-import { FieldProps } from '../form-field-controller';
-import { FormFieldError } from '../form-field-error';
-
-type RadioOptionProps = {
-  value: string;
+type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
   label: string;
-  disabled?: boolean;
 };
 
 export type FieldRadioGroupProps<
@@ -29,21 +22,11 @@ export type FieldRadioGroupProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = FieldProps<TFieldValues, TName> & {
   type: 'radio-group';
-  options: Array<RadioOptionProps>;
-  renderRadio?: (options: {
-    radio: RadioOptionProps & { checked: boolean };
-    controller: Parameters<
-      Pick<ControllerProps<TFieldValues, TName>, 'render'>['render']
-    >[0];
-  }) => ReactNode;
-  containerProps?: ComponentProps<'div'>;
-} & RemoveFromType<
-    Omit<
-      ComponentProps<typeof RadioGroup>,
-      'id' | 'aria-invalid' | 'aria-describedby'
-    >,
-    ControllerRenderProps
-  >;
+  options: Array<RadioOption>;
+  renderOption?: (props: RadioOption) => React.JSX.Element;
+} & Omit<RadioGroupProps, 'id' | 'aria-invalid' | 'aria-describedby'> & {
+    containerProps?: React.ComponentProps<'div'>;
+  };
 
 export const FieldRadioGroup = <
   TFieldValues extends FieldValues = FieldValues,
@@ -53,26 +36,16 @@ export const FieldRadioGroup = <
 ) => {
   const {
     name,
-    type,
-    options,
+    control,
     disabled,
     defaultValue,
     shouldUnregister,
-    control,
     containerProps,
-    renderRadio,
+    options,
+    renderOption,
     ...rest
   } = props;
-
   const ctx = useFormField();
-
-  const ui = getUiState((set) => {
-    if (isNonNullish(renderRadio)) {
-      return set('render-radio', { renderRadio });
-    }
-
-    return set('default');
-  });
 
   return (
     <Controller
@@ -81,12 +54,7 @@ export const FieldRadioGroup = <
       disabled={disabled}
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
-      render={(controllerRenderOptions) => {
-        const {
-          field: { onChange, onBlur, ...field },
-          fieldState,
-        } = controllerRenderOptions;
-
+      render={({ field: { onBlur, onChange, ...field }, fieldState }) => {
         return (
           <div
             {...containerProps}
@@ -107,31 +75,25 @@ export const FieldRadioGroup = <
               onValueChange={onChange}
               {...field}
             >
-              {ui
-                .match('render-radio', ({ renderRadio }) =>
-                  options.map((option) =>
-                    renderRadio({
-                      radio: {
-                        ...option,
-                        checked: option.value === field.value,
-                      },
-                      controller: controllerRenderOptions,
-                    })
-                  )
-                )
-                .match('default', () =>
-                  options.map((option) => (
-                    <Radio
-                      key={`${ctx.id}-${option.value}`}
-                      value={option.value}
-                      disabled={option.disabled}
-                      onBlur={onBlur}
-                    >
-                      {option.label}
-                    </Radio>
-                  ))
-                )
-                .exhaustive()}
+              {options.map(({ label, ...option }) => {
+                if (renderOption) {
+                  return renderOption({
+                    key: `${ctx.id}-${option.value}`,
+                    label,
+                    ...option,
+                  });
+                }
+
+                return (
+                  <Radio
+                    key={`${ctx.id}-${option.value}`}
+                    onBlur={onBlur}
+                    {...option}
+                  >
+                    {label}
+                  </Radio>
+                );
+              })}
             </RadioGroup>
             <FormFieldError />
           </div>

@@ -9,7 +9,7 @@ import { zu } from '@/lib/zod/zod-utils';
 import { FormFieldController } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-import { RadioItem } from '@/components/ui/radio-group';
+import { Radio, RadioProps } from '@/components/ui/radio-group';
 
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
@@ -135,7 +135,7 @@ export const Row = () => {
             type="radio-group"
             name="bear"
             options={options}
-            className="flex-row gap-4"
+            className="flex-row gap-6"
           />
         </FormField>
         <div>
@@ -176,7 +176,50 @@ export const WithDisabledOption = () => {
   );
 };
 
-export const RenderOption = () => {
+export const WithCustomRadio = () => {
+  // Let's say we have a custom radio component:
+  // eslint-disable-next-line @eslint-react/no-nested-component-definitions
+  const CardRadio = ({
+    value,
+    id,
+    children,
+    containerProps,
+    ...props
+  }: RadioProps & { containerProps?: React.ComponentProps<'label'> }) => {
+    return (
+      <label
+        className="relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none hover:bg-muted/50 has-[&[data-checked]]:border-primary/90 has-[&[data-checked]]:bg-primary/5"
+        {...containerProps}
+      >
+        <Radio
+          value={value}
+          id={id}
+          noLabel
+          render={(props, { checked }) => {
+            return (
+              <div
+                {...props}
+                className="flex w-full justify-between outline-none"
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium">{children}</span>
+                </div>
+                <div
+                  className={cn('rounded-full bg-primary p-1 opacity-0', {
+                    'opacity-100': checked,
+                  })}
+                >
+                  <CheckIcon className="h-4 w-4 text-primary-foreground" />
+                </div>
+              </div>
+            );
+          }}
+          {...props}
+        />
+      </label>
+    );
+  };
+
   const form = useForm(formOptions);
 
   return (
@@ -190,33 +233,12 @@ export const RenderOption = () => {
             type="radio-group"
             name="bear"
             options={options}
-            renderRadio={({ radio, controller: { field } }) => {
-              const radioId = `radio-card-${radio.value}`;
-
+            renderOption={({ value, label, id, key }) => {
+              // We can then customize the render of our field's radios
               return (
-                <label
-                  htmlFor={radioId}
-                  className={cn(
-                    'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none hover:bg-muted/50',
-                    radio.checked
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border'
-                  )}
-                >
-                  <RadioItem
-                    id={radioId}
-                    className="peer sr-only"
-                    value={radio.value}
-                    disabled={radio.disabled}
-                    onBlur={field.onBlur}
-                  />
-                  <div className="flex flex-col gap-1">
-                    <span className="font-medium">{radio.label}</span>
-                  </div>
-                  <div className="rounded-full bg-primary p-1 opacity-0 peer-data-[state=checked]:opacity-100">
-                    <CheckIcon className="h-4 w-4 text-primary-foreground" />
-                  </div>
-                </label>
+                <CardRadio value={value} id={id} key={key}>
+                  {label}
+                </CardRadio>
               );
             }}
           />
