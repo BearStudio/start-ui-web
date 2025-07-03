@@ -5,5 +5,10 @@
       "required": "Title is required",
       "alreadyUsed": "Title already used with the same author"
     }
+  },
+  "manager": {
+    "list": {
+      "newBook": "New Book"
+    }
   }
 }
