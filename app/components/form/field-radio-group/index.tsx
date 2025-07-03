@@ -66,6 +66,10 @@ export const FieldRadioGroup = <
             <RadioGroup
               id={ctx.id}
               aria-invalid={fieldState.error ? true : undefined}
+              /**
+               * RadioGroup is a div with role `radiogroup`. the label's `for` is not working and we need to explicitly set the ARIA attribute.
+               */
+              aria-labelledby={ctx.labelId}
               aria-describedby={
                 !fieldState.error
                   ? `${ctx.descriptionId}`
@@ -76,9 +80,11 @@ export const FieldRadioGroup = <
               {...field}
             >
               {options.map(({ label, ...option }) => {
+                const radioId = `${ctx.id}-${option.value}`;
+
                 if (renderOption) {
                   return (
-                    <React.Fragment key={`${ctx.id}-${option.value}`}>
+                    <React.Fragment key={radioId}>
                       {renderOption({
                         label,
                         onBlur,
@@ -89,11 +95,7 @@ export const FieldRadioGroup = <
                 }
 
                 return (
-                  <Radio
-                    key={`${ctx.id}-${option.value}`}
-                    onBlur={onBlur}
-                    {...option}
-                  >
+                  <Radio key={radioId} onBlur={onBlur} {...option}>
                     {label}
                   </Radio>
                 );

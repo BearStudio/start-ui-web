@@ -4,7 +4,9 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { useFormField } from './form-field';
 
-type FormFieldLabelProps = ComponentProps<'label'>;
+type FormFieldLabelProps = ComponentProps<'label'> & {
+  asDiv?: boolean;
+};
 
 export const FormFieldLabel = ({
   className,
@@ -13,6 +15,7 @@ export const FormFieldLabel = ({
   const ctx = useFormField();
   return (
     <label
+      id={ctx.labelId}
       htmlFor={ctx.id}
       className={cn('flex gap-1.5 align-baseline text-sm', className)}
       {...props}
