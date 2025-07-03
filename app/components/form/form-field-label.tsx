@@ -4,9 +4,7 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { useFormField } from './form-field';
 
-type FormFieldLabelProps = ComponentProps<'label'> & {
-  asDiv?: boolean;
-};
+type FormFieldLabelProps = ComponentProps<'label'>;
 
 export const FormFieldLabel = ({
   className,

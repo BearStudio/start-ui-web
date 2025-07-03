@@ -1,7 +1,8 @@
+import { render } from '@testing-library/react';
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import { render, screen, setupUser } from '@/tests/utils';
+import { screen, setupUser } from '@/tests/utils';
 
 import { FormField, FormFieldLabel } from '..';
 import { FormFieldController } from '../form-field-controller';
