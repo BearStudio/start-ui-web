@@ -38,7 +38,13 @@ export function Radio({ children, className, noLabel, ...rest }: RadioProps) {
         )}
         {...rest}
       >
-        <RadioPrimitive.Indicator className="flex items-center justify-center">
+        <RadioPrimitive.Indicator
+          keepMounted={true}
+          className={cn(
+            'flex items-center justify-center transition-transform duration-150 ease-in-out',
+            'data-checked:visible data-checked:scale-100 data-unchecked:invisible data-unchecked:scale-75'
+          )}
+        >
           <Circle className="size-2.5 fill-current text-current" />
         </RadioPrimitive.Indicator>
       </RadioPrimitive.Root>
