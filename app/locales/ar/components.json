@@ -59,5 +59,8 @@
     "placeholder": "يختار...",
     "create": "إنشاء \"{{searchTerm}}\"",
     "noResultsFound": "لم يتم العثور على نتائج"
+  },
+  "createButton": {
+    "label": "يخلق"
   }
 }
