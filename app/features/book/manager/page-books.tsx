@@ -126,7 +126,10 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       });
                     }}
                   >
-                    {total} results for "{searchTerm}"
+                    {t('user:manager.list.searchResults', {
+                      total,
+                      searchTerm,
+                    })}
                   </DataListRowResults>
                 )}
                 {items.map((item) => (
