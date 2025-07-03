@@ -11,15 +11,18 @@ import {
 
 import { FormFieldsBook } from '@/features/book/schema';
 
+import { useTranslation } from 'react-i18next';
+
 export const FormBook = () => {
   const form = useFormContext<FormFieldsBook>();
+  const { t } = useTranslation(['book']);
 
   const genresQuery = useQuery(orpc.genre.getAll.queryOptions());
 
   return (
     <div className="flex flex-col gap-4">
       <FormField>
-        <FormFieldLabel>Title</FormFieldLabel>
+        <FormFieldLabel>{t('book:common.title.label')}</FormFieldLabel>
         <FormFieldController
           type="text"
           control={form.control}
@@ -28,12 +31,12 @@ export const FormBook = () => {
         />
       </FormField>
       <FormField>
-        <FormFieldLabel>Author</FormFieldLabel>
+        <FormFieldLabel>{t('book:common.author.label')}</FormFieldLabel>
         <FormFieldController type="text" control={form.control} name="author" />
       </FormField>
 
       <FormField>
-        <FormFieldLabel>Genre</FormFieldLabel>
+        <FormFieldLabel>{t('book:common.genre.label')}</FormFieldLabel>
         <FormFieldController
           type="select"
           control={form.control}
@@ -46,7 +49,7 @@ export const FormBook = () => {
       </FormField>
 
       <FormField>
-        <FormFieldLabel>Publisher</FormFieldLabel>
+        <FormFieldLabel>{t('book:common.publisher.label')}</FormFieldLabel>
         <FormFieldController
           type="text"
           control={form.control}
