@@ -22,8 +22,11 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
+import { useTranslation } from 'react-i18next';
+
 export const PageBookNew = () => {
   const router = useRouter();
+  const { t } = useTranslation(['book']);
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useForm({
@@ -99,7 +102,7 @@ export const PageBookNew = () => {
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>New Book</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>{t('book:manager.list.newBook')}</PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">
