@@ -27,19 +27,19 @@ export function Radio({ children, className, noLabel, ...rest }: RadioProps) {
   const compProps = noLabel
     ? {}
     : {
-        className: 'flex items-center gap-2',
+        className: 'flex items-center gap-2 text-sm',
       };
   return (
     <Comp {...compProps}>
       <RadioPrimitive.Root
         className={cn(
-          'peer size-5 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'peer size-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
         {...rest}
       >
         <RadioPrimitive.Indicator className="flex items-center justify-center">
-          <Circle className="size-3 fill-current text-current" />
+          <Circle className="size-2.5 fill-current text-current" />
         </RadioPrimitive.Indicator>
       </RadioPrimitive.Root>
       {children}

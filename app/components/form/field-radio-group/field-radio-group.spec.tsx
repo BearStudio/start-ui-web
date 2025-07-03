@@ -57,7 +57,7 @@ test('should have no a11y violations', async () => {
   expect(results).toHaveNoViolations();
 });
 
-test('should select radio on click', async () => {
+test('should select radio on button click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
@@ -85,6 +85,43 @@ test('should select radio on click', async () => {
   expect(radio).not.toBeChecked();
 
   await user.click(radio);
+  expect(radio).toBeChecked();
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
+});
+
+test('should select radio on label click', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ bear: z.string() })}
+      useFormOptions={{ defaultValues: { bear: '' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            type="radio-group"
+            control={form.control}
+            name="bear"
+            options={options}
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  const radio = screen.getByRole('radio', { name: 'Buzz Pawdrin' });
+  const label = screen.getByText('Buzz Pawdrin');
+
+  expect(radio).not.toBeChecked();
+
+  // Test clicking the label specifically
+  await user.click(label);
   expect(radio).toBeChecked();
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));

@@ -77,11 +77,15 @@ export const FieldRadioGroup = <
             >
               {options.map(({ label, ...option }) => {
                 if (renderOption) {
-                  return renderOption({
-                    key: `${ctx.id}-${option.value}`,
-                    label,
-                    ...option,
-                  });
+                  return (
+                    <React.Fragment key={`${ctx.id}-${option.value}`}>
+                      {renderOption({
+                        label,
+                        onBlur,
+                        ...option,
+                      })}
+                    </React.Fragment>
+                  );
                 }
 
                 return (
