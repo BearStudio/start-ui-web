@@ -5,5 +5,10 @@
       "required": "Kichwa kinahitajika",
       "alreadyUsed": "Kichwa tayari kinatumika na mwandishi huyo huyo"
     }
+  },
+  "manager": {
+    "list": {
+      "newBook": "Kitabu Kipya"
+    }
   }
 }

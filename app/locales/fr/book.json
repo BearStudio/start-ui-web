@@ -5,5 +5,10 @@
       "label": "Titre",
       "required": "Le titre est requis"
     }
+  },
+  "manager": {
+    "list": {
+      "newBook": "Nouveau Livre"
+    }
   }
 }
