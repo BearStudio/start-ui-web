@@ -33,7 +33,9 @@ export function Radio({ children, className, noLabel, ...rest }: RadioProps) {
     <Comp {...compProps}>
       <RadioPrimitive.Root
         className={cn(
-          'peer size-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'peer size-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background',
+          'focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring',
+          'disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
         {...rest}
