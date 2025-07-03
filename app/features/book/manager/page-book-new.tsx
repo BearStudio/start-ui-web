@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 export const PageBookNew = () => {
   const router = useRouter();
-  const { t } = useTranslation(['book']);
+  const { t } = useTranslation(['book', 'components']);
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useForm({
@@ -98,7 +98,7 @@ export const PageBookNew = () => {
               className="min-w-20"
               loading={bookCreate.isPending}
             >
-              Create
+              {t('components:createButton.label')}
             </Button>
           }
         >
