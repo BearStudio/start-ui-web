@@ -4,6 +4,15 @@
       "label": "Kichwa",
       "required": "Kichwa kinahitajika",
       "alreadyUsed": "Kichwa tayari kinatumika na mwandishi huyo huyo"
+    },
+    "author": {
+      "label": "Mwandishi"
+    },
+    "genre": {
+      "label": "Jinsia"
+    },
+    "publisher": {
+      "label": "Mhariri"
     }
   },
   "manager": {
