@@ -10,6 +10,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getPageTitle } from '@/lib/get-page-title';
 import i18n, { syncLanguage } from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
@@ -17,7 +18,7 @@ import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
 import { authClient } from '@/features/auth/client';
-import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
+import { EnvHint } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
@@ -66,11 +67,11 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: `${getEnvHintTitlePrefix()} Start UI`,
+        title: getPageTitle(),
       },
       {
         name: 'apple-mobile-web-app-title',
-        content: 'Start UI',
+        content: getPageTitle(),
       },
       {
         name: 'apple-mobile-web-app-status-bar-style',
