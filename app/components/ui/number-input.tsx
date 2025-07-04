@@ -23,9 +23,9 @@ type NumberInputProps = ComponentProps<typeof NumberField.Root> &
   };
 
 export const NumberInput = ({
-  'aria-invalid': ariaInvalid,
   inputProps,
   size,
+  invalid,
   placeholder,
   locale,
   buttons,
@@ -46,7 +46,6 @@ export const NumberInput = ({
 
   return (
     <NumberField.Root
-      invalid={ariaInvalid ? true : undefined}
       {...props}
       locale={_locale}
       className={cn(className)}
@@ -71,6 +70,7 @@ export const NumberInput = ({
           render={
             <Input
               ref={mergeRefs([ref, inputRef])}
+              aria-invalid={invalid ? true : undefined}
               endElement={
                 buttons === 'classic' && (
                   <NumberField.Group className="flex flex-col">

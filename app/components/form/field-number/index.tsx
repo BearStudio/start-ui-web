@@ -73,7 +73,7 @@ export const FieldNumber = <
           >
             <NumberInput
               id={ctx.id}
-              aria-invalid={fieldState.error ? true : undefined}
+              invalid={fieldState.error ? true : undefined}
               aria-describedby={
                 !fieldState.error
                   ? `${ctx.descriptionId}`
