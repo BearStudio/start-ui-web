@@ -59,5 +59,8 @@
     "placeholder": "Chagua ...",
     "create": "Unda \"{{searchTerm}}\"",
     "noResultsFound": "Hakuna matokeo yaliyopatikana"
+  },
+  "createButton": {
+    "label": "Unda"
   }
 }
