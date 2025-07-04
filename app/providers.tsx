@@ -9,12 +9,12 @@ import { Sonner } from '@/components/ui/sonner';
 
 import { envClient } from '@/env/client';
 import {
-  DemoModeDrawer,
-  useIsDemoModeDrawerVisible,
+  DemoModeDrawer, // !STARTERCONF [demoMode] Remove this import
+  useIsDemoModeDrawerVisible, // !STARTERCONF [demoMode] Remove this import
 } from '@/features/demo/demo-mode-drawer';
 
 export const Providers = (props: { children: ReactNode }) => {
-  const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
+  const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible(); // !STARTERCONF [demoMode] Remove this line
   return (
     <ThemeProvider
       attribute="class"
@@ -23,7 +23,10 @@ export const Providers = (props: { children: ReactNode }) => {
     >
       <QueryClientProvider>
         {props.children}
+        {/* !STARTERCONF [demoMode] Remove the `!isDemoModeDrawerVisible` condition (keep the <Sonner /> component) */}
         {!isDemoModeDrawerVisible && <Sonner />}
+
+        {/* !STARTERCONF [demoMode] Remove the <DemoModeDrawer /> */}
         {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
       </QueryClientProvider>
     </ThemeProvider>

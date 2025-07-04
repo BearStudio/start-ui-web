@@ -10,6 +10,7 @@ export const LoginEmailHint = () => {
   const form = useFormContext();
   const mockedEmail = 'admin@admin.com';
 
+  // !STARTERCONF [demoMode] Remove the `&& !envClient.VITE_IS_DEMO` condition
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
   }
@@ -17,9 +18,7 @@ export const LoginEmailHint = () => {
   return (
     <Alert dir="ltr">
       <TerminalIcon className="size-4" />
-      <AlertTitle>
-        {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
-      </AlertTitle>
+      <AlertTitle>Dev mode</AlertTitle>
       <AlertDescription className="flex flex-wrap text-sm leading-4">
         You can login with{' '}
         <button
@@ -41,6 +40,7 @@ export const LoginEmailHint = () => {
 export const LoginEmailOtpHint = () => {
   const form = useFormContext();
 
+  // !STARTERCONF [demoMode] Remove the `&& !envClient.VITE_IS_DEMO` condition
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
   }
@@ -48,9 +48,7 @@ export const LoginEmailOtpHint = () => {
   return (
     <Alert dir="ltr">
       <TerminalIcon className="size-4" />
-      <AlertTitle>
-        {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
-      </AlertTitle>
+      <AlertTitle>Dev mode</AlertTitle>
       <AlertDescription className="flex text-sm leading-4">
         Use the code{' '}
         <button
