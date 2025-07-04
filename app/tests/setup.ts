@@ -13,6 +13,11 @@ afterEach(cleanup);
 
 global.ResizeObserver = ResizeObserver;
 
+/**
+ * scrollTo is not implemented by jsdom
+ */
+Element.prototype.scrollTo = vi.fn();
+
 Object.defineProperty(document, 'elementFromPoint', {
   writable: true,
   value: vi.fn().mockImplementation(() => null),

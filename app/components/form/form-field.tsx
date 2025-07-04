@@ -18,6 +18,7 @@ export const FormField = (props: FormFieldProps) => {
   const contextValue = useMemo(
     () => ({
       id,
+      labelId: `${id}-label`,
       descriptionId: `${id}-description`,
       errorId: `${id}-error`,
       size: props.size,
@@ -36,6 +37,7 @@ export const FormField = (props: FormFieldProps) => {
 
 type FormFieldContextValue = {
   id: string;
+  labelId: string;
   descriptionId: string;
   errorId: string;
   size?: FormFieldSize;

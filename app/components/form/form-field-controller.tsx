@@ -10,6 +10,7 @@ import { FieldNumber, FieldNumberProps } from '@/components/form/field-number';
 
 import { FieldDate, FieldDateProps } from './field-date';
 import { FieldOtp, FieldOtpProps } from './field-otp';
+import { FieldRadioGroup, FieldRadioGroupProps } from './field-radio-group';
 import { FieldSelect, FieldSelectProps } from './field-select';
 import { FieldText, FieldTextProps } from './field-text';
 import { useFormField } from './form-field';
@@ -47,7 +48,8 @@ export type FormFieldControllerProps<
   | FieldSelectProps<TFieldValues, TName>
   | FieldDateProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
-  | FieldOtpProps<TFieldValues, TName>;
+  | FieldOtpProps<TFieldValues, TName>
+  | FieldRadioGroupProps<TFieldValues, TName>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
@@ -83,6 +85,9 @@ export const FormFieldController = <
 
       case 'number':
         return <FieldNumber {...props} />;
+
+      case 'radio-group':
+        return <FieldRadioGroup {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };

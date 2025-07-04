@@ -41,7 +41,7 @@
     "db:seed": "node ./run-jiti ./prisma/seed/index.ts"
   },
   "dependencies": {
-    "@base-ui-components/react": "1.0.0-alpha.8",
+    "@base-ui-components/react": "1.0.0-beta.1",
     "@bearstudio/ui-state": "1.0.2",
     "@fontsource-variable/inter": "5.2.6",
     "@headlessui/react": "2.2.2",
