@@ -6,7 +6,7 @@ import { cn } from '@/lib/tailwind/utils';
 
 export type CheckboxProps = Omit<CheckboxPrimitive.Root.Props, 'type'> & {
   /**
-   * By default, the radio is wrapped in a `<label>`. Set to `false` if you do not want it.
+   * By default, the checkbox is wrapped in a `<label>`. Set to `false` if you do not want it.
    */
   noLabel?: boolean;
   labelProps?: React.ComponentProps<'label'>;

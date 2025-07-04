@@ -17,7 +17,7 @@ import { FieldCheckbox } from '@/components/form/field-checkbox';
 import { Button } from '@/components/ui/button';
 
 export default {
-  title: 'Form/FieldCheckboxGroup',
+  title: 'Form/FieldCheckbox',
   component: FieldCheckbox,
 } satisfies Meta<typeof FieldCheckbox>;
 
