@@ -98,6 +98,7 @@ const base = os
       return result;
     });
   })
+  // !STARTERCONF [demoMode] Remove this middleware (the .use(...))
   // Demo Mode
   .use(async ({ next, procedure }) => {
     if (envClient.VITE_IS_DEMO && procedure['~orpc'].route.method !== 'GET') {
