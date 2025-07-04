@@ -38,6 +38,7 @@ export function Checkbox({
           'flex size-5 cursor-pointer items-center justify-center rounded-sm outline-none',
           'focus-visible:ring-[3px] focus-visible:ring-ring/50',
           'data-checked:bg-primary data-unchecked:border data-unchecked:border-primary/50',
+          'disabled:cursor-not-allowed disabled:bg-muted-foreground disabled:opacity-20',
           className
         )}
         {...props}
@@ -46,7 +47,7 @@ export function Checkbox({
           keepMounted={true}
           className={cn(
             'flex transition-transform duration-150 ease-in-out',
-            'data-checked:scale-100 data-checked:rotate-0 data-unchecked:scale-50 data-unchecked:rotate-45'
+            'data-checked:scale-100 data-checked:rotate-0 data-unchecked:invisible data-unchecked:scale-50 data-unchecked:rotate-45'
           )}
         >
           <CheckIcon className="size-3.5 stroke-3 text-primary-foreground" />
