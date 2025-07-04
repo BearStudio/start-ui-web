@@ -1,11 +1,10 @@
 import { TerminalIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
-import { AUTH_EMAIL_OTP_MOCKED } from '@/lib/auth/config';
-
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 import { envClient } from '@/env/client';
+import { AUTH_EMAIL_OTP_MOCKED } from '@/features/auth/config';
 
 export const LoginEmailHint = () => {
   const form = useFormContext();

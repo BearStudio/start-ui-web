@@ -2,7 +2,6 @@ import { Link, useMatchRoute } from '@tanstack/react-router';
 import { ArrowRightIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { authClient } from '@/lib/auth/client';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +15,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
 
 export const DemoAppSwitch = () => {

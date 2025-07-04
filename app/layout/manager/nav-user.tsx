@@ -15,8 +15,6 @@ import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
-import { authClient } from '@/lib/auth/client';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -37,6 +35,7 @@ import {
 } from '@/components/ui/sidebar';
 import { themes } from '@/components/ui/theme-switcher';
 
+import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { WithPermissions } from '@/features/auth/with-permission';
 import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';

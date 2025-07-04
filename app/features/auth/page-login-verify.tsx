@@ -5,12 +5,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
-import {
-  AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
-  AUTH_SIGNUP_ENABLED,
-} from '@/lib/auth/config';
-
 import {
   Form,
   FormField,
@@ -20,6 +14,11 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { authClient } from '@/features/auth/client';
+import {
+  AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
+  AUTH_SIGNUP_ENABLED,
+} from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
 import {
   FormFieldsLoginVerify,

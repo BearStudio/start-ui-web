@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
-import { authClient } from '@/lib/auth/client';
-
 import { PageError } from '@/components/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
+import { authClient } from '@/features/auth/client';
 import { useRedirectAfterLogin } from '@/features/auth/utils';
 
 export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {

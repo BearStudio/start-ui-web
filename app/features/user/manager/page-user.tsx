@@ -12,7 +12,6 @@ import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
@@ -41,6 +40,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
+import { authClient } from '@/features/auth/client';
 import { WithPermissions } from '@/features/auth/with-permission';
 import {
   PageLayout,

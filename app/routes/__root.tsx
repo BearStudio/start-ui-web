@@ -10,13 +10,13 @@ import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { authClient } from '@/lib/auth/client';
 import i18n, { syncLanguage } from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
+import { authClient } from '@/features/auth/client';
 import { EnvHint, getEnvHintTitlePrefix } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';

@@ -7,7 +7,6 @@ import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
@@ -16,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { authClient } from '@/features/auth/client';
 import { FormUser } from '@/features/user/manager/form-user';
 import { zFormFieldsUser } from '@/features/user/schema';
 import {
