@@ -4,14 +4,19 @@ import React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-export type CheckboxProps = CheckboxPrimitive.Root.Props & {
+export type CheckboxProps = Omit<CheckboxPrimitive.Root.Props, 'type'> & {
+  /**
+   * By default, the radio is wrapped in a `<label>`. Set to `false` if you do not want it.
+   */
   noLabel?: boolean;
+  labelProps?: React.ComponentProps<'label'>;
 };
 
 export function Checkbox({
   children,
   className,
   noLabel,
+  labelProps,
   ...props
 }: CheckboxProps) {
   const Comp = noLabel ? React.Fragment : 'label';
@@ -19,14 +24,18 @@ export function Checkbox({
   const compProps = noLabel
     ? {}
     : {
-        className: 'flex items-center gap-2 text-base text-primary',
+        ...labelProps,
+        className: cn(
+          'flex items-center gap-2 text-base text-primary',
+          labelProps?.className
+        ),
       };
 
   return (
     <Comp {...compProps}>
       <CheckboxPrimitive.Root
         className={cn(
-          'flex size-5 items-center justify-center rounded-sm outline-none',
+          'flex size-5 cursor-pointer items-center justify-center rounded-sm outline-none',
           'focus-visible:ring-[3px] focus-visible:ring-ring/50',
           'data-checked:bg-primary data-unchecked:border data-unchecked:border-primary/50',
           className

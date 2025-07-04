@@ -33,9 +33,7 @@ export const CustomCheckbox = () => {
               className="flex w-full justify-between outline-none"
             >
               <div className="flex flex-col">
-                <span className="font-medium">
-                  I love bear (and customization) !{' '}
-                </span>
+                <span className="font-medium">I love bears</span>
               </div>
               <div
                 className={cn('rounded-full bg-primary p-1 opacity-0', {
