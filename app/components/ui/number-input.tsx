@@ -61,7 +61,13 @@ export const NumberInput = ({
       <NumberField.Group className="flex gap-2">
         {buttons === 'mobile' && (
           <NumberField.Decrement
-            render={<Button variant="secondary" size={buttonSize} />}
+            render={
+              <Button
+                variant="secondary"
+                size={buttonSize}
+                disabled={props.disabled || props.readOnly}
+              />
+            }
           >
             <Minus />
           </NumberField.Decrement>
@@ -92,7 +98,13 @@ export const NumberInput = ({
         />
         {buttons === 'mobile' && (
           <NumberField.Increment
-            render={<Button variant="secondary" size={buttonSize} />}
+            render={
+              <Button
+                variant="secondary"
+                size={buttonSize}
+                disabled={props.disabled || props.readOnly}
+              />
+            }
           >
             <Plus />
           </NumberField.Increment>
