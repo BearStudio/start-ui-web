@@ -20,15 +20,25 @@ export type RadioProps = RadioPrimitive.Root.Props & {
    * By default, the radio is wrapped in a `<label>`. Set to `false` if you do not want it.
    */
   noLabel?: boolean;
+  labelProps?: React.ComponentProps<'label'>;
 };
-export function Radio({ children, className, noLabel, ...rest }: RadioProps) {
+
+export function Radio({
+  children,
+  className,
+  noLabel,
+  labelProps,
+  ...rest
+}: RadioProps) {
   const Comp = noLabel ? React.Fragment : 'label';
 
   const compProps = noLabel
     ? {}
     : {
-        className: 'flex items-center gap-2 text-sm',
+        ...labelProps,
+        className: cn('flex items-center gap-2 text-sm', labelProps?.className),
       };
+
   return (
     <Comp {...compProps}>
       <RadioPrimitive.Root

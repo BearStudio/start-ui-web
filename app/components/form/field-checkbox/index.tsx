@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ComponentProps } from 'react';
 import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -6,45 +6,37 @@ import { cn } from '@/lib/tailwind/utils';
 import { FormFieldError } from '@/components/form';
 import { useFormField } from '@/components/form/form-field';
 import { FieldProps } from '@/components/form/form-field-controller';
-import { Radio, RadioGroup, RadioProps } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 
-type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
-  label: string;
-};
-
-export type FieldRadioGroupProps<
+export type FieldCheckboxProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = FieldProps<
   TFieldValues,
   TName,
   {
-    type: 'radio-group';
-    options: Array<RadioOption>;
-    renderOption?: (props: RadioOption) => React.JSX.Element;
-    containerProps?: React.ComponentProps<'div'>;
-  } & React.ComponentProps<typeof RadioGroup>
+    type: 'checkbox';
+    containerProps?: ComponentProps<'div'>;
+  } & ComponentProps<typeof Checkbox>
 >;
 
-export const FieldRadioGroup = <
+export const FieldCheckbox = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: FieldRadioGroupProps<TFieldValues, TName>
+  props: FieldCheckboxProps<TFieldValues, TName>
 ) => {
   const {
     name,
     control,
     disabled,
     defaultValue,
+    type,
     shouldUnregister,
     containerProps,
-    options,
-    renderOption,
     ...rest
   } = props;
   const ctx = useFormField();
-
   return (
     <Controller
       name={name}
@@ -61,41 +53,19 @@ export const FieldRadioGroup = <
               containerProps?.className
             )}
           >
-            <RadioGroup
+            <Checkbox
               id={ctx.id}
               aria-invalid={fieldState.error ? true : undefined}
-              aria-labelledby={ctx.labelId}
               aria-describedby={
                 !fieldState.error
                   ? `${ctx.descriptionId}`
                   : `${ctx.descriptionId} ${ctx.errorId}`
               }
-              value={value}
-              onValueChange={onChange}
+              checked={value}
+              onCheckedChange={onChange}
               {...rest}
-            >
-              {options.map(({ label, ...option }) => {
-                const radioId = `${ctx.id}-${option.value}`;
-
-                if (renderOption) {
-                  return (
-                    <React.Fragment key={radioId}>
-                      {renderOption({
-                        label,
-                        ...field,
-                        ...option,
-                      })}
-                    </React.Fragment>
-                  );
-                }
-
-                return (
-                  <Radio key={radioId} {...field} {...option}>
-                    {label}
-                  </Radio>
-                );
-              })}
-            </RadioGroup>
+              {...field}
+            />
             <FormFieldError />
           </div>
         );
