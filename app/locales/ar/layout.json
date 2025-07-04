@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "application": "طلب",
+    "configuration": "إعدادات",
+    "dashboard": "لوحة القيادة",
+    "users": "المستخدمون",
+    "account": "حساب",
+    "home": "بيت",
+    "apiDocumentation": "وثائق API",
+    "openApp": "افتح التطبيق",
+    "books": "كتب"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Home",
+    "application": "Application",
+    "dashboard": "Dashboard",
+    "books": "Books",
+    "configuration": "Configuration",
+    "users": "Users",
+    "account": "Account",
+    "openApp": "Open App",
+    "apiDocumentation": "API Documentation"
+  }
+}

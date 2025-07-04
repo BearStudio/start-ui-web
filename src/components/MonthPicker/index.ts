@@ -1,1 +1,0 @@
-export { MonthPicker } from './MonthPicker';

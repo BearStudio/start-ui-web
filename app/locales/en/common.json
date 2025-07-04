@@ -1,0 +1,25 @@
+{
+  "languages": {
+    "label": "Language",
+    "values": {
+      "en": "English",
+      "fr": "French",
+      "ar": "Arabic",
+      "sw": "Swahili"
+    }
+  },
+  "themes": {
+    "label": "Theme",
+    "values": {
+      "system": "System (auto)",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "actions": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}

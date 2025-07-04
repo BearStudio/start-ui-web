@@ -1,0 +1,9 @@
+{
+  "common": {
+    "title": {
+      "label": "Kichwa",
+      "required": "Kichwa kinahitajika",
+      "alreadyUsed": "Kichwa tayari kinatumika na mwandishi huyo huyo"
+    }
+  }
+}

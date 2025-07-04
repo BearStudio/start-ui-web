@@ -1,0 +1,24 @@
+{
+  "title": "Akaunti",
+  "displayPreferences": {
+    "title": "Mapendeleo ya Onyesho"
+  },
+  "userCard": {
+    "name": {
+      "label": "Jina",
+      "updateAction": "Badilisha jina lako"
+    },
+    "email": {
+      "label": "Barua pepe",
+      "notVerified": "Haijathibitishwa"
+    }
+  },
+  "changeNameDrawer": {
+    "title": "Badilisha jina lako",
+    "description": "Fomu ya kubadilisha jina lako",
+    "label": "Jina",
+    "submitButton": "Sasisha",
+    "successMessage": "Jina limesasishwa",
+    "errorMessage": "Imeshindwa kusasisha jina lako"
+  }
+}

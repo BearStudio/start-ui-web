@@ -8,12 +8,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-next-env.d.ts
-
 # production
+.output
+.vinxi
 /build
 /public/storybook
 /storybook-static
@@ -23,6 +20,7 @@ next-env.d.ts
 *.pem
 /.vscode/*
 !/.vscode/extensions.json
+!/.vscode/settings.example.json
 .idea/
 .eslintcache
 .db
@@ -44,7 +42,7 @@ yarn-error.log*
 .vercel
 
 # Build info
-.build-info.json
+build-info.gen.json
 
 # Prisma
 prisma/dev.db
@@ -58,9 +56,9 @@ prisma/dev.db-journal
 /playwright-report/
 /playwright/.cache/
 
-# next-pwa recommandation
-**/public/workbox-*.js*
-**/public/sw.js*
-**/public/worker-development.js*
-
 certificates
+
+*storybook.log
+app.config.timestamp_*.js
+.tanstack
+.nitro

@@ -1,0 +1,24 @@
+{
+  "title": "الحساب",
+  "displayPreferences": {
+    "title": "تفضيلات العرض"
+  },
+  "userCard": {
+    "name": {
+      "label": "الاسم",
+      "updateAction": "تحديث اسمك"
+    },
+    "email": {
+      "label": "البريد الإلكتروني",
+      "notVerified": "غير مؤكد"
+    }
+  },
+  "changeNameDrawer": {
+    "title": "تحديث اسمك",
+    "description": "نموذج لتحديث اسمك",
+    "label": "الاسم",
+    "submitButton": "تحديث",
+    "successMessage": "تم تحديث الاسم",
+    "errorMessage": "فشل تحديث اسمك"
+  }
+}

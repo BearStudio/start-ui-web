@@ -1,0 +1,63 @@
+{
+  "pageErrorBoundary": {
+    "title": "ERROR",
+    "description": "Something went wrong",
+    "tryAgain": "Try Again",
+    "goBack": "Back",
+    "goHome": "Home"
+  },
+  "datePickerButton": {
+    "pickADate": "Pick a date"
+  },
+  "pageError": {
+    "403": {
+      "title": "403",
+      "description": "You don't have access to this page"
+    },
+    "404": {
+      "title": "404",
+      "description": "This page could not be found"
+    },
+    "500": {
+      "title": "500",
+      "description": "Something went wrong"
+    },
+    "goHome": "Home",
+    "goBack": "Back",
+    "unknown": {
+      "title": "ERROR",
+      "description": "Something went wrong"
+    }
+  },
+  "searchInput": {
+    "clear": "Clear search",
+    "placeholder": "Search..."
+  },
+  "datalist": {
+    "retry": "Retry",
+    "errorTitle": "Something went wrong",
+    "emptyTitle": "No Data",
+    "noResultsTitle": "No results for \"{{searchTerm}}\"",
+    "clear": "Clear"
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Cancel",
+    "confirmText": "Confirm",
+    "heading": "Are you sure?"
+  },
+  "searchButton": {
+    "label": "Search"
+  },
+  "sidebar": {
+    "title": "Sidebar",
+    "toggle": "Toggle Sidebar"
+  },
+  "backButton": {
+    "label": "Back"
+  },
+  "select": {
+    "placeholder": "Select...",
+    "noResultsFound": "No results found",
+    "create": "Create \"{{searchTerm}}\""
+  }
+}

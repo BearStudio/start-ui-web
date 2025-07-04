@@ -1,0 +1,24 @@
+{
+  "title": "Compte",
+  "displayPreferences": {
+    "title": "Préférences d'affichage"
+  },
+  "userCard": {
+    "name": {
+      "label": "Nom",
+      "updateAction": "Modifier votre nom"
+    },
+    "email": {
+      "label": "Email",
+      "notVerified": "Non vérifié"
+    }
+  },
+  "changeNameDrawer": {
+    "title": "Modifier votre nom",
+    "description": "Formulaire pour modifier votre nom",
+    "label": "Nom",
+    "submitButton": "Modifier",
+    "successMessage": "Nom mis à jour",
+    "errorMessage": "Échec de la mise à jour de votre nom"
+  }
+}
