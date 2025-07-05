@@ -54,6 +54,7 @@ export const FieldRadioGroup = <
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
       render={({ field: { onChange, value, ...field }, fieldState }) => {
+        const isInvalid = fieldState.error ? true : undefined;
         return (
           <div
             {...containerProps}
@@ -64,7 +65,7 @@ export const FieldRadioGroup = <
           >
             <RadioGroup
               id={ctx.id}
-              aria-invalid={fieldState.error ? true : undefined}
+              aria-invalid={isInvalid}
               aria-labelledby={ctx.labelId}
               aria-describedby={
                 !fieldState.error
@@ -83,6 +84,7 @@ export const FieldRadioGroup = <
                     <React.Fragment key={radioId}>
                       {renderOption({
                         label,
+                        'aria-invalid': isInvalid,
                         ...field,
                         ...option,
                       })}
@@ -91,7 +93,13 @@ export const FieldRadioGroup = <
                 }
 
                 return (
-                  <Radio key={radioId} size={size} {...field} {...option}>
+                  <Radio
+                    key={radioId}
+                    aria-invalid={isInvalid}
+                    size={size}
+                    {...field}
+                    {...option}
+                  >
                     {label}
                   </Radio>
                 );
