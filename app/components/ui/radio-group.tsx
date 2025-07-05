@@ -45,6 +45,7 @@ export function Radio({
         className={cn(
           'peer size-4 cursor-pointer rounded-full border border-primary text-primary ring-offset-background',
           'focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring',
+          'aria-invalid:focus-visible:ring-destructive/50 aria-invalid:data-unchecked:border-destructive',
           'disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
