@@ -63,7 +63,7 @@ export const PageBook = (props: { params: { id: string } }) => {
         }),
       ]);
 
-      toast.success('Book deleted');
+      toast.success(t('book:manager.list.bookDeleted'));
 
       // Redirect
       if (canGoBack) {

@@ -22,7 +22,8 @@
     "list": {
       "newBook": "New Book",
       "updateBook": "Update Book",
-      "deleteBookWarning": "You are about to permanently delete this book. <strong>This action cannot be undone.</strong> Please confirm your decision carefully."
+      "deleteBookWarning": "You are about to permanently delete this book. <strong>This action cannot be undone.</strong> Please confirm your decision carefully.",
+      "bookDeleted": "Book deleted"
     }
   }
 }
