@@ -28,7 +28,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBook = (props: { params: { id: string } }) => {
-  const { t } = useTranslation(['book']);
+  const { t } = useTranslation(['book', 'common']);
   const queryClient = useQueryClient();
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -102,7 +102,7 @@ export const PageBook = (props: { params: { id: string } }) => {
                 confirmText="Delete"
                 confirmVariant="destructive"
               >
-                <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
+                <ResponsiveIconButton variant="ghost" label={t('common:actions.delete')} size="sm">
                   <Trash2Icon />
                 </ResponsiveIconButton>
               </ConfirmResponsiveDrawer>
@@ -113,7 +113,7 @@ export const PageBook = (props: { params: { id: string } }) => {
                 params={{ id: props.params.id }}
               >
                 <PencilLineIcon />
-                Edit
+                {t('common:actions.edit')}
               </Link>
             </Button>
           </>
