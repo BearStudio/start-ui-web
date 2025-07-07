@@ -20,7 +20,8 @@
   },
   "manager": {
     "list": {
-      "newBook": "كتاب جديد"
+      "newBook": "كتاب جديد",
+      "updateBook": "تحديث الكتاب"
     }
   }
 }

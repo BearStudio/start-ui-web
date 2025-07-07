@@ -20,7 +20,8 @@
   },
   "manager": {
     "list": {
-      "newBook": "Nouveau Livre"
+      "newBook": "Nouveau Livre",
+      "updateBook": "Mettre à jour le Livre"
     }
   }
 }

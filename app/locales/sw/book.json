@@ -20,7 +20,8 @@
   },
   "manager": {
     "list": {
-      "newBook": "Kitabu Kipya"
+      "newBook": "Kitabu Kipya",
+      "updateBook": "Sasisha Kitabu"
     }
   }
 }

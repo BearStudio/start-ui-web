@@ -24,7 +24,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'book']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -104,7 +104,9 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>Update Book</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>
+            {t('book:manager.list.updateBook')}
+          </PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">

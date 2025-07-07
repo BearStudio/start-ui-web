@@ -20,7 +20,8 @@
   },
   "manager": {
     "list": {
-      "newBook": "New Book"
+      "newBook": "New Book",
+      "updateBook": "Update Book"
     }
   }
 }
