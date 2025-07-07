@@ -5,6 +5,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { useCanGoBack } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -27,6 +28,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBook = (props: { params: { id: string } }) => {
+  const { t } = useTranslation(['book']);
   const queryClient = useQueryClient();
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -144,25 +146,25 @@ export const PageBook = (props: { params: { id: string } }) => {
                     <dl className="flex flex-col divide-y text-sm">
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Title
+                          {t('book:common.title.label')}
                         </dt>
                         <dd className="flex-1">{book.title}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Author
+                          {t('book:common.author.label')}
                         </dt>
                         <dd className="flex-1">{book.author}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Genre
+                          {t('book:common.genre.label')}
                         </dt>
                         <dd className="flex-1">{book.genre?.name}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Publisher
+                          {t('book:common.publisher.label')}
                         </dt>
                         <dd className="flex-1">{book.publisher}</dd>
                       </div>
