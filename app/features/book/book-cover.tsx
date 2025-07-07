@@ -2,11 +2,14 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { Book } from '@/features/book/schema';
 
+import { useTranslation } from 'react-i18next';
+
 export const BookCover = (props: {
   book: Partial<Pick<Book, 'title' | 'author' | 'genre'>>;
   variant?: 'default' | 'tiny';
   className?: string;
 }) => {
+  const { t } = useTranslation(['book']);
   return (
     <div
       className={cn(
@@ -40,7 +43,7 @@ export const BookCover = (props: {
                 props.variant === 'tiny' && 'text-[1px]'
               )}
             >
-              By {props.book.author}
+              {t('book:common.byCapitalized')} {props.book.author}
             </p>
           )}
         </div>

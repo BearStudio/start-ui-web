@@ -13,7 +13,10 @@
     },
     "publisher": {
       "label": "Mhariri"
-    }
+    },
+    "noBooksFound": "Hakuna vitabu vinavyopatikana",
+    "loadMoreBooks": "Pakia vitabu zaidi",
+    "byCapitalized": "Na"
   },
   "manager": {
     "list": {

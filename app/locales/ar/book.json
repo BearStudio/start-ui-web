@@ -13,7 +13,10 @@
     },
     "publisher": {
       "label": "الناشر"
-    }
+    },
+    "noBooksFound": "لا توجد كتب متاحة",
+    "loadMoreBooks": "تحميل المزيد من الكتب",
+    "byCapitalized": "بواسطة"
   },
   "manager": {
     "list": {

@@ -13,7 +13,10 @@
     },
     "publisher": {
       "label": "Éditeur"
-    }
+    },
+    "noBooksFound": "Aucun livre disponible",
+    "loadMoreBooks": "Charger plus de livres",
+    "byCapitalized": "Par"
   },
   "manager": {
     "list": {
