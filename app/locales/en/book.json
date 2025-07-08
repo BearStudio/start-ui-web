@@ -14,12 +14,20 @@
     "publisher": {
       "label": "Publisher"
     },
+    "newButton": {
+      "label": "New Book"
+    },
     "createButton": {
       "label": "Create"
     },
     "noBooksFound": "No books available",
     "loadMoreBooks": "Load more books",
     "byCapitalized": "By"
+  },
+  "app": {
+    "list": {
+      "title": "Books"
+    }
   },
   "manager": {
     "list": {

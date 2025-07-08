@@ -17,9 +17,17 @@
     "createButton": {
       "label": "يخلق"
     },
+    "newButton": {
+      "label": "كتاب جديد"
+    },
     "noBooksFound": "لا توجد كتب متاحة",
     "loadMoreBooks": "تحميل المزيد من الكتب",
     "byCapitalized": "بواسطة"
+  },
+  "app": {
+    "list": {
+      "title": "الكتب"
+    }
   },
   "manager": {
     "list": {

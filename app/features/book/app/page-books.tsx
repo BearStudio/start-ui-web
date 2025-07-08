@@ -17,7 +17,7 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageBooks = () => {
-  const { t } = useTranslation(['layout', 'book']);
+  const { t } = useTranslation(['book']);
   const booksQuery = useInfiniteQuery(
     orpc.book.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
@@ -41,7 +41,9 @@ export const PageBooks = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <PageLayoutTopBarTitle>{t('layout:nav.books')}</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>
+          {t('book:app.list.title')}
+        </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         {ui

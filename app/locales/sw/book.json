@@ -14,12 +14,20 @@
     "publisher": {
       "label": "Mhariri"
     },
+    "newButton": {
+      "label": "Kitabu Kipya"
+    },
     "createButton": {
       "label": "Unda"
     },
     "noBooksFound": "Hakuna vitabu vinavyopatikana",
     "loadMoreBooks": "Pakia vitabu zaidi",
     "byCapitalized": "Na"
+  },
+  "app": {
+    "list": {
+      "title": "Vitabu"
+    }
   },
   "manager": {
     "list": {

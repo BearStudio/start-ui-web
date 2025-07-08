@@ -14,12 +14,20 @@
     "publisher": {
       "label": "Éditeur"
     },
+    "newButton": {
+      "label": "Nouveau Livre"
+    },
     "createButton": {
       "label": "Créer"
     },
     "noBooksFound": "Aucun livre disponible",
     "loadMoreBooks": "Charger plus de livres",
     "byCapitalized": "Par"
+  },
+  "app": {
+    "list": {
+      "title": "Livres"
+    }
   },
   "manager": {
     "list": {
