@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
-  const { t } = useTranslation(['user', 'book']);
+  const { t } = useTranslation(['book']);
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -175,12 +175,12 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       onClick={() => booksQuery.fetchNextPage()}
                       loading={booksQuery.isFetchingNextPage}
                     >
-                      {t('user:manager.list.loadMore')}
+                      {t('book:manager.list.loadMore')}
                     </Button>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-xs text-muted-foreground">
-                      {t('user:manager.list.showing', {
+                      {t('book:manager.list.showing', {
                         count: items.length,
                         total
                       })}
