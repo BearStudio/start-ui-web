@@ -105,7 +105,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
           }
         >
           <PageLayoutTopBarTitle>
-            {t('book:manager.list.updateBook')}
+            {t('book:manager.update.title')}
           </PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>

@@ -25,12 +25,14 @@
     "list": {
       "title": "الكتب",
       "newBook": "كتاب جديد",
-      "updateBook": "تحديث الكتاب",
       "deleteBookWarning": "أنت على وشك حذف هذا الكتاب بشكل دائم. <strong>لا يمكن التراجع عن هذا الإجراء.</strong> يرجى تأكيد قرارك بعناية.",
       "bookDeleted": "تم حذف الكتاب",
       "loadMore": "تحميل المزيد",
       "showing": "عرض {{count}} من {{total}}",
       "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
+    },
+    "update": {
+      "title": "تحديث الكتاب"
     }
   }
 }

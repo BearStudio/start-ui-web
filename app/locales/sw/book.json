@@ -25,12 +25,14 @@
     "list": {
       "title": "Vitabu",
       "newBook": "Kitabu Kipya",
-      "updateBook": "Sasisha Kitabu",
       "deleteBookWarning": "Unakaribia kufuta kitabu hiki milele. <strong>Kitendo hiki hakiwezi kubatilishwa.</strong> Tafadhali thibitisha uamuzi wako kwa makini.",
       "bookDeleted": "Kitabu kimefutwa",
       "loadMore": "Pakia zaidi",
       "showing": "Inaonyesha {{count}} kati ya {{total}}",
       "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
+    },
+    "update": {
+      "title": "Sasisha Kitabu"
     }
   }
 }
