@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
-  const { t } = useTranslation(['layout', 'user', 'book']);
+  const { t } = useTranslation(['user', 'book']);
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -90,7 +90,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>{t('layout:nav.books')}</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>{t('book:manager.list.title')}</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"

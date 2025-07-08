@@ -20,6 +20,7 @@
   },
   "manager": {
     "list": {
+      "title": "Vitabu",
       "newBook": "Kitabu Kipya",
       "updateBook": "Sasisha Kitabu",
       "deleteBookWarning": "Unakaribia kufuta kitabu hiki milele. <strong>Kitendo hiki hakiwezi kubatilishwa.</strong> Tafadhali thibitisha uamuzi wako kwa makini.",
