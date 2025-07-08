@@ -23,7 +23,8 @@
       "newBook": "Nouveau Livre",
       "updateBook": "Mettre à jour le Livre",
       "deleteBookWarning": "Vous êtes sur le point de supprimer définitivement ce livre. <strong>Cette action ne peut pas être annulée.</strong> Veuillez confirmer votre décision avec soin.",
-      "bookDeleted": "Livre supprimé"
+      "bookDeleted": "Livre supprimé",
+      "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
     }
   }
 }

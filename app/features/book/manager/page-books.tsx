@@ -126,7 +126,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       });
                     }}
                   >
-                    {t('user:manager.list.searchResults', {
+                    {t('book:manager.list.searchResults', {
                       total,
                       searchTerm,
                     })}
