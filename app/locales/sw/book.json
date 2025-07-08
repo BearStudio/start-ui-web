@@ -24,12 +24,14 @@
   "manager": {
     "list": {
       "title": "Vitabu",
-      "newBook": "Kitabu Kipya",
       "deleteBookWarning": "Unakaribia kufuta kitabu hiki milele. <strong>Kitendo hiki hakiwezi kubatilishwa.</strong> Tafadhali thibitisha uamuzi wako kwa makini.",
       "bookDeleted": "Kitabu kimefutwa",
       "loadMore": "Pakia zaidi",
       "showing": "Inaonyesha {{count}} kati ya {{total}}",
       "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
+    },
+    "new": {
+      "title": "Kitabu Kipya"
     },
     "update": {
       "title": "Sasisha Kitabu"

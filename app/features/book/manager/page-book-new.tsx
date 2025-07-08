@@ -102,7 +102,7 @@ export const PageBookNew = () => {
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>{t('book:manager.list.newBook')}</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>{t('book:manager.new.title')}</PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">
