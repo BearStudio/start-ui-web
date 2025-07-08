@@ -14,6 +14,9 @@
     "publisher": {
       "label": "Publisher"
     },
+    "createButton": {
+      "label": "Create"
+    },
     "noBooksFound": "No books available",
     "loadMoreBooks": "Load more books",
     "byCapitalized": "By"

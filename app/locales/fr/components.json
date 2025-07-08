@@ -59,8 +59,5 @@
     "placeholder": "Sélectionner...",
     "create": "Créer \"{{searchTerm}}\"",
     "noResultsFound": "Aucun résultat trouvé"
-  },
-  "createButton": {
-    "label": "Créer"
   }
 }

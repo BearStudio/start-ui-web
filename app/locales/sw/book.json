@@ -14,6 +14,9 @@
     "publisher": {
       "label": "Mhariri"
     },
+    "createButton": {
+      "label": "Unda"
+    },
     "noBooksFound": "Hakuna vitabu vinavyopatikana",
     "loadMoreBooks": "Pakia vitabu zaidi",
     "byCapitalized": "Na"
