@@ -1,0 +1,24 @@
+{
+  "title": "Account",
+  "displayPreferences": {
+    "title": "Display Preferences"
+  },
+  "userCard": {
+    "name": {
+      "label": "Name",
+      "updateAction": "Update your name"
+    },
+    "email": {
+      "label": "Email",
+      "notVerified": "Not Verified"
+    }
+  },
+  "changeNameDrawer": {
+    "title": "Update your name",
+    "description": "Form to update your name",
+    "label": "Name",
+    "submitButton": "Update",
+    "successMessage": "Name updated",
+    "errorMessage": "Failed to update your name"
+  }
+}

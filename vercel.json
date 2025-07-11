@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/storybook", "destination": "/storybook/index.html" }
+  ]
+}

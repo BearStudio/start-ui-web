@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "application": "Application",
+    "configuration": "Configuration",
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "account": "Compte",
+    "home": "Accueil",
+    "apiDocumentation": "Documentation API",
+    "openApp": "Ouvrir l'application",
+    "books": "Livres"
+  }
+}

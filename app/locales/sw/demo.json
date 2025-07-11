@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "title": "Karibu kwenye Start UI [web]",
+    "description": "Kianzio cha mbele kilicho na maoni maalum, kimeundwa na kudumishwa na Timu ya BearStudio na wachangiaji wengine. Inawakilisha mkusanyiko wa teknolojia wa kisasa tunayotumia tunapotengeneza programu za wavuti kwa wateja wetu.",
+    "documentation": "Nyaraka",
+    "openIssue": "Fungua Tatizo"
+  },
+  "appSwitch": {
+    "youAreHere": "Uko hapa",
+    "noAccess": "Huna ruhusa",
+    "app": {
+      "title": "App",
+      "description": "Programu rahisi, inayopendelewa kwa simu",
+      "goTo": "Nenda kwenye /app"
+    },
+    "manager": {
+      "title": "Manager",
+      "description": "Programu ya juu, aina ya msimamizi",
+      "goTo": "Nenda kwenye /manager"
+    }
+  }
+}

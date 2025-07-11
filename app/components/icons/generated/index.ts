@@ -1,0 +1,12 @@
+export { default as IconBookOpen } from './IconBookOpen';
+export { default as IconBookOpenDuotone } from './IconBookOpenDuotone';
+export { default as IconBookOpenFill } from './IconBookOpenFill';
+export { default as IconGitBranch } from './IconGitBranch';
+export { default as IconGitBranchDuotone } from './IconGitBranchDuotone';
+export { default as IconGitBranchFill } from './IconGitBranchFill';
+export { default as IconHouse } from './IconHouse';
+export { default as IconHouseDuotone } from './IconHouseDuotone';
+export { default as IconHouseFill } from './IconHouseFill';
+export { default as IconUserCircle } from './IconUserCircle';
+export { default as IconUserCircleDuotone } from './IconUserCircleDuotone';
+export { default as IconUserCircleFill } from './IconUserCircleFill';
