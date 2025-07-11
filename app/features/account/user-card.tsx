@@ -1,8 +1,6 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { authClient } from '@/lib/auth/client';
-
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,6 +8,7 @@ import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
+import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 
 export const UserCard = () => {

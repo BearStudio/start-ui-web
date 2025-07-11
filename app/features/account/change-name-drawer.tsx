@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
 
 import {
@@ -31,6 +30,7 @@ import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
 } from '@/features/account/schema';
+import { authClient } from '@/features/auth/client';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const { t } = useTranslation(['account']);

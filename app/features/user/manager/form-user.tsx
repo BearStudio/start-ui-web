@@ -1,7 +1,5 @@
 import { useFormContext } from 'react-hook-form';
 
-import { authClient } from '@/lib/auth/client';
-
 import {
   FormField,
   FormFieldController,
@@ -9,6 +7,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 
+import { authClient } from '@/features/auth/client';
 import { rolesNames } from '@/features/auth/permissions';
 import { FormFieldsUser } from '@/features/user/schema';
 

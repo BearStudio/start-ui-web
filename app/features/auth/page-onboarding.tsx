@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
 import { orpc } from '@/lib/orpc/client';
 
 import {
@@ -16,6 +15,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';

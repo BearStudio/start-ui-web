@@ -3,16 +3,16 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
-import {
-  AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
-  AUTH_EMAIL_OTP_MOCKED,
-  AUTH_SIGNUP_ENABLED,
-} from '@/lib/auth/config';
 import i18n from '@/lib/i18n';
 
 import TemplateLoginCode from '@/emails/templates/login-code';
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
+import {
+  AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
+  AUTH_EMAIL_OTP_MOCKED,
+  AUTH_SIGNUP_ENABLED,
+} from '@/features/auth/config';
 import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';

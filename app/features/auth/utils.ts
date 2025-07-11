@@ -1,8 +1,7 @@
 import { useRouter, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
-import { authClient } from '@/lib/auth/client';
-
+import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
 
 export const useRedirectAfterLogin = () => {

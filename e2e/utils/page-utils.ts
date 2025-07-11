@@ -1,6 +1,9 @@
 import { expect, Page } from '@playwright/test';
 
-import { AUTH_EMAIL_OTP_MOCKED, AUTH_SIGNUP_ENABLED } from '@/lib/auth/config';
+import {
+  AUTH_EMAIL_OTP_MOCKED,
+  AUTH_SIGNUP_ENABLED,
+} from '@/features/auth/config';
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
 import locales from '@/locales';

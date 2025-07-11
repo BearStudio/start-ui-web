@@ -3,9 +3,9 @@ import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { authClient } from '@/lib/auth/client';
-
 import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
+
+import { authClient } from '@/features/auth/client';
 
 export const ConfirmSignOut = (props: {
   children: ReactElement<{ onClick: () => unknown }>;
