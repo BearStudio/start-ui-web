@@ -21,7 +21,7 @@ jobs:
       VITE_IS_DEMO: false
       BETTER_AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
       EMAIL_SERVER: smtp://username:password@localhost:1025
-      EMAIL_FROM: Start UI <noreply@example.com>
+      EMAIL_FROM: Example <noreply@example.com>
     services:
       postgres:
         image: postgres
