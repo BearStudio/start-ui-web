@@ -80,7 +80,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
         actions={
           <ResponsiveIconButton
             asChild
-            label={t('book:manager.list.newBook')}
+            label={t('book:manager.new.title')}
             variant="secondary"
             size="sm"
           >
