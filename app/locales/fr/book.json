@@ -39,7 +39,7 @@
       "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
     },
     "new": {
-      "title": "Nouveau Livre"
+      "title": "Nouveau livre"
     },
     "update": {
       "title": "Mettre à jour le livre"
