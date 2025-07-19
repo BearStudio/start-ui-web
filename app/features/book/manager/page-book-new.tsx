@@ -3,6 +3,7 @@ import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -24,6 +25,7 @@ import {
 
 export const PageBookNew = () => {
   const router = useRouter();
+  const { t } = useTranslation(['book']);
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useForm({
@@ -95,11 +97,11 @@ export const PageBookNew = () => {
               className="min-w-20"
               loading={bookCreate.isPending}
             >
-              Create
+              {t('book:common.createButton.label')}
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>New Book</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>{t('book:manager.new.title')}</PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">
