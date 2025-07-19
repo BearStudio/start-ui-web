@@ -20,7 +20,7 @@
     "createButton": {
       "label": "Create"
     },
-    "noBooksFound": "No books available",
+    "notFound": "No books available",
     "loadMoreBooks": "Load more books",
     "byCapitalized": "By"
   },

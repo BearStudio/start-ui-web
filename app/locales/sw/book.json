@@ -20,7 +20,7 @@
     "createButton": {
       "label": "Unda"
     },
-    "noBooksFound": "Hakuna vitabu vinavyopatikana",
+    "notFound": "Hakuna vitabu vinavyopatikana",
     "loadMoreBooks": "Pakia vitabu zaidi",
     "byCapitalized": "Na"
   },

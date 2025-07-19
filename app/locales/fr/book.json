@@ -20,7 +20,7 @@
     "createButton": {
       "label": "Créer"
     },
-    "noBooksFound": "Aucun livre disponible",
+    "notFound": "Aucun livre disponible",
     "loadMoreBooks": "Charger plus de livres",
     "byCapitalized": "Par"
   },

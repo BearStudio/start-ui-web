@@ -62,7 +62,7 @@ export const PageBooks = () => {
           .match('error', () => <PageError />)
           .match('empty', () => (
             <div className="flex flex-1 text-sm text-muted-foreground">
-              {t('book:common.noBooksFound')}
+              {t('book:common.notFound')}
             </div>
           ))
           .match('default', ({ items }) => (

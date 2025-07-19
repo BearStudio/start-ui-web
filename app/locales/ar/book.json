@@ -20,7 +20,7 @@
     "newButton": {
       "label": "كتاب جديد"
     },
-    "noBooksFound": "لا توجد كتب متاحة",
+    "notFound": "لا توجد كتب متاحة",
     "loadMoreBooks": "تحميل المزيد من الكتب",
     "byCapitalized": "بواسطة"
   },
