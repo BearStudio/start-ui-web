@@ -1,8 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import { cn } from '@/lib/tailwind/utils';
 
 import { Book } from '@/features/book/schema';
-
-import { useTranslation } from 'react-i18next';
 
 export const BookCover = (props: {
   book: Partial<Pick<Book, 'title' | 'author' | 'genre'>>;
