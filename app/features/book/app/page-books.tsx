@@ -98,7 +98,7 @@ export const PageBooks = () => {
                   onClick={() => booksQuery.fetchNextPage()}
                   loading={booksQuery.isFetchingNextPage}
                 >
-                  {t('book:common.loadMoreBooks')}
+                  {t('book:common.loadMore')}
                 </Button>
               )}
             </div>
