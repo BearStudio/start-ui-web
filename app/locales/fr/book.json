@@ -30,10 +30,12 @@
     }
   },
   "manager": {
+    "toast": {
+      "deleted": "Livre supprimé"
+    },
     "list": {
       "title": "Livres",
       "deleteBookWarning": "Vous êtes sur le point de supprimer définitivement ce livre. <strong>Cette action ne peut pas être annulée.</strong> Veuillez confirmer votre décision avec soin.",
-      "bookDeleted": "Livre supprimé",
       "loadMore": "Charger plus",
       "showing": "Affichage de {{count}} sur {{total}}",
       "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""

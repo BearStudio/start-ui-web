@@ -30,10 +30,12 @@
     }
   },
   "manager": {
+    "toast": {
+      "deleted": "تم حذف الكتاب"
+    },
     "list": {
       "title": "الكتب",
       "deleteBookWarning": "أنت على وشك حذف هذا الكتاب بشكل دائم. <strong>لا يمكن التراجع عن هذا الإجراء.</strong> يرجى تأكيد قرارك بعناية.",
-      "bookDeleted": "تم حذف الكتاب",
       "loadMore": "تحميل المزيد",
       "showing": "عرض {{count}} من {{total}}",
       "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
