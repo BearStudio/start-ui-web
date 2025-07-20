@@ -12,7 +12,7 @@ import {
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { useFormField } from '@/components/form/form-field';
+import { useFormFieldUnsafe } from '@/components/form/form-field';
 
 import {
   FormFieldControllerContext,
@@ -38,7 +38,7 @@ export const FormFieldError = <
   children,
   ...props
 }: FormFieldErrorProps<TFieldValues, TName>) => {
-  const fieldCtx = useFormField();
+  const fieldCtx = useFormFieldUnsafe();
   const controllerCtx = use<FormFieldControllerContextValue<
     TFieldValues,
     TName
@@ -81,7 +81,7 @@ export const FormFieldError = <
 
   return (
     <div
-      id={fieldCtx.errorId}
+      id={fieldCtx?.errorId}
       className={cn(
         'flex animate-in gap-1 text-sm text-negative-600 slide-in-from-top-1 dark:text-negative-400',
         className
