@@ -1,6 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -16,6 +17,7 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageBooks = () => {
+  const { t } = useTranslation(['book']);
   const booksQuery = useInfiniteQuery(
     orpc.book.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
@@ -39,7 +41,9 @@ export const PageBooks = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar>
-        <PageLayoutTopBarTitle>Books</PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>
+          {t('book:app.list.title')}
+        </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent>
         {ui
@@ -58,7 +62,7 @@ export const PageBooks = () => {
           .match('error', () => <PageError />)
           .match('empty', () => (
             <div className="flex flex-1 text-sm text-muted-foreground">
-              No books available
+              {t('book:common.notFound')}
             </div>
           ))
           .match('default', ({ items }) => (
@@ -94,7 +98,7 @@ export const PageBooks = () => {
                   onClick={() => booksQuery.fetchNextPage()}
                   loading={booksQuery.isFetchingNextPage}
                 >
-                  Load more books
+                  {t('book:common.loadMore')}
                 </Button>
               )}
             </div>

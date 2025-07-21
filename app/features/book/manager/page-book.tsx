@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { useCanGoBack } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -27,6 +28,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBook = (props: { params: { id: string } }) => {
+  const { t } = useTranslation(['book', 'common']);
   const queryClient = useQueryClient();
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -61,7 +63,7 @@ export const PageBook = (props: { params: { id: string } }) => {
         }),
       ]);
 
-      toast.success('Book deleted');
+      toast.success(t('book:manager.toast.deleted'));
 
       // Redirect
       if (canGoBack) {
@@ -89,18 +91,14 @@ export const PageBook = (props: { params: { id: string } }) => {
             >
               <ConfirmResponsiveDrawer
                 onConfirm={() => deleteBook()}
-                title={`Delete ${bookQuery.data?.title}`}
+                title={`${t('common:actions.delete')} ${bookQuery.data?.title}`}
                 description={
-                  <>
-                    You are about to permanently delete this book.{' '}
-                    <strong>This action cannot be undone.</strong> Please
-                    confirm your decision carefully.
-                  </>
+                  <Trans t={t} i18nKey="book:manager.list.deleteBookWarning"></Trans>
                 }
-                confirmText="Delete"
+                confirmText={t("common:actions.delete")}
                 confirmVariant="destructive"
               >
-                <ResponsiveIconButton variant="ghost" label="Delete" size="sm">
+                <ResponsiveIconButton variant="ghost" label={t('common:actions.delete')} size="sm">
                   <Trash2Icon />
                 </ResponsiveIconButton>
               </ConfirmResponsiveDrawer>
@@ -111,7 +109,7 @@ export const PageBook = (props: { params: { id: string } }) => {
                 params={{ id: props.params.id }}
               >
                 <PencilLineIcon />
-                Edit
+                {t('common:actions.edit')}
               </Link>
             </Button>
           </>
@@ -144,25 +142,25 @@ export const PageBook = (props: { params: { id: string } }) => {
                     <dl className="flex flex-col divide-y text-sm">
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Title
+                          {t('book:common.title.label')}
                         </dt>
                         <dd className="flex-1">{book.title}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Author
+                          {t('book:common.author.label')}
                         </dt>
                         <dd className="flex-1">{book.author}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Genre
+                          {t('book:common.genre.label')}
                         </dt>
                         <dd className="flex-1">{book.genre?.name}</dd>
                       </div>
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Publisher
+                          {t('book:common.publisher.label')}
                         </dt>
                         <dd className="flex-1">{book.publisher}</dd>
                       </div>
