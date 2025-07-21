@@ -47,7 +47,7 @@ export const CustomCheckbox = () => {
           <button
             type="button"
             {...props}
-            className="flex w-full justify-between outline-none"
+            className="flex w-full items-center justify-between outline-none"
           >
             <span className="font-medium">I love bears</span>
             <span

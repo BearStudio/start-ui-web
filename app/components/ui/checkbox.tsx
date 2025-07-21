@@ -5,7 +5,7 @@ import React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-const labelVariants = cva('flex items-center gap-2.5 text-primary', {
+const labelVariants = cva('flex items-start gap-2.5 text-primary', {
   variants: {
     size: {
       default: 'text-sm',
