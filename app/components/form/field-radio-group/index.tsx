@@ -40,6 +40,7 @@ export const FieldRadioGroup = <
     shouldUnregister,
     containerProps,
     options,
+    size,
     renderOption,
     ...rest
   } = props;
@@ -90,7 +91,7 @@ export const FieldRadioGroup = <
                 }
 
                 return (
-                  <Radio key={radioId} {...field} {...option}>
+                  <Radio key={radioId} size={size} {...field} {...option}>
                     {label}
                   </Radio>
                 );

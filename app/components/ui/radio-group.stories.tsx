@@ -61,6 +61,45 @@ export const Disabled = () => {
   );
 };
 
+export const Sizes = () => {
+  const radioGroupId = useId();
+  return (
+    <div className="flex flex-col gap-4">
+      <RadioGroup defaultValue={astrobears[1].value}>
+        {astrobears.map(({ value, label }) => {
+          return (
+            <Radio key={`${radioGroupId}-${value}`} value={value} size="sm">
+              {label}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+      <RadioGroup defaultValue={astrobears[1].value}>
+        {astrobears.map(({ value, label }) => {
+          return (
+            <Radio
+              key={`${radioGroupId}-${value}`}
+              value={value}
+              size="default"
+            >
+              {label}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+      <RadioGroup defaultValue={astrobears[1].value}>
+        {astrobears.map(({ value, label }) => {
+          return (
+            <Radio key={`${radioGroupId}-${value}`} value={value} size="lg">
+              {label}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+    </div>
+  );
+};
+
 export const Row = () => {
   const radioGroupId = useId();
   return (
@@ -77,40 +116,39 @@ export const Row = () => {
 };
 
 export const WithCustomRadio = () => {
-  const radioGroupId = useId();
   return (
     <RadioGroup>
       {astrobears.map(({ value, label }) => {
-        const radioId = `${radioGroupId}-${value}`;
         return (
-          <label
-            className="relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:outline-none hover:bg-muted/50 has-[&[data-checked]]:border-primary/90 has-[&[data-checked]]:bg-primary/5"
-            key={radioId}
-          >
-            <Radio
-              value={value}
-              noLabel
-              render={(props, { checked }) => {
-                return (
-                  <div
-                    {...props}
-                    className="flex w-full justify-between outline-none"
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium">{label}</span>
-                    </div>
-                    <div
-                      className={cn('rounded-full bg-primary p-1 opacity-0', {
+          <Radio
+            key={value}
+            value={value}
+            labelProps={{
+              className:
+                'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors outline-none focus-within:ring-[3px] focus-within:ring-ring/50 hover:bg-muted/50 has-[:checked]:border-transparent has-[:checked]:bg-primary has-[:checked]:text-primary-foreground',
+            }}
+            render={(props, { checked }) => {
+              return (
+                <button
+                  type="button"
+                  {...props}
+                  className="flex w-full justify-between outline-none"
+                >
+                  <span className="font-medium">{label}</span>
+                  <span
+                    className={cn(
+                      'rounded-full bg-primary-foreground p-1 opacity-0',
+                      {
                         'opacity-100': checked,
-                      })}
-                    >
-                      <CheckIcon className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                  </div>
-                );
-              }}
-            />
-          </label>
+                      }
+                    )}
+                  >
+                    <CheckIcon className="size-4 text-primary" />
+                  </span>
+                </button>
+              );
+            }}
+          />
         );
       })}
     </RadioGroup>
