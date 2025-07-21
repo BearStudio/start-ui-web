@@ -8,9 +8,9 @@ import { cn } from '@/lib/tailwind/utils';
 const labelVariants = cva('flex items-center gap-2.5 text-primary', {
   variants: {
     size: {
-      default: 'text-base',
-      sm: 'gap-2 text-sm',
-      lg: 'gap-3 text-lg',
+      default: 'text-sm',
+      sm: 'gap-2 text-xs',
+      lg: 'gap-3 text-base',
     },
   },
   defaultVariants: {
