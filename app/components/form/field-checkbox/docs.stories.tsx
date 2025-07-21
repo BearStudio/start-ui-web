@@ -132,31 +132,27 @@ export const CustomCheckbox = () => {
             control={form.control}
             labelProps={{
               className:
-                'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors outline-none focus-within:ring-[3px] focus-within:ring-ring/50 hover:bg-muted/50 has-[&[data-checked]]:bg-primary/5',
+                'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors outline-none focus-within:ring-[3px] focus-within:ring-ring/50 hover:bg-muted/50 has-[:checked]:border-transparent has-[:checked]:bg-primary has-[:checked]:text-primary-foreground',
             }}
             render={(props, { checked }) => {
               return (
-                <div
+                <button
+                  type="button"
                   {...props}
-                  className="flex w-full items-center justify-between outline-none"
+                  className="flex w-full justify-between outline-none"
                 >
-                  <div className="flex flex-col">
-                    <span className="font-medium">I love bears !</span>
-                    <FormFieldHelper>
-                      There is only one possible answer.
-                    </FormFieldHelper>
-                  </div>
-                  <div
+                  <span className="font-medium">I love bears</span>
+                  <span
                     className={cn(
-                      'aspect-square rounded-full bg-primary p-1 opacity-0',
+                      'rounded-full bg-primary-foreground p-1 opacity-0',
                       {
                         'opacity-100': checked,
                       }
                     )}
                   >
-                    <CheckIcon className="h-4 w-4 text-primary-foreground" />
-                  </div>
-                </div>
+                    <CheckIcon className="size-4 text-primary" />
+                  </span>
+                </button>
               );
             }}
           />

@@ -1,8 +1,38 @@
 import { Checkbox as CheckboxPrimitive } from '@base-ui-components/react/checkbox';
-import { CheckIcon } from 'lucide-react';
+import { cva } from 'class-variance-authority';
+import { CheckIcon, MinusIcon } from 'lucide-react';
 import React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
+
+const labelVariants = cva('flex items-center gap-2.5 text-primary', {
+  variants: {
+    size: {
+      default: 'text-base',
+      sm: 'gap-2 text-sm',
+      lg: 'gap-3 text-lg',
+    },
+  },
+  defaultVariants: {
+    size: 'default',
+  },
+});
+
+const checkboxVariants = cva(
+  'flex flex-none cursor-pointer items-center justify-center rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-muted-foreground disabled:opacity-20 data-checked:bg-primary data-checked:text-primary-foreground data-indeterminate:border data-indeterminate:border-primary/20 data-unchecked:border data-unchecked:border-primary/20',
+  {
+    variants: {
+      size: {
+        default: 'size-5 [&_svg]:size-3.5 [&_svg]:stroke-3',
+        sm: 'size-4 rounded-[5px] [&_svg]:size-2.5 [&_svg]:stroke-4',
+        lg: 'size-6 [&_svg]:size-4 [&_svg]:stroke-3',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
 
 export type CheckboxProps = Omit<CheckboxPrimitive.Root.Props, 'type'> & {
   /**
@@ -10,6 +40,7 @@ export type CheckboxProps = Omit<CheckboxPrimitive.Root.Props, 'type'> & {
    */
   noLabel?: boolean;
   labelProps?: React.ComponentProps<'label'>;
+  size?: 'default' | 'sm' | 'lg';
 };
 
 export function Checkbox({
@@ -17,6 +48,7 @@ export function Checkbox({
   className,
   noLabel,
   labelProps,
+  size,
   ...props
 }: CheckboxProps) {
   const Comp = noLabel ? React.Fragment : 'label';
@@ -25,33 +57,27 @@ export function Checkbox({
     ? {}
     : {
         ...labelProps,
-        className: cn(
-          'flex items-center gap-2 text-base text-primary',
-          labelProps?.className
-        ),
+        className: cn(labelVariants({ size }), labelProps?.className),
       };
 
   return (
     <Comp {...compProps}>
       <CheckboxPrimitive.Root
-        className={cn(
-          'flex size-5 cursor-pointer items-center justify-center rounded-sm outline-none',
-          'focus-visible:ring-[3px] focus-visible:ring-ring/50',
-          'data-checked:bg-primary data-unchecked:border data-unchecked:border-primary/50',
-          'disabled:cursor-not-allowed disabled:bg-muted-foreground disabled:opacity-20',
-          className
-        )}
+        className={cn(checkboxVariants({ size }), className)}
         {...props}
       >
         <CheckboxPrimitive.Indicator
           keepMounted={true}
           className={cn(
             'flex transition-transform duration-150 ease-in-out',
-            'data-checked:scale-100 data-checked:rotate-0 data-unchecked:invisible data-unchecked:scale-50 data-unchecked:rotate-45'
+            'data-checked:scale-100 data-unchecked:invisible data-unchecked:scale-75'
           )}
-        >
-          <CheckIcon className="size-3.5 stroke-3 text-primary-foreground" />
-        </CheckboxPrimitive.Indicator>
+          render={(props, state) => (
+            <span {...props}>
+              {state.indeterminate ? <MinusIcon /> : <CheckIcon />}
+            </span>
+          )}
+        />
       </CheckboxPrimitive.Root>
       {children}
     </Comp>
