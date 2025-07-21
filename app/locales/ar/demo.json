@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "title": "مرحبًا بك في Start UI [web]",
+    "description": "بداية واجهة أمامية موجهة تم إنشاؤها وصيانتها من قبل فريق BearStudio ومساهمين آخرين. تمثل المجموعة المحدثة من الأدوات التي نستخدمها عند إنشاء تطبيقات الويب لعملائنا.",
+    "documentation": "التوثيق",
+    "openIssue": "افتح تذكرة"
+  },
+  "appSwitch": {
+    "youAreHere": "أنت هنا",
+    "noAccess": "تم رفض الوصول",
+    "app": {
+      "title": "App",
+      "description": "تطبيق بسيط يركز على الجوال أولاً",
+      "goTo": "اذهب إلى /app"
+    },
+    "manager": {
+      "title": "Manager",
+      "description": "تطبيق متقدم من نوع المدير",
+      "goTo": "اذهب إلى /manager"
+    }
+  }
+}
