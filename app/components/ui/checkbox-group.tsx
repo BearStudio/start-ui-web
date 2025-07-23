@@ -2,9 +2,9 @@ import { CheckboxGroup as CheckboxGroupPrimitive } from '@base-ui-components/rea
 
 import { cn } from '@/lib/tailwind/utils';
 
-export type CheckboxGroupProps = CheckboxGroupPrimitive.Props;
+export type BaseCheckboxGroupProps = CheckboxGroupPrimitive.Props;
 
-export function CheckboxGroup(props: CheckboxGroupProps) {
+export function CheckboxGroup(props: BaseCheckboxGroupProps) {
   return (
     <CheckboxGroupPrimitive
       {...props}
