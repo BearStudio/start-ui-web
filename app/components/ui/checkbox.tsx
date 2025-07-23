@@ -49,7 +49,6 @@ export function Checkbox({
   noLabel,
   labelProps,
   size,
-  parent,
   ...props
 }: CheckboxProps) {
   const Comp = noLabel ? React.Fragment : 'label';

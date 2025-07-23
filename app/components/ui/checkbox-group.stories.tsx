@@ -2,6 +2,7 @@ import { Meta } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
+import { useCheckboxGroup } from '@/components/ui/checkbox.utils';
 import { CheckboxGroup } from '@/components/ui/checkbox-group';
 export default {
   title: 'CheckboxGroup',
@@ -78,12 +79,70 @@ export const ParentCheckbox = () => {
       <Checkbox name="astrobears" parent>
         Astrobears
       </Checkbox>
-      <div className="pl-4">
+      <div className="flex flex-col gap-1 pl-4">
         {astrobears.map((option) => (
           <Checkbox key={option.value} value={option.value}>
             {option.label}
           </Checkbox>
         ))}
+      </div>
+    </CheckboxGroup>
+  );
+};
+
+const nestedBears = [
+  { value: 'bearstrong', label: 'Bearstrong', children: undefined },
+  { value: 'pawdrin', label: 'Buzz Pawdrin', children: undefined },
+  {
+    value: 'grizzlyrin',
+    label: 'Yuri Grizzlyrin',
+    children: [
+      { value: 'mini-grizzlyrin-1', label: 'Mini grizzlyrin 1' },
+      { value: 'mini-grizzlyrin-2', label: 'Mini grizzlyrin 2' },
+    ],
+  },
+];
+
+export const NestedParentCheckbox = () => {
+  const {
+    main: { indeterminate, ...main },
+    nested,
+  } = useCheckboxGroup(nestedBears, {
+    nestedKey: 'grizzlyrin',
+    mainDefaultValue: [],
+    nestedDefaultValue: [],
+  });
+
+  return (
+    <CheckboxGroup {...main}>
+      <Checkbox name="astrobears" parent indeterminate={indeterminate}>
+        Astrobears
+      </Checkbox>
+      <div className="space-y-1 pl-4">
+        {nestedBears.map((bear) => {
+          if (!bear.children) {
+            return (
+              <Checkbox key={bear.value} value={bear.value}>
+                {bear.label}
+              </Checkbox>
+            );
+          }
+
+          return (
+            <CheckboxGroup key={bear.value} {...nested}>
+              <Checkbox value={bear.value} parent>
+                {bear.label}
+              </Checkbox>
+              <div className="space-y-1 pl-4">
+                {bear.children.map((bear) => (
+                  <Checkbox key={bear.value} value={bear.value}>
+                    {bear.label}
+                  </Checkbox>
+                ))}
+              </div>
+            </CheckboxGroup>
+          );
+        })}
       </div>
     </CheckboxGroup>
   );

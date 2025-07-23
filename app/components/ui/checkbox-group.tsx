@@ -8,10 +8,7 @@ export function CheckboxGroup(props: BaseCheckboxGroupProps) {
   return (
     <CheckboxGroupPrimitive
       {...props}
-      className={cn(
-        'className="flex flex-col items-start gap-1',
-        props?.className
-      )}
+      className={cn('flex flex-col items-start gap-1', props?.className)}
     />
   );
 }
