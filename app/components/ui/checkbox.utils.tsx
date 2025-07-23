@@ -8,16 +8,17 @@ type CheckboxOption = {
 export function useCheckboxGroup(
   options: Array<CheckboxOption>,
   params: {
-    nestedKey: string;
+    groups: string[];
     mainDefaultValue?: string[];
     nestedDefaultValue?: string[];
   }
 ) {
-  const { nestedKey, mainDefaultValue, nestedDefaultValue } = params;
+  const { groups, mainDefaultValue, nestedDefaultValue } = params;
   const mainAllValues = options.map((option) => option.value);
+
   const nestedAllValues =
     options
-      .find((option) => option.value === nestedKey)
+      .find((option) => option.value === groups[0])
       ?.children?.map((option) => option.value) ?? [];
 
   const [mainValue, setMainValue] = useState<string[]>(mainDefaultValue ?? []);
@@ -36,7 +37,7 @@ export function useCheckboxGroup(
       indeterminate: isMainIndeterminate,
       onValueChange: (value: string[]) => {
         // Update children value
-        if (value.includes(nestedKey)) {
+        if (value.includes(groups[0]!)) {
           setNestedValue(nestedAllValues);
         } else if (areAllNestedChecked) {
           setNestedValue([]);
@@ -53,9 +54,9 @@ export function useCheckboxGroup(
       onValueChange: (value: string[]) => {
         // Update parent value
         if (value.length === nestedAllValues.length) {
-          setMainValue((prev) => Array.from(new Set([...prev, nestedKey])));
+          setMainValue((prev) => Array.from(new Set([...prev, groups[0]!])));
         } else {
-          setMainValue((prev) => prev.filter((v) => v !== nestedKey));
+          setMainValue((prev) => prev.filter((v) => v !== groups[0]!));
         }
 
         // Update self value

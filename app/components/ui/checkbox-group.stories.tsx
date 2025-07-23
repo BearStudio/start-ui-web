@@ -92,7 +92,14 @@ export const ParentCheckbox = () => {
 
 const nestedBears = [
   { value: 'bearstrong', label: 'Bearstrong', children: undefined },
-  { value: 'pawdrin', label: 'Buzz Pawdrin', children: undefined },
+  {
+    value: 'pawdrin',
+    label: 'Buzz Pawdrin',
+    // children: [
+    //   { value: 'mini-pawdrin-1', label: 'Mini pawdrin 1' },
+    //   { value: 'mini-pawdrin-2', label: 'Mini pawdrin 2' },
+    // ],
+  },
   {
     value: 'grizzlyrin',
     label: 'Yuri Grizzlyrin',
@@ -108,7 +115,7 @@ export const NestedParentCheckbox = () => {
     main: { indeterminate, ...main },
     nested,
   } = useCheckboxGroup(nestedBears, {
-    nestedKey: 'grizzlyrin',
+    groups: ['grizzlyrin'],
     mainDefaultValue: [],
     nestedDefaultValue: [],
   });
@@ -145,5 +152,20 @@ export const NestedParentCheckbox = () => {
         })}
       </div>
     </CheckboxGroup>
+  );
+};
+
+export const SimpleNestedParentCheckbox = () => {
+  return (
+    <CheckboxGroup
+      groups={['grizzlyrin']}
+      options={[
+        {
+          type: 'root',
+          label: 'Astrobears',
+        },
+        ...nestedBears,
+      ]}
+    />
   );
 };
