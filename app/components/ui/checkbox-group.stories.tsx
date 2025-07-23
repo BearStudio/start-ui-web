@@ -95,10 +95,10 @@ const nestedBears = [
   {
     value: 'pawdrin',
     label: 'Buzz Pawdrin',
-    // children: [
-    //   { value: 'mini-pawdrin-1', label: 'Mini pawdrin 1' },
-    //   { value: 'mini-pawdrin-2', label: 'Mini pawdrin 2' },
-    // ],
+    children: [
+      { value: 'mini-pawdrin-1', label: 'Mini pawdrin 1' },
+      { value: 'mini-pawdrin-2', label: 'Mini pawdrin 2' },
+    ],
   },
   {
     value: 'grizzlyrin',
@@ -110,62 +110,64 @@ const nestedBears = [
   },
 ];
 
-export const NestedParentCheckbox = () => {
+export const Nested = () => {
+  return (
+    <CheckboxGroup
+      groups={['grizzlyrin', 'pawdrin']}
+      checkAll={{ label: 'Astrobears' }}
+      options={nestedBears}
+    />
+  );
+};
+
+export const NestedWithCustomLogic = () => {
   const {
     main: { indeterminate, ...main },
     nested,
   } = useCheckboxGroup(nestedBears, {
-    groups: ['grizzlyrin'],
+    groups: ['grizzlyrin', 'pawdrin'],
     mainDefaultValue: [],
-    nestedDefaultValue: [],
+    nestedDefaultValue: {
+      grizzlyrin: [],
+      pawdrin: ['mini-pawdrin-1'],
+    },
   });
 
   return (
-    <CheckboxGroup {...main}>
-      <Checkbox name="astrobears" parent indeterminate={indeterminate}>
-        Astrobears
-      </Checkbox>
-      <div className="space-y-1 pl-4">
-        {nestedBears.map((bear) => {
-          if (!bear.children) {
+    <>
+      <CheckboxGroup {...main}>
+        <Checkbox name="astrobears" parent indeterminate={indeterminate}>
+          Astrobears
+        </Checkbox>
+        <div className="space-y-1 pl-4">
+          {nestedBears.map((bear) => {
+            if (!bear.children) {
+              return (
+                <Checkbox key={bear.value} value={bear.value}>
+                  {bear.label}
+                </Checkbox>
+              );
+            }
+
             return (
-              <Checkbox key={bear.value} value={bear.value}>
-                {bear.label}
-              </Checkbox>
+              <CheckboxGroup key={bear.value} {...nested[bear.value]}>
+                <Checkbox value={bear.value} parent>
+                  {bear.label}
+                </Checkbox>
+                <div className="space-y-1 pl-4">
+                  {bear.children.map((bear) => (
+                    <Checkbox key={bear.value} value={bear.value}>
+                      {bear.label}
+                    </Checkbox>
+                  ))}
+                </div>
+              </CheckboxGroup>
             );
-          }
-
-          return (
-            <CheckboxGroup key={bear.value} {...nested}>
-              <Checkbox value={bear.value} parent>
-                {bear.label}
-              </Checkbox>
-              <div className="space-y-1 pl-4">
-                {bear.children.map((bear) => (
-                  <Checkbox key={bear.value} value={bear.value}>
-                    {bear.label}
-                  </Checkbox>
-                ))}
-              </div>
-            </CheckboxGroup>
-          );
-        })}
-      </div>
-    </CheckboxGroup>
-  );
-};
-
-export const SimpleNestedParentCheckbox = () => {
-  return (
-    <CheckboxGroup
-      groups={['grizzlyrin']}
-      options={[
-        {
-          type: 'root',
-          label: 'Astrobears',
-        },
-        ...nestedBears,
-      ]}
-    />
+          })}
+        </div>
+      </CheckboxGroup>
+      [{main.value.join(', ')}] <br />[{nested['grizzlyrin']?.value?.join(', ')}
+      ]
+    </>
   );
 };
