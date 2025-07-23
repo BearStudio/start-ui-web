@@ -1,3 +1,4 @@
+// !STARTERCONF [demoMode] Remove the demo folder
 export const DemoMarketingBento = () => {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">

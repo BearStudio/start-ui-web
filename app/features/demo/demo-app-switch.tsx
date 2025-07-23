@@ -1,3 +1,4 @@
+// !STARTERCONF [demoMode] Remove the demo folder
 import { Link, useMatchRoute } from '@tanstack/react-router';
 import { ArrowRightIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

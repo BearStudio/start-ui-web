@@ -16,6 +16,7 @@ export const sendEmail = async ({
   ...options
 }: Omit<MailOptions, 'html'> &
   Required<Pick<MailOptions, 'subject'>> & { template: ReactElement }) => {
+  // !STARTERCONF [demoMode] Remove this condition
   if (envClient.VITE_IS_DEMO) {
     return;
   }

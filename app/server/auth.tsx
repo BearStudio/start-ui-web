@@ -56,8 +56,8 @@ export const auth = betterAuth({
     emailOTP({
       disableSignUp: !AUTH_SIGNUP_ENABLED,
       expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
-      // Use predictable mocked code in dev and demo
-      ...(import.meta.env.DEV || envClient.VITE_IS_DEMO
+      // Use predictable mocked code in dev
+      ...(import.meta.env.DEV || envClient.VITE_IS_DEMO // !STARTERCONF [demoMode] Remove the `|| envClient.VITE_IS_DEMO` condition
         ? { generateOTP: () => AUTH_EMAIL_OTP_MOCKED }
         : undefined),
       async sendVerificationOTP({ email, otp, type }) {

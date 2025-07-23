@@ -7,7 +7,7 @@ import book from './book.json' assert { type: 'json' };
 import buildInfo from './build-info.json' assert { type: 'json' };
 import common from './common.json' assert { type: 'json' };
 import components from './components.json' assert { type: 'json' };
-import demo from './demo.json' assert { type: 'json' };
+import demo from './demo.json' assert { type: 'json' }; // !STARTERCONF [demoMode] Remove this import and the file
 import emails from './emails.json' assert { type: 'json' };
 import genre from './genre.json' assert { type: 'json' };
 import layout from './layout.json' assert { type: 'json' };
@@ -20,7 +20,7 @@ export default {
   buildInfo,
   common,
   components,
-  demo,
+  demo, // !STARTERCONF [demoMode] Remove this export
   emails,
   genre,
   layout,
