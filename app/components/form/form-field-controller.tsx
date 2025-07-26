@@ -14,6 +14,10 @@ import {
   FieldCheckboxGroup,
   FieldCheckboxGroupProps,
 } from '@/components/form/field-checkbox-group';
+import {
+  FieldNestedCheckboxGroup,
+  FieldNestedCheckboxGroupProps,
+} from '@/components/form/field-nested-checkbox-group';
 import { FieldNumber, FieldNumberProps } from '@/components/form/field-number';
 
 import { FieldDate, FieldDateProps } from './field-date';
@@ -59,7 +63,8 @@ export type FormFieldControllerProps<
   | FieldOtpProps<TFieldValues, TName>
   | FieldRadioGroupProps<TFieldValues, TName>
   | FieldCheckboxProps<TFieldValues, TName>
-  | FieldCheckboxGroupProps<TFieldValues, TName>;
+  | FieldCheckboxGroupProps<TFieldValues, TName>
+  | FieldNestedCheckboxGroupProps<TFieldValues, TName>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
@@ -104,6 +109,9 @@ export const FormFieldController = <
 
       case 'checkbox-group':
         return <FieldCheckboxGroup {...props} />;
+
+      case 'nested-checkbox-group':
+        return <FieldNestedCheckboxGroup {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };
