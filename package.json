@@ -90,6 +90,7 @@
     "cnfast": "0.0.8",
     "colorette": "2.0.20",
     "dayjs": "1.11.19",
+    "fast-equals": "5.2.2",
     "i18next": "25.8.0",
     "i18next-browser-languagedetector": "8.2.0",
     "input-otp": "1.4.2",
