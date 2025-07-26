@@ -1,40 +1,13 @@
 import { CheckboxGroup as CheckboxGroupPrimitive } from '@base-ui-components/react/checkbox-group';
-import { cva, VariantProps } from 'class-variance-authority';
 
-const checkboxGroupVariants = cva('flex flex-col items-start gap-1', {
-  variants: {
-    size: {
-      // TODO
-      default: '',
-      sm: '',
-      lg: '',
-    },
-  },
-  defaultVariants: {
-    size: 'default',
-  },
-});
+import { cn } from '@/lib/tailwind/utils';
 
-type BaseCheckboxGroupProps = CheckboxGroupPrimitive.Props;
-
-export type CheckboxGroupProps = BaseCheckboxGroupProps &
-  VariantProps<typeof checkboxGroupVariants>;
-
-export function CheckboxGroup({
-  children,
-  className,
-  size,
-  ...props
-}: CheckboxGroupProps) {
+type CheckboxGroupProps = CheckboxGroupPrimitive.Props;
+export function CheckboxGroup({ className, ...props }: CheckboxGroupProps) {
   return (
     <CheckboxGroupPrimitive
-      className={checkboxGroupVariants({
-        size,
-        className,
-      })}
+      className={cn('flex flex-col gap-2', className)}
       {...props}
-    >
-      {children}
-    </CheckboxGroupPrimitive>
+    />
   );
 }

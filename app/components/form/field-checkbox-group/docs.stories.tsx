@@ -16,14 +16,14 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    bear: zu.array.nonEmpty(z.string().array()),
+    bears: zu.array.nonEmpty(z.string().array(), 'Select at least one answer.'),
   });
 
 const formOptions = {
   mode: 'onBlur',
   resolver: zodResolver(zFormSchema()),
   defaultValues: {
-    bear: [],
+    bears: [],
   } as z.infer<ReturnType<typeof zFormSchema>>,
 } as const;
 
@@ -45,7 +45,7 @@ export const Default = () => {
           <FormFieldController
             type="checkbox-group"
             control={form.control}
-            name="bear"
+            name="bears"
             options={options}
           />
         </FormField>
@@ -61,7 +61,7 @@ export const DefaultValue = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      bear: ['pawdrin'],
+      bears: ['pawdrin'],
     },
   });
 
@@ -74,7 +74,7 @@ export const DefaultValue = () => {
           <FormFieldController
             control={form.control}
             type="checkbox-group"
-            name="bear"
+            name="bears"
             options={options}
           />
         </FormField>
@@ -90,7 +90,7 @@ export const Disabled = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      bear: ['pawdrin'],
+      bears: ['pawdrin'],
     },
   });
 
@@ -103,7 +103,7 @@ export const Disabled = () => {
           <FormFieldController
             control={form.control}
             type="checkbox-group"
-            name="bear"
+            name="bears"
             options={options}
             disabled
           />
@@ -128,7 +128,7 @@ export const Row = () => {
           <FormFieldController
             control={form.control}
             type="checkbox-group"
-            name="bear"
+            name="bears"
             options={options}
             className="flex-row gap-6"
           />
@@ -159,7 +159,7 @@ export const WithDisabledOption = () => {
           <FormFieldController
             control={form.control}
             type="checkbox-group"
-            name="bear"
+            name="bears"
             options={optionsWithDisabled}
           />
         </FormField>

@@ -46,7 +46,6 @@ export const FieldCheckboxGroup = <
   } = props;
   const ctx = useFormField();
 
-  console.log(options);
   return (
     <Controller
       name={name}
@@ -75,30 +74,24 @@ export const FieldCheckboxGroup = <
                   : `${ctx.descriptionId} ${ctx.errorId}`
               }
               value={value}
-              size={size}
               onValueChange={(value, event) => {
                 onChange?.(value);
                 rest.onValueChange?.(value, event);
               }}
               {...rest}
             >
-              {options.map(({ label, ...option }) => {
-                const checkboxId = `${ctx.id}-${option.value}`;
-
-                return (
-                  <Checkbox
-                    key={checkboxId}
-                    aria-invalid={isInvalid}
-                    size={size}
-                    {...field}
-                    {...option}
-                  >
-                    {label}
-                  </Checkbox>
-                );
-              })}
+              {options.map(({ label, ...option }) => (
+                <Checkbox
+                  key={`${ctx.id}-${option.value}`}
+                  aria-invalid={isInvalid}
+                  size={size}
+                  {...field}
+                  {...option}
+                >
+                  {label}
+                </Checkbox>
+              ))}
             </CheckboxGroup>
-            [{value}]
             <FormFieldError />
           </div>
         );
