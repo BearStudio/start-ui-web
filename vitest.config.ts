@@ -24,8 +24,7 @@ export default defineConfig({
               },
             ],
           },
-          include: ['app/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
-          exclude: ['app/**/*.unit.{test,spec}.?(c|m)[jt]s?(x)'],
+          include: ['app/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
           setupFiles: [
             resolve('app/tests/setup.base.ts'),
             resolve('app/tests/setup.browser.ts'),
