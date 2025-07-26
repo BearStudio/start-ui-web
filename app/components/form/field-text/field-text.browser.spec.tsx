@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import { render, screen, setupUser } from '@/tests/utils';
+import { page, render, setupUser } from '@/tests/utils';
 
 import { FormField, FormFieldLabel } from '..';
 import { FormFieldController } from '../form-field-controller';
@@ -25,10 +25,11 @@ test('update value', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
+  const input = page.getByLabelText('Name').element() as HTMLInputElement;
+
   await user.type(input, 'new value');
   expect(input.value).toBe('new value');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });
 
@@ -53,9 +54,9 @@ test('default value', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
+  const input = page.getByLabelText('Name').element() as HTMLInputElement;
   expect(input.value).toBe('default value');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: 'default value' });
 });
 
@@ -82,9 +83,13 @@ test('disabled', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
-  await user.type(input, 'another value');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  const input = page.getByLabelText('Name');
+  try {
+    await user.type(input, 'another value');
+  } catch {
+    // Expected to fail since input is disabled
+  }
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: undefined });
 });
 
@@ -111,8 +116,12 @@ test('readOnly', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Name');
-  await user.type(input, 'another value');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  const input = page.getByLabelText('Name');
+  try {
+    await user.type(input, 'another value');
+  } catch {
+    // Expected to fail since input is readOnly
+  }
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });

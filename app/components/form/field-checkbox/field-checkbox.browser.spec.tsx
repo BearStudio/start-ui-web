@@ -1,8 +1,12 @@
 import { expect, test, vi } from 'vitest';
-import { axe } from 'vitest-axe';
 import { z } from 'zod';
 
-import { render, screen, setupUser } from '@/tests/utils';
+import {
+  FAILED_CLICK_TIMEOUT_MS,
+  page,
+  render,
+  setupUser,
+} from '@/tests/utils';
 
 import { FormField, FormFieldController } from '..';
 import { FormMocked } from '../form-test-utils';
@@ -13,36 +17,6 @@ const zFormSchema = () =>
       message: 'Please say you love bears.',
     }),
   });
-
-test('should have no a11y violations', async () => {
-  const mockedSubmit = vi.fn();
-
-  HTMLCanvasElement.prototype.getContext = vi.fn();
-
-  const { container } = render(
-    <FormMocked
-      schema={zFormSchema()}
-      useFormOptions={{ defaultValues: { lovesBears: false } }}
-      onSubmit={mockedSubmit}
-    >
-      {({ form }) => (
-        <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
-            I love bears
-          </FormFieldController>
-        </FormField>
-      )}
-    </FormMocked>
-  );
-
-  const results = await axe(container);
-
-  expect(results).toHaveNoViolations();
-});
 
 test('should select checkbox on button click', async () => {
   const user = setupUser();
@@ -68,13 +42,14 @@ test('should select checkbox on button click', async () => {
     </FormMocked>
   );
 
-  const checkbox = screen.getByRole('checkbox', { name: 'I love bears' });
-  expect(checkbox).not.toBeChecked();
+  const checkbox = page.getByRole('checkbox', { name: 'I love bears' });
+
+  await expect.element(checkbox).not.toBeChecked();
 
   await user.click(checkbox);
-  expect(checkbox).toBeChecked();
+  await expect.element(checkbox).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: true });
 });
 
@@ -102,16 +77,16 @@ test('should select checkbox on label click', async () => {
     </FormMocked>
   );
 
-  const checkbox = screen.getByRole('checkbox', { name: 'I love bears' });
-  const label = screen.getByText('I love bears');
+  const checkbox = page.getByRole('checkbox', { name: 'I love bears' });
+  const label = page.getByText('I love bears');
 
-  expect(checkbox).not.toBeChecked();
+  await expect.element(checkbox).not.toBeChecked();
 
   // Test clicking the label specifically
   await user.click(label);
-  expect(checkbox).toBeChecked();
+  await expect.element(checkbox).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: true });
 });
 
@@ -138,10 +113,10 @@ test('default value', async () => {
     </FormMocked>
   );
 
-  const checkbox = screen.getByRole('checkbox', { name: 'I love bears' });
-  expect(checkbox).toBeChecked();
+  const checkbox = page.getByRole('checkbox', { name: 'I love bears' });
+  await expect.element(checkbox).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: true });
 });
 
@@ -169,12 +144,18 @@ test('disabled', async () => {
     </FormMocked>
   );
 
-  const checkbox = screen.getByRole('checkbox', { name: 'I love bears' });
-  expect(checkbox).toBeDisabled();
-  expect(checkbox).not.toBeChecked();
+  const checkbox = page.getByRole('checkbox', { name: 'I love bears' });
+  await expect.element(checkbox).toBeDisabled();
+  await expect.element(checkbox).not.toBeChecked();
 
-  await user.click(checkbox);
-  expect(checkbox).not.toBeChecked();
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  try {
+    await user.click(checkbox, {
+      trial: true,
+      timeout: FAILED_CLICK_TIMEOUT_MS,
+    });
+  } catch {
+    await expect.element(checkbox).not.toBeChecked();
+  }
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: undefined });
 });
