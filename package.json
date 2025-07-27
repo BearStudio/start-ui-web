@@ -68,6 +68,7 @@
     "cmdk": "1.1.1",
     "colorette": "2.0.20",
     "dayjs": "1.11.13",
+    "fast-equals": "5.2.2",
     "i18next": "25.1.2",
     "i18next-browser-languagedetector": "8.1.0",
     "input-otp": "1.4.2",
