@@ -3,9 +3,9 @@ import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 import {
+  CheckboxGroupContext,
+  createCheckboxGroupStore,
   CreateCheckboxGroupStoreOptions,
-  createCheckboxStore,
-  NestedCheckboxGroupContext,
 } from '@/components/ui/nested-checkbox-group/store';
 
 export type NestedCheckboxGroupProps = React.ComponentProps<'div'> &
@@ -23,7 +23,7 @@ export function NestedCheckboxGroup({
   ...rest
 }: NestedCheckboxGroupProps) {
   const [checkboxStore] = React.useState(() =>
-    createCheckboxStore({ disabled })
+    createCheckboxGroupStore({ disabled })
   );
 
   // Sync store with value (controlled)
@@ -42,17 +42,14 @@ export function NestedCheckboxGroup({
     if (!onValueChange) return;
 
     return checkboxStore.subscribe((state) => {
-      const newValues = state.checkboxes
-        .filter((cb) => cb.checked === true && !cb.disabled)
-        .map((cb) => cb.value);
-
+      const newValues = state.value();
       onValueChange(newValues);
     });
   }, [onValueChange, checkboxStore]);
 
   return (
-    <NestedCheckboxGroupContext value={checkboxStore}>
+    <CheckboxGroupContext value={checkboxStore}>
       <div className={cn('flex flex-col gap-2', className)} {...rest} />
-    </NestedCheckboxGroupContext>
+    </CheckboxGroupContext>
   );
 }

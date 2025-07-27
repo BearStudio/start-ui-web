@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
-import { createCheckboxInterfaceSelector } from '@/components/ui/nested-checkbox-group/nested-checkbox-interface';
+import { createCheckboxApiSelector } from '@/components/ui/nested-checkbox-group/nested-checkbox-interface';
 import { useCheckboxGroupStore } from '@/components/ui/nested-checkbox-group/store';
 
 export type NestedCheckboxProps = Omit<CheckboxProps, 'parent' | 'value'> & {
@@ -16,13 +16,14 @@ export function NestedCheckbox({
   defaultChecked,
   ...rest
 }: NestedCheckboxProps) {
+  const checkboxApiSelector = createCheckboxApiSelector({ value });
   const {
     checked: isChecked,
     indeterminate: isIndeterminate,
     disabled,
     onChange,
     actions,
-  } = useCheckboxGroupStore(createCheckboxInterfaceSelector({ value }));
+  } = useCheckboxGroupStore(checkboxApiSelector);
 
   React.useEffect(() => {
     if (!value) return;
@@ -38,6 +39,7 @@ export function NestedCheckbox({
       checked={isChecked}
       indeterminate={isIndeterminate}
       disabled={disabled}
+      defaultChecked={defaultChecked}
       {...rest}
       onCheckedChange={(value, event) => {
         onChange(value);

@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/nested-checkbox-group/helpers';
 import { CheckboxGroupStore } from '@/components/ui/nested-checkbox-group/store';
 
-export type NestedCheckboxInterface = {
+export type NestedCheckboxApi = {
   checkboxes: CheckboxGroupStore['checkboxes'];
   checked: boolean;
   indeterminate?: boolean;
@@ -14,8 +14,10 @@ export type NestedCheckboxInterface = {
   onChange: (newChecked: boolean) => void;
 };
 
-export function createCheckboxInterfaceSelector({ value }: { value: string }) {
-  return (state: CheckboxGroupStore): NestedCheckboxInterface => {
+export function createCheckboxApiSelector({ value }: { value: string }) {
+  return function checkboxApiSelector(
+    state: CheckboxGroupStore
+  ): NestedCheckboxApi {
     const checkboxes = state.checkboxes;
     const checkbox = checkboxes.find((c) => c.value === value);
     const children = getChildren(checkboxes, value);
@@ -59,7 +61,8 @@ function updateChildren(
 ) {
   const children = getChildren(checkboxes, value);
 
-  if (!children) return;
+  if (!children.length) return;
+
   for (const child of children) {
     if (disabled) child.disabled = true;
 

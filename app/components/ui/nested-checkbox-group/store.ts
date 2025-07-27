@@ -30,7 +30,7 @@ export type CreateCheckboxGroupStoreOptions = {
   disabled?: boolean;
 };
 
-export const createCheckboxStore = ({
+export const createCheckboxGroupStore = ({
   disabled,
 }: CreateCheckboxGroupStoreOptions) => {
   return createStore<CheckboxGroupStore>((set, get) => ({
@@ -75,13 +75,14 @@ export const createCheckboxStore = ({
   }));
 };
 
-export const NestedCheckboxGroupContext =
+export const CheckboxGroupContext =
   React.createContext<CheckboxGroupStoreApi | null>(null);
 
 export const useCheckboxGroupStore = <T>(
   selector: (state: CheckboxGroupStore) => T
 ) => {
-  const context = React.use(NestedCheckboxGroupContext);
+  const context = React.use(CheckboxGroupContext);
+
   if (!context)
     throw new Error(
       'useCheckboxGroupStore must be used within a <NestedCheckboxGroup />'
