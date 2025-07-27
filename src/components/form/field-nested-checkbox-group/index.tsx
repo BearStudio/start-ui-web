@@ -32,7 +32,7 @@ export const FieldNestedCheckboxGroup = (
   const { containerProps, options, ...rest } = props;
   const ctx = useFormField();
   const {
-    field: { value, onChange, ...field },
+    field: { value, onChange, onBlur: _onBlur, ...field },
     fieldState,
   } = useFormFieldController();
 
