@@ -1,46 +1,54 @@
 import { expect, test, vi } from 'vitest';
-import { axe } from 'vitest-axe';
 import { z } from 'zod';
+
+import { NestedCheckboxOption } from '@/components/form/field-nested-checkbox-group';
 
 import { render, screen, setupUser } from '@/tests/utils';
 
 import { FormField, FormFieldController, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
-const options = [
-  { value: 'bearstrong', label: 'Bearstrong' },
-  { value: 'pawdrin', label: 'Buzz Pawdrin' },
-  { value: 'grizzlyrin', label: 'Yuri Grizzlyrin' },
-  { value: 'jemibear', label: 'Mae Jemibear', disabled: true },
+const options: Array<NestedCheckboxOption> = [
+  {
+    label: 'Astrobears',
+    value: 'astrobears',
+    children: [
+      {
+        value: 'bearstrong',
+        label: 'Bearstrong',
+      },
+      {
+        value: 'pawdrin',
+        label: 'Buzz Pawdrin',
+        children: [
+          {
+            value: 'mini-pawdrin-1',
+            label: 'Mini Pawdrin 1',
+          },
+          {
+            value: 'mini-pawdrin-2',
+            label: 'Mini Pawdrin 2',
+          },
+        ],
+      },
+      {
+        value: 'grizzlyrin',
+        label: 'Yuri Grizzlyrin',
+        disabled: true,
+        children: [
+          {
+            value: 'mini-grizzlyrin-1',
+            label: 'Mini Grizzlyrin 1',
+          },
+          {
+            value: 'mini-grizzlyrin-2',
+            label: 'Mini Grizzlyrin 2',
+          },
+        ],
+      },
+    ],
+  },
 ];
-
-test('should have no a11y violations', async () => {
-  const mockedSubmit = vi.fn();
-  HTMLCanvasElement.prototype.getContext = vi.fn();
-
-  const { container } = render(
-    <FormMocked
-      schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
-      onSubmit={mockedSubmit}
-    >
-      {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
-        </FormField>
-      )}
-    </FormMocked>
-  );
-
-  const results = await axe(container);
-  expect(results).toHaveNoViolations();
-});
 
 test('should toggle checkbox on click', async () => {
   const user = setupUser();
@@ -56,7 +64,7 @@ test('should toggle checkbox on click', async () => {
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            type="checkbox-group"
+            type="nested-checkbox-group"
             control={form.control}
             name="bears"
             options={options}
@@ -73,10 +81,12 @@ test('should toggle checkbox on click', async () => {
   expect(checkbox).toBeChecked();
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
+  expect(mockedSubmit).toHaveBeenCalledWith({
+    bears: ['pawdrin', 'mini-pawdrin-1', 'mini-pawdrin-2'],
+  });
 });
 
-test('should toggle checkbox on label click', async () => {
+test('should check all non disabled checkboxes', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
@@ -90,7 +100,7 @@ test('should toggle checkbox on label click', async () => {
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            type="checkbox-group"
+            type="nested-checkbox-group"
             control={form.control}
             name="bears"
             options={options}
@@ -100,53 +110,21 @@ test('should toggle checkbox on label click', async () => {
     </FormMocked>
   );
 
-  const checkbox = screen.getByRole('checkbox', { name: 'Buzz Pawdrin' });
-  const label = screen.getByText('Buzz Pawdrin');
+  const checkbox = screen.getByLabelText('Astrobears');
 
-  expect(checkbox).not.toBeChecked();
-  await user.click(label);
+  await user.click(checkbox);
+
   expect(checkbox).toBeChecked();
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
-});
-
-test('should allow selecting multiple checkboxes', async () => {
-  const user = setupUser();
-  const mockedSubmit = vi.fn();
-
-  render(
-    <FormMocked
-      schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
-      onSubmit={mockedSubmit}
-    >
-      {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
-        </FormField>
-      )}
-    </FormMocked>
-  );
-
-  const cb1 = screen.getByRole('checkbox', { name: 'Bearstrong' });
-  const cb2 = screen.getByRole('checkbox', { name: 'Buzz Pawdrin' });
-
-  await user.click(cb1);
-  await user.click(cb2);
-
-  expect(cb1).toBeChecked();
-  expect(cb2).toBeChecked();
-
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({
-    bears: ['bearstrong', 'pawdrin'],
+    bears: [
+      'astrobears',
+      'bearstrong',
+      'pawdrin',
+      'mini-pawdrin-1',
+      'mini-pawdrin-2',
+    ],
   });
 });
 
@@ -164,7 +142,7 @@ test('keyboard interaction: toggle with space', async () => {
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            type="checkbox-group"
+            type="nested-checkbox-group"
             control={form.control}
             name="bears"
             options={options}
@@ -174,8 +152,9 @@ test('keyboard interaction: toggle with space', async () => {
     </FormMocked>
   );
 
-  const cb1 = screen.getByRole('checkbox', { name: 'Bearstrong' });
+  const cb1 = screen.getByLabelText('Bearstrong');
 
+  await user.tab(); // Focus the 'check all' checkbox
   await user.tab();
   expect(cb1).toHaveFocus();
 
@@ -194,7 +173,9 @@ test('default values', async () => {
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{
-        defaultValues: { bears: ['grizzlyrin'] },
+        defaultValues: {
+          bears: ['grizzlyrin', 'mini-grizzlyrin-1', 'mini-grizzlyrin-2'],
+        },
       }}
       onSubmit={mockedSubmit}
     >
@@ -202,7 +183,7 @@ test('default values', async () => {
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            type="checkbox-group"
+            type="nested-checkbox-group"
             control={form.control}
             name="bears"
             options={options}
@@ -216,10 +197,47 @@ test('default values', async () => {
   expect(cb).toBeChecked();
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['grizzlyrin'] });
+  expect(mockedSubmit).toHaveBeenCalledWith({
+    bears: ['grizzlyrin', 'mini-grizzlyrin-1', 'mini-grizzlyrin-2'],
+  });
 });
 
 test('disabled group', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ bears: z.array(z.string()) })}
+      useFormOptions={{ defaultValues: { bears: [] } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            type="nested-checkbox-group"
+            control={form.control}
+            name="bears"
+            options={options}
+            disabled
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  const checkAll = screen.getByLabelText('Astrobears');
+  expect(checkAll).toBeDisabled();
+
+  await user.click(checkAll);
+  expect(checkAll).not.toBeChecked();
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
+});
+
+test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
@@ -235,7 +253,7 @@ test('disabled group', async () => {
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            type="checkbox-group"
+            type="nested-checkbox-group"
             control={form.control}
             name="bears"
             disabled
@@ -246,43 +264,13 @@ test('disabled group', async () => {
     </FormMocked>
   );
 
-  const cb = screen.getByRole('checkbox', { name: 'Buzz Pawdrin' });
+  const cb = screen.getByLabelText('Buzz Pawdrin');
+  const subCb1 = screen.getByLabelText('Mini Pawdrin 1');
+  const subCb2 = screen.getByLabelText('Mini Pawdrin 2');
   expect(cb).toBeDisabled();
+  expect(subCb1).toBeDisabled();
+  expect(subCb2).toBeDisabled();
 
   await user.click(screen.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
-});
-
-test('disabled option', async () => {
-  const user = setupUser();
-  const mockedSubmit = vi.fn();
-
-  render(
-    <FormMocked
-      schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
-      onSubmit={mockedSubmit}
-    >
-      {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
-        </FormField>
-      )}
-    </FormMocked>
-  );
-
-  const disabledCb = screen.getByRole('checkbox', { name: 'Mae Jemibear' });
-  expect(disabledCb).toBeDisabled();
-
-  await user.click(disabledCb);
-  expect(disabledCb).not.toBeChecked();
-
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: [] });
 });

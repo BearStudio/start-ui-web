@@ -65,7 +65,10 @@ export const FieldNestedCheckboxGroup = <
       disabled={disabled}
       defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, value, ...field }, fieldState }) => {
+      render={({
+        field: { onChange, value, onBlur, ...field },
+        fieldState,
+      }) => {
         const isInvalid = fieldState.error ? true : undefined;
 
         return (
