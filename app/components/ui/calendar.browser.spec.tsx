@@ -1,28 +1,37 @@
-import { render, screen } from '@testing-library/react';
 import dayjs from 'dayjs';
-import { describe, expect, it, vitest } from 'vitest';
+import * as module from 'react-i18next';
+import { describe, expect, it, vi } from 'vitest';
+
+import { page, render } from '@/tests/utils';
 
 import { Calendar } from './calendar';
 
-vitest.mock('react-i18next', () => ({
-  // This is a mock, we name it as the hook we want to mock
-  // eslint-disable-next-line @eslint-react/hooks-extra/no-unnecessary-use-prefix
-  useTranslation: () => ({ t: (key: ExplicitAny) => key }),
-}));
+// https://vitest.dev/guide/browser/#limitations
+vi.mock('react-i18next', { spy: true });
+vi.mocked(module.useTranslation).mockImplementation(
+  // @ts-expect-error We don't bother typing properly for this test
+  () => ({ t: (key) => key })
+);
 
 describe('Calendar', () => {
-  it('should render with previous and next button by default', () => {
+  // eslint-disable-next-line sonarjs/assertions-in-tests
+  it('should render with previous and next button by default', async () => {
     render(<Calendar />);
 
-    expect(screen.getByLabelText('Go to the Previous Month')).toBeDefined();
-    expect(screen.getByLabelText('Go to the Next Month')).toBeDefined();
+    await expect
+      .element(page.getByLabelText('Go to the Previous Month'))
+      .toBeDefined();
+
+    await expect
+      .element(page.getByLabelText('Go to the Next Month'))
+      .toBeDefined();
   });
 
   it('should render without button date when uncontrolled', () => {
     render(<Calendar />);
 
     // 3 are the previous, next and year select buttons
-    expect(screen.getAllByRole('button').length).toBeLessThanOrEqual(3);
+    expect(page.getByRole('button').all().length).toBeLessThanOrEqual(3);
   });
 
   it('should render date buttons when controlled', () => {
@@ -31,11 +40,11 @@ describe('Calendar', () => {
     );
 
     // 3 are the previous, next and year select buttons
-    expect(screen.getAllByRole('button').length).toBeGreaterThan(3);
+    expect(page.getByRole('button').all().length).toBeGreaterThan(3);
   });
 
-  it('should give the selected value on select', () => {
-    const onSelect = vitest.fn();
+  it('should give the selected value on select', async () => {
+    const onSelect = vi.fn();
 
     render(
       <Calendar
@@ -53,16 +62,16 @@ describe('Calendar', () => {
     const ariaLabel = targetDate.format('dddd, MMMM D');
 
     // exact false because we don't provide the end of the aria-label (the year mostly)
-    const button = screen.getByLabelText(ariaLabel, { exact: false });
-    expect(button).toBeDefined();
+    const button = page.getByLabelText(ariaLabel, { exact: false });
+    await expect.element(button).toBeDefined();
 
-    button.click();
+    await button.click();
 
     expect(onSelect).toHaveBeenCalledWith(targetDate.startOf('day').toDate());
   });
 
-  it('should be able to select today using aria-label', () => {
-    const onSelect = vitest.fn();
+  it('should be able to select today using aria-label', async () => {
+    const onSelect = vi.fn();
 
     render(
       <Calendar
@@ -79,10 +88,10 @@ describe('Calendar', () => {
     const targetDate = dayjs();
 
     // exact false because we don't provide the end of the aria-label
-    const button = screen.getByLabelText('Today', { exact: false });
-    expect(button).toBeDefined();
+    const button = page.getByLabelText('Today', { exact: false });
+    await expect.element(button).toBeDefined();
 
-    button.click();
+    await button.click();
 
     expect(onSelect).toHaveBeenCalledWith(targetDate.startOf('day').toDate());
   });
