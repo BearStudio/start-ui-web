@@ -114,6 +114,7 @@
     "@vitejs/plugin-react": "4.4.1",
     "@vitest/browser": "3.2.4",
     "@vueless/storybook-dark-mode": "9.0.5",
+    "code-inspector-plugin": "1.0.3",
     "cross-env": "7.0.3",
     "dotenv-cli": "8.0.0",
     "eslint": "9.26.0",
