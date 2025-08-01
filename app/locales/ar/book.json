@@ -4,6 +4,47 @@
       "label": "عنوان",
       "required": "العنوان مطلوب",
       "alreadyUsed": "العنوان المستخدم بالفعل مع نفس المؤلف"
+    },
+    "author": {
+      "label": "مؤلف"
+    },
+    "genre": {
+      "label": "النوع"
+    },
+    "publisher": {
+      "label": "الناشر"
+    },
+    "createButton": {
+      "label": "يخلق"
+    },
+    "newButton": {
+      "label": "كتاب جديد"
+    },
+    "notFound": "لا توجد كتب متاحة",
+    "loadMore": "تحميل المزيد من الكتب",
+    "byCapitalized": "بواسطة"
+  },
+  "app": {
+    "list": {
+      "title": "الكتب"
+    }
+  },
+  "manager": {
+    "toast": {
+      "deleted": "تم حذف الكتاب"
+    },
+    "list": {
+      "title": "الكتب",
+      "deleteBookWarning": "أنت على وشك حذف هذا الكتاب بشكل دائم. <strong>لا يمكن التراجع عن هذا الإجراء.</strong> يرجى تأكيد قرارك بعناية.",
+      "loadMore": "تحميل المزيد",
+      "showing": "عرض {{count}} من {{total}}",
+      "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
+    },
+    "new": {
+      "title": "كتاب جديد"
+    },
+    "update": {
+      "title": "تحديث الكتاب"
     }
   }
 }
