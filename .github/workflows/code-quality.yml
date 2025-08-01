@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [20, 22, 24, 'lts/*']
+        node: [22, 24, 'lts/*']
     steps:
       - uses: actions/checkout@v4
 
@@ -65,7 +65,7 @@ jobs:
       VITE_BASE_URL: http://localhost:3000
     strategy:
       matrix:
-        node: [20, 22, 24, 'lts/*']
+        node: [22, 24, 'lts/*']
     steps:
       - uses: actions/checkout@v4
 
