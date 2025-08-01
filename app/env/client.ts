@@ -25,6 +25,7 @@ export const envClient = createEnv({
   clientPrefix: 'VITE_',
   client: {
     VITE_BASE_URL: z.string().url(),
+    // !STARTERCONF [demoMode] Remove this VITE_IS_DEMO env var
     VITE_IS_DEMO: z
       .enum(['true', 'false'])
       .optional()
