@@ -1,0 +1,25 @@
+{
+  "languages": {
+    "values": {
+      "en": "Kiingereza",
+      "fr": "Kifaransa",
+      "ar": "Kiarabu",
+      "sw": "Kiswahili"
+    },
+    "label": "Lugha"
+  },
+  "themes": {
+    "values": {
+      "light": "Mwanga",
+      "dark": "Giza",
+      "system": "Mfumo (Otomatiki)"
+    },
+    "label": "Mada"
+  },
+  "actions": {
+    "back": "Rudi",
+    "cancel": "Ghairi",
+    "delete": "Futa",
+    "edit": "Hariri"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "application": "Maombi",
+    "configuration": "Usanidi",
+    "dashboard": "Dashibodi",
+    "users": "Watumiaji",
+    "account": "Akaunti",
+    "home": "Nyumbani",
+    "apiDocumentation": "Nyaraka za API",
+    "openApp": "Fungua programu",
+    "books": "Vitabu"
+  }
+}

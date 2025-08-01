@@ -1,0 +1,9 @@
+{
+  "common": {
+    "title": {
+      "label": "Title",
+      "required": "Title is required",
+      "alreadyUsed": "Title already used with the same author"
+    }
+  }
+}

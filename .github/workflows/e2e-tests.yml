@@ -6,12 +6,8 @@ on:
       - main
       - develop
       - staging
+      - ivan/restart # TODO remove me on final merge on main
   pull_request:
-    branches:
-      - master
-      - main
-      - develop
-      - staging
 
 jobs:
   E2E:
@@ -19,11 +15,11 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BASE_URL: http://localhost:3000
-      NEXT_PUBLIC_ENV_NAME: tests
+      VITE_BASE_URL: http://localhost:3000
+      VITE_ENV_NAME: tests
       DATABASE_URL: postgres://startui:startui@localhost:5432/startui
-      NEXT_PUBLIC_IS_DEMO: false
-      AUTH_SECRET: Replace me with `openssl rand -base64 32` generated secret
+      VITE_IS_DEMO: false
+      BETTER_AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
       EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
     services:
@@ -44,9 +40,9 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -77,7 +73,7 @@ jobs:
         run: pnpm install
 
       - name: Install Playwright Browsers
-        run: pnpm playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
       - name: Migrate database
         run: pnpm db:push

@@ -1,0 +1,16 @@
+body,
+.docs-story {
+  background-color: var(--background);
+}
+
+#preview-container {
+  min-height: 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+#storybook-root #preview-container {
+  min-height: 100vh;
+}

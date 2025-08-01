@@ -1,0 +1,63 @@
+{
+  "pageErrorBoundary": {
+    "title": "ERREUR",
+    "tryAgain": "Réessayer",
+    "goBack": "Retour",
+    "description": "Quelque chose s'est mal passé",
+    "goHome": "Accueil"
+  },
+  "datePickerButton": {
+    "pickADate": "Choisir une date"
+  },
+  "pageError": {
+    "403": {
+      "description": "Vous n'avez pas accès à cette page",
+      "title": "403"
+    },
+    "404": {
+      "description": "Cette page est introuvable",
+      "title": "404"
+    },
+    "500": {
+      "description": "Quelque chose s'est mal passé",
+      "title": "500"
+    },
+    "unknown": {
+      "description": "Quelque chose s'est mal passé",
+      "title": "ERREUR"
+    },
+    "goBack": "Retour",
+    "goHome": "Accueil"
+  },
+  "searchInput": {
+    "clear": "Effacer la recherche",
+    "placeholder": "Rechercher..."
+  },
+  "confirmResponsiveDrawer": {
+    "cancelText": "Annuler",
+    "confirmText": "Confirmer",
+    "heading": "Êtes-vous sûr?"
+  },
+  "datalist": {
+    "emptyTitle": "Aucune donnée",
+    "errorTitle": "Une erreur s'est produite",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
+    "retry": "Réessayer",
+    "clear": "Effacer"
+  },
+  "searchButton": {
+    "label": "Rechercher"
+  },
+  "sidebar": {
+    "title": "Barre de navigation",
+    "toggle": "Afficher ou masquer la navigation"
+  },
+  "backButton": {
+    "label": "Retour"
+  },
+  "select": {
+    "placeholder": "Sélectionner...",
+    "create": "Créer \"{{searchTerm}}\"",
+    "noResultsFound": "Aucun résultat trouvé"
+  }
+}

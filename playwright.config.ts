@@ -21,7 +21,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+    baseURL: process.env.VITE_BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -47,7 +47,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'pnpm dev',
-    url: process.env.NEXT_PUBLIC_BASE_URL,
+    url: process.env.VITE_BASE_URL,
     reuseExistingServer: !process.env.CI,
   },
 });
