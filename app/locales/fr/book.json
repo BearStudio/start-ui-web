@@ -4,6 +4,47 @@
       "alreadyUsed": "Titre déjà utilisé avec le même auteur",
       "label": "Titre",
       "required": "Le titre est requis"
+    },
+    "author": {
+      "label": "Auteur"
+    },
+    "genre": {
+      "label": "Genre"
+    },
+    "publisher": {
+      "label": "Éditeur"
+    },
+    "newButton": {
+      "label": "Nouveau livre"
+    },
+    "createButton": {
+      "label": "Créer"
+    },
+    "notFound": "Aucun livre disponible",
+    "loadMore": "Charger plus de livres",
+    "byCapitalized": "Par"
+  },
+  "app": {
+    "list": {
+      "title": "Livres"
+    }
+  },
+  "manager": {
+    "toast": {
+      "deleted": "Livre supprimé"
+    },
+    "list": {
+      "title": "Livres",
+      "deleteBookWarning": "Vous êtes sur le point de supprimer définitivement ce livre. <strong>Cette action ne peut pas être annulée.</strong> Veuillez confirmer votre décision avec soin.",
+      "loadMore": "Charger plus",
+      "showing": "Affichage de {{count}} sur {{total}}",
+      "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
+    },
+    "new": {
+      "title": "Nouveau livre"
+    },
+    "update": {
+      "title": "Mettre à jour le livre"
     }
   }
 }
