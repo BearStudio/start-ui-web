@@ -71,12 +71,12 @@ Example: [Login Code](http://localhost:3000/api/dev/email/login-code)
 
 ##### Email translation preview
 
-Add the language in the preview url like `http://localhost:3000/devtools/email/{template}?language={language}` where `{language}` is the language key (`en`, `fr`, ...)
+Add the language in the preview url like `http://localhost:3000/api/dev/email/{template}?language={language}` where `{language}` is the language key (`en`, `fr`, ...)
 
 #### Email props preview
 
 You can add search params to the preview url to pass as props to the template.
-`http://localhost:3000/devtools/email/{template}/?{propsName}={propsValue}`
+`http://localhost:3000/api/dev/email/{template}/?{propsName}={propsValue}`
 
 ### Generate custom icons components from svg files
 

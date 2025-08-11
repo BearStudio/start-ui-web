@@ -6,6 +6,14 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
+import {
+  FieldCheckbox,
+  FieldCheckboxProps,
+} from '@/components/form/field-checkbox';
+import {
+  FieldCheckboxGroup,
+  FieldCheckboxGroupProps,
+} from '@/components/form/field-checkbox-group';
 import { FieldNumber, FieldNumberProps } from '@/components/form/field-number';
 
 import { FieldDate, FieldDateProps } from './field-date';
@@ -49,7 +57,9 @@ export type FormFieldControllerProps<
   | FieldDateProps<TFieldValues, TName>
   | FieldTextProps<TFieldValues, TName>
   | FieldOtpProps<TFieldValues, TName>
-  | FieldRadioGroupProps<TFieldValues, TName>;
+  | FieldRadioGroupProps<TFieldValues, TName>
+  | FieldCheckboxProps<TFieldValues, TName>
+  | FieldCheckboxGroupProps<TFieldValues, TName>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
@@ -88,6 +98,12 @@ export const FormFieldController = <
 
       case 'radio-group':
         return <FieldRadioGroup {...props} />;
+
+      case 'checkbox':
+        return <FieldCheckbox {...props} />;
+
+      case 'checkbox-group':
+        return <FieldCheckboxGroup {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };

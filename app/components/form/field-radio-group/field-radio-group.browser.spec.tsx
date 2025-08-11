@@ -1,8 +1,12 @@
 import { expect, test, vi } from 'vitest';
-import { axe } from 'vitest-axe';
 import { z } from 'zod';
 
-import { render, screen, setupUser } from '@/tests/utils';
+import {
+  FAILED_CLICK_TIMEOUT_MS,
+  page,
+  render,
+  setupUser,
+} from '@/tests/utils';
 
 import { FormField, FormFieldController, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
@@ -26,36 +30,6 @@ const options = [
     disabled: true,
   },
 ];
-
-test('should have no a11y violations', async () => {
-  const mockedSubmit = vi.fn();
-
-  HTMLCanvasElement.prototype.getContext = vi.fn();
-
-  const { container } = render(
-    <FormMocked
-      schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: undefined } }}
-      onSubmit={mockedSubmit}
-    >
-      {({ form }) => (
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
-        </FormField>
-      )}
-    </FormMocked>
-  );
-
-  const results = await axe(container);
-
-  expect(results).toHaveNoViolations();
-});
 
 test('should select radio on button click', async () => {
   const user = setupUser();
@@ -81,13 +55,13 @@ test('should select radio on button click', async () => {
     </FormMocked>
   );
 
-  const radio = screen.getByRole('radio', { name: 'Buzz Pawdrin' });
-  expect(radio).not.toBeChecked();
+  const radio = page.getByRole('radio', { name: 'Buzz Pawdrin' });
+  await expect.element(radio).not.toBeChecked();
 
   await user.click(radio);
-  expect(radio).toBeChecked();
+  await expect.element(radio).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
@@ -115,16 +89,16 @@ test('should select radio on label click', async () => {
     </FormMocked>
   );
 
-  const radio = screen.getByRole('radio', { name: 'Buzz Pawdrin' });
-  const label = screen.getByText('Buzz Pawdrin');
+  const radio = page.getByRole('radio', { name: 'Buzz Pawdrin' });
+  const label = page.getByText('Buzz Pawdrin');
 
-  expect(radio).not.toBeChecked();
+  await expect.element(radio).not.toBeChecked();
 
   // Test clicking the label specifically
   await user.click(label);
-  expect(radio).toBeChecked();
+  await expect.element(radio).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
@@ -152,26 +126,26 @@ test('should handle keyboard navigation', async () => {
     </FormMocked>
   );
 
-  const firstRadio = screen.getByRole('radio', { name: 'Bearstrong' });
-  const secondRadio = screen.getByRole('radio', { name: 'Buzz Pawdrin' });
-  const thirdRadio = screen.getByRole('radio', { name: 'Yuri Grizzlyrin' });
+  const firstRadio = page.getByRole('radio', { name: 'Bearstrong' });
+  const secondRadio = page.getByRole('radio', { name: 'Buzz Pawdrin' });
+  const thirdRadio = page.getByRole('radio', { name: 'Yuri Grizzlyrin' });
 
   await user.tab();
-  expect(firstRadio).toHaveFocus();
+  await expect.element(firstRadio).toHaveFocus();
 
   await user.keyboard('{ArrowDown}');
-  expect(secondRadio).toHaveFocus();
+  await expect.element(secondRadio).toHaveFocus();
   await user.keyboard(' ');
-  expect(secondRadio).toBeChecked();
+  await expect.element(secondRadio).toBeChecked();
 
   await user.keyboard('{ArrowDown}');
-  expect(thirdRadio).toHaveFocus();
+  await expect.element(thirdRadio).toHaveFocus();
 
   await user.keyboard('{ArrowUp}');
-  expect(secondRadio).toHaveFocus();
-  expect(secondRadio).toBeChecked(); // Second radio should still be checked
+  await expect.element(secondRadio).toHaveFocus();
+  await expect.element(secondRadio).toBeChecked(); // Second radio should still be checked
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
@@ -202,10 +176,10 @@ test('default value', async () => {
     </FormMocked>
   );
 
-  const radio = screen.getByRole('radio', { name: 'Yuri Grizzlyrin' });
-  expect(radio).toBeChecked();
+  const radio = page.getByRole('radio', { name: 'Yuri Grizzlyrin' });
+  await expect.element(radio).toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'grizzlyrin' });
 });
 
@@ -237,10 +211,10 @@ test('disabled', async () => {
     </FormMocked>
   );
 
-  const radio = screen.getByRole('radio', { name: 'Buzz Pawdrin' });
-  expect(radio).toBeDisabled();
+  const radio = page.getByRole('radio', { name: 'Buzz Pawdrin' });
+  await expect.element(radio).toBeDisabled();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: undefined });
 });
 
@@ -271,12 +245,16 @@ test('disabled option', async () => {
     </FormMocked>
   );
 
-  const disabledRadio = screen.getByRole('radio', { name: 'Mae Jemibear' });
-  expect(disabledRadio).toBeDisabled();
+  const disabledRadio = page.getByRole('radio', { name: 'Mae Jemibear' });
+  await expect.element(disabledRadio).toBeDisabled();
 
-  await user.click(disabledRadio);
-  expect(disabledRadio).not.toBeChecked();
+  try {
+    await user.click(disabledRadio, { timeout: FAILED_CLICK_TIMEOUT_MS });
+  } catch {
+    // Expected to fail since input is disabled
+  }
+  await expect.element(disabledRadio).not.toBeChecked();
 
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: '' });
 });

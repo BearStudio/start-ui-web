@@ -6,31 +6,32 @@ import { cn } from '@/lib/tailwind/utils';
 import { FormFieldError } from '@/components/form';
 import { useFormField } from '@/components/form/form-field';
 import { FieldProps } from '@/components/form/form-field-controller';
-import { Radio, RadioGroup, RadioProps } from '@/components/ui/radio-group';
+import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
+import { CheckboxGroup } from '@/components/ui/checkbox-group';
 
-type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
+type CheckboxOption = Omit<CheckboxProps, 'children' | 'value' | 'render'> & {
   label: string;
+  value: string;
 };
 
-export type FieldRadioGroupProps<
+export type FieldCheckboxGroupProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = FieldProps<
   TFieldValues,
   TName,
   {
-    type: 'radio-group';
-    options: Array<RadioOption>;
-    renderOption?: (props: RadioOption) => React.JSX.Element;
+    type: 'checkbox-group';
+    options: Array<CheckboxOption>;
     containerProps?: React.ComponentProps<'div'>;
-  } & React.ComponentProps<typeof RadioGroup>
+  } & Omit<React.ComponentProps<typeof CheckboxGroup>, 'allValues'>
 >;
 
-export const FieldRadioGroup = <
+export const FieldCheckboxGroup = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: FieldRadioGroupProps<TFieldValues, TName>
+  props: FieldCheckboxGroupProps<TFieldValues, TName>
 ) => {
   const {
     name,
@@ -41,7 +42,6 @@ export const FieldRadioGroup = <
     containerProps,
     options,
     size,
-    renderOption,
     ...rest
   } = props;
   const ctx = useFormField();
@@ -55,6 +55,7 @@ export const FieldRadioGroup = <
       shouldUnregister={shouldUnregister}
       render={({ field: { onChange, value, ...field }, fieldState }) => {
         const isInvalid = fieldState.error ? true : undefined;
+
         return (
           <div
             {...containerProps}
@@ -63,7 +64,7 @@ export const FieldRadioGroup = <
               containerProps?.className
             )}
           >
-            <RadioGroup
+            <CheckboxGroup
               id={ctx.id}
               aria-invalid={isInvalid}
               aria-labelledby={ctx.labelId}
@@ -73,38 +74,24 @@ export const FieldRadioGroup = <
                   : `${ctx.descriptionId} ${ctx.errorId}`
               }
               value={value}
-              onValueChange={onChange}
+              onValueChange={(value, event) => {
+                onChange?.(value);
+                rest.onValueChange?.(value, event);
+              }}
               {...rest}
             >
-              {options.map(({ label, ...option }) => {
-                const radioId = `${ctx.id}-${option.value}`;
-
-                if (renderOption) {
-                  return (
-                    <React.Fragment key={radioId}>
-                      {renderOption({
-                        label,
-                        'aria-invalid': isInvalid,
-                        ...field,
-                        ...option,
-                      })}
-                    </React.Fragment>
-                  );
-                }
-
-                return (
-                  <Radio
-                    key={radioId}
-                    aria-invalid={isInvalid}
-                    size={size}
-                    {...field}
-                    {...option}
-                  >
-                    {label}
-                  </Radio>
-                );
-              })}
-            </RadioGroup>
+              {options.map(({ label, ...option }) => (
+                <Checkbox
+                  key={`${ctx.id}-${option.value}`}
+                  aria-invalid={isInvalid}
+                  size={size}
+                  {...field}
+                  {...option}
+                >
+                  {label}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
             <FormFieldError />
           </div>
         );

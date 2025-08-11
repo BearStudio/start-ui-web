@@ -1,7 +1,12 @@
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import { render, screen, setupUser } from '@/tests/utils';
+import {
+  FAILED_CLICK_TIMEOUT_MS,
+  page,
+  render,
+  setupUser,
+} from '@/tests/utils';
 
 import { FormField, FormFieldController, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
@@ -29,10 +34,14 @@ test('update value', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Code');
+
+  const input = page.getByLabelText('Code');
   await user.click(input);
-  await user.paste('000000');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  // Add the code to the user clipboard
+  await navigator.clipboard.writeText('000000');
+
+  await user.paste();
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });
 
@@ -62,7 +71,7 @@ test('default value', async () => {
       )}
     </FormMocked>
   );
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });
 
@@ -90,9 +99,11 @@ test('auto submit', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Code');
+  const input = page.getByLabelText('Code');
   await user.click(input);
-  await user.paste('000000');
+  // Add the code to the user clipboard
+  await navigator.clipboard.writeText('000000');
+  await user.paste();
   expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });
 
@@ -120,9 +131,17 @@ test('disabled', async () => {
       )}
     </FormMocked>
   );
-  const input = screen.getByLabelText<HTMLInputElement>('Code');
-  await user.click(input);
-  await user.paste('123456');
-  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  const input = page.getByLabelText('Code');
+  try {
+    await user.click(input, { timeout: FAILED_CLICK_TIMEOUT_MS });
+  } catch {
+    // Click expected to fail since input is disabled
+  }
+  // Add the code to the user clipboard
+  await navigator.clipboard.writeText('123456');
+  await user.paste();
+
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+
   expect(mockedSubmit).toHaveBeenCalledWith({ code: undefined });
 });

@@ -1,4 +1,5 @@
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 import { defineConfig, loadEnv } from 'vite';
 import tsConfigPaths from 'vite-tsconfig-paths';
 
@@ -11,6 +12,9 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
     },
     plugins: [
+      codeInspectorPlugin({
+        bundler: 'vite',
+      }),
       tsConfigPaths({
         projects: ['./tsconfig.json'],
       }),
