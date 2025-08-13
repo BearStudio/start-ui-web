@@ -1,8 +1,8 @@
+import { expo } from '@better-auth/expo';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
-import { expo } from '@better-auth/expo';
 
 import i18n from '@/lib/i18n';
 
@@ -25,7 +25,7 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
-  trustedOrigins: ['start-ui-native://', 'start-ui-native://*'],
+  trustedOrigins: [envServer.AUTH_TRUSTED_ORIGIN],
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
