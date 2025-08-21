@@ -3,6 +3,7 @@ import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -23,6 +24,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {
+  const { t } = useTranslation(['common', 'book']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -98,11 +100,13 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
               className="min-w-20"
               loading={bookUpdate.isPending}
             >
-              Update
+              {t('common:actions.update')}
             </Button>
           }
         >
-          <PageLayoutTopBarTitle>Update Book</PageLayoutTopBarTitle>
+          <PageLayoutTopBarTitle>
+            {t('book:manager.update.title')}
+          </PageLayoutTopBarTitle>
         </PageLayoutTopBar>
         <PageLayoutContent>
           <div className="flex flex-col gap-4 xs:flex-row">
