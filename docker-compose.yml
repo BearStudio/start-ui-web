@@ -14,3 +14,44 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  minio:
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
+    env_file:
+      - .env
+    ports:
+      - '${OBJECT_STORAGE_WEB_API_PORT:-9000}:9000'
+      - '${OBJECT_STORAGE_UI_PORT:-9001}:9001'
+    environment:
+      MINIO_ROOT_USER: ${OBJECT_STORAGE_USERNAME:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${OBJECT_STORAGE_PASSWORD:-minioadmin}
+    volumes:
+      - minio:/data/minio
+    command: minio server /data/minio --console-address :${OBJECT_STORAGE_UI_PORT:-9001}
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  createbucket:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: []
+    environment:
+      MINIO_ROOT_USER: ${OBJECT_STORAGE_USERNAME:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${OBJECT_STORAGE_PASSWORD:-minioadmin}
+    command: ["sh", "-c", "
+      mc alias set default http://minio:${OBJECT_STORAGE_WEB_API_PORT:-9000} \"$OBJECT_STORAGE_USERNAME\" \"$OBJECT_STORAGE_PASSWORD\";
+      mc admin user add default $OBJECT_STORAGE_ACCESS_KEY $OBJECT_STORAGE_SECRET_KEY;
+      mc admin policy attach default readwrite --user $OBJECT_STORAGE_ACCESS_KEY;
+      mc mb --ignore-existing default/$OBJECT_STORAGE_BUCKET_NAME 2>/dev/null;
+      mc anonymous set download default/$OBJECT_STORAGE_BUCKET_NAME;
+      echo 'Bucket configuration completed successfully';
+    "]
+    restart: "no"
+
+volumes:
+  minio:
