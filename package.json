@@ -141,6 +141,7 @@
     "eslint-plugin-sonarjs": "0.25.1",
     "eslint-plugin-storybook": "0.8.0",
     "husky": "9.1.7",
+    "i18next-parser": "^9.3.0",
     "jsdom": "24.1.0",
     "lint-staged": "15.2.7",
     "maildev": "2.1.0",
