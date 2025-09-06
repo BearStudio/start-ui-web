@@ -1,70 +1,69 @@
 {
-  "list": {
-    "title": "Dépôts",
-    "actions": {
-      "createRepository": "Créer un dépôt",
-      "view": "Voir"
-    },
-    "loadMore": {
-      "button": "Charger plus",
-      "display": "Affichage de {{loaded}} sur {{total}} dépôts"
-    },
-    "empty": "Aucun dépôt"
-  },
-  "feedbacks": {
-    "deleteRepositoryError": {
-      "title": "Échec de la suppression",
-      "description": "Échec de la suppression du dépôt"
-    },
-    "loadingRepositoryError": {
-      "title": "Échec du chargement des dépôts"
-    }
-  },
   "data": {
     "name": {
-      "label": "Nom",
-      "required": "Le nom est requis",
-      "alreadyUsed": "Nom déjà utilisé"
+      "required": "TODO: required",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
     "link": {
-      "label": "Lien",
-      "required": "Le lien est requis",
-      "tooSmall": "Le lien doit contenir au moins {{min}} caractères",
-      "missingDot": "Le lien doit contenir au moins un point"
+      "required": "TODO: required",
+      "tooSmall": "TODO: tooSmall",
+      "missingDot": "TODO: missingDot",
+      "label": "TODO: label"
     },
     "description": {
-      "label": "Description"
+      "label": "TODO: label"
+    }
+  },
+  "list": {
+    "title": "TODO: title",
+    "empty": "TODO: empty",
+    "loadMore": {
+      "button": "TODO: button"
+    },
+    "actions": {
+      "createRepository": "TODO: createRepository",
+      "view": "TODO: view"
     }
   },
   "update": {
-    "action": {
-      "save": "Sauvegarder"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Mise à jour a échoué"
-      },
       "updateSuccess": {
-        "title": "Mise à jour avec succès"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "La création a échoué"
-      },
       "updateSuccess": {
-        "title": "Dépôt créé avec succès"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "Créer"
+      "save": "TODO: save"
     },
-    "title": "Nouveau dépôt"
+    "title": "TODO: title"
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "loadingRepositoryError": {
+      "title": "TODO: title"
+    }
   },
   "deleteModal": {
-    "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
-    "title": "Confirmer la suppression du dépôt"
+    "title": "TODO: title",
+    "message": "TODO: message"
   }
 }

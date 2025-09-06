@@ -1,70 +1,69 @@
 {
-  "list": {
-    "title": "المستودعات",
-    "actions": {
-      "createRepository": "إنشاء مستودع",
-      "view": "منظر"
-    },
-    "loadMore": {
-      "button": "تحميل المزيد",
-      "display": "عرض {{loaded}} من المستودعات {{total}}."
-    },
-    "empty": "لا مستودعات"
-  },
-  "feedbacks": {
-    "deleteRepositoryError": {
-      "title": "فشل الحذف",
-      "description": "فشل إزالة مستودع"
-    },
-    "loadingRepositoryError": {
-      "title": "فشل تحميل المستودعات"
-    }
-  },
   "data": {
     "name": {
-      "label": "اسم",
-      "required": "مطلوب اسم",
-      "alreadyUsed": "الاسم مستخدم بالفعل"
+      "required": "TODO: required",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
     "link": {
-      "label": "وصلة",
-      "required": "الارتباط مطلوب",
-      "tooSmall": "يجب أن يتكون الرابط من {{min}} حرفًا على الأقل",
-      "missingDot": "الرابط غير صالح، يجب أن يحتوي على نقطة على الأقل"
+      "required": "TODO: required",
+      "tooSmall": "TODO: tooSmall",
+      "missingDot": "TODO: missingDot",
+      "label": "TODO: label"
     },
     "description": {
-      "label": "وصف"
+      "label": "TODO: label"
+    }
+  },
+  "list": {
+    "title": "TODO: title",
+    "empty": "TODO: empty",
+    "loadMore": {
+      "button": "TODO: button"
+    },
+    "actions": {
+      "createRepository": "TODO: createRepository",
+      "view": "TODO: view"
     }
   },
   "update": {
-    "action": {
-      "save": "يحفظ"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "فشل التحديث"
-      },
       "updateSuccess": {
-        "title": "تم التحديث بنجاح"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "فشل الخلق"
-      },
       "updateSuccess": {
-        "title": "تم إنشاء المستودع بنجاح"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "يخلق"
+      "save": "TODO: save"
     },
-    "title": "مستودع جديد"
+    "title": "TODO: title"
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "loadingRepositoryError": {
+      "title": "TODO: title"
+    }
   },
   "deleteModal": {
-    "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",
-    "title": "قم بتأكيد حذف المستودع"
+    "title": "TODO: title",
+    "message": "TODO: message"
   }
 }

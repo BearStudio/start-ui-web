@@ -1,26 +1,18 @@
 {
-  "languages": {
-    "en": "Anglais",
-    "fr": "Français",
-    "ar": "Arabe",
-    "sw": "Swahili"
-  },
   "actions": {
-    "activate": "Activer",
-    "cancel": "Annuler",
-    "deactivate": "Désactiver",
-    "delete": "Supprimer",
-    "edit": "Modifier",
-    "back": "Retour"
+    "edit": "TODO: edit",
+    "deactivate": "TODO: deactivate",
+    "activate": "TODO: activate",
+    "delete": "TODO: delete",
+    "back": "TODO: back",
+    "cancel": "TODO: cancel"
   },
-  "or": "ou",
+  "or": "TODO: or",
   "confirmDiscardChanges": {
-    "cancelText": "Restez sur la page",
-    "confirmText": "Quitter sans sauvegarder",
-    "message": "Vous êtes sur le point de quitter la page sans sauvegarder vos modifications.",
-    "title": "Quitter la page ?"
+    "title": "TODO: title",
+    "message": "TODO: message",
+    "confirmText": "TODO: confirmText",
+    "cancelText": "TODO: cancelText"
   },
-  "filter": "Filtrer",
-  "clear": "Effacer",
-  "submit": "Soumettre"
+  "submit": "TODO: submit"
 }

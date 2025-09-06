@@ -1,13 +1,12 @@
 {
-  "title": "Tableau de bord",
+  "title": "TODO: title",
   "welcome": {
-    "author": "— <strong>L'équipe BearStudio</strong>",
-    "description": "Un starter UI dogmatique avec React, Chakra UI, React Query & React Hook Form",
-    "title": "Bienvenue dans 🚀 Start UI [web]"
+    "title": "TODO: title",
+    "description": "TODO: description"
   },
   "links": {
-    "github": "Dépôt GitHub",
-    "openIssue": "Ouvrir une issue",
-    "documentation": "Documentation"
+    "github": "TODO: github",
+    "documentation": "TODO: documentation",
+    "openIssue": "TODO: openIssue"
   }
 }

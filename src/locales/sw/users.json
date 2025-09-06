@@ -1,101 +1,92 @@
 {
-  "feedbacks": {
-    "activateUserSuccess": {
-      "title": "Mtumiaji aliyeamilishwa",
-      "description": "Mtumiaji \"{{login}}\" imewezeshwa"
+  "data": {
+    "name": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label"
     },
-    "deactivateUserSuccess": {
-      "title": "Mtumiaji aliyezimwa",
-      "description": "Mtumiaji \"{{login}}\" imezimwa"
+    "email": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
-    "activateUserError": {
-      "title": "Imeshindwa kuwezesha",
-      "description": "Imeshindwa kuwezesha mtumiaji \"{{ingia}}\""
+    "authorizations": {
+      "required": "TODO: required",
+      "label": "TODO: label"
     },
-    "deactivateUserError": {
-      "title": "Imeshindwa kuzima",
-      "description": "Imeshindwa kulemaza mtumiaji \"{{ingia}}\""
+    "status": {
+      "activated": "TODO: activated",
+      "deactivated": "TODO: deactivated"
     },
-    "deleteUserError": {
-      "title": "Imeshindwa kufuta",
-      "description": "Imeshindwa kufuta mtumiaji \"{{ingia}}\""
-    },
-    "loadingUserError": {
-      "title": "Imeshindwa kupakia watumiaji"
+    "language": {
+      "label": "TODO: label"
     }
   },
   "list": {
-    "title": "Usimamizi wa Mtumiaji",
-    "status": "Hali",
+    "title": "TODO: title",
     "actions": {
-      "createUser": "Unda mtumiaji"
+      "createUser": "TODO: createUser"
     },
     "loadMore": {
-      "button": "Pakia zaidi",
-      "display": "Inaonyesha watumiaji {{loaded}} kati ya {{total}}"
+      "button": "TODO: button"
     }
   },
-  "data": {
-    "email": {
-      "label": "Barua pepe",
-      "required": "Barua pepe inahitajika",
-      "invalid": "Barua pepe ni batili",
-      "alreadyUsed": "Anwani ya barua pepe tayari inatumika"
+  "feedbacks": {
+    "loadingUserError": {
+      "title": "TODO: title"
     },
-    "status": {
-      "activated": "Imewashwa",
-      "deactivated": "Isiyotumika"
+    "activateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "name": {
-      "label": "Jina",
-      "required": "Jina linahitajika",
-      "invalid": "Jina ni batili"
+    "activateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "language": {
-      "label": "Lugha"
+    "deactivateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "authorizations": {
-      "label": "Uidhinishaji",
-      "options": {
-        "ADMIN": "Msimamizi",
-        "APP": "Programu"
-      },
-      "required": "Angalau idhini moja inahitajika"
+    "deactivateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "createdAt": {
-      "ago": "Imeundwa <dateAgo />"
+    "deleteUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     }
   },
+  "you": "TODO: you",
   "update": {
-    "action": {
-      "save": "Hifadhi"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Usasishaji haukufaulu"
-      },
       "updateSuccess": {
-        "title": "Imesasishwa"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
-    "title": "Mtumiaji Mpya",
-    "action": {
-      "save": "Unda"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Uundaji umeshindwa"
-      },
       "updateSuccess": {
-        "title": "Utilisateur créé avec succès"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
-    }
+    },
+    "action": {
+      "save": "TODO: save"
+    },
+    "title": "TODO: title"
   },
   "deleteModal": {
-    "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
-    "title": "Thibitisha kufuta mtumiaji"
-  },
-  "you": "wewe"
+    "title": "TODO: title",
+    "message": "TODO: message"
+  }
 }

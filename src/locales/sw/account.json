@@ -1,83 +1,83 @@
 {
-  "nav": {
-    "profile": "Wasifu",
-    "myAccount": "Akaunti yangu",
-    "email": "Barua pepe"
+  "admin": {
+    "title": "TODO: title",
+    "button": "TODO: button"
   },
   "profile": {
+    "title": "TODO: title",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Imesasishwa"
+        "title": "TODO: title"
       },
       "updateError": {
-        "title": "Usasishaji haukufaulu"
+        "title": "TODO: title"
       }
     },
     "actions": {
-      "update": "Sasisha"
-    },
-    "title": "Maelezo ya wasifu"
-  },
-  "data": {
-    "name": {
-      "label": "Jina"
-    },
-    "email": {
-      "label": "Barua pepe",
-      "current": "Hii ndiyo barua pepe yako ya sasa"
-    },
-    "language": {
-      "label": "Lugha"
+      "update": "TODO: update"
     }
   },
   "email": {
-    "actions": {
-      "update": "Sasisha"
-    },
+    "title": "TODO: title",
     "feedbacks": {
-      "updateError": {
-        "title": "Usasishaji haukufaulu"
-      },
       "updateSuccess": {
-        "title": "Barua pepe imesasishwa"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
-    "title": "Sasisha barua pepe yako"
+    "actions": {
+      "update": "TODO: update"
+    }
+  },
+  "title": "TODO: title",
+  "preferences": {
+    "title": "TODO: title",
+    "theme": {
+      "light": "TODO: light",
+      "dark": "TODO: dark"
+    }
   },
   "logout": {
-    "button": "Ondoka",
     "confirm": {
-      "button": "Ondoka",
-      "message": "Unakaribia kumaliza kipindi chako",
-      "title": "Kuondoka kwa akaunti"
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
+  },
+  "nav": {
+    "myAccount": "TODO: myAccount",
+    "profile": "TODO: profile",
+    "email": "TODO: email"
+  },
+  "data": {
+    "name": {
+      "label": "TODO: label"
+    },
+    "language": {
+      "label": "TODO: label"
+    },
+    "email": {
+      "label": "TODO: label",
+      "current": "TODO: current"
     }
   },
-  "preferences": {
-    "theme": {
-      "dark": "Hali ya giza",
-      "light": "Hali ya mwanga"
-    },
-    "title": "Mapendeleo"
-  },
-  "title": "Akaunti",
-  "admin": {
-    "button": "Fungua Utawala",
-    "title": "Mtumiaji wa msimamizi"
-  },
   "deleteAccount": {
-    "button": "Futa akaunti yangu",
-    "confirm": {
-      "button": "Futa akaunti yangu",
-      "message": "Unakaribia kufuta akaunti yako. \nHii itakuwa ya kudumu, hakikisha unafanya nini.",
-      "title": "Futa akaunti yangu"
+    "validate": {
+      "button": "TODO: button"
     },
     "feedbacks": {
       "updateError": {
-        "title": "Hitilafu fulani imetokea"
+        "title": "TODO: title"
       }
     },
-    "validate": {
-      "button": "Futa akaunti yangu"
-    }
+    "confirm": {
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
   }
 }

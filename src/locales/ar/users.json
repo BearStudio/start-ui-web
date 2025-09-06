@@ -1,101 +1,92 @@
 {
+  "data": {
+    "name": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label"
+    },
+    "email": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
+    },
+    "authorizations": {
+      "required": "TODO: required",
+      "label": "TODO: label"
+    },
+    "status": {
+      "activated": "TODO: activated",
+      "deactivated": "TODO: deactivated"
+    },
+    "language": {
+      "label": "TODO: label"
+    }
+  },
   "list": {
-    "title": "إدارة المستخدمين ",
-    "status": "الحالة",
+    "title": "TODO: title",
     "actions": {
-      "createUser": "إنشاء مستخدم"
+      "createUser": "TODO: createUser"
     },
     "loadMore": {
-      "button": "تحميل المزيد",
-      "display": "عرض {{loaded}} من {{total}} من المستخدمين"
+      "button": "TODO: button"
     }
   },
   "feedbacks": {
-    "activateUserSuccess": {
-      "title": "تم تفعيل المستخدم",
-      "description": "تم  تفعيل المستخدم \"{{login}}\" بنجاح"
+    "loadingUserError": {
+      "title": "TODO: title"
     },
-    "deactivateUserSuccess": {
-      "title": "تم إلغاء تفعيل المستخدم",
-      "description": "تم  إلغاء  تفعيل المستخدم  \"{{login}}\" بنجاح"
+    "activateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
     "activateUserError": {
-      "title": "فشل التفعيل",
-      "description": "فشل تفعيل المستخدم \"{{login}}\""
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "deactivateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
     "deactivateUserError": {
-      "title": "فشل إلغاء التفعيل",
-      "description": "فشل إلغاء تفعيل المستخدم \"{{login}}\""
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
     "deleteUserError": {
-      "title": "فشل الحذف ",
-      "description": "فشل إزالة المستخدم \"{{login}}\""
-    },
-    "loadingUserError": {
-      "title": "فشل تحميل المستخدمين"
+      "title": "TODO: title",
+      "description": "TODO: description"
     }
   },
-  "data": {
-    "email": {
-      "label": "البريد الإلكتروني",
-      "alreadyUsed": "البريد الإلكتروني مستخدم بالفعل ",
-      "required": "البريد الإلكتروني مطلوب",
-      "invalid": "البريد الإلكتروني غير صالح "
-    },
-    "status": {
-      "activated": "مفعل",
-      "deactivated": "لم يتم تفعيله"
-    },
-    "name": {
-      "label": "الإسم الاول",
-      "required": "مطلوب اسم",
-      "invalid": "الاسم غير صالح"
-    },
-    "language": {
-      "label": "اللغة"
-    },
-    "authorizations": {
-      "label": "التراخيص",
-      "options": {
-        "ADMIN": "مسؤل",
-        "APP": "برنامج"
-      },
-      "required": "مطلوب تصريح واحد على الأقل"
-    },
-    "createdAt": {
-      "ago": "تم الإنشاء <dateAgo />"
-    }
-  },
+  "you": "TODO: you",
   "update": {
-    "action": {
-      "save": "يحفظ"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "فشل التحديث"
-      },
       "updateSuccess": {
-        "title": "تم التحديث بنجاح"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "فشل الإنشاء"
-      },
       "updateSuccess": {
-        "title": "تم إنشاء المستخدم بنجاح"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "يخلق"
+      "save": "TODO: save"
     },
-    "title": "مستخدم جديد"
+    "title": "TODO: title"
   },
   "deleteModal": {
-    "message": "هل ترغب في حذف \"{{name}}\"؟ \nسيكون الحذف نهائيًا.",
-    "title": "أكد حذف المستخدم"
-  },
-  "you": "أنت"
+    "title": "TODO: title",
+    "message": "TODO: message"
+  }
 }

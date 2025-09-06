@@ -1,83 +1,83 @@
 {
-  "nav": {
-    "profile": "Profil",
-    "myAccount": "Mon compte",
-    "email": "Email"
+  "admin": {
+    "title": "TODO: title",
+    "button": "TODO: button"
   },
   "profile": {
+    "title": "TODO: title",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Mis à jour avec succès"
+        "title": "TODO: title"
       },
       "updateError": {
-        "title": "Échec de la mise à jour"
+        "title": "TODO: title"
       }
     },
     "actions": {
-      "update": "Mettre à jour"
-    },
-    "title": "Informations du profil"
-  },
-  "data": {
-    "name": {
-      "label": "Nom"
-    },
-    "email": {
-      "label": "Email",
-      "current": "Ceci est votre email actuel"
-    },
-    "language": {
-      "label": "Langue"
+      "update": "TODO: update"
     }
   },
   "email": {
-    "actions": {
-      "update": "Mettre à jour"
-    },
+    "title": "TODO: title",
     "feedbacks": {
-      "updateError": {
-        "title": "Échec de la mise à jour"
-      },
       "updateSuccess": {
-        "title": "Email mis à jour"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
-    "title": "Mettez à jour votre email"
+    "actions": {
+      "update": "TODO: update"
+    }
+  },
+  "title": "TODO: title",
+  "preferences": {
+    "title": "TODO: title",
+    "theme": {
+      "light": "TODO: light",
+      "dark": "TODO: dark"
+    }
   },
   "logout": {
-    "button": "Se déconnecter",
     "confirm": {
-      "button": "Se déconnecter",
-      "message": "Vous êtes sur le point de terminer votre session",
-      "title": "Déconnexion du compte"
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
+  },
+  "nav": {
+    "myAccount": "TODO: myAccount",
+    "profile": "TODO: profile",
+    "email": "TODO: email"
+  },
+  "data": {
+    "name": {
+      "label": "TODO: label"
+    },
+    "language": {
+      "label": "TODO: label"
+    },
+    "email": {
+      "label": "TODO: label",
+      "current": "TODO: current"
     }
   },
-  "preferences": {
-    "theme": {
-      "dark": "Mode sombre",
-      "light": "Mode lumière"
-    },
-    "title": "Préférences"
-  },
-  "title": "Compte",
-  "admin": {
-    "button": "Ouvrir l'interface d'administration",
-    "title": "Utilisateur administrateur"
-  },
   "deleteAccount": {
-    "button": "Supprimer mon compte",
-    "confirm": {
-      "button": "Supprimer mon compte",
-      "message": "Vous êtes sur le point de supprimer votre compte. \nCela sera permanent, soyez sûr de ce que vous faites.",
-      "title": "Supprimer mon compte"
+    "validate": {
+      "button": "TODO: button"
     },
     "feedbacks": {
       "updateError": {
-        "title": "Quelque chose s'est mal passé"
+        "title": "TODO: title"
       }
     },
-    "validate": {
-      "button": "Supprimer mon compte"
-    }
+    "confirm": {
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
   }
 }

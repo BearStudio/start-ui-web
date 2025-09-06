@@ -1,22 +1,22 @@
 {
   "layout": {
     "mainMenu": {
-      "dashboard": "Dashboard",
-      "repositories": "Repositories",
-      "management": "Management"
+      "dashboard": "TODO: dashboard",
+      "repositories": "TODO: repositories",
+      "management": "TODO: management"
     },
     "accountMenu": {
+      "myAccount": "TODO: myAccount",
+      "apiDocs": "TODO: apiDocs",
+      "openApp": "TODO: openApp",
+      "switchColorModeLight": "TODO: switchColorModeLight",
+      "switchColorModeDark": "TODO: switchColorModeDark",
+      "logout": "TODO: logout",
       "version": {
-        "copied": "Version copied",
-        "copy": "Copy version",
-        "label": "Version"
-      },
-      "apiDocs": "Api Documentation",
-      "openApp": "Open App",
-      "switchColorModeDark": "Switch to Dark Mode",
-      "switchColorModeLight": "Switch to Light Mode",
-      "myAccount": "My Account",
-      "logout": "Logout"
+        "copied": "TODO: copied",
+        "copy": "TODO: copy",
+        "label": "TODO: label"
+      }
     }
   }
 }

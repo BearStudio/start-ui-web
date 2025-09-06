@@ -1,100 +1,60 @@
 {
-  "datalist": {
-    "retry": "Jaribu tena",
-    "errorTitle": "Hitilafu fulani imetokea",
-    "emptyTitle": "Hakuna Data",
-    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\""
-  },
-  "dateAgo": {
-    "format": "siku DD MMMM YYYY, HH:mm"
-  },
-  "actionsButton": {
-    "label": "Hisa"
-  },
-  "confirmMenuItem": {
-    "confirmText": "Bofya ili kuthibitisha"
-  },
-  "confirmModal": {
-    "confirmText": "Ili kuthibitisha",
-    "heading": "Una uhakika ?"
-  },
-  "confirmPopover": {
-    "confirmText": "Ili kuthibitisha",
-    "heading": "Una uhakika ?"
-  },
-  "pagination": {
-    "firstPage": "Ukurasa wa kawanza",
-    "lastPage": "Ukurasa wa mwisho",
-    "loading": "<spinner></spinner> <box>Chargement...</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span> \nsur</span> <strong>{{totalItems}}</strong> <box>résultats</box>",
-    "nextPage": "Ukurasa unaofuata",
-    "prevPage": "Ukurasa uliotangulia",
-    "showing": "<box>Affichage de</box> <strong>{{firstItemOnPage}}</strong> <span>à</span> <strong>{{lastItemOnPage}}</strong> <span>sur</span> <strong \n>{{totalItems}}</strong> <box>résultats</box>"
+  "sort": {
+    "sortBy": "TODO: sortBy",
+    "order": "TODO: order",
+    "sortAscending": "TODO: sortAscending",
+    "sortDescending": "TODO: sortDescending"
   },
   "searchInput": {
-    "clear": "Futa utfutaji",
-    "placeholder": "Kuchunguza..."
+    "placeholder": "TODO: placeholder",
+    "clear": "TODO: clear"
   },
-  "fieldDayPicker": {
-    "invalidMessage": "Tarehe batili"
-  },
-  "fieldMultiSelect": {
-    "noOption": "Hakuna chaguo"
-  },
-  "sort": {
-    "sortAscending": "Kupanda",
-    "sortDescending": "Descendant",
-    "sortBy": "panga kwa",
-    "order": "Agizo"
-  },
-  "errorBoundary": {
-    "actions": {
-      "expand": "Onyesha maelezo"
-    },
-    "title": "Hitilafu isiyotarajiwa imetokea."
-  },
-  "errorPage": {
-    "403": {
-      "description": "Samahani, huwezi kufikia ukurasa huu.",
-      "title": "Haijaidhinishwa"
-    },
-    "404": {
-      "description": "Ukurasa haupo au url imebadilika.",
-      "title": "Ukurasa haujapatikana"
-    },
-    "default": {
-      "description": "Hitilafu fulani imetokea 😞",
-      "title": "Hitilafu"
-    },
-    "errorCode": "Hitilafu {{code}}"
-  },
-  "dayPicker": {
-    "today": "Leo"
+  "pagination": {
+    "firstPage": "TODO: firstPage",
+    "prevPage": "TODO: prevPage",
+    "lastPage": "TODO: lastPage",
+    "nextPage": "TODO: nextPage"
   },
   "monthPicker": {
-    "today": "Leo",
-    "months": {
-      "january": "Januari",
-      "february": "Februari",
-      "march": "Machi",
-      "april": "Aprili",
-      "may": "Mei",
-      "june": "Juni",
-      "july": "Julai",
-      "august": "Agosti",
-      "september": "Septemba",
-      "october": "Oktoba",
-      "november": "Novemba",
-      "december": "Desemba"
-    }
+    "today": "TODO: today"
   },
   "formField": {
-    "optional": "Hiari"
+    "optional": "TODO: optional"
+  },
+  "errorBoundary": {
+    "title": "TODO: title",
+    "actions": {
+      "expand": "TODO: expand"
+    }
+  },
+  "dateAgo": {
+    "format": "TODO: format"
+  },
+  "datalist": {
+    "noResultsTitle": "TODO: noResultsTitle",
+    "emptyTitle": "TODO: emptyTitle",
+    "errorTitle": "TODO: errorTitle",
+    "retry": "TODO: retry"
+  },
+  "confirmPopover": {
+    "heading": "TODO: heading",
+    "confirmText": "TODO: confirmText"
+  },
+  "confirmModal": {
+    "heading": "TODO: heading",
+    "confirmText": "TODO: confirmText"
+  },
+  "confirmMenuItem": {
+    "confirmText": "TODO: confirmText"
+  },
+  "actionsButton": {
+    "label": "TODO: label"
   },
   "fieldPassword": {
-    "showPassword": "Onyesha nenosiri",
-    "hidePassword": "Ficha nenosiri"
+    "hidePassword": "TODO: hidePassword",
+    "showPassword": "TODO: showPassword"
   },
-  "toast": {
-    "closeToast": "Funga ujumbe"
+  "dayPicker": {
+    "today": "TODO: today"
   }
 }

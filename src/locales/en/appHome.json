@@ -1,12 +1,11 @@
 {
   "welcome": {
-    "title": "Welcome to 🚀 Start UI [web]",
-    "description": "An opinionated UI starter with React, Chakra UI, React Query & React Hook Form",
-    "author": "— From the <strong>BearStudio Team</strong>"
+    "title": "TODO: title",
+    "description": "TODO: description"
   },
   "links": {
-    "github": "GitHub Repository",
-    "openIssue": "Open Issue",
-    "documentation": "Documentation"
+    "github": "TODO: github",
+    "documentation": "TODO: documentation",
+    "openIssue": "TODO: openIssue"
   }
 }

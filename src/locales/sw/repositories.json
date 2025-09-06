@@ -1,70 +1,69 @@
 {
-  "list": {
-    "title": "hazina",
-    "actions": {
-      "createRepository": "Unda Hifadhi",
-      "view": "Tazama"
-    },
-    "loadMore": {
-      "button": "Pakia zaidi",
-      "display": "Inaonyesha hazina {{loaded}} kati ya {{total}}"
-    },
-    "empty": "Hakuna hazina"
-  },
-  "feedbacks": {
-    "deleteRepositoryError": {
-      "title": "Imeshindwa Kufuta",
-      "description": "Imeshindwa kuondoa hazina ya."
-    },
-    "loadingRepositoryError": {
-      "title": "Imeshindwa kupakia hazina"
-    }
-  },
   "data": {
     "name": {
-      "label": "Jina",
-      "required": "Jina linahitajika",
-      "alreadyUsed": "Jina tayari limetumika"
+      "required": "TODO: required",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
     "link": {
-      "label": "Kiungo",
-      "required": "Kiungo kinahitajika",
-      "tooSmall": "Kiungo lazima kiwe na angalau vibambo {{min}}",
-      "missingDot": "Kiungo batili, lazima kiwe na angalau nukta"
+      "required": "TODO: required",
+      "tooSmall": "TODO: tooSmall",
+      "missingDot": "TODO: missingDot",
+      "label": "TODO: label"
     },
     "description": {
-      "label": "Maelezo"
+      "label": "TODO: label"
+    }
+  },
+  "list": {
+    "title": "TODO: title",
+    "empty": "TODO: empty",
+    "loadMore": {
+      "button": "TODO: button"
+    },
+    "actions": {
+      "createRepository": "TODO: createRepository",
+      "view": "TODO: view"
     }
   },
   "update": {
-    "action": {
-      "save": "Hifadhi"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Usasishaji haukufaulu"
-      },
       "updateSuccess": {
-        "title": "Imesasishwa na mafanikio"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "Uundaji haukufaulu"
-      },
       "updateSuccess": {
-        "title": "Hifadhi imeundwa kwa mafanikio"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "Unda"
+      "save": "TODO: save"
     },
-    "title": "Hifadhi Mpya"
+    "title": "TODO: title"
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "loadingRepositoryError": {
+      "title": "TODO: title"
+    }
   },
   "deleteModal": {
-    "message": "Je, ungependa kufuta \"{{jina}}\" ? \nFuta itakuwa ya kudumu.",
-    "title": "Thibitisha kufuta hazina"
+    "title": "TODO: title",
+    "message": "TODO: message"
   }
 }

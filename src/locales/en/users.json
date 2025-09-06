@@ -1,101 +1,92 @@
 {
-  "you": "you",
-  "list": {
-    "title": "Users Management",
-    "status": "Status",
-    "actions": {
-      "createUser": "Create User"
-    },
-    "loadMore": {
-      "button": "Load more",
-      "display": "Showing {{loaded}} of {{total}} users"
-    }
-  },
-  "deleteModal": {
-    "title": "Confirm deleting the user",
-    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
-  },
-  "feedbacks": {
-    "activateUserSuccess": {
-      "title": "User Activated",
-      "description": "User \"{{login}}\" activated with success"
-    },
-    "deactivateUserSuccess": {
-      "title": "User Deactivated",
-      "description": "User \"{{login}}\" deactivated with success"
-    },
-    "activateUserError": {
-      "title": "Activation Failed",
-      "description": "Fail to activate \"{{login}}\" user"
-    },
-    "deactivateUserError": {
-      "title": "Deactivation Failed",
-      "description": "Fail to deactivate \"{{login}}\" user"
-    },
-    "deleteUserError": {
-      "title": "Deletion Failed",
-      "description": "Fail to remove \"{{login}}\" user"
-    },
-    "loadingUserError": {
-      "title": "Failed to load users"
-    }
-  },
   "data": {
+    "name": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label"
+    },
     "email": {
-      "label": "Email",
-      "alreadyUsed": "Email already used",
-      "required": "Email is required",
-      "invalid": "Email is invalid"
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
     "authorizations": {
-      "label": "Authorizations",
-      "required": "At least one authorization is required",
-      "options": {
-        "APP": "App",
-        "ADMIN": "Admin"
-      }
-    },
-    "createdAt": {
-      "ago": "Created <dateAgo />"
+      "required": "TODO: required",
+      "label": "TODO: label"
     },
     "status": {
-      "activated": "Activated",
-      "deactivated": "Not Activated"
-    },
-    "name": {
-      "label": "Name",
-      "required": "Name is required",
-      "invalid": "Name is invalid"
+      "activated": "TODO: activated",
+      "deactivated": "TODO: deactivated"
     },
     "language": {
-      "label": "Language"
+      "label": "TODO: label"
     }
   },
-  "update": {
-    "action": {
-      "save": "Save"
+  "list": {
+    "title": "TODO: title",
+    "actions": {
+      "createUser": "TODO: createUser"
     },
+    "loadMore": {
+      "button": "TODO: button"
+    }
+  },
+  "feedbacks": {
+    "loadingUserError": {
+      "title": "TODO: title"
+    },
+    "activateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "activateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "deactivateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "deactivateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "deleteUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    }
+  },
+  "you": "TODO: you",
+  "update": {
     "feedbacks": {
-      "updateError": {
-        "title": "Update failed"
-      },
       "updateSuccess": {
-        "title": "Updated with success"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "Creation failed"
-      },
       "updateSuccess": {
-        "title": "User created with success"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "Create"
+      "save": "TODO: save"
     },
-    "title": "New User"
+    "title": "TODO: title"
+  },
+  "deleteModal": {
+    "title": "TODO: title",
+    "message": "TODO: message"
   }
 }

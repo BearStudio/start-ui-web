@@ -1,83 +1,83 @@
 {
-  "title": "Account",
-  "nav": {
-    "profile": "Profile",
-    "email": "Email",
-    "myAccount": "My Account"
-  },
   "admin": {
-    "title": "Admin user",
-    "button": "Open Administration"
+    "title": "TODO: title",
+    "button": "TODO: button"
   },
   "profile": {
-    "title": "Profile informations",
+    "title": "TODO: title",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Profile updated"
+        "title": "TODO: title"
       },
       "updateError": {
-        "title": "Update failed"
+        "title": "TODO: title"
       }
     },
     "actions": {
-      "update": "Update"
+      "update": "TODO: update"
     }
   },
   "email": {
-    "title": "Update your email",
+    "title": "TODO: title",
     "feedbacks": {
       "updateSuccess": {
-        "title": "Email updated"
+        "title": "TODO: title"
       },
       "updateError": {
-        "title": "Update failed"
+        "title": "TODO: title"
       }
     },
     "actions": {
-      "update": "Update"
+      "update": "TODO: update"
     }
   },
+  "title": "TODO: title",
   "preferences": {
-    "title": "Preferences",
+    "title": "TODO: title",
     "theme": {
-      "dark": "Dark mode",
-      "light": "Light mode"
+      "light": "TODO: light",
+      "dark": "TODO: dark"
     }
   },
   "logout": {
-    "button": "Logout",
     "confirm": {
-      "title": "Account logout",
-      "message": "You are about to end your session",
-      "button": "Logout"
-    }
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
   },
-  "deleteAccount": {
-    "button": "Delete my account",
-    "confirm": {
-      "title": "Delete my account",
-      "message": "You are about to delete your account. This will be permanent, be sure of what you are doing.",
-      "button": "Delete my account"
-    },
-    "validate": {
-      "button": "Delete my account"
-    },
-    "feedbacks": {
-      "updateError": {
-        "title": "Something went wrong"
-      }
-    }
+  "nav": {
+    "myAccount": "TODO: myAccount",
+    "profile": "TODO: profile",
+    "email": "TODO: email"
   },
   "data": {
     "name": {
-      "label": "Name"
-    },
-    "email": {
-      "label": "Email",
-      "current": "This is your current email"
+      "label": "TODO: label"
     },
     "language": {
-      "label": "Language"
+      "label": "TODO: label"
+    },
+    "email": {
+      "label": "TODO: label",
+      "current": "TODO: current"
     }
+  },
+  "deleteAccount": {
+    "validate": {
+      "button": "TODO: button"
+    },
+    "feedbacks": {
+      "updateError": {
+        "title": "TODO: title"
+      }
+    },
+    "confirm": {
+      "title": "TODO: title",
+      "message": "TODO: message",
+      "button": "TODO: button"
+    },
+    "button": "TODO: button"
   }
 }

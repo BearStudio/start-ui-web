@@ -1,22 +1,22 @@
 {
   "layout": {
     "mainMenu": {
-      "dashboard": "Tableau de bord",
-      "repositories": "Dépôts",
-      "management": "Gestion"
+      "dashboard": "TODO: dashboard",
+      "repositories": "TODO: repositories",
+      "management": "TODO: management"
     },
     "accountMenu": {
+      "myAccount": "TODO: myAccount",
+      "apiDocs": "TODO: apiDocs",
+      "openApp": "TODO: openApp",
+      "switchColorModeLight": "TODO: switchColorModeLight",
+      "switchColorModeDark": "TODO: switchColorModeDark",
+      "logout": "TODO: logout",
       "version": {
-        "copied": "Version copiée",
-        "copy": "Copier la version",
-        "label": "Version"
-      },
-      "switchColorModeDark": "Passer en mode sombre",
-      "switchColorModeLight": "Passer en mode clair",
-      "myAccount": "Mon compte",
-      "logout": "Déconnexion",
-      "apiDocs": "Documentation de l'API",
-      "openApp": "Ouvrir l'app"
+        "copied": "TODO: copied",
+        "copy": "TODO: copy",
+        "label": "TODO: label"
+      }
     }
   }
 }

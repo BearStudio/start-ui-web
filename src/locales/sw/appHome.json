@@ -1,12 +1,11 @@
 {
-  "links": {
-    "documentation": "Nyaraka",
-    "github": "Hifadhi ya GitHub",
-    "openIssue": "Fungua Toleo"
-  },
   "welcome": {
-    "author": "— Kutoka kwa <strong>Timu ya BearStudio</strong>",
-    "description": "Kianzisha UI chenye maoni na React, Chakra UI, React Query",
-    "title": "Karibu kwenye 🚀 Start UI [web]"
+    "title": "TODO: title",
+    "description": "TODO: description"
+  },
+  "links": {
+    "github": "TODO: github",
+    "documentation": "TODO: documentation",
+    "openIssue": "TODO: openIssue"
   }
 }

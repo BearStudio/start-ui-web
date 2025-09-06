@@ -1,9 +1,9 @@
 {
   "layout": {
     "mainMenu": {
-      "account": "حساب",
-      "home": "بيت",
-      "repositories": "المستودعات"
+      "home": "TODO: home",
+      "repositories": "TODO: repositories",
+      "account": "TODO: account"
     }
   }
 }

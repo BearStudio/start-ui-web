@@ -1,12 +1,11 @@
 {
-  "links": {
-    "documentation": "توثيق",
-    "github": "مستودع جيثب",
-    "openIssue": "قضية مفتوحة"
-  },
   "welcome": {
-    "author": "— من <strong>فريق BearStudio</strong>",
-    "description": "بداية واجهة مستخدم مدروسة مع React وChakra UI وReact Query",
-    "title": "🚀 Start UI [web] مرحبا بك في"
+    "title": "TODO: title",
+    "description": "TODO: description"
+  },
+  "links": {
+    "github": "TODO: github",
+    "documentation": "TODO: documentation",
+    "openIssue": "TODO: openIssue"
   }
 }

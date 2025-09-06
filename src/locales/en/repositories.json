@@ -1,70 +1,69 @@
 {
-  "list": {
-    "title": "Repositories",
-    "empty": "No repositories",
-    "actions": {
-      "createRepository": "Create Repository",
-      "view": "View"
-    },
-    "loadMore": {
-      "button": "Load more",
-      "display": "Showing {{loaded}} of {{total}} repositories"
-    }
-  },
-  "deleteModal": {
-    "title": "Confirm deleting the repository",
-    "message": "Would you like to delete \"{{name}}\" ? Delete will be permanent."
-  },
-  "feedbacks": {
-    "deleteRepositoryError": {
-      "title": "Deletion Failed",
-      "description": "Fail to remove repository"
-    },
-    "loadingRepositoryError": {
-      "title": "Failed to load repositories"
-    }
-  },
   "data": {
     "name": {
-      "label": "Name",
-      "required": "Name is required",
-      "alreadyUsed": "Name already used"
+      "required": "TODO: required",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
     "link": {
-      "label": "Link",
-      "required": "Link is required",
-      "tooSmall": "Invalid link, must be at least {{min}} characters",
-      "missingDot": "Invalid link, must contain at least a dot"
+      "required": "TODO: required",
+      "tooSmall": "TODO: tooSmall",
+      "missingDot": "TODO: missingDot",
+      "label": "TODO: label"
     },
     "description": {
-      "label": "Description"
+      "label": "TODO: label"
+    }
+  },
+  "list": {
+    "title": "TODO: title",
+    "empty": "TODO: empty",
+    "loadMore": {
+      "button": "TODO: button"
+    },
+    "actions": {
+      "createRepository": "TODO: createRepository",
+      "view": "TODO: view"
     }
   },
   "update": {
-    "action": {
-      "save": "Save"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Update failed"
-      },
       "updateSuccess": {
-        "title": "Updated with success"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
     "feedbacks": {
-      "updateError": {
-        "title": "Creation failed"
-      },
       "updateSuccess": {
-        "title": "Repository created with success"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
     },
     "action": {
-      "save": "Create"
+      "save": "TODO: save"
     },
-    "title": "New Repository"
+    "title": "TODO: title"
+  },
+  "feedbacks": {
+    "deleteRepositoryError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
+    },
+    "loadingRepositoryError": {
+      "title": "TODO: title"
+    }
+  },
+  "deleteModal": {
+    "title": "TODO: title",
+    "message": "TODO: message"
   }
 }

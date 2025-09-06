@@ -1,101 +1,92 @@
 {
-  "feedbacks": {
-    "activateUserSuccess": {
-      "title": "Utilisateur activé",
-      "description": "Utilisateur \"{{login}}\" activé avec succès"
+  "data": {
+    "name": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label"
     },
-    "deactivateUserSuccess": {
-      "title": "Utilisateur désactivé",
-      "description": "Utilisateur \"{{login}}\" désactivé avec succès"
+    "email": {
+      "required": "TODO: required",
+      "invalid": "TODO: invalid",
+      "label": "TODO: label",
+      "alreadyUsed": "TODO: alreadyUsed"
     },
-    "activateUserError": {
-      "title": "Échec de l'activation",
-      "description": "Échec de l'activation de l'utilisateur \"{{login}}\""
+    "authorizations": {
+      "required": "TODO: required",
+      "label": "TODO: label"
     },
-    "deactivateUserError": {
-      "title": "Échec de la désactivation",
-      "description": "Échec de la désactivation de l'utilisateur \"{{login}}\""
+    "status": {
+      "activated": "TODO: activated",
+      "deactivated": "TODO: deactivated"
     },
-    "deleteUserError": {
-      "title": "Échec de la suppression",
-      "description": "Échec de la suppression de l'utilisateur \"{{login}}\""
-    },
-    "loadingUserError": {
-      "title": "Échec du chargement des utilisateurs"
+    "language": {
+      "label": "TODO: label"
     }
   },
   "list": {
-    "title": "Gestion des utilisateurs",
-    "status": "Statut",
+    "title": "TODO: title",
     "actions": {
-      "createUser": "Créer un utilisateur"
+      "createUser": "TODO: createUser"
     },
     "loadMore": {
-      "button": "Charger plus",
-      "display": "Affichage de {{loaded}} utilisateurs sur {{total}}"
+      "button": "TODO: button"
     }
   },
-  "data": {
-    "email": {
-      "label": "Email",
-      "required": "L'email est requis",
-      "invalid": "L'email est invalide",
-      "alreadyUsed": "L'email est déjà utilisé"
+  "feedbacks": {
+    "loadingUserError": {
+      "title": "TODO: title"
     },
-    "status": {
-      "activated": "Activé",
-      "deactivated": "Désactivé"
+    "activateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "name": {
-      "label": "Nom",
-      "required": "Le nom est requis",
-      "invalid": "Le nom n'est pas valide"
+    "activateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "language": {
-      "label": "Langue"
+    "deactivateUserSuccess": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "authorizations": {
-      "label": "Autorisations",
-      "options": {
-        "ADMIN": "Administrateur",
-        "APP": "Application"
-      },
-      "required": "Au moins une autorisation est requise"
+    "deactivateUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     },
-    "createdAt": {
-      "ago": "Créé <dateAgo />"
+    "deleteUserError": {
+      "title": "TODO: title",
+      "description": "TODO: description"
     }
   },
+  "you": "TODO: you",
   "update": {
-    "action": {
-      "save": "Sauvegarder"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Échec de la mise à jour"
-      },
       "updateSuccess": {
-        "title": "Mis à jour avec succès"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
+    },
+    "action": {
+      "save": "TODO: save"
     }
   },
   "create": {
-    "title": "Nouvel utilisateur",
-    "action": {
-      "save": "Créer"
-    },
     "feedbacks": {
-      "updateError": {
-        "title": "Échec de la création"
-      },
       "updateSuccess": {
-        "title": "Utilisateur créé avec succès"
+        "title": "TODO: title"
+      },
+      "updateError": {
+        "title": "TODO: title"
       }
-    }
+    },
+    "action": {
+      "save": "TODO: save"
+    },
+    "title": "TODO: title"
   },
   "deleteModal": {
-    "message": "Souhaitez-vous supprimer \"{{name}}\" ? \nLa suppression sera permanente.",
-    "title": "Confirmer la suppression de l'utilisateur"
-  },
-  "you": "vous"
+    "title": "TODO: title",
+    "message": "TODO: message"
+  }
 }

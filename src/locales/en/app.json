@@ -1,9 +1,9 @@
 {
   "layout": {
     "mainMenu": {
-      "home": "Home",
-      "repositories": "Repositories",
-      "account": "Account"
+      "home": "TODO: home",
+      "repositories": "TODO: repositories",
+      "account": "TODO: account"
     }
   }
 }
