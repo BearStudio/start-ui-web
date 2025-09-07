@@ -46,6 +46,10 @@
     },
     "update": {
       "title": "Sasisha Kitabu"
+    },
+    "detail": {
+      "confirmDeleteDescription": "Unakaribia kufuta kitabu hiki kabisa. \nKitendo hiki hakiwezi kufutwa.",
+      "confirmDeleteTitle": "Futa \"{{kichwa}}\""
     }
   }
 }

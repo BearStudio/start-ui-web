@@ -46,6 +46,10 @@
     },
     "update": {
       "title": "تحديث الكتاب"
+    },
+    "detail": {
+      "confirmDeleteDescription": "أنت على وشك حذف هذا الكتاب بشكل دائم. \nلا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteTitle": "حذف \"{{title}}\""
     }
   }
 }

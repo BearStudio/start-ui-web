@@ -19,7 +19,7 @@
   "actions": {
     "back": "رجوع",
     "cancel": "إلغاء",
-    "delete": "حذف {{title}}",
+    "delete": "حذف",
     "edit": "تعديل",
     "update": "تحديث"
   }

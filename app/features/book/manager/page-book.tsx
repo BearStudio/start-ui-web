@@ -91,10 +91,10 @@ export const PageBook = (props: { params: { id: string } }) => {
             >
               <ConfirmResponsiveDrawer
                 onConfirm={() => deleteBook()}
-                title={t('common:actions.delete', {
+                title={t('book:manager.detail.confirmDeleteTitle', {
                   title: bookQuery.data?.title ?? '--',
                 })}
-                description={t('book:manager.list.deleteBookWarning')}
+                description={t('book:manager.detail.confirmDeleteDescription')}
                 confirmText={t('common:actions.delete')}
                 confirmVariant="destructive"
               >

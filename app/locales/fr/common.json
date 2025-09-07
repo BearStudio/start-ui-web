@@ -19,7 +19,7 @@
   "actions": {
     "back": "Retour",
     "cancel": "Annuler",
-    "delete": "Supprimer {{title}}",
+    "delete": "Supprimer",
     "edit": "Modifier",
     "update": "Mettre à jour"
   }

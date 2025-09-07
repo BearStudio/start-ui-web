@@ -19,7 +19,7 @@
   "actions": {
     "back": "Rudi",
     "cancel": "Ghairi",
-    "delete": "Futa {{title}}",
+    "delete": "Futa",
     "edit": "Hariri",
     "update": "Sasisha"
   }

@@ -41,6 +41,10 @@
       "showing": "Affichage de {{count}} sur {{total}}",
       "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
     },
+    "detail": {
+      "confirmDeleteTitle": "Supprimer \"{{title}}\"",
+      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement cet utilisateur. Cette action ne peut pas être annulée"
+    },
     "new": {
       "title": "Nouveau livre"
     },

@@ -36,10 +36,13 @@
     },
     "list": {
       "title": "Books",
-      "deleteBookWarning": "You are about to permanently delete this book. <strong>This action cannot be undone.</strong> Please confirm your decision carefully.",
       "loadMore": "Load more",
       "showing": "Showing {{count}} of {{total}}",
       "searchResults": "{{total}} results for \"{{searchTerm}}\""
+    },
+    "detail": {
+      "confirmDeleteTitle": "Delete \"{{title}}\"",
+      "confirmDeleteDescription": "You are about to permanently delete this book. This action cannot be undone."
     },
     "new": {
       "title": "New Book"
