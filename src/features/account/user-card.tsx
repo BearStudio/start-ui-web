@@ -1,13 +1,14 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
+import { ChangeProfilePictureDrawer } from '@/features/account/change-profile-picture-drawer';
 import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 
@@ -17,21 +18,35 @@ export const UserCard = () => {
   return (
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <Avatar>
-            <AvatarFallback
-              variant="boring"
-              name={session.data?.user.name ?? ''}
-            />
-          </Avatar>
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <CardTitle className="truncate">
-              {session.data?.user.name || session.data?.user.email || (
-                <span className="text-xs text-muted-foreground">--</span>
-              )}
-            </CardTitle>
-          </div>
-        </div>
+        <ChangeProfilePictureDrawer>
+          <button
+            className="cursor-pointer"
+            type="button"
+            onClick={() => {
+              console.log('update picture');
+            }}
+          >
+            <div className="flex min-w-0 items-center gap-3">
+              <Avatar>
+                <AvatarImage
+                  src={`${session.data?.user.image}`}
+                  alt={session.data?.user.name}
+                />
+                <AvatarFallback
+                  variant="boring"
+                  name={session.data?.user.name ?? ''}
+                />
+              </Avatar>
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <CardTitle className="truncate">
+                  {session.data?.user.name || session.data?.user.email || (
+                    <span className="text-xs text-muted-foreground">--</span>
+                  )}
+                </CardTitle>
+              </div>
+            </div>
+          </button>
+        </ChangeProfilePictureDrawer>
         <CardAction>
           <ConfirmSignOut>
             <Button size="sm" variant="ghost">

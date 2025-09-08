@@ -20,5 +20,13 @@
     "submitButton": "Modifier",
     "successMessage": "Nom mis à jour",
     "errorMessage": "Échec de la mise à jour de votre nom"
+  },
+  "changeProfilePictureDrawer": {
+    "title": "Modifier votre avatar",
+    "description": "Formulaire pour modifier votre avatar",
+    "label": "Avatar",
+    "submitButton": "Modifier",
+    "successMessage": "Avatar mis à jour",
+    "errorMessage": "Échec de la mise à jour de votre avatar"
   }
 }

@@ -104,6 +104,9 @@ export const FormFieldController = <
 
       case 'checkbox-group':
         return <FieldCheckboxGroup {...props} />;
+
+      case 'file':
+        return <FieldText {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };

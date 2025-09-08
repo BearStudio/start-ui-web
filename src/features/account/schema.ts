@@ -9,3 +9,11 @@ export const zFormFieldsAccountUpdateName = () =>
   z.object({
     name: zu.string.nonEmpty(z.string()),
   });
+
+export type FormFieldsAccountUpdateProfilePicture = z.infer<
+  ReturnType<typeof zFormFieldsAccountUpdateProfilePicture>
+>;
+export const zFormFieldsAccountUpdateProfilePicture = () =>
+  z.object({
+    profilePicture: z.string().min(1),
+  });
