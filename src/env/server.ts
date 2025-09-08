@@ -33,6 +33,16 @@ export const envServer = createEnv({
       .enum(['true', 'false'])
       .prefault(isProd ? 'false' : 'true')
       .transform((value) => value === 'true'),
+
+    OBJECT_STORAGE_API_PORT: z.string().default('9000'),
+    OBJECT_STORAGE_UI_PORT: z.string().default('9001'),
+    OBJECT_STORAGE_USERNAME: z.string(),
+    OBJECT_STORAGE_PASSWORD: z.string(),
+    OBJECT_STORAGE_ACCESS_KEY: z.string(),
+    OBJECT_STORAGE_SECRET_KEY: z.string(),
+    OBJECT_STORAGE_BUCKET_NAME: z.string().default('default'),
+    OBJECT_STORAGE_REGION: z.string().default('default'),
+    OBJECT_STORAGE_ENTRYPOINT: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
