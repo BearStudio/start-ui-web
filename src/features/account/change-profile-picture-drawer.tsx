@@ -13,6 +13,7 @@ import {
   Form,
   FormField,
   FormFieldController,
+  FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
@@ -46,14 +47,8 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
     },
   });
 
-  const { upload, isPending, uploadedFile } = useUploadFile({
+  const avatarUpload = useUploadFile({
     route: 'avatar',
-    onUploadBegin: () => {
-      console.log('upload started');
-    },
-    onUploadComplete: ({ file }) => {
-      console.log('upload completed', { file });
-    },
     onError: (error) => {
       form.setError('profilePicture', {
         message: error.message || 'An error occurred',
@@ -64,7 +59,7 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
   const updateUser = useMutation(
     orpc.account.updateInfo.mutationOptions({
       onSuccess: async () => {
-        await session.refetch();
+        session.refetch();
         toast.success(t('account:changeProfilePictureDrawer.successMessage'));
         form.reset();
         router.navigate({
@@ -101,9 +96,10 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
       <ResponsiveDrawerContent className="sm:max-w-xs">
         <Form
           {...form}
-          onSubmit={async ({ profilePicture }) => {
-            console.log('form', { profilePicture, uploadedFile });
-            updateUser.mutate({ profilePictureId: uploadedFile?.objectKey });
+          onSubmit={async () => {
+            updateUser.mutate({
+              avatarFileId: avatarUpload.uploadedFile?.objectKey,
+            });
           }}
           className="flex flex-col gap-4"
         >
@@ -127,7 +123,7 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
                 size="lg"
                 onChange={(e) => {
                   if (e.target.files?.[0]) {
-                    upload(e.target.files[0], {
+                    avatarUpload.upload(e.target.files[0], {
                       metadata: {
                         userId: session.data?.user.id,
                       },
@@ -136,6 +132,11 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
                 }}
                 autoFocus
               />
+              {avatarUpload.isPending && (
+                <FormFieldHelper>
+                  Upload {avatarUpload.progress}%
+                </FormFieldHelper>
+              )}
             </FormField>
           </ResponsiveDrawerBody>
           <ResponsiveDrawerFooter>
@@ -143,7 +144,11 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
               type="submit"
               className="w-full"
               size="lg"
-              loading={updateUser.isPending || isPending}
+              disabled={
+                (form.formState.isSubmitted && !form.formState.isValid) ||
+                avatarUpload.isPending
+              }
+              loading={updateUser.isPending}
             >
               {t('account:changeProfilePictureDrawer.submitButton')}
             </Button>

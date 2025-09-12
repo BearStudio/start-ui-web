@@ -18,17 +18,15 @@ enum UserRole {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  name              String
-  email             String
-  emailVerified     Boolean
-  image             String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  sessions          Session[]
-  accounts          Account[]
-  profilePictureId  String?
-  profilePictureUrl String?
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  emailVerified Boolean
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  avatarFileId  String?
 
   role        UserRole?
   banned      Boolean?

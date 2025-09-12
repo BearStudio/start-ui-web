@@ -37,7 +37,7 @@ export const auth = betterAuth({
       onboardedAt: {
         type: 'date',
       },
-      profilePictureId: {
+      avatarFileId: {
         type: 'string',
       },
     },
