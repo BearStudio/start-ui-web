@@ -42,7 +42,7 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
   const form = useForm<FormFieldsAccountUpdateProfilePicture>({
     resolver: zodResolver(zFormFieldsAccountUpdateProfilePicture()),
     values: {
-      profilePicture: '', // [TODO] Ajouter la valeur par défaut ?,
+      profilePicture: '',
     },
   });
 

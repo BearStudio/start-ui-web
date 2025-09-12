@@ -5,15 +5,15 @@ import { s3client } from '@/lib/object-storage';
 
 import { envServer } from '@/env/server';
 
-// [TODO] Voir pour bouger cette logique directement dans orpc
 const router: Router = {
   client: s3client,
-  bucketName: envServer.OBJECT_STORAGE_BUCKET_NAME,
+  bucketName: envServer.S3_BUCKET_NAME,
   routes: {
     avatar: route({
       fileTypes: ['image/*'],
       maxFileSize: 1024 * 1024 * 4, // 4MB
-      onBeforeUpload: async () => {
+      onBeforeUpload: async ({ req, clientMetadata }) => {
+        console.log({ req, clientMetadata });
         // [TODO] Ajouter la logique d'authentification
       },
     }),

@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { z } from 'zod';
 
 import { s3client } from '@/lib/object-storage';
@@ -54,7 +54,7 @@ export default {
       if (input.profilePictureId) {
         // Remove old file if there was one (to prevent bucket overloading)
         const deleteCommand = new DeleteObjectCommand({
-          Bucket: envServer.OBJECT_STORAGE_BUCKET_NAME,
+          Bucket: envServer.S3_BUCKET_NAME,
           Key: context.user.profilePictureId,
         });
         try {
@@ -72,7 +72,7 @@ export default {
           await context.db.user.update({
             where: { id: context.user.id },
             data: {
-              image: `${envServer.OBJECT_STORAGE_ENTRYPOINT}/${envServer.OBJECT_STORAGE_BUCKET_NAME}/${input.profilePictureId}`,
+              image: `${envServer.S3_BUCKET_PUBLIC_URL}/${input.profilePictureId}`,
             },
           });
         } catch (error) {
