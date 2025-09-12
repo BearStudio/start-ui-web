@@ -1,7 +1,7 @@
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { z } from 'zod';
 
-import { s3client } from '@/lib/object-storage';
+import { s3client } from '@/lib/s3';
 
 import { envServer } from '@/env/server';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
@@ -43,41 +43,39 @@ export default {
     .input(
       zUser().pick({
         name: true,
-        profilePictureId: true,
+        avatarFileId: true,
       })
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
 
-      // If profilePictureId, generate a public link
-      if (input.profilePictureId) {
-        // Remove old file if there was one (to prevent bucket overloading)
+      // If profilePictureId is defined, check to delete the old one
+      if (input.avatarFileId) {
+        // Remove old file if there was one
         const deleteCommand = new DeleteObjectCommand({
           Bucket: envServer.S3_BUCKET_NAME,
-          Key: context.user.profilePictureId,
+          Key: context.user.avatarFileId,
         });
         try {
           await s3client.send(deleteCommand);
         } catch (error) {
           context.logger.warn('Fail to delete user profile picture', {
-            profilePictureId: context.user.profilePictureId,
+            profilePictureId: context.user.avatarFileId,
             error,
           });
         }
 
-        // [TODO] Check to return an error
-        //        Check to move this code into its own rpc
         try {
           await context.db.user.update({
             where: { id: context.user.id },
             data: {
-              image: `${envServer.S3_BUCKET_PUBLIC_URL}/${input.profilePictureId}`,
+              avatarFileId: input.avatarFileId,
             },
           });
         } catch (error) {
           context.logger.warn('Fail to save user profile picture', {
-            profilePictureId: context.user.profilePictureId,
+            profilePictureId: context.user.avatarFileId,
             error,
           });
         }

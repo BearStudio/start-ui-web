@@ -20,11 +20,10 @@ export const zUser = () =>
     ),
     emailVerified: z.boolean(),
     role: zRole().nullish(),
-    image: z.string().nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
     onboardedAt: z.date().nullish(),
-    profilePictureId: z.string().nullish(),
+    avatarFileId: z.string().nullish(),
   });
 
 export type Session = z.infer<ReturnType<typeof zSession>>;

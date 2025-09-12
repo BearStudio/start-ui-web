@@ -42,7 +42,6 @@ export const envServer = createEnv({
     S3_SECRET_ACCESS_KEY: z.string(),
     S3_BUCKET_NAME: z.string().default('default'),
     S3_REGION: z.string().default('default'),
-    S3_BUCKET_PUBLIC_URL: z.string(),
     S3_ENDPOINT: z.string(),
   },
   runtimeEnv: process.env,
