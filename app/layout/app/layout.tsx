@@ -18,11 +18,11 @@ export const Layout = (props: { children?: ReactNode }) => {
   );
 };
 
-type ShouldShowNav = 'all' | 'desktop-only' | 'none';
+type ShouldShowNavMode = 'all' | 'desktop-only' | 'none';
 
 interface ShouldShowNavState {
-  mode: ShouldShowNav;
-  update: (shouldShowNav: ShouldShowNav) => void;
+  mode: ShouldShowNavMode;
+  update: (shouldShowNav: ShouldShowNavMode) => void;
 }
 
 const useShouldShowNavStore = create<ShouldShowNavState>()((set) => ({
@@ -34,7 +34,7 @@ const useShouldShowNavStore = create<ShouldShowNavState>()((set) => ({
   },
 }));
 
-export const useShouldShowNav = (shouldShowNav: ShouldShowNav) => {
+export const useShouldShowNav = (shouldShowNav: ShouldShowNavMode) => {
   const update = useShouldShowNavStore((s) => s.update);
   useLayoutEffect(() => {
     update(shouldShowNav);
