@@ -24,7 +24,7 @@ export default {
       z
         .object({
           cursor: z.string().optional(),
-          limit: z.number().min(1).max(100).default(20),
+          limit: z.coerce.number().int().min(1).max(100).default(20),
           searchTerm: z.string().trim().optional().default(''),
         })
         .default({})
@@ -268,7 +268,7 @@ export default {
       z.object({
         userId: z.string(),
         cursor: z.string().optional(),
-        limit: z.number().min(1).max(100).default(20),
+        limit: z.coerce.number().int().min(1).max(100).default(20),
       })
     )
     .output(
