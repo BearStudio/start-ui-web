@@ -1,5 +1,5 @@
-import type { ReactNode } from '@tanstack/react-router';
 import { ThemeProvider } from 'next-themes';
+import type { ReactNode } from 'react';
 import '@/lib/dayjs/config';
 import '@/lib/i18n';
 
