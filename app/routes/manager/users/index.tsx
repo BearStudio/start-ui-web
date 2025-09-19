@@ -2,9 +2,9 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { PageBooks } from '@/features/book/manager/page-books';
+import { PageUsers } from '@/features/user/manager/page-users';
 
-export const Route = createFileRoute('/manager/_layout/books/')({
+export const Route = createFileRoute('/manager/users/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
@@ -18,5 +18,5 @@ export const Route = createFileRoute('/manager/_layout/books/')({
 
 function RouteComponent() {
   const search = Route.useSearch();
-  return <PageBooks search={search} />;
+  return <PageUsers search={search} />;
 }

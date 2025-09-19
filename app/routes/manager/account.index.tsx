@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { PageAccount } from '@/features/account/manager/page-account';
 
-export const Route = createFileRoute('/manager/_layout/account/')({
+export const Route = createFileRoute('/manager/account/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({

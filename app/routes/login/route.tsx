@@ -8,6 +8,7 @@ import { LayoutLogin } from '@/features/auth/layout-login';
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
   notFoundComponent: () => <PageError error="404" />,
+  errorComponent: () => <PageError error="500" />,
 });
 
 function RouteComponent() {
