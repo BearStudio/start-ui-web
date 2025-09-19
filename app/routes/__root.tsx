@@ -1,11 +1,13 @@
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import { QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -110,7 +112,15 @@ function RootComponent() {
     <RootDocument>
       <Providers>
         <Outlet />
-        <ReactQueryDevtools initialIsOpen={false} />
+        <TanStackDevtools
+          plugins={[
+            { name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
       </Providers>
     </RootDocument>
   );
