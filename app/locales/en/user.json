@@ -26,6 +26,12 @@
       "searchResults": "{{total}} results for \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "Edit"
+      },
+      "deleteButton": {
+        "label": "Delete"
+      },
       "userDeleted": "User deleted",
       "deleteError": "Failed to delete the user",
       "confirmDeleteTitle": "Delete {{user}}",
@@ -40,6 +46,23 @@
       "sessionUpdated": "Updated {{time}}",
       "sessionExpires": "Expires {{time}}",
       "editUser": "Edit user"
+    },
+    "form": {
+      "emailAlreadyExist": "Email already used"
+    },
+    "new": {
+      "title": "New User",
+      "createButton": {
+        "label": "Create"
+      },
+      "createError": "Failed to create a user"
+    },
+    "update": {
+      "title": "Update Book",
+      "updateButton": {
+        "label": "Save"
+      },
+      "updateError": "Failed to update a user"
     }
   }
 }

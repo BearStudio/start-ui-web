@@ -1,20 +1,20 @@
 {
   "common": {
     "email": {
-      "invalid": "البريد الإلكتروني غير صالح",
-      "label": "بريد إلكتروني",
-      "required": "البريد الإلكتروني مطلوب"
+      "label": "البريد الإلكتروني",
+      "required": "البريد الإلكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صالح"
     },
     "name": {
-      "invalid": "الاسم غير صالح",
-      "label": "اسم",
       "onboardingLabel": "ما اسمك؟",
+      "label": "الاسم",
       "required": "الاسم مطلوب",
-      "notAvailable": "غير متوفر"
+      "invalid": "الاسم غير صالح",
+      "notAvailable": "غير متاح"
     },
     "onboardingStatus": {
-      "notOnboarded": "غير مسجل",
-      "onboardedAt": "تم التسجيل {{time}}"
+      "notOnboarded": "لم يتم الإعداد",
+      "onboardedAt": "تم الإعداد في {{time}}"
     }
   },
   "manager": {
@@ -26,20 +26,43 @@
       "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "تعديل"
+      },
+      "deleteButton": {
+        "label": "حذف"
+      },
       "userDeleted": "تم حذف المستخدم",
       "deleteError": "فشل في حذف المستخدم",
       "confirmDeleteTitle": "حذف {{user}}",
       "confirmDeleteDescription": "أنت على وشك حذف هذا المستخدم نهائياً. لا يمكن التراجع عن هذا الإجراء.",
-      "revokeAllSessions": "إلغاء الجميع",
-      "revokeAllError": "فشل في إلغاء جميع الجلسات",
+      "revokeAllSessions": "إلغاء الكل",
+      "revokeAllError": "فشل في إلغاء كل الجلسات",
       "revokeSession": "إلغاء",
       "revokeError": "فشل في إلغاء الجلسة",
       "userSessions": "جلسات المستخدم",
       "noSessions": "لا توجد جلسات للمستخدم",
-      "session": "جلسة {{token}}",
+      "session": "الجلسة {{token}}",
       "sessionUpdated": "تم التحديث {{time}}",
       "sessionExpires": "تنتهي {{time}}",
       "editUser": "تعديل المستخدم"
+    },
+    "form": {
+      "emailAlreadyExist": "البريد الإلكتروني مستخدم بالفعل"
+    },
+    "new": {
+      "title": "مستخدم جديد",
+      "createButton": {
+        "label": "إنشاء"
+      },
+      "createError": "فشل في إنشاء مستخدم"
+    },
+    "update": {
+      "title": "تحديث الكتاب",
+      "updateButton": {
+        "label": "حفظ"
+      },
+      "updateError": "فشل في تحديث المستخدم"
     }
   }
 }

@@ -14,12 +14,6 @@
     "publisher": {
       "label": "Publisher"
     },
-    "newButton": {
-      "label": "New Book"
-    },
-    "createButton": {
-      "label": "Create"
-    },
     "notFound": "No books available",
     "loadMore": "Load more books",
     "byCapitalized": "By"
@@ -30,10 +24,6 @@
     }
   },
   "manager": {
-    "toast": {
-      "deleted": "Book deleted",
-      "deleteError": "Failed to delete the book"
-    },
     "list": {
       "title": "Books",
       "loadMore": "Load more",
@@ -41,14 +31,33 @@
       "searchResults": "{{total}} results for \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "Edit"
+      },
+      "deleteButton": {
+        "label": "Delete"
+      },
+      "deleted": "Book deleted",
+      "deleteError": "Failed to delete the book",
       "confirmDeleteTitle": "Delete \"{{title}}\"",
       "confirmDeleteDescription": "You are about to permanently delete this book. This action cannot be undone."
     },
+    "form": {
+      "titleAlreadyExist": "A book by this author already exist"
+    },
     "new": {
-      "title": "New Book"
+      "title": "New Book",
+      "createButton": {
+        "label": "Create"
+      },
+      "createError": "Failed to create a book"
     },
     "update": {
-      "title": "Update Book"
+      "title": "Update Book",
+      "updateButton": {
+        "label": "Save"
+      },
+      "updateError": "Failed to update a book"
     }
   }
 }

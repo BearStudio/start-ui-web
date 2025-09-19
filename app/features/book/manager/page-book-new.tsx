@@ -62,12 +62,12 @@ export const PageBookNew = () => {
           error.data?.target?.includes('title')
         ) {
           form.setError('title', {
-            message: 'A book by this author already exist',
+            message: t('book:manager.form.titleAlreadyExist'),
           });
           return;
         }
 
-        toast.error('Failed to create a book');
+        toast.error(t('book:manager.new.createError'));
       },
     })
   );
@@ -91,7 +91,7 @@ export const PageBookNew = () => {
                 className="min-w-20"
                 loading={bookCreate.isPending}
               >
-                {t('book:common.createButton.label')}
+                {t('book:manager.new.createButton.label')}
               </Button>
             }
           >

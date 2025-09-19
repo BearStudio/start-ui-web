@@ -3,6 +3,7 @@ import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -23,6 +24,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUserNew = () => {
+  const { t } = useTranslation(['user']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -58,12 +60,12 @@ export const PageUserNew = () => {
           error.data?.target?.includes('email')
         ) {
           form.setError('email', {
-            message: 'Email already used',
+            message: t('user:manager.form.emailAlreadyExist'),
           });
           return;
         }
 
-        toast.error('Failed to create user');
+        toast.error(t('user:manager.new.createError'));
       },
     })
   );
@@ -87,11 +89,13 @@ export const PageUserNew = () => {
                 className="min-w-20"
                 loading={userCreate.isPending}
               >
-                Create
+                {t('user:manager.new.createButton.label')}
               </Button>
             }
           >
-            <PageLayoutTopBarTitle>New User</PageLayoutTopBarTitle>
+            <PageLayoutTopBarTitle>
+              {t('user:manager.new.title')}
+            </PageLayoutTopBarTitle>
           </PageLayoutTopBar>
           <PageLayoutContent>
             <Card>

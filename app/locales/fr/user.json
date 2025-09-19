@@ -26,6 +26,12 @@
       "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "Modifier"
+      },
+      "deleteButton": {
+        "label": "Supprimer"
+      },
       "userDeleted": "Utilisateur supprimé",
       "deleteError": "Échec de la suppression de l'utilisateur",
       "confirmDeleteTitle": "Supprimer {{user}}",
@@ -40,6 +46,23 @@
       "sessionUpdated": "Mise à jour {{time}}",
       "sessionExpires": "Expire {{time}}",
       "editUser": "Modifier l'utilisateur"
+    },
+    "form": {
+      "emailAlreadyExist": "Email déjà utilisé"
+    },
+    "new": {
+      "title": "Nouvel utilisateur",
+      "createButton": {
+        "label": "Créer"
+      },
+      "createError": "Échec de la création de l'utilisateur"
+    },
+    "update": {
+      "title": "Modifier l'utilisateur",
+      "updateButton": {
+        "label": "Sauvegarder"
+      },
+      "updateError": "Échec de la modification de l'utilisateur"
     }
   }
 }
