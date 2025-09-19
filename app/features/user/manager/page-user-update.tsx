@@ -2,7 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useBlocker, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -11,6 +11,7 @@ import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
+import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -57,9 +58,9 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
 
         // Redirect
         if (canGoBack) {
-          router.history.back();
+          router.history.back({ ignoreBlocker: true });
         } else {
-          router.navigate({ to: '..', replace: true });
+          router.navigate({ to: '..', replace: true, ignoreBlocker: true });
         }
       },
       onError: (error) => {
@@ -101,54 +102,48 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     return set('default', { user: userQuery.data });
   });
 
-  const formIsDirty = form.formState.isDirty;
-  useBlocker({
-    shouldBlockFn: () => {
-      if (!formIsDirty || userUpdate.isSuccess) return false;
-      const shouldLeave = confirm('Are you sure you want to leave?');
-      return !shouldLeave;
-    },
-  });
-
   return (
-    <Form
-      {...form}
-      onSubmit={(values) => {
-        userUpdate.mutate({ id: props.params.id, ...values });
-      }}
-    >
-      <PageLayout>
-        <PageLayoutTopBar
-          backButton={<BackButton />}
-          actions={
-            <Button
-              size="sm"
-              type="submit"
-              className="min-w-20"
-              loading={userUpdate.isPending}
-            >
-              Save
-            </Button>
-          }
-        >
-          <PageLayoutTopBarTitle>
-            {ui
-              .match('pending', () => <Skeleton className="h-4 w-48" />)
-              .match(['not-found', 'error'], () => (
-                <AlertCircleIcon className="size-4 text-muted-foreground" />
-              ))
-              .match('default', ({ user }) => <>{user.name || user.email}</>)
-              .exhaustive()}
-          </PageLayoutTopBarTitle>
-        </PageLayoutTopBar>
-        <PageLayoutContent>
-          <Card>
-            <CardContent>
-              <FormUser userId={props.params.id} />
-            </CardContent>
-          </Card>
-        </PageLayoutContent>
-      </PageLayout>
-    </Form>
+    <>
+      <PreventNavigation shoudlBlock={form.formState.isDirty} />
+      <Form
+        {...form}
+        onSubmit={(values) => {
+          userUpdate.mutate({ id: props.params.id, ...values });
+        }}
+      >
+        <PageLayout>
+          <PageLayoutTopBar
+            backButton={<BackButton />}
+            actions={
+              <Button
+                size="sm"
+                type="submit"
+                className="min-w-20"
+                loading={userUpdate.isPending}
+              >
+                Save
+              </Button>
+            }
+          >
+            <PageLayoutTopBarTitle>
+              {ui
+                .match('pending', () => <Skeleton className="h-4 w-48" />)
+                .match(['not-found', 'error'], () => (
+                  <AlertCircleIcon className="size-4 text-muted-foreground" />
+                ))
+                .match('default', ({ user }) => <>{user.name || user.email}</>)
+                .exhaustive()}
+            </PageLayoutTopBarTitle>
+          </PageLayoutTopBar>
+          <PageLayoutContent>
+            <Card>
+              <CardContent>
+                <FormUser userId={props.params.id} />
+              </CardContent>
+            </Card>
+          </PageLayoutContent>
+        </PageLayout>
+      </Form>
+    </>
   );
 };
