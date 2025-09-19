@@ -104,7 +104,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
 
   return (
     <>
-      <PreventNavigation shoudlBlock={form.formState.isDirty} />
+      <PreventNavigation shouldBlock={form.formState.isDirty} />
       <Form
         {...form}
         onSubmit={(values) => {

@@ -74,7 +74,7 @@ export const PageBookNew = () => {
 
   return (
     <>
-      <PreventNavigation shoudlBlock={form.formState.isDirty} />
+      <PreventNavigation shouldBlock={form.formState.isDirty} />
       <Form
         {...form}
         onSubmit={async (values) => {
