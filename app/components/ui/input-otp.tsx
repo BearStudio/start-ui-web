@@ -1,7 +1,7 @@
-import { ReactNode } from '@tanstack/react-router';
 import { cva, VariantProps } from 'class-variance-authority';
 import { OTPInput, OTPInputContext as OTPInputContextFromLib } from 'input-otp';
 import { MinusIcon } from 'lucide-react';
+import { ReactNode } from 'react';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -41,7 +41,7 @@ function InputOTP({
   containerClassName,
   size,
   ...props
-}: Omit<React.ComponentProps<typeof OTPInput>, 'size'> &
+}: Omit<React.ComponentProps<typeof OTPInput>, 'size' | 'render'> &
   VariantProps<typeof inputOTPVariants> & { children: ReactNode }) {
   const invalid = !!props['aria-invalid'];
   const value = React.useMemo(
