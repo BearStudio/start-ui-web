@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Opinionated UI starter from the 🐻 BearStudio Team",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "postinstall": "run-p gen:prisma gen:build-info",
