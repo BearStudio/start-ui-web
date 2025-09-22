@@ -27,6 +27,9 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /* Increase the timeout to operate on Github Actions */
+  expect: { timeout: process.env.CI ? 10000 : undefined },
+
   /* Configure projects for major browsers */
   projects: [
     {
