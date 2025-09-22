@@ -59,5 +59,8 @@
     "placeholder": "يختار...",
     "create": "إنشاء \"{{searchTerm}}\"",
     "noResultsFound": "لم يتم العثور على نتائج"
+  },
+  "preventNavigation": {
+    "confirmLabel": "هل أنت متأكد أنك تريد المغادرة؟"
   }
 }
