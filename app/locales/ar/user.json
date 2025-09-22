@@ -58,7 +58,7 @@
       "createError": "فشل في إنشاء مستخدم"
     },
     "update": {
-      "title": "تحديث الكتاب",
+      "title": "تحديث المستخدم",
       "updateButton": {
         "label": "حفظ"
       },

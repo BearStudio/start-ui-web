@@ -58,7 +58,7 @@
       "createError": "Failed to create a user"
     },
     "update": {
-      "title": "Update Book",
+      "title": "Update User",
       "updateButton": {
         "label": "Save"
       },

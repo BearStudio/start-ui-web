@@ -36,10 +36,10 @@
       "deleteError": "Imeshindikana kufuta mtumiaji",
       "confirmDeleteTitle": "Futa {{user}}",
       "confirmDeleteDescription": "Unakaribia kufuta mtumiaji huyu kabisa. Hatua hii haiwezi kubatilishwa.",
-      "revokeAllSessions": "Batili zote",
-      "revokeAllError": "Imeshindikana kubatili vikao vyote",
-      "revokeSession": "Batili",
-      "revokeError": "Imeshindikana kubatili kikao",
+      "revokeAllSessions": "Batilisha zote",
+      "revokeAllError": "Imeshindikana kubatilisha vikao vyote",
+      "revokeSession": "Batilisha",
+      "revokeError": "Imeshindikana kubatilisha kikao",
       "userSessions": "Vikao vya mtumiaji",
       "noSessions": "Hakuna vikao vya mtumiaji",
       "session": "Kikao {{token}}",
@@ -58,7 +58,7 @@
       "createError": "Imeshindikana kuunda mtumiaji"
     },
     "update": {
-      "title": "Sasisha Kitabu",
+      "title": "Sasisha Mtumiaji",
       "updateButton": {
         "label": "Hifadhi"
       },

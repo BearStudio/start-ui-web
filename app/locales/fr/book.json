@@ -41,7 +41,7 @@
       "deleted": "Livre supprimé",
       "deleteError": "Échec de la suppression du livre",
       "confirmDeleteTitle": "Supprimer \"{{title}}\"",
-      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement cet utilisateur. Cette action ne peut pas être annulée"
+      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement ce livre. Cette action ne peut pas être annulée"
     },
     "form": {
       "titleAlreadyExist": "Un livre existe déjà pour cet auteur"
