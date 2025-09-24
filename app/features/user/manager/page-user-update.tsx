@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -27,6 +28,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageUserUpdate = (props: { params: { id: string } }) => {
+  const { t } = useTranslation(['user']);
   const router = useRouter();
   const session = authClient.useSession();
   const canGoBack = useCanGoBack();
@@ -70,12 +72,12 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           error.data?.target?.includes('email')
         ) {
           form.setError('email', {
-            message: 'Email already used',
+            message: t('user:manager.form.emailAlreadyExist'),
           });
           return;
         }
 
-        toast.error('Failed to update user');
+        toast.error(t('user:manager.update.updateError'));
       },
     })
   );
@@ -121,7 +123,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
                 className="min-w-20"
                 loading={userUpdate.isPending}
               >
-                Save
+                {t('user:manager.update.updateButton.label')}
               </Button>
             }
           >

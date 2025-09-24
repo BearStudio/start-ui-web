@@ -54,7 +54,7 @@ export const PageUser = (props: { params: { id: string } }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const session = authClient.useSession();
-  const { t } = useTranslation(['user', 'common']);
+  const { t } = useTranslation(['user']);
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({
       input: { id: props.params.id },
@@ -124,12 +124,12 @@ export const PageUser = (props: { params: { id: string } }) => {
                   description={t(
                     'user:manager.detail.confirmDeleteDescription'
                   )}
-                  confirmText={t('common:actions.delete')}
+                  confirmText={t('user:manager.detail.deleteButton.label')}
                   confirmVariant="destructive"
                 >
                   <ResponsiveIconButton
                     variant="ghost"
-                    label={t('common:actions.delete')}
+                    label={t('user:manager.detail.deleteButton.label')}
                     size="sm"
                   >
                     <Trash2Icon />

@@ -1,8 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useRouter } from '@tanstack/react-router';
-import { useCanGoBack } from '@tanstack/react-router';
+import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -28,7 +27,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBook = (props: { params: { id: string } }) => {
-  const { t } = useTranslation(['book', 'common']);
+  const { t } = useTranslation(['book']);
   const queryClient = useQueryClient();
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -63,7 +62,7 @@ export const PageBook = (props: { params: { id: string } }) => {
         }),
       ]);
 
-      toast.success(t('book:manager.toast.deleted'));
+      toast.success(t('book:manager.detail.deleted'));
 
       // Redirect
       if (canGoBack) {
@@ -72,7 +71,7 @@ export const PageBook = (props: { params: { id: string } }) => {
         router.navigate({ to: '..', replace: true });
       }
     } catch {
-      toast.error(t('book:manager.toast.deleteError'));
+      toast.error(t('book:manager.detail.deleteError'));
     }
   };
 
@@ -95,12 +94,12 @@ export const PageBook = (props: { params: { id: string } }) => {
                   title: bookQuery.data?.title ?? '--',
                 })}
                 description={t('book:manager.detail.confirmDeleteDescription')}
-                confirmText={t('common:actions.delete')}
+                confirmText={t('book:manager.detail.deleteButton.label')}
                 confirmVariant="destructive"
               >
                 <ResponsiveIconButton
                   variant="ghost"
-                  label={t('common:actions.delete')}
+                  label={t('book:manager.detail.deleteButton.label')}
                   size="sm"
                 >
                   <Trash2Icon />
@@ -113,7 +112,7 @@ export const PageBook = (props: { params: { id: string } }) => {
                 params={{ id: props.params.id }}
               >
                 <PencilLineIcon />
-                {t('common:actions.edit')}
+                {t('book:manager.detail.editButton.label')}
               </Link>
             </Button>
           </>

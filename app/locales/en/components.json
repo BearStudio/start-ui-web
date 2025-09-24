@@ -59,5 +59,8 @@
     "placeholder": "Select...",
     "noResultsFound": "No results found",
     "create": "Create \"{{searchTerm}}\""
+  },
+  "preventNavigation": {
+    "confirmLabel": "Are you sure you want to leave?"
   }
 }

@@ -59,5 +59,8 @@
     "placeholder": "Chagua ...",
     "create": "Unda \"{{searchTerm}}\"",
     "noResultsFound": "Hakuna matokeo yaliyopatikana"
+  },
+  "preventNavigation": {
+    "confirmLabel": "Je, una uhakika unataka kuondoka?"
   }
 }

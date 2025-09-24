@@ -59,5 +59,8 @@
     "placeholder": "Sélectionner...",
     "create": "Créer \"{{searchTerm}}\"",
     "noResultsFound": "Aucun résultat trouvé"
+  },
+  "preventNavigation": {
+    "confirmLabel": "Êtes-vous sûr de vouloir quitter ?"
   }
 }

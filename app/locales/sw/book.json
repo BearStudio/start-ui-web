@@ -3,7 +3,7 @@
     "title": {
       "label": "Kichwa",
       "required": "Kichwa kinahitajika",
-      "alreadyUsed": "Kichwa tayari kinatumika na mwandishi huyo huyo"
+      "alreadyUsed": "Kichwa tayari kimetumika na mwandishi huyu"
     },
     "author": {
       "label": "Mwandishi"
@@ -30,26 +30,40 @@
     }
   },
   "manager": {
-    "toast": {
-      "deleted": "Kitabu kimefutwa",
-      "deleteError": "Imeshindwa kufuta kitabu hicho"
-    },
     "list": {
       "title": "Vitabu",
-      "deleteBookWarning": "Unakaribia kufuta kitabu hiki milele. <strong>Kitendo hiki hakiwezi kubatilishwa.</strong> Tafadhali thibitisha uamuzi wako kwa makini.",
       "loadMore": "Pakia zaidi",
       "showing": "Inaonyesha {{count}} kati ya {{total}}",
-      "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
-    },
-    "new": {
-      "title": "Kitabu Kipya"
-    },
-    "update": {
-      "title": "Sasisha Kitabu"
+      "searchResults": "Matokeo {{total}} kwa \"{{searchTerm}}\""
     },
     "detail": {
-      "confirmDeleteDescription": "Unakaribia kufuta kitabu hiki kabisa. \nKitendo hiki hakiwezi kufutwa.",
-      "confirmDeleteTitle": "Futa \"{{kichwa}}\""
+      "editButton": {
+        "label": "Hariri"
+      },
+      "deleteButton": {
+        "label": "Futa"
+      },
+      "deleted": "Kitabu kimefutwa",
+      "deleteError": "Imeshindikana kufuta kitabu",
+      "confirmDeleteTitle": "Futa \"{{title}}\"",
+      "confirmDeleteDescription": "Unakaribia kufuta kitabu hiki kabisa. Hatua hii haiwezi kubatilishwa."
+    },
+    "form": {
+      "titleAlreadyExist": "Tayari kuna kitabu cha mwandishi huyu"
+    },
+    "new": {
+      "title": "Kitabu Kipya",
+      "createButton": {
+        "label": "Unda"
+      },
+      "createError": "Imeshindikana kuunda kitabu"
+    },
+    "update": {
+      "title": "Sasisha Kitabu",
+      "updateButton": {
+        "label": "Hifadhi"
+      },
+      "updateError": "Imeshindikana kusasisha kitabu"
     }
   }
 }

@@ -1,24 +1,18 @@
 {
   "common": {
     "title": {
-      "label": "عنوان",
+      "label": "العنوان",
       "required": "العنوان مطلوب",
-      "alreadyUsed": "العنوان المستخدم بالفعل مع نفس المؤلف"
+      "alreadyUsed": "العنوان مستخدم بالفعل مع نفس المؤلف"
     },
     "author": {
-      "label": "مؤلف"
+      "label": "المؤلف"
     },
     "genre": {
       "label": "النوع"
     },
     "publisher": {
       "label": "الناشر"
-    },
-    "createButton": {
-      "label": "يخلق"
-    },
-    "newButton": {
-      "label": "كتاب جديد"
     },
     "notFound": "لا توجد كتب متاحة",
     "loadMore": "تحميل المزيد من الكتب",
@@ -30,26 +24,40 @@
     }
   },
   "manager": {
-    "toast": {
-      "deleted": "تم حذف الكتاب",
-      "deleteError": "فشل في حذف الكتاب"
-    },
     "list": {
       "title": "الكتب",
-      "deleteBookWarning": "أنت على وشك حذف هذا الكتاب بشكل دائم. <strong>لا يمكن التراجع عن هذا الإجراء.</strong> يرجى تأكيد قرارك بعناية.",
       "loadMore": "تحميل المزيد",
       "showing": "عرض {{count}} من {{total}}",
       "searchResults": "{{total}} نتيجة لـ \"{{searchTerm}}\""
     },
+    "detail": {
+      "editButton": {
+        "label": "تعديل"
+      },
+      "deleteButton": {
+        "label": "حذف"
+      },
+      "deleted": "تم حذف الكتاب",
+      "deleteError": "فشل في حذف الكتاب",
+      "confirmDeleteTitle": "حذف \"{{title}}\"",
+      "confirmDeleteDescription": "أنت على وشك حذف هذا الكتاب نهائياً. لا يمكن التراجع عن هذا الإجراء."
+    },
+    "form": {
+      "titleAlreadyExist": "يوجد بالفعل كتاب لهذا المؤلف"
+    },
     "new": {
-      "title": "كتاب جديد"
+      "title": "كتاب جديد",
+      "createButton": {
+        "label": "إنشاء"
+      },
+      "createError": "فشل في إنشاء كتاب"
     },
     "update": {
-      "title": "تحديث الكتاب"
-    },
-    "detail": {
-      "confirmDeleteDescription": "أنت على وشك حذف هذا الكتاب بشكل دائم. \nلا يمكن التراجع عن هذا الإجراء.",
-      "confirmDeleteTitle": "حذف \"{{title}}\""
+      "title": "تحديث الكتاب",
+      "updateButton": {
+        "label": "حفظ"
+      },
+      "updateError": "فشل في تحديث الكتاب"
     }
   }
 }

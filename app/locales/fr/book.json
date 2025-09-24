@@ -14,12 +14,6 @@
     "publisher": {
       "label": "Éditeur"
     },
-    "newButton": {
-      "label": "Nouveau livre"
-    },
-    "createButton": {
-      "label": "Créer"
-    },
     "notFound": "Aucun livre disponible",
     "loadMore": "Charger plus de livres",
     "byCapitalized": "Par"
@@ -30,10 +24,6 @@
     }
   },
   "manager": {
-    "toast": {
-      "deleted": "Livre supprimé",
-      "deleteError": "Échec de la suppression du livre"
-    },
     "list": {
       "title": "Livres",
       "deleteBookWarning": "Vous êtes sur le point de supprimer définitivement ce livre. <strong>Cette action ne peut pas être annulée.</strong> Veuillez confirmer votre décision avec soin.",
@@ -42,14 +32,33 @@
       "searchResults": "{{total}} résultats pour \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "Modifier"
+      },
+      "deleteButton": {
+        "label": "Supprimer"
+      },
+      "deleted": "Livre supprimé",
+      "deleteError": "Échec de la suppression du livre",
       "confirmDeleteTitle": "Supprimer \"{{title}}\"",
-      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement cet utilisateur. Cette action ne peut pas être annulée"
+      "confirmDeleteDescription": "Vous êtes sur le point de supprimer définitivement ce livre. Cette action ne peut pas être annulée"
+    },
+    "form": {
+      "titleAlreadyExist": "Un livre existe déjà pour cet auteur"
     },
     "new": {
-      "title": "Nouveau livre"
+      "title": "Nouveau livre",
+      "createButton": {
+        "label": "Créer"
+      },
+      "createError": "Échec de la création du livre"
     },
     "update": {
-      "title": "Mettre à jour le livre"
+      "title": "Mettre à jour le livre",
+      "updateButton": {
+        "label": "Sauvegarder"
+      },
+      "updateError": "Échec de la modification du livre"
     }
   }
 }

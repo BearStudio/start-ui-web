@@ -1,20 +1,20 @@
 {
   "common": {
     "email": {
-      "invalid": "Barua pepe ni batili",
       "label": "Barua pepe",
-      "required": "Barua pepe inahitajika"
+      "required": "Barua pepe inahitajika",
+      "invalid": "Barua pepe si sahihi"
     },
     "name": {
-      "invalid": "Jina sio batili",
-      "label": "Jina",
       "onboardingLabel": "Jina lako ni nani?",
+      "label": "Jina",
       "required": "Jina linahitajika",
-      "notAvailable": "Haupo"
+      "invalid": "Jina si sahihi",
+      "notAvailable": "Haipatikani"
     },
     "onboardingStatus": {
-      "notOnboarded": "Hajaandikishwa",
-      "onboardedAt": "Aliandikishwa {{time}}"
+      "notOnboarded": "Haijawekwa",
+      "onboardedAt": "Imewekwa {{time}}"
     }
   },
   "manager": {
@@ -23,23 +23,46 @@
       "newButton": "Mtumiaji Mpya",
       "loadMore": "Pakia zaidi",
       "showing": "Inaonyesha {{count}} kati ya {{total}}",
-      "searchResults": "Matokeo {{total}} ya \"{{searchTerm}}\""
+      "searchResults": "Matokeo {{total}} kwa \"{{searchTerm}}\""
     },
     "detail": {
+      "editButton": {
+        "label": "Hariri"
+      },
+      "deleteButton": {
+        "label": "Futa"
+      },
       "userDeleted": "Mtumiaji amefutwa",
-      "deleteError": "Imeshindwa kufuta mtumiaji",
+      "deleteError": "Imeshindikana kufuta mtumiaji",
       "confirmDeleteTitle": "Futa {{user}}",
-      "confirmDeleteDescription": "Unakaribia kufuta mtumiaji huyu kabisa. Kitendo hiki hakiwezi kutenduliwa.",
+      "confirmDeleteDescription": "Unakaribia kufuta mtumiaji huyu kabisa. Hatua hii haiwezi kubatilishwa.",
       "revokeAllSessions": "Batilisha zote",
-      "revokeAllError": "Imeshindwa kubatilisha vipindi vyote",
+      "revokeAllError": "Imeshindikana kubatilisha vikao vyote",
       "revokeSession": "Batilisha",
-      "revokeError": "Imeshindwa kubatilisha kipindi",
-      "userSessions": "Vipindi vya Mtumiaji",
-      "noSessions": "Hakuna vipindi vya mtumiaji",
-      "session": "Kipindi {{token}}",
-      "sessionUpdated": "Imesasishwa {{time}}",
-      "sessionExpires": "Inaisha {{time}}",
+      "revokeError": "Imeshindikana kubatilisha kikao",
+      "userSessions": "Vikao vya mtumiaji",
+      "noSessions": "Hakuna vikao vya mtumiaji",
+      "session": "Kikao {{token}}",
+      "sessionUpdated": "Kimesasishwa {{time}}",
+      "sessionExpires": "Kinaisha {{time}}",
       "editUser": "Hariri mtumiaji"
+    },
+    "form": {
+      "emailAlreadyExist": "Barua pepe tayari imetumika"
+    },
+    "new": {
+      "title": "Mtumiaji Mpya",
+      "createButton": {
+        "label": "Unda"
+      },
+      "createError": "Imeshindikana kuunda mtumiaji"
+    },
+    "update": {
+      "title": "Sasisha Mtumiaji",
+      "updateButton": {
+        "label": "Hifadhi"
+      },
+      "updateError": "Imeshindikana kusasisha mtumiaji"
     }
   }
 }

@@ -25,7 +25,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {
-  const { t } = useTranslation(['common', 'book']);
+  const { t } = useTranslation(['book']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -65,12 +65,12 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
           error.data?.target?.includes('title')
         ) {
           form.setError('title', {
-            message: 'A book by this author already exist',
+            message: t('book:manager.form.titleAlreadyExist'),
           });
           return;
         }
 
-        toast.error('Failed to update the book');
+        toast.error(t('book:manager.update.updateError'));
       },
     })
   );
@@ -94,7 +94,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
                 className="min-w-20"
                 loading={bookUpdate.isPending}
               >
-                {t('common:actions.update')}
+                {t('book:manager.update.updateButton.label')}
               </Button>
             }
           >
