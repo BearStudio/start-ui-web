@@ -1,3 +1,4 @@
+import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
 import { codeInspectorPlugin } from 'code-inspector-plugin';
@@ -13,6 +14,7 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
     },
     plugins: [
+      devtools(),
       codeInspectorPlugin({
         bundler: 'vite',
       }),
