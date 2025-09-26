@@ -14,3 +14,4 @@ public
 !.env.validator.js
 pnpm-lock.yaml
 *.gen.ts
+generated

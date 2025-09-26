@@ -2,7 +2,9 @@ import type { Preview } from '@storybook/react-vite';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { StoryContext } from 'storybook/internal/csf';
 
 import '@/styles/app.css';
 import './preview.css';
@@ -10,11 +12,19 @@ import './preview.css';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
-} from '../app/lib/i18n/constants';
-import i18nGlobal from '../app/lib/i18n/index';
-import { Providers } from '../app/providers';
+} from '../src/lib/i18n/constants';
+import i18nGlobal from '../src/lib/i18n/index';
+import { Providers } from '../src/providers';
 
-const DocumentationWrapper = ({ children, isDarkMode, context }) => {
+const DocumentationWrapper = ({
+  children,
+  isDarkMode,
+  context,
+}: {
+  children: ReactNode;
+  isDarkMode: boolean;
+  context: StoryContext;
+}) => {
   const { i18n } = useTranslation();
   const { setTheme } = useTheme();
 

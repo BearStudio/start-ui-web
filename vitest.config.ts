@@ -24,15 +24,15 @@ export default defineConfig({
               },
             ],
           },
-          include: ['app/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
+          include: ['src/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
           setupFiles: [
-            resolve('app/tests/setup.base.ts'),
-            resolve('app/tests/setup.browser.ts'),
+            resolve('src/tests/setup.base.ts'),
+            resolve('src/tests/setup.browser.ts'),
           ],
         },
         resolve: {
           alias: {
-            '@': resolve('./app'),
+            '@': resolve('./src'),
           },
         },
       },
@@ -40,12 +40,12 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'node',
-          include: ['app/**/*.unit.{test,spec}.?(c|m)[jt]s?(x)'],
-          setupFiles: [resolve('app/tests/setup.base.ts')],
+          include: ['src/**/*.unit.{test,spec}.?(c|m)[jt]s?(x)'],
+          setupFiles: [resolve('src/tests/setup.base.ts')],
         },
         resolve: {
           alias: {
-            '@': resolve('./app'),
+            '@': resolve('./src'),
           },
         },
       },

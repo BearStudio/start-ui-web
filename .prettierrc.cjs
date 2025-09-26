@@ -10,7 +10,7 @@ const config = {
   trailingComma: 'es5',
   arrowParens: 'always',
 
-  tailwindStylesheet: './app/styles/app.css',
+  tailwindStylesheet: './src/styles/app.css',
   tailwindFunctions: ['cn', 'cva'],
 };
 
