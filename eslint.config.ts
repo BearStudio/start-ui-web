@@ -49,7 +49,7 @@ export default tslint.config(
     plugins: {
       unicorn,
     },
-    ignores: ['app/routes/**/*.*'],
+    ignores: ['src/routes/**/*.*'],
     rules: {
       'unicorn/filename-case': [
         'error',
@@ -61,7 +61,7 @@ export default tslint.config(
     },
   },
   {
-    files: ['app/**/*'],
+    files: ['src/**/*'],
     rules: {
       'no-process-env': 'error',
       'no-restricted-syntax': [
@@ -70,13 +70,13 @@ export default tslint.config(
           selector:
             "MemberExpression[object.type='MemberExpression'][object.object.type='MetaProperty'][object.object.property.name='meta'][object.property.name='env'][property.name!=/^(DEV|PROD|MODE|SSR|BASE_URL|MANIFEST)$/]",
           message:
-            'Custom import.meta.env variables are not allowed. Use envClient and envServer from @/app/env folder instead.',
+            'Custom import.meta.env variables are not allowed. Use envClient and envServer from @/src/env folder instead.',
         },
       ],
     },
   },
   {
-    files: ['**/*.stories.tsx', './app/locales/**/*'],
+    files: ['**/*.stories.tsx', './src/locales/**/*'],
     rules: {
       'import/no-anonymous-default-export': 'off',
     },

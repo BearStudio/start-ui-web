@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
@@ -19,7 +20,6 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { PageError } from '@/components/page-error';
 import { PageErrorBoundary } from '@/components/page-error-boundary';
 
-import { authClient } from '@/features/auth/client';
 import { EnvHint } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';
@@ -31,18 +31,9 @@ const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
   };
 });
 
-let devWarmUpDone = false;
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
-  beforeLoad: async () => {
-    // Warm up auth session in Dev
-    // Prevent error on first load
-    if (import.meta.env.DEV && !devWarmUpDone) {
-      devWarmUpDone = true;
-      await authClient.getSession();
-    }
-  },
   loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {

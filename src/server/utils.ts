@@ -1,19 +1,8 @@
 import {
   getCookie,
-  getHeaders as vinxiGetHeaders,
+  getRequestHeaders,
   setCookie,
 } from '@tanstack/react-start/server';
-import { entries } from 'remeda';
-
-export const getHeaders = () => {
-  const headers = new Headers();
-  entries(vinxiGetHeaders()).forEach(([key, value]) => {
-    if (value) {
-      headers.append(key, value);
-    }
-  });
-  return headers;
-};
 
 import {
   AVAILABLE_LANGUAGES,
@@ -30,7 +19,7 @@ export const getUserLanguage = (input?: string) => {
   const value =
     input ??
     getCookie('i18next') ??
-    getHeaders()
+    getRequestHeaders()
       .get('accept-language')
       ?.split(',')?.[0] // Get the first language ar,en-US -> ar
       ?.split('-')?.[0]; // Get the first part en-US -> en

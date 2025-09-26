@@ -1,5 +1,6 @@
 import { ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
+import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
@@ -9,7 +10,6 @@ import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
-import { getHeaders } from '@/server/utils';
 
 const base = os
   .$context<ResponseHeadersPluginContext>()
@@ -17,7 +17,7 @@ const base = os
   .use(async ({ next, context }) => {
     const start = performance.now();
 
-    const session = await auth.api.getSession({ headers: getHeaders() });
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
     const duration = performance.now() - start;
 

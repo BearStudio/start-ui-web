@@ -34,7 +34,7 @@ const getContent = () => {
   };
 };
 
-const generatedPath = './app/features/build-info/build-info.gen.json';
+const generatedPath = './src/features/build-info/build-info.gen.json';
 
 const generateAppBuild = () => {
   try {

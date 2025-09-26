@@ -18,16 +18,9 @@ export default defineConfig(({ mode }) => {
       codeInspectorPlugin({
         bundler: 'vite',
       }),
-      tsConfigPaths({
-        projects: ['./tsconfig.json'],
-      }),
-      tanstackStart({
-        customViteReactPlugin: true,
-        tsr: {
-          srcDirectory: 'app',
-          routesDirectory: 'app/routes',
-        },
-      }),
+      tsConfigPaths(),
+      tanstackStart(),
+      // react's vite plugin must come after start's vite plugin
       viteReact(),
     ],
   };

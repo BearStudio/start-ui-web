@@ -24,7 +24,7 @@ export default ${componentName};
 // eslint-disable-next-line no-undef
 module.exports = {
   icon: true,
-  outDir: './app/components/icons/generated',
+  outDir: './src/components/icons/generated',
   expandProps: true,
   typescript: true,
   replaceAttrValues: { '#000': 'currentColor' },

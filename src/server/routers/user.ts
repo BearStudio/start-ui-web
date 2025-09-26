@@ -1,11 +1,11 @@
 import { ORPCError } from '@orpc/client';
 import { Prisma } from '@prisma/client';
+import { getRequestHeaders } from '@tanstack/react-start/server';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
 import { protectedProcedure } from '@/server/orpc';
-import { getHeaders } from '@/server/utils';
 
 const tags = ['users'];
 
@@ -245,7 +245,7 @@ export default {
         body: {
           userId: input.id,
         },
-        headers: getHeaders(),
+        headers: getRequestHeaders(),
       });
 
       if (!response.success) {
@@ -343,7 +343,7 @@ export default {
         body: {
           userId: input.id,
         },
-        headers: getHeaders(),
+        headers: getRequestHeaders(),
       });
 
       if (!response.success) {
@@ -384,7 +384,7 @@ export default {
         body: {
           sessionToken: input.sessionToken,
         },
-        headers: getHeaders(),
+        headers: getRequestHeaders(),
       });
 
       if (!response.success) {

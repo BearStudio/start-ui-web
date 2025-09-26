@@ -63,7 +63,7 @@ The maildev UI is available at [0.0.0.0:1080](http://0.0.0.0:1080).
 
 #### Preview emails
 
-Emails templates are built with `react-email` components in the `app/emails` folder.
+Emails templates are built with `react-email` components in the `src/emails` folder.
 
 You can preview an email template at `http://localhost:3000/api/dev/email/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
 
@@ -80,7 +80,7 @@ You can add search params to the preview url to pass as props to the template.
 
 ### Generate custom icons components from svg files
 
-Put the custom svg files into the `app/components/icons/svg-sources` folder and then run the following command:
+Put the custom svg files into the `src/components/icons/svg-sources` folder and then run the following command:
 
 ```bash
 pnpm gen:icons

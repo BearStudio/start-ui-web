@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from '@tanstack/react-start/server'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
@@ -26,23 +24,21 @@ import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.inde
 import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
 import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
 import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiRestSplatRouteImport } from './routes/api/rest.$'
+import { Route as ApiOpenapiAuthRouteImport } from './routes/api/openapi/auth'
+import { Route as ApiOpenapiAppRouteImport } from './routes/api/openapi/app'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
 import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
 import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
+import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
+import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
+import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
 import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
-import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api/rpc.$'
-import { ServerRoute as ApiRestSplatServerRouteImport } from './routes/api/rest.$'
-import { ServerRoute as ApiOpenapiAuthServerRouteImport } from './routes/api/openapi/auth'
-import { ServerRoute as ApiOpenapiAppServerRouteImport } from './routes/api/openapi/app'
-import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
-import { ServerRoute as ApiOpenapiAuthSchemaServerRouteImport } from './routes/api/openapi/auth.schema'
-import { ServerRoute as ApiOpenapiAppSchemaServerRouteImport } from './routes/api/openapi/app.schema'
-import { ServerRoute as ApiDevEmailTemplateServerRouteImport } from './routes/api/dev.email.$template'
-
-const rootServerRouteImport = createServerRootRoute()
 
 const ManagerRouteRoute = ManagerRouteRouteImport.update({
   id: '/manager',
@@ -119,6 +115,31 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRestSplatRoute = ApiRestSplatRouteImport.update({
+  id: '/api/rest/$',
+  path: '/api/rest/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOpenapiAuthRoute = ApiOpenapiAuthRouteImport.update({
+  id: '/api/openapi/auth',
+  path: '/api/openapi/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOpenapiAppRoute = ApiOpenapiAppRouteImport.update({
+  id: '/api/openapi/app',
+  path: '/api/openapi/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManagerUsersNewIndexRoute = ManagerUsersNewIndexRouteImport.update({
   id: '/users/new/',
   path: '/users/new/',
@@ -144,6 +165,21 @@ const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
   path: '/books/$id/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const ApiOpenapiAuthSchemaRoute = ApiOpenapiAuthSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => ApiOpenapiAuthRoute,
+} as any)
+const ApiOpenapiAppSchemaRoute = ApiOpenapiAppSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => ApiOpenapiAppRoute,
+} as any)
+const ApiDevEmailTemplateRoute = ApiDevEmailTemplateRouteImport.update({
+  id: '/api/dev/email/$template',
+  path: '/api/dev/email/$template',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManagerUsersIdUpdateIndexRoute =
   ManagerUsersIdUpdateIndexRouteImport.update({
     id: '/users/$id/update/',
@@ -156,49 +192,6 @@ const ManagerBooksIdUpdateIndexRoute =
     path: '/books/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
-const ApiRpcSplatServerRoute = ApiRpcSplatServerRouteImport.update({
-  id: '/api/rpc/$',
-  path: '/api/rpc/$',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiRestSplatServerRoute = ApiRestSplatServerRouteImport.update({
-  id: '/api/rest/$',
-  path: '/api/rest/$',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiOpenapiAuthServerRoute = ApiOpenapiAuthServerRouteImport.update({
-  id: '/api/openapi/auth',
-  path: '/api/openapi/auth',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiOpenapiAppServerRoute = ApiOpenapiAppServerRouteImport.update({
-  id: '/api/openapi/app',
-  path: '/api/openapi/app',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiOpenapiAuthSchemaServerRoute =
-  ApiOpenapiAuthSchemaServerRouteImport.update({
-    id: '/schema',
-    path: '/schema',
-    getParentRoute: () => ApiOpenapiAuthServerRoute,
-  } as any)
-const ApiOpenapiAppSchemaServerRoute =
-  ApiOpenapiAppSchemaServerRouteImport.update({
-    id: '/schema',
-    path: '/schema',
-    getParentRoute: () => ApiOpenapiAppServerRoute,
-  } as any)
-const ApiDevEmailTemplateServerRoute =
-  ApiDevEmailTemplateServerRouteImport.update({
-    id: '/api/dev/email/$template',
-    path: '/api/dev/email/$template',
-    getParentRoute: () => rootServerRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -208,6 +201,11 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/openapi/app': typeof ApiOpenapiAppRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account': typeof AppAccountIndexRoute
   '/app/books': typeof AppBooksIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
@@ -216,6 +214,9 @@ export interface FileRoutesByFullPath {
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
@@ -229,6 +230,11 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
   '/manager': typeof ManagerIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/openapi/app': typeof ApiOpenapiAppRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account': typeof AppAccountIndexRoute
   '/app/books': typeof AppBooksIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
@@ -237,6 +243,9 @@ export interface FileRoutesByTo {
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
@@ -254,6 +263,11 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/openapi/app': typeof ApiOpenapiAppRouteWithChildren
+  '/api/openapi/auth': typeof ApiOpenapiAuthRouteWithChildren
+  '/api/rest/$': typeof ApiRestSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
@@ -262,6 +276,9 @@ export interface FileRoutesById {
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
+  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
+  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
+  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
   '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
@@ -280,6 +297,11 @@ export interface FileRouteTypes {
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
     | '/app/account'
     | '/app/books'
     | '/login/error'
@@ -288,6 +310,9 @@ export interface FileRouteTypes {
     | '/manager/books'
     | '/manager/dashboard'
     | '/manager/users'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
@@ -301,6 +326,11 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
     | '/app/account'
     | '/app/books'
     | '/login/error'
@@ -309,6 +339,9 @@ export interface FileRouteTypes {
     | '/manager/books'
     | '/manager/dashboard'
     | '/manager/users'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
@@ -325,6 +358,11 @@ export interface FileRouteTypes {
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/api/auth/$'
+    | '/api/openapi/app'
+    | '/api/openapi/auth'
+    | '/api/rest/$'
+    | '/api/rpc/$'
     | '/app/account/'
     | '/app/books/'
     | '/login/error/'
@@ -333,6 +371,9 @@ export interface FileRouteTypes {
     | '/manager/books/'
     | '/manager/dashboard/'
     | '/manager/users/'
+    | '/api/dev/email/$template'
+    | '/api/openapi/app/schema'
+    | '/api/openapi/auth/schema'
     | '/app/books/$id/'
     | '/manager/books/$id/'
     | '/manager/books/new/'
@@ -347,78 +388,12 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
-}
-export interface FileServerRoutesByFullPath {
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
-  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
-  '/api/rest/$': typeof ApiRestSplatServerRoute
-  '/api/rpc/$': typeof ApiRpcSplatServerRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
-  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
-  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
-}
-export interface FileServerRoutesByTo {
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
-  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
-  '/api/rest/$': typeof ApiRestSplatServerRoute
-  '/api/rpc/$': typeof ApiRpcSplatServerRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
-  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
-  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/openapi/app': typeof ApiOpenapiAppServerRouteWithChildren
-  '/api/openapi/auth': typeof ApiOpenapiAuthServerRouteWithChildren
-  '/api/rest/$': typeof ApiRestSplatServerRoute
-  '/api/rpc/$': typeof ApiRpcSplatServerRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateServerRoute
-  '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaServerRoute
-  '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaServerRoute
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths:
-    | '/api/auth/$'
-    | '/api/openapi/app'
-    | '/api/openapi/auth'
-    | '/api/rest/$'
-    | '/api/rpc/$'
-    | '/api/dev/email/$template'
-    | '/api/openapi/app/schema'
-    | '/api/openapi/auth/schema'
-  fileServerRoutesByTo: FileServerRoutesByTo
-  to:
-    | '/api/auth/$'
-    | '/api/openapi/app'
-    | '/api/openapi/auth'
-    | '/api/rest/$'
-    | '/api/rpc/$'
-    | '/api/dev/email/$template'
-    | '/api/openapi/app/schema'
-    | '/api/openapi/auth/schema'
-  id:
-    | '__root__'
-    | '/api/auth/$'
-    | '/api/openapi/app'
-    | '/api/openapi/auth'
-    | '/api/rest/$'
-    | '/api/rpc/$'
-    | '/api/dev/email/$template'
-    | '/api/openapi/app/schema'
-    | '/api/openapi/auth/schema'
-  fileServerRoutesById: FileServerRoutesById
-}
-export interface RootServerRouteChildren {
-  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
-  ApiOpenapiAppServerRoute: typeof ApiOpenapiAppServerRouteWithChildren
-  ApiOpenapiAuthServerRoute: typeof ApiOpenapiAuthServerRouteWithChildren
-  ApiRestSplatServerRoute: typeof ApiRestSplatServerRoute
-  ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
-  ApiDevEmailTemplateServerRoute: typeof ApiDevEmailTemplateServerRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiOpenapiAppRoute: typeof ApiOpenapiAppRouteWithChildren
+  ApiOpenapiAuthRoute: typeof ApiOpenapiAuthRouteWithChildren
+  ApiRestSplatRoute: typeof ApiRestSplatRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
+  ApiDevEmailTemplateRoute: typeof ApiDevEmailTemplateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -528,6 +503,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rest/$': {
+      id: '/api/rest/$'
+      path: '/api/rest/$'
+      fullPath: '/api/rest/$'
+      preLoaderRoute: typeof ApiRestSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/openapi/auth': {
+      id: '/api/openapi/auth'
+      path: '/api/openapi/auth'
+      fullPath: '/api/openapi/auth'
+      preLoaderRoute: typeof ApiOpenapiAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/openapi/app': {
+      id: '/api/openapi/app'
+      path: '/api/openapi/app'
+      fullPath: '/api/openapi/app'
+      preLoaderRoute: typeof ApiOpenapiAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manager/users/new/': {
       id: '/manager/users/new/'
       path: '/users/new'
@@ -563,6 +573,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBooksIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/api/openapi/auth/schema': {
+      id: '/api/openapi/auth/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/auth/schema'
+      preLoaderRoute: typeof ApiOpenapiAuthSchemaRouteImport
+      parentRoute: typeof ApiOpenapiAuthRoute
+    }
+    '/api/openapi/app/schema': {
+      id: '/api/openapi/app/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/app/schema'
+      preLoaderRoute: typeof ApiOpenapiAppSchemaRouteImport
+      parentRoute: typeof ApiOpenapiAppRoute
+    }
+    '/api/dev/email/$template': {
+      id: '/api/dev/email/$template'
+      path: '/api/dev/email/$template'
+      fullPath: '/api/dev/email/$template'
+      preLoaderRoute: typeof ApiDevEmailTemplateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manager/users/$id/update/': {
       id: '/manager/users/$id/update/'
       path: '/users/$id/update'
@@ -576,66 +607,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/manager/books/$id/update'
       preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
-    }
-  }
-}
-declare module '@tanstack/react-start/server' {
-  interface ServerFileRoutesByPath {
-    '/api/rpc/$': {
-      id: '/api/rpc/$'
-      path: '/api/rpc/$'
-      fullPath: '/api/rpc/$'
-      preLoaderRoute: typeof ApiRpcSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/rest/$': {
-      id: '/api/rest/$'
-      path: '/api/rest/$'
-      fullPath: '/api/rest/$'
-      preLoaderRoute: typeof ApiRestSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/openapi/auth': {
-      id: '/api/openapi/auth'
-      path: '/api/openapi/auth'
-      fullPath: '/api/openapi/auth'
-      preLoaderRoute: typeof ApiOpenapiAuthServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/openapi/app': {
-      id: '/api/openapi/app'
-      path: '/api/openapi/app'
-      fullPath: '/api/openapi/app'
-      preLoaderRoute: typeof ApiOpenapiAppServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/openapi/auth/schema': {
-      id: '/api/openapi/auth/schema'
-      path: '/schema'
-      fullPath: '/api/openapi/auth/schema'
-      preLoaderRoute: typeof ApiOpenapiAuthSchemaServerRouteImport
-      parentRoute: typeof ApiOpenapiAuthServerRoute
-    }
-    '/api/openapi/app/schema': {
-      id: '/api/openapi/app/schema'
-      path: '/schema'
-      fullPath: '/api/openapi/app/schema'
-      preLoaderRoute: typeof ApiOpenapiAppSchemaServerRouteImport
-      parentRoute: typeof ApiOpenapiAppServerRoute
-    }
-    '/api/dev/email/$template': {
-      id: '/api/dev/email/$template'
-      path: '/api/dev/email/$template'
-      fullPath: '/api/dev/email/$template'
-      preLoaderRoute: typeof ApiDevEmailTemplateServerRouteImport
-      parentRoute: typeof rootServerRouteImport
     }
   }
 }
@@ -706,45 +677,51 @@ const ManagerRouteRouteWithChildren = ManagerRouteRoute._addFileChildren(
   ManagerRouteRouteChildren,
 )
 
-interface ApiOpenapiAppServerRouteChildren {
-  ApiOpenapiAppSchemaServerRoute: typeof ApiOpenapiAppSchemaServerRoute
+interface ApiOpenapiAppRouteChildren {
+  ApiOpenapiAppSchemaRoute: typeof ApiOpenapiAppSchemaRoute
 }
 
-const ApiOpenapiAppServerRouteChildren: ApiOpenapiAppServerRouteChildren = {
-  ApiOpenapiAppSchemaServerRoute: ApiOpenapiAppSchemaServerRoute,
+const ApiOpenapiAppRouteChildren: ApiOpenapiAppRouteChildren = {
+  ApiOpenapiAppSchemaRoute: ApiOpenapiAppSchemaRoute,
 }
 
-const ApiOpenapiAppServerRouteWithChildren =
-  ApiOpenapiAppServerRoute._addFileChildren(ApiOpenapiAppServerRouteChildren)
+const ApiOpenapiAppRouteWithChildren = ApiOpenapiAppRoute._addFileChildren(
+  ApiOpenapiAppRouteChildren,
+)
 
-interface ApiOpenapiAuthServerRouteChildren {
-  ApiOpenapiAuthSchemaServerRoute: typeof ApiOpenapiAuthSchemaServerRoute
+interface ApiOpenapiAuthRouteChildren {
+  ApiOpenapiAuthSchemaRoute: typeof ApiOpenapiAuthSchemaRoute
 }
 
-const ApiOpenapiAuthServerRouteChildren: ApiOpenapiAuthServerRouteChildren = {
-  ApiOpenapiAuthSchemaServerRoute: ApiOpenapiAuthSchemaServerRoute,
+const ApiOpenapiAuthRouteChildren: ApiOpenapiAuthRouteChildren = {
+  ApiOpenapiAuthSchemaRoute: ApiOpenapiAuthSchemaRoute,
 }
 
-const ApiOpenapiAuthServerRouteWithChildren =
-  ApiOpenapiAuthServerRoute._addFileChildren(ApiOpenapiAuthServerRouteChildren)
+const ApiOpenapiAuthRouteWithChildren = ApiOpenapiAuthRoute._addFileChildren(
+  ApiOpenapiAuthRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRouteWithChildren,
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiOpenapiAppRoute: ApiOpenapiAppRouteWithChildren,
+  ApiOpenapiAuthRoute: ApiOpenapiAuthRouteWithChildren,
+  ApiRestSplatRoute: ApiRestSplatRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
+  ApiDevEmailTemplateRoute: ApiDevEmailTemplateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
-  ApiOpenapiAppServerRoute: ApiOpenapiAppServerRouteWithChildren,
-  ApiOpenapiAuthServerRoute: ApiOpenapiAuthServerRouteWithChildren,
-  ApiRestSplatServerRoute: ApiRestSplatServerRoute,
-  ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
-  ApiDevEmailTemplateServerRoute: ApiDevEmailTemplateServerRoute,
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>()
