@@ -1,57 +1,14 @@
-import { PrismaPg } from '@prisma/adapter-pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
 import { envServer } from '@/env/server';
-import { timingStore } from '@/server/timing-store';
 
-import { PrismaClient } from './generated/client';
+import * as schema from './schemas';
 
-const levels = {
-  trace: ['query', 'error', 'warn', 'info'],
-  debug: ['error', 'warn', 'info'],
-  info: ['error', 'warn', 'info'],
-  warn: ['error', 'warn'],
-  error: ['error'],
-  fatal: ['error'],
-} satisfies Record<string, ('query' | 'error' | 'warn' | 'info')[]>;
+const pool = new Pool({
+  connectionString: envServer.DATABASE_URL,
+});
 
-const adapter = new PrismaPg({ connectionString: envServer.DATABASE_URL });
-
-function createPrisma() {
-  return new PrismaClient({
-    adapter,
-    log: levels[envServer.LOGGER_LEVEL],
-  }).$extends({
-    name: 'server-timing',
-    query: {
-      $allModels: {
-        async $allOperations({ query, args, model, operation }) {
-          const start = performance.now();
-
-          const result = await query(args);
-
-          const duration = performance.now() - start;
-
-          const store = timingStore.getStore();
-          if (store) {
-            store.prisma.push({
-              model,
-              operation,
-              duration,
-            });
-          }
-
-          return result;
-        },
-      },
-    },
-  });
-}
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createPrisma> | undefined;
-  serverTiming?: Array<{ key: string; duration: string }>;
-};
-
-export const db = globalForPrisma.prisma ?? createPrisma();
-
-if (import.meta.env.DEV) globalForPrisma.prisma = db;
+export const db = drizzle(pool, {
+  schema,
+});

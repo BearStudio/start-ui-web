@@ -1,8 +1,10 @@
 import { ORPCError } from '@orpc/client';
+import { and, asc, count, gt, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
+import { book } from '@/server/db/schemas';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -37,36 +39,22 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting books from database');
 
-      const where = {
-        OR: [
-          {
-            title: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
+      const where = or(
+        like(book.title, `%${input.searchTerm}%`),
+        like(book.author, `%${input.searchTerm}%`)
+      );
+      const [total, items] = await context.db.transaction(async (tr) => [
+        await tr.$count(book, where),
+        await tr.query.book.findMany({
+          where: and(
+            input.cursor ? gt(book.id, input.cursor) : undefined,
+            where
+          ),
+          orderBy: asc(book.title),
+          limit: input.limit + 1,
+          with: {
+            genre: true,
           },
-          {
-            author: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      } satisfies Prisma.BookWhereInput;
-
-      const [total, items] = await context.db.$transaction([
-        context.db.book.count({
-          where,
-        }),
-        context.db.book.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            title: 'asc',
-          },
-          where,
-          include: { genre: true },
         }),
       ]);
 

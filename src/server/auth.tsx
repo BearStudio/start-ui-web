@@ -1,5 +1,5 @@
 import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
@@ -24,8 +24,8 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
-  database: prismaAdapter(db, {
-    provider: 'postgresql',
+  database: drizzleAdapter(db, {
+    provider: 'pg',
   }),
   user: {
     additionalFields: {
