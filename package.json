@@ -51,6 +51,7 @@
     "@orpc/react-query": "1.5.2",
     "@orpc/server": "1.5.2",
     "@orpc/zod": "1.5.2",
+    "@prisma/adapter-pg": "6.16.2",
     "@prisma/client": "6.16.2",
     "@react-email/components": "0.0.39",
     "@react-email/render": "1.1.0",

@@ -5,6 +5,7 @@ generator client {
   provider     = "prisma-client"
   output       = "../src/server/db/generated"
   moduleFormat = "esm"
+  engineType   = "library"
 }
 
 datasource db {
