@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-
 import { envServer } from '@/env/server';
 import { timingStore } from '@/server/timing-store';
+
+import { PrismaClient } from './generated/client';
 
 const levels = {
   trace: ['query', 'error', 'warn', 'info'],

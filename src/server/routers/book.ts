@@ -1,8 +1,8 @@
 import { ORPCError } from '@orpc/client';
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 import { zBook } from '@/features/book/schema';
+import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];

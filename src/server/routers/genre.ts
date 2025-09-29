@@ -1,7 +1,7 @@
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
+import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['genres'];

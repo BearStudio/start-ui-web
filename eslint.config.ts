@@ -49,7 +49,7 @@ export default tslint.config(
     plugins: {
       unicorn,
     },
-    ignores: ['src/routes/**/*.*'],
+    ignores: ['src/routes/**/*.*', '**/generated/**/*.*'],
     rules: {
       'unicorn/filename-case': [
         'error',
@@ -70,7 +70,7 @@ export default tslint.config(
           selector:
             "MemberExpression[object.type='MemberExpression'][object.object.type='MetaProperty'][object.object.property.name='meta'][object.property.name='env'][property.name!=/^(DEV|PROD|MODE|SSR|BASE_URL|MANIFEST)$/]",
           message:
-            'Custom import.meta.env variables are not allowed. Use envClient and envServer from @/src/env folder instead.',
+            'Custom import.meta.env variables are not allowed. Use envClient and envServer from @/env/client and @/env/servr folder instead.',
         },
       ],
     },
