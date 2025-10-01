@@ -25,7 +25,7 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
-  // Allows an expo native app to use social auth, can be delete if no needed
+  // Allows an Expo native app to use social auth, can be delete if no needed
   trustedOrigins: envServer.AUTH_TRUSTED_ORIGIN
     ? envServer.AUTH_TRUSTED_ORIGIN.split(',')
     : undefined,
@@ -53,7 +53,7 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    expo(),
+    expo(), // Allows an Expo native app to use auth, can be delete if no needed
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
