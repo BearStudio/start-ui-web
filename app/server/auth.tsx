@@ -26,7 +26,9 @@ export const auth = betterAuth({
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
   // Allows an expo native app to use social auth, can be delete if no needed
-  trustedOrigins: [envServer.AUTH_TRUSTED_ORIGIN],
+  trustedOrigins: envServer.AUTH_TRUSTED_ORIGIN
+    ? envServer.AUTH_TRUSTED_ORIGIN.split(',')
+    : undefined,
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
