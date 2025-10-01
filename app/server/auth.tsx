@@ -1,3 +1,4 @@
+import { expo } from '@better-auth/expo';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
@@ -24,6 +25,10 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
+  // Allows an Expo native app to use social auth, can be delete if no needed
+  trustedOrigins: envServer.AUTH_TRUSTED_ORIGIN
+    ? envServer.AUTH_TRUSTED_ORIGIN.split(',')
+    : undefined,
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
@@ -46,7 +51,9 @@ export const auth = betterAuth({
       disableImplicitSignUp: !AUTH_SIGNUP_ENABLED,
     },
   },
+
   plugins: [
+    expo(), // Allows an Expo native app to use auth, can be delete if no needed
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
