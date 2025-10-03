@@ -1,7 +1,8 @@
+import { and, asc, gt, like } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
-import { Prisma } from '@/server/db/generated/client';
+import { genre } from '@/server/db/schemas';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['genres'];
@@ -20,7 +21,7 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
+          cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).default(20),
           searchTerm: z.string().optional(),
         })
@@ -34,27 +35,20 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting books from database');
+      context.logger.info('Getting genre from database');
 
-      const where = {
-        name: {
-          contains: input.searchTerm,
-          mode: 'insensitive',
-        },
-      } satisfies Prisma.GenreWhereInput;
-
-      const [total, items] = await context.db.$transaction([
-        context.db.genre.count({
-          where,
-        }),
-        context.db.genre.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
+      const whereSearchTerm = input.searchTerm
+        ? like(genre.name, `%${input.searchTerm}%`)
+        : undefined;
+      const [total, items] = await context.db.transaction(async (tr) => [
+        await tr.$count(genre, whereSearchTerm),
+        await tr.query.genre.findMany({
+          where: and(
+            input.cursor ? gt(genre.id, input.cursor) : undefined,
+            whereSearchTerm
+          ),
+          orderBy: asc(genre.name),
+          limit: input.limit + 1,
         }),
       ]);
 

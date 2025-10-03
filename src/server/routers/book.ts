@@ -1,5 +1,5 @@
 import { ORPCError } from '@orpc/client';
-import { and, asc, count, gt, like, or } from 'drizzle-orm';
+import { and, asc, eq, gt, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zBook } from '@/features/book/schema';
@@ -23,7 +23,7 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
+          cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).default(20),
           searchTerm: z.string().trim().optional().default(''),
         })
@@ -39,16 +39,18 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting books from database');
 
-      const where = or(
-        like(book.title, `%${input.searchTerm}%`),
-        like(book.author, `%${input.searchTerm}%`)
-      );
+      const whereSearchTerm = input.searchTerm
+        ? or(
+            like(book.title, `%${input.searchTerm}%`),
+            like(book.author, `%${input.searchTerm}%`)
+          )
+        : undefined;
       const [total, items] = await context.db.transaction(async (tr) => [
-        await tr.$count(book, where),
+        await tr.$count(book, whereSearchTerm),
         await tr.query.book.findMany({
           where: and(
             input.cursor ? gt(book.id, input.cursor) : undefined,
-            where
+            whereSearchTerm
           ),
           orderBy: asc(book.title),
           limit: input.limit + 1,
@@ -89,17 +91,19 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting book');
-      const book = await context.db.book.findUnique({
-        where: { id: input.id },
-        include: { genre: true },
+      const item = await context.db.query.book.findFirst({
+        where: eq(book.id, input.id),
+        with: {
+          genre: true,
+        },
       });
 
-      if (!book) {
+      if (!item) {
         context.logger.warn('Unable to find book with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return book;
+      return item;
     }),
 
   create: protectedProcedure({
@@ -124,28 +128,30 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
-      try {
-        return await context.db.book.create({
-          data: {
-            title: input.title,
-            author: input.author,
-            genreId: input.genreId ?? undefined,
-            publisher: input.publisher,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
-        }
+      const [inserted] = await context.db
+        .insert(book)
+        .values({
+          title: input.title,
+          author: input.author,
+          genreId: input.genreId ?? undefined,
+          publisher: input.publisher,
+        })
+        .returning();
+      if (!inserted) {
+        context.logger.error('Unable to get the returning book from insert');
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
+      const result = await context.db.query.book.findFirst({
+        where: eq(book.id, inserted?.id),
+        with: {
+          genre: true,
+        },
+      });
+      if (!result) {
+        context.logger.error('Unable to find the inserted book');
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+      return result;
     }),
 
   updateById: protectedProcedure({
