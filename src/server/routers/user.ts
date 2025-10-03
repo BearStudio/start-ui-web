@@ -1,9 +1,11 @@
 import { ORPCError } from '@orpc/client';
 import { getRequestHeaders } from '@tanstack/react-start/server';
+import { and, asc, eq, gt, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
+import { dbSchemas } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
@@ -37,36 +39,23 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      const where = {
-        OR: [
-          {
-            name: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-          {
-            email: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      } satisfies Prisma.UserWhereInput;
-
       context.logger.info('Getting users from database');
-      const [total, items] = await context.db.$transaction([
-        context.db.user.count({
-          where,
-        }),
-        context.db.user.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
+
+      const whereSearchTerm = input.searchTerm
+        ? or(
+            like(dbSchemas.user.name, `%${input.searchTerm}%`),
+            like(dbSchemas.user.email, `%${input.searchTerm}%`)
+          )
+        : undefined;
+      const [total, items] = await context.db.transaction(async (tr) => [
+        await tr.$count(dbSchemas.user, whereSearchTerm),
+        await tr.query.user.findMany({
+          where: and(
+            input.cursor ? gt(dbSchemas.book.id, input.cursor) : undefined,
+            whereSearchTerm
+          ),
+          orderBy: asc(dbSchemas.book.title),
+          limit: input.limit + 1,
         }),
       ]);
 
@@ -101,16 +90,16 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting user');
-      const user = await context.db.user.findUnique({
-        where: { id: input.id },
+      const item = await context.db.query.user.findFirst({
+        where: eq(dbSchemas.book.id, input.id),
       });
 
-      if (!user) {
+      if (!item) {
         context.logger.warn('Unable to find user with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return user;
+      return item;
     }),
 
   updateById: protectedProcedure({
@@ -134,9 +123,11 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting current user email');
-      const currentUser = await context.db.user.findUnique({
-        where: { id: input.id },
-        select: { email: true },
+      const currentUser = await context.db.query.user.findFirst({
+        where: eq(dbSchemas.user.id, input.id),
+        columns: {
+          email: true,
+        },
       });
 
       if (!currentUser) {
@@ -193,25 +184,22 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Create user');
       try {
-        return await context.db.user.create({
-          data: {
+        const [item] = await context.db
+          .insert(dbSchemas.user)
+          .values({
             email: input.email,
             emailVerified: true,
             name: input.name ?? '',
             role: input.role ?? 'user',
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
+          })
+          .returning();
+        if (!item) {
+          context.logger.error('Unable to get the returning user from insert');
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
         }
+        return item;
+      } catch {
+        // TODO conflict
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),
@@ -279,23 +267,16 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      const where = {
-        userId: input.userId,
-      } satisfies Prisma.SessionWhereInput;
-
       context.logger.info('Getting user sessions from database');
-      const [total, items] = await context.db.$transaction([
-        context.db.session.count({
-          where,
-        }),
-        context.db.session.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            createdAt: 'desc',
-          },
-          where,
+
+      const [total, items] = await context.db.transaction(async (tr) => [
+        await tr.$count(dbSchemas.session),
+        await tr.query.session.findMany({
+          where: and(
+            input.cursor ? gt(dbSchemas.book.id, input.cursor) : undefined
+          ),
+          orderBy: asc(dbSchemas.book.title),
+          limit: input.limit + 1,
         }),
       ]);
 

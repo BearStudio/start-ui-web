@@ -1,7 +1,10 @@
+import { createId } from '@paralleldrive/cuid2';
 import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
+import { rolesNames } from '@/features/auth/permissions';
+
 export const user = pgTable('user', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$defaultFn(createId),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').default(false).notNull(),
@@ -11,7 +14,7 @@ export const user = pgTable('user', {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  role: text('role'),
+  role: text('role', { enum: rolesNames }),
   banned: boolean('banned').default(false),
   banReason: text('ban_reason'),
   banExpires: timestamp('ban_expires'),

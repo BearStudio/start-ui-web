@@ -3,8 +3,7 @@ import { and, asc, eq, gt, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zBook } from '@/features/book/schema';
-import { Prisma } from '@/server/db/generated/client';
-import { book } from '@/server/db/schemas';
+import { dbSchemas } from '@/server/db';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -41,18 +40,18 @@ export default {
 
       const whereSearchTerm = input.searchTerm
         ? or(
-            like(book.title, `%${input.searchTerm}%`),
-            like(book.author, `%${input.searchTerm}%`)
+            like(dbSchemas.book.title, `%${input.searchTerm}%`),
+            like(dbSchemas.book.author, `%${input.searchTerm}%`)
           )
         : undefined;
       const [total, items] = await context.db.transaction(async (tr) => [
-        await tr.$count(book, whereSearchTerm),
+        await tr.$count(dbSchemas.book, whereSearchTerm),
         await tr.query.book.findMany({
           where: and(
-            input.cursor ? gt(book.id, input.cursor) : undefined,
+            input.cursor ? gt(dbSchemas.book.id, input.cursor) : undefined,
             whereSearchTerm
           ),
-          orderBy: asc(book.title),
+          orderBy: asc(dbSchemas.book.title),
           limit: input.limit + 1,
           with: {
             genre: true,
@@ -92,7 +91,7 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting book');
       const item = await context.db.query.book.findFirst({
-        where: eq(book.id, input.id),
+        where: eq(dbSchemas.book.id, input.id),
         with: {
           genre: true,
         },
@@ -128,30 +127,35 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
-      const [inserted] = await context.db
-        .insert(book)
-        .values({
-          title: input.title,
-          author: input.author,
-          genreId: input.genreId ?? undefined,
-          publisher: input.publisher,
-        })
-        .returning();
-      if (!inserted) {
-        context.logger.error('Unable to get the returning book from insert');
+      try {
+        const [item] = await context.db
+          .insert(dbSchemas.book)
+          .values({
+            title: input.title,
+            author: input.author,
+            genreId: input.genreId ?? undefined,
+            publisher: input.publisher,
+          })
+          .returning();
+        if (!item) {
+          context.logger.error('Unable to get the returning book from insert');
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
+        }
+        const fullItem = await context.db.query.book.findFirst({
+          where: eq(dbSchemas.book.id, item.id),
+          with: {
+            genre: true,
+          },
+        });
+        if (!fullItem) {
+          context.logger.error('Unable to find the inserted book');
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
+        }
+        return fullItem;
+      } catch {
+        // TODO conflict
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
-      const result = await context.db.query.book.findFirst({
-        where: eq(book.id, inserted?.id),
-        with: {
-          genre: true,
-        },
-      });
-      if (!result) {
-        context.logger.error('Unable to find the inserted book');
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
-      return result;
     }),
 
   updateById: protectedProcedure({
@@ -178,26 +182,23 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
       try {
-        return await context.db.book.update({
-          where: { id: input.id },
-          data: {
+        const [item] = await context.db
+          .update(dbSchemas.book)
+          .set({
             title: input.title,
             author: input.author,
             genreId: input.genreId,
             publisher: input.publisher ?? null,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
+          })
+          .where(eq(dbSchemas.book.id, input.id))
+          .returning();
+        if (!item) {
+          context.logger.error('Unable to get the returning book from update');
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
         }
+        return item;
+      } catch {
+        // TODO conflict
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),
@@ -221,9 +222,9 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Delete book');
       try {
-        await context.db.book.delete({
-          where: { id: input.id },
-        });
+        await context.db
+          .delete(dbSchemas.book)
+          .where(eq(dbSchemas.book.id, input.id));
       } catch {
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }

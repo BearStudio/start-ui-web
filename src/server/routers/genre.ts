@@ -2,7 +2,7 @@ import { and, asc, gt, like } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
-import { genre } from '@/server/db/schemas';
+import { dbSchemas } from '@/server/db';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['genres'];
@@ -38,16 +38,16 @@ export default {
       context.logger.info('Getting genre from database');
 
       const whereSearchTerm = input.searchTerm
-        ? like(genre.name, `%${input.searchTerm}%`)
+        ? like(dbSchemas.genre.name, `%${input.searchTerm}%`)
         : undefined;
       const [total, items] = await context.db.transaction(async (tr) => [
-        await tr.$count(genre, whereSearchTerm),
+        await tr.$count(dbSchemas.genre, whereSearchTerm),
         await tr.query.genre.findMany({
           where: and(
-            input.cursor ? gt(genre.id, input.cursor) : undefined,
+            input.cursor ? gt(dbSchemas.genre.id, input.cursor) : undefined,
             whereSearchTerm
           ),
-          orderBy: asc(genre.name),
+          orderBy: asc(dbSchemas.genre.name),
           limit: input.limit + 1,
         }),
       ]);
