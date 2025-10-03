@@ -38,9 +38,9 @@ export const GuardAuthenticated = ({
   }
 
   // Check if onboarding is done
-  // if (!session.data.user.onboardedAt) {
-  //   return <PageOnboarding />;
-  // }
+  if (!session.data.user.onboardedAt) {
+    return <PageOnboarding />;
+  }
 
   // Unauthorized if the user permission do not match
   if (

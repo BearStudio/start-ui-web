@@ -1,12 +1,11 @@
 import { ORPCError } from '@orpc/client';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { and, asc, eq, gt, like, or } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, like, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
 import { dbSchemas } from '@/server/db';
-import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['users'];
@@ -51,10 +50,10 @@ export default {
         await tr.$count(dbSchemas.user, whereSearchTerm),
         await tr.query.user.findMany({
           where: and(
-            input.cursor ? gt(dbSchemas.book.id, input.cursor) : undefined,
+            input.cursor ? gt(dbSchemas.user.id, input.cursor) : undefined,
             whereSearchTerm
           ),
-          orderBy: asc(dbSchemas.book.title),
+          orderBy: asc(dbSchemas.user.name),
           limit: input.limit + 1,
         }),
       ]);
@@ -91,7 +90,7 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting user');
       const item = await context.db.query.user.findFirst({
-        where: eq(dbSchemas.book.id, input.id),
+        where: eq(dbSchemas.user.id, input.id),
       });
 
       if (!item) {
@@ -137,28 +136,26 @@ export default {
 
       context.logger.info('Update user');
       try {
-        return await context.db.user.update({
-          where: { id: input.id },
-          data: {
+        const [item] = await context.db
+          .update(dbSchemas.user)
+          .set({
             name: input.name ?? '',
             // Prevent to change role of the connected user
             role: context.user.id === input.id ? undefined : input.role,
             email: input.email,
             // Set email as verified if admin changed the email
             emailVerified: currentUser.email !== input.email ? true : undefined,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
+          })
+          .where(eq(dbSchemas.user.id, input.id))
+          .returning();
+
+        if (!item) {
+          context.logger.error('Unable to get the returning user from update');
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
         }
+        return item;
+      } catch {
+        // TODO conflict
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),
@@ -273,9 +270,9 @@ export default {
         await tr.$count(dbSchemas.session),
         await tr.query.session.findMany({
           where: and(
-            input.cursor ? gt(dbSchemas.book.id, input.cursor) : undefined
+            input.cursor ? gt(dbSchemas.session.id, input.cursor) : undefined
           ),
-          orderBy: asc(dbSchemas.book.title),
+          orderBy: desc(dbSchemas.session.createdAt),
           limit: input.limit + 1,
         }),
       ]);
