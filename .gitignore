@@ -11,6 +11,7 @@
 # production
 .output
 .vinxi
+/dist
 /build
 /public/storybook
 /storybook-static
@@ -47,6 +48,7 @@ build-info.gen.json
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
+src/server/db/generated
 
 # Emails
 .react-email

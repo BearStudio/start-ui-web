@@ -10,9 +10,9 @@
     "noImplicitAny": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./app/*"]
+      "@/*": ["./src/*"]
     },
-    "typeRoots": ["node_modules/@types", "app/types"],
+    "typeRoots": ["node_modules/@types", "src/types"],
     "plugins": [
       {
         "name": "ts-plugin-sort-import-suggestions",
