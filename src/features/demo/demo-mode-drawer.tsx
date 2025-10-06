@@ -1,3 +1,4 @@
+// !STARTERCONF [demoMode] Remove the demo folder
 import { create } from 'zustand';
 
 import {
