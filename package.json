@@ -9,6 +9,7 @@
   },
   "scripts": {
     "postinstall": "run-p gen:prisma gen:build-info",
+    "prepare": "pnpm lefthook install",
     "dev": "run-p env dev:*",
     "dev:app": "pnpm gen:build-info && vite dev",
     "dev:smtp": "maildev -outgoing-host smtp.example.com --outgoing-secure --outgoing-user 'username' --outgoing-pass 'password'",
