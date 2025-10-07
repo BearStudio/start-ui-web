@@ -1,4 +1,4 @@
-import { createServerFileRoute } from '@tanstack/react-start/server';
+import { createFileRoute } from '@tanstack/react-router';
 import { handleRequest, route, type Router } from 'better-upload/server';
 
 import { s3client } from '@/lib/s3';
@@ -17,15 +17,15 @@ const router: Router = {
         'image/gif',
         'image/avif',
       ],
-      maxFileSize: 1024 * 1024 * 100, // 100MB
+      maxFileSize: 1024 * 1024 * 100, // 100Mb
     }),
   },
 };
 
-async function handle({ request }: { request: Request }) {
-  return handleRequest(request, router);
-}
-
-export const ServerRoute = createServerFileRoute('/api/upload').methods({
-  POST: handle,
+export const Route = createFileRoute('/api/upload')({
+  server: {
+    handlers: {
+      POST: ({ request }) => handleRequest(request, router),
+    },
+  },
 });

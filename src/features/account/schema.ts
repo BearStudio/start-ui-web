@@ -15,5 +15,5 @@ export type FormFieldsAccountUpdateProfilePicture = z.infer<
 >;
 export const zFormFieldsAccountUpdateProfilePicture = () =>
   z.object({
-    profilePicture: zu.string.nonEmpty(z.string()),
+    avatarFileId: zu.string.nonEmpty(z.string()),
   });

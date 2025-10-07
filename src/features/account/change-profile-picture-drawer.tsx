@@ -43,14 +43,14 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
   const form = useForm<FormFieldsAccountUpdateProfilePicture>({
     resolver: zodResolver(zFormFieldsAccountUpdateProfilePicture()),
     values: {
-      profilePicture: '',
+      avatarFileId: '',
     },
   });
 
   const avatarUpload = useUploadFile({
     route: 'avatar',
     onError: (error) => {
-      form.setError('profilePicture', {
+      form.setError('avatarFileId', {
         message: error.message || 'An error occurred',
       });
     },
@@ -119,7 +119,7 @@ export const ChangeProfilePictureDrawer = (props: { children: ReactNode }) => {
               <FormFieldController
                 control={form.control}
                 type="file"
-                name="profilePicture"
+                name="avatarFileId"
                 size="lg"
                 onChange={(e) => {
                   if (e.target.files?.[0]) {
