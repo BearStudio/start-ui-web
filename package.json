@@ -32,7 +32,7 @@
     "test:ui": "vitest",
     "e2e": "dotenv -- cross-env playwright test",
     "e2e:ui": "dotenv -- cross-env playwright test --ui",
-    "dk:init": "docker compose up -d",
+    "dk:init": "docker compose --profile init up -d",
     "dk:start": "docker compose start",
     "dk:stop": "docker compose stop",
     "dk:clear": "docker compose down --volumes",
@@ -42,6 +42,7 @@
     "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.864.0",
     "@base-ui-components/react": "1.0.0-beta.1",
     "@bearstudio/ui-state": "1.0.2",
     "@fontsource-variable/inter": "5.2.6",
@@ -67,6 +68,7 @@
     "@tanstack/zod-adapter": "1.132.31",
     "@uidotdev/usehooks": "2.4.1",
     "better-auth": "1.2.10",
+    "better-upload": "2.0.1",
     "boring-avatars": "1.11.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

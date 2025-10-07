@@ -22,11 +22,11 @@ model User {
   name          String
   email         String
   emailVerified Boolean
-  image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  avatarFileId  String?
 
   role        UserRole?
   banned      Boolean?

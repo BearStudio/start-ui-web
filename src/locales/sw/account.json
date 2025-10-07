@@ -20,5 +20,13 @@
     "submitButton": "Sasisha",
     "successMessage": "Jina limesasishwa",
     "errorMessage": "Imeshindwa kusasisha jina lako"
+  },
+  "changeProfilePictureDrawer": {
+    "title": "Badilisha avatar yako",
+    "description": "Fomu ya kubadilisha avatar yako",
+    "label": "Avatar",
+    "submitButton": "Badilisha",
+    "successMessage": "Avatar imeboreshwa",
+    "errorMessage": "Imeshindikana kuboresha avatar yako"
   }
 }

@@ -16,7 +16,7 @@ export type FieldTextProps<
   TFieldValues,
   TName,
   {
-    type: 'text' | 'email' | 'tel';
+    type: 'text' | 'email' | 'tel' | 'file';
     containerProps?: ComponentProps<'div'>;
   } & ComponentProps<typeof Input>
 >;
