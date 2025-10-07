@@ -87,8 +87,8 @@ importers:
         specifier: 1.2.10
         version: 1.2.10
       better-upload:
-        specifier: 1.1.0
-        version: 1.1.0(@aws-sdk/client-s3@3.864.0)(react@19.1.0)
+        specifier: 2.0.1
+        version: 2.0.1(@aws-sdk/client-s3@3.864.0)(react@19.1.0)
       boring-avatars:
         specifier: 1.11.2
         version: 1.11.2
@@ -3971,8 +3971,8 @@ packages:
     resolution: {integrity: sha512-aVNobHnJqLiUelTaHat9DZ1qM2w0C0Eym4LPI/3JxOnSokGVdsl1T1kN7TFvsEAD8G47A6VKQ0TVHqbBnYMJlQ==}
     engines: {node: '>=12.0.0'}
 
-  better-upload@1.1.0:
-    resolution: {integrity: sha512-ibJwx84bI/bCPo7b8HfeuyIcRf0uxl83l6Tyo83vE9QTNo9zmehijkofHFxq0LWW/A99KyIAiTvkh/em3eneCg==}
+  better-upload@2.0.1:
+    resolution: {integrity: sha512-YpWg0Zd3nl5SsQiRaNvRS/crO+03GiM+0pXdiCc3iVmegPuwmQwsR1H7MVXoIY8z+zs0ESttGNCH5RPLurnDwg==}
     peerDependencies:
       '@aws-sdk/client-s3': '*'
       react: '*'
@@ -12235,7 +12235,7 @@ snapshots:
     dependencies:
       open: 8.4.2
 
-  better-upload@1.1.0(@aws-sdk/client-s3@3.864.0)(react@19.1.0):
+  better-upload@2.0.1(@aws-sdk/client-s3@3.864.0)(react@19.1.0):
     dependencies:
       '@aws-sdk/client-s3': 3.864.0
       '@aws-sdk/s3-request-presigner': 3.864.0
