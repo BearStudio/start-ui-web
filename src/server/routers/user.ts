@@ -24,10 +24,10 @@ export default {
       z
         .object({
           cursor: z.string().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
-          searchTerm: z.string().trim().optional().default(''),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
+          searchTerm: z.string().trim().optional().prefault(''),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
@@ -268,7 +268,7 @@ export default {
       z.object({
         userId: z.string(),
         cursor: z.string().optional(),
-        limit: z.coerce.number().int().min(1).max(100).default(20),
+        limit: z.coerce.number().int().min(1).max(100).prefault(20),
       })
     )
     .output(

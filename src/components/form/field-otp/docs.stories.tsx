@@ -16,15 +16,14 @@ export default {
 const zFormSchema = (options: { length?: number } = {}) => {
   const length = options.length ?? 6;
   return z.object({
-    code: zu.string.nonEmpty(
-      z
-        .string()
-        .min(length, `Code is ${length} digits`)
-        .max(length, `Code is ${length} digits`),
-      {
-        required_error: 'Code is required',
-      }
-    ),
+    code: zu.fieldText
+      .required({ error: 'Invalid code' })
+      .pipe(
+        z
+          .string()
+          .min(length, `Code is ${length} digits`)
+          .max(length, `Code is ${length} digits`)
+      ),
   });
 };
 

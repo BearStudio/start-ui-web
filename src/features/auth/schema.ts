@@ -7,23 +7,23 @@ export type Otp = z.infer<ReturnType<typeof zOtp>>;
 export const zOtp = () =>
   z
     .string({
-      invalid_type_error: t('auth:common.otp.invalid'),
-      required_error: t('auth:common.otp.required'),
+      error: (issue) =>
+        !issue.input
+          ? t('auth:common.otp.required')
+          : t('auth:common.otp.invalid'),
     })
     .length(6, t('auth:common.otp.invalidLength'));
 
 export type FormFieldsLogin = z.infer<ReturnType<typeof zFormFieldsLogin>>;
 export const zFormFieldsLogin = () =>
   z.object({
-    email: zu.string.email(
-      z.string({
-        required_error: t('auth:common.email.required'),
-        invalid_type_error: t('auth:common.email.invalid'),
-      }),
-      {
-        required_error: t('auth:common.email.required'),
-        invalid_type_error: t('auth:common.email.invalid'),
-      }
+    email: zu.fieldText.required().pipe(
+      z.email({
+        error: (issue) =>
+          !issue.input
+            ? t('auth:common.email.required')
+            : t('auth:common.email.invalid'),
+      })
     ),
   });
 
@@ -40,5 +40,5 @@ export type FormFieldsOnboarding = z.infer<
 >;
 export const zFormFieldsOnboarding = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string()),
+    name: z.string().nonempty(),
   });

@@ -21,16 +21,16 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
-          searchTerm: z.string().trim().optional().default(''),
+          cursor: z.cuid().optional(),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
+          searchTerm: z.string().trim().optional().prefault(''),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
         items: z.array(zBook()),
-        nextCursor: z.string().cuid().optional(),
+        nextCursor: z.cuid().optional(),
         total: z.number(),
       })
     )
@@ -95,7 +95,7 @@ export default {
     })
     .input(
       z.object({
-        id: z.string().cuid(),
+        id: z.cuid(),
       })
     )
     .output(zBook())

@@ -23,10 +23,8 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), {
-      required_error: 'Name is required',
-    }),
-    other: zu.string.nonEmptyNullish(z.string()),
+    name: zu.fieldText.required(),
+    other: zu.fieldText.nullish(),
   });
 
 export const Default = () => {

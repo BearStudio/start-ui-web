@@ -9,16 +9,15 @@ export type User = z.infer<ReturnType<typeof zUser>>;
 export const zUser = () =>
   z.object({
     id: z.string(),
-    name: zu.string.nonEmptyNullish(
-      z.string({
-        required_error: t('user:common.name.required'),
-        invalid_type_error: t('user:common.name.invalid'),
+    name: zu.fieldText.nullish(),
+    email: zu.fieldText.required().pipe(
+      z.email({
+        error: (issue) =>
+          !issue.input
+            ? t('user:common.email.required')
+            : t('user:common.email.invalid'),
       })
     ),
-    email: zu.string.email(z.string(), {
-      required_error: t('user:common.email.required'),
-      invalid_type_error: t('user:common.email.invalid'),
-    }),
     emailVerified: z.boolean(),
     role: zRole().nullish(),
     image: z.string().nullish(),

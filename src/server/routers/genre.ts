@@ -20,16 +20,16 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
+          cursor: z.cuid().optional(),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
           searchTerm: z.string().optional(),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
         items: z.array(zGenre()),
-        nextCursor: z.string().cuid().optional(),
+        nextCursor: z.cuid().optional(),
         total: z.number(),
       })
     )

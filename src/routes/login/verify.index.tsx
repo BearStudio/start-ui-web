@@ -9,7 +9,7 @@ export const Route = createFileRoute('/login/verify/')({
   validateSearch: zodValidator(
     z.object({
       redirect: fallback(z.string(), '').optional(),
-      email: z.string().email(),
+      email: z.email(),
     })
   ),
 });

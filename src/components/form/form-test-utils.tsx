@@ -1,16 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReactNode } from 'react';
 import {
+  FieldValues,
   SubmitHandler,
   useForm,
   UseFormProps,
   UseFormReturn,
 } from 'react-hook-form';
-import { Schema, z } from 'zod';
+import { z, ZodType } from 'zod';
 
 import { Form } from '.';
 
-export const FormMocked = <T extends Schema>({
+export const FormMocked = <T extends ZodType<FieldValues>>({
   children,
   schema,
   useFormOptions,

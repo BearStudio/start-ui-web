@@ -58,9 +58,7 @@ export const Controlled = () => {
 
 const zFormSchema = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string(), {
-      required_error: 'Name is required',
-    }),
+    name: zu.fieldText.required({ error: 'Name is required' }),
   });
 
 export const WithForm = () => {

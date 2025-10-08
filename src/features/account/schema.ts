@@ -7,5 +7,5 @@ export type FormFieldsAccountUpdateName = z.infer<
 >;
 export const zFormFieldsAccountUpdateName = () =>
   z.object({
-    name: zu.string.nonEmpty(z.string()),
+    name: zu.fieldText.required(),
   });

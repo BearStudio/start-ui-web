@@ -22,5 +22,8 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "update": "Mettre à jour"
+  },
+  "errors": {
+    "required": "Requis"
   }
 }

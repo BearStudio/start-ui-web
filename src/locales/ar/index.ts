@@ -1,4 +1,3 @@
-import zod from 'zod-i18n-map/locales/ar/zod.json' assert { type: 'json' };
 import 'dayjs/locale/ar.js';
 
 import account from './account.json' assert { type: 'json' };
@@ -25,5 +24,4 @@ export default {
   genre,
   layout,
   user,
-  zod,
 } as const;
