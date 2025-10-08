@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import react from '@eslint-react/eslint-plugin';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
 import tanstackRouter from '@tanstack/eslint-plugin-router';
+import { defineConfig } from 'eslint/config';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sonarjs from 'eslint-plugin-sonarjs';
@@ -9,7 +10,7 @@ import * as storybook from 'eslint-plugin-storybook';
 import unicorn from 'eslint-plugin-unicorn';
 import tslint from 'typescript-eslint';
 
-export default tslint.config(
+export default defineConfig(
   eslint.configs.recommended,
   tslint.configs.recommended,
   sonarjs.configs.recommended,
@@ -18,7 +19,13 @@ export default tslint.config(
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],
   react.configs['recommended-typescript'],
-  reactHooks.configs['recommended-latest'],
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      'react-hooks': reactHooks,
+    },
+    extends: ['react-hooks/recommended'],
+  },
   {
     rules: {
       'sonarjs/todo-tag': 'warn',

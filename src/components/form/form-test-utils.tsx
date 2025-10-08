@@ -23,7 +23,7 @@ export const FormMocked = <T extends Schema>({
 }) => {
   const form = useForm({
     mode: 'onBlur',
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema as TODO),
     ...useFormOptions,
   });
   return (

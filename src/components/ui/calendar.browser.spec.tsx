@@ -14,7 +14,6 @@ vi.mocked(module.useTranslation).mockImplementation(
 );
 
 describe('Calendar', () => {
-  // eslint-disable-next-line sonarjs/assertions-in-tests
   it('should render with previous and next button by default', async () => {
     render(<Calendar />);
 
