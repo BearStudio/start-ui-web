@@ -34,6 +34,10 @@ export default defineConfig(
       'no-unreachable': 'error',
       'sonarjs/no-nested-functions': 'off',
       'sonarjs/no-unused-vars': 'off',
+      'sonarjs/prefer-read-only-props': 'off',
+      'sonarjs/function-return-type': 'off',
+      'sonarjs/no-redundant-optional': 'off',
+      'sonarjs/no-useless-intersection': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
