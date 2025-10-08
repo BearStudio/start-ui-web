@@ -14,12 +14,6 @@
     "publisher": {
       "label": "Mchapishaji"
     },
-    "newButton": {
-      "label": "Kitabu Kipya"
-    },
-    "createButton": {
-      "label": "Unda"
-    },
     "notFound": "Hakuna vitabu vinavyopatikana",
     "loadMore": "Pakia vitabu zaidi",
     "byCapitalized": "Na"
