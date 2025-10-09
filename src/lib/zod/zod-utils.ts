@@ -12,14 +12,10 @@ const emptyStringAsUndefined = (input: string) =>
 export const zu = {
   fieldText: {
     required: (
-      params: Parameters<typeof z.string>[0] = {
-        error: t('common:errors.required'),
-      }
+      params: Parameters<typeof z.string>[0] = t('common:errors.required')
     ) => z.string(params).transform(emptyStringAsNull).pipe(z.string(params)),
     nullable: (
-      params: Parameters<typeof z.string>[0] = {
-        error: t('common:errors.required'),
-      }
+      params: Parameters<typeof z.string>[0] = t('common:errors.required')
     ) =>
       z
         .string(params)
@@ -27,9 +23,7 @@ export const zu = {
         .nullable()
         .pipe(z.string(params).nullable()),
     nullish: (
-      params: Parameters<typeof z.string>[0] = {
-        error: t('common:errors.required'),
-      }
+      params: Parameters<typeof z.string>[0] = t('common:errors.required')
     ) =>
       z
         .string(params)
@@ -37,9 +31,7 @@ export const zu = {
         .nullish()
         .pipe(z.string(params).nullish()),
     optional: (
-      params: Parameters<typeof z.string>[0] = {
-        error: t('common:errors.required'),
-      }
+      params: Parameters<typeof z.string>[0] = t('common:errors.required')
     ) =>
       z
         .string(params)
