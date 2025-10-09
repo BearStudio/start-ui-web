@@ -15,17 +15,7 @@ export const envServer = createEnv({
     AUTH_TRUSTED_ORIGINS: z
       .string()
       .optional()
-      .transform((stringValue) => stringValue?.split(','))
-      .transform((values) => [
-        ...(values?.map((v) => v.trim()) ?? []),
-        // Setup vercel urls as trusted origins
-        ...(process.env.VERCEL_URL
-          ? [`https://${process.env.VERCEL_URL}`]
-          : []),
-        ...(process.env.VERCEL_BRANCH_URL
-          ? [`https://${process.env.VERCEL_BRANCH_URL}`]
-          : []),
-      ]),
+      .transform((stringValue) => stringValue?.split(',').map((v) => v.trim())),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
