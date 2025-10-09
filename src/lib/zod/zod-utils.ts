@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import z from 'zod';
+import { z } from 'zod';
 
 const emptyStringAsNull = (input: string) =>
   // Cast null value to string for React Hook Form inference

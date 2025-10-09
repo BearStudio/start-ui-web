@@ -1,7 +1,7 @@
 import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
-import { zBook } from '@/features/book/schema';
+import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
@@ -124,15 +124,7 @@ export default {
       path: '/books',
       tags,
     })
-    .input(
-      zBook()
-        .pick({
-          title: true,
-          author: true,
-          publisher: true,
-        })
-        .extend({ genreId: z.string().nonempty() })
-    )
+    .input(zFormFieldsBook())
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
@@ -170,16 +162,7 @@ export default {
       path: '/books/{id}',
       tags,
     })
-    .input(
-      zBook()
-        .pick({
-          id: true,
-          title: true,
-          author: true,
-          publisher: true,
-        })
-        .extend({ genreId: z.string().nonempty() })
-    )
+    .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');

@@ -37,5 +37,5 @@ export type FormFieldsOnboarding = z.infer<
 >;
 export const zFormFieldsOnboarding = () =>
   z.object({
-    name: z.string().nonempty(),
+    name: zu.fieldText.required(),
   });
