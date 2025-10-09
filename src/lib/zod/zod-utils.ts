@@ -6,7 +6,7 @@ const emptyStringAsNull = (input: string) =>
   input.trim() === '' ? (null as unknown as string) : input.trim();
 
 const emptyStringAsUndefined = (input: string) =>
-  // Cast null value to string for React Hook Form inference
+  // Cast undefined value to string for React Hook Form inference
   input.trim() === '' ? (undefined as unknown as string) : input.trim();
 
 export const zu = {
