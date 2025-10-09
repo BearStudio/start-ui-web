@@ -7,10 +7,7 @@ export type Otp = z.infer<ReturnType<typeof zOtp>>;
 export const zOtp = () =>
   z
     .string({
-      error: (issue) =>
-        !issue.input
-          ? t('auth:common.otp.required')
-          : t('auth:common.otp.invalid'),
+      error: t('auth:common.otp.required'),
     })
     .length(6, t('auth:common.otp.invalidLength'));
 
@@ -20,9 +17,9 @@ export const zFormFieldsLogin = () =>
     email: zu.fieldText.required().pipe(
       z.email({
         error: (issue) =>
-          !issue.input
-            ? t('auth:common.email.required')
-            : t('auth:common.email.invalid'),
+          issue.input
+            ? t('auth:common.email.invalid')
+            : t('auth:common.email.required'),
       })
     ),
   });

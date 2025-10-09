@@ -13,9 +13,9 @@ export const zUser = () =>
     email: zu.fieldText.required().pipe(
       z.email({
         error: (issue) =>
-          !issue.input
-            ? t('user:common.email.required')
-            : t('user:common.email.invalid'),
+          issue.input
+            ? t('user:common.email.invalid')
+            : t('user:common.email.required'),
       })
     ),
     emailVerified: z.boolean(),
