@@ -55,7 +55,7 @@ export default {
       } satisfies Prisma.UserWhereInput;
 
       context.logger.info('Getting users from database');
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.user.count({
           where,
         }),
@@ -284,7 +284,7 @@ export default {
       } satisfies Prisma.SessionWhereInput;
 
       context.logger.info('Getting user sessions from database');
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.session.count({
           where,
         }),

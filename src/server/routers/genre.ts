@@ -43,7 +43,7 @@ export default {
         },
       } satisfies Prisma.GenreWhereInput;
 
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.genre.count({
           where,
         }),

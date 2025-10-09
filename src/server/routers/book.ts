@@ -54,7 +54,7 @@ export default {
         ],
       } satisfies Prisma.BookWhereInput;
 
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.book.count({
           where,
         }),
