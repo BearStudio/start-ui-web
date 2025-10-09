@@ -94,4 +94,20 @@ export const auth = betterAuth({
       },
     }),
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          return { data: user };
+        },
+      },
+      update: {
+        before: async (user) => {
+          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          return { data: user };
+        },
+      },
+    },
+  },
 });
