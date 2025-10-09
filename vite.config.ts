@@ -55,7 +55,7 @@ function createPrismaCopyBinariesPlugin() {
         if (outputDir === serverDir) {
           await cpy(
             './src/server/db/generated/**/*.node',
-            resolve(serverDir, 'chunks', '_')
+            resolve(serverDir, 'chunks')
           );
         }
       },
