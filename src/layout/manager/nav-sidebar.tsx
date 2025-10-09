@@ -1,3 +1,4 @@
+'use no memo'; // Allows re-rendering for useMatchRoute https://github.com/TanStack/router/issues/4499
 import { Link, useMatchRoute } from '@tanstack/react-router';
 import {
   LayoutDashboardIcon,
