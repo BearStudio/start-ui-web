@@ -12,7 +12,7 @@ export const envServer = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     SESSION_EXPIRATION_IN_SECONDS: z.coerce.number().int().prefault(2592000), // 30 days by default
     SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().prefault(86400), // 1 day by default
-    AUTH_TRUSTED_ORIGIN: z.string().optional(),
+    AUTH_TRUSTED_ORIGINS: z.string().optional(), // Trusted origins, useful for React Native
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
