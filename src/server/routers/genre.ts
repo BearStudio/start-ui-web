@@ -34,7 +34,7 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting books from database');
+      context.logger.info('Getting genres from database');
 
       const where = {
         name: {

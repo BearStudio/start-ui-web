@@ -193,7 +193,7 @@ export default {
 
   deleteById: protectedProcedure({
     permission: {
-      user: ['delete'],
+      book: ['delete'],
     },
   })
     .route({
