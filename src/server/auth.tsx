@@ -19,6 +19,8 @@ import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
 
+console.log('AUTH_TRUSTED_ORIGINS', envServer.AUTH_TRUSTED_ORIGINS);
+
 export type Auth = typeof auth;
 export const auth = betterAuth({
   session: {
