@@ -21,7 +21,7 @@ export default {
     .input(
       z
         .object({
-          cursor: z.cuid().optional(),
+          cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).prefault(20),
           searchTerm: z.string().trim().optional().prefault(''),
         })
@@ -30,7 +30,7 @@ export default {
     .output(
       z.object({
         items: z.array(zBook()),
-        nextCursor: z.cuid().optional(),
+        nextCursor: z.string().optional(),
         total: z.number(),
       })
     )
@@ -95,7 +95,7 @@ export default {
     })
     .input(
       z.object({
-        id: z.cuid(),
+        id: z.string(),
       })
     )
     .output(zBook())

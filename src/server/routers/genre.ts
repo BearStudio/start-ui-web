@@ -20,7 +20,7 @@ export default {
     .input(
       z
         .object({
-          cursor: z.cuid().optional(),
+          cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).prefault(20),
           searchTerm: z.string().optional(),
         })
@@ -29,7 +29,7 @@ export default {
     .output(
       z.object({
         items: z.array(zGenre()),
-        nextCursor: z.cuid().optional(),
+        nextCursor: z.string().optional(),
         total: z.number(),
       })
     )

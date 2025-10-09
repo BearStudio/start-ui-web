@@ -9,7 +9,7 @@ export type Book = z.infer<ReturnType<typeof zBook>>;
 
 export const zBook = () =>
   z.object({
-    id: z.cuid(),
+    id: z.string(),
     title: zu.fieldText.required({ error: t('book:common.title.required') }),
     author: zu.fieldText.required(),
     genre: zGenre().nullish(),
