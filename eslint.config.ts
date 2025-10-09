@@ -19,13 +19,8 @@ export default defineConfig(
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],
   react.configs['recommended-typescript'],
-  {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      'react-hooks': reactHooks,
-    },
-    extends: ['react-hooks/recommended'],
-  },
+  // @ts-expect-error it's working 🤷
+  reactHooks.configs.flat.recommended,
   {
     rules: {
       'sonarjs/todo-tag': 'warn',

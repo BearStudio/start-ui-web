@@ -28,7 +28,7 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect, react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
 

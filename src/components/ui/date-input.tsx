@@ -33,7 +33,7 @@ export const useDatePickerInputManagement = (
   // To update the state if the value of the format change
   useEffect(() => {
     if (dateValue) {
-      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect, react-hooks/set-state-in-effect
       setInputValue(dayjs(dateValue).format(dateFormat));
     } else {
       // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect

@@ -34,6 +34,7 @@ const ChevronWrapper = ({ orientation }: ChevronProps) => {
     .with(undefined, () => ChevronDown)
     .exhaustive();
 
+  // eslint-disable-next-line react-hooks/static-components
   return <Icon className="h-4 w-4" />;
 };
 
