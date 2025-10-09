@@ -25,18 +25,7 @@ export const auth = betterAuth({
     expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
   },
-  trustedOrigins: [
-    // Setup custom trusted origins, useful for React Native
-    ...(envServer.AUTH_TRUSTED_ORIGINS
-      ? envServer.AUTH_TRUSTED_ORIGINS.split(',')
-      : []),
-
-    // Setup vercel urls as trusted origins
-    // eslint-disable-next-line no-process-env
-    ...(process.env.VERCEL_URL ? [process.env.VERCEL_URL] : []),
-    // eslint-disable-next-line no-process-env
-    ...(process.env.VERCEL_BRANCH_URL ? [process.env.VERCEL_BRANCH_URL] : []),
-  ],
+  trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),

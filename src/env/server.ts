@@ -12,7 +12,20 @@ export const envServer = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     SESSION_EXPIRATION_IN_SECONDS: z.coerce.number().int().prefault(2592000), // 30 days by default
     SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().prefault(86400), // 1 day by default
-    AUTH_TRUSTED_ORIGINS: z.string().optional(), // Trusted origins, useful for React Native
+    AUTH_TRUSTED_ORIGINS: z
+      .string()
+      .optional()
+      .transform((stringValue) => stringValue?.split(','))
+      .transform((values) => [
+        ...(values?.map((v) => v.trim()) ?? []),
+        // Setup vercel urls as trusted origins
+        ...(process.env.VERCEL_URL
+          ? [`https://${process.env.VERCEL_URL}`]
+          : []),
+        ...(process.env.VERCEL_BRANCH_URL
+          ? [`https://${process.env.VERCEL_BRANCH_URL}`]
+          : []),
+      ]),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
