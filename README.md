@@ -19,7 +19,7 @@ It represents our team's up-to-date stack that we use when creating web apps for
 # Getting Started
 
 ```bash
-pnpm create start-ui -t web -b v3-main myApp
+pnpm create start-ui -t web myApp
 ```
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
