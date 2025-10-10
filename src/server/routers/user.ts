@@ -24,10 +24,10 @@ export default {
       z
         .object({
           cursor: z.string().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
-          searchTerm: z.string().trim().optional().default(''),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
+          searchTerm: z.string().trim().optional().prefault(''),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
@@ -55,7 +55,7 @@ export default {
       } satisfies Prisma.UserWhereInput;
 
       context.logger.info('Getting users from database');
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.user.count({
           where,
         }),
@@ -268,7 +268,7 @@ export default {
       z.object({
         userId: z.string(),
         cursor: z.string().optional(),
-        limit: z.coerce.number().int().min(1).max(100).default(20),
+        limit: z.coerce.number().int().min(1).max(100).prefault(20),
       })
     )
     .output(
@@ -284,7 +284,7 @@ export default {
       } satisfies Prisma.SessionWhereInput;
 
       context.logger.info('Getting user sessions from database');
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.session.count({
           where,
         }),

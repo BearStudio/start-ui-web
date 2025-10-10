@@ -24,18 +24,17 @@ const getBaseUrl = () => {
 export const envClient = createEnv({
   clientPrefix: 'VITE_',
   client: {
-    VITE_BASE_URL: z.string().url(),
+    VITE_BASE_URL: z.url(),
     VITE_IS_DEMO: z
       .enum(['true', 'false'])
       .optional()
-      .default('false')
+      .prefault('false')
       .transform((v) => v === 'true'),
     VITE_ENV_NAME: z
       .string()
       .optional()
       .transform((value) => value ?? (isDev ? 'LOCAL' : undefined)),
     VITE_ENV_EMOJI: z
-      .string()
       .emoji()
       .optional()
       .transform((value) => value ?? (isDev ? '🚧' : undefined)),

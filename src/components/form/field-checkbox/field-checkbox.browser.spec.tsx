@@ -14,7 +14,7 @@ import { FormMocked } from '../form-test-utils';
 const zFormSchema = () =>
   z.object({
     lovesBears: z.boolean().refine((val) => val === true, {
-      message: 'Please say you love bears.',
+      error: 'Please say you love bears.',
     }),
   });
 

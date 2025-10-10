@@ -22,5 +22,8 @@
     "delete": "حذف",
     "edit": "تعديل",
     "update": "تحديث"
+  },
+  "errors": {
+    "required": "مطلوب"
   }
 }

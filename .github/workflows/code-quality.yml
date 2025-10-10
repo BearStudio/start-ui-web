@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Run eslint
-        run: pnpm run lint:eslint
+        run: pnpm run lint:eslint --max-warnings 0
 
   typescriptChecker:
     name: 🟦 TypeScript Checker

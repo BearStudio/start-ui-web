@@ -9,13 +9,11 @@ export type Book = z.infer<ReturnType<typeof zBook>>;
 
 export const zBook = () =>
   z.object({
-    id: z.string().cuid(),
-    title: zu.string.nonEmpty(z.string(), {
-      required_error: t('book:common.title.required'),
-    }),
-    author: zu.string.nonEmpty(z.string()),
+    id: z.string(),
+    title: zu.fieldText.required({ error: t('book:common.title.required') }),
+    author: zu.fieldText.required(),
     genre: zGenre().nullish(),
-    publisher: zu.string.nonEmptyNullish(z.string()),
+    publisher: zu.fieldText.nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
   });
@@ -24,4 +22,4 @@ export type FormFieldsBook = z.infer<ReturnType<typeof zFormFieldsBook>>;
 export const zFormFieldsBook = () =>
   zBook()
     .pick({ title: true, author: true, publisher: true })
-    .extend({ genreId: z.string().nonempty() });
+    .extend({ genreId: zu.fieldText.required() });

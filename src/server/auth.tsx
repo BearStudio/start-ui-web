@@ -22,13 +22,10 @@ import { getUserLanguage } from '@/server/utils';
 export type Auth = typeof auth;
 export const auth = betterAuth({
   session: {
-    expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
-    updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
+    expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
+    updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
   },
-  // Allows an Expo native app to use social auth, can be delete if no needed
-  trustedOrigins: envServer.AUTH_TRUSTED_ORIGIN
-    ? envServer.AUTH_TRUSTED_ORIGIN.split(',')
-    : undefined,
+  trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
@@ -94,4 +91,20 @@ export const auth = betterAuth({
       },
     }),
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          return { data: user };
+        },
+      },
+      update: {
+        before: async (user) => {
+          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          return { data: user };
+        },
+      },
+    },
+  },
 });

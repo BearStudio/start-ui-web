@@ -8,7 +8,7 @@ export const Route = createFileRoute('/manager/books/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
-      searchTerm: z.string().default(''),
+      searchTerm: z.string().prefault(''),
     })
   ),
   search: {

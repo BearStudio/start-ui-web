@@ -35,7 +35,11 @@ export default defineConfig(({ mode }) => {
         },
       }),
       // react's vite plugin must come after start's vite plugin
-      viteReact(),
+      viteReact({
+        babel: {
+          plugins: ['babel-plugin-react-compiler'],
+        },
+      }),
       // Copy prisma binaries at the end
       prismaCopyBinariesPlugin(),
     ],
@@ -55,7 +59,7 @@ function createPrismaCopyBinariesPlugin() {
         if (outputDir === serverDir) {
           await cpy(
             './src/server/db/generated/**/*.node',
-            resolve(serverDir, 'chunks', '_')
+            resolve(serverDir, 'chunks')
           );
         }
       },

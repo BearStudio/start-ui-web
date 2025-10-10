@@ -1,5 +1,11 @@
 import { SearchIcon, XIcon } from 'lucide-react';
-import React, { ComponentProps, useEffect, useRef, useState } from 'react';
+import React, {
+  ComponentProps,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -38,22 +44,20 @@ export const SearchInput = ({
 
   const [search, setSearch] = useState<string>(value ?? '');
 
-  const searchRef = useRef(search);
-  searchRef.current = search;
-
-  const onChangeRef = useRef<typeof onChange>(null);
-  onChangeRef.current = onChange;
+  const onChangeEvent = useEffectEvent((s: string) => {
+    onChange?.(s);
+  });
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      onChangeRef.current?.(search);
+      onChangeEvent(search);
     }, delay);
 
     return () => clearTimeout(timeoutId);
   }, [search, delay]);
 
   const externalValueHasChanged = useValueHasChanged(value);
-  if (externalValueHasChanged && value !== searchRef.current) {
+  if (externalValueHasChanged && value !== search) {
     setSearch(value ?? '');
   }
 

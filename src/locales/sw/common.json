@@ -22,5 +22,8 @@
     "delete": "Futa",
     "edit": "Hariri",
     "update": "Sasisha"
+  },
+  "errors": {
+    "required": "Inahitajika"
   }
 }

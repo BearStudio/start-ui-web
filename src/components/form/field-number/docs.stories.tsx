@@ -20,7 +20,7 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    balance: z.number().min(0),
+    balance: z.number({ error: 'Required' }).min(0),
   });
 
 const formOptions = {

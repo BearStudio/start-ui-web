@@ -20,21 +20,21 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
+          cursor: z.string().optional(),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
           searchTerm: z.string().optional(),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
         items: z.array(zGenre()),
-        nextCursor: z.string().cuid().optional(),
+        nextCursor: z.string().optional(),
         total: z.number(),
       })
     )
     .handler(async ({ context, input }) => {
-      context.logger.info('Getting books from database');
+      context.logger.info('Getting genres from database');
 
       const where = {
         name: {
@@ -43,7 +43,7 @@ export default {
         },
       } satisfies Prisma.GenreWhereInput;
 
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.genre.count({
           where,
         }),

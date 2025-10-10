@@ -24,7 +24,7 @@ export default {
 const zFormSchema = () =>
   z.object({
     lovesBears: z.boolean().refine((val) => val === true, {
-      message: 'Please say you love bears.',
+      error: 'Please say you love bears.',
     }),
   });
 

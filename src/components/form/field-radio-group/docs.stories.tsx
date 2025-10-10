@@ -19,8 +19,8 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    bear: zu.string.nonEmpty(z.string(), {
-      required_error: 'Please select your favorite bearstronaut',
+    bear: zu.fieldText.required({
+      error: 'Please select your favorite bearstronaut',
     }),
   });
 

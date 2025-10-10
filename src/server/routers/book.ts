@@ -1,7 +1,7 @@
 import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
-import { zBook } from '@/features/book/schema';
+import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
@@ -21,16 +21,16 @@ export default {
     .input(
       z
         .object({
-          cursor: z.string().cuid().optional(),
-          limit: z.coerce.number().int().min(1).max(100).default(20),
-          searchTerm: z.string().trim().optional().default(''),
+          cursor: z.string().optional(),
+          limit: z.coerce.number().int().min(1).max(100).prefault(20),
+          searchTerm: z.string().trim().optional().prefault(''),
         })
-        .default({})
+        .prefault({})
     )
     .output(
       z.object({
         items: z.array(zBook()),
-        nextCursor: z.string().cuid().optional(),
+        nextCursor: z.string().optional(),
         total: z.number(),
       })
     )
@@ -54,7 +54,7 @@ export default {
         ],
       } satisfies Prisma.BookWhereInput;
 
-      const [total, items] = await context.db.$transaction([
+      const [total, items] = await Promise.all([
         context.db.book.count({
           where,
         }),
@@ -95,7 +95,7 @@ export default {
     })
     .input(
       z.object({
-        id: z.string().cuid(),
+        id: z.string(),
       })
     )
     .output(zBook())
@@ -124,15 +124,7 @@ export default {
       path: '/books',
       tags,
     })
-    .input(
-      zBook()
-        .pick({
-          title: true,
-          author: true,
-          publisher: true,
-        })
-        .extend({ genreId: z.string().nonempty() })
-    )
+    .input(zFormFieldsBook())
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
@@ -170,16 +162,7 @@ export default {
       path: '/books/{id}',
       tags,
     })
-    .input(
-      zBook()
-        .pick({
-          id: true,
-          title: true,
-          author: true,
-          publisher: true,
-        })
-        .extend({ genreId: z.string().nonempty() })
-    )
+    .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
@@ -210,7 +193,7 @@ export default {
 
   deleteById: protectedProcedure({
     permission: {
-      user: ['delete'],
+      book: ['delete'],
     },
   })
     .route({
