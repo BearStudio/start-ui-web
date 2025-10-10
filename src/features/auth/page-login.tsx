@@ -13,6 +13,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
+import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
@@ -130,6 +131,7 @@ export default function PageLogin({
         <Button
           className="w-full"
           variant="secondary"
+          disabled={envClient.VITE_IS_DEMO}
           loading={
             social.variables === 'github' &&
             (social.isPending || social.isSuccess)
