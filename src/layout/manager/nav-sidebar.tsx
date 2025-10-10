@@ -1,5 +1,4 @@
-'use no memo'; // Allows re-rendering for useMatchRoute https://github.com/TanStack/router/issues/4499
-import { Link, useMatchRoute } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import {
   LayoutDashboardIcon,
   PanelLeftIcon,
@@ -32,7 +31,6 @@ import { NavUser } from '@/layout/manager/nav-user';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
   const { t } = useTranslation(['layout']);
-  const matchRoute = useMatchRoute();
   return (
     <SidebarProvider>
       <Sidebar>
@@ -66,30 +64,28 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={
-                      !!matchRoute({ to: '/manager/dashboard', fuzzy: true })
-                    }
-                  >
-                    <Link to="/manager/dashboard">
-                      <LayoutDashboardIcon />
-                      <span>{t('layout:nav.dashboard')}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <Link to="/manager/dashboard">
+                    {({ isActive }) => (
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <span>
+                          <LayoutDashboardIcon />
+                          <span>{t('layout:nav.dashboard')}</span>
+                        </span>
+                      </SidebarMenuButton>
+                    )}
+                  </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={
-                      !!matchRoute({ to: '/manager/books', fuzzy: true })
-                    }
-                  >
-                    <Link to="/manager/books">
-                      <IconBookOpen />
-                      <span>{t('layout:nav.books')}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <Link to="/manager/books">
+                    {({ isActive }) => (
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <span>
+                          <IconBookOpen />
+                          <span>{t('layout:nav.books')}</span>
+                        </span>
+                      </SidebarMenuButton>
+                    )}
+                  </Link>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
@@ -108,17 +104,16 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={
-                        !!matchRoute({ to: '/manager/users', fuzzy: true })
-                      }
-                    >
-                      <Link to="/manager/users">
-                        <UsersIcon />
-                        <span>{t('layout:nav.users')}</span>
-                      </Link>
-                    </SidebarMenuButton>
+                    <Link to="/manager/users">
+                      {({ isActive }) => (
+                        <SidebarMenuButton asChild isActive={isActive}>
+                          <span>
+                            <UsersIcon />
+                            <span>{t('layout:nav.users')}</span>
+                          </span>
+                        </SidebarMenuButton>
+                      )}
+                    </Link>
                   </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
