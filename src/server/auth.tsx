@@ -22,8 +22,8 @@ import { getUserLanguage } from '@/server/utils';
 export type Auth = typeof auth;
 export const auth = betterAuth({
   session: {
-    expiresIn: envServer.SESSION_EXPIRATION_IN_SECONDS,
-    updateAge: envServer.SESSION_UPDATE_AGE_IN_SECONDS,
+    expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
+    updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
   },
   trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
   database: prismaAdapter(db, {
