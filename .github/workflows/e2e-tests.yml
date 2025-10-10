@@ -19,7 +19,7 @@ jobs:
       VITE_ENV_NAME: tests
       DATABASE_URL: postgres://startui:startui@localhost:5432/startui
       VITE_IS_DEMO: false
-      BETTER_AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
+      AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
       EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
     services:
