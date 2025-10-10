@@ -4,19 +4,23 @@
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
 
-# Technologies
+## Technologies
 
 <div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
 
 [⚙️ Node.js](https://nodejs.org), [🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [📦 TanStack Start](https://tanstack.com/start), [💨 Tailwind CSS](https://tailwindcss.com/), [🧩 shadcn/ui](https://ui.shadcn.com/), [📋 React Hook Form](https://react-hook-form.com/), [🔌 oRPC](https://orpc.unnoq.com/), [🛠 Prisma](https://www.prisma.io/), [🔐 Better Auth](https://www.better-auth.com/), [📚 Storybook](https://storybook.js.org/), [🧪 Vitest](https://vitest.dev/), [🎭 Playwright](https://playwright.dev/)
 
-# Requirements
+## Documentation
+
+For detailed information on how to use this project, please refer to the [documentation](https://docs.web.start-ui.com). The documentation contains all the necessary information on installation, usage, and some guides.
+
+## Requirements
 
 * [Node.js](https://nodejs.org) >= 22
 * [pnpm](https://pnpm.io/)
 * [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
-# Getting Started
+## Getting Started
 
 ```bash
 pnpm create start-ui -t web myApp
@@ -24,7 +28,7 @@ pnpm create start-ui -t web myApp
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
-# Installation
+## Installation
 
 ```bash
 cp .env.example .env # Setup your env variables
@@ -38,7 +42,7 @@ pnpm db:init # Init the db
 > **Quick advices for local development**
 > - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
 
-# Run
+## Run
 
 ```bash
 pnpm dk:start # Only if your docker is not running
@@ -120,7 +124,7 @@ VITE_ENV_EMOJI="🔬"
 VITE_ENV_COLOR="teal"
 ```
 
-# FAQ
+## FAQ
 
 <details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
 <p>
