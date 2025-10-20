@@ -35,15 +35,19 @@ export default function PageLogin({
     mutationFn: async (
       provider: Parameters<typeof authClient.signIn.social>[0]['provider']
     ) => {
-      const response = await authClient.signIn.social({
-        provider,
-        callbackURL: search.redirect ?? '/',
-        errorCallbackURL: '/login/error',
-      });
-      if (response.error) {
-        throw new Error(response.error.message);
+      try {
+        const response = await authClient.signIn.social({
+          provider,
+          callbackURL: search.redirect ?? '/',
+          errorCallbackURL: '/login/error',
+        });
+        if (response.error) {
+          throw new Error(response.error.message);
+        }
+        return response.data;
+      } catch {
+        toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
       }
-      return response.data;
     },
     onError: (error) => {
       form.setError('email', { message: error.message });
@@ -63,30 +67,34 @@ export default function PageLogin({
   useMascot({ isError: !isValid && isSubmitted });
 
   const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
-    const { error } = await authClient.emailOtp.sendVerificationOtp({
-      email,
-      type: 'sign-in',
-    });
-
-    if (error) {
-      toast.error(
-        error.code
-          ? t(
-              `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
-            )
-          : error.message || t('auth:errorCode.UNKNOWN_ERROR')
-      );
-      return;
-    }
-
-    router.navigate({
-      replace: true,
-      to: '/login/verify',
-      search: {
-        redirect: search.redirect,
+    try {
+      const { error } = await authClient.emailOtp.sendVerificationOtp({
         email,
-      },
-    });
+        type: 'sign-in',
+      });
+
+      if (error) {
+        toast.error(
+          error.code
+            ? t(
+                `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+              )
+            : error.message || t('auth:errorCode.UNKNOWN_ERROR')
+        );
+        return;
+      }
+
+      router.navigate({
+        replace: true,
+        to: '/login/verify',
+        search: {
+          redirect: search.redirect,
+          email,
+        },
+      });
+    } catch {
+      toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
+    }
   };
 
   return (
