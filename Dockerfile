@@ -17,7 +17,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY run-jiti.js ./
 COPY src/features/build-info/script-to-generate-json.ts src/features/build-info/build-info.gen.json ./src/features/build-info/
 COPY prisma/schema.prisma ./prisma/
-RUN pnpm install --frozen-lockfile --prod=false
+RUN pnpm install --frozen-lockfile
 
 # copy source
 COPY . .
@@ -34,20 +34,17 @@ FROM node:22-alpine AS runtime
 WORKDIR /app
 
 # install pnpm
-RUN npm install -g pnpm
-RUN npm install -g npm-run-all
+RUN npm install -g pnpm npm-run-all
+
+COPY .env ./
+
 
 
 ## copy output build and package.json from builder
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/src/features/build-info/build-info.gen.json ./src/features/build-info/build-info.gen.json
-COPY --from=builder /app/src/features/build-info/script-to-generate-json.ts ./src/features/build-info/script-to-generate-json.ts
-
-# install only production dependencies
-
-
-RUN pnpm install --prod
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/node_modules ./node_modules
 
 ENV NODE_ENV=production
 
