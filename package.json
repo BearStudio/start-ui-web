@@ -37,6 +37,7 @@
     "dk:start": "docker compose start",
     "dk:stop": "docker compose stop",
     "dk:clear": "docker compose down --volumes",
+    "dk:build": "docker build -t start-ui-web . && docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web",
     "db:init": "pnpm db:push && pnpm db:seed",
     "db:push": "prisma db push",
     "db:ui": "prisma studio",
