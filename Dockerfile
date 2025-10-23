@@ -51,7 +51,7 @@ COPY .env ./
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY --from=builder /app/node_modules ./node_modules
+RUN pnpm install --frozen-lockfile
 
 EXPOSE 3000
 
