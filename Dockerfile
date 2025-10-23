@@ -17,13 +17,15 @@ COPY package.json pnpm-lock.yaml ./
 COPY run-jiti.js ./
 COPY src/features/build-info/script-to-generate-json.ts src/features/build-info/build-info.gen.json ./src/features/build-info/
 COPY prisma/schema.prisma ./prisma/
+
 RUN pnpm install --frozen-lockfile
 
 # copy source
 COPY . .
 
-# build .output
 ENV NODE_OPTIONS=--max-old-space-size=4096
+
+# build app
 RUN pnpm build
 
 
@@ -32,6 +34,11 @@ FROM node:22-alpine AS runtime
 
 
 WORKDIR /app
+
+# ENV
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
 
 # install pnpm
 RUN npm install -g pnpm npm-run-all
@@ -45,11 +52,6 @@ COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/node_modules ./node_modules
-
-ENV NODE_ENV=production
-
-ENV HOST=0.0.0.0
-ENV PORT=3000
 
 EXPOSE 3000
 
