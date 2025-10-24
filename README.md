@@ -73,7 +73,20 @@ pnpm dk:start # Only if your Docker containers are not running
 pnpm dev
 ```
 
+## Dockerfile 
 
+Build the image using the following command 
+
+```bash
+docker build -t start-ui-web .
+```
+Then, you can run it with this example command:
+
+```bash
+And now you can use this command example to run it `docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web`
+```
+
+During the build process, it automatically uses your project’s .env file.
 
 
 ### Emails in development
