@@ -54,7 +54,20 @@ pnpm dev
 >
 > Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
 
+## Dockerfile 
 
+Build the image using the following command 
+
+```bash
+docker build -t start-ui-web .
+```
+Then, you can run it with this example command:
+
+```bash
+And now you can use this command example to run it `docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web`
+```
+
+During the build process, it automatically uses your project’s .env file.
 
 
 ### Emails in development
