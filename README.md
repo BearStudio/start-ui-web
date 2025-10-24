@@ -62,10 +62,12 @@ Build the image using the following command
 docker build -t start-ui-web .
 ```
 Then, you can run it with this example command:
-
 ```bash
-And now you can use this command example to run it `docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web`
+docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web
 ```
+
+> [!NOTE]
+> The network name `start-ui-web_default` is created by Docker Compose when you run `pnpm dk:start`. If you're running Docker without Docker Compose, use `--network bridge` or omit the `--network` flag.
 
 During the build process, it automatically uses your project’s .env file.
 
