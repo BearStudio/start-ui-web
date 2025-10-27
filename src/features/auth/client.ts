@@ -11,7 +11,10 @@ import type { Auth } from '@/server/auth';
 import { permissions } from './permissions';
 
 export const authClient = createAuthClient({
-  baseURL: `${envClient.VITE_BASE_URL}/api/auth`,
+  baseURL:
+    typeof window === 'undefined'
+      ? envClient.VITE_BASE_URL
+      : window.location.origin,
   plugins: [
     inferAdditionalFields<Auth>(),
     adminClient({
