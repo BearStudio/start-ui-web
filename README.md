@@ -59,7 +59,19 @@ pnpm dev
 Build the image using the following command 
 
 ```bash
-docker build -t start-ui-web .
+docker build -t start-ui-web \
+  --build-arg VITE_BASE_URL="http://localhost:3000" \
+  --build-arg VITE_ENV_NAME="DOCKER" \
+  --build-arg VITE_ENV_EMOJI="🐋" \
+  --build-arg VITE_ENV_COLOR="blue" \
+  --build-arg VITE_IS_DEMO="true" \
+  --build-arg DATABASE_URL="postgres://user:pass@host:5432/db" \
+  --build-arg AUTH_SECRET="change-me" \
+  --build-arg GITHUB_CLIENT_ID="" \
+  --build-arg GITHUB_CLIENT_SECRET="" \
+  --build-arg EMAIL_SERVER="smtp://user:pass@0.0.0.0:1025" \
+  --build-arg EMAIL_FROM="Start UI <noreply@example.com>" \
+  .
 ```
 Then, you can run it with this example command:
 ```bash
