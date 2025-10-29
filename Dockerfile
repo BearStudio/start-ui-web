@@ -1,4 +1,3 @@
-
 # Builder Stage
 FROM node:22-alpine AS builder
 
@@ -31,32 +30,21 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Environnement variables
+# Environment variables
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
-    PORT=3000
+    PORT=3000 \
+    VITE_PORT=3000
 
-# install tools
-RUN npm install -g pnpm npm-run-all && \
-    apk add --no-cache git && \
-    git init
-
-# copy files needed for installing dependencies
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-COPY --from=builder /app/run-jiti.js ./
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/src/features/build-info ./src/features/build-info
-
-# copy environment configuration
-# TODO: Replace with environment variables or secrets in production
+# install pnpm
+RUN npm install -g pnpm npm-run-all
 COPY .env ./
 
-# install production dependencies (this will run prisma generate)
-RUN pnpm install --frozen-lockfile
-
-# copy build artifacts after installation
+## copy output build and package.json from builder
 COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 
