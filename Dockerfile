@@ -15,7 +15,7 @@ COPY run-jiti.js ./
 COPY src/features/build-info/script-to-generate-json.ts ./src/features/build-info/
 
 # install dependencies
-RUN pnpm install --frozen-lockfil
+RUN pnpm install --frozen-lockfile
 
 ARG VITE_BASE_URL
 ARG VITE_ENV_NAME
