@@ -1,10 +1,10 @@
 import { ORPCError } from '@orpc/client';
+import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
-import { zodResponseFormat } from 'openai/helpers/zod';
 
 const tags = ['books'];
 
@@ -234,18 +234,30 @@ export default {
       path: '/books/auto-generate',
       tags,
     })
-    .input(z.void())
+    .input(
+      z
+        .object({
+          title: z.string().nullish(),
+          author: z.string().nullish(),
+          publisher: z.string().nullish(),
+        })
+        .extend({ genreId: z.string().nullish() })
+        .optional()
+    )
     .output(
       zBook()
         .pick({ title: true, author: true, genre: true, publisher: true })
         .extend({ genreId: z.string() })
     )
-    .handler(async ({ context }) => {
+    .handler(async ({ context, input }) => {
       context.logger.info('Auto generate books');
 
       const genres = await context.db.genre.findMany({
         select: { id: true, name: true },
       });
+
+      const withSetValues =
+        input?.author || input?.title || input?.genreId || input?.publisher;
 
       const response = await client.chat.completions.create({
         model: 'gpt-5-nano',
@@ -262,6 +274,14 @@ export default {
             content:
               'Generate a new book with a title, author name, genre and publisher as JSON.',
           },
+          ...(withSetValues
+            ? ([
+                {
+                  role: 'user',
+                  content: `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`,
+                },
+              ] as const)
+            : []),
         ],
         response_format: zodResponseFormat(
           z.object({
