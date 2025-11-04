@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import { LucideSparkles } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -38,6 +39,17 @@ export const PageBookNew = () => {
       publisher: '',
     },
   });
+
+  const bookAutoGenerate = useMutation(
+    orpc.book.autoGenerate.mutationOptions({
+      onSuccess: async (data) => {
+        form.setValue('title', data.title);
+        form.setValue('author', data.author);
+        form.setValue('genreId', data.genreId);
+        form.setValue('publisher', data.publisher);
+      },
+    })
+  );
 
   const bookCreate = useMutation(
     orpc.book.create.mutationOptions({
@@ -85,14 +97,25 @@ export const PageBookNew = () => {
           <PageLayoutTopBar
             startActions={<BackButton />}
             endActions={
-              <Button
-                size="sm"
-                type="submit"
-                className="min-w-20"
-                loading={bookCreate.isPending}
-              >
-                {t('book:manager.new.createButton.label')}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  loading={bookAutoGenerate.isPending}
+                  onClick={() => bookAutoGenerate.mutate()}
+                  variant="secondary"
+                >
+                  <LucideSparkles />
+                  Suggestion
+                </Button>
+                <Button
+                  size="sm"
+                  type="submit"
+                  className="min-w-20"
+                  loading={bookCreate.isPending}
+                >
+                  {t('book:manager.new.createButton.label')}
+                </Button>
+              </div>
             }
           >
             <PageLayoutTopBarTitle>

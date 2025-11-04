@@ -4,8 +4,14 @@ import { z } from 'zod';
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
+import { zodResponseFormat } from 'openai/helpers/zod';
 
 const tags = ['books'];
+
+import OpenAI from 'openai';
+
+import { envServer } from '@/env/server';
+const client = new OpenAI({ apiKey: envServer.OPENAI_API_KEY });
 
 export default {
   getAll: protectedProcedure({
@@ -216,5 +222,73 @@ export default {
       } catch {
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
+    }),
+
+  autoGenerate: protectedProcedure({
+    permission: {
+      book: ['create'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/books/auto-generate',
+      tags,
+    })
+    .input(z.void())
+    .output(
+      zBook()
+        .pick({ title: true, author: true, genre: true, publisher: true })
+        .extend({ genreId: z.string() })
+    )
+    .handler(async ({ context }) => {
+      context.logger.info('Auto generate books');
+
+      const genres = await context.db.genre.findMany({
+        select: { id: true, name: true },
+      });
+
+      const response = await client.chat.completions.create({
+        model: 'gpt-5-nano',
+        messages: [
+          {
+            role: 'system',
+            content: [
+              'You are a helpful assistant who generates real life existing books data in JSON.',
+              `This is the list of genres: ${JSON.stringify(genres)}`,
+            ].join('\n'),
+          },
+          {
+            role: 'user',
+            content:
+              'Generate a new book with a title, author name, genre and publisher as JSON.',
+          },
+        ],
+        response_format: zodResponseFormat(
+          z.object({
+            title: z.string(),
+            author: z.string(),
+            genreId: z.string(),
+            publisher: z.string().nullable(),
+          }),
+          'book'
+        ),
+      });
+
+      context.logger.info('Response from OpenAI');
+      context.logger.info({ response: response.choices[0]?.message.content });
+
+      const generatedBook = zBook()
+        .pick({ title: true, author: true, genre: true, publisher: true })
+        .extend({ genreId: z.string() })
+        .safeParse(JSON.parse(response.choices[0]?.message.content ?? ''));
+
+      if (generatedBook.error) {
+        context.logger.error('Invalid auto generated book');
+        throw new ORPCError('INTERNAL_SERVER_ERROR', {
+          message: generatedBook.error.message,
+        });
+      }
+
+      return generatedBook.data;
     }),
 };
