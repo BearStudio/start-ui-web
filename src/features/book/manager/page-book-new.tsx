@@ -101,7 +101,14 @@ export const PageBookNew = () => {
                 <Button
                   size="sm"
                   loading={bookAutoGenerate.isPending}
-                  onClick={() => bookAutoGenerate.mutate()}
+                  onClick={() =>
+                    bookAutoGenerate.mutate({
+                      author: form.getValues('author'),
+                      title: form.getValues('title'),
+                      genreId: form.getValues('genreId'),
+                      publisher: form.getValues('publisher'),
+                    })
+                  }
                   variant="secondary"
                 >
                   <LucideSparkles />
