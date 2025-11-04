@@ -4,14 +4,10 @@ import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
+import { openai } from '@/server/openai';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
-
-import OpenAI from 'openai';
-
-import { envServer } from '@/env/server';
-const client = new OpenAI({ apiKey: envServer.OPENAI_API_KEY });
 
 export default {
   getAll: protectedProcedure({
@@ -259,7 +255,7 @@ export default {
       const withSetValues =
         input?.author || input?.title || input?.genreId || input?.publisher;
 
-      const response = await client.chat.completions.create({
+      const response = await openai.chat.completions.create({
         model: 'gpt-5-nano',
         messages: [
           {
