@@ -20,13 +20,5 @@
     "submitButton": "تحديث",
     "successMessage": "تم تحديث الاسم",
     "errorMessage": "فشل تحديث اسمك"
-  },
-  "changeProfilePictureDrawer": {
-    "title": "تغيير صورتك الرمزية",
-    "description": "نموذج لتغيير صورتك الرمزية",
-    "label": "الصورة الرمزية",
-    "submitButton": "تغيير",
-    "successMessage": "تم تحديث الصورة الرمزية",
-    "errorMessage": "فشل في تحديث الصورة الرمزية الخاصة بك"
   }
 }

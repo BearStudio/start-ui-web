@@ -20,13 +20,5 @@
     "submitButton": "Update",
     "successMessage": "Name updated",
     "errorMessage": "Failed to update your name"
-  },
-  "changeProfilePictureDrawer": {
-    "title": "Update your profile picture",
-    "description": "Form to update your profile picture",
-    "label": "Profile picture",
-    "submitButton": "Update",
-    "successMessage": "Profile picture updated",
-    "errorMessage": "Failed to update your profile picture"
   }
 }

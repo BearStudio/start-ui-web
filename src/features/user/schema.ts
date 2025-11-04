@@ -23,7 +23,6 @@ export const zUser = () =>
     createdAt: z.date(),
     updatedAt: z.date(),
     onboardedAt: z.date().nullish(),
-    avatarFileId: z.string().nullish(),
   });
 
 export type Session = z.infer<ReturnType<typeof zSession>>;

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useUploadFile } from 'better-upload/client';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { orpc } from '@/lib/orpc/client';
@@ -21,14 +22,46 @@ export const FormBookCover = () => {
     name: 'author',
     control: form.control,
   });
+  const coverId = useWatch({
+    name: 'coverId',
+    control: form.control,
+  });
+
+  const { upload, uploadedFile } = useUploadFile({
+    route: 'bookCover',
+    onUploadComplete: ({ file }) => {
+      form.setValue('coverId', file.objectKey);
+    },
+  });
+
+  // [TODO] Handle upload errors
+
   const genre = genresQuery.data?.items.find((item) => item.id === genreId);
   return (
-    <BookCover
-      book={{
-        title,
-        author,
-        genre,
-      }}
-    />
+    <div className="relative">
+      <label htmlFor="coverId">
+        <input
+          className="hidden"
+          id="coverId"
+          type="file"
+          name="coverId"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              upload(e.target.files[0]);
+            }
+          }}
+        />
+        <input type="hidden" {...form.register('coverId')} />
+        <BookCover
+          className="hover:cursor-pointer"
+          book={{
+            title,
+            author,
+            genre,
+            coverId: uploadedFile?.objectKey ?? coverId,
+          }}
+        />
+      </label>
+    </div>
   );
 };

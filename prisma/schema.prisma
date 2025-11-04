@@ -26,7 +26,6 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  avatarFileId  String?
 
   role        UserRole?
   banned      Boolean?
@@ -94,6 +93,7 @@ model Book {
   genre     Genre?   @relation(fields: [genreId], references: [id])
   genreId   String
   publisher String?
+  coverId   String?
 
   @@unique([title, author])
   @@map("book")

@@ -68,7 +68,7 @@
     "@tanstack/zod-adapter": "1.132.47",
     "@uidotdev/usehooks": "2.4.1",
     "better-auth": "1.3.27",
-    "better-upload": "2.0.1",
+    "better-upload": "2.0.3",
     "boring-avatars": "2.0.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

@@ -8,7 +8,7 @@ export const Route = createFileRoute('/app/account/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
-      state: z.enum(['', 'change-name', 'change-profile-picture']).prefault(''),
+      state: z.enum(['', 'change-name']).prefault(''),
       newEmail: z.string().prefault(''),
     })
   ),

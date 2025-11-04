@@ -9,11 +9,3 @@ export const zFormFieldsAccountUpdateName = () =>
   z.object({
     name: zu.fieldText.required(),
   });
-
-export type FormFieldsAccountUpdateProfilePicture = z.infer<
-  ReturnType<typeof zFormFieldsAccountUpdateProfilePicture>
->;
-export const zFormFieldsAccountUpdateProfilePicture = () =>
-  z.object({
-    avatarFileId: zu.fieldText.required(),
-  });

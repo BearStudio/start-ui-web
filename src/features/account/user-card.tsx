@@ -1,55 +1,37 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { envClient } from '@/env/client';
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
-import { ChangeProfilePictureDrawer } from '@/features/account/change-profile-picture-drawer';
 import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);
   const session = authClient.useSession();
-
-  const getImageUrl = () => {
-    return `${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${session.data?.user.avatarFileId}`;
-  };
-
   return (
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">
-        <ChangeProfilePictureDrawer>
-          <button className="cursor-pointer" type="button">
-            <div className="flex min-w-0 items-center gap-3">
-              <Avatar>
-                {session.data?.user.avatarFileId ? (
-                  <AvatarImage
-                    src={getImageUrl()}
-                    alt={session.data?.user.name}
-                  />
-                ) : (
-                  <AvatarFallback
-                    variant="boring"
-                    name={session.data?.user.name ?? ''}
-                  />
-                )}
-              </Avatar>
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <CardTitle className="truncate">
-                  {session.data?.user.name || session.data?.user.email || (
-                    <span className="text-xs text-muted-foreground">--</span>
-                  )}
-                </CardTitle>
-              </div>
-            </div>
-          </button>
-        </ChangeProfilePictureDrawer>
+        <div className="flex min-w-0 items-center gap-3">
+          <Avatar>
+            <AvatarFallback
+              variant="boring"
+              name={session.data?.user.name ?? ''}
+            />
+          </Avatar>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <CardTitle className="truncate">
+              {session.data?.user.name || session.data?.user.email || (
+                <span className="text-xs text-muted-foreground">--</span>
+              )}
+            </CardTitle>
+          </div>
+        </div>
         <CardAction>
           <ConfirmSignOut>
             <Button size="sm" variant="ghost">

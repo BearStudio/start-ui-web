@@ -15,25 +15,34 @@ const router: Router = {
   client: s3client,
   bucketName: envServer.S3_BUCKET_NAME,
   routes: {
-    avatar: route({
+    bookCover: route({
       fileTypes: ['image/png', 'image/jpeg', 'image/webp'],
       maxFileSize: 1024 * 1024 * 100, // 100Mb
       onBeforeUpload: async ({ req, file }) => {
         const session = await auth.api.getSession({ headers: req.headers });
-        if (!session) {
-          // The message error thrown here is visible to the user
-          // as a field error message.
-          // [TODO] Check to send i18n key so the message can be translated
-          throw new RejectUpload('Not logged in!');
+
+        // Only admins should be able to update book covers
+        const canUpdateBookCover = await auth.api.userHasPermission({
+          body: {
+            userId: session?.user.id,
+            permissions: {
+              book: ['create', 'update'],
+            },
+            role: 'admin',
+          },
+        });
+
+        if (!canUpdateBookCover.success) {
+          throw new RejectUpload('Not authorized');
         }
 
+        // normalize file extension from detected mimetype
         const fileExtension = file.type.split('/').at(-1) as string;
-
         return {
-          // Here we want to keep the filename always the same
-          // Each avatar upload will erase the previous one.
+          // I think it is a good idea to create a random file id as it impersonate the file name (which can contains sensitive data :/ ?)
+          // [TODO] Add a way to clean unused documents
           objectInfo: {
-            key: `${session.user.id}/avatar.${fileExtension}`,
+            key: `books/${crypto.randomUUID()}.${fileExtension}`,
           },
         };
       },

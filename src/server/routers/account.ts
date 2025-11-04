@@ -39,7 +39,6 @@ export default {
     .input(
       zUser().pick({
         name: true,
-        avatarFileId: true,
       })
     )
     .output(z.void())
@@ -49,8 +48,7 @@ export default {
       await context.db.user.update({
         where: { id: context.user.id },
         data: {
-          name: input.name ?? context.user.name,
-          avatarFileId: input.avatarFileId ?? context.user.avatarFileId,
+          name: input.name ?? '',
         },
       });
     }),
