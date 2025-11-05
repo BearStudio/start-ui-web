@@ -115,7 +115,7 @@ export const PageBookNew = () => {
                   variant="secondary"
                 >
                   <LucideSparkles />
-                  Suggestion
+                  {t('book:manager.new.aiGenerateButton.label')}
                 </Button>
                 <Button
                   size="sm"

@@ -50,6 +50,9 @@
       "createButton": {
         "label": "Unda"
       },
+      "aiGenerateButton": {
+        "label": "Kushiriki"
+      },
       "createError": "Imeshindikana kuunda kitabu",
       "autoGenerateError": "Imeshindikana kuunda kitabu"
     },
