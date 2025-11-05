@@ -39,6 +39,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
       author: bookQuery.data?.author ?? '',
       genreId: bookQuery.data?.genre?.id ?? null!,
       publisher: bookQuery.data?.publisher ?? '',
+      coverId: bookQuery.data?.coverId ?? '',
     },
   });
 
