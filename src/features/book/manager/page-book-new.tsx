@@ -48,6 +48,9 @@ export const PageBookNew = () => {
         form.setValue('genreId', data.genreId);
         form.setValue('publisher', data.publisher);
       },
+      onError: () => {
+        toast.error(t('book:manager.new.autoGenerateError'));
+      },
     })
   );
 

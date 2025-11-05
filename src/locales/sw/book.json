@@ -50,7 +50,8 @@
       "createButton": {
         "label": "Unda"
       },
-      "createError": "Imeshindikana kuunda kitabu"
+      "createError": "Imeshindikana kuunda kitabu",
+      "autoGenerateError": "Imeshindikana kuunda kitabu"
     },
     "update": {
       "title": "Sasisha Kitabu",

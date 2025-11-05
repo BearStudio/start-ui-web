@@ -50,7 +50,8 @@
       "createButton": {
         "label": "إنشاء"
       },
-      "createError": "فشل في إنشاء كتاب"
+      "createError": "فشل في إنشاء كتاب",
+      "autoGenerateError": "فشل في إنشاء كتاب"
     },
     "update": {
       "title": "تحديث الكتاب",
