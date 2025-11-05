@@ -50,6 +50,9 @@
       "createButton": {
         "label": "إنشاء"
       },
+      "aiGenerateButton": {
+        "label": "توصية"
+      },
       "createError": "فشل في إنشاء كتاب",
       "autoGenerateError": "فشل في إنشاء كتاب"
     },
