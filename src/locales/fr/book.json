@@ -50,7 +50,8 @@
       "createButton": {
         "label": "Créer"
       },
-      "createError": "Échec de la création du livre"
+      "createError": "Échec de la création du livre",
+      "autoGenerateError": "Échec de la génération du livre"
     },
     "update": {
       "title": "Mettre à jour le livre",
