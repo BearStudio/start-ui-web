@@ -94,6 +94,7 @@ model Book {
   genre     Genre?   @relation(fields: [genreId], references: [id])
   genreId   String
   publisher String?
+  coverId   String?
 
   @@unique([title, author])
   @@map("book")

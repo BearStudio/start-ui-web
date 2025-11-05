@@ -57,7 +57,11 @@
       "updateButton": {
         "label": "Save"
       },
-      "updateError": "Failed to update a book"
+      "updateError": "Failed to update a book",
+      "uploadErrorCodes": {
+        "NOT_AUTHENTICATED": "You need to be authenticated to be able to upload a new cover",
+        "UNAUTHORIZED": "You are not allowed to change book cover"
+      }
     }
   }
 }
