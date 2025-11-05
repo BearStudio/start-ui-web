@@ -1,10 +1,10 @@
+import { openai } from '@ai-sdk/openai';
 import { ORPCError } from '@orpc/client';
-import { zodResponseFormat } from 'openai/helpers/zod';
+import { generateObject } from 'ai';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
-import { openai } from '@/server/openai';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -242,7 +242,7 @@ export default {
     )
     .output(
       zBook()
-        .pick({ title: true, author: true, genre: true, publisher: true })
+        .pick({ title: true, author: true, publisher: true })
         .extend({ genreId: z.string() })
     )
     .handler(async ({ context, input }) => {
@@ -255,56 +255,28 @@ export default {
       const withSetValues =
         input?.author || input?.title || input?.genreId || input?.publisher;
 
-      const response = await openai.chat.completions.create({
-        model: 'gpt-5-nano',
-        messages: [
-          {
-            role: 'system',
-            content: [
-              'You are a helpful assistant who generates real life existing books data in JSON.',
-              `This is the list of genres: ${JSON.stringify(genres)}`,
-            ].join('\n'),
-          },
-          {
-            role: 'user',
-            content:
-              'Generate a new book with a title, author name, genre and publisher as JSON.',
-          },
-          ...(withSetValues
-            ? ([
-                {
-                  role: 'user',
-                  content: `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`,
-                },
-              ] as const)
-            : []),
-        ],
-        response_format: zodResponseFormat(
-          z.object({
-            title: z.string(),
-            author: z.string(),
-            genreId: z.string(),
-            publisher: z.string().nullable(),
-          }),
-          'book'
-        ),
+      const response = await generateObject({
+        model: openai('gpt-5-nano'),
+        schemaName: 'book',
+        schemaDescription: 'A real life book data',
+        schema: zBook()
+          .pick({ title: true, author: true, publisher: true })
+          .extend({ genreId: z.string() }),
+        system: [
+          'You are a helpful assistant who generates real life existing books data in JSON.',
+          `This is the list of genres: ${JSON.stringify(genres)}`,
+        ].join('\n'),
+        prompt: [
+          'Generate a new book with a title, author name, genre and publisher as JSON.',
+          withSetValues
+            ? `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`
+            : '',
+        ].join('\n'),
       });
 
       context.logger.info('Response from OpenAI');
-      context.logger.info({ response: response.choices[0]?.message.content });
+      context.logger.info({ response: response.object });
 
-      const generatedBook = zBook()
-        .pick({ title: true, author: true, genre: true, publisher: true })
-        .extend({ genreId: z.string() })
-        .safeParse(JSON.parse(response.choices[0]?.message.content ?? ''));
-
-      if (generatedBook.error) {
-        context.logger.error('Invalid auto generated book');
-        throw new ORPCError('INTERNAL_SERVER_ERROR', {
-          message: generatedBook.error.message,
-        });
-      }
-
-      return generatedBook.data;
+      return response.object;
     }),
 };
