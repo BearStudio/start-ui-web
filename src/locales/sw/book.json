@@ -58,6 +58,19 @@
         "label": "Hifadhi"
       },
       "updateError": "Imeshindikana kusasisha kitabu"
+    },
+    "uploadErrors": {
+      "NOT_AUTHENTICATED": "Unahitaji kuwa umeingia ili uweze kupakia jalada jipya",
+      "UNAUTHORIZED": "Hauruhusiwi kubadilisha jalada la kitabu",
+      "unknown": "Hitilafu isiyojulikana imetokea wakati wa kupakia",
+      "invalid_request": "Ombi la kupakia si halali",
+      "no_files": "Hakuna faili zilizochaguliwa kwa kupakia",
+      "s3_upload": "Imeshindwa kupakia faili kwenye hifadhi",
+      "file_too_large": "Faili ni kubwa sana. Ukubwa wa juu ni 100MB",
+      "invalid_file_type": "Aina ya faili si halali. Picha za PNG, JPEG, WebP, na GIF tu ndizo zinazoruhusiwa",
+      "rejected": "Kupakia kumekataliwa",
+      "too_many_files": "Faili nyingi sana zimechaguliwa",
+      "aborted": "Kupakia kumeghairiwa"
     }
   }
 }

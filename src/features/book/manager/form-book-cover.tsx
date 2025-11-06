@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUploadFile } from 'better-upload/client';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -8,6 +10,7 @@ import { BookCover } from '@/features/book/book-cover';
 import { FormFieldsBook } from '@/features/book/schema';
 
 export const FormBookCover = () => {
+  const { t } = useTranslation(['book']);
   const form = useFormContext<FormFieldsBook>();
   const genresQuery = useQuery(orpc.genre.getAll.queryOptions());
   const title = useWatch({
@@ -34,9 +37,16 @@ export const FormBookCover = () => {
     onUploadComplete: ({ file }) => {
       form.setValue('coverId', file.objectKey);
     },
+    onError: (error) => {
+      if (error.type === 'rejected') {
+        // In this specific case, error should be a translated message
+        // because rejected are custom errors thrown by the developper
+        toast.error(error.message);
+      } else {
+        toast.error(t(`book:manager.uploadErrors.${error.type}`));
+      }
+    },
   });
-
-  // [TODO] Handle upload errors
 
   return (
     <div className="relative">

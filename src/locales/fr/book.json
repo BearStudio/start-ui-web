@@ -58,6 +58,19 @@
         "label": "Sauvegarder"
       },
       "updateError": "Échec de la modification du livre"
+    },
+    "uploadErrors": {
+      "NOT_AUTHENTICATED": "Vous devez être authentifié pour pouvoir télécharger une nouvelle couverture",
+      "UNAUTHORIZED": "Vous n'êtes pas autorisé à changer la couverture du livre",
+      "unknown": "Une erreur inconnue s'est produite lors du téléchargement",
+      "invalid_request": "Demande de téléchargement invalide",
+      "no_files": "Aucun fichier sélectionné pour le téléchargement",
+      "s3_upload": "Échec du téléchargement du fichier vers le stockage",
+      "file_too_large": "Le fichier est trop volumineux. Taille maximale : 100 Mo",
+      "invalid_file_type": "Type de fichier invalide. Seules les images PNG, JPEG, WebP et GIF sont autorisées",
+      "rejected": "Le téléchargement a été rejeté",
+      "too_many_files": "Trop de fichiers sélectionnés",
+      "aborted": "Le téléchargement a été annulé"
     }
   }
 }
