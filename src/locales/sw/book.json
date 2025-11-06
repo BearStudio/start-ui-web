@@ -59,6 +59,7 @@
       },
       "updateError": "Imeshindikana kusasisha kitabu"
     },
+    "uploadCover": "Pakia Jalada",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "Unahitaji kuwa umeingia ili uweze kupakia jalada jipya",
       "UNAUTHORIZED": "Hauruhusiwi kubadilisha jalada la kitabu",

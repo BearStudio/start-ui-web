@@ -59,6 +59,7 @@
       },
       "updateError": "فشل في تحديث الكتاب"
     },
+    "uploadCover": "رفع الغلاف",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "تحتاج إلى تسجيل الدخول لتتمكن من رفع غلاف جديد",
       "UNAUTHORIZED": "غير مسموح لك بتغيير غلاف الكتاب",
