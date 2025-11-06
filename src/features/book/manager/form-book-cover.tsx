@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUploadFile } from 'better-upload/client';
+import { Upload } from 'lucide-react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+
+import { Button } from '@/components/ui/button';
 
 import { BookCover } from '@/features/book/book-cover';
 import { FormFieldsBook } from '@/features/book/schema';
@@ -72,6 +75,11 @@ export const FormBookCover = () => {
             coverId: uploadedFile?.objectKey ?? coverId,
           }}
         />
+
+        <span className="absolute top-1/2 left-1/2 z-10 flex origin-center -translate-1/2 cursor-pointer items-center gap-2 rounded bg-white px-2 py-1 text-black">
+          <Upload size="16" />
+          {t('book:manager.uploadCover')}
+        </span>
       </label>
     </div>
   );
