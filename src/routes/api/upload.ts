@@ -6,6 +6,7 @@ import {
   type Router,
 } from 'better-upload/server';
 
+import i18n from '@/lib/i18n';
 import { s3client } from '@/lib/s3';
 
 import { envServer } from '@/env/server';
@@ -21,7 +22,9 @@ const router: Router = {
       onBeforeUpload: async ({ req, file }) => {
         const session = await auth.api.getSession({ headers: req.headers });
         if (!session?.user) {
-          throw new RejectUpload('manager.uploadError.NOT_AUTHENTICATED');
+          throw new RejectUpload(
+            i18n.t('book:manager.uploadErrors.NOT_AUTHENTICATED')
+          );
         }
 
         // Only admins should be able to update book covers
@@ -36,7 +39,9 @@ const router: Router = {
         });
 
         if (!canUpdateBookCover.success) {
-          throw new RejectUpload('manager.uploadError.UNAUTHORIZED');
+          throw new RejectUpload(
+            i18n.t('book:manager.uploadErrors.UNAUTHORIZED')
+          );
         }
 
         // normalize file extension from detected mimetype
