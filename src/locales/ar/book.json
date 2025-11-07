@@ -45,16 +45,25 @@
     "form": {
       "titleAlreadyExist": "يوجد بالفعل كتاب لهذا المؤلف"
     },
+    "modalNew": {
+      "title": "كتاب جديد",
+      "createButton": {
+        "label": "إنشاء"
+      },
+      "manualButton": {
+        "label": "إنشاء من اليد"
+      },
+      "cancelButton": {
+        "label": "إلغاء"
+      },
+      "generationError": "فشل في إنشاء كتاب"
+    },
     "new": {
       "title": "كتاب جديد",
       "createButton": {
         "label": "إنشاء"
       },
-      "aiGenerateButton": {
-        "label": "توصية"
-      },
-      "createError": "فشل في إنشاء كتاب",
-      "autoGenerateError": "فشل في إنشاء كتاب"
+      "createError": "فشل في إنشاء كتاب"
     },
     "update": {
       "title": "تحديث الكتاب",

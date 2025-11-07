@@ -45,16 +45,25 @@
     "form": {
       "titleAlreadyExist": "A book by this author already exist"
     },
+    "modalNew": {
+      "title": "New Book",
+      "createButton": {
+        "label": "Create"
+      },
+      "manualButton": {
+        "label": "Manual creation"
+      },
+      "cancelButton": {
+        "label": "Cancel"
+      },
+      "generationError": "Failed to generate a book"
+    },
     "new": {
       "title": "New Book",
       "createButton": {
         "label": "Create"
       },
-      "aiGenerateButton": {
-        "label": "Suggestion"
-      },
-      "createError": "Failed to create a book",
-      "autoGenerateError": "Failed to generate a book"
+      "createError": "Failed to create a book"
     },
     "update": {
       "title": "Update Book",
