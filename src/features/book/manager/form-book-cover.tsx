@@ -7,8 +7,6 @@ import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { Button } from '@/components/ui/button';
-
 import { BookCover } from '@/features/book/book-cover';
 import { FormFieldsBook } from '@/features/book/schema';
 
