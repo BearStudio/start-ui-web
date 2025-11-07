@@ -240,11 +240,7 @@ export default {
         .extend({ genreId: z.string().nullish() })
         .optional()
     )
-    .output(
-      zBook()
-        .pick({ title: true, author: true, publisher: true })
-        .extend({ genreId: z.string() })
-    )
+    .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Auto generate books');
 
@@ -256,7 +252,7 @@ export default {
         input?.author || input?.title || input?.genreId || input?.publisher;
 
       const response = await generateObject({
-        model: openai('gpt-5-nano'),
+        model: openai('gpt-5-mini'),
         schemaName: 'book',
         schemaDescription: 'A real life book data',
         schema: zBook()
@@ -277,6 +273,13 @@ export default {
       context.logger.info('Response from OpenAI');
       context.logger.info({ response: response.object });
 
-      return response.object;
+      return context.db.book.create({
+        data: {
+          title: response.object.title,
+          author: response.object.author,
+          genreId: response.object.genreId,
+          publisher: response.object.publisher,
+        },
+      });
     }),
 };

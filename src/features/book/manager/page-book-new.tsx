@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
-import { LucideSparkles } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -17,7 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
-import { zFormFieldsBook } from '@/features/book/schema';
+import { Book, zFormFieldsBook } from '@/features/book/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -25,34 +24,23 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageBookNew = () => {
+export const PageBookNew = (props: {
+  search?: Partial<Pick<Book, 'title'>>;
+}) => {
   const router = useRouter();
   const { t } = useTranslation(['book']);
+
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
-      title: '',
+      title: props.search?.title ?? '',
       author: '',
       genreId: '',
       publisher: '',
     },
   });
-
-  const bookAutoGenerate = useMutation(
-    orpc.book.autoGenerate.mutationOptions({
-      onSuccess: async (data) => {
-        form.setValue('title', data.title);
-        form.setValue('author', data.author);
-        form.setValue('genreId', data.genreId);
-        form.setValue('publisher', data.publisher);
-      },
-      onError: () => {
-        toast.error(t('book:manager.new.autoGenerateError'));
-      },
-    })
-  );
 
   const bookCreate = useMutation(
     orpc.book.create.mutationOptions({
@@ -101,22 +89,6 @@ export const PageBookNew = () => {
             startActions={<BackButton />}
             endActions={
               <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  loading={bookAutoGenerate.isPending}
-                  onClick={() =>
-                    bookAutoGenerate.mutate({
-                      author: form.getValues('author'),
-                      title: form.getValues('title'),
-                      genreId: form.getValues('genreId'),
-                      publisher: form.getValues('publisher'),
-                    })
-                  }
-                  variant="secondary"
-                >
-                  <LucideSparkles />
-                  {t('book:manager.new.aiGenerateButton.label')}
-                </Button>
                 <Button
                   size="sm"
                   type="submit"

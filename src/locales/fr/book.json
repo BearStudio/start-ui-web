@@ -45,16 +45,25 @@
     "form": {
       "titleAlreadyExist": "Un livre existe déjà pour cet auteur"
     },
+    "modalNew": {
+      "title": "Nouveau livre",
+      "createButton": {
+        "label": "Créer"
+      },
+      "manualButton": {
+        "label": "Création manuelle"
+      },
+      "cancelButton": {
+        "label": "Annuler"
+      },
+      "generationError": "Échec de la génération du livre"
+    },
     "new": {
       "title": "Nouveau livre",
       "createButton": {
         "label": "Créer"
       },
-      "aiGenerateButton": {
-        "label": "Suggestion"
-      },
-      "createError": "Échec de la création du livre",
-      "autoGenerateError": "Échec de la génération du livre"
+      "createError": "Échec de la création du livre"
     },
     "update": {
       "title": "Mettre à jour le livre",

@@ -45,16 +45,25 @@
     "form": {
       "titleAlreadyExist": "Tayari kuna kitabu cha mwandishi huyu"
     },
+    "modalNew": {
+      "title": "Kitabu Kipya",
+      "createButton": {
+        "label": "Unda"
+      },
+      "manualButton": {
+        "label": "Unda Kwa Kituo"
+      },
+      "cancelButton": {
+        "label": "Leta"
+      },
+      "generationError": "Imeshindikana kuunda kitabu"
+    },
     "new": {
       "title": "Kitabu Kipya",
       "createButton": {
         "label": "Unda"
       },
-      "aiGenerateButton": {
-        "label": "Kushiriki"
-      },
-      "createError": "Imeshindikana kuunda kitabu",
-      "autoGenerateError": "Imeshindikana kuunda kitabu"
+      "createError": "Imeshindikana kuunda kitabu"
     },
     "update": {
       "title": "Sasisha Kitabu",

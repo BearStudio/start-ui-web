@@ -22,6 +22,7 @@ import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
 import { BookCover } from '@/features/book/book-cover';
+import { DialogNewBook } from '@/features/book/manager/dialog-new-book';
 import {
   PageLayout,
   PageLayoutContent,
@@ -77,16 +78,15 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         endActions={
-          <ResponsiveIconButton
-            asChild
-            label={t('book:manager.new.title')}
-            variant="secondary"
-            size="sm"
-          >
-            <Link to="/manager/books/new">
+          <DialogNewBook>
+            <ResponsiveIconButton
+              label={t('book:manager.new.title')}
+              variant="secondary"
+              size="sm"
+            >
               <PlusIcon />
-            </Link>
-          </ResponsiveIconButton>
+            </ResponsiveIconButton>
+          </DialogNewBook>
         }
       >
         <PageLayoutTopBarTitle>
