@@ -7,7 +7,7 @@ import {
   FieldPath,
   FieldValues,
   get,
-  useFormContext,
+  useFormState,
 } from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -43,9 +43,7 @@ export const FormFieldError = <
     TFieldValues,
     TName
   > | null>(FormFieldControllerContext as ExplicitAny);
-  const {
-    formState: { errors },
-  } = useFormContext<TFieldValues, TName>();
+  const { errors } = useFormState<TFieldValues>();
   const control = 'control' in props ? props.control : controllerCtx?.control;
   const name = 'name' in props ? props.name : controllerCtx?.name;
 
