@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react-vite';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
 import { useTheme } from 'next-themes';
-import { useEffect } from 'react';
+import { StrictMode, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StoryContext } from 'storybook/internal/csf';
@@ -86,12 +86,14 @@ const preview: Preview = {
       const isDarkMode = useDarkMode();
       return (
         <Providers>
-          <DocumentationWrapper isDarkMode={isDarkMode} context={context}>
-            {/* Calling as a function to avoid errors. Learn more at:
-             * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-             */}
-            {story(context)}
-          </DocumentationWrapper>
+          <StrictMode>
+            <DocumentationWrapper isDarkMode={isDarkMode} context={context}>
+              {/* Calling as a function to avoid errors. Learn more at:
+               * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+               */}
+              {story(context)}
+            </DocumentationWrapper>
+          </StrictMode>
         </Providers>
       );
     },
