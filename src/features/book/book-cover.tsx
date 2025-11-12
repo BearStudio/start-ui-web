@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { match, P } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -12,25 +11,24 @@ export const BookCover = (props: {
   className?: string;
 }) => {
   const { t } = useTranslation(['book']);
-  console.log(props.book);
-  const style = match(props.book.coverId || null)
-    .with(P.nullish, () => ({
-      backgroundColor: props.book.genre?.color ?? '#333',
-    }))
-    .with(P._, (coverId) => ({
-      backgroundImage: `url(${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${coverId})`,
-    }))
-    .exhaustive();
 
   return (
     <div
       className={cn(
-        '@container relative flex aspect-[2/3] flex-col justify-between overflow-hidden rounded-sm bg-neutral-800 bg-cover bg-center p-[10%] pl-[16%] text-white shadow-2xl',
+        '@container relative flex aspect-[2/3] flex-col justify-between overflow-hidden rounded-sm bg-neutral-800 p-[10%] pl-[16%] text-white shadow-2xl',
         props.variant === 'tiny' && 'w-8 rounded-xs',
         props.className
       )}
-      style={style}
+      style={{
+        backgroundColor: props.book.genre?.color ?? '#333',
+      }}
     >
+      {!!props.book.coverId && (
+        <img
+          className="absolute inset-0 h-full w-full object-cover mix-blend-overlay"
+          src={`${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${props.book.coverId}`}
+        />
+      )}
       <div className="absolute inset-y-0 left-0 w-[5%] bg-gradient-to-r from-black/0 to-black/10 bg-blend-screen" />
       <div className="absolute inset-y-0 left-[5%] w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />
       <div className="absolute inset-y-0 left-[7%] w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />

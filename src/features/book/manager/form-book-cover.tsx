@@ -1,11 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUploadFile } from 'better-upload/client';
-import { Upload } from 'lucide-react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+
+import {
+  FormField,
+  FormFieldController,
+  FormFieldError,
+} from '@/components/form';
+import { UploadButton } from '@/components/ui/upload-button';
 
 import { BookCover } from '@/features/book/book-cover';
 import { FormFieldsBook } from '@/features/book/schema';
@@ -33,52 +38,62 @@ export const FormBookCover = () => {
     control: form.control,
   });
 
-  const { upload, uploadedFile } = useUploadFile({
+  const { uploadedFile, control } = useUploadFile({
     route: 'bookCover',
     onUploadComplete: ({ file }) => {
+      form.clearErrors('coverId');
       form.setValue('coverId', file.objectKey);
     },
     onError: (error) => {
       if (error.type === 'rejected') {
         // In this specific case, error should be a translated message
         // because rejected are custom errors thrown by the developper
-        toast.error(error.message);
+        form.setError('coverId', {
+          type: 'custom',
+          message: error.message,
+        });
       } else {
-        toast.error(t(`book:manager.uploadErrors.${error.type}`));
+        form.setError('coverId', {
+          type: 'custom',
+          message: t(`book:manager.uploadErrors.${error.type}`),
+        });
       }
     },
   });
 
   return (
-    <div className="relative">
-      <label htmlFor="coverId">
-        <input
-          className="hidden"
-          id="coverId"
-          type="file"
-          name="coverId"
-          onChange={(e) => {
-            if (e.target.files?.[0]) {
-              upload(e.target.files[0]);
-            }
-          }}
-        />
-        <input type="hidden" {...form.register('coverId')} />
-        <BookCover
-          className="hover:cursor-pointer"
-          book={{
-            title,
-            author,
-            genre,
-            coverId: uploadedFile?.objectKey ?? coverId,
-          }}
-        />
+    <FormField>
+      <FormFieldController
+        control={form.control}
+        type="custom"
+        name="coverId"
+        render={() => {
+          return (
+            <>
+              <div className="relative mb-2">
+                <span className="sr-only">{t('book:manager.uploadCover')}</span>
+                <BookCover
+                  className="opacity-60"
+                  book={{
+                    title,
+                    author,
+                    genre,
+                    coverId: uploadedFile?.objectKey ?? coverId,
+                  }}
+                />
 
-        <span className="absolute top-1/2 left-1/2 z-10 flex origin-center -translate-1/2 cursor-pointer items-center gap-2 rounded bg-white px-2 py-1 text-black">
-          <Upload size="16" />
-          {t('book:manager.uploadCover')}
-        </span>
-      </label>
-    </div>
+                <UploadButton
+                  className="absolute top-1/2 left-1/2 -translate-1/2 bg-black/50 text-white"
+                  variant="ghost"
+                  control={control}
+                  disabled={form.formState.isSubmitting}
+                />
+              </div>
+              <FormFieldError />
+            </>
+          );
+        }}
+      />
+    </FormField>
   );
 };
