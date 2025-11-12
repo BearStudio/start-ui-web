@@ -17,9 +17,11 @@ type CheckboxOption = Omit<CheckboxProps, 'children' | 'value' | 'render'> & {
 export type FieldCheckboxGroupProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'checkbox-group';
     options: Array<CheckboxOption>;
@@ -30,8 +32,9 @@ export type FieldCheckboxGroupProps<
 export const FieldCheckboxGroup = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldCheckboxGroupProps<TFieldValues, TName>
+  props: FieldCheckboxGroupProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

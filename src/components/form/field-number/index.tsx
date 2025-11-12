@@ -13,9 +13,11 @@ import { FormFieldError } from '../form-field-error';
 export type FieldNumberProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'number';
     containerProps?: ComponentProps<'div'>;
@@ -26,8 +28,9 @@ export type FieldNumberProps<
 export const FieldNumber = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldNumberProps<TFieldValues, TName>
+  props: FieldNumberProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

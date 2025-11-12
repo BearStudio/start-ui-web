@@ -11,9 +11,11 @@ import { DatePicker } from '@/components/ui/date-picker';
 export type FieldDateProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'date';
     containerProps?: ComponentProps<'div'>;
@@ -23,8 +25,9 @@ export type FieldDateProps<
 export const FieldDate = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldDateProps<TFieldValues, TName>
+  props: FieldDateProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

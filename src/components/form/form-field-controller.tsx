@@ -28,20 +28,27 @@ type FormFieldSize = 'sm' | 'default' | 'lg';
 type FieldCustomProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = {
   type: 'custom';
 } & Pick<
-  ControllerProps<TFieldValues, TName>,
+  ControllerProps<TFieldValues, TName, TTransformedValues>,
   'defaultValue' | 'name' | 'shouldUnregister' | 'disabled' | 'render'
 > &
-  Required<Pick<ControllerProps<TFieldValues, TName>, 'control'>>;
+  Required<
+    Pick<ControllerProps<TFieldValues, TName, TTransformedValues>, 'control'>
+  >;
 
 type CustomProps = object;
 export type FieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
   TProps extends CustomProps = CustomProps,
-> = Omit<FieldCustomProps<TFieldValues, TName>, 'render' | 'type'> & {
+> = Omit<
+  FieldCustomProps<TFieldValues, TName, TTransformedValues>,
+  'render' | 'type'
+> & {
   size?: FormFieldSize;
   displayError?: boolean;
 } & Omit<TProps, 'value' | 'ref' | 'id' | 'aria-invalid' | 'aria-describedby'>;
@@ -49,23 +56,25 @@ export type FieldProps<
 export type FormFieldControllerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > =
-  | FieldCustomProps<TFieldValues, TName>
+  | FieldCustomProps<TFieldValues, TName, TTransformedValues>
   // -- ADD NEW FIELD PROPS TYPE HERE --
-  | FieldNumberProps<TFieldValues, TName>
-  | FieldSelectProps<TFieldValues, TName>
-  | FieldDateProps<TFieldValues, TName>
-  | FieldTextProps<TFieldValues, TName>
-  | FieldOtpProps<TFieldValues, TName>
-  | FieldRadioGroupProps<TFieldValues, TName>
-  | FieldCheckboxProps<TFieldValues, TName>
-  | FieldCheckboxGroupProps<TFieldValues, TName>;
+  | FieldNumberProps<TFieldValues, TName, TTransformedValues>
+  | FieldSelectProps<TFieldValues, TName, TTransformedValues>
+  | FieldDateProps<TFieldValues, TName, TTransformedValues>
+  | FieldTextProps<TFieldValues, TName, TTransformedValues>
+  | FieldOtpProps<TFieldValues, TName, TTransformedValues>
+  | FieldRadioGroupProps<TFieldValues, TName, TTransformedValues>
+  | FieldCheckboxProps<TFieldValues, TName, TTransformedValues>
+  | FieldCheckboxGroupProps<TFieldValues, TName, TTransformedValues>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  _props: FormFieldControllerProps<TFieldValues, TName>
+  _props: FormFieldControllerProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const { size } = useFormField();
 
@@ -110,15 +119,18 @@ export const FormFieldController = <
 
   const displayError = 'displayError' in props ? props.displayError : undefined;
 
-  const contextValue: FormFieldControllerContextValue<TFieldValues, TName> =
-    useMemo(
-      () => ({
-        name: props.name,
-        control: props.control,
-        displayError: displayError,
-      }),
-      [props.name, props.control, displayError]
-    );
+  const contextValue: FormFieldControllerContextValue<
+    TFieldValues,
+    TName,
+    TTransformedValues
+  > = useMemo(
+    () => ({
+      name: props.name,
+      control: props.control,
+      displayError: displayError,
+    }),
+    [props.name, props.control, displayError]
+  );
 
   return (
     <FormFieldControllerContext value={contextValue as ExplicitAny}>
@@ -130,7 +142,13 @@ export const FormFieldController = <
 export type FormFieldControllerContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>> & {
+  TTransformedValues = TFieldValues,
+> = Required<
+  Pick<
+    ControllerProps<TFieldValues, TName, TTransformedValues>,
+    'control' | 'name'
+  >
+> & {
   displayError?: boolean;
 };
 

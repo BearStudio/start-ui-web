@@ -15,9 +15,11 @@ type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
 export type FieldRadioGroupProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'radio-group';
     options: Array<RadioOption>;
@@ -29,8 +31,9 @@ export type FieldRadioGroupProps<
 export const FieldRadioGroup = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldRadioGroupProps<TFieldValues, TName>
+  props: FieldRadioGroupProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

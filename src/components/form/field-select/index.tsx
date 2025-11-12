@@ -11,9 +11,11 @@ import { Select } from '@/components/ui/select';
 export type FieldSelectProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'select';
     containerProps?: ComponentProps<'div'>;
@@ -23,8 +25,9 @@ export type FieldSelectProps<
 export const FieldSelect = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldSelectProps<TFieldValues, TName>
+  props: FieldSelectProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

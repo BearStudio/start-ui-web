@@ -16,9 +16,11 @@ import { FormFieldError } from '../form-field-error';
 export type FieldOtpProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'otp';
     autoSubmit?: boolean;
@@ -29,8 +31,9 @@ export type FieldOtpProps<
 export const FieldOtp = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldOtpProps<TFieldValues, TName>
+  props: FieldOtpProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,
