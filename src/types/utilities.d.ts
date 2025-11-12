@@ -35,3 +35,8 @@ type StrictUnion<T> = StrictUnionHelper<T, T>;
 type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
+
+type WithRequired<TTarget, TKey extends keyof TTarget> = TTarget & {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  [_ in TKey]: {};
+};

@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 type OptionBase = { id: string; label: string; disabled?: boolean };
-type TValueBase = OptionBase | null;
+export type TValueBase = OptionBase | null;
 
 type InputProps = ComponentProps<typeof Input>;
 type InputPropsRoot = Pick<
