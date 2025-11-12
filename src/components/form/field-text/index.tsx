@@ -12,9 +12,11 @@ import { FormFieldError } from '../form-field-error';
 export type FieldTextProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'text' | 'email' | 'tel';
     containerProps?: ComponentProps<'div'>;
@@ -24,8 +26,9 @@ export type FieldTextProps<
 export const FieldText = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldTextProps<TFieldValues, TName>
+  props: FieldTextProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

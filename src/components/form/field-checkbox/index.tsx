@@ -11,9 +11,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 export type FieldCheckboxProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 > = FieldProps<
   TFieldValues,
   TName,
+  TTransformedValues,
   {
     type: 'checkbox';
     containerProps?: ComponentProps<'div'>;
@@ -23,8 +25,9 @@ export type FieldCheckboxProps<
 export const FieldCheckbox = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >(
-  props: FieldCheckboxProps<TFieldValues, TName>
+  props: FieldCheckboxProps<TFieldValues, TName, TTransformedValues>
 ) => {
   const {
     name,

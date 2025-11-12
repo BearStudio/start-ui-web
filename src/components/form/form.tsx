@@ -7,13 +7,17 @@ import {
 
 import { cn } from '@/lib/tailwind/utils';
 
-type FormProps<TFieldValues extends FieldValues> = StrictUnion<
-  | (FormProviderProps<TFieldValues> & {
+type FormProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TContext = ExplicitAny,
+  TTransformedValues = TFieldValues,
+> = StrictUnion<
+  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
       noHtmlForm?: false;
-      onSubmit?: SubmitHandler<TFieldValues>;
+      onSubmit?: SubmitHandler<TTransformedValues>;
       className?: string;
     })
-  | (FormProviderProps<TFieldValues> & {
+  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
       noHtmlForm: true;
     })
 >;
