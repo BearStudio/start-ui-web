@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -190,6 +190,7 @@ function FieldError({
 }: React.ComponentProps<'div'> & {
   errors?: Array<{ message?: string } | undefined>;
 }) {
+  const id = useId();
   const content = useMemo(() => {
     if (children) {
       return children;
@@ -211,11 +212,14 @@ function FieldError({
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
           (error, index) =>
-            error?.message && <li key={index}>{error.message}</li>
+            error?.message && (
+              // eslint-disable-next-line @eslint-react/no-array-index-key
+              <li key={`${id}-error-${index}`}>{error.message}</li>
+            )
         )}
       </ul>
     );
-  }, [children, errors]);
+  }, [children, errors, id]);
 
   if (!content) {
     return null;
