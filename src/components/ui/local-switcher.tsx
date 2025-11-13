@@ -39,14 +39,14 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
           >
             <CheckIcon
               className={cn(
-                'mt-0.5 size-4 self-start',
+                'mt-0.5 size-4 self-start text-current',
                 i18n.language === language.key ? 'opacity-100' : 'opacity-0'
               )}
             />
             <span className="flex flex-col">
               <span>{t(`common:languages.values.${language.key}`)}</span>
               {language.key !== i18n.language && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs opacity-60">
                   {t(`common:languages.values.${language.key}`, {
                     lng: language.key,
                   })}
