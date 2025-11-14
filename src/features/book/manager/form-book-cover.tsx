@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { join } from 'remeda';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -12,7 +13,10 @@ import {
 import { UploadButton } from '@/components/ui/upload-button';
 
 import { BookCover } from '@/features/book/book-cover';
-import { FormFieldsBook } from '@/features/book/schema';
+import {
+  bookCoverAcceptedFileTypes,
+  FormFieldsBook,
+} from '@/features/book/schema';
 
 export const FormBookCover = () => {
   const { t } = useTranslation(['book']);
@@ -61,7 +65,7 @@ export const FormBookCover = () => {
                 <UploadButton
                   uploadRoute="bookCover"
                   inputProps={{
-                    accept: 'image/png, image/jpeg, image/webp, image/gif',
+                    accept: join(bookCoverAcceptedFileTypes, ','),
                   }}
                   className="absolute top-1/2 left-1/2 -translate-1/2 bg-black/50 text-white"
                   variant="ghost"
