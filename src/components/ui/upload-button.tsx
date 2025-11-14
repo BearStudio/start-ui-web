@@ -1,12 +1,15 @@
 import {
+  type ClientUploadError,
   type FileUploadInfo,
-  type UploadHookControl,
-} from 'better-upload/client';
+  uploadFile,
+  type UploadStatus,
+} from '@better-upload/client';
+import { useIsMutating, useMutation } from '@tanstack/react-query';
 import { UploadIcon } from 'lucide-react';
 import {
   type ChangeEvent,
   type ComponentProps,
-  useEffect,
+  type ReactElement,
   useId,
   useRef,
 } from 'react';
@@ -15,67 +18,87 @@ import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
 
+import type { UploadRoutes } from '@/routes/api/upload';
+
 export type UploadButtonProps = {
-  control: UploadHookControl<false>;
+  uploadRoute: UploadRoutes;
   /**
    * Called only if the file was uploaded successfully.
    */
-  onChange?: (file: FileUploadInfo<'complete'>) => void;
+  onUploadSuccess?: (file: FileUploadInfo<'complete'>) => void;
+  onUploadStateChange?: <T extends UploadStatus>(
+    file: FileUploadInfo<T>
+  ) => void;
+  onError?: (error: Error | ClientUploadError) => void;
   inputProps?: ComponentProps<'input'>;
+  icon?: ReactElement;
 } & Omit<ComponentProps<typeof Button>, 'onChange'>;
 
-/**
- * Upload button that should be used with useUploadFile() better-upload hook.
- */
+export const useIsUploadingFiles = (uploadRoute: UploadRoutes) =>
+  useIsMutating({
+    mutationKey: ['fileUpload', uploadRoute],
+  }) > 0;
+
 export const UploadButton = ({
   children,
   inputProps,
-  control,
-  onChange,
+  onUploadStateChange,
+  onUploadSuccess,
+  onError,
   disabled,
+  icon,
+  uploadRoute,
   ...rest
 }: UploadButtonProps) => {
   const innerId = useId();
 
+  const uploadMutation = useMutation({
+    mutationKey: ['fileUpload', uploadRoute],
+    mutationFn: async (file: File) => {
+      return uploadFile({
+        file,
+        route: uploadRoute,
+        onFileStateChange: ({ file }) => {
+          onUploadStateChange?.(file);
+        },
+      });
+    },
+    onSuccess: ({ file }) => {
+      onUploadSuccess?.(file);
+    },
+    onError: (error) => {
+      onError?.(error);
+    },
+  });
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      control.upload(file);
+      uploadMutation.mutate(file);
     }
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!control.isSuccess || !control.uploadedFile) return;
-    // if success, it means the file was successfully uploaded
-    onChange?.(control.uploadedFile);
-  }, [control.isSuccess, control.uploadedFile, onChange]);
-
   return (
     <>
       <Button
         size={!children ? 'icon' : undefined}
-        loading={control.isPending}
-        disabled={control.isPending || disabled}
-        asChild
+        loading={uploadMutation.isPending}
+        disabled={uploadMutation.isPending || disabled}
+        onClick={() => inputRef.current?.click()}
+        onKeyDown={(keyboardEvent) => {
+          // Skip if the pressed key is neither enter or space
+          if (!['Enter', ' '].includes(keyboardEvent.key)) return;
+
+          // Prevent space key to trigger page scroll (and Enter to bubble)
+          keyboardEvent.preventDefault();
+
+          inputRef.current?.click();
+        }}
         {...rest}
       >
-        <label
-          tabIndex={0}
-          htmlFor={innerId}
-          onKeyDown={(keyboardEvent) => {
-            // Skip if the pressed key is neither enter or space
-            if (!['Enter', ' '].includes(keyboardEvent.key)) return;
-
-            // Prevent space key to trigger page scroll (and Enter to bubble)
-            keyboardEvent.preventDefault();
-
-            inputRef.current?.click();
-          }}
-        >
-          {!children ? <UploadIcon /> : children}
-        </label>
+        {!children ? (icon ?? <UploadIcon />) : children}
       </Button>
       <input
         {...inputProps}
@@ -83,7 +106,7 @@ export const UploadButton = ({
         ref={inputRef}
         className={cn('hidden', inputProps?.className)}
         type="file"
-        disabled={control.isPending || disabled}
+        disabled={uploadMutation.isPending || disabled}
         onChange={(onChangeEvent) => {
           handleFileChange(onChangeEvent);
           inputProps?.onChange?.(onChangeEvent);

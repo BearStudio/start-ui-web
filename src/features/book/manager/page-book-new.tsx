@@ -13,6 +13,7 @@ import { Form } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useIsUploadingFiles } from '@/components/ui/upload-button';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
@@ -36,8 +37,11 @@ export const PageBookNew = () => {
       author: '',
       genreId: '',
       publisher: '',
+      coverId: '',
     },
   });
+
+  const isUploadingFiles = useIsUploadingFiles('bookCover');
 
   const bookCreate = useMutation(
     orpc.book.create.mutationOptions({
@@ -90,6 +94,7 @@ export const PageBookNew = () => {
                 type="submit"
                 className="min-w-20"
                 loading={bookCreate.isPending}
+                disabled={isUploadingFiles}
               >
                 {t('book:manager.new.createButton.label')}
               </Button>

@@ -135,6 +135,7 @@ export default {
             author: input.author,
             genreId: input.genreId ?? undefined,
             publisher: input.publisher,
+            coverId: input.coverId,
           },
         });
       } catch (error: unknown) {
