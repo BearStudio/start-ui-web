@@ -24,3 +24,10 @@ export const zFormFieldsBook = () =>
   zBook()
     .pick({ title: true, author: true, publisher: true, coverId: true })
     .extend({ genreId: zu.fieldText.required() });
+
+export const bookCoverAcceptedFileTypes = [
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+];
