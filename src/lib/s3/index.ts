@@ -1,13 +1,12 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { minio } from '@better-upload/server/clients';
 
 import { envServer } from '@/env/server';
 
-export const s3client = new S3Client({
+// cf. https://better-upload.com/docs/helpers-server#s3-clients to
+// see all available clients.
+export const uploadClient = minio({
   endpoint: envServer.S3_ENDPOINT,
-  forcePathStyle: true,
-  credentials: {
-    accessKeyId: envServer.S3_ACCESS_KEY_ID,
-    secretAccessKey: envServer.S3_SECRET_ACCESS_KEY,
-  },
+  accessKeyId: envServer.S3_ACCESS_KEY_ID,
+  secretAccessKey: envServer.S3_SECRET_ACCESS_KEY,
   region: envServer.S3_REGION,
 });

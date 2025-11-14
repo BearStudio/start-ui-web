@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useUploadFile } from 'better-upload/client';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -31,35 +30,12 @@ export const FormBookCover = () => {
     name: 'author',
     control: form.control,
   });
-  const genre = genresQuery.data?.items.find((item) => item.id === genreId);
-
   const coverId = useWatch({
     name: 'coverId',
     control: form.control,
   });
 
-  const { uploadedFile, control } = useUploadFile({
-    route: 'bookCover',
-    onUploadComplete: ({ file }) => {
-      form.clearErrors('coverId');
-      form.setValue('coverId', file.objectKey);
-    },
-    onError: (error) => {
-      if (error.type === 'rejected') {
-        // In this specific case, error should be a translated message
-        // because rejected are custom errors thrown by the developper
-        form.setError('coverId', {
-          type: 'custom',
-          message: error.message,
-        });
-      } else {
-        form.setError('coverId', {
-          type: 'custom',
-          message: t(`book:manager.uploadErrors.${error.type}`),
-        });
-      }
-    },
-  });
+  const genre = genresQuery.data?.items.find((item) => item.id === genreId);
 
   return (
     <FormField>
@@ -67,7 +43,7 @@ export const FormBookCover = () => {
         control={form.control}
         type="custom"
         name="coverId"
-        render={() => {
+        render={({ field }) => {
           return (
             <>
               <div className="relative mb-2">
@@ -78,15 +54,20 @@ export const FormBookCover = () => {
                     title,
                     author,
                     genre,
-                    coverId: uploadedFile?.objectKey ?? coverId,
+                    coverId,
                   }}
                 />
 
                 <UploadButton
+                  uploadRoute="bookCover"
+                  inputProps={{
+                    accept: 'image/png, image/jpeg, image/webp, image/gif',
+                  }}
                   className="absolute top-1/2 left-1/2 -translate-1/2 bg-black/50 text-white"
                   variant="ghost"
-                  control={control}
-                  disabled={form.formState.isSubmitting}
+                  onUploadSuccess={(file) =>
+                    field.onChange(file.objectInfo.key)
+                  }
                 />
               </div>
               <FormFieldError />

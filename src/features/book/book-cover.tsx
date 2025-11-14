@@ -25,6 +25,7 @@ export const BookCover = (props: {
     >
       {!!props.book.coverId && (
         <img
+          alt=""
           className="absolute inset-0 h-full w-full object-cover mix-blend-overlay"
           src={`${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${props.book.coverId}`}
         />
