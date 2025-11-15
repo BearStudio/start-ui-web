@@ -6,7 +6,6 @@ on:
       - main
       - develop
       - staging
-      - ivan/restart # TODO remove me on final merge on main
   pull_request:
 
 jobs:
