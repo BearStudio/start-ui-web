@@ -68,7 +68,7 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
           >
             <CheckIcon
               className={cn(
-                'mt-0.5 size-4 self-start',
+                'mt-0.5 size-4 self-start text-current',
                 theme === item ? 'opacity-100' : 'opacity-0'
               )}
             />
