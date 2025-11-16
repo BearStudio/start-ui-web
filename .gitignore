@@ -57,6 +57,7 @@ src/server/db/generated
 /test-results/
 /playwright-report/
 /playwright/.cache/
+e2e/.auth
 
 certificates
 
