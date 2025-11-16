@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from 'e2e/utils';
 
 test.describe('App Rest API Schema', () => {
   test(`App API schema is building without error`, async ({ request }) => {

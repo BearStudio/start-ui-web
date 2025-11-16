@@ -32,18 +32,23 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // eslint-disable-next-line sonarjs/slow-regex
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: process.env.CI ? ['setup'] : [],
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      dependencies: process.env.CI ? ['setup'] : [],
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      dependencies: process.env.CI ? ['setup'] : [],
     },
   ],
 
