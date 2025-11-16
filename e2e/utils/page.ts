@@ -62,5 +62,5 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
 
   page.to = page.goto;
 
-  apply(page);
+  await apply(page);
 };

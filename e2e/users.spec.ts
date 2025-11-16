@@ -1,8 +1,10 @@
 import { expect, test } from 'e2e/utils';
+import { ADMIN_FILE, USER_FILE } from 'e2e/utils/constants';
 import { randomString } from 'remeda';
 
 test.describe('User management as user', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
+  test.use({ storageState: USER_FILE });
+
   test('Should not have access', async ({ page }) => {
     await page.to('/manager/users');
 
@@ -13,9 +15,7 @@ test.describe('User management as user', () => {
 });
 
 test.describe('User management as manager', () => {
-  test.use({
-    storageState: 'e2e/.auth/admin.json',
-  });
+  test.use({ storageState: ADMIN_FILE });
 
   test.beforeEach(async ({ page }) => {
     await page.to('/manager/users');
