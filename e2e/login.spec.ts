@@ -1,5 +1,4 @@
-import { expect } from '@playwright/test';
-import { test } from 'e2e/utils';
+import { expect, test } from 'e2e/utils';
 import { ADMIN_EMAIL, USER_EMAIL } from 'e2e/utils/constants';
 
 test.describe('Login flow', () => {

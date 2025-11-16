@@ -1,5 +1,4 @@
-import { expect } from '@playwright/test';
-import { test } from 'e2e/utils';
+import { expect, test } from 'e2e/utils';
 import { randomString } from 'remeda';
 
 test.describe('User management as user', () => {
