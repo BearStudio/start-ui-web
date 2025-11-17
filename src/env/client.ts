@@ -42,7 +42,13 @@ export const envClient = createEnv({
       .string()
       .optional()
       .transform((value) => value ?? (isDev ? 'gold' : 'plum')),
-    VITE_S3_BUCKET_PUBLIC_URL: z.url(),
+    VITE_S3_BUCKET_PUBLIC_URL: z
+      .url()
+      .optional()
+      .transform(
+        (value) =>
+          value ?? (isDev ? 'http://127.0.0.1:9000/default' : undefined)
+      ),
   },
   runtimeEnv: {
     ...envMetaOrProcess,
