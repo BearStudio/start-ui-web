@@ -43,6 +43,20 @@ export async function createBooks() {
 
   await Promise.all(
     Array.from({ length: Math.max(0, 100 - existingCount) }, async () => {
+      const author = faker.book.author();
+      const title = faker.book.title();
+
+      // Avoid @unique([title, author]) constraint failure
+      const book = await db.book.findFirst({
+        where: {
+          author,
+          title,
+        },
+      });
+      if (book) {
+        return;
+      }
+
       await db.book.create({
         data: {
           author: faker.book.author(),

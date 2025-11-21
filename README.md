@@ -101,10 +101,13 @@ If you want to use the same set of custom duotone icons that Start UI is already
 E2E tests are setup with Playwright.
 
 ```sh
-pnpm e2e     # Run tests in headless mode, this is the command executed in CI
-pnpm e2e:ui  # Open a UI which allow you to run specific tests and see test execution
+pnpm e2e        # Run tests in headless mode, this is the command executed in CI
+pnpm e2e:setup  # Setup context to be used across test for more efficient execution 
+pnpm e2e:ui     # Open a UI which allow you to run specific tests and see test execution
 ```
 
+> [!WARNING]
+> The generated e2e context files contain authentication logic. If you make changes to your local database instance, you should re-run `pnpm e2e:setup`. It will be run automatically in a CI context.
 ## Production
 
 ```bash
