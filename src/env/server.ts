@@ -33,6 +33,15 @@ export const envServer = createEnv({
       .enum(['true', 'false'])
       .prefault(isProd ? 'false' : 'true')
       .transform((value) => value === 'true'),
+    DOCKER_MINIO_API_PORT: z.string().default('9000'),
+    DOCKER_MINIO_UI_PORT: z.string().default('9001'),
+    DOCKER_MINIO_USERNAME: z.string(),
+    DOCKER_MINIO_PASSWORD: z.string(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
+    S3_BUCKET_NAME: z.string().default('default'),
+    S3_REGION: z.string().default('default'),
+    S3_ENDPOINT: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
