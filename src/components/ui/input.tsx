@@ -10,7 +10,7 @@ const inputVariants = cva(
     'selection:bg-primary selection:text-primary-foreground',
     '[&>input]:placeholder:text-muted-foreground',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
-    'has-[[aria-invalid]]:border-destructive has-[[aria-invalid]]:ring-destructive/20 dark:has-[[aria-invalid]]:ring-destructive/40',
+    'has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40',
     '[&>input]:disabled:opacity-50'
   ),
   {
