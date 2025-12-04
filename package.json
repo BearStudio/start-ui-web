@@ -30,6 +30,7 @@
     "test": "vitest --browser.headless",
     "test:ci": "vitest run",
     "test:ui": "vitest",
+    "e2e:setup": "dotenv -- cross-env playwright test --project=setup",
     "e2e": "dotenv -- cross-env playwright test",
     "e2e:ui": "dotenv -- cross-env playwright test --ui",
     "dk:init": "docker compose up -d",
