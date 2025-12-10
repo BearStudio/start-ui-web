@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
-import { aiProtectedProcedure, protectedProcedure } from '@/server/orpc';
+import { aiMiddleware, protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
 
@@ -220,11 +220,12 @@ export default {
       }
     }),
 
-  autoGenerate: aiProtectedProcedure({
+  autoGenerate: protectedProcedure({
     permission: {
       book: ['create'],
     },
   })
+    .use(aiMiddleware)
     .route({
       method: 'POST',
       path: '/books/auto-generate',
