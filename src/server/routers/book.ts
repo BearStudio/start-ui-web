@@ -240,7 +240,7 @@ export default {
         .extend({ genreId: z.string().nullish() })
         .optional()
     )
-    .output(zBook())
+    .output(zFormFieldsBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Auto generate books');
 
@@ -266,7 +266,7 @@ export default {
           prompt: [
             'Generate a new book with a title, author name, genre and publisher as JSON.',
             withSetValues
-              ? `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`
+              ? `The following values are set: ${JSON.stringify(input)}, Complete the missing ones, and fix syntax errors`
               : '',
           ].join('\n'),
         });
@@ -278,14 +278,7 @@ export default {
           throw new ORPCError('INTERNAL_SERVER_ERROR');
         }
 
-        return await context.db.book.create({
-          data: {
-            title: openAiObjectResponse.object.title,
-            author: openAiObjectResponse.object.author,
-            genreId: openAiObjectResponse.object.genreId,
-            publisher: openAiObjectResponse.object.publisher,
-          },
-        });
+        return openAiObjectResponse.object;
       } catch {
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
