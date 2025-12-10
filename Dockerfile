@@ -4,9 +4,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # install tools
-RUN npm install -g pnpm && \
-    apk add --no-cache git && \
-    git init
+RUN npm install -g pnpm
 
 # copy files needed for installing dependencies
 COPY package.json pnpm-lock.yaml ./
@@ -15,7 +13,8 @@ COPY run-jiti.js ./
 COPY src/features/build-info/script-to-generate-json.ts ./src/features/build-info/
 
 # install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm postinstall
 
 ARG VITE_BASE_URL
 ARG VITE_ENV_NAME
