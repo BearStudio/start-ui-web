@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ORPCError } from '@orpc/client';
 import { useMutation } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { PropsWithChildren } from 'react';
@@ -30,7 +31,7 @@ import {
 import { zFormFieldsBook } from '@/features/book/schema';
 
 export const DialogNewBook = (props: PropsWithChildren) => {
-  const { t } = useTranslation(['book']);
+  const { t } = useTranslation(['book', 'common']);
   const router = useRouter();
 
   const form = useForm({
@@ -45,8 +46,15 @@ export const DialogNewBook = (props: PropsWithChildren) => {
       onSuccess: (data) => {
         router.navigate({ to: '/manager/books/$id', params: { id: data.id } });
       },
-      onError: () => {
-        toast.error(t('book:manager.modalNew.generationError'));
+      onError: (error) => {
+        if (
+          error instanceof ORPCError &&
+          error.code === 'METHOD_NOT_SUPPORTED'
+        ) {
+          toast.error(t('common:errors.openAiMissingApiKey'));
+        } else {
+          toast.error(t('book:manager.modalNew.generationError'));
+        }
       },
     })
   );

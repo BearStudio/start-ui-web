@@ -24,6 +24,7 @@
     "update": "Mettre à jour"
   },
   "errors": {
-    "required": "Requis"
+    "required": "Requis",
+    "openAiMissingApiKey": "La clé API OpenAI est manquante"
   }
 }

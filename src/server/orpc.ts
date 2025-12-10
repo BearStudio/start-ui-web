@@ -1,10 +1,11 @@
-import { ORPCError, os } from '@orpc/server';
+import { Context, MiddlewareNextFn, ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
 import { envClient } from '@/env/client';
+import { envServer } from '@/env/server';
 import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
@@ -153,3 +154,26 @@ export const protectedProcedure = ({
       },
     });
   });
+
+const aiMiddleware = async ({
+  next,
+  context,
+}: {
+  next: MiddlewareNextFn<unknown>;
+  context: Context;
+}) => {
+  if (!envServer.OPENAI_API_KEY) {
+    context.logger.error('OpenAI API key is not set');
+
+    throw new ORPCError('METHOD_NOT_SUPPORTED', {
+      message: 'OPENAI_API_KEY_NOT_SET',
+    });
+  }
+  return await next();
+};
+
+export const aiProtectedProcedure = (
+  params: Parameters<typeof protectedProcedure>[0] & { permission: Permission }
+) => protectedProcedure(params).use(aiMiddleware);
+
+export const aiPublicProcedure = () => publicProcedure().use(aiMiddleware);
