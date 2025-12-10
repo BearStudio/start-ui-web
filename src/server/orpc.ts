@@ -155,7 +155,7 @@ export const protectedProcedure = ({
     });
   });
 
-const aiMiddleware = async ({
+export const aiMiddleware = async ({
   next,
   context,
 }: {
@@ -171,9 +171,3 @@ const aiMiddleware = async ({
   }
   return await next();
 };
-
-export const aiProtectedProcedure = (
-  params: Parameters<typeof protectedProcedure>[0] & { permission: Permission }
-) => protectedProcedure(params).use(aiMiddleware);
-
-export const aiPublicProcedure = () => publicProcedure().use(aiMiddleware);
