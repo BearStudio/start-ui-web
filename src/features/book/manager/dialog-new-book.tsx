@@ -44,7 +44,7 @@ export const DialogNewBook = (props: PropsWithChildren) => {
   const bookCreate = useMutation(
     orpc.book.autoGenerate.mutationOptions({
       onSuccess: (data) => {
-        router.navigate({ to: '/manager/books/$id', params: { id: data.id } });
+        router.navigate({ to: '/manager/books/new', search: data });
       },
       onError: (error) => {
         if (

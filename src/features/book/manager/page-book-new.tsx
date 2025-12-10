@@ -16,7 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
-import { Book, zFormFieldsBook } from '@/features/book/schema';
+import { FormFieldsBook, zFormFieldsBook } from '@/features/book/schema';
 import {
   PageLayout,
   PageLayoutContent,
@@ -24,9 +24,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-export const PageBookNew = (props: {
-  search?: Partial<Pick<Book, 'title'>>;
-}) => {
+export const PageBookNew = (props: { search?: Partial<FormFieldsBook> }) => {
   const router = useRouter();
   const { t } = useTranslation(['book']);
 
@@ -36,9 +34,9 @@ export const PageBookNew = (props: {
     resolver: zodResolver(zFormFieldsBook()),
     values: {
       title: props.search?.title ?? '',
-      author: '',
-      genreId: '',
-      publisher: '',
+      author: props.search?.author ?? '',
+      genreId: props.search?.genreId ?? '',
+      publisher: props.search?.publisher ?? '',
     },
   });
 
