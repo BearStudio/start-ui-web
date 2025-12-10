@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { envClient } from '@/env/client';
+import { envServer } from '@/env/server';
 import { publicProcedure } from '@/server/orpc';
 
 const tags = ['config'];
@@ -15,6 +16,7 @@ export default {
         emoji: z.string().optional(),
         isDemo: z.boolean(),
         isDev: z.boolean(),
+        isOpenAIEnabled: z.boolean(),
       })
     )
     .handler(() => {
@@ -24,6 +26,7 @@ export default {
         emoji: envClient.VITE_ENV_EMOJI,
         isDemo: envClient.VITE_IS_DEMO,
         isDev: import.meta.env.DEV,
+        isOpenAIEnabled: !!envServer.OPENAI_API_KEY,
       };
     }),
 };

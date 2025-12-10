@@ -25,6 +25,7 @@
     "update": "تحديث"
   },
   "errors": {
-    "required": "مطلوب"
+    "required": "مطلوب",
+    "openAiMissingApiKey": "مفقودة مفتاح API OpenAI"
   }
 }

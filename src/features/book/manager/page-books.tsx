@@ -1,7 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, SparklesIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
@@ -56,6 +56,8 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     })
   );
 
+  const configQuery = useQuery(orpc.config.env.queryOptions());
+
   const ui = getUiState((set) => {
     if (booksQuery.status === 'pending') return set('pending');
     if (booksQuery.status === 'error') return set('error');
@@ -78,15 +80,28 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         endActions={
-          <DialogNewBook>
+          configQuery.data?.isOpenAIEnabled ? (
+            <DialogNewBook>
+              <ResponsiveIconButton
+                label={t('book:manager.new.title')}
+                variant="secondary"
+                size="sm"
+              >
+                <SparklesIcon />
+              </ResponsiveIconButton>
+            </DialogNewBook>
+          ) : (
             <ResponsiveIconButton
+              asChild
               label={t('book:manager.new.title')}
               variant="secondary"
               size="sm"
             >
-              <PlusIcon />
+              <Link to="/manager/books/new">
+                <PlusIcon />
+              </Link>
             </ResponsiveIconButton>
-          </DialogNewBook>
+          )
         }
       >
         <PageLayoutTopBarTitle>

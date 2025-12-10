@@ -25,6 +25,7 @@
     "update": "Sasisha"
   },
   "errors": {
-    "required": "Inahitajika"
+    "required": "Inahitajika",
+    "openAiMissingApiKey": "Kichwa cha API OpenAI kinahitajika"
   }
 }

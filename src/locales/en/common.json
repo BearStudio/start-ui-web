@@ -25,6 +25,7 @@
     "update": "Update"
   },
   "errors": {
-    "required": "Required"
+    "required": "Required",
+    "openAiMissingApiKey": "OpenAI API key is missing"
   }
 }

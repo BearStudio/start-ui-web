@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
 import { Prisma } from '@/server/db/generated/client';
-import { protectedProcedure } from '@/server/orpc';
+import { aiProtectedProcedure, protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
 
@@ -220,7 +220,7 @@ export default {
       }
     }),
 
-  autoGenerate: protectedProcedure({
+  autoGenerate: aiProtectedProcedure({
     permission: {
       book: ['create'],
     },
@@ -228,7 +228,7 @@ export default {
     .route({
       method: 'POST',
       path: '/books/auto-generate',
-      tags,
+      tags: [...tags, 'ai'],
     })
     .input(
       z
@@ -251,35 +251,43 @@ export default {
       const withSetValues =
         input?.author || input?.title || input?.genreId || input?.publisher;
 
-      const response = await generateObject({
-        model: openai('gpt-5-mini'),
-        schemaName: 'book',
-        schemaDescription: 'A real life book data',
-        schema: zBook()
-          .pick({ title: true, author: true, publisher: true })
-          .extend({ genreId: z.string() }),
-        system: [
-          'You are a helpful assistant who generates real life existing books data in JSON.',
-          `This is the list of genres: ${JSON.stringify(genres)}`,
-        ].join('\n'),
-        prompt: [
-          'Generate a new book with a title, author name, genre and publisher as JSON.',
-          withSetValues
-            ? `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`
-            : '',
-        ].join('\n'),
-      });
+      try {
+        const openAiObjectResponse = await generateObject({
+          model: openai('gpt-5-mini'),
+          schemaName: 'book',
+          schemaDescription: 'A real life book data',
+          schema: zBook()
+            .pick({ title: true, author: true, publisher: true })
+            .extend({ genreId: z.string() }),
+          system: [
+            'You are a helpful assistant who generates real life existing books data in JSON.',
+            `This is the list of genres: ${JSON.stringify(genres)}`,
+          ].join('\n'),
+          prompt: [
+            'Generate a new book with a title, author name, genre and publisher as JSON.',
+            withSetValues
+              ? `The following values are set: ${JSON.stringify(input)}, Complete the missing ones`
+              : '',
+          ].join('\n'),
+        });
 
-      context.logger.info('Response from OpenAI');
-      context.logger.info({ response: response.object });
+        context.logger.info('Response from OpenAI');
+        context.logger.info({ response: openAiObjectResponse.object });
 
-      return context.db.book.create({
-        data: {
-          title: response.object.title,
-          author: response.object.author,
-          genreId: response.object.genreId,
-          publisher: response.object.publisher,
-        },
-      });
+        if (!openAiObjectResponse.object) {
+          throw new ORPCError('INTERNAL_SERVER_ERROR');
+        }
+
+        return await context.db.book.create({
+          data: {
+            title: openAiObjectResponse.object.title,
+            author: openAiObjectResponse.object.author,
+            genreId: openAiObjectResponse.object.genreId,
+            publisher: openAiObjectResponse.object.publisher,
+          },
+        });
+      } catch {
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
     }),
 };

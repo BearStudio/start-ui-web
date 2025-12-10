@@ -26,7 +26,7 @@ export const envServer = createEnv({
     EMAIL_SERVER: z.url(),
     EMAIL_FROM: z.string(),
 
-    OPENAI_API_KEY: z.string().optional(),
+    OPENAI_API_KEY: zOptionalWithReplaceMe(),
 
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
