@@ -15,6 +15,10 @@
     "onboardingStatus": {
       "notOnboarded": "Non onboardé",
       "onboardedAt": "Onboardé {{time}}"
+    },
+    "role": {
+      "label": "Rôle",
+      "cannotUpdateOwnRole": "Vous ne pouvez pas modifier votre propre rôle."
     }
   },
   "manager": {

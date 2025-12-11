@@ -15,6 +15,10 @@
     "onboardingStatus": {
       "notOnboarded": "Haijawekwa",
       "onboardedAt": "Imewekwa {{time}}"
+    },
+    "role": {
+      "label": "Jukumu",
+      "cannotUpdateOwnRole": "Huwezi kusasisha jukumu lako mwenyewe."
     }
   },
   "manager": {
