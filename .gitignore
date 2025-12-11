@@ -19,9 +19,6 @@
 # misc
 .DS_Store
 *.pem
-/.vscode/*
-!/.vscode/extensions.json
-!/.vscode/settings.example.json
 .idea/
 .eslintcache
 .db
@@ -65,3 +62,12 @@ certificates
 app.config.timestamp_*.js
 .tanstack
 .nitro
+
+# vscode
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.example.json
+
+# zed
+/.zed/*
+!/.zed/settings.example.json

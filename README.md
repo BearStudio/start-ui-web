@@ -28,11 +28,22 @@ pnpm create start-ui -t web myApp
 
 That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
 
+## Setup your IDE
+
+- VS Code
+```bash
+cp .vscode/settings.example.json .vscode/settings.json
+```
+
+- Zed
+```bash
+cp .zed/settings.example.json .zed/settings.json
+```
+
 ## Installation
 
 ```bash
 cp .env.example .env # Setup your env variables
-cp .vscode/settings.example.json .vscode/settings.json  # (Optionnal) Setup your VS Code
 pnpm install # Install dependencies
 pnpm dk:init # Init docker
 pnpm db:init # Init the db
