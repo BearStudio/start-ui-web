@@ -1,0 +1,17 @@
+{
+  "languages": {
+    "CSS": {
+      "language_servers": ["tailwindcss-language-server"]
+    }
+  },
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "classFunctions": ["cva", "cn"],
+        "experimental": {
+          "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"]
+        }
+      }
+    }
+  }
+}
