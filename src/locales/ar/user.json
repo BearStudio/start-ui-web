@@ -15,6 +15,10 @@
     "onboardingStatus": {
       "notOnboarded": "لم يتم الإعداد",
       "onboardedAt": "تم الإعداد في {{time}}"
+    },
+    "role": {
+      "label": "الدور",
+      "cannotUpdateOwnRole": "لا يمكنك تحديث دورك الخاص."
     }
   },
   "manager": {

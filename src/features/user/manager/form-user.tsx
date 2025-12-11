@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import {
   FormField,
@@ -12,6 +13,7 @@ import { rolesNames } from '@/features/auth/permissions';
 import { FormFieldsUser } from '@/features/user/schema';
 
 export const FormUser = (props: { userId?: string }) => {
+  const { t } = useTranslation(['user']);
   const session = authClient.useSession();
   const form = useFormContext<FormFieldsUser>();
   const isCurrentUser = props.userId === session.data?.user.id;
@@ -19,7 +21,7 @@ export const FormUser = (props: { userId?: string }) => {
   return (
     <div className="flex flex-col gap-4">
       <FormField>
-        <FormFieldLabel>Name</FormFieldLabel>
+        <FormFieldLabel>{t('user:common.name.label')}</FormFieldLabel>
         <FormFieldController
           type="text"
           control={form.control}
@@ -28,11 +30,11 @@ export const FormUser = (props: { userId?: string }) => {
         />
       </FormField>
       <FormField>
-        <FormFieldLabel>Email</FormFieldLabel>
+        <FormFieldLabel>{t('user:common.email.label')}</FormFieldLabel>
         <FormFieldController type="email" control={form.control} name="email" />
       </FormField>
       <FormField>
-        <FormFieldLabel>Role</FormFieldLabel>
+        <FormFieldLabel>{t('user:common.role.label')}</FormFieldLabel>
         <FormFieldController
           type="select"
           control={form.control}
@@ -44,7 +46,9 @@ export const FormUser = (props: { userId?: string }) => {
           }))}
         />
         {isCurrentUser && (
-          <FormFieldHelper>You can't update your own role.</FormFieldHelper>
+          <FormFieldHelper>
+            {t('user:common.role.cannotUpdateOwnRole')}
+          </FormFieldHelper>
         )}
       </FormField>
     </div>
