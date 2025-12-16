@@ -105,6 +105,9 @@ function RootComponent() {
       <Providers>
         <Outlet />
         <TanStackDevtools
+          config={{
+            openHotkey: [], // Disable keyboard shortcut
+          }}
           plugins={[
             { name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
             {
