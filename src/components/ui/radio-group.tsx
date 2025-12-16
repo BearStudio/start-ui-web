@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-const labelVariants = cva('flex items-start gap-2.5 text-primary', {
+const labelVariants = cva('flex items-start gap-2.5', {
   variants: {
     size: {
       default: 'text-sm',
@@ -20,7 +20,7 @@ const labelVariants = cva('flex items-start gap-2.5 text-primary', {
 });
 
 const radioVariants = cva(
-  'flex flex-none cursor-pointer items-center justify-center rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-muted-foreground disabled:opacity-20 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-indeterminate:border data-indeterminate:border-primary/20 data-unchecked:border data-unchecked:border-primary/20 aria-invalid:data-unchecked:border-destructive',
+  'flex flex-none cursor-pointer items-center justify-center rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-muted-foreground disabled:opacity-20 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-indeterminate:border data-unchecked:border aria-invalid:data-unchecked:border-destructive',
   {
     variants: {
       size: {
