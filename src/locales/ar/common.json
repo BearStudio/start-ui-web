@@ -19,6 +19,7 @@
   "actions": {
     "back": "رجوع",
     "cancel": "إلغاء",
+    "close": "إغلاق",
     "delete": "حذف",
     "edit": "تعديل",
     "update": "تحديث"

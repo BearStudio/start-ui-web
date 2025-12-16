@@ -1,66 +1,75 @@
 {
-  "pageErrorBoundary": {
-    "title": "خطأ",
-    "tryAgain": "حاول مرة أخرى",
-    "goBack": "رجوع",
-    "description": "حدث خطأ ما",
-    "goHome": "بيت"
-  },
   "datePickerButton": {
     "pickADate": "اختر موعدًا"
   },
   "pageError": {
     "403": {
-      "description": "ليس لديك حق الوصول إلى هذه الصفحة",
-      "title": "403"
+      "title": "غير مصرح",
+      "message": "ليس لديك حق الوصول إلى هذه الصفحة"
     },
     "404": {
-      "description": "لا يمكن العثور على هذه الصفحة",
-      "title": "404"
+      "title": "غير موجود",
+      "message": "لا يمكن العثور على هذه الصفحة"
     },
-    "500": {
-      "description": "حدث خطأ ما",
-      "title": "500"
+    "error-boundary": {
+      "title": "خطأ",
+      "message": "واجهنا خطأ غير متوقع"
+    },
+    "unknown-server-error": {
+      "title": "خطأ",
+      "message": "حدث خطأ غير متوقع في الخادم"
+    },
+    "unknown-auth-error": {
+      "title": "خطأ",
+      "message": "حدث خطأ في المصادقة"
     },
     "unknown": {
-      "description": "حدث خطأ ما",
-      "title": "خطأ"
+      "title": "خطأ",
+      "message": "واجهنا خطأ غير متوقع"
     },
-    "goBack": "خلف",
-    "goHome": "بيت"
+    "goHome": "الرئيسية",
+    "goBack": "رجوع"
   },
   "searchInput": {
-    "clear": "بحث واضح",
-    "placeholder": "يبحث..."
-  },
-  "confirmResponsiveDrawer": {
-    "cancelText": "يلغي",
-    "confirmText": "يتأكد",
-    "heading": "هل أنت متأكد؟"
+    "clear": "مسح البحث",
+    "placeholder": "بحث..."
   },
   "datalist": {
-    "emptyTitle": "لا توجد بيانات",
-    "errorTitle": "حدث خطأ ما",
-    "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\"",
     "retry": "إعادة المحاولة",
+    "errorTitle": "حدث خطأ ما",
+    "emptyTitle": "لا توجد بيانات",
+    "noResultsTitle": "لا توجد نتائج لـ \"{{searchTerm}}\"",
     "clear": "مسح"
   },
+  "confirmResponsiveDrawer": {
+    "cancelText": "إلغاء",
+    "confirmText": "تأكيد",
+    "heading": "هل أنت متأكد؟"
+  },
   "searchButton": {
-    "label": "يبحث"
+    "label": "بحث"
   },
   "sidebar": {
     "title": "الشريط الجانبي",
     "toggle": "تبديل الشريط الجانبي"
   },
   "backButton": {
-    "label": "خلف"
+    "label": "رجوع"
   },
   "select": {
-    "placeholder": "يختار...",
-    "create": "إنشاء \"{{searchTerm}}\"",
-    "noResultsFound": "لم يتم العثور على نتائج"
+    "placeholder": "اختر...",
+    "noResultsFound": "لم يتم العثور على نتائج",
+    "create": "إنشاء \"{{searchTerm}}\""
   },
   "preventNavigation": {
     "confirmLabel": "هل أنت متأكد أنك تريد المغادرة؟"
+  },
+  "errorBoundary": {
+    "title": "خطأ غير معروف",
+    "details": "التفاصيل",
+    "description": "حدث خطأ غير متوقع أثناء تحميل هذا المحتوى",
+    "unknown": "غير معروف",
+    "copyError": "نسخ الخطأ",
+    "copied": "تم النسخ"
   }
 }

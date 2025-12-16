@@ -19,6 +19,7 @@
   "actions": {
     "back": "Back",
     "cancel": "Cancel",
+    "close": "Close",
     "delete": "Delete",
     "edit": "Edit",
     "update": "Update"

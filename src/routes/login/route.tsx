@@ -1,14 +1,14 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-import { PageError } from '@/components/page-error';
+import { PageError } from '@/components/errors/page-error';
 
 import { GuardPublicOnly } from '@/features/auth/guard-public-only';
 import { LayoutLogin } from '@/features/auth/layout-login';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
-  notFoundComponent: () => <PageError error="404" />,
-  errorComponent: () => <PageError error="500" />,
+  notFoundComponent: () => <PageError type="404" />,
+  errorComponent: () => <PageError type="error-boundary" />,
 });
 
 function RouteComponent() {

@@ -1,49 +1,50 @@
 {
-  "pageErrorBoundary": {
-    "title": "ERREUR",
-    "tryAgain": "Réessayer",
-    "goBack": "Retour",
-    "description": "Quelque chose s'est mal passé",
-    "goHome": "Accueil"
-  },
   "datePickerButton": {
     "pickADate": "Choisir une date"
   },
   "pageError": {
     "403": {
-      "description": "Vous n'avez pas accès à cette page",
-      "title": "403"
+      "title": "Non autorisé",
+      "message": "Vous n'avez pas accès à cette page"
     },
     "404": {
-      "description": "Cette page est introuvable",
-      "title": "404"
+      "title": "Non trouvé",
+      "message": "Cette page est introuvable"
     },
-    "500": {
-      "description": "Quelque chose s'est mal passé",
-      "title": "500"
+    "error-boundary": {
+      "title": "Erreur",
+      "message": "Nous avons rencontré une erreur inattendue"
+    },
+    "unknown-server-error": {
+      "title": "Erreur",
+      "message": "Une erreur serveur inattendue s'est produite"
+    },
+    "unknown-auth-error": {
+      "title": "Erreur",
+      "message": "Une erreur d'authentification s'est produite"
     },
     "unknown": {
-      "description": "Quelque chose s'est mal passé",
-      "title": "ERREUR"
+      "title": "Erreur",
+      "message": "Nous avons rencontré une erreur inattendue"
     },
-    "goBack": "Retour",
-    "goHome": "Accueil"
+    "goHome": "Accueil",
+    "goBack": "Retour"
   },
   "searchInput": {
     "clear": "Effacer la recherche",
     "placeholder": "Rechercher..."
   },
+  "datalist": {
+    "retry": "Réessayer",
+    "errorTitle": "Quelque chose s'est mal passé",
+    "emptyTitle": "Aucune donnée",
+    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
+    "clear": "Effacer"
+  },
   "confirmResponsiveDrawer": {
     "cancelText": "Annuler",
     "confirmText": "Confirmer",
-    "heading": "Êtes-vous sûr?"
-  },
-  "datalist": {
-    "emptyTitle": "Aucune donnée",
-    "errorTitle": "Une erreur s'est produite",
-    "noResultsTitle": "Aucun résultat pour \"{{searchTerm}}\"",
-    "retry": "Réessayer",
-    "clear": "Effacer"
+    "heading": "Êtes-vous sûr ?"
   },
   "searchButton": {
     "label": "Rechercher"
@@ -57,10 +58,18 @@
   },
   "select": {
     "placeholder": "Sélectionner...",
-    "create": "Créer \"{{searchTerm}}\"",
-    "noResultsFound": "Aucun résultat trouvé"
+    "noResultsFound": "Aucun résultat trouvé",
+    "create": "Créer \"{{searchTerm}}\""
   },
   "preventNavigation": {
     "confirmLabel": "Êtes-vous sûr de vouloir quitter ?"
+  },
+  "errorBoundary": {
+    "title": "Erreur inconnue",
+    "details": "Détails",
+    "description": "Une erreur inattendue s'est produite lors du chargement de ce contenu",
+    "unknown": "Inconnu",
+    "copyError": "Copier l'erreur",
+    "copied": "Copié"
   }
 }

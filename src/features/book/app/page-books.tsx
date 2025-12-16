@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { PageError } from '@/components/page-error';
+import { PageError } from '@/components/errors/page-error';
 import { Button } from '@/components/ui/button';
 
 import { BookCover } from '@/features/book/book-cover';
@@ -59,7 +59,7 @@ export const PageBooks = () => {
               ))}
             </div>
           ))
-          .match('error', () => <PageError />)
+          .match('error', () => <PageError type="unknown-server-error" />)
           .match('empty', () => (
             <div className="flex flex-1 text-sm text-muted-foreground">
               {t('book:common.notFound')}

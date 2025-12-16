@@ -17,8 +17,7 @@ import { getPageTitle } from '@/lib/get-page-title';
 import i18n, { syncLanguage } from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
-import { PageError } from '@/components/page-error';
-import { PageErrorBoundary } from '@/components/page-error-boundary';
+import { PageError } from '@/components/errors/page-error';
 
 import { MailDevDevtoolPanel } from '@/devtools/maildev';
 import { EnvHint } from '@/features/devtools/env-hint';
@@ -42,11 +41,11 @@ export const Route = createRootRouteWithContext<{
       i18n.changeLanguage(language);
     }
   },
-  notFoundComponent: () => <PageError error="404" />,
-  errorComponent: (props) => {
+  notFoundComponent: () => <PageError type="404" />,
+  errorComponent: () => {
     return (
       <RootDocument>
-        <PageErrorBoundary {...props} />
+        <PageError type="error-boundary" />
       </RootDocument>
     );
   },
