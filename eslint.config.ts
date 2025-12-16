@@ -19,7 +19,6 @@ export default defineConfig(
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],
   react.configs['recommended-typescript'],
-  // @ts-expect-error it's working 🤷
   reactHooks.configs.flat.recommended,
   {
     rules: {
