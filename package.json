@@ -67,7 +67,7 @@
     "@tanstack/react-start": "1.132.51",
     "@tanstack/zod-adapter": "1.132.47",
     "@uidotdev/usehooks": "2.4.1",
-    "better-auth": "1.4.2",
+    "better-auth": "1.4.5",
     "boring-avatars": "2.0.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
