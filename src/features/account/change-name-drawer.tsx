@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter, useSearch } from '@tanstack/react-router';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -34,8 +33,7 @@ import { authClient } from '@/features/auth/client';
 
 export const ChangeNameDrawer = (props: { children: ReactNode }) => {
   const { t } = useTranslation(['account']);
-  const router = useRouter();
-  const search = useSearch({ strict: false });
+  const [open, setOpen] = useState(false);
   const session = authClient.useSession();
   const form = useForm<FormFieldsAccountUpdateName>({
     resolver: zodResolver(zFormFieldsAccountUpdateName()),
@@ -50,13 +48,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
         await session.refetch();
         toast.success(t('account:changeNameDrawer.successMessage'));
         form.reset();
-        router.navigate({
-          replace: true,
-          to: '.',
-          search: {
-            state: '',
-          },
-        });
+        setOpen(false);
       },
       onError: () => toast.error(t('account:changeNameDrawer.errorMessage')),
     })
@@ -64,16 +56,10 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
 
   return (
     <ResponsiveDrawer
-      open={search.state === 'change-name'}
-      onOpenChange={(open) => {
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
         form.reset();
-        router.navigate({
-          replace: true,
-          to: '.',
-          search: {
-            state: open ? 'change-name' : '',
-          },
-        });
       }}
     >
       <ResponsiveDrawerTrigger asChild>
