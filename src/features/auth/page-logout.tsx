@@ -18,7 +18,7 @@ export const PageLogout = () => {
       }
       await session.refetch();
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       navigate({
         to: '/',
       });
