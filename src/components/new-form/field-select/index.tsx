@@ -1,19 +1,20 @@
-import { useFormField } from '@/components/new-form/form-field/context';
-import { FieldError } from '@/components/ui/field';
+import { useFormControllerContext } from '@/components/new-form/form-controller/context';
+import { FieldProps } from '@/components/new-form/types';
+import { Field, FieldError } from '@/components/ui/field';
 import type { TValueBase } from '@/components/ui/select';
 import { Select } from '@/components/ui/select';
 
 export const FieldSelect = <TValue extends TValueBase>({
   options,
+  containerProps,
+  hideErrors,
   ...rest
-}: React.ComponentProps<typeof Select<TValue>>) => {
-  const { field, fieldState } = useFormField();
-
-  const descriptionId = `${field.name}-desc`;
-  const errorId = `${field.name}-error`;
+}: FieldProps<typeof Select<TValue>>) => {
+  const { field, fieldState, descriptionId, errorId } =
+    useFormControllerContext();
 
   return (
-    <>
+    <Field data-invalid={fieldState.invalid} {...containerProps}>
       <Select
         invalid={fieldState.error ? true : undefined}
         aria-invalid={fieldState.error ? true : undefined}
@@ -37,9 +38,9 @@ export const FieldSelect = <TValue extends TValueBase>({
           ...rest.inputProps,
         }}
       />
-      {fieldState.invalid && (
+      {!hideErrors && fieldState.invalid && (
         <FieldError id={errorId} errors={[fieldState.error]} />
       )}
-    </>
+    </Field>
   );
 };

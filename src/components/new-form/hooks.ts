@@ -4,9 +4,9 @@ import {
   useFormContext as useRhfFormContext,
 } from 'react-hook-form';
 
-import { FormField } from '@/components/new-form';
+import { FormController } from '@/components/new-form';
 
-export function useFormContext<
+export function useAppFormContext<
   TFieldValues extends FieldValues = FieldValues,
   TContext = ExplicitAny,
   TTransformedValues = TFieldValues,
@@ -19,11 +19,11 @@ export function useFormContext<
 
   return {
     ...formContext,
-    Field: FormField<TFieldValues>,
+    Controller: FormController<TFieldValues>,
   };
 }
 
-export function useForm<
+export function useAppForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = ExplicitAny,
   TTransformedValues = TFieldValues,
@@ -32,6 +32,6 @@ export function useForm<
 
   return {
     ...form,
-    Field: FormField<TFieldValues>,
+    Controller: FormController<TFieldValues>,
   };
 }

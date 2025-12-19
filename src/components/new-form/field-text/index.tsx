@@ -1,14 +1,18 @@
-import { useFormField } from '@/components/new-form/form-field/context';
-import { FieldError } from '@/components/ui/field';
+import { useFormControllerContext } from '@/components/new-form/form-controller/context';
+import { FieldProps } from '@/components/new-form/types';
+import { Field, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-export function FieldText(props: React.ComponentProps<typeof Input>) {
-  const { field, fieldState, size } = useFormField();
+export function FieldText({
+  containerProps,
+  hideErrors,
+  ...rest
+}: FieldProps<typeof Input>) {
+  const { field, fieldState, descriptionId, errorId, size } =
+    useFormControllerContext();
 
-  const descriptionId = `${field.name}-desc`;
-  const errorId = `${field.name}-error`;
   return (
-    <>
+    <Field data-invalid={fieldState.invalid} {...containerProps}>
       <Input
         id={field.name}
         aria-invalid={fieldState.invalid}
@@ -17,19 +21,19 @@ export function FieldText(props: React.ComponentProps<typeof Input>) {
         }
         size={size}
         {...field}
-        {...props}
+        {...rest}
         onChange={(e) => {
           field.onChange(e);
-          props.onChange?.(e);
+          rest.onChange?.(e);
         }}
         onBlur={(e) => {
           field.onBlur();
-          props.onBlur?.(e);
+          rest.onBlur?.(e);
         }}
       />
-      {fieldState.invalid && (
+      {!hideErrors && fieldState.invalid && (
         <FieldError id={errorId} errors={[fieldState.error]} />
       )}
-    </>
+    </Field>
   );
 }

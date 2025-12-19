@@ -2,17 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react-vite';
 import { z } from 'zod';
 
-import { useForm } from '@/lib/react-hook-form';
 import { zu } from '@/lib/zod/zod-utils';
 
 import { onSubmit } from '@/components/form/docs.utils';
 import { Form } from '@/components/new-form';
+import { useAppForm } from '@/components/new-form/hooks';
 import { Button } from '@/components/ui/button';
-import {
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from '@/components/ui/field';
+import { FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 export default {
@@ -26,7 +22,7 @@ const zFormSchema = () =>
   });
 
 export const Default = () => {
-  const form = useForm({
+  const form = useAppForm({
     mode: 'onBlur',
     resolver: zodResolver(zFormSchema()),
     defaultValues: {
@@ -38,29 +34,31 @@ export const Default = () => {
   return (
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
-        <form.Field
+        <form.Controller
           name="name"
           size="lg"
-          children={(field) => (
+          render={(field) => (
             <>
               <field.Label>Name</field.Label>
               <field.Text />
-              <FieldDescription>This is an helper text</FieldDescription>
+              <field.Description>This is an helper text</field.Description>
             </>
           )}
         />
-        <form.Field
+        <form.Controller
           name="other"
-          children={({ props, state }) => (
+          render={(field) => (
             <>
-              <FieldLabel htmlFor={props.name}>Name</FieldLabel>
+              <field.Label htmlFor={field.props.name}>Name</field.Label>
               <Input
-                {...props}
-                value={props.value ?? ''}
-                id={props.name}
-                aria-invalid={state.invalid}
+                {...field.props}
+                value={field.props.value ?? ''}
+                id={field.props.name}
+                aria-invalid={field.state.invalid}
               />
-              {state.invalid && <FieldError errors={[state.error]} />}
+              {field.state.invalid && (
+                <FieldError errors={[field.state.error]} />
+              )}
             </>
           )}
         />

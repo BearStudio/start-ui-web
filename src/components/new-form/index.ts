@@ -1,4 +1,4 @@
 import { Form } from '@/components/new-form/form';
-import { FormField } from '@/components/new-form/form-field/index';
+import { FormController } from '@/components/new-form/form-controller/index';
 
-export { Form, FormField };
+export { Form, FormController };

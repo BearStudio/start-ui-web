@@ -13,68 +13,68 @@ import {
   fieldComponents,
 } from '@/components/new-form/_field-components';
 import {
-  FormFieldContext,
-  FormFieldContextValue,
-  FormFieldSize,
-} from '@/components/new-form/form-field/context';
-import { Field } from '@/components/ui/field';
+  FormControllerContext,
+  FormControllerContextValue,
+} from '@/components/new-form/form-controller/context';
 
-export type FormFieldProps<
+export type FormControllerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues = TFieldValues,
 > = WithRequired<
   UseControllerProps<TFieldValues, TName, TTransformedValues>,
   'name'
-> & {
-  size?: FormFieldSize;
-  children: (
-    field: {
-      props: ControllerRenderProps<TFieldValues, TName>;
-      state: ControllerFieldState;
-    } & FieldComponents
-  ) => React.ReactNode;
-};
+> &
+  Pick<FormControllerContextValue, 'size'> & {
+    render: (
+      field: {
+        props: ControllerRenderProps<TFieldValues, TName>;
+        state: ControllerFieldState;
+      } & FieldComponents
+    ) => React.ReactNode;
+  };
 
 /**
- * Inspired by from @tanstack/react-form
+ * Inspired by @tanstack/react-form
  *
  * @see https://github.com/TanStack/form/blob/main/packages/react-form/src/createFormHook.tsx
  */
-export function FormField<
+export function FormController<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues = TFieldValues,
 >({
-  children,
+  render,
   size,
   ...controllerProps
-}: FormFieldProps<TFieldValues, TName, TTransformedValues>) {
+}: FormControllerProps<TFieldValues, TName, TTransformedValues>) {
   return (
     <Controller
       {...controllerProps}
       render={({ field, fieldState }) => {
+        const id = field.name;
         // We are inside a render function so it's fine
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const fieldCtx = useMemo(
           () => ({
+            labelId: `${id}-label`,
+            errorId: `${id}-error`,
+            descriptionId: `${id}-description`,
             field,
             fieldState,
             size,
           }),
-          [field, fieldState]
-        ) as FormFieldContextValue;
+          [field, fieldState, id]
+        ) as FormControllerContextValue;
 
         return (
-          <Field data-invalid={fieldState.invalid}>
-            <FormFieldContext value={fieldCtx}>
-              {children({
-                props: field,
-                ...fieldComponents,
-                state: fieldState,
-              })}
-            </FormFieldContext>
-          </Field>
+          <FormControllerContext value={fieldCtx}>
+            {render({
+              props: field,
+              ...fieldComponents,
+              state: fieldState,
+            })}
+          </FormControllerContext>
         );
       }}
     />
