@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
-import { PageError } from '@/components/page-error';
+import { PageError } from '@/components/errors/page-error';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -64,8 +64,8 @@ export const PageBook = (props: { params: { id: string } }) => {
       <PageLayoutContent>
         {ui
           .match('pending', () => <Spinner full />)
-          .match('not-found', () => <PageError error="404" />)
-          .match('error', () => <PageError />)
+          .match('not-found', () => <PageError type="404" />)
+          .match('error', () => <PageError type="unknown-server-error" />)
           .match('default', ({ book }) => (
             <div className="flex flex-col gap-8 xs:flex-row">
               <div className="flex-2">

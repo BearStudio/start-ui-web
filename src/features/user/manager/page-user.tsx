@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
-import { PageError } from '@/components/page-error';
+import { PageError } from '@/components/errors/page-error';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -153,8 +153,8 @@ export const PageUser = (props: { params: { id: string } }) => {
       <PageLayoutContent>
         {ui
           .match('pending', () => <Spinner full />)
-          .match('not-found', () => <PageError error="404" />)
-          .match('error', () => <PageError />)
+          .match('not-found', () => <PageError type="404" />)
+          .match('error', () => <PageError type="unknown-server-error" />)
           .match('default', ({ user }) => (
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
               <Card className="relative flex-1">

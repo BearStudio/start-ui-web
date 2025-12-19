@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { randomInt } from 'node:crypto';
 
 import { db } from '@/server/db';
+import data from './book-data.json';
 
 export async function createBooks() {
   console.log(`⏳ Seeding genre`);
@@ -38,29 +39,26 @@ export async function createBooks() {
 
   let createdCounter = 0;
   const existingCount = await db.book.count();
-
   const existingGenresAfterSeed = await db.genre.findMany();
 
   await Promise.all(
-    Array.from({ length: Math.max(0, 100 - existingCount) }, async () => {
-      const author = faker.book.author();
-      const title = faker.book.title();
-
-      // Avoid @unique([title, author]) constraint failure
+    data.books.map(async ({ author, title }) => {
+      // Avoid creating existing books
       const book = await db.book.findFirst({
         where: {
           author,
           title,
         },
       });
+
       if (book) {
         return;
       }
 
       await db.book.create({
         data: {
-          author: faker.book.author(),
-          title: faker.book.title(),
+          author,
+          title,
           genre: {
             connect:
               existingGenresAfterSeed[

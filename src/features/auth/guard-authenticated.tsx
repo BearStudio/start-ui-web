@@ -1,7 +1,7 @@
 import { useRouter } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { PageError } from '@/components/page-error';
+import { PageError } from '@/components/errors/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
@@ -23,7 +23,7 @@ export const GuardAuthenticated = ({
   }
 
   if (session.error && session.error.status > 0) {
-    return <PageError />;
+    return <PageError type="unknown-auth-error" />;
   }
 
   if (!session.data?.user) {
@@ -52,7 +52,7 @@ export const GuardAuthenticated = ({
       },
     })
   ) {
-    return <PageError error="403" />;
+    return <PageError type="403" />;
   }
 
   return <>{children}</>;

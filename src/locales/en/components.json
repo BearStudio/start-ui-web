@@ -1,33 +1,34 @@
 {
-  "pageErrorBoundary": {
-    "title": "ERROR",
-    "description": "Something went wrong",
-    "tryAgain": "Try Again",
-    "goBack": "Back",
-    "goHome": "Home"
-  },
   "datePickerButton": {
     "pickADate": "Pick a date"
   },
   "pageError": {
     "403": {
-      "title": "403",
-      "description": "You don't have access to this page"
+      "title": "Unauthorized",
+      "message": "You don't have access to this page"
     },
     "404": {
-      "title": "404",
-      "description": "This page could not be found"
+      "title": "Not Found",
+      "message": "This page could not be found"
     },
-    "500": {
-      "title": "500",
-      "description": "Something went wrong"
+    "error-boundary": {
+      "title": "Error",
+      "message": "We encountered an unexpected error"
+    },
+    "unknown-server-error": {
+      "title": "Error",
+      "message": "An unexpected server error occurred"
+    },
+    "unknown-auth-error": {
+      "title": "Error",
+      "message": "An authentication error occurred"
+    },
+    "unknown": {
+      "title": "Error",
+      "message": "We encountered an unexpected error"
     },
     "goHome": "Home",
-    "goBack": "Back",
-    "unknown": {
-      "title": "ERROR",
-      "description": "Something went wrong"
-    }
+    "goBack": "Back"
   },
   "searchInput": {
     "clear": "Clear search",
@@ -62,5 +63,13 @@
   },
   "preventNavigation": {
     "confirmLabel": "Are you sure you want to leave?"
+  },
+  "errorBoundary": {
+    "title": "Unknown Error",
+    "details": "Details",
+    "description": "An unexpected error occurred while loading this content",
+    "unknown": "Unknown",
+    "copyError": "Copy Error",
+    "copied": "Copied"
   }
 }

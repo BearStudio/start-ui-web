@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { PageErrorBoundary } from '@/components/page-error-boundary';
+import { PageError } from '@/components/errors/page-error';
 
 import PageLogin from '@/features/auth/page-login';
 
@@ -13,9 +13,7 @@ export const Route = createFileRoute('/login/')({
       redirect: fallback(z.string(), '').optional(),
     })
   ),
-  errorComponent: (props) => {
-    return <PageErrorBoundary {...props} />;
-  },
+  errorComponent: () => <PageError type="error-boundary" />,
 });
 
 function RouteComponent() {

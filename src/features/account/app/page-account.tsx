@@ -14,6 +14,7 @@ import {
 
 export const PageAccount = () => {
   const { t } = useTranslation(['account']);
+
   return (
     <PageLayout>
       <PageLayoutTopBar>

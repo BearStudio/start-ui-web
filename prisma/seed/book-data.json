@@ -1,0 +1,404 @@
+{
+  "books": [
+    {
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee"
+    },
+    {
+      "title": "1984",
+      "author": "George Orwell"
+    },
+    {
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen"
+    },
+    {
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald"
+    },
+    {
+      "title": "Moby-Dick",
+      "author": "Herman Melville"
+    },
+    {
+      "title": "War and Peace",
+      "author": "Leo Tolstoy"
+    },
+    {
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger"
+    },
+    {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien"
+    },
+    {
+      "title": "Crime and Punishment",
+      "author": "Fyodor Dostoevsky"
+    },
+    {
+      "title": "The Lord of the Rings",
+      "author": "J.R.R. Tolkien"
+    },
+    {
+      "title": "Jane Eyre",
+      "author": "Charlotte Brontë"
+    },
+    {
+      "title": "Animal Farm",
+      "author": "George Orwell"
+    },
+    {
+      "title": "Brave New World",
+      "author": "Aldous Huxley"
+    },
+    {
+      "title": "The Odyssey",
+      "author": "Homer"
+    },
+    {
+      "title": "The Divine Comedy",
+      "author": "Dante Alighieri"
+    },
+    {
+      "title": "Wuthering Heights",
+      "author": "Emily Brontë"
+    },
+    {
+      "title": "The Brothers Karamazov",
+      "author": "Fyodor Dostoevsky"
+    },
+    {
+      "title": "Anna Karenina",
+      "author": "Leo Tolstoy"
+    },
+    {
+      "title": "The Iliad",
+      "author": "Homer"
+    },
+    {
+      "title": "One Hundred Years of Solitude",
+      "author": "Gabriel García Márquez"
+    },
+    {
+      "title": "Don Quixote",
+      "author": "Miguel de Cervantes"
+    },
+    {
+      "title": "Hamlet",
+      "author": "William Shakespeare"
+    },
+    {
+      "title": "Macbeth",
+      "author": "William Shakespeare"
+    },
+    {
+      "title": "Romeo and Juliet",
+      "author": "William Shakespeare"
+    },
+    {
+      "title": "The Canterbury Tales",
+      "author": "Geoffrey Chaucer"
+    },
+    {
+      "title": "Frankenstein",
+      "author": "Mary Shelley"
+    },
+    {
+      "title": "Dracula",
+      "author": "Bram Stoker"
+    },
+    {
+      "title": "The Picture of Dorian Gray",
+      "author": "Oscar Wilde"
+    },
+    {
+      "title": "Les Misérables",
+      "author": "Victor Hugo"
+    },
+    {
+      "title": "The Count of Monte Cristo",
+      "author": "Alexandre Dumas"
+    },
+    {
+      "title": "The Three Musketeers",
+      "author": "Alexandre Dumas"
+    },
+    {
+      "title": "Madame Bovary",
+      "author": "Gustave Flaubert"
+    },
+    {
+      "title": "The Stranger",
+      "author": "Albert Camus"
+    },
+    {
+      "title": "The Plague",
+      "author": "Albert Camus"
+    },
+    {
+      "title": "Catch-22",
+      "author": "Joseph Heller"
+    },
+    {
+      "title": "Slaughterhouse-Five",
+      "author": "Kurt Vonnegut"
+    },
+    {
+      "title": "The Grapes of Wrath",
+      "author": "John Steinbeck"
+    },
+    {
+      "title": "Of Mice and Men",
+      "author": "John Steinbeck"
+    },
+    {
+      "title": "East of Eden",
+      "author": "John Steinbeck"
+    },
+    {
+      "title": "The Sound and the Fury",
+      "author": "William Faulkner"
+    },
+    {
+      "title": "As I Lay Dying",
+      "author": "William Faulkner"
+    },
+    {
+      "title": "Beloved",
+      "author": "Toni Morrison"
+    },
+    {
+      "title": "The Bluest Eye",
+      "author": "Toni Morrison"
+    },
+    {
+      "title": "Invisible Man",
+      "author": "Ralph Ellison"
+    },
+    {
+      "title": "The Color Purple",
+      "author": "Alice Walker"
+    },
+    {
+      "title": "Their Eyes Were Watching God",
+      "author": "Zora Neale Hurston"
+    },
+    {
+      "title": "The Sun Also Rises",
+      "author": "Ernest Hemingway"
+    },
+    {
+      "title": "A Farewell to Arms",
+      "author": "Ernest Hemingway"
+    },
+    {
+      "title": "For Whom the Bell Tolls",
+      "author": "Ernest Hemingway"
+    },
+    {
+      "title": "The Old Man and the Sea",
+      "author": "Ernest Hemingway"
+    },
+    {
+      "title": "Ulysses",
+      "author": "James Joyce"
+    },
+    {
+      "title": "A Portrait of the Artist as a Young Man",
+      "author": "James Joyce"
+    },
+    {
+      "title": "Dubliners",
+      "author": "James Joyce"
+    },
+    {
+      "title": "Heart of Darkness",
+      "author": "Joseph Conrad"
+    },
+    {
+      "title": "Lord Jim",
+      "author": "Joseph Conrad"
+    },
+    {
+      "title": "The Trial",
+      "author": "Franz Kafka"
+    },
+    {
+      "title": "The Metamorphosis",
+      "author": "Franz Kafka"
+    },
+    {
+      "title": "The Castle",
+      "author": "Franz Kafka"
+    },
+    {
+      "title": "Mrs Dalloway",
+      "author": "Virginia Woolf"
+    },
+    {
+      "title": "To the Lighthouse",
+      "author": "Virginia Woolf"
+    },
+    {
+      "title": "The Waves",
+      "author": "Virginia Woolf"
+    },
+    {
+      "title": "Middlemarch",
+      "author": "George Eliot"
+    },
+    {
+      "title": "Silas Marner",
+      "author": "George Eliot"
+    },
+    {
+      "title": "Great Expectations",
+      "author": "Charles Dickens"
+    },
+    {
+      "title": "A Tale of Two Cities",
+      "author": "Charles Dickens"
+    },
+    {
+      "title": "Oliver Twist",
+      "author": "Charles Dickens"
+    },
+    {
+      "title": "David Copperfield",
+      "author": "Charles Dickens"
+    },
+    {
+      "title": "Bleak House",
+      "author": "Charles Dickens"
+    },
+    {
+      "title": "The Adventures of Huckleberry Finn",
+      "author": "Mark Twain"
+    },
+    {
+      "title": "The Adventures of Tom Sawyer",
+      "author": "Mark Twain"
+    },
+    {
+      "title": "A Connecticut Yankee in King Arthur's Court",
+      "author": "Mark Twain"
+    },
+    {
+      "title": "Gulliver's Travels",
+      "author": "Jonathan Swift"
+    },
+    {
+      "title": "Robinson Crusoe",
+      "author": "Daniel Defoe"
+    },
+    {
+      "title": "Treasure Island",
+      "author": "Robert Louis Stevenson"
+    },
+    {
+      "title": "The Strange Case of Dr Jekyll and Mr Hyde",
+      "author": "Robert Louis Stevenson"
+    },
+    {
+      "title": "Kidnapped",
+      "author": "Robert Louis Stevenson"
+    },
+    {
+      "title": "The Wind in the Willows",
+      "author": "Kenneth Grahame"
+    },
+    {
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Lewis Carroll"
+    },
+    {
+      "title": "Through the Looking-Glass",
+      "author": "Lewis Carroll"
+    },
+    {
+      "title": "The Secret Garden",
+      "author": "Frances Hodgson Burnett"
+    },
+    {
+      "title": "Little Women",
+      "author": "Louisa May Alcott"
+    },
+    {
+      "title": "Anne of Green Gables",
+      "author": "L.M. Montgomery"
+    },
+    {
+      "title": "The Lion, the Witch and the Wardrobe",
+      "author": "C.S. Lewis"
+    },
+    {
+      "title": "Charlotte's Web",
+      "author": "E.B. White"
+    },
+    {
+      "title": "Where the Wild Things Are",
+      "author": "Maurice Sendak"
+    },
+    {
+      "title": "The Very Hungry Caterpillar",
+      "author": "Eric Carle"
+    },
+    {
+      "title": "Harry Potter and the Philosopher's Stone",
+      "author": "J.K. Rowling"
+    },
+    {
+      "title": "Harry Potter and the Chamber of Secrets",
+      "author": "J.K. Rowling"
+    },
+    {
+      "title": "Harry Potter and the Prisoner of Azkaban",
+      "author": "J.K. Rowling"
+    },
+    {
+      "title": "The Hunger Games",
+      "author": "Suzanne Collins"
+    },
+    {
+      "title": "Divergent",
+      "author": "Veronica Roth"
+    },
+    {
+      "title": "The Fault in Our Stars",
+      "author": "John Green"
+    },
+    {
+      "title": "The Book Thief",
+      "author": "Markus Zusak"
+    },
+    {
+      "title": "Life of Pi",
+      "author": "Yann Martel"
+    },
+    {
+      "title": "The Kite Runner",
+      "author": "Khaled Hosseini"
+    },
+    {
+      "title": "A Thousand Splendid Suns",
+      "author": "Khaled Hosseini"
+    },
+    {
+      "title": "The Road",
+      "author": "Cormac McCarthy"
+    },
+    {
+      "title": "No Country for Old Men",
+      "author": "Cormac McCarthy"
+    },
+    {
+      "title": "The Handmaid's Tale",
+      "author": "Margaret Atwood"
+    },
+    {
+      "title": "The Alchemist",
+      "author": "Paulo Coelho"
+    }
+  ]
+}

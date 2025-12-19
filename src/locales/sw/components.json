@@ -1,66 +1,75 @@
 {
-  "pageErrorBoundary": {
-    "title": "Kosa",
-    "tryAgain": "Jaribu tena",
-    "goBack": "Rudi nyuma",
-    "description": "Kitu kilienda vibaya",
-    "goHome": "Nyumbani"
-  },
   "datePickerButton": {
     "pickADate": "Chagua tarehe"
   },
   "pageError": {
     "403": {
-      "description": "Huna ufikiaji wa ukurasa huu",
-      "title": "403"
+      "title": "Hauruhusiwi",
+      "message": "Huna ufikiaji wa ukurasa huu"
     },
     "404": {
-      "description": "Ukurasa huu haukuweza kupatikana",
-      "title": "404"
+      "title": "Haikupatikana",
+      "message": "Ukurasa huu haukuweza kupatikana"
     },
-    "500": {
-      "description": "Kitu kilienda vibaya",
-      "title": "500"
+    "error-boundary": {
+      "title": "Hitilafu",
+      "message": "Tumekutana na hitilafu isiyotarajiwa"
+    },
+    "unknown-server-error": {
+      "title": "Hitilafu",
+      "message": "Hitilafu isiyo ya kutarajiwa ya seva ilitokea"
+    },
+    "unknown-auth-error": {
+      "title": "Hitilafu",
+      "message": "Hitilafu ya uthibitishaji imetokea"
     },
     "unknown": {
-      "description": "Kitu kilienda vibaya",
-      "title": "Kosa"
+      "title": "Hitilafu",
+      "message": "Tumekutana na hitilafu isiyotarajiwa"
     },
-    "goBack": "Nyuma",
-    "goHome": "Nyumbani"
+    "goHome": "Nyumbani",
+    "goBack": "Rudi nyuma"
   },
   "searchInput": {
-    "clear": "Utaftaji wazi",
-    "placeholder": "Tafuta ..."
+    "clear": "Futa utaftaji",
+    "placeholder": "Tafuta..."
+  },
+  "datalist": {
+    "retry": "Jaribu tena",
+    "errorTitle": "Kitu kilienda vibaya",
+    "emptyTitle": "Hakuna data",
+    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
+    "clear": "Futa"
   },
   "confirmResponsiveDrawer": {
     "cancelText": "Ghairi",
     "confirmText": "Thibitisha",
     "heading": "Una uhakika?"
   },
-  "datalist": {
-    "emptyTitle": "Hakuna data",
-    "errorTitle": "Kitu kilienda vibaya",
-    "noResultsTitle": "Hakuna matokeo ya \"{{searchTerm}}\"",
-    "retry": "Jaribu tena",
-    "clear": "Futa"
-  },
   "searchButton": {
     "label": "Tafuta"
   },
   "sidebar": {
     "title": "Pembeni",
-    "toggle": "Kubadilisha kando ya pembeni"
+    "toggle": "Kubadilisha pembeni"
   },
   "backButton": {
-    "label": "Nyuma"
+    "label": "Rudi nyuma"
   },
   "select": {
-    "placeholder": "Chagua ...",
-    "create": "Unda \"{{searchTerm}}\"",
-    "noResultsFound": "Hakuna matokeo yaliyopatikana"
+    "placeholder": "Chagua...",
+    "noResultsFound": "Hakuna matokeo yaliyopatikana",
+    "create": "Unda \"{{searchTerm}}\""
   },
   "preventNavigation": {
     "confirmLabel": "Je, una uhakika unataka kuondoka?"
+  },
+  "errorBoundary": {
+    "title": "Hitilafu Isiyojulikana",
+    "details": "Maelezo",
+    "description": "Hitilafu isiyotarajiwa ilitokea wakati wa kupakia maudhui haya",
+    "unknown": "Haijulikani",
+    "copyError": "Nakili Hitilafu",
+    "copied": "Imenakiliwa"
   }
 }
