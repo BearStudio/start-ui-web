@@ -18,15 +18,19 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
   email         String
   emailVerified Boolean
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  nickname String?
+  topSize  String? // "S/M/L/XL"
 
   role        UserRole?
   banned      Boolean?
@@ -34,7 +38,17 @@ model User {
   banExpires  DateTime?
   onboardedAt DateTime?
 
+  // --- Goodies relations (match GoodieOrder) ---
+  requestedGoodieOrders GoodieOrder[] @relation("GoodieOrderRequestedBy")
+  madeGoodieOrders      GoodieOrder[] @relation("GoodieOrderMadeBy")
+
+  // --- Distribution / onboarding ---
+  goodieGrants          GoodieGrant[]
+  onboardingAssignments OnboardingAssignment[]
+
   @@unique([email])
+  @@index([nickname])
+  @@index([topSize])
   @@map("user")
 }
 
@@ -85,6 +99,245 @@ model Verification {
   @@map("verification")
 }
 
+// ========= Enums =========
+enum GoodieCategory {
+  TSHIRT
+  HOODIE
+  STICKER
+  MUG
+  TOTE_BAG
+  NOTEBOOK
+  OTHER
+}
+
+enum GoodieOrderStatus {
+  IDEA
+  REQUESTED
+  QUOTED
+  ORDERED
+  RECEIVED
+  CANCELLED
+}
+
+enum AssetType {
+  LOGO
+  MOCKUP
+  PHOTO
+  OTHER
+}
+
+// ========= Core =========
+model Goodie {
+  id          String         @id @default(cuid())
+  name        String // ex: "T-shirt Start UI"
+  edition     String? // ex: "2022" / ou label d'édition
+  category    GoodieCategory
+  description String?
+  photoUrl    String? // ex: "/goodies/tshirt-start-ui-2022.png"
+
+  // IMPORTANT: pas de syntaxe Prisma pour "tableau typé inline"
+  // On stocke un tableau JSON: [{ key, size, color, stockQty, ... }]
+  variants Json @default("[]")
+
+  // Si vous voulez une "date du goodie" différente de createdAt:
+  // ajoutez un champ dédié (ex: releaseYear / releaseDate / label)
+  releaseLabel String? // ex: "Start UI 2022" (optionnel)
+  releaseDate  DateTime? // optionnel
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders          GoodieOrder[]
+  assets          Asset[]
+  grants          GoodieGrant[]
+  onboardingItems OnboardingPackItem[]
+  eventNeeds      EventGoodieNeed[]
+
+  @@index([category])
+  @@index([name])
+  @@map("goodie")
+}
+
+// ========= Suppliers & Creation / Ideas =========
+model Supplier {
+  id         String   @id @default(cuid())
+  name       String
+  websiteUrl String?
+  contact    String?
+  comment    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  orders GoodieOrder[]
+  assets Asset[]
+
+  @@index([name])
+  @@map("supplier")
+}
+
+model GoodieOrder {
+  id     String            @id @default(cuid())
+  status GoodieOrderStatus @default(IDEA)
+
+  goodieId String?
+  goodie   Goodie? @relation(fields: [goodieId], references: [id], onDelete: SetNull)
+
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+
+  requestedById String?
+  requestedBy   User?   @relation("GoodieOrderRequestedBy", fields: [requestedById], references: [id], onDelete: SetNull)
+
+  madeById String?
+  madeBy   User?   @relation("GoodieOrderMadeBy", fields: [madeById], references: [id], onDelete: SetNull)
+
+  requestedAt DateTime?
+  orderedAt   DateTime?
+  receivedAt  DateTime?
+
+  quantity    Int?
+  qualityNote String?
+  comment     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([supplierId])
+  @@index([goodieId])
+  @@map("goodie_order")
+}
+
+// Banque d’images / logos / mockups (V1: URL uniquement)
+model Asset {
+  id        String    @id @default(cuid())
+  type      AssetType @default(OTHER)
+  name      String
+  url       String // ex: "/goodies/logos/start-ui.svg"
+  comment   String?
+  createdAt DateTime  @default(now())
+
+  goodieId String?
+  goodie   Goodie? @relation(fields: [goodieId], references: [id], onDelete: SetNull)
+
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+
+  @@index([type])
+  @@index([goodieId])
+  @@index([supplierId])
+  @@map("asset")
+}
+
+// ========= Onboarding & Distribution =========
+model OnboardingPack {
+  id        String   @id @default(cuid())
+  name      String
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items       OnboardingPackItem[]
+  assignments OnboardingAssignment[]
+
+  @@map("onboarding_pack")
+}
+
+// Un item pointe sur un Goodie + une clé de variant dans Goodie.variants
+model OnboardingPackItem {
+  id     String         @id @default(cuid())
+  packId String
+  pack   OnboardingPack @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  goodieId String
+  goodie   Goodie @relation(fields: [goodieId], references: [id], onDelete: Restrict)
+
+  variantKey String? // ex: "tshirt-S" ; null si "one-size"
+  quantity   Int     @default(1)
+
+  @@unique([packId, goodieId, variantKey])
+  @@index([goodieId])
+  @@map("onboarding_pack_item")
+}
+
+model OnboardingAssignment {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  packId String
+  pack   OnboardingPack @relation(fields: [packId], references: [id], onDelete: Restrict)
+
+  isDone  Boolean   @default(false)
+  doneAt  DateTime?
+  comment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, packId])
+  @@index([isDone])
+  @@map("onboarding_assignment")
+}
+
+// ========= Events =========
+model Event {
+  id        String    @id @default(cuid())
+  name      String
+  date      DateTime?
+  location  String?
+  comment   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  needs EventGoodieNeed[]
+
+  @@index([date])
+  @@index([name])
+  @@map("event")
+}
+
+model EventGoodieNeed {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  goodieId String
+  goodie   Goodie @relation(fields: [goodieId], references: [id], onDelete: Restrict)
+
+  variantKey String?
+  quantity   Int     @default(1)
+  comment    String?
+
+  @@unique([eventId, goodieId, variantKey])
+  @@index([goodieId])
+  @@map("event_goodie_need")
+}
+
+// ========= Grants (qui a eu quoi) =========
+model GoodieGrant {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  goodieId String
+  goodie   Goodie @relation(fields: [goodieId], references: [id], onDelete: Cascade)
+
+  variantKey String?
+  quantity   Int     @default(1)
+
+  grantedAt DateTime @default(now())
+  reason    String?
+  comment   String?
+
+  @@unique([userId, goodieId, variantKey])
+  @@index([goodieId, variantKey])
+  @@index([userId])
+  @@map("goodie_grant")
+}
+
+//======== Previous data - kept for examples - not used ========
+
 model Book {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -92,7 +345,7 @@ model Book {
   title     String
   author    String
   genre     Genre?   @relation(fields: [genreId], references: [id])
-  genreId   String
+  genreId   String?
   publisher String?
 
   @@unique([title, author])
