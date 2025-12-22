@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import {
   LayoutDashboardIcon,
   PanelLeftIcon,
+  ShoppingCartIcon,
   UsersIcon,
   XIcon,
 } from 'lucide-react';
@@ -82,6 +83,18 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                         <span>
                           <IconBookOpen />
                           <span>{t('layout:nav.books')}</span>
+                        </span>
+                      </SidebarMenuButton>
+                    )}
+                  </Link>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <Link to="/manager/goodies">
+                    {({ isActive }) => (
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <span>
+                          <ShoppingCartIcon />
+                          <span>Goodies</span>
                         </span>
                       </SidebarMenuButton>
                     )}
