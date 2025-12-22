@@ -26,11 +26,25 @@ export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
 export const zGoodieVariant = z.object({
-  key: z.string(),
-  size: z.string().optional(),
-  color: z.string().optional(),
-  stockQty: z.number().int().nonnegative().optional(),
+  key: zu.fieldText.required(),
+  size: z.string().nullish(),
+  color: z.string().nullish(),
+  stockQty: z.number().int().min(0).default(0),
 });
+
+// validation : chaque key unique dans le tableau
+export const zGoodieVariants = z
+  .array(zGoodieVariant)
+  .superRefine((variants, ctx) => {
+    const keys = variants.map((v) => v.key);
+    const duplicates = keys.filter((k, i) => keys.indexOf(k) !== i);
+    if (duplicates.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Duplicate variant keys: ${duplicates.join(', ')}`,
+      });
+    }
+  });
 
 //============ Goodie ============
 export const zGoodie = () =>
@@ -42,13 +56,35 @@ export const zGoodie = () =>
     description: zu.fieldText.nullish(),
     photoUrl: z.string().url().nullish(),
 
-    variants: z.array(zGoodieVariant),
+    variants: zGoodieVariants.default([]),
 
     releaseLabel: zu.fieldText.nullish(),
     releaseDate: z.date().nullish(),
 
     createdAt: z.date(),
     updatedAt: z.date(),
+  });
+
+export const zGoodieDetail = () =>
+  zGoodie().extend({
+    assets: z.array(
+      z.object({
+        id: z.string(),
+        type: z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']),
+        name: z.string(),
+        url: z.string().url(),
+      })
+    ),
+    grants: z
+      .array(
+        z.object({
+          id: z.string(),
+          userId: z.string(),
+          variantKey: z.string().nullish(),
+          quantity: z.number().int().min(1),
+        })
+      )
+      .optional(),
   });
 
 export type FormFieldsGoodie = z.infer<ReturnType<typeof zFormFieldsGoodie>>;
@@ -156,14 +192,22 @@ export const zFormFieldsAsset = () =>
   });
 
 //============ Grant ============
+export const zVariantKey = (allowedKeys: string[]) =>
+  z
+    .string()
+    .nullish()
+    .refine((key) => !key || allowedKeys.includes(key), {
+      message: 'variantKey must exist in Goodie.variants',
+    });
+
 export type GoodieGrant = z.infer<ReturnType<typeof zGoodieGrant>>;
 
-export const zGoodieGrant = () =>
+export const zGoodieGrant = (allowedKeys: string[]) =>
   z.object({
     id: z.string(),
     userId: z.string(),
     goodieId: z.string(),
-    variantKey: z.string().nullish(),
+    variantKey: zVariantKey(allowedKeys),
     quantity: z.number().int().positive(),
     grantedAt: z.date(),
     reason: zu.fieldText.nullish(),
@@ -174,7 +218,7 @@ export type FormFieldsGoodieGrant = z.infer<
   ReturnType<typeof zFormFieldsGoodieGrant>
 >;
 export const zFormFieldsGoodieGrant = () =>
-  zGoodieGrant().pick({
+  zGoodieGrant([]).pick({
     userId: true,
     goodieId: true,
     variantKey: true,
@@ -182,3 +226,14 @@ export const zFormFieldsGoodieGrant = () =>
     reason: true,
     comment: true,
   });
+
+//============ List Item ============
+
+export const zGoodieListItem = z.object({
+  id: z.string(),
+  name: zu.fieldText.required(),
+  edition: zu.fieldText.nullish(),
+  category: zGoodieCategory,
+  photoUrl: z.string().url().nullish(),
+  totalStock: z.number().int().min(0).optional(), // calculé côté serveur
+});
