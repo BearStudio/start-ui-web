@@ -12,6 +12,8 @@ export const zGoodieCategory = z.enum([
   'OTHER',
 ]);
 
+export const GOODIE_CATEGORY_OPTIONS = zGoodieCategory.options;
+
 export const zGoodieOrderStatus = z.enum([
   'IDEA',
   'REQUESTED',
@@ -20,6 +22,8 @@ export const zGoodieOrderStatus = z.enum([
   'RECEIVED',
   'CANCELLED',
 ]);
+
+export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
@@ -53,7 +57,6 @@ export const zGoodie = () =>
     category: zGoodieCategory,
     description: zu.fieldText.nullish(),
     photoUrl: z.string().url().nullish(),
-    total: z.number().int().positive().nullish(),
 
     variants: zGoodieVariants.default([]),
 
@@ -163,31 +166,53 @@ export const zFormFieldsGoodieOrder = () =>
   });
 
 //============ Asset ============
+export type Asset = z.infer<ReturnType<typeof zAsset>>;
 
-export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
+export const zAsset = () =>
+  z.object({
+    id: z.string(),
+    type: zAssetType,
+    name: zu.fieldText.required(),
+    url: z.string().url(),
+    comment: zu.fieldText.nullish(),
 
-export const zAsset = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: zAssetType,
-  url: z.string().url(),
-  comment: z.string().nullable(),
-  goodieId: z.string().nullable(),
-  supplierId: z.string().nullable(),
-  createdAt: z.date(),
-});
+    goodieId: z.string().nullish(),
+    supplierId: z.string().nullish(),
 
-export const zFormFieldsAsset = z.object({
-  name: z.string().min(1),
-  type: zAssetType,
-  url: z.string().url(),
-  comment: z.string().nullable().prefault(null),
-  goodieId: z.string().nullable().prefault(null),
-  supplierId: z.string().nullable().prefault(null),
-});
+    createdAt: z.date(),
+  });
 
-export type Asset = z.infer<typeof zAsset>;
-export type FormFieldsAsset = z.infer<typeof zFormFieldsAsset>;
+export type FormFieldsAsset = z.infer<ReturnType<typeof zFormFieldsAsset>>;
+export const zFormFieldsAsset = () =>
+  zAsset().pick({
+    type: true,
+    name: true,
+    url: true,
+    comment: true,
+    goodieId: true,
+    supplierId: true,
+  });
+
+//============ New Goodie Idea ============
+export type GoodieIdea = z.infer<ReturnType<typeof zGoodieIdea>>;
+export const zGoodieIdea = () =>
+  z.object({
+    id: z.string(),
+    name: zu.fieldText.required(),
+    category: zGoodieCategory,
+    description: z
+      .string()
+      .nullish()
+      .transform((v) => v ?? ''),
+  });
+
+export type FormFieldsIdea = z.infer<ReturnType<typeof zFormFieldsIdea>>;
+export const zFormFieldsIdea = () =>
+  zGoodieIdea().pick({
+    name: true,
+    category: true,
+    description: true,
+  });
 
 //============ Grant ============
 export const zVariantKey = (allowedKeys: string[]) =>
@@ -234,5 +259,4 @@ export const zGoodieListItem = z.object({
   category: zGoodieCategory,
   photoUrl: z.string().url().nullish(),
   totalStock: z.number().int().min(0).optional(), // calculé côté serveur
-  description: z.string().nullish(),
 });

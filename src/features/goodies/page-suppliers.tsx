@@ -17,6 +17,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { FormIdeaNew } from './manager/form-idea-new';
 import GoodieSuppliersTab from './tab-suppliers-list';
 
 export const PageGoodiesSuppliers = () => {
@@ -48,8 +49,8 @@ export const PageGoodiesSuppliers = () => {
         </PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
-        <Tabs defaultValue="newIdea" className="flex gap-10">
-          <TabsList className="flex w-full flex-1 gap-4 bg-white p-2">
+        <Tabs defaultValue="newIdea" className="flex flex-col gap-10">
+          <TabsList className="flex w-full gap-4 bg-white p-2">
             <TabsTrigger asChild value="newIdea" className="flex flex-1">
               <Button
                 variant="ghost"
@@ -90,7 +91,7 @@ export const PageGoodiesSuppliers = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="newIdea">
-            <span>Ajouter le fichier du composant contenant ce tabs</span>
+            <FormIdeaNew />
           </TabsContent>
           <TabsContent value="suppliersList">
             <GoodieSuppliersTab />
