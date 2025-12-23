@@ -17,6 +17,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import GoodieSuppliersTab from './tab-suppliers-list';
 
 export const PageGoodiesSuppliers = () => {
   const matchRoute = useMatchRoute();
@@ -92,7 +93,7 @@ export const PageGoodiesSuppliers = () => {
             <span>Ajouter le fichier du composant contenant ce tabs</span>
           </TabsContent>
           <TabsContent value="suppliersList">
-            <span>Ajouter le fichier du composant contenant ce tabs</span>
+            <GoodieSuppliersTab />
           </TabsContent>
           <TabsContent value="createdObject">
             <span>Ajouter le fichier du composant contenant ce tabs</span>
