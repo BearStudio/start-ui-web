@@ -1,22 +1,25 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import { GiftIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { zFormFieldsIdea } from '../schema';
 import { orpc } from '@/lib/orpc/client';
+
+import { BackButton } from '@/components/back-button';
+import { Form } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { BackButton } from '@/components/back-button';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/form';
-import { Card, CardContent } from '@/components/ui/card';
-import { GiftIcon } from 'lucide-react';
+
+import { zFormFieldsIdea } from '../schema';
 
 export const FormIdeaNew = () => {
   const router = useRouter();
