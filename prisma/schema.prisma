@@ -158,6 +158,13 @@ model Goodie {
   @@map("goodie")
 }
 
+model Idea {
+  id          String         @id @default(cuid())
+  name        String
+  category    GoodieCategory
+  description String?
+}
+
 // ========= Suppliers & Creation / Ideas =========
 model Supplier {
   id         String   @id @default(cuid())

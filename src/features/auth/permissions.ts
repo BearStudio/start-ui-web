@@ -16,6 +16,7 @@ const statement = {
   genre: ['read'],
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read', 'create', 'update', 'delete'],
+  idea: ['read', 'create', 'update', 'delete'],
   supplier: ['read', 'create', 'update', 'delete'],
 } as const;
 

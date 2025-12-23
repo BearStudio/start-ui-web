@@ -76,7 +76,7 @@ export const FormIdeaNew = () => {
   });
 
   const goodieIdeaCreate = useMutation(
-    orpc.goodie.createIdea.mutationOptions({
+    orpc.idea.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries({
           queryKey: orpc.goodie.getAll.key(),
