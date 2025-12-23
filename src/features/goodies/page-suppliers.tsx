@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import GoodieAssetsTab from '@/features/goodies/tab-images-bank';
 import {
   PageLayout,
   PageLayoutContent,
@@ -97,7 +98,7 @@ export const PageGoodiesSuppliers = () => {
             <span>Ajouter le fichier du composant contenant ce tabs</span>
           </TabsContent>
           <TabsContent value="imagesBank">
-            <span>Ajouter le fichier du composant contenant ce tabs</span>
+            <GoodieAssetsTab />
           </TabsContent>
         </Tabs>
       </PageLayoutContent>

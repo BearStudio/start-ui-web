@@ -21,8 +21,6 @@ export const zGoodieOrderStatus = z.enum([
   'CANCELLED',
 ]);
 
-export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
-
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
 export const zGoodieVariant = z.object({
@@ -164,32 +162,31 @@ export const zFormFieldsGoodieOrder = () =>
   });
 
 //============ Asset ============
-export type Asset = z.infer<ReturnType<typeof zAsset>>;
 
-export const zAsset = () =>
-  z.object({
-    id: z.string(),
-    type: zAssetType,
-    name: zu.fieldText.required(),
-    url: z.string().url(),
-    comment: zu.fieldText.nullish(),
+export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 
-    goodieId: z.string().nullish(),
-    supplierId: z.string().nullish(),
+export const zAsset = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: zAssetType,
+  url: z.string().url(),
+  comment: z.string().nullable(),
+  goodieId: z.string().nullable(),
+  supplierId: z.string().nullable(),
+  createdAt: z.date(),
+});
 
-    createdAt: z.date(),
-  });
+export const zFormFieldsAsset = z.object({
+  name: z.string().min(1),
+  type: zAssetType,
+  url: z.string().url(),
+  comment: z.string().nullable().prefault(null),
+  goodieId: z.string().nullable().prefault(null),
+  supplierId: z.string().nullable().prefault(null),
+});
 
-export type FormFieldsAsset = z.infer<ReturnType<typeof zFormFieldsAsset>>;
-export const zFormFieldsAsset = () =>
-  zAsset().pick({
-    type: true,
-    name: true,
-    url: true,
-    comment: true,
-    goodieId: true,
-    supplierId: true,
-  });
+export type Asset = z.infer<typeof zAsset>;
+export type FormFieldsAsset = z.infer<typeof zFormFieldsAsset>;
 
 //============ Grant ============
 export const zVariantKey = (allowedKeys: string[]) =>
