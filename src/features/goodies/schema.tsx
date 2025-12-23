@@ -133,12 +133,15 @@ export type GoodieOrder = z.infer<ReturnType<typeof zGoodieOrder>>;
 export const zGoodieOrder = () =>
   z.object({
     id: z.string(),
+    name: z.string().nullish(),
     status: zGoodieOrderStatus,
 
     goodieId: z.string().nullish(),
     supplierId: z.string().nullish(),
     requestedById: z.string().nullish(),
     madeById: z.string().nullish(),
+
+    madeBy: zUserLite.nullish(),
 
     requestedAt: z.date().nullish(),
     orderedAt: z.date().nullish(),
@@ -152,16 +155,24 @@ export const zGoodieOrder = () =>
     updatedAt: z.date(),
   });
 
+export const zUserLite = z.object({
+  id: z.string(),
+  name: z.string(),
+  image: z.string().nullish(),
+});
+
 export type FormFieldsGoodieOrder = z.infer<
   ReturnType<typeof zFormFieldsGoodieOrder>
 >;
 export const zFormFieldsGoodieOrder = () =>
   zGoodieOrder().pick({
     status: true,
+    name: true,
     goodieId: true,
     supplierId: true,
     quantity: true,
     qualityNote: true,
+    madeById: true,
     comment: true,
   });
 

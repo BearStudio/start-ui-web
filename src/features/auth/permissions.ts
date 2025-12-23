@@ -17,6 +17,7 @@ const statement = {
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read', 'create', 'update', 'delete'],
   supplier: ['read', 'create', 'update', 'delete'],
+  order: ['read', 'create', 'update', 'delete'],
 } as const;
 
 const ac = createAccessControl(statement);
@@ -29,6 +30,7 @@ const user = ac.newRole({
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read'],
   supplier: ['read'],
+  order: ['read'],
 });
 
 const admin = ac.newRole({
@@ -40,6 +42,7 @@ const admin = ac.newRole({
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read', 'create', 'update', 'delete'],
   supplier: ['read', 'create', 'update', 'delete'],
+  order: ['read', 'create', 'update', 'delete'],
 });
 
 export const rolesNames = ['admin', 'user'] as const;

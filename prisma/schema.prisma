@@ -177,6 +177,7 @@ model Supplier {
 
 model GoodieOrder {
   id     String            @id @default(cuid())
+  name   String
   status GoodieOrderStatus @default(IDEA)
 
   goodieId String?
