@@ -2,16 +2,17 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-export const zGoodieCategory = () =>
-  z.enum([
-    'TSHIRT',
-    'HOODIE',
-    'STICKER',
-    'MUG',
-    'TOTE_BAG',
-    'NOTEBOOK',
-    'OTHER',
-  ]);
+export const zGoodieCategory = z.enum([
+  'TSHIRT',
+  'HOODIE',
+  'STICKER',
+  'MUG',
+  'TOTE_BAG',
+  'NOTEBOOK',
+  'OTHER',
+]);
+
+export const GOODIE_CATEGORY_OPTIONS = zGoodieCategory.options;
 
 export const zGoodieOrderStatus = () =>
   z.enum(['IDEA', 'REQUESTED', 'QUOTED', 'ORDERED', 'RECEIVED', 'CANCELLED']);
@@ -47,7 +48,7 @@ export const zGoodie = () =>
     id: z.string(),
     name: zu.fieldText.required(),
     edition: zu.fieldText.nullish(),
-    category: zGoodieCategory(),
+    category: zGoodieCategory,
     description: zu.fieldText.nullish(),
     photoUrl: z.string().url().nullish(),
 
@@ -192,7 +193,7 @@ export const zGoodieIdea = () =>
   z.object({
     id: z.string(),
     name: zu.fieldText.required(),
-    category: zGoodieCategory(),
+    category: zGoodieCategory,
     description: z
       .string()
       .nullish()
@@ -249,7 +250,7 @@ export const zGoodieListItem = z.object({
   id: z.string(),
   name: zu.fieldText.required(),
   edition: zu.fieldText.nullish(),
-  category: zGoodieCategory(),
+  category: zGoodieCategory,
   photoUrl: z.string().url().nullish(),
   totalStock: z.number().int().min(0).optional(), // calculé côté serveur
 });
