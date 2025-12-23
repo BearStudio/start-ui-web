@@ -35,6 +35,7 @@ import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
 import { Route as ManagerGoodiesSuppliersIndexRouteImport } from './routes/manager/goodies/suppliers.index'
 import { Route as ManagerGoodiesStockIndexRouteImport } from './routes/manager/goodies/stock.index'
+import { Route as ManagerGoodiesNewIndexRouteImport } from './routes/manager/goodies/new.index'
 import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
 import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
@@ -176,6 +177,11 @@ const ManagerGoodiesStockIndexRoute =
     path: '/goodies/stock/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const ManagerGoodiesNewIndexRoute = ManagerGoodiesNewIndexRouteImport.update({
+  id: '/goodies/new/',
+  path: '/goodies/new/',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
 const ManagerBooksNewIndexRoute = ManagerBooksNewIndexRouteImport.update({
   id: '/books/new/',
   path: '/books/new/',
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
@@ -281,6 +288,7 @@ export interface FileRoutesByTo {
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
@@ -318,6 +326,7 @@ export interface FileRoutesById {
   '/app/books/$id/': typeof AppBooksIdIndexRoute
   '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new/': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock/': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers/': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
+    | '/manager/goodies/new'
     | '/manager/goodies/stock'
     | '/manager/goodies/suppliers'
     | '/manager/users/$id'
@@ -389,6 +399,7 @@ export interface FileRouteTypes {
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
+    | '/manager/goodies/new'
     | '/manager/goodies/stock'
     | '/manager/goodies/suppliers'
     | '/manager/users/$id'
@@ -425,6 +436,7 @@ export interface FileRouteTypes {
     | '/app/books/$id/'
     | '/manager/books/$id/'
     | '/manager/books/new/'
+    | '/manager/goodies/new/'
     | '/manager/goodies/stock/'
     | '/manager/goodies/suppliers/'
     | '/manager/users/$id/'
@@ -631,6 +643,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerGoodiesStockIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/manager/goodies/new/': {
+      id: '/manager/goodies/new/'
+      path: '/goodies/new'
+      fullPath: '/manager/goodies/new'
+      preLoaderRoute: typeof ManagerGoodiesNewIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
     '/manager/books/new/': {
       id: '/manager/books/new/'
       path: '/books/new'
@@ -733,6 +752,7 @@ interface ManagerRouteRouteChildren {
   ManagerUsersIndexRoute: typeof ManagerUsersIndexRoute
   ManagerBooksIdIndexRoute: typeof ManagerBooksIdIndexRoute
   ManagerBooksNewIndexRoute: typeof ManagerBooksNewIndexRoute
+  ManagerGoodiesNewIndexRoute: typeof ManagerGoodiesNewIndexRoute
   ManagerGoodiesStockIndexRoute: typeof ManagerGoodiesStockIndexRoute
   ManagerGoodiesSuppliersIndexRoute: typeof ManagerGoodiesSuppliersIndexRoute
   ManagerUsersIdIndexRoute: typeof ManagerUsersIdIndexRoute
@@ -750,6 +770,7 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerUsersIndexRoute: ManagerUsersIndexRoute,
   ManagerBooksIdIndexRoute: ManagerBooksIdIndexRoute,
   ManagerBooksNewIndexRoute: ManagerBooksNewIndexRoute,
+  ManagerGoodiesNewIndexRoute: ManagerGoodiesNewIndexRoute,
   ManagerGoodiesStockIndexRoute: ManagerGoodiesStockIndexRoute,
   ManagerGoodiesSuppliersIndexRoute: ManagerGoodiesSuppliersIndexRoute,
   ManagerUsersIdIndexRoute: ManagerUsersIdIndexRoute,

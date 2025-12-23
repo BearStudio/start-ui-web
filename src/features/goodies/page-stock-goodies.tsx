@@ -14,7 +14,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-
 export const PageGoodiesStock = () => {
   const matchRoute = useMatchRoute();
 
@@ -48,9 +47,11 @@ export const PageGoodiesStock = () => {
             variant="secondary"
             size="sm"
           >
-            <div className="flex gap-2">
-              <PlusIcon />
-            </div>
+            <Link to="/manager/goodies/new">
+              <div className="flex gap-2">
+                <PlusIcon />
+              </div>
+            </Link>
           </ResponsiveIconButton>
         }
       >
