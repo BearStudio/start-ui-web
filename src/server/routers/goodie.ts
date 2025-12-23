@@ -1,14 +1,9 @@
 import { ORPCError } from '@orpc/server';
 import { z } from 'zod';
 
-import {
-  zFormFieldsIdea,
-  zGoodieDetail,
-  zGoodieIdea,
-} from '@/features/goodies/schema';
-import { zFormFieldsGoodie, zGoodie } from '@/features/goodies/schema';
-import { Prisma } from '@/server/db/generated/client';
+import { zFormFieldsGoodie, zGoodie, zGoodieDetail } from '@/features/goodies/schema';
 import { protectedProcedure } from '@/server/orpc';
+import { Prisma } from '../db/generated/client';
 
 const tags = ['goodies'];
 
@@ -86,31 +81,6 @@ export default {
       };
     }),
 
-  createIdea: protectedProcedure({
-    permission: {
-      goodie: ['create'],
-    },
-  })
-    .route({
-      method: 'POST',
-      path: '/goodies',
-      tags,
-    })
-    .input(zFormFieldsIdea())
-    .output(zGoodieIdea())
-    .handler(async ({ context, input }) => {
-      context.logger.info('Add new idea');
-
-      const created = await context.db.goodie.create({
-        data: {
-          name: input.name,
-          category: input.category,
-          description: input.description,
-        },
-        select: { id: true, name: true, category: true, description: true },
-      });
-      return { ...created, description: created.description ?? '' };
-    }),
   create: protectedProcedure({
     permission: {
       goodie: ['create'],

@@ -6,6 +6,7 @@ import bookRouter from './routers/book';
 import configRouter from './routers/config';
 import genreRouter from './routers/genre';
 import goodieRouter from './routers/goodie';
+import ideaRouter from './routers/idea';
 import supplierRouter from './routers/suppliers';
 import userRouter from './routers/user';
 
@@ -20,5 +21,6 @@ export const router = {
   config: configRouter,
   asset: assetRouter,
   goodie: goodieRouter,
+  idea: ideaRouter,
   supplier: supplierRouter,
 };

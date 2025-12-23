@@ -16,6 +16,7 @@ const statement = {
   genre: ['read'],
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read', 'create', 'update', 'delete'],
+  idea: ['read', 'create', 'update', 'delete'],
   supplier: ['read', 'create', 'update', 'delete'],
 } as const;
 
@@ -28,6 +29,7 @@ const user = ac.newRole({
   genre: ['read'],
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read'],
+  idea: ['read', 'create', 'update', 'delete'],
   supplier: ['read'],
 });
 
@@ -39,6 +41,7 @@ const admin = ac.newRole({
   genre: ['read'],
   asset: ['read', 'create', 'update', 'delete'],
   goodie: ['read', 'create', 'update', 'delete'],
+  idea: ['read', 'create', 'update', 'delete'],
   supplier: ['read', 'create', 'update', 'delete'],
 });
 
