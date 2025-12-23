@@ -80,6 +80,7 @@ export const PageGoodiesStock = () => {
           {goodies?.map((goodie) => (
             <CardGoodieDisplay
               key={goodie.id}
+              id={goodie.id}
               title={goodie.name}
               year={goodie.edition ?? ''}
               category={goodie.category}

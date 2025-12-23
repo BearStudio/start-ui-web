@@ -1,4 +1,8 @@
-import { EllipsisVertical, Shirt } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { Edit, EllipsisVertical, Shirt, Trash } from 'lucide-react';
+
+import { orpc } from '@/lib/orpc/client';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,13 +14,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface SizeStock {
   size: string;
   stockQty: number;
 }
 
-interface GoodieDisplayCardProps {
+interface CardGoodieDisplayProps {
+  id: string; // pour les actions
   title: string;
   year: string;
   category: string;
@@ -27,6 +38,7 @@ interface GoodieDisplayCardProps {
 }
 
 export default function CardGoodieDisplay({
+  id,
   title,
   year,
   category,
@@ -34,7 +46,22 @@ export default function CardGoodieDisplay({
   stock,
   sizesStocks,
   imageUrl,
-}: GoodieDisplayCardProps) {
+}: CardGoodieDisplayProps) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  // Mutation pour supprimer le goodie
+  const deleteGoodie = useMutation(
+    orpc.goodie.delete.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.goodie.getAll.key() });
+      },
+      onError: (error: unknown) => {
+        console.error('Erreur lors de la suppression:', error);
+      },
+    })
+  );
+
   return (
     <Card className="flex h-full flex-col shadow-lg transition-shadow duration-200 hover:shadow-xl">
       {/* IMAGE + STOCK + ACTIONS */}
@@ -51,13 +78,33 @@ export default function CardGoodieDisplay({
         <Badge className="text-gray-800 absolute top-2 left-2 bg-white shadow-sm">
           Stock: {stock}
         </Badge>
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute top-2 right-2"
-        >
-          <EllipsisVertical />
-        </Button>
+
+        {/* Menu Meatballs */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-2 right-2"
+            >
+              <EllipsisVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() =>
+                router.navigate({ to: `/manager/goodies/${id}/edit` })
+              }
+            >
+              <Edit className="mr-2 h-4 w-4" />
+              Modifier
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteGoodie.mutate({ id: id })}>
+              <Trash className="mr-2 h-4 w-4" />
+              Supprimer
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* HEADER */}

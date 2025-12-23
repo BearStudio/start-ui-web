@@ -43,6 +43,7 @@ import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/a
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
+import { Route as ManagerGoodiesIdEditIndexRouteImport } from './routes/manager/goodies/$id.edit.index'
 import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
 
 const LogoutRoute = LogoutRouteImport.update({
@@ -218,6 +219,12 @@ const ManagerUsersIdUpdateIndexRoute =
     path: '/users/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const ManagerGoodiesIdEditIndexRoute =
+  ManagerGoodiesIdEditIndexRouteImport.update({
+    id: '/goodies/$id/edit/',
+    path: '/goodies/$id/edit/',
+    getParentRoute: () => ManagerRouteRoute,
+  } as any)
 const ManagerBooksIdUpdateIndexRoute =
   ManagerBooksIdUpdateIndexRouteImport.update({
     id: '/books/$id/update/',
@@ -260,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesByTo {
@@ -294,6 +302,7 @@ export interface FileRoutesByTo {
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesById {
@@ -332,6 +341,7 @@ export interface FileRoutesById {
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit/': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRouteTypes {
@@ -371,6 +381,7 @@ export interface FileRouteTypes {
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/books/$id/update'
+    | '/manager/goodies/$id/edit'
     | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -405,6 +416,7 @@ export interface FileRouteTypes {
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/books/$id/update'
+    | '/manager/goodies/$id/edit'
     | '/manager/users/$id/update'
   id:
     | '__root__'
@@ -442,6 +454,7 @@ export interface FileRouteTypes {
     | '/manager/users/$id/'
     | '/manager/users/new/'
     | '/manager/books/$id/update/'
+    | '/manager/goodies/$id/edit/'
     | '/manager/users/$id/update/'
   fileRoutesById: FileRoutesById
 }
@@ -699,6 +712,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/manager/goodies/$id/edit/': {
+      id: '/manager/goodies/$id/edit/'
+      path: '/goodies/$id/edit'
+      fullPath: '/manager/goodies/$id/edit'
+      preLoaderRoute: typeof ManagerGoodiesIdEditIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
     '/manager/books/$id/update/': {
       id: '/manager/books/$id/update/'
       path: '/books/$id/update'
@@ -758,6 +778,7 @@ interface ManagerRouteRouteChildren {
   ManagerUsersIdIndexRoute: typeof ManagerUsersIdIndexRoute
   ManagerUsersNewIndexRoute: typeof ManagerUsersNewIndexRoute
   ManagerBooksIdUpdateIndexRoute: typeof ManagerBooksIdUpdateIndexRoute
+  ManagerGoodiesIdEditIndexRoute: typeof ManagerGoodiesIdEditIndexRoute
   ManagerUsersIdUpdateIndexRoute: typeof ManagerUsersIdUpdateIndexRoute
 }
 
@@ -776,6 +797,7 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerUsersIdIndexRoute: ManagerUsersIdIndexRoute,
   ManagerUsersNewIndexRoute: ManagerUsersNewIndexRoute,
   ManagerBooksIdUpdateIndexRoute: ManagerBooksIdUpdateIndexRoute,
+  ManagerGoodiesIdEditIndexRoute: ManagerGoodiesIdEditIndexRoute,
   ManagerUsersIdUpdateIndexRoute: ManagerUsersIdUpdateIndexRoute,
 }
 
