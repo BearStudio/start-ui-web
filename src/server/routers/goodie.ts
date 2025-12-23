@@ -55,12 +55,17 @@ export default {
         },
       });
 
-      // Mapping des variants pour TypeScript + sécurité runtime
       const mappedItems = items.map((g) => ({
         ...g,
         variants: Array.isArray(g.variants)
           ? (g.variants as unknown as GoodieVariant[])
           : [],
+        total:
+          g.total ??
+          (g.variants as GoodieVariant[]).reduce(
+            (sum, v) => sum + (v.stockQty ?? 0),
+            0
+          ),
       }));
 
       let nextCursor: typeof input.cursor | undefined = undefined;

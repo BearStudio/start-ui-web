@@ -91,8 +91,6 @@ export const PageGoodiesStock = () => {
                 stockQty: v.stockQty,
               }))}
               imageUrl={goodie.assets[0]?.url}
-              onIncrement={() => {}}
-              onDecrement={() => {}}
             />
           ))}
         </div>

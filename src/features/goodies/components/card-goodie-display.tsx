@@ -1,4 +1,4 @@
-import { EllipsisVertical, Minus, Plus, Shirt } from 'lucide-react';
+import { EllipsisVertical, Shirt } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,6 @@ interface GoodieDisplayCardProps {
   stock?: number;
   sizesStocks?: SizeStock[];
   imageUrl?: string;
-  onIncrement?: () => void;
-  onDecrement?: () => void;
 }
 
 export default function CardGoodieDisplay({
@@ -36,44 +34,57 @@ export default function CardGoodieDisplay({
   stock,
   sizesStocks,
   imageUrl,
-  onIncrement,
-  onDecrement,
 }: GoodieDisplayCardProps) {
   return (
-    <Card>
-      <div>
-        {imageUrl ? <img src={imageUrl} title={title} /> : <Shirt />}
-        <Badge variant="outline">Stock: {stock}</Badge>
-        <Button>
+    <Card className="flex h-full flex-col shadow-lg transition-shadow duration-200 hover:shadow-xl">
+      {/* IMAGE + STOCK + ACTIONS */}
+      <div className="bg-gray-100 relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-xl">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={title}
+            className="h-full w-full object-contain"
+          />
+        ) : (
+          <Shirt className="text-gray-400 h-16 w-16" />
+        )}
+        <Badge className="text-gray-800 absolute top-2 left-2 bg-white shadow-sm">
+          Stock: {stock}
+        </Badge>
+        <Button
+          size="icon"
+          variant="secondary"
+          className="absolute top-2 right-2"
+        >
           <EllipsisVertical />
         </Button>
       </div>
 
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{year}</CardDescription>
+      {/* HEADER */}
+      <CardHeader className="flex flex-col items-center justify-center px-4 pt-4 text-center">
+        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+        <CardDescription className="text-gray-500 text-sm">
+          {year}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+
+      {/* CONTENT */}
+      <CardContent className="flex flex-col gap-2 px-4 pb-4">
         <Badge variant="secondary">{category}</Badge>
-        {description}
-      </CardContent>
-      <CardFooter>
-        Tailles disponibles:
-        {(sizesStocks ?? []).map((sizeStock) => (
-          <Badge key={sizeStock.size} variant="secondary">
-            {sizeStock.size}: {sizeStock.stockQty}
-          </Badge>
-        ))}
-        {(sizesStocks ?? []).length == 0 && (
-          <>
-            <Button size="icon-lg" variant="destructive" onClick={onIncrement}>
-              <Plus />
-            </Button>
-            <Button size="icon-lg" variant="destructive" onClick={onDecrement}>
-              <Minus />
-            </Button>
-          </>
+        {description && (
+          <p className="text-gray-700 text-center text-sm">{description}</p>
         )}
+      </CardContent>
+
+      {/* FOOTER */}
+      <CardFooter className="flex flex-col gap-2 px-4 pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          {sizesStocks?.map((sizeStock) => (
+            <Badge key={sizeStock.size} variant="secondary">
+              {sizeStock.size}: {sizeStock.stockQty}
+            </Badge>
+          ))}
+        </div>
       </CardFooter>
     </Card>
   );

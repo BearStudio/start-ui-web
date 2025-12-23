@@ -57,6 +57,7 @@ export const zGoodie = () =>
     category: zGoodieCategory,
     description: zu.fieldText.nullish(),
     photoUrl: z.string().url().nullish(),
+    total: z.number().int().nullish(),
 
     variants: zGoodieVariants.default([]),
 
