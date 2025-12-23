@@ -8,7 +8,7 @@ const tags = ['ideas'];
 export default {
   getAll: protectedProcedure({
     permission: {
-      goodie: ['read'],
+      idea: ['read'],
     },
   })
     .route({
