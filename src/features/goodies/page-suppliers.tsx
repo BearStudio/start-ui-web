@@ -51,46 +51,60 @@ export const PageGoodiesSuppliers = () => {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <Tabs defaultValue="newIdea" className="flex flex-col gap-10">
-          <TabsList className="flex w-full gap-4 bg-white p-2">
-            <TabsTrigger asChild value="newIdea" className="flex flex-1">
-              <Button
-                variant="ghost"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          <div className="flex gap-2 rounded-lg bg-white p-2">
+            <TabsList className="flex w-full gap-4 bg-transparent">
+              <TabsTrigger
+                asChild
+                value="newIdea"
+                className="flex flex-1 bg-transparent"
               >
-                <Lightbulb />
-                Idées à venir
-              </Button>
-            </TabsTrigger>
+                <Button
+                  variant="ghost"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <Lightbulb />
+                  Idées à venir
+                </Button>
+              </TabsTrigger>
 
-            <TabsTrigger asChild value="suppliersList" className="flex flex-1">
-              <Button
-                variant="ghost"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              <TabsTrigger
+                asChild
+                value="suppliersList"
+                className="flex flex-1"
               >
-                <Building2 />
-                Fournisseurs
-              </Button>
-            </TabsTrigger>
+                <Button
+                  variant="ghost"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <Building2 />
+                  Fournisseurs
+                </Button>
+              </TabsTrigger>
 
-            <TabsTrigger asChild value="createdObject" className="flex flex-1">
-              <Button
-                variant="ghost"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              <TabsTrigger
+                asChild
+                value="createdObject"
+                className="flex flex-1"
               >
-                <StarIcon />
-                Objets créés
-              </Button>
-            </TabsTrigger>
-            <TabsTrigger asChild value="imagesBank" className="flex flex-1">
-              <Button
-                variant="ghost"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-              >
-                <ImageIcon />
-                Banque d'images
-              </Button>
-            </TabsTrigger>
-          </TabsList>
+                <Button
+                  variant="ghost"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <StarIcon />
+                  Objets créés
+                </Button>
+              </TabsTrigger>
+              <TabsTrigger asChild value="imagesBank" className="flex flex-1">
+                <Button
+                  variant="ghost"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <ImageIcon />
+                  Banque d'images
+                </Button>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           <TabsContent value="newIdea">
             <FormIdeaNew />
           </TabsContent>

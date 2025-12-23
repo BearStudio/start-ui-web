@@ -15,6 +15,7 @@ import { FormFieldsAsset } from '@/features/goodies/schema';
 
 export default function GoodieAssetsTab() {
   const [zoomed, setZoomed] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const form = useForm<FormFieldsAsset>({
@@ -27,7 +28,6 @@ export default function GoodieAssetsTab() {
     },
   });
 
-  // Fetch de tous les assets
   const { data: assets = [], isLoading } = useQuery({
     queryKey: orpc.asset.getAllAssets.key(),
     queryFn: () => orpc.asset.getAllAssets.call(),
@@ -36,26 +36,37 @@ export default function GoodieAssetsTab() {
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       await orpc.asset.createAsset.call(values);
-
       await queryClient.invalidateQueries({
         queryKey: orpc.asset.getAllAssets.key(),
       });
-
-      form.reset({
-        ...form.getValues(),
-        name: '',
-        url: '',
-      });
-
+      form.reset({ ...form.getValues(), name: '', url: '' });
       toast.success('Image ajoutée');
     } catch {
       toast.error('Erreur lors de la création');
     }
   });
 
-  if (isLoading) {
-    return <div>Chargement des assets...</div>;
-  }
+  if (isLoading) return <div>Chargement des assets...</div>;
+
+  const handleDownload = async (url: string, id: string, filename?: string) => {
+    try {
+      setDownloadingId(id); // on active le loader
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename ?? 'image';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast.error('Erreur lors du téléchargement');
+    } finally {
+      setDownloadingId(null); // on désactive le loader
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -91,9 +102,15 @@ export default function GoodieAssetsTab() {
                 <Button
                   size="icon"
                   variant="secondary"
-                  onClick={() => console.log('download')}
+                  onClick={() =>
+                    handleDownload(asset.url, asset.id, asset.name)
+                  }
                 >
-                  <Download size={16} />
+                  {downloadingId === asset.id ? (
+                    <div className="border-gray-600 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                  ) : (
+                    <Download size={16} />
+                  )}
                 </Button>
                 <Button
                   size="icon"
