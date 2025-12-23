@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { PageGoodiesSuppliers } from '@/features/goodies/page-suppliers';
+
 export const Route = createFileRoute('/manager/goodies/suppliers/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/manager/goodies/suppliers/"!</div>;
+  return <PageGoodiesSuppliers />;
 }
