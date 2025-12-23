@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zu } from '@/lib/zod/zod-utils';
 
 export const zGoodieCategory = () =>
-  z.literal([
+  z.enum([
     'TSHIRT',
     'HOODIE',
     'STICKER',
@@ -14,16 +14,9 @@ export const zGoodieCategory = () =>
   ]);
 
 export const zGoodieOrderStatus = () =>
-  z.literal([
-    'IDEA',
-    'REQUESTED',
-    'QUOTED',
-    'ORDERED',
-    'RECEIVED',
-    'CANCELLED',
-  ]);
+  z.enum(['IDEA', 'REQUESTED', 'QUOTED', 'ORDERED', 'RECEIVED', 'CANCELLED']);
 
-export const zAssetType = () => z.literal(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
+export const zAssetType = () => z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
