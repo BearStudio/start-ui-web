@@ -29,7 +29,6 @@ export const FormSupplier = () => {
           type="text"
           control={form.control}
           name="contact"
-          autoFocus
         />
       </FormField>
 

@@ -7,7 +7,8 @@ import configRouter from './routers/config';
 import genreRouter from './routers/genre';
 import goodieRouter from './routers/goodie';
 import ideaRouter from './routers/idea';
-import supplierRouter from './routers/suppliers';
+import orderRouter from './routers/order';
+import supplierRouter from './routers/supplier';
 import userRouter from './routers/user';
 
 export type Router = typeof router;
@@ -23,4 +24,5 @@ export const router = {
   goodie: goodieRouter,
   idea: ideaRouter,
   supplier: supplierRouter,
+  order: orderRouter,
 };
