@@ -1,9 +1,13 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useMatchRoute } from '@tanstack/react-router';
 import { BoxIcon, PlusIcon } from 'lucide-react';
+
+import { orpc } from '@/lib/orpc/client';
 
 import { Button } from '@/components/ui/button';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
+import CardGoodieDisplay from '@/features/goodies/components/card-goodie-display';
 import {
   PageLayout,
   PageLayoutContent,
@@ -16,6 +20,24 @@ export const PageGoodiesStock = () => {
 
   const isStock = matchRoute({ to: '/manager/goodies/stock' });
   const isSuppliers = matchRoute({ to: '/manager/goodies/suppliers' });
+
+  const goodiesQuery = useInfiniteQuery(
+    orpc.goodie.getAll.infiniteOptions({
+      input: (cursor: string | undefined) => ({ cursor }),
+      initialPageParam: undefined,
+      maxPages: 10,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    })
+  );
+
+  const goodies = goodiesQuery.data?.pages[0]?.items;
+
+  // Retourne le stock total d'un goodie
+  const getTotalStock = (variants: { stockQty?: number }[]) => {
+    if (!variants || variants.length === 0) return 0;
+    return variants.reduce((total, v) => total + (v.stockQty ?? 0), 0);
+  };
+
   return (
     <PageLayout>
       <PageLayoutTopBar
@@ -54,13 +76,24 @@ export const PageGoodiesStock = () => {
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-            <div
-              key={item}
-              className="bg-gray-200 flex h-100 items-center justify-center rounded-lg border-3"
-            >
-              <span>Item {item}</span>
-            </div>
+          {goodies?.map((goodie) => (
+            <CardGoodieDisplay
+              key={goodie.id}
+              title={goodie.name}
+              year={goodie.edition ?? ''}
+              category={goodie.category}
+              description={goodie.description ?? ''}
+              stock={
+                goodie.total ? goodie.total : getTotalStock(goodie.variants)
+              }
+              sizesStocks={goodie.variants.map((v) => ({
+                size: v.size ?? 'N/A',
+                stockQty: v.stockQty,
+              }))}
+              imageUrl={goodie.assets[0]?.url}
+              onIncrement={() => {}}
+              onDecrement={() => {}}
+            />
           ))}
         </div>
       </PageLayoutContent>

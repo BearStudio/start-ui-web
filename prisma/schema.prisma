@@ -134,6 +134,7 @@ model Goodie {
   category    GoodieCategory
   description String?
   photoUrl    String? // ex: "/goodies/tshirt-start-ui-2022.png"
+  total       Int?
 
   // IMPORTANT: pas de syntaxe Prisma pour "tableau typé inline"
   // On stocke un tableau JSON: [{ key, size, color, stockQty, ... }]

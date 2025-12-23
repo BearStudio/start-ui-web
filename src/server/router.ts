@@ -5,6 +5,7 @@ import assetRouter from './routers/asset';
 import bookRouter from './routers/book';
 import configRouter from './routers/config';
 import genreRouter from './routers/genre';
+import goodieRouter from './routers/goodie';
 import userRouter from './routers/user';
 
 export type Router = typeof router;
@@ -17,4 +18,5 @@ export const router = {
   user: userRouter,
   config: configRouter,
   asset: assetRouter,
+  goodie: goodieRouter,
 };

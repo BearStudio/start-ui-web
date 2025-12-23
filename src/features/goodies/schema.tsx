@@ -53,6 +53,7 @@ export const zGoodie = () =>
     category: zGoodieCategory,
     description: zu.fieldText.nullish(),
     photoUrl: z.string().url().nullish(),
+    total: z.number().int().positive().nullish(),
 
     variants: zGoodieVariants.default([]),
 
@@ -233,4 +234,5 @@ export const zGoodieListItem = z.object({
   category: zGoodieCategory,
   photoUrl: z.string().url().nullish(),
   totalStock: z.number().int().min(0).optional(), // calculé côté serveur
+  description: z.string().nullish(),
 });
