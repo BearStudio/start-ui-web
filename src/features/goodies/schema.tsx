@@ -23,8 +23,6 @@ export const zGoodieOrderStatus = z.enum([
   'CANCELLED',
 ]);
 
-export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
-
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
 export const zGoodieVariant = z.object({
@@ -168,6 +166,7 @@ export const zFormFieldsGoodieOrder = () =>
   });
 
 //============ Asset ============
+export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 export type Asset = z.infer<ReturnType<typeof zAsset>>;
 
 export const zAsset = () =>

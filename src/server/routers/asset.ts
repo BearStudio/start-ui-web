@@ -16,7 +16,7 @@ export default {
       path: '/assets',
       tags,
     })
-    .output(z.array(zAsset))
+    .output(z.array(zAsset()))
     .handler(async ({ context }) => {
       return context.db.asset.findMany({
         orderBy: { createdAt: 'desc' },
@@ -31,8 +31,8 @@ export default {
       path: '/assets',
       tags,
     })
-    .input(zFormFieldsAsset)
-    .output(zAsset)
+    .input(zFormFieldsAsset())
+    .output(zAsset())
     .handler(async ({ context, input }) => {
       try {
         return await context.db.asset.create({
