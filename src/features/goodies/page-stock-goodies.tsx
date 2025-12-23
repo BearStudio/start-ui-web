@@ -14,7 +14,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-
 export const PageGoodiesStock = () => {
   const matchRoute = useMatchRoute();
 
@@ -48,9 +47,11 @@ export const PageGoodiesStock = () => {
             variant="secondary"
             size="sm"
           >
-            <div className="flex gap-2">
-              <PlusIcon />
-            </div>
+            <Link to="/manager/goodies/new">
+              <div className="flex gap-2">
+                <PlusIcon />
+              </div>
+            </Link>
           </ResponsiveIconButton>
         }
       >
@@ -79,6 +80,7 @@ export const PageGoodiesStock = () => {
           {goodies?.map((goodie) => (
             <CardGoodieDisplay
               key={goodie.id}
+              id={goodie.id}
               title={goodie.name}
               year={goodie.edition ?? ''}
               category={goodie.category}
@@ -91,8 +93,6 @@ export const PageGoodiesStock = () => {
                 stockQty: v.stockQty,
               }))}
               imageUrl={goodie.assets[0]?.url}
-              onIncrement={() => {}}
-              onDecrement={() => {}}
             />
           ))}
         </div>

@@ -35,6 +35,7 @@ import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
 import { Route as ManagerGoodiesSuppliersIndexRouteImport } from './routes/manager/goodies/suppliers.index'
 import { Route as ManagerGoodiesStockIndexRouteImport } from './routes/manager/goodies/stock.index'
+import { Route as ManagerGoodiesNewIndexRouteImport } from './routes/manager/goodies/new.index'
 import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
 import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
@@ -42,6 +43,7 @@ import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/a
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
+import { Route as ManagerGoodiesIdEditIndexRouteImport } from './routes/manager/goodies/$id.edit.index'
 import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
 
 const LogoutRoute = LogoutRouteImport.update({
@@ -176,6 +178,11 @@ const ManagerGoodiesStockIndexRoute =
     path: '/goodies/stock/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const ManagerGoodiesNewIndexRoute = ManagerGoodiesNewIndexRouteImport.update({
+  id: '/goodies/new/',
+  path: '/goodies/new/',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
 const ManagerBooksNewIndexRoute = ManagerBooksNewIndexRouteImport.update({
   id: '/books/new/',
   path: '/books/new/',
@@ -210,6 +217,12 @@ const ManagerUsersIdUpdateIndexRoute =
   ManagerUsersIdUpdateIndexRouteImport.update({
     id: '/users/$id/update/',
     path: '/users/$id/update/',
+    getParentRoute: () => ManagerRouteRoute,
+  } as any)
+const ManagerGoodiesIdEditIndexRoute =
+  ManagerGoodiesIdEditIndexRouteImport.update({
+    id: '/goodies/$id/edit/',
+    path: '/goodies/$id/edit/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
 const ManagerBooksIdUpdateIndexRoute =
@@ -248,11 +261,13 @@ export interface FileRoutesByFullPath {
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesByTo {
@@ -281,11 +296,13 @@ export interface FileRoutesByTo {
   '/app/books/$id': typeof AppBooksIdIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesById {
@@ -318,11 +335,13 @@ export interface FileRoutesById {
   '/app/books/$id/': typeof AppBooksIdIndexRoute
   '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
+  '/manager/goodies/new/': typeof ManagerGoodiesNewIndexRoute
   '/manager/goodies/stock/': typeof ManagerGoodiesStockIndexRoute
   '/manager/goodies/suppliers/': typeof ManagerGoodiesSuppliersIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
   '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/goodies/$id/edit/': typeof ManagerGoodiesIdEditIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRouteTypes {
@@ -356,11 +375,13 @@ export interface FileRouteTypes {
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
+    | '/manager/goodies/new'
     | '/manager/goodies/stock'
     | '/manager/goodies/suppliers'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/books/$id/update'
+    | '/manager/goodies/$id/edit'
     | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -389,11 +410,13 @@ export interface FileRouteTypes {
     | '/app/books/$id'
     | '/manager/books/$id'
     | '/manager/books/new'
+    | '/manager/goodies/new'
     | '/manager/goodies/stock'
     | '/manager/goodies/suppliers'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/manager/books/$id/update'
+    | '/manager/goodies/$id/edit'
     | '/manager/users/$id/update'
   id:
     | '__root__'
@@ -425,11 +448,13 @@ export interface FileRouteTypes {
     | '/app/books/$id/'
     | '/manager/books/$id/'
     | '/manager/books/new/'
+    | '/manager/goodies/new/'
     | '/manager/goodies/stock/'
     | '/manager/goodies/suppliers/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
     | '/manager/books/$id/update/'
+    | '/manager/goodies/$id/edit/'
     | '/manager/users/$id/update/'
   fileRoutesById: FileRoutesById
 }
@@ -631,6 +656,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerGoodiesStockIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/manager/goodies/new/': {
+      id: '/manager/goodies/new/'
+      path: '/goodies/new'
+      fullPath: '/manager/goodies/new'
+      preLoaderRoute: typeof ManagerGoodiesNewIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
     '/manager/books/new/': {
       id: '/manager/books/new/'
       path: '/books/new'
@@ -678,6 +710,13 @@ declare module '@tanstack/react-router' {
       path: '/users/$id/update'
       fullPath: '/manager/users/$id/update'
       preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/manager/goodies/$id/edit/': {
+      id: '/manager/goodies/$id/edit/'
+      path: '/goodies/$id/edit'
+      fullPath: '/manager/goodies/$id/edit'
+      preLoaderRoute: typeof ManagerGoodiesIdEditIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/$id/update/': {
@@ -733,11 +772,13 @@ interface ManagerRouteRouteChildren {
   ManagerUsersIndexRoute: typeof ManagerUsersIndexRoute
   ManagerBooksIdIndexRoute: typeof ManagerBooksIdIndexRoute
   ManagerBooksNewIndexRoute: typeof ManagerBooksNewIndexRoute
+  ManagerGoodiesNewIndexRoute: typeof ManagerGoodiesNewIndexRoute
   ManagerGoodiesStockIndexRoute: typeof ManagerGoodiesStockIndexRoute
   ManagerGoodiesSuppliersIndexRoute: typeof ManagerGoodiesSuppliersIndexRoute
   ManagerUsersIdIndexRoute: typeof ManagerUsersIdIndexRoute
   ManagerUsersNewIndexRoute: typeof ManagerUsersNewIndexRoute
   ManagerBooksIdUpdateIndexRoute: typeof ManagerBooksIdUpdateIndexRoute
+  ManagerGoodiesIdEditIndexRoute: typeof ManagerGoodiesIdEditIndexRoute
   ManagerUsersIdUpdateIndexRoute: typeof ManagerUsersIdUpdateIndexRoute
 }
 
@@ -750,11 +791,13 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerUsersIndexRoute: ManagerUsersIndexRoute,
   ManagerBooksIdIndexRoute: ManagerBooksIdIndexRoute,
   ManagerBooksNewIndexRoute: ManagerBooksNewIndexRoute,
+  ManagerGoodiesNewIndexRoute: ManagerGoodiesNewIndexRoute,
   ManagerGoodiesStockIndexRoute: ManagerGoodiesStockIndexRoute,
   ManagerGoodiesSuppliersIndexRoute: ManagerGoodiesSuppliersIndexRoute,
   ManagerUsersIdIndexRoute: ManagerUsersIdIndexRoute,
   ManagerUsersNewIndexRoute: ManagerUsersNewIndexRoute,
   ManagerBooksIdUpdateIndexRoute: ManagerBooksIdUpdateIndexRoute,
+  ManagerGoodiesIdEditIndexRoute: ManagerGoodiesIdEditIndexRoute,
   ManagerUsersIdUpdateIndexRoute: ManagerUsersIdUpdateIndexRoute,
 }
 

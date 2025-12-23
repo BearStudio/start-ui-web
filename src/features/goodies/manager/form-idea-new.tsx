@@ -6,7 +6,6 @@ import { useForm, useFormContext } from 'react-hook-form';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { BackButton } from '@/components/back-button';
 import {
   Form,
   FormField,
@@ -16,13 +15,6 @@ import {
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
 
 import {
   FormFieldsIdea,

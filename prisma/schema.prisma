@@ -152,7 +152,6 @@ model Goodie {
   assets          Asset[]
   grants          GoodieGrant[]
   onboardingItems OnboardingPackItem[]
-  eventNeeds      EventGoodieNeed[]
 
   @@index([category])
   @@index([name])
@@ -279,40 +278,6 @@ model OnboardingAssignment {
   @@unique([userId, packId])
   @@index([isDone])
   @@map("onboarding_assignment")
-}
-
-// ========= Events =========
-model Event {
-  id        String    @id @default(cuid())
-  name      String
-  date      DateTime?
-  location  String?
-  comment   String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  needs EventGoodieNeed[]
-
-  @@index([date])
-  @@index([name])
-  @@map("event")
-}
-
-model EventGoodieNeed {
-  id      String @id @default(cuid())
-  eventId String
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-
-  goodieId String
-  goodie   Goodie @relation(fields: [goodieId], references: [id], onDelete: Restrict)
-
-  variantKey String?
-  quantity   Int     @default(1)
-  comment    String?
-
-  @@unique([eventId, goodieId, variantKey])
-  @@index([goodieId])
-  @@map("event_goodie_need")
 }
 
 // ========= Grants (qui a eu quoi) =========

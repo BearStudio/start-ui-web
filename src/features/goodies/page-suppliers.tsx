@@ -17,6 +17,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+
 import { FormIdeaNew } from './manager/form-idea-new';
 import GoodieSuppliersTab from './tab-suppliers-list';
 

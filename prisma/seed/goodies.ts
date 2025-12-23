@@ -18,8 +18,6 @@ export async function createGoodies() {
   await seedGoodieOrders(goodies, suppliers, users);
   const packs = await seedOnboardingPacks(goodies);
   await seedOnboardingAssignments(packs, users);
-  const events = await seedEvents();
-  await seedEventNeeds(events, goodies);
   await seedGoodieGrants(goodies, users);
 
   console.log('✅ Goodies ecosystem seeded');
@@ -166,39 +164,7 @@ async function seedOnboardingAssignments(
 
   console.log('✅ Onboarding assignments created');
 }
-async function seedEvents() {
-  const events = await Promise.all(
-    ['React Paris', 'JS Conf', 'Tech Meetup'].map((name) =>
-      db.event.create({
-        data: {
-          name,
-          date: faker.date.future(),
-          location: faker.location.city(),
-        },
-      })
-    )
-  );
 
-  console.log('✅ Events created');
-  return events;
-}
-
-async function seedEventNeeds(events: ExplicitAny[], goodies: ExplicitAny[]) {
-  await Promise.all(
-    events.map((event) =>
-      db.eventGoodieNeed.create({
-        data: {
-          eventId: event.id,
-          goodieId: goodies[randomInt(goodies.length)].id,
-          variantKey: 'L',
-          quantity: randomInt(20, 100),
-        },
-      })
-    )
-  );
-
-  console.log('✅ Event goodie needs created');
-}
 async function seedGoodieGrants(goodies: ExplicitAny[], users: ExplicitAny[]) {
   await Promise.all(
     users.slice(0, 20).map((user) =>

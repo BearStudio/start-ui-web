@@ -23,8 +23,6 @@ export const zGoodieOrderStatus = z.enum([
   'CANCELLED',
 ]);
 
-export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
-
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
 export const zGoodieVariant = z.object({
@@ -56,7 +54,8 @@ export const zGoodie = () =>
     edition: zu.fieldText.nullish(),
     category: zGoodieCategory,
     description: zu.fieldText.nullish(),
-    photoUrl: z.string().url().nullish(),
+    photoUrl: z.string().url().nullish().optional(),
+    total: z.number().int().nullish(),
 
     variants: zGoodieVariants.default([]),
 
@@ -100,6 +99,7 @@ export const zFormFieldsGoodie = () =>
     variants: true,
     releaseLabel: true,
     releaseDate: true,
+    total: true,
   });
 
 //============ Supplier ============
@@ -166,6 +166,7 @@ export const zFormFieldsGoodieOrder = () =>
   });
 
 //============ Asset ============
+export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 export type Asset = z.infer<ReturnType<typeof zAsset>>;
 
 export const zAsset = () =>
@@ -249,14 +250,3 @@ export const zFormFieldsGoodieGrant = () =>
     reason: true,
     comment: true,
   });
-
-//============ List Item ============
-
-export const zGoodieListItem = z.object({
-  id: z.string(),
-  name: zu.fieldText.required(),
-  edition: zu.fieldText.nullish(),
-  category: zGoodieCategory,
-  photoUrl: z.string().url().nullish(),
-  totalStock: z.number().int().min(0).optional(), // calculé côté serveur
-});
