@@ -14,10 +14,16 @@ export const zGoodieCategory = z.enum([
 
 export const GOODIE_CATEGORY_OPTIONS = zGoodieCategory.options;
 
-export const zGoodieOrderStatus = () =>
-  z.enum(['IDEA', 'REQUESTED', 'QUOTED', 'ORDERED', 'RECEIVED', 'CANCELLED']);
+export const zGoodieOrderStatus = z.enum([
+  'IDEA',
+  'REQUESTED',
+  'QUOTED',
+  'ORDERED',
+  'RECEIVED',
+  'CANCELLED',
+]);
 
-export const zAssetType = () => z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
+export const zAssetType = z.enum(['LOGO', 'MOCKUP', 'PHOTO', 'OTHER']);
 
 export type Goodie = z.infer<ReturnType<typeof zGoodie>>;
 
@@ -127,7 +133,7 @@ export type GoodieOrder = z.infer<ReturnType<typeof zGoodieOrder>>;
 export const zGoodieOrder = () =>
   z.object({
     id: z.string(),
-    status: zGoodieOrderStatus(),
+    status: zGoodieOrderStatus,
 
     goodieId: z.string().nullish(),
     supplierId: z.string().nullish(),
@@ -165,7 +171,7 @@ export type Asset = z.infer<ReturnType<typeof zAsset>>;
 export const zAsset = () =>
   z.object({
     id: z.string(),
-    type: zAssetType(),
+    type: zAssetType,
     name: zu.fieldText.required(),
     url: z.string().url(),
     comment: zu.fieldText.nullish(),
