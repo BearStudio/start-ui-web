@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import { zGoodieDetail } from '@/features/goodies/schema';
+import {
+  zFormFieldsIdea,
+  zGoodieDetail,
+  zGoodieIdea,
+} from '@/features/goodies/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['goodies'];
@@ -72,5 +76,31 @@ export default {
         nextCursor,
         total,
       };
+    }),
+
+  createIdea: protectedProcedure({
+    permission: {
+      goodie: ['create'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/goodies',
+      tags,
+    })
+    .input(zFormFieldsIdea())
+    .output(zGoodieIdea())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Add new idea');
+
+      const created = await context.db.goodie.create({
+        data: {
+          name: input.name,
+          category: input.category,
+          description: input.description,
+        },
+        select: { id: true, name: true, category: true, description: true },
+      });
+      return { ...created, description: created.description ?? '' };
     }),
 };
