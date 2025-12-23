@@ -64,12 +64,16 @@ export default function CardGoodieDisplay({
             {sizeStock.size}: {sizeStock.stockQty}
           </Badge>
         ))}
-        <Button size="icon-lg" variant="destructive" onClick={onIncrement}>
-          <Plus />
-        </Button>
-        <Button size="icon-lg" variant="destructive" onClick={onDecrement}>
-          <Minus />
-        </Button>
+        {(sizesStocks ?? []).length == 0 && (
+          <>
+            <Button size="icon-lg" variant="destructive" onClick={onIncrement}>
+              <Plus />
+            </Button>
+            <Button size="icon-lg" variant="destructive" onClick={onDecrement}>
+              <Minus />
+            </Button>
+          </>
+        )}
       </CardFooter>
     </Card>
   );

@@ -18,6 +18,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 import { FormIdeaNew } from './manager/form-idea-new';
+import GoodieSuppliersTab from './tab-suppliers-list';
 
 export const PageGoodiesSuppliers = () => {
   const matchRoute = useMatchRoute();
@@ -93,7 +94,7 @@ export const PageGoodiesSuppliers = () => {
             <FormIdeaNew />
           </TabsContent>
           <TabsContent value="suppliersList">
-            <span>Ajouter le fichier du composant contenant ce tabs</span>
+            <GoodieSuppliersTab />
           </TabsContent>
           <TabsContent value="createdObject">
             <span>Ajouter le fichier du composant contenant ce tabs</span>
