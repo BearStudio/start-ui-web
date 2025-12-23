@@ -76,7 +76,7 @@ export const FormIdeaNew = () => {
   const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(zFormFieldsIdea()),
-    values: {
+    defaultValues: {
       name: '',
       category: 'TSHIRT',
       description: '',
@@ -90,9 +90,9 @@ export const FormIdeaNew = () => {
           queryKey: orpc.goodie.getAll.key(),
           type: 'all',
         });
-
         if (canGoBack) router.history.back({ ignoreBlocker: true });
         else router.navigate({ to: '..', replace: true, ignoreBlocker: true });
+        form.reset();
       },
     })
   );
@@ -100,48 +100,33 @@ export const FormIdeaNew = () => {
   return (
     <>
       <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={async (values) => {
-          goodieIdeaCreate.mutate(values);
-        }}
-      >
-        <PageLayout>
-          <PageLayoutTopBar
-            backButton={<BackButton />}
-            actions={
-              <Button
-                size="sm"
-                type="submit"
-                className="min-w-20"
-                loading={goodieIdeaCreate.isPending}
-              >
-                {"Ajouter l'idée"}
-              </Button>
-            }
-          >
-            <PageLayoutTopBarTitle>
-              {'Ajouter une nouvelle idée de goodies :'}
-            </PageLayoutTopBarTitle>
-          </PageLayoutTopBar>
-          <PageLayoutContent>
-            <div className="flex flex-col gap-4 xs:flex-row">
-              <div className="flex-2">
-                <Card>
-                  <CardContent>
-                    <FormGoodieIdea />
-                  </CardContent>
-                </Card>
-              </div>
-              <div
-                aria-hidden
-                className="mx-auto w-full max-w-64 min-w-48 flex-1"
-              >
-                <GiftIcon /> // to be fixed with real picture type
-              </div>
+      <Form {...form} onSubmit={(values) => goodieIdeaCreate.mutate(values)}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 xs:flex-row">
+            <div className="flex-2">
+              <Card>
+                <CardContent>
+                  <FormGoodieIdea />
+                </CardContent>
+              </Card>
             </div>
-          </PageLayoutContent>
-        </PageLayout>
+
+            <div
+              aria-hidden
+              className="mx-auto w-full max-w-64 min-w-48 flex-1"
+            >
+              <GiftIcon />
+            </div>
+          </div>
+
+          <Button
+            type="submit"
+            loading={goodieIdeaCreate.isPending}
+            className="w-full"
+          >
+            + Ajouter l’idée
+          </Button>
+        </div>
       </Form>
     </>
   );
