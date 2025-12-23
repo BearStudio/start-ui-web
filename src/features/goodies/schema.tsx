@@ -193,7 +193,10 @@ export const zGoodieIdea = () =>
     id: z.string(),
     name: zu.fieldText.required(),
     category: zGoodieCategory(),
-    description: z.string(),
+    description: z
+      .string()
+      .nullish()
+      .transform((v) => v ?? ''),
   });
 
 export type FormFieldsIdea = z.infer<ReturnType<typeof zFormFieldsIdea>>;
