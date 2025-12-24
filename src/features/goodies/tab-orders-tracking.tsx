@@ -118,10 +118,15 @@ export default function GoodieOrdersTab() {
                 <DataListCell>
                   <div className="flex items-center gap-2">
                     <Avatar>
-                      <AvatarImage src={order.madeBy.image} alt="@cosmobear" />
+                      {order.madeBy?.image ? (
+                        <AvatarImage
+                          src={order.madeBy.image}
+                          alt="@cosmobear"
+                        />
+                      ) : null}
                     </Avatar>
                     <DataListText className="text-xs text-muted-foreground">
-                      {order.madeBy.name}
+                      {order.madeBy?.name ?? '_'}
                     </DataListText>
                   </div>
                 </DataListCell>
