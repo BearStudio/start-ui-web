@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { GiftIcon, Edit, EllipsisVertical, Save, Trash, X } from 'lucide-react';
 import { useForm, useFormContext } from 'react-hook-form';
+import { useRainbow } from 'kikoojs';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -151,13 +152,18 @@ export const FormIdeaNew = () => {
     })
   );
 
+  const [rainbowRef1] = useRainbow<HTMLDivElement>({ speed: 0.2 });
+  const [rainbowRef2] = useRainbow<HTMLDivElement>({ speed: 0.3 });
+  const [rainbowRef3] = useRainbow<HTMLDivElement>({ speed: 0.4 });
+  const [rainbowRef4] = useRainbow<HTMLDivElement>({ speed: 0.5 });
+
   return (
     <>
       <PreventNavigation shouldBlock={form.formState.isDirty} />
       <Form {...form} onSubmit={(values) => goodieIdeaCreate.mutate(values)}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4" ref={rainbowRef1}>
           Ajouter une nouvelle idée :
-          <div className="flex flex-col gap-4 xs:flex-row">
+          <div className="flex flex-col gap-4 xs:flex-row" ref={rainbowRef2}>
             <div className="flex-2">
               <Card>
                 <CardContent>
@@ -169,6 +175,7 @@ export const FormIdeaNew = () => {
             <div
               aria-hidden
               className="mx-auto w-full max-w-64 min-w-48 flex-1"
+              ref={rainbowRef4}
             >
               <GiftIcon />
             </div>
@@ -180,7 +187,7 @@ export const FormIdeaNew = () => {
           >
             + Ajouter l’idée
           </Button>
-          <div className="mt-2 flex flex-col gap-3">
+          <div className="mt-2 flex flex-col gap-3" ref={rainbowRef2}>
             <div className="text-md font-medium">Liste des idées :</div>
 
             {goodieIdeaList.isPending ? (
@@ -191,7 +198,10 @@ export const FormIdeaNew = () => {
               </div>
             ) : (
               <>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+                  ref={rainbowRef3}
+                >
                   {goodieIdeaList.data?.pages
                     .flatMap((p) => p.items)
                     .map((idea) => (
