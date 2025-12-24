@@ -49,7 +49,14 @@ export default {
       try {
         return await context.db.goodieOrder.create({
           data: {
-            ...input,
+            name: input.name ?? '',
+            status: input.status,
+            goodieId: input.goodieId ?? undefined,
+            supplierId: input.supplierId ?? undefined,
+            madeById: input.madeById ?? undefined,
+            quantity: input.quantity ?? undefined,
+            qualityNote: input.qualityNote ?? undefined,
+            comment: input.comment ?? undefined,
             requestedAt: new Date(),
           },
         });
