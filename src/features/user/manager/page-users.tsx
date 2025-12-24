@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -138,6 +138,10 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
                       <Avatar>
+                        <AvatarImage
+                          src={item.image ?? undefined}
+                          alt={item.name ?? ''}
+                        />
                         <AvatarFallback
                           variant="boring"
                           name={item.name ?? ''}
