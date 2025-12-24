@@ -1,10 +1,10 @@
+/* eslint-disable sonarjs/no-nested-conditional */
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { GiftIcon } from 'lucide-react';
 import { useForm, useFormContext } from 'react-hook-form';
 

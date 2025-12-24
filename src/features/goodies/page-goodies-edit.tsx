@@ -9,7 +9,6 @@ import {
   useForm,
 } from 'react-hook-form';
 import { toast } from 'sonner';
-import z from 'zod';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -21,7 +20,11 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
-import { zFormFieldsGoodie } from '@/features/goodies/schema';
+import {
+  FormFieldsGoodie,
+  mapFormToApi,
+  SIZE_OPTIONS,
+} from '@/features/goodies/page-goodies-new';
 import { zGoodieCategory } from '@/features/goodies/schema';
 import {
   PageLayout,
@@ -29,23 +32,6 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-
-type VariantLine = {
-  size: string;
-  quantity: number;
-};
-
-export type FormFieldsGoodie = {
-  name: string;
-  edition?: string;
-  category?: string | null;
-  description?: string;
-  photoUrl?: string | null;
-  hasVariants: boolean;
-  variants: VariantLine[];
-  totalQuantity: number;
-  releaseDate?: string;
-};
 
 const GOODIE_CATEGORY_OPTIONS = zGoodieCategory.options.map((c) => ({
   id: c,
@@ -61,7 +47,7 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
       category: 'OTHER',
       description: '',
       photoUrl: null,
-      hasVariants: false,
+      variantMode: 'none',
       variants: [],
       totalQuantity: 0,
       releaseDate: '',
@@ -73,43 +59,68 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
     orpc.goodie.getGoodieById.queryOptions({ input: { id: props.params.id } })
   );
   useEffect(() => {
-    if (goodieQuery.data) {
-      const g = goodieQuery.data;
-      reset({
-        name: g.name,
-        edition: g.edition ?? '',
-        category: g.category ?? 'OTHER',
-        description: g.description ?? '',
-        photoUrl: g.photoUrl ?? null,
-        releaseDate: g.releaseDate
-          ? new Date(g.releaseDate).toISOString().slice(0, 10)
-          : '',
-        hasVariants: (g.variants?.length ?? 0) > 0,
-        variants:
-          g.variants?.map((v) => ({
-            size: v.size ?? '',
-            quantity: v.stockQty ?? 0,
-          })) ?? [],
-        totalQuantity: g.total ?? 0,
-      });
+    if (!goodieQuery.data) return;
+
+    const g = goodieQuery.data;
+
+    // Déterminer le mode de variante à partir des données existantes
+    let mode: FormFieldsGoodie['variantMode'] = 'none';
+    if (g.variants?.length > 0) {
+      const hasSize = g.variants.some((v) => !!v.size);
+      const hasColor = g.variants.some((v) => !!v.color);
+      if (hasSize && hasColor) mode = 'sizeAndColor';
+      else if (hasSize) mode = 'size';
+      else if (hasColor) mode = 'color';
     }
+
+    reset({
+      name: g.name,
+      edition: g.edition ?? '',
+      category: g.category ?? 'OTHER',
+      description: g.description ?? '',
+      photoUrl: g.photoUrl ?? null,
+      releaseDate: g.releaseDate
+        ? new Date(g.releaseDate).toISOString().slice(0, 10)
+        : '',
+      variantMode: mode,
+      variants:
+        g.variants?.map((v) => ({
+          size: v.size ?? '',
+          color: v.color ?? '',
+          quantity: v.stockQty ?? 0,
+        })) ?? [],
+      totalQuantity: g.total ?? 0,
+    });
   }, [goodieQuery.data, reset]);
 
-  const hasVariants = watch('hasVariants');
-  useEffect(() => {
-    if (hasVariants && fields.length === 0) {
-      ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
-    }
-
-    if (!hasVariants && fields.length > 0) {
-      fields.forEach((_, index) => remove(index));
-    }
-  }, [hasVariants]);
-
+  const variantMode = watch('variantMode');
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'variants',
   });
+
+  useEffect(() => {
+    // Vider le tableau si mode 'none'
+    if (variantMode === 'none' && fields.length > 0) {
+      fields.forEach((_, index) => remove(index));
+      return;
+    }
+
+    // Ajouter des lignes si le tableau est vide
+    if (fields.length === 0) {
+      if (variantMode === 'size') {
+        ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
+      } else if (variantMode === 'color') {
+        ['Rouge', 'Bleu', 'Vert'].forEach((color) =>
+          append({ color, quantity: 0 })
+        );
+      } else if (variantMode === 'sizeAndColor') {
+        ['S', 'M', 'L'].forEach((size) =>
+          append({ size, color: '', quantity: 0 })
+        );
+      }
+    }
+  }, [variantMode]);
 
   const queryClient = useQueryClient();
   const canGoBack = useCanGoBack();
@@ -134,8 +145,6 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
       },
     })
   );
-
-  const variants = watch('variants');
 
   return (
     <PageLayout>
@@ -222,72 +231,70 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
                     />
                   </FormField>
 
-                  <label className="flex items-center gap-2">
-                    <Controller
+                  <FormField>
+                    <FormFieldLabel>Type de variante</FormFieldLabel>
+                    <FormFieldController
                       control={control}
-                      name="hasVariants"
-                      render={({ field }) => (
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={field.onChange}
-                          className="form-checkbox"
-                        />
-                      )}
+                      name="variantMode"
+                      type="select"
+                      options={[
+                        { id: 'none', label: 'Aucune' },
+                        { id: 'size', label: 'Taille uniquement' },
+                        { id: 'color', label: 'Couleur uniquement' },
+                        { id: 'sizeAndColor', label: 'Taille et Couleur' },
+                      ]}
                     />
-                    Ce goodie a des tailles
-                  </label>
+                  </FormField>
 
-                  {hasVariants ? (
+                  {fields.length > 0 && (
                     <div className="flex flex-col gap-2 rounded border p-2">
-                      {fields.map((field, index) => {
-                        const selectedSizes = variants
-                          ?.map((v, i) => (i !== index ? v?.size : null))
-                          .filter(Boolean);
-
-                        const sizeOptions = [
-                          { id: '2XS', label: '2XS' },
-                          { id: 'XS', label: 'XS' },
-                          { id: 'S', label: 'S' },
-                          { id: 'M', label: 'M' },
-                          { id: 'L', label: 'L' },
-                          { id: 'XL', label: 'XL' },
-                          { id: '2XL', label: '2XL' },
-                        ].filter((opt) => !selectedSizes.includes(opt.id));
-
-                        return (
-                          <div
-                            key={field.id}
-                            className="flex items-center gap-2"
-                          >
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex items-center gap-2">
+                          {(variantMode === 'size' ||
+                            variantMode === 'sizeAndColor') && (
                             <FormField>
+                              <FormFieldLabel>Taille</FormFieldLabel>
                               <FormFieldController
                                 control={control}
                                 name={`variants.${index}.size`}
                                 type="select"
                                 placeholder="Taille"
-                                options={sizeOptions}
+                                options={SIZE_OPTIONS}
                               />
                             </FormField>
+                          )}
+                          {(variantMode === 'color' ||
+                            variantMode === 'sizeAndColor') && (
                             <FormField>
+                              <FormFieldLabel>Couleur</FormFieldLabel>
                               <FormFieldController
                                 control={control}
-                                name={`variants.${index}.quantity`}
-                                type="number"
-                                placeholder="Quantité"
-                              />{' '}
+                                name={`variants.${index}.color`}
+                                type="text"
+                                placeholder="Couleur"
+                              />
                             </FormField>
-                            <Button
-                              variant="ghost"
-                              size="icon-xs"
-                              onClick={() => remove(index)}
-                            >
-                              <X />
-                            </Button>
-                          </div>
-                        );
-                      })}
-                      <div className="flex items-center justify-between">
+                          )}
+                          <FormField>
+                            <FormFieldLabel>Quantité</FormFieldLabel>
+                            <FormFieldController
+                              control={control}
+                              name={`variants.${index}.quantity`}
+                              type="number"
+                              placeholder="Quantité"
+                            />{' '}
+                          </FormField>
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => remove(index)}
+                          >
+                            <X />
+                          </Button>
+                        </div>
+                      ))}
+
+                      <div className="mt-2 flex items-center justify-between">
                         <div>
                           Total:{' '}
                           {fields.reduce(
@@ -297,14 +304,18 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
                           )}
                         </div>
                         <Button
-                          onClick={() => append({ size: '', quantity: 0 })}
+                          onClick={() =>
+                            append({ size: '', color: '', quantity: 0 })
+                          }
                         >
                           <PlusIcon />
                           <span>Ajouter une ligne</span>
                         </Button>
                       </div>
                     </div>
-                  ) : (
+                  )}
+
+                  {variantMode === 'none' && (
                     <FormField>
                       <FormFieldLabel>Quantité totale</FormFieldLabel>
                       <FormFieldController
@@ -323,51 +334,4 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
       </FormProvider>
     </PageLayout>
   );
-}
-
-function mapFormToApi(
-  values: FormFieldsGoodie
-): z.infer<ReturnType<typeof zFormFieldsGoodie>> {
-  if (values.hasVariants) {
-    return {
-      name: values.name,
-      edition: values.edition ?? null,
-      category: values.category as
-        | 'TSHIRT'
-        | 'HOODIE'
-        | 'STICKER'
-        | 'MUG'
-        | 'TOTE_BAG'
-        | 'NOTEBOOK'
-        | 'OTHER',
-      description: values.description ?? null,
-      photoUrl: values.photoUrl ?? null,
-      releaseDate: values.releaseDate ? new Date(values.releaseDate) : null,
-
-      variants: values.variants.map((v) => ({
-        key: `SIZE_${v.size}`,
-        size: v.size,
-        stockQty: v.quantity,
-      })),
-    };
-  }
-
-  return {
-    name: values.name,
-    edition: values.edition ?? null,
-    category: values.category as
-      | 'TSHIRT'
-      | 'HOODIE'
-      | 'STICKER'
-      | 'MUG'
-      | 'TOTE_BAG'
-      | 'NOTEBOOK'
-      | 'OTHER',
-    description: values.description ?? null,
-    photoUrl: values.photoUrl ?? null,
-    releaseDate: values.releaseDate ? new Date(values.releaseDate) : null,
-
-    total: values.totalQuantity,
-    variants: [],
-  };
 }

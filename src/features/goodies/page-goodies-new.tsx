@@ -30,10 +30,22 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 
-type VariantLine = {
-  size: string;
+export type VariantLine = {
+  size?: string;
+  color?: string;
   quantity: number;
 };
+export const SIZE_OPTIONS = [
+  { id: '2XS', label: '2XS' },
+  { id: 'XS', label: 'XS' },
+  { id: 'S', label: 'S' },
+  { id: 'M', label: 'M' },
+  { id: 'L', label: 'L' },
+  { id: 'XL', label: 'XL' },
+  { id: '2XL', label: '2XL' },
+];
+
+export type VariantMode = 'none' | 'size' | 'color' | 'sizeAndColor';
 
 export type FormFieldsGoodie = {
   name: string;
@@ -41,7 +53,7 @@ export type FormFieldsGoodie = {
   category?: string | null;
   description?: string;
   photoUrl?: string | null;
-  hasVariants: boolean;
+  variantMode: VariantMode;
   variants: VariantLine[];
   totalQuantity: number;
   releaseDate?: string;
@@ -61,7 +73,7 @@ export default function PageGoodieNew() {
       category: 'OTHER',
       description: '',
       photoUrl: null,
-      hasVariants: false,
+      variantMode: 'none',
       variants: [],
       totalQuantity: 0,
       releaseDate: '',
@@ -70,18 +82,28 @@ export default function PageGoodieNew() {
 
   const { control, watch, handleSubmit } = form;
 
-  const hasVariants = watch('hasVariants');
+  const variantMode = watch('variantMode');
   useEffect(() => {
-    if (hasVariants && fields.length === 0) {
-      // Ajouter par défaut S, M, L
-      ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
+    if (variantMode === 'none') {
+      // rien à faire
+      remove();
+      return;
     }
 
-    if (!hasVariants && fields.length > 0) {
-      // Supprimer toutes les variantes si décoché
-      fields.forEach((_, index) => remove(index));
+    if (fields.length === 0) {
+      if (variantMode === 'size') {
+        ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
+      } else if (variantMode === 'color') {
+        ['Rouge', 'Bleu', 'Vert'].forEach((color) =>
+          append({ color, quantity: 0 })
+        );
+      } else if (variantMode === 'sizeAndColor') {
+        ['S', 'M', 'L'].forEach((size) =>
+          append({ size, color: '', quantity: 0 })
+        );
+      }
     }
-  }, [hasVariants]);
+  }, [variantMode]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -111,8 +133,6 @@ export default function PageGoodieNew() {
       },
     })
   );
-
-  const variants = watch('variants');
 
   return (
     <PageLayout>
@@ -199,72 +219,70 @@ export default function PageGoodieNew() {
                     />
                   </FormField>
 
-                  <label className="flex items-center gap-2">
-                    <Controller
+                  <FormField>
+                    <FormFieldLabel>Type de variante</FormFieldLabel>
+                    <FormFieldController
                       control={control}
-                      name="hasVariants"
-                      render={({ field }) => (
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={field.onChange}
-                          className="form-checkbox"
-                        />
-                      )}
+                      name="variantMode"
+                      type="select"
+                      options={[
+                        { id: 'none', label: 'Aucune' },
+                        { id: 'size', label: 'Taille uniquement' },
+                        { id: 'color', label: 'Couleur uniquement' },
+                        { id: 'sizeAndColor', label: 'Taille et Couleur' },
+                      ]}
                     />
-                    Ce goodie a des tailles
-                  </label>
+                  </FormField>
 
-                  {hasVariants ? (
+                  {fields.length > 0 && (
                     <div className="flex flex-col gap-2 rounded border p-2">
-                      {fields.map((field, index) => {
-                        const selectedSizes = variants
-                          ?.map((v, i) => (i !== index ? v?.size : null))
-                          .filter(Boolean);
-
-                        const sizeOptions = [
-                          { id: '2XS', label: '2XS' },
-                          { id: 'XS', label: 'XS' },
-                          { id: 'S', label: 'S' },
-                          { id: 'M', label: 'M' },
-                          { id: 'L', label: 'L' },
-                          { id: 'XL', label: 'XL' },
-                          { id: '2XL', label: '2XL' },
-                        ].filter((opt) => !selectedSizes.includes(opt.id));
-
-                        return (
-                          <div
-                            key={field.id}
-                            className="flex items-center gap-2"
-                          >
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex items-center gap-2">
+                          {(variantMode === 'size' ||
+                            variantMode === 'sizeAndColor') && (
                             <FormField>
+                              <FormFieldLabel>Taille</FormFieldLabel>
                               <FormFieldController
                                 control={control}
                                 name={`variants.${index}.size`}
                                 type="select"
                                 placeholder="Taille"
-                                options={sizeOptions}
+                                options={SIZE_OPTIONS}
                               />
                             </FormField>
+                          )}
+                          {(variantMode === 'color' ||
+                            variantMode === 'sizeAndColor') && (
                             <FormField>
+                              <FormFieldLabel>Couleur</FormFieldLabel>
                               <FormFieldController
                                 control={control}
-                                name={`variants.${index}.quantity`}
-                                type="number"
-                                placeholder="Quantité"
-                              />{' '}
+                                name={`variants.${index}.color`}
+                                type="text"
+                                placeholder="Couleur"
+                              />
                             </FormField>
-                            <Button
-                              variant="ghost"
-                              size="icon-xs"
-                              onClick={() => remove(index)}
-                            >
-                              <X />
-                            </Button>
-                          </div>
-                        );
-                      })}
-                      <div className="flex items-center justify-between">
+                          )}
+                          <FormField>
+                            <FormFieldLabel>Quantité</FormFieldLabel>
+                            <FormFieldController
+                              control={control}
+                              name={`variants.${index}.quantity`}
+                              type="number"
+                              placeholder="Quantité"
+                            />{' '}
+                          </FormField>
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => remove(index)}
+                          >
+                            <X />
+                          </Button>
+                        </div>
+                      ))}
+
+                      <div className="mt-2 flex items-center justify-between">
                         <div>
                           Total:{' '}
                           {fields.reduce(
@@ -274,14 +292,18 @@ export default function PageGoodieNew() {
                           )}
                         </div>
                         <Button
-                          onClick={() => append({ size: '', quantity: 0 })}
+                          onClick={() =>
+                            append({ size: '', color: '', quantity: 0 })
+                          }
                         >
                           <PlusIcon />
                           <span>Ajouter une ligne</span>
                         </Button>
                       </div>
                     </div>
-                  ) : (
+                  )}
+
+                  {variantMode === 'none' && (
                     <FormField>
                       <FormFieldLabel>Quantité totale</FormFieldLabel>
                       <FormFieldController
@@ -302,10 +324,10 @@ export default function PageGoodieNew() {
   );
 }
 
-function mapFormToApi(
+export function mapFormToApi(
   values: FormFieldsGoodie
 ): z.infer<ReturnType<typeof zFormFieldsGoodie>> {
-  if (values.hasVariants) {
+  if (values.variantMode) {
     return {
       name: values.name,
       edition: values.edition ?? null,
@@ -321,11 +343,19 @@ function mapFormToApi(
       photoUrl: values.photoUrl ?? null,
       releaseDate: values.releaseDate ? new Date(values.releaseDate) : null,
 
-      variants: values.variants.map((v) => ({
-        key: `SIZE_${v.size}`,
-        size: v.size,
-        stockQty: v.quantity,
-      })),
+      variants: values.variants.map((v) => {
+        const parts = [];
+        if (v.size) parts.push(`SIZE_${v.size}`);
+        if (v.color) parts.push(v.color.toUpperCase());
+        const key = parts.join('_') || 'DEFAULT';
+
+        return {
+          key,
+          size: v.size ?? null,
+          color: v.color ?? null,
+          stockQty: v.quantity,
+        };
+      }),
     };
   }
 
