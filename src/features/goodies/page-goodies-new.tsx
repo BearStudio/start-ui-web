@@ -83,33 +83,41 @@ export default function PageGoodieNew() {
   const { control, watch, handleSubmit } = form;
 
   const variantMode = watch('variantMode');
-  useEffect(() => {
-    if (variantMode === 'none') {
-      // rien à faire
-      remove();
-      return;
-    }
 
-    if (fields.length === 0) {
-      if (variantMode === 'size') {
-        ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
-      } else if (variantMode === 'color') {
-        ['Rouge', 'Bleu', 'Vert'].forEach((color) =>
-          append({ color, quantity: 0 })
-        );
-      } else if (variantMode === 'sizeAndColor') {
-        ['S', 'M', 'L'].forEach((size) =>
-          append({ size, color: '', quantity: 0 })
-        );
-      }
-    }
-  }, [variantMode]);
-
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: 'variants',
   });
+  useEffect(() => {
+    if (variantMode === 'none') {
+      replace([]);
+      return;
+    }
 
+    if (variantMode === 'size') {
+      replace([
+        { size: 'S', quantity: 0 },
+        { size: 'M', quantity: 0 },
+        { size: 'L', quantity: 0 },
+      ]);
+    }
+
+    if (variantMode === 'color') {
+      replace([
+        { color: 'Rouge', quantity: 0 },
+        { color: 'Bleu', quantity: 0 },
+        { color: 'Vert', quantity: 0 },
+      ]);
+    }
+
+    if (variantMode === 'sizeAndColor') {
+      replace([
+        { size: 'S', color: '', quantity: 0 },
+        { size: 'M', color: '', quantity: 0 },
+        { size: 'L', color: '', quantity: 0 },
+      ]);
+    }
+  }, [variantMode, replace]);
   const queryClient = useQueryClient();
   const canGoBack = useCanGoBack();
   const router = useRouter();
@@ -292,9 +300,17 @@ export default function PageGoodieNew() {
                           )}
                         </div>
                         <Button
-                          onClick={() =>
-                            append({ size: '', color: '', quantity: 0 })
-                          }
+                          onClick={() => {
+                            if (variantMode === 'size') {
+                              append({ size: '', quantity: 0 });
+                            }
+                            if (variantMode === 'color') {
+                              append({ color: '', quantity: 0 });
+                            }
+                            if (variantMode === 'sizeAndColor') {
+                              append({ size: '', color: '', quantity: 0 });
+                            }
+                          }}
                         >
                           <PlusIcon />
                           <span>Ajouter une ligne</span>
@@ -327,7 +343,7 @@ export default function PageGoodieNew() {
 export function mapFormToApi(
   values: FormFieldsGoodie
 ): z.infer<ReturnType<typeof zFormFieldsGoodie>> {
-  if (values.variantMode) {
+  if (values.variantMode !== 'none') {
     return {
       name: values.name,
       edition: values.edition ?? null,
