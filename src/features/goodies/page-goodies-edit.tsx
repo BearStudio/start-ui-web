@@ -94,33 +94,28 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
   }, [goodieQuery.data, reset]);
 
   const variantMode = watch('variantMode');
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: 'variants',
   });
-
   useEffect(() => {
-    // Vider le tableau si mode 'none'
-    if (variantMode === 'none' && fields.length > 0) {
-      fields.forEach((_, index) => remove(index));
+    if (variantMode === 'none') {
+      replace([]);
       return;
     }
 
-    // Ajouter des lignes si le tableau est vide
-    if (fields.length === 0) {
-      if (variantMode === 'size') {
-        ['S', 'M', 'L'].forEach((size) => append({ size, quantity: 0 }));
-      } else if (variantMode === 'color') {
-        ['Rouge', 'Bleu', 'Vert'].forEach((color) =>
-          append({ color, quantity: 0 })
-        );
-      } else if (variantMode === 'sizeAndColor') {
-        ['S', 'M', 'L'].forEach((size) =>
-          append({ size, color: '', quantity: 0 })
-        );
-      }
+    if (variantMode === 'size') {
+      replace([{ size: '', quantity: 0 }]);
     }
-  }, [variantMode]);
+
+    if (variantMode === 'color') {
+      replace([{ color: '', quantity: 0 }]);
+    }
+
+    if (variantMode === 'sizeAndColor') {
+      replace([{ size: '', color: '', quantity: 0 }]);
+    }
+  }, [variantMode, replace]);
 
   const queryClient = useQueryClient();
   const canGoBack = useCanGoBack();
@@ -304,9 +299,17 @@ export default function PageGoodieEdit(props: { params: { id: string } }) {
                           )}
                         </div>
                         <Button
-                          onClick={() =>
-                            append({ size: '', color: '', quantity: 0 })
-                          }
+                          onClick={() => {
+                            if (variantMode === 'size') {
+                              append({ size: '', quantity: 0 });
+                            }
+                            if (variantMode === 'color') {
+                              append({ color: '', quantity: 0 });
+                            }
+                            if (variantMode === 'sizeAndColor') {
+                              append({ size: '', color: '', quantity: 0 });
+                            }
+                          }}
                         >
                           <PlusIcon />
                           <span>Ajouter une ligne</span>

@@ -21,19 +21,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-interface SizeStock {
-  size: string;
+interface VariantStock {
+  size?: string | null;
+  color?: string | null;
   stockQty: number;
 }
 
 interface CardGoodieDisplayProps {
-  id: string; // pour les actions
+  id: string;
   title: string;
   year: string;
   category: string;
   description?: string;
   stock?: number;
-  sizesStocks?: SizeStock[];
+  variants?: VariantStock[];
   imageUrl?: string;
 }
 
@@ -44,11 +45,27 @@ export default function CardGoodieDisplay({
   category,
   description,
   stock,
-  sizesStocks,
+  variants,
   imageUrl,
 }: CardGoodieDisplayProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const hasSize = variants?.some((v) => v.size);
+  const hasColor = variants?.some((v) => v.color);
+
+  const variantsBySize = variants?.reduce<
+    Record<string, { color: string; qty: number }[]>
+  >((acc, v) => {
+    if (!v.size || !v.color) return acc;
+
+    acc[v.size] ??= [];
+    if (!acc[v.size]) {
+      acc[v.size] = [];
+    }
+    acc[v.size]?.push({ color: v.color, qty: v.stockQty });
+
+    return acc;
+  }, {});
 
   // Mutation pour supprimer le goodie
   const deleteGoodie = useMutation(
@@ -124,14 +141,51 @@ export default function CardGoodieDisplay({
       </CardContent>
 
       {/* FOOTER */}
-      <CardFooter className="flex flex-col gap-2 px-4 pb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          {sizesStocks?.map((sizeStock) => (
-            <Badge key={sizeStock.size} variant="secondary">
-              {sizeStock.size}: {sizeStock.stockQty}
-            </Badge>
-          ))}
-        </div>
+      <CardFooter className="flex flex-col items-center gap-2 px-4 pb-4 text-center">
+        {/* Taille + Couleur */}
+        {hasSize && hasColor && variantsBySize && (
+          <div className="flex w-full flex-col items-center justify-center gap-6">
+            {Object.entries(variantsBySize).map(([size, colors]) => (
+              <div
+                key={size}
+                className="flex flex-col items-center justify-center gap-3"
+              >
+                <Badge variant="outline" className="w-fit">
+                  Taille {size}
+                </Badge>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {colors.map((c, i) => (
+                    <Badge key={i} variant="secondary">
+                      {c.color}: {c.qty}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Taille uniquement */}
+        {hasSize && !hasColor && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {variants?.map((v, i) => (
+              <Badge key={i} variant="secondary">
+                {v.size}: {v.stockQty}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* Couleur uniquement */}
+        {!hasSize && hasColor && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {variants?.map((v, i) => (
+              <Badge key={i} variant="secondary">
+                {v.color}: {v.stockQty}
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardFooter>
     </Card>
   );

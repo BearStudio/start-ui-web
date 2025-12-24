@@ -88,10 +88,7 @@ export const PageGoodiesStock = () => {
               stock={
                 goodie.total ? goodie.total : getTotalStock(goodie.variants)
               }
-              sizesStocks={goodie.variants.map((v) => ({
-                size: v.size ?? 'N/A',
-                stockQty: v.stockQty,
-              }))}
+              variants={goodie.variants}
               imageUrl={goodie.assets[0]?.url}
             />
           ))}
