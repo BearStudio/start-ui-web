@@ -1,4 +1,5 @@
 import { Link, useMatchRoute } from '@tanstack/react-router';
+import { useCursors } from 'kikoojs';
 import {
   BoxIcon,
   Building2,
@@ -27,6 +28,9 @@ export const PageGoodiesSuppliers = () => {
 
   const isStock = matchRoute({ to: '/manager/goodies/stock' });
   const isSuppliers = matchRoute({ to: '/manager/goodies/suppliers' });
+  useCursors({
+    enabledCursors: 'fairyDustCursor',
+  });
   return (
     <PageLayout>
       <PageLayoutTopBar>

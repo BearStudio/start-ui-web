@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useMatchRoute } from '@tanstack/react-router';
+import { useCursors } from 'kikoojs';
 import { BoxIcon, PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
@@ -36,6 +37,9 @@ export const PageGoodiesStock = () => {
     if (!variants || variants.length === 0) return 0;
     return variants.reduce((total, v) => total + (v.stockQty ?? 0), 0);
   };
+  useCursors({
+    enabledCursors: 'rainbowCursor',
+  });
 
   return (
     <PageLayout>

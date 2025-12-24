@@ -1,3 +1,4 @@
+import { useRainbow } from 'kikoojs';
 import { ReactNode } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -96,8 +97,10 @@ export const PageLayoutContent = (props: {
   className?: string;
   containerClassName?: string;
 }) => {
+  const [rainbowRef1] = useRainbow<HTMLDivElement>({ speed: 0.1 });
+
   return (
-    <div className="relative flex flex-1 flex-col">
+    <div className="relative flex flex-1 flex-col" ref={rainbowRef1}>
       <div className="absolute inset-0">
         <ScrollArea className="h-full">
           <div className={cn('flex flex-1 flex-col', props.className)}>
