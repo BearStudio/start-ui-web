@@ -30,7 +30,7 @@ export const FormGoodieOrder = () => {
   });
 
   // Fetch de tous les Users
-  const { data: users = [] } = useQuery({
+  const { data: users } = useQuery({
     queryKey: orpc.user.getAll.key(),
     queryFn: () => orpc.user.getAll.call(),
   });
@@ -76,9 +76,10 @@ export const FormGoodieOrder = () => {
           control={form.control}
           name="madeById"
           options={
-            users?.items
-              ? users.items.map((user) => ({ id: user.id, label: user.name }))
-              : []
+            users?.items?.map((user) => ({
+              id: user.id,
+              label: user.name ?? '',
+            })) ?? []
           }
         />
       </FormField>
