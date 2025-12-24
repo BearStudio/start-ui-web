@@ -1,7 +1,7 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,6 +19,10 @@ export const UserCard = () => {
       <CardHeader className="gap-y-0 py-4">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar>
+            <AvatarImage
+              src={session.data?.user.image ?? undefined}
+              alt={session.data?.user.name ?? ''}
+            />
             <AvatarFallback
               variant="boring"
               name={session.data?.user.name ?? ''}
