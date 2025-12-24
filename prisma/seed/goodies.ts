@@ -97,6 +97,7 @@ async function seedGoodieOrders(
 
       return db.goodieOrder.create({
         data: {
+          name: 'Tasses',
           status: GoodieOrderStatus.ORDERED,
 
           goodie: {

@@ -4,7 +4,7 @@ import {
   Building2,
   ImageIcon,
   Lightbulb,
-  StarIcon,
+  Package,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ import {
 } from '@/layout/manager/page-layout';
 
 import { FormIdeaNew } from './manager/form-idea-new';
+import GoodieOrdersTab from './tab-orders-tracking';
 import GoodieSuppliersTab from './tab-suppliers-list';
 
 export const PageGoodiesSuppliers = () => {
@@ -90,7 +91,7 @@ export const PageGoodiesSuppliers = () => {
                   variant="ghost"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                 >
-                  <StarIcon />
+                  <Package />
                   Objets créés
                 </Button>
               </TabsTrigger>
@@ -112,7 +113,7 @@ export const PageGoodiesSuppliers = () => {
             <GoodieSuppliersTab />
           </TabsContent>
           <TabsContent value="createdObject">
-            <span>Ajouter le fichier du composant contenant ce tabs</span>
+            <GoodieOrdersTab />
           </TabsContent>
           <TabsContent value="imagesBank">
             <GoodieAssetsTab />

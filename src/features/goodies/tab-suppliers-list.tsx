@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ImageIcon } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -12,6 +11,7 @@ import { FormFieldsSupplier } from '@/features/goodies/schema';
 
 import CardSupplier from './components/card-supplier';
 import { FormSupplier } from './form-supplier';
+import { Building2 } from 'lucide-react';
 
 export default function GoodieSuppliersTab() {
   const queryClient = useQueryClient();
@@ -77,7 +77,7 @@ export default function GoodieSuppliersTab() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-4">
-              <ImageIcon />
+              <Building2 />
               Nouveau fournisseur
             </CardTitle>
           </CardHeader>
