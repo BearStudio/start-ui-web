@@ -73,6 +73,7 @@ export function FormFieldController<
         );
 
         const Field = fieldComponents[type];
+
         return (
           <FormFieldControllerContext
             value={contextValue as NonGenericFormFieldControllerContextValue}
