@@ -10,7 +10,7 @@ import {
   FieldComponentProps,
   fieldComponents,
   FieldType,
-} from '@/components/new-form/_fields';
+} from '@/components/form/_fields';
 
 import {
   FormFieldControllerContext,

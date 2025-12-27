@@ -1,117 +1,80 @@
-import * as React from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
-
-import { cn } from '@/lib/tailwind/utils';
+import { Fragment } from 'react';
 
 import { FormFieldError } from '@/components/form';
 import { useFormField } from '@/components/form/form-field';
-import { FieldProps } from '@/components/form/form-field-controller';
+import { FormFieldContainer } from '@/components/form/form-field-container';
+import { useFormFieldController } from '@/components/form/form-field-controller/context';
+import { FieldProps } from '@/components/form/types';
 import { Radio, RadioGroup, RadioProps } from '@/components/ui/radio-group';
 
 type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
   label: string;
 };
 
-export type FieldRadioGroupProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  TTransformedValues,
+export type FieldRadioGroupProps = FieldProps<
   {
-    type: 'radio-group';
     options: Array<RadioOption>;
     renderOption?: (props: RadioOption) => React.JSX.Element;
-    containerProps?: React.ComponentProps<'div'>;
+    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
   } & React.ComponentProps<typeof RadioGroup>
 >;
 
-export const FieldRadioGroup = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
->(
-  props: FieldRadioGroupProps<TFieldValues, TName, TTransformedValues>
-) => {
-  const {
-    name,
-    control,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    containerProps,
-    options,
-    size,
-    renderOption,
-    ...rest
-  } = props;
+export const FieldRadioGroup = (props: FieldRadioGroupProps) => {
+  const { containerProps, options, renderOption, ...rest } = props;
   const ctx = useFormField();
-
+  const {
+    field: { value, onChange, ...field },
+    fieldState,
+    displayError,
+  } = useFormFieldController();
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, value, ...field }, fieldState }) => {
-        const isInvalid = fieldState.error ? true : undefined;
-        return (
-          <div
-            {...containerProps}
-            className={cn(
-              'flex flex-1 flex-col gap-1',
-              containerProps?.className
-            )}
-          >
-            <RadioGroup
-              id={ctx.id}
-              aria-invalid={isInvalid}
-              aria-labelledby={ctx.labelId}
-              aria-describedby={
-                !fieldState.error
-                  ? `${ctx.descriptionId}`
-                  : `${ctx.descriptionId} ${ctx.errorId}`
-              }
-              value={value}
-              onValueChange={onChange}
-              {...rest}
+    <FormFieldContainer {...containerProps}>
+      <RadioGroup
+        id={ctx.id}
+        aria-invalid={fieldState.invalid}
+        aria-labelledby={ctx.labelId}
+        aria-describedby={
+          !fieldState.error
+            ? `${ctx.descriptionId}`
+            : `${ctx.descriptionId} ${ctx.errorId}`
+        }
+        value={value}
+        onValueChange={onChange}
+        {...rest}
+      >
+        {options.map(({ label, ...option }) => {
+          const radioId = `${ctx.id}-${option.value}`;
+
+          if (renderOption) {
+            return (
+              <Fragment key={radioId}>
+                {renderOption({
+                  label,
+                  'aria-invalid': fieldState.invalid,
+                  size: ctx.size,
+                  ...field,
+                  ...option,
+                })}
+              </Fragment>
+            );
+          }
+
+          return (
+            <Radio
+              key={radioId}
+              aria-invalid={fieldState.invalid}
+              size={ctx.size}
+              {...field}
+              {...option}
             >
-              {options.map(({ label, ...option }) => {
-                const radioId = `${ctx.id}-${option.value}`;
-
-                if (renderOption) {
-                  return (
-                    <React.Fragment key={radioId}>
-                      {renderOption({
-                        label,
-                        'aria-invalid': isInvalid,
-                        ...field,
-                        ...option,
-                      })}
-                    </React.Fragment>
-                  );
-                }
-
-                return (
-                  <Radio
-                    key={radioId}
-                    aria-invalid={isInvalid}
-                    size={size}
-                    {...field}
-                    {...option}
-                  >
-                    {label}
-                  </Radio>
-                );
-              })}
-            </RadioGroup>
-            <FormFieldError />
-          </div>
-        );
-      }}
-    />
+              {label}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+      {fieldState.invalid && displayError && (
+        <FormFieldError errors={[fieldState.error]} />
+      )}
+    </FormFieldContainer>
   );
 };

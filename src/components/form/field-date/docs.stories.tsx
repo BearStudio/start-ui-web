@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '..';
 
 export default {
-  title: 'Form/FieldDate',
+  title: 'NewForm/FieldDate',
 };
 
 const zFormSchema = () =>
