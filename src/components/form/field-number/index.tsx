@@ -76,7 +76,6 @@ export const FieldNumber = <
           >
             <NumberInput
               id={ctx.id}
-              invalid={fieldState.error ? true : undefined}
               aria-describedby={
                 !fieldState.error
                   ? `${ctx.descriptionId}`
@@ -85,9 +84,9 @@ export const FieldNumber = <
               {...rest}
               {...fieldProps}
               value={formatValue(value, 'from-cents')}
-              onValueChange={(value) => {
+              onValueChange={(value, event) => {
                 onChange(formatValue(value, 'to-cents'));
-                rest.onValueChange?.(value);
+                rest.onValueChange?.(value, event);
               }}
               onBlur={(e) => {
                 field.onBlur();
