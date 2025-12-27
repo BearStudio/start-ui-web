@@ -91,7 +91,7 @@ export const InputAndButton = () => {
           className="pr-1"
           placeholder="Placeholder..."
           endElement={
-            <Button type="submit" size="xs" className="-mr-1.5">
+            <Button type="submit" size="xs">
               Submit
             </Button>
           }
@@ -128,11 +128,10 @@ export const InputAndButton = () => {
         }}
       >
         <Input
-          className="pr-1"
           placeholder="Placeholder..."
           size="lg"
           endElement={
-            <Button type="submit" size="sm" className="-mr-2">
+            <Button type="submit" size="sm">
               Submit
             </Button>
           }
