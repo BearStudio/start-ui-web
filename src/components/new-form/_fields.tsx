@@ -1,4 +1,5 @@
 import { FieldCheckbox } from '@/components/new-form/field-checkbox';
+import { FieldCheckboxGroup } from '@/components/new-form/field-checkbox-group';
 import { FieldDate } from '@/components/new-form/field-date';
 
 import { FieldNumber } from './field-number';
@@ -15,6 +16,7 @@ export const fieldComponents = {
   otp: FieldOtp,
   date: FieldDate,
   checkbox: FieldCheckbox,
+  'checkbox-group': FieldCheckboxGroup,
 } as const;
 
 export type FieldType = keyof typeof fieldComponents;
