@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { useFormField } from '@/components/form/form-field';
+import { useFormField } from './form-field';
 
 export const FormFieldHelper = ({
   className,

@@ -1,13 +1,6 @@
-import { Form as _Form } from './form';
-import { FormField as _FormField } from './form-field';
-import { FormFieldController as _FormFieldController } from './form-field-controller';
-import { FormFieldError as _FormFieldError } from './form-field-error';
-import { FormFieldHelper as _FormFieldHelper } from './form-field-helper';
-import { FormFieldLabel as _FormFieldLabel } from './form-field-label';
-
-export const Form = _Form;
-export const FormField = _FormField;
-export const FormFieldController = _FormFieldController;
-export const FormFieldError = _FormFieldError;
-export const FormFieldHelper = _FormFieldHelper;
-export const FormFieldLabel = _FormFieldLabel;
+export { Form } from './form';
+export { FormField } from './form-field';
+export { FormFieldController } from './form-field-controller';
+export { FormFieldError } from './form-field-error';
+export { FormFieldHelper } from './form-field-helper';
+export { FormFieldLabel } from './form-field-label';
