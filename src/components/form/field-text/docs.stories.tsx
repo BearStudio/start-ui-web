@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
 export default {
-  title: 'Form/FieldText',
+  title: 'NewForm/FieldText',
 };
 
 const zFormSchema = () =>

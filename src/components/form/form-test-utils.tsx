@@ -9,7 +9,7 @@ import {
 } from 'react-hook-form';
 import { z, ZodType } from 'zod';
 
-import { Form } from '.';
+import { Form } from '@/components/form';
 
 export const FormMocked = <T extends ZodType<FieldValues>>({
   children,

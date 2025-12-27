@@ -1,84 +1,47 @@
 import { ComponentProps } from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
-
-import { cn } from '@/lib/tailwind/utils';
 
 import { useFormField } from '@/components/form/form-field';
-import { FieldProps } from '@/components/form/form-field-controller';
+import { FormFieldContainer } from '@/components/form/form-field-container';
+import { useFormFieldController } from '@/components/form/form-field-controller/context';
 import { FormFieldError } from '@/components/form/form-field-error';
+import { FieldProps } from '@/components/form/types';
 import { DatePicker } from '@/components/ui/date-picker';
 
-export type FieldDateProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  TTransformedValues,
+export type FieldDateProps = FieldProps<
   {
-    type: 'date';
-    containerProps?: ComponentProps<'div'>;
+    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
   } & ComponentProps<typeof DatePicker>
 >;
 
-export const FieldDate = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
->(
-  props: FieldDateProps<TFieldValues, TName, TTransformedValues>
-) => {
-  const {
-    name,
-    control,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    type,
-    containerProps,
-    ...rest
-  } = props;
+export const FieldDate = (props: FieldDateProps) => {
+  const { disabled, defaultValue, type, containerProps, ...rest } = props;
 
   const ctx = useFormField();
-
+  const { field, fieldState, displayError } = useFormFieldController();
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field, fieldState }) => (
-        <div
-          {...containerProps}
-          className={cn(
-            'flex flex-1 flex-col gap-1',
-            containerProps?.className
-          )}
-        >
-          <DatePicker
-            id={ctx.id}
-            aria-invalid={fieldState.error ? true : undefined}
-            aria-describedby={
-              !fieldState.error
-                ? ctx.descriptionId
-                : `${ctx.descriptionId} ${ctx.errorId}`
-            }
-            {...rest}
-            {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              rest.onChange?.(e);
-            }}
-            onBlur={(e) => {
-              field.onBlur();
-              rest.onBlur?.(e);
-            }}
-          />
-          <FormFieldError />
-        </div>
+    <FormFieldContainer {...containerProps}>
+      <DatePicker
+        id={ctx.id}
+        aria-invalid={fieldState.error ? true : undefined}
+        aria-describedby={
+          !fieldState.error
+            ? ctx.descriptionId
+            : `${ctx.descriptionId} ${ctx.errorId}`
+        }
+        {...rest}
+        {...field}
+        onChange={(e) => {
+          field.onChange(e);
+          rest.onChange?.(e);
+        }}
+        onBlur={(e) => {
+          field.onBlur();
+          rest.onBlur?.(e);
+        }}
+      />
+      {fieldState.invalid && displayError && (
+        <FormFieldError errors={[fieldState.error]} />
       )}
-    />
+    </FormFieldContainer>
   );
 };
