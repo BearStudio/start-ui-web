@@ -1,4 +1,5 @@
 import { FieldNumber } from './field-number';
+import { FieldOtp } from './field-otp';
 import { FieldSelect } from './field-select';
 import { FieldText } from './field-text';
 
@@ -8,6 +9,7 @@ export const fieldComponents = {
   tel: FieldText,
   select: FieldSelect,
   number: FieldNumber,
+  otp: FieldOtp,
 } as const;
 
 export type FieldType = keyof typeof fieldComponents;
