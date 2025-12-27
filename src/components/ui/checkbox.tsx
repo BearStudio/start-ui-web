@@ -1,7 +1,7 @@
 import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox';
 import { cva } from 'class-variance-authority';
 import { CheckIcon, MinusIcon } from 'lucide-react';
-import React from 'react';
+import React, { useId } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -53,10 +53,13 @@ export function Checkbox({
 }: CheckboxProps) {
   const Comp = noLabel ? React.Fragment : 'label';
 
+  const _compId = useId();
+  const id = labelProps?.id ?? _compId;
   const compProps = noLabel
     ? {}
     : {
         ...labelProps,
+        id,
         className: cn(labelVariants({ size }), labelProps?.className),
       };
 
@@ -65,6 +68,7 @@ export function Checkbox({
       <CheckboxPrimitive.Root
         className={cn(checkboxVariants({ size }), className)}
         {...props}
+        aria-labelledby={id}
       >
         <CheckboxPrimitive.Indicator
           keepMounted={true}

@@ -2,7 +2,7 @@ import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 import { cva } from 'class-variance-authority';
 import { Circle } from 'lucide-react';
-import * as React from 'react';
+import { Fragment, useId } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -63,12 +63,14 @@ export function Radio({
   size,
   ...rest
 }: RadioProps) {
-  const Comp = noLabel ? React.Fragment : 'label';
-
+  const Comp = noLabel ? Fragment : 'label';
+  const _compId = useId();
+  const id = labelProps?.id ?? _compId;
   const compProps = noLabel
     ? {}
     : {
         ...labelProps,
+        id,
         className: cn(labelVariants({ size }), labelProps?.className),
       };
 
@@ -76,6 +78,7 @@ export function Radio({
     <Comp {...compProps}>
       <RadioPrimitive.Root
         className={cn(radioVariants({ size }), className)}
+        aria-labelledby={id}
         {...rest}
       >
         <RadioPrimitive.Indicator
