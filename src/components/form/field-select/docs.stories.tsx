@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 
 export default {
-  title: 'NewForm/FieldSelect',
+  title: 'Form/FieldSelect',
 } satisfies Meta<typeof Select>;
 
 const zFormSchema = () =>

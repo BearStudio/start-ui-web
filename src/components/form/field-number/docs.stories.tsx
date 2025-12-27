@@ -15,7 +15,7 @@ import { FieldNumber } from '@/components/form/field-number';
 import { Button } from '@/components/ui/button';
 
 export default {
-  title: 'NewForm/FieldNumber',
+  title: 'Form/FieldNumber',
 } satisfies Meta<typeof FieldNumber>;
 
 const zFormSchema = () =>

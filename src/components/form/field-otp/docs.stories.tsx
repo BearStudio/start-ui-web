@@ -14,7 +14,7 @@ import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
 export default {
-  title: 'NewForm/FieldOtp',
+  title: 'Form/FieldOtp',
 };
 
 const zFormSchema = (options: { length?: number } = {}) => {
