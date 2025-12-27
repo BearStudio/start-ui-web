@@ -16,7 +16,7 @@ export const Placeholder = () => {
 };
 
 export const Invalid = () => {
-  return <NumberInput invalid />;
+  return <NumberInput aria-invalid={true} data-invalid />;
 };
 
 export const Disabled = () => {
