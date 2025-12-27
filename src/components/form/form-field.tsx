@@ -2,7 +2,7 @@ import { createContext, ReactNode, use, useId, useMemo } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-type FormFieldSize = 'sm' | 'default' | 'lg';
+import { FormFieldSize } from '@/components/form/types';
 
 type FormFieldProps = {
   id?: string;
@@ -52,7 +52,13 @@ export const useFormField = () => {
   if (!fieldContext) {
     throw new Error('Missing <FormField /> parent component');
   }
-  return fieldContext;
+  return {
+    ...fieldContext,
+    describedBy: (invalid: boolean) =>
+      invalid
+        ? `${fieldContext.descriptionId} ${fieldContext.errorId}`
+        : fieldContext.descriptionId,
+  };
 };
 
 export const useFormFieldUnsafe = () => {

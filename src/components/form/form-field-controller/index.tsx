@@ -49,8 +49,8 @@ export type FormFieldControllerProps<
 export function FormFieldController<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedsValues extends FieldValues = TFieldValues,
->(props: FormFieldControllerProps<TFieldValues, TName, TTransformedsValues>) {
+  TTransformedValues extends FieldValues = TFieldValues,
+>(props: FormFieldControllerProps<TFieldValues, TName, TTransformedValues>) {
   const {
     name,
     control,
