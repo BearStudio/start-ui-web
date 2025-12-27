@@ -12,11 +12,11 @@ export type FieldSelectProps = FieldProps<
 >;
 
 export const FieldSelect = (props: FieldSelectProps) => {
-  const { name, disabled, containerProps, options, ...rest } = props;
+  const { containerProps, options, ...rest } = props;
 
   const ctx = useFormField();
-
   const { field, fieldState, displayError } = useFormFieldController();
+
   return (
     <FormFieldContainer {...containerProps}>
       <Select

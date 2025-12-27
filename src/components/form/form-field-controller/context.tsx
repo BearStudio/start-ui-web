@@ -5,12 +5,15 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
+import { FieldType } from '@/components/form/_fields';
+
 export type NonGenericFormFieldControllerContextValue =
   FormFieldControllerContextValue<FieldValues>;
 
 export type FormFieldControllerContextValue<
   TFieldValues extends FieldValues = FieldValues,
 > = {
+  type: FieldType;
   field: ControllerRenderProps<TFieldValues>;
   fieldState: ControllerFieldState;
   displayError?: boolean;

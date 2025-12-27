@@ -75,6 +75,7 @@ export function FormFieldController<
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const contextValue = useMemo(
           () => ({
+            type,
             displayError: displayError ?? true,
             field,
             fieldState,
