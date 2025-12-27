@@ -26,11 +26,7 @@ export const FieldText = (props: FieldTextProps) => {
         type={type}
         id={ctx.id}
         aria-invalid={fieldState.invalid}
-        aria-describedby={
-          !fieldState.error
-            ? `${ctx.descriptionId}`
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}
         onChange={(e) => {

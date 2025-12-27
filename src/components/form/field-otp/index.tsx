@@ -31,12 +31,8 @@ export const FieldOtp = (props: FieldOtpProps) => {
     <FormFieldContainer {...containerProps} ref={containerRef}>
       <InputOTP
         id={ctx.id}
-        aria-invalid={fieldState.error ? true : undefined}
-        aria-describedby={
-          !fieldState.error
-            ? `${ctx.descriptionId}`
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-invalid={fieldState.invalid}
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         onComplete={(v) => {
           rest.onComplete?.(v);
           // Only auto submit on first try

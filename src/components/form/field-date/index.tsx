@@ -23,11 +23,7 @@ export const FieldDate = (props: FieldDateProps) => {
       <DatePicker
         id={ctx.id}
         aria-invalid={fieldState.error ? true : undefined}
-        aria-describedby={
-          !fieldState.error
-            ? ctx.descriptionId
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}
         onChange={(e) => {

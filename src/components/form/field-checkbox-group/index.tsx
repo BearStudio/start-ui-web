@@ -32,11 +32,7 @@ export const FieldCheckboxGroup = (props: FieldCheckboxGroupProps) => {
         id={ctx.id}
         aria-invalid={fieldState.invalid}
         aria-labelledby={ctx.labelId}
-        aria-describedby={
-          !fieldState.error
-            ? `${ctx.descriptionId}`
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         value={value}
         onValueChange={(value, event) => {
           onChange?.(value);

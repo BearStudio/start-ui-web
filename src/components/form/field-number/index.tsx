@@ -35,11 +35,7 @@ export const FieldNumber = (props: FieldNumberProps) => {
     <FormFieldContainer {...containerProps}>
       <NumberInput
         id={ctx.id}
-        aria-describedby={
-          !fieldState.error
-            ? `${ctx.descriptionId}`
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...fieldProps}
         value={formatValue(value, 'from-cents')}

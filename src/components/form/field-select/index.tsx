@@ -22,11 +22,7 @@ export const FieldSelect = (props: FieldSelectProps) => {
       <Select
         invalid={fieldState.invalid}
         aria-invalid={fieldState.invalid}
-        aria-describedby={
-          !fieldState.invalid
-            ? ctx.descriptionId
-            : `${ctx.descriptionId} ${ctx.errorId}`
-        }
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}
         options={options}
