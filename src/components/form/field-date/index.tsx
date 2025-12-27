@@ -14,7 +14,7 @@ export type FieldDateProps = FieldProps<
 >;
 
 export const FieldDate = (props: FieldDateProps) => {
-  const { disabled, defaultValue, type, containerProps, ...rest } = props;
+  const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
   const { field, fieldState, displayError } = useFormFieldController();

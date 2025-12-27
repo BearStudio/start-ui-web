@@ -18,12 +18,12 @@ export const FieldText = (props: FieldTextProps) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, displayError } = useFormFieldController();
+  const { field, fieldState, displayError, type } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Input
-        type="text"
+        type={type}
         id={ctx.id}
         aria-invalid={fieldState.invalid}
         aria-describedby={
