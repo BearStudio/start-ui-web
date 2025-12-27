@@ -1,3 +1,4 @@
+import { FieldCheckbox } from '@/components/new-form/field-checkbox';
 import { FieldDate } from '@/components/new-form/field-date';
 
 import { FieldNumber } from './field-number';
@@ -13,6 +14,7 @@ export const fieldComponents = {
   number: FieldNumber,
   otp: FieldOtp,
   date: FieldDate,
+  checkbox: FieldCheckbox,
 } as const;
 
 export type FieldType = keyof typeof fieldComponents;
