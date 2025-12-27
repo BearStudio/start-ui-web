@@ -8,7 +8,12 @@ import { match } from 'ts-pattern';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import type { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group';
 
 type InputProps = ComponentProps<typeof Input>;
 type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size' | 'aria-invalid'>;
@@ -72,30 +77,37 @@ export const NumberInput = ({
             <Minus />
           </NumberField.Decrement>
         )}
-        <NumberField.Input
-          render={
-            <Input
-              aria-invalid={invalid}
-              ref={mergeRefs([ref, inputRef])}
-              endElement={
-                buttons === 'classic' && (
-                  <NumberField.Group className="flex flex-col">
-                    <NumberField.Increment>
-                      <ChevronUp />
-                    </NumberField.Increment>
-                    <NumberField.Decrement>
-                      <ChevronDown />
-                    </NumberField.Decrement>
-                  </NumberField.Group>
-                )
+        <InputGroup size={size}>
+          <NumberField.Input
+            render={
+              <InputGroupInput
+                aria-invalid={invalid}
+                ref={mergeRefs([ref, inputRef])}
+                placeholder={placeholder}
+                inputMode="decimal"
+                {...inputProps}
+              />
+            }
+          />
+          {buttons === 'classic' && (
+            <NumberField.Group
+              render={
+                <InputGroupAddon
+                  align="inline-end"
+                  className="flex flex-col gap-0 py-0"
+                />
               }
-              size={size}
-              placeholder={placeholder}
-              inputMode="decimal"
-              {...inputProps}
-            />
-          }
-        />
+            >
+              <NumberField.Increment>
+                <ChevronUp />
+              </NumberField.Increment>
+              <NumberField.Decrement>
+                <ChevronDown />
+              </NumberField.Decrement>
+            </NumberField.Group>
+          )}
+        </InputGroup>
+
         {buttons === 'mobile' && (
           <NumberField.Increment
             render={
