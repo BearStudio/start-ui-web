@@ -36,7 +36,7 @@ export const DatePicker = ({
             onOpenChange={(open) => datePicker.toggle(open)}
           >
             <PopoverTrigger asChild>
-              <Button size="icon-xs" variant="secondary" className="-mr-1.5">
+              <Button size="icon-xs" variant="secondary">
                 <CalendarIcon />
               </Button>
             </PopoverTrigger>
