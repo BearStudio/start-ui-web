@@ -1,3 +1,5 @@
+import { FieldDate } from '@/components/new-form/field-date';
+
 import { FieldNumber } from './field-number';
 import { FieldOtp } from './field-otp';
 import { FieldSelect } from './field-select';
@@ -10,6 +12,7 @@ export const fieldComponents = {
   select: FieldSelect,
   number: FieldNumber,
   otp: FieldOtp,
+  date: FieldDate,
 } as const;
 
 export type FieldType = keyof typeof fieldComponents;
