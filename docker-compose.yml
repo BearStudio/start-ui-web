@@ -39,12 +39,13 @@ services:
     depends_on:
       minio:
         condition: service_healthy
+    network_mode: service:minio
     entrypoint: [""]
     command: [
         "sh",
         "-c",
         '
-        mc alias set default http://minio:9000 "${DOCKER_MINIO_USERNAME}" "${DOCKER_MINIO_PASSWORD}";
+        mc alias set default "${S3_ENDPOINT}" "${DOCKER_MINIO_USERNAME}" "${DOCKER_MINIO_PASSWORD}";
         mc admin user add default ${S3_ACCESS_KEY_ID} ${S3_SECRET_ACCESS_KEY};
         mc admin policy attach default readwrite --user ${S3_ACCESS_KEY_ID};
         mc mb --ignore-existing default/${S3_BUCKET_NAME} 2>/dev/null;
