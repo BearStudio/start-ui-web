@@ -105,8 +105,8 @@ export const PageUser = (props: { params: { id: string } }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        backButton={<BackButton />}
-        actions={
+        startActions={<BackButton />}
+        endActions={
           <>
             {session.data?.user.id !== props.params.id && (
               <WithPermissions

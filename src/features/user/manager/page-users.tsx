@@ -77,7 +77,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        actions={
+        endActions={
           <ResponsiveIconButton
             asChild
             label={t('user:manager.list.newButton')}

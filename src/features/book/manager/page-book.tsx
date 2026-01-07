@@ -78,8 +78,8 @@ export const PageBook = (props: { params: { id: string } }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        backButton={<BackButton />}
-        actions={
+        startActions={<BackButton />}
+        endActions={
           <>
             <WithPermissions
               permissions={[

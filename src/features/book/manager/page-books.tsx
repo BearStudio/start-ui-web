@@ -76,7 +76,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        actions={
+        endActions={
           <ResponsiveIconButton
             asChild
             label={t('book:manager.new.title')}

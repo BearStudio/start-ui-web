@@ -29,8 +29,8 @@ export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
   containerClassName?: string;
-  actions?: ReactNode;
-  backButton?: ReactNode;
+  endActions?: ReactNode;
+  startActions?: ReactNode;
 }) => {
   const { open, isMobile } = useSidebar();
   return (
@@ -42,17 +42,19 @@ export const PageLayoutTopBar = (props: {
       style={{ height: TOPBAT_HEIGHT }}
     >
       <div className="flex h-14 min-w-0 flex-1 items-center gap-4 rtl:h-11">
-        {(!open || (isMobile && !props.backButton) || !!props.backButton) && (
+        {(!open ||
+          (isMobile && !props.startActions) ||
+          !!props.startActions) && (
           <div className="flex items-center gap-3">
-            {(!open || (isMobile && !props.backButton)) && (
+            {(!open || (isMobile && !props.startActions)) && (
               <>
                 <SidebarTrigger className="-mx-1" />
                 <Separator orientation="vertical" className="h-4" />
               </>
             )}
-            {!!props.backButton && (
+            {!!props.startActions && (
               <>
-                <div className="-mx-1">{props.backButton}</div>
+                <div className="-mx-1">{props.startActions}</div>
                 <Separator orientation="vertical" className="h-4" />
               </>
             )}
@@ -66,8 +68,10 @@ export const PageLayoutTopBar = (props: {
         >
           {props.children}
         </div>
-        {!!props.actions && (
-          <div className="flex min-w-0 items-center gap-2">{props.actions}</div>
+        {!!props.endActions && (
+          <div className="flex min-w-0 items-center gap-2">
+            {props.endActions}
+          </div>
         )}
       </div>
     </header>

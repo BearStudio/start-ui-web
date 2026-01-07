@@ -115,8 +115,8 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
       >
         <PageLayout>
           <PageLayoutTopBar
-            backButton={<BackButton />}
-            actions={
+            startActions={<BackButton />}
+            endActions={
               <Button
                 size="sm"
                 type="submit"

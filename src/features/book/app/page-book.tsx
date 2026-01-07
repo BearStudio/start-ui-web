@@ -42,7 +42,7 @@ export const PageBook = (props: { params: { id: string } }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        leftActions={
+        startActions={
           <div className="flex items-center gap-3">
             <div className="-mx-1">
               <BackButton />
