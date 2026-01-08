@@ -83,8 +83,8 @@ export const PageBookNew = () => {
       >
         <PageLayout>
           <PageLayoutTopBar
-            backButton={<BackButton />}
-            actions={
+            startActions={<BackButton />}
+            endActions={
               <Button
                 size="sm"
                 type="submit"

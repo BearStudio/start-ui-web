@@ -26,8 +26,8 @@ const TOPBAT_HEIGHT =
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
-  leftActions?: ReactNode;
-  rightActions?: ReactNode;
+  startActions?: ReactNode;
+  endActions?: ReactNode;
   containerClassName?: string;
 }) => {
   return (
@@ -44,12 +44,12 @@ export const PageLayoutTopBar = (props: {
         className={cn('justify-end py-2', props.containerClassName)}
       >
         <div className="flex h-10 w-full min-w-0 items-center justify-center gap-4 pt-2">
-          {!!props.leftActions && (
-            <div className="flex items-center gap-2">{props.leftActions}</div>
+          {!!props.startActions && (
+            <div className="flex items-center gap-2">{props.startActions}</div>
           )}
           <div className="min-w-0 flex-1">{props.children}</div>
-          {!!props.rightActions && (
-            <div className="flex items-center gap-2">{props.rightActions}</div>
+          {!!props.endActions && (
+            <div className="flex items-center gap-2">{props.endActions}</div>
           )}
         </div>
       </PageLayoutContainer>
