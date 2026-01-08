@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ActivityIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -130,31 +129,6 @@ export const ReadOnly = () => {
             name="name"
             placeholder="Buzz Pawdrin"
             readOnly
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-export const StartElement = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="text"
-            name="name"
-            placeholder="Buzz Pawdrin"
-            startElement={<ActivityIcon />}
           />
           <FormFieldHelper>Help</FormFieldHelper>
         </FormField>
