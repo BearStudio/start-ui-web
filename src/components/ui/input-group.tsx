@@ -16,6 +16,7 @@ const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col',
 
     'has-[input:disabled]:cursor-not-allowed [&>input]:disabled:opacity-50',
+    'has-[textarea:disabled]:cursor-not-allowed [&>textarea]:disabled:opacity-50',
 
     // Focus state.
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',

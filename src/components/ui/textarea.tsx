@@ -24,9 +24,9 @@ type TextareaProps = Pick<
     ref?: React.Ref<HTMLTextAreaElement | null>;
   };
 
-function Textarea({ ref, size, ...props }: TextareaProps) {
+function Textarea({ ref, size, className, ...props }: TextareaProps) {
   return (
-    <InputGroup size={size}>
+    <InputGroup size={size} className={className}>
       <InputGroupTextarea {...props} ref={ref} data-slot="input" />
     </InputGroup>
   );
