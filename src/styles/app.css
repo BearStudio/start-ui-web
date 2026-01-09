@@ -88,7 +88,7 @@
   --secondary: var(--color-neutral-100);
   --secondary-foreground: var(--color-neutral-900);
   --muted: var(--color-neutral-100);
-  --muted-foreground: var(--color-neutral-600);
+  --muted-foreground: var(--color-neutral-500);
   --accent: var(--color-neutral-100);
   --accent-foreground: var(--color-neutral-900);
   --destructive: var(--color-negative-600);
@@ -103,7 +103,7 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
   --sidebar: var(--color-white);
-  --sidebar-foreground: var(--color-neutral-950);
+  --sidebar-foreground: var(--color-neutral-600);
   --sidebar-primary: var(--color-neutral-900);
   --sidebar-primary-foreground: var(--color-neutral-50);
   --sidebar-accent: var(--color-neutral-100);
@@ -126,7 +126,7 @@
   --secondary: var(--color-neutral-800);
   --secondary-foreground: var(--color-neutral-50);
   --muted: var(--color-neutral-900);
-  --muted-foreground: var(--color-neutral-300);
+  --muted-foreground: var(--color-neutral-400);
   --accent: var(--color-neutral-800);
   --accent-foreground: var(--color-neutral-50);
   --destructive: var(--color-negative-700);
@@ -140,7 +140,7 @@
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: var(--color-neutral-900);
-  --sidebar-foreground: var(--color-neutral-50);
+  --sidebar-foreground: var(--color-neutral-300);
   --sidebar-primary: var(--color-neutral-100);
   --sidebar-primary-foreground: var(--color-neutral-900);
   --sidebar-accent: var(--color-neutral-800);
