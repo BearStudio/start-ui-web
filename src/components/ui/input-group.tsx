@@ -9,12 +9,19 @@ import { Button } from '@/components/ui/button';
 const inputGroupVariants = cva(
   cn(
     'group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30',
-    'min-w-0 has-[>textarea]:h-auto [&>input]:md:text-sm [&>textarea]:md:text-sm',
+    'min-w-0',
+
+    // Input
+    '[&>input]:md:text-sm',
+
+    // Textarea
+    'has-[>textarea]:h-auto [&>textarea]:max-h-64 [&>textarea]:md:text-sm',
 
     // Variants based on alignment.
     'has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col',
     'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col',
 
+    // Disabled
     'has-[input:disabled]:cursor-not-allowed [&>input]:disabled:opacity-50',
     'has-[textarea:disabled]:cursor-not-allowed [&>textarea]:disabled:opacity-50',
 
@@ -27,10 +34,27 @@ const inputGroupVariants = cva(
   {
     variants: {
       size: {
-        default:
-          'h-9 [&>input]:px-3 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5 [&>textarea]:-my-px [&>textarea]:min-h-14 [&>textarea]:px-3 [&>textarea]:py-2 has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[>[data-align=block-start]]:[&>textarea]:pb-3',
-        sm: 'h-8 [&>input]:px-2.5 has-[>[data-align=block-end]]:[&>input]:pt-2.5 has-[>[data-align=block-start]]:[&>input]:pb-2.5 has-[>[data-align=inline-end]]:[&>input]:pr-1 has-[>[data-align=inline-start]]:[&>input]:pl-1 [&>textarea]:-my-px [&>textarea]:min-h-12 [&>textarea]:px-2.5 [&>textarea]:py-1.5 has-[>[data-align=block-end]]:[&>textarea]:pt-2.5 has-[>[data-align=block-start]]:[&>textarea]:pb-2.5',
-        lg: 'h-10 md:text-base [&>input]:px-4 has-[>[data-align=block-end]]:[&>input]:pt-4 has-[>[data-align=block-start]]:[&>input]:pb-4 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=inline-start]]:[&>input]:pl-2 [&>textarea]:-my-px [&>textarea]:min-h-15 [&>textarea]:px-4 [&>textarea]:py-2.5 has-[>[data-align=block-end]]:[&>textarea]:pt-4 has-[>[data-align=block-start]]:[&>textarea]:pb-4',
+        default: cn(
+          'h-9',
+          // Input
+          '[&>input]:px-3 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
+          // Textarea
+          '[&>textarea]:-my-px [&>textarea]:min-h-14 [&>textarea]:px-3 [&>textarea]:py-2 has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[>[data-align=block-start]]:[&>textarea]:pb-3'
+        ),
+        sm: cn(
+          'h-8',
+          // Input
+          '[&>input]:px-2.5 has-[>[data-align=block-end]]:[&>input]:pt-2.5 has-[>[data-align=block-start]]:[&>input]:pb-2.5 has-[>[data-align=inline-end]]:[&>input]:pr-1 has-[>[data-align=inline-start]]:[&>input]:pl-1',
+          // Textarea
+          '[&>textarea]:-my-px [&>textarea]:max-h-64 [&>textarea]:min-h-12 [&>textarea]:px-2.5 [&>textarea]:py-1.5 has-[>[data-align=block-end]]:[&>textarea]:pt-2.5 has-[>[data-align=block-start]]:[&>textarea]:pb-2.5'
+        ),
+        lg: cn(
+          'h-10 md:text-base',
+          // Input
+          '[&>input]:px-4 has-[>[data-align=block-end]]:[&>input]:pt-4 has-[>[data-align=block-start]]:[&>input]:pb-4 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=inline-start]]:[&>input]:pl-2',
+          // Textarea
+          '[&>textarea]:-my-px [&>textarea]:min-h-15 [&>textarea]:px-4 [&>textarea]:py-2.5 has-[>[data-align=block-end]]:[&>textarea]:pt-4 has-[>[data-align=block-start]]:[&>textarea]:pb-4'
+        ),
       },
     },
     defaultVariants: {

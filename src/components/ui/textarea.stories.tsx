@@ -31,3 +31,41 @@ export const Sizes = () => {
     </div>
   );
 };
+
+export const MinHeight = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <Textarea placeholder="Placeholder..." className="[&>textarea]:min-h-0" />
+      <Textarea
+        placeholder="Placeholder..."
+        className="[&>textarea]:min-h-24"
+      />
+    </div>
+  );
+};
+
+export const FixedHeight = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <Textarea
+        placeholder="Placeholder..."
+        className="[&>textarea]:max-h-32 [&>textarea]:min-h-32"
+      />
+    </div>
+  );
+};
+
+export const MaxHeight = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <Textarea
+        placeholder="Placeholder..."
+        className="[&>textarea]:max-h-24"
+      />
+      <Textarea
+        placeholder="Placeholder..."
+        className="[&>textarea]:max-h-64"
+      />
+    </div>
+  );
+};
