@@ -1,4 +1,4 @@
-import { NumberField } from '@base-ui-components/react';
+import { NumberField } from '@base-ui/react/number-field';
 import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
 import { ComponentProps, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,13 +25,13 @@ type NumberInputProps = ComponentProps<typeof NumberField.Root> &
 export const NumberInput = ({
   inputProps,
   size,
-  invalid,
   placeholder,
   locale,
   buttons,
   className,
   onKeyDown,
   ref,
+  'aria-invalid': invalid,
   ...props
 }: NumberInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,8 +75,8 @@ export const NumberInput = ({
         <NumberField.Input
           render={
             <Input
+              aria-invalid={invalid}
               ref={mergeRefs([ref, inputRef])}
-              aria-invalid={invalid ? true : undefined}
               endElement={
                 buttons === 'classic' && (
                   <NumberField.Group className="flex flex-col">
