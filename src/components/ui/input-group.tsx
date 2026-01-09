@@ -46,14 +46,14 @@ function InputGroup({
     <div
       data-slot="input-group"
       role="group"
-      className={inputGroupVariants({ size })}
+      className={cn(inputGroupVariants({ size }), className)}
       {...props}
     />
   );
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)]",
+  "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)]",
   {
     variants: {
       align: {

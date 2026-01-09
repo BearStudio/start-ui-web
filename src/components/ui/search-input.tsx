@@ -35,6 +35,7 @@ export const SearchInput = ({
   ref,
   value,
   defaultValue,
+  className,
   onChange,
   delay = 500,
   placeholder,
@@ -103,7 +104,7 @@ export const SearchInput = ({
   };
 
   return (
-    <InputGroup size={size}>
+    <InputGroup size={size} className={className}>
       <InputGroupInput
         {...rest}
         ref={inputRef}
