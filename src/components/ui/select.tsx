@@ -16,25 +16,22 @@ import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Button } from '@/components/ui/button';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group';
+import { Input } from '@/components/ui/input';
+import { InputGroupButton } from '@/components/ui/input-group';
 
 type OptionBase = { id: string; label: string; disabled?: boolean };
 type TValueBase = OptionBase | null;
 
-type InputPropsRoot = Pick<ComponentProps<typeof InputGroup>, 'size'> &
-  Pick<
-    ComponentProps<typeof InputGroupInput>,
-    | 'placeholder'
-    | 'aria-invalid'
-    | 'aria-describedby'
-    | 'readOnly'
-    | 'autoFocus'
-  >;
+type InputProps = ComponentProps<typeof Input>;
+type InputPropsRoot = Pick<
+  InputProps,
+  | 'placeholder'
+  | 'size'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'readOnly'
+  | 'autoFocus'
+>;
 
 type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
   InputPropsRoot & {
@@ -42,7 +39,7 @@ type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
     withClearButton?: boolean;
     options: ReadonlyArray<NonNullable<TValue>>;
     inputProps?: Omit<
-      RemoveFromType<ComponentProps<typeof InputGroupInput>, InputPropsRoot>,
+      RemoveFromType<InputProps, InputPropsRoot>,
       // Removing the defaultValue from the input to avoid conflict with ComboboxInput type
       'defaultValue'
     >;
@@ -65,6 +62,7 @@ export const Select = <TValue extends TValueBase>({
   renderOption,
   onChange,
   value,
+  autoFocus,
   allowCustomValue = false,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
@@ -123,10 +121,6 @@ export const Select = <TValue extends TValueBase>({
     return set('default');
   });
 
-  const { className: inputGroupClassName, ...restInputProps } = inputProps ?? {
-    className: '',
-  };
-
   return (
     <Combobox
       immediate
@@ -141,42 +135,41 @@ export const Select = <TValue extends TValueBase>({
       disabled={props.disabled || readOnly}
       {...props}
     >
-      <InputGroup size={size} className={inputGroupClassName}>
+      <div className="relative">
         {/* Setting the type so we have type check and typings for the displayValue prop */}
-        <ComboboxInput<TValue, typeof InputGroupInput>
-          as={InputGroupInput}
+        <ComboboxInput<TValue, typeof Input>
+          as={Input}
+          size={size}
           displayValue={(item) => item?.label ?? ''}
           onChange={handleInputChange}
+          autoFocus={autoFocus}
           placeholder={placeholder ?? t('components:select.placeholder')}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
-          {...restInputProps}
-        />
-        <InputGroupAddon align="inline-end">
-          <div className="flex gap-1">
-            {!!withClearButton && value && (
-              <Button
-                variant="ghost"
+          endAddon={
+            <>
+              {!!withClearButton && value && (
+                <InputGroupButton
+                  size="icon-xs"
+                  className="-mr-1"
+                  onClick={() => {
+                    onChange?.(null);
+                  }}
+                >
+                  <XIcon />
+                </InputGroupButton>
+              )}
+              <ComboboxButton
+                as={InputGroupButton}
+                disabled={props.disabled}
                 size="icon-xs"
-                className="text-inherit"
-                onClick={() => {
-                  onChange?.(null);
-                }}
               >
-                <XIcon />
-              </Button>
-            )}
-            <ComboboxButton
-              as={Button}
-              variant="ghost"
-              disabled={props.disabled}
-              className="-me-1.5 text-inherit opacity-60 hover:opacity-100"
-              size="icon-xs"
-            >
-              <ChevronDownIcon aria-hidden="true" />
-            </ComboboxButton>
-          </div>
-        </InputGroupAddon>
+                <ChevronDownIcon aria-hidden="true" />
+              </ComboboxButton>
+            </>
+          }
+          {...inputProps}
+        />
 
         <ComboboxOptions
           anchor="bottom start"
@@ -211,7 +204,7 @@ export const Select = <TValue extends TValueBase>({
             )
             .exhaustive()}
         </ComboboxOptions>
-      </InputGroup>
+      </div>
     </Combobox>
   );
 };

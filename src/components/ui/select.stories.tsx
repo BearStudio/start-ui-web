@@ -1,8 +1,10 @@
 import { faker } from '@faker-js/faker';
+import { ComboboxButton } from '@headlessui/react';
 import { Meta } from '@storybook/react-vite';
-import { CheckIcon } from 'lucide-react';
+import { ArrowDown, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import { InputGroupButton } from '@/components/ui/input-group';
 import { ComboboxOption, Select } from '@/components/ui/select';
 
 export default {
@@ -208,8 +210,12 @@ export const Customization = () => {
     <Select
       options={astrobears}
       inputProps={{
-        className:
-          'bg-warning-200 text-warning-700 border-transparent shadow-none dark:bg-warning-800',
+        endAddon: (
+          <ComboboxButton as={InputGroupButton} size="icon-xs">
+            <ArrowDown />
+          </ComboboxButton>
+        ),
+        className: 'bg-warning-200 border-none shadow-none dark:bg-warning-800',
       }}
       value={bear}
       onChange={(v) => setBear(v)}
