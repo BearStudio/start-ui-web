@@ -34,7 +34,7 @@ const ErrorFallback = (props: FallbackProps) => {
         onClick={() => setOpen(true)}
         className="@container cursor-pointer border-none bg-negative-500/5"
       >
-        <CircleAlertIcon className="size-4 @max-2xs:absolute @max-2xs:top-1/2 @max-2xs:left-1/2 @max-2xs:-translate-x-1/2 @max-2xs:-translate-y-1/2!" />
+        <CircleAlertIcon className="size-4 @max-2xs:absolute @max-2xs:top-1/2 @max-2xs:left-1/2 @max-2xs:-translate-x-1/2 @max-2xs:!-translate-y-1/2" />
         <AlertTitle className="flex flex-wrap items-center gap-2 @max-2xs:opacity-0">
           <span className="line-clamp-1 flex-1">
             {t('components:errorBoundary.title')}
