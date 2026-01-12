@@ -5,7 +5,7 @@ import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 const labelVariants = cva(
-  'flex gap-1.5 align-baseline text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+  'flex items-baseline gap-1.5 text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
 );
 
 const Label = ({
