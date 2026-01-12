@@ -9,7 +9,7 @@ import {
   ComboboxOptions,
   ComboboxProps,
 } from '@headlessui/react';
-import { ChevronDownIcon, XIcon } from 'lucide-react';
+import { ChevronDown, XIcon } from 'lucide-react';
 import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isEmpty, isNonNullish, isNullish } from 'remeda';
@@ -164,7 +164,7 @@ export const Select = <TValue extends TValueBase>({
                 disabled={props.disabled}
                 size="icon-xs"
               >
-                <ChevronDownIcon aria-hidden="true" />
+                <ChevronDown aria-hidden="true" />
               </ComboboxButton>
             </>
           }
