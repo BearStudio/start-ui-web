@@ -184,7 +184,7 @@ export const TextExample = () => {
   );
 };
 
-export function TexareaExample() {
+export function TextareaExample() {
   return (
     <div className="grid w-full max-w-md gap-4">
       <InputGroup>
