@@ -4,9 +4,9 @@ import { Label } from '@/components/ui/label';
 
 import { useFormField } from './form-field';
 
-type FormFieldLabelProps = ComponentProps<'label'>;
+type FormFieldLabelProps = Omit<ComponentProps<'label'>, 'id' | 'htmlFor'>;
 
 export const FormFieldLabel = (props: FormFieldLabelProps) => {
   const ctx = useFormField();
-  return <Label id={ctx.labelId} htmlFor={ctx.id} {...props} />;
+  return <Label {...props} id={ctx.labelId} htmlFor={ctx.id} />;
 };
