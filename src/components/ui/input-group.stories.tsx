@@ -55,7 +55,7 @@ export function Default() {
         <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="example.com" className="!pl-1" />
+        <InputGroupInput placeholder="example.com" className="pl-1!" />
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
@@ -91,7 +91,7 @@ export function Default() {
             </DropdownMenuContent>
           </DropdownMenu>
           <InputGroupText className="ml-auto">52% used</InputGroupText>
-          <Separator orientation="vertical" className="!h-4" />
+          <Separator orientation="vertical" className="h-4!" />
           <InputGroupButton variant="default" size="icon-xs" disabled>
             <ArrowUpIcon />
             <span className="sr-only">Send</span>
@@ -161,7 +161,7 @@ export const TextExample = () => {
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="example.com" className="!pl-0.5" />
+        <InputGroupInput placeholder="example.com" className="pl-0.5!" />
         <InputGroupAddon align="inline-end">
           <InputGroupText>.com</InputGroupText>
         </InputGroupAddon>
@@ -316,7 +316,7 @@ export function DropdownExample() {
         <InputGroupAddon align="inline-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <InputGroupButton variant="ghost" className="!pr-1.5 text-xs">
+              <InputGroupButton variant="ghost" className="pr-1.5! text-xs">
                 Search In... <ChevronDownIcon className="size-3" />
               </InputGroupButton>
             </DropdownMenuTrigger>
