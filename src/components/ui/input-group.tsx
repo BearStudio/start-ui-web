@@ -109,6 +109,7 @@ function InputGroupAddon({
       data-slot="input-group-addon"
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
+      {...props}
       onClick={(e) => {
         if ((e.target as HTMLElement).closest('button')) {
           return;
@@ -119,7 +120,6 @@ function InputGroupAddon({
           >('input, textarea')
           ?.focus();
       }}
-      {...props}
     />
   );
 }
