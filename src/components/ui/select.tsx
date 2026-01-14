@@ -177,7 +177,9 @@ export const Select = <TValue extends TValueBase>({
         >
           {ui
             .match('empty', () => (
-              <div className="p-4">{t('components:select.noResultsFound')}</div>
+              <div className="px-3 py-2 text-xs opacity-60">
+                {t('components:select.noResultsFound')}
+              </div>
             ))
             .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
             .match('create-search', ({ search }) => (
