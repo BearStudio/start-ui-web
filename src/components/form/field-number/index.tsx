@@ -35,6 +35,7 @@ export const FieldNumber = (
     <FormFieldContainer {...containerProps}>
       <NumberInput
         id={ctx.id}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...fieldProps}
