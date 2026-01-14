@@ -23,7 +23,7 @@ type TextareaProps = Pick<
   | 'cols'
 > &
   Pick<React.ComponentProps<typeof InputGroup>, 'size'> & {
-    ref?: React.Ref<HTMLTextAreaElement | null>;
+    ref?: React.Ref<HTMLTextAreaElement>;
   };
 
 function Textarea({ ref, size, className, ...props }: TextareaProps) {
