@@ -1,22 +1,12 @@
 import { ComponentProps } from 'react';
 
-import { cn } from '@/lib/tailwind/utils';
+import { Label } from '@/components/ui/label';
 
 import { useFormField } from './form-field';
 
-type FormFieldLabelProps = ComponentProps<'label'>;
+type FormFieldLabelProps = Omit<ComponentProps<'label'>, 'id' | 'htmlFor'>;
 
-export const FormFieldLabel = ({
-  className,
-  ...props
-}: FormFieldLabelProps) => {
+export const FormFieldLabel = (props: FormFieldLabelProps) => {
   const ctx = useFormField();
-  return (
-    <label
-      id={ctx.labelId}
-      htmlFor={ctx.id}
-      className={cn('flex gap-1.5 align-baseline text-sm', className)}
-      {...props}
-    />
-  );
+  return <Label {...props} id={ctx.labelId} htmlFor={ctx.id} />;
 };

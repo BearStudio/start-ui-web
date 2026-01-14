@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useDisclosure } from 'react-use-disclosure';
 
 import { onSubmit } from '@/components/form/docs.utils';
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { DateInput } from '@/components/ui/date-input';
+import { InputGroupButton } from '@/components/ui/input-group';
 import {
   Popover,
   PopoverContent,
@@ -43,15 +43,15 @@ export const WithPicker = () => {
     <DateInput
       onChange={(date) => setDate(date)}
       value={date}
-      endElement={
+      endAddon={
         <Popover
           open={datePicker.isOpen}
           onOpenChange={(open) => datePicker.toggle(open)}
         >
           <PopoverTrigger asChild>
-            <Button size="icon-xs" className="-mr-1.5">
+            <InputGroupButton size="icon-xs">
               <CalendarIcon />
-            </Button>
+            </InputGroupButton>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar

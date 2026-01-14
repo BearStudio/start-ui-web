@@ -9,15 +9,15 @@ import {
   ComboboxOptions,
   ComboboxProps,
 } from '@headlessui/react';
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDown, XIcon } from 'lucide-react';
 import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InputGroupButton } from '@/components/ui/input-group';
 
 type OptionBase = { id: string; label: string; disabled?: boolean };
 type TValueBase = OptionBase | null;
@@ -146,29 +146,27 @@ export const Select = <TValue extends TValueBase>({
           placeholder={placeholder ?? t('components:select.placeholder')}
           aria-invalid={ariaInvalid}
           aria-describedby={ariaDescribedBy}
-          endElement={
-            <div className="flex gap-1">
+          endAddon={
+            <>
               {!!withClearButton && value && (
-                <Button
-                  variant="ghost"
+                <InputGroupButton
                   size="icon-xs"
+                  className="-mr-1"
                   onClick={() => {
                     onChange?.(null);
                   }}
                 >
-                  <X />
-                </Button>
+                  <XIcon />
+                </InputGroupButton>
               )}
               <ComboboxButton
-                as={Button}
-                variant="ghost"
+                as={InputGroupButton}
                 disabled={props.disabled}
-                className="-me-1.5"
                 size="icon-xs"
               >
                 <ChevronDown aria-hidden="true" />
               </ComboboxButton>
-            </div>
+            </>
           }
           {...inputProps}
         />

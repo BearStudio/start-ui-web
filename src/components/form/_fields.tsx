@@ -6,9 +6,11 @@ import { FieldOtp } from './field-otp';
 import { FieldRadioGroup } from './field-radio-group';
 import { FieldSelect } from './field-select';
 import { FieldText } from './field-text';
+import { FieldTextarea } from './field-textarea';
 
 export const fieldComponents = {
   text: FieldText,
+  textarea: FieldTextarea,
   email: FieldText,
   tel: FieldText,
   select: FieldSelect,
