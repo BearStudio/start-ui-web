@@ -151,7 +151,7 @@ export const Select = <TValue extends TValueBase>({
               {!!withClearButton && value && (
                 <InputGroupButton
                   size="icon-xs"
-                  className="-mr-1"
+                  className="-me-1"
                   onClick={() => {
                     onChange?.(null);
                   }}
