@@ -31,7 +31,7 @@ export const FieldOtp = (
     <FormFieldContainer {...containerProps} ref={containerRef}>
       <InputOTP
         id={ctx.id}
-        aria-invalid={fieldState.invalid}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         onComplete={(v) => {
           rest.onComplete?.(v);

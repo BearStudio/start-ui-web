@@ -21,7 +21,7 @@ export const FieldSelect = (
     <FormFieldContainer {...containerProps}>
       <Select
         invalid={fieldState.invalid}
-        aria-invalid={fieldState.invalid}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}

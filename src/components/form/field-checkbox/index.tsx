@@ -27,7 +27,7 @@ export const FieldCheckbox = (
     <FormFieldContainer {...containerProps}>
       <Checkbox
         id={ctx.id}
-        aria-invalid={fieldState.invalid}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         checked={value}
         onCheckedChange={onChange}

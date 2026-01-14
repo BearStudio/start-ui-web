@@ -31,7 +31,7 @@ export const FieldRadioGroup = (
     <FormFieldContainer {...containerProps}>
       <RadioGroup
         id={ctx.id}
-        aria-invalid={fieldState.invalid}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         value={value}
@@ -58,7 +58,7 @@ export const FieldRadioGroup = (
           return (
             <Radio
               key={radioId}
-              aria-invalid={fieldState.invalid}
+              aria-invalid={fieldState.invalid ? true : undefined}
               size={ctx.size}
               {...field}
               {...option}

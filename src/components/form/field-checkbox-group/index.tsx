@@ -30,7 +30,7 @@ export const FieldCheckboxGroup = (
     <FormFieldContainer {...containerProps}>
       <CheckboxGroup
         id={ctx.id}
-        aria-invalid={fieldState.invalid}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         value={value}
@@ -43,7 +43,7 @@ export const FieldCheckboxGroup = (
         {options.map(({ label, ...option }) => (
           <Checkbox
             key={`${ctx.id}-${option.value}`}
-            aria-invalid={fieldState.invalid}
+            aria-invalid={fieldState.invalid ? true : undefined}
             size={ctx.size}
             {...field}
             {...option}
