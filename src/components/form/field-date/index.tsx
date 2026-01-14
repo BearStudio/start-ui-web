@@ -22,7 +22,7 @@ export const FieldDate = (
     <FormFieldContainer {...containerProps}>
       <DatePicker
         id={ctx.id}
-        aria-invalid={fieldState.error ? true : undefined}
+        aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}
