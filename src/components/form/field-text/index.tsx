@@ -1,12 +1,11 @@
 import { ComponentProps } from 'react';
 
+import { useFormField } from '@/components/form/form-field';
 import { FormFieldContainer } from '@/components/form/form-field-container';
 import { useFormFieldController } from '@/components/form/form-field-controller/context';
 import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
 import { Input } from '@/components/ui/input';
-
-import { useFormField } from '../form-field';
 
 export const FieldText = (
   props: FieldProps<
