@@ -19,6 +19,8 @@ type TextareaProps = Pick<
   | 'onChange'
   | 'onKeyDown'
   | 'inputMode'
+  | 'rows'
+  | 'cols'
 > &
   Pick<React.ComponentProps<typeof InputGroup>, 'size'> & {
     ref?: React.Ref<HTMLTextAreaElement | null>;

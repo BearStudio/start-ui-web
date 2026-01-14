@@ -49,7 +49,7 @@ export const SearchInput = ({
   const internalRef = useRef<HTMLInputElement>(null);
   const inputRef = ref ?? internalRef;
 
-  const [search, setSearch] = useState<string>(value ?? '');
+  const [search, setSearch] = useState<string>(value ?? defaultValue ?? '');
 
   const onChangeEvent = useEffectEvent((s: string) => {
     onChange?.(s);
