@@ -11,14 +11,14 @@ type CheckboxOption = Omit<CheckboxProps, 'children' | 'value' | 'render'> & {
   value: string;
 };
 
-export type FieldCheckboxGroupProps = FieldProps<
-  {
-    options: Array<CheckboxOption>;
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & Omit<React.ComponentProps<typeof CheckboxGroup>, 'allValues'>
->;
-
-export const FieldCheckboxGroup = (props: FieldCheckboxGroupProps) => {
+export const FieldCheckboxGroup = (
+  props: FieldProps<
+    {
+      options: Array<CheckboxOption>;
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & Omit<React.ComponentProps<typeof CheckboxGroup>, 'allValues'>
+  >
+) => {
   const { containerProps, options, ...rest } = props;
   const ctx = useFormField();
   const {

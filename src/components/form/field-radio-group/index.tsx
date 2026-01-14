@@ -11,15 +11,15 @@ type RadioOption = Omit<RadioProps, 'children' | 'render'> & {
   label: string;
 };
 
-export type FieldRadioGroupProps = FieldProps<
-  {
-    options: Array<RadioOption>;
-    renderOption?: (props: RadioOption) => React.JSX.Element;
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & React.ComponentProps<typeof RadioGroup>
->;
-
-export const FieldRadioGroup = (props: FieldRadioGroupProps) => {
+export const FieldRadioGroup = (
+  props: FieldProps<
+    {
+      options: Array<RadioOption>;
+      renderOption?: (props: RadioOption) => React.JSX.Element;
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & React.ComponentProps<typeof RadioGroup>
+  >
+) => {
   const { containerProps, options, renderOption, ...rest } = props;
   const ctx = useFormField();
   const {

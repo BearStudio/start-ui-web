@@ -8,13 +8,13 @@ import { Input } from '@/components/ui/input';
 
 import { useFormField } from '../form-field';
 
-export type FieldTextProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & ComponentProps<typeof Input>
->;
-
-export const FieldText = (props: FieldTextProps) => {
+export const FieldText = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & ComponentProps<typeof Input>
+  >
+) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();

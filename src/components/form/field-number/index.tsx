@@ -7,14 +7,14 @@ import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
 import { NumberInput } from '@/components/ui/number-input';
 
-export type FieldNumberProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-    inCents?: boolean;
-  } & React.ComponentProps<typeof NumberInput>
->;
-
-export const FieldNumber = (props: FieldNumberProps) => {
+export const FieldNumber = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+      inCents?: boolean;
+    } & React.ComponentProps<typeof NumberInput>
+  >
+) => {
   const { containerProps, inCents, ...rest } = props;
 
   const ctx = useFormField();

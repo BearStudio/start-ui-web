@@ -8,13 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { useFormField } from '../form-field';
 
-export type FieldTextProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & ComponentProps<typeof Textarea>
->;
-
-export const FieldTextarea = (props: FieldTextProps) => {
+export const FieldTextarea = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & ComponentProps<typeof Textarea>
+  >
+) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();

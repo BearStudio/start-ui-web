@@ -7,13 +7,13 @@ import { useFormFieldController } from '@/components/form/form-field-controller/
 import { FieldProps } from '@/components/form/types';
 import { Checkbox } from '@/components/ui/checkbox';
 
-export type FieldCheckboxProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & ComponentProps<typeof Checkbox>
->;
-
-export const FieldCheckbox = (props: FieldCheckboxProps) => {
+export const FieldCheckbox = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & ComponentProps<typeof Checkbox>
+  >
+) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();

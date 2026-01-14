@@ -7,13 +7,13 @@ import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
 import { DatePicker } from '@/components/ui/date-picker';
 
-export type FieldDateProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & ComponentProps<typeof DatePicker>
->;
-
-export const FieldDate = (props: FieldDateProps) => {
+export const FieldDate = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & ComponentProps<typeof DatePicker>
+  >
+) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();

@@ -12,15 +12,15 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 
-export type FieldOtpProps = FieldProps<
-  {
-    type: 'otp';
-    autoSubmit?: boolean;
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & Omit<React.ComponentProps<typeof InputOTP>, 'children'>
->;
-
-export const FieldOtp = (props: FieldOtpProps) => {
+export const FieldOtp = (
+  props: FieldProps<
+    {
+      type: 'otp';
+      autoSubmit?: boolean;
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & Omit<React.ComponentProps<typeof InputOTP>, 'children'>
+  >
+) => {
   const { containerProps, autoSubmit, ...rest } = props;
 
   const containerRef = useRef<React.ComponentRef<'div'>>(null);

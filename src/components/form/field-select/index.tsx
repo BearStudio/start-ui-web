@@ -5,13 +5,13 @@ import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
 import { Select } from '@/components/ui/select';
 
-export type FieldSelectProps = FieldProps<
-  {
-    containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-  } & React.ComponentProps<typeof Select>
->;
-
-export const FieldSelect = (props: FieldSelectProps) => {
+export const FieldSelect = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & React.ComponentProps<typeof Select>
+  >
+) => {
   const { containerProps, options, ...rest } = props;
 
   const ctx = useFormField();
