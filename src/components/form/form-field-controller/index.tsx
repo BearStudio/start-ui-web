@@ -17,47 +17,33 @@ import {
   NonGenericFormFieldControllerContextValue,
 } from './context';
 
-type FormFieldControllerBaseProps<
-  TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
-  TTransformedValues extends FieldValues,
-> = Omit<ControllerProps<TFieldValues, TName, TTransformedValues>, 'render'> & {
-  displayError?: boolean;
-};
-
-export type FormFieldControllerProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues extends FieldValues = TFieldValues,
-> = (
-  | {
-      [K in FieldType]: {
-        type: K;
-      } & FieldComponentProps<K>;
-    }[FieldType]
-  | {
-      type: 'custom';
-      render: ControllerProps<
-        TFieldValues,
-        TName,
-        TTransformedValues
-      >['render'];
-    }
-) &
-  FormFieldControllerBaseProps<TFieldValues, TName, TTransformedValues>;
-
 export function FormFieldController<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues extends FieldValues = TFieldValues,
->(props: FormFieldControllerProps<TFieldValues, TName, TTransformedValues>) {
+>(
+  props: (
+    | { [K in FieldType]: { type: K } & FieldComponentProps<K> }[FieldType]
+    | {
+        type: 'custom';
+        render: ControllerProps<
+          TFieldValues,
+          TName,
+          TTransformedValues
+        >['render'];
+      }
+  ) &
+    Omit<ControllerProps<TFieldValues, TName, TTransformedValues>, 'render'> & {
+      displayError?: boolean;
+    }
+) {
   const {
     name,
     control,
     defaultValue,
     rules,
     shouldUnregister,
-    displayError,
+    displayError = true,
     type,
     ...fieldProps
   } = props;
@@ -70,40 +56,53 @@ export function FormFieldController<
       disabled={fieldProps.disabled}
       rules={rules}
       shouldUnregister={shouldUnregister}
-      render={({ field, fieldState, formState }) => {
-        // This is a render function so it's fine
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const contextValue = useMemo(
-          () => ({
-            type,
-            displayError: displayError ?? true,
-            field,
-            fieldState,
-          }),
-          [field, fieldState]
-        );
-
-        // This is a render function so it's fine
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const fieldContent = useMemo(() => {
-          if (type === 'custom')
-            return props.render({ field, fieldState, formState });
-
-          const Field = fieldComponents[type];
-
-          return (
-            <Field {...(fieldProps as FieldComponentProps<ExplicitAny>)} />
-          );
-        }, [field, fieldState, formState]);
-
-        return (
-          <FormFieldControllerContext
-            value={contextValue as NonGenericFormFieldControllerContextValue}
-          >
-            {fieldContent}
-          </FormFieldControllerContext>
-        );
-      }}
+      render={(renderProps) => (
+        <FormFieldControllerRender
+          {...renderProps}
+          type={type}
+          displayError={displayError}
+          fieldProps={fieldProps}
+          customRender={type === 'custom' ? props.render : undefined}
+        />
+      )}
     />
+  );
+}
+
+function FormFieldControllerRender<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>,
+>({
+  field,
+  fieldState,
+  formState,
+  type,
+  displayError,
+  fieldProps,
+  customRender,
+}: Parameters<ControllerProps<TFieldValues, TName>['render']>[0] & {
+  type: FieldType | 'custom';
+  displayError: boolean;
+  fieldProps: Record<string, unknown>;
+  customRender?: ControllerProps<TFieldValues, TName>['render'];
+}) {
+  const contextValue = useMemo(
+    () => ({ type, displayError, field, fieldState }),
+    [type, displayError, field, fieldState]
+  );
+
+  const fieldContent = useMemo(() => {
+    if (type === 'custom')
+      return customRender?.({ field, fieldState, formState });
+    const Field = fieldComponents[type];
+    return <Field {...(fieldProps as FieldComponentProps<ExplicitAny>)} />;
+  }, [type, customRender, field, fieldState, formState, fieldProps]);
+
+  return (
+    <FormFieldControllerContext
+      value={contextValue as NonGenericFormFieldControllerContextValue}
+    >
+      {fieldContent}
+    </FormFieldControllerContext>
   );
 }
