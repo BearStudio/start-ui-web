@@ -47,11 +47,7 @@ export const Default = () => {
       <div className="flex flex-col gap-4">
         <FormField size="lg">
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="textarea"
-            name="name"
-          />
+          <FormFieldController control={form.control} type="text" name="name" />
           <FormFieldHelper>This is an helper text</FormFieldHelper>
         </FormField>
         <FormField>
@@ -99,7 +95,7 @@ export const NoHtmlForm = () => {
             <FormFieldLabel>Name</FormFieldLabel>
             <FormFieldController
               control={form.control}
-              type="textarea"
+              type="text"
               name="name"
             />
             <FormFieldHelper>This is an helper text</FormFieldHelper>
