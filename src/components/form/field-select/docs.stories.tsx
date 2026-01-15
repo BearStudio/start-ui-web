@@ -19,14 +19,17 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    bear: z.enum([
-      'bearstrong',
-      'pawdrin',
-      'grizzlyrin',
-      'jemibear',
-      'ridepaw',
-      'michaelpawanderson',
-    ]),
+    bear: z.enum(
+      [
+        'bearstrong',
+        'pawdrin',
+        'grizzlyrin',
+        'jemibear',
+        'ridepaw',
+        'michaelpawanderson',
+      ],
+      { error: 'Required' }
+    ),
   });
 
 const options = [
