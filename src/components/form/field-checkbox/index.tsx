@@ -20,7 +20,6 @@ export const FieldCheckbox = (
   const {
     field: { value, onChange, ...field },
     fieldState,
-    displayError,
   } = useFormFieldController();
 
   return (
@@ -34,9 +33,7 @@ export const FieldCheckbox = (
         {...rest}
         {...field}
       />
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

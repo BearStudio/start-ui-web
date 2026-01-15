@@ -25,7 +25,6 @@ export const FieldRadioGroup = (
   const {
     field: { value, onChange, ...field },
     fieldState,
-    displayError,
   } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
@@ -68,9 +67,8 @@ export const FieldRadioGroup = (
           );
         })}
       </RadioGroup>
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

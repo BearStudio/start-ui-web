@@ -17,7 +17,7 @@ export const FieldText = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, displayError, type } = useFormFieldController();
+  const { field, fieldState, type } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -37,9 +37,7 @@ export const FieldText = (
           rest.onBlur?.(e);
         }}
       />
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

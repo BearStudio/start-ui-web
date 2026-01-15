@@ -15,7 +15,7 @@ export const FieldSelect = (
   const { containerProps, options, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, displayError } = useFormFieldController();
+  const { field, fieldState } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -40,9 +40,8 @@ export const FieldSelect = (
           ...rest.inputProps,
         }}
       />
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

@@ -24,7 +24,6 @@ export const FieldCheckboxGroup = (
   const {
     field: { value, onChange, ...field },
     fieldState,
-    displayError,
   } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
@@ -52,9 +51,7 @@ export const FieldCheckboxGroup = (
           </Checkbox>
         ))}
       </CheckboxGroup>
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

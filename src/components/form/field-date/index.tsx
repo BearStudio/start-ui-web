@@ -17,7 +17,7 @@ export const FieldDate = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, displayError } = useFormFieldController();
+  const { field, fieldState } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
       <DatePicker
@@ -35,9 +35,7 @@ export const FieldDate = (
           rest.onBlur?.(e);
         }}
       />
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+      <FormFieldError />
     </FormFieldContainer>
   );
 };

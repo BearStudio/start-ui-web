@@ -29,7 +29,7 @@ export default {
 const zFormSchema = () =>
   z.object({
     name: zu.fieldText.required(),
-    other: zu.fieldText.nullish(),
+    other: zu.fieldText.required(),
   });
 
 export const Default = () => {
@@ -56,13 +56,17 @@ export const Default = () => {
             control={form.control}
             name="other"
             type="custom"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <>
                 <InputGroup>
                   <InputGroupAddon>
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
-                  <InputGroupInput {...field} value={field.value ?? ''} />
+                  <InputGroupInput
+                    {...field}
+                    aria-invalid={fieldState.invalid ? true : undefined}
+                    value={field.value ?? ''}
+                  />
                 </InputGroup>
                 <FormFieldError />
               </>
@@ -106,13 +110,17 @@ export const NoHtmlForm = () => {
               control={form.control}
               name="other"
               type="custom"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <>
                   <InputGroup>
                     <InputGroupAddon>
                       <InputGroupText>https://</InputGroupText>
                     </InputGroupAddon>
-                    <InputGroupInput {...field} value={field.value ?? ''} />
+                    <InputGroupInput
+                      {...field}
+                      aria-invalid={fieldState.invalid ? true : undefined}
+                      value={field.value ?? ''}
+                    />
                   </InputGroup>
                   <FormFieldError />
                 </>

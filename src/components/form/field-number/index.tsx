@@ -18,7 +18,7 @@ export const FieldNumber = (
   const { containerProps, inCents, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, displayError } = useFormFieldController();
+  const { field, fieldState } = useFormFieldController();
   const formatValue = (
     value: number | undefined | null,
     type: 'to-cents' | 'from-cents'
@@ -49,9 +49,7 @@ export const FieldNumber = (
           rest.onBlur?.(e);
         }}
       />
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+      <FormFieldError />
     </FormFieldContainer>
   );
 };
