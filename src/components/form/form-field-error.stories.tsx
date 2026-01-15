@@ -93,20 +93,8 @@ export const Standalone = () => {
           <FormFieldController
             control={form.control}
             name="website"
-            type="custom"
+            type="text"
             displayError={false}
-            render={({ field, fieldState }) => (
-              <InputGroup>
-                <InputGroupAddon>
-                  <InputGroupText>https://</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput
-                  {...field}
-                  aria-invalid={fieldState.invalid ? true : undefined}
-                  value={field.value ?? ''}
-                />
-              </InputGroup>
-            )}
           />
         </FormField>
         {/* Error displayed outside of FormFieldController */}
