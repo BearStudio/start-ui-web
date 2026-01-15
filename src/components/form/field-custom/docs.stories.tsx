@@ -138,6 +138,7 @@ export const Disabled = () => {
             control={form.control}
             name="url"
             type="custom"
+            disabled
             render={({ field, fieldState }) => (
               <>
                 <InputGroup>
