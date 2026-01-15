@@ -26,7 +26,7 @@ export const FieldOtp = (
   const containerRef = useRef<React.ComponentRef<'div'>>(null);
   const ctx = useFormField();
   const formState = useFormState();
-  const { field, fieldState, displayError } = useFormFieldController();
+  const { field, fieldState } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps} ref={containerRef}>
       <InputOTP
@@ -63,9 +63,8 @@ export const FieldOtp = (
           ))}
         </InputOTPGroup>
       </InputOTP>
-      {fieldState.invalid && displayError && (
-        <FormFieldError errors={[fieldState.error]} />
-      )}
+
+      <FormFieldError />
     </FormFieldContainer>
   );
 };
