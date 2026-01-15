@@ -1,111 +1,71 @@
-import { ComponentProps, ComponentRef, useRef } from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
+import { useRef } from 'react';
+import { useFormState } from 'react-hook-form';
 
-import { cn } from '@/lib/tailwind/utils';
-
+import { useFormField } from '@/components/form/form-field';
+import { FormFieldContainer } from '@/components/form/form-field-container';
+import { useFormFieldController } from '@/components/form/form-field-controller/context';
+import { FormFieldError } from '@/components/form/form-field-error';
+import { FieldProps } from '@/components/form/types';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 
-import { useFormField } from '../form-field';
-import { FieldProps } from '../form-field-controller';
-import { FormFieldError } from '../form-field-error';
-
-export type FieldOtpProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  TTransformedValues,
-  {
-    type: 'otp';
-    autoSubmit?: boolean;
-    containerProps?: ComponentProps<'div'>;
-  } & Omit<ComponentProps<typeof InputOTP>, 'children'>
->;
-
-export const FieldOtp = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
->(
-  props: FieldOtpProps<TFieldValues, TName, TTransformedValues>
+export const FieldOtp = (
+  props: FieldProps<
+    {
+      type: 'otp';
+      autoSubmit?: boolean;
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & Omit<React.ComponentProps<typeof InputOTP>, 'children'>
+  >
 ) => {
-  const {
-    name,
-    type,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    control,
-    containerProps,
-    autoSubmit,
-    ...rest
-  } = props;
+  const { containerProps, autoSubmit, ...rest } = props;
 
-  const containerRef = useRef<ComponentRef<'div'>>(null);
+  const containerRef = useRef<React.ComponentRef<'div'>>(null);
   const ctx = useFormField();
+  const formState = useFormState();
+  const { field, fieldState, displayError } = useFormFieldController();
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field, fieldState, formState }) => (
-        <div
-          {...containerProps}
-          ref={containerRef}
-          className={cn(
-            'flex flex-1 flex-col gap-1',
-            containerProps?.className
-          )}
-        >
-          <InputOTP
-            id={ctx.id}
-            aria-invalid={fieldState.error ? true : undefined}
-            aria-describedby={
-              !fieldState.error
-                ? `${ctx.descriptionId}`
-                : `${ctx.descriptionId} ${ctx.errorId}`
-            }
-            onComplete={(v) => {
-              rest.onComplete?.(v);
-              // Only auto submit on first try
-              if (!formState.isSubmitted && autoSubmit) {
-                const button = document.createElement('button');
-                button.type = 'submit';
-                button.style.display = 'none';
-                containerRef.current?.append(button);
-                button.click();
-                button.remove();
-              }
-            }}
-            {...rest}
-            {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              rest.onChange?.(e);
-            }}
-            onBlur={(e) => {
-              field.onBlur();
-              rest.onBlur?.(e);
-            }}
-          >
-            <InputOTPGroup>
-              {Array.from({ length: rest.maxLength }).map((_, index) => (
-                // eslint-disable-next-line @eslint-react/no-array-index-key
-                <InputOTPSlot index={index} key={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
-          <FormFieldError />
-        </div>
+    <FormFieldContainer {...containerProps} ref={containerRef}>
+      <InputOTP
+        id={ctx.id}
+        aria-invalid={fieldState.invalid ? true : undefined}
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        onComplete={(v) => {
+          rest.onComplete?.(v);
+          // Only auto submit on first try
+          if (!formState.isSubmitted && autoSubmit) {
+            const button = document.createElement('button');
+            button.type = 'submit';
+            button.style.display = 'none';
+            containerRef.current?.append(button);
+            button.click();
+            button.remove();
+          }
+        }}
+        {...rest}
+        {...field}
+        onChange={(e) => {
+          field.onChange(e);
+          rest.onChange?.(e);
+        }}
+        onBlur={(e) => {
+          field.onBlur();
+          rest.onBlur?.(e);
+        }}
+      >
+        <InputOTPGroup>
+          {Array.from({ length: rest.maxLength }).map((_, index) => (
+            // eslint-disable-next-line @eslint-react/no-array-index-key
+            <InputOTPSlot index={index} key={index} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
+      {fieldState.invalid && displayError && (
+        <FormFieldError errors={[fieldState.error]} />
       )}
-    />
+    </FormFieldContainer>
   );
 };

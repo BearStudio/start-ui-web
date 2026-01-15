@@ -4,9 +4,7 @@ import { Meta } from '@storybook/react-vite';
 import { ArrowDown, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
 
-import { cn } from '@/lib/tailwind/utils';
-
-import { Button } from '@/components/ui/button';
+import { InputGroupButton } from '@/components/ui/input-group';
 import { ComboboxOption, Select } from '@/components/ui/select';
 
 export default {
@@ -212,17 +210,12 @@ export const Customization = () => {
     <Select
       options={astrobears}
       inputProps={{
-        endElement: (
-          <ComboboxButton
-            as={Button}
-            variant="ghost"
-            className="-me-1.5"
-            size="icon-xs"
-          >
+        endAddon: (
+          <ComboboxButton as={InputGroupButton} size="icon-xs">
             <ArrowDown />
           </ComboboxButton>
         ),
-        inputClassName: cn('data-[state=open]:bg-[#C0FFEE]'),
+        className: 'bg-warning-200 border-none shadow-none dark:bg-warning-800',
       }}
       value={bear}
       onChange={(v) => setBear(v)}

@@ -15,7 +15,12 @@ import {
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '@/components/ui/input-group';
 
 export default {
   title: 'Form/Form',
@@ -53,7 +58,12 @@ export const Default = () => {
             type="custom"
             render={({ field }) => (
               <>
-                <Input {...field} value={field.value ?? ''} />
+                <InputGroup>
+                  <InputGroupAddon>
+                    <InputGroupText>https://</InputGroupText>
+                  </InputGroupAddon>
+                  <InputGroupInput {...field} value={field.value ?? ''} />
+                </InputGroup>
                 <FormFieldError />
               </>
             )}
@@ -98,7 +108,12 @@ export const NoHtmlForm = () => {
               type="custom"
               render={({ field }) => (
                 <>
-                  <Input {...field} value={field.value ?? ''} />
+                  <InputGroup>
+                    <InputGroupAddon>
+                      <InputGroupText>https://</InputGroupText>
+                    </InputGroupAddon>
+                    <InputGroupInput {...field} value={field.value ?? ''} />
+                  </InputGroup>
                   <FormFieldError />
                 </>
               )}

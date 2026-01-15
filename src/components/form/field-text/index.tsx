@@ -1,85 +1,45 @@
 import { ComponentProps } from 'react';
-import { Controller, FieldPath, FieldValues } from 'react-hook-form';
 
-import { cn } from '@/lib/tailwind/utils';
-
+import { useFormField } from '@/components/form/form-field';
+import { FormFieldContainer } from '@/components/form/form-field-container';
+import { useFormFieldController } from '@/components/form/form-field-controller/context';
+import { FormFieldError } from '@/components/form/form-field-error';
+import { FieldProps } from '@/components/form/types';
 import { Input } from '@/components/ui/input';
 
-import { useFormField } from '../form-field';
-import { FieldProps } from '../form-field-controller';
-import { FormFieldError } from '../form-field-error';
-
-export type FieldTextProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
-> = FieldProps<
-  TFieldValues,
-  TName,
-  TTransformedValues,
-  {
-    type: 'text' | 'email' | 'tel';
-    containerProps?: ComponentProps<'div'>;
-  } & ComponentProps<typeof Input>
->;
-
-export const FieldText = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-  TTransformedValues = TFieldValues,
->(
-  props: FieldTextProps<TFieldValues, TName, TTransformedValues>
+export const FieldText = (
+  props: FieldProps<
+    {
+      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
+    } & ComponentProps<typeof Input>
+  >
 ) => {
-  const {
-    name,
-    type,
-    disabled,
-    defaultValue,
-    shouldUnregister,
-    control,
-    containerProps,
-    ...rest
-  } = props;
+  const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
+  const { field, fieldState, displayError, type } = useFormFieldController();
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      disabled={disabled}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      render={({ field, fieldState }) => (
-        <div
-          {...containerProps}
-          className={cn(
-            'flex flex-1 flex-col gap-1',
-            containerProps?.className
-          )}
-        >
-          <Input
-            type={type}
-            id={ctx.id}
-            aria-invalid={fieldState.error ? true : undefined}
-            aria-describedby={
-              !fieldState.error
-                ? `${ctx.descriptionId}`
-                : `${ctx.descriptionId} ${ctx.errorId}`
-            }
-            {...rest}
-            {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              rest.onChange?.(e);
-            }}
-            onBlur={(e) => {
-              field.onBlur();
-              rest.onBlur?.(e);
-            }}
-          />
-          <FormFieldError />
-        </div>
+    <FormFieldContainer {...containerProps}>
+      <Input
+        type={type}
+        id={ctx.id}
+        aria-invalid={fieldState.invalid ? true : undefined}
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        {...rest}
+        {...field}
+        onChange={(e) => {
+          field.onChange(e);
+          rest.onChange?.(e);
+        }}
+        onBlur={(e) => {
+          field.onBlur();
+          rest.onBlur?.(e);
+        }}
+      />
+      {fieldState.invalid && displayError && (
+        <FormFieldError errors={[fieldState.error]} />
       )}
-    />
+    </FormFieldContainer>
   );
 };

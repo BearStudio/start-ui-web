@@ -2,9 +2,9 @@ import { CalendarIcon } from 'lucide-react';
 import { ComponentProps } from 'react';
 import { useDisclosure } from 'react-use-disclosure';
 
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { DateInput } from '@/components/ui/date-input';
+import { InputGroupButton } from '@/components/ui/input-group';
 import {
   Popover,
   PopoverContent,
@@ -29,16 +29,16 @@ export const DatePicker = ({
   return (
     <DateInput
       {...props}
-      endElement={
+      endAddon={
         noCalendar ? null : (
           <Popover
             open={datePicker.isOpen}
             onOpenChange={(open) => datePicker.toggle(open)}
           >
             <PopoverTrigger asChild>
-              <Button size="icon-xs" variant="secondary" className="-mr-1.5">
+              <InputGroupButton size="icon-xs">
                 <CalendarIcon />
-              </Button>
+              </InputGroupButton>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar

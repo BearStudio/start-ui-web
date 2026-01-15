@@ -11,19 +11,19 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormFieldHelper, FormFieldLabel } from '../';
 
 export default {
-  title: 'Form/FieldText',
+  title: 'Form/FieldTextarea',
 };
 
 const zFormSchema = () =>
   z.object({
-    name: zu.fieldText.required({ error: 'Name is required' }),
+    description: zu.fieldText.required({ error: 'Description is required' }),
   });
 
 const formOptions = {
   mode: 'onBlur',
   resolver: zodResolver(zFormSchema()),
   defaultValues: {
-    name: '',
+    description: '',
   },
 } as const;
 
@@ -34,11 +34,11 @@ export const Default = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
-            type="text"
+            type="textarea"
             control={form.control}
-            name="name"
+            name="description"
             placeholder="Buzz Pawdrin"
           />
           <FormFieldHelper>Help</FormFieldHelper>
@@ -55,7 +55,7 @@ export const DefaultValue = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      name: 'Default Name',
+      description: 'Default description',
     },
   });
 
@@ -63,11 +63,11 @@ export const DefaultValue = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="text"
-            name="name"
+            type="textarea"
+            name="description"
             placeholder="Buzz Pawdrin"
           />
           <FormFieldHelper>Help</FormFieldHelper>
@@ -84,7 +84,7 @@ export const Disabled = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      name: 'Default Value',
+      description: 'Default Value',
     },
   });
 
@@ -92,11 +92,11 @@ export const Disabled = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="text"
-            name="name"
+            type="textarea"
+            name="description"
             placeholder="Buzz Pawdrin"
             disabled
           />
@@ -114,7 +114,7 @@ export const ReadOnly = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      name: 'Default Value',
+      description: 'Default Value',
     },
   });
 
@@ -122,11 +122,11 @@ export const ReadOnly = () => {
     <Form {...form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldLabel>Name</FormFieldLabel>
+          <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="text"
-            name="name"
+            type="textarea"
+            name="description"
             placeholder="Buzz Pawdrin"
             readOnly
           />

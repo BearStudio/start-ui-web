@@ -4,10 +4,14 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
+import {
+  Form,
+  FormField,
+  FormFieldController,
+  FormFieldLabel,
+} from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-
-import { Form, FormField, FormFieldController, FormFieldLabel } from '../';
 
 export default {
   title: 'Form/FieldOtp',

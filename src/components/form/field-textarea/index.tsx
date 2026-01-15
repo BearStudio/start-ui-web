@@ -5,22 +5,23 @@ import { FormFieldContainer } from '@/components/form/form-field-container';
 import { useFormFieldController } from '@/components/form/form-field-controller/context';
 import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
-import { DatePicker } from '@/components/ui/date-picker';
+import { Textarea } from '@/components/ui/textarea';
 
-export const FieldDate = (
+export const FieldTextarea = (
   props: FieldProps<
     {
       containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-    } & ComponentProps<typeof DatePicker>
+    } & ComponentProps<typeof Textarea>
   >
 ) => {
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
   const { field, fieldState, displayError } = useFormFieldController();
+
   return (
     <FormFieldContainer {...containerProps}>
-      <DatePicker
+      <Textarea
         id={ctx.id}
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}

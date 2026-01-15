@@ -14,7 +14,7 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    date: z.date(),
+    date: z.date({ error: 'Required' }),
   });
 
 const formOptions = {

@@ -1,9 +1,8 @@
 import type { Meta } from '@storybook/react-vite';
 import { MailIcon } from 'lucide-react';
 
-import { onSubmit } from '@/components/form/docs.utils';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InputGroupText } from '@/components/ui/input-group';
 
 export default {
   title: 'Input',
@@ -28,116 +27,44 @@ export const ReadOnly = () => {
 export const Sizes = () => {
   return (
     <div className="flex flex-col gap-4">
-      <Input size="sm" placeholder="Placeholder..." />
-      <Input placeholder="Placeholder..." />
-      <Input size="lg" placeholder="Placeholder..." />
+      <Input size="sm" placeholder="Small" />
+      <Input placeholder="Default" />
+      <Input size="lg" placeholder="Large" />
     </div>
   );
 };
-
-export const StartEndElements = () => {
+export const StartEndAddons = () => {
   return (
     <div className="flex flex-col gap-4">
+      <p className="text-sm">
+        See <strong>InputGroup</strong> for more advanced use cases
+      </p>
       <Input
-        startElement={<MailIcon />}
+        startAddon={<MailIcon />}
         defaultValue="Icon start"
         placeholder="Placeholder..."
       />
       <Input
-        endElement={<MailIcon />}
+        endAddon={<MailIcon />}
         defaultValue="Icon end"
         placeholder="Placeholder..."
       />
       <Input
-        startElement={<MailIcon />}
-        endElement={<MailIcon />}
+        startAddon={<MailIcon />}
+        endAddon={<MailIcon />}
         defaultValue="Icon start and end"
         placeholder="Placeholder..."
       />
       <Input
-        startElement="https://"
+        startAddon={<InputGroupText>https://</InputGroupText>}
         defaultValue="Text start"
         placeholder="Placeholder..."
       />
       <Input
-        endElement=".com"
+        endAddon={<InputGroupText>.com</InputGroupText>}
         defaultValue="Text end"
         placeholder="Placeholder..."
       />
-    </div>
-  );
-};
-
-export const InputAndButton = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <form
-        className="flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit('Submitted');
-        }}
-      >
-        <Input placeholder="Placeholder..." />
-        <Button type="submit">Submit</Button>
-      </form>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit('Submitted');
-        }}
-      >
-        <Input
-          className="pr-1"
-          placeholder="Placeholder..."
-          endElement={
-            <Button type="submit" size="xs" className="-mr-1.5">
-              Submit
-            </Button>
-          }
-        />
-      </form>
-      <form
-        className="flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit('Submitted');
-        }}
-      >
-        <Input size="sm" placeholder="Placeholder..." />
-        <Button size="sm" type="submit">
-          Submit
-        </Button>
-      </form>
-      <form
-        className="flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit('Submitted');
-        }}
-      >
-        <Input size="lg" placeholder="Placeholder..." />
-        <Button size="lg" type="submit">
-          Submit
-        </Button>
-      </form>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit('Submitted');
-        }}
-      >
-        <Input
-          className="pr-1"
-          placeholder="Placeholder..."
-          size="lg"
-          endElement={
-            <Button type="submit" size="sm" className="-mr-2">
-              Submit
-            </Button>
-          }
-        />
-      </form>
     </div>
   );
 };

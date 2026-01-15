@@ -61,7 +61,7 @@ function InputOTP({
           containerClassName
         )}
         className={cn(
-          '!text-base', // Prevent zoom on iOS (no impact on visual render)
+          'text-base!', // Prevent zoom on iOS (no impact on visual render)
           'disabled:cursor-not-allowed',
           className
         )}
