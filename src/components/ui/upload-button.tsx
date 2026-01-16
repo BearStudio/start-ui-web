@@ -32,6 +32,9 @@ export type UploadButtonProps = {
   onError?: (error: Error | ClientUploadError) => void;
   inputProps?: ComponentProps<'input'>;
   icon?: ReactElement;
+  getMetadata?: (
+    file: File
+  ) => NonNullable<Parameters<typeof uploadFile>[0]['metadata']>;
 } & Omit<ComponentProps<typeof Button>, 'onChange'>;
 
 export const useIsUploadingFiles = (uploadRoute: UploadRoutes) =>
@@ -48,6 +51,7 @@ export const UploadButton = ({
   disabled,
   icon,
   uploadRoute,
+  getMetadata,
   ...rest
 }: UploadButtonProps) => {
   const innerId = useId();
@@ -61,6 +65,7 @@ export const UploadButton = ({
         onFileStateChange: ({ file }) => {
           onUploadStateChange?.(file);
         },
+        metadata: getMetadata?.(file),
       });
     },
     onSuccess: ({ file }) => {
