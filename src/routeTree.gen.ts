@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ManagerIndexRouteImport } from './routes/manager/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ManagerUsersIndexRouteImport } from './routes/manager/users/index'
 import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
 import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
@@ -80,6 +81,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ManagerUsersIndexRoute = ManagerUsersIndexRouteImport.update({
   id: '/users/',
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
   '/logout': typeof LogoutRoute
+  '/api/chat': typeof ApiChatRoute
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
+  '/api/chat': typeof ApiChatRoute
   '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
   '/manager': typeof ManagerIndexRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
   '/logout': typeof LogoutRoute
+  '/api/chat': typeof ApiChatRoute
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/manager'
     | '/logout'
+    | '/api/chat'
     | '/app/'
     | '/login/'
     | '/manager/'
@@ -334,6 +344,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/logout'
+    | '/api/chat'
     | '/app'
     | '/login'
     | '/manager'
@@ -367,6 +378,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/manager'
     | '/logout'
+    | '/api/chat'
     | '/app/'
     | '/login/'
     | '/manager/'
@@ -401,6 +413,7 @@ export interface RootRouteChildren {
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
   LogoutRoute: typeof LogoutRoute
+  ApiChatRoute: typeof ApiChatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiOpenapiAppRoute: typeof ApiOpenapiAppRouteWithChildren
   ApiOpenapiAuthRoute: typeof ApiOpenapiAuthRouteWithChildren
@@ -466,6 +479,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/manager/users/': {
       id: '/manager/users/'
@@ -727,6 +747,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRouteRoute: LoginRouteRouteWithChildren,
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
   LogoutRoute: LogoutRoute,
+  ApiChatRoute: ApiChatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiOpenapiAppRoute: ApiOpenapiAppRouteWithChildren,
   ApiOpenapiAuthRoute: ApiOpenapiAuthRouteWithChildren,

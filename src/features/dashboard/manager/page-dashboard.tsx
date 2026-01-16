@@ -1,3 +1,4 @@
+import { Chat } from '@/features/ai/chat';
 import { DemoAppSwitch } from '@/features/demo/demo-app-switch';
 import { DemoMarketingBento } from '@/features/demo/demo-marketing-bento';
 import { DemoWelcome } from '@/features/demo/demo-welcome';
@@ -15,6 +16,9 @@ export const PageDashboard = () => {
         <PageLayoutTopBarTitle>Dashboard</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent containerClassName="max-w-4xl">
+        <div className="absolute right-0 bottom-0">
+          <Chat />
+        </div>
         <div className="flex flex-col gap-4">
           <DemoWelcome />
           <DemoAppSwitch />

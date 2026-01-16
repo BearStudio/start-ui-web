@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { AiDevtoolsPanel } from '@tanstack/react-ai-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
@@ -112,6 +113,10 @@ function RootComponent() {
             {
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
+            },
+            {
+              name: 'Tanstack AI',
+              render: <AiDevtoolsPanel />,
             },
             {
               name: 'MailDev iframe',

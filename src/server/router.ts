@@ -1,6 +1,7 @@
 import { InferRouterInputs, InferRouterOutputs } from '@orpc/server';
 
 import accountRouter from './routers/account';
+import aiRouter from './routers/ai';
 import bookRouter from './routers/book';
 import configRouter from './routers/config';
 import genreRouter from './routers/genre';
@@ -15,4 +16,5 @@ export const router = {
   genre: genreRouter,
   user: userRouter,
   config: configRouter,
+  ai: aiRouter,
 };
