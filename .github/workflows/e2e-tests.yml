@@ -21,11 +21,10 @@ jobs:
       AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
       EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
-      S3_ENDPOINT: http://localhost:9000
+      S3_ENDPOINT: localhost:9000
       S3_BUCKET_NAME: default
       S3_ACCESS_KEY_ID: startui-access-key
       S3_SECRET_ACCESS_KEY: startui-secret-key
-      S3_REGION: default
       DOCKER_MINIO_USERNAME: minioadmin
       DOCKER_MINIO_PASSWORD: minioadmin
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:9000/default

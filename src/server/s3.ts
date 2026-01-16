@@ -1,12 +1,12 @@
-import { minio } from '@better-upload/server/clients';
+import { custom } from '@better-upload/server/clients';
 
 import { envServer } from '@/env/server';
 
-// cf. https://better-upload.com/docs/helpers-server#s3-clients to
-// see all available clients.
-export const uploadClient = minio({
-  endpoint: envServer.S3_ENDPOINT,
+export const uploadClient = custom({
+  host: envServer.S3_ENDPOINT,
   accessKeyId: envServer.S3_ACCESS_KEY_ID,
   secretAccessKey: envServer.S3_SECRET_ACCESS_KEY,
   region: envServer.S3_REGION,
+  forcePathStyle: envServer.S3_FORCE_PATH_STYLE,
+  secure: envServer.S3_SECURE,
 });
