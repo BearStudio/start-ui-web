@@ -4,7 +4,7 @@ import {
   uploadFile,
   type UploadStatus,
 } from '@better-upload/client';
-import { useIsMutating, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { UploadIcon } from 'lucide-react';
 import {
   type ChangeEvent,
@@ -36,11 +36,6 @@ export type UploadButtonProps = {
     file: File
   ) => NonNullable<Parameters<typeof uploadFile>[0]['metadata']>;
 } & Omit<ComponentProps<typeof Button>, 'onChange'>;
-
-export const useIsUploadingFiles = (uploadRoute: UploadRoutes) =>
-  useIsMutating({
-    mutationKey: ['fileUpload', uploadRoute],
-  }) > 0;
 
 export const UploadButton = ({
   children,

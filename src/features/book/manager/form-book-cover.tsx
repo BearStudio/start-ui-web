@@ -11,7 +11,7 @@ import {
   FormFieldController,
   FormFieldError,
 } from '@/components/form';
-import { UploadButton } from '@/components/ui/upload-button';
+import { UploadButton } from '@/components/upload/upload-button';
 
 import { envClient } from '@/env/client';
 import { BookCover } from '@/features/book/book-cover';

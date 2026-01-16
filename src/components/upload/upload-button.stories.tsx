@@ -1,10 +1,10 @@
 import type { Meta } from '@storybook/react-vite';
 import { UploadIcon } from 'lucide-react';
 
-import { UploadButton } from '@/components/ui/upload-button';
+import { UploadButton } from '@/components/upload/upload-button';
 
 export default {
-  title: 'Upload Button',
+  title: 'Upload/UploadButton',
 } satisfies Meta<typeof UploadButton>;
 
 export const Default = () => {

@@ -13,7 +13,7 @@ import { Form } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useIsUploadingFiles } from '@/components/ui/upload-button';
+import { useIsUploadingFiles } from '@/components/upload/utils';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
