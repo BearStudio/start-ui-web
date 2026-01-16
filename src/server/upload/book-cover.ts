@@ -23,7 +23,6 @@ export const bookCover = route({
         permissions: {
           book: ['create', 'update'],
         },
-        role: 'admin',
       },
     });
 
