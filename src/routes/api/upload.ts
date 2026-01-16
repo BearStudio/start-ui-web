@@ -1,10 +1,9 @@
 import { handleRequest, type Router } from '@better-upload/server';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { uploadClient } from '@/lib/s3';
-
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
+import { uploadClient } from '@/server/s3';
 import { bookCover } from '@/server/upload/book-cover';
 
 const router = {
