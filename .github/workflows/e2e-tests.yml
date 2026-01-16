@@ -44,21 +44,6 @@ jobs:
         ports:
           - 5432:5432
 
-      minio:
-        image: minio/minio:RELEASE.2025-07-23T15-54-02Z
-
-        env:
-          MINIO_ROOT_USER: minioadmin
-          MINIO_ROOT_PASSWORD: minioadmin
-
-        options: >-
-          --health-cmd "mc ready local"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 9000:9000
-
     steps:
       - uses: actions/checkout@v4
 
@@ -92,6 +77,24 @@ jobs:
 
       - name: Install deps
         run: pnpm install
+
+      - name: Start MinIO server
+        run: |
+          docker run -d \
+            --name minio \
+            -p 9000:9000 \
+            -p 9001:9001 \
+            -e MINIO_ROOT_USER=minioadmin \
+            -e MINIO_ROOT_PASSWORD=minioadmin \
+            minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1 \
+            server /data --console-address :9001
+
+          # Wait for MinIO to be ready
+          until curl -sf http://localhost:9000/minio/health/live; do
+            echo "Waiting for MinIO..."
+            sleep 2
+          done
+          echo "MinIO is ready"
 
       - name: Setup MinIO bucket
         run: |
