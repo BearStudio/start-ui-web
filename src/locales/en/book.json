@@ -72,7 +72,6 @@
       "rejected": "Upload was rejected",
       "too_many_files": "Too many files selected",
       "aborted": "Upload was cancelled",
-      "disabledInDemo": "Upload disabled in demo mode",
       "failed": "Upload failed"
     }
   }

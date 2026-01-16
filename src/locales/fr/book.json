@@ -72,7 +72,6 @@
       "rejected": "Le téléchargement a été rejeté",
       "too_many_files": "Trop de fichiers sélectionnés",
       "aborted": "Le téléchargement a été annulé",
-      "disabledInDemo": "Téléchargement désactivé en mode démo",
       "failed": "Échec du téléchargement"
     }
   }

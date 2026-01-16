@@ -19,6 +19,7 @@ import {
   bookCoverAcceptedFileTypes,
   FormFieldsBook,
 } from '@/features/book/schema';
+import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
 
 export const FormBookCover = () => {
   const { t } = useTranslation(['book']);
@@ -76,9 +77,7 @@ export const FormBookCover = () => {
                   }
                   onError={() => {
                     if (envClient.VITE_IS_DEMO) {
-                      toast.error(
-                        t('book:manager.uploadErrors.disabledInDemo')
-                      );
+                      openDemoModeDrawer();
                     } else {
                       toast.error(t('book:manager.uploadErrors.failed'));
                     }
