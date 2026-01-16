@@ -25,7 +25,7 @@ export type UploadButtonProps = {
   /**
    * Called only if the file was uploaded successfully.
    */
-  onUploadSuccess?: (file: FileUploadInfo<'complete'>) => void;
+  onSuccess?: (file: FileUploadInfo<'complete'>) => void;
   onUploadStateChange?: <T extends UploadStatus>(
     file: FileUploadInfo<T>
   ) => void;
@@ -41,7 +41,7 @@ export const UploadButton = ({
   children,
   inputProps,
   onUploadStateChange,
-  onUploadSuccess,
+  onSuccess,
   onError,
   disabled,
   icon,
@@ -64,7 +64,7 @@ export const UploadButton = ({
       });
     },
     onSuccess: ({ file }) => {
-      onUploadSuccess?.(file);
+      onSuccess?.(file);
     },
     onError: (error) => {
       onError?.(error);

@@ -72,15 +72,13 @@ export const FormBookCover = () => {
                   }}
                   className="absolute top-1/2 left-1/2 -translate-1/2 bg-black/50 text-white"
                   variant="ghost"
-                  onUploadSuccess={(file) =>
-                    field.onChange(file.objectInfo.key)
-                  }
+                  onSuccess={(file) => field.onChange(file.objectInfo.key)}
                   onError={() => {
                     if (envClient.VITE_IS_DEMO) {
                       openDemoModeDrawer();
-                    } else {
-                      toast.error(t('book:manager.uploadErrors.failed'));
+                      return;
                     }
+                    toast.error(t('book:manager.uploadErrors.failed'));
                   }}
                 />
               </div>
