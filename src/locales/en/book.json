@@ -71,7 +71,9 @@
       "invalid_file_type": "Invalid file type. Only PNG, JPEG, WebP, and GIF images are allowed",
       "rejected": "Upload was rejected",
       "too_many_files": "Too many files selected",
-      "aborted": "Upload was cancelled"
+      "aborted": "Upload was cancelled",
+      "disabledInDemo": "Upload disabled in demo mode",
+      "failed": "Upload failed"
     }
   }
 }

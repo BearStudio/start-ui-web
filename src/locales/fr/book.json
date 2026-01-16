@@ -71,7 +71,9 @@
       "invalid_file_type": "Type de fichier invalide. Seules les images PNG, JPEG, WebP et GIF sont autorisées",
       "rejected": "Le téléchargement a été rejeté",
       "too_many_files": "Trop de fichiers sélectionnés",
-      "aborted": "Le téléchargement a été annulé"
+      "aborted": "Le téléchargement a été annulé",
+      "disabledInDemo": "Téléchargement désactivé en mode démo",
+      "failed": "Échec du téléchargement"
     }
   }
 }

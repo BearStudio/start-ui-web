@@ -71,7 +71,9 @@
       "invalid_file_type": "نوع الملف غير صالح. مسموح فقط بصور PNG و JPEG و WebP و GIF",
       "rejected": "تم رفض الرفع",
       "too_many_files": "تم اختيار عدد كبير من الملفات",
-      "aborted": "تم إلغاء الرفع"
+      "aborted": "تم إلغاء الرفع",
+      "disabledInDemo": "الرفع معطل في الوضع التجريبي",
+      "failed": "فشل الرفع"
     }
   }
 }

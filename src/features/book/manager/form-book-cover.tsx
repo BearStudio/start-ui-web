@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { join } from 'remeda';
+import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -12,6 +13,7 @@ import {
 } from '@/components/form';
 import { UploadButton } from '@/components/ui/upload-button';
 
+import { envClient } from '@/env/client';
 import { BookCover } from '@/features/book/book-cover';
 import {
   bookCoverAcceptedFileTypes,
@@ -72,6 +74,15 @@ export const FormBookCover = () => {
                   onUploadSuccess={(file) =>
                     field.onChange(file.objectInfo.key)
                   }
+                  onError={() => {
+                    if (envClient.VITE_IS_DEMO) {
+                      toast.error(
+                        t('book:manager.uploadErrors.disabledInDemo')
+                      );
+                    } else {
+                      toast.error(t('book:manager.uploadErrors.failed'));
+                    }
+                  }}
                 />
               </div>
               <FormFieldError />

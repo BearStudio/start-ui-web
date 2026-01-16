@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { uploadClient } from '@/lib/s3';
 
+import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
 import { bookCover } from '@/server/upload/book-cover';
 
@@ -21,7 +22,12 @@ export type UploadRoutes = keyof typeof router.routes;
 export const Route = createFileRoute('/api/upload')({
   server: {
     handlers: {
-      POST: ({ request }) => handleRequest(request, router),
+      POST: ({ request }) => {
+        if (envClient.VITE_IS_DEMO) {
+          return new Response('Demo Mode', { status: 405 });
+        }
+        return handleRequest(request, router);
+      },
     },
   },
 });

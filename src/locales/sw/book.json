@@ -71,7 +71,9 @@
       "invalid_file_type": "Aina ya faili si halali. Picha za PNG, JPEG, WebP, na GIF tu ndizo zinazoruhusiwa",
       "rejected": "Kupakia kumekataliwa",
       "too_many_files": "Faili nyingi sana zimechaguliwa",
-      "aborted": "Kupakia kumeghairiwa"
+      "aborted": "Kupakia kumeghairiwa",
+      "disabledInDemo": "Kupakia kumezimwa katika hali ya maonyesho",
+      "failed": "Kupakia kumeshindikana"
     }
   }
 }
