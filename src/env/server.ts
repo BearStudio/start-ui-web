@@ -37,7 +37,7 @@ export const envServer = createEnv({
     S3_SECRET_ACCESS_KEY: z.string(),
     S3_BUCKET_NAME: z.string().default('default'),
     S3_REGION: z.string().default('auto'),
-    S3_ENDPOINT: z.string(),
+    S3_HOST: z.string(),
     S3_SECURE: z.stringbool().default(true),
     S3_FORCE_PATH_STYLE: z.stringbool().default(false),
   },
