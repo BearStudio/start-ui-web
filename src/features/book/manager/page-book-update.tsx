@@ -13,6 +13,7 @@ import { Form } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useIsUploadingFiles } from '@/components/upload/utils';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
@@ -39,8 +40,11 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
       author: bookQuery.data?.author ?? '',
       genreId: bookQuery.data?.genre?.id ?? null!,
       publisher: bookQuery.data?.publisher ?? '',
+      coverId: bookQuery.data?.coverId ?? '',
     },
   });
+
+  const isUploadingFiles = useIsUploadingFiles('bookCover');
 
   const bookUpdate = useMutation(
     orpc.book.updateById.mutationOptions({
@@ -92,6 +96,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
                 size="sm"
                 type="submit"
                 className="min-w-20"
+                disabled={isUploadingFiles}
                 loading={bookUpdate.isPending}
               >
                 {t('book:manager.update.updateButton.label')}
