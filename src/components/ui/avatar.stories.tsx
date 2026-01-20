@@ -70,3 +70,19 @@ export function Boring() {
     </div>
   );
 }
+
+export function Stack() {
+  return (
+    <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background">
+      <Avatar>
+        <AvatarFallback variant="boring" name="Cosmo Bear" />
+      </Avatar>
+      <Avatar>
+        <AvatarFallback variant="boring" name="Ivan Dalmet" />
+      </Avatar>
+      <Avatar>
+        <AvatarFallback variant="boring" name="Yoann Fleury" />
+      </Avatar>
+    </div>
+  );
+}

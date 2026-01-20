@@ -1,6 +1,6 @@
 import BoringAvatarComponent from 'boring-avatars';
 import { Avatar as AvatarPrimitive } from 'radix-ui';
-import * as React from 'react';
+import type * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -27,7 +27,7 @@ function AvatarImage({
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
-      className={cn('aspect-square size-full', className)}
+      className={cn('aspect-square size-full object-cover', className)}
       {...props}
     />
   );
