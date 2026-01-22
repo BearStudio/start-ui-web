@@ -42,7 +42,6 @@ export const AsChild = () => {
   return (
     <div>
       <Badge asChild>
-        {/* biome-ignore lint/a11y/useValidAnchor: it's an example */}
         <a href="#">Anchor as child</a>
       </Badge>
     </div>
