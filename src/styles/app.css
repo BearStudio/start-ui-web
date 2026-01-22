@@ -65,6 +65,7 @@
   --spacing-safe-right: env(safe-area-inset-right);
 
   --text-2xs: 0.625rem;
+  --text-3xs: 0.5rem;
 
   --breakpoint-2xs: 24rem; /* 384px */
   --breakpoint-xs: 32rem; /* 512px */

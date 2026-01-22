@@ -1,4 +1,10 @@
 {
+  "sheet": {
+    "close": "Funga"
+  },
+  "dialog": {
+    "close": "Funga"
+  },
   "datePickerButton": {
     "pickADate": "Chagua tarehe"
   },
