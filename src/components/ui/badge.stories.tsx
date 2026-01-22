@@ -22,7 +22,7 @@ export const Variants = () => {
       <Badge variant="secondary">Secondary</Badge>
       <Badge variant="negative">Negative</Badge>
       <Badge variant="warning">Warning</Badge>
-      <Badge variant="positive">Success</Badge>
+      <Badge variant="positive">Positive</Badge>
     </div>
   );
 };
