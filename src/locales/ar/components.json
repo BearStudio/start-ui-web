@@ -2,6 +2,9 @@
   "sheet": {
     "close": "إغلاق"
   },
+  "dialog": {
+    "close": "إغلاق"
+  },
   "datePickerButton": {
     "pickADate": "اختر موعدًا"
   },

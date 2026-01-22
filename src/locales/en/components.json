@@ -2,6 +2,9 @@
   "sheet": {
     "close": "Close"
   },
+  "dialog": {
+    "close": "Close"
+  },
   "datePickerButton": {
     "pickADate": "Pick a date"
   },
