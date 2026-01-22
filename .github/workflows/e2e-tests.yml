@@ -25,6 +25,8 @@ jobs:
       S3_BUCKET_NAME: default
       S3_ACCESS_KEY_ID: startui-access-key
       S3_SECRET_ACCESS_KEY: startui-secret-key
+      S3_SECURE: false
+      S3_FORCE_PATH_STYLE: true
       DOCKER_MINIO_USERNAME: minioadmin
       DOCKER_MINIO_PASSWORD: minioadmin
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:9000/default
