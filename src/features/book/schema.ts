@@ -16,10 +16,18 @@ export const zBook = () =>
     publisher: zu.fieldText.nullish(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    coverId: z.string().nullish(),
   });
 
 export type FormFieldsBook = z.infer<ReturnType<typeof zFormFieldsBook>>;
 export const zFormFieldsBook = () =>
   zBook()
-    .pick({ title: true, author: true, publisher: true })
+    .pick({ title: true, author: true, publisher: true, coverId: true })
     .extend({ genreId: zu.fieldText.required() });
+
+export const bookCoverAcceptedFileTypes = [
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+];

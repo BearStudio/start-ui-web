@@ -14,3 +14,46 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  minio:
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
+    ports:
+      - '${DOCKER_MINIO_API_PORT}:9000'
+      - '${DOCKER_MINIO_UI_PORT}:9001'
+    environment:
+      - MINIO_ROOT_USER=${DOCKER_MINIO_USERNAME}
+      - MINIO_ROOT_PASSWORD=${DOCKER_MINIO_PASSWORD}
+    volumes:
+      - minio:/data/minio
+    command: minio server /data/minio --console-address :${DOCKER_MINIO_UI_PORT}
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  createbucket:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z-cpuv1
+    profiles:
+      - init
+    depends_on:
+      minio:
+        condition: service_healthy
+    network_mode: service:minio
+    entrypoint: ['']
+    command: [
+        'sh',
+        '-c',
+        '
+        mc alias set default "http://${S3_HOST}" "${DOCKER_MINIO_USERNAME}" "${DOCKER_MINIO_PASSWORD}";
+        mc admin user add default ${S3_ACCESS_KEY_ID} ${S3_SECRET_ACCESS_KEY};
+        mc admin policy attach default readwrite --user ${S3_ACCESS_KEY_ID};
+        mc mb --ignore-existing default/${S3_BUCKET_NAME} 2>/dev/null;
+        mc anonymous set download default/${S3_BUCKET_NAME};
+        echo ''Bucket configuration completed successfully'';
+        ',
+      ]
+    restart: 'no'
+
+volumes:
+  minio:

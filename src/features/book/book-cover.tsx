@@ -2,14 +2,16 @@ import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
 
+import { envClient } from '@/env/client';
 import { Book } from '@/features/book/schema';
 
 export const BookCover = (props: {
-  book: Partial<Pick<Book, 'title' | 'author' | 'genre'>>;
+  book: Partial<Pick<Book, 'title' | 'author' | 'genre' | 'coverId'>>;
   variant?: 'default' | 'tiny';
   className?: string;
 }) => {
   const { t } = useTranslation(['book']);
+
   return (
     <div
       className={cn(
@@ -18,9 +20,16 @@ export const BookCover = (props: {
         props.className
       )}
       style={{
-        background: props.book.genre?.color ?? '#333',
+        backgroundColor: props.book.genre?.color ?? '#333',
       }}
     >
+      {!!props.book.coverId && (
+        <img
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover mix-blend-overlay"
+          src={`${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${props.book.coverId}`}
+        />
+      )}
       <div className="absolute inset-y-0 left-0 w-[5%] bg-gradient-to-r from-black/0 to-black/10 bg-blend-screen" />
       <div className="absolute inset-y-0 left-[5%] w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />
       <div className="absolute inset-y-0 left-[7%] w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />

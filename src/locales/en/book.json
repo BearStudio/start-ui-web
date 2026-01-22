@@ -58,6 +58,21 @@
         "label": "Save"
       },
       "updateError": "Failed to update a book"
+    },
+    "uploadCover": "Upload Cover",
+    "uploadErrors": {
+      "NOT_AUTHENTICATED": "You need to be authenticated to be able to upload a new cover",
+      "UNAUTHORIZED": "You are not allowed to change book cover",
+      "unknown": "An unknown error occurred during upload",
+      "invalid_request": "Invalid upload request",
+      "no_files": "No files selected for upload",
+      "s3_upload": "Failed to upload file to storage",
+      "file_too_large": "File is too large. Maximum size is 100MB",
+      "invalid_file_type": "Invalid file type. Only PNG, JPEG, WebP, and GIF images are allowed",
+      "rejected": "Upload was rejected",
+      "too_many_files": "Too many files selected",
+      "aborted": "Upload was cancelled",
+      "failed": "Upload failed"
     }
   }
 }

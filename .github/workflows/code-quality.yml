@@ -63,6 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_BASE_URL: http://localhost:3000
+      VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
     strategy:
       matrix:
         node: [22, 24, 'lts/*']
