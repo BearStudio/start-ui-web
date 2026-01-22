@@ -1,4 +1,7 @@
 {
+  "sheet": {
+    "close": "Close"
+  },
   "datePickerButton": {
     "pickADate": "Pick a date"
   },
