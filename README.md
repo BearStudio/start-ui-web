@@ -65,7 +65,34 @@ pnpm dev
 >
 > Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
 
+## Dockerfile 
 
+Build the image using the following command 
+
+```bash
+docker build -t start-ui-web \
+  --build-arg VITE_BASE_URL="http://localhost:3000" \
+  --build-arg VITE_ENV_NAME="DOCKER" \
+  --build-arg VITE_ENV_EMOJI="🐋" \
+  --build-arg VITE_ENV_COLOR="blue" \
+  --build-arg VITE_IS_DEMO="true" \
+  --build-arg DATABASE_URL="postgres://user:pass@host:5432/db" \
+  --build-arg AUTH_SECRET="change-me" \
+  --build-arg GITHUB_CLIENT_ID="" \
+  --build-arg GITHUB_CLIENT_SECRET="" \
+  --build-arg EMAIL_SERVER="smtp://user:pass@0.0.0.0:1025" \
+  --build-arg EMAIL_FROM="Start UI <noreply@example.com>" \
+  .
+```
+Then, you can run it with this example command:
+```bash
+docker run -d --network start-ui-web_default -p 3000:3000 --name start-ui-web-container start-ui-web
+```
+
+> [!NOTE]
+> The network name `start-ui-web_default` is created by Docker Compose when you run `pnpm dk:start`. If you're running Docker without Docker Compose, use `--network bridge` or omit the `--network` flag.
+
+During the build process, it automatically uses your project’s .env file.
 
 
 ### Emails in development
