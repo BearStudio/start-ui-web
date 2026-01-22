@@ -77,6 +77,37 @@ export const WithIcon = () => {
   );
 };
 
+export const FixedWidth = () => {
+  return (
+    <div className="flex gap-4">
+      <Button className="w-32">
+        <MailIcon />
+        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+          Button
+        </span>
+      </Button>
+      <Button className="w-32">
+        <MailIcon />
+        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+          Button with a long label
+        </span>
+      </Button>
+      <Button className="w-32">
+        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+          Button
+        </span>
+        <MailIcon />
+      </Button>
+      <Button className="w-32">
+        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+          Button with a long label
+        </span>
+        <MailIcon />
+      </Button>
+    </div>
+  );
+};
+
 export const Loading = () => {
   return (
     <div className="flex flex-col gap-4">
