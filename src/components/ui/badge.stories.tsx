@@ -20,7 +20,7 @@ export const Variants = () => {
     <div className="flex gap-4">
       <Badge>Default</Badge>
       <Badge variant="secondary">Secondary</Badge>
-      <Badge variant="negative">Error</Badge>
+      <Badge variant="negative">Negative</Badge>
       <Badge variant="warning">Warning</Badge>
       <Badge variant="positive">Success</Badge>
     </div>
