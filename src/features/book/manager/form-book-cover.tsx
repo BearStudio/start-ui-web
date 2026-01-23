@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Trash2Icon } from 'lucide-react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { join } from 'remeda';
@@ -11,6 +12,7 @@ import {
   FormFieldController,
   FormFieldError,
 } from '@/components/form';
+import { Button } from '@/components/ui/button';
 import { UploadButton } from '@/components/upload/upload-button';
 
 import { envClient } from '@/env/client';
@@ -65,22 +67,34 @@ export const FormBookCover = () => {
                   }}
                 />
 
-                <UploadButton
-                  uploadRoute="bookCover"
-                  inputProps={{
-                    accept: join(bookCoverAcceptedFileTypes, ','),
-                  }}
-                  className="absolute top-1/2 left-1/2 -translate-1/2 bg-black/50 text-white"
-                  variant="ghost"
-                  onSuccess={(file) => field.onChange(file.objectInfo.key)}
-                  onError={() => {
-                    if (envClient.VITE_IS_DEMO) {
-                      openDemoModeDrawer();
-                      return;
-                    }
-                    toast.error(t('book:manager.uploadErrors.failed'));
-                  }}
-                />
+                <div className="absolute top-1/2 left-1/2 flex -translate-1/2 gap-2">
+                  <UploadButton
+                    uploadRoute="bookCover"
+                    inputProps={{
+                      accept: join(bookCoverAcceptedFileTypes, ','),
+                    }}
+                    className="bg-black/50 text-white"
+                    variant="ghost"
+                    onSuccess={(file) => field.onChange(file.objectInfo.key)}
+                    onError={() => {
+                      if (envClient.VITE_IS_DEMO) {
+                        openDemoModeDrawer();
+                        return;
+                      }
+                      toast.error(t('book:manager.uploadErrors.failed'));
+                    }}
+                  />
+                  {field.value && (
+                    <Button
+                      variant="ghost"
+                      className="bg-black/50 text-white"
+                      size="icon"
+                      onClick={() => field.onChange(undefined)}
+                    >
+                      <Trash2Icon />
+                    </Button>
+                  )}
+                </div>
               </div>
               <FormFieldError />
             </>
