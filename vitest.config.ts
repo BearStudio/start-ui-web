@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
@@ -13,16 +14,12 @@ export default defineConfig({
           name: 'browser',
           browser: {
             enabled: true,
-            provider: 'playwright',
-            // https://vitest.dev/guide/browser/playwright
-            instances: [
-              {
-                browser: 'chromium',
-                context: {
-                  permissions: ['clipboard-write', 'clipboard-read'],
-                },
+            provider: playwright({
+              contextOptions: {
+                permissions: ['clipboard-write', 'clipboard-read'],
               },
-            ],
+            }),
+            instances: [{ browser: 'chromium' }],
           },
           include: ['src/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
           setupFiles: [
