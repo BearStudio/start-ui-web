@@ -265,8 +265,7 @@ describe('book router', () => {
 
       const result = await call(bookRouter.updateById, updateInput);
 
-      const { genreId: _, ...expectedBook } = updatedBookFromDb;
-      expect(result).toEqual(expectedBook);
+      expect(result).toEqual(toExpectedBook(updatedBookFromDb));
     });
 
     it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
@@ -285,6 +284,21 @@ describe('book router', () => {
       ).rejects.toMatchObject({
         code: 'CONFLICT',
         data: { target: ['title', 'author'] },
+      });
+    });
+
+    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
+      mockDb.book.update.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: '0.0.0',
+        })
+      );
+
+      await expect(
+        call(bookRouter.updateById, updateInput)
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
       });
     });
 
@@ -339,6 +353,21 @@ describe('book router', () => {
   });
 
   describe('deleteById', () => {
+    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
+      mockDb.book.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: '0.0.0',
+        })
+      );
+
+      await expect(
+        call(bookRouter.deleteById, { id: 'nonexistent' })
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
+      });
+    });
+
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
       mockDb.book.delete.mockRejectedValue(new Error('DB connection lost'));
 
@@ -360,7 +389,7 @@ describe('book router', () => {
     });
 
     it('should require book delete permission', async () => {
-      mockDb.book.delete.mockResolvedValue(undefined);
+      mockDb.book.delete.mockResolvedValue(mockBookFromDb);
 
       await call(bookRouter.deleteById, { id: 'book-1' });
 
