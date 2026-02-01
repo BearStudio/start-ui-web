@@ -185,9 +185,7 @@ describe('book router', () => {
       };
       mockDb.book.create.mockResolvedValue(createdBookFromDb);
 
-      const result = await call(bookRouter.create, createInput, {
-        context: {},
-      });
+      const result = await call(bookRouter.create, createInput);
 
       expect(result).toEqual(toExpectedBook(createdBookFromDb));
     });
@@ -265,9 +263,7 @@ describe('book router', () => {
       const updatedBookFromDb = { ...mockBookFromDb, ...updateInput };
       mockDb.book.update.mockResolvedValue(updatedBookFromDb);
 
-      const result = await call(bookRouter.updateById, updateInput, {
-        context: {},
-      });
+      const result = await call(bookRouter.updateById, updateInput);
 
       const { genreId: _, ...expectedBook } = updatedBookFromDb;
       expect(result).toEqual(expectedBook);
