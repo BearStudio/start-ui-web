@@ -1,5 +1,4 @@
-import { ValidateLinkOptions } from '@tanstack/react-router';
-import { FC } from 'react';
+import { linkOptions } from '@tanstack/react-router';
 
 import {
   IconBookOpenDuotone,
@@ -10,36 +9,29 @@ import {
   IconUserCircleFill,
 } from '@/components/icons/generated';
 
-export const MAIN_NAV_LINKS = [
+export const MAIN_NAV_LINKS = linkOptions([
   {
     labelTranslationKey: 'layout:nav.home',
     icon: IconHouseDuotone,
     iconActive: IconHouseFill,
-    linkOptions: {
-      to: '/app',
-    },
-    exact: true,
-  } as const,
+    to: '/app',
+    activeOptions: { exact: true },
+  },
   {
     labelTranslationKey: 'layout:nav.books',
     icon: IconBookOpenDuotone,
     iconActive: IconBookOpenFill,
-    linkOptions: {
-      to: '/app/books',
-    },
-  } as const,
+    to: '/app/books',
+  },
   {
     labelTranslationKey: 'layout:nav.account',
     icon: IconUserCircleDuotone,
     iconActive: IconUserCircleFill,
-    linkOptions: {
-      to: '/app/account',
-    },
-  } as const,
-] satisfies Array<{
-  labelTranslationKey: string;
-  icon: FC<{ className?: string }>;
-  iconActive?: FC<{ className?: string }>;
-  linkOptions: ValidateLinkOptions;
-  exact?: boolean;
-}>;
+    to: '/app/account',
+  },
+]);
+
+export type NavLinkItem = Omit<
+  (typeof MAIN_NAV_LINKS)[number],
+  'labelTranslationKey'
+> & { children?: React.ReactNode };

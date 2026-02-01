@@ -1,8 +1,7 @@
-import { Link, ValidateLinkOptions } from '@tanstack/react-router';
-import { FC, ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-import { MAIN_NAV_LINKS } from '@/layout/app/main-nav-config';
+import { MAIN_NAV_LINKS, NavLinkItem } from '@/layout/app/main-nav-config';
 
 const HEIGHT = 'calc(64px + env(safe-area-inset-bottom))';
 
@@ -20,7 +19,7 @@ export const MainNavMobile = () => {
         style={{ height: HEIGHT }}
       >
         {MAIN_NAV_LINKS.map(({ labelTranslationKey, ...item }) => (
-          <Item key={item.linkOptions.to} {...item}>
+          <Item key={item.to} {...item}>
             {t(labelTranslationKey)}
           </Item>
         ))}
@@ -29,27 +28,21 @@ export const MainNavMobile = () => {
   );
 };
 
-const Item = (props: {
-  linkOptions: ValidateLinkOptions;
-  exact?: boolean;
-  children?: ReactNode;
-  icon: FC<{ className?: string }>;
-  iconActive?: FC<{ className?: string }>;
-}) => {
-  const Icon = props.icon;
-  const IconActive = props.iconActive ?? props.icon;
+const Item = ({
+  icon: Icon,
+  iconActive,
+  children,
+  ...linkProps
+}: NavLinkItem) => {
+  const IconActive = iconActive ?? Icon;
   return (
     <Link
-      {...props.linkOptions}
-      activeOptions={{
-        exact: props.exact,
-        ...props.linkOptions.activeOptions,
-      }}
+      {...linkProps}
       className="flex flex-1 flex-col items-center justify-center text-neutral-500 dark:text-neutral-400 [&.active]:text-primary"
     >
       <Icon className="size-6 opacity-60 [.active_&]:hidden" />
       <IconActive className="hidden size-6 [.active_&]:block" />
-      <span className="text-2xs font-medium">{props.children}</span>
+      <span className="text-2xs font-medium">{children}</span>
     </Link>
   );
 };

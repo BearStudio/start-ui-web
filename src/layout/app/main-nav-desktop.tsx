@@ -1,10 +1,9 @@
-import { Link, ValidateLinkOptions } from '@tanstack/react-router';
-import { FC, ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
 
-import { MAIN_NAV_LINKS } from '@/layout/app/main-nav-config';
+import { MAIN_NAV_LINKS, NavLinkItem } from '@/layout/app/main-nav-config';
 
 export const MainNavDesktop = () => {
   const { t } = useTranslation(['layout']);
@@ -26,7 +25,7 @@ export const MainNavDesktop = () => {
           </Link>
           <nav className="flex gap-0.5">
             {MAIN_NAV_LINKS.map(({ labelTranslationKey, ...item }) => (
-              <Item key={item.linkOptions.to} {...item}>
+              <Item key={item.to} {...item}>
                 {t(labelTranslationKey)}
               </Item>
             ))}
@@ -37,27 +36,21 @@ export const MainNavDesktop = () => {
   );
 };
 
-const Item = (props: {
-  linkOptions: ValidateLinkOptions;
-  exact?: boolean;
-  children?: ReactNode;
-  icon: FC<{ className?: string }>;
-  iconActive?: FC<{ className?: string }>;
-}) => {
-  const Icon = props.icon;
-  const IconActive = props.iconActive ?? props.icon;
+const Item = ({
+  icon: Icon,
+  iconActive,
+  children,
+  ...linkProps
+}: NavLinkItem) => {
+  const IconActive = iconActive ?? Icon;
   return (
     <Link
-      {...props.linkOptions}
-      activeOptions={{
-        exact: props.exact,
-        ...props.linkOptions.activeOptions,
-      }}
+      {...linkProps}
       className="flex items-center justify-center gap-2 rounded-md px-2.5 py-2 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
     >
       <Icon className="size-4 opacity-60 [.active_&]:hidden" />
       <IconActive className="hidden size-4 [.active_&]:block" />
-      <span className="text-sm font-medium">{props.children}</span>
+      <span className="text-sm font-medium">{children}</span>
     </Link>
   );
 };
