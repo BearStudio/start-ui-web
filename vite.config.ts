@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
           hooks: {
             'build:before': nitroRetrieveServerDirHook,
           },
-          routeRules: { '/storybook': { redirect: '/storybook/index.html' } },
+          routeRules: { '/storybook': { redirect: '/storybook/' } },
         },
       }),
       // react's vite plugin must come after start's vite plugin
