@@ -32,7 +32,7 @@ export const BookCover = (props: {
       <div className="absolute inset-y-0 left-[7%] z-10 w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />
       <div className="absolute -top-1/8 -right-1/8 z-10 aspect-square w-3/4 rounded-full bg-white/40 bg-blend-screen blur-xl @6xs:blur-2xl @5xs:blur-3xl" />
       <div className="absolute -bottom-1/8 -left-1/8 z-10 aspect-square w-3/4 rounded-full bg-black/40 bg-blend-screen blur-xl @6xs:blur-2xl @5xs:blur-3xl" />
-      {props.book.coverId ? (
+      {!!props.book.coverId && (
         <>
           <img
             alt=""
@@ -40,30 +40,34 @@ export const BookCover = (props: {
             src={`${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${props.book.coverId}`}
           />
         </>
-      ) : (
-        <div className="relative flex flex-1 flex-col justify-between">
-          <h3
-            className={cn(
-              'text-sm leading-tight font-bold break-words @6xs:text-base @5xs:text-lg @4xs:text-xl',
-              props.variant === 'tiny' && 'text-[2px]'
-            )}
-          >
-            {props.book.title ?? ''}
-          </h3>
-          <div className="flex flex-col">
-            {!!props.book.author && (
-              <p
-                className={cn(
-                  'text-xs break-words opacity-60',
-                  props.variant === 'tiny' && 'text-[1px]'
-                )}
-              >
-                {t('book:common.byCapitalized')} {props.book.author}
-              </p>
-            )}
-          </div>
-        </div>
       )}
+      <div
+        className={cn(
+          'relative flex flex-1 flex-col justify-between',
+          !!props.book.coverId && 'sr-only'
+        )}
+      >
+        <h3
+          className={cn(
+            'text-sm leading-tight font-bold break-words @6xs:text-base @5xs:text-lg @4xs:text-xl',
+            props.variant === 'tiny' && 'text-[2px]'
+          )}
+        >
+          {props.book.title ?? ''}
+        </h3>
+        <div className="flex flex-col">
+          {!!props.book.author && (
+            <p
+              className={cn(
+                'text-xs break-words opacity-60',
+                props.variant === 'tiny' && 'text-[1px]'
+              )}
+            >
+              {t('book:common.byCapitalized')} {props.book.author}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
