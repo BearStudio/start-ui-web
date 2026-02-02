@@ -63,7 +63,6 @@ function Button({
   size,
   disabled,
   loading,
-  render,
   ...props
 }: ButtonProps) {
   return (
@@ -71,7 +70,6 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       disabled={loading || disabled}
-      render={render}
       {...props}
     >
       {!!loading && (

@@ -81,7 +81,11 @@ export default function PageLoginVerify({
       className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-1">
-        <Button variant="link" render={<Link to="/login" />}>
+        <Button
+          variant="link"
+          render={<Link to="/login" />}
+          nativeButton={false}
+        >
           <ArrowLeftIcon />
           {t('common:actions.back')}
         </Button>

@@ -36,7 +36,11 @@ export const Sizes = () => {
 };
 
 export const Render = () => {
-  return <Button render={<a href="#" />}>Anchor as child</Button>;
+  return (
+    <Button render={<a href="#" />} nativeButton={false}>
+      Anchor as child
+    </Button>
+  );
 };
 
 export const IconOnly = () => {

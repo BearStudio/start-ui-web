@@ -54,20 +54,16 @@ export const UserCard = () => {
             )}
           </p>
           <ChangeNameDrawer>
-            <button type="button" className="cursor-pointer">
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                className="-my-1.5"
-                render={<span />}
-              >
-                <PenLineIcon />
-                <span className="sr-only">
-                  {t('account:userCard.name.updateAction')}
-                </span>
-              </Button>
-              <span className="absolute inset-0" />
-            </button>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="-my-1.5 cursor-pointer"
+            >
+              <PenLineIcon />
+              <span className="sr-only">
+                {t('account:userCard.name.updateAction')}
+              </span>
+            </Button>
           </ChangeNameDrawer>
         </div>
       </AccountCardRow>
