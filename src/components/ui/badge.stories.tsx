@@ -38,12 +38,10 @@ export const Sizes = () => {
   );
 };
 
-export const AsChild = () => {
+export const AsLink = () => {
   return (
     <div>
-      <Badge asChild>
-        <a href="#">Anchor as child</a>
-      </Badge>
+      <Badge render={<a href="#" />}>Anchor as badge</Badge>
     </div>
   );
 };

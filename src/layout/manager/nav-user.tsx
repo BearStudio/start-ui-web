@@ -58,20 +58,22 @@ export function NavUser() {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="size-8">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback variant="boring" name={user.name ?? ''} />
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-              </div>
-              <ChevronsUpDownIcon className="ml-auto size-4" />
-            </SidebarMenuButton>
+          <DropdownMenuTrigger
+            render={
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              />
+            }
+          >
+            <Avatar className="size-8">
+              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarFallback variant="boring" name={user.name ?? ''} />
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">{user.name}</span>
+            </div>
+            <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
@@ -95,14 +97,16 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/manager/account"
-                  onClick={() => setOpenMobile(false)}
-                >
-                  <CircleUserIcon />
-                  {t('layout:nav.account')}
-                </Link>
+              <DropdownMenuItem
+                render={
+                  <Link
+                    to="/manager/account"
+                    onClick={() => setOpenMobile(false)}
+                  />
+                }
+              >
+                <CircleUserIcon />
+                {t('layout:nav.account')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -136,22 +140,22 @@ export function NavUser() {
                   },
                 ]}
               >
-                <DropdownMenuItem asChild>
-                  <Link to="/app">
-                    <MonitorSmartphoneIcon />
-                    {t('layout:nav.openApp')}
-                  </Link>
+                <DropdownMenuItem render={<Link to="/app" />}>
+                  <MonitorSmartphoneIcon />
+                  {t('layout:nav.openApp')}
                 </DropdownMenuItem>
               </WithPermissions>
-              <DropdownMenuItem asChild>
-                <a
-                  href="/api/openapi/app"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <BookOpenIcon />
-                  {t('layout:nav.apiDocumentation')}
-                </a>
+              <DropdownMenuItem
+                render={
+                  <a
+                    href="/api/openapi/app"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  />
+                }
+              >
+                <BookOpenIcon />
+                {t('layout:nav.apiDocumentation')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
