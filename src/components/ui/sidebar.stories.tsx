@@ -60,13 +60,16 @@ export function AppSidebar() {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="h-auto">
-                <a href="#">
-                  <span>
-                    <Logo className="w-24" />
-                  </span>
-                </a>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                className="h-auto"
+                render={
+                  <a href="#">
+                    <span>
+                      <Logo className="w-24" />
+                    </span>
+                  </a>
+                }
+              />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
@@ -77,12 +80,14 @@ export function AppSidebar() {
               <SidebarMenu>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
+                    <SidebarMenuButton
+                      render={
+                        <a href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </a>
+                      }
+                    />
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
