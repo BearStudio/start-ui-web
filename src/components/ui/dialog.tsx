@@ -46,7 +46,8 @@ function DialogContent({
   children,
   hideCloseButton,
   ...props
-}: DialogPrimitive.Popup.Props & {
+}: Omit<DialogPrimitive.Popup.Props, 'children'> & {
+  children?: React.ReactNode;
   hideCloseButton?: boolean;
 }) {
   const { t } = useTranslation('components');

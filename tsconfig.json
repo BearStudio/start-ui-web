@@ -17,7 +17,7 @@
       {
         "name": "ts-plugin-sort-import-suggestions",
         "moveUpPatterns": ["@/", "\\.{1,2}/"],
-        "moveDownPatterns": ["lucide-react", "radix-ui", "@react-email"]
+        "moveDownPatterns": ["lucide-react", "@react-email"]
       }
     ]
   }
