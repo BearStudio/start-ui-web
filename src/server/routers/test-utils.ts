@@ -1,7 +1,12 @@
 import { vi } from 'vitest';
 
-export const mockGetSession = vi.fn();
-export const mockUserHasPermission = vi.fn();
+const hoisted = vi.hoisted(() => ({
+  mockGetSession: vi.fn(),
+  mockUserHasPermission: vi.fn(),
+}));
+
+export const mockGetSession = hoisted.mockGetSession;
+export const mockUserHasPermission = hoisted.mockUserHasPermission;
 
 import type { Mock } from 'vitest';
 

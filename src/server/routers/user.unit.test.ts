@@ -17,9 +17,12 @@ import userRouter from '@/server/routers/user';
 // Since vi.mock is hoisted and last-write-wins per module, we re-declare the full
 // mock here, forwarding getSession/userHasPermission to the shared test-utils fns.
 
-const mockRemoveUser = vi.fn();
-const mockRevokeUserSessions = vi.fn();
-const mockRevokeUserSession = vi.fn();
+const { mockRemoveUser, mockRevokeUserSessions, mockRevokeUserSession } =
+  vi.hoisted(() => ({
+    mockRemoveUser: vi.fn(),
+    mockRevokeUserSessions: vi.fn(),
+    mockRevokeUserSession: vi.fn(),
+  }));
 
 vi.mock('@/server/auth', () => ({
   auth: {
