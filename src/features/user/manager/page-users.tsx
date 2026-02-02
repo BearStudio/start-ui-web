@@ -79,14 +79,12 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       <PageLayoutTopBar
         endActions={
           <ResponsiveIconButton
-            asChild
             label={t('user:manager.list.newButton')}
             variant="secondary"
             size="sm"
+            render={<Link to="/manager/users/new" />}
           >
-            <Link to="/manager/users/new">
-              <PlusIcon />
-            </Link>
+            <PlusIcon />
           </ResponsiveIconButton>
         }
       >

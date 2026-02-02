@@ -17,24 +17,29 @@ export const BackButton = ({
   const router = useRouter();
 
   return (
-    <Button asChild variant="ghost" size="icon-sm" {...props}>
-      <Link
-        to=".."
-        onClick={(e) => {
-          if (canGoBack) {
-            e.preventDefault();
-            router.history.back();
-          }
-        }}
-        {...linkProps}
-      >
-        {children ?? (
-          <>
-            <ArrowLeftIcon className="rtl:rotate-180" />
-            <span className="sr-only">{t('components:backButton.label')}</span>
-          </>
-        )}
-      </Link>
+    <Button
+      variant="ghost"
+      size="icon-sm"
+      render={
+        <Link
+          to=".."
+          onClick={(e) => {
+            if (canGoBack) {
+              e.preventDefault();
+              router.history.back();
+            }
+          }}
+          {...linkProps}
+        />
+      }
+      {...props}
+    >
+      {children ?? (
+        <>
+          <ArrowLeftIcon className="rtl:rotate-180" />
+          <span className="sr-only">{t('components:backButton.label')}</span>
+        </>
+      )}
     </Button>
   );
 };

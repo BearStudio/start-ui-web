@@ -106,14 +106,18 @@ export const PageBook = (props: { params: { id: string } }) => {
                 </ResponsiveIconButton>
               </ConfirmResponsiveDrawer>
             </WithPermissions>
-            <Button asChild size="sm" variant="secondary">
-              <Link
-                to="/manager/books/$id/update"
-                params={{ id: props.params.id }}
-              >
-                <PencilLineIcon />
-                {t('book:manager.detail.editButton.label')}
-              </Link>
+            <Button
+              size="sm"
+              variant="secondary"
+              render={
+                <Link
+                  to="/manager/books/$id/update"
+                  params={{ id: props.params.id }}
+                />
+              }
+            >
+              <PencilLineIcon />
+              {t('book:manager.detail.editButton.label')}
             </Button>
           </>
         }

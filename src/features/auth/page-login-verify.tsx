@@ -81,11 +81,9 @@ export default function PageLoginVerify({
       className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-1">
-        <Button asChild variant="link">
-          <Link to="/login">
-            <ArrowLeftIcon />
-            {t('common:actions.back')}
-          </Link>
+        <Button variant="link" render={<Link to="/login" />}>
+          <ArrowLeftIcon />
+          {t('common:actions.back')}
         </Button>
         <h1 className="text-lg font-bold text-balance">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}

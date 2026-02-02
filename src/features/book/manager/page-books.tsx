@@ -78,14 +78,12 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
       <PageLayoutTopBar
         endActions={
           <ResponsiveIconButton
-            asChild
             label={t('book:manager.new.title')}
             variant="secondary"
             size="sm"
+            render={<Link to="/manager/books/new" />}
           >
-            <Link to="/manager/books/new">
-              <PlusIcon />
-            </Link>
+            <PlusIcon />
           </ResponsiveIconButton>
         }
       >

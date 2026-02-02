@@ -56,16 +56,14 @@ export const UserCard = () => {
           <ChangeNameDrawer>
             <button type="button" className="cursor-pointer">
               <Button
-                asChild
                 variant="ghost"
                 size="icon-xs"
                 className="-my-1.5"
+                render={<span />}
               >
-                <span>
-                  <PenLineIcon />
-                  <span className="sr-only">
-                    {t('account:userCard.name.updateAction')}
-                  </span>
+                <PenLineIcon />
+                <span className="sr-only">
+                  {t('account:userCard.name.updateAction')}
                 </span>
               </Button>
               <span className="absolute inset-0" />

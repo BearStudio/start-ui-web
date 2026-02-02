@@ -16,18 +16,28 @@ export const DemoWelcome = () => {
       </div>
       <div>
         <div className="flex flex-wrap gap-3">
-          <Button asChild variant="secondary" size="xs">
-            <a href="https://github.com/BearStudio/start-ui-web">GitHub</a>
+          <Button
+            variant="secondary"
+            size="xs"
+            render={<a href="https://github.com/BearStudio/start-ui-web" />}
+          >
+            GitHub
           </Button>
-          <Button asChild variant="secondary" size="xs">
-            <a href="https://docs.web.start-ui.com/">
-              {t('demo:welcome.documentation')}
-            </a>
+          <Button
+            variant="secondary"
+            size="xs"
+            render={<a href="https://docs.web.start-ui.com/" />}
+          >
+            {t('demo:welcome.documentation')}
           </Button>
-          <Button asChild variant="secondary" size="xs">
-            <a href="https://github.com/BearStudio/start-ui/issues/new">
-              {t('demo:welcome.openIssue')}
-            </a>
+          <Button
+            variant="secondary"
+            size="xs"
+            render={
+              <a href="https://github.com/BearStudio/start-ui/issues/new" />
+            }
+          >
+            {t('demo:welcome.openIssue')}
           </Button>
         </div>
       </div>

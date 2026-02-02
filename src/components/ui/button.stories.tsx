@@ -35,12 +35,8 @@ export const Sizes = () => {
   );
 };
 
-export const AsChild = () => {
-  return (
-    <Button asChild>
-      <a href="#">Anchor as child</a>
-    </Button>
-  );
+export const Render = () => {
+  return <Button render={<a href="#" />}>Anchor as child</Button>;
 };
 
 export const IconOnly = () => {

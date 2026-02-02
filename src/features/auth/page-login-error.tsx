@@ -62,11 +62,9 @@ const Wrapper = ({ children }: { children?: ReactNode }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {children}
-      <Button asChild variant="link">
-        <Link to="/login">
-          <ArrowLeftIcon />
-          Back to login
-        </Link>
+      <Button variant="link" render={<Link to="/login" />}>
+        <ArrowLeftIcon />
+        Back to login
       </Button>
     </div>
   );

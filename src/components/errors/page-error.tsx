@@ -55,28 +55,34 @@ export const PageError = (props: {
 export const PageErrorButtonBack = () => {
   const { t } = useTranslation(['components']);
   return (
-    <Button asChild variant="link" className="text-muted-foreground">
-      <a
-        href="/"
-        onClick={(e) => {
-          e.preventDefault();
-          window.history.back();
-        }}
-      >
-        <Undo2Icon className="opacity-60" />
-        {t('components:pageError.goBack')}
-      </a>
+    <Button
+      variant="link"
+      className="text-muted-foreground"
+      render={
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            window.history.back();
+          }}
+        />
+      }
+    >
+      <Undo2Icon className="opacity-60" />
+      {t('components:pageError.goBack')}
     </Button>
   );
 };
 export const PageErrorButtonHome = () => {
   const { t } = useTranslation(['components']);
   return (
-    <Button asChild variant="link" className="text-muted-foreground">
-      <a href="/">
-        <HomeIcon className="opacity-60" />
-        {t('components:pageError.goHome')}
-      </a>
+    <Button
+      variant="link"
+      className="text-muted-foreground"
+      render={<a href="/" />}
+    >
+      <HomeIcon className="opacity-60" />
+      {t('components:pageError.goHome')}
     </Button>
   );
 };

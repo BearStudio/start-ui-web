@@ -1,8 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot as SlotPrimitive } from 'radix-ui';
-import * as React from 'react';
+'use client';
 
-import { cloneAsChild } from '@/lib/clone-as-child';
+import { Button as ButtonPrimitive } from '@base-ui/react/button';
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@/lib/tailwind/utils';
 
 import { Spinner } from '@/components/ui/spinner';
@@ -51,54 +51,43 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonProps = React.ComponentProps<'button'> &
+type ButtonProps = ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
     loading?: boolean;
-    asChild?: boolean;
   };
 
 function Button({
   className,
   children,
   variant,
-  asChild,
   size,
   disabled,
   loading,
+  render,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button';
-
   return (
-    <Comp
+    <ButtonPrimitive
       data-slot="button"
-      type={!asChild ? 'button' : undefined}
       className={cn(buttonVariants({ variant, size, className }))}
       disabled={loading || disabled}
+      render={render}
       {...props}
     >
-      {cloneAsChild({
-        children,
-        asChild,
-        render: (child) => (
-          <>
-            {!!loading && (
-              <span className="absolute inset-0 flex items-center justify-center">
-                <Spinner />
-              </span>
-            )}
-            <span
-              className={cn(
-                'flex items-center justify-center',
-                loading && 'opacity-0'
-              )}
-            >
-              {child}
-            </span>
-          </>
-        ),
-      })}
-    </Comp>
+      {!!loading && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Spinner />
+        </span>
+      )}
+      <span
+        className={cn(
+          'flex items-center justify-center',
+          loading && 'opacity-0'
+        )}
+      >
+        {children}
+      </span>
+    </ButtonPrimitive>
   );
 }
 
