@@ -59,12 +59,13 @@ export default function PageLoginError({
 }
 
 const Wrapper = ({ children }: { children?: ReactNode }) => {
+  const { t } = useTranslation(['auth']);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {children}
       <Button variant="link" render={<Link to="/login" />} nativeButton={false}>
         <ArrowLeftIcon />
-        Back to login
+        {t('auth:pageLoginError.backToLogin')}
       </Button>
     </div>
   );
