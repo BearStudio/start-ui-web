@@ -26,6 +26,13 @@ const ErrorFallback = (props: FallbackProps) => {
   const [open, setOpen] = useState(false);
 
   const { copyToClipboard, isCopied } = useClipboard();
+  const errorMessage =
+    !!props.error &&
+    typeof props.error === 'object' &&
+    'message' in props.error &&
+    typeof props.error.message === 'string'
+      ? props.error.message
+      : null;
 
   return (
     <ResponsiveDrawer open={open} onOpenChange={setOpen}>
@@ -46,7 +53,7 @@ const ErrorFallback = (props: FallbackProps) => {
           </ResponsiveDrawerTrigger>
         </AlertTitle>
         <AlertDescription className="line-clamp-1 font-mono text-xs text-muted-foreground! opacity-80 @max-2xs:hidden">
-          {props.error.message}
+          {errorMessage}
         </AlertDescription>
       </Alert>
       <ResponsiveDrawerContent>
@@ -60,7 +67,7 @@ const ErrorFallback = (props: FallbackProps) => {
         </ResponsiveDrawerHeader>
         <ResponsiveDrawerBody>
           <pre className="w-full rounded-md bg-muted p-4 font-mono text-xs break-words whitespace-pre-wrap text-muted-foreground">
-            {props.error.message ?? t('components:errorBoundary.unknown')}
+            {errorMessage || t('components:errorBoundary.unknown')}
           </pre>
         </ResponsiveDrawerBody>
         <ResponsiveDrawerFooter>
@@ -68,7 +75,7 @@ const ErrorFallback = (props: FallbackProps) => {
             variant="secondary"
             onClick={() =>
               copyToClipboard(
-                props.error.message ?? t('components:errorBoundary.unknown')
+                errorMessage || t('components:errorBoundary.unknown')
               )
             }
           >

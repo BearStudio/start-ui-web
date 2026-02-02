@@ -13,8 +13,8 @@ import tslint from 'typescript-eslint';
 export default defineConfig(
   eslint.configs.recommended,
   tslint.configs.recommended,
+  // @ts-expect-error Type error with latest version of eslint-plugin-sonarjs
   sonarjs.configs.recommended,
-  // @ts-expect-error not sure it is related to https://github.com/storybookjs/eslint-plugin-storybook/issues/209 but quite similar
   ...storybook.configs['flat/recommended'],
   ...tanstackRouter.configs['flat/recommended'],
   ...tanstackQuery.configs['flat/recommended'],

@@ -220,24 +220,24 @@ export interface FileRoutesByFullPath {
   '/api/openapi/auth': typeof ApiOpenapiAuthRouteWithChildren
   '/api/rest/$': typeof ApiRestSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
-  '/app/account': typeof AppAccountIndexRoute
-  '/app/books': typeof AppBooksIndexRoute
-  '/login/error': typeof LoginErrorIndexRoute
-  '/login/verify': typeof LoginVerifyIndexRoute
-  '/manager/account': typeof ManagerAccountIndexRoute
-  '/manager/books': typeof ManagerBooksIndexRoute
-  '/manager/dashboard': typeof ManagerDashboardIndexRoute
-  '/manager/users': typeof ManagerUsersIndexRoute
+  '/app/account/': typeof AppAccountIndexRoute
+  '/app/books/': typeof AppBooksIndexRoute
+  '/login/error/': typeof LoginErrorIndexRoute
+  '/login/verify/': typeof LoginVerifyIndexRoute
+  '/manager/account/': typeof ManagerAccountIndexRoute
+  '/manager/books/': typeof ManagerBooksIndexRoute
+  '/manager/dashboard/': typeof ManagerDashboardIndexRoute
+  '/manager/users/': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
-  '/app/books/$id': typeof AppBooksIdIndexRoute
-  '/manager/books/$id': typeof ManagerBooksIdIndexRoute
-  '/manager/books/new': typeof ManagerBooksNewIndexRoute
-  '/manager/users/$id': typeof ManagerUsersIdIndexRoute
-  '/manager/users/new': typeof ManagerUsersNewIndexRoute
-  '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
-  '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
+  '/app/books/$id/': typeof AppBooksIdIndexRoute
+  '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
+  '/manager/books/new/': typeof ManagerBooksNewIndexRoute
+  '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
+  '/manager/users/new/': typeof ManagerUsersNewIndexRoute
+  '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
+  '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -322,24 +322,24 @@ export interface FileRouteTypes {
     | '/api/openapi/auth'
     | '/api/rest/$'
     | '/api/rpc/$'
-    | '/app/account'
-    | '/app/books'
-    | '/login/error'
-    | '/login/verify'
-    | '/manager/account'
-    | '/manager/books'
-    | '/manager/dashboard'
-    | '/manager/users'
+    | '/app/account/'
+    | '/app/books/'
+    | '/login/error/'
+    | '/login/verify/'
+    | '/manager/account/'
+    | '/manager/books/'
+    | '/manager/dashboard/'
+    | '/manager/users/'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
-    | '/app/books/$id'
-    | '/manager/books/$id'
-    | '/manager/books/new'
-    | '/manager/users/$id'
-    | '/manager/users/new'
-    | '/manager/books/$id/update'
-    | '/manager/users/$id/update'
+    | '/app/books/$id/'
+    | '/manager/books/$id/'
+    | '/manager/books/new/'
+    | '/manager/users/$id/'
+    | '/manager/users/new/'
+    | '/manager/books/$id/update/'
+    | '/manager/users/$id/update/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -490,56 +490,56 @@ declare module '@tanstack/react-router' {
     '/manager/users/': {
       id: '/manager/users/'
       path: '/users'
-      fullPath: '/manager/users'
+      fullPath: '/manager/users/'
       preLoaderRoute: typeof ManagerUsersIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/dashboard/': {
       id: '/manager/dashboard/'
       path: '/dashboard'
-      fullPath: '/manager/dashboard'
+      fullPath: '/manager/dashboard/'
       preLoaderRoute: typeof ManagerDashboardIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/': {
       id: '/manager/books/'
       path: '/books'
-      fullPath: '/manager/books'
+      fullPath: '/manager/books/'
       preLoaderRoute: typeof ManagerBooksIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/account/': {
       id: '/manager/account/'
       path: '/account'
-      fullPath: '/manager/account'
+      fullPath: '/manager/account/'
       preLoaderRoute: typeof ManagerAccountIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/login/verify/': {
       id: '/login/verify/'
       path: '/verify'
-      fullPath: '/login/verify'
+      fullPath: '/login/verify/'
       preLoaderRoute: typeof LoginVerifyIndexRouteImport
       parentRoute: typeof LoginRouteRoute
     }
     '/login/error/': {
       id: '/login/error/'
       path: '/error'
-      fullPath: '/login/error'
+      fullPath: '/login/error/'
       preLoaderRoute: typeof LoginErrorIndexRouteImport
       parentRoute: typeof LoginRouteRoute
     }
     '/app/books/': {
       id: '/app/books/'
       path: '/books'
-      fullPath: '/app/books'
+      fullPath: '/app/books/'
       preLoaderRoute: typeof AppBooksIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/account/': {
       id: '/app/account/'
       path: '/account'
-      fullPath: '/app/account'
+      fullPath: '/app/account/'
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
@@ -581,35 +581,35 @@ declare module '@tanstack/react-router' {
     '/manager/users/new/': {
       id: '/manager/users/new/'
       path: '/users/new'
-      fullPath: '/manager/users/new'
+      fullPath: '/manager/users/new/'
       preLoaderRoute: typeof ManagerUsersNewIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/users/$id/': {
       id: '/manager/users/$id/'
       path: '/users/$id'
-      fullPath: '/manager/users/$id'
+      fullPath: '/manager/users/$id/'
       preLoaderRoute: typeof ManagerUsersIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/new/': {
       id: '/manager/books/new/'
       path: '/books/new'
-      fullPath: '/manager/books/new'
+      fullPath: '/manager/books/new/'
       preLoaderRoute: typeof ManagerBooksNewIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/$id/': {
       id: '/manager/books/$id/'
       path: '/books/$id'
-      fullPath: '/manager/books/$id'
+      fullPath: '/manager/books/$id/'
       preLoaderRoute: typeof ManagerBooksIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/app/books/$id/': {
       id: '/app/books/$id/'
       path: '/books/$id'
-      fullPath: '/app/books/$id'
+      fullPath: '/app/books/$id/'
       preLoaderRoute: typeof AppBooksIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
@@ -637,14 +637,14 @@ declare module '@tanstack/react-router' {
     '/manager/users/$id/update/': {
       id: '/manager/users/$id/update/'
       path: '/users/$id/update'
-      fullPath: '/manager/users/$id/update'
+      fullPath: '/manager/users/$id/update/'
       preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/$id/update/': {
       id: '/manager/books/$id/update/'
       path: '/books/$id/update'
-      fullPath: '/manager/books/$id/update'
+      fullPath: '/manager/books/$id/update/'
       preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
