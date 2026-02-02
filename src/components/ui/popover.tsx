@@ -33,13 +33,23 @@ function PopoverContent({
   className,
   align = 'center',
   sideOffset = 4,
+  side = 'bottom',
+  alignOffset,
   children,
   ...props
 }: PopoverPrimitive.Popup.Props &
-  Pick<PopoverPrimitive.Positioner.Props, 'align' | 'sideOffset'>) {
+  Pick<
+    PopoverPrimitive.Positioner.Props,
+    'align' | 'sideOffset' | 'side' | 'alignOffset'
+  >) {
   return (
     <PopoverPortal>
-      <PopoverPositioner align={align} sideOffset={sideOffset}>
+      <PopoverPositioner
+        align={align}
+        sideOffset={sideOffset}
+        side={side}
+        alignOffset={alignOffset}
+      >
         <PopoverPrimitive.Popup
           data-slot="popover-content"
           className={cn(
