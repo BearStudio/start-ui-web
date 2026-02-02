@@ -1,3 +1,5 @@
+'use client';
+
 import { CheckboxGroup as CheckboxGroupPrimitive } from '@base-ui/react/checkbox-group';
 
 import { cn } from '@/lib/tailwind/utils';
