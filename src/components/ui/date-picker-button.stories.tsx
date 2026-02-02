@@ -47,11 +47,13 @@ export const UsageWithPopover = () => {
       open={datePicker.isOpen}
       onOpenChange={(open) => datePicker.toggle(open)}
     >
-      <PopoverTrigger asChild>
-        <DatePickerButton>
-          {date ? dayjs(date).format('DD/MM/YYYY') : null}
-        </DatePickerButton>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <DatePickerButton>
+            {date ? dayjs(date).format('DD/MM/YYYY') : null}
+          </DatePickerButton>
+        }
+      />
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
@@ -86,11 +88,13 @@ export const UsageWithPopoverRange = () => {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <DatePickerButton className="max-w-[300px]">
-          {format()}
-        </DatePickerButton>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <DatePickerButton className="max-w-[300px]">
+            {format()}
+          </DatePickerButton>
+        }
+      />
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           autoFocus
@@ -114,10 +118,8 @@ export const UsageWithDialog = () => {
       open={datePicker.isOpen}
       onOpenChange={(open) => datePicker.toggle(open)}
     >
-      <DialogTrigger asChild>
-        <DatePickerButton>
-          {date ? dayjs(date).format('DD/MM/YYYY') : null}
-        </DatePickerButton>
+      <DialogTrigger render={<DatePickerButton />}>
+        {date ? dayjs(date).format('DD/MM/YYYY') : null}
       </DialogTrigger>
       <DialogContent className="h-96 w-auto">
         <DialogBody>
