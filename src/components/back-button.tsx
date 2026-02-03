@@ -20,18 +20,13 @@ export const BackButton = ({
     <Button
       variant="ghost"
       size="icon-sm"
-      render={
-        <Link
-          to=".."
-          onClick={(e) => {
-            if (canGoBack) {
-              e.preventDefault();
-              router.history.back();
-            }
-          }}
-          {...linkProps}
-        />
-      }
+      onClick={(e) => {
+        if (canGoBack) {
+          e.preventDefault();
+          router.history.back();
+        }
+      }}
+      render={<Link to=".." {...linkProps} />}
       {...props}
     >
       {children ?? (

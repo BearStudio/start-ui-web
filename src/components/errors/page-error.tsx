@@ -58,15 +58,11 @@ export const PageErrorButtonBack = () => {
     <Button
       variant="link"
       className="text-muted-foreground"
-      render={
-        <a
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            window.history.back();
-          }}
-        />
-      }
+      onClick={(e) => {
+        e.preventDefault();
+        window.history.back();
+      }}
+      render={<a href="/" />}
     >
       <Undo2Icon className="opacity-60" />
       {t('components:pageError.goBack')}
