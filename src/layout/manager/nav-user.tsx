@@ -10,6 +10,7 @@ import {
   SunMoonIcon,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
@@ -45,6 +46,7 @@ export function NavUser() {
   const session = authClient.useSession();
   const { setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const [buildInfoOpen, setBuildInfoOpen] = useState(false);
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
@@ -55,7 +57,7 @@ export function NavUser() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger
             render={
               <SidebarMenuButton
@@ -74,10 +76,11 @@ export function NavUser() {
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="min-w-56 rounded-lg"
             side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
+            finalFocus={false}
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0 font-normal">
@@ -160,28 +163,23 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <ConfirmSignOut>
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                }}
-              >
+              <DropdownMenuItem closeOnClick={false}>
                 <LogOutIcon />
                 {t('auth:signOut.action')}
               </DropdownMenuItem>
             </ConfirmSignOut>
             <DropdownMenuSeparator />
-            <BuildInfoDrawer>
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                }}
-                className="py-1 text-xs text-muted-foreground"
-              >
-                <BuildInfoVersion />
-              </DropdownMenuItem>
-            </BuildInfoDrawer>
+            <DropdownMenuItem
+              closeOnClick={false}
+              onClick={() => setBuildInfoOpen(true)}
+              className="py-1 text-xs text-muted-foreground"
+            >
+              <BuildInfoVersion />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <BuildInfoDrawer open={buildInfoOpen} onOpenChange={setBuildInfoOpen} />
       </SidebarMenuItem>
     </SidebarMenu>
   );

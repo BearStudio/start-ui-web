@@ -1,4 +1,4 @@
-import { type ComponentProps } from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -32,15 +32,23 @@ import {
 const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = ({
-  modal = true,
+  modal,
+  children,
   ...props
-}: Omit<ComponentProps<typeof Drawer | typeof Dialog>, 'onOpenChange'> &
+}: Omit<ComponentProps<typeof Dialog>, 'onOpenChange' | 'children'> &
   // Temporary fix since the Drawer onOpenChange type is more restrictive
-  Pick<ComponentProps<typeof Drawer>, 'onOpenChange'>) => (
-  <Drawer modal={modal === true || modal === 'trap-focus'} {...props}>
-    <Dialog modal={modal} {...props} />
-  </Drawer>
-);
+  Pick<ComponentProps<typeof Drawer>, 'onOpenChange'> & {
+    children?: ReactNode;
+  }) =>
+  useIsMobile(BREAKPOINT) ? (
+    <Drawer modal={modal === true || modal === 'trap-focus'} {...props}>
+      {children}
+    </Drawer>
+  ) : (
+    <Dialog modal={modal} {...props}>
+      {children}
+    </Dialog>
+  );
 
 export const ResponsiveDrawerTrigger = ({
   ...props
