@@ -28,7 +28,9 @@ export default {
 export const Default = () => {
   return (
     <Popover>
-      <PopoverTrigger render={<Button>Click me</Button>} />
+      <PopoverTrigger asChild>
+        <Button>Click me</Button>
+      </PopoverTrigger>
       <PopoverContent>The content</PopoverContent>
     </Popover>
   );
@@ -84,7 +86,9 @@ export const WithForm = () => {
       }}
       open={popover.isOpen}
     >
-      <PopoverTrigger render={<Button>Info</Button>} />
+      <PopoverTrigger asChild>
+        <Button>Info</Button>
+      </PopoverTrigger>
       <PopoverContent>
         <Form
           {...form}

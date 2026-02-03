@@ -17,19 +17,17 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant={props.iconOnly ? 'ghost' : 'link'}
-            size={props.iconOnly ? 'icon' : 'default'}
-          />
-        }
-      >
-        <LanguagesIcon className="opacity-50" />
-        <span className={cn(props.iconOnly && 'sr-only')}>
-          {t(`common:languages.values.${i18n.language as LanguageKey}`)}
-        </span>
-        {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant={props.iconOnly ? 'ghost' : 'link'}
+          size={props.iconOnly ? 'icon' : 'default'}
+        >
+          <LanguagesIcon className="opacity-50" />
+          <span className={cn(props.iconOnly && 'sr-only')}>
+            {t(`common:languages.values.${i18n.language as LanguageKey}`)}
+          </span>
+          {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {AVAILABLE_LANGUAGES.map((language) => (

@@ -20,8 +20,8 @@ export default {
 export const Default = () => {
   return (
     <Dialog>
-      <DialogTrigger render={<Button variant="secondary" />}>
-        Open
+      <DialogTrigger asChild>
+        <Button variant="secondary">Open</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -30,7 +30,9 @@ export const Default = () => {
         </DialogHeader>
         <DialogBody>Content</DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button />}>Close</DialogClose>
+          <DialogClose asChild>
+            <Button>Close</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

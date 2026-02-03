@@ -268,10 +268,10 @@ export const RowResults = () => (
 const ExampleMenu = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={<Button size="icon-sm" variant="ghost" className="-m-1" />}
-      >
-        <EllipsisIcon />
+      <DropdownMenuTrigger asChild>
+        <Button size="icon-sm" variant="ghost" className="-m-1">
+          <EllipsisIcon />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="left" className="min-w-24">
         <DropdownMenuGroup>

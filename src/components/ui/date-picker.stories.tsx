@@ -52,8 +52,8 @@ export const InDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button variant="secondary" />}>
-        Open
+      <DialogTrigger asChild>
+        <Button variant="secondary">Open</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -64,7 +64,9 @@ export const InDialog = () => {
           <DatePicker onChange={(value) => setDate(value)} value={date} />
         </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button />}>Save</DialogClose>
+          <DialogClose asChild>
+            <Button>Save</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
