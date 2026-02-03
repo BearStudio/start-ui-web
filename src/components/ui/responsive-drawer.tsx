@@ -36,12 +36,12 @@ export const ResponsiveDrawer = ({
   children,
   ...props
 }: Omit<ComponentProps<typeof Dialog>, 'onOpenChange' | 'children'> &
-  // Temporary fix since the Drawer onOpenChange type is more restrictive
+  // The types of the Drawer are not yet fully aligned with BaseUI API.
   Pick<ComponentProps<typeof Drawer>, 'onOpenChange'> & {
     children?: ReactNode;
   }) =>
   useIsMobile(BREAKPOINT) ? (
-    <Drawer modal={modal === true || modal === 'trap-focus'} {...props}>
+    <Drawer modal={modal} {...props}>
       {children}
     </Drawer>
   ) : (
