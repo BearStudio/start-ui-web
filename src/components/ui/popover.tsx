@@ -3,11 +3,11 @@ import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-function Popover({ ...props }: PopoverPrimitive.Root.Props) {
+function Popover(props: PopoverPrimitive.Root.Props) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
 }
 
-function PopoverTrigger({ ...props }: PopoverPrimitive.Trigger.Props) {
+function PopoverTrigger(props: PopoverPrimitive.Trigger.Props) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 

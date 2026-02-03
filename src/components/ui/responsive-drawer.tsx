@@ -32,23 +32,13 @@ import {
 const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = ({
-  modal,
-  children,
   ...props
 }: Omit<ComponentProps<typeof Dialog>, 'onOpenChange' | 'children'> &
   // The types of the Drawer are not yet fully aligned with BaseUI API.
   Pick<ComponentProps<typeof Drawer>, 'onOpenChange'> & {
     children?: ReactNode;
   }) =>
-  useIsMobile(BREAKPOINT) ? (
-    <Drawer modal={modal} {...props}>
-      {children}
-    </Drawer>
-  ) : (
-    <Dialog modal={modal} {...props}>
-      {children}
-    </Dialog>
-  );
+  useIsMobile(BREAKPOINT) ? <Drawer {...props} /> : <Dialog {...props} />;
 
 export const ResponsiveDrawerTrigger = ({
   ...props
