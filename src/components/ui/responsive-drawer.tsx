@@ -31,17 +31,20 @@ import {
 
 const BREAKPOINT = 640;
 
-export const ResponsiveDrawer = (
-  props: ComponentProps<typeof Drawer | typeof Dialog>
-) => (
-  <Drawer {...props}>
-    <Dialog {...props} />
+export const ResponsiveDrawer = ({
+  modal,
+  ...props
+}: Omit<ComponentProps<typeof Drawer | typeof Dialog>, 'onOpenChange'> &
+  // Temporary fix since the Drawer onOpenChange type is more restrictive
+  Pick<ComponentProps<typeof Drawer>, 'onOpenChange'>) => (
+  <Drawer modal={!!modal} {...props}>
+    <Dialog modal={modal} {...props} />
   </Drawer>
 );
 
-export const ResponsiveDrawerTrigger = (
-  props: ComponentProps<typeof DrawerTrigger | typeof DialogTrigger>
-) =>
+export const ResponsiveDrawerTrigger = ({
+  ...props
+}: ComponentProps<typeof DrawerTrigger | typeof DialogTrigger>) =>
   useIsMobile(BREAKPOINT) ? (
     <DrawerTrigger {...props} />
   ) : (

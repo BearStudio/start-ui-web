@@ -114,10 +114,8 @@ export const UsageWithDialog = () => {
       open={datePicker.isOpen}
       onOpenChange={(open) => datePicker.toggle(open)}
     >
-      <DialogTrigger asChild>
-        <DatePickerButton>
-          {date ? dayjs(date).format('DD/MM/YYYY') : null}
-        </DatePickerButton>
+      <DialogTrigger render={<DatePickerButton />}>
+        {date ? dayjs(date).format('DD/MM/YYYY') : null}
       </DialogTrigger>
       <DialogContent className="h-96 w-auto">
         <DialogBody>

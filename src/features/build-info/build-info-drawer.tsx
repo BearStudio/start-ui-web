@@ -25,9 +25,7 @@ export const BuildInfoDrawer = (props: { children: ReactElement }) => {
 
   return (
     <ResponsiveDrawer>
-      <ResponsiveDrawerTrigger asChild>
-        {props.children}
-      </ResponsiveDrawerTrigger>
+      <ResponsiveDrawerTrigger render={props.children} />
       <ResponsiveDrawerContent>
         <ResponsiveDrawerHeader className="gap-2 text-center">
           <ResponsiveDrawerTitle>
