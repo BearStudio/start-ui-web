@@ -89,7 +89,7 @@ function Button({
             )}
             <span
               className={cn(
-                'flex items-center justify-center',
+                'flex min-w-0 flex-1 items-center justify-center',
                 loading && 'opacity-0'
               )}
             >

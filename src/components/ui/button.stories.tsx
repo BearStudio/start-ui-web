@@ -82,24 +82,29 @@ export const FixedWidth = () => {
     <div className="flex gap-4">
       <Button className="w-32">
         <MailIcon />
-        <span className="flex-1 overflow-hidden text-left text-ellipsis">
-          Button
-        </span>
+        <span className="truncate">Button</span>
       </Button>
       <Button className="w-32">
         <MailIcon />
-        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+        <span className="truncate">Button with a long label</span>
+      </Button>
+      <Button className="w-32">
+        <MailIcon />
+        <span className="flex-1 truncate text-left">Button</span>
+      </Button>
+      <Button className="w-32">
+        <MailIcon />
+        <span className="flex-1 truncate text-left">
           Button with a long label
         </span>
       </Button>
       <Button className="w-32">
-        <span className="flex-1 overflow-hidden text-left text-ellipsis">
-          Button
-        </span>
+        <span className="flex-1 truncate text-left">Button</span>
+
         <MailIcon />
       </Button>
       <Button className="w-32">
-        <span className="flex-1 overflow-hidden text-left text-ellipsis">
+        <span className="flex-1 truncate text-left">
           Button with a long label
         </span>
         <MailIcon />
