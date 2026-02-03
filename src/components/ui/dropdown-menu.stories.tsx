@@ -18,8 +18,8 @@ export default {
 export const Default = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary">Open</Button>
+      <DropdownMenuTrigger render={<Button variant="secondary" />}>
+        Open
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
