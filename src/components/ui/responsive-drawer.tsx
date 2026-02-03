@@ -32,12 +32,12 @@ import {
 const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = ({
-  modal,
+  modal = true,
   ...props
 }: Omit<ComponentProps<typeof Drawer | typeof Dialog>, 'onOpenChange'> &
   // Temporary fix since the Drawer onOpenChange type is more restrictive
   Pick<ComponentProps<typeof Drawer>, 'onOpenChange'>) => (
-  <Drawer modal={!!modal} {...props}>
+  <Drawer modal={modal === true || modal === 'trap-focus'} {...props}>
     <Dialog modal={modal} {...props} />
   </Drawer>
 );
