@@ -1,5 +1,3 @@
-'use client';
-
 import { useRender } from '@base-ui/react/use-render';
 import { useRouter } from '@tanstack/react-router';
 import { cva, VariantProps } from 'class-variance-authority';

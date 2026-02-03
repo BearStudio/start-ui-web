@@ -1,5 +1,3 @@
-'use client';
-
 import { ScrollArea as ScrollAreaPrimitive } from '@base-ui/react/scroll-area';
 import { useTranslation } from 'react-i18next';
 

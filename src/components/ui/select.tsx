@@ -1,5 +1,3 @@
-'use client';
-
 import { getUiState } from '@bearstudio/ui-state';
 import {
   Combobox,
