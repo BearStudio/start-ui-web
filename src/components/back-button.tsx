@@ -9,9 +9,7 @@ export const BackButton = ({
   children,
   to = '..',
   ...props
-}: Omit<ComponentProps<typeof ButtonLink>, 'children'> & {
-  children?: ComponentProps<typeof ButtonLink>['children'];
-}) => {
+}: ComponentProps<typeof ButtonLink>) => {
   const { t } = useTranslation(['components']);
   const canGoBack = useCanGoBack();
   const router = useRouter();
