@@ -17,7 +17,7 @@ import {
   DataListRowResults,
   DataListText,
 } from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
+import { ResponsiveIconButtonLink } from '@/components/ui/responsive-icon-button-link';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
@@ -77,14 +77,14 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     <PageLayout>
       <PageLayoutTopBar
         endActions={
-          <ResponsiveIconButton
+          <ResponsiveIconButtonLink
             label={t('book:manager.new.title')}
             variant="secondary"
             size="sm"
-            render={<Link to="/manager/books/new" />}
+            to="/manager/books/new"
           >
             <PlusIcon />
-          </ResponsiveIconButton>
+          </ResponsiveIconButtonLink>
         }
       >
         <PageLayoutTopBarTitle>
