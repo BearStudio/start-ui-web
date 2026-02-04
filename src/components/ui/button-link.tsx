@@ -3,60 +3,43 @@ import { ComponentProps } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-type ButtonLinkProps = Omit<
+type ButtonLinkProps = Pick<
   ComponentProps<typeof Button>,
-  'render' | 'nativeButton'
+  | 'className'
+  | 'children'
+  | 'variant'
+  | 'size'
+  | 'disabled'
+  | 'loading'
+  | 'onClick'
 > &
   Omit<LinkProps, 'children'>;
 
 function ButtonLink({
-  // Link props
-  to,
-  params,
-  search,
-  hash,
-  state,
-  mask,
-  from,
-  reloadDocument,
-  replace,
-  resetScroll,
-  viewTransition,
-  ignoreBlocker,
-  preload,
-  preloadDelay,
-  activeOptions,
-  activeProps,
-  inactiveProps,
-  ...buttonProps
+  // Button-specific props
+  className,
+  children,
+  variant,
+  size,
+  disabled,
+  loading,
+  onClick,
+  // Rest are Link props
+  ...linkProps
 }: ButtonLinkProps) {
   return (
     <Button
-      {...buttonProps}
+      className={className}
+      variant={variant}
+      size={size}
+      disabled={disabled}
+      loading={loading}
+      onClick={onClick}
       nativeButton={false}
-      render={
-        <Link
-          to={to}
-          params={params}
-          search={search}
-          hash={hash}
-          state={state}
-          mask={mask}
-          from={from}
-          reloadDocument={reloadDocument}
-          replace={replace}
-          resetScroll={resetScroll}
-          viewTransition={viewTransition}
-          ignoreBlocker={ignoreBlocker}
-          preload={preload}
-          preloadDelay={preloadDelay}
-          activeOptions={activeOptions}
-          activeProps={activeProps}
-          inactiveProps={inactiveProps}
-          disabled={buttonProps.disabled}
-        />
-      }
-    />
+      render={<Link {...linkProps} disabled={disabled} />}
+    >
+      {children}
+    </Button>
   );
 }
 
