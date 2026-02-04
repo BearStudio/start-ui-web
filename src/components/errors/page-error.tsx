@@ -63,6 +63,7 @@ export const PageErrorButtonBack = () => {
         window.history.back();
       }}
       render={<a href="/" />}
+      nativeButton={false}
     >
       <Undo2Icon className="opacity-60" />
       {t('components:pageError.goBack')}
@@ -76,6 +77,7 @@ export const PageErrorButtonHome = () => {
       variant="link"
       className="text-muted-foreground"
       render={<a href="/" />}
+      nativeButton={false}
     >
       <HomeIcon className="opacity-60" />
       {t('components:pageError.goHome')}

@@ -58,7 +58,11 @@ export function Variants() {
 
 export function Render() {
   return (
-    <ResponsiveIconButton label="Add" render={<a href="/" />}>
+    <ResponsiveIconButton
+      label="Add"
+      render={<a href="/" />}
+      nativeButton={false}
+    >
       <PlusIcon />
     </ResponsiveIconButton>
   );
