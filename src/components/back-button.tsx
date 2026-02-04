@@ -1,23 +1,23 @@
-import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
+import { ButtonLink } from '@/components/ui/button-link';
 
 export const BackButton = ({
   children,
-  linkProps,
+  to = '..',
   ...props
-}: ComponentProps<typeof Button> & {
-  linkProps?: Partial<Omit<ComponentProps<typeof Link>, 'children'>>;
+}: Omit<ComponentProps<typeof ButtonLink>, 'children'> & {
+  children?: ComponentProps<typeof ButtonLink>['children'];
 }) => {
   const { t } = useTranslation(['components']);
   const canGoBack = useCanGoBack();
   const router = useRouter();
 
   return (
-    <Button
+    <ButtonLink
       variant="ghost"
       size="icon-sm"
       onClick={(e) => {
@@ -26,7 +26,7 @@ export const BackButton = ({
           router.history.back();
         }
       }}
-      render={<Link to=".." {...linkProps} />}
+      to={to}
       {...props}
     >
       {children ?? (
@@ -35,6 +35,6 @@ export const BackButton = ({
           <span className="sr-only">{t('components:backButton.label')}</span>
         </>
       )}
-    </Button>
+    </ButtonLink>
   );
 };

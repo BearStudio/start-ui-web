@@ -1,10 +1,9 @@
-import { Link } from '@tanstack/react-router';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { ButtonLink } from '@/components/ui/button-link';
 
 import { useMascot } from '@/features/auth/mascot';
 
@@ -63,10 +62,10 @@ const Wrapper = ({ children }: { children?: ReactNode }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {children}
-      <Button variant="link" render={<Link to="/login" />} nativeButton={false}>
+      <ButtonLink variant="link" to="/login">
         <ArrowLeftIcon />
         {t('auth:pageLoginError.backToLogin')}
-      </Button>
+      </ButtonLink>
     </div>
   );
 };
