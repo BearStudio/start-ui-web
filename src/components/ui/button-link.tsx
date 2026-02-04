@@ -1,45 +1,27 @@
 import { Link, LinkProps } from '@tanstack/react-router';
+import { VariantProps } from 'class-variance-authority';
 import { ComponentProps } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/tailwind/utils';
 
-type ButtonLinkProps = Pick<
-  ComponentProps<typeof Button>,
-  | 'className'
-  | 'children'
-  | 'variant'
-  | 'size'
-  | 'disabled'
-  | 'loading'
-  | 'onClick'
-> &
-  Omit<LinkProps, 'children'>;
+import { buttonVariants } from '@/components/ui/button';
 
 function ButtonLink({
-  // Button-specific props
   className,
   children,
   variant,
   size,
-  disabled,
-  loading,
-  onClick,
-  // Rest are Link props
-  ...linkProps
-}: ButtonLinkProps) {
+  ...props
+}: VariantProps<typeof buttonVariants> &
+  ComponentProps<'a'> &
+  LinkProps & { className?: string }) {
   return (
-    <Button
-      className={className}
-      variant={variant}
-      size={size}
-      disabled={disabled}
-      loading={loading}
-      onClick={onClick}
-      nativeButton={false}
-      render={<Link {...linkProps} disabled={disabled} />}
+    <Link
+      {...props}
+      className={cn(buttonVariants({ variant, size, className }))}
     >
       {children}
-    </Button>
+    </Link>
   );
 }
 

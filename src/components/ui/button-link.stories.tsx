@@ -143,49 +143,6 @@ export const FixedWidth = () => {
   );
 };
 
-export const Loading = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex gap-4">
-        <ButtonLink to="/" loading>
-          Button
-        </ButtonLink>
-        <ButtonLink to="/" size="icon" loading>
-          <MailIcon />
-        </ButtonLink>
-        <ButtonLink to="/" loading>
-          <MailIcon />
-          Button
-        </ButtonLink>
-      </div>
-      <div className="flex gap-4">
-        <ButtonLink to="/" variant="secondary" loading>
-          Button
-        </ButtonLink>
-        <ButtonLink to="/" variant="secondary" size="icon" loading>
-          <MailIcon />
-        </ButtonLink>
-        <ButtonLink to="/" variant="secondary" loading>
-          <MailIcon />
-          Button
-        </ButtonLink>
-      </div>
-      <div className="flex gap-4">
-        <ButtonLink to="/" variant="link" loading>
-          Button
-        </ButtonLink>
-        <ButtonLink to="/" variant="link" size="icon" loading>
-          <MailIcon />
-        </ButtonLink>
-        <ButtonLink to="/" variant="link" loading>
-          <MailIcon />
-          Button
-        </ButtonLink>
-      </div>
-    </div>
-  );
-};
-
 export const Disabled = () => {
   return (
     <div className="flex gap-4">

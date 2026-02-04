@@ -12,7 +12,8 @@ export const ResponsiveIconButtonLink = ({
   breakpoint,
   children,
   ...props
-}: Omit<ComponentProps<typeof ButtonLink>, 'size'> & {
+}: Omit<ComponentProps<typeof ButtonLink>, 'size' | 'children'> & {
+  children?: ReactNode;
   label: ReactNode;
   size?: 'xs' | 'sm' | 'default' | 'lg';
   breakpoint?: number;
