@@ -38,6 +38,7 @@ export const DemoWelcome = () => {
             render={
               <a href="https://github.com/BearStudio/start-ui/issues/new" />
             }
+            nativeButton={false}
           >
             {t('demo:welcome.openIssue')}
           </Button>
