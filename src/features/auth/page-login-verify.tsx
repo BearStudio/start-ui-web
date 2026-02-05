@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -13,6 +12,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
+import { ButtonLink } from '@/components/ui/button-link';
 
 import { authClient } from '@/features/auth/client';
 import {
@@ -81,14 +81,10 @@ export default function PageLoginVerify({
       className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-1">
-        <Button
-          variant="link"
-          render={<Link to="/login" />}
-          nativeButton={false}
-        >
+        <ButtonLink variant="link" to="/login">
           <ArrowLeftIcon />
           {t('common:actions.back')}
-        </Button>
+        </ButtonLink>
         <h1 className="text-lg font-bold text-balance">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
         </h1>

@@ -20,6 +20,7 @@ export const DemoWelcome = () => {
             variant="secondary"
             size="xs"
             render={<a href="https://github.com/BearStudio/start-ui-web" />}
+            nativeButton={false}
           >
             GitHub
           </Button>
@@ -27,6 +28,7 @@ export const DemoWelcome = () => {
             variant="secondary"
             size="xs"
             render={<a href="https://docs.web.start-ui.com/" />}
+            nativeButton={false}
           >
             {t('demo:welcome.documentation')}
           </Button>
