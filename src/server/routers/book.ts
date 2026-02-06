@@ -179,15 +179,17 @@ export default {
           },
         });
       } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2025') {
+            throw new ORPCError('NOT_FOUND');
+          }
+          if (error.code === 'P2002') {
+            throw new ORPCError('CONFLICT', {
+              data: {
+                target: error.meta?.target,
+              },
+            });
+          }
         }
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
@@ -215,7 +217,13 @@ export default {
         await context.db.book.delete({
           where: { id: input.id },
         });
-      } catch {
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2025'
+        ) {
+          throw new ORPCError('NOT_FOUND');
+        }
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),

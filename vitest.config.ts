@@ -38,7 +38,10 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['src/**/*.unit.{test,spec}.?(c|m)[jt]s?(x)'],
-          setupFiles: [resolve('src/tests/setup.base.ts')],
+          setupFiles: [
+            resolve('src/tests/setup.base.ts'),
+            resolve('src/server/routers/test-setup.ts'),
+          ],
         },
         resolve: {
           alias: {
