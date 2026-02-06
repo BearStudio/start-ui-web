@@ -93,6 +93,21 @@ Add the language in the preview url like `http://localhost:3000/api/dev/email/{t
 You can add search params to the preview url to pass as props to the template.
 `http://localhost:3000/api/dev/email/{template}/?{propsName}={propsValue}`
 
+### Testing backend endpoints via OpenAPI
+
+To ensure your backend requests are working correctly, you can use the OpenAPI interface available at:
+
+`http://localhost:[server_port]/api/openapi/app`
+
+
+This interface allows you to:
+
+* View a complete list of all backend endpoints exposed by the API.
+
+* Test each route directly from the interface, without needing the frontend.
+
+* See the server responses in real time, making development and debugging easier.
+
 ### Generate custom icons components from svg files
 
 Put the custom svg files into the `src/components/icons/svg-sources` folder and then run the following command:
