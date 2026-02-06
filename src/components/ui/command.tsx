@@ -33,9 +33,10 @@ function CommandDialog({
   description = 'Search for a command to run...',
   children,
   ...props
-}: React.ComponentProps<typeof Dialog> & {
+}: Omit<React.ComponentProps<typeof Dialog>, 'children'> & {
   title?: string;
   description?: string;
+  children?: React.ReactNode;
 }) {
   return (
     <Dialog {...props}>

@@ -15,9 +15,14 @@ import {
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
   PopoverTrigger,
 } from '@/components/ui/popover';
 
@@ -28,9 +33,7 @@ export default {
 export const Default = () => {
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button>Click me</Button>
-      </PopoverTrigger>
+      <PopoverTrigger render={<Button />}>Click me</PopoverTrigger>
       <PopoverContent>The content</PopoverContent>
     </Popover>
   );
@@ -86,9 +89,7 @@ export const WithForm = () => {
       }}
       open={popover.isOpen}
     >
-      <PopoverTrigger asChild>
-        <Button>Info</Button>
-      </PopoverTrigger>
+      <PopoverTrigger render={<Button />}>Info</PopoverTrigger>
       <PopoverContent>
         <Form
           {...form}
@@ -116,5 +117,80 @@ export const WithForm = () => {
         </Form>
       </PopoverContent>
     </Popover>
+  );
+};
+
+export const WithHeaderAndDescription = () => {
+  return (
+    <Popover>
+      <PopoverTrigger render={<Button variant="secondary" />}>
+        Open popover
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <PopoverHeader>
+          <PopoverTitle>Dimensions</PopoverTitle>
+          <PopoverDescription>
+            Set the dimensions for the layer.
+          </PopoverDescription>
+        </PopoverHeader>
+        <div className="grid gap-2">
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="width">Width</Label>
+            <Input id="width" defaultValue="100%" className="col-span-2 h-8" />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="maxWidth">Max. width</Label>
+            <Input
+              id="maxWidth"
+              defaultValue="300px"
+              className="col-span-2 h-8"
+            />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="height">Height</Label>
+            <Input id="height" defaultValue="25px" className="col-span-2 h-8" />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="maxHeight">Max. height</Label>
+            <Input
+              id="maxHeight"
+              defaultValue="none"
+              className="col-span-2 h-8"
+            />
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export const Placements = () => {
+  return (
+    <div className="flex min-h-[300px] items-center justify-center gap-4">
+      <Popover>
+        <PopoverTrigger render={<Button variant="secondary" />}>
+          Top
+        </PopoverTrigger>
+        <PopoverContent side="top">Popover on top</PopoverContent>
+      </Popover>
+      <Popover>
+        <PopoverTrigger render={<Button variant="secondary" />}>
+          Right
+        </PopoverTrigger>
+        <PopoverContent side="right">Popover on right</PopoverContent>
+      </Popover>
+      <Popover>
+        <PopoverTrigger render={<Button variant="secondary" />}>
+          Bottom
+        </PopoverTrigger>
+        <PopoverContent side="bottom">Popover on bottom</PopoverContent>
+      </Popover>
+      <Popover>
+        <PopoverTrigger render={<Button variant="secondary" />}>
+          Left
+        </PopoverTrigger>
+        <PopoverContent side="left">Popover on left</PopoverContent>
+      </Popover>
+    </div>
   );
 };

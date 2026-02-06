@@ -38,25 +38,27 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant={props.iconOnly ? 'ghost' : 'link'}
-          size={props.iconOnly ? 'icon' : 'default'}
-        >
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant={props.iconOnly ? 'ghost' : 'link'}
+            size={props.iconOnly ? 'icon' : 'default'}
+          />
+        }
+      >
+        {match(theme as (typeof themes)[number])
+          .with('system', () => <SunMoonIcon className="opacity-50" />)
+          .with('light', () => <SunIcon className="opacity-50" />)
+          .with('dark', () => <MoonIcon className="opacity-50" />)
+          .exhaustive()}
+        <span className={cn(props.iconOnly && 'sr-only')}>
           {match(theme as (typeof themes)[number])
-            .with('system', () => <SunMoonIcon className="opacity-50" />)
-            .with('light', () => <SunIcon className="opacity-50" />)
-            .with('dark', () => <MoonIcon className="opacity-50" />)
+            .with('system', () => t('common:themes.values.system'))
+            .with('light', () => t('common:themes.values.light'))
+            .with('dark', () => t('common:themes.values.dark'))
             .exhaustive()}
-          <span className={cn(props.iconOnly && 'sr-only')}>
-            {match(theme as (typeof themes)[number])
-              .with('system', () => t('common:themes.values.system'))
-              .with('light', () => t('common:themes.values.light'))
-              .with('dark', () => t('common:themes.values.dark'))
-              .exhaustive()}
-          </span>
-          {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
-        </Button>
+        </span>
+        {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {themes.map((item) => (

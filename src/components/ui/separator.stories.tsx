@@ -10,7 +10,7 @@ export function Default() {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-1">
-        <h4 className="text-sm leading-none font-medium">Radix Primitives</h4>
+        <h4 className="text-sm leading-none font-medium">BaseUI Primitives</h4>
         <p className="text-sm text-muted-foreground">
           An open-source UI component library.
         </p>

@@ -16,8 +16,8 @@ export function Default() {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="secondary">Hover</Button>
+        <TooltipTrigger render={<Button variant="secondary" />}>
+          Hover
         </TooltipTrigger>
         <TooltipContent>
           <p>Add to library</p>

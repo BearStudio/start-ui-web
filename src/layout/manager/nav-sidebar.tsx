@@ -38,13 +38,16 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
           <div className="flex items-center">
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className="h-auto">
-                  <Link to="/manager">
-                    <span>
-                      <Logo className="w-24 group-data-[collapsible=icon]:w-18" />
-                    </span>
-                  </Link>
-                </SidebarMenuButton>
+                <SidebarMenuButton
+                  className="h-auto"
+                  render={
+                    <Link to="/manager">
+                      <span>
+                        <Logo className="w-24 group-data-[collapsible=icon]:w-18" />
+                      </span>
+                    </Link>
+                  }
+                />
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarTrigger
@@ -66,24 +69,30 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuItem>
                   <Link to="/manager/dashboard">
                     {({ isActive }) => (
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <span>
-                          <LayoutDashboardIcon />
-                          <span>{t('layout:nav.dashboard')}</span>
-                        </span>
-                      </SidebarMenuButton>
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        render={
+                          <span>
+                            <LayoutDashboardIcon />
+                            <span>{t('layout:nav.dashboard')}</span>
+                          </span>
+                        }
+                      />
                     )}
                   </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <Link to="/manager/books">
                     {({ isActive }) => (
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <span>
-                          <IconBookOpen />
-                          <span>{t('layout:nav.books')}</span>
-                        </span>
-                      </SidebarMenuButton>
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        render={
+                          <span>
+                            <IconBookOpen />
+                            <span>{t('layout:nav.books')}</span>
+                          </span>
+                        }
+                      />
                     )}
                   </Link>
                 </SidebarMenuItem>
@@ -106,12 +115,15 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                   <SidebarMenuItem>
                     <Link to="/manager/users">
                       {({ isActive }) => (
-                        <SidebarMenuButton asChild isActive={isActive}>
-                          <span>
-                            <UsersIcon />
-                            <span>{t('layout:nav.users')}</span>
-                          </span>
-                        </SidebarMenuButton>
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          render={
+                            <span>
+                              <UsersIcon />
+                              <span>{t('layout:nav.users')}</span>
+                            </span>
+                          }
+                        />
                       )}
                     </Link>
                   </SidebarMenuItem>

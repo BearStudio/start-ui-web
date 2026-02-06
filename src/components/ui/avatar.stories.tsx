@@ -1,7 +1,14 @@
 import type { Meta } from '@storybook/react-vite';
 import { User2Icon } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from '@/components/ui/avatar';
 
 export default {
   title: 'Avatar',
@@ -16,12 +23,22 @@ export function Default() {
   );
 }
 
-export function Size() {
+export function Sizes() {
   return (
-    <Avatar className="size-12">
-      <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
-      <AvatarFallback variant="initials" name="Cosmo Bear" />
-    </Avatar>
+    <div className="flex items-center gap-4">
+      <Avatar size="sm">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+      </Avatar>
+      <Avatar size="default">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+      </Avatar>
+    </div>
   );
 }
 
@@ -71,9 +88,31 @@ export function Boring() {
   );
 }
 
-export function Stack() {
+export function WithBadge() {
   return (
-    <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background">
+    <div className="flex items-center gap-4">
+      <Avatar size="sm">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+        <AvatarBadge />
+      </Avatar>
+      <Avatar size="default">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+        <AvatarBadge />
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarImage src="/avatar.jpg" alt="@cosmobear" />
+        <AvatarFallback variant="initials" name="Cosmo Bear" />
+        <AvatarBadge />
+      </Avatar>
+    </div>
+  );
+}
+
+export function Group() {
+  return (
+    <AvatarGroup>
       <Avatar>
         <AvatarFallback variant="boring" name="Cosmo Bear" />
       </Avatar>
@@ -83,6 +122,50 @@ export function Stack() {
       <Avatar>
         <AvatarFallback variant="boring" name="Yoann Fleury" />
       </Avatar>
+      <AvatarGroupCount>+2</AvatarGroupCount>
+    </AvatarGroup>
+  );
+}
+
+export function GroupSizes() {
+  return (
+    <div className="flex flex-col gap-4">
+      <AvatarGroup>
+        <Avatar size="sm">
+          <AvatarFallback variant="boring" name="Cosmo Bear" />
+        </Avatar>
+        <Avatar size="sm">
+          <AvatarFallback variant="boring" name="Ivan Dalmet" />
+        </Avatar>
+        <Avatar size="sm">
+          <AvatarFallback variant="boring" name="Yoann Fleury" />
+        </Avatar>
+        <AvatarGroupCount>+2</AvatarGroupCount>
+      </AvatarGroup>
+      <AvatarGroup>
+        <Avatar size="default">
+          <AvatarFallback variant="boring" name="Cosmo Bear" />
+        </Avatar>
+        <Avatar size="default">
+          <AvatarFallback variant="boring" name="Ivan Dalmet" />
+        </Avatar>
+        <Avatar size="default">
+          <AvatarFallback variant="boring" name="Yoann Fleury" />
+        </Avatar>
+        <AvatarGroupCount>+2</AvatarGroupCount>
+      </AvatarGroup>
+      <AvatarGroup>
+        <Avatar size="lg">
+          <AvatarFallback variant="boring" name="Cosmo Bear" />
+        </Avatar>
+        <Avatar size="lg">
+          <AvatarFallback variant="boring" name="Ivan Dalmet" />
+        </Avatar>
+        <Avatar size="lg">
+          <AvatarFallback variant="boring" name="Yoann Fleury" />
+        </Avatar>
+        <AvatarGroupCount>+2</AvatarGroupCount>
+      </AvatarGroup>
     </div>
   );
 }

@@ -19,16 +19,14 @@ import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 
 import buildInfo from './build-info.gen.json';
 
-export const BuildInfoDrawer = (props: { children: ReactElement }) => {
+export const BuildInfoDrawer = ({ children }: { children?: ReactElement }) => {
   const { t } = useTranslation(['buildInfo']);
   const { copyToClipboard, isCopied } = useClipboard();
 
   return (
     <ResponsiveDrawer>
-      <ResponsiveDrawerTrigger asChild>
-        {props.children}
-      </ResponsiveDrawerTrigger>
-      <ResponsiveDrawerContent>
+      {children && <ResponsiveDrawerTrigger render={children} />}
+      <ResponsiveDrawerContent forceOverlay>
         <ResponsiveDrawerHeader className="gap-2 text-center">
           <ResponsiveDrawerTitle>
             <BuildInfoVersion />
@@ -54,7 +52,7 @@ export const BuildInfoDrawer = (props: { children: ReactElement }) => {
             )}
           </ResponsiveDrawerDescription>
         </ResponsiveDrawerHeader>
-        <ResponsiveDrawerBody className="min-w-0">
+        <ResponsiveDrawerBody className="min-w-0 pb-8">
           <div className="flex flex-col">
             {Object.entries(buildInfo).map(([key, value]) => {
               if (key === 'display') return null;

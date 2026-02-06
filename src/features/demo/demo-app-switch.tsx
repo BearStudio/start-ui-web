@@ -66,11 +66,14 @@ export const DemoAppSwitch = () => {
             </div>
             {currentApp !== 'app' && hasAppAccess && (
               <CardAction className="-m-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <div>
-                    {t('demo:appSwitch.app.goTo')}
-                    <ArrowRightIcon />
-                  </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  render={<div />}
+                  nativeButton={false}
+                >
+                  {t('demo:appSwitch.app.goTo')}
+                  <ArrowRightIcon />
                 </Button>
               </CardAction>
             )}
@@ -110,11 +113,14 @@ export const DemoAppSwitch = () => {
 
             {currentApp !== 'manager' && hasManagerAccess && (
               <CardAction className="-m-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <div>
-                    {t('demo:appSwitch.manager.goTo')}
-                    <ArrowRightIcon />
-                  </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  render={<div />}
+                  nativeButton={false}
+                >
+                  {t('demo:appSwitch.manager.goTo')}
+                  <ArrowRightIcon />
                 </Button>
               </CardAction>
             )}

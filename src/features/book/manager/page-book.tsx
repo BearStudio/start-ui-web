@@ -1,7 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -10,7 +10,7 @@ import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
-import { Button } from '@/components/ui/button';
+import { ButtonLink } from '@/components/ui/button-link';
 import { Card, CardContent } from '@/components/ui/card';
 import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
@@ -106,15 +106,15 @@ export const PageBook = (props: { params: { id: string } }) => {
                 </ResponsiveIconButton>
               </ConfirmResponsiveDrawer>
             </WithPermissions>
-            <Button asChild size="sm" variant="secondary">
-              <Link
-                to="/manager/books/$id/update"
-                params={{ id: props.params.id }}
-              >
-                <PencilLineIcon />
-                {t('book:manager.detail.editButton.label')}
-              </Link>
-            </Button>
+            <ButtonLink
+              size="sm"
+              variant="secondary"
+              to="/manager/books/$id/update"
+              params={{ id: props.params.id }}
+            >
+              <PencilLineIcon />
+              {t('book:manager.detail.editButton.label')}
+            </ButtonLink>
           </>
         }
       >

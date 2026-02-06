@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -31,7 +31,7 @@ import {
 } from '@/features/account/schema';
 import { authClient } from '@/features/auth/client';
 
-export const ChangeNameDrawer = (props: { children: ReactNode }) => {
+export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
   const [open, setOpen] = useState(false);
   const session = authClient.useSession();
@@ -62,9 +62,7 @@ export const ChangeNameDrawer = (props: { children: ReactNode }) => {
         form.reset();
       }}
     >
-      <ResponsiveDrawerTrigger asChild>
-        {props.children}
-      </ResponsiveDrawerTrigger>
+      <ResponsiveDrawerTrigger render={props.children} />
 
       <ResponsiveDrawerContent className="sm:max-w-xs">
         <Form
