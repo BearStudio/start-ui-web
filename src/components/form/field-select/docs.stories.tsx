@@ -11,7 +11,7 @@ import {
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { Select, SelectGroup, SelectItem } from '@/components/ui/select';
 
 export default {
   title: 'Form/FieldSelect',
@@ -78,8 +78,15 @@ export const Default = () => {
             type="select"
             name="bear"
             placeholder="Placeholder"
-            options={options}
-          />
+          >
+            <SelectGroup>
+              {options.map((item) => (
+                <SelectItem value={item.id} key={item.id}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </FormFieldController>
         </FormField>
         <Button type="submit">Submit</Button>
       </div>
@@ -105,8 +112,15 @@ export const DefaultValue = () => {
             type="select"
             name="bear"
             placeholder="Placeholder"
-            options={options}
-          />
+          >
+            <SelectGroup>
+              {options.map((item) => (
+                <SelectItem value={item.id} key={item.id}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </FormFieldController>
         </FormField>
 
         <Button type="submit">Submit</Button>
@@ -134,8 +148,15 @@ export const Disabled = () => {
             name="bear"
             placeholder="Placeholder"
             disabled
-            options={options}
-          />
+          >
+            <SelectGroup>
+              {options.map((item) => (
+                <SelectItem value={item.id} key={item.id}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </FormFieldController>
         </FormField>
 
         <Button type="submit">Submit</Button>
@@ -163,7 +184,7 @@ export const ReadOnly = () => {
             name="bear"
             placeholder="Placeholder"
             readOnly
-            options={options}
+            // options={options}
           />
         </FormField>
 
