@@ -46,10 +46,10 @@ const ErrorFallback = (props: FallbackProps) => {
           <span className="line-clamp-1 flex-1">
             {t('components:errorBoundary.title')}
           </span>
-          <ResponsiveDrawerTrigger asChild>
-            <Button variant="secondary" size="xs">
-              {t('components:errorBoundary.details')}
-            </Button>
+          <ResponsiveDrawerTrigger
+            render={<Button variant="secondary" size="xs" />}
+          >
+            {t('components:errorBoundary.details')}
           </ResponsiveDrawerTrigger>
         </AlertTitle>
         <AlertDescription className="line-clamp-1 font-mono text-xs text-muted-foreground! opacity-80 @max-2xs:hidden">

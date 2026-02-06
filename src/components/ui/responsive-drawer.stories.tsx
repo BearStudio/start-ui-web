@@ -20,8 +20,8 @@ export default {
 export const Default = () => {
   return (
     <ResponsiveDrawer>
-      <ResponsiveDrawerTrigger asChild>
-        <Button variant="secondary">Open</Button>
+      <ResponsiveDrawerTrigger render={<Button variant="secondary" />}>
+        Open
       </ResponsiveDrawerTrigger>
       <ResponsiveDrawerContent>
         <ResponsiveDrawerHeader>
@@ -30,8 +30,8 @@ export const Default = () => {
         </ResponsiveDrawerHeader>
         <ResponsiveDrawerBody>Content</ResponsiveDrawerBody>
         <ResponsiveDrawerFooter>
-          <ResponsiveDrawerClose asChild>
-            <Button>Close</Button>
+          <ResponsiveDrawerClose render={<Button />}>
+            Close
           </ResponsiveDrawerClose>
         </ResponsiveDrawerFooter>
       </ResponsiveDrawerContent>
