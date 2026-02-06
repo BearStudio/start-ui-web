@@ -1,5 +1,5 @@
 import { CheckCircle2Icon, CopyIcon } from 'lucide-react';
-import { ComponentProps, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useClipboard } from '@/hooks/use-clipboard';
@@ -19,18 +19,12 @@ import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 
 import buildInfo from './build-info.gen.json';
 
-export const BuildInfoDrawer = ({
-  children,
-  ...rest
-}: { children?: ReactElement } & Omit<
-  ComponentProps<typeof ResponsiveDrawer>,
-  'children'
->) => {
+export const BuildInfoDrawer = ({ children }: { children?: ReactElement }) => {
   const { t } = useTranslation(['buildInfo']);
   const { copyToClipboard, isCopied } = useClipboard();
 
   return (
-    <ResponsiveDrawer {...rest}>
+    <ResponsiveDrawer>
       {children && <ResponsiveDrawerTrigger render={children} />}
       <ResponsiveDrawerContent forceOverlay>
         <ResponsiveDrawerHeader className="gap-2 text-center">
