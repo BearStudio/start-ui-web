@@ -20,7 +20,9 @@ function ButtonLink({
       {...props}
       className={cn(buttonVariants({ variant, size, className }))}
     >
-      {children}
+      <span className={'flex min-w-0 flex-1 items-center justify-center'}>
+        {children}
+      </span>
     </Link>
   );
 }
