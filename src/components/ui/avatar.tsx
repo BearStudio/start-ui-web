@@ -67,7 +67,7 @@ function AvatarFallback(
       <AvatarPrimitive.Fallback
         data-slot="avatar-fallback"
         className={cn(
-          'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs',
+          'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-2xs',
           className
         )}
         {...rest}
@@ -83,7 +83,7 @@ function AvatarFallback(
       <AvatarPrimitive.Fallback
         data-slot="avatar-fallback"
         className={cn(
-          'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground uppercase group-data-[size=sm]/avatar:text-xs',
+          'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground uppercase group-data-[size=sm]/avatar:text-2xs',
           className
         )}
         {...rest}
@@ -123,7 +123,7 @@ function AvatarFallback(
             '#32CC91',
           ]}
         />
-        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-black uppercase mix-blend-overlay">
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-black uppercase mix-blend-overlay group-data-[size=sm]/avatar:text-2xs">
           {name
             ?.split(' ')
             .slice(0, 2)

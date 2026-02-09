@@ -14,6 +14,29 @@ export default {
   title: 'Select',
 } satisfies Meta<typeof Select>;
 
+const items = [
+  {
+    value: 'apple',
+    label: 'Apple',
+  },
+  {
+    value: 'banana',
+    label: 'Banana',
+  },
+  {
+    value: 'blueberry',
+    label: 'Blueberry',
+  },
+  {
+    value: 'grapes',
+    label: 'Grapes',
+  },
+  {
+    value: 'pineapple',
+    label: 'Pineapple',
+  },
+];
+
 export function Default() {
   return (
     <Select>
@@ -36,18 +59,18 @@ export function Default() {
 
 export function Invalid() {
   return (
-    <Select>
+    <Select items={items}>
       <SelectTrigger aria-invalid="true">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {items.map((item) => (
+            <SelectItem value={item.value} key={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
@@ -56,18 +79,18 @@ export function Invalid() {
 
 export function Disabled() {
   return (
-    <Select disabled>
+    <Select disabled items={items}>
       <SelectTrigger>
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {items.map((item) => (
+            <SelectItem value={item.value} key={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
@@ -77,48 +100,48 @@ export function Disabled() {
 export function Sizes() {
   return (
     <div className="flex gap-4">
-      <Select>
+      <Select items={items}>
         <SelectTrigger size="sm">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple">Apple</SelectItem>
-            <SelectItem value="banana">Banana</SelectItem>
-            <SelectItem value="blueberry">Blueberry</SelectItem>
-            <SelectItem value="grapes">Grapes</SelectItem>
-            <SelectItem value="pineapple">Pineapple</SelectItem>
+            {items.map((item) => (
+              <SelectItem value={item.value} key={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Select>
+      <Select items={items}>
         <SelectTrigger>
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple">Apple</SelectItem>
-            <SelectItem value="banana">Banana</SelectItem>
-            <SelectItem value="blueberry">Blueberry</SelectItem>
-            <SelectItem value="grapes">Grapes</SelectItem>
-            <SelectItem value="pineapple">Pineapple</SelectItem>
+            {items.map((item) => (
+              <SelectItem value={item.value} key={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Select>
+      <Select items={items}>
         <SelectTrigger size="lg">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value="apple">Apple</SelectItem>
-            <SelectItem value="banana">Banana</SelectItem>
-            <SelectItem value="blueberry">Blueberry</SelectItem>
-            <SelectItem value="grapes">Grapes</SelectItem>
-            <SelectItem value="pineapple">Pineapple</SelectItem>
+            {items.map((item) => (
+              <SelectItem value={item.value} key={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -8,17 +8,26 @@ import type { FieldProps } from '@/components/form/types';
 import {
   Select,
   SelectContent,
+  SelectGroup,
+  SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 
-export const FieldSelect = (
+type Item = {
+  label: React.ReactNode;
+  value: ExplicitAny;
+  disabled?: boolean;
+};
+
+export const FieldSelect = <TItem extends Item>(
   props: FieldProps<
     {
       containerProps?: React.ComponentProps<typeof FormFieldContainer>;
       inputProps?: React.ComponentProps<typeof SelectValue>;
-    } & ComponentProps<typeof Select> &
-      Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
+    } & Omit<ComponentProps<typeof Select>, 'items'> & {
+        items: TItem[];
+      } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
   >
 ) => {
   const { containerProps, inputProps, children, placeholder, ...rest } = props;
@@ -30,23 +39,39 @@ export const FieldSelect = (
     <FormFieldContainer {...containerProps}>
       <Select
         {...rest}
+        inputRef={field.ref}
         disabled={field.disabled}
-        value={field.value}
+        value={field.value ?? null}
         onValueChange={(value, event) => {
-          field.onChange(value);
+          field.onChange(value, event);
           rest.onValueChange?.(value, event);
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger
+          aria-invalid={fieldState.invalid ? true : undefined}
+          id={ctx.id}
+        >
           <SelectValue
             {...inputProps}
             placeholder={placeholder}
-            id={ctx.id}
-            aria-invalid={fieldState.invalid ? true : undefined}
             aria-describedby={ctx.describedBy(fieldState.invalid)}
           />
         </SelectTrigger>
-        <SelectContent>{children}</SelectContent>
+        <SelectContent>
+          {children ?? (
+            <SelectGroup>
+              {rest.items?.map((item) => (
+                <SelectItem
+                  value={item.value}
+                  key={item.value}
+                  disabled={item.disabled}
+                >
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          )}
+        </SelectContent>
       </Select>
       <FormFieldError />
     </FormFieldContainer>
