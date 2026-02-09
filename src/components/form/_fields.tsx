@@ -1,5 +1,6 @@
 import { FieldCheckbox } from './field-checkbox';
 import { FieldCheckboxGroup } from './field-checkbox-group';
+import { FieldCombobox } from './field-combobox';
 import { FieldDate } from './field-date';
 import { FieldNumber } from './field-number';
 import { FieldOtp } from './field-otp';
@@ -14,6 +15,7 @@ export const fieldComponents = {
   email: FieldText,
   tel: FieldText,
   select: FieldSelect,
+  combobox: FieldCombobox,
   number: FieldNumber,
   otp: FieldOtp,
   date: FieldDate,

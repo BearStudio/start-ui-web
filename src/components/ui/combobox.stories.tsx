@@ -1,12 +1,19 @@
 import type { Meta } from '@storybook/react-vite';
+import * as React from 'react';
 
 import {
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxClear,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
 } from './combobox';
 
 export default {
@@ -23,12 +30,8 @@ const options = [
 
 export function Default() {
   return (
-    <Combobox
-      items={options}
-      defaultValue={options[0]}
-      itemToStringLabel={(item) => item.label}
-    >
-      <ComboboxInput placeholder="Select a fruit" />
+    <Combobox items={options} defaultValue={options[0]}>
+      <ComboboxInput placeholder="Select a fruit" showClear />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
@@ -50,7 +53,11 @@ export function Invalid() {
       defaultValue={options[0]}
       itemToStringLabel={(item) => item.label}
     >
-      <ComboboxInput aria-invalid={true} placeholder="Select a fruit" />
+      <ComboboxInput
+        aria-invalid={true}
+        placeholder="Select a fruit"
+        showClear
+      />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
@@ -72,7 +79,7 @@ export function Disabled() {
       defaultValue={options[0]}
       itemToStringLabel={(item) => item.label}
     >
-      <ComboboxInput disabled placeholder="Select a fruit" />
+      <ComboboxInput disabled placeholder="Select a fruit" showClear />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
@@ -95,7 +102,7 @@ export function Sizes() {
         defaultValue={options[0]}
         itemToStringLabel={(item) => item.label}
       >
-        <ComboboxInput size="sm" placeholder="Select a fruit" />
+        <ComboboxInput size="sm" placeholder="Select a fruit" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
@@ -129,8 +136,130 @@ export function Sizes() {
         defaultValue={options[0]}
         itemToStringLabel={(item) => item.label}
       >
-        <ComboboxInput size="lg" placeholder="Select a fruit" />
+        <ComboboxInput size="lg" placeholder="Select a fruit" showClear />
         <ComboboxContent>
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item: (typeof options)[number]) => (
+              <ComboboxItem value={item} key={item.id}>
+                {item.label}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
+}
+
+export function Multiple() {
+  const anchor = useComboboxAnchor();
+  return (
+    <Combobox items={options} defaultValue={[options[0]]} multiple>
+      <ComboboxChips ref={anchor}>
+        <ComboboxValue>
+          {(items) => (
+            <React.Fragment>
+              {items.map((item: (typeof options)[number]) => (
+                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+              ))}
+              <ComboboxChipsInput placeholder="Add..." />
+              <ComboboxClear />
+            </React.Fragment>
+          )}
+        </ComboboxValue>
+      </ComboboxChips>
+
+      <ComboboxContent anchor={anchor}>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item: (typeof options)[number]) => (
+            <ComboboxItem value={item} key={item.id}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  );
+}
+
+export function MultipleSizes() {
+  const anchorSm = useComboboxAnchor();
+  const anchorDefault = useComboboxAnchor();
+  const anchorLg = useComboboxAnchor();
+  return (
+    <div className="flex items-start gap-4">
+      <Combobox items={options} defaultValue={[options[0]]} multiple>
+        <ComboboxChips className="flex-1" size="sm" ref={anchorSm}>
+          <ComboboxValue>
+            {(items) => (
+              <React.Fragment>
+                {items.map((item: (typeof options)[number]) => (
+                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+                ))}
+                <ComboboxChipsInput placeholder="Add..." />
+                <ComboboxClear />
+              </React.Fragment>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+
+        <ComboboxContent anchor={anchorSm}>
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item: (typeof options)[number]) => (
+              <ComboboxItem value={item} key={item.id}>
+                {item.label}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+
+      <Combobox items={options} defaultValue={[options[0]]} multiple>
+        <ComboboxChips className="flex-1" ref={anchorDefault}>
+          <ComboboxValue>
+            {(items) => (
+              <React.Fragment>
+                {items.map((item: (typeof options)[number]) => (
+                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+                ))}
+                <ComboboxChipsInput placeholder="Add..." />
+                <ComboboxClear />
+              </React.Fragment>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+
+        <ComboboxContent anchor={anchorDefault}>
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item: (typeof options)[number]) => (
+              <ComboboxItem value={item} key={item.id}>
+                {item.label}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+
+      <Combobox items={options} defaultValue={[options[0]]} multiple>
+        <ComboboxChips className="flex-1" size="lg" ref={anchorLg}>
+          <ComboboxValue>
+            {(items) => (
+              <React.Fragment>
+                {items.map((item: (typeof options)[number]) => (
+                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+                ))}
+                <ComboboxChipsInput placeholder="Add..." />
+                <ComboboxClear />
+              </React.Fragment>
+            )}
+          </ComboboxValue>
+        </ComboboxChips>
+
+        <ComboboxContent anchor={anchorLg}>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof options)[number]) => (
