@@ -75,6 +75,7 @@ export const Default = () => {
             items={options.map((item) => ({
               value: item.id,
               label: item.name,
+              disabled: item.disabled,
             }))}
           />
         </FormField>
@@ -146,6 +147,7 @@ export const DefaultValue = () => {
             items={options.map((item) => ({
               value: item.id,
               label: item.name,
+              disabled: item.disabled,
             }))}
           />
         </FormField>
@@ -178,6 +180,7 @@ export const Disabled = () => {
             items={options.map((item) => ({
               value: item.id,
               label: item.name,
+              disabled: item.disabled,
             }))}
           />
         </FormField>
