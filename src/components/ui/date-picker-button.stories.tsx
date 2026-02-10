@@ -113,11 +113,12 @@ export const UsageWithDialog = () => {
       <DialogTrigger render={<DatePickerButton />}>
         {date ? dayjs(date).format('DD/MM/YYYY') : null}
       </DialogTrigger>
-      <DialogContent className="h-96 w-auto">
+      <DialogContent className="w-auto" hideCloseButton>
         <DialogBody>
           <Calendar
             autoFocus
             mode="single"
+            className="p-0"
             selected={date}
             onSelect={(date) => {
               setDate(date);
