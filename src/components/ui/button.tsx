@@ -28,11 +28,11 @@ const buttonVariants = cva(
         xs: "h-6 rounded-sm px-2 text-xs has-[>span>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3 [&>span]:gap-1",
         sm: 'h-8 px-3 has-[>span>svg]:px-2.5',
         lg: 'h-10 px-6 has-[>span>svg]:px-4',
-        icon: 'size-9',
+        icon: 'size-9 max-w-none',
         'icon-xs':
-          "size-6 rounded-sm text-xs [&_svg:not([class*='size-'])]:size-3",
-        'icon-sm': 'size-8',
-        'icon-lg': 'size-10',
+          "size-6 max-w-none rounded-sm text-xs [&_svg:not([class*='size-'])]:size-3",
+        'icon-sm': 'size-8 max-w-none',
+        'icon-lg': 'size-10 max-w-none',
       },
     },
     compoundVariants: [
