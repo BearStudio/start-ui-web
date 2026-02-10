@@ -1,4 +1,5 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useFormField } from '@/components/form/form-field';
 import { FormFieldContainer } from '@/components/form/form-field-container';
@@ -31,6 +32,7 @@ export const FieldCombobox = <TItem extends Item>(
     > & {
         items: TItem[];
         showClear?: boolean;
+        emptyContent?: ReactNode;
       } & Pick<
         ComponentProps<typeof ComboboxInput>,
         'placeholder' | 'showClear'
@@ -44,9 +46,11 @@ export const FieldCombobox = <TItem extends Item>(
     items,
     showClear,
     placeholder,
+    emptyContent,
     ...rest
   } = props;
 
+  const { t } = useTranslation(['components']);
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
 
@@ -79,7 +83,9 @@ export const FieldCombobox = <TItem extends Item>(
           showClear={showClear}
         />
         <ComboboxContent>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxEmpty>
+            {emptyContent ?? t('components:combobox.noItemsFound')}
+          </ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof items)[number]) => (
               <ComboboxItem

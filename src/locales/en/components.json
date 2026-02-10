@@ -62,13 +62,11 @@
   "backButton": {
     "label": "Back"
   },
-  "select": {
-    "placeholder": "Select...",
-    "noResultsFound": "No results found",
-    "create": "Create \"{{searchTerm}}\""
-  },
   "preventNavigation": {
     "confirmLabel": "Are you sure you want to leave?"
+  },
+  "combobox": {
+    "noItemsFound": "No items found."
   },
   "errorBoundary": {
     "title": "Unknown Error",

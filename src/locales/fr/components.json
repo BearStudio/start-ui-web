@@ -62,13 +62,11 @@
   "backButton": {
     "label": "Retour"
   },
-  "select": {
-    "placeholder": "Sélectionner...",
-    "noResultsFound": "Aucun résultat trouvé",
-    "create": "Créer \"{{searchTerm}}\""
-  },
   "preventNavigation": {
     "confirmLabel": "Êtes-vous sûr de vouloir quitter ?"
+  },
+  "combobox": {
+    "noItemsFound": "Aucun élément trouvé."
   },
   "errorBoundary": {
     "title": "Erreur inconnue",
