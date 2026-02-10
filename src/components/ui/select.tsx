@@ -2,6 +2,7 @@ import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { cva, VariantProps } from 'class-variance-authority';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -17,11 +18,17 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   );
 }
 
-function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
+function SelectValue({
+  className,
+  placeholder,
+  ...props
+}: SelectPrimitive.Value.Props) {
+  const { t } = useTranslation(['components']);
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
       className={cn('min-w-0 flex-1 truncate text-left', className)}
+      placeholder={placeholder ?? t('components:select.placeholder')}
       {...props}
     />
   );

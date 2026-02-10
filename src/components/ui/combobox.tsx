@@ -4,6 +4,7 @@ import { Combobox as ComboboxPrimitive } from '@base-ui/react';
 import { cva, VariantProps } from 'class-variance-authority';
 import { CheckIcon, ChevronDownIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -15,7 +16,11 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 
-const Combobox = ComboboxPrimitive.Root;
+function Combobox<Value, Multiple extends boolean | undefined = false>(
+  props: ComboboxPrimitive.Root.Props<Value, Multiple>
+): React.JSX.Element {
+  return <ComboboxPrimitive.Root autoHighlight {...props} />;
+}
 
 function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props) {
   return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />;
@@ -60,17 +65,20 @@ function ComboboxInput({
   disabled = false,
   showTrigger = true,
   showClear = false,
+  placeholder,
   ...props
 }: Omit<ComboboxPrimitive.Input.Props, 'size'> &
   Pick<React.ComponentProps<typeof InputGroup>, 'size'> & {
     showTrigger?: boolean;
     showClear?: boolean;
   }) {
+  const { t } = useTranslation(['components']);
   return (
     <InputGroup size={size} className={cn('w-auto', className)}>
       <ComboboxPrimitive.Input
         render={<InputGroupInput />}
         disabled={disabled}
+        placeholder={placeholder ?? t('components:combobox.placeholder')}
         {...props}
       />
       <InputGroupAddon align="inline-end">

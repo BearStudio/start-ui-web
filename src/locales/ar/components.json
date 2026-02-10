@@ -62,10 +62,14 @@
   "backButton": {
     "label": "رجوع"
   },
+  "select": {
+    "placeholder": "اختر..."
+  },
   "preventNavigation": {
     "confirmLabel": "هل أنت متأكد أنك تريد المغادرة؟"
   },
   "combobox": {
+    "placeholder": "اختر...",
     "noItemsFound": "لم يتم العثور على عناصر."
   },
   "errorBoundary": {

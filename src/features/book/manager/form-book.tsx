@@ -37,7 +37,7 @@ export const FormBook = () => {
       <FormField>
         <FormFieldLabel>{t('book:common.genre.label')}</FormFieldLabel>
         <FormFieldController
-          type="select"
+          type="combobox"
           control={form.control}
           name="genreId"
           items={(genresQuery.data?.items ?? []).map((genre) => ({
