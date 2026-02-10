@@ -49,13 +49,10 @@ export const FieldSelect = <TItem extends Item>(
       >
         <SelectTrigger
           aria-invalid={fieldState.invalid ? true : undefined}
+          aria-describedby={ctx.describedBy(fieldState.invalid)}
           id={ctx.id}
         >
-          <SelectValue
-            {...inputProps}
-            placeholder={placeholder}
-            aria-describedby={ctx.describedBy(fieldState.invalid)}
-          />
+          <SelectValue {...inputProps} placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {children ?? (
