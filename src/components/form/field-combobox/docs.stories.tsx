@@ -11,10 +11,10 @@ import {
 import { onSubmit } from '@/components/form/docs.utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { SelectGroup, SelectItem } from '@/components/ui/select';
+import { ComboboxItem } from '@/components/ui/combobox';
 
 export default {
-  title: 'Form/FieldSelect',
+  title: 'Form/FieldCombobox',
 };
 
 const zFormSchema = () =>
@@ -69,56 +69,16 @@ export const Default = () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="select"
+            type="combobox"
             name="bear"
             placeholder="Placeholder"
+            showClear
             items={options.map((item) => ({
               value: item.id,
               label: item.name,
               disabled: item.disabled,
             }))}
           />
-        </FormField>
-        <Button type="submit">Submit</Button>
-      </div>
-    </Form>
-  );
-};
-
-export const CustomOptions = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            items={options.map((item) => ({
-              value: item.id,
-              label: item.name,
-              disabled: item.disabled,
-            }))}
-          >
-            <SelectGroup>
-              {options.map((item) => (
-                <SelectItem
-                  value={item.id}
-                  key={item.id}
-                  disabled={item.disabled}
-                >
-                  <Avatar size="sm" className="size-6">
-                    <AvatarFallback variant="boring" name={item.name} />
-                  </Avatar>
-                  <span className="pt-0.5">{item.name}</span>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </FormFieldController>
         </FormField>
         <Button type="submit">Submit</Button>
       </div>
@@ -141,9 +101,10 @@ export const DefaultValue = () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="select"
+            type="combobox"
             name="bear"
             placeholder="Placeholder"
+            showClear
             items={options.map((item) => ({
               value: item.id,
               label: item.name,
@@ -173,7 +134,7 @@ export const Disabled = () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             control={form.control}
-            type="select"
+            type="combobox"
             name="bear"
             placeholder="Placeholder"
             disabled
@@ -185,6 +146,45 @@ export const Disabled = () => {
           />
         </FormField>
 
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
+  );
+};
+
+export const CustomOptions = () => {
+  const form = useForm(formOptions);
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="combobox"
+            name="bear"
+            placeholder="Placeholder"
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
+          >
+            {(item) => (
+              <ComboboxItem
+                value={item}
+                key={item.value}
+                disabled={item.disabled}
+              >
+                <Avatar size="sm" className="size-6">
+                  <AvatarFallback variant="boring" name={item.label} />
+                </Avatar>
+                <span className="pt-0.5">{item.label}</span>
+              </ComboboxItem>
+            )}
+          </FormFieldController>
+        </FormField>
         <Button type="submit">Submit</Button>
       </div>
     </Form>

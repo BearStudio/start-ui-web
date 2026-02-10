@@ -1,228 +1,219 @@
-import { getUiState } from '@bearstudio/ui-state';
-import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOption as HeadlessComboboxOption,
-  ComboboxOptions,
-  ComboboxProps,
-} from '@headlessui/react';
-import { ChevronDown, XIcon } from 'lucide-react';
-import { ChangeEvent, ComponentProps, ReactNode, useState } from 'react';
+import { Select as SelectPrimitive } from '@base-ui/react/select';
+import { cva, VariantProps } from 'class-variance-authority';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { isEmpty, isNonNullish, isNullish } from 'remeda';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Input } from '@/components/ui/input';
-import { InputGroupButton } from '@/components/ui/input-group';
+const Select = SelectPrimitive.Root;
 
-type OptionBase = { id: string; label: string; disabled?: boolean };
-type TValueBase = OptionBase | null;
-
-type InputProps = ComponentProps<typeof Input>;
-type InputPropsRoot = Pick<
-  InputProps,
-  | 'placeholder'
-  | 'size'
-  | 'aria-invalid'
-  | 'aria-describedby'
-  | 'readOnly'
-  | 'autoFocus'
->;
-
-type SelectProps<TValue extends TValueBase> = ComboboxProps<TValue, false> &
-  InputPropsRoot & {
-    /** Allow user to clear the select using a button */
-    withClearButton?: boolean;
-    options: ReadonlyArray<NonNullable<TValue>>;
-    inputProps?: Omit<
-      RemoveFromType<InputProps, InputPropsRoot>,
-      // Removing the defaultValue from the input to avoid conflict with ComboboxInput type
-      'defaultValue'
-    >;
-    /** Override the way the empty state is displayed */
-    renderEmpty?: (search: string) => ReactNode;
-    /** Allow the user to provide a custom value */
-    allowCustomValue?: boolean;
-    /** Allow you to provide custom ComboboxOption */
-    renderOption?: (option: NonNullable<TValue>) => ReactNode;
-    mode?: 'default' | 'virtual';
-  };
-
-export const Select = <TValue extends TValueBase>({
-  withClearButton,
-  inputProps,
-  size,
-  placeholder,
-  options,
-  renderEmpty,
-  renderOption,
-  onChange,
-  value,
-  autoFocus,
-  allowCustomValue = false,
-  'aria-describedby': ariaDescribedBy,
-  'aria-invalid': ariaInvalid,
-  readOnly,
-  mode = 'default',
-  ...props
-}: SelectProps<TValue>) => {
-  const { t } = useTranslation(['components']);
-  const [search, setSearch] = useState('');
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-  };
-
-  const handleOnValueChange: SelectProps<TValue>['onChange'] = (value) => {
-    setSearch('');
-    onChange?.(value);
-  };
-
-  /**
-   * On close, reset the search and items so they are back to the original state
-   */
-  const handleOnClose = () => {
-    setSearch('');
-  };
-
-  const items = options.filter((item) =>
-    item.label.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const ui = getUiState((set) => {
-    if (items.length === 0 && allowCustomValue && search.length > 0) {
-      return set('create-search', { search });
-    }
-
-    if (items.length === 0 && isNullish(renderEmpty)) {
-      return set('empty');
-    }
-
-    if (items.length === 0 && isNonNullish(renderEmpty)) {
-      return set('empty-override', { renderEmpty });
-    }
-
-    if (mode === 'virtual' && !isEmpty(items)) {
-      return set('virtual');
-    }
-
-    if (items.length !== 0 && isNonNullish(renderOption)) {
-      return set('render-option', { renderOption });
-    }
-
-    if (items.length !== 0) {
-      return set('default');
-    }
-
-    return set('default');
-  });
-
+function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (
-    <Combobox
-      immediate
-      value={value ?? null}
-      onChange={(v) => handleOnValueChange(v)}
-      onClose={handleOnClose}
-      virtual={
-        mode === 'virtual' && isNonNullish(items) && !isEmpty(items)
-          ? { options: items, disabled: (o) => o?.disabled ?? false }
-          : undefined
-      }
-      disabled={props.disabled || readOnly}
+    <SelectPrimitive.Group
+      data-slot="select-group"
+      className={cn('scroll-my-1 p-1', className)}
       {...props}
-    >
-      <div className="relative">
-        {/* Setting the type so we have type check and typings for the displayValue prop */}
-        <ComboboxInput<TValue, typeof Input>
-          as={Input}
-          size={size}
-          displayValue={(item) => item?.label ?? ''}
-          onChange={handleInputChange}
-          autoFocus={autoFocus}
-          placeholder={placeholder ?? t('components:select.placeholder')}
-          aria-invalid={ariaInvalid}
-          aria-describedby={ariaDescribedBy}
-          endAddon={
-            <>
-              {!!withClearButton && value && (
-                <InputGroupButton
-                  size="icon-xs"
-                  className="-me-1"
-                  onClick={() => {
-                    onChange?.(null);
-                  }}
-                >
-                  <XIcon />
-                </InputGroupButton>
-              )}
-              <ComboboxButton
-                as={InputGroupButton}
-                disabled={props.disabled}
-                size="icon-xs"
-              >
-                <ChevronDown aria-hidden="true" />
-              </ComboboxButton>
-            </>
-          }
-          {...inputProps}
-        />
-
-        <ComboboxOptions
-          anchor="bottom start"
-          className="absolute z-10 mt-1 w-(--input-width) overflow-auto rounded-md bg-white p-1 shadow empty:invisible dark:bg-neutral-900"
-        >
-          {ui
-            .match('empty', () => (
-              <div className="px-3 py-2 text-xs opacity-60">
-                {t('components:select.noResultsFound')}
-              </div>
-            ))
-            .match('empty-override', ({ renderEmpty }) => renderEmpty(search))
-            .match('create-search', ({ search }) => (
-              <ComboboxOption value={{ id: search, label: search }}>
-                {t('components:select.create', { searchTerm: search })}
-              </ComboboxOption>
-            ))
-            .match('virtual', () => ({ option }: { option: OptionBase }) => (
-              <ComboboxOption value={option}>{option.label}</ComboboxOption>
-            ))
-            .match('render-option', ({ renderOption }) =>
-              items.map((item) => renderOption(item))
-            )
-            .match('default', () =>
-              items.map((item) => (
-                <ComboboxOption
-                  key={item.id}
-                  value={item}
-                  disabled={item.disabled}
-                >
-                  {item.label}
-                </ComboboxOption>
-              ))
-            )
-            .exhaustive()}
-        </ComboboxOptions>
-      </div>
-    </Combobox>
-  );
-};
-
-export function ComboboxOption({
-  ...props
-}: ComponentProps<typeof HeadlessComboboxOption>) {
-  return (
-    <HeadlessComboboxOption
-      {...props}
-      className={cn(
-        'flex cursor-pointer gap-1 rounded-sm px-3 py-1.5',
-        'data-[focus]:bg-neutral-50 dark:data-[focus]:bg-neutral-800',
-        'data-[selected]:bg-neutral-100 data-[selected]:font-medium dark:data-[selected]:bg-neutral-700',
-        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
-        'text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800',
-        props.className
-      )}
     />
   );
 }
+
+function SelectValue({
+  className,
+  placeholder,
+  ...props
+}: SelectPrimitive.Value.Props) {
+  const { t } = useTranslation(['components']);
+  return (
+    <SelectPrimitive.Value
+      data-slot="select-value"
+      className={cn('min-w-0 flex-1 truncate text-left', className)}
+      placeholder={placeholder ?? t('components:select.placeholder')}
+      {...props}
+    />
+  );
+}
+
+const selectTriggerVariants = cva(
+  'flex w-full min-w-0 items-center justify-between gap-1.5 rounded-md border border-input bg-white whitespace-nowrap shadow-xs transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground *:data-[slot=select-value]:line-clamp-1 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      size: {
+        default: cn('h-9 px-3 text-sm'),
+        sm: cn('h-8 px-2.5 text-sm'),
+        lg: cn('h-10 px-4 text-base'),
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+function SelectTrigger({
+  className,
+  size = 'default',
+  children,
+  ...props
+}: SelectPrimitive.Trigger.Props & VariantProps<typeof selectTriggerVariants>) {
+  return (
+    <SelectPrimitive.Trigger
+      data-slot="select-trigger"
+      data-size={size}
+      className={cn(selectTriggerVariants({ size }), className)}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon
+        render={
+          <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
+        }
+      />
+    </SelectPrimitive.Trigger>
+  );
+}
+
+function SelectContent({
+  className,
+  children,
+  side = 'bottom',
+  sideOffset = 4,
+  align = 'center',
+  alignOffset = 0,
+  alignItemWithTrigger = false,
+  ...props
+}: SelectPrimitive.Popup.Props &
+  Pick<
+    SelectPrimitive.Positioner.Props,
+    'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
+  >) {
+  return (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Positioner
+        side={side}
+        sideOffset={sideOffset}
+        align={align}
+        alignOffset={alignOffset}
+        alignItemWithTrigger={alignItemWithTrigger}
+        className="isolate z-50"
+      >
+        <SelectPrimitive.Popup
+          data-slot="select-content"
+          data-align-trigger={alignItemWithTrigger}
+          className={cn(
+            'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+            className
+          )}
+          {...props}
+        >
+          <SelectScrollUpButton />
+          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          <SelectScrollDownButton />
+        </SelectPrimitive.Popup>
+      </SelectPrimitive.Positioner>
+    </SelectPrimitive.Portal>
+  );
+}
+
+function SelectLabel({
+  className,
+  ...props
+}: SelectPrimitive.GroupLabel.Props) {
+  return (
+    <SelectPrimitive.GroupLabel
+      data-slot="select-label"
+      className={cn('px-1.5 py-1 text-xs text-muted-foreground', className)}
+      {...props}
+    />
+  );
+}
+
+function SelectItem({
+  className,
+  children,
+  ...props
+}: SelectPrimitive.Item.Props) {
+  return (
+    <SelectPrimitive.Item
+      data-slot="select-item"
+      className={cn(
+        "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        className
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText className="flex min-w-0 flex-1 shrink-0 gap-2">
+        {children}
+      </SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator
+        render={
+          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+            <CheckIcon className="pointer-events-none" />
+          </span>
+        }
+      />
+    </SelectPrimitive.Item>
+  );
+}
+
+function SelectSeparator({
+  className,
+  ...props
+}: SelectPrimitive.Separator.Props) {
+  return (
+    <SelectPrimitive.Separator
+      data-slot="select-separator"
+      className={cn('pointer-events-none -mx-1 my-1 h-px bg-border', className)}
+      {...props}
+    />
+  );
+}
+
+function SelectScrollUpButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollUpArrow>) {
+  return (
+    <SelectPrimitive.ScrollUpArrow
+      data-slot="select-scroll-up-button"
+      className={cn(
+        "top-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    >
+      <ChevronUpIcon />
+    </SelectPrimitive.ScrollUpArrow>
+  );
+}
+
+function SelectScrollDownButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollDownArrow>) {
+  return (
+    <SelectPrimitive.ScrollDownArrow
+      data-slot="select-scroll-down-button"
+      className={cn(
+        "bottom-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    >
+      <ChevronDownIcon />
+    </SelectPrimitive.ScrollDownArrow>
+  );
+}
+
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+};

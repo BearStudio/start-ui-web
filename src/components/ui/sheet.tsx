@@ -46,7 +46,7 @@ function SheetContent({
   side?: 'top' | 'right' | 'bottom' | 'left';
   showCloseButton?: boolean;
 }) {
-  const { t } = useTranslation('components');
+  const { t } = useTranslation(['components']);
 
   return (
     <SheetPortal>
@@ -80,7 +80,7 @@ function SheetContent({
             }
           >
             <XIcon />
-            <span className="sr-only">{t('sheet.close')}</span>
+            <span className="sr-only">{t('components:sheet.close')}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

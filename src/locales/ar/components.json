@@ -63,12 +63,14 @@
     "label": "رجوع"
   },
   "select": {
-    "placeholder": "اختر...",
-    "noResultsFound": "لم يتم العثور على نتائج",
-    "create": "إنشاء \"{{searchTerm}}\""
+    "placeholder": "اختر..."
   },
   "preventNavigation": {
     "confirmLabel": "هل أنت متأكد أنك تريد المغادرة؟"
+  },
+  "combobox": {
+    "placeholder": "اختر...",
+    "noItemsFound": "لم يتم العثور على عناصر."
   },
   "errorBoundary": {
     "title": "خطأ غير معروف",

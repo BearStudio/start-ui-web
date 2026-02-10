@@ -63,12 +63,14 @@
     "label": "Back"
   },
   "select": {
-    "placeholder": "Select...",
-    "noResultsFound": "No results found",
-    "create": "Create \"{{searchTerm}}\""
+    "placeholder": "Select..."
   },
   "preventNavigation": {
     "confirmLabel": "Are you sure you want to leave?"
+  },
+  "combobox": {
+    "placeholder": "Select...",
+    "noItemsFound": "No items found."
   },
   "errorBoundary": {
     "title": "Unknown Error",
