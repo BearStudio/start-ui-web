@@ -238,13 +238,13 @@ const comboboxChipsVariants = cva(
     variants: {
       size: {
         default: cn(
-          'min-h-9 has-data-[slot=combobox-chip]:px-1.5 md:[&_input]:text-xs'
+          'min-h-9 has-data-[slot=combobox-chip]:px-1.5 [&_input]:md:text-sm has-data-[slot=combobox-chip]:[&_input]:md:text-xs'
         ),
         sm: cn(
-          'min-h-8 has-data-[slot=combobox-chip]:px-1 md:[&_input]:text-xs'
+          'min-h-8 has-data-[slot=combobox-chip]:px-1 [&_input]:md:text-sm has-data-[slot=combobox-chip]:[&_input]:md:text-xs'
         ),
         lg: cn(
-          'min-h-10 has-data-[slot=combobox-chip]:px-2 md:[&_input]:text-sm'
+          'min-h-10 has-data-[slot=combobox-chip]:px-2 [&_input]:md:text-base has-data-[slot=combobox-chip]:[&_input]:md:text-sm'
         ),
       },
     },
@@ -310,10 +310,7 @@ function ComboboxChipsInput({
   return (
     <ComboboxPrimitive.Input
       data-slot="combobox-chip-input"
-      className={cn(
-        'min-w-16 flex-1 px-0.5 text-base outline-none md:pt-px',
-        className
-      )}
+      className={cn('min-w-16 flex-1 px-0.5 text-base outline-none', className)}
       {...props}
     />
   );
