@@ -184,6 +184,70 @@ export function Multiple() {
   );
 }
 
+export function MultipleDisabled() {
+  const anchor = useComboboxAnchor();
+  return (
+    <Combobox disabled items={options} defaultValue={[options[0]]} multiple>
+      <ComboboxChips ref={anchor}>
+        <ComboboxValue>
+          {(items) => (
+            <React.Fragment>
+              {items.map((item: (typeof options)[number]) => (
+                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+              ))}
+              <ComboboxChipsInput placeholder="Add..." />
+              <ComboboxClear />
+            </React.Fragment>
+          )}
+        </ComboboxValue>
+      </ComboboxChips>
+
+      <ComboboxContent anchor={anchor}>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item: (typeof options)[number]) => (
+            <ComboboxItem value={item} key={item.id}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  );
+}
+
+export function MultipleInvalid() {
+  const anchor = useComboboxAnchor();
+  return (
+    <Combobox items={options} defaultValue={[options[0]]} multiple>
+      <ComboboxChips ref={anchor}>
+        <ComboboxValue>
+          {(items) => (
+            <React.Fragment>
+              {items.map((item: (typeof options)[number]) => (
+                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
+              ))}
+              <ComboboxChipsInput aria-invalid={true} placeholder="Add..." />
+              <ComboboxClear />
+            </React.Fragment>
+          )}
+        </ComboboxValue>
+      </ComboboxChips>
+
+      <ComboboxContent anchor={anchor}>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item: (typeof options)[number]) => (
+            <ComboboxItem value={item} key={item.id}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  );
+}
+
 export function MultipleSizes() {
   const anchorSm = useComboboxAnchor();
   const anchorDefault = useComboboxAnchor();
