@@ -82,7 +82,11 @@ export const FieldCombobox = <TItem extends Item>(
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof items)[number]) => (
-              <ComboboxItem value={item} key={item.value}>
+              <ComboboxItem
+                value={item}
+                key={item.value}
+                disabled={item.disabled}
+              >
                 {item.label}
               </ComboboxItem>
             )}
