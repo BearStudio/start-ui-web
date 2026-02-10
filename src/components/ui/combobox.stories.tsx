@@ -119,7 +119,7 @@ export function Sizes() {
         defaultValue={options[0]}
         itemToStringLabel={(item) => item.label}
       >
-        <ComboboxInput placeholder="Select a fruit" />
+        <ComboboxInput placeholder="Select a fruit" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
