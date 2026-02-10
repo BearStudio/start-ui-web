@@ -49,7 +49,6 @@
     "@better-upload/client": "3.0.12",
     "@better-upload/server": "3.0.12",
     "@fontsource-variable/inter": "5.2.8",
-    "@headlessui/react": "2.2.9",
     "@hookform/resolvers": "5.2.2",
     "@orpc/client": "1.13.4",
     "@orpc/openapi": "1.13.4",
