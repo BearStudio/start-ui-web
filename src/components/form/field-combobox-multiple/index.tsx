@@ -1,5 +1,9 @@
-import type { ComponentProps, ReactNode } from 'react';
-import * as React from 'react';
+import {
+  type ComponentProps,
+  Fragment,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormField } from '@/components/form/form-field';
@@ -22,7 +26,7 @@ import {
 } from '@/components/ui/combobox';
 
 type Item = {
-  label: React.ReactNode;
+  label: string;
   value: ExplicitAny;
   disabled?: boolean;
 };
@@ -30,14 +34,15 @@ type Item = {
 export const FieldComboboxMultiple = <TItem extends Item>(
   props: FieldProps<
     {
-      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-      inputProps?: React.ComponentProps<typeof ComboboxChipsInput>;
+      containerProps?: ComponentProps<typeof FormFieldContainer>;
+      inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
       ComponentProps<typeof Combobox>,
-      'items' | 'value' | 'multiple' | 'defaultValue'
+      'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
     > & {
         items: TItem[];
         showClear?: boolean;
+        children?: (item: TItem) => ReactElement;
         emptyContent?: ReactNode;
       } & Pick<ComponentProps<typeof ComboboxChipsInput>, 'placeholder'>
   >
@@ -46,8 +51,8 @@ export const FieldComboboxMultiple = <TItem extends Item>(
   const {
     containerProps,
     inputProps,
-    children,
     items,
+    children,
     showClear = true,
     placeholder,
     emptyContent,
@@ -65,9 +70,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         multiple
         items={items}
         disabled={field.disabled}
-        value={
-          items?.filter((item) => field.value?.includes(item.value)) ?? null
-        }
+        value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
         isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
           item.value === selectedValue.value
         }
@@ -82,7 +85,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         <ComboboxChips ref={anchor}>
           <ComboboxValue>
             {(items: TItem[]) => (
-              <React.Fragment>
+              <Fragment>
                 {items?.map((item) => (
                   <ComboboxChip key={item.value}>{item.label}</ComboboxChip>
                 ))}
@@ -95,7 +98,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
                   {...inputProps}
                 />
                 {!!showClear && <ComboboxClear />}
-              </React.Fragment>
+              </Fragment>
             )}
           </ComboboxValue>
         </ComboboxChips>
@@ -103,17 +106,22 @@ export const FieldComboboxMultiple = <TItem extends Item>(
           <ComboboxEmpty>
             {emptyContent ?? t('components:combobox.noItemsFound')}
           </ComboboxEmpty>
-          <ComboboxList>
-            {(item: TItem) => (
-              <ComboboxItem
-                value={item}
-                key={item.value}
-                disabled={item.disabled}
-              >
-                {item.label}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
+
+          {children ? (
+            <ComboboxList>{children}</ComboboxList>
+          ) : (
+            <ComboboxList>
+              {(item: TItem) => (
+                <ComboboxItem
+                  value={item}
+                  key={item.value}
+                  disabled={item.disabled}
+                >
+                  {item.label}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          )}
         </ComboboxContent>
       </Combobox>
       <FormFieldError />

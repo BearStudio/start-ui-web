@@ -9,7 +9,9 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { ComboboxItem } from '@/components/ui/combobox';
 
 export default {
   title: 'Form/FieldComboboxMultiple',
@@ -146,6 +148,45 @@ export const Disabled = () => {
           />
         </FormField>
 
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
+  );
+};
+
+export const CustomOptions = () => {
+  const form = useForm(formOptions);
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="combobox-multiple"
+            name="bear"
+            placeholder="Placeholder"
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
+          >
+            {(item) => (
+              <ComboboxItem
+                value={item}
+                key={item.value}
+                disabled={item.disabled}
+              >
+                <Avatar size="sm" className="size-6">
+                  <AvatarFallback variant="boring" name={item.label} />
+                </Avatar>
+                <span className="pt-0.5">{item.label}</span>
+              </ComboboxItem>
+            )}
+          </FormFieldController>
+        </FormField>
         <Button type="submit">Submit</Button>
       </div>
     </Form>

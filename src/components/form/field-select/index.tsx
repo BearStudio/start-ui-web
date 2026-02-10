@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select';
 
 type Item = {
-  label: React.ReactNode;
+  label: string;
   value: ExplicitAny;
   disabled?: boolean;
 };
@@ -23,8 +23,8 @@ type Item = {
 export const FieldSelect = <TItem extends Item>(
   props: FieldProps<
     {
-      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-      inputProps?: React.ComponentProps<typeof SelectValue>;
+      containerProps?: ComponentProps<typeof FormFieldContainer>;
+      inputProps?: ComponentProps<typeof SelectValue>;
     } & Omit<ComponentProps<typeof Select>, 'items'> & {
         items: TItem[];
       } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
@@ -57,7 +57,7 @@ export const FieldSelect = <TItem extends Item>(
         <SelectContent>
           {children ?? (
             <SelectGroup>
-              {rest.items?.map((item) => (
+              {rest.items.map((item) => (
                 <SelectItem
                   value={item.value}
                   key={item.value}

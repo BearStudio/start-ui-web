@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormField } from '@/components/form/form-field';
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/combobox';
 
 type Item = {
-  label: React.ReactNode;
+  label: string;
   value: ExplicitAny;
   disabled?: boolean;
 };
@@ -24,15 +24,15 @@ type Item = {
 export const FieldCombobox = <TItem extends Item>(
   props: FieldProps<
     {
-      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-      inputProps?: React.ComponentProps<typeof ComboboxInput>;
+      containerProps?: ComponentProps<typeof FormFieldContainer>;
+      inputProps?: ComponentProps<typeof ComboboxInput>;
     } & Omit<
       ComponentProps<typeof Combobox>,
-      'items' | 'value' | 'multiple'
+      'items' | 'value' | 'multiple' | 'children'
     > & {
         items: TItem[];
-        showClear?: boolean;
         emptyContent?: ReactNode;
+        children?: (item: TItem) => ReactElement;
       } & Pick<
         ComponentProps<typeof ComboboxInput>,
         'placeholder' | 'showClear'
@@ -86,17 +86,21 @@ export const FieldCombobox = <TItem extends Item>(
           <ComboboxEmpty>
             {emptyContent ?? t('components:combobox.noItemsFound')}
           </ComboboxEmpty>
-          <ComboboxList>
-            {(item: (typeof items)[number]) => (
-              <ComboboxItem
-                value={item}
-                key={item.value}
-                disabled={item.disabled}
-              >
-                {item.label}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
+          {children ? (
+            <ComboboxList>{children}</ComboboxList>
+          ) : (
+            <ComboboxList>
+              {(item: TItem) => (
+                <ComboboxItem
+                  value={item}
+                  key={item.value}
+                  disabled={item.disabled}
+                >
+                  {item.label}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          )}
         </ComboboxContent>
       </Combobox>
       <FormFieldError />
