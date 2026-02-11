@@ -84,7 +84,7 @@ export const UsageWithPopoverRange = () => {
 
   return (
     <Popover>
-      <PopoverTrigger render={<DatePickerButton className="max-w-[300px]" />}>
+      <PopoverTrigger render={<DatePickerButton className="max-w-75" />}>
         {format()}
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
