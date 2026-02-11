@@ -1,4 +1,4 @@
-import { Combobox as ComboboxPrimitive } from '@base-ui/react';
+import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox';
 import { cva, VariantProps } from 'class-variance-authority';
 import { CheckIcon, ChevronDownIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
