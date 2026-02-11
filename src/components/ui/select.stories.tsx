@@ -39,7 +39,7 @@ const items = [
 
 export function Default() {
   return (
-    <Select>
+    <Select items={items}>
       <SelectTrigger>
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>

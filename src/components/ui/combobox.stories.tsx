@@ -48,11 +48,7 @@ export function Default() {
 
 export function Invalid() {
   return (
-    <Combobox
-      items={options}
-      defaultValue={options[0]}
-      itemToStringLabel={(item) => item.label}
-    >
+    <Combobox items={options} defaultValue={options[0]}>
       <ComboboxInput
         aria-invalid={true}
         placeholder="Select a fruit"
@@ -74,11 +70,7 @@ export function Invalid() {
 
 export function Disabled() {
   return (
-    <Combobox
-      items={options}
-      defaultValue={options[0]}
-      itemToStringLabel={(item) => item.label}
-    >
+    <Combobox items={options} defaultValue={options[0]}>
       <ComboboxInput disabled placeholder="Select a fruit" showClear />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -97,11 +89,7 @@ export function Disabled() {
 export function Sizes() {
   return (
     <div className="flex gap-4">
-      <Combobox
-        items={options}
-        defaultValue={options[0]}
-        itemToStringLabel={(item) => item.label}
-      >
+      <Combobox items={options} defaultValue={options[0]}>
         <ComboboxInput size="sm" placeholder="Select a fruit" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -114,11 +102,7 @@ export function Sizes() {
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      <Combobox
-        items={options}
-        defaultValue={options[0]}
-        itemToStringLabel={(item) => item.label}
-      >
+      <Combobox items={options} defaultValue={options[0]}>
         <ComboboxInput placeholder="Select a fruit" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -131,11 +115,7 @@ export function Sizes() {
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      <Combobox
-        items={options}
-        defaultValue={options[0]}
-        itemToStringLabel={(item) => item.label}
-      >
+      <Combobox items={options} defaultValue={options[0]}>
         <ComboboxInput size="lg" placeholder="Select a fruit" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
