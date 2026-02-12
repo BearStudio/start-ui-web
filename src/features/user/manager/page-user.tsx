@@ -187,6 +187,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                           size="icon-sm"
                           variant="ghost"
                           render={<span />}
+                          nativeButton={false}
                         >
                           <PencilLineIcon />
                           <span className="sr-only">

@@ -167,7 +167,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </ConfirmSignOut>
             <DropdownMenuSeparator />
-            <BuildInfoDrawer>
+            <BuildInfoDrawer nativeButtonTrigger={false}>
               <DropdownMenuItem
                 closeOnClick={false}
                 className="py-1 text-xs text-muted-foreground"

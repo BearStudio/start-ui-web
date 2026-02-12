@@ -20,10 +20,6 @@ export default defineConfig(({ mode }) => {
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
       strictPort: true,
     },
-    ssr: {
-      // base-vaul imports CSS directly which Node.js cannot handle during SSR
-      noExternal: ['base-vaul'],
-    },
     plugins: [
       devtools(),
       codeInspectorPlugin({

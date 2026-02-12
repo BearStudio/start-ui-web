@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -33,11 +33,7 @@ const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = ({
   ...props
-}: Omit<ComponentProps<typeof Dialog>, 'onOpenChange' | 'children'> &
-  // The types of the Drawer are not yet fully aligned with BaseUI API.
-  Pick<ComponentProps<typeof Drawer>, 'onOpenChange'> & {
-    children?: ReactNode;
-  }) =>
+}: Overwrite<ComponentProps<typeof Dialog>, ComponentProps<typeof Drawer>>) =>
   useIsMobile(BREAKPOINT) ? <Drawer {...props} /> : <Dialog {...props} />;
 
 export const ResponsiveDrawerTrigger = ({
@@ -80,9 +76,9 @@ export const ResponsiveDrawerContent = (
   props: ComponentProps<typeof DrawerContent | typeof DialogContent>
 ) =>
   useIsMobile(BREAKPOINT) ? (
-    <DrawerContent {...props} />
+    <DrawerContent {...(props as ComponentProps<typeof DrawerContent>)} />
   ) : (
-    <DialogContent {...props} />
+    <DialogContent {...(props as ComponentProps<typeof DialogContent>)} />
   );
 
 export const ResponsiveDrawerHeader = (
