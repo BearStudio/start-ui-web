@@ -73,8 +73,9 @@ export const ResponsiveDrawerOverlay = (
   );
 
 export const ResponsiveDrawerContent = (
-  props: ComponentProps<typeof DrawerContent | typeof DialogContent>
+  props: ComponentProps<typeof DialogContent | typeof DrawerContent>
 ) =>
+  // `className` and `render` types are not compatible
   useIsMobile(BREAKPOINT) ? (
     <DrawerContent {...(props as ComponentProps<typeof DrawerContent>)} />
   ) : (
