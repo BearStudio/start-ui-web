@@ -17,15 +17,9 @@ export default {
   title: 'Drawer',
 } satisfies Meta<typeof Drawer>;
 
-const DrawerDemo = ({
-  direction,
-}: {
-  direction?: 'down' | 'up' | 'left' | 'right';
-}) => (
-  <Drawer swipeDirection={direction}>
-    <DrawerTrigger render={<Button variant="secondary" />}>
-      Open {direction ?? 'default'}
-    </DrawerTrigger>
+export const Default = () => (
+  <Drawer>
+    <DrawerTrigger render={<Button variant="secondary" />}>Open</DrawerTrigger>
     <DrawerContent>
       <DrawerHeader>
         <DrawerTitle>Title</DrawerTitle>
@@ -39,13 +33,24 @@ const DrawerDemo = ({
   </Drawer>
 );
 
-export const Default = () => <DrawerDemo />;
-
 export const SwipeDirections = () => (
   <div className="flex flex-wrap gap-4">
-    <DrawerDemo direction="down" />
-    <DrawerDemo direction="up" />
-    <DrawerDemo direction="left" />
-    <DrawerDemo direction="right" />
+    {(['down', 'up', 'left', 'right'] as const).map((direction) => (
+      <Drawer key={direction} swipeDirection={direction}>
+        <DrawerTrigger render={<Button variant="secondary" />}>
+          Open {direction}
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Title</DrawerTitle>
+            <DrawerDescription>Description</DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody>Content</DrawerBody>
+          <DrawerFooter>
+            <DrawerClose render={<Button />}>Close</DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    ))}
   </div>
 );
