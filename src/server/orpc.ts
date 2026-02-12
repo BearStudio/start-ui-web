@@ -110,7 +110,7 @@ const base = os
     return await next();
   })
   // Prisma Error Handler
-  .use(async ({ next }) => {
+  .use(async ({ next, context }) => {
     try {
       return await next();
     } catch (error) {
@@ -118,50 +118,53 @@ const base = os
         throw error;
       }
 
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError ||
-        (error instanceof Error &&
-          error.name === 'PrismaClientKnownRequestError')
-      ) {
-        const prismaError = error as Prisma.PrismaClientKnownRequestError;
-        throw match(prismaError.code)
-          .with(
-            'P2002',
-            () =>
-              new ORPCError('CONFLICT', {
-                message: 'Unique constraint violation',
-                data: { target: prismaError.meta?.target },
-              })
-          )
-          .with(
-            'P2025',
-            () =>
-              new ORPCError('NOT_FOUND', {
-                message: 'Record not found',
-              })
-          )
-          .with(
-            'P2003',
-            () =>
-              new ORPCError('BAD_REQUEST', {
-                message: 'Foreign key constraint violation',
-                data: { field: prismaError.meta?.field_name },
-              })
-          )
-          .otherwise(
-            () =>
-              new ORPCError('INTERNAL_SERVER_ERROR', {
-                message: 'Database error',
-              })
-          );
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw match(error.code)
+          .with('P2002', () => {
+            context.logger.warn(
+              error.meta,
+              `Prisma Error: ${error.code} ${error.message}`
+            );
+            return new ORPCError('CONFLICT', {
+              message: 'Unique constraint violation',
+              data: { target: error.meta?.target },
+            });
+          })
+          .with('P2025', () => {
+            context.logger.warn(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('NOT_FOUND', {
+              message: 'Record not found',
+            });
+          })
+          .with('P2003', () => {
+            context.logger.error(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('BAD_REQUEST', {
+              message: 'Foreign key constraint violation',
+            });
+          })
+          .otherwise(() => {
+            context.logger.error(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('INTERNAL_SERVER_ERROR', {
+              message: 'Database error',
+            });
+          });
       }
 
-      if (
-        error instanceof Prisma.PrismaClientValidationError ||
-        (error instanceof Error && error.name === 'PrismaClientValidationError')
-      ) {
+      if (error instanceof Prisma.PrismaClientValidationError) {
+        context.logger.error(
+          `Prisma Client Validation Error: ${error.message}`
+        );
         throw new ORPCError('BAD_REQUEST', {
-          message: 'Validation error',
+          message: 'Database validation error',
         });
       }
 
