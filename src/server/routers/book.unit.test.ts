@@ -12,7 +12,6 @@ import {
   mockUserHasPermission,
 } from '@/server/routers/test-utils';
 
-// --- Mocks ---
 const now = new Date();
 
 const mockGenre = {
@@ -36,8 +35,6 @@ const mockBookFromDb = {
 };
 
 const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
-
-// --- Tests ---
 
 describe('book router', () => {
   describe('getAll', () => {
@@ -273,7 +270,7 @@ describe('book router', () => {
         'Unique constraint failed',
         {
           code: 'P2002',
-          clientVersion: '6.0.0',
+          clientVersion: '0.0.0',
           meta: { target: ['title', 'author'] },
         }
       );
@@ -353,6 +350,14 @@ describe('book router', () => {
   });
 
   describe('deleteById', () => {
+    it('should delete a book successfully', async () => {
+      mockDb.book.delete.mockResolvedValue(mockBookFromDb);
+
+      await expect(
+        call(bookRouter.deleteById, { id: 'book-1' })
+      ).resolves.toBeUndefined();
+    });
+
     it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
       mockDb.book.delete.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError('Record not found', {

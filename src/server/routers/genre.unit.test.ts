@@ -9,7 +9,6 @@ import {
   mockUserHasPermission,
 } from '@/server/routers/test-utils';
 
-// --- Mocks ---
 const now = new Date();
 
 const mockGenreFromDb = {
@@ -19,8 +18,6 @@ const mockGenreFromDb = {
   createdAt: now,
   updatedAt: now,
 };
-
-// --- Tests ---
 
 describe('genre router', () => {
   describe('getAll', () => {

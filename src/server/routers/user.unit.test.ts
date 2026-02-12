@@ -11,12 +11,6 @@ import {
 } from '@/server/routers/test-utils';
 import userRouter from '@/server/routers/user';
 
-// --- Auth API mocks ---
-// test-utils already mocks @/server/auth with getSession and userHasPermission.
-// The user router also calls removeUser, revokeUserSessions, and revokeUserSession.
-// Since vi.mock is hoisted and last-write-wins per module, we re-declare the full
-// mock here, forwarding getSession/userHasPermission to the shared test-utils fns.
-
 const { mockRemoveUser, mockRevokeUserSessions, mockRevokeUserSession } =
   vi.hoisted(() => ({
     mockRemoveUser: vi.fn(),
@@ -37,7 +31,6 @@ vi.mock('@/server/auth', () => ({
   },
 }));
 
-// --- Mocks ---
 const now = new Date();
 
 const mockUserFromDb = {
@@ -59,8 +52,6 @@ const mockSessionFromDb = {
   updatedAt: now,
   expiresAt: new Date(Date.now() + 86400000),
 };
-
-// --- Tests ---
 
 describe('user router', () => {
   describe('getAll', () => {
@@ -296,8 +287,6 @@ describe('user router', () => {
       mockDb.user.findUnique.mockResolvedValue({
         email: 'self@example.com',
       });
-      // The handler sets role to undefined when updating self,
-      // so the DB returns whatever role was already set
       const returnedUser = {
         ...mockUserFromDb,
         id: mockUser.id,
@@ -611,8 +600,6 @@ describe('user router', () => {
     });
 
     it('should prevent revoking own current session', async () => {
-      // mockSession from test-utils has id: 'session-1' but no token.
-      // The handler checks context.session.token, so we need to set it.
       mockGetSession.mockResolvedValue({
         user: mockUser,
         session: { ...mockSession, token: 'my-token' },

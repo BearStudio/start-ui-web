@@ -1,6 +1,5 @@
 import { call } from '@orpc/server';
 import { describe, expect, it, vi } from 'vitest';
-import '@/server/routers/test-utils';
 
 import configRouter from '@/server/routers/config';
 import {
@@ -16,8 +15,6 @@ vi.mock('@/env/client', () => ({
     VITE_IS_DEMO: false,
   },
 }));
-
-// --- Tests ---
 
 describe('config router', () => {
   describe('env', () => {

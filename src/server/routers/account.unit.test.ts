@@ -7,8 +7,6 @@ import {
   mockUserHasPermission,
 } from '@/server/routers/test-utils';
 
-// --- Tests ---
-
 describe('account router', () => {
   describe('submitOnboarding', () => {
     const onboardingInput = { name: 'Test User' };
