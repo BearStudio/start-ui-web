@@ -1,7 +1,6 @@
-import { ComponentProps, ReactElement, ReactNode } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { match } from 'ts-pattern';
 
-import { cloneAsChild } from '@/lib/clone-as-child';
 import { cn } from '@/lib/tailwind/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -13,8 +12,7 @@ export const ResponsiveIconButton = ({
   label,
   breakpoint,
   ...props
-}: Omit<ComponentProps<typeof Button>, 'size' | 'children'> & {
-  children: ReactElement<{ children?: ReactNode }>;
+}: Omit<ComponentProps<typeof Button>, 'size'> & {
   label: ReactNode;
   size?: 'xs' | 'sm' | 'default' | 'lg';
   breakpoint?: number;
@@ -30,15 +28,8 @@ export const ResponsiveIconButton = ({
 
   return (
     <Button size={buttonSize} {...props}>
-      {cloneAsChild({
-        children,
-        asChild: props.asChild,
-        render: (child) => (
-          <>
-            {child} <span className={cn(isMobile && 'sr-only')}>{label}</span>
-          </>
-        ),
-      })}
+      {children}
+      <span className={cn(isMobile && 'sr-only')}>{label}</span>
     </Button>
   );
 };

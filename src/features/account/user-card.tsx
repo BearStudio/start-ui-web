@@ -47,31 +47,19 @@ export const UserCard = () => {
       </CardHeader>
 
       <AccountCardRow label={t('account:userCard.name.label')}>
-        <div className="flex gap-1">
-          <p className="truncate underline-offset-4">
-            {session.data?.user.name || (
-              <span className="text-xs text-muted-foreground">--</span>
-            )}
-          </p>
-          <ChangeNameDrawer>
-            <button type="button" className="cursor-pointer">
-              <Button
-                asChild
-                variant="ghost"
-                size="icon-xs"
-                className="-my-1.5"
-              >
-                <span>
-                  <PenLineIcon />
-                  <span className="sr-only">
-                    {t('account:userCard.name.updateAction')}
-                  </span>
-                </span>
-              </Button>
-              <span className="absolute inset-0" />
-            </button>
-          </ChangeNameDrawer>
-        </div>
+        <ChangeNameDrawer>
+          <Button variant="link" size="sm" className="-my-1.5">
+            <span className="truncate">
+              {session.data?.user.name || (
+                <span className="text-xs text-muted-foreground">--</span>
+              )}
+            </span>
+            <PenLineIcon className="size-3" />
+            <span className="sr-only">
+              {t('account:userCard.name.updateAction')}
+            </span>
+          </Button>
+        </ChangeNameDrawer>
       </AccountCardRow>
       <AccountCardRow label={t('account:userCard.email.label')}>
         <p className="flex-1 truncate underline-offset-4">

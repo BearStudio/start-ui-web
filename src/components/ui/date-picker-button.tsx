@@ -18,7 +18,7 @@ export const DatePickerButton = ({
     <Button
       variant="secondary"
       className={cn(
-        'w-full max-w-[240px] justify-start text-left font-normal',
+        'w-full max-w-60 justify-start text-left font-normal',
         !children && 'text-muted-foreground',
         className
       )}

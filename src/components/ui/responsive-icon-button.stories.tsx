@@ -56,12 +56,14 @@ export function Variants() {
   );
 }
 
-export function AsChild() {
+export function Render() {
   return (
-    <ResponsiveIconButton label="Add" asChild>
-      <a href="/">
-        <PlusIcon />
-      </a>
+    <ResponsiveIconButton
+      label="Add"
+      render={<a href="/" />}
+      nativeButton={false}
+    >
+      <PlusIcon />
     </ResponsiveIconButton>
   );
 }

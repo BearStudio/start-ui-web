@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Meta } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -10,55 +9,50 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { SelectGroup, SelectItem } from '@/components/ui/select';
 
 export default {
   title: 'Form/FieldSelect',
-} satisfies Meta<typeof Select>;
+};
 
 const zFormSchema = () =>
   z.object({
-    bear: z.enum(
-      [
-        'bearstrong',
-        'pawdrin',
-        'grizzlyrin',
-        'jemibear',
-        'ridepaw',
-        'michaelpawanderson',
-      ],
-      { error: 'Required' }
-    ),
+    bear: z.enum(['1', '2', '3', '4', '5', '6'], { error: 'Required' }),
   });
 
 const options = [
   {
-    id: 'bearstrong',
-    label: 'Bearstrong',
+    id: '1',
+    name: 'Bearstrong',
   },
   {
-    id: 'pawdrin',
-    label: 'Buzz Pawdrin',
+    id: '2',
+    name: 'Buzz Pawdrin',
   },
   {
-    id: 'grizzlyrin',
-    label: 'Yuri Grizzlyrin',
+    id: '3',
+    name: 'Yuri Grizzlyrin',
   },
   {
-    id: 'jemibear',
-    label: 'Mae Jemibear',
+    id: '4',
+    name: 'Mae Jemibear',
     disabled: true,
   },
   {
-    id: 'ridepaw',
-    label: 'Sally Ridepaw',
+    id: '5',
+    name: 'Sally Ridepaw',
   },
   {
-    id: 'michaelpawanderson',
-    label: 'Michael Paw Anderson',
+    id: '6',
+    name: 'Michael Paw Anderson',
   },
-] as const;
+] satisfies {
+  id: string;
+  name: string;
+  disabled?: boolean;
+}[];
 
 const formOptions = {
   mode: 'onBlur',
@@ -78,8 +72,53 @@ export const Default = () => {
             type="select"
             name="bear"
             placeholder="Placeholder"
-            options={options}
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
           />
+        </FormField>
+        <Button type="submit">Submit</Button>
+      </div>
+    </Form>
+  );
+};
+
+export const CustomOptions = () => {
+  const form = useForm(formOptions);
+
+  return (
+    <Form {...form} onSubmit={onSubmit}>
+      <div className="flex flex-col gap-4">
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            control={form.control}
+            type="select"
+            name="bear"
+            placeholder="Placeholder"
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
+          >
+            <SelectGroup>
+              {options.map((item) => (
+                <SelectItem
+                  value={item.id}
+                  key={item.id}
+                  disabled={item.disabled}
+                >
+                  <Avatar size="sm" className="size-6">
+                    <AvatarFallback variant="boring" name={item.name} />
+                  </Avatar>
+                  <span className="pt-0.5">{item.name}</span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </FormFieldController>
         </FormField>
         <Button type="submit">Submit</Button>
       </div>
@@ -91,7 +130,7 @@ export const DefaultValue = () => {
   const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
     ...formOptions,
     defaultValues: {
-      bear: 'pawdrin',
+      bear: '1',
     },
   });
 
@@ -105,7 +144,11 @@ export const DefaultValue = () => {
             type="select"
             name="bear"
             placeholder="Placeholder"
-            options={options}
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
           />
         </FormField>
 
@@ -119,7 +162,7 @@ export const Disabled = () => {
   const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
     ...formOptions,
     defaultValues: {
-      bear: 'michaelpawanderson',
+      bear: '1',
     },
   });
 
@@ -134,36 +177,11 @@ export const Disabled = () => {
             name="bear"
             placeholder="Placeholder"
             disabled
-            options={options}
-          />
-        </FormField>
-
-        <Button type="submit">Submit</Button>
-      </div>
-    </Form>
-  );
-};
-
-export const ReadOnly = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
-    ...formOptions,
-    defaultValues: {
-      bear: 'michaelpawanderson',
-    },
-  });
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            type="select"
-            name="bear"
-            placeholder="Placeholder"
-            readOnly
-            options={options}
+            items={options.map((item) => ({
+              value: item.id,
+              label: item.name,
+              disabled: item.disabled,
+            }))}
           />
         </FormField>
 

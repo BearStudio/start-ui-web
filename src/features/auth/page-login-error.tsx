@@ -1,10 +1,9 @@
-import { Link } from '@tanstack/react-router';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { ButtonLink } from '@/components/ui/button-link';
 
 import { useMascot } from '@/features/auth/mascot';
 
@@ -59,15 +58,14 @@ export default function PageLoginError({
 }
 
 const Wrapper = ({ children }: { children?: ReactNode }) => {
+  const { t } = useTranslation(['auth']);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {children}
-      <Button asChild variant="link">
-        <Link to="/login">
-          <ArrowLeftIcon />
-          Back to login
-        </Link>
-      </Button>
+      <ButtonLink variant="link" to="/login">
+        <ArrowLeftIcon />
+        {t('auth:pageLoginError.backToLogin')}
+      </ButtonLink>
     </div>
   );
 };

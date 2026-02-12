@@ -63,12 +63,14 @@
     "label": "Rudi nyuma"
   },
   "select": {
-    "placeholder": "Chagua...",
-    "noResultsFound": "Hakuna matokeo yaliyopatikana",
-    "create": "Unda \"{{searchTerm}}\""
+    "placeholder": "Chagua..."
   },
   "preventNavigation": {
     "confirmLabel": "Je, una uhakika unataka kuondoka?"
+  },
+  "combobox": {
+    "placeholder": "Chagua...",
+    "noItemsFound": "Hakuna vitu vilivyopatikana."
   },
   "errorBoundary": {
     "title": "Hitilafu Isiyojulikana",

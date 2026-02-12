@@ -183,12 +183,14 @@ export const PageUser = (props: { params: { id: string } }) => {
                         params={props.params}
                         className="-m-2 self-start"
                       >
-                        <Button size="icon-sm" variant="ghost" asChild>
-                          <span>
-                            <PencilLineIcon />
-                            <span className="sr-only">
-                              {t('user:manager.detail.editUser')}
-                            </span>
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          render={<span />}
+                        >
+                          <PencilLineIcon />
+                          <span className="sr-only">
+                            {t('user:manager.detail.editUser')}
                           </span>
                         </Button>
                         <span className="absolute inset-0" />

@@ -39,10 +39,10 @@ export const FormUser = (props: { userId?: string }) => {
           type="select"
           control={form.control}
           name="role"
-          readOnly={isCurrentUser}
-          options={rolesNames.map((role) => ({
+          disabled={isCurrentUser}
+          items={rolesNames.map((role) => ({
+            value: role,
             label: role,
-            id: role,
           }))}
         />
         {isCurrentUser && (

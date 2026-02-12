@@ -35,10 +35,10 @@ export const Sizes = () => {
   );
 };
 
-export const AsChild = () => {
+export const Render = () => {
   return (
-    <Button asChild>
-      <a href="#">Anchor as child</a>
+    <Button render={<a href="#" />} nativeButton={false}>
+      Anchor as child
     </Button>
   );
 };
@@ -100,7 +100,6 @@ export const FixedWidth = () => {
       </Button>
       <Button className="w-32">
         <span className="flex-1 truncate text-left">Button</span>
-
         <MailIcon />
       </Button>
       <Button className="w-32">

@@ -63,12 +63,14 @@
     "label": "Retour"
   },
   "select": {
-    "placeholder": "Sélectionner...",
-    "noResultsFound": "Aucun résultat trouvé",
-    "create": "Créer \"{{searchTerm}}\""
+    "placeholder": "Sélectionner..."
   },
   "preventNavigation": {
     "confirmLabel": "Êtes-vous sûr de vouloir quitter ?"
+  },
+  "combobox": {
+    "placeholder": "Sélectionner...",
+    "noItemsFound": "Aucun élément trouvé."
   },
   "errorBoundary": {
     "title": "Erreur inconnue",

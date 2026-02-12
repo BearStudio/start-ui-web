@@ -43,13 +43,11 @@ const SearchButtonComponent = ({
         setOpen(o);
       }}
     >
-      <DrawerTrigger asChild>
-        <Button size="icon" variant="ghost" {...props}>
-          {loading ? <Spinner /> : <SearchIcon />}
-          <span className="sr-only">
-            {label || t('components:searchButton.label')}
-          </span>
-        </Button>
+      <DrawerTrigger render={<Button size="icon" variant="ghost" {...props} />}>
+        {loading ? <Spinner /> : <SearchIcon />}
+        <span className="sr-only">
+          {label || t('components:searchButton.label')}
+        </span>
       </DrawerTrigger>
       <DrawerContent className="pt-safe-top">
         <DrawerHeader className="sr-only">

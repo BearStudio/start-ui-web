@@ -1,18 +1,36 @@
+import type { ComponentProps } from 'react';
+
 import { useFormField } from '@/components/form/form-field';
 import { FormFieldContainer } from '@/components/form/form-field-container';
 import { useFormFieldController } from '@/components/form/form-field-controller/context';
 import { FormFieldError } from '@/components/form/form-field-error';
-import { FieldProps } from '@/components/form/types';
-import { Select } from '@/components/ui/select';
+import type { FieldProps } from '@/components/form/types';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-export const FieldSelect = (
+type Item = {
+  label: string;
+  value: ExplicitAny;
+  disabled?: boolean;
+};
+
+export const FieldSelect = <TItem extends Item>(
   props: FieldProps<
     {
-      containerProps?: React.ComponentProps<typeof FormFieldContainer>;
-    } & React.ComponentProps<typeof Select>
+      containerProps?: ComponentProps<typeof FormFieldContainer>;
+      inputProps?: ComponentProps<typeof SelectValue>;
+    } & Omit<ComponentProps<typeof Select>, 'items'> & {
+        items: TItem[];
+      } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
   >
 ) => {
-  const { containerProps, options, ...rest } = props;
+  const { containerProps, inputProps, children, placeholder, ...rest } = props;
 
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
@@ -20,27 +38,38 @@ export const FieldSelect = (
   return (
     <FormFieldContainer {...containerProps}>
       <Select
-        invalid={fieldState.invalid}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
-        {...field}
-        options={options}
-        value={options.find((option) => option.id === field.value) ?? null}
-        onChange={(e) => {
-          field.onChange(e ? e.id : null);
-          rest.onChange?.(e);
+        inputRef={field.ref}
+        disabled={field.disabled}
+        value={field.value ?? null}
+        onValueChange={(value, event) => {
+          field.onChange(value, event);
+          rest.onValueChange?.(value, event);
         }}
-        inputProps={{
-          id: ctx.id,
-          onBlur: (e) => {
-            field.onBlur();
-            rest.inputProps?.onBlur?.(e);
-          },
-          ...rest.inputProps,
-        }}
-      />
-
+      >
+        <SelectTrigger
+          aria-invalid={fieldState.invalid ? true : undefined}
+          aria-describedby={ctx.describedBy(fieldState.invalid)}
+          id={ctx.id}
+        >
+          <SelectValue {...inputProps} placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {children ?? (
+            <SelectGroup>
+              {rest.items.map((item) => (
+                <SelectItem
+                  value={item.value}
+                  key={item.value}
+                  disabled={item.disabled}
+                >
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          )}
+        </SelectContent>
+      </Select>
       <FormFieldError />
     </FormFieldContainer>
   );
