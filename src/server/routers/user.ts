@@ -145,31 +145,17 @@ export default {
       }
 
       context.logger.info('Update user');
-      try {
-        return await context.db.user.update({
-          where: { id: input.id },
-          data: {
-            name: input.name ?? '',
-            // Prevent to change role of the connected user
-            role: context.user.id === input.id ? undefined : input.role,
-            email: input.email,
-            // Set email as verified if admin changed the email
-            emailVerified: currentUser.email !== input.email ? true : undefined,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
-        }
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
+      return await context.db.user.update({
+        where: { id: input.id },
+        data: {
+          name: input.name ?? '',
+          // Prevent to change role of the connected user
+          role: context.user.id === input.id ? undefined : input.role,
+          email: input.email,
+          // Set email as verified if admin changed the email
+          emailVerified: currentUser.email !== input.email ? true : undefined,
+        },
+      });
     }),
 
   create: protectedProcedure({
@@ -192,28 +178,14 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Create user');
-      try {
-        return await context.db.user.create({
-          data: {
-            email: input.email,
-            emailVerified: true,
-            name: input.name ?? '',
-            role: input.role ?? 'user',
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
-        }
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
+      return await context.db.user.create({
+        data: {
+          email: input.email,
+          emailVerified: true,
+          name: input.name ?? '',
+          role: input.role ?? 'user',
+        },
+      });
     }),
 
   deleteById: protectedProcedure({

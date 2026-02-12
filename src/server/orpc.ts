@@ -3,11 +3,13 @@ import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
+import { match } from 'ts-pattern';
 
 import { envClient } from '@/env/client';
 import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
+import { Prisma } from '@/server/db/generated/client';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
@@ -106,6 +108,70 @@ const base = os
       });
     }
     return await next();
+  })
+  // Prisma Error Handler
+  .use(async ({ next, context }) => {
+    try {
+      return await next();
+    } catch (error) {
+      if (error instanceof ORPCError) {
+        throw error;
+      }
+
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw match(error.code)
+          .with('P2002', () => {
+            context.logger.warn(
+              error.meta,
+              `Prisma Error: ${error.code} ${error.message}`
+            );
+            return new ORPCError('CONFLICT', {
+              message: 'Unique constraint violation',
+              data: { target: error.meta?.target },
+            });
+          })
+          .with('P2025', () => {
+            context.logger.warn(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('NOT_FOUND', {
+              message: 'Record not found',
+            });
+          })
+          .with('P2003', () => {
+            context.logger.error(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('BAD_REQUEST', {
+              message: 'Foreign key constraint violation',
+            });
+          })
+          .otherwise(() => {
+            context.logger.error(
+              error.meta,
+              `Prisma Error ${error.code}: ${error.message}`
+            );
+            return new ORPCError('INTERNAL_SERVER_ERROR', {
+              message: 'Database error',
+            });
+          });
+      }
+
+      if (error instanceof Prisma.PrismaClientValidationError) {
+        context.logger.error(
+          `Prisma Client Validation Error: ${error.message}`
+        );
+        throw new ORPCError('BAD_REQUEST', {
+          message: 'Database validation error',
+        });
+      }
+
+      throw new ORPCError('INTERNAL_SERVER_ERROR', {
+        message: 'Unhandled error',
+      });
+    }
   });
 
 export const publicProcedure = () => base;

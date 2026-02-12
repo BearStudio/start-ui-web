@@ -128,29 +128,15 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
-      try {
-        return await context.db.book.create({
-          data: {
-            title: input.title,
-            author: input.author,
-            genreId: input.genreId ?? undefined,
-            publisher: input.publisher,
-            coverId: input.coverId,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
-        }
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
+      return await context.db.book.create({
+        data: {
+          title: input.title,
+          author: input.author,
+          genreId: input.genreId ?? undefined,
+          publisher: input.publisher,
+          coverId: input.coverId,
+        },
+      });
     }),
 
   updateById: protectedProcedure({
@@ -167,30 +153,16 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
-      try {
-        return await context.db.book.update({
-          where: { id: input.id },
-          data: {
-            title: input.title,
-            author: input.author,
-            genreId: input.genreId,
-            publisher: input.publisher ?? null,
-            coverId: input.coverId ?? null,
-          },
-        });
-      } catch (error: unknown) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === 'P2002'
-        ) {
-          throw new ORPCError('CONFLICT', {
-            data: {
-              target: error.meta?.target,
-            },
-          });
-        }
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
+      return await context.db.book.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          author: input.author,
+          genreId: input.genreId,
+          publisher: input.publisher ?? null,
+          coverId: input.coverId ?? null,
+        },
+      });
     }),
 
   deleteById: protectedProcedure({
@@ -211,12 +183,8 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Delete book');
-      try {
-        await context.db.book.delete({
-          where: { id: input.id },
-        });
-      } catch {
-        throw new ORPCError('INTERNAL_SERVER_ERROR');
-      }
+      await context.db.book.delete({
+        where: { id: input.id },
+      });
     }),
 };
