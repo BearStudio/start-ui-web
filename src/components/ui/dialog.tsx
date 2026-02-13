@@ -88,7 +88,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('flex flex-col gap-1 text-center sm:text-left', className)}
+      className={cn('flex flex-col gap-1 text-left', className)}
       {...props}
     />
   );
