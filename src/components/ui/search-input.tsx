@@ -64,10 +64,6 @@ export const SearchInput = ({
     return () => clearTimeout(timeoutId);
   }, [search, delay]);
 
-  useEffect(() => {
-    internalRef.current?.focus();
-  });
-
   const externalValueHasChanged = useValueHasChanged(value);
   if (externalValueHasChanged && value !== search) {
     setSearch(value ?? '');

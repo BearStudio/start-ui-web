@@ -61,6 +61,7 @@ const SearchButtonComponent = ({
             delay={0}
             onChange={setInternalValue}
             size="lg"
+            autoFocus // Force iOS to open the keyboard
             {...inputProps}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
