@@ -42,16 +42,16 @@ function DrawerOverlay({
 function DrawerContent({
   className,
   children,
-  forceOverlay,
+  forceRenderOverlay,
   keepMounted,
   ...props
 }: DrawerPrimitive.Popup.Props & {
-  forceOverlay?: boolean;
+  forceRenderOverlay?: boolean;
   keepMounted?: boolean;
 }) {
   return (
     <DrawerPortal data-slot="drawer-portal" keepMounted={keepMounted}>
-      <DrawerOverlay forceRender={forceOverlay} />
+      <DrawerOverlay forceRender={forceRenderOverlay} />
       <DrawerPrimitive.Viewport
         data-slot="drawer-viewport"
         className="fixed inset-0 z-50"

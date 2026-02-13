@@ -72,14 +72,23 @@ export const ResponsiveDrawerOverlay = (
     <DialogOverlay {...props} />
   );
 
-export const ResponsiveDrawerContent = (
-  props: ComponentProps<typeof DialogContent | typeof DrawerContent>
-) =>
+export const ResponsiveDrawerContent = ({
+  hideCloseButton,
+  ...props
+}: Omit<
+  ComponentProps<typeof DialogContent | typeof DrawerContent>,
+  'render' | 'className'
+> & {
   // `className` and `render` types are not compatible
+  render?: React.ReactElement;
+  className?: string;
+  // Only for DialogContent
+  hideCloseButton?: boolean;
+}) =>
   useIsMobile(BREAKPOINT) ? (
-    <DrawerContent {...(props as ComponentProps<typeof DrawerContent>)} />
+    <DrawerContent {...props} />
   ) : (
-    <DialogContent {...(props as ComponentProps<typeof DialogContent>)} />
+    <DialogContent hideCloseButton={hideCloseButton} {...props} />
   );
 
 export const ResponsiveDrawerHeader = (
