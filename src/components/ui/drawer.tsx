@@ -83,6 +83,7 @@ function DrawerContent({
             'data-[swipe-direction=right]:data-ending-style:transform-[translateX(100%)]',
             className
           )}
+          initialFocus
           {...props}
         >
           <div className="mx-auto mt-4 hidden h-1.5 w-25 shrink-0 rounded-full bg-muted group-data-[swipe-direction=down]/drawer-content:block" />
