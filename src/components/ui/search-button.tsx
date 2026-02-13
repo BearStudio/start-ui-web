@@ -35,8 +35,7 @@ const SearchButtonComponent = ({
 
   return (
     <Drawer
-      direction="top"
-      autoFocus
+      swipeDirection="up"
       open={open}
       onOpenChange={(o) => {
         onChange?.(internalValue ?? '');
@@ -62,6 +61,7 @@ const SearchButtonComponent = ({
             delay={0}
             onChange={setInternalValue}
             size="lg"
+            autoFocus // Force iOS to open the keyboard
             {...inputProps}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {

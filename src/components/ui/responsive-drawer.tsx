@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -33,11 +33,7 @@ const BREAKPOINT = 640;
 
 export const ResponsiveDrawer = ({
   ...props
-}: Omit<ComponentProps<typeof Dialog>, 'onOpenChange' | 'children'> &
-  // The types of the Drawer are not yet fully aligned with BaseUI API.
-  Pick<ComponentProps<typeof Drawer>, 'onOpenChange'> & {
-    children?: ReactNode;
-  }) =>
+}: Overwrite<ComponentProps<typeof Dialog>, ComponentProps<typeof Drawer>>) =>
   useIsMobile(BREAKPOINT) ? <Drawer {...props} /> : <Dialog {...props} />;
 
 export const ResponsiveDrawerTrigger = ({
@@ -76,13 +72,23 @@ export const ResponsiveDrawerOverlay = (
     <DialogOverlay {...props} />
   );
 
-export const ResponsiveDrawerContent = (
-  props: ComponentProps<typeof DrawerContent | typeof DialogContent>
-) =>
+export const ResponsiveDrawerContent = ({
+  hideCloseButton,
+  ...props
+}: Omit<
+  ComponentProps<typeof DialogContent | typeof DrawerContent>,
+  'render' | 'className'
+> & {
+  // `className` and `render` types are not compatible
+  render?: React.ReactElement;
+  className?: string;
+  // Only for DialogContent
+  hideCloseButton?: boolean;
+}) =>
   useIsMobile(BREAKPOINT) ? (
     <DrawerContent {...props} />
   ) : (
-    <DialogContent {...props} />
+    <DialogContent hideCloseButton={hideCloseButton} {...props} />
   );
 
 export const ResponsiveDrawerHeader = (

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 
 const inputGroupVariants = cva(
   cn(
-    'group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30',
+    'group/input-group relative flex w-full items-center rounded-md border border-input text-base shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30',
     'min-w-0',
 
     // Input

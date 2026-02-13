@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { mergeRefs } from 'react-merge-refs';
 
 import { cn } from '@/lib/tailwind/utils';
 import { useValueHasChanged } from '@/hooks/use-value-has-changed';
@@ -47,7 +48,7 @@ export const SearchInput = ({
 }: SearchInputProps & { ref?: React.RefObject<HTMLInputElement | null> }) => {
   const { t } = useTranslation(['components']);
   const internalRef = useRef<HTMLInputElement>(null);
-  const inputRef = ref ?? internalRef;
+  const inputRef = mergeRefs([ref, internalRef]);
 
   const [search, setSearch] = useState<string>(value ?? defaultValue ?? '');
 
@@ -74,7 +75,7 @@ export const SearchInput = ({
 
   const handleClear = () => {
     setSearch('');
-    inputRef.current?.focus();
+    internalRef.current?.focus();
   };
 
   const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {

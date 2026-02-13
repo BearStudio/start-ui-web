@@ -43,23 +43,24 @@ function DialogContent({
   className,
   children,
   hideCloseButton,
-  forceOverlay,
+  forceRenderOverlay,
   ...props
 }: DialogPrimitive.Popup.Props & {
   hideCloseButton?: boolean;
-  forceOverlay?: boolean;
+  forceRenderOverlay?: boolean;
 }) {
   const { t } = useTranslation(['components']);
 
   return (
     <DialogPortal>
-      <DialogOverlay forceRender={forceOverlay} />
+      <DialogOverlay forceRender={forceRenderOverlay} />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
           'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-6 text-sm ring-1 ring-foreground/10 duration-100 outline-none data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 sm:max-w-md',
           className
         )}
+        initialFocus
         {...props}
       >
         {children}
@@ -87,7 +88,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('flex flex-col gap-1 text-center sm:text-left', className)}
+      className={cn('flex flex-col gap-1 text-left', className)}
       {...props}
     />
   );

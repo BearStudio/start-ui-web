@@ -65,6 +65,7 @@ function SheetContent({
             'inset-x-0 bottom-0 h-auto border-t data-closed:slide-out-to-bottom data-open:slide-in-from-bottom',
           className
         )}
+        initialFocus
         {...props}
       >
         {children}

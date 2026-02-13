@@ -19,14 +19,25 @@ import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 
 import buildInfo from './build-info.gen.json';
 
-export const BuildInfoDrawer = ({ children }: { children?: ReactElement }) => {
+export const BuildInfoDrawer = ({
+  children,
+  nativeButtonTrigger = true,
+}: {
+  children?: ReactElement;
+  nativeButtonTrigger?: boolean;
+}) => {
   const { t } = useTranslation(['buildInfo']);
   const { copyToClipboard, isCopied } = useClipboard();
 
   return (
     <ResponsiveDrawer>
-      {children && <ResponsiveDrawerTrigger render={children} />}
-      <ResponsiveDrawerContent forceOverlay>
+      {children && (
+        <ResponsiveDrawerTrigger
+          nativeButton={nativeButtonTrigger}
+          render={children}
+        />
+      )}
+      <ResponsiveDrawerContent forceRenderOverlay>
         <ResponsiveDrawerHeader className="gap-2 text-center">
           <ResponsiveDrawerTitle>
             <BuildInfoVersion />
