@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
 import { zUser } from '@/features/user/schema';
-import { protectedProcedure } from '@/server/orpc';
+import { tryQuery } from '@/server/db';
+import { protectedProcedure, throwPrismaError } from '@/server/orpc';
 
 const tags = ['account'];
 
@@ -19,13 +20,16 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db.user.update({
-        where: { id: context.user.id },
-        data: {
-          ...input,
-          onboardedAt: new Date(),
-        },
-      });
+      const result = await tryQuery(
+        context.db.user.update({
+          where: { id: context.user.id },
+          data: {
+            ...input,
+            onboardedAt: new Date(),
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
     }),
 
   updateInfo: protectedProcedure({
@@ -44,11 +48,14 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db.user.update({
-        where: { id: context.user.id },
-        data: {
-          name: input.name ?? '',
-        },
-      });
+      const result = await tryQuery(
+        context.db.user.update({
+          where: { id: context.user.id },
+          data: {
+            name: input.name ?? '',
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
     }),
 };

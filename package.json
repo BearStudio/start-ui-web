@@ -70,6 +70,7 @@
     "@uidotdev/usehooks": "2.4.1",
     "base-vaul": "1.2.1",
     "better-auth": "1.4.17",
+    "better-result": "^2.7.0",
     "boring-avatars": "2.0.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
