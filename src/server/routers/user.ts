@@ -4,8 +4,9 @@ import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
+import { tryQuery } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
-import { protectedProcedure } from '@/server/orpc';
+import { protectedProcedure, throwPrismaError } from '@/server/orpc';
 
 const tags = ['users'];
 
@@ -55,20 +56,29 @@ export default {
       } satisfies Prisma.UserWhereInput;
 
       context.logger.info('Getting users from database');
-      const [total, items] = await Promise.all([
-        context.db.user.count({
-          where,
-        }),
-        context.db.user.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
-        }),
+      const [totalResult, itemsResult] = await Promise.all([
+        tryQuery(
+          context.db.user.count({
+            where,
+          })
+        ),
+        tryQuery(
+          context.db.user.findMany({
+            // Get an extra item at the end which we'll use as next cursor
+            take: input.limit + 1,
+            cursor: input.cursor ? { id: input.cursor } : undefined,
+            orderBy: {
+              name: 'asc',
+            },
+            where,
+          })
+        ),
       ]);
+      if (totalResult.isErr()) throwPrismaError(totalResult.error);
+      if (itemsResult.isErr()) throwPrismaError(itemsResult.error);
+
+      const total = totalResult.value;
+      const items = itemsResult.value;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
@@ -101,16 +111,19 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting user');
-      const user = await context.db.user.findUnique({
-        where: { id: input.id },
-      });
+      const result = await tryQuery(
+        context.db.user.findUnique({
+          where: { id: input.id },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
 
-      if (!user) {
+      if (!result.value) {
         context.logger.warn('Unable to find user with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return user;
+      return result.value;
     }),
 
   updateById: protectedProcedure({
@@ -134,28 +147,36 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting current user email');
-      const currentUser = await context.db.user.findUnique({
-        where: { id: input.id },
-        select: { email: true },
-      });
+      const currentUserResult = await tryQuery(
+        context.db.user.findUnique({
+          where: { id: input.id },
+          select: { email: true },
+        })
+      );
+      if (currentUserResult.isErr()) throwPrismaError(currentUserResult.error);
 
-      if (!currentUser) {
+      if (!currentUserResult.value) {
         context.logger.warn('Unable to find user with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
       context.logger.info('Update user');
-      return await context.db.user.update({
-        where: { id: input.id },
-        data: {
-          name: input.name ?? '',
-          // Prevent to change role of the connected user
-          role: context.user.id === input.id ? undefined : input.role,
-          email: input.email,
-          // Set email as verified if admin changed the email
-          emailVerified: currentUser.email !== input.email ? true : undefined,
-        },
-      });
+      const result = await tryQuery(
+        context.db.user.update({
+          where: { id: input.id },
+          data: {
+            name: input.name ?? '',
+            // Prevent to change role of the connected user
+            role: context.user.id === input.id ? undefined : input.role,
+            email: input.email,
+            // Set email as verified if admin changed the email
+            emailVerified:
+              currentUserResult.value.email !== input.email ? true : undefined,
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
+      return result.value;
     }),
 
   create: protectedProcedure({
@@ -178,14 +199,18 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Create user');
-      return await context.db.user.create({
-        data: {
-          email: input.email,
-          emailVerified: true,
-          name: input.name ?? '',
-          role: input.role ?? 'user',
-        },
-      });
+      const result = await tryQuery(
+        context.db.user.create({
+          data: {
+            email: input.email,
+            emailVerified: true,
+            name: input.name ?? '',
+            role: input.role ?? 'user',
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
+      return result.value;
     }),
 
   deleteById: protectedProcedure({
@@ -256,20 +281,29 @@ export default {
       } satisfies Prisma.SessionWhereInput;
 
       context.logger.info('Getting user sessions from database');
-      const [total, items] = await Promise.all([
-        context.db.session.count({
-          where,
-        }),
-        context.db.session.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            createdAt: 'desc',
-          },
-          where,
-        }),
+      const [totalResult, itemsResult] = await Promise.all([
+        tryQuery(
+          context.db.session.count({
+            where,
+          })
+        ),
+        tryQuery(
+          context.db.session.findMany({
+            // Get an extra item at the end which we'll use as next cursor
+            take: input.limit + 1,
+            cursor: input.cursor ? { id: input.cursor } : undefined,
+            orderBy: {
+              createdAt: 'desc',
+            },
+            where,
+          })
+        ),
       ]);
+      if (totalResult.isErr()) throwPrismaError(totalResult.error);
+      if (itemsResult.isErr()) throwPrismaError(itemsResult.error);
+
+      const total = totalResult.value;
+      const items = itemsResult.value;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {

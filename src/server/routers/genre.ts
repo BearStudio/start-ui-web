@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
+import { tryQuery } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
-import { protectedProcedure } from '@/server/orpc';
+import { protectedProcedure, throwPrismaError } from '@/server/orpc';
 
 const tags = ['genres'];
 
@@ -43,20 +44,29 @@ export default {
         },
       } satisfies Prisma.GenreWhereInput;
 
-      const [total, items] = await Promise.all([
-        context.db.genre.count({
-          where,
-        }),
-        context.db.genre.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
-        }),
+      const [totalResult, itemsResult] = await Promise.all([
+        tryQuery(
+          context.db.genre.count({
+            where,
+          })
+        ),
+        tryQuery(
+          context.db.genre.findMany({
+            // Get an extra item at the end which we'll use as next cursor
+            take: input.limit + 1,
+            cursor: input.cursor ? { id: input.cursor } : undefined,
+            orderBy: {
+              name: 'asc',
+            },
+            where,
+          })
+        ),
       ]);
+      if (totalResult.isErr()) throwPrismaError(totalResult.error);
+      if (itemsResult.isErr()) throwPrismaError(itemsResult.error);
+
+      const total = totalResult.value;
+      const items = itemsResult.value;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {

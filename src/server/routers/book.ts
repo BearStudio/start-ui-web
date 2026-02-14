@@ -2,8 +2,9 @@ import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
+import { tryQuery } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
-import { protectedProcedure } from '@/server/orpc';
+import { protectedProcedure, throwPrismaError } from '@/server/orpc';
 
 const tags = ['books'];
 
@@ -54,21 +55,31 @@ export default {
         ],
       } satisfies Prisma.BookWhereInput;
 
-      const [total, items] = await Promise.all([
-        context.db.book.count({
-          where,
-        }),
-        context.db.book.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            title: 'asc',
-          },
-          where,
-          include: { genre: true },
-        }),
+      const [totalResult, itemsResult] = await Promise.all([
+        tryQuery(
+          context.db.book.count({
+            where,
+          })
+        ),
+        tryQuery(
+          context.db.book.findMany({
+            // Get an extra item at the end which we'll use as next cursor
+            take: input.limit + 1,
+            cursor: input.cursor ? { id: input.cursor } : undefined,
+            orderBy: {
+              title: 'asc',
+            },
+            where,
+            include: { genre: true },
+          })
+        ),
       ]);
+
+      if (totalResult.isErr()) throwPrismaError(totalResult.error);
+      if (itemsResult.isErr()) throwPrismaError(itemsResult.error);
+
+      const total = totalResult.value;
+      const items = itemsResult.value;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
@@ -101,17 +112,20 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting book');
-      const book = await context.db.book.findUnique({
-        where: { id: input.id },
-        include: { genre: true },
-      });
+      const result = await tryQuery(
+        context.db.book.findUnique({
+          where: { id: input.id },
+          include: { genre: true },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
 
-      if (!book) {
+      if (!result.value) {
         context.logger.warn('Unable to find book with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return book;
+      return result.value;
     }),
 
   create: protectedProcedure({
@@ -128,15 +142,19 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
-      return await context.db.book.create({
-        data: {
-          title: input.title,
-          author: input.author,
-          genreId: input.genreId ?? undefined,
-          publisher: input.publisher,
-          coverId: input.coverId,
-        },
-      });
+      const result = await tryQuery(
+        context.db.book.create({
+          data: {
+            title: input.title,
+            author: input.author,
+            genreId: input.genreId ?? undefined,
+            publisher: input.publisher,
+            coverId: input.coverId,
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
+      return result.value;
     }),
 
   updateById: protectedProcedure({
@@ -153,16 +171,20 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
-      return await context.db.book.update({
-        where: { id: input.id },
-        data: {
-          title: input.title,
-          author: input.author,
-          genreId: input.genreId,
-          publisher: input.publisher ?? null,
-          coverId: input.coverId ?? null,
-        },
-      });
+      const result = await tryQuery(
+        context.db.book.update({
+          where: { id: input.id },
+          data: {
+            title: input.title,
+            author: input.author,
+            genreId: input.genreId,
+            publisher: input.publisher ?? null,
+            coverId: input.coverId ?? null,
+          },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
+      return result.value;
     }),
 
   deleteById: protectedProcedure({
@@ -183,8 +205,11 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Delete book');
-      await context.db.book.delete({
-        where: { id: input.id },
-      });
+      const result = await tryQuery(
+        context.db.book.delete({
+          where: { id: input.id },
+        })
+      );
+      if (result.isErr()) throwPrismaError(result.error);
     }),
 };
