@@ -122,7 +122,6 @@
     "@vitest/browser-playwright": "4.0.18",
     "@vueless/storybook-dark-mode": "10.0.7",
     "babel-plugin-react-compiler": "1.0.0",
-    "code-inspector-plugin": "1.4.1",
     "cpy": "12.1.0",
     "cross-env": "10.1.0",
     "dotenv-cli": "11.0.0",
