@@ -33,7 +33,7 @@ services:
       retries: 5
 
   maildev:
-    image: maildev/maildev
+    image: maildev/maildev:2.2.1
     ports:
       - '${DOCKER_MAILDEV_SMTP_PORT:-1025}:1025'
       - '${DOCKER_MAILDEV_UI_PORT:-1080}:1080'

@@ -68,7 +68,7 @@ pnpm dev
 
 #### Maildev to catch emails
 
-In development, the emails will not be sent and will be catched by [maildev](https://github.com/maildev/maildev) which runs as a Docker container.
+In development, the emails will not be sent and will be caught by [maildev](https://github.com/maildev/maildev) which runs as a Docker container.
 
 The maildev UI is available at [localhost:1080](http://localhost:1080) (port configurable via `DOCKER_MAILDEV_UI_PORT` in `.env`).
 
