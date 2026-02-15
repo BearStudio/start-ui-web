@@ -43,6 +43,7 @@ export const envClient = createEnv({
       .optional()
       .transform((value) => value ?? (isDev ? 'gold' : 'plum')),
     VITE_S3_BUCKET_PUBLIC_URL: z.url(),
+    VITE_DOCKER_MAILDEV_UI_PORT: z.string().optional().prefault('1080'),
   },
   runtimeEnv: {
     ...envMetaOrProcess,
