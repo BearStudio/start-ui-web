@@ -26,4 +26,21 @@ export default {
         isDev: import.meta.env.DEV,
       };
     }),
+  devtools: publicProcedure()
+    .route({ method: 'GET', path: '/config/devtools', tags })
+    .output(
+      z.object({
+        maildevIframeSrc: z.string().nullish(),
+      })
+    )
+    .handler(() => {
+      return {
+        maildevIframeSrc:
+          // eslint-disable-next-line no-process-env
+          import.meta.env.DEV && process.env.DOCKER_MAILDEV_UI_PORT
+            ? // eslint-disable-next-line no-process-env
+              `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT}/#/`
+            : null,
+      };
+    }),
 };
