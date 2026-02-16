@@ -43,27 +43,23 @@ cp .zed/settings.example.json .zed/settings.json
 ## Installation
 
 ```bash
-cp .env.example .env # Setup your env variables
-pnpm install # Install dependencies
-pnpm dk:init # Init docker
-pnpm db:init # Init the db
-```
-
-> [!NOTE]
-> **Quick advices for local development**
-> - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
-
-## Run
-
-```bash
-pnpm dk:start # Only if your docker is not running
-pnpm dev
+cp .env.example .env  # Setup your env variables
+pnpm install          # Install dependencies
+pnpm dk:init          # Start Docker containers (PostgreSQL, MinIO, Maildev)
+pnpm db:init          # Push the Prisma schema and seed the database
 ```
 
 > [!NOTE]
 > **Don't want to use docker?**
 >
 > Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
+
+## Run
+
+```bash
+pnpm dk:start # Only if your Docker containers are not running
+pnpm dev
+```
 
 
 
@@ -72,9 +68,9 @@ pnpm dev
 
 #### Maildev to catch emails
 
-In development, the emails will not be sent and will be catched by [maildev](https://github.com/maildev/maildev).
+In development, the emails will not be sent and will be caught by [maildev](https://github.com/maildev/maildev) which runs as a Docker container.
 
-The maildev UI is available at [0.0.0.0:1080](http://0.0.0.0:1080).
+The maildev UI is available at [localhost:1080](http://localhost:1080) (port configurable via `DOCKER_MAILDEV_UI_PORT` in `.env`).
 
 #### Preview emails
 
