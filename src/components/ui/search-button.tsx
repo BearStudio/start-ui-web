@@ -48,7 +48,7 @@ const SearchButtonComponent = ({
           {label || t('components:searchButton.label')}
         </span>
       </DrawerTrigger>
-      <DrawerContent className="pt-safe-top">
+      <DrawerContent>
         <DrawerHeader className="sr-only">
           <DrawerTitle>
             {label || t('components:searchButton.label')}
