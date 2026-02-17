@@ -64,22 +64,22 @@ function DrawerContent({
             'data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*400ms)]',
             'data-swiping:duration-0 data-swiping:select-none',
             // Down
-            'data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t',
+            'data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-safe-bottom',
             'data-[swipe-direction=down]:transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]',
             'data-[swipe-direction=down]:data-starting-style:transform-[translateY(100%)]',
             'data-[swipe-direction=down]:data-ending-style:transform-[translateY(100%)]',
             // Up
-            'data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b',
+            'data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:pt-safe-top',
             'data-[swipe-direction=up]:transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]',
             'data-[swipe-direction=up]:data-starting-style:transform-[translateY(-100%)]',
             'data-[swipe-direction=up]:data-ending-style:transform-[translateY(-100%)]',
             // Left
-            'data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:sm:max-w-sm',
+            'data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:ps-safe-left data-[swipe-direction=left]:sm:max-w-sm',
             'data-[swipe-direction=left]:transform-[translateX(var(--drawer-swipe-movement-x,0px))]',
             'data-[swipe-direction=left]:data-starting-style:transform-[translateX(-100%)]',
             'data-[swipe-direction=left]:data-ending-style:transform-[translateX(-100%)]',
             // Right
-            'data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:sm:max-w-sm',
+            'data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:pe-safe-right data-[swipe-direction=right]:sm:max-w-sm',
             'data-[swipe-direction=right]:transform-[translateX(var(--drawer-swipe-movement-x,0px))]',
             'data-[swipe-direction=right]:data-starting-style:transform-[translateX(100%)]',
             'data-[swipe-direction=right]:data-ending-style:transform-[translateX(100%)]',
