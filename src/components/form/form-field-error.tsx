@@ -87,6 +87,7 @@ export const FormFieldError = <
         'flex animate-in gap-1 text-sm text-negative-600 slide-in-from-top-1 dark:text-negative-400',
         className
       )}
+      role="alert"
       {...rest}
     >
       <AlertCircleIcon size="1em" className="my-0.5 flex-none" />
