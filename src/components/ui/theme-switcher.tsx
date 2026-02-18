@@ -6,10 +6,10 @@ import {
   SunMoonIcon,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
+import { useHydrated } from '@/hooks/use-hydrated';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
@@ -22,16 +22,10 @@ import {
 
 export const themes = ['system', 'light', 'dark'] as const;
 
-const emptySubscribe = () => () => {};
-
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);
   const { theme, setTheme } = useTheme();
-  const hydrated = useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
+  const hydrated = useHydrated();
 
   if (!hydrated) {
     return <div className="size-9" />;
