@@ -28,27 +28,27 @@ export default {
 const items = [
   {
     title: 'Home',
-    url: '#',
+    url: '/',
     icon: Home,
   },
   {
     title: 'Inbox',
-    url: '#',
+    url: '/',
     icon: Inbox,
   },
   {
     title: 'Calendar',
-    url: '#',
+    url: '/',
     icon: Calendar,
   },
   {
     title: 'Search',
-    url: '#',
+    url: '/',
     icon: Search,
   },
   {
     title: 'Settings',
-    url: '#',
+    url: '/',
     icon: Settings,
   },
 ];
@@ -63,7 +63,7 @@ export function AppSidebar() {
               <SidebarMenuButton
                 className="h-auto"
                 render={
-                  <a href="#">
+                  <a href="/">
                     <span>
                       <Logo className="w-24" />
                     </span>

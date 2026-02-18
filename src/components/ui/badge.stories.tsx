@@ -41,7 +41,7 @@ export const Sizes = () => {
 export const AsLink = () => {
   return (
     <div>
-      <Badge render={<a href="#" />}>Anchor as badge</Badge>
+      <Badge render={<a href="/" />}>Anchor as badge</Badge>
     </div>
   );
 };

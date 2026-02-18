@@ -14,13 +14,17 @@ import {
   useIsDemoModeDrawerVisible,
 } from '@/features/demo/demo-mode-drawer';
 
-export const Providers = (props: { children: ReactNode }) => {
+export const Providers = (props: {
+  children: ReactNode;
+  forcedTheme?: string;
+}) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
   return (
     <ThemeProvider
       attribute="class"
       storageKey="theme"
       disableTransitionOnChange
+      forcedTheme={props.forcedTheme}
     >
       <QueryClientProvider>
         {props.children}

@@ -6,7 +6,7 @@ import {
   SunMoonIcon,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
@@ -22,15 +22,16 @@ import {
 
 export const themes = ['system', 'light', 'dark'] as const;
 
+const emptySubscribe = () => () => {};
+
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);
   const { theme, setTheme } = useTheme();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect, react-hooks/set-state-in-effect
-    setHydrated(true);
-  }, []);
+  const hydrated = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!hydrated) {
     return <div className="size-9" />;
