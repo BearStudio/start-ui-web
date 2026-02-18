@@ -43,9 +43,10 @@ export default function PageLogin({
           callbackURL,
           errorCallbackURL: '/login/error',
         });
-      } catch {
-        toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
-        return;
+      } catch (error) {
+        throw error instanceof Error
+          ? error
+          : new Error(t('auth:errorCode.UNKNOWN_ERROR'));
       }
       if (response.error) {
         throw new Error(response.error.message);
@@ -53,8 +54,8 @@ export default function PageLogin({
       return response.data;
     },
     onError: (error) => {
-      form.setError('email', { message: error.message });
-      toast.error(error.message);
+      const message = error.message || t('auth:errorCode.UNKNOWN_ERROR');
+      toast.error(message);
     },
   });
 
