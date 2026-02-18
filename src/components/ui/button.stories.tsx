@@ -38,7 +38,7 @@ export const Sizes = () => {
 export const Render = () => {
   return (
     <Button render={<a href="/" />} nativeButton={false}>
-      Anchor as child
+      Render as Anchor
     </Button>
   );
 };

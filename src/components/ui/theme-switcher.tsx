@@ -9,8 +9,8 @@ import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
-import { useHydrated } from '@/hooks/use-hydrated';
 import { cn } from '@/lib/tailwind/utils';
+import { useHydrated } from '@/hooks/use-hydrated';
 
 import { Button } from '@/components/ui/button';
 import {
