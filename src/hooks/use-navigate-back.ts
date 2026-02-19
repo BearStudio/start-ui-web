@@ -8,18 +8,14 @@ export const useNavigateBack = () => {
   const canGoBack = useCanGoBack();
   const router = useRouter();
 
-  const navigateBack = (options?: {
-    ignoreBlocker?: boolean;
-    navigateOptions?: NavigateOptions;
-  }) => {
+  const navigateBack = (options?: NavigateOptions) => {
     if (canGoBack) {
       router.history.back({ ignoreBlocker: options?.ignoreBlocker });
     } else {
       router.navigate({
         to: '..',
         replace: true,
-        ignoreBlocker: options?.ignoreBlocker,
-        ...options?.navigateOptions,
+        ...options,
       });
     }
   };
