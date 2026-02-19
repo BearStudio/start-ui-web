@@ -1,7 +1,8 @@
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { ButtonLink } from '@/components/ui/button-link';
 
@@ -11,8 +12,7 @@ export const BackButton = ({
   ...props
 }: ComponentProps<typeof ButtonLink>) => {
   const { t } = useTranslation(['components']);
-  const canGoBack = useCanGoBack();
-  const router = useRouter();
+  const { canGoBack, navigateBack } = useNavigateBack();
 
   return (
     <ButtonLink
@@ -21,7 +21,7 @@ export const BackButton = ({
       onClick={(e) => {
         if (canGoBack) {
           e.preventDefault();
-          router.history.back();
+          navigateBack();
         }
       }}
       to={to}

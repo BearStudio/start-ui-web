@@ -6,13 +6,14 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
@@ -51,8 +52,7 @@ import {
 
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
-  const router = useRouter();
-  const canGoBack = useCanGoBack();
+  const { navigateBack } = useNavigateBack();
   const session = authClient.useSession();
   const { t } = useTranslation(['user']);
   const userQuery = useQuery(
@@ -79,11 +79,7 @@ export const PageUser = (props: { params: { id: string } }) => {
       toast.success(t('user:manager.detail.userDeleted'));
 
       // Redirect
-      if (canGoBack) {
-        router.history.back();
-      } else {
-        router.navigate({ to: '..', replace: true });
-      }
+      navigateBack();
     } catch {
       toast.error(t('user:manager.detail.deleteError'));
     }
