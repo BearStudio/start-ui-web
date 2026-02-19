@@ -1,12 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
@@ -25,8 +25,7 @@ import {
 
 export const PageUserNew = () => {
   const { t } = useTranslation(['user']);
-  const router = useRouter();
-  const canGoBack = useCanGoBack();
+  const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(zFormFieldsUser()),
@@ -47,11 +46,7 @@ export const PageUserNew = () => {
         });
 
         // Redirect
-        if (canGoBack) {
-          router.history.back({ ignoreBlocker: true });
-        } else {
-          router.navigate({ to: '..', replace: true, ignoreBlocker: true });
-        }
+        navigateBack({ ignoreBlocker: true });
       },
       onError: (error) => {
         if (

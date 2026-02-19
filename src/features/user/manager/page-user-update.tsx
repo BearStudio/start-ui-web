@@ -2,13 +2,13 @@ import { getUiState } from '@bearstudio/ui-state';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
@@ -29,9 +29,8 @@ import {
 
 export const PageUserUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['user']);
-  const router = useRouter();
+  const { navigateBack } = useNavigateBack();
   const session = authClient.useSession();
-  const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({ input: { id: props.params.id } })
@@ -59,11 +58,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
         ]);
 
         // Redirect
-        if (canGoBack) {
-          router.history.back({ ignoreBlocker: true });
-        } else {
-          router.navigate({ to: '..', replace: true, ignoreBlocker: true });
-        }
+        navigateBack({ ignoreBlocker: true });
       },
       onError: (error) => {
         if (
