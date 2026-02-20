@@ -27,6 +27,7 @@ export const FieldTextarea = (
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         {...field}
+        value={field.value ?? ''}
         onChange={(e) => {
           field.onChange(e);
           rest.onChange?.(e);
