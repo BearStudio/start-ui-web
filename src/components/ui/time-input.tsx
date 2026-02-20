@@ -1,3 +1,4 @@
+import { Time } from '@internationalized/date';
 import { ReactNode } from 'react';
 import {
   composeRenderProps,
@@ -7,13 +8,32 @@ import {
   DateSegmentProps as AriaDateSegmentProps,
   TimeField as AriaTimeField,
   TimeFieldProps as AriaTimeFieldProps,
-  TimeValue as AriaTimeValue,
   useLocale,
 } from 'react-aria-components';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { InputGroup, InputGroupAddon } from '@/components/ui/input-group';
+
+type TimeValue = {
+  hour: number;
+  minute: number;
+  second?: number;
+  millisecond?: number;
+};
+
+function toAriaTime(value: TimeValue): Time {
+  return new Time(value.hour, value.minute, value.second, value.millisecond);
+}
+
+function fromAriaTime(time: Time): TimeValue {
+  return {
+    hour: time.hour,
+    minute: time.minute,
+    second: time.second,
+    millisecond: time.millisecond,
+  };
+}
 
 function getHourCycle(locale: string): 12 | 24 {
   try {
@@ -64,24 +84,30 @@ function DateInput({
   );
 }
 
-type TimeInputProps<T extends AriaTimeValue> = Omit<
-  AriaTimeFieldProps<T>,
-  'className' | 'children'
+type TimeInputProps = Omit<
+  AriaTimeFieldProps<Time>,
+  'className' | 'children' | 'value' | 'defaultValue' | 'onChange'
 > &
   Pick<React.ComponentProps<typeof InputGroup>, 'size'> & {
     className?: string;
     startAddon?: ReactNode;
     endAddon?: ReactNode;
+    value?: TimeValue | null;
+    defaultValue?: TimeValue | null;
+    onChange?: (value: TimeValue) => void;
   };
 
-function TimeInput<T extends AriaTimeValue>({
+function TimeInput({
   className,
   size,
   startAddon,
   endAddon,
   hourCycle,
+  value,
+  defaultValue,
+  onChange,
   ...props
-}: TimeInputProps<T>) {
+}: TimeInputProps) {
   const { locale } = useLocale();
   const resolvedHourCycle = hourCycle ?? getHourCycle(locale);
 
@@ -89,6 +115,11 @@ function TimeInput<T extends AriaTimeValue>({
     <AriaTimeField
       hourCycle={resolvedHourCycle}
       data-slot="time-input"
+      value={value ? toAriaTime(value) : (value ?? undefined)}
+      defaultValue={defaultValue ? toAriaTime(defaultValue) : undefined}
+      onChange={
+        onChange ? (time) => time && onChange(fromAriaTime(time)) : undefined
+      }
       {...props}
       render={(props, { isInvalid, isDisabled }) => (
         <InputGroup
@@ -111,4 +142,4 @@ function TimeInput<T extends AriaTimeValue>({
 }
 
 export { DateInput, DateSegment, TimeInput };
-export type { TimeInputProps };
+export type { TimeInputProps, TimeValue };

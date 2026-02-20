@@ -1,4 +1,3 @@
-import { Time } from '@internationalized/date';
 import type { Meta } from '@storybook/react-vite';
 import { ClockIcon } from 'lucide-react';
 
@@ -14,29 +13,29 @@ export const Default = () => {
 };
 
 export const WithDefaultValue = () => {
-  return <TimeInput defaultValue={new Time(14, 30)} />;
+  return <TimeInput defaultValue={{ hour: 14, minute: 30 }} />;
 };
 
 export const Sizes = () => {
   return (
     <div className="flex flex-col gap-4">
-      <TimeInput size="sm" defaultValue={new Time(9, 0)} />
-      <TimeInput defaultValue={new Time(14, 30)} />
-      <TimeInput size="lg" defaultValue={new Time(18, 45)} />
+      <TimeInput size="sm" defaultValue={{ hour: 9, minute: 0 }} />
+      <TimeInput defaultValue={{ hour: 14, minute: 30 }} />
+      <TimeInput size="lg" defaultValue={{ hour: 18, minute: 45 }} />
     </div>
   );
 };
 
 export const Invalid = () => {
-  return <TimeInput isInvalid defaultValue={new Time(14, 30)} />;
+  return <TimeInput isInvalid defaultValue={{ hour: 14, minute: 30 }} />;
 };
 
 export const Disabled = () => {
-  return <TimeInput isDisabled defaultValue={new Time(14, 30)} />;
+  return <TimeInput isDisabled defaultValue={{ hour: 14, minute: 30 }} />;
 };
 
 export const ReadOnly = () => {
-  return <TimeInput isReadOnly defaultValue={new Time(14, 30)} />;
+  return <TimeInput isReadOnly defaultValue={{ hour: 14, minute: 30 }} />;
 };
 
 export const StartEndAddons = () => {
@@ -45,15 +44,18 @@ export const StartEndAddons = () => {
       <p className="text-sm">
         See <strong>InputGroup</strong> for more advanced use cases
       </p>
-      <TimeInput startAddon={<ClockIcon />} defaultValue={new Time(9, 0)} />
+      <TimeInput
+        startAddon={<ClockIcon />}
+        defaultValue={{ hour: 9, minute: 0 }}
+      />
       <TimeInput
         endAddon={<InputGroupText>UTC</InputGroupText>}
-        defaultValue={new Time(14, 30)}
+        defaultValue={{ hour: 14, minute: 30 }}
       />
       <TimeInput
         startAddon={<ClockIcon />}
         endAddon={<InputGroupText>UTC</InputGroupText>}
-        defaultValue={new Time(18, 45)}
+        defaultValue={{ hour: 18, minute: 45 }}
       />
     </div>
   );
@@ -65,13 +67,16 @@ export const SizesWithAddons = () => {
       <TimeInput
         size="sm"
         startAddon={<ClockIcon />}
-        defaultValue={new Time(9, 0)}
+        defaultValue={{ hour: 9, minute: 0 }}
       />
-      <TimeInput startAddon={<ClockIcon />} defaultValue={new Time(14, 30)} />
+      <TimeInput
+        startAddon={<ClockIcon />}
+        defaultValue={{ hour: 14, minute: 30 }}
+      />
       <TimeInput
         size="lg"
         startAddon={<ClockIcon />}
-        defaultValue={new Time(18, 45)}
+        defaultValue={{ hour: 18, minute: 45 }}
       />
     </div>
   );
@@ -87,12 +92,12 @@ export const WithInputGroup = () => {
             <ClockIcon />
           </InputGroupButton>
         }
-        defaultValue={new Time(14, 30)}
+        defaultValue={{ hour: 14, minute: 30 }}
       />
       <TimeInput
         startAddon={<InputGroupText>Start</InputGroupText>}
         endAddon={<InputGroupText>hrs</InputGroupText>}
-        defaultValue={new Time(9, 0)}
+        defaultValue={{ hour: 9, minute: 0 }}
       />
     </div>
   );
