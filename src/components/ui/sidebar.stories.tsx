@@ -63,7 +63,11 @@ export function AppSidebar() {
               <SidebarMenuButton
                 className="h-auto"
                 render={
-                  <a href="/">
+                  <a
+                    href="https://start-ui.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span>
                       <Logo className="w-24" />
                     </span>
