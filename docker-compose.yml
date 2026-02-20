@@ -38,7 +38,7 @@ services:
       - '${DOCKER_MAILDEV_SMTP_PORT:-1025}:1025'
       - '${DOCKER_MAILDEV_UI_PORT:-1080}:1080'
     healthcheck:
-      test: ['CMD-SHELL', 'wget -q --spider http://localhost:1080/healthz || exit 1']
+      test: ['CMD-SHELL', 'wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz']
       interval: 5s
       timeout: 5s
       retries: 5
