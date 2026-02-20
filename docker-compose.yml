@@ -37,6 +37,11 @@ services:
     ports:
       - '${DOCKER_MAILDEV_SMTP_PORT:-1025}:1025'
       - '${DOCKER_MAILDEV_UI_PORT:-1080}:1080'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:1080/api/']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   createbucket:
     image: minio/mc:RELEASE.2025-08-13T08-35-41Z-cpuv1
