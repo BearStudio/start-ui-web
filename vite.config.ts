@@ -55,10 +55,15 @@ function createPrismaCopyBinariesPlugin() {
       name: 'prisma-copy-binaries',
       writeBundle: async (outputOptions: { dir?: string }) => {
         const outputDir = outputOptions.dir?.replace(resolve('.'), '.');
+        console.log(
+          '=++++++================> server dir',
+          serverDir,
+          outputDir
+        );
         if (outputDir === serverDir) {
           await cpy(
             './src/server/db/generated/**/*.node',
-            resolve(serverDir, 'chunks')
+            resolve(serverDir, 'task')
           );
         }
       },
