@@ -78,7 +78,7 @@
     "input-otp": "1.4.2",
     "lucide-react": "0.563.0",
     "next-themes": "0.4.6",
-    "nitro": "npm:nitro-nightly@3.0.1-20251023-125324-a6f9b591",
+    "nitro": "npm:nitro-nightly@3.0.1-20260219-081345-4df7aab2",
     "nodemailer": "7.0.13",
     "pino": "10.3.0",
     "pino-pretty": "13.1.3",
