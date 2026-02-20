@@ -122,8 +122,8 @@ If you want to use the same set of custom duotone icons that Start UI is already
 E2E tests are setup with Playwright.
 
 ```sh
-pnpm e2e        # Run tests in headless mode, this is the command executed in CI
 pnpm e2e:setup  # Setup context to be used across test for more efficient execution 
+pnpm e2e        # Run tests in headless mode, this is the command executed in CI
 pnpm e2e:ui     # Open a UI which allow you to run specific tests and see test execution
 ```
 
