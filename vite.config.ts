@@ -24,12 +24,14 @@ export default defineConfig(({ mode }) => {
       tsConfigPaths(),
       tanstackStart(),
       nitro({
-        config: {
-          hooks: {
-            'build:before': nitroRetrieveServerDirHook,
+        modules: [
+          (nitro) => {
+            nitro.hooks.hook('build:before', () => {
+              nitroRetrieveServerDirHook(nitro);
+            });
           },
-          routeRules: { '/storybook': { redirect: '/storybook/' } },
-        },
+        ],
+        routeRules: { '/storybook': { redirect: '/storybook/' } },
       }),
       // react's vite plugin must come after start's vite plugin
       viteReact({
@@ -54,10 +56,7 @@ function createPrismaCopyBinariesPlugin() {
       writeBundle: async (outputOptions: { dir?: string }) => {
         const outputDir = outputOptions.dir?.replace(resolve('.'), '.');
         if (outputDir === serverDir) {
-          await cpy(
-            './src/server/db/generated/**/*.node',
-            resolve(serverDir, 'chunks')
-          );
+          await cpy('./src/server/db/generated/**/*.node', resolve(serverDir));
         }
       },
     }),
