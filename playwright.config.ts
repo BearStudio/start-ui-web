@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -36,18 +38,18 @@ export default defineConfig({
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], locale: DEFAULT_LANGUAGE_KEY },
       dependencies: process.env.CI ? ['setup'] : [],
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], locale: DEFAULT_LANGUAGE_KEY },
       dependencies: process.env.CI ? ['setup'] : [],
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['Desktop Safari'], locale: DEFAULT_LANGUAGE_KEY },
       dependencies: process.env.CI ? ['setup'] : [],
     },
   ],
