@@ -42,7 +42,7 @@ test.describe('User management as manager', () => {
     await page.waitForURL('/manager/users');
     await page
       .getByPlaceholder(t.components.searchInput.placeholder)
-      .fill('new-user');
+      .fill(`new-user-${randomId}`);
     await expect(page.getByText(uniqueEmail)).toBeVisible();
   });
 
