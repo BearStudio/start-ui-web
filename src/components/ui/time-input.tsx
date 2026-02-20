@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   composeRenderProps,
   DateInput as AriaDateInput,
@@ -9,6 +8,7 @@ import {
   TimeField as AriaTimeField,
   TimeFieldProps as AriaTimeFieldProps,
   TimeValue as AriaTimeValue,
+  useLocale,
 } from 'react-aria-components';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -54,9 +54,8 @@ function DateInput({
 }: Omit<AriaDateInputProps, 'children'>) {
   return (
     <AriaDateInput
-      data-slot="input-group-control"
       className={composeRenderProps(className, (className) =>
-        cn('flex h-full w-full flex-1 items-center text-sm', className)
+        cn('flex h-full w-full flex-1 items-center', className)
       )}
       {...props}
     >
@@ -83,12 +82,15 @@ function TimeInput<T extends AriaTimeValue>({
   hourCycle,
   ...props
 }: TimeInputProps<T>) {
-  const { i18n } = useTranslation();
-  const resolvedHourCycle = hourCycle ?? getHourCycle(i18n.language);
+  const { locale } = useLocale();
+  const resolvedHourCycle = hourCycle ?? getHourCycle(locale);
 
   return (
-    <AriaTimeField hourCycle={resolvedHourCycle} {...props}>
-      {({ isInvalid, isDisabled }) => (
+    <AriaTimeField
+      hourCycle={resolvedHourCycle}
+      data-slot="time-input"
+      {...props}
+      render={(props, { isInvalid, isDisabled }) => (
         <InputGroup
           size={size}
           className={className}
@@ -98,13 +100,13 @@ function TimeInput<T extends AriaTimeValue>({
           {!!startAddon && (
             <InputGroupAddon align="inline-start">{startAddon}</InputGroupAddon>
           )}
-          <DateInput aria-invalid={isInvalid || undefined} />
+          <DateInput aria-invalid={isInvalid || undefined} {...props} />
           {!!endAddon && (
             <InputGroupAddon align="inline-end">{endAddon}</InputGroupAddon>
           )}
         </InputGroup>
       )}
-    </AriaTimeField>
+    />
   );
 }
 
