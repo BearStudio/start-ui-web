@@ -2,9 +2,10 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/server/db/generated"
-  moduleFormat = "esm"
+  provider      = "prisma-client"
+  output        = "../src/server/db/generated"
+  moduleFormat  = "esm"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
