@@ -24,9 +24,13 @@ export default defineConfig(({ mode }) => {
       tsConfigPaths(),
       tanstackStart(),
       nitro({
-        hooks: {
-          'build:before': nitroRetrieveServerDirHook,
-        },
+        modules: [
+          (nitro) => {
+            nitro.hooks.hook('build:before', () => {
+              nitroRetrieveServerDirHook(nitro);
+            });
+          },
+        ],
         routeRules: { '/storybook': { redirect: '/storybook/' } },
       }),
       // react's vite plugin must come after start's vite plugin
