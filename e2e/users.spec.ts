@@ -2,6 +2,12 @@ import { expect, test } from 'e2e/utils';
 import { ADMIN_FILE, USER_FILE } from 'e2e/utils/constants';
 import { randomString } from 'remeda';
 
+import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+
+import locales from '@/locales';
+
+const t = locales[DEFAULT_LANGUAGE_KEY];
+
 test.describe('User management as user', () => {
   test.use({ storageState: USER_FILE });
 
@@ -9,7 +15,7 @@ test.describe('User management as user', () => {
     await page.to('/manager/users');
 
     await expect(
-      page.getByText("You don't have access to this page")
+      page.getByText(t.components.pageError[403].message)
     ).toBeVisible();
   });
 });
@@ -22,19 +28,21 @@ test.describe('User management as manager', () => {
   });
 
   test('Create a user', async ({ page }) => {
-    await page.getByText('New User').click();
+    await page.getByText(t.user.manager.list.newButton).click();
 
     const randomId = randomString(8);
     const uniqueEmail = `new-user-${randomId}@user.com`;
 
     // Fill the form
     await page.waitForURL('/manager/users/new');
-    await page.getByLabel('Name').fill('New user');
-    await page.getByLabel('Email').fill(uniqueEmail);
-    await page.getByText('Create').click();
+    await page.getByLabel(t.user.common.name.label).fill('New user');
+    await page.getByLabel(t.user.common.email.label).fill(uniqueEmail);
+    await page.getByText(t.user.manager.new.createButton.label).click();
 
     await page.waitForURL('/manager/users');
-    await page.getByPlaceholder('Search...').fill('new-user');
+    await page
+      .getByPlaceholder(t.components.searchInput.placeholder)
+      .fill('new-user');
     await expect(page.getByText(uniqueEmail)).toBeVisible();
   });
 
@@ -43,12 +51,14 @@ test.describe('User management as manager', () => {
       force: true,
     });
 
-    await page.getByRole('link', { name: 'Edit user' }).click();
+    await page
+      .getByRole('link', { name: t.user.manager.detail.editUser })
+      .click();
 
     const randomId = randomString(8);
     const newAdminName = `Admin ${randomId}`;
-    await page.getByLabel('Name').fill(newAdminName);
-    await page.getByText('Save').click();
+    await page.getByLabel(t.user.common.name.label).fill(newAdminName);
+    await page.getByText(t.user.manager.update.updateButton.label).click();
 
     await expect(page.getByText(newAdminName).first()).toBeVisible();
   });
@@ -61,14 +71,20 @@ test.describe('User management as manager', () => {
       .first()
       .click({ force: true });
 
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page
+      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
+      .click();
 
     await expect(
-      page.getByText('You are about to permanently delete this user.')
+      page.getByText(t.user.manager.detail.confirmDeleteDescription)
     ).toBeVisible();
 
-    await page.getByRole('button', { name: 'Delete' }).click();
+    await page
+      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
+      .click();
 
-    await expect(page.getByText('User deleted')).toBeVisible();
+    await expect(
+      page.getByText(t.user.manager.detail.userDeleted)
+    ).toBeVisible();
   });
 });
