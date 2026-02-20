@@ -60,7 +60,9 @@ test.describe('User management as manager', () => {
     await page.getByLabel(t.user.common.name.label).fill(newAdminName);
     await page.getByText(t.user.manager.update.updateButton.label).click();
 
-    await expect(page.getByText(newAdminName).first()).toBeVisible();
+    await expect(
+      page.locator('main').getByText(newAdminName).first()
+    ).toBeVisible();
   });
 
   test('Delete a user', async ({ page }) => {
