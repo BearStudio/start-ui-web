@@ -43,7 +43,7 @@ const inputGroupVariants = cva(
           // Input
           '[&>input]:px-3 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
           // Control
-          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-3 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1.5 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1.5',
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-2.5 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1.5 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1.5',
           // Textarea
           '[&>textarea]:-my-px [&>textarea]:min-h-14 [&>textarea]:px-3 [&>textarea]:py-2 has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[>[data-align=block-start]]:[&>textarea]:pb-3'
         ),
@@ -52,18 +52,18 @@ const inputGroupVariants = cva(
           // Input
           '[&>input]:px-2.5 has-[>[data-align=block-end]]:[&>input]:pt-2.5 has-[>[data-align=block-start]]:[&>input]:pb-2.5 has-[>[data-align=inline-end]]:[&>input]:pr-1 has-[>[data-align=inline-start]]:[&>input]:pl-1',
           // Control
-          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-2.5 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1',
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-2 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1',
           // Textarea
           '[&>textarea]:-my-px [&>textarea]:max-h-64 [&>textarea]:min-h-12 [&>textarea]:px-2.5 [&>textarea]:py-1.5 has-[>[data-align=block-end]]:[&>textarea]:pt-2.5 has-[>[data-align=block-start]]:[&>textarea]:pb-2.5'
         ),
         lg: cn(
           'h-10 md:text-base',
           // Input
-          '[&>input]:px-4 has-[>[data-align=block-end]]:[&>input]:pt-4 has-[>[data-align=block-start]]:[&>input]:pb-4 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=inline-start]]:[&>input]:pl-2',
+          '[&>input]:px-4 has-[>[data-align=block-end]]:[&>input]:pt-4 has-[>[data-align=block-start]]:[&>input]:pb-4 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=inline-start]]:[&>input]:pl-2 [&>input]:md:text-base',
           // Control
-          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-4 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-2 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-2',
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-3.5 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-2 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-2 [&>[data-slot=input-group-control]:not(input):not(textarea)]:md:text-base',
           // Textarea
-          '[&>textarea]:-my-px [&>textarea]:min-h-15 [&>textarea]:px-4 [&>textarea]:py-2.5 has-[>[data-align=block-end]]:[&>textarea]:pt-4 has-[>[data-align=block-start]]:[&>textarea]:pb-4'
+          '[&>textarea]:-my-px [&>textarea]:min-h-15 [&>textarea]:px-4 [&>textarea]:py-2.5 has-[>[data-align=block-end]]:[&>textarea]:pt-4 has-[>[data-align=block-start]]:[&>textarea]:pb-4 [&>textarea]:md:text-base'
         ),
       },
     },
