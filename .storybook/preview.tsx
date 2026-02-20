@@ -1,6 +1,5 @@
 import type { Preview } from '@storybook/react-vite';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
-import { useTheme } from 'next-themes';
 import { StrictMode, useEffect } from 'react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,20 +17,12 @@ import { Providers } from '../src/providers';
 
 const DocumentationWrapper = ({
   children,
-  isDarkMode,
   context,
 }: {
   children: ReactNode;
-  isDarkMode: boolean;
   context: StoryContext;
 }) => {
   const { i18n } = useTranslation();
-  const { setTheme } = useTheme();
-
-  // Update color mode
-  useEffect(() => {
-    setTheme(isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode, setTheme]);
 
   // Update language
   useEffect(() => {
@@ -84,9 +75,9 @@ const preview: Preview = {
     (story, context) => {
       const isDarkMode = useDarkMode();
       return (
-        <Providers>
+        <Providers forcedTheme={isDarkMode ? 'dark' : 'light'}>
           <StrictMode>
-            <DocumentationWrapper isDarkMode={isDarkMode} context={context}>
+            <DocumentationWrapper context={context}>
               {/* Calling as a function to avoid errors. Learn more at:
                * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
                */}

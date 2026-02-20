@@ -23,18 +23,14 @@ import { Button, buttonVariants } from '@/components/ui/button';
 
 import { REACT_DAY_PICKER_LOCALE_MAP } from '@/locales/react-day-picker';
 
-const ChevronWrapper = ({ orientation }: ChevronProps) => {
-  const Icon = match(orientation)
-    .with('left', () => ChevronLeft)
-    .with('right', () => ChevronRight)
-    .with('down', () => ChevronDown)
-    .with('up', () => ChevronUp)
-    .with(undefined, () => ChevronDown)
+const ChevronWrapper = ({ orientation }: ChevronProps) =>
+  match(orientation)
+    .with('left', () => <ChevronLeft className="size-4" />)
+    .with('right', () => <ChevronRight className="size-4" />)
+    .with('down', () => <ChevronDown className="size-4" />)
+    .with('up', () => <ChevronUp className="size-4" />)
+    .with(undefined, () => <ChevronDown className="size-4" />)
     .exhaustive();
-
-  // eslint-disable-next-line react-hooks/static-components
-  return <Icon className="h-4 w-4" />;
-};
 
 /**
  * A custom calendar component built on top of react-day-picker.

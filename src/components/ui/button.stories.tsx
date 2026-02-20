@@ -37,8 +37,17 @@ export const Sizes = () => {
 
 export const Render = () => {
   return (
-    <Button render={<a href="#" />} nativeButton={false}>
-      Anchor as child
+    <Button
+      render={
+        <a
+          href="https://start-ui.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      }
+      nativeButton={false}
+    >
+      Render as Anchor
     </Button>
   );
 };

@@ -120,6 +120,15 @@ function InputGroupAddon({
           >('input, textarea')
           ?.focus();
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.currentTarget.parentElement
+            ?.querySelector<
+              HTMLInputElement | HTMLTextAreaElement
+            >('input, textarea')
+            ?.focus();
+        }
+      }}
     />
   );
 }

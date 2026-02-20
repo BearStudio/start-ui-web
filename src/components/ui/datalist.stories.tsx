@@ -85,7 +85,11 @@ export const Default = () => (
           </DataListCell>
           <DataListCell>
             <DataListText className="font-medium">
-              <a href="#">
+              <a
+                href="https://start-ui.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {user.name}
                 {/* Row hitzone for link */}
                 <span className="absolute inset-0" />
@@ -139,7 +143,11 @@ export const WithHeader = () => (
           </DataListCell>
           <DataListCell>
             <DataListText className="font-medium">
-              <a href="#">
+              <a
+                href="https://start-ui.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {user.name}
                 {/* Row hitzone for link */}
                 <span className="absolute inset-0" />
@@ -236,7 +244,11 @@ export const RowResults = () => (
           </DataListCell>
           <DataListCell>
             <DataListText className="font-medium">
-              <a href="#">
+              <a
+                href="https://start-ui.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {user.name}
                 {/* Row hitzone for link */}
                 <span className="absolute inset-0" />

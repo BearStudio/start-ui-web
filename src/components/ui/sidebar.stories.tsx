@@ -28,27 +28,27 @@ export default {
 const items = [
   {
     title: 'Home',
-    url: '#',
+    url: 'https://start-ui.com/',
     icon: Home,
   },
   {
     title: 'Inbox',
-    url: '#',
+    url: 'https://start-ui.com/',
     icon: Inbox,
   },
   {
     title: 'Calendar',
-    url: '#',
+    url: 'https://start-ui.com/',
     icon: Calendar,
   },
   {
     title: 'Search',
-    url: '#',
+    url: 'https://start-ui.com/',
     icon: Search,
   },
   {
     title: 'Settings',
-    url: '#',
+    url: 'https://start-ui.com/',
     icon: Settings,
   },
 ];
@@ -63,7 +63,11 @@ export function AppSidebar() {
               <SidebarMenuButton
                 className="h-auto"
                 render={
-                  <a href="#">
+                  <a
+                    href="https://start-ui.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span>
                       <Logo className="w-24" />
                     </span>
@@ -82,7 +86,11 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       render={
-                        <a href={item.url}>
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <item.icon />
                           <span>{item.title}</span>
                         </a>

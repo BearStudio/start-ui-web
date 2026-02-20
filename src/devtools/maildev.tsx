@@ -22,18 +22,20 @@ export function MailDevDevtoolPanel() {
     <div className="flex h-full flex-1 flex-col">
       {ui
         .match('pending', () => <Spinner full />)
-        .match('error', () => <PageError type="unknown" children="" />)
+        .match('error', () => <PageError type="unknown">{''}</PageError>)
         .match('unavailable', () => (
           <PageError
             type="unknown"
-            children=""
             errorCode="No URL"
             title="Unavailable"
             message="No maildev url available"
-          />
+          >
+            {''}
+          </PageError>
         ))
         .match('default', (data) => (
           <iframe
+            title="MailDev"
             className="h-full w-full"
             src={data.maildevIframeSrc}
             // eslint-disable-next-line @eslint-react/dom/no-unsafe-iframe-sandbox
