@@ -14,6 +14,9 @@ const inputGroupVariants = cva(
     // Input
     '[&>input]:md:text-sm',
 
+    // Control (non-native input elements like React Aria DateInput)
+    '[&>[data-slot=input-group-control]:not(input):not(textarea)]:md:text-sm',
+
     // Textarea
     'has-[>textarea]:h-auto [&>textarea]:max-h-64 [&>textarea]:md:text-sm',
 
@@ -24,6 +27,7 @@ const inputGroupVariants = cva(
     // Disabled
     'has-[input:disabled]:cursor-not-allowed [&>input]:disabled:opacity-50',
     'has-[textarea:disabled]:cursor-not-allowed [&>textarea]:disabled:opacity-50',
+    'data-[disabled]:cursor-not-allowed',
 
     // Focus state.
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
@@ -38,6 +42,8 @@ const inputGroupVariants = cva(
           'h-9',
           // Input
           '[&>input]:px-3 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
+          // Control
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-3 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1.5 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1.5',
           // Textarea
           '[&>textarea]:-my-px [&>textarea]:min-h-14 [&>textarea]:px-3 [&>textarea]:py-2 has-[>[data-align=block-end]]:[&>textarea]:pt-3 has-[>[data-align=block-start]]:[&>textarea]:pb-3'
         ),
@@ -45,6 +51,8 @@ const inputGroupVariants = cva(
           'h-8',
           // Input
           '[&>input]:px-2.5 has-[>[data-align=block-end]]:[&>input]:pt-2.5 has-[>[data-align=block-start]]:[&>input]:pb-2.5 has-[>[data-align=inline-end]]:[&>input]:pr-1 has-[>[data-align=inline-start]]:[&>input]:pl-1',
+          // Control
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-2.5 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-1 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-1',
           // Textarea
           '[&>textarea]:-my-px [&>textarea]:max-h-64 [&>textarea]:min-h-12 [&>textarea]:px-2.5 [&>textarea]:py-1.5 has-[>[data-align=block-end]]:[&>textarea]:pt-2.5 has-[>[data-align=block-start]]:[&>textarea]:pb-2.5'
         ),
@@ -52,6 +60,8 @@ const inputGroupVariants = cva(
           'h-10 md:text-base',
           // Input
           '[&>input]:px-4 has-[>[data-align=block-end]]:[&>input]:pt-4 has-[>[data-align=block-start]]:[&>input]:pb-4 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=inline-start]]:[&>input]:pl-2',
+          // Control
+          '[&>[data-slot=input-group-control]:not(input):not(textarea)]:px-4 has-[>[data-align=inline-end]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pr-2 has-[>[data-align=inline-start]]:[&>[data-slot=input-group-control]:not(input):not(textarea)]:pl-2',
           // Textarea
           '[&>textarea]:-my-px [&>textarea]:min-h-15 [&>textarea]:px-4 [&>textarea]:py-2.5 has-[>[data-align=block-end]]:[&>textarea]:pt-4 has-[>[data-align=block-start]]:[&>textarea]:pb-4'
         ),
