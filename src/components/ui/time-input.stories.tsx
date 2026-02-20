@@ -1,8 +1,22 @@
 import type { Meta } from '@storybook/react-vite';
+import dayjs from 'dayjs';
 import { ClockIcon } from 'lucide-react';
 
 import { InputGroupButton, InputGroupText } from '@/components/ui/input-group';
-import { TimeInput } from '@/components/ui/time-input';
+import { TimeInput, type TimeValue } from '@/components/ui/time-input';
+
+// Helpers to convert common date types to TimeValue
+function timeValueFromDate(date: Date): TimeValue {
+  return {
+    hour: date.getHours(),
+    minute: date.getMinutes(),
+    second: date.getSeconds(),
+  };
+}
+
+function timeValueFromDayjs(d: dayjs.Dayjs): TimeValue {
+  return { hour: d.hour(), minute: d.minute(), second: d.second() };
+}
 
 export default {
   title: 'TimeInput',
@@ -78,6 +92,28 @@ export const SizesWithAddons = () => {
         startAddon={<ClockIcon />}
         defaultValue={{ hour: 18, minute: 45 }}
       />
+    </div>
+  );
+};
+
+export const FromDate = () => {
+  const meetingDate = new Date('2024-03-15T09:30:00');
+  const lastUpdated = dayjs('2024-03-15T17:45:00');
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <p className="text-xs text-muted-foreground">From a Date object</p>
+        <TimeInput defaultValue={timeValueFromDate(meetingDate)} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <p className="text-xs text-muted-foreground">From a dayjs object</p>
+        <TimeInput defaultValue={timeValueFromDayjs(lastUpdated)} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <p className="text-xs text-muted-foreground">Current time (Date.now)</p>
+        <TimeInput defaultValue={timeValueFromDate(new Date())} />
+      </div>
     </div>
   );
 };
