@@ -38,7 +38,12 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
 
     await expect(
       page.getByText(
-        locales[DEFAULT_LANGUAGE_KEY].auth.pageLoginWithSignUp.title
+        locales[DEFAULT_LANGUAGE_KEY].auth[
+          AUTH_SIGNUP_ENABLED ? 'pageLoginWithSignUp' : 'pageLogin'
+        ].title,
+        {
+          exact: true,
+        }
       )
     ).toBeVisible();
 
