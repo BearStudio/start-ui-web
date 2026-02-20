@@ -219,7 +219,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                 </CardContent>
               </Card>
 
-              <div className="flex flex-2 flex-col">
+              <div className="flex min-w-0 flex-2 flex-col">
                 <WithPermissions permissions={[{ session: ['list'] }]}>
                   <UserSessions userId={props.params.id} />
                 </WithPermissions>

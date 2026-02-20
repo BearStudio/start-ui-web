@@ -34,8 +34,12 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // eslint-disable-next-line sonarjs/slow-regex
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    {
+      name: 'setup',
+      // eslint-disable-next-line sonarjs/slow-regex
+      testMatch: /.*\.setup\.ts/,
+      use: { locale: DEFAULT_LANGUAGE_KEY },
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], locale: DEFAULT_LANGUAGE_KEY },
