@@ -10,9 +10,13 @@ on:
 
 jobs:
   E2E:
-    name: Playwright E2E Tests
+    name: E2E (${{ matrix.browser }})
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_ENV_NAME: tests
@@ -71,26 +75,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Cache node modules
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-${{ env.cache-name }}-
-            ${{ runner.os }}-pnpm-store-
-            ${{ runner.os }}-
+          cache: 'pnpm'
 
       - name: Install deps
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium ${{ matrix.browser }} --with-deps
+
+      - name: Install Playwright system deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium ${{ matrix.browser }}
 
       - name: Start MinIO server
         run: |
@@ -127,9 +130,6 @@ jobs:
           mc mb --ignore-existing minio/$S3_BUCKET_NAME
           mc anonymous set download minio/$S3_BUCKET_NAME
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
       - name: Migrate database
         run: pnpm db:push
 
@@ -137,11 +137,11 @@ jobs:
         run: pnpm db:seed
 
       - name: Run Playwright tests
-        run: pnpm e2e
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 30
