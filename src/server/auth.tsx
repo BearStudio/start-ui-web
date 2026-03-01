@@ -87,6 +87,11 @@ export const auth = betterAuth({
               'forget-password email not implemented, update the /app/server/auth.tsx file'
             );
           })
+          .with('change-email', async () => {
+            throw new Error(
+              'change-email email not implemented, update the /app/server/auth.tsx file'
+            );
+          })
           .exhaustive();
       },
     }),

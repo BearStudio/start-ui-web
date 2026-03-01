@@ -47,7 +47,7 @@ export const GuardAuthenticated = ({
     permissionApps &&
     !authClient.admin.checkRolePermission({
       role: session.data.user.role as Role,
-      permission: {
+      permissions: {
         apps: permissionApps,
       },
     })

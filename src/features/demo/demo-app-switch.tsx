@@ -29,14 +29,14 @@ export const DemoAppSwitch = () => {
 
   const hasAppAccess = authClient.admin.checkRolePermission({
     role: userRole as Role,
-    permission: {
+    permissions: {
       apps: ['app'],
     },
   });
 
   const hasManagerAccess = authClient.admin.checkRolePermission({
     role: userRole as Role,
-    permission: {
+    permissions: {
       apps: ['manager'],
     },
   });
