@@ -17,7 +17,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
-import { WithPermissions } from '@/features/auth/with-permission';
+import { WithPermissions } from '@/features/auth/with-permissions';
 import { BookCover } from '@/features/book/book-cover';
 import {
   PageLayout,

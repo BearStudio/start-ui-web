@@ -26,7 +26,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-import { WithPermissions } from '@/features/auth/with-permission';
+import { WithPermissions } from '@/features/auth/with-permissions';
 import { NavUser } from '@/layout/manager/nav-user';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
