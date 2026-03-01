@@ -25,6 +25,7 @@ export default ${componentName};
 module.exports = {
   icon: true,
   outDir: './src/components/icons/generated',
+  filenameCase: 'kebab',
   expandProps: true,
   typescript: true,
   replaceAttrValues: { '#000': 'currentColor' },
