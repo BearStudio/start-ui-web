@@ -60,7 +60,7 @@ export default defineConfig(
         'error',
         {
           case: 'kebabCase',
-          ignore: ['^routeTree\\.gen\\.ts$', '^Icon(.*)\\.tsx'],
+          ignore: ['^routeTree\\.gen\\.ts$'],
         },
       ],
     },
