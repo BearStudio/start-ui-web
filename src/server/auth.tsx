@@ -21,6 +21,7 @@ import { getUserLanguage } from '@/server/utils';
 
 export type Auth = typeof auth;
 export const auth = betterAuth({
+  baseURL: envClient.VITE_BASE_URL,
   session: {
     expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
