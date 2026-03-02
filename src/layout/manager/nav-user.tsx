@@ -35,7 +35,7 @@ import { themes } from '@/components/ui/theme-switcher';
 
 import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
-import { WithPermissions } from '@/features/auth/with-permission';
+import { WithPermissions } from '@/features/auth/with-permissions';
 import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
 import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 

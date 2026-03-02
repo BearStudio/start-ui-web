@@ -9,7 +9,7 @@ const tags = ['books'];
 
 export default {
   getAll: protectedProcedure({
-    permission: {
+    permissions: {
       book: ['read'],
     },
   })
@@ -84,7 +84,7 @@ export default {
     }),
 
   getById: protectedProcedure({
-    permission: {
+    permissions: {
       book: ['read'],
     },
   })
@@ -115,7 +115,7 @@ export default {
     }),
 
   create: protectedProcedure({
-    permission: {
+    permissions: {
       book: ['create'],
     },
   })
@@ -140,7 +140,7 @@ export default {
     }),
 
   updateById: protectedProcedure({
-    permission: {
+    permissions: {
       book: ['update'],
     },
   })
@@ -166,7 +166,7 @@ export default {
     }),
 
   deleteById: protectedProcedure({
-    permission: {
+    permissions: {
       book: ['delete'],
     },
   })

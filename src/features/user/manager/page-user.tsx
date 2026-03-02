@@ -42,7 +42,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
-import { WithPermissions } from '@/features/auth/with-permission';
+import { WithPermissions } from '@/features/auth/with-permissions';
 import {
   PageLayout,
   PageLayoutContent,

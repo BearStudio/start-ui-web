@@ -92,7 +92,7 @@ describe('book router', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
-          permission: { book: ['read'] },
+          permissions: { book: ['read'] },
         },
       });
     });
@@ -146,7 +146,7 @@ describe('book router', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
-          permission: { book: ['read'] },
+          permissions: { book: ['read'] },
         },
       });
     });
@@ -229,7 +229,7 @@ describe('book router', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
-          permission: { book: ['create'] },
+          permissions: { book: ['create'] },
         },
       });
     });
@@ -330,7 +330,7 @@ describe('book router', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
-          permission: { book: ['update'] },
+          permissions: { book: ['update'] },
         },
       });
     });
@@ -401,7 +401,7 @@ describe('book router', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
-          permission: { book: ['delete'] },
+          permissions: { book: ['delete'] },
         },
       });
     });

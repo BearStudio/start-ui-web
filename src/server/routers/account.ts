@@ -8,7 +8,7 @@ const tags = ['account'];
 
 export default {
   submitOnboarding: protectedProcedure({
-    permission: null,
+    permissions: null,
   })
     .route({
       method: 'POST',
@@ -29,7 +29,7 @@ export default {
     }),
 
   updateInfo: protectedProcedure({
-    permission: null,
+    permissions: null,
   })
     .route({
       method: 'POST',

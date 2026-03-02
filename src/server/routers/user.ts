@@ -11,7 +11,7 @@ const tags = ['users'];
 
 export default {
   getAll: protectedProcedure({
-    permission: {
+    permissions: {
       user: ['list'],
     },
   })
@@ -84,7 +84,7 @@ export default {
     }),
 
   getById: protectedProcedure({
-    permission: {
+    permissions: {
       user: ['list'],
     },
   })
@@ -114,7 +114,7 @@ export default {
     }),
 
   updateById: protectedProcedure({
-    permission: {
+    permissions: {
       user: ['set-role'],
     },
   })
@@ -159,7 +159,7 @@ export default {
     }),
 
   create: protectedProcedure({
-    permission: {
+    permissions: {
       user: ['create'],
     },
   })
@@ -189,7 +189,7 @@ export default {
     }),
 
   deleteById: protectedProcedure({
-    permission: {
+    permissions: {
       user: ['delete'],
     },
   })
@@ -227,7 +227,7 @@ export default {
     }),
 
   getUserSessions: protectedProcedure({
-    permission: {
+    permissions: {
       session: ['list'],
     },
   })
@@ -285,7 +285,7 @@ export default {
     }),
 
   revokeUserSessions: protectedProcedure({
-    permission: {
+    permissions: {
       session: ['revoke'],
     },
   })
@@ -325,7 +325,7 @@ export default {
     }),
 
   revokeUserSession: protectedProcedure({
-    permission: {
+    permissions: {
       session: ['revoke'],
     },
   })

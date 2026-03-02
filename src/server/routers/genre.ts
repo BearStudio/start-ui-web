@@ -8,7 +8,7 @@ const tags = ['genres'];
 
 export default {
   getAll: protectedProcedure({
-    permission: {
+    permissions: {
       genre: ['read'],
     },
   })
