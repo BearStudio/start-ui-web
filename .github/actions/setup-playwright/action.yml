@@ -20,9 +20,13 @@ runs:
     - name: Install Playwright browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: pnpm exec playwright install ${{ inputs.browsers }} --with-deps
+      env:
+        BROWSERS: ${{ inputs.browsers }}
+      run: pnpm exec playwright install $BROWSERS --with-deps
 
     - name: Install Playwright system deps
       if: steps.playwright-cache.outputs.cache-hit == 'true'
       shell: bash
-      run: pnpm exec playwright install-deps ${{ inputs.browsers }}
+      env:
+        BROWSERS: ${{ inputs.browsers }}
+      run: pnpm exec playwright install-deps $BROWSERS
