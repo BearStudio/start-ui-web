@@ -137,7 +137,7 @@
     "prettier-plugin-tailwindcss": "0.7.2",
     "prisma": "6.19.2",
     "resize-observer-polyfill": "1.5.1",
-    "storybook": "10.2.1",
+    "storybook": "10.2.10",
     "ts-plugin-sort-import-suggestions": "1.0.4",
     "typescript": "5.9.3",
     "typescript-eslint": "8.54.0",
