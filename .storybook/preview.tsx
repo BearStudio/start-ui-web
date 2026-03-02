@@ -44,7 +44,7 @@ const preview: Preview = {
   parameters: {
     layout: 'padded',
     backgrounds: {
-      disable: true,
+      disabled: true,
     },
     darkMode: {
       stylePreview: true,
