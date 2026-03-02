@@ -15,6 +15,10 @@ export const envServer = createEnv({
       .int()
       .prefault(2592000), // 30 days by default
     AUTH_SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().prefault(86400), // 1 day by default
+    AUTH_ALLOWED_HOSTS: z
+      .string()
+      .optional()
+      .transform((stringValue) => stringValue?.split(',').map((v) => v.trim())),
     AUTH_TRUSTED_ORIGINS: z
       .string()
       .optional()
