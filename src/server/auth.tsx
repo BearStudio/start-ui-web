@@ -22,7 +22,12 @@ import { getUserLanguage } from '@/server/utils';
 export type Auth = typeof auth;
 export const auth = betterAuth({
   baseURL: envServer.AUTH_ALLOWED_HOSTS
-    ? { allowedHosts: envServer.AUTH_ALLOWED_HOSTS }
+    ? {
+        allowedHosts: [
+          new URL(envClient.VITE_BASE_URL).host,
+          ...envServer.AUTH_ALLOWED_HOSTS,
+        ],
+      }
     : envClient.VITE_BASE_URL,
   session: {
     expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
