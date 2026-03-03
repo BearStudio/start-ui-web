@@ -12,7 +12,14 @@ import {
   UploadCloudIcon,
   XIcon,
 } from 'lucide-react';
-import { type ChangeEvent, type ComponentProps, useRef, useState } from 'react';
+import {
+  type ChangeEvent,
+  type ComponentProps,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -59,12 +66,21 @@ export const UploadInput = ({
   placeholder,
   defaultValue,
 }: UploadInputProps) => {
+  const { t } = useTranslation(['components']);
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [defaultCleared, setDefaultCleared] = useState(false);
   const dragCounterRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (thumbnailUrl) {
+        URL.revokeObjectURL(thumbnailUrl);
+      }
+    };
+  }, [thumbnailUrl]);
 
   const showDefault = !!defaultValue && !selectedFile && !defaultCleared;
 
@@ -220,7 +236,7 @@ export const UploadInput = ({
           <>
             <UploadCloudIcon className="size-4 shrink-0 text-muted-foreground" />
             <span className="min-w-0 flex-1 truncate text-muted-foreground">
-              {placeholder ?? 'Drag & drop your file here, or click to browse'}
+              {placeholder ?? t('components:uploadInput.placeholder')}
             </span>
           </>
         ))
@@ -230,7 +246,7 @@ export const UploadInput = ({
           variant="ghost"
           size="icon-xs"
           onClick={handleClear}
-          aria-label="Remove file"
+          aria-label={t('components:uploadInput.removeFile')}
         >
           <XIcon />
         </Button>

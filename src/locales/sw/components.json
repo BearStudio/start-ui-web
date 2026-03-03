@@ -72,6 +72,10 @@
     "placeholder": "Chagua...",
     "noItemsFound": "Hakuna vitu vilivyopatikana."
   },
+  "uploadInput": {
+    "placeholder": "Buruta na udondoshe faili yako hapa, au bofya kuvinjari",
+    "removeFile": "Ondoa faili"
+  },
   "errorBoundary": {
     "title": "Hitilafu Isiyojulikana",
     "details": "Maelezo",
