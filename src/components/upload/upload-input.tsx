@@ -1,0 +1,285 @@
+import { getUiState } from '@bearstudio/ui-state';
+import {
+  type ClientUploadError,
+  type FileUploadInfo,
+  uploadFile,
+  type UploadStatus,
+} from '@better-upload/client';
+import { useMutation } from '@tanstack/react-query';
+import {
+  CircleAlertIcon,
+  FileIcon,
+  UploadCloudIcon,
+  XIcon,
+} from 'lucide-react';
+import { type ChangeEvent, type ComponentProps, useRef, useState } from 'react';
+import { match } from 'ts-pattern';
+
+import { cn } from '@/lib/tailwind/utils';
+
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+
+import type { UploadRoutes } from '@/routes/api/upload';
+
+export type UploadInputDefaultValue = {
+  name: string;
+  url?: string;
+};
+
+export type UploadInputProps = {
+  uploadRoute: UploadRoutes;
+  /**
+   * Called only if the file was uploaded successfully.
+   */
+  onSuccess?: (file: FileUploadInfo<'complete'>) => void;
+  onUploadStateChange?: <T extends UploadStatus>(
+    file: FileUploadInfo<T>
+  ) => void;
+  onError?: (error: Error | ClientUploadError) => void;
+  inputProps?: ComponentProps<'input'>;
+  getMetadata?: (
+    file: File
+  ) => NonNullable<Parameters<typeof uploadFile>[0]['metadata']>;
+  disabled?: boolean;
+  className?: string;
+  placeholder?: string;
+  defaultValue?: UploadInputDefaultValue;
+};
+
+export const UploadInput = ({
+  inputProps,
+  onUploadStateChange,
+  onSuccess,
+  onError,
+  disabled,
+  uploadRoute,
+  getMetadata,
+  className,
+  placeholder,
+  defaultValue,
+}: UploadInputProps) => {
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [defaultCleared, setDefaultCleared] = useState(false);
+  const dragCounterRef = useRef(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const showDefault = !!defaultValue && !selectedFile && !defaultCleared;
+
+  const uploadMutation = useMutation({
+    mutationKey: ['fileUpload', uploadRoute],
+    mutationFn: async (file: File) => {
+      return uploadFile({
+        file,
+        route: uploadRoute,
+        onFileStateChange: ({ file }) => {
+          onUploadStateChange?.(file);
+        },
+        metadata: getMetadata?.(file),
+      });
+    },
+    onSuccess: ({ file }) => {
+      onSuccess?.(file);
+    },
+    onError: (error) => {
+      onError?.(error);
+    },
+  });
+
+  const isDisabled = uploadMutation.isPending || disabled;
+
+  const ui = getUiState((set) => {
+    if (selectedFile) return set('selected', { file: selectedFile });
+    if (showDefault) return set('default', { defaultValue: defaultValue! });
+    return set('empty');
+  });
+
+  const handleFile = (file: File) => {
+    if (thumbnailUrl) {
+      URL.revokeObjectURL(thumbnailUrl);
+    }
+    setSelectedFile(file);
+    setThumbnailUrl(
+      file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+    );
+    uploadMutation.mutate(file);
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFile(file);
+    }
+    // Reset so re-selecting the same file triggers onChange
+    event.target.value = '';
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (thumbnailUrl) {
+      URL.revokeObjectURL(thumbnailUrl);
+    }
+    setSelectedFile(null);
+    setThumbnailUrl(null);
+    setDefaultCleared(true);
+    uploadMutation.reset();
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current++;
+    if (e.dataTransfer.items?.length) {
+      setIsDragOver(true);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
+      setIsDragOver(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    dragCounterRef.current = 0;
+    const file = e.dataTransfer.files?.[0] ?? null;
+    if (file && !isDisabled) {
+      handleFile(file);
+    }
+  };
+
+  return (
+    <div
+      role="button"
+      tabIndex={isDisabled ? undefined : 0}
+      className={cn(
+        'flex h-9 w-full items-center gap-2 rounded-md border text-xs transition-[color,box-shadow]',
+        'cursor-pointer',
+        !ui.is('empty')
+          ? 'border-input bg-background px-1.5 shadow-xs dark:bg-input/30'
+          : 'border-dashed border-input bg-neutral-50 px-3 dark:bg-input/30',
+        'hover:bg-accent/50',
+        isDragOver && 'border-solid border-ring bg-accent/50',
+        uploadMutation.isError &&
+          'border-destructive ring-[3px] ring-destructive/20 dark:ring-destructive/40',
+        'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+        isDisabled && 'pointer-events-none opacity-50',
+        className
+      )}
+      onClick={() => !isDisabled && inputRef.current?.click()}
+      onKeyDown={(e) => {
+        if (['Enter', ' '].includes(e.key)) {
+          e.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
+      {ui
+        .match('selected', ({ file }) => (
+          <>
+            <FilePreview
+              status={uploadMutation.status}
+              thumbnailUrl={thumbnailUrl}
+            />
+            <span
+              className={cn(
+                'min-w-0 flex-1 truncate text-muted-foreground',
+                uploadMutation.isError && 'text-destructive'
+              )}
+            >
+              {file.name}
+            </span>
+          </>
+        ))
+        .match('default', ({ defaultValue }) => (
+          <>
+            <FilePreview thumbnailUrl={defaultValue.url ?? null} />
+            <span className="min-w-0 flex-1 truncate text-muted-foreground">
+              {defaultValue.name}
+            </span>
+          </>
+        ))
+        .match('empty', () => (
+          <>
+            <UploadCloudIcon className="size-4 shrink-0 text-muted-foreground" />
+            <span className="min-w-0 flex-1 truncate text-muted-foreground">
+              {placeholder ?? 'Drag & drop your file here, or click to browse'}
+            </span>
+          </>
+        ))
+        .exhaustive()}
+      {!ui.is('empty') && !isDisabled && (
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          onClick={handleClear}
+          aria-label="Remove file"
+        >
+          <XIcon />
+        </Button>
+      )}
+      <input
+        {...inputProps}
+        ref={inputRef}
+        className={cn('hidden', inputProps?.className)}
+        type="file"
+        disabled={isDisabled}
+        onChange={(e) => {
+          handleFileChange(e);
+          inputProps?.onChange?.(e);
+        }}
+      />
+    </div>
+  );
+};
+
+function FilePreview({
+  status = 'idle',
+  thumbnailUrl,
+}: {
+  status?: 'idle' | 'pending' | 'error' | 'success';
+  thumbnailUrl: string | null;
+}) {
+  return match(status)
+    .with('pending', () => (
+      <div className="flex size-6 shrink-0 items-center justify-center rounded bg-muted">
+        <Spinner className="size-4 shrink-0" />
+      </div>
+    ))
+    .with('error', () => (
+      <div className="flex size-6 shrink-0 items-center justify-center rounded bg-destructive/10">
+        <CircleAlertIcon className="size-3 text-destructive" />
+      </div>
+    ))
+    .with('idle', 'success', () =>
+      thumbnailUrl ? (
+        <img
+          src={thumbnailUrl}
+          alt=""
+          className="size-6 shrink-0 rounded object-cover"
+        />
+      ) : (
+        <div className="flex size-6 shrink-0 items-center justify-center rounded bg-muted">
+          <FileIcon className="size-3 text-muted-foreground" />
+        </div>
+      )
+    )
+    .exhaustive();
+}
