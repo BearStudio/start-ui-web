@@ -6,6 +6,7 @@ import {
   type UploadStatus,
 } from '@better-upload/client';
 import { useMutation } from '@tanstack/react-query';
+import { cva, type VariantProps } from 'class-variance-authority';
 import {
   CircleAlertIcon,
   FileIcon,
@@ -29,12 +30,75 @@ import { Spinner } from '@/components/ui/spinner';
 
 import type { UploadRoutes } from '@/routes/api/upload';
 
+const uploadInputVariants = cva(
+  cn(
+    'flex w-full items-center gap-2 rounded-md border text-xs transition-[color,box-shadow]',
+    'cursor-pointer',
+    'hover:bg-accent/50',
+    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
+  ),
+  {
+    variants: {
+      size: {
+        sm: 'h-8',
+        default: 'h-9',
+        lg: 'h-10 text-sm',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+const uploadInputFilledVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'px-1',
+      default: 'px-1.5',
+      lg: 'px-2',
+    },
+  },
+  defaultVariants: {
+    size: 'default',
+  },
+});
+
+const uploadInputEmptyVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'px-2.5',
+      default: 'px-3',
+      lg: 'px-4',
+    },
+  },
+  defaultVariants: {
+    size: 'default',
+  },
+});
+
+const filePreviewVariants = cva(
+  'flex shrink-0 items-center justify-center rounded',
+  {
+    variants: {
+      size: {
+        sm: 'size-5',
+        default: 'size-6',
+        lg: 'size-7',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
 export type UploadInputDefaultValue = {
   name: string;
   url?: string;
 };
 
-export type UploadInputProps = {
+export type UploadInputProps = VariantProps<typeof uploadInputVariants> & {
   uploadRoute: UploadRoutes;
   /**
    * Called only if the file was uploaded successfully.
@@ -65,6 +129,7 @@ export const UploadInput = ({
   className,
   placeholder,
   defaultValue,
+  size,
 }: UploadInputProps) => {
   const { t } = useTranslation(['components']);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -182,16 +247,19 @@ export const UploadInput = ({
       role="button"
       tabIndex={isDisabled ? undefined : 0}
       className={cn(
-        'flex h-9 w-full items-center gap-2 rounded-md border text-xs transition-[color,box-shadow]',
-        'cursor-pointer',
+        uploadInputVariants({ size }),
         !ui.is('empty')
-          ? 'border-input bg-background px-1.5 shadow-xs dark:bg-input/30'
-          : 'border-dashed border-input bg-neutral-50 px-3 dark:bg-input/30',
-        'hover:bg-accent/50',
+          ? cn(
+              'border-input bg-background shadow-xs dark:bg-input/30',
+              uploadInputFilledVariants({ size })
+            )
+          : cn(
+              'border-dashed border-input bg-neutral-50 dark:bg-input/30',
+              uploadInputEmptyVariants({ size })
+            ),
         isDragOver && 'border-solid border-ring bg-accent/50',
         uploadMutation.isError &&
           'border-destructive ring-[3px] ring-destructive/20 dark:ring-destructive/40',
-        'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
         isDisabled && 'pointer-events-none opacity-50',
         className
       )}
@@ -211,12 +279,13 @@ export const UploadInput = ({
         .match('selected', ({ file }) => (
           <>
             <FilePreview
+              size={size}
               status={uploadMutation.status}
               thumbnailUrl={thumbnailUrl}
             />
             <span
               className={cn(
-                'min-w-0 flex-1 truncate text-muted-foreground',
+                'min-w-0 flex-1 truncate',
                 uploadMutation.isError && 'text-destructive'
               )}
             >
@@ -226,10 +295,8 @@ export const UploadInput = ({
         ))
         .match('default', ({ defaultValue }) => (
           <>
-            <FilePreview thumbnailUrl={defaultValue.url ?? null} />
-            <span className="min-w-0 flex-1 truncate text-muted-foreground">
-              {defaultValue.name}
-            </span>
+            <FilePreview size={size} thumbnailUrl={defaultValue.url ?? null} />
+            <span className="min-w-0 flex-1 truncate">{defaultValue.name}</span>
           </>
         ))
         .match('empty', () => (
@@ -269,18 +336,22 @@ export const UploadInput = ({
 function FilePreview({
   status = 'idle',
   thumbnailUrl,
+  size,
 }: {
   status?: 'idle' | 'pending' | 'error' | 'success';
   thumbnailUrl: string | null;
+  size?: VariantProps<typeof filePreviewVariants>['size'];
 }) {
+  const previewClass = filePreviewVariants({ size });
+
   return match(status)
     .with('pending', () => (
-      <div className="flex size-6 shrink-0 items-center justify-center rounded bg-muted">
+      <div className={cn(previewClass, 'bg-muted')}>
         <Spinner className="size-4 shrink-0" />
       </div>
     ))
     .with('error', () => (
-      <div className="flex size-6 shrink-0 items-center justify-center rounded bg-destructive/10">
+      <div className={cn(previewClass, 'bg-destructive/10')}>
         <CircleAlertIcon className="size-3 text-destructive" />
       </div>
     ))
@@ -289,10 +360,10 @@ function FilePreview({
         <img
           src={thumbnailUrl}
           alt=""
-          className="size-6 shrink-0 rounded object-cover"
+          className={cn(previewClass, 'object-cover')}
         />
       ) : (
-        <div className="flex size-6 shrink-0 items-center justify-center rounded bg-muted">
+        <div className={cn(previewClass, 'bg-muted')}>
           <FileIcon className="size-3 text-muted-foreground" />
         </div>
       )

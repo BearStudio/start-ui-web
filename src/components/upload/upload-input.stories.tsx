@@ -67,6 +67,30 @@ export const CustomPlaceholder = () => {
   );
 };
 
+export const Sizes = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <UploadInput
+        size="sm"
+        uploadRoute="bookCover"
+        onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
+      />
+      <UploadInput
+        uploadRoute="bookCover"
+        onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
+      />
+      <UploadInput
+        size="lg"
+        uploadRoute="bookCover"
+        onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
+      />
+    </div>
+  );
+};
+
 export const Disabled = () => {
   return (
     <UploadInput
