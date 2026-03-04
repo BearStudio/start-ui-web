@@ -250,9 +250,8 @@ export const UploadInput = ({
   };
 
   return (
-    <button
-      type="button"
-      disabled={isDisabled}
+    <div
+      tabIndex={isDisabled ? undefined : 0}
       aria-describedby={ariaDescribedby}
       className={cn(
         uploadInputVariants({ size }),
@@ -340,7 +339,7 @@ export const UploadInput = ({
           inputProps?.onChange?.(e);
         }}
       />
-    </button>
+    </div>
   );
 };
 
