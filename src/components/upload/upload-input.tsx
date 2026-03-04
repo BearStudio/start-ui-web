@@ -32,7 +32,7 @@ import type { UploadRoutes } from '@/routes/api/upload';
 
 const uploadInputVariants = cva(
   cn(
-    'flex w-full items-center gap-2 rounded-md border text-xs transition-[color,box-shadow]',
+    'flex w-full items-center gap-2 rounded-md border text-left text-xs transition-[color,box-shadow]',
     'cursor-pointer',
     'hover:bg-accent/50',
     'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
@@ -250,21 +250,21 @@ export const UploadInput = ({
   };
 
   return (
-    <div
-      role="button"
-      tabIndex={isDisabled ? undefined : 0}
+    <button
+      type="button"
+      disabled={isDisabled}
       aria-invalid={ariaInvalid}
       aria-describedby={ariaDescribedby}
       className={cn(
         uploadInputVariants({ size }),
-        !ui.is('empty')
+        ui.is('empty')
           ? cn(
-              'border-input bg-background shadow-xs dark:bg-input/30',
-              uploadInputFilledVariants({ size })
-            )
-          : cn(
               'border-dashed border-input bg-neutral-50 dark:bg-input/30',
               uploadInputEmptyVariants({ size })
+            )
+          : cn(
+              'border-input bg-background shadow-xs dark:bg-input/30',
+              uploadInputFilledVariants({ size })
             ),
         isDragOver && 'border-solid border-ring bg-accent/50',
         uploadMutation.isError &&
@@ -341,7 +341,7 @@ export const UploadInput = ({
           inputProps?.onChange?.(e);
         }}
       />
-    </div>
+    </button>
   );
 };
 
