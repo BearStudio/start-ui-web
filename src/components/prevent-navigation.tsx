@@ -12,7 +12,6 @@ export const PreventNavigation = (props: { shouldBlock: boolean }) => {
         );
         return !shouldLeave;
       }}
-      withResolver
       enableBeforeUnload={props.shouldBlock}
     />
   );
