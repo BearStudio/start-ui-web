@@ -56,7 +56,9 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    expo({ disableOriginOverride: true }), // Allows an Expo native app to use auth, can be deleted if not needed
+    // Allows an Expo native app to use auth, can be deleted if not needed
+    // https://github.com/better-auth/better-auth/issues/1058
+    expo({ disableOriginOverride: true }),
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
