@@ -136,12 +136,14 @@ export const UploadInput = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [defaultCleared, setDefaultCleared] = useState(false);
+  const prevDefaultValueRef = useRef(defaultValue);
   const dragCounterRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  if (prevDefaultValueRef.current !== defaultValue) {
+    prevDefaultValueRef.current = defaultValue;
     setDefaultCleared(false);
-  }, [defaultValue]);
+  }
 
   useEffect(() => {
     return () => {
@@ -251,6 +253,8 @@ export const UploadInput = ({
     <div
       role="button"
       tabIndex={isDisabled ? undefined : 0}
+      aria-invalid={inputProps?.['aria-invalid']}
+      aria-describedby={inputProps?.['aria-describedby']}
       className={cn(
         uploadInputVariants({ size }),
         !ui.is('empty')
