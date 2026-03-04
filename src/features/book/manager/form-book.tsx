@@ -65,7 +65,7 @@ export const FormBook = () => {
       </FormField>
 
       <FormField>
-        <FormFieldLabel>{t('book:manager.uploadCover')}</FormFieldLabel>
+        <FormFieldLabel>{t('book:common.uploadCover.label')}</FormFieldLabel>
         <FormFieldController
           type="upload-input"
           control={form.control}
@@ -82,7 +82,7 @@ export const FormBook = () => {
             toast.error(t('book:manager.uploadErrors.failed'));
           }}
         />
-        <FormFieldHelper>{t('book:manager.uploadCoverHelper')}</FormFieldHelper>
+        <FormFieldHelper>{t('book:common.uploadCover.helper')}</FormFieldHelper>
       </FormField>
     </div>
   );
