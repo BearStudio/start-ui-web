@@ -5,10 +5,9 @@ import { FormFieldContainer } from '@/components/form/form-field-container';
 import { useFormFieldController } from '@/components/form/form-field-controller/context';
 import { FormFieldError } from '@/components/form/form-field-error';
 import type { FieldProps } from '@/components/form/types';
-import {
-  UploadInput,
-  type UploadInputDefaultValue,
-} from '@/components/upload/upload-input';
+import { UploadInput } from '@/components/upload/upload-input';
+
+import { envClient } from '@/env/client';
 
 export const FieldUploadInput = (
   props: FieldProps<
@@ -22,7 +21,10 @@ export const FieldUploadInput = (
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
 
-  const defaultValue = field.value as UploadInputDefaultValue | undefined;
+  const value =
+    field.value && !field.value.startsWith('http')
+      ? `${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${field.value}`
+      : field.value || undefined;
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -31,13 +33,18 @@ export const FieldUploadInput = (
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         disabled={field.disabled ?? rest.disabled}
-        defaultValue={defaultValue}
+        defaultValue={
+          value
+            ? { name: value.split('/').at(-1) ?? value, url: value }
+            : undefined
+        }
         onSuccess={(file) => {
-          field.onChange({
-            name: file.name,
-            url: file.objectInfo.key,
-          } satisfies UploadInputDefaultValue);
+          field.onChange(file.objectInfo.key);
           rest.onSuccess?.(file);
+        }}
+        onClear={() => {
+          field.onChange(null);
+          rest.onClear?.();
         }}
         onError={(error) => {
           rest.onError?.(error);

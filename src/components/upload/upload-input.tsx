@@ -108,6 +108,7 @@ export type UploadInputProps = VariantProps<typeof uploadInputVariants> & {
     file: FileUploadInfo<T>
   ) => void;
   onError?: (error: Error | ClientUploadError) => void;
+  onClear?: () => void;
   inputProps?: ComponentProps<'input'>;
   getMetadata?: (
     file: File
@@ -123,6 +124,7 @@ export const UploadInput = ({
   onUploadStateChange,
   onSuccess,
   onError,
+  onClear,
   disabled,
   uploadRoute,
   getMetadata,
@@ -206,6 +208,7 @@ export const UploadInput = ({
     setThumbnailUrl(null);
     setDefaultCleared(true);
     uploadMutation.reset();
+    onClear?.();
   };
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -360,7 +363,7 @@ function FilePreview({
         <img
           src={thumbnailUrl}
           alt=""
-          className={cn(previewClass, 'object-cover')}
+          className={cn(previewClass, 'object-cover shadow-lg')}
         />
       ) : (
         <div className={cn(previewClass, 'bg-muted')}>

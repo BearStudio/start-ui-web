@@ -11,36 +11,22 @@ import {
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
-import { type UploadInputDefaultValue } from '@/components/upload/upload-input';
 
 export default {
   title: 'Form/FieldUploadInput',
 };
 
-const zUploadValue = () =>
-  z.object(
-    {
-      name: z.string(),
-      url: z.string().optional(),
-    },
-    'File is required'
-  );
-
-type FormValues = {
-  file: UploadInputDefaultValue | null;
-};
-
 const zFormSchema = () =>
   z.object({
-    file: zUploadValue(),
+    file: z.string('File is required').nullish(),
   });
 
 const formOptions = {
   mode: 'onBlur' as const,
   resolver: zodResolver(zFormSchema()),
   defaultValues: {
-    file: null!,
-  } satisfies FormValues,
+    file: '',
+  },
 };
 
 export const Default = () => {
@@ -69,10 +55,7 @@ export const DefaultValue = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      file: {
-        name: 'cover.jpg',
-        url: 'https://picsum.photos/seed/storybook/200/200',
-      },
+      file: 'https://picsum.photos/seed/storybook/200/200',
     },
   });
 
@@ -99,10 +82,7 @@ export const Disabled = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      file: {
-        name: 'cover.jpg',
-        url: 'https://picsum.photos/seed/storybook/200/200',
-      },
+      file: 'https://picsum.photos/seed/storybook/200/200',
     },
   });
 
