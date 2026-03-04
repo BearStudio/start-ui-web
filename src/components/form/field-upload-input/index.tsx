@@ -21,10 +21,13 @@ export const FieldUploadInput = (
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
 
-  const value =
-    field.value && !field.value.startsWith('http')
-      ? `${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${field.value}`
-      : field.value || undefined;
+  const getFieldUrl = (raw: unknown): string | undefined => {
+    if (typeof raw !== 'string' || !raw) return undefined;
+    if (raw.startsWith('http')) return raw;
+    return `${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${raw}`;
+  };
+
+  const value = getFieldUrl(field.value);
 
   return (
     <FormFieldContainer {...containerProps}>

@@ -253,7 +253,6 @@ export const UploadInput = ({
     <button
       type="button"
       disabled={isDisabled}
-      aria-invalid={ariaInvalid}
       aria-describedby={ariaDescribedby}
       className={cn(
         uploadInputVariants({ size }),
