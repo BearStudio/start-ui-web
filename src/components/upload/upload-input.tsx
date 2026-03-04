@@ -140,6 +140,10 @@ export const UploadInput = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    setDefaultCleared(false);
+  }, [defaultValue]);
+
+  useEffect(() => {
     return () => {
       if (thumbnailUrl) {
         URL.revokeObjectURL(thumbnailUrl);
