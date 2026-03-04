@@ -251,6 +251,7 @@ export const UploadInput = ({
 
   return (
     <div
+      role="group"
       tabIndex={isDisabled ? undefined : 0}
       aria-describedby={ariaDescribedby}
       className={cn(
