@@ -60,6 +60,7 @@
       "updateError": "Imeshindikana kusasisha kitabu"
     },
     "uploadCover": "Picha ya jalada",
+    "uploadCoverHelper": "Ukubwa unaopendekezwa: 512 x 768px",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "Unahitaji kuwa umeingia ili uweze kupakia jalada jipya",
       "UNAUTHORIZED": "Hauruhusiwi kubadilisha jalada la kitabu",

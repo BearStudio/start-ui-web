@@ -29,8 +29,6 @@ export const FieldUploadInput = (
   return (
     <FormFieldContainer {...containerProps}>
       <UploadInput
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         disabled={field.disabled ?? rest.disabled}
         defaultValue={
@@ -48,6 +46,11 @@ export const FieldUploadInput = (
         }}
         onError={(error) => {
           rest.onError?.(error);
+        }}
+        inputProps={{
+          ...rest.inputProps,
+          'aria-invalid': fieldState.invalid ? true : undefined,
+          'aria-describedby': ctx.describedBy(fieldState.invalid),
         }}
       />
       <FormFieldError />

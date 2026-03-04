@@ -18,14 +18,14 @@ export default {
 
 const zFormSchema = () =>
   z.object({
-    file: z.string('File is required').nullish(),
+    file: z.string('Required'),
   });
 
 const formOptions = {
   mode: 'onBlur' as const,
   resolver: zodResolver(zFormSchema()),
   defaultValues: {
-    file: '',
+    file: null!,
   },
 };
 

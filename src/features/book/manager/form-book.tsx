@@ -9,6 +9,7 @@ import { orpc } from '@/lib/orpc/client';
 import {
   FormField,
   FormFieldController,
+  FormFieldHelper,
   FormFieldLabel,
 } from '@/components/form';
 
@@ -81,6 +82,7 @@ export const FormBook = () => {
             toast.error(t('book:manager.uploadErrors.failed'));
           }}
         />
+        <FormFieldHelper>{t('book:manager.uploadCoverHelper')}</FormFieldHelper>
       </FormField>
     </div>
   );

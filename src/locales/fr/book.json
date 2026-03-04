@@ -60,6 +60,7 @@
       "updateError": "Échec de la modification du livre"
     },
     "uploadCover": "Image de couverture",
+    "uploadCoverHelper": "Taille recommandée : 512 x 768px",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "Vous devez être authentifié pour pouvoir télécharger une nouvelle couverture",
       "UNAUTHORIZED": "Vous n'êtes pas autorisé à changer la couverture du livre",

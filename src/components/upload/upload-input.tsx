@@ -35,7 +35,8 @@ const uploadInputVariants = cva(
     'flex w-full items-center gap-2 rounded-md border text-xs transition-[color,box-shadow]',
     'cursor-pointer',
     'hover:bg-accent/50',
-    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
+    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+    'has-[[aria-invalid=true]]:border-destructive'
   ),
   {
     variants: {
@@ -100,9 +101,6 @@ export type UploadInputDefaultValue = {
 
 export type UploadInputProps = VariantProps<typeof uploadInputVariants> & {
   uploadRoute: UploadRoutes;
-  /**
-   * Called only if the file was uploaded successfully.
-   */
   onSuccess?: (file: FileUploadInfo<'complete'>) => void;
   onUploadStateChange?: <T extends UploadStatus>(
     file: FileUploadInfo<T>
