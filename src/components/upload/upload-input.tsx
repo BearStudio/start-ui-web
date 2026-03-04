@@ -274,6 +274,7 @@ export const UploadInput = ({
       )}
       onClick={() => !isDisabled && inputRef.current?.click()}
       onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
         if (['Enter', ' '].includes(e.key)) {
           e.preventDefault();
           inputRef.current?.click();
