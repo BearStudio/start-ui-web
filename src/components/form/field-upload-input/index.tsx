@@ -47,11 +47,8 @@ export const FieldUploadInput = (
         onError={(error) => {
           rest.onError?.(error);
         }}
-        inputProps={{
-          ...rest.inputProps,
-          'aria-invalid': fieldState.invalid ? true : undefined,
-          'aria-describedby': ctx.describedBy(fieldState.invalid),
-        }}
+        aria-invalid={fieldState.invalid ? true : undefined}
+        aria-describedby={ctx.describedBy(fieldState.invalid)}
       />
       <FormFieldError />
     </FormFieldContainer>

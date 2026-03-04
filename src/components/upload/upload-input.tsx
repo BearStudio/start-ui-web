@@ -115,6 +115,8 @@ export type UploadInputProps = VariantProps<typeof uploadInputVariants> & {
   className?: string;
   placeholder?: string;
   defaultValue?: UploadInputDefaultValue;
+  'aria-invalid'?: ComponentProps<'input'>['aria-invalid'];
+  'aria-describedby'?: string;
 };
 
 export const UploadInput = ({
@@ -130,6 +132,8 @@ export const UploadInput = ({
   placeholder,
   defaultValue,
   size,
+  'aria-invalid': ariaInvalid,
+  'aria-describedby': ariaDescribedby,
 }: UploadInputProps) => {
   const { t } = useTranslation(['components']);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -249,8 +253,8 @@ export const UploadInput = ({
     <div
       role="button"
       tabIndex={isDisabled ? undefined : 0}
-      aria-invalid={inputProps?.['aria-invalid']}
-      aria-describedby={inputProps?.['aria-describedby']}
+      aria-invalid={ariaInvalid}
+      aria-describedby={ariaDescribedby}
       className={cn(
         uploadInputVariants({ size }),
         !ui.is('empty')
@@ -329,6 +333,8 @@ export const UploadInput = ({
         className={cn('hidden', inputProps?.className)}
         type="file"
         disabled={isDisabled}
+        aria-invalid={ariaInvalid}
+        aria-describedby={ariaDescribedby}
         onChange={(e) => {
           handleFileChange(e);
           inputProps?.onChange?.(e);
