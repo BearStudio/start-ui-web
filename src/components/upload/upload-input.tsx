@@ -135,15 +135,10 @@ export const UploadInput = ({
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
-  const [defaultCleared, setDefaultCleared] = useState(false);
-  const prevDefaultValueRef = useRef(defaultValue);
+  const [clearedDefaultValue, setClearedDefaultValue] =
+    useState<UploadInputDefaultValue>();
   const dragCounterRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  if (prevDefaultValueRef.current !== defaultValue) {
-    prevDefaultValueRef.current = defaultValue;
-    setDefaultCleared(false);
-  }
 
   useEffect(() => {
     return () => {
@@ -153,7 +148,8 @@ export const UploadInput = ({
     };
   }, [thumbnailUrl]);
 
-  const showDefault = !!defaultValue && !selectedFile && !defaultCleared;
+  const showDefault =
+    !!defaultValue && !selectedFile && defaultValue !== clearedDefaultValue;
 
   const uploadMutation = useMutation({
     mutationKey: ['fileUpload', uploadRoute],
@@ -210,7 +206,7 @@ export const UploadInput = ({
     }
     setSelectedFile(null);
     setThumbnailUrl(null);
-    setDefaultCleared(true);
+    setClearedDefaultValue(defaultValue);
     uploadMutation.reset();
     onClear?.();
   };
