@@ -31,7 +31,6 @@ module.exports = {
   replaceAttrValues: { '#000': 'currentColor' },
   template,
 
-  // Disable svgr's built-in prettier formatting; gen:icons script runs oxfmt instead
   // See https://github.com/gregberge/svgr/issues/893 for details on the underlying issue
   prettier: false,
 };
