@@ -5,6 +5,14 @@ pre-commit:
       run: pnpm prettier --write {staged_files}
       stage_fixed: true
 
+prepare-commit-msg:
+  commands:
+    ai-attribution:
+      run: >
+        if [ -n "$AI_CO_AUTHOR" ] && ! grep -q "Co-authored-by:" {1}; then
+          printf "\n\nCo-authored-by: %s" "$AI_CO_AUTHOR" >> {1};
+        fi
+
 pre-push:
   commands:
     check:
