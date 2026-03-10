@@ -19,10 +19,7 @@ Thank you for considering contributing to this repository!
 
 AI tools (e.g. Claude, Copilot, ChatGPT) are welcome to assist with contributions. If AI was used to generate or significantly assist with your changes, please make it transparent:
 
-- **Commits**: a `Co-authored-by:` trailer will be added automatically if you set the `AI_CO_AUTHOR` environment variable before committing:
-  ```sh
-  AI_CO_AUTHOR="GitHub Copilot <noreply@github.com>" git commit -m "..."
-  ```
+- **Commits**: include a `Co-authored-by:` trailer (e.g. `Co-authored-by: GitHub Copilot <noreply@github.com>`)
 - **Pull requests**: mention the AI tool used in the PR description
 
 If you use **Claude Code**, attribution is handled automatically via `.claude/settings.json` — no extra setup needed.
