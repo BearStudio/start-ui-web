@@ -6,9 +6,24 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { envClient } from '@/env/client';
 import { AUTH_EMAIL_OTP_MOCKED } from '@/features/auth/config';
 
+const LoginEmailButton = ({
+  email,
+  form,
+}: {
+  email: string;
+  form: ReturnType<typeof useFormContext>;
+}) => (
+  <button
+    type="button"
+    className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
+    onClick={() => form.setValue('email', email, { shouldValidate: true })}
+  >
+    {email.split('@')[0]}
+  </button>
+);
+
 export const LoginEmailHint = () => {
   const form = useFormContext();
-  const mockedEmail = 'admin@admin.com';
 
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
@@ -20,19 +35,11 @@ export const LoginEmailHint = () => {
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
-      <AlertDescription className="flex flex-wrap text-sm leading-4">
+      <AlertDescription className="flex flex-wrap gap-x-1 text-sm leading-4">
         You can login with{' '}
-        <button
-          type="button"
-          className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          onClick={() =>
-            form.setValue('email', mockedEmail, {
-              shouldValidate: true,
-            })
-          }
-        >
-          {mockedEmail}
-        </button>
+        <LoginEmailButton email="admin@admin.com" form={form} />
+        {' or '}
+        <LoginEmailButton email="user@user.com" form={form} />
       </AlertDescription>
     </Alert>
   );
