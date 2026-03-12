@@ -6,6 +6,19 @@ on:
   pull_request:
 
 jobs:
+  formatter:
+    name: 🎨 Formatter
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Check formatting
+        run: pnpm run format --check
+
   linter:
     name: 🧹 Linter
     timeout-minutes: 10
