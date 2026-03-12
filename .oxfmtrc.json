@@ -24,7 +24,8 @@
     "**/*.md",
     "**/*.mdx",
     ".env*",
-    "pnpm-lock.yaml",
+    "**/*.yml",
+    "**/*.yaml",
     "**/*.gen.ts",
     "**/generated"
   ]
