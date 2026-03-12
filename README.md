@@ -14,6 +14,8 @@ It represents our team's up-to-date stack that we use when creating web apps for
 
 For detailed information on how to use this project, please refer to the [documentation](https://docs.web.start-ui.com). The documentation contains all the necessary information on installation, usage, and some guides.
 
+You can also browse the auto-generated wiki for this repository on [Code Wiki](https://codewiki.google/github.com/bearstudio/start-ui-web), powered by Gemini.
+
 ## Requirements
 
 * [Node.js](https://nodejs.org) >= 22
