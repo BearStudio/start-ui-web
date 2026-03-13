@@ -1,13 +1,9 @@
-import tailwindcss from '@tailwindcss/postcss';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
+  plugins: [tailwindcss()],
 });

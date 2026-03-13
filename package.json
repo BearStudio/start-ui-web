@@ -107,7 +107,7 @@
     "@storybook/addon-docs": "10.3.0-alpha.16",
     "@storybook/react-vite": "10.3.0-alpha.16",
     "@svgr/cli": "8.1.0",
-    "@tailwindcss/postcss": "4.1.18",
+    "@tailwindcss/vite": "4.2.1",
     "@tanstack/eslint-plugin-query": "5.91.4",
     "@tanstack/eslint-plugin-router": "1.161.4",
     "@types/nodemailer": "7.0.9",
