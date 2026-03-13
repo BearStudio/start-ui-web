@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { userEvent } from 'vitest/browser';
+import { userEvent } from 'vite-plus/test/browser';
 import { ComponentRenderOptions, render } from 'vitest-browser-react';
 
 import { Providers } from '@/providers';

@@ -1,5 +1,5 @@
 import { call } from '@orpc/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vite-plus/test';
 
 import configRouter from '@/server/routers/config';
 import {

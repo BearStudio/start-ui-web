@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from 'vite-plus/test';
 
 const hoisted = vi.hoisted(() => ({
   mockGetSession: vi.fn(),
@@ -8,7 +8,7 @@ const hoisted = vi.hoisted(() => ({
 export const mockGetSession = hoisted.mockGetSession;
 export const mockUserHasPermission = hoisted.mockUserHasPermission;
 
-import type { Mock } from 'vitest';
+import type { Mock } from 'vite-plus/test';
 
 import type { PrismaClient } from '@/server/db/generated/client';
 

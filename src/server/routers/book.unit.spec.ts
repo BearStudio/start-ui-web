@@ -1,6 +1,6 @@
 import { call } from '@orpc/server';
 import { omit } from 'remeda';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 
 import { Book } from '@/features/book/schema';
 import { Book as BookFromDb, Prisma } from '@/server/db/generated/client';
