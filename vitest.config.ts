@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react';
+import viteReact from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
@@ -6,10 +6,14 @@ import { defineConfig } from 'vitest/config';
 const resolve = (filePath: string) => path.resolve(__dirname, filePath);
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [viteReact()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     projects: [
       {
+        extends: true,
         test: {
           name: 'browser',
           browser: {
@@ -34,6 +38,7 @@ export default defineConfig({
         },
       },
       {
+        extends: true,
         test: {
           name: 'unit',
           environment: 'node',

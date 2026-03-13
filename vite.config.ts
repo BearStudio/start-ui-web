@@ -1,12 +1,13 @@
+import babel from '@rolldown/plugin-babel';
+import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
-import viteReact from '@vitejs/plugin-react';
+import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
 import cpy from 'cpy';
 import { Nitro } from 'nitro/types';
 import { nitro } from 'nitro/vite';
 import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
-import tsConfigPaths from 'vite-tsconfig-paths';
 
 const { nitroRetrieveServerDirHook, prismaCopyBinariesPlugin } =
   createPrismaCopyBinariesPlugin();
@@ -15,13 +16,16 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   return {
+    resolve: {
+      tsconfigPaths: true,
+    },
     server: {
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
       strictPort: true,
     },
     plugins: [
       devtools(),
-      tsConfigPaths(),
+      tailwindcss(),
       tanstackStart(),
       nitro({
         modules: [
@@ -34,10 +38,12 @@ export default defineConfig(({ mode }) => {
         routeRules: { '/storybook': { redirect: '/storybook/' } },
       }),
       // react's vite plugin must come after start's vite plugin
-      viteReact({
-        babel: {
-          plugins: ['babel-plugin-react-compiler'],
-        },
+      viteReact(),
+      babel({
+        presets: [
+          ['@babel/preset-react', { runtime: 'automatic' }],
+          reactCompilerPreset(),
+        ],
       }),
       // Copy prisma binaries at the end
       prismaCopyBinariesPlugin(),
