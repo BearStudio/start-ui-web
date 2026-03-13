@@ -15,7 +15,7 @@ test('update value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
       useFormOptions={{ defaultValues: { code: '' } }}
@@ -48,7 +48,7 @@ test('update value', async () => {
 test('default value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={z.object({ code: z.string() })}
       useFormOptions={{
@@ -79,7 +79,7 @@ test('auto submit', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
       useFormOptions={{ defaultValues: { code: '' } }}
@@ -111,7 +111,7 @@ test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
       useFormOptions={{ defaultValues: { code: '000000' } }}

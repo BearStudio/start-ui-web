@@ -15,7 +15,7 @@ vi.mocked(module.useTranslation).mockImplementation(
 
 describe('Calendar', () => {
   it('should render with previous and next button by default', async () => {
-    render(<Calendar />);
+    await render(<Calendar />);
 
     await expect
       .element(page.getByLabelText('Go to the Previous Month'))
@@ -26,15 +26,15 @@ describe('Calendar', () => {
       .toBeDefined();
   });
 
-  it('should render without button date when uncontrolled', () => {
-    render(<Calendar />);
+  it('should render without button date when uncontrolled', async () => {
+    await render(<Calendar />);
 
     // 3 are the previous, next and year select buttons
     expect(page.getByRole('button').all().length).toBeLessThanOrEqual(3);
   });
 
-  it('should render date buttons when controlled', () => {
-    render(
+  it('should render date buttons when controlled', async () => {
+    await render(
       <Calendar mode="single" selected={new Date()} onSelect={() => {}} />
     );
 
@@ -45,7 +45,7 @@ describe('Calendar', () => {
   it('should give the selected value on select', async () => {
     const onSelect = vi.fn();
 
-    render(
+    await render(
       <Calendar
         mode="single"
         selected={new Date()}
@@ -72,7 +72,7 @@ describe('Calendar', () => {
   it('should be able to select today using aria-label', async () => {
     const onSelect = vi.fn();
 
-    render(
+    await render(
       <Calendar
         mode="single"
         selected={dayjs().add(2, 'days').toDate()} // just to make sure that today will be selected

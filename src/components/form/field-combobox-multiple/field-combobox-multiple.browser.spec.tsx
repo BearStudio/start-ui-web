@@ -22,7 +22,7 @@ test('should select item on click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -58,7 +58,7 @@ test('should allow selecting multiple items', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -96,7 +96,7 @@ test('default values', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: ['grizzlyrin'] } }}
@@ -126,7 +126,7 @@ test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: ['pawdrin'] } }}
@@ -158,7 +158,7 @@ test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
