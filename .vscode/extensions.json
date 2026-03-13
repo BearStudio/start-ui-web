@@ -1,8 +1,7 @@
 {
   "recommendations": [
     "lokalise.i18n-ally",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
+    "oxc.oxc-vscode",
     "ms-playwright.playwright",
     "Prisma.prisma"
   ]

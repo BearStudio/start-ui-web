@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "arrowParens": "always",
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles/app.css",
+    "functions": ["cn", "cva"]
+  },
+  "ignorePatterns": [
+    ".cache",
+    ".db",
+    ".history",
+    "output",
+    ".vinxi",
+    "node_modules",
+    "package.json",
+    "package-lock.json",
+    "yarn.lock",
+    "public",
+    "**/*.md",
+    "**/*.mdx",
+    ".env*",
+    "**/*.gen.ts",
+    "**/generated"
+  ]
+}

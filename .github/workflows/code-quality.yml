@@ -16,8 +16,8 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
 
-      - name: Run eslint
-        run: pnpm run lint:eslint --max-warnings 0
+      - name: Run oxlint
+        run: pnpm oxlint --deny-warnings .
 
   typescriptChecker:
     name: 🟦 TypeScript Checker
