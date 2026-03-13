@@ -1,7 +1,7 @@
 pre-commit:
   commands:
     check:
-      glob: "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc,css,scss}"
+      glob: "*.{js,ts,cjs,mjs,jsx,tsx,css,scss}"
       run: pnpm oxfmt {staged_files}
       stage_fixed: true
 
