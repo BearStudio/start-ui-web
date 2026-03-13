@@ -2,11 +2,29 @@
   "name": "start-ui-web",
   "version": "3.0.0",
   "private": true,
-  "type": "module",
   "description": "Opinionated UI starter from the 🐻 BearStudio Team",
-  "engines": {
-    "node": ">=22"
+  "homepage": "https://github.com/bearstudio/start-ui-web#readme",
+  "bugs": {
+    "url": "https://github.com/bearstudio/start-ui-web/issues"
   },
+  "license": "MIT",
+  "author": {
+    "name": "Ivan Dalmet",
+    "email": "ivan@dalmet.fr",
+    "url": "https://github.com/ivan-dalmet"
+  },
+  "contributors": [
+    {
+      "name": "Yoann Fleury",
+      "email": "yoannfleurydev@gmail.com",
+      "url": "https://github.com/yoannfleurydev"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bearstudio/start-ui-web.git"
+  },
+  "type": "module",
   "scripts": {
     "postinstall": "run-p gen:prisma gen:build-info",
     "prepare": "pnpm lefthook install",
@@ -132,8 +150,8 @@
     "jiti": "2.6.1",
     "lefthook": "2.0.16",
     "npm-run-all": "4.1.5",
-    "playwright": "1.58.0",
     "oxfmt": "0.36.0",
+    "playwright": "1.58.0",
     "prisma": "6.19.2",
     "resize-observer-polyfill": "1.5.1",
     "storybook": "10.2.14",
@@ -145,27 +163,9 @@
     "vitest": "4.0.18",
     "vitest-browser-react": "2.0.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bearstudio/start-ui-web.git"
+  "engines": {
+    "node": ">=22"
   },
-  "author": {
-    "name": "Ivan Dalmet",
-    "email": "ivan@dalmet.fr",
-    "url": "https://github.com/ivan-dalmet"
-  },
-  "contributors": [
-    {
-      "name": "Yoann Fleury",
-      "email": "yoannfleurydev@gmail.com",
-      "url": "https://github.com/yoannfleurydev"
-    }
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bearstudio/start-ui-web/issues"
-  },
-  "homepage": "https://github.com/bearstudio/start-ui-web#readme",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
