@@ -117,6 +117,30 @@ If you want to use the same set of custom duotone icons that Start UI is already
 > [!WARNING]
 > All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **square size** and **filled with `#000` color** (will be replaced by `currentColor`).
 
+### Component Registry
+
+Start UI ships a [shadcn-compatible registry](https://ui.shadcn.com/docs/registry) so you can install individual components into other projects.
+
+#### Build the registry
+
+```bash
+pnpm registry:build
+```
+
+This generates JSON files in `public/r/`. In development they are served at `http://localhost:3000/r/<name>.json`.
+
+#### Install a component from the registry
+
+From a consumer project:
+
+```bash
+pnpm dlx shadcn@latest add https://demo.start-ui.com/r/button.json
+```
+
+> [!NOTE]
+> See `registry.json` at the project root for the full list of available components, hooks, and utilities.
+> See `CONTRIBUTING.md` for instructions on keeping the registry up to date when adding or modifying components.
+
 ### E2E Tests
 
 E2E tests are setup with Playwright.

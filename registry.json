@@ -1,0 +1,949 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "start-ui",
+  "homepage": "https://start-ui.com",
+  "items": [
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utilities",
+      "description": "Tailwind CSS class merging utility (cn).",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/lib/tailwind/utils.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-media-query",
+      "type": "registry:hook",
+      "title": "useMediaQuery",
+      "description": "React hook for responsive media query matching.",
+      "files": [
+        {
+          "path": "src/hooks/use-media-query.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-media-query.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-mobile",
+      "type": "registry:hook",
+      "title": "useIsMobile",
+      "description": "React hook to detect mobile viewport.",
+      "registryDependencies": ["use-media-query"],
+      "files": [
+        {
+          "path": "src/hooks/use-mobile.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-mobile.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-hydrated",
+      "type": "registry:hook",
+      "title": "useHydrated",
+      "description": "React hook to detect client-side hydration.",
+      "files": [
+        {
+          "path": "src/hooks/use-hydrated.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-hydrated.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-value-has-changed",
+      "type": "registry:hook",
+      "title": "useValueHasChanged",
+      "description": "React hook to detect if a value changed between renders.",
+      "files": [
+        {
+          "path": "src/hooks/use-value-has-changed.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-value-has-changed.ts"
+        }
+      ]
+    },
+    {
+      "name": "parse-string-to-date",
+      "type": "registry:lib",
+      "title": "Parse String to Date",
+      "description": "Utility to parse various date string formats into Date objects.",
+      "dependencies": ["dayjs"],
+      "files": [
+        {
+          "path": "src/lib/dayjs/parse-string-to-date.ts",
+          "type": "registry:lib",
+          "target": "lib/parse-string-to-date.ts"
+        }
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Loading spinner indicator.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/spinner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Button component with multiple variants and loading state.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["utils", "spinner"],
+      "files": [
+        {
+          "path": "src/components/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Alert component for displaying messages.",
+      "dependencies": ["class-variance-authority"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Avatar component with fallback and boring-avatars support.",
+      "dependencies": ["@base-ui/react", "boring-avatars"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/avatar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Badge component with multiple variants.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Breadcrumb navigation component.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/breadcrumb.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button-link",
+      "type": "registry:ui",
+      "title": "ButtonLink",
+      "description": "Button styled as a router link.",
+      "dependencies": ["@tanstack/react-router", "class-variance-authority"],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/button-link.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Calendar component built on react-day-picker.",
+      "dependencies": [
+        "react-day-picker",
+        "react-i18next",
+        "ts-pattern",
+        "lucide-react"
+      ],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/calendar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Card container component.",
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Checkbox component with indeterminate state support.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-group",
+      "type": "registry:ui",
+      "title": "CheckboxGroup",
+      "description": "Group of checkboxes with shared state.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/checkbox-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "InputGroup",
+      "description": "Input group with addons, buttons, and textarea support.",
+      "dependencies": ["class-variance-authority", "react-textarea-autosize"],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/input-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Text input component with addon support.",
+      "registryDependencies": ["input-group"],
+      "files": [
+        {
+          "path": "src/components/ui/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Combobox component with search, chips, and multiple selection.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react",
+        "react-i18next"
+      ],
+      "registryDependencies": ["utils", "button", "input-group"],
+      "files": [
+        {
+          "path": "src/components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "datalist",
+      "type": "registry:ui",
+      "title": "Datalist",
+      "description": "Data list component with loading, error, and empty states.",
+      "dependencies": ["lucide-react", "react-i18next"],
+      "registryDependencies": ["utils", "button", "skeleton"],
+      "files": [
+        {
+          "path": "src/components/ui/datalist.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "DateInput",
+      "description": "Date input with string parsing and formatting.",
+      "dependencies": ["dayjs"],
+      "registryDependencies": ["input", "parse-string-to-date"],
+      "files": [
+        {
+          "path": "src/components/ui/date-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-button",
+      "type": "registry:ui",
+      "title": "DatePickerButton",
+      "description": "Button trigger for date picker.",
+      "dependencies": ["lucide-react", "react-i18next"],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/date-picker-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "DatePicker",
+      "description": "Date picker with calendar popover and text input.",
+      "dependencies": ["lucide-react", "react-use-disclosure"],
+      "registryDependencies": [
+        "calendar",
+        "date-input",
+        "input-group",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Modal dialog component.",
+      "dependencies": ["@base-ui/react", "lucide-react", "react-i18next"],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Drawer component with swipe gesture support.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "DropdownMenu",
+      "description": "Dropdown menu with items, checkboxes, and radio groups.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "InputOTP",
+      "description": "One-time password input component.",
+      "dependencies": ["class-variance-authority", "input-otp", "lucide-react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/input-otp.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Form label component.",
+      "dependencies": ["class-variance-authority"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "number-input",
+      "type": "registry:ui",
+      "title": "NumberInput",
+      "description": "Number input with increment/decrement controls.",
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react",
+        "react-i18next",
+        "react-merge-refs",
+        "ts-pattern"
+      ],
+      "registryDependencies": ["utils", "button", "input-group"],
+      "files": [
+        {
+          "path": "src/components/ui/number-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Popover component with positioning.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "RadioGroup",
+      "description": "Radio group component.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/radio-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "responsive-drawer",
+      "type": "registry:ui",
+      "title": "ResponsiveDrawer",
+      "description": "Responsive component that renders as dialog on desktop and drawer on mobile.",
+      "registryDependencies": ["use-mobile", "dialog", "drawer"],
+      "files": [
+        {
+          "path": "src/components/ui/responsive-drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "confirm-responsive-drawer",
+      "type": "registry:ui",
+      "title": "ConfirmResponsiveDrawer",
+      "description": "Confirmation dialog that adapts between dialog and drawer.",
+      "dependencies": ["react-i18next", "react-use-disclosure"],
+      "registryDependencies": ["button", "responsive-drawer"],
+      "files": [
+        {
+          "path": "src/components/ui/confirm-responsive-drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "responsive-icon-button",
+      "type": "registry:ui",
+      "title": "ResponsiveIconButton",
+      "description": "Button that shows icon-only on mobile and full label on desktop.",
+      "dependencies": ["ts-pattern"],
+      "registryDependencies": ["utils", "use-mobile", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/responsive-icon-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "responsive-icon-button-link",
+      "type": "registry:ui",
+      "title": "ResponsiveIconButtonLink",
+      "description": "Link button that shows icon-only on mobile and full label on desktop.",
+      "dependencies": ["ts-pattern"],
+      "registryDependencies": ["utils", "use-mobile", "button-link"],
+      "files": [
+        {
+          "path": "src/components/ui/responsive-icon-button-link.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "ScrollArea",
+      "description": "Custom scroll area with styled scrollbar.",
+      "dependencies": ["@base-ui/react", "react-i18next"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/scroll-area.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "search-input",
+      "type": "registry:ui",
+      "title": "SearchInput",
+      "description": "Search input with debounce, clear button, and loading state.",
+      "dependencies": ["lucide-react", "react-i18next", "react-merge-refs"],
+      "registryDependencies": [
+        "utils",
+        "use-value-has-changed",
+        "input",
+        "input-group",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/search-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "search-button",
+      "type": "registry:ui",
+      "title": "SearchButton",
+      "description": "Mobile search button that opens a drawer with search input.",
+      "dependencies": ["lucide-react", "react-i18next"],
+      "registryDependencies": ["button", "drawer", "search-input", "spinner"],
+      "files": [
+        {
+          "path": "src/components/ui/search-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Select dropdown component.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react",
+        "react-i18next"
+      ],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Visual separator component.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/separator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Sheet overlay component.",
+      "dependencies": ["@base-ui/react", "lucide-react", "react-i18next"],
+      "registryDependencies": ["utils", "button"],
+      "files": [
+        {
+          "path": "src/components/ui/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Application sidebar with collapsible sections.",
+      "dependencies": [
+        "@base-ui/react",
+        "@tanstack/react-router",
+        "class-variance-authority",
+        "lucide-react",
+        "react-i18next"
+      ],
+      "registryDependencies": [
+        "utils",
+        "use-mobile",
+        "button",
+        "input",
+        "separator",
+        "sheet",
+        "skeleton",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/sidebar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Loading placeholder skeleton.",
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sonner",
+      "type": "registry:ui",
+      "title": "Sonner",
+      "description": "Toast notification component using sonner.",
+      "dependencies": ["next-themes", "sonner"],
+      "files": [
+        {
+          "path": "src/components/ui/sonner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Auto-resizing textarea component.",
+      "registryDependencies": ["input-group"],
+      "files": [
+        {
+          "path": "src/components/ui/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Tooltip component.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "theme-switcher",
+      "type": "registry:ui",
+      "title": "ThemeSwitcher",
+      "description": "Theme switcher dropdown (system/light/dark).",
+      "dependencies": [
+        "lucide-react",
+        "next-themes",
+        "react-i18next",
+        "ts-pattern"
+      ],
+      "registryDependencies": [
+        "utils",
+        "use-hydrated",
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/theme-switcher.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "local-switcher",
+      "type": "registry:ui",
+      "title": "LocalSwitcher",
+      "description": "Language/locale switcher dropdown.",
+      "dependencies": ["lucide-react", "react-i18next"],
+      "registryDependencies": ["utils", "button", "dropdown-menu"],
+      "files": [
+        {
+          "path": "src/components/ui/local-switcher.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "Form component with react-hook-form integration.",
+      "dependencies": ["react-hook-form"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/components/form/form.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-container.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-error.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-helper.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-label.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-controller/index.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/form-field-controller/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/form/_fields.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-text",
+      "type": "registry:component",
+      "title": "FieldText",
+      "description": "Text input form field (text, email, tel).",
+      "registryDependencies": ["form", "input"],
+      "files": [
+        {
+          "path": "src/components/form/field-text/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-textarea",
+      "type": "registry:component",
+      "title": "FieldTextarea",
+      "description": "Textarea form field.",
+      "registryDependencies": ["form", "textarea"],
+      "files": [
+        {
+          "path": "src/components/form/field-textarea/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-checkbox",
+      "type": "registry:component",
+      "title": "FieldCheckbox",
+      "description": "Checkbox form field.",
+      "registryDependencies": ["form", "checkbox"],
+      "files": [
+        {
+          "path": "src/components/form/field-checkbox/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-checkbox-group",
+      "type": "registry:component",
+      "title": "FieldCheckboxGroup",
+      "description": "Checkbox group form field.",
+      "registryDependencies": ["form", "checkbox", "checkbox-group"],
+      "files": [
+        {
+          "path": "src/components/form/field-checkbox-group/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-radio-group",
+      "type": "registry:component",
+      "title": "FieldRadioGroup",
+      "description": "Radio group form field.",
+      "registryDependencies": ["form", "radio-group"],
+      "files": [
+        {
+          "path": "src/components/form/field-radio-group/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-select",
+      "type": "registry:component",
+      "title": "FieldSelect",
+      "description": "Select dropdown form field.",
+      "registryDependencies": ["form", "select"],
+      "files": [
+        {
+          "path": "src/components/form/field-select/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-combobox",
+      "type": "registry:component",
+      "title": "FieldCombobox",
+      "description": "Combobox form field with search.",
+      "dependencies": ["react-i18next"],
+      "registryDependencies": ["form", "combobox"],
+      "files": [
+        {
+          "path": "src/components/form/field-combobox/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-combobox-multiple",
+      "type": "registry:component",
+      "title": "FieldComboboxMultiple",
+      "description": "Multi-select combobox form field.",
+      "dependencies": ["react-i18next"],
+      "registryDependencies": ["form", "combobox"],
+      "files": [
+        {
+          "path": "src/components/form/field-combobox-multiple/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-number",
+      "type": "registry:component",
+      "title": "FieldNumber",
+      "description": "Number input form field with optional cents conversion.",
+      "registryDependencies": ["form", "number-input"],
+      "files": [
+        {
+          "path": "src/components/form/field-number/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-date",
+      "type": "registry:component",
+      "title": "FieldDate",
+      "description": "Date picker form field.",
+      "registryDependencies": ["form", "date-picker"],
+      "files": [
+        {
+          "path": "src/components/form/field-date/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "field-otp",
+      "type": "registry:component",
+      "title": "FieldOTP",
+      "description": "One-time password form field with auto-submit.",
+      "dependencies": ["react-hook-form"],
+      "registryDependencies": ["form", "input-otp", "button"],
+      "files": [
+        {
+          "path": "src/components/form/field-otp/index.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
