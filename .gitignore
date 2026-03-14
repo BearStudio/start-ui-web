@@ -15,6 +15,7 @@
 /dist
 /build
 /public/storybook
+/public/r
 /storybook-static
 
 # misc
