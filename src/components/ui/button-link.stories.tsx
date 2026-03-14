@@ -142,28 +142,3 @@ export const FixedWidth = () => {
     </div>
   );
 };
-
-export const Disabled = () => {
-  return (
-    <div className="flex gap-4">
-      <ButtonLink to="/" disabled>
-        Default
-      </ButtonLink>
-      <ButtonLink to="/" disabled variant="secondary">
-        Secondary
-      </ButtonLink>
-      <ButtonLink to="/" disabled variant="destructive">
-        Destructive
-      </ButtonLink>
-      <ButtonLink to="/" disabled variant="destructive-secondary">
-        Destructive
-      </ButtonLink>
-      <ButtonLink to="/" disabled variant="ghost">
-        Ghost
-      </ButtonLink>
-      <ButtonLink to="/" disabled variant="link">
-        Link
-      </ButtonLink>
-    </div>
-  );
-};
