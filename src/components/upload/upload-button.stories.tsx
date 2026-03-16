@@ -1,5 +1,6 @@
 import type { Meta } from '@storybook/react-vite';
 import { UploadIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { UploadButton } from '@/components/upload/upload-button';
 
@@ -15,6 +16,7 @@ export const Default = () => {
         accept: 'image/png,image/jpeg,image/gif',
       }}
       onSuccess={(file) => console.log('uploaded file', file)}
+      onError={() => toast.error('Cannot upload in storybook')}
     />
   );
 };
@@ -25,6 +27,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
       >
         <UploadIcon />
         Upload a new file
@@ -33,6 +36,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
       >
         Upload a new file
         <UploadIcon />
@@ -41,6 +45,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
       >
         Upload a new file
       </UploadButton>
@@ -55,6 +60,7 @@ export const Disabled = () => {
         disabled
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
       >
         <UploadIcon />
         Upload a new file
@@ -64,6 +70,7 @@ export const Disabled = () => {
         disabled
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
+        onError={() => toast.error('Cannot upload in storybook')}
       >
         Upload a new file
         <UploadIcon />

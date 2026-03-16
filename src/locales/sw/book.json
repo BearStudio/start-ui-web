@@ -16,7 +16,11 @@
     },
     "notFound": "Hakuna vitabu vinavyopatikana",
     "loadMore": "Pakia vitabu zaidi",
-    "byCapitalized": "Na"
+    "byCapitalized": "Na",
+    "uploadCover": {
+      "label": "Picha ya jalada",
+      "helper": "Ukubwa unaopendekezwa: 512 x 768px"
+    }
   },
   "app": {
     "list": {
@@ -59,7 +63,6 @@
       },
       "updateError": "Imeshindikana kusasisha kitabu"
     },
-    "uploadCover": "Pakia Jalada",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "Unahitaji kuwa umeingia ili uweze kupakia jalada jipya",
       "UNAUTHORIZED": "Hauruhusiwi kubadilisha jalada la kitabu",

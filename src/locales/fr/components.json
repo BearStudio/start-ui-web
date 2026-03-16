@@ -72,6 +72,10 @@
     "placeholder": "Sélectionner...",
     "noItemsFound": "Aucun élément trouvé."
   },
+  "uploadInput": {
+    "placeholder": "Glissez-déposez votre fichier ici, ou cliquez pour parcourir",
+    "removeFile": "Supprimer le fichier"
+  },
   "errorBoundary": {
     "title": "Erreur inconnue",
     "details": "Détails",

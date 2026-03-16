@@ -9,6 +9,7 @@ import { FieldRadioGroup } from './field-radio-group';
 import { FieldSelect } from './field-select';
 import { FieldText } from './field-text';
 import { FieldTextarea } from './field-textarea';
+import { FieldUploadInput } from './field-upload-input';
 
 export const fieldComponents = {
   text: FieldText,
@@ -24,6 +25,7 @@ export const fieldComponents = {
   checkbox: FieldCheckbox,
   'checkbox-group': FieldCheckboxGroup,
   'radio-group': FieldRadioGroup,
+  'upload-input': FieldUploadInput,
 } as const;
 
 export type FieldType = keyof typeof fieldComponents;

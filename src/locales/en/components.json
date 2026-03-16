@@ -72,6 +72,10 @@
     "placeholder": "Select...",
     "noItemsFound": "No items found."
   },
+  "uploadInput": {
+    "placeholder": "Drag & drop your file here, or click to browse",
+    "removeFile": "Remove file"
+  },
   "errorBoundary": {
     "title": "Unknown Error",
     "details": "Details",

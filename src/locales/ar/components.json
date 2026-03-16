@@ -72,6 +72,10 @@
     "placeholder": "اختر...",
     "noItemsFound": "لم يتم العثور على عناصر."
   },
+  "uploadInput": {
+    "placeholder": "اسحب وأفلت ملفك هنا، أو انقر للتصفح",
+    "removeFile": "إزالة الملف"
+  },
   "errorBoundary": {
     "title": "خطأ غير معروف",
     "details": "التفاصيل",

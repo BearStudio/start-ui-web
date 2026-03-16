@@ -16,7 +16,11 @@
     },
     "notFound": "Aucun livre disponible",
     "loadMore": "Charger plus de livres",
-    "byCapitalized": "Par"
+    "byCapitalized": "Par",
+    "uploadCover": {
+      "label": "Image de couverture",
+      "helper": "Taille recommandée : 512 x 768px"
+    }
   },
   "app": {
     "list": {
@@ -59,7 +63,6 @@
       },
       "updateError": "Échec de la modification du livre"
     },
-    "uploadCover": "Modifier",
     "uploadErrors": {
       "NOT_AUTHENTICATED": "Vous devez être authentifié pour pouvoir télécharger une nouvelle couverture",
       "UNAUTHORIZED": "Vous n'êtes pas autorisé à changer la couverture du livre",
