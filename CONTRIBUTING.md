@@ -15,6 +15,16 @@ Thank you for considering contributing to this repository!
 > Write a good commit message.
 > Also, make sure that the linting is correct.
 
+## AI usage
+
+AI tools (e.g. Claude, Copilot, ChatGPT) are welcome to assist with contributions. If AI was used to generate or significantly assist with your changes, please make it transparent:
+
+- **Commits**: include a `Co-authored-by:` trailer (e.g. `Co-authored-by: GitHub Copilot <noreply@github.com>`)
+- **Pull requests**: mention the AI tool used in the PR description
+
+If you use **Claude Code**, attribution is handled automatically via `.claude/settings.json` — no extra setup needed.
+
+
 ## Translations
 
 You only need to maintain the english and french translations for you PR. 
