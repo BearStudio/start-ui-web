@@ -48,8 +48,8 @@ const Item = ({
       {...linkProps}
       className="flex items-center justify-center gap-2 rounded-md px-2.5 py-2 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
     >
-      <Icon className="size-4 opacity-60 [.active_&]:hidden" />
-      <IconActive className="hidden size-4 [.active_&]:block" />
+      <Icon className="size-4 opacity-60 in-[.active]:hidden" />
+      <IconActive className="hidden size-4 in-[.active]:block" />
       <span className="text-sm font-medium">{children}</span>
     </Link>
   );
