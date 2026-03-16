@@ -56,7 +56,12 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    expo(), // Allows an Expo native app to use auth, can be delete if no needed
+    /**
+     * Allows an Expo native app to use auth, can be deleted if not needed.
+     * disableOriginOverride: workaround for a crash in onRequest. Learn more at:
+     * https://github.com/better-auth/better-auth/issues/1058
+     */
+    expo({ disableOriginOverride: true }),
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),

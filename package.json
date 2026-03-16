@@ -44,7 +44,7 @@
   "dependencies": {
     "@base-ui/react": "1.2.0",
     "@bearstudio/ui-state": "1.1.0",
-    "@better-auth/expo": "1.5.0",
+    "@better-auth/expo": "1.5.2",
     "@better-upload/client": "3.0.12",
     "@better-upload/server": "3.0.12",
     "@fontsource-variable/inter": "5.2.8",
@@ -67,7 +67,7 @@
     "@tanstack/react-start": "1.166.1",
     "@tanstack/zod-adapter": "1.163.3",
     "@uidotdev/usehooks": "2.4.1",
-    "better-auth": "1.5.0",
+    "better-auth": "1.5.2",
     "boring-avatars": "2.0.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
