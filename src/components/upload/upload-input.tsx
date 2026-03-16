@@ -199,6 +199,7 @@ export const UploadInput = ({
     if (file) {
       handleFile(file);
     }
+    inputProps?.onChange?.(event);
     // Reset so re-selecting the same file triggers onChange
     event.target.value = '';
   };
@@ -335,10 +336,7 @@ export const UploadInput = ({
         disabled={isDisabled}
         aria-invalid={ariaInvalid}
         aria-describedby={ariaDescribedby}
-        onChange={(e) => {
-          handleFileChange(e);
-          inputProps?.onChange?.(e);
-        }}
+        onChange={handleFileChange}
       />
     </div>
   );
