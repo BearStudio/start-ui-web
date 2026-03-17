@@ -25,6 +25,6 @@
     "**/*.mdx",
     ".env*",
     "**/*.gen.ts",
-    "**/generated"
+    "src/server/db/generated"
   ]
 }
