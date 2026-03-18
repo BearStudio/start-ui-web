@@ -1,7 +1,7 @@
-import { FormFieldError } from '@/components/form';
 import { useFormField } from '@/components/form/form-field';
 import { FormFieldContainer } from '@/components/form/form-field-container';
 import { useFormFieldController } from '@/components/form/form-field-controller/context';
+import { FormFieldError } from '@/components/form/form-field-error';
 import { FieldProps } from '@/components/form/types';
 import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
 import { CheckboxGroup } from '@/components/ui/checkbox-group';
