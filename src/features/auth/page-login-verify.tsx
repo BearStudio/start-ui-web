@@ -88,7 +88,7 @@ export default function PageLoginVerify({
         <h1 className="text-lg font-bold text-balance">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
         </h1>
-        <p className="text-sm text-balance break-words text-muted-foreground">
+        <p className="text-sm text-balance wrap-break-word text-muted-foreground">
           <Trans
             t={t}
             i18nKey={`${I18N_KEY_PAGE_PREFIX}.description`}
