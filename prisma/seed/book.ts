@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { randomInt } from 'node:crypto';
 
 import { db } from '@/server/db';
+
 import data from './book-data.json';
 
 export async function createBooks() {
