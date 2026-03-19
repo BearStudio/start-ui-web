@@ -31,8 +31,6 @@ module.exports = {
   replaceAttrValues: { '#000': 'currentColor' },
   template,
 
-  // Prevent svgr + prettier 3 compatibility issue
-  // It is ok to disable it here, generation script will run prettier
   // See https://github.com/gregberge/svgr/issues/893 for details on the underlying issue
   prettier: false,
 };
