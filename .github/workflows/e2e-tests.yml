@@ -12,6 +12,7 @@ on:
 jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
+    if: github.event.pull_request.draft == false
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:

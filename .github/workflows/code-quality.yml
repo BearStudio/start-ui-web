@@ -9,6 +9,7 @@ on:
 jobs:
   linter:
     name: 🧹 Linter
+    if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +23,7 @@ jobs:
 
   typescriptChecker:
     name: 🟦 TypeScript Checker
+    if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -37,6 +39,7 @@ jobs:
 
   tests:
     name: 🔬 Tests
+    if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
