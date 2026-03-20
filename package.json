@@ -68,7 +68,7 @@
     "@fontsource-variable/inter": "5.2.8",
     "@hookform/resolvers": "5.2.2",
     "@orpc/client": "1.13.4",
-    "@orpc/openapi": "1.13.4",
+    "@orpc/openapi": "1.13.9",
     "@orpc/react-query": "1.13.4",
     "@orpc/server": "1.13.4",
     "@orpc/zod": "1.13.4",
