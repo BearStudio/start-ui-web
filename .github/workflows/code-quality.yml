@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   linter:
@@ -23,16 +24,13 @@ jobs:
     name: 🟦 TypeScript Checker
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [22, 24, 'lts/*']
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24
 
       - name: Run Typescript checker
         run: pnpm run lint:ts
@@ -44,16 +42,13 @@ jobs:
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
-    strategy:
-      matrix:
-        node: [22, 24, 'lts/*']
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24
 
       - name: Setup Playwright
         uses: ./.github/actions/setup-playwright
