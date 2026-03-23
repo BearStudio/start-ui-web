@@ -69,7 +69,7 @@ export const FieldCombobox = <TItem extends Item>(
         itemToStringValue={(item: TItem) => item.value}
         onValueChange={(item: TItem | null, event) => {
           field.onChange(item?.value ?? null, event);
-          rest.onValueChange?.(item?.value ?? null, event);
+          rest.onValueChange?.(item ?? null, event);
         }}
         inputRef={field.ref}
       >
