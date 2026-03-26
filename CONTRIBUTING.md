@@ -9,7 +9,7 @@ Thank you for considering contributing to this repository!
 3. Make your changes (if you want to work on an issue, make sure you have been assigned that issue by a BearStudio's team member).
 4. Run the tests and commit.
 5. Push to your fork and submit a pull request.
-6. You can now work on another issue to way for you PR to be merged.
+6. While waiting for your PR to be reviewed, feel free to work on another issue.
 
 > 💡 Please make sure your PR is readable for the most.
 > Write a good commit message.
@@ -27,5 +27,5 @@ If you use **Claude Code**, attribution is handled automatically via `.claude/se
 
 ## Translations
 
-You only need to maintain the english and french translations for you PR. 
+You only need to maintain the english and french translations for your PR.
 Other language translations are not required to submit a PR 😉
