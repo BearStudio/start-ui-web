@@ -115,7 +115,7 @@ If you want to use the same set of custom duotone icons that Start UI is already
 [Phosphor](https://phosphoricons.com/)
 
 > [!WARNING]
-> All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **square size** and **filled with `#000` color** (will be replaced by `currentColor`).
+> All svg icons should be svg files prefixed by `icon-` (example: `icon-external-link`) with **square size** and **filled with `#000` color** (will be replaced by `currentColor`).
 
 ### E2E Tests
 
@@ -124,7 +124,7 @@ E2E tests are setup with Playwright.
 ```sh
 pnpm e2e:setup  # Setup context to be used across test for more efficient execution 
 pnpm e2e        # Run tests in headless mode, this is the command executed in CI
-pnpm e2e:ui     # Open a UI which allow you to run specific tests and see test execution
+pnpm e2e:ui     # Open a UI which allows you to run specific tests and see test execution
 ```
 
 > [!WARNING]
