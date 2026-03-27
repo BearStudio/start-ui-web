@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 
 import type { PushduckUploadRouter } from '@/server/pushduck';
 
-const { useUpload } = createUploadClient<PushduckUploadRouter>({
+const uploadClient = createUploadClient<PushduckUploadRouter>({
   endpoint: '/api/pushduck',
 });
 
@@ -43,14 +43,15 @@ export const PushduckUploadButton = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isPending, setIsPending] = useState(false);
 
-  const { upload } = useUpload(uploadRoute, {
+  // uploadRoute is a stable prop — calling the typed hook via proxy is safe
+  const { uploadFiles } = uploadClient[uploadRoute]({
     onSuccess(results) {
       const result = results[0];
-      if (result) {
-        onSuccess?.(result);
+      if (result?.url) {
+        onSuccess?.({ url: result.url, key: result.key ?? result.url });
       }
     },
-    onError(err) {
+    onError(err: unknown) {
       onError?.(err instanceof Error ? err : new Error(String(err)));
     },
   });
@@ -61,7 +62,7 @@ export const PushduckUploadButton = ({
 
     setIsPending(true);
     try {
-      await upload([file]);
+      await uploadFiles([file]);
     } finally {
       setIsPending(false);
       event.target.value = '';
