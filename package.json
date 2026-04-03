@@ -27,7 +27,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "run-p gen:prisma gen:build-info",
-    "prepare": "pnpm lefthook install",
+    "prepare": "vp config",
     "dev": "run-p env dev:*",
     "dev:app": "pnpm gen:build-info && vp dev",
     "build": "cross-env NODE_ENV=production run-p env gen:build-info && vp build",
@@ -39,7 +39,8 @@
     "storybook:build": "storybook build && mv ./storybook-static ./public/storybook",
     "format": "vp fmt",
     "lint": "run-p lint:*",
-    "lint:oxlint": "vp lint --fix .",
+    "lint:oxlint": "vp lint .",
+    "lint:oxlint:fix": "vp lint --fix .",
     "lint:ts": "tsc --noEmit",
     "gen:prisma": "prisma generate --no-hints",
     "gen:build-info": "dotenv -- node ./run-jiti ./src/features/build-info/script-to-generate-json.ts",
@@ -142,7 +143,6 @@
     "eslint-plugin-sonarjs": "3.0.6",
     "eslint-plugin-storybook": "10.3.3",
     "jiti": "2.6.1",
-    "lefthook": "2.0.16",
     "npm-run-all": "4.1.5",
     "playwright": "1.58.0",
     "prisma": "6.19.2",
@@ -150,14 +150,15 @@
     "storybook": "10.3.3",
     "ts-plugin-sort-import-suggestions": "1.0.4",
     "typescript": "5.9.3",
-    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vite-plus": "latest",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@latest",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.14",
+    "vite-plus": "0.1.14",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.14",
     "vitest-browser-react": "2.1.0"
   },
   "engines": {
     "node": ">=22.12.0"
   },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
@@ -165,14 +166,12 @@
       "@prisma/engines",
       "@tailwindcss/oxide",
       "esbuild",
-      "lefthook",
       "prisma",
       "sharp"
     ],
     "overrides": {
-      "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-      "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.14",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.14"
     }
-  },
-  "packageManager": "pnpm@10.33.0"
+  }
 }

@@ -1,4 +1,0 @@
-pre-push:
-  commands:
-    check:
-      run: pnpm lint

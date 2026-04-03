@@ -5,8 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
-  vitest: npm:@voidzero-dev/vite-plus-test@latest
+  vite: npm:@voidzero-dev/vite-plus-core@0.1.14
+  vitest: npm:@voidzero-dev/vite-plus-test@0.1.14
 
 importers:
 
@@ -253,9 +253,6 @@ importers:
       jiti:
         specifier: 2.6.1
         version: 2.6.1
-      lefthook:
-        specifier: 2.0.16
-        version: 2.0.16
       npm-run-all:
         specifier: 4.1.5
         version: 4.1.5
@@ -278,13 +275,13 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       vite:
-        specifier: npm:@voidzero-dev/vite-plus-core@latest
+        specifier: npm:@voidzero-dev/vite-plus-core@0.1.14
         version: '@voidzero-dev/vite-plus-core@0.1.14(@types/node@25.3.3)(esbuild@0.27.2)(jiti@2.6.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)'
       vite-plus:
-        specifier: latest
+        specifier: 0.1.14
         version: 0.1.14(@types/node@25.3.3)(@voidzero-dev/vite-plus-core@0.1.14(@types/node@25.3.3)(esbuild@0.27.2)(jiti@2.6.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(esbuild@0.27.2)(jiti@2.6.1)(jsdom@24.1.3)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       vitest:
-        specifier: npm:@voidzero-dev/vite-plus-test@latest
+        specifier: npm:@voidzero-dev/vite-plus-test@0.1.14
         version: '@voidzero-dev/vite-plus-test@0.1.14(@types/node@25.3.3)(@voidzero-dev/vite-plus-core@0.1.14(@types/node@25.3.3)(esbuild@0.27.2)(jiti@2.6.1)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(esbuild@0.27.2)(jiti@2.6.1)(jsdom@24.1.3)(terser@5.46.0)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)'
       vitest-browser-react:
         specifier: 2.1.0
@@ -4912,60 +4909,6 @@ packages:
 
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
-
-  lefthook-darwin-arm64@2.0.16:
-    resolution: {integrity: sha512-kjVHkD7rfPa7M0aKJSx/yatdV9uC6o3cJyzM9zk7cg5HD7alSwchFalgF/P0w6nt7C02rAUx8C05qiWCDWaKeA==}
-    cpu: [arm64]
-    os: [darwin]
-
-  lefthook-darwin-x64@2.0.16:
-    resolution: {integrity: sha512-tbJ0mdT49DNRLqknro0BvWrYNC23TTcqBJFQnQ32pq1/H9B87bTNKvKKAtogp/saxfHUzkIq1i3twZlBZ3G3Xw==}
-    cpu: [x64]
-    os: [darwin]
-
-  lefthook-freebsd-arm64@2.0.16:
-    resolution: {integrity: sha512-wa1KFD5tSUhw3tuetVef/BCSxbbmS7auTDNdoLx3WFeuN5RS15woSN9+E8GPGOOY1g2HCsgdLrhrexEomulfjQ==}
-    cpu: [arm64]
-    os: [freebsd]
-
-  lefthook-freebsd-x64@2.0.16:
-    resolution: {integrity: sha512-UXowfn2e94AwNk9UuoePRK+qiF15jZsssiyA15VK5GTtxpn6Sn+Z2QFciofxJczXXxM4abaf7qgx2OoJBt32VA==}
-    cpu: [x64]
-    os: [freebsd]
-
-  lefthook-linux-arm64@2.0.16:
-    resolution: {integrity: sha512-U355elz4Z0AHSVqxfcglN09TGR86ov/GtYlliDknci2mmz6EWLiD3dTYnqJiwa4dYxqmuCDc/DvAL9rgb3YJiQ==}
-    cpu: [arm64]
-    os: [linux]
-
-  lefthook-linux-x64@2.0.16:
-    resolution: {integrity: sha512-7eAvBeWGAgjOKZ23OQbjJINLPImDIuDeX8dXOfk+aI6IFt2X6KCzRkp+ASUvGQtrPuNZQZT43EhW0/1jZU14ZQ==}
-    cpu: [x64]
-    os: [linux]
-
-  lefthook-openbsd-arm64@2.0.16:
-    resolution: {integrity: sha512-Fcd+E17ZkWGnRSQINb5gf+rNy2So5PYn5mBljiC31dl+TgWM8Wy46mSEGveHo7lKCO3q+DkmHIa50Qm58G03AQ==}
-    cpu: [arm64]
-    os: [openbsd]
-
-  lefthook-openbsd-x64@2.0.16:
-    resolution: {integrity: sha512-uL5nOkz8eBtQHped0/tB5X8clZ5kfnyjQrv1fpKbGAjeFHI2J+GmRqcn6Awq2IeuBbQvkyV6jDjpATyHBp5mCA==}
-    cpu: [x64]
-    os: [openbsd]
-
-  lefthook-windows-arm64@2.0.16:
-    resolution: {integrity: sha512-U61bNWzD6Vd2kjuJ7b4voPfTQ4mlBFOyTpCU3k/h0YjpKDQEFT1T5fDKkDothdnw/JVDSgrclIcfAY7Jyr/UIg==}
-    cpu: [arm64]
-    os: [win32]
-
-  lefthook-windows-x64@2.0.16:
-    resolution: {integrity: sha512-dCHi2+hebhPI0LQUGRNjPMsGRyXhrTN3Y/b8M4HO8KVyGamKB3Yemf67ya81tZopDkxNVy5XUBXLYWKGhnAfLQ==}
-    cpu: [x64]
-    os: [win32]
-
-  lefthook@2.0.16:
-    resolution: {integrity: sha512-ABs3M5V9c4nqxFnZO509HXuQTu8GM8hmqc9ruV0acQ81yKlxEq70MRoYP5Z1dr5le326X8vA5qj3arJA36yE3A==}
-    hasBin: true
 
   leven@3.1.0:
     resolution: {integrity: sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==}
@@ -12415,49 +12358,6 @@ snapshots:
       shell-quote: 1.8.3
 
   leac@0.6.0: {}
-
-  lefthook-darwin-arm64@2.0.16:
-    optional: true
-
-  lefthook-darwin-x64@2.0.16:
-    optional: true
-
-  lefthook-freebsd-arm64@2.0.16:
-    optional: true
-
-  lefthook-freebsd-x64@2.0.16:
-    optional: true
-
-  lefthook-linux-arm64@2.0.16:
-    optional: true
-
-  lefthook-linux-x64@2.0.16:
-    optional: true
-
-  lefthook-openbsd-arm64@2.0.16:
-    optional: true
-
-  lefthook-openbsd-x64@2.0.16:
-    optional: true
-
-  lefthook-windows-arm64@2.0.16:
-    optional: true
-
-  lefthook-windows-x64@2.0.16:
-    optional: true
-
-  lefthook@2.0.16:
-    optionalDependencies:
-      lefthook-darwin-arm64: 2.0.16
-      lefthook-darwin-x64: 2.0.16
-      lefthook-freebsd-arm64: 2.0.16
-      lefthook-freebsd-x64: 2.0.16
-      lefthook-linux-arm64: 2.0.16
-      lefthook-linux-x64: 2.0.16
-      lefthook-openbsd-arm64: 2.0.16
-      lefthook-openbsd-x64: 2.0.16
-      lefthook-windows-arm64: 2.0.16
-      lefthook-windows-x64: 2.0.16
 
   leven@3.1.0:
     optional: true

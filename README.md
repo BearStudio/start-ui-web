@@ -3,7 +3,6 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
-
 ## Technologies
 
 <div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
@@ -16,9 +15,9 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Requirements
 
-* [Node.js](https://nodejs.org) >= 22
-* [pnpm](https://pnpm.io/)
-* [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
+- [Node.js](https://nodejs.org) >= 22
+- [pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
 ## Getting Started
 
@@ -31,11 +30,13 @@ That will scaffold a new folder with the latest version of 🚀 Start UI <small>
 ## Setup your IDE
 
 - VS Code
+
 ```bash
 cp .vscode/settings.example.json .vscode/settings.json
 ```
 
 - Zed
+
 ```bash
 cp .zed/settings.example.json .zed/settings.json
 ```
@@ -60,9 +61,6 @@ pnpm db:init          # Push the Prisma schema and seed the database
 pnpm dk:start # Only if your Docker containers are not running
 pnpm dev
 ```
-
-
-
 
 ### Emails in development
 
@@ -97,11 +95,11 @@ You can access the API documentation via the OpenAPI interface at:
 
 This interface allows you to:
 
-* View complete and up-to-date documentation of all backend endpoints exposed by the API.
+- View complete and up-to-date documentation of all backend endpoints exposed by the API.
 
-* Understand request and response formats for each route.
+- Understand request and response formats for each route.
 
-* Facilitate development and debugging by testing endpoints directly from the interface, without needing the frontend.
+- Facilitate development and debugging by testing endpoints directly from the interface, without needing the frontend.
 
 ### Generate custom icons components from svg files
 
@@ -122,13 +120,14 @@ If you want to use the same set of custom duotone icons that Start UI is already
 E2E tests are setup with Playwright.
 
 ```sh
-pnpm e2e:setup  # Setup context to be used across test for more efficient execution 
+pnpm e2e:setup  # Setup context to be used across test for more efficient execution
 pnpm e2e        # Run tests in headless mode, this is the command executed in CI
 pnpm e2e:ui     # Open a UI which allows you to run specific tests and see test execution
 ```
 
 > [!WARNING]
 > The generated e2e context files contain authentication logic. If you make changes to your local database instance, you should re-run `pnpm e2e:setup`. It will be run automatically in a CI context.
+
 ## Production
 
 ```bash
@@ -150,16 +149,19 @@ VITE_ENV_COLOR="teal"
 
 ## FAQ
 
-<details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
+<details><summary><strong>Git hooks or <code>core.hooksPath</code> look wrong</strong></summary>
 <p>
-You probably have updated your branch with lefthook installed instead of husky. Follow these steps to fix
-your hooks issue:
+This project uses <strong>Vite+</strong> for Git hooks (see <a href="https://viteplus.dev/guide/commit-hooks">commit hooks</a>). After <code>pnpm install</code>, <code>prepare</code> runs <code>vp config</code>, which installs hooks (default directory: <code>.vite-hooks</code>).
+</p>
+<p>
+If you still have an old <code>.husky</code> folder or a conflicting <code>core.hooksPath</code>:
 <ul>
   <li><code>git config --unset core.hooksPath</code></li>
-  <li><code>rm -rf ./.husky</code></li>
-  <li><code>pnpm install</code></li>
+  <li><code>rm -rf ./.husky</code> (if present and unused)</li>
+  <li><code>pnpm install</code> (or <code>vp install</code>) to re-run <code>vp config</code></li>
 </ul>
-
-From now husky should have been removed; and lefthook should run your hooks correctly.
+</p>
+<p>
+To skip hook installation (e.g. CI), set <code>VITE_GIT_HOOKS=0</code>.
 </p>
 </details>
