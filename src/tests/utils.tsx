@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { userEvent } from 'vitest/browser';
+import { userEvent } from 'vite-plus/test/browser';
 import { ComponentRenderOptions, render } from 'vitest-browser-react';
 
 import { Providers } from '@/providers';
@@ -17,7 +17,7 @@ const customRender = (
 
 // Custom Render
 // https://testing-library.com/docs/react-testing-library/setup#custom-render
-export * from 'vitest/browser';
+export * from 'vite-plus/test/browser';
 export * from 'vitest-browser-react';
 
 export { customRender as render };

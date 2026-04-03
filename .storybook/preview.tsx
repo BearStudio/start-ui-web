@@ -1,7 +1,13 @@
 import type { Preview } from '@storybook/react-vite';
+import {
+  createMemoryHistory,
+  createRootRoute,
+  createRouter,
+  RouterProvider,
+} from '@tanstack/react-router';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
-import { StrictMode, useEffect } from 'react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { createContext, StrictMode, useContext, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StoryContext } from 'storybook/internal/csf';
 
@@ -14,6 +20,33 @@ import {
 } from '../src/lib/i18n/constants';
 import i18nGlobal from '../src/lib/i18n/index';
 import { Providers } from '../src/providers';
+
+const StorybookStorySlotContext = createContext<ReactNode>(null);
+
+function StorybookStorySlotRoot() {
+  const slot = useContext(StorybookStorySlotContext);
+  return <>{slot}</>;
+}
+
+/** Minimal router so components using useRouter() work in Storybook. */
+function StorybookTanStackRouter({ children }: { children: ReactNode }) {
+  const router = useMemo(() => {
+    const rootRoute = createRootRoute({
+      component: StorybookStorySlotRoot,
+    });
+    const routeTree = rootRoute.addChildren([]);
+    return createRouter({
+      routeTree,
+      history: createMemoryHistory({ initialEntries: ['/'] }),
+    });
+  }, []);
+
+  return (
+    <StorybookStorySlotContext.Provider value={children}>
+      <RouterProvider router={router} />
+    </StorybookStorySlotContext.Provider>
+  );
+}
 
 const DocumentationWrapper = ({
   children,
@@ -77,12 +110,14 @@ const preview: Preview = {
       return (
         <Providers forcedTheme={isDarkMode ? 'dark' : 'light'}>
           <StrictMode>
-            <DocumentationWrapper context={context}>
-              {/* Calling as a function to avoid errors. Learn more at:
-               * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-               */}
-              {story(context)}
-            </DocumentationWrapper>
+            <StorybookTanStackRouter>
+              <DocumentationWrapper context={context}>
+                {/* Calling as a function to avoid errors. Learn more at:
+                 * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+                 */}
+                {story(context)}
+              </DocumentationWrapper>
+            </StorybookTanStackRouter>
           </StrictMode>
         </Providers>
       );

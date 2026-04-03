@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import * as module from 'react-i18next';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vite-plus/test';
 
 import { page, render } from '@/tests/utils';
 
