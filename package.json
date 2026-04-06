@@ -153,7 +153,7 @@
     "storybook": "10.2.14",
     "ts-plugin-sort-import-suggestions": "1.0.4",
     "typescript": "5.9.3",
-    "vite": "7.3.1",
+    "vite": "7.3.2",
     "vite-tsconfig-paths": "6.0.5",
     "vitest": "4.0.18",
     "vitest-browser-react": "2.0.4"
