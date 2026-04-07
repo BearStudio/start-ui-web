@@ -2,13 +2,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
-import cpy from 'cpy';
 import { nitro } from 'nitro/vite';
-import { resolve } from 'node:path';
 import { defineConfig, loadEnv, type UserConfig } from 'vite-plus';
-
-const { nitroRetrieveServerDirHook, prismaCopyBinariesPlugin } =
-  createPrismaCopyBinariesPlugin();
 
 const envMode = process.env.MODE ?? process.env.NODE_ENV ?? 'development';
 const env = loadEnv(envMode, process.cwd(), 'VITE_');
@@ -164,19 +159,10 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart(),
     nitro({
-      modules: [
-        (nitro) => {
-          nitro.hooks.hook('build:before', () => {
-            nitroRetrieveServerDirHook(nitro);
-          });
-        },
-      ],
       routeRules: { '/storybook': { redirect: '/storybook/' } },
     }),
     // react's vite plugin must come after start's vite plugin
     viteReact(),
-    // Copy prisma binaries at the end
-    prismaCopyBinariesPlugin(),
   ],
   fmt,
   lint,
@@ -184,23 +170,3 @@ export default defineConfig({
     '*': 'vp check --fix',
   },
 });
-
-function createPrismaCopyBinariesPlugin() {
-  let serverDir = '';
-  return {
-    nitroRetrieveServerDirHook: (_nitro: {
-      options: { output: { serverDir: string } };
-    }) => {
-      serverDir = _nitro.options.output.serverDir.replace(resolve('.'), '.');
-    },
-    prismaCopyBinariesPlugin: () => ({
-      name: 'prisma-copy-binaries',
-      writeBundle: async (outputOptions: { dir?: string }) => {
-        const outputDir = outputOptions.dir?.replace(resolve('.'), '.');
-        if (outputDir === serverDir) {
-          await cpy('./src/server/db/generated/**/*.node', resolve(serverDir));
-        }
-      },
-    }),
-  };
-}
