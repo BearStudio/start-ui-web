@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest';
+import { expect, test, vi } from 'vite-plus/test';
 import { z } from 'zod';
 
 import {
@@ -22,7 +22,7 @@ test('should select checkbox on button click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={zFormSchema()}
       useFormOptions={{ defaultValues: { lovesBears: false } }}
@@ -57,7 +57,7 @@ test('should select checkbox on label click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={zFormSchema()}
       useFormOptions={{ defaultValues: { lovesBears: false } }}
@@ -93,7 +93,7 @@ test('should select checkbox on label click', async () => {
 test('default value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={zFormSchema()}
       useFormOptions={{ defaultValues: { lovesBears: true } }}
@@ -123,7 +123,7 @@ test('default value', async () => {
 test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={z.object({ lovesBears: z.boolean() })}
       useFormOptions={{ defaultValues: { lovesBears: false } }}

@@ -1,10 +1,9 @@
-import { defineConfig } from 'vite';
-import tsConfigPaths from 'vite-tsconfig-paths';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
-  plugins: [
-    tsConfigPaths({
-      projects: ['./tsconfig.json'],
-    }),
-  ],
+  plugins: [tailwindcss()],
+  resolve: {
+    tsconfigPaths: true,
+  },
 });

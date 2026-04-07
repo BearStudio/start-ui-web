@@ -22,11 +22,11 @@ runs:
       shell: bash
       env:
         BROWSERS: ${{ inputs.browsers }}
-      run: pnpm exec playwright install $BROWSERS --with-deps
+      run: vp exec playwright install $BROWSERS --with-deps
 
     - name: Install Playwright system deps
       if: steps.playwright-cache.outputs.cache-hit == 'true'
       shell: bash
       env:
         BROWSERS: ${{ inputs.browsers }}
-      run: pnpm exec playwright install-deps $BROWSERS
+      run: vp exec playwright install-deps $BROWSERS

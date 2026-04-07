@@ -23,7 +23,6 @@
 /.vscode/*
 !/.vscode/extensions.json
 .idea/
-.eslintcache
 .db
 .git
 

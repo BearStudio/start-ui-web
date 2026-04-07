@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest';
+import { expect, test, vi } from 'vite-plus/test';
 import { z } from 'zod';
 
 import {
@@ -22,7 +22,7 @@ test('should select item on click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}
@@ -56,7 +56,7 @@ test('default value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: 'grizzlyrin' } }}
@@ -88,7 +88,7 @@ test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: 'pawdrin' } }}
@@ -120,7 +120,7 @@ test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}

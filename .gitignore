@@ -21,7 +21,6 @@
 .DS_Store
 *.pem
 .idea/
-.eslintcache
 .db
 tsconfig.tsbuildinfo
 

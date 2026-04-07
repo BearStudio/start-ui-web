@@ -113,13 +113,13 @@ jobs:
           mc anonymous set download minio/$S3_BUCKET_NAME
 
       - name: Migrate database
-        run: pnpm db:push
+        run: vp run db:push
 
       - name: Add default data into database
-        run: pnpm db:seed
+        run: vp run db:seed
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        run: vp exec playwright test --project=${{ matrix.browser }}
 
       - uses: actions/upload-artifact@v4
         if: always()
