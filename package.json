@@ -150,9 +150,9 @@
     "storybook": "10.3.3",
     "ts-plugin-sort-import-suggestions": "1.0.4",
     "typescript": "5.9.3",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.14",
-    "vite-plus": "0.1.14",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.14",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.16",
+    "vite-plus": "0.1.16",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.16",
     "vitest-browser-react": "2.1.0"
   },
   "engines": {
@@ -170,8 +170,8 @@
       "sharp"
     ],
     "overrides": {
-      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.14",
-      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.14"
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.16",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.16"
     }
   }
 }

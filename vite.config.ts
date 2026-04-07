@@ -9,8 +9,10 @@ import { defineConfig, loadEnv, type UserConfig } from 'vite-plus';
 
 const { nitroRetrieveServerDirHook, prismaCopyBinariesPlugin } =
   createPrismaCopyBinariesPlugin();
+
 const envMode = process.env.MODE ?? process.env.NODE_ENV ?? 'development';
 const env = loadEnv(envMode, process.cwd(), 'VITE_');
+
 const fmt: NonNullable<UserConfig['fmt']> = {
   printWidth: 80,
   tabWidth: 2,
