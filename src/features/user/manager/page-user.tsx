@@ -41,7 +41,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
-import { authClient } from '@/features/auth/client';
+import { useSession } from '@/features/auth/use-session';
 import { WithPermissions } from '@/features/auth/with-permissions';
 import {
   PageLayout,
@@ -53,7 +53,7 @@ import {
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const { navigateBack } = useNavigateBack();
-  const session = authClient.useSession();
+  const session = useSession();
   const { t } = useTranslation(['user']);
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({
@@ -353,7 +353,7 @@ const UserSessions = (props: { userId: string }) => {
 
 const RevokeAllSessionsButton = (props: { userId: string }) => {
   const queryClient = useQueryClient();
-  const currentSession = authClient.useSession();
+  const currentSession = useSession();
   const { t } = useTranslation(['user']);
   const revokeAllSessions = useMutation(
     orpc.user.revokeUserSessions.mutationOptions({
@@ -393,7 +393,7 @@ const RevokeSessionButton = (props: {
   sessionToken: string;
 }) => {
   const queryClient = useQueryClient();
-  const currentSession = authClient.useSession();
+  const currentSession = useSession();
   const { t } = useTranslation(['user']);
   const revokeSession = useMutation(
     orpc.user.revokeUserSession.mutationOptions({
