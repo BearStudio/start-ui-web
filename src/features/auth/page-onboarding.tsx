@@ -15,15 +15,15 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
-import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
+import { useSession } from '@/features/auth/use-session';
 
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
-  const session = authClient.useSession();
+  const session = useSession();
 
   const submitOnboarding = useMutation(
     orpc.account.submitOnboarding.mutationOptions({

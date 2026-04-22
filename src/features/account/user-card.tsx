@@ -8,12 +8,12 @@ import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
-import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
+import { useSession } from '@/features/auth/use-session';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);
-  const session = authClient.useSession();
+  const session = useSession();
   return (
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">

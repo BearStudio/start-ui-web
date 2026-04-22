@@ -8,6 +8,7 @@ import {
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
@@ -20,6 +21,8 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { PageError } from '@/components/errors/page-error';
 
 import { MailDevDevtoolPanel } from '@/devtools/maildev';
+import type { AuthSession } from '@/features/auth/session.server';
+import { getAuthSession } from '@/features/auth/session.server';
 import { EnvHint } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';
@@ -34,6 +37,13 @@ const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  beforeLoad: async (): Promise<{ authSession: AuthSession | null }> => {
+    if (!import.meta.env.SSR) {
+      return { authSession: null };
+    }
+    const authSession = await getAuthSession();
+    return { authSession };
+  },
   loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
@@ -98,6 +108,8 @@ export const Route = createRootRouteWithContext<{
   }),
 });
 
+export const RootRouteApi = getRouteApi('__root__');
+
 function RootComponent() {
   return (
     <RootDocument>
@@ -143,7 +155,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           : undefined,
       }}
     >
-      <head>
+      <head suppressHydrationWarning>
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">
