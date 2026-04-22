@@ -10,6 +10,7 @@ import { canonicalUsers, getCanonicalUserRepairData } from './user-fixtures';
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
+  const pluralizeUsers = (count: number) => (count === 1 ? 'user' : 'users');
 
   let createdCounter = 0;
   let repairedCounter = 0;
@@ -49,7 +50,7 @@ export async function createUsers() {
   }
 
   console.log(
-    `✅ ${existingCount} existing ${existingCount === 1 ? 'user' : 'users'} 👉 ${createdCounter} canonical users created 👉 ${repairedCounter} canonical users repaired`
+    `✅ ${existingCount} existing ${pluralizeUsers(existingCount)} 👉 ${createdCounter} canonical ${pluralizeUsers(createdCounter)} created 👉 ${repairedCounter} canonical ${pluralizeUsers(repairedCounter)} repaired`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);
