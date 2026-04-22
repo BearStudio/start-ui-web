@@ -1,0 +1,3 @@
+-- Baseline migration generated from the existing PostgreSQL schema.
+-- This file intentionally contains no executable DDL so Drizzle can record
+-- migration ownership on a populated database without recreating tables.

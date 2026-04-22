@@ -1,15 +1,16 @@
 import { ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
+import { eq } from 'drizzle-orm';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
-import { match } from 'ts-pattern';
 
 import { envClient } from '@/env/client';
 import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
-import { Prisma } from '@/server/db/generated/client';
+import { mapDatabaseError } from '@/server/db/errors';
+import { books, users } from '@/server/db/schema';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
@@ -81,13 +82,15 @@ const base = os
   })
   // Middleware to add database Server Timing header
   .use(async ({ next, context }) => {
-    return timingStore.run({ prisma: [] }, async () => {
+    return timingStore.run({ db: [] }, async () => {
+      const beforeTimings = timingStore.getStore()?.db.length ?? 0;
       const result = await next();
 
       // Add the Server-Timing header if there are timings
       const serverTimingHeader = timingStore
         .getStore()
-        ?.prisma.map(
+        ?.db.slice(beforeTimings)
+        .map(
           (timing) =>
             `db-${timing.model}-${timing.operation};dur=${timing.duration.toFixed(2)}`
         )
@@ -117,62 +120,29 @@ const base = os
       if (error instanceof ORPCError) {
         throw error;
       }
-
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw match(error.code)
-          .with('P2002', () => {
-            context.logger.warn(
-              error.meta,
-              `Prisma Error: ${error.code} ${error.message}`
-            );
-            return new ORPCError('CONFLICT', {
-              message: 'Unique constraint violation',
-              data: { target: error.meta?.target },
-            });
-          })
-          .with('P2025', () => {
-            context.logger.warn(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
-            );
-            return new ORPCError('NOT_FOUND', {
-              message: 'Record not found',
-            });
-          })
-          .with('P2003', () => {
-            context.logger.error(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
-            );
-            return new ORPCError('BAD_REQUEST', {
-              message: 'Foreign key constraint violation',
-            });
-          })
-          .otherwise(() => {
-            context.logger.error(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
-            );
-            return new ORPCError('INTERNAL_SERVER_ERROR', {
-              message: 'Database error',
-            });
-          });
-      }
-
-      if (error instanceof Prisma.PrismaClientValidationError) {
-        context.logger.error(
-          `Prisma Client Validation Error: ${error.message}`
-        );
-        throw new ORPCError('BAD_REQUEST', {
-          message: 'Database validation error',
-        });
-      }
-
-      throw new ORPCError('INTERNAL_SERVER_ERROR', {
-        message: 'Unhandled error',
-      });
+      const mappedError = mapDatabaseError(error);
+      context.logger.error(error);
+      throw mappedError;
     }
   });
+
+export async function ensureUserExists(id: string) {
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1);
+  return user;
+}
+
+export async function ensureBookExists(id: string) {
+  const [book] = await db
+    .select({ id: books.id })
+    .from(books)
+    .where(eq(books.id, id))
+    .limit(1);
+  return book;
+}
 
 export const publicProcedure = () => base;
 
