@@ -45,7 +45,7 @@ describe('genre router', () => {
       const result = await call(genreRouter.getAll, { limit: 3 });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('genre-4');
+      expect(result.nextCursor).toBe('genre-3');
       expect(result.total).toBe(10);
     });
 

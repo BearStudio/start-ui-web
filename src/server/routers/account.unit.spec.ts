@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import accountRouter from '@/server/routers/account';
 import {
+  mockDb,
   mockGetSession,
   mockUserHasPermission,
 } from '@/server/routers/test-utils';
@@ -12,12 +13,18 @@ describe('account router', () => {
     const onboardingInput = { name: 'Test User' };
 
     it('should succeed for an authenticated user', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'user-1' });
+      mockDb.user.update.mockResolvedValue({});
+
       await expect(
         call(accountRouter.submitOnboarding, onboardingInput)
       ).resolves.toBeUndefined();
     });
 
     it('should not require any specific permission', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'user-1' });
+      mockDb.user.update.mockResolvedValue({});
+
       await call(accountRouter.submitOnboarding, onboardingInput);
 
       expect(mockUserHasPermission).not.toHaveBeenCalled();
@@ -32,18 +39,34 @@ describe('account router', () => {
         code: 'UNAUTHORIZED',
       });
     });
+
+    it('should throw NOT_FOUND when the authenticated user row does not exist', async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        call(accountRouter.submitOnboarding, onboardingInput)
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
+      });
+    });
   });
 
   describe('updateInfo', () => {
     const updateInput = { name: 'Updated Name' };
 
     it('should succeed for an authenticated user', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'user-1' });
+      mockDb.user.update.mockResolvedValue({});
+
       await expect(
         call(accountRouter.updateInfo, updateInput)
       ).resolves.toBeUndefined();
     });
 
     it('should not require any specific permission', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'user-1' });
+      mockDb.user.update.mockResolvedValue({});
+
       await call(accountRouter.updateInfo, updateInput);
 
       expect(mockUserHasPermission).not.toHaveBeenCalled();
@@ -56,6 +79,16 @@ describe('account router', () => {
         call(accountRouter.updateInfo, updateInput)
       ).rejects.toMatchObject({
         code: 'UNAUTHORIZED',
+      });
+    });
+
+    it('should throw NOT_FOUND when the authenticated user row does not exist', async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        call(accountRouter.updateInfo, updateInput)
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
       });
     });
   });

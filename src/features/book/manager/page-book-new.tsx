@@ -17,6 +17,7 @@ import { useIsUploadingFiles } from '@/components/upload/utils';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
+import { useBookGenres } from '@/features/book/manager/use-book-genres';
 import { zFormFieldsBook } from '@/features/book/schema';
 import {
   PageLayout,
@@ -29,6 +30,7 @@ export const PageBookNew = () => {
   const { t } = useTranslation(['book']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
+  const genres = useBookGenres();
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
@@ -104,7 +106,7 @@ export const PageBookNew = () => {
               <div className="flex-2">
                 <Card>
                   <CardContent>
-                    <FormBook />
+                    <FormBook genres={genres} />
                   </CardContent>
                 </Card>
               </div>
@@ -112,7 +114,7 @@ export const PageBookNew = () => {
                 aria-hidden
                 className="mx-auto w-full max-w-64 min-w-48 flex-1"
               >
-                <FormBookCover />
+                <FormBookCover genres={genres} />
               </div>
             </div>
           </PageLayoutContent>

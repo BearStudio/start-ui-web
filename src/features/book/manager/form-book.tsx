@@ -1,10 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { join } from 'remeda';
 import { toast } from 'sonner';
-
-import { orpc } from '@/lib/orpc/client';
 
 import {
   FormField,
@@ -19,12 +16,11 @@ import {
   FormFieldsBook,
 } from '@/features/book/schema';
 import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
+import { Genre } from '@/features/genre/schema';
 
-export const FormBook = () => {
+export const FormBook = (props: { genres: Genre[] }) => {
   const form = useFormContext<FormFieldsBook>();
   const { t } = useTranslation(['book']);
-
-  const genresQuery = useQuery(orpc.genre.getAll.queryOptions());
 
   return (
     <div className="flex flex-col gap-4">
@@ -48,7 +44,7 @@ export const FormBook = () => {
           type="combobox"
           control={form.control}
           name="genreId"
-          items={(genresQuery.data?.items ?? []).map((genre) => ({
+          items={props.genres.map((genre) => ({
             value: genre.id,
             label: genre.name,
           }))}

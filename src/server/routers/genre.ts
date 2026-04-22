@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
-import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['genres'];
@@ -41,7 +40,7 @@ export default {
           contains: input.searchTerm,
           mode: 'insensitive',
         },
-      } satisfies Prisma.GenreWhereInput;
+      };
 
       const [total, items] = await Promise.all([
         context.db.genre.count({
@@ -60,8 +59,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {

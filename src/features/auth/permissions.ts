@@ -6,7 +6,7 @@ import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 import { z } from 'zod';
 
 import { authClient } from '@/features/auth/client';
-import { UserRole } from '@/server/db/generated/client';
+import type { UserRole } from '@/server/db/schema';
 
 const statement = {
   ...defaultStatements,

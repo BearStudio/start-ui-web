@@ -22,4 +22,19 @@ test.describe('Login flow', () => {
     await page.waitForURL('/app');
     await expect(page.getByTestId('layout-app')).toBeVisible();
   });
+
+  test('Existing authenticated session survives logout-free navigation', async ({
+    page,
+  }) => {
+    await page.to('/login');
+    await page.login({ email: ADMIN_EMAIL });
+    await page.waitForURL('/manager');
+    await expect(page.getByTestId('layout-manager')).toBeVisible();
+
+    await page.to('/manager/users');
+    await expect(page.getByTestId('layout-manager')).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByTestId('layout-manager')).toBeVisible();
+  });
 });

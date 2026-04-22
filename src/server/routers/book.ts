@@ -2,7 +2,6 @@ import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
-import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -52,7 +51,7 @@ export default {
             },
           },
         ],
-      } satisfies Prisma.BookWhereInput;
+      };
 
       const [total, items] = await Promise.all([
         context.db.book.count({
@@ -72,8 +71,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
@@ -152,6 +151,14 @@ export default {
     .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
     .handler(async ({ context, input }) => {
+      const book = await context.db.book.findUnique({
+        where: { id: input.id },
+      });
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
       context.logger.info('Update book');
       return await context.db.book.update({
         where: { id: input.id },
@@ -182,6 +189,14 @@ export default {
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
+      const book = await context.db.book.findUnique({
+        where: { id: input.id },
+      });
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
       context.logger.info('Delete book');
       await context.db.book.delete({
         where: { id: input.id },
