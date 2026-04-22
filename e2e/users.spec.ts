@@ -91,7 +91,10 @@ test.describe('User management as manager', () => {
     ).toBeVisible();
   });
 
-  test('Session revocation is enforced for another user', async ({ page }) => {
+  test('Session revocation is enforced for another user', async ({
+    page,
+    baseURL,
+  }) => {
     const randomId = randomString(8);
     const uniqueEmail = `session-target-${randomId}@user.com`;
 
@@ -109,7 +112,12 @@ test.describe('User management as manager', () => {
 
     const userDetailUrl = page.url();
 
-    const targetContext = await page.context().browser()?.newContext();
+    const targetContext = await page
+      .context()
+      .browser()
+      ?.newContext({
+        baseURL: baseURL ?? undefined,
+      });
     const targetPage = await targetContext?.newPage();
 
     try {

@@ -72,7 +72,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: `VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm dev -- --host ${localPlaywrightHost} --port ${localPlaywrightPort}`,
+    command: `VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run env && VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run dev:app -- --host ${localPlaywrightHost} --port ${localPlaywrightPort}`,
     url: localPlaywrightBaseURL,
     reuseExistingServer: !process.env.CI,
   },
