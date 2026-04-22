@@ -20,6 +20,46 @@ const mockGenreFromDb = {
 };
 
 describe('genre router', () => {
+  describe('getAllNoCursor', () => {
+    it('should return all genres ordered for select inputs', async () => {
+      const genresFromDb = Array.from({ length: 3 }, (_, index) => ({
+        ...mockGenreFromDb,
+        id: `genre-${index + 1}`,
+      }));
+      mockDb.genre.findAll.mockResolvedValue(genresFromDb);
+
+      const result = await call(genreRouter.getAllNoCursor, undefined);
+
+      expect(result).toEqual(genresFromDb);
+      expect(mockDb.genre.findAll).toHaveBeenCalledWith({
+        orderBy: { name: 'asc' },
+      });
+    });
+
+    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
+      mockGetSession.mockResolvedValue(null);
+
+      await expect(
+        call(genreRouter.getAllNoCursor, undefined)
+      ).rejects.toMatchObject({
+        code: 'UNAUTHORIZED',
+      });
+    });
+
+    it('should require genre read permission', async () => {
+      mockDb.genre.findAll.mockResolvedValue([]);
+
+      await call(genreRouter.getAllNoCursor, undefined);
+
+      expect(mockUserHasPermission).toHaveBeenCalledWith({
+        body: {
+          userId: mockUser.id,
+          permissions: { genre: ['read'] },
+        },
+      });
+    });
+  });
+
   describe('getAll', () => {
     it('should return paginated genres with total count', async () => {
       mockDb.genre.count.mockResolvedValue(1);

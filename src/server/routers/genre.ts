@@ -6,6 +6,28 @@ import { protectedProcedure } from '@/server/orpc';
 const tags = ['genres'];
 
 export default {
+  getAllNoCursor: protectedProcedure({
+    permissions: {
+      genre: ['read'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/genres/all',
+      tags,
+    })
+    .input(z.void())
+    .output(z.array(zGenre()))
+    .handler(async ({ context }) => {
+      context.logger.info('Getting all genres from database');
+
+      return await context.db.genre.findAll({
+        orderBy: {
+          name: 'asc',
+        },
+      });
+    }),
+
   getAll: protectedProcedure({
     permissions: {
       genre: ['read'],

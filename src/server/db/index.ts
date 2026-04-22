@@ -346,6 +346,15 @@ function createSessionModel(db: DrizzleRuntimeDb) {
 }
 
 function createGenreModel(db: DrizzleDb) {
+  const getFilters = (where?: { name?: { contains?: string } }) => {
+    const filters: SQL[] = [];
+    if (where?.name?.contains) {
+      filters.push(ilike(genres.name, `%${where.name.contains}%`));
+    }
+
+    return filters;
+  };
+
   return {
     async count({ where }: { where?: { name?: { contains?: string } } }) {
       const [result] = await db
@@ -369,10 +378,7 @@ function createGenreModel(db: DrizzleDb) {
       orderBy?: { name: SortDirection };
       where?: { name?: { contains?: string } };
     }) {
-      const filters: SQL[] = [];
-      if (where?.name?.contains) {
-        filters.push(ilike(genres.name, `%${where.name.contains}%`));
-      }
+      const filters = getFilters(where);
       if (cursor?.id) {
         const [cursorGenre] = await db
           .select({ id: genres.id, name: genres.name })
@@ -401,6 +407,24 @@ function createGenreModel(db: DrizzleDb) {
           asc(genres.id)
         )
         .limit(take);
+    },
+    async findAll({
+      orderBy,
+      where,
+    }: {
+      orderBy?: { name: SortDirection };
+      where?: { name?: { contains?: string } };
+    }) {
+      const filters = getFilters(where);
+
+      return await db
+        .select()
+        .from(genres)
+        .where(filters.length ? and(...filters) : undefined)
+        .orderBy(
+          orderByDirection(genres.name, orderBy?.name ?? 'asc'),
+          asc(genres.id)
+        );
     },
   };
 }

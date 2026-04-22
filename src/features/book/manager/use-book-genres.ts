@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { orpc } from '@/lib/orpc/client';
@@ -8,8 +8,6 @@ import { Genre } from '@/features/genre/schema';
 type GenrePage = {
   items: Genre[];
 };
-
-const genrePageSize = 100;
 
 export const mergeGenres = (
   pages: GenrePage[] | undefined,
@@ -33,19 +31,10 @@ export const mergeGenres = (
 };
 
 export const useBookGenres = (linkedGenre?: Genre | null) => {
-  const { data } = useInfiniteQuery(
-    orpc.genre.getAll.infiniteOptions({
-      input: (cursor: string | undefined) => ({
-        cursor,
-        limit: genrePageSize,
-      }),
-      initialPageParam: undefined,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
-  );
+  const { data } = useQuery(orpc.genre.getAllNoCursor.queryOptions());
 
   return useMemo(
-    () => mergeGenres(data?.pages, linkedGenre),
-    [data?.pages, linkedGenre]
+    () => mergeGenres(data ? [{ items: data }] : undefined, linkedGenre),
+    [data, linkedGenre]
   );
 };
