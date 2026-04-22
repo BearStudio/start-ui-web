@@ -2,6 +2,18 @@ import { defineConfig, devices } from '@playwright/test';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
+const configuredBaseURL =
+  process.env.PLAYWRIGHT_BASE_URL ??
+  process.env.VITE_BASE_URL ??
+  'http://localhost:3000';
+const configuredURL = new URL(configuredBaseURL);
+const localPlaywrightHost =
+  process.env.PLAYWRIGHT_HOST ?? configuredURL.hostname;
+const localPlaywrightPort =
+  process.env.PLAYWRIGHT_PORT ??
+  (configuredURL.port || (configuredURL.protocol === 'https:' ? '443' : '80'));
+const localPlaywrightBaseURL = `${configuredURL.protocol}//${localPlaywrightHost}:${localPlaywrightPort}`;
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -23,7 +35,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: process.env.VITE_BASE_URL,
+    baseURL: localPlaywrightBaseURL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -60,8 +72,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm dev',
-    url: process.env.VITE_BASE_URL,
+    command: `VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm dev -- --host ${localPlaywrightHost} --port ${localPlaywrightPort}`,
+    url: localPlaywrightBaseURL,
     reuseExistingServer: !process.env.CI,
   },
 });
