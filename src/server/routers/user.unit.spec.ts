@@ -98,7 +98,7 @@ describe('user router', () => {
       const result = await call(userRouter.getAll, { limit: 3 });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('user-4');
+      expect(result.nextCursor).toBe('user-3');
       expect(result.total).toBe(10);
     });
 
@@ -498,7 +498,7 @@ describe('user router', () => {
       });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('session-4');
+      expect(result.nextCursor).toBe('session-3');
       expect(result.total).toBe(10);
     });
 
@@ -643,29 +643,13 @@ describe('user router', () => {
 
       expect(mockDb.session.findFirstForUser).toHaveBeenCalledWith({
         userId: 'target-user-1',
-        sessionIdOrToken: 'session-2',
+        sessionId: 'session-2',
       });
       expect(mockRevokeUserSession).toHaveBeenCalledWith({
         body: {
           sessionToken: 'other-token',
         },
         headers: expect.any(Headers),
-      });
-    });
-
-    it('should prevent revoking own current session by token', async () => {
-      mockGetSession.mockResolvedValue({
-        user: mockUser,
-        session: { ...mockSession, token: 'my-token' },
-      });
-
-      await expect(
-        call(userRouter.revokeUserSession, {
-          id: mockUser.id,
-          sessionId: 'my-token',
-        })
-      ).rejects.toMatchObject({
-        code: 'BAD_REQUEST',
       });
     });
 

@@ -29,7 +29,7 @@ export const users = pgTable(
     emailVerified: boolean('emailVerified').notNull(),
     image: text('image'),
     ...timestamps,
-    role: userRoleEnum('role'),
+    role: userRoleEnum('role').default('user').notNull(),
     banned: boolean('banned'),
     banReason: text('banReason'),
     banExpires: timestamp('banExpires', { precision: 3 }),
@@ -58,25 +58,38 @@ export const sessions = pgTable(
   (table) => [uniqueIndex('session_token_key').on(table.token)]
 );
 
-export const accounts = pgTable('account', {
-  id: text('id').primaryKey().notNull(),
-  accountId: text('accountId').notNull(),
-  providerId: text('providerId').notNull(),
-  userId: text('userId')
-    .notNull()
-    .references(() => users.id, {
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+export const accounts = pgTable(
+  'account',
+  {
+    id: text('id').primaryKey().notNull(),
+    accountId: text('accountId').notNull(),
+    providerId: text('providerId').notNull(),
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      }),
+    accessToken: text('accessToken'),
+    refreshToken: text('refreshToken'),
+    idToken: text('idToken'),
+    accessTokenExpiresAt: timestamp('accessTokenExpiresAt', {
+      precision: 3,
     }),
-  accessToken: text('accessToken'),
-  refreshToken: text('refreshToken'),
-  idToken: text('idToken'),
-  accessTokenExpiresAt: timestamp('accessTokenExpiresAt', { precision: 3 }),
-  refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt', { precision: 3 }),
-  scope: text('scope'),
-  password: text('password'),
-  ...timestamps,
-});
+    refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt', {
+      precision: 3,
+    }),
+    scope: text('scope'),
+    password: text('password'),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex('account_providerId_accountId_key').on(
+      table.providerId,
+      table.accountId
+    ),
+  ]
+);
 
 export const verifications = pgTable('verification', {
   id: text('id').primaryKey().notNull(),

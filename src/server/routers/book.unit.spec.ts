@@ -273,7 +273,6 @@ describe('book router', () => {
 
     it('should update a book and return it', async () => {
       const updatedBookFromDb = { ...mockBookFromDb, ...updateInput };
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.update.mockResolvedValue(updatedBookFromDb);
 
       const result = await call(bookRouter.updateById, updateInput);
@@ -282,7 +281,6 @@ describe('book router', () => {
     });
 
     it('should throw CONFLICT on unique constraint violation', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.update.mockRejectedValue(
         drizzleError('23505', {
           constraint_name: 'book_title_author_key',
@@ -300,19 +298,16 @@ describe('book router', () => {
     });
 
     it('should throw NOT_FOUND when update target does not exist', async () => {
-      mockDb.book.findUnique.mockResolvedValue(null);
+      mockDb.book.update.mockResolvedValue(null);
 
       await expect(
         call(bookRouter.updateById, updateInput)
       ).rejects.toMatchObject({
         code: 'NOT_FOUND',
       });
-
-      expect(mockDb.book.update).not.toHaveBeenCalled();
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.update.mockRejectedValue(new Error('DB connection lost'));
 
       await expect(
@@ -333,7 +328,6 @@ describe('book router', () => {
     });
 
     it('should require book update permission', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.update.mockResolvedValue({
         ...mockBookFromDb,
         ...updateInput,
@@ -365,7 +359,6 @@ describe('book router', () => {
 
   describe('deleteById', () => {
     it('should delete a book successfully', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.delete.mockResolvedValue(mockBookFromDb);
 
       await expect(
@@ -374,7 +367,7 @@ describe('book router', () => {
     });
 
     it('should throw NOT_FOUND when delete cannot find the book', async () => {
-      mockDb.book.findUnique.mockResolvedValue(null);
+      mockDb.book.delete.mockResolvedValue(null);
 
       await expect(
         call(bookRouter.deleteById, { id: 'nonexistent' })
@@ -384,7 +377,6 @@ describe('book router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.delete.mockRejectedValue(new Error('DB connection lost'));
 
       await expect(
@@ -405,7 +397,6 @@ describe('book router', () => {
     });
 
     it('should require book delete permission', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
       mockDb.book.delete.mockResolvedValue(mockBookFromDb);
 
       await call(bookRouter.deleteById, { id: 'book-1' });

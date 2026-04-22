@@ -50,4 +50,26 @@ describe('mergeGenres', () => {
     expect(result).toHaveLength(21);
     expect(result.at(-1)).toEqual(linkedGenre);
   });
+
+  it('deduplicates an already loaded linked genre and keeps the linked record', () => {
+    const linkedGenre = {
+      ...createGenre(5),
+      name: 'Linked Genre',
+      color: '#445566',
+    };
+
+    const pages = [
+      {
+        items: Array.from({ length: 10 }, (_, index) => createGenre(index + 1)),
+      },
+    ];
+
+    const result = mergeGenres(pages, linkedGenre);
+    const matchingGenres = result.filter(
+      (genre) => genre.id === linkedGenre.id
+    );
+
+    expect(result).toHaveLength(10);
+    expect(matchingGenres).toEqual([linkedGenre]);
+  });
 });

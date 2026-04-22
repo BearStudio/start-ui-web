@@ -151,16 +151,8 @@ export default {
     .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
     .handler(async ({ context, input }) => {
-      const book = await context.db.book.findUnique({
-        where: { id: input.id },
-      });
-      if (!book) {
-        context.logger.warn('Unable to find book with the provided input');
-        throw new ORPCError('NOT_FOUND');
-      }
-
       context.logger.info('Update book');
-      return await context.db.book.update({
+      const book = await context.db.book.update({
         where: { id: input.id },
         data: {
           title: input.title,
@@ -170,6 +162,13 @@ export default {
           coverId: input.coverId ?? null,
         },
       });
+
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return book;
     }),
 
   deleteById: protectedProcedure({
@@ -189,17 +188,14 @@ export default {
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
-      const book = await context.db.book.findUnique({
+      context.logger.info('Delete book');
+      const book = await context.db.book.delete({
         where: { id: input.id },
       });
+
       if (!book) {
         context.logger.warn('Unable to find book with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
-
-      context.logger.info('Delete book');
-      await context.db.book.delete({
-        where: { id: input.id },
-      });
     }),
 };

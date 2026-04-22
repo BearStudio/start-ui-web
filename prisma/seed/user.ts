@@ -49,7 +49,7 @@ export async function createUsers() {
   }
 
   console.log(
-    `✅ ${existingCount} existing user 👉 ${createdCounter} canonical users created 👉 ${repairedCounter} canonical users repaired`
+    `✅ ${existingCount} existing ${existingCount === 1 ? 'user' : 'users'} 👉 ${createdCounter} canonical users created 👉 ${repairedCounter} canonical users repaired`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);

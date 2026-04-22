@@ -96,7 +96,7 @@ type UserModel = {
     where: UniqueKey;
     data: Partial<{
       name: string;
-      role: 'user' | 'admin' | null;
+      role: 'user' | 'admin';
       email: string;
       emailVerified: boolean;
       onboardedAt: Date;
@@ -243,7 +243,7 @@ function createUserModel(db: DrizzleDb): UserModel {
       where: UniqueKey;
       data: Partial<{
         name: string;
-        role: 'user' | 'admin' | null;
+        role: 'user' | 'admin';
         email: string;
         emailVerified: boolean;
         onboardedAt: Date;
@@ -322,10 +322,10 @@ function createSessionModel(db: DrizzleRuntimeDb) {
     },
     async findFirstForUser({
       userId,
-      sessionIdOrToken,
+      sessionId,
     }: {
       userId: string;
-      sessionIdOrToken: string;
+      sessionId: string;
     }) {
       const [session] = await db
         .select({
@@ -337,15 +337,7 @@ function createSessionModel(db: DrizzleRuntimeDb) {
           userId: sessions.userId,
         })
         .from(sessions)
-        .where(
-          and(
-            eq(sessions.userId, userId),
-            or(
-              eq(sessions.id, sessionIdOrToken),
-              eq(sessions.token, sessionIdOrToken)
-            )!
-          )
-        )
+        .where(and(eq(sessions.userId, userId), eq(sessions.id, sessionId)))
         .limit(1);
 
       return session ?? null;
@@ -573,7 +565,7 @@ function createBookModel(db: DrizzleDb) {
         .where(eq(books.id, where.id))
         .returning();
       if (!book) {
-        throw new Error('Failed to update book');
+        return null;
       }
       return (await db.query.books.findFirst({
         where: eq(books.id, book.id),
@@ -585,7 +577,7 @@ function createBookModel(db: DrizzleDb) {
         .delete(books)
         .where(eq(books.id, where.id))
         .returning();
-      return book;
+      return book ?? null;
     },
   };
 }

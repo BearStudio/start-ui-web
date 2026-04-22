@@ -8,6 +8,13 @@
       "when": 1760000000000,
       "tag": "0000_baseline",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776811200000,
+      "tag": "0001_harden_auth_constraints",
+      "breakpoints": true
     }
   ]
 }

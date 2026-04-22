@@ -6,9 +6,11 @@ import {
 } from '../../../prisma/seed/user-fixtures';
 
 describe('getCanonicalUserRepairData', () => {
-  const adminFixture = canonicalUsers[1]!;
+  const adminFixture = canonicalUsers.find((user) => user.role === 'admin');
 
   it('returns no changes for an already canonical fixture state', () => {
+    expect(adminFixture).toBeDefined();
+
     expect(
       getCanonicalUserRepairData(
         {
@@ -16,13 +18,14 @@ describe('getCanonicalUserRepairData', () => {
           emailVerified: true,
           onboardedAt: new Date('2026-04-19T00:00:00.000Z'),
         },
-        adminFixture
+        adminFixture!
       )
     ).toEqual({});
   });
 
   it('repairs role, verification, and onboarding drift for canonical users', () => {
     const now = new Date('2026-04-19T12:00:00.000Z');
+    expect(adminFixture).toBeDefined();
 
     expect(
       getCanonicalUserRepairData(
@@ -31,7 +34,7 @@ describe('getCanonicalUserRepairData', () => {
           emailVerified: false,
           onboardedAt: null,
         },
-        adminFixture,
+        adminFixture!,
         now
       )
     ).toEqual({

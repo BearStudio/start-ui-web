@@ -295,7 +295,7 @@ const UserSessions = (props: { userId: string }) => {
                 >
                   <DataListCell>
                     <DataListText>
-                      {t('user:manager.detail.session', { token: item.id })}
+                      {t('user:manager.detail.session', { id: item.id })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>

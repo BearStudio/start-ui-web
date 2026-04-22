@@ -87,8 +87,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
@@ -165,7 +165,8 @@ export default {
         data: {
           name: input.name ?? '',
           // Prevent to change role of the connected user
-          role: context.user.id === input.id ? undefined : input.role,
+          role:
+            context.user.id === input.id ? undefined : (input.role ?? 'user'),
           email: input.email,
           // Set email as verified if admin changed the email
           emailVerified: currentUser.email !== input.email ? true : undefined,
@@ -288,8 +289,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
@@ -366,18 +367,9 @@ export default {
         });
       }
 
-      if (context.session.token === input.sessionId) {
-        context.logger.warn(
-          'Prevent to revoke the current connected user session by session token'
-        );
-        throw new ORPCError('BAD_REQUEST', {
-          message: 'You cannot revoke your current session',
-        });
-      }
-
       const targetSession = await context.db.session.findFirstForUser({
         userId: input.id,
-        sessionIdOrToken: input.sessionId,
+        sessionId: input.sessionId,
       });
 
       if (!targetSession) {

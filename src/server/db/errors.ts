@@ -32,7 +32,7 @@ export function mapDatabaseError(error: unknown): ORPCError<string, unknown> {
   }
 
   if (error instanceof DrizzleQueryError) {
-    const cause = (error.cause ?? error.params ?? {}) as QueryErrorCause;
+    const cause = (error.cause ?? {}) as QueryErrorCause;
 
     switch (cause.code) {
       case '23505':

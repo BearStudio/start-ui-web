@@ -1,7 +1,6 @@
 import { ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { eq } from 'drizzle-orm';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
@@ -10,7 +9,6 @@ import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { mapDatabaseError } from '@/server/db/errors';
-import { books, users } from '@/server/db/schema';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
@@ -83,14 +81,12 @@ const base = os
   // Middleware to add database Server Timing header
   .use(async ({ next, context }) => {
     return timingStore.run({ db: [] }, async () => {
-      const beforeTimings = timingStore.getStore()?.db.length ?? 0;
       const result = await next();
 
       // Add the Server-Timing header if there are timings
       const serverTimingHeader = timingStore
         .getStore()
-        ?.db.slice(beforeTimings)
-        .map(
+        ?.db.map(
           (timing) =>
             `db-${timing.model}-${timing.operation};dur=${timing.duration.toFixed(2)}`
         )
@@ -112,7 +108,7 @@ const base = os
     }
     return await next();
   })
-  // Prisma Error Handler
+  // Database error mapping middleware
   .use(async ({ next, context }) => {
     try {
       return await next();
@@ -125,24 +121,6 @@ const base = os
       throw mappedError;
     }
   });
-
-export async function ensureUserExists(id: string) {
-  const [user] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.id, id))
-    .limit(1);
-  return user;
-}
-
-export async function ensureBookExists(id: string) {
-  const [book] = await db
-    .select({ id: books.id })
-    .from(books)
-    .where(eq(books.id, id))
-    .limit(1);
-  return book;
-}
 
 export const publicProcedure = () => base;
 
