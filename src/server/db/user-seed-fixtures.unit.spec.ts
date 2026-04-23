@@ -16,6 +16,9 @@ describe('getCanonicalUserRepairData', () => {
         {
           name: 'Admin',
           role: 'admin',
+          banned: false,
+          banReason: null,
+          banExpires: null,
           emailVerified: true,
           onboardedAt: new Date('2026-04-19T00:00:00.000Z'),
         },
@@ -33,6 +36,9 @@ describe('getCanonicalUserRepairData', () => {
         {
           name: 'Not Admin',
           role: 'user',
+          banned: true,
+          banReason: 'Too many attempts',
+          banExpires: new Date('2026-04-19T11:00:00.000Z'),
           emailVerified: false,
           onboardedAt: null,
         },
@@ -42,6 +48,9 @@ describe('getCanonicalUserRepairData', () => {
     ).toEqual({
       name: 'Admin',
       role: 'admin',
+      banned: false,
+      banReason: null,
+      banExpires: null,
       emailVerified: true,
       onboardedAt: now,
     });

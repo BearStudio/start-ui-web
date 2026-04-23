@@ -7,6 +7,9 @@ export type CanonicalUserFixture = {
 type CanonicalUserState = {
   name: string;
   role: 'user' | 'admin' | null;
+  banned: boolean | null;
+  banReason: string | null;
+  banExpires: Date | null;
   emailVerified: boolean;
   onboardedAt: Date | null;
 };
@@ -14,6 +17,9 @@ type CanonicalUserState = {
 export type CanonicalUserRepairData = Partial<{
   name: CanonicalUserFixture['name'];
   role: CanonicalUserFixture['role'];
+  banned: false;
+  banReason: null;
+  banExpires: null;
   emailVerified: true;
   onboardedAt: Date;
 }>;
@@ -44,6 +50,16 @@ export function getCanonicalUserRepairData(
 
   if (existingUser.role !== canonicalUser.role) {
     repairData.role = canonicalUser.role;
+  }
+
+  if (
+    existingUser.banned ||
+    existingUser.banReason ||
+    existingUser.banExpires
+  ) {
+    repairData.banned = false;
+    repairData.banReason = null;
+    repairData.banExpires = null;
   }
 
   if (!existingUser.emailVerified) {
