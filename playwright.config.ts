@@ -13,6 +13,10 @@ const localPlaywrightPort =
   process.env.PLAYWRIGHT_PORT ??
   (configuredURL.port || (configuredURL.protocol === 'https:' ? '443' : '80'));
 const localPlaywrightBaseURL = `${configuredURL.protocol}//${localPlaywrightHost}:${localPlaywrightPort}`;
+const usesExternalBaseURL = process.env.PLAYWRIGHT_BASE_URL !== undefined;
+const playwrightBaseURL = usesExternalBaseURL
+  ? configuredBaseURL
+  : localPlaywrightBaseURL;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -32,10 +36,10 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'github' : 'html',
+  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: localPlaywrightBaseURL,
+    baseURL: playwrightBaseURL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -57,7 +61,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], locale: DEFAULT_LANGUAGE_KEY },
       dependencies: process.env.CI ? ['setup'] : [],
     },
-
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'], locale: DEFAULT_LANGUAGE_KEY },
@@ -71,9 +74,11 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: `VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run env && VITE_BASE_URL="${localPlaywrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run dev:app -- --host ${localPlaywrightHost} --port ${localPlaywrightPort}`,
-    url: localPlaywrightBaseURL,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: usesExternalBaseURL
+    ? undefined
+    : {
+        command: `VITE_BASE_URL="${playwrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run env && VITE_BASE_URL="${playwrightBaseURL}" VITE_PORT=${localPlaywrightPort} corepack pnpm run dev:app -- --host ${localPlaywrightHost} --port ${localPlaywrightPort}`,
+        url: playwrightBaseURL,
+        reuseExistingServer: !process.env.CI,
+      },
 });
