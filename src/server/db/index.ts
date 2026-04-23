@@ -133,7 +133,7 @@ function getContainsFilters<TField extends string>(
   for (const clause of clauses ?? []) {
     for (const field of Object.keys(fieldFactories) as TField[]) {
       const searchTerm = clause[field]?.contains;
-      if (searchTerm !== undefined) {
+      if (searchTerm !== undefined && searchTerm !== '') {
         filters.push(fieldFactories[field](searchTerm));
       }
     }
