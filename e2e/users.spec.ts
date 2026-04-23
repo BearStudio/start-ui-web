@@ -5,10 +5,26 @@ import { randomString } from 'remeda';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
+import { AUTH_EMAIL_OTP_MOCKED } from '@/features/auth/config';
 import locales from '@/locales';
 
 const t = locales[DEFAULT_LANGUAGE_KEY];
-const OTP_CODE = '000000';
+
+const deleteManagedUser = async (page: Page) => {
+  await page
+    .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
+    .click();
+
+  await expect(
+    page.getByText(t.user.manager.detail.confirmDeleteDescription)
+  ).toBeVisible();
+
+  await page
+    .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
+    .click();
+
+  await expect(page.getByText(t.user.manager.detail.userDeleted)).toBeVisible();
+};
 
 test.describe('User management as user', () => {
   test.use({ storageState: USER_FILE });
@@ -42,7 +58,7 @@ test.describe('User management as manager', () => {
     await page
       .getByPlaceholder(t.components.searchInput.placeholder)
       .fill(input.email);
-    await page.getByText(input.email).click({ force: true });
+    await page.getByRole('link', { name: input.name }).click();
   };
 
   test('Create a user', async ({ page }) => {
@@ -50,10 +66,11 @@ test.describe('User management as manager', () => {
 
     const randomId = randomString(8);
     const uniqueEmail = `new-user-${randomId}@user.com`;
+    const uniqueName = `New user ${randomId}`;
 
     // Fill the form
     await page.waitForURL('/manager/users/new');
-    await page.getByLabel(t.user.common.name.label).fill('New user');
+    await page.getByLabel(t.user.common.name.label).fill(uniqueName);
     await page.getByLabel(t.user.common.email.label).fill(uniqueEmail);
     await page.getByText(t.user.manager.new.createButton.label).click();
 
@@ -62,13 +79,16 @@ test.describe('User management as manager', () => {
       .getByPlaceholder(t.components.searchInput.placeholder)
       .fill(`new-user-${randomId}`);
     await expect(page.getByText(uniqueEmail)).toBeVisible();
+
+    await page.getByRole('link', { name: uniqueName }).click();
+    await deleteManagedUser(page);
   });
 
   test('Edit a user', async ({ page }) => {
     const randomId = randomString(8);
     const uniqueEmail = `edit-user-${randomId}@user.com`;
     await createManagedUser(page, {
-      name: 'Editable User',
+      name: `Editable User ${randomId}`,
       email: uniqueEmail,
     });
 
@@ -83,32 +103,20 @@ test.describe('User management as manager', () => {
     await expect(
       page.locator('main').getByText(newAdminName).first()
     ).toBeVisible();
+
+    await deleteManagedUser(page);
   });
 
   test('Delete a user', async ({ page }) => {
     const randomId = randomString(8);
     const uniqueEmail = `delete-user-${randomId}@user.com`;
+    const uniqueName = `Delete User ${randomId}`;
 
     await createManagedUser(page, {
-      name: 'Delete User',
+      name: uniqueName,
       email: uniqueEmail,
     });
-
-    await page
-      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
-      .click();
-
-    await expect(
-      page.getByText(t.user.manager.detail.confirmDeleteDescription)
-    ).toBeVisible();
-
-    await page
-      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
-      .click();
-
-    await expect(
-      page.getByText(t.user.manager.detail.userDeleted)
-    ).toBeVisible();
+    await deleteManagedUser(page);
 
     await page
       .getByPlaceholder(t.components.searchInput.placeholder)
@@ -122,10 +130,11 @@ test.describe('User management as manager', () => {
   }) => {
     const randomId = randomString(8);
     const uniqueEmail = `session-target-${randomId}@user.com`;
+    const uniqueName = `Session Target ${randomId}`;
 
     await page.getByText(t.user.manager.list.newButton).click();
     await page.waitForURL('/manager/users/new');
-    await page.getByLabel(t.user.common.name.label).fill('Session Target');
+    await page.getByLabel(t.user.common.name.label).fill(uniqueName);
     await page.getByLabel(t.user.common.email.label).fill(uniqueEmail);
     await page.getByText(t.user.manager.new.createButton.label).click();
 
@@ -133,7 +142,7 @@ test.describe('User management as manager', () => {
     await page
       .getByPlaceholder(t.components.searchInput.placeholder)
       .fill(uniqueEmail);
-    await page.getByText(uniqueEmail).click({ force: true });
+    await page.getByRole('link', { name: uniqueName }).click();
 
     const userDetailUrl = page.url();
 
@@ -160,7 +169,9 @@ test.describe('User management as manager', () => {
         })
         .click();
       await targetPage.waitForURL('**/login/verify**');
-      await targetPage.getByText(t.auth.common.otp.label).fill(OTP_CODE);
+      await targetPage
+        .getByText(t.auth.common.otp.label)
+        .fill(AUTH_EMAIL_OTP_MOCKED);
       await targetPage.waitForURL('/app');
       await expect(targetPage.getByTestId('layout-app')).toBeVisible();
 
@@ -178,6 +189,8 @@ test.describe('User management as manager', () => {
       await targetPage.goto('/app');
       await targetPage.waitForURL(/\/login(\?.*)?$/);
       await expect(targetPage.getByTestId('layout-login')).toBeVisible();
+
+      await deleteManagedUser(page);
     } finally {
       await targetContext?.close();
     }
