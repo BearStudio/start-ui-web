@@ -112,26 +112,71 @@ function orderByDirection<TColumn>(column: TColumn, direction: SortDirection) {
 
 type ContainsFilter = { contains?: string };
 
-function getSearchTerm<TField extends string>(
+function combineOrFilters(filters: SQL[]) {
+  if (filters.length === 0) {
+    return undefined;
+  }
+
+  return filters.reduce<SQL | undefined>(
+    (combinedFilter, filter) =>
+      combinedFilter ? (or(combinedFilter, filter) ?? combinedFilter) : filter,
+    undefined
+  );
+}
+
+function getContainsFilters<TField extends string>(
   clauses: Array<Partial<Record<TField, ContainsFilter>>> | undefined,
-  fields: readonly TField[]
+  fieldFactories: Record<TField, (searchTerm: string) => SQL>
 ) {
+  const filters: SQL[] = [];
+
   for (const clause of clauses ?? []) {
-    for (const field of fields) {
+    for (const field of Object.keys(fieldFactories) as TField[]) {
       const searchTerm = clause[field]?.contains;
       if (searchTerm !== undefined) {
-        return searchTerm;
+        filters.push(fieldFactories[field](searchTerm));
       }
     }
   }
 
-  return undefined;
+  return combineOrFilters(filters);
 }
 
 function pushFilter(filters: SQL[], filter: SQL | undefined) {
   if (filter) {
     filters.push(filter);
   }
+}
+
+function getCursorPaginationFilter<TColumn, TIdColumn>(
+  column: TColumn,
+  direction: SortDirection,
+  cursorValue: unknown,
+  idColumn: TIdColumn,
+  cursorId: string
+) {
+  const compareColumn = column as Parameters<typeof gt>[0];
+  const compareIdColumn = idColumn as Parameters<typeof gt>[0];
+  const compareValue = cursorValue as never;
+  const compareId = cursorId as never;
+
+  if (direction === 'desc') {
+    return or(
+      lt(compareColumn as Parameters<typeof lt>[0], compareValue),
+      and(
+        eq(compareColumn as Parameters<typeof eq>[0], compareValue),
+        lt(compareIdColumn as Parameters<typeof lt>[0], compareId)
+      )
+    );
+  }
+
+  return or(
+    gt(compareColumn, compareValue),
+    and(
+      eq(compareColumn as Parameters<typeof eq>[0], compareValue),
+      gt(compareIdColumn, compareId)
+    )
+  );
 }
 
 function createUserModel(db: DrizzleDb): UserModel {
@@ -159,13 +204,10 @@ function createUserModel(db: DrizzleDb): UserModel {
         >;
       };
     }) {
-      const searchTerm = getSearchTerm(where?.OR, ['name', 'email']);
-      const filters = searchTerm
-        ? or(
-            ilike(users.name, `%${searchTerm}%`),
-            ilike(users.email, `%${searchTerm}%`)
-          )
-        : undefined;
+      const filters = getContainsFilters(where?.OR, {
+        name: (searchTerm) => ilike(users.name, `%${searchTerm}%`),
+        email: (searchTerm) => ilike(users.email, `%${searchTerm}%`),
+      });
       const [result] = await db
         .select({ value: count() })
         .from(users)
@@ -187,17 +229,14 @@ function createUserModel(db: DrizzleDb): UserModel {
         >;
       };
     }) {
-      const searchTerm = getSearchTerm(where?.OR, ['name', 'email']);
       const filters: SQL[] = [];
-      if (searchTerm) {
-        pushFilter(
-          filters,
-          or(
-            ilike(users.name, `%${searchTerm}%`),
-            ilike(users.email, `%${searchTerm}%`)
-          )
-        );
-      }
+      pushFilter(
+        filters,
+        getContainsFilters(where?.OR, {
+          name: (searchTerm) => ilike(users.name, `%${searchTerm}%`),
+          email: (searchTerm) => ilike(users.email, `%${searchTerm}%`),
+        })
+      );
       if (cursor?.id) {
         const [cursorUser] = await db
           .select({ id: users.id, name: users.name })
@@ -208,9 +247,12 @@ function createUserModel(db: DrizzleDb): UserModel {
         if (cursorUser) {
           pushFilter(
             filters,
-            or(
-              gt(users.name, cursorUser.name),
-              and(eq(users.name, cursorUser.name), gt(users.id, cursorUser.id))
+            getCursorPaginationFilter(
+              users.name,
+              orderBy?.name ?? 'asc',
+              cursorUser.name,
+              users.id,
+              cursorUser.id
             )
           );
         }
@@ -313,12 +355,12 @@ function createSessionModel(db: DrizzleRuntimeDb) {
         if (cursorSession) {
           pushFilter(
             filters,
-            or(
-              lt(sessions.createdAt, cursorSession.createdAt),
-              and(
-                eq(sessions.createdAt, cursorSession.createdAt),
-                lt(sessions.id, cursorSession.id)
-              )
+            getCursorPaginationFilter(
+              sessions.createdAt,
+              orderBy?.createdAt ?? 'desc',
+              cursorSession.createdAt,
+              sessions.id,
+              cursorSession.id
             )
           );
         }
@@ -661,10 +703,11 @@ function getRuntimeModels(db: DrizzleRuntimeDb) {
   return models;
 }
 
-function createRuntimeDb(drizzleDb: DrizzleRuntimeDb) {
+function createRuntimeDb(drizzleDb: DrizzleRuntimeDb): RuntimeDb {
   const models = getRuntimeModels(drizzleDb);
+  const runtimeDb = Object.assign(Object.create(drizzleDb), models);
 
-  return new Proxy(drizzleDb, {
+  return new Proxy(runtimeDb, {
     get(target, property, receiver) {
       if (property === '$client') {
         return target.$client;
@@ -677,7 +720,7 @@ function createRuntimeDb(drizzleDb: DrizzleRuntimeDb) {
       const value = Reflect.get(target, property, receiver);
       return typeof value === 'function' ? value.bind(target) : value;
     },
-  }) as RuntimeDb;
+  });
 }
 
 const globalForDb = globalThis as unknown as GlobalDb;
