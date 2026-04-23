@@ -2,7 +2,6 @@ import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
-import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -52,7 +51,7 @@ export default {
             },
           },
         ],
-      } satisfies Prisma.BookWhereInput;
+      };
 
       const [total, items] = await Promise.all([
         context.db.book.count({
@@ -72,8 +71,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
@@ -132,7 +131,7 @@ export default {
         data: {
           title: input.title,
           author: input.author,
-          genreId: input.genreId ?? undefined,
+          genreId: input.genreId,
           publisher: input.publisher,
           coverId: input.coverId,
         },
@@ -153,7 +152,7 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
-      return await context.db.book.update({
+      const book = await context.db.book.update({
         where: { id: input.id },
         data: {
           title: input.title,
@@ -163,6 +162,13 @@ export default {
           coverId: input.coverId ?? null,
         },
       });
+
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return book;
     }),
 
   deleteById: protectedProcedure({
@@ -183,8 +189,13 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Delete book');
-      await context.db.book.delete({
+      const book = await context.db.book.delete({
         where: { id: input.id },
       });
+
+      if (!book) {
+        context.logger.warn('Unable to find book with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
     }),
 };

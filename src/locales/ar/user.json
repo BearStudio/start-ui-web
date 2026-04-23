@@ -46,7 +46,7 @@
       "revokeError": "فشل في إلغاء الجلسة",
       "userSessions": "جلسات المستخدم",
       "noSessions": "لا توجد جلسات للمستخدم",
-      "session": "الجلسة {{token}}",
+      "session": "الجلسة {{id}}",
       "sessionUpdated": "تم التحديث {{time}}",
       "sessionExpires": "تنتهي {{time}}",
       "editUser": "تعديل المستخدم"

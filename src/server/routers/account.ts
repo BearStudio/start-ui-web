@@ -1,3 +1,4 @@
+import { ORPCError } from '@orpc/server';
 import { z } from 'zod';
 
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
@@ -18,6 +19,14 @@ export default {
     .input(zFormFieldsOnboarding())
     .output(z.void())
     .handler(async ({ context, input }) => {
+      const user = await context.db.user.findUnique({
+        where: { id: context.user.id },
+      });
+      if (!user) {
+        context.logger.warn('Unable to find user with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
       context.logger.info('Update user');
       await context.db.user.update({
         where: { id: context.user.id },
@@ -43,6 +52,14 @@ export default {
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
+      const user = await context.db.user.findUnique({
+        where: { id: context.user.id },
+      });
+      if (!user) {
+        context.logger.warn('Unable to find user with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
       context.logger.info('Update user');
       await context.db.user.update({
         where: { id: context.user.id },

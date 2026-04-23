@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: $DOCKER_DATABASE_USERNAME
       POSTGRES_PASSWORD: $DOCKER_DATABASE_PASSWORD
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $DOCKER_DATABASE_NAME']
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
       interval: 10s
       timeout: 5s
       retries: 5

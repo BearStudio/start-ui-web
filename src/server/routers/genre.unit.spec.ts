@@ -20,6 +20,46 @@ const mockGenreFromDb = {
 };
 
 describe('genre router', () => {
+  describe('getAllNoCursor', () => {
+    it('should return all genres ordered for select inputs', async () => {
+      const genresFromDb = Array.from({ length: 3 }, (_, index) => ({
+        ...mockGenreFromDb,
+        id: `genre-${index + 1}`,
+      }));
+      mockDb.genre.findAll.mockResolvedValue(genresFromDb);
+
+      const result = await call(genreRouter.getAllNoCursor, undefined);
+
+      expect(result).toEqual(genresFromDb);
+      expect(mockDb.genre.findAll).toHaveBeenCalledWith({
+        orderBy: { name: 'asc' },
+      });
+    });
+
+    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
+      mockGetSession.mockResolvedValue(null);
+
+      await expect(
+        call(genreRouter.getAllNoCursor, undefined)
+      ).rejects.toMatchObject({
+        code: 'UNAUTHORIZED',
+      });
+    });
+
+    it('should require genre read permission', async () => {
+      mockDb.genre.findAll.mockResolvedValue([]);
+
+      await call(genreRouter.getAllNoCursor, undefined);
+
+      expect(mockUserHasPermission).toHaveBeenCalledWith({
+        body: {
+          userId: mockUser.id,
+          permissions: { genre: ['read'] },
+        },
+      });
+    });
+  });
+
   describe('getAll', () => {
     it('should return paginated genres with total count', async () => {
       mockDb.genre.count.mockResolvedValue(1);
@@ -45,7 +85,7 @@ describe('genre router', () => {
       const result = await call(genreRouter.getAll, { limit: 3 });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('genre-4');
+      expect(result.nextCursor).toBe('genre-3');
       expect(result.total).toBe(10);
     });
 
@@ -56,6 +96,32 @@ describe('genre router', () => {
       const result = await call(genreRouter.getAll, { limit: 5 });
 
       expect(result.nextCursor).toBeUndefined();
+    });
+
+    it('should trim whitespace-only search terms before querying', async () => {
+      mockDb.genre.count.mockResolvedValue(1);
+      mockDb.genre.findMany.mockResolvedValue([mockGenreFromDb]);
+
+      await call(genreRouter.getAll, { searchTerm: '   ' });
+
+      expect(mockDb.genre.count).toHaveBeenCalledWith({
+        where: {
+          name: {
+            contains: '',
+            mode: 'insensitive',
+          },
+        },
+      });
+      expect(mockDb.genre.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            name: {
+              contains: '',
+              mode: 'insensitive',
+            },
+          },
+        })
+      );
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {

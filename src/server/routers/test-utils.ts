@@ -10,16 +10,16 @@ export const mockUserHasPermission = hoisted.mockUserHasPermission;
 
 import type { Mock } from 'vitest';
 
-import type { PrismaClient } from '@/server/db/generated/client';
+import type { RuntimeDb } from '@/server/db';
 
 type ModelKeys = {
-  [K in keyof PrismaClient]: PrismaClient[K] extends { findMany: unknown }
+  [K in keyof RuntimeDb]: RuntimeDb[K] extends { findMany: unknown }
     ? K
     : never;
-}[keyof PrismaClient];
+}[keyof RuntimeDb];
 
 type MockedModel<T> = { [K in keyof T]: Mock };
-type MockedDb = { [K in ModelKeys]: MockedModel<PrismaClient[K]> };
+type MockedDb = { [K in ModelKeys]: MockedModel<RuntimeDb[K]> };
 
 // Auto-mock @/server/db: any model property returns a proxy where
 // every method is a vi.fn(), so tests don't need to declare the shape.
@@ -40,7 +40,7 @@ export const mockDb: MockedDb = new Proxy({} as ExplicitAny, {
 });
 
 export const mockUser = { id: 'user-1', name: 'Test User' };
-export const mockSession = { id: 'session-1' };
+export const mockSession = { id: 'session-1', token: 'session-token-1' };
 
 export function setupAuthenticatedUser() {
   mockGetSession.mockResolvedValue({

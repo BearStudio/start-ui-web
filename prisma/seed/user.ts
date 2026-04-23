@@ -1,57 +1,56 @@
 import { faker } from '@faker-js/faker';
+import { eq } from 'drizzle-orm';
 
 import { db } from '@/server/db';
+import { users } from '@/server/db/schema';
 
 import { emphasis } from './_utils';
+import { countUsers, findUserByEmail } from './drizzle-utils';
+import { canonicalUsers, getCanonicalUserRepairData } from './user-fixtures';
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
+  const pluralizeUsers = (count: number) => (count === 1 ? 'user' : 'users');
 
   let createdCounter = 0;
-  const existingCount = await db.user.count();
+  let repairedCounter = 0;
+  const existingCount = await countUsers();
 
-  await Promise.all(
-    Array.from({ length: Math.max(0, 98 - existingCount) }, async () => {
-      await db.user.create({
-        data: {
-          name: faker.person.fullName(),
-          email: faker.internet.email().toLowerCase(),
-          emailVerified: true,
-          role: 'user',
-        },
-      });
-      createdCounter += 1;
-    })
-  );
+  for (const canonicalUser of canonicalUsers) {
+    const existingUser = await findUserByEmail(canonicalUser.email);
 
-  if (!(await db.user.findUnique({ where: { email: 'user@user.com' } }))) {
-    await db.user.create({
-      data: {
-        name: 'User',
-        email: 'user@user.com',
-        emailVerified: true,
-        onboardedAt: new Date(),
-        role: 'user',
-      },
-    });
-    createdCounter += 1;
-  }
+    if (existingUser) {
+      const repairData = getCanonicalUserRepairData(
+        existingUser,
+        canonicalUser
+      );
 
-  if (!(await db.user.findUnique({ where: { email: 'admin@admin.com' } }))) {
-    await db.user.create({
-      data: {
-        name: 'Admin',
-        email: 'admin@admin.com',
-        emailVerified: true,
-        role: 'admin',
-        onboardedAt: new Date(),
-      },
+      if (Object.keys(repairData).length > 0) {
+        await db
+          .update(users)
+          .set(repairData)
+          .where(eq(users.id, existingUser.id));
+        repairedCounter += 1;
+      }
+
+      continue;
+    }
+
+    await db.insert(users).values({
+      id: faker.string.alphanumeric(25).toLowerCase(),
+      name: canonicalUser.name,
+      email: canonicalUser.email,
+      emailVerified: true,
+      onboardedAt: new Date(),
+      role: canonicalUser.role,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
     createdCounter += 1;
   }
 
   console.log(
-    `✅ ${existingCount} existing user 👉 ${createdCounter} users created`
+    `✅ ${existingCount} existing ${pluralizeUsers(existingCount)} 👉 ${createdCounter} canonical ${pluralizeUsers(createdCounter)} created 👉 ${repairedCounter} canonical ${pluralizeUsers(repairedCounter)} repaired`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);

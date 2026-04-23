@@ -1,6 +1,6 @@
 import { expo } from '@better-auth/expo';
 import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
@@ -15,25 +15,43 @@ import {
   AUTH_SIGNUP_ENABLED,
 } from '@/features/auth/config';
 import { permissions } from '@/features/auth/permissions';
-import { db } from '@/server/db';
+import { drizzleDb } from '@/server/db';
+import { accounts, sessions, users, verifications } from '@/server/db/schema';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
 
 export type Auth = typeof auth;
+const allowedAuthHosts = Array.from(
+  new Set([
+    new URL(envClient.VITE_BASE_URL).host,
+    ...(envServer.AUTH_ALLOWED_HOSTS ?? []),
+  ])
+);
+
+const authSchema = {
+  user: users,
+  users,
+  session: sessions,
+  sessions,
+  account: accounts,
+  accounts,
+  verification: verifications,
+  verifications,
+} as const;
+
 export const auth = betterAuth({
   baseURL: {
-    allowedHosts: [
-      new URL(envClient.VITE_BASE_URL).host,
-      ...(envServer.AUTH_ALLOWED_HOSTS ?? []),
-    ],
+    allowedHosts: allowedAuthHosts,
   },
   session: {
     expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
     updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
   },
   trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
-  database: prismaAdapter(db, {
-    provider: 'postgresql',
+  database: drizzleAdapter(drizzleDb, {
+    provider: 'pg',
+    usePlural: true,
+    schema: authSchema,
   }),
   user: {
     additionalFields: {

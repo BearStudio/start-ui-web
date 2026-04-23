@@ -17,6 +17,7 @@ import { useIsUploadingFiles } from '@/components/upload/utils';
 
 import { FormBook } from '@/features/book/manager/form-book';
 import { FormBookCover } from '@/features/book/manager/form-book-cover';
+import { useBookGenres } from '@/features/book/manager/use-book-genres';
 import { zFormFieldsBook } from '@/features/book/schema';
 import {
   PageLayout,
@@ -32,6 +33,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const bookQuery = useQuery(
     orpc.book.getById.queryOptions({ input: { id: props.params.id } })
   );
+  const genres = useBookGenres(bookQuery.data?.genre);
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
@@ -107,7 +109,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
               <div className="flex-2">
                 <Card>
                   <CardContent>
-                    <FormBook />
+                    <FormBook genres={genres} />
                   </CardContent>
                 </Card>
               </div>
@@ -115,7 +117,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
                 aria-hidden
                 className="mx-auto w-full max-w-64 min-w-48 flex-1"
               >
-                <FormBookCover />
+                <FormBookCover genres={genres} />
               </div>
             </div>
           </PageLayoutContent>

@@ -1,52 +1,721 @@
+import type { InferSelectModel, SQL } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  getTableColumns,
+  gt,
+  ilike,
+  lt,
+  or,
+} from 'drizzle-orm';
+import type { Logger } from 'drizzle-orm/logger';
+import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import postgres, { type Sql } from 'postgres';
+
 import { envServer } from '@/env/server';
 import { timingStore } from '@/server/timing-store';
 
-import { PrismaClient } from './generated/client';
+import { books, genres, schema, sessions, users } from './schema';
 
-const levels = {
-  trace: ['query', 'error', 'warn', 'info'],
-  debug: ['error', 'warn', 'info'],
-  info: ['error', 'warn', 'info'],
-  warn: ['error', 'warn'],
-  error: ['error'],
-  fatal: ['error'],
-} satisfies Record<string, ('query' | 'error' | 'warn' | 'info')[]>;
+const TABLE_NAME_REGEX = /\b(?:from|into|update)\s+"?([a-z_][$\w]*)"?/i;
 
-function createPrisma() {
-  return new PrismaClient({
-    log: levels[envServer.LOGGER_LEVEL],
-  }).$extends({
-    name: 'server-timing',
-    query: {
-      $allModels: {
-        async $allOperations({ query, args, model, operation }) {
-          const start = performance.now();
+class ServerTimingLogger implements Logger {
+  logQuery(query: string): void {
+    const store = timingStore.getStore();
+    if (!store) {
+      return;
+    }
 
-          const result = await query(args);
+    const normalizedQuery = query.trim().replaceAll(/\s+/g, ' ');
+    const operation = normalizedQuery.split(' ')[0]?.toLowerCase() ?? 'query';
+    const tableMatch = TABLE_NAME_REGEX.exec(normalizedQuery);
 
-          const duration = performance.now() - start;
+    store.db.push({
+      model: tableMatch?.[1] ?? 'unknown',
+      operation,
+      duration: 0,
+    });
+  }
+}
 
-          const store = timingStore.getStore();
-          if (store) {
-            store.prisma.push({
-              model,
-              operation,
-              duration,
-            });
-          }
+function createDb(): DrizzleRuntimeDb {
+  const client = postgres(envServer.DATABASE_URL, {
+    max: 10,
+    idle_timeout: 20,
+    connect_timeout: 10,
+  });
 
-          return result;
-        },
-      },
+  return drizzle(client, {
+    schema,
+    logger:
+      envServer.LOGGER_LEVEL === 'trace' ? new ServerTimingLogger() : false,
+  });
+}
+
+export type DrizzleDb = PostgresJsDatabase<typeof schema>;
+type UniqueKey = { id: string };
+type SortDirection = 'asc' | 'desc';
+type SearchFilter =
+  | { name?: { contains?: string } }
+  | { email?: { contains?: string } };
+type UserRecord = InferSelectModel<typeof users>;
+type UserEmailRecord = Pick<UserRecord, 'email'>;
+type UserFindUniqueArgs = {
+  where: UniqueKey;
+  select?: { email?: true };
+};
+type UserFindUniqueResult<TArgs extends UserFindUniqueArgs> = TArgs extends {
+  select: { email: true };
+}
+  ? UserEmailRecord | null
+  : UserRecord | null;
+
+type UserModel = {
+  count(args: { where?: { OR?: SearchFilter[] } }): Promise<number>;
+  findMany(args: {
+    take: number;
+    cursor?: UniqueKey;
+    orderBy?: { name: SortDirection };
+    where?: { OR?: SearchFilter[] };
+  }): Promise<UserRecord[]>;
+  findUnique<TArgs extends UserFindUniqueArgs>(
+    args: TArgs
+  ): Promise<UserFindUniqueResult<TArgs>>;
+  create(args: {
+    data: {
+      email: string;
+      emailVerified: boolean;
+      name: string;
+      role: 'user' | 'admin';
+    };
+  }): Promise<UserRecord>;
+  update(args: {
+    where: UniqueKey;
+    data: Partial<{
+      name: string;
+      role: 'user' | 'admin';
+      email: string;
+      emailVerified: boolean;
+      onboardedAt: Date;
+    }>;
+  }): Promise<UserRecord>;
+};
+
+function orderByDirection<TColumn>(column: TColumn, direction: SortDirection) {
+  return direction === 'desc'
+    ? desc(column as Parameters<typeof desc>[0])
+    : asc(column as Parameters<typeof asc>[0]);
+}
+
+type ContainsFilter = { contains?: string };
+
+function combineOrFilters(filters: SQL[]) {
+  if (filters.length === 0) {
+    return undefined;
+  }
+
+  return filters.reduce<SQL | undefined>(
+    (combinedFilter, filter) =>
+      combinedFilter ? (or(combinedFilter, filter) ?? combinedFilter) : filter,
+    undefined
+  );
+}
+
+function getContainsFilters<TField extends string>(
+  clauses: Array<Partial<Record<TField, ContainsFilter>>> | undefined,
+  fieldFactories: Record<TField, (searchTerm: string) => SQL>
+) {
+  const filters: SQL[] = [];
+
+  for (const clause of clauses ?? []) {
+    for (const field of Object.keys(fieldFactories) as TField[]) {
+      const searchTerm = clause[field]?.contains;
+      if (searchTerm !== undefined && searchTerm !== '') {
+        filters.push(fieldFactories[field](searchTerm));
+      }
+    }
+  }
+
+  return combineOrFilters(filters);
+}
+
+function pushFilter(filters: SQL[], filter: SQL | undefined) {
+  if (filter) {
+    filters.push(filter);
+  }
+}
+
+function getCursorPaginationFilter<TColumn, TIdColumn>(
+  column: TColumn,
+  direction: SortDirection,
+  cursorValue: unknown,
+  idColumn: TIdColumn,
+  cursorId: string
+) {
+  const compareColumn = column as Parameters<typeof gt>[0];
+  const compareIdColumn = idColumn as Parameters<typeof gt>[0];
+  const compareValue = cursorValue as never;
+  const compareId = cursorId as never;
+
+  if (direction === 'desc') {
+    return or(
+      lt(compareColumn, compareValue),
+      and(eq(compareColumn, compareValue), lt(compareIdColumn, compareId))
+    );
+  }
+
+  return or(
+    gt(compareColumn, compareValue),
+    and(eq(compareColumn, compareValue), gt(compareIdColumn, compareId))
+  );
+}
+
+function createUserModel(db: DrizzleDb): UserModel {
+  const findUnique: UserModel['findUnique'] = async <
+    TArgs extends UserFindUniqueArgs,
+  >({
+    where,
+    select,
+  }: TArgs) => {
+    const [user] = await db
+      .select(select?.email ? { email: users.email } : getTableColumns(users))
+      .from(users)
+      .where(eq(users.id, where.id))
+      .limit(1);
+    return (user ?? null) as UserFindUniqueResult<TArgs>;
+  };
+
+  return {
+    async count({
+      where,
+    }: {
+      where?: {
+        OR?: Array<
+          { name?: { contains?: string } } | { email?: { contains?: string } }
+        >;
+      };
+    }) {
+      const filters = getContainsFilters(where?.OR, {
+        name: (searchTerm) => ilike(users.name, `%${searchTerm}%`),
+        email: (searchTerm) => ilike(users.email, `%${searchTerm}%`),
+      });
+      const [result] = await db
+        .select({ value: count() })
+        .from(users)
+        .where(filters);
+      return result?.value ?? 0;
+    },
+    async findMany({
+      take,
+      cursor,
+      orderBy,
+      where,
+    }: {
+      take: number;
+      cursor?: UniqueKey;
+      orderBy?: { name: SortDirection };
+      where?: {
+        OR?: Array<
+          { name?: { contains?: string } } | { email?: { contains?: string } }
+        >;
+      };
+    }) {
+      const filters: SQL[] = [];
+      pushFilter(
+        filters,
+        getContainsFilters(where?.OR, {
+          name: (searchTerm) => ilike(users.name, `%${searchTerm}%`),
+          email: (searchTerm) => ilike(users.email, `%${searchTerm}%`),
+        })
+      );
+      if (cursor?.id) {
+        const [cursorUser] = await db
+          .select({ id: users.id, name: users.name })
+          .from(users)
+          .where(eq(users.id, cursor.id))
+          .limit(1);
+
+        if (cursorUser) {
+          pushFilter(
+            filters,
+            getCursorPaginationFilter(
+              users.name,
+              orderBy?.name ?? 'asc',
+              cursorUser.name,
+              users.id,
+              cursorUser.id
+            )
+          );
+        }
+      }
+
+      return await db
+        .select()
+        .from(users)
+        .where(filters.length ? and(...filters) : undefined)
+        .orderBy(
+          orderByDirection(users.name, orderBy?.name ?? 'asc'),
+          asc(users.id)
+        )
+        .limit(take);
+    },
+    findUnique,
+    async create({
+      data,
+    }: {
+      data: {
+        email: string;
+        emailVerified: boolean;
+        name: string;
+        role: 'user' | 'admin';
+      };
+    }) {
+      const [user] = await db
+        .insert(users)
+        .values({
+          id: crypto.randomUUID(),
+          email: data.email,
+          emailVerified: data.emailVerified,
+          name: data.name,
+          role: data.role,
+        })
+        .returning();
+      if (!user) {
+        throw new Error('Failed to create user');
+      }
+      return user;
+    },
+    async update({
+      where,
+      data,
+    }: {
+      where: UniqueKey;
+      data: Partial<{
+        name: string;
+        role: 'user' | 'admin';
+        email: string;
+        emailVerified: boolean;
+        onboardedAt: Date;
+      }>;
+    }) {
+      const payload = Object.fromEntries(
+        Object.entries(data).filter(([, value]) => value !== undefined)
+      );
+      const [user] = await db
+        .update(users)
+        .set(payload)
+        .where(eq(users.id, where.id))
+        .returning();
+      if (!user) {
+        throw new Error('Failed to update user');
+      }
+      return user;
+    },
+  };
+}
+
+function createSessionModel(db: DrizzleRuntimeDb) {
+  return {
+    async count({ where }: { where: { userId: string } }) {
+      const [result] = await db
+        .select({ value: count() })
+        .from(sessions)
+        .where(eq(sessions.userId, where.userId));
+      return result?.value ?? 0;
+    },
+    async findMany({
+      take,
+      cursor,
+      orderBy,
+      where,
+    }: {
+      take: number;
+      cursor?: UniqueKey;
+      orderBy?: { createdAt: SortDirection };
+      where: { userId: string };
+    }) {
+      const filters: SQL[] = [eq(sessions.userId, where.userId)];
+      if (cursor?.id) {
+        const [cursorSession] = await db
+          .select({ id: sessions.id, createdAt: sessions.createdAt })
+          .from(sessions)
+          .where(
+            and(eq(sessions.id, cursor.id), eq(sessions.userId, where.userId))
+          )
+          .limit(1);
+        if (cursorSession) {
+          pushFilter(
+            filters,
+            getCursorPaginationFilter(
+              sessions.createdAt,
+              orderBy?.createdAt ?? 'desc',
+              cursorSession.createdAt,
+              sessions.id,
+              cursorSession.id
+            )
+          );
+        }
+      }
+      return await db
+        .select({
+          id: sessions.id,
+          token: sessions.token,
+          createdAt: sessions.createdAt,
+          updatedAt: sessions.updatedAt,
+          expiresAt: sessions.expiresAt,
+        })
+        .from(sessions)
+        .where(and(...filters))
+        .orderBy(
+          orderByDirection(sessions.createdAt, orderBy?.createdAt ?? 'desc'),
+          desc(sessions.id)
+        )
+        .limit(take);
+    },
+    async findFirstForUser({
+      userId,
+      sessionId,
+    }: {
+      userId: string;
+      sessionId: string;
+    }) {
+      const [session] = await db
+        .select({
+          id: sessions.id,
+          token: sessions.token,
+          createdAt: sessions.createdAt,
+          updatedAt: sessions.updatedAt,
+          expiresAt: sessions.expiresAt,
+          userId: sessions.userId,
+        })
+        .from(sessions)
+        .where(and(eq(sessions.userId, userId), eq(sessions.id, sessionId)))
+        .limit(1);
+
+      return session ?? null;
+    },
+  };
+}
+
+function createGenreModel(db: DrizzleDb) {
+  const getFilters = (where?: { name?: { contains?: string } }) => {
+    const filters: SQL[] = [];
+    if (where?.name?.contains) {
+      filters.push(ilike(genres.name, `%${where.name.contains}%`));
+    }
+
+    return filters;
+  };
+
+  return {
+    async count({ where }: { where?: { name?: { contains?: string } } }) {
+      const [result] = await db
+        .select({ value: count() })
+        .from(genres)
+        .where(
+          where?.name?.contains
+            ? ilike(genres.name, `%${where.name.contains}%`)
+            : undefined
+        );
+      return result?.value ?? 0;
+    },
+    async findMany({
+      take,
+      cursor,
+      orderBy,
+      where,
+    }: {
+      take: number;
+      cursor?: UniqueKey;
+      orderBy?: { name: SortDirection };
+      where?: { name?: { contains?: string } };
+    }) {
+      const filters = getFilters(where);
+      if (cursor?.id) {
+        const [cursorGenre] = await db
+          .select({ id: genres.id, name: genres.name })
+          .from(genres)
+          .where(eq(genres.id, cursor.id))
+          .limit(1);
+        if (cursorGenre) {
+          pushFilter(
+            filters,
+            getCursorPaginationFilter(
+              genres.name,
+              orderBy?.name ?? 'asc',
+              cursorGenre.name,
+              genres.id,
+              cursorGenre.id
+            )
+          );
+        }
+      }
+
+      return await db
+        .select()
+        .from(genres)
+        .where(filters.length ? and(...filters) : undefined)
+        .orderBy(
+          orderByDirection(genres.name, orderBy?.name ?? 'asc'),
+          asc(genres.id)
+        )
+        .limit(take);
+    },
+    async findAll({
+      orderBy,
+      where,
+    }: {
+      orderBy?: { name: SortDirection };
+      where?: { name?: { contains?: string } };
+    }) {
+      const filters = getFilters(where);
+
+      return await db
+        .select()
+        .from(genres)
+        .where(filters.length ? and(...filters) : undefined)
+        .orderBy(
+          orderByDirection(genres.name, orderBy?.name ?? 'asc'),
+          asc(genres.id)
+        );
+    },
+  };
+}
+
+function createBookModel(db: DrizzleDb) {
+  return {
+    async count({
+      where,
+    }: {
+      where?: {
+        OR?: Array<
+          { title?: { contains?: string } } | { author?: { contains?: string } }
+        >;
+      };
+    }) {
+      const filters = getContainsFilters(where?.OR, {
+        title: (searchTerm) => ilike(books.title, `%${searchTerm}%`),
+        author: (searchTerm) => ilike(books.author, `%${searchTerm}%`),
+      });
+      const [result] = await db
+        .select({ value: count() })
+        .from(books)
+        .where(filters);
+      return result?.value ?? 0;
+    },
+    async findMany({
+      take,
+      cursor,
+      orderBy,
+      where,
+    }: {
+      take: number;
+      cursor?: UniqueKey;
+      orderBy?: { title: SortDirection };
+      where?: {
+        OR?: Array<
+          { title?: { contains?: string } } | { author?: { contains?: string } }
+        >;
+      };
+      include?: { genre: true };
+    }) {
+      const filters: SQL[] = [];
+      pushFilter(
+        filters,
+        getContainsFilters(where?.OR, {
+          title: (searchTerm) => ilike(books.title, `%${searchTerm}%`),
+          author: (searchTerm) => ilike(books.author, `%${searchTerm}%`),
+        })
+      );
+      if (cursor?.id) {
+        const [cursorBook] = await db
+          .select({ id: books.id, title: books.title })
+          .from(books)
+          .where(eq(books.id, cursor.id))
+          .limit(1);
+        if (cursorBook) {
+          pushFilter(
+            filters,
+            getCursorPaginationFilter(
+              books.title,
+              orderBy?.title ?? 'asc',
+              cursorBook.title,
+              books.id,
+              cursorBook.id
+            )
+          );
+        }
+      }
+
+      return await db.query.books.findMany({
+        where: filters.length ? and(...filters) : undefined,
+        with: { genre: true },
+        orderBy: [
+          orderByDirection(books.title, orderBy?.title ?? 'asc'),
+          asc(books.id),
+        ],
+        limit: take,
+      });
+    },
+    async findUnique({
+      where,
+      include,
+    }: {
+      where: UniqueKey;
+      include?: { genre: true };
+    }) {
+      return (
+        (include?.genre
+          ? await db.query.books.findFirst({
+              where: eq(books.id, where.id),
+              with: { genre: true },
+            })
+          : await db.query.books.findFirst({
+              where: eq(books.id, where.id),
+            })) ?? null
+      );
+    },
+    async create({
+      data,
+    }: {
+      data: {
+        title: string;
+        author: string;
+        genreId: string;
+        publisher?: string | null;
+        coverId?: string | null;
+      };
+    }) {
+      const [book] = await db
+        .insert(books)
+        .values({
+          id: crypto.randomUUID(),
+          title: data.title,
+          author: data.author,
+          genreId: data.genreId,
+          publisher: data.publisher ?? null,
+          coverId: data.coverId ?? null,
+        })
+        .returning();
+      if (!book) {
+        throw new Error('Failed to create book');
+      }
+      return (await db.query.books.findFirst({
+        where: eq(books.id, book.id),
+        with: { genre: true },
+      }))!;
+    },
+    async update({
+      where,
+      data,
+    }: {
+      where: UniqueKey;
+      data: Partial<{
+        title: string;
+        author: string;
+        genreId: string | null;
+        publisher: string | null;
+        coverId: string | null;
+      }>;
+    }) {
+      const payload = Object.fromEntries(
+        Object.entries(data).filter(([, value]) => value !== undefined)
+      );
+      const [book] = await db
+        .update(books)
+        .set(payload)
+        .where(eq(books.id, where.id))
+        .returning();
+      if (!book) {
+        return null;
+      }
+      return (await db.query.books.findFirst({
+        where: eq(books.id, book.id),
+        with: { genre: true },
+      }))!;
+    },
+    async delete({ where }: { where: UniqueKey }) {
+      const [book] = await db
+        .delete(books)
+        .where(eq(books.id, where.id))
+        .returning();
+      return book ?? null;
+    },
+  };
+}
+
+type DrizzleRuntimeDb = DrizzleDb & {
+  $client: Sql;
+};
+
+type RuntimeModelMap = {
+  user: UserModel;
+  session: ReturnType<typeof createSessionModel>;
+  genre: ReturnType<typeof createGenreModel>;
+  book: ReturnType<typeof createBookModel>;
+};
+
+export type RuntimeDb = DrizzleRuntimeDb & RuntimeModelMap;
+
+type GlobalDb = {
+  drizzleDb: DrizzleRuntimeDb | undefined;
+  db: RuntimeDb | undefined;
+};
+
+const runtimeModels = new WeakMap<DrizzleRuntimeDb, RuntimeModelMap>();
+
+function hasOwnProperty<T extends object>(
+  value: T,
+  property: PropertyKey
+): property is keyof T {
+  return Object.hasOwn(value, property);
+}
+
+function getRuntimeModels(db: DrizzleRuntimeDb) {
+  let models = runtimeModels.get(db);
+
+  if (!models) {
+    models = {
+      user: createUserModel(db),
+      session: createSessionModel(db),
+      genre: createGenreModel(db),
+      book: createBookModel(db),
+    };
+    runtimeModels.set(db, models);
+  }
+
+  return models;
+}
+
+function createRuntimeDb(drizzleDb: DrizzleRuntimeDb): RuntimeDb {
+  const models = getRuntimeModels(drizzleDb);
+  const runtimeDb = Object.assign(Object.create(drizzleDb), models);
+
+  return new Proxy(runtimeDb, {
+    get(target, property, receiver) {
+      if (property === '$client') {
+        return target.$client;
+      }
+
+      if (hasOwnProperty(models, property)) {
+        return Reflect.get(models, property);
+      }
+
+      const value = Reflect.get(target, property, receiver);
+      return typeof value === 'function' ? value.bind(target) : value;
     },
   });
 }
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createPrisma> | undefined;
-  serverTiming?: Array<{ key: string; duration: string }>;
-};
+const globalForDb = globalThis as unknown as GlobalDb;
 
-export const db = globalForPrisma.prisma ?? createPrisma();
+export const drizzleDb = globalForDb.drizzleDb ?? createDb();
+export const db = globalForDb.db ?? createRuntimeDb(drizzleDb);
 
-if (import.meta.env.DEV) globalForPrisma.prisma = db;
+if (import.meta.env.DEV) {
+  globalForDb.drizzleDb = drizzleDb;
+  globalForDb.db = db;
+}

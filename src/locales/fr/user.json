@@ -46,7 +46,7 @@
       "revokeError": "Échec de la révocation de la session",
       "userSessions": "Sessions utilisateur",
       "noSessions": "Aucune session utilisateur",
-      "session": "Session {{token}}",
+      "session": "Session {{id}}",
       "sessionUpdated": "Mise à jour {{time}}",
       "sessionExpires": "Expire {{time}}",
       "editUser": "Modifier l'utilisateur"

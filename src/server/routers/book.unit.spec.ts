@@ -1,9 +1,9 @@
 import { call } from '@orpc/server';
+import { DrizzleQueryError } from 'drizzle-orm/errors';
 import { omit } from 'remeda';
 import { describe, expect, it } from 'vitest';
 
 import { Book } from '@/features/book/schema';
-import { Book as BookFromDb, Prisma } from '@/server/db/generated/client';
 import bookRouter from '@/server/routers/book';
 import {
   mockDb,
@@ -13,6 +13,10 @@ import {
 } from '@/server/routers/test-utils';
 
 const now = new Date();
+
+type BookFromDb = Book & {
+  genreId: string | null;
+};
 
 const mockGenre = {
   id: 'genre-1',
@@ -35,6 +39,18 @@ const mockBookFromDb = {
 };
 
 const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
+
+function drizzleError(code: string, extras: Record<string, unknown> = {}) {
+  const error = new DrizzleQueryError(
+    {
+      sql: 'mock query',
+      params: [],
+    } as never,
+    []
+  );
+  error.cause = { code, ...extras } as unknown as Error;
+  return error;
+}
 
 describe('book router', () => {
   describe('getAll', () => {
@@ -62,7 +78,7 @@ describe('book router', () => {
       const result = await call(bookRouter.getAll, { limit: 3 });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('book-4');
+      expect(result.nextCursor).toBe('book-3');
       expect(result.total).toBe(10);
     });
 
@@ -187,12 +203,11 @@ describe('book router', () => {
       expect(result).toEqual(toExpectedBook(createdBookFromDb));
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
+    it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.book.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['title', 'author'] },
+        drizzleError('23505', {
+          constraint_name: 'book_title_author_key',
+          detail: 'Key (title, author)=(New Book, New Author) already exists.',
         })
       );
 
@@ -265,16 +280,14 @@ describe('book router', () => {
       expect(result).toEqual(toExpectedBook(updatedBookFromDb));
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
-      const prismaError = new Prisma.PrismaClientKnownRequestError(
-        'Unique constraint failed',
-        {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['title', 'author'] },
-        }
+    it('should throw CONFLICT on unique constraint violation', async () => {
+      mockDb.book.update.mockRejectedValue(
+        drizzleError('23505', {
+          constraint_name: 'book_title_author_key',
+          detail:
+            'Key (title, author)=(Updated Title, Updated Author) already exists.',
+        })
       );
-      mockDb.book.update.mockRejectedValue(prismaError);
 
       await expect(
         call(bookRouter.updateById, updateInput)
@@ -284,13 +297,8 @@ describe('book router', () => {
       });
     });
 
-    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
-      mockDb.book.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Record not found', {
-          code: 'P2025',
-          clientVersion: '0.0.0',
-        })
-      );
+    it('should throw NOT_FOUND when update target does not exist', async () => {
+      mockDb.book.update.mockResolvedValue(null);
 
       await expect(
         call(bookRouter.updateById, updateInput)
@@ -358,13 +366,8 @@ describe('book router', () => {
       ).resolves.toBeUndefined();
     });
 
-    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
-      mockDb.book.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Record not found', {
-          code: 'P2025',
-          clientVersion: '0.0.0',
-        })
-      );
+    it('should throw NOT_FOUND when delete cannot find the book', async () => {
+      mockDb.book.delete.mockResolvedValue(null);
 
       await expect(
         call(bookRouter.deleteById, { id: 'nonexistent' })

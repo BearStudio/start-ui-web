@@ -4,10 +4,25 @@ import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
-import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['users'];
+
+function toPublicSession<
+  TSession extends {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    expiresAt: Date;
+  },
+>(session: TSession) {
+  return {
+    id: session.id,
+    createdAt: session.createdAt,
+    updatedAt: session.updatedAt,
+    expiresAt: session.expiresAt,
+  };
+}
 
 export default {
   getAll: protectedProcedure({
@@ -52,7 +67,7 @@ export default {
             },
           },
         ],
-      } satisfies Prisma.UserWhereInput;
+      };
 
       context.logger.info('Getting users from database');
       const [total, items] = await Promise.all([
@@ -72,8 +87,8 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
@@ -148,9 +163,12 @@ export default {
       return await context.db.user.update({
         where: { id: input.id },
         data: {
-          name: input.name ?? '',
+          name: input.name ?? undefined,
           // Prevent to change role of the connected user
-          role: context.user.id === input.id ? undefined : input.role,
+          role:
+            context.user.id === input.id || input.role == null
+              ? undefined
+              : input.role,
           email: input.email,
           // Set email as verified if admin changed the email
           emailVerified: currentUser.email !== input.email ? true : undefined,
@@ -253,7 +271,7 @@ export default {
     .handler(async ({ context, input }) => {
       const where = {
         userId: input.userId,
-      } satisfies Prisma.SessionWhereInput;
+      };
 
       context.logger.info('Getting user sessions from database');
       const [total, items] = await Promise.all([
@@ -273,12 +291,12 @@ export default {
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem?.id;
+        items.pop();
+        nextCursor = items.at(-1)?.id;
       }
 
       return {
-        items,
+        items: items.map(toPublicSession),
         nextCursor,
         total,
       };
@@ -331,30 +349,45 @@ export default {
   })
     .route({
       method: 'POST',
-      path: '/users/{id}/sessions/{sessionToken}/revoke',
+      path: '/users/{id}/sessions/{sessionId}/revoke',
       tags,
     })
     .input(
       z.object({
         id: z.string(),
-        sessionToken: z.string(),
+        sessionId: z.string(),
       })
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
-      if (context.session.token === input.sessionToken) {
+      if (context.session.id === input.sessionId) {
         context.logger.warn(
-          'Prevent to revoke the current connected user session'
+          'Prevent to revoke the current connected user session by session id'
         );
         throw new ORPCError('BAD_REQUEST', {
           message: 'You cannot revoke your current session',
         });
       }
 
+      const targetSession = await context.db.session.findFirstForUser({
+        userId: input.id,
+        sessionId: input.sessionId,
+      });
+
+      if (!targetSession) {
+        context.logger.warn(
+          'Prevent to revoke a session that does not belong to the target user'
+        );
+        throw new ORPCError('BAD_REQUEST', {
+          message:
+            'You cannot revoke a session that does not belong to this user',
+        });
+      }
+
       context.logger.info('Revoke user session');
       const response = await auth.api.revokeUserSession({
         body: {
-          sessionToken: input.sessionToken,
+          sessionToken: targetSession.token,
         },
         headers: getRequestHeaders(),
       });

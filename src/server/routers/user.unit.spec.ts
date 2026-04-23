@@ -1,7 +1,7 @@
 import { call } from '@orpc/server';
+import { DrizzleQueryError } from 'drizzle-orm/errors';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Prisma } from '@/server/db/generated/client';
 import {
   mockDb,
   mockGetSession,
@@ -53,6 +53,25 @@ const mockSessionFromDb = {
   expiresAt: new Date(Date.now() + 86400000),
 };
 
+const mockPublicSessionFromDb = {
+  id: mockSessionFromDb.id,
+  createdAt: mockSessionFromDb.createdAt,
+  updatedAt: mockSessionFromDb.updatedAt,
+  expiresAt: mockSessionFromDb.expiresAt,
+};
+
+function drizzleError(code: string, extras: Record<string, unknown> = {}) {
+  const error = new DrizzleQueryError(
+    {
+      sql: 'mock query',
+      params: [],
+    } as never,
+    []
+  );
+  error.cause = { code, ...extras } as unknown as Error;
+  return error;
+}
+
 describe('user router', () => {
   describe('getAll', () => {
     it('should return paginated users with total count', async () => {
@@ -79,7 +98,7 @@ describe('user router', () => {
       const result = await call(userRouter.getAll, { limit: 3 });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('user-4');
+      expect(result.nextCursor).toBe('user-3');
       expect(result.total).toBe(10);
     });
 
@@ -198,12 +217,11 @@ describe('user router', () => {
       expect(result).toEqual(createdUser);
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
+    it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.user.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['email'] },
+        drizzleError('23505', {
+          constraint_name: 'user_email_key',
+          detail: 'Key (email)=(new@example.com) already exists.',
         })
       );
 
@@ -299,6 +317,38 @@ describe('user router', () => {
       const result = await call(userRouter.updateById, selfUpdateInput);
 
       expect(result.role).toBe('user');
+      expect(mockDb.user.update).toHaveBeenCalledWith({
+        where: { id: mockUser.id },
+        data: {
+          name: 'New Name',
+          role: undefined,
+          email: 'self@example.com',
+          emailVerified: undefined,
+        },
+      });
+    });
+
+    it('should preserve omitted optional fields', async () => {
+      mockDb.user.update.mockClear();
+      mockDb.user.findUnique.mockResolvedValue({
+        email: 'target@example.com',
+      });
+      mockDb.user.update.mockResolvedValue(mockUserFromDb);
+
+      await call(userRouter.updateById, {
+        id: 'target-user-1',
+        email: 'target@example.com',
+      });
+
+      expect(mockDb.user.update).toHaveBeenCalledWith({
+        where: { id: 'target-user-1' },
+        data: {
+          name: undefined,
+          role: undefined,
+          email: 'target@example.com',
+          emailVerified: undefined,
+        },
+      });
     });
 
     it('should throw NOT_FOUND when target user does not exist', async () => {
@@ -311,15 +361,14 @@ describe('user router', () => {
       });
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
+    it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.user.findUnique.mockResolvedValue({
         email: 'target@example.com',
       });
       mockDb.user.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['email'] },
+        drizzleError('23505', {
+          constraint_name: 'user_email_key',
+          detail: 'Key (email)=(updated@example.com) already exists.',
         })
       );
 
@@ -461,7 +510,7 @@ describe('user router', () => {
       });
 
       expect(result).toEqual({
-        items: [mockSessionFromDb],
+        items: [mockPublicSessionFromDb],
         nextCursor: undefined,
         total: 1,
       });
@@ -481,7 +530,7 @@ describe('user router', () => {
       });
 
       expect(result.items).toHaveLength(3);
-      expect(result.nextCursor).toBe('session-4');
+      expect(result.nextCursor).toBe('session-3');
       expect(result.total).toBe(10);
     });
 
@@ -507,6 +556,26 @@ describe('user router', () => {
           permissions: { session: ['list'] },
         },
       });
+    });
+
+    it('should only return public session fields', async () => {
+      mockDb.session.count.mockResolvedValue(1);
+      mockDb.session.findMany.mockResolvedValue([
+        {
+          ...mockSessionFromDb,
+          userId: 'target-user-1',
+          ipAddress: '127.0.0.1',
+          userAgent: 'Mozilla/5.0',
+          impersonatedBy: null,
+        },
+      ]);
+
+      const result = await call(userRouter.getUserSessions, {
+        userId: 'target-user-1',
+      });
+
+      expect(result.items).toEqual([mockPublicSessionFromDb]);
+      expect(result.items[0]).not.toHaveProperty('token');
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -589,39 +658,80 @@ describe('user router', () => {
 
   describe('revokeUserSession', () => {
     it('should revoke a specific session', async () => {
+      mockDb.session.findFirstForUser.mockResolvedValue({
+        ...mockSessionFromDb,
+        id: 'session-2',
+        token: 'other-token',
+        userId: 'target-user-1',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: true });
 
       await expect(
         call(userRouter.revokeUserSession, {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).resolves.toBeUndefined();
+
+      expect(mockDb.session.findFirstForUser).toHaveBeenCalledWith({
+        userId: 'target-user-1',
+        sessionId: 'session-2',
+      });
+      expect(mockRevokeUserSession).toHaveBeenCalledWith({
+        body: {
+          sessionToken: 'other-token',
+        },
+        headers: expect.any(Headers),
+      });
     });
 
-    it('should prevent revoking own current session', async () => {
+    it('should prevent revoking own current session by id', async () => {
       mockGetSession.mockResolvedValue({
         user: mockUser,
-        session: { ...mockSession, token: 'my-token' },
+        session: { ...mockSession, id: 'my-session-id', token: 'other-token' },
       });
 
       await expect(
         call(userRouter.revokeUserSession, {
           id: mockUser.id,
-          sessionToken: 'my-token',
+          sessionId: 'my-session-id',
         })
       ).rejects.toMatchObject({
         code: 'BAD_REQUEST',
       });
     });
 
+    it('should reject revoking a session that does not belong to the target user', async () => {
+      mockDb.session.findFirstForUser.mockResolvedValue(null);
+      const revokeCallCount = mockRevokeUserSession.mock.calls.length;
+
+      await expect(
+        call(userRouter.revokeUserSession, {
+          id: 'target-user-1',
+          sessionId: 'foreign-session',
+        })
+      ).rejects.toMatchObject({
+        code: 'BAD_REQUEST',
+        message:
+          'You cannot revoke a session that does not belong to this user',
+      });
+
+      expect(mockRevokeUserSession.mock.calls).toHaveLength(revokeCallCount);
+    });
+
     it('should throw INTERNAL_SERVER_ERROR when revoke fails', async () => {
+      mockDb.session.findFirstForUser.mockResolvedValue({
+        ...mockSessionFromDb,
+        id: 'session-2',
+        token: 'other-token',
+        userId: 'target-user-1',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: false });
 
       await expect(
         call(userRouter.revokeUserSession, {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).rejects.toMatchObject({
         code: 'INTERNAL_SERVER_ERROR',
@@ -634,7 +744,7 @@ describe('user router', () => {
       await expect(
         call(userRouter.revokeUserSession, {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).rejects.toMatchObject({
         code: 'UNAUTHORIZED',
@@ -642,11 +752,17 @@ describe('user router', () => {
     });
 
     it('should require session revoke permission', async () => {
+      mockDb.session.findFirstForUser.mockResolvedValue({
+        ...mockSessionFromDb,
+        id: 'session-2',
+        token: 'other-token',
+        userId: 'target-user-1',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: true });
 
       await call(userRouter.revokeUserSession, {
         id: 'target-user-1',
-        sessionToken: 'other-token',
+        sessionId: 'session-2',
       });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
@@ -666,7 +782,7 @@ describe('user router', () => {
       await expect(
         call(userRouter.revokeUserSession, {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).rejects.toMatchObject({
         code: 'FORBIDDEN',
