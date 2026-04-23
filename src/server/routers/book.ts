@@ -131,7 +131,7 @@ export default {
         data: {
           title: input.title,
           author: input.author,
-          genreId: input.genreId ?? undefined,
+          genreId: input.genreId,
           publisher: input.publisher,
           coverId: input.coverId,
         },

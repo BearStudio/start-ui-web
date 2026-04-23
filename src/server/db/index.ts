@@ -584,7 +584,7 @@ function createBookModel(db: DrizzleDb) {
       data: {
         title: string;
         author: string;
-        genreId?: string;
+        genreId: string;
         publisher?: string | null;
         coverId?: string | null;
       };
@@ -595,7 +595,7 @@ function createBookModel(db: DrizzleDb) {
           id: crypto.randomUUID(),
           title: data.title,
           author: data.author,
-          genreId: data.genreId!,
+          genreId: data.genreId,
           publisher: data.publisher ?? null,
           coverId: data.coverId ?? null,
         })
