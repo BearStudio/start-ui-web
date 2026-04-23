@@ -9,6 +9,8 @@ type QueryErrorCause = {
   message?: string;
 };
 
+const UNIQUE_KEY_DETAIL_REGEX = /Key \((.+)\)=/;
+
 function getTargetFields(cause: QueryErrorCause): string[] | undefined {
   if (cause.constraint_name === 'user_email_key') {
     return ['email'];
@@ -19,7 +21,7 @@ function getTargetFields(cause: QueryErrorCause): string[] | undefined {
   }
 
   const detail = cause.detail ?? '';
-  const match = detail.match(/Key \((.+)\)=/);
+  const match = UNIQUE_KEY_DETAIL_REGEX.exec(detail);
   return match?.[1]
     ?.split(', ')
     .map((field) => field.replaceAll('"', '').trim())

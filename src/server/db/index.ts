@@ -20,6 +20,8 @@ import { timingStore } from '@/server/timing-store';
 
 import { books, genres, schema, sessions, users } from './schema';
 
+const TABLE_NAME_REGEX = /\b(?:from|into|update)\s+"?([a-z_][$\w]*)"?/i;
+
 class ServerTimingLogger implements Logger {
   logQuery(query: string): void {
     const store = timingStore.getStore();
@@ -29,9 +31,7 @@ class ServerTimingLogger implements Logger {
 
     const normalizedQuery = query.trim().replaceAll(/\s+/g, ' ');
     const operation = normalizedQuery.split(' ')[0]?.toLowerCase() ?? 'query';
-    const tableMatch = normalizedQuery.match(
-      /\b(?:from|into|update)\s+"?([a-zA-Z_][\w$]*)"?/i
-    );
+    const tableMatch = TABLE_NAME_REGEX.exec(normalizedQuery);
 
     store.db.push({
       model: tableMatch?.[1] ?? 'unknown',
@@ -41,7 +41,7 @@ class ServerTimingLogger implements Logger {
   }
 }
 
-function createDb() {
+function createDb(): DrizzleRuntimeDb {
   const client = postgres(envServer.DATABASE_URL, {
     max: 10,
     idle_timeout: 20,
@@ -128,6 +128,12 @@ function getSearchTerm<TField extends string>(
   return undefined;
 }
 
+function pushFilter(filters: SQL[], filter: SQL | undefined) {
+  if (filter) {
+    filters.push(filter);
+  }
+}
+
 function createUserModel(db: DrizzleDb): UserModel {
   const findUnique: UserModel['findUnique'] = async <
     TArgs extends UserFindUniqueArgs,
@@ -184,11 +190,12 @@ function createUserModel(db: DrizzleDb): UserModel {
       const searchTerm = getSearchTerm(where?.OR, ['name', 'email']);
       const filters: SQL[] = [];
       if (searchTerm) {
-        filters.push(
+        pushFilter(
+          filters,
           or(
             ilike(users.name, `%${searchTerm}%`),
             ilike(users.email, `%${searchTerm}%`)
-          )!
+          )
         );
       }
       if (cursor?.id) {
@@ -199,11 +206,12 @@ function createUserModel(db: DrizzleDb): UserModel {
           .limit(1);
 
         if (cursorUser) {
-          filters.push(
+          pushFilter(
+            filters,
             or(
               gt(users.name, cursorUser.name),
               and(eq(users.name, cursorUser.name), gt(users.id, cursorUser.id))
-            )!
+            )
           );
         }
       }
@@ -303,14 +311,15 @@ function createSessionModel(db: DrizzleRuntimeDb) {
           )
           .limit(1);
         if (cursorSession) {
-          filters.push(
+          pushFilter(
+            filters,
             or(
               lt(sessions.createdAt, cursorSession.createdAt),
               and(
                 eq(sessions.createdAt, cursorSession.createdAt),
                 lt(sessions.id, cursorSession.id)
               )
-            )!
+            )
           );
         }
       }
@@ -396,14 +405,15 @@ function createGenreModel(db: DrizzleDb) {
           .where(eq(genres.id, cursor.id))
           .limit(1);
         if (cursorGenre) {
-          filters.push(
+          pushFilter(
+            filters,
             or(
               gt(genres.name, cursorGenre.name),
               and(
                 eq(genres.name, cursorGenre.name),
                 gt(genres.id, cursorGenre.id)
               )
-            )!
+            )
           );
         }
       }
@@ -483,11 +493,12 @@ function createBookModel(db: DrizzleDb) {
       const searchTerm = getSearchTerm(where?.OR, ['title', 'author']);
       const filters: SQL[] = [];
       if (searchTerm) {
-        filters.push(
+        pushFilter(
+          filters,
           or(
             ilike(books.title, `%${searchTerm}%`),
             ilike(books.author, `%${searchTerm}%`)
-          )!
+          )
         );
       }
       if (cursor?.id) {
@@ -497,14 +508,15 @@ function createBookModel(db: DrizzleDb) {
           .where(eq(books.id, cursor.id))
           .limit(1);
         if (cursorBook) {
-          filters.push(
+          pushFilter(
+            filters,
             or(
               gt(books.title, cursorBook.title),
               and(
                 eq(books.title, cursorBook.title),
                 gt(books.id, cursorBook.id)
               )
-            )!
+            )
           );
         }
       }
@@ -624,17 +636,17 @@ type GlobalDb = {
   db: RuntimeDb | undefined;
 };
 
-const runtimeModels = new WeakMap<DrizzleDb, RuntimeModelMap>();
+const runtimeModels = new WeakMap<DrizzleRuntimeDb, RuntimeModelMap>();
 
 function hasOwnProperty<T extends object>(
   value: T,
   property: PropertyKey
 ): property is keyof T {
-  return Object.prototype.hasOwnProperty.call(value, property);
+  return Object.hasOwn(value, property);
 }
 
 function getRuntimeModels(db: DrizzleRuntimeDb) {
-  let models = runtimeModels.get(db as DrizzleDb);
+  let models = runtimeModels.get(db);
 
   if (!models) {
     models = {
@@ -643,7 +655,7 @@ function getRuntimeModels(db: DrizzleRuntimeDb) {
       genre: createGenreModel(db),
       book: createBookModel(db),
     };
-    runtimeModels.set(db as DrizzleDb, models);
+    runtimeModels.set(db, models);
   }
 
   return models;
@@ -670,8 +682,7 @@ function createRuntimeDb(drizzleDb: DrizzleRuntimeDb) {
 
 const globalForDb = globalThis as unknown as GlobalDb;
 
-export const drizzleDb = (globalForDb.drizzleDb ??
-  (createDb() as DrizzleRuntimeDb)) as DrizzleRuntimeDb;
+export const drizzleDb = globalForDb.drizzleDb ?? createDb();
 export const db = globalForDb.db ?? createRuntimeDb(drizzleDb);
 
 if (import.meta.env.DEV) {
