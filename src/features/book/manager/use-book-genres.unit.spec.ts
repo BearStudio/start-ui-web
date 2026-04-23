@@ -51,7 +51,12 @@ describe('mergeGenres', () => {
     expect(result.at(-1)).toEqual(linkedGenre);
   });
 
-  it('deduplicates an already loaded linked genre and keeps the linked record', () => {
+  it('deduplicates an already loaded linked genre and keeps the fetched record', () => {
+    const existingGenre = {
+      ...createGenre(5),
+      name: 'Existing Genre',
+      color: '#778899',
+    };
     const linkedGenre = {
       ...createGenre(5),
       name: 'Linked Genre',
@@ -60,7 +65,9 @@ describe('mergeGenres', () => {
 
     const pages = [
       {
-        items: Array.from({ length: 10 }, (_, index) => createGenre(index + 1)),
+        items: Array.from({ length: 10 }, (_, index) =>
+          index === 4 ? existingGenre : createGenre(index + 1)
+        ),
       },
     ];
 
@@ -68,8 +75,7 @@ describe('mergeGenres', () => {
     const matchingGenres = result.filter(
       (genre) => genre.id === linkedGenre.id
     );
-
+    expect(matchingGenres).toEqual([existingGenre]);
     expect(result).toHaveLength(10);
-    expect(matchingGenres).toEqual([linkedGenre]);
   });
 });

@@ -21,7 +21,7 @@ export const mergeGenres = (
     }
   }
 
-  if (linkedGenre) {
+  if (linkedGenre && !genresById.has(linkedGenre.id)) {
     genresById.set(linkedGenre.id, linkedGenre);
   }
 

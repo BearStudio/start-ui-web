@@ -110,6 +110,24 @@ function orderByDirection<TColumn>(column: TColumn, direction: SortDirection) {
     : asc(column as Parameters<typeof asc>[0]);
 }
 
+type ContainsFilter = { contains?: string };
+
+function getSearchTerm<TField extends string>(
+  clauses: Array<Partial<Record<TField, ContainsFilter>>> | undefined,
+  fields: readonly TField[]
+) {
+  for (const clause of clauses ?? []) {
+    for (const field of fields) {
+      const searchTerm = clause[field]?.contains;
+      if (searchTerm !== undefined) {
+        return searchTerm;
+      }
+    }
+  }
+
+  return undefined;
+}
+
 function createUserModel(db: DrizzleDb): UserModel {
   const findUnique: UserModel['findUnique'] = async <
     TArgs extends UserFindUniqueArgs,
@@ -135,12 +153,7 @@ function createUserModel(db: DrizzleDb): UserModel {
         >;
       };
     }) {
-      const searchTerm =
-        where?.OR?.[0] && 'name' in where.OR[0]
-          ? where.OR[0].name?.contains
-          : where?.OR?.[1] && 'email' in where.OR[1]
-            ? where.OR[1].email?.contains
-            : undefined;
+      const searchTerm = getSearchTerm(where?.OR, ['name', 'email']);
       const filters = searchTerm
         ? or(
             ilike(users.name, `%${searchTerm}%`),
@@ -168,12 +181,7 @@ function createUserModel(db: DrizzleDb): UserModel {
         >;
       };
     }) {
-      const searchTerm =
-        where?.OR?.[0] && 'name' in where.OR[0]
-          ? where.OR[0].name?.contains
-          : where?.OR?.[1] && 'email' in where.OR[1]
-            ? where.OR[1].email?.contains
-            : undefined;
+      const searchTerm = getSearchTerm(where?.OR, ['name', 'email']);
       const filters: SQL[] = [];
       if (searchTerm) {
         filters.push(
@@ -290,7 +298,9 @@ function createSessionModel(db: DrizzleRuntimeDb) {
         const [cursorSession] = await db
           .select({ id: sessions.id, createdAt: sessions.createdAt })
           .from(sessions)
-          .where(eq(sessions.id, cursor.id))
+          .where(
+            and(eq(sessions.id, cursor.id), eq(sessions.userId, where.userId))
+          )
           .limit(1);
         if (cursorSession) {
           filters.push(
@@ -440,12 +450,7 @@ function createBookModel(db: DrizzleDb) {
         >;
       };
     }) {
-      const searchTerm =
-        where?.OR?.[0] && 'title' in where.OR[0]
-          ? where.OR[0].title?.contains
-          : where?.OR?.[1] && 'author' in where.OR[1]
-            ? where.OR[1].author?.contains
-            : undefined;
+      const searchTerm = getSearchTerm(where?.OR, ['title', 'author']);
       const [result] = await db
         .select({ value: count() })
         .from(books)
@@ -475,12 +480,7 @@ function createBookModel(db: DrizzleDb) {
       };
       include?: { genre: true };
     }) {
-      const searchTerm =
-        where?.OR?.[0] && 'title' in where.OR[0]
-          ? where.OR[0].title?.contains
-          : where?.OR?.[1] && 'author' in where.OR[1]
-            ? where.OR[1].author?.contains
-            : undefined;
+      const searchTerm = getSearchTerm(where?.OR, ['title', 'author']);
       const filters: SQL[] = [];
       if (searchTerm) {
         filters.push(
