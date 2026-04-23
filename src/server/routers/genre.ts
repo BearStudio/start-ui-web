@@ -43,7 +43,7 @@ export default {
         .object({
           cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).prefault(20),
-          searchTerm: z.string().optional(),
+          searchTerm: z.string().trim().optional().prefault(''),
         })
         .prefault({})
     )

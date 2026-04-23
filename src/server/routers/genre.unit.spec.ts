@@ -98,6 +98,32 @@ describe('genre router', () => {
       expect(result.nextCursor).toBeUndefined();
     });
 
+    it('should trim whitespace-only search terms before querying', async () => {
+      mockDb.genre.count.mockResolvedValue(1);
+      mockDb.genre.findMany.mockResolvedValue([mockGenreFromDb]);
+
+      await call(genreRouter.getAll, { searchTerm: '   ' });
+
+      expect(mockDb.genre.count).toHaveBeenCalledWith({
+        where: {
+          name: {
+            contains: '',
+            mode: 'insensitive',
+          },
+        },
+      });
+      expect(mockDb.genre.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            name: {
+              contains: '',
+              mode: 'insensitive',
+            },
+          },
+        })
+      );
+    });
+
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
       mockGetSession.mockResolvedValue(null);
 
