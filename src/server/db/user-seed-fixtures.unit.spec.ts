@@ -14,6 +14,7 @@ describe('getCanonicalUserRepairData', () => {
     expect(
       getCanonicalUserRepairData(
         {
+          name: 'Admin',
           role: 'admin',
           emailVerified: true,
           onboardedAt: new Date('2026-04-19T00:00:00.000Z'),
@@ -30,6 +31,7 @@ describe('getCanonicalUserRepairData', () => {
     expect(
       getCanonicalUserRepairData(
         {
+          name: 'Not Admin',
           role: 'user',
           emailVerified: false,
           onboardedAt: null,
@@ -38,6 +40,7 @@ describe('getCanonicalUserRepairData', () => {
         now
       )
     ).toEqual({
+      name: 'Admin',
       role: 'admin',
       emailVerified: true,
       onboardedAt: now,
