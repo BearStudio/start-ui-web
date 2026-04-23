@@ -449,12 +449,12 @@ function createGenreModel(db: DrizzleDb) {
         if (cursorGenre) {
           pushFilter(
             filters,
-            or(
-              gt(genres.name, cursorGenre.name),
-              and(
-                eq(genres.name, cursorGenre.name),
-                gt(genres.id, cursorGenre.id)
-              )
+            getCursorPaginationFilter(
+              genres.name,
+              orderBy?.name ?? 'asc',
+              cursorGenre.name,
+              genres.id,
+              cursorGenre.id
             )
           );
         }
@@ -502,18 +502,14 @@ function createBookModel(db: DrizzleDb) {
         >;
       };
     }) {
-      const searchTerm = getSearchTerm(where?.OR, ['title', 'author']);
+      const filters = getContainsFilters(where?.OR, {
+        title: (searchTerm) => ilike(books.title, `%${searchTerm}%`),
+        author: (searchTerm) => ilike(books.author, `%${searchTerm}%`),
+      });
       const [result] = await db
         .select({ value: count() })
         .from(books)
-        .where(
-          searchTerm
-            ? or(
-                ilike(books.title, `%${searchTerm}%`),
-                ilike(books.author, `%${searchTerm}%`)
-              )
-            : undefined
-        );
+        .where(filters);
       return result?.value ?? 0;
     },
     async findMany({
@@ -532,17 +528,14 @@ function createBookModel(db: DrizzleDb) {
       };
       include?: { genre: true };
     }) {
-      const searchTerm = getSearchTerm(where?.OR, ['title', 'author']);
       const filters: SQL[] = [];
-      if (searchTerm) {
-        pushFilter(
-          filters,
-          or(
-            ilike(books.title, `%${searchTerm}%`),
-            ilike(books.author, `%${searchTerm}%`)
-          )
-        );
-      }
+      pushFilter(
+        filters,
+        getContainsFilters(where?.OR, {
+          title: (searchTerm) => ilike(books.title, `%${searchTerm}%`),
+          author: (searchTerm) => ilike(books.author, `%${searchTerm}%`),
+        })
+      );
       if (cursor?.id) {
         const [cursorBook] = await db
           .select({ id: books.id, title: books.title })
@@ -552,12 +545,12 @@ function createBookModel(db: DrizzleDb) {
         if (cursorBook) {
           pushFilter(
             filters,
-            or(
-              gt(books.title, cursorBook.title),
-              and(
-                eq(books.title, cursorBook.title),
-                gt(books.id, cursorBook.id)
-              )
+            getCursorPaginationFilter(
+              books.title,
+              orderBy?.title ?? 'asc',
+              cursorBook.title,
+              books.id,
+              cursorBook.id
             )
           );
         }
