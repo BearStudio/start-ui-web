@@ -55,6 +55,7 @@ export function mapDatabaseError(error: unknown): ORPCError<string, unknown> {
       case '23503':
         return new ORPCError('BAD_REQUEST', {
           message: 'Foreign key constraint violation',
+          data: { target: getValidationTargetFields(cause) },
         });
       case '23502':
       case '22P02':
