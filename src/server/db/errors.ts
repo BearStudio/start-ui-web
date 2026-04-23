@@ -28,6 +28,16 @@ function getTargetFields(cause: QueryErrorCause): string[] | undefined {
     .filter(Boolean);
 }
 
+function getValidationTargetFields(
+  cause: QueryErrorCause
+): string[] | undefined {
+  if (cause.column_name) {
+    return [cause.column_name];
+  }
+
+  return getTargetFields(cause);
+}
+
 export function mapDatabaseError(error: unknown): ORPCError<string, unknown> {
   if (error instanceof ORPCError) {
     return error;
@@ -50,6 +60,7 @@ export function mapDatabaseError(error: unknown): ORPCError<string, unknown> {
       case '22P02':
         return new ORPCError('BAD_REQUEST', {
           message: 'Database validation error',
+          data: { target: getValidationTargetFields(cause) },
         });
       default:
         return new ORPCError('INTERNAL_SERVER_ERROR', {
