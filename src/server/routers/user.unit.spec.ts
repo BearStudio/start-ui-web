@@ -317,6 +317,38 @@ describe('user router', () => {
       const result = await call(userRouter.updateById, selfUpdateInput);
 
       expect(result.role).toBe('user');
+      expect(mockDb.user.update).toHaveBeenCalledWith({
+        where: { id: mockUser.id },
+        data: {
+          name: 'New Name',
+          role: undefined,
+          email: 'self@example.com',
+          emailVerified: undefined,
+        },
+      });
+    });
+
+    it('should preserve omitted optional fields', async () => {
+      mockDb.user.update.mockClear();
+      mockDb.user.findUnique.mockResolvedValue({
+        email: 'target@example.com',
+      });
+      mockDb.user.update.mockResolvedValue(mockUserFromDb);
+
+      await call(userRouter.updateById, {
+        id: 'target-user-1',
+        email: 'target@example.com',
+      });
+
+      expect(mockDb.user.update).toHaveBeenCalledWith({
+        where: { id: 'target-user-1' },
+        data: {
+          name: undefined,
+          role: undefined,
+          email: 'target@example.com',
+          emailVerified: undefined,
+        },
+      });
     });
 
     it('should throw NOT_FOUND when target user does not exist', async () => {

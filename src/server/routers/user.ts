@@ -163,10 +163,12 @@ export default {
       return await context.db.user.update({
         where: { id: input.id },
         data: {
-          name: input.name ?? '',
+          name: input.name ?? undefined,
           // Prevent to change role of the connected user
           role:
-            context.user.id === input.id ? undefined : (input.role ?? 'user'),
+            context.user.id === input.id || input.role == null
+              ? undefined
+              : input.role,
           email: input.email,
           // Set email as verified if admin changed the email
           emailVerified: currentUser.email !== input.email ? true : undefined,
