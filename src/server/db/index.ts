@@ -162,20 +162,14 @@ function getCursorPaginationFilter<TColumn, TIdColumn>(
 
   if (direction === 'desc') {
     return or(
-      lt(compareColumn as Parameters<typeof lt>[0], compareValue),
-      and(
-        eq(compareColumn as Parameters<typeof eq>[0], compareValue),
-        lt(compareIdColumn as Parameters<typeof lt>[0], compareId)
-      )
+      lt(compareColumn, compareValue),
+      and(eq(compareColumn, compareValue), lt(compareIdColumn, compareId))
     );
   }
 
   return or(
     gt(compareColumn, compareValue),
-    and(
-      eq(compareColumn as Parameters<typeof eq>[0], compareValue),
-      gt(compareIdColumn, compareId)
-    )
+    and(eq(compareColumn, compareValue), gt(compareIdColumn, compareId))
   );
 }
 
