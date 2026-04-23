@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from 'e2e/utils';
 import { ADMIN_FILE, USER_FILE } from 'e2e/utils/constants';
 import { randomString } from 'remeda';
@@ -28,6 +29,22 @@ test.describe('User management as manager', () => {
     await page.to('/manager/users');
   });
 
+  const createManagedUser = async (
+    page: Page,
+    input: { name: string; email: string }
+  ) => {
+    await page.getByText(t.user.manager.list.newButton).click();
+    await page.waitForURL('/manager/users/new');
+    await page.getByLabel(t.user.common.name.label).fill(input.name);
+    await page.getByLabel(t.user.common.email.label).fill(input.email);
+    await page.getByText(t.user.manager.new.createButton.label).click();
+    await page.waitForURL('/manager/users');
+    await page
+      .getByPlaceholder(t.components.searchInput.placeholder)
+      .fill(input.email);
+    await page.getByText(input.email).click({ force: true });
+  };
+
   test('Create a user', async ({ page }) => {
     await page.getByText(t.user.manager.list.newButton).click();
 
@@ -48,15 +65,17 @@ test.describe('User management as manager', () => {
   });
 
   test('Edit a user', async ({ page }) => {
-    await page.getByText('admin@admin.com').click({
-      force: true,
+    const randomId = randomString(8);
+    const uniqueEmail = `edit-user-${randomId}@user.com`;
+    await createManagedUser(page, {
+      name: 'Editable User',
+      email: uniqueEmail,
     });
 
     await page
       .getByRole('link', { name: t.user.manager.detail.editUser })
       .click();
 
-    const randomId = randomString(8);
     const newAdminName = `Admin ${randomId}`;
     await page.getByLabel(t.user.common.name.label).fill(newAdminName);
     await page.getByText(t.user.manager.update.updateButton.label).click();
@@ -67,12 +86,13 @@ test.describe('User management as manager', () => {
   });
 
   test('Delete a user', async ({ page }) => {
-    await page
-      .getByText('user', {
-        exact: true,
-      })
-      .first()
-      .click({ force: true });
+    const randomId = randomString(8);
+    const uniqueEmail = `delete-user-${randomId}@user.com`;
+
+    await createManagedUser(page, {
+      name: 'Delete User',
+      email: uniqueEmail,
+    });
 
     await page
       .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
@@ -89,6 +109,11 @@ test.describe('User management as manager', () => {
     await expect(
       page.getByText(t.user.manager.detail.userDeleted)
     ).toBeVisible();
+
+    await page
+      .getByPlaceholder(t.components.searchInput.placeholder)
+      .fill(uniqueEmail);
+    await expect(page.getByText(uniqueEmail)).not.toBeVisible();
   });
 
   test('Session revocation is enforced for another user', async ({
