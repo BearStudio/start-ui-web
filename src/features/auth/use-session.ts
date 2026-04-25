@@ -14,7 +14,7 @@ export const useSession = () => {
   const session = authClient.useSession();
   const { authSession } = RootRouteApi.useRouteContext();
 
-  if (session.isPending && authSession?.session !== undefined) {
+  if (session.isPending && authSession?.session) {
     return {
       ...session,
       data: authSession.session satisfies typeof session.data,
