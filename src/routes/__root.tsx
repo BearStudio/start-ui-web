@@ -4,11 +4,11 @@ import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
+  getRouteApi,
   HeadContent,
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
-import { getRouteApi } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
