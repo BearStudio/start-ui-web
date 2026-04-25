@@ -17,7 +17,7 @@ export const useSession = () => {
   if (session.isPending && authSession?.session) {
     return {
       ...session,
-      data: authSession.session satisfies typeof session.data,
+      data: authSession satisfies typeof session.data,
       isPending: false,
     };
   }

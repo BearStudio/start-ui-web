@@ -2,12 +2,12 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 
 import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
-import { getAuthSession } from '@/features/auth/session.server';
+import { initAuthSsr } from '@/features/auth/session';
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
   beforeLoad: async () => {
-    const authSession = await getAuthSession();
+    const { authSession } = await initAuthSsr();
 
     if (!authSession?.session) {
       throw redirect({ to: '/login' });
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/')({
 
     if (
       authClient.admin.checkRolePermission({
-        role: authSession.session.user.role as Role,
+        role: authSession.user.role as Role,
         permissions: {
           apps: ['manager'],
         },

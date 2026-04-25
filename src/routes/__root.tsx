@@ -21,8 +21,7 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { PageError } from '@/components/errors/page-error';
 
 import { MailDevDevtoolPanel } from '@/devtools/maildev';
-import type { AuthSession } from '@/features/auth/session.server';
-import { getAuthSession } from '@/features/auth/session.server';
+import { type AuthSession, initAuthSsr } from '@/features/auth/session';
 import { EnvHint } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';
@@ -41,7 +40,7 @@ export const Route = createRootRouteWithContext<{
     if (!import.meta.env.SSR) {
       return { authSession: null };
     }
-    const authSession = await getAuthSession();
+    const { authSession } = await initAuthSsr();
     return { authSession };
   },
   loader: async () => {
