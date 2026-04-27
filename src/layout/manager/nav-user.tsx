@@ -33,8 +33,8 @@ import {
 } from '@/components/ui/sidebar';
 import { themes } from '@/components/ui/theme-switcher';
 
-import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
+import { useSession } from '@/features/auth/use-session';
 import { WithPermissions } from '@/features/auth/with-permissions';
 import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
 import { BuildInfoVersion } from '@/features/build-info/build-info-version';
@@ -42,7 +42,7 @@ import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 export function NavUser() {
   const { t } = useTranslation(['common', 'auth', 'layout']);
   const { isMobile } = useSidebar();
-  const session = authClient.useSession();
+  const session = useSession();
   const { setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
 
@@ -111,12 +111,15 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+            <DropdownMenuRadioGroup
+              value={theme ?? 'system'}
+              onValueChange={setTheme}
+            >
               {themes.map((item) => (
                 <DropdownMenuRadioItem
                   key={item}
                   value={item}
-                  icon={match(theme as (typeof themes)[number])
+                  icon={match((theme as (typeof themes)[number]) ?? 'system')
                     .with('system', () => (
                       <SunMoonIcon className="text-muted-foreground" />
                     ))

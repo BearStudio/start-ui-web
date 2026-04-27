@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { authClient } from '@/features/auth/client';
+import { useSession } from '@/features/auth/use-session';
 import { FormUser } from '@/features/user/manager/form-user';
 import { zFormFieldsUser } from '@/features/user/schema';
 import {
@@ -30,7 +30,7 @@ import {
 export const PageUserUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['user']);
   const { navigateBack } = useNavigateBack();
-  const session = authClient.useSession();
+  const session = useSession();
   const queryClient = useQueryClient();
   const userQuery = useQuery(
     orpc.user.getById.queryOptions({ input: { id: props.params.id } })

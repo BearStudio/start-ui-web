@@ -3,11 +3,12 @@ import { useEffect } from 'react';
 
 import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
+import { useSession } from '@/features/auth/use-session';
 
 export const useRedirectAfterLogin = () => {
   const search = useSearch({ strict: false });
   const router = useRouter();
-  const session = authClient.useSession();
+  const session = useSession();
   const searchRedirect = search.redirect;
 
   useEffect(() => {
