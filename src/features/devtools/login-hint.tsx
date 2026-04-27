@@ -36,9 +36,9 @@ export const LoginEmailHint = () => {
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
       <AlertDescription className="flex flex-wrap gap-x-1 text-sm leading-4">
-        You can login with{' '}
+        You can login with
         <LoginEmailButton email="admin@admin.com" form={form} />
-        {' or '}
+        or
         <LoginEmailButton email="user@user.com" form={form} />
       </AlertDescription>
     </Alert>
@@ -58,8 +58,8 @@ export const LoginEmailOtpHint = () => {
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
-      <AlertDescription className="flex text-sm leading-4">
-        Use the code{' '}
+      <AlertDescription className="flex gap-x-1 text-sm leading-4">
+        Use the code
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"

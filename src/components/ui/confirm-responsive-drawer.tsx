@@ -28,6 +28,7 @@ export const ConfirmResponsiveDrawer = (props: {
   confirmText?: ReactNode;
   confirmVariant?: ComponentProps<typeof Button>['variant'];
   cancelText?: ReactNode;
+  forceRenderOverlay?: boolean;
 }) => {
   const { t } = useTranslation(['common', 'components']);
   const [isPending, setIsPending] = useState(false);
@@ -82,6 +83,7 @@ export const ConfirmResponsiveDrawer = (props: {
       >
         <ResponsiveDrawerContent
           hideCloseButton
+          forceRenderOverlay={props.forceRenderOverlay}
           className="sm:max-w-xs"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
