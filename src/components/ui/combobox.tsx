@@ -14,8 +14,13 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 
+type ComboboxProps<
+  Value = unknown,
+  Multiple extends boolean | undefined = false,
+> = ComboboxPrimitive.Root.Props<Value, Multiple>;
+
 function Combobox<Value, Multiple extends boolean | undefined = false>(
-  props: ComboboxPrimitive.Root.Props<Value, Multiple>
+  props: ComboboxProps<Value, Multiple>
 ): React.JSX.Element {
   return <ComboboxPrimitive.Root autoHighlight {...props} />;
 }
@@ -334,6 +339,7 @@ export {
   ComboboxItem,
   ComboboxLabel,
   ComboboxList,
+  type ComboboxProps,
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,

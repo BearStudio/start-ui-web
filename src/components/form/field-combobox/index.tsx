@@ -13,6 +13,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  type ComboboxProps,
 } from '@/components/ui/combobox';
 
 type Item = {
@@ -27,7 +28,7 @@ export const FieldCombobox = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
+      ComboboxProps<TItem>,
       'items' | 'value' | 'multiple' | 'children'
     > & {
         items: TItem[];
@@ -66,9 +67,9 @@ export const FieldCombobox = <TItem extends Item>(
         }
         itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
         itemToStringValue={(item: TItem) => item.value}
-        onValueChange={(item: TItem, event) => {
+        onValueChange={(item: TItem | null, event) => {
           field.onChange(item?.value ?? null, event);
-          rest.onValueChange?.(item?.value ?? null, event);
+          rest.onValueChange?.(item ?? null, event);
         }}
         inputRef={field.ref}
       >
