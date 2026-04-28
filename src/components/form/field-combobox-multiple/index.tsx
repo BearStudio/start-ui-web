@@ -21,6 +21,7 @@ import {
   ComboboxEmpty,
   ComboboxItem,
   ComboboxList,
+  type ComboboxProps,
   ComboboxValue,
   useComboboxAnchor,
 } from '@/components/ui/combobox';
@@ -37,7 +38,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
+      ComboboxProps<TItem, true>,
       'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
     > & {
         items: TItem[];
