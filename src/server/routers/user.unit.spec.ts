@@ -53,13 +53,13 @@ const mockSessionFromDb = {
   expiresAt: new Date(Date.now() + 86400000),
 };
 
-const buildPgError = (code: string, detail?: string) => {
+const buildPgError = (code: string, constraint?: string) => {
   const error = new Error('PG error') as Error & {
     code: string;
-    detail?: string;
+    constraint?: string;
   };
   error.code = code;
-  error.detail = detail;
+  error.constraint = constraint;
   return error;
 };
 
@@ -210,9 +210,7 @@ describe('user router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.insert.mockReturnValueOnce(
-        chainResult(
-          buildPgError('23505', 'Key (email)=(new@example.com) already exists.')
-        )
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(call(userRouter.create, createInput)).rejects.toMatchObject({
@@ -325,12 +323,7 @@ describe('user router', () => {
         email: 'target@example.com',
       });
       mockDb.update.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (email)=(updated@example.com) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(

@@ -28,12 +28,7 @@ export const FormMocked = <T extends ZodType<FieldValues>>({
     ...useFormOptions,
   });
   return (
-    <Form
-      {...form}
-      onSubmit={
-        onSubmit ? form.handleSubmit((values) => onSubmit(values)) : undefined
-      }
-    >
+    <Form {...form} onSubmit={onSubmit}>
       {children({ form })}
       <button type="submit">Submit</button>
     </Form>

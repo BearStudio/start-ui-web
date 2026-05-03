@@ -2,6 +2,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { relations } from 'drizzle-orm';
 import {
   boolean,
+  index,
   pgEnum,
   pgTable,
   text,
@@ -61,55 +62,69 @@ export const session = pgTable(
 
     impersonatedBy: text('impersonatedBy'),
   },
-  (table) => [uniqueIndex('session_token_key').on(table.token)]
+  (table) => [
+    uniqueIndex('session_token_key').on(table.token),
+    index('session_user_id_idx').on(table.userId),
+  ]
 );
 
-export const account = pgTable('account', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => createId()),
-  accountId: text('accountId').notNull(),
-  providerId: text('providerId').notNull(),
-  userId: text('userId')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  accessToken: text('accessToken'),
-  refreshToken: text('refreshToken'),
-  idToken: text('idToken'),
-  accessTokenExpiresAt: timestamp('accessTokenExpiresAt', {
-    precision: 3,
-    mode: 'date',
-  }),
-  refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt', {
-    precision: 3,
-    mode: 'date',
-  }),
-  scope: text('scope'),
-  password: text('password'),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-});
+export const account = pgTable(
+  'account',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    accountId: text('accountId').notNull(),
+    providerId: text('providerId').notNull(),
+    userId: text('userId')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('accessToken'),
+    refreshToken: text('refreshToken'),
+    idToken: text('idToken'),
+    accessTokenExpiresAt: timestamp('accessTokenExpiresAt', {
+      precision: 3,
+      mode: 'date',
+    }),
+    refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt', {
+      precision: 3,
+      mode: 'date',
+    }),
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [index('account_user_id_idx').on(table.userId)]
+);
 
-export const verification = pgTable('verification', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => createId()),
-  identifier: text('identifier').notNull(),
-  value: text('value').notNull(),
-  expiresAt: timestamp('expiresAt', { precision: 3, mode: 'date' }).notNull(),
-  createdAt: timestamp('createdAt', {
-    precision: 3,
-    mode: 'date',
-  }).defaultNow(),
-  updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
+export const verification = pgTable(
+  'verification',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: timestamp('expiresAt', { precision: 3, mode: 'date' }).notNull(),
+    createdAt: timestamp('createdAt', {
+      precision: 3,
+      mode: 'date',
+    })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [index('verification_identifier_idx').on(table.identifier)]
+);
 
 export const genre = pgTable(
   'genre',
@@ -153,6 +168,7 @@ export const book = pgTable(
   },
   (table) => [
     uniqueIndex('book_title_author_key').on(table.title, table.author),
+    index('book_genre_id_idx').on(table.genreId),
   ]
 );
 

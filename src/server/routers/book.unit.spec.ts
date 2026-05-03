@@ -37,13 +37,13 @@ const mockBookFromDb: BookFromDb & { genre: typeof mockGenre } = {
 
 const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
 
-const buildPgError = (code: string, detail?: string) => {
+const buildPgError = (code: string, constraint?: string) => {
   const error = new Error('PG error') as Error & {
     code: string;
-    detail?: string;
+    constraint?: string;
   };
   error.code = code;
-  error.detail = detail;
+  error.constraint = constraint;
   return error;
 };
 
@@ -200,12 +200,7 @@ describe('book router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.insert.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (title, author)=(New Book, New Author) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
 
       await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
@@ -280,12 +275,7 @@ describe('book router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.update.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (title, author)=(Updated Title, Updated Author) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
 
       await expect(

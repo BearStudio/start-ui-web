@@ -1,6 +1,6 @@
 import { ORPCError } from '@orpc/client';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { and, asc, desc, eq, gt, gte, ilike, lte, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, gte, ilike, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
@@ -283,14 +283,11 @@ export default {
 
       const cursorFilter = cursorRow
         ? or(
-            // desc createdAt: next page has older createdAt
-            // include cursor row, so use lte
-            // and tie-break with id ascending
             and(
               eq(session.createdAt, cursorRow.createdAt),
               gte(session.id, cursorRow.id)
             ),
-            lte(session.createdAt, cursorRow.createdAt)
+            lt(session.createdAt, cursorRow.createdAt)
           )
         : undefined;
 

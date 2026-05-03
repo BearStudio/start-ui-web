@@ -37,7 +37,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
+      ComponentProps<typeof Combobox<TItem, true>>,
       'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
     > & {
         items: TItem[];
@@ -65,7 +65,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
 
   return (
     <FormFieldContainer {...containerProps}>
-      <Combobox
+      <Combobox<TItem, true>
         {...rest}
         multiple
         items={items}
@@ -75,7 +75,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
           item.value === selectedValue.value
         }
         itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
-        itemToStringValue={(item: TItem) => item.value}
+        itemToStringValue={(item: TItem) => String(item.value)}
         onValueChange={(items: TItem[], event) => {
           field.onChange(items?.map((i) => i.value) ?? [], event);
           rest.onValueChange?.(items?.map((i) => i.value) ?? [], event);
