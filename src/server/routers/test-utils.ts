@@ -10,34 +10,92 @@ export const mockUserHasPermission = hoisted.mockUserHasPermission;
 
 import type { Mock } from 'vitest';
 
-import type { PrismaClient } from '@/server/db/generated/client';
+type DrizzleQueryMock = {
+  findFirst: Mock;
+  findMany: Mock;
+};
 
-type ModelKeys = {
-  [K in keyof PrismaClient]: PrismaClient[K] extends { findMany: unknown }
-    ? K
-    : never;
-}[keyof PrismaClient];
+type MockedDb = {
+  query: {
+    user: DrizzleQueryMock;
+    session: DrizzleQueryMock;
+    book: DrizzleQueryMock;
+    genre: DrizzleQueryMock;
+    account: DrizzleQueryMock;
+    verification: DrizzleQueryMock;
+  };
+  select: Mock;
+  insert: Mock;
+  update: Mock;
+  delete: Mock;
+};
 
-type MockedModel<T> = { [K in keyof T]: Mock };
-type MockedDb = { [K in ModelKeys]: MockedModel<PrismaClient[K]> };
+function makeQueryMock(): DrizzleQueryMock {
+  return {
+    findFirst: vi.fn(),
+    findMany: vi.fn(),
+  };
+}
 
-// Auto-mock @/server/db: any model property returns a proxy where
-// every method is a vi.fn(), so tests don't need to declare the shape.
-export const mockDb: MockedDb = new Proxy({} as ExplicitAny, {
-  get(target: Record<string, Record<string, unknown>>, model: string) {
-    if (!(model in target)) {
-      target[model] = new Proxy({} as ExplicitAny, {
-        get(methodTarget: Record<string, unknown>, method: string) {
-          if (!(method in methodTarget)) {
-            methodTarget[method] = vi.fn();
-          }
-          return methodTarget[method];
-        },
-      });
-    }
-    return target[model];
-  },
-});
+/**
+ * Build a chain stub where every accessed method on the result is callable and
+ * returns the same chain. The chain itself is awaitable, resolving to `result`.
+ * If `result` is an Error, the await throws.
+ */
+export function chainResult<T>(result: T | Error) {
+  const buildChain = (): ExplicitAny => {
+    const target: ExplicitAny = {};
+    return new Proxy(target, {
+      get(t, prop: string | symbol) {
+        if (prop === 'then') {
+          return (
+            onFulfilled?: (v: T) => unknown,
+            onRejected?: (e: unknown) => unknown
+          ) => {
+            if (result instanceof Error) {
+              return Promise.reject(result).then(onFulfilled, onRejected);
+            }
+            return Promise.resolve(result as T).then(onFulfilled, onRejected);
+          };
+        }
+        if (prop === Symbol.toStringTag) return 'Promise';
+        if (prop in t) return t[prop as string];
+        const fn = vi.fn(() => buildChain());
+        t[prop as string] = fn;
+        return fn;
+      },
+    });
+  };
+  return buildChain();
+}
+
+function buildMockDb(): MockedDb {
+  return {
+    query: {
+      user: makeQueryMock(),
+      session: makeQueryMock(),
+      book: makeQueryMock(),
+      genre: makeQueryMock(),
+      account: makeQueryMock(),
+      verification: makeQueryMock(),
+    },
+    select: vi.fn(() => chainResult([])),
+    insert: vi.fn(() => chainResult([])),
+    update: vi.fn(() => chainResult([])),
+    delete: vi.fn(() => chainResult([])),
+  };
+}
+
+export const mockDb: MockedDb = buildMockDb();
+
+export function resetMockDb() {
+  const fresh = buildMockDb();
+  mockDb.query = fresh.query;
+  mockDb.select = fresh.select;
+  mockDb.insert = fresh.insert;
+  mockDb.update = fresh.update;
+  mockDb.delete = fresh.delete;
+}
 
 export const mockUser = { id: 'user-1', name: 'Test User' };
 export const mockSession = { id: 'session-1' };

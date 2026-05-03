@@ -1,7 +1,8 @@
+import { and, asc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
-import { Prisma } from '@/server/db/generated/client';
+import { genre } from '@/server/db/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['genres'];
@@ -36,27 +37,39 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting genres from database');
 
-      const where = {
-        name: {
-          contains: input.searchTerm,
-          mode: 'insensitive',
-        },
-      } satisfies Prisma.GenreWhereInput;
+      const searchFilter = input.searchTerm
+        ? ilike(genre.name, `%${input.searchTerm}%`)
+        : undefined;
 
-      const [total, items] = await Promise.all([
-        context.db.genre.count({
-          where,
-        }),
-        context.db.genre.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
+      const cursorRow = input.cursor
+        ? await context.db.query.genre.findFirst({
+            where: eq(genre.id, input.cursor),
+            columns: { id: true, name: true },
+          })
+        : undefined;
+
+      const cursorFilter = cursorRow
+        ? or(
+            gt(genre.name, cursorRow.name),
+            and(eq(genre.name, cursorRow.name), gte(genre.id, cursorRow.id))
+          )
+        : undefined;
+
+      const where = and(searchFilter, cursorFilter);
+
+      const [totalResult, items] = await Promise.all([
+        context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(genre)
+          .where(searchFilter),
+        context.db.query.genre.findMany({
+          where: where,
+          orderBy: [asc(genre.name), asc(genre.id)],
+          limit: input.limit + 1,
         }),
       ]);
+
+      const total = totalResult[0]?.count ?? 0;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {

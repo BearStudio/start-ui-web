@@ -1,8 +1,9 @@
 import { ORPCError } from '@orpc/client';
+import { and, asc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
-import { Prisma } from '@/server/db/generated/client';
+import { book } from '@/server/db/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['books'];
@@ -37,38 +38,44 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting books from database');
 
-      const where = {
-        OR: [
-          {
-            title: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-          {
-            author: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      } satisfies Prisma.BookWhereInput;
+      const searchPattern = `%${input.searchTerm}%`;
+      const searchFilter = input.searchTerm
+        ? or(
+            ilike(book.title, searchPattern),
+            ilike(book.author, searchPattern)
+          )
+        : undefined;
 
-      const [total, items] = await Promise.all([
-        context.db.book.count({
-          where,
-        }),
-        context.db.book.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            title: 'asc',
-          },
-          where,
-          include: { genre: true },
+      const cursorRow = input.cursor
+        ? await context.db.query.book.findFirst({
+            where: eq(book.id, input.cursor),
+            columns: { id: true, title: true },
+          })
+        : undefined;
+
+      const cursorFilter = cursorRow
+        ? or(
+            gt(book.title, cursorRow.title),
+            and(eq(book.title, cursorRow.title), gte(book.id, cursorRow.id))
+          )
+        : undefined;
+
+      const where = and(searchFilter, cursorFilter);
+
+      const [totalResult, items] = await Promise.all([
+        context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(book)
+          .where(searchFilter),
+        context.db.query.book.findMany({
+          where: where,
+          orderBy: [asc(book.title), asc(book.id)],
+          limit: input.limit + 1,
+          with: { genre: true },
         }),
       ]);
+
+      const total = totalResult[0]?.count ?? 0;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
@@ -101,17 +108,17 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting book');
-      const book = await context.db.book.findUnique({
-        where: { id: input.id },
-        include: { genre: true },
+      const result = await context.db.query.book.findFirst({
+        where: eq(book.id, input.id),
+        with: { genre: true },
       });
 
-      if (!book) {
+      if (!result) {
         context.logger.warn('Unable to find book with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return book;
+      return result;
     }),
 
   create: protectedProcedure({
@@ -128,15 +135,22 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Create book');
-      return await context.db.book.create({
-        data: {
+      const [created] = await context.db
+        .insert(book)
+        .values({
           title: input.title,
           author: input.author,
-          genreId: input.genreId ?? undefined,
+          genreId: input.genreId,
           publisher: input.publisher,
           coverId: input.coverId,
-        },
-      });
+        })
+        .returning();
+
+      if (!created) {
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+
+      return created;
     }),
 
   updateById: protectedProcedure({
@@ -153,16 +167,23 @@ export default {
     .output(zBook())
     .handler(async ({ context, input }) => {
       context.logger.info('Update book');
-      return await context.db.book.update({
-        where: { id: input.id },
-        data: {
+      const [updated] = await context.db
+        .update(book)
+        .set({
           title: input.title,
           author: input.author,
           genreId: input.genreId,
           publisher: input.publisher ?? null,
           coverId: input.coverId ?? null,
-        },
-      });
+        })
+        .where(eq(book.id, input.id))
+        .returning();
+
+      if (!updated) {
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return updated;
     }),
 
   deleteById: protectedProcedure({
@@ -183,8 +204,13 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Delete book');
-      await context.db.book.delete({
-        where: { id: input.id },
-      });
+      const [deleted] = await context.db
+        .delete(book)
+        .where(eq(book.id, input.id))
+        .returning({ id: book.id });
+
+      if (!deleted) {
+        throw new ORPCError('NOT_FOUND');
+      }
     }),
 };

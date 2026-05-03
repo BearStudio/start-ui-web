@@ -13,6 +13,6 @@ main()
     console.error(e);
     process.exit(1);
   })
-  .finally(() => {
-    db.$disconnect();
+  .finally(async () => {
+    await db.$client.end();
   });
