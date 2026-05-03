@@ -142,6 +142,154 @@ pnpm build
 pnpm start
 ```
 
+## Deploy
+
+This app is a TanStack Start app with Nitro already enabled in `vite.config.ts`. `pnpm build` creates the production `.output` directory, and `pnpm start` runs `.output/server/index.mjs`.
+
+Before deploying anywhere:
+
+* Use Node.js 24 or newer to match the current `package.json` engine.
+* Set production values for the required variables in `.env.example`, especially `DATABASE_URL`, `AUTH_SECRET`, `VITE_BASE_URL`, S3 storage, email, OAuth, and any public `VITE_*` values.
+* Point `VITE_BASE_URL` at the deployed HTTPS URL. For preview domains, also configure `AUTH_ALLOWED_HOSTS` as needed.
+* Run `pnpm db:push` or your migration command against the production database before serving production traffic.
+
+<details>
+<summary><strong>Cloudflare Workers</strong></summary>
+
+Cloudflare's TanStack Start guide supports existing projects through Wrangler automatic configuration.
+
+```bash
+pnpm dlx wrangler login
+pnpm dlx wrangler deploy
+```
+
+Wrangler can detect TanStack Start and generate the Worker configuration for `.output/server/index.mjs`, `.output/public`, and the `nodejs_compat` compatibility flag.
+
+For Workers Builds from the Cloudflare dashboard:
+
+* Deploy command: `pnpm dlx wrangler deploy`
+* Build variables: set `NODE_VERSION=24` and optionally `PNPM_VERSION=10.33.0`
+* Secrets and environment variables: add the production values from `.env.example`
+
+For source-controlled Worker configuration, install Wrangler and the Cloudflare Vite plugin, then follow Cloudflare's existing-app setup for `vite.config.ts` and `wrangler.jsonc`.
+
+```bash
+pnpm add -D wrangler @cloudflare/vite-plugin
+```
+
+Cloudflare Workers is not a normal Node server, so validate database, storage, and email dependencies with Workers-compatible providers or bindings instead of local Docker, MinIO, and Maildev URLs.
+
+Docs: [Cloudflare TanStack Start](https://developers.cloudflare.com/workers/framework-guides/web-apps/tanstack-start/), [Workers Builds image](https://developers.cloudflare.com/workers/ci-cd/builds/build-image/)
+
+</details>
+
+<details>
+<summary><strong>Vercel</strong></summary>
+
+Vercel supports TanStack Start with Nitro, and this repo already has the required `nitro()` Vite plugin.
+
+Deploy from Git:
+
+1. Import the repository in Vercel.
+2. Use the TanStack Start preset if it is shown, otherwise use the default project settings.
+3. Set Node.js Version to `24.x`.
+4. Set Build Command to `pnpm build`.
+5. Leave Output Directory empty/default.
+6. Add the production environment variables from `.env.example`.
+7. Deploy.
+
+Deploy from the CLI:
+
+```bash
+pnpm dlx vercel
+pnpm dlx vercel --prod
+```
+
+For Vercel preview URLs, this app can derive `VITE_BASE_URL` from Vercel's preview environment variables when `VITE_BASE_URL` is not set. Add `AUTH_ALLOWED_HOSTS="*.vercel.app"` if auth should accept Vercel preview hosts.
+
+Docs: [TanStack Start on Vercel](https://vercel.com/docs/frameworks/full-stack/tanstack-start), [Vercel Node.js versions](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)
+
+</details>
+
+<details>
+<summary><strong>Railway</strong></summary>
+
+Railway deploys TanStack Start as a standard Node service. Railpack detects `package.json`, installs pnpm from `packageManager`, runs the `build` script, and uses the `start` script.
+
+Deploy from Git:
+
+1. Create a Railway project and deploy from the GitHub repository.
+2. Add a PostgreSQL service or connect an external PostgreSQL database.
+3. Add the production environment variables from `.env.example`.
+4. Set `RAILPACK_NODE_VERSION=24` if Railway does not pick Node 24 from `package.json`.
+5. Generate a public domain in the service Networking tab.
+6. Set `VITE_BASE_URL` to that public URL and redeploy.
+
+Deploy from the CLI after installing and authenticating the Railway CLI:
+
+```bash
+railway init
+railway up
+```
+
+If detection fails, set explicit commands in the service settings:
+
+```text
+Build Command: pnpm build
+Start Command: pnpm start
+```
+
+Nitro reads Railway's `PORT` environment variable automatically.
+
+Docs: [Railway TanStack Start](https://docs.railway.com/guides/tanstack-start), [Railway CLI deploys](https://docs.railway.com/cli/deploying), [Railpack Node.js](https://railpack.com/languages/node)
+
+</details>
+
+<details>
+<summary><strong>Render</strong></summary>
+
+Render should be configured as a Node Web Service that builds the Nitro output and starts the generated Node server.
+
+Dashboard settings:
+
+```text
+Runtime: Node
+Build Command: pnpm i --shamefully-hoist && pnpm build
+Start Command: node .output/server/index.mjs
+```
+
+Environment variables:
+
+```text
+NITRO_PRESET=render-com
+NODE_VERSION=24
+HOST=0.0.0.0
+```
+
+Also add the production values from `.env.example`. Render provides `PORT`; Nitro reads `PORT` automatically.
+
+Optional `render.yaml`:
+
+```yaml
+services:
+  - type: web
+    name: start-ui-web
+    env: node
+    buildCommand: pnpm i --shamefully-hoist && pnpm build
+    startCommand: node .output/server/index.mjs
+    envVars:
+      - key: NITRO_PRESET
+        value: render-com
+      - key: NODE_VERSION
+        value: 24
+      - key: HOST
+        value: 0.0.0.0
+```
+
+Docs: [Nitro on Render](https://nitro-docs.pages.dev/deploy/providers/render/), [Render deploys](https://render.com/docs/deploys), [Render Node.js versions](https://render.com/docs/node-version)
+
+</details>
+
 ## Show hint on development environments
 
 Setup the `VITE_ENV_NAME` env variable with the name of the environment.

@@ -1,5 +1,4 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { ORPCError } from '@orpc/client';
 import {
   useInfiniteQuery,
   useMutation,
@@ -12,7 +11,6 @@ import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
@@ -49,30 +47,30 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { userQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const { navigateBack } = useNavigateBack();
   const session = authClient.useSession();
   const { t } = useTranslation(['user']);
-  const userQuery = useQuery(
-    orpc.user.getById.queryOptions({
-      input: { id: props.params.id },
-    })
-  );
+  const userQuery = useQuery(userQueries.getById({ id: props.params.id }));
+
+  const deleteUserMutation = useMutation(userQueries.deleteById());
 
   const deleteUser = async () => {
     try {
-      await orpc.user.deleteById.call({ id: props.params.id });
+      await deleteUserMutation.mutateAsync({ id: props.params.id });
       await Promise.all([
         // Invalidate users list
         queryClient.invalidateQueries({
-          queryKey: orpc.user.getAll.key(),
+          queryKey: userQueries.getAll(),
           type: 'all',
         }),
         // Remove user from cache
         queryClient.removeQueries({
-          queryKey: orpc.user.getById.key({ input: { id: props.params.id } }),
+          queryKey: userQueries.getById({ id: props.params.id }).queryKey,
         }),
       ]);
 
@@ -89,7 +87,7 @@ export const PageUser = (props: { params: { id: string } }) => {
     if (userQuery.status === 'pending') return set('pending');
     if (
       userQuery.status === 'error' &&
-      userQuery.error instanceof ORPCError &&
+      isServerFnError(userQuery.error) &&
       userQuery.error.code === 'NOT_FOUND'
     )
       return set('not-found');
@@ -235,15 +233,9 @@ export const PageUser = (props: { params: { id: string } }) => {
 const UserSessions = (props: { userId: string }) => {
   const { t } = useTranslation(['user']);
   const sessionsQuery = useInfiniteQuery(
-    orpc.user.getUserSessions.infiniteOptions({
-      input: (cursor: string | undefined) => ({
-        userId: props.userId,
-        cursor,
-        limit: 5,
-      }),
-      maxPages: 10,
-      initialPageParam: undefined,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    userQueries.getUserSessionsInfinite({
+      userId: props.userId,
+      limit: 5,
     })
   );
 
@@ -355,21 +347,17 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
   const { t } = useTranslation(['user']);
-  const revokeAllSessions = useMutation(
-    orpc.user.revokeUserSessions.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: orpc.user.getUserSessions.key({
-            input: { userId: props.userId },
-            type: 'infinite',
-          }),
-        });
-      },
-      onError: () => {
-        toast.error(t('user:manager.detail.revokeAllError'));
-      },
-    })
-  );
+  const revokeAllSessions = useMutation({
+    ...userQueries.revokeUserSessions(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: userQueries.getUserSessions(),
+      });
+    },
+    onError: () => {
+      toast.error(t('user:manager.detail.revokeAllError'));
+    },
+  });
 
   return (
     <Button
@@ -395,21 +383,17 @@ const RevokeSessionButton = (props: {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
   const { t } = useTranslation(['user']);
-  const revokeSession = useMutation(
-    orpc.user.revokeUserSession.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: orpc.user.getUserSessions.key({
-            input: { userId: props.userId },
-            type: 'infinite',
-          }),
-        });
-      },
-      onError: () => {
-        toast.error(t('user:manager.detail.revokeError'));
-      },
-    })
-  );
+  const revokeSession = useMutation({
+    ...userQueries.revokeUserSession(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: userQueries.getUserSessions(),
+      });
+    },
+    onError: () => {
+      toast.error(t('user:manager.detail.revokeError'));
+    },
+  });
   return (
     <Button
       size="xs"

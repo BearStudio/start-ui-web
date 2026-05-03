@@ -4,8 +4,6 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { orpc } from '@/lib/orpc/client';
-
 import { Button } from '@/components/ui/button';
 import {
   DataList,
@@ -28,6 +26,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { bookQueries } from '@/server/functions/queries';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();
@@ -44,15 +43,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   };
 
   const booksQuery = useInfiniteQuery(
-    orpc.book.getAll.infiniteOptions({
-      input: (cursor: string | undefined) => ({
-        searchTerm: props.search.searchTerm,
-        cursor,
-      }),
-      initialPageParam: undefined,
-      maxPages: 10,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
+    bookQueries.getAllInfinite({ searchTerm: props.search.searchTerm })
   );
 
   const ui = getUiState((set) => {

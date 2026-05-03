@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
@@ -24,6 +22,8 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { bookQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageBookNew = () => {
   const { t } = useTranslation(['book']);
@@ -42,34 +42,34 @@ export const PageBookNew = () => {
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
-  const bookCreate = useMutation(
-    orpc.book.create.mutationOptions({
-      onSuccess: async () => {
-        // Invalidate Users list
-        await queryClient.invalidateQueries({
-          queryKey: orpc.book.getAll.key(),
-          type: 'all',
+  const bookCreate = useMutation({
+    ...bookQueries.create(),
+    onSuccess: async () => {
+      // Invalidate Users list
+      await queryClient.invalidateQueries({
+        queryKey: bookQueries.getAll(),
+        type: 'all',
+      });
+
+      // Redirect
+      navigateBack({ ignoreBlocker: true });
+    },
+    onError: (error) => {
+      if (
+        isServerFnError(error) &&
+        error.code === 'CONFLICT' &&
+        Array.isArray(error.data?.target) &&
+        error.data.target.includes('title')
+      ) {
+        form.setError('title', {
+          message: t('book:manager.form.titleAlreadyExist'),
         });
+        return;
+      }
 
-        // Redirect
-        navigateBack({ ignoreBlocker: true });
-      },
-      onError: (error) => {
-        if (
-          error instanceof ORPCError &&
-          error.code === 'CONFLICT' &&
-          error.data?.target?.includes('title')
-        ) {
-          form.setError('title', {
-            message: t('book:manager.form.titleAlreadyExist'),
-          });
-          return;
-        }
-
-        toast.error(t('book:manager.new.createError'));
-      },
-    })
-  );
+      toast.error(t('book:manager.new.createError'));
+    },
+  });
 
   return (
     <>

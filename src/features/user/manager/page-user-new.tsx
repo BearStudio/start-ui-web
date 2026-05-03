@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ORPCError } from '@orpc/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
@@ -22,6 +20,8 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { userQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageUserNew = () => {
   const { t } = useTranslation(['user']);
@@ -36,34 +36,34 @@ export const PageUserNew = () => {
     },
   });
 
-  const userCreate = useMutation(
-    orpc.user.create.mutationOptions({
-      onSuccess: async () => {
-        // Invalidate Users list
-        await queryClient.invalidateQueries({
-          queryKey: orpc.user.getAll.key(),
-          type: 'all',
+  const userCreate = useMutation({
+    ...userQueries.create(),
+    onSuccess: async () => {
+      // Invalidate Users list
+      await queryClient.invalidateQueries({
+        queryKey: userQueries.getAll(),
+        type: 'all',
+      });
+
+      // Redirect
+      navigateBack({ ignoreBlocker: true });
+    },
+    onError: (error) => {
+      if (
+        isServerFnError(error) &&
+        error.code === 'CONFLICT' &&
+        Array.isArray(error.data?.target) &&
+        error.data.target.includes('email')
+      ) {
+        form.setError('email', {
+          message: t('user:manager.form.emailAlreadyExist'),
         });
+        return;
+      }
 
-        // Redirect
-        navigateBack({ ignoreBlocker: true });
-      },
-      onError: (error) => {
-        if (
-          error instanceof ORPCError &&
-          error.code === 'CONFLICT' &&
-          error.data?.target?.includes('email')
-        ) {
-          form.setError('email', {
-            message: t('user:manager.form.emailAlreadyExist'),
-          });
-          return;
-        }
-
-        toast.error(t('user:manager.new.createError'));
-      },
-    })
-  );
+      toast.error(t('user:manager.new.createError'));
+    },
+  });
 
   return (
     <>

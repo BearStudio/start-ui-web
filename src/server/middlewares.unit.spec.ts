@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isPgError } from '@/server/orpc';
+import { isPgError } from '@/server/middlewares.server';
 
 const buildPgError = (
   overrides: Partial<

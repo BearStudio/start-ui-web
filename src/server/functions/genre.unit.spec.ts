@@ -1,14 +1,13 @@
-import { call } from '@orpc/server';
 import { describe, expect, it } from 'vitest';
 
-import genreRouter from '@/server/routers/genre';
+import { handlers } from '@/server/functions/genre.handlers.server';
 import {
   chainResult,
+  createAuthenticatedContext,
   mockDb,
-  mockGetSession,
   mockUser,
   mockUserHasPermission,
-} from '@/server/routers/test-utils';
+} from '@/server/functions/test-utils';
 
 const now = new Date();
 
@@ -20,13 +19,18 @@ const mockGenreFromDb = {
   updatedAt: now,
 };
 
-describe('genre router', () => {
+const defaultGetAllInput = { limit: 20 };
+
+describe('genre handlers', () => {
   describe('getAll', () => {
     it('should return paginated genres with total count', async () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
       mockDb.query.genre.findMany.mockResolvedValue([mockGenreFromDb]);
 
-      const result = await call(genreRouter.getAll, {});
+      const result = await handlers.getAll(
+        createAuthenticatedContext(),
+        defaultGetAllInput
+      );
 
       expect(result).toEqual({
         items: [mockGenreFromDb],
@@ -43,7 +47,9 @@ describe('genre router', () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
       mockDb.query.genre.findMany.mockResolvedValue(genresFromDb);
 
-      const result = await call(genreRouter.getAll, { limit: 3 });
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        limit: 3,
+      });
 
       expect(result.items).toHaveLength(3);
       expect(result.nextCursor).toBe('genre-4');
@@ -54,7 +60,9 @@ describe('genre router', () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
       mockDb.query.genre.findMany.mockResolvedValue([mockGenreFromDb]);
 
-      const result = await call(genreRouter.getAll, { limit: 5 });
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        limit: 5,
+      });
 
       expect(result.nextCursor).toBeUndefined();
     });
@@ -63,7 +71,8 @@ describe('genre router', () => {
       mockDb.query.genre.findFirst.mockResolvedValue(undefined);
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
 
-      const result = await call(genreRouter.getAll, {
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        ...defaultGetAllInput,
         cursor: 'deleted-genre',
       });
 
@@ -75,19 +84,11 @@ describe('genre router', () => {
       expect(mockDb.query.genre.findMany).not.toHaveBeenCalled();
     });
 
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(call(genreRouter.getAll, {})).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
-      });
-    });
-
     it('should require genre read permission', async () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
       mockDb.query.genre.findMany.mockResolvedValue([]);
 
-      await call(genreRouter.getAll, {});
+      await handlers.getAll(createAuthenticatedContext(), defaultGetAllInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -103,7 +104,9 @@ describe('genre router', () => {
         error: false,
       });
 
-      await expect(call(genreRouter.getAll, {})).rejects.toMatchObject({
+      await expect(
+        handlers.getAll(createAuthenticatedContext(), defaultGetAllInput)
+      ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });
     });

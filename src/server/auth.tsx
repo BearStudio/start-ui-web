@@ -56,7 +56,7 @@ export const auth = betterAuth({
 
   plugins: [
     openAPI({
-      disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
+      disableDefaultReference: true,
     }),
     admin({
       ...permissions,

@@ -1,17 +1,14 @@
-import { call } from '@orpc/server';
-import { omit } from 'remeda';
 import { describe, expect, it } from 'vitest';
 
-import { Book } from '@/features/book/schema';
-import { Book as BookFromDb } from '@/server/db/schema';
-import bookRouter from '@/server/routers/book';
+import type { Book as BookFromDb } from '@/server/db/schema';
+import { handlers } from '@/server/functions/book.handlers.server';
 import {
   chainResult,
+  createAuthenticatedContext,
   mockDb,
-  mockGetSession,
   mockUser,
   mockUserHasPermission,
-} from '@/server/routers/test-utils';
+} from '@/server/functions/test-utils';
 
 const now = new Date();
 
@@ -35,36 +32,21 @@ const mockBookFromDb: BookFromDb & { genre: typeof mockGenre } = {
   updatedAt: now,
 };
 
-const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
+const defaultGetAllInput = { limit: 20, searchTerm: '' };
 
-const buildPgError = (code: string, constraint?: string) => {
-  const error = new Error('PG error') as Error & {
-    code: string;
-    constraint?: string;
-    file: string;
-    line: string;
-    routine: string;
-    severity: string;
-  };
-  error.code = code;
-  error.constraint = constraint;
-  error.file = 'postgres.c';
-  error.line = '123';
-  error.routine = 'exec_simple_query';
-  error.severity = 'ERROR';
-  return error;
-};
-
-describe('book router', () => {
+describe('book handlers', () => {
   describe('getAll', () => {
     it('should return paginated books with total count', async () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
       mockDb.query.book.findMany.mockResolvedValue([mockBookFromDb]);
 
-      const result = await call(bookRouter.getAll, {});
+      const result = await handlers.getAll(
+        createAuthenticatedContext(),
+        defaultGetAllInput
+      );
 
       expect(result).toEqual({
-        items: [toExpectedBook(mockBookFromDb)],
+        items: [mockBookFromDb],
         nextCursor: undefined,
         total: 1,
       });
@@ -78,7 +60,10 @@ describe('book router', () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
       mockDb.query.book.findMany.mockResolvedValue(booksFromDb);
 
-      const result = await call(bookRouter.getAll, { limit: 3 });
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        ...defaultGetAllInput,
+        limit: 3,
+      });
 
       expect(result.items).toHaveLength(3);
       expect(result.nextCursor).toBe('book-4');
@@ -89,7 +74,10 @@ describe('book router', () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
       mockDb.query.book.findMany.mockResolvedValue([mockBookFromDb]);
 
-      const result = await call(bookRouter.getAll, { limit: 5 });
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        ...defaultGetAllInput,
+        limit: 5,
+      });
 
       expect(result.nextCursor).toBeUndefined();
     });
@@ -98,7 +86,10 @@ describe('book router', () => {
       mockDb.query.book.findFirst.mockResolvedValue(undefined);
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
 
-      const result = await call(bookRouter.getAll, { cursor: 'deleted-book' });
+      const result = await handlers.getAll(createAuthenticatedContext(), {
+        ...defaultGetAllInput,
+        cursor: 'deleted-book',
+      });
 
       expect(result).toEqual({
         items: [],
@@ -108,19 +99,11 @@ describe('book router', () => {
       expect(mockDb.query.book.findMany).not.toHaveBeenCalled();
     });
 
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(call(bookRouter.getAll, {})).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
-      });
-    });
-
     it('should require book read permission', async () => {
       mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
       mockDb.query.book.findMany.mockResolvedValue([]);
 
-      await call(bookRouter.getAll, {});
+      await handlers.getAll(createAuthenticatedContext(), defaultGetAllInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -136,7 +119,9 @@ describe('book router', () => {
         error: false,
       });
 
-      await expect(call(bookRouter.getAll, {})).rejects.toMatchObject({
+      await expect(
+        handlers.getAll(createAuthenticatedContext(), defaultGetAllInput)
+      ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });
     });
@@ -146,35 +131,27 @@ describe('book router', () => {
     it('should return a book when found', async () => {
       mockDb.query.book.findFirst.mockResolvedValue(mockBookFromDb);
 
-      const result = await call(bookRouter.getById, { id: 'book-1' });
+      const result = await handlers.getById(createAuthenticatedContext(), {
+        id: 'book-1',
+      });
 
-      expect(result).toEqual(toExpectedBook(mockBookFromDb));
+      expect(result).toEqual(mockBookFromDb);
     });
 
     it('should throw NOT_FOUND when book does not exist', async () => {
       mockDb.query.book.findFirst.mockResolvedValue(undefined);
 
       await expect(
-        call(bookRouter.getById, { id: 'nonexistent' })
+        handlers.getById(createAuthenticatedContext(), { id: 'nonexistent' })
       ).rejects.toMatchObject({
         code: 'NOT_FOUND',
-      });
-    });
-
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(
-        call(bookRouter.getById, { id: 'book-1' })
-      ).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
       });
     });
 
     it('should require book read permission', async () => {
       mockDb.query.book.findFirst.mockResolvedValue(mockBookFromDb);
 
-      await call(bookRouter.getById, { id: 'book-1' });
+      await handlers.getById(createAuthenticatedContext(), { id: 'book-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -191,7 +168,7 @@ describe('book router', () => {
       });
 
       await expect(
-        call(bookRouter.getById, { id: 'book-1' })
+        handlers.getById(createAuthenticatedContext(), { id: 'book-1' })
       ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });
@@ -215,37 +192,21 @@ describe('book router', () => {
       };
       mockDb.insert.mockReturnValueOnce(chainResult([createdBookFromDb]));
 
-      const result = await call(bookRouter.create, createInput);
-
-      expect(result).toEqual(toExpectedBook(createdBookFromDb));
-    });
-
-    it('should throw CONFLICT on unique constraint violation', async () => {
-      mockDb.insert.mockReturnValueOnce(
-        chainResult(buildPgError('23505', 'book_title_author_key'))
+      const result = await handlers.create(
+        createAuthenticatedContext(),
+        createInput
       );
 
-      await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
-        code: 'CONFLICT',
-        data: { target: ['title', 'author'] },
-      });
+      expect(result).toEqual(createdBookFromDb);
     });
 
-    it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.insert.mockReturnValueOnce(
-        chainResult(new Error('DB connection lost'))
-      );
+    it('should throw INTERNAL_SERVER_ERROR when no row is returned', async () => {
+      mockDb.insert.mockReturnValueOnce(chainResult([]));
 
-      await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
+      await expect(
+        handlers.create(createAuthenticatedContext(), createInput)
+      ).rejects.toMatchObject({
         code: 'INTERNAL_SERVER_ERROR',
-      });
-    });
-
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
       });
     });
 
@@ -254,7 +215,7 @@ describe('book router', () => {
         chainResult([{ ...mockBookFromDb, ...createInput }])
       );
 
-      await call(bookRouter.create, createInput);
+      await handlers.create(createAuthenticatedContext(), createInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -270,7 +231,9 @@ describe('book router', () => {
         error: false,
       });
 
-      await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
+      await expect(
+        handlers.create(createAuthenticatedContext(), createInput)
+      ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });
     });
@@ -290,53 +253,21 @@ describe('book router', () => {
       const updatedBookFromDb = { ...mockBookFromDb, ...updateInput };
       mockDb.update.mockReturnValueOnce(chainResult([updatedBookFromDb]));
 
-      const result = await call(bookRouter.updateById, updateInput);
-
-      expect(result).toEqual(toExpectedBook(updatedBookFromDb));
-    });
-
-    it('should throw CONFLICT on unique constraint violation', async () => {
-      mockDb.update.mockReturnValueOnce(
-        chainResult(buildPgError('23505', 'book_title_author_key'))
+      const result = await handlers.updateById(
+        createAuthenticatedContext(),
+        updateInput
       );
 
-      await expect(
-        call(bookRouter.updateById, updateInput)
-      ).rejects.toMatchObject({
-        code: 'CONFLICT',
-        data: { target: ['title', 'author'] },
-      });
+      expect(result).toEqual(updatedBookFromDb);
     });
 
     it('should throw NOT_FOUND when book does not exist', async () => {
       mockDb.update.mockReturnValueOnce(chainResult([]));
 
       await expect(
-        call(bookRouter.updateById, updateInput)
+        handlers.updateById(createAuthenticatedContext(), updateInput)
       ).rejects.toMatchObject({
         code: 'NOT_FOUND',
-      });
-    });
-
-    it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.update.mockReturnValueOnce(
-        chainResult(new Error('DB connection lost'))
-      );
-
-      await expect(
-        call(bookRouter.updateById, updateInput)
-      ).rejects.toMatchObject({
-        code: 'INTERNAL_SERVER_ERROR',
-      });
-    });
-
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(
-        call(bookRouter.updateById, updateInput)
-      ).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
       });
     });
 
@@ -345,7 +276,7 @@ describe('book router', () => {
         chainResult([{ ...mockBookFromDb, ...updateInput }])
       );
 
-      await call(bookRouter.updateById, updateInput);
+      await handlers.updateById(createAuthenticatedContext(), updateInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -362,7 +293,7 @@ describe('book router', () => {
       });
 
       await expect(
-        call(bookRouter.updateById, updateInput)
+        handlers.updateById(createAuthenticatedContext(), updateInput)
       ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });
@@ -374,7 +305,7 @@ describe('book router', () => {
       mockDb.delete.mockReturnValueOnce(chainResult([{ id: 'book-1' }]));
 
       await expect(
-        call(bookRouter.deleteById, { id: 'book-1' })
+        handlers.deleteById(createAuthenticatedContext(), { id: 'book-1' })
       ).resolves.toBeUndefined();
     });
 
@@ -382,38 +313,16 @@ describe('book router', () => {
       mockDb.delete.mockReturnValueOnce(chainResult([]));
 
       await expect(
-        call(bookRouter.deleteById, { id: 'nonexistent' })
+        handlers.deleteById(createAuthenticatedContext(), { id: 'nonexistent' })
       ).rejects.toMatchObject({
         code: 'NOT_FOUND',
-      });
-    });
-
-    it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.delete.mockReturnValueOnce(
-        chainResult(new Error('DB connection lost'))
-      );
-
-      await expect(
-        call(bookRouter.deleteById, { id: 'book-1' })
-      ).rejects.toMatchObject({
-        code: 'INTERNAL_SERVER_ERROR',
-      });
-    });
-
-    it('should throw UNAUTHORIZED when user is not authenticated', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      await expect(
-        call(bookRouter.deleteById, { id: 'book-1' })
-      ).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
       });
     });
 
     it('should require book delete permission', async () => {
       mockDb.delete.mockReturnValueOnce(chainResult([{ id: 'book-1' }]));
 
-      await call(bookRouter.deleteById, { id: 'book-1' });
+      await handlers.deleteById(createAuthenticatedContext(), { id: 'book-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
@@ -430,7 +339,7 @@ describe('book router', () => {
       });
 
       await expect(
-        call(bookRouter.deleteById, { id: 'book-1' })
+        handlers.deleteById(createAuthenticatedContext(), { id: 'book-1' })
       ).rejects.toMatchObject({
         code: 'FORBIDDEN',
       });

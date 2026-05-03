@@ -1,11 +1,9 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { ORPCError } from '@orpc/client';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
@@ -25,20 +23,21 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { bookQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
   const queryClient = useQueryClient();
   const { navigateBack } = useNavigateBack();
-  const bookQuery = useQuery(
-    orpc.book.getById.queryOptions({ input: { id: props.params.id } })
-  );
+  const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
+  const deleteBookMutation = useMutation(bookQueries.deleteById());
 
   const ui = getUiState((set) => {
     if (bookQuery.status === 'pending') return set('pending');
     if (
       bookQuery.status === 'error' &&
-      bookQuery.error instanceof ORPCError &&
+      isServerFnError(bookQuery.error) &&
       bookQuery.error.code === 'NOT_FOUND'
     )
       return set('not-found');
@@ -48,16 +47,16 @@ export const PageBook = (props: { params: { id: string } }) => {
 
   const deleteBook = async () => {
     try {
-      await orpc.book.deleteById.call({ id: props.params.id });
+      await deleteBookMutation.mutateAsync({ id: props.params.id });
       await Promise.all([
         // Invalidate books list
         queryClient.invalidateQueries({
-          queryKey: orpc.book.getAll.key(),
+          queryKey: bookQueries.getAll(),
           type: 'all',
         }),
         // Remove user from cache
         queryClient.removeQueries({
-          queryKey: orpc.book.getById.key({ input: { id: props.params.id } }),
+          queryKey: bookQueries.getById({ id: props.params.id }).queryKey,
         }),
       ]);
 

@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { join } from 'remeda';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
-
 import {
   FormField,
   FormFieldController,
@@ -19,12 +17,13 @@ import {
   FormFieldsBook,
 } from '@/features/book/schema';
 import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
+import { genreQueries } from '@/server/functions/queries';
 
 export const FormBook = () => {
   const form = useFormContext<FormFieldsBook>();
   const { t } = useTranslation(['book']);
 
-  const genresQuery = useQuery(orpc.genre.getAll.queryOptions());
+  const genresQuery = useQuery(genreQueries.getAllList());
 
   return (
     <div className="flex flex-col gap-4">

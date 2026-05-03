@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
@@ -24,14 +22,14 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { bookQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
-  const bookQuery = useQuery(
-    orpc.book.getById.queryOptions({ input: { id: props.params.id } })
-  );
+  const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
   const form = useForm({
     resolver: zodResolver(zFormFieldsBook()),
     values: {
@@ -45,34 +43,34 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
-  const bookUpdate = useMutation(
-    orpc.book.updateById.mutationOptions({
-      onSuccess: async () => {
-        // Invalidate Users list
-        await queryClient.invalidateQueries({
-          queryKey: orpc.book.getAll.key(),
-          type: 'all',
+  const bookUpdate = useMutation({
+    ...bookQueries.updateById(),
+    onSuccess: async () => {
+      // Invalidate Users list
+      await queryClient.invalidateQueries({
+        queryKey: bookQueries.getAll(),
+        type: 'all',
+      });
+
+      // Redirect
+      navigateBack({ ignoreBlocker: true });
+    },
+    onError: (error) => {
+      if (
+        isServerFnError(error) &&
+        error.code === 'CONFLICT' &&
+        Array.isArray(error.data?.target) &&
+        error.data.target.includes('title')
+      ) {
+        form.setError('title', {
+          message: t('book:manager.form.titleAlreadyExist'),
         });
+        return;
+      }
 
-        // Redirect
-        navigateBack({ ignoreBlocker: true });
-      },
-      onError: (error) => {
-        if (
-          error instanceof ORPCError &&
-          error.code === 'CONFLICT' &&
-          error.data?.target?.includes('title')
-        ) {
-          form.setError('title', {
-            message: t('book:manager.form.titleAlreadyExist'),
-          });
-          return;
-        }
-
-        toast.error(t('book:manager.update.updateError'));
-      },
-    })
-  );
+      toast.error(t('book:manager.update.updateError'));
+    },
+  });
 
   return (
     <>

@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
-
 import {
   Form,
   FormField,
@@ -20,24 +18,24 @@ import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { LayoutLogin } from '@/features/auth/layout-login';
 import { useMascot } from '@/features/auth/mascot';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
+import { accountQueries } from '@/server/functions/queries';
 
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
   const session = authClient.useSession();
 
-  const submitOnboarding = useMutation(
-    orpc.account.submitOnboarding.mutationOptions({
-      onSuccess: (_, variables) => {
-        toast.success(
-          t('auth:pageOnboarding.successMessage', { name: variables.name })
-        );
-        session.refetch();
-      },
-      onError: () => {
-        toast.error(t('auth:pageOnboarding.errorMessage'));
-      },
-    })
-  );
+  const submitOnboarding = useMutation({
+    ...accountQueries.submitOnboarding(),
+    onSuccess: (_, variables) => {
+      toast.success(
+        t('auth:pageOnboarding.successMessage', { name: variables.name })
+      );
+      session.refetch();
+    },
+    onError: () => {
+      toast.error(t('auth:pageOnboarding.errorMessage'));
+    },
+  });
 
   const form = useForm({
     mode: 'onSubmit',
