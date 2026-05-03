@@ -43,10 +43,6 @@ yarn-error.log*
 # Build info
 build-info.gen.json
 
-# Prisma
-prisma/dev.db
-prisma/dev.db-journal
-src/server/db/generated
 
 # Emails
 .react-email

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import genreRouter from '@/server/routers/genre';
 import {
+  chainResult,
   mockDb,
   mockGetSession,
   mockUser,
@@ -22,8 +23,8 @@ const mockGenreFromDb = {
 describe('genre router', () => {
   describe('getAll', () => {
     it('should return paginated genres with total count', async () => {
-      mockDb.genre.count.mockResolvedValue(1);
-      mockDb.genre.findMany.mockResolvedValue([mockGenreFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.genre.findMany.mockResolvedValue([mockGenreFromDb]);
 
       const result = await call(genreRouter.getAll, {});
 
@@ -39,8 +40,8 @@ describe('genre router', () => {
         ...mockGenreFromDb,
         id: `genre-${i + 1}`,
       }));
-      mockDb.genre.count.mockResolvedValue(10);
-      mockDb.genre.findMany.mockResolvedValue(genresFromDb);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+      mockDb.query.genre.findMany.mockResolvedValue(genresFromDb);
 
       const result = await call(genreRouter.getAll, { limit: 3 });
 
@@ -50,8 +51,8 @@ describe('genre router', () => {
     });
 
     it('should not return nextCursor when items fit within limit', async () => {
-      mockDb.genre.count.mockResolvedValue(1);
-      mockDb.genre.findMany.mockResolvedValue([mockGenreFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.genre.findMany.mockResolvedValue([mockGenreFromDb]);
 
       const result = await call(genreRouter.getAll, { limit: 5 });
 
@@ -67,8 +68,8 @@ describe('genre router', () => {
     });
 
     it('should require genre read permission', async () => {
-      mockDb.genre.count.mockResolvedValue(0);
-      mockDb.genre.findMany.mockResolvedValue([]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
+      mockDb.query.genre.findMany.mockResolvedValue([]);
 
       await call(genreRouter.getAll, {});
 

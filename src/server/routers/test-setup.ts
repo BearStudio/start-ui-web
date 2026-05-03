@@ -4,6 +4,7 @@ import {
   mockDb,
   mockGetSession,
   mockUserHasPermission,
+  resetMockDb,
   setupAuthenticatedUser,
 } from '@/server/routers/test-utils';
 
@@ -47,5 +48,6 @@ vi.mock('@/server/db', () => ({ db: mockDb }));
 
 beforeEach(() => {
   vi.clearAllMocks();
+  resetMockDb();
   setupAuthenticatedUser();
 });
