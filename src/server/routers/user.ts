@@ -1,10 +1,11 @@
 import { ORPCError } from '@orpc/client';
 import { getRequestHeaders } from '@tanstack/react-start/server';
+import { and, asc, desc, eq, gt, gte, ilike, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
 import { auth } from '@/server/auth';
-import { Prisma } from '@/server/db/generated/client';
+import { session, user } from '@/server/db/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['users'];
@@ -37,38 +38,42 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      const where = {
-        OR: [
-          {
-            name: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-          {
-            email: {
-              contains: input.searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      } satisfies Prisma.UserWhereInput;
-
       context.logger.info('Getting users from database');
-      const [total, items] = await Promise.all([
-        context.db.user.count({
-          where,
-        }),
-        context.db.user.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            name: 'asc',
-          },
-          where,
+
+      const searchPattern = `%${input.searchTerm}%`;
+      const searchFilter = input.searchTerm
+        ? or(ilike(user.name, searchPattern), ilike(user.email, searchPattern))
+        : undefined;
+
+      const cursorRow = input.cursor
+        ? await context.db.query.user.findFirst({
+            where: eq(user.id, input.cursor),
+            columns: { id: true, name: true },
+          })
+        : undefined;
+
+      const cursorFilter = cursorRow
+        ? or(
+            gt(user.name, cursorRow.name),
+            and(eq(user.name, cursorRow.name), gte(user.id, cursorRow.id))
+          )
+        : undefined;
+
+      const where = and(searchFilter, cursorFilter);
+
+      const [totalResult, items] = await Promise.all([
+        context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(user)
+          .where(searchFilter),
+        context.db.query.user.findMany({
+          where: where,
+          orderBy: [asc(user.name), asc(user.id)],
+          limit: input.limit + 1,
         }),
       ]);
+
+      const total = totalResult[0]?.count ?? 0;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {
@@ -101,16 +106,16 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting user');
-      const user = await context.db.user.findUnique({
-        where: { id: input.id },
+      const result = await context.db.query.user.findFirst({
+        where: eq(user.id, input.id),
       });
 
-      if (!user) {
+      if (!result) {
         context.logger.warn('Unable to find user with the provided input');
         throw new ORPCError('NOT_FOUND');
       }
 
-      return user;
+      return result;
     }),
 
   updateById: protectedProcedure({
@@ -134,9 +139,9 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Getting current user email');
-      const currentUser = await context.db.user.findUnique({
-        where: { id: input.id },
-        select: { email: true },
+      const currentUser = await context.db.query.user.findFirst({
+        where: eq(user.id, input.id),
+        columns: { email: true },
       });
 
       if (!currentUser) {
@@ -145,17 +150,24 @@ export default {
       }
 
       context.logger.info('Update user');
-      return await context.db.user.update({
-        where: { id: input.id },
-        data: {
+      const [updated] = await context.db
+        .update(user)
+        .set({
           name: input.name ?? '',
           // Prevent to change role of the connected user
           role: context.user.id === input.id ? undefined : input.role,
           email: input.email,
           // Set email as verified if admin changed the email
           emailVerified: currentUser.email !== input.email ? true : undefined,
-        },
-      });
+        })
+        .where(eq(user.id, input.id))
+        .returning();
+
+      if (!updated) {
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return updated;
     }),
 
   create: protectedProcedure({
@@ -178,14 +190,21 @@ export default {
     .output(zUser())
     .handler(async ({ context, input }) => {
       context.logger.info('Create user');
-      return await context.db.user.create({
-        data: {
+      const [created] = await context.db
+        .insert(user)
+        .values({
           email: input.email,
           emailVerified: true,
           name: input.name ?? '',
           role: input.role ?? 'user',
-        },
-      });
+        })
+        .returning();
+
+      if (!created) {
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+
+      return created;
     }),
 
   deleteById: protectedProcedure({
@@ -251,25 +270,42 @@ export default {
       })
     )
     .handler(async ({ context, input }) => {
-      const where = {
-        userId: input.userId,
-      } satisfies Prisma.SessionWhereInput;
-
       context.logger.info('Getting user sessions from database');
-      const [total, items] = await Promise.all([
-        context.db.session.count({
-          where,
-        }),
-        context.db.session.findMany({
-          // Get an extra item at the end which we'll use as next cursor
-          take: input.limit + 1,
-          cursor: input.cursor ? { id: input.cursor } : undefined,
-          orderBy: {
-            createdAt: 'desc',
-          },
-          where,
+
+      const userIdFilter = eq(session.userId, input.userId);
+
+      const cursorRow = input.cursor
+        ? await context.db.query.session.findFirst({
+            where: eq(session.id, input.cursor),
+            columns: { id: true, createdAt: true },
+          })
+        : undefined;
+
+      const cursorFilter = cursorRow
+        ? or(
+            and(
+              eq(session.createdAt, cursorRow.createdAt),
+              gte(session.id, cursorRow.id)
+            ),
+            lt(session.createdAt, cursorRow.createdAt)
+          )
+        : undefined;
+
+      const where = and(userIdFilter, cursorFilter);
+
+      const [totalResult, items] = await Promise.all([
+        context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(session)
+          .where(userIdFilter),
+        context.db.query.session.findMany({
+          where: where,
+          orderBy: [desc(session.createdAt), asc(session.id)],
+          limit: input.limit + 1,
         }),
       ]);
+
+      const total = totalResult[0]?.count ?? 0;
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (items.length > input.limit) {

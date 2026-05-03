@@ -1,8 +1,8 @@
 import { call } from '@orpc/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Prisma } from '@/server/db/generated/client';
 import {
+  chainResult,
   mockDb,
   mockGetSession,
   mockSession,
@@ -53,11 +53,21 @@ const mockSessionFromDb = {
   expiresAt: new Date(Date.now() + 86400000),
 };
 
+const buildPgError = (code: string, constraint?: string) => {
+  const error = new Error('PG error') as Error & {
+    code: string;
+    constraint?: string;
+  };
+  error.code = code;
+  error.constraint = constraint;
+  return error;
+};
+
 describe('user router', () => {
   describe('getAll', () => {
     it('should return paginated users with total count', async () => {
-      mockDb.user.count.mockResolvedValue(1);
-      mockDb.user.findMany.mockResolvedValue([mockUserFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.user.findMany.mockResolvedValue([mockUserFromDb]);
 
       const result = await call(userRouter.getAll, {});
 
@@ -73,8 +83,8 @@ describe('user router', () => {
         ...mockUserFromDb,
         id: `user-${i + 1}`,
       }));
-      mockDb.user.count.mockResolvedValue(10);
-      mockDb.user.findMany.mockResolvedValue(usersFromDb);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+      mockDb.query.user.findMany.mockResolvedValue(usersFromDb);
 
       const result = await call(userRouter.getAll, { limit: 3 });
 
@@ -84,8 +94,8 @@ describe('user router', () => {
     });
 
     it('should not return nextCursor when items fit within limit', async () => {
-      mockDb.user.count.mockResolvedValue(1);
-      mockDb.user.findMany.mockResolvedValue([mockUserFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.user.findMany.mockResolvedValue([mockUserFromDb]);
 
       const result = await call(userRouter.getAll, { limit: 5 });
 
@@ -101,8 +111,8 @@ describe('user router', () => {
     });
 
     it('should require user list permission', async () => {
-      mockDb.user.count.mockResolvedValue(0);
-      mockDb.user.findMany.mockResolvedValue([]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
+      mockDb.query.user.findMany.mockResolvedValue([]);
 
       await call(userRouter.getAll, {});
 
@@ -128,7 +138,7 @@ describe('user router', () => {
 
   describe('getById', () => {
     it('should return a user when found', async () => {
-      mockDb.user.findUnique.mockResolvedValue(mockUserFromDb);
+      mockDb.query.user.findFirst.mockResolvedValue(mockUserFromDb);
 
       const result = await call(userRouter.getById, { id: 'target-user-1' });
 
@@ -136,7 +146,7 @@ describe('user router', () => {
     });
 
     it('should throw NOT_FOUND when user does not exist', async () => {
-      mockDb.user.findUnique.mockResolvedValue(null);
+      mockDb.query.user.findFirst.mockResolvedValue(undefined);
 
       await expect(
         call(userRouter.getById, { id: 'nonexistent' })
@@ -156,7 +166,7 @@ describe('user router', () => {
     });
 
     it('should require user list permission', async () => {
-      mockDb.user.findUnique.mockResolvedValue(mockUserFromDb);
+      mockDb.query.user.findFirst.mockResolvedValue(mockUserFromDb);
 
       await call(userRouter.getById, { id: 'target-user-1' });
 
@@ -191,20 +201,16 @@ describe('user router', () => {
 
     it('should create a user and return it', async () => {
       const createdUser = { ...mockUserFromDb, ...createInput, id: 'new-1' };
-      mockDb.user.create.mockResolvedValue(createdUser);
+      mockDb.insert.mockReturnValueOnce(chainResult([createdUser]));
 
       const result = await call(userRouter.create, createInput);
 
       expect(result).toEqual(createdUser);
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
-      mockDb.user.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['email'] },
-        })
+    it('should throw CONFLICT on unique constraint violation', async () => {
+      mockDb.insert.mockReturnValueOnce(
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(call(userRouter.create, createInput)).rejects.toMatchObject({
@@ -214,7 +220,9 @@ describe('user router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.user.create.mockRejectedValue(new Error('DB connection lost'));
+      mockDb.insert.mockReturnValueOnce(
+        chainResult(new Error('DB connection lost'))
+      );
 
       await expect(call(userRouter.create, createInput)).rejects.toMatchObject({
         code: 'INTERNAL_SERVER_ERROR',
@@ -230,10 +238,9 @@ describe('user router', () => {
     });
 
     it('should require user create permission', async () => {
-      mockDb.user.create.mockResolvedValue({
-        ...mockUserFromDb,
-        ...createInput,
-      });
+      mockDb.insert.mockReturnValueOnce(
+        chainResult([{ ...mockUserFromDb, ...createInput }])
+      );
 
       await call(userRouter.create, createInput);
 
@@ -266,11 +273,11 @@ describe('user router', () => {
     };
 
     it('should update a user and return it', async () => {
-      mockDb.user.findUnique.mockResolvedValue({
+      mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
       });
       const updatedUser = { ...mockUserFromDb, ...updateInput };
-      mockDb.user.update.mockResolvedValue(updatedUser);
+      mockDb.update.mockReturnValueOnce(chainResult([updatedUser]));
 
       const result = await call(userRouter.updateById, updateInput);
 
@@ -284,7 +291,7 @@ describe('user router', () => {
         email: 'self@example.com',
         role: 'admin' as const,
       };
-      mockDb.user.findUnique.mockResolvedValue({
+      mockDb.query.user.findFirst.mockResolvedValue({
         email: 'self@example.com',
       });
       const returnedUser = {
@@ -294,7 +301,7 @@ describe('user router', () => {
         email: 'self@example.com',
         role: 'user',
       };
-      mockDb.user.update.mockResolvedValue(returnedUser);
+      mockDb.update.mockReturnValueOnce(chainResult([returnedUser]));
 
       const result = await call(userRouter.updateById, selfUpdateInput);
 
@@ -302,7 +309,7 @@ describe('user router', () => {
     });
 
     it('should throw NOT_FOUND when target user does not exist', async () => {
-      mockDb.user.findUnique.mockResolvedValue(null);
+      mockDb.query.user.findFirst.mockResolvedValue(undefined);
 
       await expect(
         call(userRouter.updateById, updateInput)
@@ -311,16 +318,12 @@ describe('user router', () => {
       });
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
-      mockDb.user.findUnique.mockResolvedValue({
+    it('should throw CONFLICT on unique constraint violation', async () => {
+      mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
       });
-      mockDb.user.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['email'] },
-        })
+      mockDb.update.mockReturnValueOnce(
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(
@@ -332,10 +335,12 @@ describe('user router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.user.findUnique.mockResolvedValue({
+      mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
       });
-      mockDb.user.update.mockRejectedValue(new Error('DB connection lost'));
+      mockDb.update.mockReturnValueOnce(
+        chainResult(new Error('DB connection lost'))
+      );
 
       await expect(
         call(userRouter.updateById, updateInput)
@@ -355,13 +360,12 @@ describe('user router', () => {
     });
 
     it('should require user set-role permission', async () => {
-      mockDb.user.findUnique.mockResolvedValue({
+      mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
       });
-      mockDb.user.update.mockResolvedValue({
-        ...mockUserFromDb,
-        ...updateInput,
-      });
+      mockDb.update.mockReturnValueOnce(
+        chainResult([{ ...mockUserFromDb, ...updateInput }])
+      );
 
       await call(userRouter.updateById, updateInput);
 
@@ -453,8 +457,8 @@ describe('user router', () => {
 
   describe('getUserSessions', () => {
     it('should return paginated sessions with total count', async () => {
-      mockDb.session.count.mockResolvedValue(1);
-      mockDb.session.findMany.mockResolvedValue([mockSessionFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.session.findMany.mockResolvedValue([mockSessionFromDb]);
 
       const result = await call(userRouter.getUserSessions, {
         userId: 'target-user-1',
@@ -472,8 +476,8 @@ describe('user router', () => {
         ...mockSessionFromDb,
         id: `session-${i + 1}`,
       }));
-      mockDb.session.count.mockResolvedValue(10);
-      mockDb.session.findMany.mockResolvedValue(sessions);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+      mockDb.query.session.findMany.mockResolvedValue(sessions);
 
       const result = await call(userRouter.getUserSessions, {
         userId: 'target-user-1',
@@ -496,8 +500,8 @@ describe('user router', () => {
     });
 
     it('should require session list permission', async () => {
-      mockDb.session.count.mockResolvedValue(0);
-      mockDb.session.findMany.mockResolvedValue([]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
+      mockDb.query.session.findMany.mockResolvedValue([]);
 
       await call(userRouter.getUserSessions, { userId: 'target-user-1' });
 

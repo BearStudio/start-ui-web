@@ -9,9 +9,22 @@ import { envClient } from '@/env/client';
 import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
-import { Prisma } from '@/server/db/generated/client';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
+
+type PgError = Error & { code: '23505' | '23503'; constraint?: string };
+
+const uniqueConstraintTargets: Record<string, string[]> = {
+  book_title_author_key: ['title', 'author'],
+  genre_name_key: ['name'],
+  session_token_key: ['token'],
+  user_email_key: ['email'],
+};
+
+const isPgError = (error: unknown): error is PgError =>
+  error instanceof Error &&
+  'code' in error &&
+  (error.code === '23505' || error.code === '23503');
 
 const base = os
   .$context<ResponseHeadersPluginContext>()
@@ -81,13 +94,13 @@ const base = os
   })
   // Middleware to add database Server Timing header
   .use(async ({ next, context }) => {
-    return timingStore.run({ prisma: [] }, async () => {
+    return timingStore.run({ db: [] }, async () => {
       const result = await next();
 
       // Add the Server-Timing header if there are timings
       const serverTimingHeader = timingStore
         .getStore()
-        ?.prisma.map(
+        ?.db.map(
           (timing) =>
             `db-${timing.model}-${timing.operation};dur=${timing.duration.toFixed(2)}`
         )
@@ -109,7 +122,7 @@ const base = os
     }
     return await next();
   })
-  // Prisma Error Handler
+  // Database Error Handler
   .use(async ({ next, context }) => {
     try {
       return await next();
@@ -118,31 +131,23 @@ const base = os
         throw error;
       }
 
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (isPgError(error)) {
         throw match(error.code)
-          .with('P2002', () => {
+          .with('23505', () => {
+            const target = getUniqueConstraintTarget(error);
             context.logger.warn(
-              error.meta,
-              `Prisma Error: ${error.code} ${error.message}`
+              { constraint: error.constraint },
+              `DB Error: ${error.code} ${error.message}`
             );
             return new ORPCError('CONFLICT', {
               message: 'Unique constraint violation',
-              data: { target: error.meta?.target },
+              data: { target },
             });
           })
-          .with('P2025', () => {
-            context.logger.warn(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
-            );
-            return new ORPCError('NOT_FOUND', {
-              message: 'Record not found',
-            });
-          })
-          .with('P2003', () => {
+          .with('23503', () => {
             context.logger.error(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
+              { constraint: error.constraint },
+              `DB Error ${error.code}: ${error.message}`
             );
             return new ORPCError('BAD_REQUEST', {
               message: 'Foreign key constraint violation',
@@ -150,8 +155,8 @@ const base = os
           })
           .otherwise(() => {
             context.logger.error(
-              error.meta,
-              `Prisma Error ${error.code}: ${error.message}`
+              { constraint: error.constraint },
+              `DB Error ${error.code}: ${error.message}`
             );
             return new ORPCError('INTERNAL_SERVER_ERROR', {
               message: 'Database error',
@@ -159,20 +164,16 @@ const base = os
           });
       }
 
-      if (error instanceof Prisma.PrismaClientValidationError) {
-        context.logger.error(
-          `Prisma Client Validation Error: ${error.message}`
-        );
-        throw new ORPCError('BAD_REQUEST', {
-          message: 'Database validation error',
-        });
-      }
-
       throw new ORPCError('INTERNAL_SERVER_ERROR', {
         message: 'Unhandled error',
       });
     }
   });
+
+function getUniqueConstraintTarget(error: PgError): string[] | undefined {
+  if (!error.constraint) return undefined;
+  return uniqueConstraintTargets[error.constraint];
+}
 
 export const publicProcedure = () => base;
 
@@ -219,3 +220,6 @@ export const protectedProcedure = ({
       },
     });
   });
+
+export { isPgError };
+export type { PgError };

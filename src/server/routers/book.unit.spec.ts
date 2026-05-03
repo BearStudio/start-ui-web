@@ -3,9 +3,10 @@ import { omit } from 'remeda';
 import { describe, expect, it } from 'vitest';
 
 import { Book } from '@/features/book/schema';
-import { Book as BookFromDb, Prisma } from '@/server/db/generated/client';
+import { Book as BookFromDb } from '@/server/db/schema';
 import bookRouter from '@/server/routers/book';
 import {
+  chainResult,
   mockDb,
   mockGetSession,
   mockUser,
@@ -22,7 +23,7 @@ const mockGenre = {
   updatedAt: now,
 };
 
-const mockBookFromDb = {
+const mockBookFromDb: BookFromDb & { genre: typeof mockGenre } = {
   id: 'book-1',
   title: 'Test Book',
   author: 'Test Author',
@@ -36,11 +37,21 @@ const mockBookFromDb = {
 
 const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
 
+const buildPgError = (code: string, constraint?: string) => {
+  const error = new Error('PG error') as Error & {
+    code: string;
+    constraint?: string;
+  };
+  error.code = code;
+  error.constraint = constraint;
+  return error;
+};
+
 describe('book router', () => {
   describe('getAll', () => {
     it('should return paginated books with total count', async () => {
-      mockDb.book.count.mockResolvedValue(1);
-      mockDb.book.findMany.mockResolvedValue([mockBookFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.book.findMany.mockResolvedValue([mockBookFromDb]);
 
       const result = await call(bookRouter.getAll, {});
 
@@ -56,8 +67,8 @@ describe('book router', () => {
         ...mockBookFromDb,
         id: `book-${i + 1}`,
       }));
-      mockDb.book.count.mockResolvedValue(10);
-      mockDb.book.findMany.mockResolvedValue(booksFromDb);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+      mockDb.query.book.findMany.mockResolvedValue(booksFromDb);
 
       const result = await call(bookRouter.getAll, { limit: 3 });
 
@@ -67,8 +78,8 @@ describe('book router', () => {
     });
 
     it('should not return nextCursor when items fit within limit', async () => {
-      mockDb.book.count.mockResolvedValue(1);
-      mockDb.book.findMany.mockResolvedValue([mockBookFromDb]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.book.findMany.mockResolvedValue([mockBookFromDb]);
 
       const result = await call(bookRouter.getAll, { limit: 5 });
 
@@ -84,8 +95,8 @@ describe('book router', () => {
     });
 
     it('should require book read permission', async () => {
-      mockDb.book.count.mockResolvedValue(0);
-      mockDb.book.findMany.mockResolvedValue([]);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 0 }]));
+      mockDb.query.book.findMany.mockResolvedValue([]);
 
       await call(bookRouter.getAll, {});
 
@@ -111,7 +122,7 @@ describe('book router', () => {
 
   describe('getById', () => {
     it('should return a book when found', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
+      mockDb.query.book.findFirst.mockResolvedValue(mockBookFromDb);
 
       const result = await call(bookRouter.getById, { id: 'book-1' });
 
@@ -119,7 +130,7 @@ describe('book router', () => {
     });
 
     it('should throw NOT_FOUND when book does not exist', async () => {
-      mockDb.book.findUnique.mockResolvedValue(null);
+      mockDb.query.book.findFirst.mockResolvedValue(undefined);
 
       await expect(
         call(bookRouter.getById, { id: 'nonexistent' })
@@ -139,7 +150,7 @@ describe('book router', () => {
     });
 
     it('should require book read permission', async () => {
-      mockDb.book.findUnique.mockResolvedValue(mockBookFromDb);
+      mockDb.query.book.findFirst.mockResolvedValue(mockBookFromDb);
 
       await call(bookRouter.getById, { id: 'book-1' });
 
@@ -180,20 +191,16 @@ describe('book router', () => {
         ...createInput,
         id: 'new-book-1',
       };
-      mockDb.book.create.mockResolvedValue(createdBookFromDb);
+      mockDb.insert.mockReturnValueOnce(chainResult([createdBookFromDb]));
 
       const result = await call(bookRouter.create, createInput);
 
       expect(result).toEqual(toExpectedBook(createdBookFromDb));
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
-      mockDb.book.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['title', 'author'] },
-        })
+    it('should throw CONFLICT on unique constraint violation', async () => {
+      mockDb.insert.mockReturnValueOnce(
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
 
       await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
@@ -203,7 +210,9 @@ describe('book router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.book.create.mockRejectedValue(new Error('DB connection lost'));
+      mockDb.insert.mockReturnValueOnce(
+        chainResult(new Error('DB connection lost'))
+      );
 
       await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
         code: 'INTERNAL_SERVER_ERROR',
@@ -219,10 +228,9 @@ describe('book router', () => {
     });
 
     it('should require book create permission', async () => {
-      mockDb.book.create.mockResolvedValue({
-        ...mockBookFromDb,
-        ...createInput,
-      });
+      mockDb.insert.mockReturnValueOnce(
+        chainResult([{ ...mockBookFromDb, ...createInput }])
+      );
 
       await call(bookRouter.create, createInput);
 
@@ -258,23 +266,17 @@ describe('book router', () => {
 
     it('should update a book and return it', async () => {
       const updatedBookFromDb = { ...mockBookFromDb, ...updateInput };
-      mockDb.book.update.mockResolvedValue(updatedBookFromDb);
+      mockDb.update.mockReturnValueOnce(chainResult([updatedBookFromDb]));
 
       const result = await call(bookRouter.updateById, updateInput);
 
       expect(result).toEqual(toExpectedBook(updatedBookFromDb));
     });
 
-    it('should throw CONFLICT on unique constraint violation (P2002)', async () => {
-      const prismaError = new Prisma.PrismaClientKnownRequestError(
-        'Unique constraint failed',
-        {
-          code: 'P2002',
-          clientVersion: '0.0.0',
-          meta: { target: ['title', 'author'] },
-        }
+    it('should throw CONFLICT on unique constraint violation', async () => {
+      mockDb.update.mockReturnValueOnce(
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
-      mockDb.book.update.mockRejectedValue(prismaError);
 
       await expect(
         call(bookRouter.updateById, updateInput)
@@ -284,13 +286,8 @@ describe('book router', () => {
       });
     });
 
-    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
-      mockDb.book.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Record not found', {
-          code: 'P2025',
-          clientVersion: '0.0.0',
-        })
-      );
+    it('should throw NOT_FOUND when book does not exist', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([]));
 
       await expect(
         call(bookRouter.updateById, updateInput)
@@ -300,7 +297,9 @@ describe('book router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.book.update.mockRejectedValue(new Error('DB connection lost'));
+      mockDb.update.mockReturnValueOnce(
+        chainResult(new Error('DB connection lost'))
+      );
 
       await expect(
         call(bookRouter.updateById, updateInput)
@@ -320,10 +319,9 @@ describe('book router', () => {
     });
 
     it('should require book update permission', async () => {
-      mockDb.book.update.mockResolvedValue({
-        ...mockBookFromDb,
-        ...updateInput,
-      });
+      mockDb.update.mockReturnValueOnce(
+        chainResult([{ ...mockBookFromDb, ...updateInput }])
+      );
 
       await call(bookRouter.updateById, updateInput);
 
@@ -351,20 +349,15 @@ describe('book router', () => {
 
   describe('deleteById', () => {
     it('should delete a book successfully', async () => {
-      mockDb.book.delete.mockResolvedValue(mockBookFromDb);
+      mockDb.delete.mockReturnValueOnce(chainResult([{ id: 'book-1' }]));
 
       await expect(
         call(bookRouter.deleteById, { id: 'book-1' })
       ).resolves.toBeUndefined();
     });
 
-    it('should throw NOT_FOUND when book does not exist (P2025)', async () => {
-      mockDb.book.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Record not found', {
-          code: 'P2025',
-          clientVersion: '0.0.0',
-        })
-      );
+    it('should throw NOT_FOUND when book does not exist', async () => {
+      mockDb.delete.mockReturnValueOnce(chainResult([]));
 
       await expect(
         call(bookRouter.deleteById, { id: 'nonexistent' })
@@ -374,7 +367,9 @@ describe('book router', () => {
     });
 
     it('should throw INTERNAL_SERVER_ERROR on unexpected errors', async () => {
-      mockDb.book.delete.mockRejectedValue(new Error('DB connection lost'));
+      mockDb.delete.mockReturnValueOnce(
+        chainResult(new Error('DB connection lost'))
+      );
 
       await expect(
         call(bookRouter.deleteById, { id: 'book-1' })
@@ -394,7 +389,7 @@ describe('book router', () => {
     });
 
     it('should require book delete permission', async () => {
-      mockDb.book.delete.mockResolvedValue(mockBookFromDb);
+      mockDb.delete.mockReturnValueOnce(chainResult([{ id: 'book-1' }]));
 
       await call(bookRouter.deleteById, { id: 'book-1' });
 

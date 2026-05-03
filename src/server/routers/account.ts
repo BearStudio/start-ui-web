@@ -1,7 +1,9 @@
+import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
 import { zUser } from '@/features/user/schema';
+import { user } from '@/server/db/schema';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['account'];
@@ -19,13 +21,13 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db.user.update({
-        where: { id: context.user.id },
-        data: {
+      await context.db
+        .update(user)
+        .set({
           ...input,
           onboardedAt: new Date(),
-        },
-      });
+        })
+        .where(eq(user.id, context.user.id));
     }),
 
   updateInfo: protectedProcedure({
@@ -44,11 +46,11 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db.user.update({
-        where: { id: context.user.id },
-        data: {
+      await context.db
+        .update(user)
+        .set({
           name: input.name ?? '',
-        },
-      });
+        })
+        .where(eq(user.id, context.user.id));
     }),
 };
