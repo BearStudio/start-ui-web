@@ -1,4 +1,8 @@
-import { type ComponentProps } from 'react';
+import {
+  type ComponentProps,
+  type CSSProperties,
+  type ReactElement,
+} from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -79,10 +83,10 @@ export const ResponsiveDrawerContent = ({
   ComponentProps<typeof DialogContent | typeof DrawerContent>,
   'render' | 'className' | 'style'
 > & {
-  // `className`, `render`, and state-aware `style` types are not compatible
-  render?: React.ReactElement;
+  // These prop types differ between the dialog and drawer primitives.
+  render?: ReactElement;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   // Only for DialogContent
   hideCloseButton?: boolean;
 }) =>

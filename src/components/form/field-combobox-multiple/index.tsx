@@ -71,14 +71,16 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         items={items}
         disabled={field.disabled}
         value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
-        isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
-          item.value === selectedValue.value
+        isItemEqualToValue={(item, selectedValue) =>
+          (item as TItem).value === (selectedValue as TItem).value
         }
-        itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
-        itemToStringValue={(item: TItem) => String(item.value)}
-        onValueChange={(items: TItem[], event) => {
-          field.onChange(items?.map((i) => i.value) ?? [], event);
-          rest.onValueChange?.(items?.map((i) => i.value) ?? [], event);
+        itemToStringLabel={(item) => (item as TItem).label?.toString() ?? ''}
+        itemToStringValue={(item) => String((item as TItem).value ?? '')}
+        onValueChange={(items, event) => {
+          const selectedItems = items as TItem[];
+          const selectedValues = selectedItems.map((i) => i.value);
+          field.onChange(selectedValues, event);
+          rest.onValueChange?.(selectedValues, event);
         }}
         inputRef={field.ref}
       >
