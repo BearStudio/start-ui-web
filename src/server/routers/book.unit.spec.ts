@@ -41,9 +41,17 @@ const buildPgError = (code: string, constraint?: string) => {
   const error = new Error('PG error') as Error & {
     code: string;
     constraint?: string;
+    file: string;
+    line: string;
+    routine: string;
+    severity: string;
   };
   error.code = code;
   error.constraint = constraint;
+  error.file = 'postgres.c';
+  error.line = '123';
+  error.routine = 'exec_simple_query';
+  error.severity = 'ERROR';
   return error;
 };
 

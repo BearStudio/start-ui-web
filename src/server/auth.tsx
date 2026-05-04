@@ -1,4 +1,3 @@
-import { expo } from '@better-auth/expo';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
@@ -56,12 +55,6 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    /**
-     * Allows an Expo native app to use auth, can be deleted if not needed.
-     * disableOriginOverride: workaround for a crash in onRequest. Learn more at:
-     * https://github.com/better-auth/better-auth/issues/1058
-     */
-    expo({ disableOriginOverride: true }),
     openAPI({
       disableDefaultReference: true, // Use custom exposition in /routes/api/openapi folder
     }),
