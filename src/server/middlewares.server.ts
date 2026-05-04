@@ -124,6 +124,15 @@ const finalize = (
 
 const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
   const mappedError = mapDbError(error);
+  const shouldLogOriginalError =
+    mappedError instanceof ServerFnError &&
+    mappedError.message === 'Unhandled error' &&
+    mappedError !== error;
+
+  if (shouldLogOriginalError) {
+    procedureLogger.error(error, 'Unhandled error before mapping');
+  }
+
   const logLevel = (() => {
     if (!(mappedError instanceof Error)) return 'error';
     if (mappedError.message === 'DEMO_MODE_ENABLED') return 'info';

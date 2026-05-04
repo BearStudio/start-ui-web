@@ -127,17 +127,26 @@ const updateById = async (
   ctx: ProtectedContext,
   data: z.infer<ReturnType<typeof zUpdateByIdInput>>
 ) => {
-  await assertPermission(ctx.user.id, { user: ['set-role'] });
+  await assertPermission(ctx.user.id, { user: ['update'] });
 
-  ctx.logger.info('Getting current user email');
+  ctx.logger.info('Getting current user');
   const currentUser = await ctx.db.query.user.findFirst({
     where: eq(user.id, data.id),
-    columns: { email: true },
+    columns: { email: true, role: true },
   });
 
   if (!currentUser) {
     ctx.logger.warn('Unable to find user with the provided input');
     throw new ServerFnError('NOT_FOUND');
+  }
+
+  const nextRole =
+    ctx.user.id === data.id ? undefined : (data.role ?? undefined);
+  const isChangingRole =
+    nextRole !== undefined && nextRole !== currentUser.role;
+
+  if (isChangingRole) {
+    await assertPermission(ctx.user.id, { user: ['set-role'] });
   }
 
   ctx.logger.info('Update user');
@@ -146,9 +155,9 @@ const updateById = async (
     .set({
       name: data.name ?? '',
       // Prevent changing the connected user's own role.
-      role: ctx.user.id === data.id ? undefined : (data.role ?? undefined),
+      role: nextRole,
       email: data.email,
-      emailVerified: currentUser.email !== data.email ? true : undefined,
+      emailVerified: currentUser.email !== data.email ? false : undefined,
     })
     .where(eq(user.id, data.id))
     .returning();
@@ -233,7 +242,10 @@ const getUserSessions = async (
 
   const cursorRow = data.cursor
     ? await ctx.db.query.session.findFirst({
-        where: eq(session.id, data.cursor),
+        where: and(
+          eq(session.id, data.cursor),
+          eq(session.userId, data.userId)
+        ),
         columns: { id: true, createdAt: true },
       })
     : undefined;

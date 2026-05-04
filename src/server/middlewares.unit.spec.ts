@@ -78,11 +78,16 @@ describe('server function middleware', () => {
   });
 
   it('maps auth context construction errors through the central handler', async () => {
-    mockGetSession.mockRejectedValueOnce(new Error('auth unavailable'));
+    const error = new Error('auth unavailable');
+    mockGetSession.mockRejectedValueOnce(error);
 
     await expect(withPublicContext(async () => 'ok')).rejects.toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
     });
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      error,
+      'Unhandled error before mapping'
+    );
     expect(mockLogger.error).toHaveBeenCalledWith(
       expect.objectContaining({
         code: 'INTERNAL_SERVER_ERROR',

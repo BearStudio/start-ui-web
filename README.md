@@ -151,7 +151,7 @@ Before deploying anywhere:
 * Use Node.js 24 or newer to match the current `package.json` engine.
 * Set production values for the required variables in `.env.example`, especially `DATABASE_URL`, `AUTH_SECRET`, `VITE_BASE_URL`, S3 storage, email, OAuth, and any public `VITE_*` values.
 * Point `VITE_BASE_URL` at the deployed HTTPS URL. For preview domains, also configure `AUTH_ALLOWED_HOSTS` as needed.
-* Run `pnpm db:push` or your migration command against the production database before serving production traffic.
+* Run your versioned migration command against the production database before serving production traffic. Do not use `pnpm db:push` for production deployments because it bypasses migration history.
 
 <details>
 <summary><strong>Cloudflare Workers</strong></summary>
@@ -168,7 +168,7 @@ Wrangler can detect TanStack Start and generate the Worker configuration for `.o
 For Workers Builds from the Cloudflare dashboard:
 
 * Deploy command: `pnpm dlx wrangler deploy`
-* Build variables: set `NODE_VERSION=24` and optionally `PNPM_VERSION=10.33.0`
+* Build variables: set `NODE_VERSION=24` and, if needed, set `PNPM_VERSION` to the version declared by the `packageManager` field in `package.json`
 * Secrets and environment variables: add the production values from `.env.example`
 
 For source-controlled Worker configuration, install Wrangler and the Cloudflare Vite plugin, then follow Cloudflare's existing-app setup for `vite.config.ts` and `wrangler.jsonc`.

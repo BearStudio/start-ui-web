@@ -65,6 +65,50 @@ const publicSessionFromDb = {
   userAgent: mockSessionFromDb.userAgent,
 };
 
+function getSqlColumnNames(value: ExplicitAny): string[] {
+  const names: string[] = [];
+  const seen = new Set<object>();
+
+  const visit = (node: ExplicitAny) => {
+    if (!node || typeof node !== 'object' || seen.has(node)) return;
+    seen.add(node);
+
+    if (typeof node.name === 'string' && typeof node.columnType === 'string') {
+      names.push(node.name);
+    }
+
+    if (Array.isArray(node.queryChunks)) {
+      node.queryChunks.forEach(visit);
+    }
+  };
+
+  visit(value);
+
+  return names;
+}
+
+function getSqlParamValues(value: ExplicitAny): unknown[] {
+  const values: unknown[] = [];
+  const seen = new Set<object>();
+
+  const visit = (node: ExplicitAny) => {
+    if (!node || typeof node !== 'object' || seen.has(node)) return;
+    seen.add(node);
+
+    if ('value' in node && 'encoder' in node) {
+      values.push(node.value);
+    }
+
+    if (Array.isArray(node.queryChunks)) {
+      node.queryChunks.forEach(visit);
+    }
+  };
+
+  visit(value);
+
+  return values;
+}
+
 const defaultGetAllInput = { limit: 20, searchTerm: '' };
 const defaultGetUserSessionsInput = (userId: string) => ({
   userId,
@@ -283,6 +327,7 @@ describe('user handlers', () => {
     it('should update a user and return it', async () => {
       mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
+        role: 'user',
       });
       const updatedUser = { ...mockUserFromDb, ...updateInput };
       mockDb.update.mockReturnValueOnce(chainResult([updatedUser]));
@@ -304,6 +349,7 @@ describe('user handlers', () => {
       };
       mockDb.query.user.findFirst.mockResolvedValue({
         email: 'self@example.com',
+        role: 'user',
       });
       const returnedUser = {
         ...mockUserFromDb,
@@ -335,6 +381,7 @@ describe('user handlers', () => {
     it('should throw NOT_FOUND when update returns no row', async () => {
       mockDb.query.user.findFirst.mockResolvedValue({
         email: 'target@example.com',
+        role: 'admin',
       });
       mockDb.update.mockReturnValueOnce(chainResult([]));
 
@@ -345,9 +392,10 @@ describe('user handlers', () => {
       });
     });
 
-    it('should require user set-role permission', async () => {
+    it('should require user update permission', async () => {
       mockDb.query.user.findFirst.mockResolvedValue({
-        email: 'target@example.com',
+        email: updateInput.email,
+        role: updateInput.role,
       });
       mockDb.update.mockReturnValueOnce(
         chainResult([{ ...mockUserFromDb, ...updateInput }])
@@ -358,9 +406,69 @@ describe('user handlers', () => {
       expect(mockUserHasPermission).toHaveBeenCalledWith({
         body: {
           userId: mockUser.id,
+          permissions: { user: ['update'] },
+        },
+      });
+      expect(mockUserHasPermission).toHaveBeenCalledTimes(1);
+    });
+
+    it('should require user set-role permission when changing role', async () => {
+      mockDb.query.user.findFirst.mockResolvedValue({
+        email: 'target@example.com',
+        role: 'user',
+      });
+      mockDb.update.mockReturnValueOnce(
+        chainResult([{ ...mockUserFromDb, ...updateInput }])
+      );
+
+      await handlers.updateById(createAuthenticatedContext(), updateInput);
+
+      expect(mockUserHasPermission).toHaveBeenNthCalledWith(1, {
+        body: {
+          userId: mockUser.id,
+          permissions: { user: ['update'] },
+        },
+      });
+      expect(mockUserHasPermission).toHaveBeenNthCalledWith(2, {
+        body: {
+          userId: mockUser.id,
           permissions: { user: ['set-role'] },
         },
       });
+    });
+
+    it('should reject role changes when set-role permission is missing', async () => {
+      mockUserHasPermission
+        .mockResolvedValueOnce({ success: true, error: false })
+        .mockResolvedValueOnce({ success: false, error: false });
+      mockDb.query.user.findFirst.mockResolvedValue({
+        email: 'target@example.com',
+        role: 'user',
+      });
+
+      await expect(
+        handlers.updateById(createAuthenticatedContext(), updateInput)
+      ).rejects.toMatchObject({
+        code: 'FORBIDDEN',
+      });
+      expect(mockDb.update).not.toHaveBeenCalled();
+    });
+
+    it('should mark changed emails as unverified', async () => {
+      mockDb.query.user.findFirst.mockResolvedValue({
+        email: 'target@example.com',
+        role: updateInput.role,
+      });
+      const updateChain = chainResult([{ ...mockUserFromDb, ...updateInput }]);
+      mockDb.update.mockReturnValueOnce(updateChain);
+
+      await handlers.updateById(createAuthenticatedContext(), updateInput);
+
+      expect(updateChain.set).toHaveBeenCalledWith(
+        expect.objectContaining({
+          emailVerified: false,
+        })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -517,6 +625,27 @@ describe('user handlers', () => {
         total: 10,
       });
       expect(mockDb.query.session.findMany).not.toHaveBeenCalled();
+    });
+
+    it('should scope session cursor lookup to the requested user', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue(mockSessionFromDb);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.session.findMany.mockResolvedValue([mockSessionFromDb]);
+
+      await handlers.getUserSessions(createAuthenticatedContext(), {
+        userId: 'target-user-1',
+        cursor: 'session-1',
+        limit: 20,
+      });
+
+      const where = mockDb.query.session.findFirst.mock.calls[0]?.[0].where;
+
+      expect(getSqlColumnNames(where)).toEqual(
+        expect.arrayContaining(['id', 'userId'])
+      );
+      expect(getSqlParamValues(where)).toEqual(
+        expect.arrayContaining(['session-1', 'target-user-1'])
+      );
     });
 
     it('should require session list permission', async () => {

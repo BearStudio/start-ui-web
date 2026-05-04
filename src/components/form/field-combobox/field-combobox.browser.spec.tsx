@@ -78,8 +78,9 @@ test('default value', async () => {
 
   const input = page.getByRole('combobox', {
     name: 'Bearstronaut',
-  }) as unknown as { element(): HTMLInputElement };
-  expect(input.element().value).toBe('Yuri Grizzlyrin');
+  });
+  await expect.element(input).toBeDefined();
+  expect((input.element() as HTMLInputElement).value).toBe('Yuri Grizzlyrin');
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'grizzlyrin' });

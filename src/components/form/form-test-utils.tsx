@@ -27,8 +27,23 @@ export const FormMocked = <T extends ZodType<FieldValues>>({
     resolver: zodResolver(schema as TODO),
     ...useFormOptions,
   });
+  const defaultValues = useFormOptions?.defaultValues;
+  const defaultValueKeys =
+    defaultValues && typeof defaultValues === 'object'
+      ? Object.keys(defaultValues)
+      : [];
+  const handleSubmit: SubmitHandler<z.infer<T>> | undefined = onSubmit
+    ? (values) =>
+        onSubmit({
+          ...Object.fromEntries(
+            defaultValueKeys.map((key) => [key, undefined])
+          ),
+          ...values,
+        } as z.infer<T>)
+    : undefined;
+
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form {...form} onSubmit={handleSubmit}>
       {children({ form })}
       <button type="submit">Submit</button>
     </Form>

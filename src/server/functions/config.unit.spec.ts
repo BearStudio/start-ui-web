@@ -21,7 +21,7 @@ describe('config handlers', () => {
         color: 'blue',
         emoji: undefined,
         isDemo: false,
-        isDev: expect.any(Boolean),
+        isDev: import.meta.env.DEV,
       });
     });
   });
