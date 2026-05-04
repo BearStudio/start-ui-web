@@ -14,8 +14,7 @@
 .vinxi
 /dist
 /build
-/public/storybook
-/storybook-static
+/cosmos-export
 
 # misc
 .DS_Store
@@ -55,7 +54,6 @@ e2e/.auth
 
 certificates
 
-*storybook.log
 app.config.timestamp_*.js
 .tanstack
 .nitro
