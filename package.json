@@ -123,13 +123,18 @@
     "zustand": "5.0.12"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.4.5",
     "@faker-js/faker": "10.4.0",
     "@playwright/test": "1.59.1",
     "@rolldown/plugin-babel": "^0.2.3",
+    "@softarc/sheriff-core": "^0.19.6",
     "@svgr/cli": "8.1.0",
     "@tailwindcss/postcss": "4.2.4",
+    "@tailwindcss/typography": "^0.5.19",
     "@tanstack/eslint-plugin-query": "5.100.9",
     "@tanstack/eslint-plugin-router": "1.161.6",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.6.0",
     "@types/nodemailer": "8.0.0",
     "@types/pg": "^8.20.0",
     "@types/react": "19.2.14",
@@ -137,13 +142,17 @@
     "@vitejs/plugin-react": "6.0.1",
     "@vitest/browser": "4.1.5",
     "@vitest/browser-playwright": "4.1.5",
+    "@vitest/coverage-v8": "^4.1.5",
     "babel-plugin-react-compiler": "1.0.0",
     "cross-env": "10.1.0",
+    "dependency-cruiser": "^17.4.0",
     "dotenv-cli": "11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint-plugin-simple-import-sort": "13.0.0",
     "eslint-plugin-sonarjs": "4.0.3",
     "jiti": "2.6.1",
+    "jscpd": "^4.0.9",
+    "knip": "^6.11.0",
     "lefthook": "2.1.6",
     "npm-run-all": "4.1.5",
     "oxfmt": "0.36.0",
@@ -159,9 +168,13 @@
     "vitest": "4.1.5",
     "vitest-browser-react": "2.2.0"
   },
-  "engines": {
-    "node": ">=22"
+  "resolutions": {
+    "@types/node": "^24"
   },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
@@ -170,5 +183,23 @@
       "lefthook",
       "sharp"
     ]
+  },
+  "jscpd": {
+    "threshold": 0,
+    "reporters": [
+      "markdown"
+    ],
+    "ignore": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/coverage/**",
+      "**/tests/**",
+      "**/*.json",
+      "**/*.tsx",
+      "**/*.test.ts",
+      "**/*.css",
+      "**/*.md"
+    ],
+    "absolute": false
   }
 }
