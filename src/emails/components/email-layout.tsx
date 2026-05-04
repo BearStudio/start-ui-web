@@ -1,5 +1,5 @@
-import { Body, Head, Html, Preview } from '@react-email/components';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { Body, Head, Html, Preview } from 'react-email';
 
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
