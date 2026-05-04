@@ -1,0 +1,11 @@
+body {
+  background-color: var(--background);
+}
+
+#preview-container {
+  display: flex;
+  width: 100%;
+  min-height: 10rem;
+  flex-direction: column;
+  justify-content: flex-start;
+}
