@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { and, eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { randomInt } from 'node:crypto';
 
 import { db } from '@/server/db';
@@ -52,31 +52,28 @@ export async function createBooks() {
   const existingCount = countRow?.count ?? 0;
   const existingGenresAfterSeed = await db.select().from(genre);
 
-  await Promise.all(
-    data.books.map(async ({ author, title }) => {
-      // Avoid creating existing books
-      const existingBook = await db.query.book.findFirst({
-        where: and(eq(book.author, author), eq(book.title, title)),
-      });
-
-      if (existingBook) {
-        return;
-      }
-
+  if (existingGenresAfterSeed.length > 0) {
+    const booksToSeed = data.books.map(({ author, title }) => {
       const randomGenre =
-        existingGenresAfterSeed[randomInt(existingGenresAfterSeed.length)];
+        existingGenresAfterSeed[randomInt(existingGenresAfterSeed.length)]!;
 
-      if (!randomGenre) return;
-
-      await db.insert(book).values({
+      return {
         author,
         title,
         genreId: randomGenre.id,
         publisher: faker.book.publisher(),
-      });
-      createdCounter += 1;
-    })
-  );
+      };
+    });
+
+    if (booksToSeed.length > 0) {
+      const inserted = await db
+        .insert(book)
+        .values(booksToSeed)
+        .onConflictDoNothing()
+        .returning({ id: book.id });
+      createdCounter = inserted.length;
+    }
+  }
 
   console.log(
     `✅ ${existingCount} existing books 👉 ${createdCounter} books created`

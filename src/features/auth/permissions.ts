@@ -7,7 +7,8 @@ import { z } from 'zod';
 
 import { authClient } from '@/features/auth/client';
 
-type UserRole = 'user' | 'admin';
+export const rolesNames = ['admin', 'user'] as const;
+type UserRole = (typeof rolesNames)[number];
 
 const statement = {
   ...defaultStatements,
@@ -34,7 +35,6 @@ const admin = ac.newRole({
   genre: ['read'],
 });
 
-export const rolesNames = ['admin', 'user'] as const;
 export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
 export type Role = keyof typeof roles;
 const roles = {

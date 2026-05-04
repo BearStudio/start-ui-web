@@ -1,5 +1,7 @@
 /* eslint-disable sonarjs/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+declare module '@fontsource-variable/inter';
+
 /**
  * Use this type to temporary bypass to `any` without writting `any`
  * Comment the line to find where it's used

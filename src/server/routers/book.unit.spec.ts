@@ -37,13 +37,13 @@ const mockBookFromDb: BookFromDb & { genre: typeof mockGenre } = {
 
 const toExpectedBook = (mock: BookFromDb): Book => omit(mock, ['genreId']);
 
-const buildPgError = (code: string, detail?: string) => {
+const buildPgError = (code: string, constraint?: string) => {
   const error = new Error('PG error') as Error & {
     code: string;
-    detail?: string;
+    constraint?: string;
   };
   error.code = code;
-  error.detail = detail;
+  error.constraint = constraint;
   return error;
 };
 
@@ -84,6 +84,20 @@ describe('book router', () => {
       const result = await call(bookRouter.getAll, { limit: 5 });
 
       expect(result.nextCursor).toBeUndefined();
+    });
+
+    it('should return an empty page when the cursor no longer exists', async () => {
+      mockDb.query.book.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(bookRouter.getAll, { cursor: 'deleted-book' });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.book.findMany).not.toHaveBeenCalled();
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
@@ -200,12 +214,7 @@ describe('book router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.insert.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (title, author)=(New Book, New Author) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
 
       await expect(call(bookRouter.create, createInput)).rejects.toMatchObject({
@@ -280,12 +289,7 @@ describe('book router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.update.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (title, author)=(Updated Title, Updated Author) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'book_title_author_key'))
       );
 
       await expect(

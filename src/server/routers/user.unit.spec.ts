@@ -53,13 +53,13 @@ const mockSessionFromDb = {
   expiresAt: new Date(Date.now() + 86400000),
 };
 
-const buildPgError = (code: string, detail?: string) => {
+const buildPgError = (code: string, constraint?: string) => {
   const error = new Error('PG error') as Error & {
     code: string;
-    detail?: string;
+    constraint?: string;
   };
   error.code = code;
-  error.detail = detail;
+  error.constraint = constraint;
   return error;
 };
 
@@ -100,6 +100,20 @@ describe('user router', () => {
       const result = await call(userRouter.getAll, { limit: 5 });
 
       expect(result.nextCursor).toBeUndefined();
+    });
+
+    it('should return an empty page when the cursor no longer exists', async () => {
+      mockDb.query.user.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(userRouter.getAll, { cursor: 'deleted-user' });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.user.findMany).not.toHaveBeenCalled();
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
@@ -210,9 +224,7 @@ describe('user router', () => {
 
     it('should throw CONFLICT on unique constraint violation', async () => {
       mockDb.insert.mockReturnValueOnce(
-        chainResult(
-          buildPgError('23505', 'Key (email)=(new@example.com) already exists.')
-        )
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(call(userRouter.create, createInput)).rejects.toMatchObject({
@@ -325,12 +337,7 @@ describe('user router', () => {
         email: 'target@example.com',
       });
       mockDb.update.mockReturnValueOnce(
-        chainResult(
-          buildPgError(
-            '23505',
-            'Key (email)=(updated@example.com) already exists.'
-          )
-        )
+        chainResult(buildPgError('23505', 'user_email_key'))
       );
 
       await expect(
@@ -494,6 +501,23 @@ describe('user router', () => {
       expect(result.items).toHaveLength(3);
       expect(result.nextCursor).toBe('session-4');
       expect(result.total).toBe(10);
+    });
+
+    it('should return an empty page when the session cursor no longer exists', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(userRouter.getUserSessions, {
+        userId: 'target-user-1',
+        cursor: 'deleted-session',
+      });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.session.findMany).not.toHaveBeenCalled();
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {

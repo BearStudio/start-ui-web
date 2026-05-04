@@ -1,4 +1,4 @@
-import { and, asc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
@@ -48,10 +48,23 @@ export default {
           })
         : undefined;
 
+      if (input.cursor && !cursorRow) {
+        const [totalResult] = await context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(genre)
+          .where(searchFilter);
+
+        return {
+          items: [],
+          nextCursor: undefined,
+          total: totalResult?.count ?? 0,
+        };
+      }
+
       const cursorFilter = cursorRow
         ? or(
             gt(genre.name, cursorRow.name),
-            and(eq(genre.name, cursorRow.name), gte(genre.id, cursorRow.id))
+            and(eq(genre.name, cursorRow.name), gt(genre.id, cursorRow.id))
           )
         : undefined;
 

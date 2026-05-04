@@ -1,3 +1,4 @@
+import { ORPCError } from '@orpc/client';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -21,13 +22,18 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db
+      const [updatedUser] = await context.db
         .update(user)
         .set({
           ...input,
           onboardedAt: new Date(),
         })
-        .where(eq(user.id, context.user.id));
+        .where(eq(user.id, context.user.id))
+        .returning({ id: user.id });
+
+      if (!updatedUser) {
+        throw new ORPCError('NOT_FOUND', { message: 'Account not found' });
+      }
     }),
 
   updateInfo: protectedProcedure({
@@ -46,11 +52,16 @@ export default {
     .output(z.void())
     .handler(async ({ context, input }) => {
       context.logger.info('Update user');
-      await context.db
+      const [updatedUser] = await context.db
         .update(user)
         .set({
           name: input.name ?? '',
         })
-        .where(eq(user.id, context.user.id));
+        .where(eq(user.id, context.user.id))
+        .returning({ id: user.id });
+
+      if (!updatedUser) {
+        throw new ORPCError('NOT_FOUND', { message: 'Account not found' });
+      }
     }),
 };

@@ -37,7 +37,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
+      ComponentProps<typeof Combobox<TItem, true>>,
       'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
     > & {
         items: TItem[];
@@ -65,20 +65,22 @@ export const FieldComboboxMultiple = <TItem extends Item>(
 
   return (
     <FormFieldContainer {...containerProps}>
-      <Combobox
+      <Combobox<TItem, true>
         {...rest}
         multiple
         items={items}
         disabled={field.disabled}
         value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
-        isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
-          item.value === selectedValue.value
+        isItemEqualToValue={(item, selectedValue) =>
+          (item as TItem).value === (selectedValue as TItem).value
         }
-        itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
-        itemToStringValue={(item: TItem) => item.value}
-        onValueChange={(items: TItem[], event) => {
-          field.onChange(items?.map((i) => i.value) ?? [], event);
-          rest.onValueChange?.(items?.map((i) => i.value) ?? [], event);
+        itemToStringLabel={(item) => (item as TItem).label?.toString() ?? ''}
+        itemToStringValue={(item) => String((item as TItem).value ?? '')}
+        onValueChange={(items, event) => {
+          const selectedItems = (items ?? []) as TItem[];
+          const selectedValues = selectedItems.map((i) => i.value);
+          field.onChange(selectedValues, event);
+          rest.onValueChange?.(selectedValues, event);
         }}
         inputRef={field.ref}
       >

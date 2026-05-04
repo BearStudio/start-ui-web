@@ -12,10 +12,22 @@ import { db } from '@/server/db';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
-type PgError = Error & { code?: string; constraint?: string; detail?: string };
+type PgError = Error & { code: string; constraint?: string };
 
-const isPgError = (error: unknown): error is PgError =>
-  error instanceof Error && 'code' in error && typeof error.code === 'string';
+const uniqueConstraintTargets: Record<string, string[]> = {
+  account_provider_account_key: ['providerId', 'accountId'],
+  book_title_author_key: ['title', 'author'],
+  genre_name_key: ['name'],
+  session_token_key: ['token'],
+  user_email_key: ['email'],
+  verification_identifier_value_key: ['identifier', 'value'],
+};
+
+const isPgError = (error: unknown): error is PgError => {
+  const code =
+    error instanceof Error ? (error as { code?: unknown }).code : undefined;
+  return typeof code === 'string' && /^[A-Z0-9]{5}$/.test(code);
+};
 
 const base = os
   .$context<ResponseHeadersPluginContext>()
@@ -125,9 +137,9 @@ const base = os
       if (isPgError(error)) {
         throw match(error.code)
           .with('23505', () => {
-            const target = parseUniqueConstraintTarget(error);
+            const target = getUniqueConstraintTarget(error);
             context.logger.warn(
-              { detail: error.detail, constraint: error.constraint },
+              { constraint: error.constraint },
               `DB Error: ${error.code} ${error.message}`
             );
             return new ORPCError('CONFLICT', {
@@ -137,7 +149,7 @@ const base = os
           })
           .with('23503', () => {
             context.logger.error(
-              { detail: error.detail, constraint: error.constraint },
+              { constraint: error.constraint },
               `DB Error ${error.code}: ${error.message}`
             );
             return new ORPCError('BAD_REQUEST', {
@@ -146,7 +158,7 @@ const base = os
           })
           .otherwise(() => {
             context.logger.error(
-              { detail: error.detail, constraint: error.constraint },
+              { constraint: error.constraint },
               `DB Error ${error.code}: ${error.message}`
             );
             return new ORPCError('INTERNAL_SERVER_ERROR', {
@@ -161,13 +173,9 @@ const base = os
     }
   });
 
-function parseUniqueConstraintTarget(error: PgError): string[] | undefined {
-  const detail = error.detail;
-  if (!detail) return undefined;
-  // Parse "Key (col1, col2)=(val1, val2) already exists." into ['col1', 'col2']
-  const match = /Key \(([^)]+)\)/.exec(detail);
-  if (!match) return undefined;
-  return match[1]!.split(',').map((c) => c.trim().replace(/^"|"$/g, ''));
+function getUniqueConstraintTarget(error: PgError): string[] | undefined {
+  if (!error.constraint) return undefined;
+  return uniqueConstraintTargets[error.constraint];
 }
 
 export const publicProcedure = () => base;
