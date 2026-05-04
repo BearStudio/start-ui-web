@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -14,7 +14,7 @@ export default {
       },
     },
   },
-} satisfies Meta<typeof Calendar>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Calendar />;

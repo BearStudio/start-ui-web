@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { CheckIcon } from 'lucide-react';
 import { useId } from 'react';
 
@@ -8,7 +8,7 @@ import { Radio, RadioGroup } from '@/components/ui/radio-group';
 
 export default {
   title: 'RadioGroup',
-} satisfies Meta<typeof RadioGroup>;
+} satisfies StoryDefault;
 
 const astrobears = [
   { value: 'bearstrong', label: 'Bearstrong' },

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { User2Icon } from 'lucide-react';
 
 import {
@@ -12,7 +12,7 @@ import {
 
 export default {
   title: 'Avatar',
-} satisfies Meta<typeof Avatar>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

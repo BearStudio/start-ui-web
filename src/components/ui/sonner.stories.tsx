@@ -1,20 +1,11 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import { Sonner } from '@/components/ui/sonner';
 
 export default {
   title: 'Sonner',
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'Find everything about sonner in [Sonner docs](https://sonner.emilkowal.ski/toast)',
-      },
-    },
-  },
-} satisfies Meta<typeof Sonner>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

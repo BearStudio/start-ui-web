@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
 
 import { Logo } from '@/components/brand/logo';
@@ -22,7 +22,7 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof Sidebar>;
+} satisfies StoryDefault;
 
 // Menu items.
 const items = [

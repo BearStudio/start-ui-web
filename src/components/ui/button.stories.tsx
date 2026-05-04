@@ -1,11 +1,11 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { MailIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
 export default {
   title: 'Button',
-} satisfies Meta<typeof Button>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Button>Default</Button>;

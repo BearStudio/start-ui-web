@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { CheckIcon } from 'lucide-react';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 export default {
   title: 'Checkbox',
-} satisfies Meta<typeof Checkbox>;
+} satisfies StoryDefault;
 
 export function Default() {
   return <Checkbox>I love bears</Checkbox>;

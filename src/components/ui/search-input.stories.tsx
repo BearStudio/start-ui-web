@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,7 @@ import { SearchInput } from '@/components/ui/search-input';
 
 export default {
   title: 'SearchInput',
-} satisfies Meta<typeof SearchInput>;
+} satisfies StoryDefault;
 
 export function Default() {
   const [searchTerm, setSearchTerm] = useState('');

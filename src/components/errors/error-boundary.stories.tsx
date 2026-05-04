@@ -1,10 +1,10 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { ErrorBoundary } from '@/components/errors/error-boundary';
 
 export default {
   title: 'Errors/Error Boundary',
-} satisfies Meta<typeof ErrorBoundary>;
+} satisfies StoryDefault;
 
 const Boom = () => {
   throw new Error(

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { CheckIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -13,13 +13,11 @@ import {
   FormFieldHelper,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
-import { FieldCheckbox } from '@/components/form/field-checkbox';
 import { Button } from '@/components/ui/button';
 
 export default {
   title: 'Form/FieldCheckbox',
-  component: FieldCheckbox,
-} satisfies Meta<typeof FieldCheckbox>;
+} satisfies StoryDefault;
 
 const zFormSchema = () =>
   z.object({

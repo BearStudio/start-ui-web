@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import {
   ArrowUpIcon,
   CheckIcon,
@@ -42,7 +42,7 @@ import {
 
 export default {
   title: 'InputGroup',
-} satisfies Meta<typeof InputGroup>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

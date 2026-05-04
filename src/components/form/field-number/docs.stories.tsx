@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -11,12 +11,11 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
-import { FieldNumber } from '@/components/form/field-number';
 import { Button } from '@/components/ui/button';
 
 export default {
   title: 'Form/FieldNumber',
-} satisfies Meta<typeof FieldNumber>;
+} satisfies StoryDefault;
 
 const zFormSchema = () =>
   z.object({

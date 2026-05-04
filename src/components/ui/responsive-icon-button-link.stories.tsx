@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import {
   createMemoryHistory,
   createRootRoute,
@@ -27,8 +27,14 @@ const RouterWrapper = ({ children }: { children: ReactNode }) => {
 
 export default {
   title: 'ResponsiveIconButtonLink',
-  decorators: [(Story) => <RouterWrapper>{Story()}</RouterWrapper>],
-} satisfies Meta<typeof ResponsiveIconButtonLink>;
+  decorators: [
+    (Story) => (
+      <RouterWrapper>
+        <Story />
+      </RouterWrapper>
+    ),
+  ],
+} satisfies StoryDefault;
 
 export function Default() {
   return (

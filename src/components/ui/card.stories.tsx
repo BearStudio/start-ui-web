@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import {
   Card,
@@ -11,7 +11,7 @@ import {
 
 export default {
   title: 'Card',
-} satisfies Meta<typeof Card>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

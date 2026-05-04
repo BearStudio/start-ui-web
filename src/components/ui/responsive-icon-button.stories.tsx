@@ -1,11 +1,11 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { PlusIcon } from 'lucide-react';
 
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 export default {
   title: 'ResponsiveIconButton',
-} satisfies Meta<typeof ResponsiveIconButton>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

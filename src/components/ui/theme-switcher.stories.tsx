@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 
 export default {
   title: 'Theme Switcher',
-} satisfies Meta<typeof ThemeSwitcher>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <ThemeSwitcher />;

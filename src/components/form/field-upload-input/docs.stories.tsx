@@ -42,7 +42,7 @@ export const Default = () => {
             type="upload-input"
             name="file"
             uploadRoute="bookCover"
-            onError={() => toast.error('Cannot upload in storybook')}
+            onError={() => toast.error('Cannot upload in ladle')}
           />
         </FormField>
         <Button type="submit">Submit</Button>
@@ -55,7 +55,7 @@ export const DefaultValue = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      file: 'https://picsum.photos/seed/storybook/200/200',
+      file: 'https://picsum.photos/seed/ladle/200/200',
     },
   });
 
@@ -69,7 +69,7 @@ export const DefaultValue = () => {
             type="upload-input"
             name="file"
             uploadRoute="bookCover"
-            onError={() => toast.error('Cannot upload in storybook')}
+            onError={() => toast.error('Cannot upload in ladle')}
           />
         </FormField>
         <Button type="submit">Submit</Button>
@@ -82,7 +82,7 @@ export const Disabled = () => {
   const form = useForm({
     ...formOptions,
     defaultValues: {
-      file: 'https://picsum.photos/seed/storybook/200/200',
+      file: 'https://picsum.photos/seed/ladle/200/200',
     },
   });
 
@@ -97,7 +97,7 @@ export const Disabled = () => {
             name="file"
             uploadRoute="bookCover"
             disabled
-            onError={() => toast.error('Cannot upload in storybook')}
+            onError={() => toast.error('Cannot upload in ladle')}
           />
         </FormField>
         <Button type="submit">Submit</Button>

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { Fragment } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default {
   title: 'ScrollArea',
-} satisfies Meta<typeof ScrollArea>;
+} satisfies StoryDefault;
 
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`

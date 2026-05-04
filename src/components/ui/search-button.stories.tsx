@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,7 @@ import { SearchButton } from '@/components/ui/search-button';
 
 export default {
   title: 'SearchButton',
-} satisfies Meta<typeof SearchButton>;
+} satisfies StoryDefault;
 
 export function Default() {
   const [searchTerm, setSearchTerm] = useState('');

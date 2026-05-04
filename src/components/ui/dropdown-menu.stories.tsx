@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +13,7 @@ import {
 
 export default {
   title: 'DropdownMenu',
-} satisfies Meta<typeof DropdownMenu>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

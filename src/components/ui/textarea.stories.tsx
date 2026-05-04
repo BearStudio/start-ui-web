@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Textarea } from '@/components/ui/textarea';
 
 export default {
   title: 'Textarea',
-} satisfies Meta<typeof Textarea>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Textarea placeholder="Placeholder..." />;

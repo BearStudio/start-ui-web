@@ -1,18 +1,18 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { toast } from 'sonner';
 
 import { UploadInput } from './upload-input';
 
 export default {
   title: 'Upload/UploadInput',
-} satisfies Meta<typeof UploadInput>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (
     <UploadInput
       uploadRoute="bookCover"
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -23,7 +23,7 @@ export const WithDocument = () => {
       uploadRoute="bookCover"
       defaultValue={{ name: 'document.txt' }}
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -34,10 +34,10 @@ export const WithImage = () => {
       uploadRoute="bookCover"
       defaultValue={{
         name: 'cover.jpg',
-        url: 'https://picsum.photos/seed/storybook/200/200',
+        url: 'https://picsum.photos/seed/ladle/200/200',
       }}
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -51,7 +51,7 @@ export const WithAcceptFilter = () => {
       }}
       placeholder="Drop an image here, or click to browse"
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -62,7 +62,7 @@ export const CustomPlaceholder = () => {
       uploadRoute="bookCover"
       placeholder="Upload your document..."
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -74,18 +74,18 @@ export const Sizes = () => {
         size="sm"
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       />
       <UploadInput
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       />
       <UploadInput
         size="lg"
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       />
     </div>
   );
@@ -97,7 +97,7 @@ export const Disabled = () => {
       disabled
       uploadRoute="bookCover"
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };

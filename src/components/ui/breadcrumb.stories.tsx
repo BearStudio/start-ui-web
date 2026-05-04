@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import {
   Breadcrumb,
@@ -18,7 +18,7 @@ import {
 
 export default {
   title: 'Breadcrumb',
-} satisfies Meta<typeof Breadcrumb>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

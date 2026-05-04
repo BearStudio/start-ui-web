@@ -1,10 +1,10 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { PageError } from '@/components/errors/page-error';
 
 export default {
   title: 'Errors/Page Error',
-} satisfies Meta<typeof PageError>;
+} satisfies StoryDefault;
 
 export const Error404 = () => {
   return <PageError type="404" />;

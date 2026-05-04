@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useDisclosure } from 'react-use-disclosure';
@@ -23,7 +23,7 @@ export default {
       },
     },
   },
-} satisfies Meta<typeof DateInput>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <DateInput onChange={onSubmit} />;

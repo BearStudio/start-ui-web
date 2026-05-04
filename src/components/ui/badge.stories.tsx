@@ -1,11 +1,11 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { MailIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 
 export default {
   title: 'Badge',
-} satisfies Meta<typeof Badge>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

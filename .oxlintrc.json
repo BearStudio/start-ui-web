@@ -5,8 +5,7 @@
     "@tanstack/eslint-plugin-query",
     "@tanstack/eslint-plugin-router",
     "eslint-plugin-simple-import-sort",
-    "eslint-plugin-sonarjs",
-    "eslint-plugin-storybook"
+    "eslint-plugin-sonarjs"
   ],
   "categories": {
     "correctness": "error"
@@ -81,22 +80,6 @@
       ],
       "rules": {
         "unicorn/filename-case": "off"
-      }
-    },
-    {
-      "files": ["**/*.stories.*"],
-      "rules": {
-        "storybook/await-interactions": "error",
-        "storybook/context-in-play-function": "error",
-        "storybook/default-exports": "error",
-        "storybook/hierarchy-separator": "warn",
-        "storybook/no-redundant-story-name": "warn",
-        "storybook/no-renderer-packages": "error",
-        "storybook/prefer-pascal-case": "warn",
-        "storybook/story-exports": "error",
-        "storybook/use-storybook-expect": "error",
-        "storybook/use-storybook-testing-library": "error",
-        "storybook/no-uninstalled-addons": "error"
       }
     }
   ]

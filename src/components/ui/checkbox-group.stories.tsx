@@ -1,11 +1,10 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { CheckboxGroup } from '@/components/ui/checkbox-group';
 export default {
   title: 'CheckboxGroup',
-  component: CheckboxGroup,
-} satisfies Meta<typeof CheckboxGroup>;
+} satisfies StoryDefault;
 
 const astrobears = [
   { value: 'bearstrong', label: 'Bearstrong', disabled: false },

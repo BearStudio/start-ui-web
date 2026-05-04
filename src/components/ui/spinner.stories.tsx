@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Spinner } from '@/components/ui/spinner';
 
 export default {
   title: 'Spinner',
-} satisfies Meta<typeof Spinner>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Spinner />;

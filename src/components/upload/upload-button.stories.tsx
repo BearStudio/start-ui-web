@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { UploadIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -6,7 +6,7 @@ import { UploadButton } from '@/components/upload/upload-button';
 
 export default {
   title: 'Upload/UploadButton',
-} satisfies Meta<typeof UploadButton>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (
@@ -16,7 +16,7 @@ export const Default = () => {
         accept: 'image/png,image/jpeg,image/gif',
       }}
       onSuccess={(file) => console.log('uploaded file', file)}
-      onError={() => toast.error('Cannot upload in storybook')}
+      onError={() => toast.error('Cannot upload in ladle')}
     />
   );
 };
@@ -27,7 +27,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       >
         <UploadIcon />
         Upload a new file
@@ -36,7 +36,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       >
         Upload a new file
         <UploadIcon />
@@ -45,7 +45,7 @@ export const WithChildren = () => {
       <UploadButton
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       >
         Upload a new file
       </UploadButton>
@@ -60,7 +60,7 @@ export const Disabled = () => {
         disabled
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       >
         <UploadIcon />
         Upload a new file
@@ -70,7 +70,7 @@ export const Disabled = () => {
         disabled
         uploadRoute="bookCover"
         onSuccess={(file) => console.log('uploaded file', file)}
-        onError={() => toast.error('Cannot upload in storybook')}
+        onError={() => toast.error('Cannot upload in ladle')}
       >
         Upload a new file
         <UploadIcon />

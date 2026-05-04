@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +15,7 @@ import {
 
 export default {
   title: 'ResponsiveDrawer',
-} satisfies Meta<typeof ResponsiveDrawer>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

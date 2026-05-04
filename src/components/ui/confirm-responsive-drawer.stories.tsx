@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,7 @@ import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-draw
 
 export default {
   title: 'ConfirmResponsiveDrawer',
-} satisfies Meta<typeof ConfirmResponsiveDrawer>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

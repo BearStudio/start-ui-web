@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
             });
           },
         ],
-        routeRules: { '/storybook': { redirect: '/storybook/' } },
+        routeRules: { '/ladle': { redirect: '/ladle/' } },
       }),
       // react's vite plugin must come after start's vite plugin
       viteReact({

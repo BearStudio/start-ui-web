@@ -14,8 +14,7 @@
 .vinxi
 /dist
 /build
-/public/storybook
-/storybook-static
+/public/ladle
 
 # misc
 .DS_Store
@@ -59,7 +58,7 @@ e2e/.auth
 
 certificates
 
-*storybook.log
+*ladle.log
 app.config.timestamp_*.js
 .tanstack
 .nitro

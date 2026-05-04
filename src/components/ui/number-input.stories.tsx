@@ -1,11 +1,11 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useState } from 'react';
 
 import { NumberInput } from '@/components/ui/number-input';
 
 export default {
   title: 'NumberInput',
-} satisfies Meta<typeof NumberInput>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <NumberInput />;

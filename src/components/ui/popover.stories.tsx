@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { useForm } from 'react-hook-form';
 import { useDisclosure } from 'react-use-disclosure';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ import {
 
 export default {
   title: 'Popover',
-} satisfies Meta<typeof Popover>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { onSubmit } from '@/components/form/docs.utils';
 import {
@@ -9,7 +9,7 @@ import {
 
 export default {
   title: 'InputOTP',
-} satisfies Meta<typeof InputOTP>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return (

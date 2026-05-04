@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default {
   title: 'Skeleton',
-} satisfies Meta<typeof Skeleton>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

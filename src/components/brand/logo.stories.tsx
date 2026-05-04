@@ -1,10 +1,10 @@
-import { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Logo } from '@/components/brand/logo';
 
 export default {
   title: 'Brand/Logo',
-} satisfies Meta<typeof Logo>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Logo className="w-32" />;

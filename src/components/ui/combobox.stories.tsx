@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import * as React from 'react';
 
 import {
@@ -18,7 +18,7 @@ import {
 
 export default {
   title: 'Combobox',
-} satisfies Meta<typeof Combobox>;
+} satisfies StoryDefault;
 
 const options = [
   { id: 1, label: 'Apple' },

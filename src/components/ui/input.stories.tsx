@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 import { MailIcon } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -6,7 +6,7 @@ import { InputGroupText } from '@/components/ui/input-group';
 
 export default {
   title: 'Input',
-} satisfies Meta<typeof Input>;
+} satisfies StoryDefault;
 
 export const Default = () => {
   return <Input placeholder="Placeholder..." />;

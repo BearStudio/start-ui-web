@@ -14,8 +14,7 @@
 
 # production
 /build
-/public/storybook
-/storybook-static
+/public/ladle
 
 # misc
 .DS_Store

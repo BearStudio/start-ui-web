@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +10,7 @@ import {
 
 export default {
   title: 'Tooltip',
-} satisfies Meta<typeof Tooltip>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (

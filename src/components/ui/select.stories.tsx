@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import {
   Select,
@@ -12,7 +12,7 @@ import {
 
 export default {
   title: 'Select',
-} satisfies Meta<typeof Select>;
+} satisfies StoryDefault;
 
 const items = [
   {

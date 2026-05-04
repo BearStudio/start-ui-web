@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
+import type { StoryDefault } from '@ladle/react';
 
 import { Separator } from '@/components/ui/separator';
 
 export default {
   title: 'Separator',
-} satisfies Meta<typeof Separator>;
+} satisfies StoryDefault;
 
 export function Default() {
   return (
