@@ -32,7 +32,10 @@ export const DemoModeDrawer = () => {
   const setOpen = useStore((state) => state.setOpen);
 
   return (
-    <ResponsiveDrawer open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
+    <ResponsiveDrawer
+      open={open}
+      onOpenChange={(isOpen: boolean) => setOpen(isOpen)}
+    >
       <ResponsiveDrawerContent dir="ltr">
         <ResponsiveDrawerHeader>
           <ResponsiveDrawerTitle>👋 Demo Mode</ResponsiveDrawerTitle>

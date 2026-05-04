@@ -77,11 +77,12 @@ export const ResponsiveDrawerContent = ({
   ...props
 }: Omit<
   ComponentProps<typeof DialogContent | typeof DrawerContent>,
-  'render' | 'className'
+  'render' | 'className' | 'style'
 > & {
-  // `className` and `render` types are not compatible
+  // `className`, `render`, and state-aware `style` types are not compatible
   render?: React.ReactElement;
   className?: string;
+  style?: React.CSSProperties;
   // Only for DialogContent
   hideCloseButton?: boolean;
 }) =>

@@ -34,11 +34,7 @@ export default defineConfig(({ mode }) => {
         routeRules: { '/storybook': { redirect: '/storybook/' } },
       }),
       // react's vite plugin must come after start's vite plugin
-      viteReact({
-        babel: {
-          plugins: ['babel-plugin-react-compiler'],
-        },
-      }),
+      viteReact(),
       // Copy prisma binaries at the end
       prismaCopyBinariesPlugin(),
     ],

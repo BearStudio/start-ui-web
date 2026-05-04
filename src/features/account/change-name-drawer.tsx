@@ -57,7 +57,7 @@ export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   return (
     <ResponsiveDrawer
       open={open}
-      onOpenChange={(isOpen) => {
+      onOpenChange={(isOpen: boolean) => {
         setOpen(isOpen);
         form.reset();
       }}

@@ -1,6 +1,7 @@
 import {
   cloneElement,
   ComponentProps,
+  KeyboardEvent,
   ReactElement,
   ReactNode,
   useState,
@@ -72,7 +73,7 @@ export const ConfirmResponsiveDrawer = (props: {
       {childrenWithOnOpen}
       <ResponsiveDrawer
         open={isOpen}
-        onOpenChange={(isOpen) => {
+        onOpenChange={(isOpen: boolean) => {
           if (isOpen) {
             open();
             return;
@@ -83,7 +84,7 @@ export const ConfirmResponsiveDrawer = (props: {
         <ResponsiveDrawerContent
           hideCloseButton
           className="sm:max-w-xs"
-          onKeyDown={(e) => {
+          onKeyDown={(e: KeyboardEvent) => {
             if (e.key === 'Enter') {
               e.preventDefault();
               handleConfirm();

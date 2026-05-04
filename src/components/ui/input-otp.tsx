@@ -1,8 +1,8 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { OTPInput, OTPInputContext as OTPInputContextFromLib } from 'input-otp';
 import { MinusIcon } from 'lucide-react';
-import { ReactNode } from 'react';
 import * as React from 'react';
+import { ReactNode } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 

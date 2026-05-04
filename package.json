@@ -74,6 +74,7 @@
     "@orpc/react-query": "1.14.0",
     "@orpc/server": "1.14.0",
     "@orpc/zod": "1.14.0",
+    "@paralleldrive/cuid2": "^3.3.0",
     "@react-email/components": "1.0.12",
     "@react-email/render": "2.0.8",
     "@t3-oss/env-core": "0.13.11",

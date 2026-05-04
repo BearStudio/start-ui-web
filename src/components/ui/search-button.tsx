@@ -37,7 +37,7 @@ const SearchButtonComponent = ({
     <Drawer
       swipeDirection="up"
       open={open}
-      onOpenChange={(o) => {
+      onOpenChange={(o: boolean) => {
         onChange?.(internalValue ?? '');
         setOpen(o);
       }}
