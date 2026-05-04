@@ -102,6 +102,20 @@ describe('user router', () => {
       expect(result.nextCursor).toBeUndefined();
     });
 
+    it('should return an empty page when the cursor no longer exists', async () => {
+      mockDb.query.user.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(userRouter.getAll, { cursor: 'deleted-user' });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.user.findMany).not.toHaveBeenCalled();
+    });
+
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
       mockGetSession.mockResolvedValue(null);
 
@@ -487,6 +501,23 @@ describe('user router', () => {
       expect(result.items).toHaveLength(3);
       expect(result.nextCursor).toBe('session-4');
       expect(result.total).toBe(10);
+    });
+
+    it('should return an empty page when the session cursor no longer exists', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(userRouter.getUserSessions, {
+        userId: 'target-user-1',
+        cursor: 'deleted-session',
+      });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.session.findMany).not.toHaveBeenCalled();
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {

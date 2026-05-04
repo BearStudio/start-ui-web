@@ -10,7 +10,9 @@ function createDb() {
     connectionString: envServer.DATABASE_URL,
   });
 
-  return drizzle(pool, { schema, casing: 'camelCase' });
+  return Object.assign(drizzle(pool, { schema, casing: 'camelCase' }), {
+    $client: pool,
+  });
 }
 
 const globalForDb = globalThis as unknown as {

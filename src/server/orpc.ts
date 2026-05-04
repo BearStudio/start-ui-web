@@ -12,19 +12,22 @@ import { db } from '@/server/db';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
-type PgError = Error & { code: '23505' | '23503'; constraint?: string };
+type PgError = Error & { code: string; constraint?: string };
 
 const uniqueConstraintTargets: Record<string, string[]> = {
+  account_provider_account_key: ['providerId', 'accountId'],
   book_title_author_key: ['title', 'author'],
   genre_name_key: ['name'],
   session_token_key: ['token'],
   user_email_key: ['email'],
+  verification_identifier_value_key: ['identifier', 'value'],
 };
 
-const isPgError = (error: unknown): error is PgError =>
-  error instanceof Error &&
-  'code' in error &&
-  (error.code === '23505' || error.code === '23503');
+const isPgError = (error: unknown): error is PgError => {
+  const code =
+    error instanceof Error ? (error as { code?: unknown }).code : undefined;
+  return typeof code === 'string' && /^[A-Z0-9]{5}$/.test(code);
+};
 
 const base = os
   .$context<ResponseHeadersPluginContext>()

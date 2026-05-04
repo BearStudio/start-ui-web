@@ -86,6 +86,20 @@ describe('book router', () => {
       expect(result.nextCursor).toBeUndefined();
     });
 
+    it('should return an empty page when the cursor no longer exists', async () => {
+      mockDb.query.book.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(bookRouter.getAll, { cursor: 'deleted-book' });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.book.findMany).not.toHaveBeenCalled();
+    });
+
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
       mockGetSession.mockResolvedValue(null);
 

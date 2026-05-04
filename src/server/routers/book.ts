@@ -1,5 +1,5 @@
 import { ORPCError } from '@orpc/client';
-import { and, asc, eq, gt, gte, ilike, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
@@ -53,10 +53,23 @@ export default {
           })
         : undefined;
 
+      if (input.cursor && !cursorRow) {
+        const [totalResult] = await context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(book)
+          .where(searchFilter);
+
+        return {
+          items: [],
+          nextCursor: undefined,
+          total: totalResult?.count ?? 0,
+        };
+      }
+
       const cursorFilter = cursorRow
         ? or(
             gt(book.title, cursorRow.title),
-            and(eq(book.title, cursorRow.title), gte(book.id, cursorRow.id))
+            and(eq(book.title, cursorRow.title), gt(book.id, cursorRow.id))
           )
         : undefined;
 

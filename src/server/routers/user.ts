@@ -1,6 +1,6 @@
 import { ORPCError } from '@orpc/client';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { and, asc, desc, eq, gt, gte, ilike, lt, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, ilike, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { zSession, zUser } from '@/features/user/schema';
@@ -52,10 +52,23 @@ export default {
           })
         : undefined;
 
+      if (input.cursor && !cursorRow) {
+        const [totalResult] = await context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(user)
+          .where(searchFilter);
+
+        return {
+          items: [],
+          nextCursor: undefined,
+          total: totalResult?.count ?? 0,
+        };
+      }
+
       const cursorFilter = cursorRow
         ? or(
             gt(user.name, cursorRow.name),
-            and(eq(user.name, cursorRow.name), gte(user.id, cursorRow.id))
+            and(eq(user.name, cursorRow.name), gt(user.id, cursorRow.id))
           )
         : undefined;
 
@@ -155,7 +168,10 @@ export default {
         .set({
           name: input.name ?? '',
           // Prevent to change role of the connected user
-          role: context.user.id === input.id ? undefined : input.role,
+          role:
+            context.user.id === input.id
+              ? undefined
+              : (input.role ?? undefined),
           email: input.email,
           // Set email as verified if admin changed the email
           emailVerified: currentUser.email !== input.email ? true : undefined,
@@ -281,11 +297,24 @@ export default {
           })
         : undefined;
 
+      if (input.cursor && !cursorRow) {
+        const [totalResult] = await context.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(session)
+          .where(userIdFilter);
+
+        return {
+          items: [],
+          nextCursor: undefined,
+          total: totalResult?.count ?? 0,
+        };
+      }
+
       const cursorFilter = cursorRow
         ? or(
             and(
               eq(session.createdAt, cursorRow.createdAt),
-              gte(session.id, cursorRow.id)
+              gt(session.id, cursorRow.id)
             ),
             lt(session.createdAt, cursorRow.createdAt)
           )

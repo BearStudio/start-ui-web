@@ -1,10 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { sql } from 'drizzle-orm';
+import { notInArray, sql } from 'drizzle-orm';
 
 import { db } from '@/server/db';
 import { user } from '@/server/db/schema';
 
 import { emphasis } from './_utils';
+
+const demoUserEmails = ['user@user.com', 'admin@admin.com'];
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
@@ -12,11 +14,12 @@ export async function createUsers() {
   let createdCounter = 0;
   const [countRow] = await db
     .select({ count: sql<number>`cast(count(*) as integer)` })
-    .from(user);
-  const existingCount = countRow?.count ?? 0;
+    .from(user)
+    .where(notInArray(user.email, demoUserEmails));
+  const existingRandomUserCount = countRow?.count ?? 0;
 
   const usersToSeed = Array.from(
-    { length: Math.max(0, 98 - existingCount) },
+    { length: Math.max(0, 98 - existingRandomUserCount) },
     () => ({
       name: faker.person.fullName(),
       email: faker.internet.email().toLowerCase(),
@@ -65,7 +68,7 @@ export async function createUsers() {
   }
 
   console.log(
-    `✅ ${existingCount} existing user 👉 ${createdCounter} users created`
+    `✅ ${existingRandomUserCount} existing random users 👉 ${createdCounter} users created`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);

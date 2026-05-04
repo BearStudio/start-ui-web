@@ -30,7 +30,7 @@ export const user = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
 
-    role: userRoleEnum('role'),
+    role: userRoleEnum('role').default('user').notNull(),
     banned: boolean('banned'),
     banReason: text('banReason'),
     banExpires: timestamp('banExpires', { precision: 3, mode: 'date' }),
@@ -100,7 +100,13 @@ export const account = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index('account_user_id_idx').on(table.userId)]
+  (table) => [
+    index('account_user_id_idx').on(table.userId),
+    uniqueIndex('account_provider_account_key').on(
+      table.providerId,
+      table.accountId
+    ),
+  ]
 );
 
 export const verification = pgTable(
@@ -123,7 +129,13 @@ export const verification = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index('verification_identifier_idx').on(table.identifier)]
+  (table) => [
+    index('verification_identifier_idx').on(table.identifier),
+    uniqueIndex('verification_identifier_value_key').on(
+      table.identifier,
+      table.value
+    ),
+  ]
 );
 
 export const genre = pgTable(

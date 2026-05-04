@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import accountRouter from '@/server/routers/account';
 import {
+  chainResult,
+  mockDb,
   mockGetSession,
   mockUserHasPermission,
 } from '@/server/routers/test-utils';
@@ -12,15 +14,29 @@ describe('account router', () => {
     const onboardingInput = { name: 'Test User' };
 
     it('should succeed for an authenticated user', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([{ id: 'user-1' }]));
+
       await expect(
         call(accountRouter.submitOnboarding, onboardingInput)
       ).resolves.toBeUndefined();
     });
 
     it('should not require any specific permission', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([{ id: 'user-1' }]));
+
       await call(accountRouter.submitOnboarding, onboardingInput);
 
       expect(mockUserHasPermission).not.toHaveBeenCalled();
+    });
+
+    it('should throw NOT_FOUND when the account row no longer exists', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([]));
+
+      await expect(
+        call(accountRouter.submitOnboarding, onboardingInput)
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
+      });
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
@@ -38,15 +54,29 @@ describe('account router', () => {
     const updateInput = { name: 'Updated Name' };
 
     it('should succeed for an authenticated user', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([{ id: 'user-1' }]));
+
       await expect(
         call(accountRouter.updateInfo, updateInput)
       ).resolves.toBeUndefined();
     });
 
     it('should not require any specific permission', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([{ id: 'user-1' }]));
+
       await call(accountRouter.updateInfo, updateInput);
 
       expect(mockUserHasPermission).not.toHaveBeenCalled();
+    });
+
+    it('should throw NOT_FOUND when the account row no longer exists', async () => {
+      mockDb.update.mockReturnValueOnce(chainResult([]));
+
+      await expect(
+        call(accountRouter.updateInfo, updateInput)
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
+      });
     });
 
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {

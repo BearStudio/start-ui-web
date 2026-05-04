@@ -77,7 +77,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         itemToStringLabel={(item) => (item as TItem).label?.toString() ?? ''}
         itemToStringValue={(item) => String((item as TItem).value ?? '')}
         onValueChange={(items, event) => {
-          const selectedItems = items as TItem[];
+          const selectedItems = (items ?? []) as TItem[];
           const selectedValues = selectedItems.map((i) => i.value);
           field.onChange(selectedValues, event);
           rest.onValueChange?.(selectedValues, event);

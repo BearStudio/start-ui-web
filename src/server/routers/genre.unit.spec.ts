@@ -59,6 +59,22 @@ describe('genre router', () => {
       expect(result.nextCursor).toBeUndefined();
     });
 
+    it('should return an empty page when the cursor no longer exists', async () => {
+      mockDb.query.genre.findFirst.mockResolvedValue(undefined);
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 10 }]));
+
+      const result = await call(genreRouter.getAll, {
+        cursor: 'deleted-genre',
+      });
+
+      expect(result).toEqual({
+        items: [],
+        nextCursor: undefined,
+        total: 10,
+      });
+      expect(mockDb.query.genre.findMany).not.toHaveBeenCalled();
+    });
+
     it('should throw UNAUTHORIZED when user is not authenticated', async () => {
       mockGetSession.mockResolvedValue(null);
 
