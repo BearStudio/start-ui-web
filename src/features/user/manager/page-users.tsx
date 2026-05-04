@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -31,6 +30,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { userQueries } from '@/server/functions/queries';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);
@@ -47,15 +47,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   };
 
   const usersQuery = useInfiniteQuery(
-    orpc.user.getAll.infiniteOptions({
-      input: (cursor: string | undefined) => ({
-        searchTerm: props.search.searchTerm,
-        cursor,
-      }),
-      initialPageParam: undefined,
-      maxPages: 10,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
+    userQueries.getAllInfinite({ searchTerm: props.search.searchTerm })
   );
 
   const ui = getUiState((set) => {

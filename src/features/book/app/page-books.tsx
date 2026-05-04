@@ -3,8 +3,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-import { orpc } from '@/lib/orpc/client';
-
 import { PageError } from '@/components/errors/page-error';
 import { Button } from '@/components/ui/button';
 
@@ -15,19 +13,11 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
+import { bookQueries } from '@/server/functions/queries';
 
 export const PageBooks = () => {
   const { t } = useTranslation(['book']);
-  const booksQuery = useInfiniteQuery(
-    orpc.book.getAll.infiniteOptions({
-      input: (cursor: string | undefined) => ({
-        cursor,
-      }),
-      initialPageParam: undefined,
-      maxPages: 10,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
-  );
+  const booksQuery = useInfiniteQuery(bookQueries.getAllInfinite());
 
   const ui = getUiState((set) => {
     if (booksQuery.status === 'pending') return set('pending');

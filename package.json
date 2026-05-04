@@ -39,6 +39,7 @@
     "cosmos-export": "cosmos-export",
     "format": "oxfmt",
     "lint": "run-p lint:*",
+    "lint:deps": "depcruise src --config .dependency-cruiser.cjs",
     "lint:oxlint": "oxlint --fix .",
     "lint:ts": "tsc --noEmit",
     "gen:build-info": "dotenv -- node ./run-jiti ./src/features/build-info/script-to-generate-json.ts",
@@ -67,12 +68,6 @@
     "@better-upload/server": "3.0.18",
     "@fontsource-variable/inter": "5.2.8",
     "@hookform/resolvers": "5.2.2",
-    "@neondatabase/serverless": "^1.1.0",
-    "@orpc/client": "1.14.0",
-    "@orpc/openapi": "1.14.0",
-    "@orpc/react-query": "1.14.0",
-    "@orpc/server": "1.14.0",
-    "@orpc/zod": "1.14.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@react-email/render": "2.0.8",
     "@t3-oss/env-core": "0.13.11",
@@ -177,7 +172,8 @@
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
-      "body-parser": "1.20.4"
+      "body-parser": "1.20.4",
+      "effect": "3.21.2"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",

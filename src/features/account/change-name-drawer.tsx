@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { orpc } from '@/lib/orpc/client';
-
 import {
   Form,
   FormField,
@@ -30,6 +28,7 @@ import {
   zFormFieldsAccountUpdateName,
 } from '@/features/account/schema';
 import { authClient } from '@/features/auth/client';
+import { accountQueries } from '@/server/functions/queries';
 
 export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
@@ -42,17 +41,16 @@ export const ChangeNameDrawer = (props: { children: ReactElement }) => {
     },
   });
 
-  const updateUser = useMutation(
-    orpc.account.updateInfo.mutationOptions({
-      onSuccess: async () => {
-        await session.refetch();
-        toast.success(t('account:changeNameDrawer.successMessage'));
-        form.reset();
-        setOpen(false);
-      },
-      onError: () => toast.error(t('account:changeNameDrawer.errorMessage')),
-    })
-  );
+  const updateUser = useMutation({
+    ...accountQueries.updateInfo(),
+    onSuccess: async () => {
+      await session.refetch();
+      toast.success(t('account:changeNameDrawer.successMessage'));
+      form.reset();
+      setOpen(false);
+    },
+    onError: () => toast.error(t('account:changeNameDrawer.errorMessage')),
+  });
 
   return (
     <ResponsiveDrawer

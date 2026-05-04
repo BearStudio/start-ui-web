@@ -46,7 +46,7 @@
       "revokeError": "Imeshindikana kubatilisha kikao",
       "userSessions": "Vikao vya mtumiaji",
       "noSessions": "Hakuna vikao vya mtumiaji",
-      "session": "Kikao {{token}}",
+      "session": "Kikao {{id}}",
       "sessionUpdated": "Kimesasishwa {{time}}",
       "sessionExpires": "Kinaisha {{time}}",
       "editUser": "Hariri mtumiaji"

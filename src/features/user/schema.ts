@@ -30,10 +30,11 @@ export type Session = z.infer<ReturnType<typeof zSession>>;
 export const zSession = () =>
   z.object({
     id: z.string(),
-    token: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
     expiresAt: z.date(),
+    ipAddress: z.string().nullish(),
+    userAgent: z.string().nullish(),
   });
 
 export type FormFieldsUser = z.infer<ReturnType<typeof zFormFieldsUser>>;

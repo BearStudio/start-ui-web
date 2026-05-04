@@ -1,10 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
-import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
@@ -20,18 +17,18 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
+import { bookQueries } from '@/server/functions/queries';
+import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
-  const bookQuery = useQuery(
-    orpc.book.getById.queryOptions({ input: { id: props.params.id } })
-  );
+  const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
 
   const ui = getUiState((set) => {
     if (bookQuery.status === 'pending') return set('pending');
     if (
       bookQuery.status === 'error' &&
-      bookQuery.error instanceof ORPCError &&
+      isServerFnError(bookQuery.error) &&
       bookQuery.error.code === 'NOT_FOUND'
     )
       return set('not-found');

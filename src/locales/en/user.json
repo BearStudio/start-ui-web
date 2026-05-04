@@ -46,7 +46,7 @@
       "revokeError": "Failed to revoke session",
       "userSessions": "User Sessions",
       "noSessions": "No user sessions",
-      "session": "Session {{token}}",
+      "session": "Session {{id}}",
       "sessionUpdated": "Updated {{time}}",
       "sessionExpires": "Expires {{time}}",
       "editUser": "Edit user"

@@ -3,10 +3,11 @@ import { beforeEach, vi } from 'vitest';
 import {
   mockDb,
   mockGetSession,
+  mockLogger,
   mockUserHasPermission,
   resetMockDb,
   setupAuthenticatedUser,
-} from '@/server/routers/test-utils';
+} from '@/server/functions/test-utils';
 
 vi.mock('@/server/auth', () => ({
   auth: {
@@ -19,6 +20,7 @@ vi.mock('@/server/auth', () => ({
 
 vi.mock('@tanstack/react-start/server', () => ({
   getRequestHeaders: () => new Headers(),
+  setResponseHeader: vi.fn(),
 }));
 
 vi.mock('@/env/client', () => ({
@@ -36,11 +38,7 @@ vi.mock('@/env/server', () => ({
 
 vi.mock('@/server/logger', () => ({
   logger: {
-    child: () => ({
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    }),
+    child: () => mockLogger,
   },
 }));
 

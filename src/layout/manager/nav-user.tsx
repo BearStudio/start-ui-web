@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import {
-  BookOpenIcon,
   ChevronsUpDownIcon,
   CircleUserIcon,
   LogOutIcon,
@@ -146,18 +145,6 @@ export function NavUser() {
                   {t('layout:nav.openApp')}
                 </DropdownMenuItem>
               </WithPermissions>
-              <DropdownMenuItem
-                render={
-                  <a
-                    href="/api/openapi/app"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  />
-                }
-              >
-                <BookOpenIcon />
-                {t('layout:nav.apiDocumentation')}
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <ConfirmSignOut>
