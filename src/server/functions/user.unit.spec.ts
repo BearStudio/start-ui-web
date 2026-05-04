@@ -52,6 +52,17 @@ const mockSessionFromDb = {
   createdAt: now,
   updatedAt: now,
   expiresAt: new Date(Date.now() + 86400000),
+  ipAddress: null,
+  userAgent: null,
+};
+
+const publicSessionFromDb = {
+  id: mockSessionFromDb.id,
+  createdAt: mockSessionFromDb.createdAt,
+  updatedAt: mockSessionFromDb.updatedAt,
+  expiresAt: mockSessionFromDb.expiresAt,
+  ipAddress: mockSessionFromDb.ipAddress,
+  userAgent: mockSessionFromDb.userAgent,
 };
 
 const defaultGetAllInput = { limit: 20, searchTerm: '' };
@@ -439,10 +450,34 @@ describe('user handlers', () => {
       );
 
       expect(result).toEqual({
-        items: [mockSessionFromDb],
+        items: [publicSessionFromDb],
         nextCursor: undefined,
         total: 1,
       });
+      expect(mockDb.query.session.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          columns: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            expiresAt: true,
+            ipAddress: true,
+            userAgent: true,
+          },
+        })
+      );
+    });
+
+    it('should not expose raw session tokens in the returned page', async () => {
+      mockDb.select.mockReturnValueOnce(chainResult([{ count: 1 }]));
+      mockDb.query.session.findMany.mockResolvedValue([mockSessionFromDb]);
+
+      const result = await handlers.getUserSessions(
+        createAuthenticatedContext(),
+        defaultGetUserSessionsInput('target-user-1')
+      );
+
+      expect(result.items[0]).not.toHaveProperty('token');
     });
 
     it('should return nextCursor when there are more items than limit', async () => {
@@ -584,36 +619,72 @@ describe('user handlers', () => {
 
   describe('revokeUserSession', () => {
     it('should revoke a specific session', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue({
+        id: 'session-2',
+        token: 'other-token',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: true });
 
       await expect(
         handlers.revokeUserSession(createAuthenticatedContext(), {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).resolves.toBeUndefined();
+      expect(mockRevokeUserSession).toHaveBeenCalledWith({
+        body: { sessionToken: 'other-token' },
+        headers: expect.any(Headers),
+      });
+    });
+
+    it('should throw NOT_FOUND when the target session does not belong to the user', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue(undefined);
+
+      await expect(
+        handlers.revokeUserSession(createAuthenticatedContext(), {
+          id: 'target-user-1',
+          sessionId: 'missing-session',
+        })
+      ).rejects.toMatchObject({
+        code: 'NOT_FOUND',
+      });
+      expect(mockRevokeUserSession).not.toHaveBeenCalled();
     });
 
     it('should prevent revoking own current session', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue({
+        id: 'current-session',
+        token: 'my-token',
+      });
+
       await expect(
         handlers.revokeUserSession(
           createAuthenticatedContext({
-            session: { ...mockSession, token: 'my-token' } as ExplicitAny,
+            session: {
+              ...mockSession,
+              id: 'current-session',
+              token: 'my-token',
+            } as ExplicitAny,
           }),
-          { id: mockUser.id, sessionToken: 'my-token' }
+          { id: mockUser.id, sessionId: 'current-session' }
         )
       ).rejects.toMatchObject({
         code: 'BAD_REQUEST',
       });
+      expect(mockRevokeUserSession).not.toHaveBeenCalled();
     });
 
     it('should throw INTERNAL_SERVER_ERROR when revoke fails', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue({
+        id: 'session-2',
+        token: 'other-token',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: false });
 
       await expect(
         handlers.revokeUserSession(createAuthenticatedContext(), {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).rejects.toMatchObject({
         code: 'INTERNAL_SERVER_ERROR',
@@ -621,11 +692,15 @@ describe('user handlers', () => {
     });
 
     it('should require session revoke permission', async () => {
+      mockDb.query.session.findFirst.mockResolvedValue({
+        id: 'session-2',
+        token: 'other-token',
+      });
       mockRevokeUserSession.mockResolvedValue({ success: true });
 
       await handlers.revokeUserSession(createAuthenticatedContext(), {
         id: 'target-user-1',
-        sessionToken: 'other-token',
+        sessionId: 'session-2',
       });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
@@ -645,7 +720,7 @@ describe('user handlers', () => {
       await expect(
         handlers.revokeUserSession(createAuthenticatedContext(), {
           id: 'target-user-1',
-          sessionToken: 'other-token',
+          sessionId: 'session-2',
         })
       ).rejects.toMatchObject({
         code: 'FORBIDDEN',

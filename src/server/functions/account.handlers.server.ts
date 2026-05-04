@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
+import { zFormFieldsAccountUpdateName } from '@/features/account/schema';
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
-import { zUser } from '@/features/user/schema';
 import { user } from '@/server/db/schema';
 import type { ProtectedContext } from '@/server/middlewares.server';
 import { ServerFnError } from '@/server/server-fn-error';
@@ -30,13 +30,13 @@ const submitOnboarding = async (
 
 const updateInfo = async (
   ctx: ProtectedContext,
-  data: { name?: string | null }
+  data: z.infer<ReturnType<typeof zUpdateInfoInput>>
 ) => {
   ctx.logger.info('Update user');
   const [updatedUser] = await ctx.db
     .update(user)
     .set({
-      name: data.name ?? '',
+      name: data.name,
     })
     .where(eq(user.id, ctx.user.id))
     .returning({ id: user.id });
@@ -58,4 +58,4 @@ export const handlers: AccountHandlers = {
   updateInfo,
 };
 
-export const zUpdateInfoInput = () => zUser().pick({ name: true });
+export const zUpdateInfoInput = () => zFormFieldsAccountUpdateName();

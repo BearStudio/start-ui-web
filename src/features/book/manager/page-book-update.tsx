@@ -46,26 +46,34 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const bookUpdate = useMutation({
     ...bookQueries.updateById(),
     onSuccess: async () => {
-      // Invalidate Users list
-      await queryClient.invalidateQueries({
-        queryKey: bookQueries.getAll(),
-        type: 'all',
-      });
+      await Promise.all([
+        // Invalidate book entry
+        queryClient.invalidateQueries({
+          queryKey: bookQueries.getById({ id: props.params.id }).queryKey,
+        }),
+        // Invalidate books list
+        queryClient.invalidateQueries({
+          queryKey: bookQueries.getAll(),
+          type: 'all',
+        }),
+      ]);
 
       // Redirect
       navigateBack({ ignoreBlocker: true });
     },
     onError: (error) => {
-      if (
-        isServerFnError(error) &&
-        error.code === 'CONFLICT' &&
-        Array.isArray(error.data?.target) &&
-        error.data.target.includes('title')
-      ) {
-        form.setError('title', {
-          message: t('book:manager.form.titleAlreadyExist'),
-        });
-        return;
+      if (isServerFnError(error) && error.code === 'CONFLICT') {
+        const target = error.data?.target;
+        const isTitleConflict =
+          target === 'title' ||
+          (Array.isArray(target) && target.includes('title'));
+
+        if (isTitleConflict) {
+          form.setError('title', {
+            message: t('book:manager.form.titleAlreadyExist'),
+          });
+          return;
+        }
       }
 
       toast.error(t('book:manager.update.updateError'));

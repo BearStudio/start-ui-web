@@ -39,6 +39,7 @@
     "cosmos-export": "cosmos-export",
     "format": "oxfmt",
     "lint": "run-p lint:*",
+    "lint:deps": "depcruise src --config .dependency-cruiser.cjs",
     "lint:oxlint": "oxlint --fix .",
     "lint:ts": "tsc --noEmit",
     "gen:build-info": "dotenv -- node ./run-jiti ./src/features/build-info/script-to-generate-json.ts",
@@ -171,7 +172,8 @@
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
-      "body-parser": "1.20.4"
+      "body-parser": "1.20.4",
+      "effect": "3.21.2"
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",

@@ -54,7 +54,7 @@ export const PageBook = (props: { params: { id: string } }) => {
           queryKey: bookQueries.getAll(),
           type: 'all',
         }),
-        // Remove user from cache
+        // Remove book from cache
         queryClient.removeQueries({
           queryKey: bookQueries.getById({ id: props.params.id }).queryKey,
         }),

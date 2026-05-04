@@ -93,20 +93,13 @@ const appendServerTiming = (entries: ServerTimingEntry[]) => {
   setResponseHeader('Server-Timing', formatTiming(entries));
 };
 
-const buildContext = async () => {
-  const requestId = randomUUID();
-  const timings: ServerTimingEntry[] = [];
-
+const getSession = async (timings: ServerTimingEntry[]) => {
   const authStart = performance.now();
   const session = await auth.api.getSession({
     headers: getRequestHeaders(),
   });
   timings.push({ name: 'auth', durationMs: performance.now() - authStart });
-
-  const meta = { requestId, userId: session?.user?.id };
-  const procedureLogger = logger.child({ ...meta, scope: 'procedure' });
-
-  return { session, procedureLogger, timings };
+  return session;
 };
 
 const finalize = (
@@ -130,51 +123,40 @@ const finalize = (
 };
 
 const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
+  const mappedError = mapDbError(error);
   const logLevel = (() => {
-    if (!(error instanceof Error)) return 'error';
-    if (error.message === 'DEMO_MODE_ENABLED') return 'info';
-    if (error instanceof ServerFnError) {
-      if (error.status >= 500) return 'error';
-      if (error.status >= 400) return 'warn';
-      if (error.status >= 300) return 'info';
+    if (!(mappedError instanceof Error)) return 'error';
+    if (mappedError.message === 'DEMO_MODE_ENABLED') return 'info';
+    if (mappedError instanceof ServerFnError) {
+      if (mappedError.status >= 500) return 'error';
+      if (mappedError.status >= 400) return 'warn';
+      if (mappedError.status >= 300) return 'info';
     }
     return 'error';
   })();
-  procedureLogger[logLevel](error);
+  procedureLogger[logLevel](mappedError);
 
-  return mapDbError(error, procedureLogger);
+  return mappedError;
 };
 
-function mapDbError(error: unknown, procedureLogger: ProcedureLogger): unknown {
+function mapDbError(error: unknown): unknown {
   if (error instanceof ServerFnError) return error;
 
   if (isPgError(error)) {
     return match(error.code)
       .with('23505', () => {
         const target = getUniqueConstraintTarget(error);
-        procedureLogger.warn(
-          { constraint: error.constraint },
-          `DB Error: ${error.code} ${error.message}`
-        );
         return new ServerFnError('CONFLICT', {
           message: 'Unique constraint violation',
           data: { target },
         });
       })
       .with('23503', () => {
-        procedureLogger.error(
-          { constraint: error.constraint },
-          `DB Error ${error.code}: ${error.message}`
-        );
         return new ServerFnError('BAD_REQUEST', {
           message: 'Foreign key constraint violation',
         });
       })
       .otherwise(() => {
-        procedureLogger.error(
-          { constraint: error.constraint },
-          `DB Error ${error.code}: ${error.message}`
-        );
         return new ServerFnError('INTERNAL_SERVER_ERROR', {
           message: 'Database error',
         });
@@ -203,22 +185,33 @@ export async function withPublicContext<T>(
   fn: (ctx: PublicContext) => Promise<T>
 ): Promise<T> {
   const start = performance.now();
-  const { session, procedureLogger, timings } = await buildContext();
+  const requestId = randomUUID();
+  const timings: ServerTimingEntry[] = [];
+  let procedureLogger = logger.child({ requestId, scope: 'procedure' });
   procedureLogger.info('Before');
 
   return await timingStore.run({ db: [] }, async () => {
     try {
+      const session = await getSession(timings);
+      if (session?.user?.id) {
+        procedureLogger = logger.child({
+          requestId,
+          userId: session.user.id,
+          scope: 'procedure',
+        });
+      }
+
       const ctx: PublicContext = {
         user: session?.user ?? null,
         session: session?.session ?? null,
         db,
         logger: procedureLogger,
       };
-      const result = await fn(ctx);
-      finalize(procedureLogger, timings, start);
-      return result;
+      return await fn(ctx);
     } catch (error) {
       throw handleError(error, procedureLogger);
+    } finally {
+      finalize(procedureLogger, timings, start);
     }
   });
 }
@@ -242,8 +235,10 @@ export async function withProtectedContext<T>(
 export async function withProtectedMutation<T>(
   fn: (ctx: ProtectedContext) => Promise<T>
 ): Promise<T> {
-  assertNotDemoMode();
-  return withProtectedContext(fn);
+  return withProtectedContext(async (ctx) => {
+    assertNotDemoMode();
+    return fn(ctx);
+  });
 }
 
 export async function assertPermission(

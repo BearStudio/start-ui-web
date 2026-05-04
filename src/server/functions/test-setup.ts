@@ -3,6 +3,7 @@ import { beforeEach, vi } from 'vitest';
 import {
   mockDb,
   mockGetSession,
+  mockLogger,
   mockUserHasPermission,
   resetMockDb,
   setupAuthenticatedUser,
@@ -37,11 +38,7 @@ vi.mock('@/env/server', () => ({
 
 vi.mock('@/server/logger', () => ({
   logger: {
-    child: () => ({
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    }),
+    child: () => mockLogger,
   },
 }));
 

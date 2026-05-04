@@ -55,16 +55,18 @@ export const PageBookNew = () => {
       navigateBack({ ignoreBlocker: true });
     },
     onError: (error) => {
-      if (
-        isServerFnError(error) &&
-        error.code === 'CONFLICT' &&
-        Array.isArray(error.data?.target) &&
-        error.data.target.includes('title')
-      ) {
-        form.setError('title', {
-          message: t('book:manager.form.titleAlreadyExist'),
-        });
-        return;
+      if (isServerFnError(error) && error.code === 'CONFLICT') {
+        const target = error.data?.target;
+        const isTitleConflict =
+          target === 'title' ||
+          (Array.isArray(target) && target.includes('title'));
+
+        if (isTitleConflict) {
+          form.setError('title', {
+            message: t('book:manager.form.titleAlreadyExist'),
+          });
+          return;
+        }
       }
 
       toast.error(t('book:manager.new.createError'));

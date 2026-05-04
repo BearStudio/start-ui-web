@@ -11,6 +11,22 @@ import {
 } from '@/server/middlewares.server';
 import { ServerFnError } from '@/server/server-fn-error';
 
+type UserSessionListItem = Pick<
+  typeof session.$inferSelect,
+  'id' | 'createdAt' | 'updatedAt' | 'expiresAt' | 'ipAddress' | 'userAgent'
+>;
+
+const toUserSessionListItem = (
+  item: UserSessionListItem | typeof session.$inferSelect
+): UserSessionListItem => ({
+  id: item.id,
+  createdAt: item.createdAt,
+  updatedAt: item.updatedAt,
+  expiresAt: item.expiresAt,
+  ipAddress: item.ipAddress,
+  userAgent: item.userAgent,
+});
+
 export const zGetAllInput = () =>
   z
     .object({
@@ -254,6 +270,14 @@ const getUserSessions = async (
       .where(userIdFilter),
     ctx.db.query.session.findMany({
       where,
+      columns: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        expiresAt: true,
+        ipAddress: true,
+        userAgent: true,
+      },
       orderBy: [desc(session.createdAt), asc(session.id)],
       limit: data.limit + 1,
     }),
@@ -265,7 +289,11 @@ const getUserSessions = async (
     nextCursor = nextItem?.id;
   }
 
-  return { items, nextCursor, total: total[0]?.count ?? 0 };
+  return {
+    items: items.map(toUserSessionListItem),
+    nextCursor,
+    total: total[0]?.count ?? 0,
+  };
 };
 
 export const zRevokeUserSessionsInput = () => z.object({ id: z.string() });
@@ -298,7 +326,7 @@ const revokeUserSessions = async (
 };
 
 export const zRevokeUserSessionInput = () =>
-  z.object({ id: z.string(), sessionToken: z.string() });
+  z.object({ id: z.string(), sessionId: z.string() });
 
 const revokeUserSession = async (
   ctx: ProtectedContext,
@@ -306,7 +334,16 @@ const revokeUserSession = async (
 ) => {
   await assertPermission(ctx.user.id, { session: ['revoke'] });
 
-  if (ctx.session.token === data.sessionToken) {
+  const targetSession = await ctx.db.query.session.findFirst({
+    where: and(eq(session.id, data.sessionId), eq(session.userId, data.id)),
+    columns: { id: true, token: true },
+  });
+
+  if (!targetSession) {
+    throw new ServerFnError('NOT_FOUND');
+  }
+
+  if (ctx.session.id === targetSession.id) {
     ctx.logger.warn('Prevent to revoke the current connected user session');
     throw new ServerFnError('BAD_REQUEST', {
       message: 'You cannot revoke your current session',
@@ -315,7 +352,7 @@ const revokeUserSession = async (
 
   ctx.logger.info('Revoke user session');
   const response = await auth.api.revokeUserSession({
-    body: { sessionToken: data.sessionToken },
+    body: { sessionToken: targetSession.token },
     headers: getRequestHeaders(),
   });
 

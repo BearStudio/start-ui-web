@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { handlers } from '@/server/functions/account.handlers.server';
+import {
+  handlers,
+  zUpdateInfoInput,
+} from '@/server/functions/account.handlers.server';
 import {
   chainResult,
   createAuthenticatedContext,
@@ -63,6 +66,10 @@ describe('account handlers', () => {
       expect(updateChain.set).toHaveBeenCalledWith({
         name: 'Updated Name',
       });
+    });
+
+    it('should require an explicit name value', () => {
+      expect(() => zUpdateInfoInput().parse({})).toThrow();
     });
 
     it('should throw NOT_FOUND when no user was updated', async () => {

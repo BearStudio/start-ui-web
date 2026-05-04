@@ -287,7 +287,7 @@ const UserSessions = (props: { userId: string }) => {
                 >
                   <DataListCell>
                     <DataListText>
-                      {t('user:manager.detail.session', { token: item.token })}
+                      {t('user:manager.detail.session', { id: item.id })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>
@@ -308,7 +308,7 @@ const UserSessions = (props: { userId: string }) => {
                     <DataListCell className="flex-none">
                       <RevokeSessionButton
                         userId={props.userId}
-                        sessionToken={item.token}
+                        sessionId={item.id}
                       />
                     </DataListCell>
                   </WithPermissions>
@@ -376,10 +376,7 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
   );
 };
 
-const RevokeSessionButton = (props: {
-  userId: string;
-  sessionToken: string;
-}) => {
+const RevokeSessionButton = (props: { userId: string; sessionId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = authClient.useSession();
   const { t } = useTranslation(['user']);
@@ -398,12 +395,12 @@ const RevokeSessionButton = (props: {
     <Button
       size="xs"
       variant="secondary"
-      disabled={currentSession.data?.session.token === props.sessionToken}
+      disabled={currentSession.data?.session.id === props.sessionId}
       loading={revokeSession.isPending}
       onClick={() => {
         revokeSession.mutate({
           id: props.userId,
-          sessionToken: props.sessionToken,
+          sessionId: props.sessionId,
         });
       }}
     >
