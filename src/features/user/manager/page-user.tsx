@@ -171,7 +171,7 @@ export const PageUser = (props: { params: { id: string } }) => {
                       </CardTitle>
                       <CardDescription>{user.email}</CardDescription>
                     </div>
-                    <WithPermissions permissions={[{ user: ['set-role'] }]}>
+                    <WithPermissions permissions={[{ user: ['update'] }]}>
                       <Link
                         to="/manager/users/$id/update"
                         params={props.params}

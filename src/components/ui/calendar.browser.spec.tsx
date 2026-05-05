@@ -26,20 +26,28 @@ describe('Calendar', () => {
       .toBeDefined();
   });
 
-  it('should render without button date when uncontrolled', () => {
+  it('should render without button date when uncontrolled', async () => {
     render(<Calendar />);
 
+    await expect
+      .element(page.getByLabelText('Go to the Previous Month'))
+      .toBeDefined();
+
     // 3 are the previous, next and year select buttons
-    expect(page.getByRole('button').all().length).toBeLessThanOrEqual(3);
+    expect(page.getByRole('button').elements().length).toBeLessThanOrEqual(3);
   });
 
-  it('should render date buttons when controlled', () => {
+  it('should render date buttons when controlled', async () => {
     render(
       <Calendar mode="single" selected={new Date()} onSelect={() => {}} />
     );
 
+    await expect
+      .element(page.getByLabelText('Go to the Previous Month'))
+      .toBeDefined();
+
     // 3 are the previous, next and year select buttons
-    expect(page.getByRole('button').all().length).toBeGreaterThan(3);
+    expect(page.getByRole('button').elements().length).toBeGreaterThan(3);
   });
 
   it('should give the selected value on select', async () => {

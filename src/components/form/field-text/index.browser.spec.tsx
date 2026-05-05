@@ -25,7 +25,9 @@ test('update value', async () => {
       )}
     </FormMocked>
   );
-  const input = page.getByLabelText('Name').element() as HTMLInputElement;
+  const nameInput = page.getByLabelText('Name');
+  await expect.element(nameInput).toBeDefined();
+  const input = nameInput.element() as HTMLInputElement;
 
   await user.type(input, 'new value');
   expect(input.value).toBe('new value');
@@ -54,7 +56,9 @@ test('default value', async () => {
       )}
     </FormMocked>
   );
-  const input = page.getByLabelText('Name').element() as HTMLInputElement;
+  const nameInput = page.getByLabelText('Name');
+  await expect.element(nameInput).toBeDefined();
+  const input = nameInput.element() as HTMLInputElement;
   expect(input.value).toBe('default value');
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ name: 'default value' });
