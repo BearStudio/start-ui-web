@@ -3,7 +3,58 @@ import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { nitro } from 'nitro/vite';
-import { defineConfig, loadEnv } from 'vite';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
+
+function srcJsonImportPlugin(): Plugin {
+  return {
+    name: 'start-ui:src-json-import',
+    apply: 'serve',
+    configureServer(server) {
+      const srcDir = path.resolve(server.config.root, 'src');
+
+      server.middlewares.use(async (req, res, next) => {
+        if (!req.url) {
+          next();
+          return;
+        }
+
+        const url = new URL(req.url, 'http://localhost');
+        const isSrcJsonImport =
+          url.pathname.startsWith('/src/') &&
+          url.pathname.endsWith('.json') &&
+          url.searchParams.has('import');
+
+        if (!isSrcJsonImport) {
+          next();
+          return;
+        }
+
+        const filePath = path.resolve(
+          server.config.root,
+          `.${decodeURIComponent(url.pathname)}`
+        );
+
+        if (!filePath.startsWith(`${srcDir}${path.sep}`)) {
+          next();
+          return;
+        }
+
+        try {
+          const source = await readFile(filePath, 'utf8');
+          res.setHeader('Content-Type', 'text/javascript');
+          res.setHeader('Cache-Control', 'no-cache');
+          res.end(
+            `const data = JSON.parse(${JSON.stringify(source)});\nexport default data;\n`
+          );
+        } catch {
+          next();
+        }
+      });
+    },
+  };
+}
 
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -18,6 +69,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       devtools(),
+      srcJsonImportPlugin(),
       tanstackStart(),
       nitro(),
       // react's vite plugin must come after start's vite plugin

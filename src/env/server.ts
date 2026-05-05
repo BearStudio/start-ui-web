@@ -29,6 +29,7 @@ export const envServer = createEnv({
 
     EMAIL_SERVER: z.url(),
     EMAIL_FROM: z.string(),
+    EMAIL_DELIVERY_DISABLED: z.stringbool().default(false),
 
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])

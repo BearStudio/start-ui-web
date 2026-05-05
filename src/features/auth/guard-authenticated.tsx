@@ -1,5 +1,5 @@
 import { useRouter } from '@tanstack/react-router';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { PageError } from '@/components/errors/page-error';
 import { Spinner } from '@/components/ui/spinner';
@@ -18,6 +18,20 @@ export const GuardAuthenticated = ({
   const session = authClient.useSession();
   const router = useRouter();
 
+  useEffect(() => {
+    if (session.isPending || session.error || session.data?.user) {
+      return;
+    }
+
+    router.navigate({
+      to: '/login',
+      replace: true,
+      search: {
+        redirect: location.href,
+      },
+    });
+  }, [router, session.data?.user, session.error, session.isPending]);
+
   if (session.isPending) {
     return <Spinner full className="opacity-60" />;
   }
@@ -27,13 +41,6 @@ export const GuardAuthenticated = ({
   }
 
   if (!session.data?.user) {
-    router.navigate({
-      to: '/login',
-      replace: true,
-      search: {
-        redirect: location.href,
-      },
-    });
     return null;
   }
 

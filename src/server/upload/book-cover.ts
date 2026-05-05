@@ -18,6 +18,7 @@ export const bookCover = route({
 
     // Only admins should be able to update book covers
     const canUpdateBookCover = await auth.api.userHasPermission({
+      headers: req.headers,
       body: {
         userId: session.user.id,
         permissions: {
