@@ -1,4 +1,6 @@
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
+
+import type { Permission } from '@/features/auth/permissions';
 
 const hoisted = vi.hoisted(() => ({
   mockGetSession: vi.fn(),
@@ -99,6 +101,14 @@ export function resetMockDb() {
 
 export const mockUser = { id: 'user-1', name: 'Test User' };
 export const mockSession = { id: 'session-1', token: 'session-token-1' };
+
+export const expectedPermissionRequest = (permissions: Permission) => ({
+  body: {
+    userId: mockUser.id,
+    permissions,
+  },
+  headers: expect.any(Headers),
+});
 
 export function setupAuthenticatedUser() {
   mockGetSession.mockResolvedValue({

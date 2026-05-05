@@ -31,9 +31,18 @@ function srcJsonImportPlugin(): Plugin {
           return;
         }
 
+        let decodedPathname: string;
+
+        try {
+          decodedPathname = decodeURIComponent(url.pathname);
+        } catch {
+          next();
+          return;
+        }
+
         const filePath = path.resolve(
           server.config.root,
-          `.${decodeURIComponent(url.pathname)}`
+          `.${decodedPathname}`
         );
 
         if (!filePath.startsWith(`${srcDir}${path.sep}`)) {

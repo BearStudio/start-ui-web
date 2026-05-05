@@ -4,8 +4,8 @@ import { handlers } from '@/server/functions/genre.handlers.server';
 import {
   chainResult,
   createAuthenticatedContext,
+  expectedPermissionRequest,
   mockDb,
-  mockUser,
   mockUserHasPermission,
 } from '@/server/functions/test-utils';
 
@@ -90,12 +90,9 @@ describe('genre handlers', () => {
 
       await handlers.getAll(createAuthenticatedContext(), defaultGetAllInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { genre: ['read'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ genre: ['read'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {

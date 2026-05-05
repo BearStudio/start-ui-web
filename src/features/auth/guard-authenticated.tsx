@@ -1,4 +1,4 @@
-import { useRouter } from '@tanstack/react-router';
+import { useLocation, useRouter } from '@tanstack/react-router';
 import { ReactNode, useEffect } from 'react';
 
 import { PageError } from '@/components/errors/page-error';
@@ -17,9 +17,13 @@ export const GuardAuthenticated = ({
 }) => {
   const session = authClient.useSession();
   const router = useRouter();
+  const location = useLocation();
+  const user = session.data?.user;
+  const hasAuthError = !!session.error;
+  const isAuthenticated = !!user;
 
   useEffect(() => {
-    if (session.isPending || session.error || session.data?.user) {
+    if (session.isPending || hasAuthError || isAuthenticated) {
       return;
     }
 
@@ -30,22 +34,22 @@ export const GuardAuthenticated = ({
         redirect: location.href,
       },
     });
-  }, [router, session.data?.user, session.error, session.isPending]);
+  }, [hasAuthError, isAuthenticated, location.href, router, session.isPending]);
 
   if (session.isPending) {
     return <Spinner full className="opacity-60" />;
   }
 
-  if (session.error && session.error.status > 0) {
+  if (hasAuthError) {
     return <PageError type="unknown-auth-error" />;
   }
 
-  if (!session.data?.user) {
+  if (!isAuthenticated) {
     return null;
   }
 
   // Check if onboarding is done
-  if (!session.data.user.onboardedAt) {
+  if (!user.onboardedAt) {
     return <PageOnboarding />;
   }
 
@@ -53,7 +57,7 @@ export const GuardAuthenticated = ({
   if (
     permissionApps &&
     !authClient.admin.checkRolePermission({
-      role: session.data.user.role as Role,
+      role: user.role as Role,
       permissions: {
         apps: permissionApps,
       },

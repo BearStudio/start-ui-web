@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   chainResult,
   createAuthenticatedContext,
+  expectedPermissionRequest,
   mockDb,
   mockGetSession,
   mockSession,
@@ -186,12 +187,9 @@ describe('user handlers', () => {
 
       await handlers.getAll(createAuthenticatedContext(), defaultGetAllInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['list'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ user: ['list'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -236,12 +234,9 @@ describe('user handlers', () => {
         id: 'target-user-1',
       });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['list'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ user: ['list'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -294,12 +289,9 @@ describe('user handlers', () => {
 
       await handlers.create(createAuthenticatedContext(), createInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['create'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ user: ['create'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -403,12 +395,9 @@ describe('user handlers', () => {
 
       await handlers.updateById(createAuthenticatedContext(), updateInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['update'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ user: ['update'] })
+      );
       expect(mockUserHasPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -423,18 +412,14 @@ describe('user handlers', () => {
 
       await handlers.updateById(createAuthenticatedContext(), updateInput);
 
-      expect(mockUserHasPermission).toHaveBeenNthCalledWith(1, {
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['update'] },
-        },
-      });
-      expect(mockUserHasPermission).toHaveBeenNthCalledWith(2, {
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['set-role'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenNthCalledWith(
+        1,
+        expectedPermissionRequest({ user: ['update'] })
+      );
+      expect(mockUserHasPermission).toHaveBeenNthCalledWith(
+        2,
+        expectedPermissionRequest({ user: ['set-role'] })
+      );
     });
 
     it('should reject role changes when set-role permission is missing', async () => {
@@ -523,12 +508,9 @@ describe('user handlers', () => {
         id: 'target-user-1',
       });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { user: ['delete'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ user: ['delete'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -657,12 +639,9 @@ describe('user handlers', () => {
         defaultGetUserSessionsInput('target-user-1')
       );
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { session: ['list'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ session: ['list'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -722,12 +701,9 @@ describe('user handlers', () => {
         id: 'target-user-1',
       });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { session: ['revoke'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ session: ['revoke'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -832,12 +808,9 @@ describe('user handlers', () => {
         sessionId: 'session-2',
       });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { session: ['revoke'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ session: ['revoke'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
