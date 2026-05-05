@@ -256,6 +256,7 @@ export async function assertPermission(
 ) {
   const result = await auth.api.userHasPermission({
     body: { userId, permissions },
+    headers: getRequestHeaders(),
   });
 
   if (result.error) {

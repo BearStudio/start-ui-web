@@ -17,8 +17,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* The E2E server uses one shared PGLite database instance. */
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? 'github' : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -29,8 +29,8 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Increase the timeout to operate on Github Actions */
-  expect: { timeout: process.env.CI ? 10000 : undefined },
+  /* Increase the timeout to absorb initial dev-server compilation. */
+  expect: { timeout: 10000 },
 
   /* Configure projects for major browsers */
   projects: [
@@ -43,25 +43,25 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], locale: DEFAULT_LANGUAGE_KEY },
-      dependencies: process.env.CI ? ['setup'] : [],
+      dependencies: ['setup'],
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'], locale: DEFAULT_LANGUAGE_KEY },
-      dependencies: process.env.CI ? ['setup'] : [],
+      dependencies: ['setup'],
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'], locale: DEFAULT_LANGUAGE_KEY },
-      dependencies: process.env.CI ? ['setup'] : [],
+      dependencies: ['setup'],
     },
   ],
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm dev',
+    command: 'pnpm e2e:webserver',
     url: process.env.VITE_BASE_URL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
   },
 });

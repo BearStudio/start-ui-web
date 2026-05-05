@@ -16,7 +16,7 @@ export const sendEmail = async ({
   ...options
 }: Omit<MailOptions, 'html'> &
   Required<Pick<MailOptions, 'subject'>> & { template: ReactElement }) => {
-  if (envClient.VITE_IS_DEMO) {
+  if (envClient.VITE_IS_DEMO || envServer.EMAIL_DELIVERY_DISABLED) {
     return;
   }
 
