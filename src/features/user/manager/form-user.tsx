@@ -8,13 +8,13 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 
-import { authClient } from '@/features/auth/client';
 import { rolesNames } from '@/features/auth/permissions';
+import { useSession } from '@/features/auth/use-session';
 import { FormFieldsUser } from '@/features/user/schema';
 
 export const FormUser = (props: { userId?: string }) => {
   const { t } = useTranslation(['user']);
-  const session = authClient.useSession();
+  const session = useSession();
   const form = useFormContext<FormFieldsUser>();
   const isCurrentUser = props.userId === session.data?.user.id;
 

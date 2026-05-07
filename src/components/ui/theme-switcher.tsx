@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
-import { useHydrated } from '@/hooks/use-hydrated';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -25,11 +24,6 @@ export const themes = ['system', 'light', 'dark'] as const;
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);
   const { theme, setTheme } = useTheme();
-  const hydrated = useHydrated();
-
-  if (!hydrated) {
-    return <div className="size-9" />;
-  }
 
   return (
     <DropdownMenu>
@@ -41,13 +35,13 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
           />
         }
       >
-        {match(theme as (typeof themes)[number])
+        {match((theme as (typeof themes)[number]) ?? 'system')
           .with('system', () => <SunMoonIcon className="opacity-50" />)
           .with('light', () => <SunIcon className="opacity-50" />)
           .with('dark', () => <MoonIcon className="opacity-50" />)
           .exhaustive()}
         <span className={cn(props.iconOnly && 'sr-only')}>
-          {match(theme as (typeof themes)[number])
+          {match((theme as (typeof themes)[number]) ?? 'system')
             .with('system', () => t('common:themes.values.system'))
             .with('light', () => t('common:themes.values.light'))
             .with('dark', () => t('common:themes.values.dark'))
