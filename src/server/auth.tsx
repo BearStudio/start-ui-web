@@ -14,6 +14,7 @@ import {
   AUTH_SIGNUP_ENABLED,
 } from '@/features/auth/config';
 import { permissions } from '@/features/auth/permissions';
+import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
 import { getUserLanguage } from '@/server/utils';
@@ -82,19 +83,31 @@ export const auth = betterAuth({
             });
           })
           .with('email-verification', async () => {
-            throw new Error(
-              'email-verification email not implemented, update the /app/server/auth.tsx file'
-            );
+            throw new AppError({
+              code: 'AUTH_EMAIL_VERIFICATION_NOT_IMPLEMENTED',
+              category: 'system',
+              status: 500,
+              message:
+                'email-verification email not implemented, update the /app/server/auth.tsx file',
+            });
           })
           .with('forget-password', async () => {
-            throw new Error(
-              'forget-password email not implemented, update the /app/server/auth.tsx file'
-            );
+            throw new AppError({
+              code: 'AUTH_FORGET_PASSWORD_NOT_IMPLEMENTED',
+              category: 'system',
+              status: 500,
+              message:
+                'forget-password email not implemented, update the /app/server/auth.tsx file',
+            });
           })
           .with('change-email', async () => {
-            throw new Error(
-              'change-email email not implemented, update the /app/server/auth.tsx file'
-            );
+            throw new AppError({
+              code: 'AUTH_CHANGE_EMAIL_NOT_IMPLEMENTED',
+              category: 'system',
+              status: 500,
+              message:
+                'change-email email not implemented, update the /app/server/auth.tsx file',
+            });
           })
           .exhaustive();
       },
@@ -104,13 +117,27 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          if (envClient.VITE_IS_DEMO) {
+            throw new AppError({
+              code: 'DEMO_MODE_ENABLED',
+              category: 'bad_request',
+              status: 405,
+              message: 'DEMO MODE',
+            });
+          }
           return { data: user };
         },
       },
       update: {
         before: async (user) => {
-          if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
+          if (envClient.VITE_IS_DEMO) {
+            throw new AppError({
+              code: 'DEMO_MODE_ENABLED',
+              category: 'bad_request',
+              status: 405,
+              message: 'DEMO MODE',
+            });
+          }
           return { data: user };
         },
       },

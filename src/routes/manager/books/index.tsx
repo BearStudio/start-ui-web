@@ -2,7 +2,7 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { PageBooks } from '@/features/book/manager/page-books';
+import { ManagerPageBooks as PageBooks } from '@/modules/book';
 
 export const Route = createFileRoute('/manager/books/')({
   component: RouteComponent,

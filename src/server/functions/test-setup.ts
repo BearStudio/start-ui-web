@@ -44,6 +44,21 @@ vi.mock('@/server/logger', () => ({
 
 vi.mock('@/server/db', () => ({ db: mockDb }));
 
+vi.mock('@/modules/kernel/infrastructure/logger/pino', () => ({
+  logger: {
+    info: (...args: unknown[]) => mockLogger.info(...args),
+    warn: (...args: unknown[]) => mockLogger.warn(...args),
+    error: (...args: unknown[]) => mockLogger.error(...args),
+  },
+}));
+
+vi.mock('@/modules/kernel/infrastructure/db/client', () => ({
+  db: mockDb,
+  transactionRunner: {
+    run: (work: (tx: typeof mockDb) => Promise<unknown>) => work(mockDb),
+  },
+}));
+
 beforeEach(() => {
   vi.clearAllMocks();
   resetMockDb();

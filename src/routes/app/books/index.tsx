@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageBooks } from '@/features/book/app/page-books';
+import { AppPageBooks as PageBooks } from '@/modules/book';
 
 export const Route = createFileRoute('/app/books/')({
   component: RouteComponent,

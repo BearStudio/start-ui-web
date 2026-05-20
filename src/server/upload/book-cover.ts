@@ -2,7 +2,7 @@ import { RejectUpload, route } from '@better-upload/server';
 
 import i18n from '@/lib/i18n';
 
-import { bookCoverAcceptedFileTypes } from '@/features/book/schema';
+import { bookCoverAcceptedFileTypes } from '@/modules/book/presentation/schema';
 import { auth } from '@/server/auth';
 
 export const bookCover = route({
