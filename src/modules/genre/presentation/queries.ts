@@ -11,9 +11,11 @@ type GetAllInput = {
 export const genreQueries = {
   all: () => ['genre'] as const,
   getAll: () => [...genreQueries.all(), 'getAll'] as const,
-  getAllList: (input?: GetAllInput) =>
-    queryOptions({
-      queryKey: [...genreQueries.getAll(), input ?? {}] as const,
-      queryFn: () => genreGetAll({ data: input }),
-    }),
+  getAllList: (input?: GetAllInput) => {
+    const norm = input ?? {};
+    return queryOptions({
+      queryKey: [...genreQueries.getAll(), norm] as const,
+      queryFn: () => genreGetAll({ data: norm }),
+    });
+  },
 };

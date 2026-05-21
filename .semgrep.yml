@@ -120,8 +120,8 @@ rules:
     languages: [typescript]
     severity: ERROR
     pattern-either:
-      - pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/"''\n]+/(?!index|presentation|server|client)[^"''\n]+["'']'
-      - pattern-regex: 'from\s+["'']@/modules/(?!kernel/)[^/"''\n]+/(?!index|presentation|server|client)[^"''\n]+["'']'
+      - pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|client)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
+      - pattern-regex: 'from\s+["'']@/modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|client)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
     paths:
       include:
         - src/routes/**/*.ts
