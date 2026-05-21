@@ -8,8 +8,8 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 
-import { authClient } from '@/features/auth/client';
-import { rolesNames } from '@/features/auth/permissions';
+import { rolesNames } from '@/modules/auth';
+import { authClient } from '@/modules/auth/client';
 import { FormFieldsUser } from '@/modules/user/presentation/schema';
 
 export const FormUser = (props: { userId?: string }) => {

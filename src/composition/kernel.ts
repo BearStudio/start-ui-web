@@ -1,5 +1,6 @@
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
+import { auth } from '@/modules/auth/server';
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
@@ -12,8 +13,8 @@ import {
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
 import { logger as pinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
-import { auth } from '@/server/auth';
 
+import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
 
 type CacheEntry = {
@@ -27,7 +28,7 @@ const memoryCache = (): CacheGateway => {
     async get<T>(key: string) {
       const entry = entries.get(key);
       if (!entry) return undefined;
-      if (entry.expiresAt && entry.expiresAt < Date.now()) {
+      if (entry.expiresAt !== undefined && entry.expiresAt <= Date.now()) {
         entries.delete(key);
         return undefined;
       }
@@ -36,7 +37,8 @@ const memoryCache = (): CacheGateway => {
     async set<T>(key: string, value: T, options?: { ttlMs?: number }) {
       entries.set(key, {
         value,
-        expiresAt: options?.ttlMs ? Date.now() + options.ttlMs : undefined,
+        expiresAt:
+          options?.ttlMs === undefined ? undefined : Date.now() + options.ttlMs,
       });
     },
     async delete(key: string) {
@@ -88,8 +90,9 @@ const buildKernel = (overrides?: KernelOverrides): Kernel => ({
 const getCachedKernel = createCachedFactory(() => buildKernel());
 
 export function getKernel(options?: { overrides?: KernelOverrides }): Kernel {
-  if (options?.overrides && Object.keys(options.overrides).length > 0) {
-    return buildKernel(options.overrides);
+  const overrides = options?.overrides;
+  if (hasDefinedOverrides(overrides)) {
+    return buildKernel(overrides);
   }
   return getCachedKernel(false);
 }

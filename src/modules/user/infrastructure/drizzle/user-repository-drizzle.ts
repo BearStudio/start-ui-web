@@ -100,8 +100,9 @@ export class UserRepositoryDrizzle implements UserRepository {
     searchTerm: string;
   }): Promise<UserListPage> {
     try {
-      const searchPattern = `%${escapeLikePattern(input.searchTerm.trim())}%`;
-      const searchFilter = input.searchTerm
+      const searchTerm = input.searchTerm.trim();
+      const searchPattern = `%${escapeLikePattern(searchTerm)}%`;
+      const searchFilter = searchTerm
         ? or(
             ilike(userTable.name, searchPattern),
             ilike(userTable.email, searchPattern)
@@ -153,13 +154,15 @@ export class UserRepositoryDrizzle implements UserRepository {
       ]);
 
       let nextCursor: UserId | undefined;
+      let pageRows = rows;
       if (rows.length > input.limit) {
-        const nextItem = rows.pop();
-        nextCursor = nextItem ? toUserId(nextItem.id) : undefined;
+        pageRows = rows.slice(0, input.limit);
+        const lastVisible = pageRows.at(-1);
+        nextCursor = lastVisible ? toUserId(lastVisible.id) : undefined;
       }
 
       return {
-        items: rows.map(toDomainUser),
+        items: pageRows.map(toDomainUser),
         nextCursor,
         total: total[0]?.count ?? 0,
       };
@@ -307,13 +310,15 @@ export class UserRepositoryDrizzle implements UserRepository {
       ]);
 
       let nextCursor: SessionId | undefined;
+      let pageRows = rows;
       if (rows.length > input.limit) {
-        const nextItem = rows.pop();
-        nextCursor = nextItem ? toSessionId(nextItem.id) : undefined;
+        pageRows = rows.slice(0, input.limit);
+        const lastVisible = pageRows.at(-1);
+        nextCursor = lastVisible ? toSessionId(lastVisible.id) : undefined;
       }
 
       return {
-        items: rows.map(toDomainSession),
+        items: pageRows.map(toDomainSession),
         nextCursor,
         total: total[0]?.count ?? 0,
       };

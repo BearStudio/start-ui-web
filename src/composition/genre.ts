@@ -3,6 +3,7 @@ import { createGenreUseCases } from '@/modules/genre/factory';
 import { GenreRepositoryDrizzle } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
 
 import { getKernel, type KernelOverrides } from './kernel';
+import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
 
 export type GenreCompositionOverrides = KernelOverrides & {
@@ -24,8 +25,9 @@ const getCachedGenreUseCases = createCachedFactory(() => buildGenreUseCases());
 export function getGenreUseCases(options?: {
   overrides?: GenreCompositionOverrides;
 }) {
-  if (options?.overrides && Object.keys(options.overrides).length > 0) {
-    return buildGenreUseCases(options.overrides);
+  const overrides = options?.overrides;
+  if (hasDefinedOverrides(overrides)) {
+    return buildGenreUseCases(overrides);
   }
   return getCachedGenreUseCases(false);
 }

@@ -26,7 +26,7 @@ export async function createUser(
     const value = await deps.userRepository.create(input.user);
     return { ok: true, value };
   } catch (error) {
-    if (error instanceof AppError && error.category === 'conflict') {
+    if (error instanceof AppError && error.code === 'USER_DUPLICATE') {
       return { ok: false, reason: 'duplicate' };
     }
     throw error;

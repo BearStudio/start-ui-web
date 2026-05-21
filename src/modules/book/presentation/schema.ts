@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { zGenre } from '@/modules/genre';
+import { zGenre } from '@/modules/genre/presentation';
 
 export type Book = z.infer<ReturnType<typeof zBook>>;
 

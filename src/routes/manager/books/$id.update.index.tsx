@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageBookUpdate } from '@/modules/book';
+import { PageBookUpdate } from '@/modules/book/presentation';
 
 export const Route = createFileRoute('/manager/books/$id/update/')({
   component: RouteComponent,

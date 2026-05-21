@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { getAccountUseCases } from '@/composition/account';
+import type { ProtectedContext } from '@/modules/auth/server';
 import { toUserId } from '@/modules/kernel/domain/ids';
-import type { ProtectedContext } from '@/server/middlewares.server';
-import { ServerFnError } from '@/server/server-fn-error';
+import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zSubmitOnboardingInput = () =>
   z.object({ name: z.string().trim().min(1) });
@@ -13,7 +13,6 @@ export const zUpdateInfoInput = () =>
 const getUseCases = (ctx: ProtectedContext) =>
   getAccountUseCases({
     overrides: {
-      db: ctx.db,
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
@@ -31,7 +30,10 @@ const submitOnboarding = async (
     name: data.name,
   });
   if (!result.ok) {
-    throw new ServerFnError('NOT_FOUND', { message: 'Account not found' });
+    throwServerFnErrorForReason(result.reason, {
+      invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
+      not_found: { code: 'NOT_FOUND', message: 'Account not found' },
+    });
   }
 };
 
@@ -44,7 +46,10 @@ const updateInfo = async (
     name: data.name,
   });
   if (!result.ok) {
-    throw new ServerFnError('NOT_FOUND', { message: 'Account not found' });
+    throwServerFnErrorForReason(result.reason, {
+      invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
+      not_found: { code: 'NOT_FOUND', message: 'Account not found' },
+    });
   }
 };
 

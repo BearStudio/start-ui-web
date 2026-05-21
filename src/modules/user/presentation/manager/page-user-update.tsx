@@ -15,17 +15,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { authClient } from '@/features/auth/client';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { authClient } from '@/modules/auth/client';
+import { isServerFnError } from '@/modules/kernel/client';
 import { FormUser } from '@/modules/user/presentation/manager/form-user';
+import { userQueries } from '@/modules/user/presentation/queries';
 import { zFormFieldsUser } from '@/modules/user/presentation/schema';
-import { userQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageUserUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['user']);

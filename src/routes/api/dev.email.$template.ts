@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { previewEmailRoute } from '@/server/email';
+import { previewEmailRoute } from '@/composition/email-preview';
 
 export const Route = createFileRoute('/api/dev/email/$template')({
   server: {

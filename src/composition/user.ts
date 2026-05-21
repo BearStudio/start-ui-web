@@ -1,12 +1,13 @@
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
+import { auth } from '@/modules/auth/server';
 import type { UserAuthGateway } from '@/modules/user/application/ports/user-auth-gateway';
 import type { UserRepository } from '@/modules/user/application/ports/user-repository';
 import { createUserUseCases } from '@/modules/user/factory';
 import { UserRepositoryDrizzle } from '@/modules/user/infrastructure/drizzle/user-repository-drizzle';
-import { auth } from '@/server/auth';
 
 import { getKernel, type KernelOverrides } from './kernel';
+import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
 
 const productionUserAuthGateway: UserAuthGateway = {
@@ -54,8 +55,9 @@ const getCachedUserUseCases = createCachedFactory(() => buildUserUseCases());
 export function getUserUseCases(options?: {
   overrides?: UserCompositionOverrides;
 }) {
-  if (options?.overrides && Object.keys(options.overrides).length > 0) {
-    return buildUserUseCases(options.overrides);
+  const overrides = options?.overrides;
+  if (hasDefinedOverrides(overrides)) {
+    return buildUserUseCases(overrides);
   }
   return getCachedUserUseCases(false);
 }

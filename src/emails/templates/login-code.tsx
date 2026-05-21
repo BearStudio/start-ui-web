@@ -5,7 +5,7 @@ import i18n from '@/lib/i18n';
 import { EmailFooter } from '@/emails/components/email-footer';
 import { EmailLayout } from '@/emails/components/email-layout';
 import { styles } from '@/emails/styles';
-import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/features/auth/config';
+import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/modules/auth';
 
 export const TemplateLoginCode = (props: {
   language: string;

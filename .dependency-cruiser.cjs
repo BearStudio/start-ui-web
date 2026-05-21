@@ -43,12 +43,25 @@ module.exports = {
     {
       name: 'no-cross-feature-deep-import',
       severity: 'error',
-      comment: 'Cross-module imports must go through the module index.ts',
+      comment:
+        'Cross-module imports must go through module public files: index.ts, presentation.ts, server.ts, or client.ts',
       from: { path: '^src/modules/([^/]+)/' },
       to: {
-        path: '^src/modules/(?!\\1)([^/]+)/(?!index\\.)',
+        path: '^src/modules/(?!\\1)([^/]+)/(?!index\\.|presentation\\.|server\\.|client\\.)',
         pathNot: '^src/modules/kernel/',
       },
+    },
+    {
+      name: 'presentation-no-infrastructure',
+      severity: 'error',
+      from: { path: '^src/modules/[^/]+/presentation' },
+      to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
+    },
+    {
+      name: 'transport-no-infrastructure',
+      severity: 'error',
+      from: { path: '^src/modules/[^/]+/transport' },
+      to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
     },
     {
       name: 'kernel-no-feature-imports',
@@ -61,6 +74,20 @@ module.exports = {
       severity: 'error',
       from: { path: '^src/(routes|components|features)' },
       to: { path: '^src/modules/[^/]+/infrastructure' },
+    },
+    {
+      name: 'routes-use-module-public-api',
+      severity: 'error',
+      from: { path: '^src/(routes|components|layout|devtools)' },
+      to: {
+        path: '^src/modules/[^/]+/(?!index\\.|presentation\\.|server\\.|client\\.)',
+      },
+    },
+    {
+      name: 'legacy-server-entrypoints-removed',
+      severity: 'error',
+      from: {},
+      to: { path: '^src/server' },
     },
     {
       name: 'drizzle-confined-to-infrastructure',

@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 import { getGenreUseCases } from '@/composition/genre';
-import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
-import type { ProtectedContext } from '@/server/middlewares.server';
-import { ServerFnError } from '@/server/server-fn-error';
+import type { ProtectedContext } from '@/modules/auth/server';
+import { toGenreId, toUserId, zGenreId } from '@/modules/kernel/domain/ids';
+import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zGetAllInput = () =>
   z
     .object({
-      cursor: z.string().optional(),
+      cursor: zGenreId().optional(),
       limit: z.coerce.number().int().min(1).max(100).prefault(20),
       searchTerm: z.string().trim().optional(),
     })
@@ -17,7 +17,6 @@ export const zGetAllInput = () =>
 const getUseCases = (ctx: ProtectedContext) =>
   getGenreUseCases({
     overrides: {
-      db: ctx.db,
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
@@ -37,7 +36,9 @@ const getAll = async (
     searchTerm: data.searchTerm ?? '',
   });
   if (result.ok) return result.value;
-  throw new ServerFnError('FORBIDDEN');
+  return throwServerFnErrorForReason(result.reason, {
+    forbidden: 'FORBIDDEN',
+  });
 };
 
 export type GenreHandlers = {

@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import { sql } from 'drizzle-orm';
 import { randomInt } from 'node:crypto';
 
-import { db } from '@/server/db';
-import { book, genre } from '@/server/db/schema';
+import { db } from '@/modules/kernel/infrastructure/db/client';
+import { book, genre } from '@/modules/kernel/infrastructure/db/schema';
 
 import data from './book-data.json';
 

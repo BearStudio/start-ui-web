@@ -18,10 +18,10 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { isServerFnError } from '@/modules/kernel/client';
 import { FormUser } from '@/modules/user/presentation/manager/form-user';
+import { userQueries } from '@/modules/user/presentation/queries';
 import { zFormFieldsUser } from '@/modules/user/presentation/schema';
-import { userQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
 
 export const PageUserNew = () => {
   const { t } = useTranslation(['user']);

@@ -15,16 +15,16 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
-import { WithPermissions } from '@/features/auth/with-permissions';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
+import { WithPermissions } from '@/modules/auth/client';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
+import { bookQueries } from '@/modules/book/presentation/queries';
+import { isServerFnError } from '@/modules/kernel/client';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);

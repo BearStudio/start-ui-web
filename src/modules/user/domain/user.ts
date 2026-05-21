@@ -52,7 +52,7 @@ export type UserUpdateInput = {
 };
 
 export type UserUpdatePersistenceInput = {
-  name: string;
+  name?: string;
   email: EmailAddress;
   role?: UserRole;
   emailVerified?: boolean;

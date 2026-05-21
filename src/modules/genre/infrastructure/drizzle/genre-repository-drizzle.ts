@@ -51,8 +51,9 @@ export class GenreRepositoryDrizzle implements GenreRepository {
     searchTerm: string;
   }): Promise<GenreListPage> {
     try {
-      const searchPattern = `%${escapeLikePattern(input.searchTerm.trim())}%`;
-      const searchFilter = input.searchTerm
+      const searchTerm = input.searchTerm.trim();
+      const searchPattern = `%${escapeLikePattern(searchTerm)}%`;
+      const searchFilter = searchTerm
         ? ilike(genreTable.name, searchPattern)
         : undefined;
 
@@ -101,13 +102,15 @@ export class GenreRepositoryDrizzle implements GenreRepository {
       ]);
 
       let nextCursor: GenreId | undefined;
+      let pageRows = rows;
       if (rows.length > input.limit) {
-        const nextItem = rows.pop();
-        nextCursor = nextItem ? toGenreId(nextItem.id) : undefined;
+        pageRows = rows.slice(0, input.limit);
+        const lastVisible = pageRows.at(-1);
+        nextCursor = lastVisible ? toGenreId(lastVisible.id) : undefined;
       }
 
       return {
-        items: rows.map(toDomain),
+        items: pageRows.map(toDomain),
         nextCursor,
         total: total[0]?.count ?? 0,
       };

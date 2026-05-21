@@ -30,7 +30,7 @@ import {
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { userQueries } from '@/server/functions/queries';
+import { userQueries } from '@/modules/user/presentation/queries';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);

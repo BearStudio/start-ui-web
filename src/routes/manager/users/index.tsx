@@ -2,7 +2,7 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import { PageUsers } from '@/modules/user';
+import { PageUsers } from '@/modules/user/presentation';
 
 export const Route = createFileRoute('/manager/users/')({
   component: RouteComponent,

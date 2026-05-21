@@ -1,4 +1,4 @@
-import { db } from '@/server/db';
+import { db } from '@/modules/kernel/infrastructure/db/client';
 
 import { createBooks } from './book';
 import { createUsers } from './user';

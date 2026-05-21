@@ -3,6 +3,7 @@ import type { UserId } from '@/modules/kernel/domain/ids';
 import type { AccountUseCaseDeps, UseCaseResult } from './types';
 import type { AccountUpdateResult } from '../../domain/account';
 import { normalizeAccountName } from '../../domain/account';
+import { isAccountNamePresent } from '../../domain/account-policy';
 
 export type UpdateAccountInfoInput = {
   currentUserId: UserId;
@@ -12,7 +13,10 @@ export type UpdateAccountInfoInput = {
 export async function updateAccountInfo(
   deps: AccountUseCaseDeps,
   input: UpdateAccountInfoInput
-): Promise<UseCaseResult<AccountUpdateResult, 'not_found'>> {
+): Promise<UseCaseResult<AccountUpdateResult, 'invalid' | 'not_found'>> {
+  if (!isAccountNamePresent(input.name))
+    return { ok: false, reason: 'invalid' };
+
   deps.logger.info('account.update_info', {
     event: 'account.update_info',
     userId: input.currentUserId,

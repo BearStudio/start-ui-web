@@ -1,15 +1,17 @@
 import { z } from 'zod';
 
 import { getUserUseCases } from '@/composition/user';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type { ProtectedContext } from '@/modules/auth/server';
 import {
   toEmailAddress,
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
+import {
+  mapAppErrorToServerFnError,
+  throwServerFnErrorForReason,
+} from '@/modules/kernel/transport/tanstack/result-mapper';
 import type { UserRole } from '@/modules/user/domain/user';
-import type { ProtectedContext } from '@/server/middlewares.server';
-import { ServerFnError } from '@/server/server-fn-error';
 
 const zRole = () => z.enum(['admin', 'user']);
 
@@ -56,7 +58,6 @@ export const zRevokeUserSessionInput = () =>
 const getUseCases = (ctx: ProtectedContext) =>
   getUserUseCases({
     overrides: {
-      db: ctx.db,
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
@@ -65,35 +66,23 @@ const getUseCases = (ctx: ProtectedContext) =>
     },
   });
 
-const mapReason = (reason: string): never => {
-  if (reason === 'forbidden') throw new ServerFnError('FORBIDDEN');
-  if (reason === 'not_found') throw new ServerFnError('NOT_FOUND');
-  if (reason === 'duplicate') {
-    throw new ServerFnError('CONFLICT', {
+const mapReason = (
+  reason: string,
+  options?: { selfMessage?: string }
+): never => {
+  return throwServerFnErrorForReason(reason, {
+    duplicate: {
+      code: 'CONFLICT',
       message: 'Unique constraint violation',
       data: { target: ['email'] },
-    });
-  }
-  if (reason === 'self') {
-    throw new ServerFnError('BAD_REQUEST');
-  }
-  throw new ServerFnError('INTERNAL_SERVER_ERROR');
-};
-
-const mapThrownError = (error: unknown): never => {
-  if (error instanceof AppError) {
-    if (error.category === 'conflict') {
-      throw new ServerFnError('CONFLICT', {
-        message: error.message,
-        data: error.details,
-      });
-    }
-    if (error.category === 'bad_request') {
-      throw new ServerFnError('BAD_REQUEST', { message: error.message });
-    }
-    throw new ServerFnError('INTERNAL_SERVER_ERROR');
-  }
-  throw error;
+    },
+    forbidden: 'FORBIDDEN',
+    not_found: 'NOT_FOUND',
+    self: {
+      code: 'BAD_REQUEST',
+      message: options?.selfMessage ?? 'You cannot target yourself',
+    },
+  });
 };
 
 const getAll = async (
@@ -107,7 +96,7 @@ const getAll = async (
       limit: data.limit,
       searchTerm: data.searchTerm ?? '',
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -121,7 +110,7 @@ const getById = async (
       currentUserId: toUserId(ctx.user.id),
       id: toUserId(data.id),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -140,7 +129,7 @@ const updateById = async (
         role: data.role as UserRole | null | undefined,
       },
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -158,7 +147,7 @@ const create = async (
         role: data.role as UserRole | null | undefined,
       },
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -172,9 +161,11 @@ const deleteById = async (
       currentUserId: toUserId(ctx.user.id),
       id: toUserId(data.id),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return;
-  return mapReason(result.reason);
+  return mapReason(result.reason, {
+    selfMessage: 'You cannot delete yourself',
+  });
 };
 
 const getUserSessions = async (
@@ -188,7 +179,7 @@ const getUserSessions = async (
       cursor: data.cursor ? toSessionId(data.cursor) : undefined,
       limit: data.limit,
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -202,9 +193,11 @@ const revokeUserSessions = async (
       currentUserId: toUserId(ctx.user.id),
       id: toUserId(data.id),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return;
-  return mapReason(result.reason);
+  return mapReason(result.reason, {
+    selfMessage: 'You cannot revoke your own sessions',
+  });
 };
 
 const revokeUserSession = async (
@@ -218,9 +211,11 @@ const revokeUserSession = async (
       id: toUserId(data.id),
       sessionId: toSessionId(data.sessionId),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return;
-  return mapReason(result.reason);
+  return mapReason(result.reason, {
+    selfMessage: 'You cannot revoke your current session',
+  });
 };
 
 export type UserHandlers = {

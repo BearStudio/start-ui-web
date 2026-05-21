@@ -3,6 +3,7 @@ import { createAccountUseCases } from '@/modules/account/factory';
 import { AccountRepositoryDrizzle } from '@/modules/account/infrastructure/drizzle/account-repository-drizzle';
 
 import { getKernel, type KernelOverrides } from './kernel';
+import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
 
 export type AccountCompositionOverrides = KernelOverrides & {
@@ -26,8 +27,9 @@ const getCachedAccountUseCases = createCachedFactory(() =>
 export function getAccountUseCases(options?: {
   overrides?: AccountCompositionOverrides;
 }) {
-  if (options?.overrides && Object.keys(options.overrides).length > 0) {
-    return buildAccountUseCases(options.overrides);
+  const overrides = options?.overrides;
+  if (hasDefinedOverrides(overrides)) {
+    return buildAccountUseCases(overrides);
   }
   return getCachedAccountUseCases(false);
 }

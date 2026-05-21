@@ -21,8 +21,8 @@ import { PageError } from '@/components/errors/page-error';
 
 import { MailDevDevtoolPanel } from '@/devtools/maildev';
 import { EnvHint } from '@/features/devtools/env-hint';
+import { getUserLanguage } from '@/modules/kernel/server';
 import { Providers } from '@/providers';
-import { getUserLanguage } from '@/server/utils';
 import appCss from '@/styles/app.css?url';
 
 const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {

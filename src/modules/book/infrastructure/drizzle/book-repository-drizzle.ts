@@ -85,8 +85,9 @@ export class BookRepositoryDrizzle implements BookRepository {
     searchTerm: string;
   }): Promise<BookListPage> {
     try {
-      const searchPattern = `%${escapeLikePattern(input.searchTerm.trim())}%`;
-      const searchFilter = input.searchTerm
+      const searchTerm = input.searchTerm.trim();
+      const searchPattern = `%${escapeLikePattern(searchTerm)}%`;
+      const searchFilter = searchTerm
         ? or(
             ilike(bookTable.title, searchPattern),
             ilike(bookTable.author, searchPattern)
@@ -139,13 +140,15 @@ export class BookRepositoryDrizzle implements BookRepository {
       ]);
 
       let nextCursor: BookId | undefined;
+      let pageRows = rows;
       if (rows.length > input.limit) {
-        const nextItem = rows.pop();
-        nextCursor = nextItem ? toBookId(nextItem.id) : undefined;
+        pageRows = rows.slice(0, input.limit);
+        const lastVisible = pageRows.at(-1);
+        nextCursor = lastVisible ? toBookId(lastVisible.id) : undefined;
       }
 
       return {
-        items: rows.map(toDomain),
+        items: pageRows.map(toDomain),
         nextCursor,
         total: total[0]?.count ?? 0,
       };
@@ -209,7 +212,8 @@ export class BookRepositoryDrizzle implements BookRepository {
         .where(eq(bookTable.id, id))
         .returning();
 
-      return updated ? toDomain(updated) : null;
+      if (!updated) return null;
+      return this.getById(id);
     } catch (error) {
       mapDbError(error);
     }

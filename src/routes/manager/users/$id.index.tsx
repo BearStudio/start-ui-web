@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageUser } from '@/modules/user';
+import { PageUser } from '@/modules/user/presentation';
 
 export const Route = createFileRoute('/manager/users/$id/')({
   component: RouteComponent,

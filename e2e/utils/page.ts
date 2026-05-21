@@ -3,11 +3,11 @@ import { CustomFixture } from 'e2e/utils/types';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
+import locales from '@/locales';
 import {
   AUTH_EMAIL_OTP_MOCKED,
   AUTH_SIGNUP_ENABLED,
-} from '@/features/auth/config';
-import locales from '@/locales';
+} from '@/modules/auth/client';
 import { FileRouteTypes } from '@/routeTree.gen';
 
 interface PageUtils {

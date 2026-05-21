@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import PageLoginError from '@/features/auth/page-login-error';
+import { PageLoginError } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login/error/')({
   component: RouteComponent,
