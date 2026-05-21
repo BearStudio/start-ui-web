@@ -42,7 +42,7 @@ export const mapAppErrorToServerFnError = (error: unknown): never => {
     throw new ServerFnError(codeForCategory[error.category], {
       message: error.message,
       data:
-        error.details && typeof error.details === 'object'
+        error.exposeDetails && typeof error.details === 'object'
           ? (error.details as Record<string, unknown>)
           : undefined,
     });

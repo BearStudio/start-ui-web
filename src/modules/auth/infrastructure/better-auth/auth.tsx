@@ -13,7 +13,7 @@ import {
   AUTH_EMAIL_OTP_MOCKED,
   permissions,
 } from '@/modules/auth';
-import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
+import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/client';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { db } from '@/modules/kernel/infrastructure/db/client';
 import { sendEmail } from '@/modules/kernel/infrastructure/email/nodemailer';

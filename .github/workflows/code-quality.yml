@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Run oxlint
-        run: pnpm oxlint --deny-warnings .
+        run: pnpm lint
 
   typescriptChecker:
     name: 🟦 TypeScript Checker
@@ -35,7 +35,7 @@ jobs:
           node-version: 24
 
       - name: Run Typescript checker
-        run: pnpm run lint:ts
+        run: pnpm typecheck
 
   tests:
     name: 🔬 Tests
@@ -57,4 +57,4 @@ jobs:
         uses: ./.github/actions/setup-playwright
 
       - name: Run tests
-        run: SKIP_ENV_VALIDATION=true pnpm run test:ci
+        run: SKIP_ENV_VALIDATION=true pnpm test

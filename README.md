@@ -65,8 +65,13 @@ pnpm dk:start # Only if your Docker containers are not running
 pnpm dev
 ```
 
+## Verification
 
-
+```bash
+pnpm check   # Static checks: format, lint, types, architecture, security, audit
+pnpm test    # Unit and integration tests
+pnpm verify  # Full local pre-merge gate
+```
 
 ### Emails in development
 
