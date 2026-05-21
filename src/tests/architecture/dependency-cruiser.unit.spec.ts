@@ -1,0 +1,15 @@
+import { cruise } from 'dependency-cruiser';
+import extractDepcruiseOptions from 'dependency-cruiser/config-utl/extract-depcruise-options';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
+
+describe('dependency-cruiser architecture rules', () => {
+  it('has zero dependency violations', async () => {
+    const options = await extractDepcruiseOptions(
+      path.resolve(process.cwd(), '.dependency-cruiser.cjs')
+    );
+    const result = await cruise(['src'], options);
+
+    expect(result.exitCode).toBe(0);
+  });
+});

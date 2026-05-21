@@ -1,0 +1,25 @@
+import type { UserId } from '@/modules/kernel/domain/ids';
+
+import type { AccountUseCaseDeps, UseCaseResult } from './types';
+import type { AccountUpdateResult } from '../../domain/account';
+import { normalizeAccountName } from '../../domain/account';
+
+export type UpdateAccountInfoInput = {
+  currentUserId: UserId;
+  name: string;
+};
+
+export async function updateAccountInfo(
+  deps: AccountUseCaseDeps,
+  input: UpdateAccountInfoInput
+): Promise<UseCaseResult<AccountUpdateResult, 'not_found'>> {
+  deps.logger.info('account.update_info', {
+    event: 'account.update_info',
+    userId: input.currentUserId,
+  });
+  const value = await deps.accountRepository.updateInfo(input.currentUserId, {
+    name: normalizeAccountName(input.name),
+  });
+  if (!value) return { ok: false, reason: 'not_found' };
+  return { ok: true, value };
+}

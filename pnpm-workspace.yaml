@@ -1,0 +1,14 @@
+engineStrict: true
+sideEffectsCache: false
+
+overrides:
+  '@types/node': ^24
+  body-parser: 1.20.4
+  effect: 3.21.2
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  esbuild: true
+  lefthook: true
+  sharp: true

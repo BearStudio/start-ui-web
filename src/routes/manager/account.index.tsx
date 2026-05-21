@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageAccount } from '@/features/account/manager/page-account';
+import { ManagerPageAccount as PageAccount } from '@/modules/account';
 
 export const Route = createFileRoute('/manager/account/')({
   component: RouteComponent,

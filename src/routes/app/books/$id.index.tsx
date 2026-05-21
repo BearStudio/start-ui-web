@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageBook } from '@/features/book/app/page-book';
 import { useShouldShowNav } from '@/layout/app/layout';
+import { AppPageBook as PageBook } from '@/modules/book';
 
 export const Route = createFileRoute('/app/books/$id/')({
   component: RouteComponent,

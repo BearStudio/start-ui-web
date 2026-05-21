@@ -1,3 +1,5 @@
+import { AppError } from '@/modules/kernel/domain/errors/app-error';
+
 export const SERVER_FN_ERROR_CODES = [
   'BAD_REQUEST',
   'UNAUTHORIZED',
@@ -25,21 +27,36 @@ const STATUS_BY_CODE: Record<ServerFnErrorCode, number> = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-export class ServerFnError extends Error {
+const CATEGORY_BY_CODE: Record<
+  ServerFnErrorCode,
+  ConstructorParameters<typeof AppError>[0]['category']
+> = {
+  BAD_REQUEST: 'bad_request',
+  UNAUTHORIZED: 'unauthorized',
+  FORBIDDEN: 'forbidden',
+  NOT_FOUND: 'not_found',
+  CONFLICT: 'conflict',
+  METHOD_NOT_SUPPORTED: 'bad_request',
+  INTERNAL_SERVER_ERROR: 'system',
+};
+
+export class ServerFnError extends AppError {
   static readonly NAME = 'ServerFnError';
 
-  readonly code: ServerFnErrorCode;
-  readonly status: number;
   readonly data?: ServerFnErrorData;
 
   constructor(
     code: ServerFnErrorCode,
     options?: { message?: string; data?: ServerFnErrorData }
   ) {
-    super(options?.message ?? code);
+    super({
+      code,
+      category: CATEGORY_BY_CODE[code],
+      status: STATUS_BY_CODE[code],
+      message: options?.message ?? code,
+      details: options?.data,
+    });
     this.name = ServerFnError.NAME;
-    this.code = code;
-    this.status = STATUS_BY_CODE[code];
     this.data = options?.data;
   }
 

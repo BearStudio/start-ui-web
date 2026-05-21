@@ -5,8 +5,8 @@ import { handlers } from '@/server/functions/book.handlers.server';
 import {
   chainResult,
   createAuthenticatedContext,
+  expectedPermissionRequest,
   mockDb,
-  mockUser,
   mockUserHasPermission,
 } from '@/server/functions/test-utils';
 
@@ -105,12 +105,9 @@ describe('book handlers', () => {
 
       await handlers.getAll(createAuthenticatedContext(), defaultGetAllInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { book: ['read'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ book: ['read'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -153,12 +150,9 @@ describe('book handlers', () => {
 
       await handlers.getById(createAuthenticatedContext(), { id: 'book-1' });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { book: ['read'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ book: ['read'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -217,12 +211,9 @@ describe('book handlers', () => {
 
       await handlers.create(createAuthenticatedContext(), createInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { book: ['create'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ book: ['create'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -278,12 +269,9 @@ describe('book handlers', () => {
 
       await handlers.updateById(createAuthenticatedContext(), updateInput);
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { book: ['update'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ book: ['update'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {
@@ -324,12 +312,9 @@ describe('book handlers', () => {
 
       await handlers.deleteById(createAuthenticatedContext(), { id: 'book-1' });
 
-      expect(mockUserHasPermission).toHaveBeenCalledWith({
-        body: {
-          userId: mockUser.id,
-          permissions: { book: ['delete'] },
-        },
-      });
+      expect(mockUserHasPermission).toHaveBeenCalledWith(
+        expectedPermissionRequest({ book: ['delete'] })
+      );
     });
 
     it('should throw FORBIDDEN when user lacks permission', async () => {

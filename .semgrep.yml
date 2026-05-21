@@ -1,0 +1,156 @@
+rules:
+  - id: no-session-token-in-client-features
+    message: Do not expose or pass raw session tokens through client-facing feature code; use session IDs and resolve tokens server-side.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - /src/features/**/*.ts
+        - /src/features/**/*.tsx
+    pattern-either:
+      - pattern: sessionToken
+      - pattern: $SESSION.session.token
+      - pattern: $SESSION.token
+
+  - id: no-session-token-server-function-input
+    message: Server function input validators must not accept raw session tokens from clients; accept a sessionId and resolve the token server-side.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - /src/server/functions/**/*.ts
+    pattern: |
+      z.object({ ..., sessionToken: z.string(), ... })
+
+  - id: no-id-only-session-cursor-lookup
+    message: Session cursor lookups must scope by both session.id and session.userId so one user's cursor cannot affect another user's page.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - /src/server/functions/**/*.ts
+    pattern: |
+      ctx.db.query.session.findFirst({
+        where: eq(session.id, $CURSOR),
+        ...
+      })
+
+  - id: no-user-update-email-autoverify
+    message: User update handlers must not automatically mark changed emails as verified.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - /src/server/functions/**/*.ts
+    patterns:
+      - pattern-inside: |
+          ctx.db
+            .update(user)
+            ...
+      - pattern: |
+          {
+            ...,
+            emailVerified: true,
+            ...
+          }
+
+  - id: raw-env-access-outside-kernel
+    message: Read env via kernel/infrastructure/config/env.ts, not process.env directly.
+    languages: [typescript]
+    severity: ERROR
+    pattern: process.env.$X
+    paths:
+      exclude:
+        - src/modules/kernel/infrastructure/config/**
+        - '*.config.ts'
+        - '*.config.mjs'
+        - '*.cosmos.ts'
+        - 'vite.*.ts'
+        - vite.config.*
+        - drizzle.config.*
+
+  - id: bare-server-new-error
+    message: Throw AppError or a domain error subclass, not bare new Error in server code.
+    languages: [typescript]
+    severity: ERROR
+    pattern: new Error(...)
+    paths:
+      include:
+        - src/modules/**/application/**
+        - src/modules/**/transport/**
+        - src/modules/**/infrastructure/**
+        - src/server/**
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: unescaped-like-pattern
+    message: Use escapeLikePattern() from kernel before interpolating into LIKE.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: |
+              `%${$X}%`
+          - pattern: |
+              "%" + $X + "%"
+      - pattern-not: |
+          `%${escapeLikePattern(...)}%`
+
+  - id: direct-sdk-import-outside-infrastructure
+    message: Drizzle/pg/postgres SDKs are confined to infrastructure or composition.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '^\s*import\s+.*\s+from\s+["''](?:drizzle-orm(?:/[^"'']*)?|postgres|pg)["'']'
+    paths:
+      exclude:
+        - src/modules/*/infrastructure/**
+        - src/modules/kernel/infrastructure/**
+        - src/composition/**
+        - drizzle/**
+        - drizzle.config.ts
+
+  - id: cross-feature-deep-import
+    message: Import other modules through their index.ts, not deep paths.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/]+/(?!index)[^"'']+["'']'
+
+  - id: unsafe-redirect-from-user-input
+    message: Validate redirect targets against an allowlist; do not pass raw request input.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: 'redirect({ to: $REQ.$X.$Y, ... })'
+      - pattern: 'Response.redirect($REQ.$X.$Y, ...)'
+
+  - id: token-or-secret-logging
+    message: Do not log tokens, secrets, passwords, or Authorization headers.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: '$LOG.$M(..., { ..., token: $T, ... })'
+      - pattern: '$LOG.$M(..., { ..., authorization: $A, ... })'
+      - pattern: '$LOG.$M(..., { ..., password: $P, ... })'
+      - pattern: '$LOG.$M(..., $REQ.headers.authorization, ...)'
+      - pattern: 'console.log(..., $REQ.headers.authorization, ...)'
+    paths:
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: domain-imports-react-or-router
+    message: domain/ must not import React or routing libs.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: import $X from "react"
+      - pattern: import $X from "@tanstack/react-router"
+      - pattern: import $X from "@tanstack/react-query"
+    paths:
+      include:
+        - src/modules/*/domain/**

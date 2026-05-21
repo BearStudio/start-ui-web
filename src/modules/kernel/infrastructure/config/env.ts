@@ -1,0 +1,143 @@
+/* oxlint-disable no-process-env */
+import { z } from 'zod';
+
+type RuntimeEnv = Record<string, unknown>;
+
+const runtimeEnv = (): RuntimeEnv => ({
+  ...(typeof process === 'undefined' ? {} : process.env),
+  ...import.meta.env,
+});
+
+const isTruthy = (value: unknown) => value === true || value === 'true';
+
+const isProd = () => {
+  const env = runtimeEnv();
+  return env.NODE_ENV ? env.NODE_ENV === 'production' : isTruthy(env.PROD);
+};
+
+const isDev = () => {
+  const env = runtimeEnv();
+  return env.NODE_ENV ? env.NODE_ENV === 'development' : isTruthy(env.DEV);
+};
+
+const zOptionalWithReplaceMe = () =>
+  z
+    .string()
+    .optional()
+    .refine((value) => !isProd() || value !== 'REPLACE ME', {
+      error: 'Update the value "REPLACE ME" or remove the variable',
+    })
+    .transform((value) => (value === 'REPLACE ME' ? undefined : value));
+
+const getBaseUrl = (env: RuntimeEnv) => {
+  const vercelUrlPreviewUrl =
+    env.VITE_VERCEL_ENV === 'preview' ? env.VITE_VERCEL_BRANCH_URL : null;
+
+  if (typeof vercelUrlPreviewUrl === 'string' && vercelUrlPreviewUrl) {
+    return `https://${vercelUrlPreviewUrl}`;
+  }
+
+  return env.VITE_BASE_URL;
+};
+
+const serverSchema = () =>
+  z.object({
+    DATABASE_URL: z.url(),
+    AUTH_SECRET: z.string(),
+    AUTH_SESSION_EXPIRATION_IN_SECONDS: z.coerce
+      .number()
+      .int()
+      .prefault(2592000),
+    AUTH_SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().prefault(86400),
+    AUTH_ALLOWED_HOSTS: z
+      .string()
+      .optional()
+      .transform((value) => value?.split(',').map((v) => v.trim())),
+    AUTH_TRUSTED_ORIGINS: z
+      .string()
+      .optional()
+      .transform((value) => value?.split(',').map((v) => v.trim())),
+    GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
+    GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
+    EMAIL_SERVER: z.url(),
+    EMAIL_FROM: z.string(),
+    EMAIL_DELIVERY_DISABLED: z.stringbool().default(false),
+    LOGGER_LEVEL: z
+      .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
+      .prefault(isProd() ? 'error' : 'info'),
+    LOGGER_PRETTY: z
+      .enum(['true', 'false'])
+      .prefault(isProd() ? 'false' : 'true')
+      .transform((value) => value === 'true'),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
+    S3_BUCKET_NAME: z.string().default('default'),
+    S3_REGION: z.string().default('auto'),
+    S3_HOST: z.string(),
+    S3_SECURE: z.stringbool().default(true),
+    S3_FORCE_PATH_STYLE: z.stringbool().default(false),
+    DOCKER_MAILDEV_UI_PORT: z.string().optional(),
+  });
+
+const clientSchema = () =>
+  z.object({
+    VITE_BASE_URL: z.url(),
+    VITE_IS_DEMO: z
+      .enum(['true', 'false'])
+      .optional()
+      .prefault('false')
+      .transform((value) => value === 'true'),
+    VITE_ENV_NAME: z
+      .string()
+      .optional()
+      .transform((value) => value ?? (isDev() ? 'LOCAL' : undefined)),
+    VITE_ENV_EMOJI: z
+      .emoji()
+      .optional()
+      .transform((value) => value ?? (isDev() ? '🚧' : undefined)),
+    VITE_ENV_COLOR: z
+      .string()
+      .optional()
+      .transform((value) => value ?? (isDev() ? 'gold' : 'plum')),
+    VITE_S3_BUCKET_PUBLIC_URL: z.url(),
+  });
+
+export type EnvServer = z.infer<ReturnType<typeof serverSchema>>;
+export type EnvClient = z.infer<ReturnType<typeof clientSchema>>;
+export type Env = EnvServer & EnvClient;
+
+let cachedServerEnv: EnvServer | undefined;
+let cachedClientEnv: EnvClient | undefined;
+
+export function getEnvServer(): EnvServer {
+  if (cachedServerEnv) return cachedServerEnv;
+  cachedServerEnv = serverSchema().parse(runtimeEnv());
+  return cachedServerEnv;
+}
+
+export function getEnvClient(): EnvClient {
+  if (cachedClientEnv) return cachedClientEnv;
+  const raw = runtimeEnv();
+  cachedClientEnv = clientSchema().parse({
+    ...raw,
+    VITE_BASE_URL: getBaseUrl(raw),
+  });
+  return cachedClientEnv;
+}
+
+export const envServer = new Proxy({} as EnvServer, {
+  get: (_target, property: keyof EnvServer) => getEnvServer()[property],
+});
+
+export const envClient = new Proxy({} as EnvClient, {
+  get: (_target, property: keyof EnvClient) => getEnvClient()[property],
+});
+
+export const env = new Proxy({} as Env, {
+  get: (_target, property: keyof Env) => {
+    if (String(property).startsWith('VITE_')) {
+      return getEnvClient()[property as keyof EnvClient];
+    }
+    return getEnvServer()[property as keyof EnvServer];
+  },
+});

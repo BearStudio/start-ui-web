@@ -1,0 +1,118 @@
+import { and, asc, eq, gt, ilike, or, sql } from 'drizzle-orm';
+
+import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type { GenreId } from '@/modules/kernel/domain/ids';
+import { toGenreId } from '@/modules/kernel/domain/ids';
+import type { Database } from '@/modules/kernel/infrastructure/db/client';
+import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
+import { escapeLikePattern } from '@/modules/kernel/infrastructure/db/like';
+import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
+
+import type { GenreRepository } from '../../application/ports/genre-repository';
+import type { Genre, GenreListPage } from '../../domain/genre';
+
+function toDomain(row: typeof genreTable.$inferSelect): Genre {
+  return {
+    id: toGenreId(row.id),
+    name: row.name,
+    color: row.color,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
+function mapDbError(error: unknown): never {
+  if (isPgError(error) && error.code === '23505') {
+    throw new AppError({
+      code: 'GENRE_DUPLICATE',
+      category: 'conflict',
+      status: 409,
+      message: 'Genre already exists',
+      details: { target: ['name'] },
+      cause: error,
+    });
+  }
+
+  throw new AppError({
+    code: 'GENRE_REPOSITORY_ERROR',
+    category: 'system',
+    status: 500,
+    message: 'Genre repository error',
+    cause: error,
+  });
+}
+
+export class GenreRepositoryDrizzle implements GenreRepository {
+  constructor(private readonly db: Database) {}
+
+  async list(input: {
+    cursor?: GenreId;
+    limit: number;
+    searchTerm: string;
+  }): Promise<GenreListPage> {
+    try {
+      const searchPattern = `%${escapeLikePattern(input.searchTerm.trim())}%`;
+      const searchFilter = input.searchTerm
+        ? ilike(genreTable.name, searchPattern)
+        : undefined;
+
+      const cursorRow = input.cursor
+        ? await this.db.query.genre.findFirst({
+            where: eq(genreTable.id, input.cursor),
+            columns: { id: true, name: true },
+          })
+        : undefined;
+
+      if (input.cursor && !cursorRow) {
+        const [totalResult] = await this.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(genreTable)
+          .where(searchFilter);
+
+        return {
+          items: [],
+          nextCursor: undefined,
+          total: totalResult?.count ?? 0,
+        };
+      }
+
+      const cursorFilter = cursorRow
+        ? or(
+            gt(genreTable.name, cursorRow.name),
+            and(
+              eq(genreTable.name, cursorRow.name),
+              gt(genreTable.id, cursorRow.id)
+            )
+          )
+        : undefined;
+
+      const where = and(searchFilter, cursorFilter);
+
+      const [total, rows] = await Promise.all([
+        this.db
+          .select({ count: sql<number>`cast(count(*) as integer)` })
+          .from(genreTable)
+          .where(searchFilter),
+        this.db.query.genre.findMany({
+          where,
+          orderBy: [asc(genreTable.name), asc(genreTable.id)],
+          limit: input.limit + 1,
+        }),
+      ]);
+
+      let nextCursor: GenreId | undefined;
+      if (rows.length > input.limit) {
+        const nextItem = rows.pop();
+        nextCursor = nextItem ? toGenreId(nextItem.id) : undefined;
+      }
+
+      return {
+        items: rows.map(toDomain),
+        nextCursor,
+        total: total[0]?.count ?? 0,
+      };
+    } catch (error) {
+      mapDbError(error);
+    }
+  }
+}
