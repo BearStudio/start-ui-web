@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { PageError } from '@/components/errors/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
-import { configQueries } from '@/server/functions/queries';
+import { configQueries } from '@/modules/runtime-config/presentation';
 
 export function MailDevDevtoolPanel() {
   const devtoolsQuery = useQuery(configQueries.devtools());

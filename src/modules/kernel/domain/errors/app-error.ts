@@ -15,6 +15,7 @@ export type AppErrorOptions = {
   status: number;
   message?: string;
   details?: AppErrorDetails;
+  exposeDetails?: boolean;
   cause?: unknown;
 };
 
@@ -23,6 +24,7 @@ export class AppError extends Error {
   readonly category: AppErrorCategory;
   readonly status: number;
   readonly details?: AppErrorDetails;
+  readonly exposeDetails: boolean;
 
   constructor(options: AppErrorOptions) {
     super(options.message ?? options.code, { cause: options.cause });
@@ -31,6 +33,7 @@ export class AppError extends Error {
     this.category = options.category;
     this.status = options.status;
     this.details = options.details;
+    this.exposeDetails = options.exposeDetails ?? false;
   }
 }
 

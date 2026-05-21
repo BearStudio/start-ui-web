@@ -24,9 +24,12 @@ export const db = globalForDb.db ?? createDb();
 
 export { schema };
 export type Database = typeof db;
+export type DatabaseTransaction = Parameters<
+  Parameters<Database['transaction']>[0]
+>[0];
 
-export const transactionRunner: TransactionRunner<Database> = {
-  run: (work) => db.transaction((tx) => work(tx as unknown as Database)),
+export const transactionRunner: TransactionRunner<DatabaseTransaction> = {
+  run: (work) => db.transaction((tx) => work(tx)),
 };
 
 if (import.meta.env.DEV) globalForDb.db = db;

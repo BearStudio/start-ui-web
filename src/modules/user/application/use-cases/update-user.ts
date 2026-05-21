@@ -49,18 +49,21 @@ export async function updateUser(
 
   try {
     deps.logger.info('user.update', { event: 'user.update', userId: input.id });
-    const value = await deps.userRepository.update(input.id, {
-      name: input.user.name ?? '',
+    const update = {
       email: input.user.email,
       role: nextRole,
       emailVerified: shouldUnverifyEmail(current.email, input.user.email)
         ? false
         : undefined,
+      ...(input.user.name === undefined ? {} : { name: input.user.name ?? '' }),
+    };
+    const value = await deps.userRepository.update(input.id, {
+      ...update,
     });
     if (!value) return { ok: false, reason: 'not_found' };
     return { ok: true, value };
   } catch (error) {
-    if (error instanceof AppError && error.category === 'conflict') {
+    if (error instanceof AppError && error.code === 'USER_DUPLICATE') {
       return { ok: false, reason: 'duplicate' };
     }
     throw error;

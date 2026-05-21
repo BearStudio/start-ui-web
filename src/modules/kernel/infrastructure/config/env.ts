@@ -9,6 +9,7 @@ const runtimeEnv = (): RuntimeEnv => ({
 });
 
 const isTruthy = (value: unknown) => value === true || value === 'true';
+const zNonEmptyString = () => z.string().trim().min(1);
 
 const isProd = () => {
   const env = runtimeEnv();
@@ -43,12 +44,17 @@ const getBaseUrl = (env: RuntimeEnv) => {
 const serverSchema = () =>
   z.object({
     DATABASE_URL: z.url(),
-    AUTH_SECRET: z.string(),
+    AUTH_SECRET: zNonEmptyString(),
     AUTH_SESSION_EXPIRATION_IN_SECONDS: z.coerce
       .number()
       .int()
+      .min(1)
       .prefault(2592000),
-    AUTH_SESSION_UPDATE_AGE_IN_SECONDS: z.coerce.number().int().prefault(86400),
+    AUTH_SESSION_UPDATE_AGE_IN_SECONDS: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .prefault(86400),
     AUTH_ALLOWED_HOSTS: z
       .string()
       .optional()
@@ -60,7 +66,7 @@ const serverSchema = () =>
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
     EMAIL_SERVER: z.url(),
-    EMAIL_FROM: z.string(),
+    EMAIL_FROM: zNonEmptyString(),
     EMAIL_DELIVERY_DISABLED: z.stringbool().default(false),
     LOGGER_LEVEL: z
       .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
@@ -69,11 +75,11 @@ const serverSchema = () =>
       .enum(['true', 'false'])
       .prefault(isProd() ? 'false' : 'true')
       .transform((value) => value === 'true'),
-    S3_ACCESS_KEY_ID: z.string(),
-    S3_SECRET_ACCESS_KEY: z.string(),
-    S3_BUCKET_NAME: z.string().default('default'),
-    S3_REGION: z.string().default('auto'),
-    S3_HOST: z.string(),
+    S3_ACCESS_KEY_ID: zNonEmptyString(),
+    S3_SECRET_ACCESS_KEY: zNonEmptyString(),
+    S3_BUCKET_NAME: zNonEmptyString().default('default'),
+    S3_REGION: zNonEmptyString().default('auto'),
+    S3_HOST: zNonEmptyString(),
     S3_SECURE: z.stringbool().default(true),
     S3_FORCE_PATH_STYLE: z.stringbool().default(false),
     DOCKER_MAILDEV_UI_PORT: z.string().optional(),
@@ -134,10 +140,14 @@ export const envClient = new Proxy({} as EnvClient, {
 });
 
 export const env = new Proxy({} as Env, {
-  get: (_target, property: keyof Env) => {
-    if (String(property).startsWith('VITE_')) {
-      return getEnvClient()[property as keyof EnvClient];
+  get: (target, property) => {
+    if (typeof property === 'symbol' || property in Object.prototype) {
+      return Reflect.get(target, property);
     }
-    return getEnvServer()[property as keyof EnvServer];
+    const prop = String(property);
+    if (prop.startsWith('VITE_')) {
+      return getEnvClient()[prop as keyof EnvClient];
+    }
+    return getEnvServer()[prop as keyof EnvServer];
   },
 });

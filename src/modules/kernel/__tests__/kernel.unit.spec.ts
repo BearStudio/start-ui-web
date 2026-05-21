@@ -4,6 +4,7 @@ import { cacheAside } from '@/modules/kernel/application/cache/cache-aside';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { zBookId, zEmailAddress, zUserId } from '@/modules/kernel/domain/ids';
 import { escapeLikePattern } from '@/modules/kernel/infrastructure/db/like';
+import { appErrorToResponse } from '@/modules/kernel/transport/http/error-mapper';
 
 describe('kernel primitives', () => {
   it('parses CUID-compatible branded IDs and email addresses', () => {
@@ -27,6 +28,29 @@ describe('kernel primitives', () => {
       status: 409,
       details: { target: ['email'] },
     });
+  });
+
+  it('does not expose AppError details unless explicitly allowed', async () => {
+    const hidden = await appErrorToResponse(
+      new AppError({
+        code: 'TEST',
+        category: 'conflict',
+        status: 409,
+        details: { target: ['email'] },
+      })
+    ).json();
+    const exposed = await appErrorToResponse(
+      new AppError({
+        code: 'TEST',
+        category: 'conflict',
+        status: 409,
+        details: { target: ['email'] },
+        exposeDetails: true,
+      })
+    ).json();
+
+    expect(hidden).not.toHaveProperty('details');
+    expect(exposed).toHaveProperty('details', { target: ['email'] });
   });
 
   it.each([

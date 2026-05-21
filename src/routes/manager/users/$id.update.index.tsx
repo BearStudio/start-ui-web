@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageUserUpdate } from '@/modules/user';
+import { PageUserUpdate } from '@/modules/user/presentation';
 
 export const Route = createFileRoute('/manager/users/$id/update/')({
   component: RouteComponent,

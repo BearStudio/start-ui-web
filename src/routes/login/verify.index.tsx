@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
-import PageLoginVerify from '@/features/auth/page-login-verify';
+import { PageLoginVerify } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login/verify/')({
   component: RouteComponent,

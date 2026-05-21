@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { notInArray, sql } from 'drizzle-orm';
 
-import { db } from '@/server/db';
-import { user } from '@/server/db/schema';
+import { db } from '@/modules/kernel/infrastructure/db/client';
+import { user } from '@/modules/kernel/infrastructure/db/schema';
 
 import { emphasis } from './_utils';
 

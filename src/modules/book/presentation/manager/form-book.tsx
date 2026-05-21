@@ -17,7 +17,7 @@ import {
   bookCoverAcceptedFileTypes,
   FormFieldsBook,
 } from '@/modules/book/presentation/schema';
-import { genreQueries } from '@/server/functions/queries';
+import { genreQueries } from '@/modules/genre/presentation';
 
 export const FormBook = () => {
   const form = useFormContext<FormFieldsBook>();

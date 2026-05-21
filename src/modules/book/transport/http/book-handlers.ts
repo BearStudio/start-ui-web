@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
 import { getBookUseCases } from '@/composition/book';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type { ProtectedContext } from '@/modules/auth/server';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
-import type { ProtectedContext } from '@/server/middlewares.server';
-import { ServerFnError } from '@/server/server-fn-error';
+import {
+  mapAppErrorToServerFnError,
+  throwServerFnErrorForReason,
+} from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zGetAllInput = () =>
   z
@@ -33,7 +35,6 @@ export const zDeleteByIdInput = () => z.object({ id: z.string() });
 const getUseCases = (ctx: ProtectedContext) =>
   getBookUseCases({
     overrides: {
-      db: ctx.db,
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
@@ -43,31 +44,15 @@ const getUseCases = (ctx: ProtectedContext) =>
   });
 
 const mapReason = (reason: string): never => {
-  if (reason === 'forbidden') throw new ServerFnError('FORBIDDEN');
-  if (reason === 'not_found') throw new ServerFnError('NOT_FOUND');
-  if (reason === 'duplicate') {
-    throw new ServerFnError('CONFLICT', {
+  return throwServerFnErrorForReason(reason, {
+    duplicate: {
+      code: 'CONFLICT',
       message: 'Unique constraint violation',
       data: { target: ['title', 'author'] },
-    });
-  }
-  throw new ServerFnError('INTERNAL_SERVER_ERROR');
-};
-
-const mapThrownError = (error: unknown): never => {
-  if (error instanceof AppError) {
-    if (error.category === 'conflict') {
-      throw new ServerFnError('CONFLICT', {
-        message: error.message,
-        data: error.details,
-      });
-    }
-    if (error.category === 'bad_request') {
-      throw new ServerFnError('BAD_REQUEST', { message: error.message });
-    }
-    throw new ServerFnError('INTERNAL_SERVER_ERROR');
-  }
-  throw error;
+    },
+    forbidden: 'FORBIDDEN',
+    not_found: 'NOT_FOUND',
+  });
 };
 
 const getAll = async (
@@ -81,7 +66,7 @@ const getAll = async (
       limit: data.limit,
       searchTerm: data.searchTerm ?? '',
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -95,7 +80,7 @@ const getById = async (
       currentUserId: toUserId(ctx.user.id),
       id: toBookId(data.id),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -115,7 +100,7 @@ const create = async (
         coverId: data.coverId,
       },
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -136,7 +121,7 @@ const updateById = async (
         coverId: data.coverId,
       },
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return result.value;
   return mapReason(result.reason);
 };
@@ -150,7 +135,7 @@ const deleteById = async (
       currentUserId: toUserId(ctx.user.id),
       id: toBookId(data.id),
     })
-    .catch(mapThrownError);
+    .catch(mapAppErrorToServerFnError);
   if (result.ok) return;
   return mapReason(result.reason);
 };

@@ -3,6 +3,7 @@ import { createBookUseCases } from '@/modules/book/factory';
 import { BookRepositoryDrizzle } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 
 import { getKernel, type KernelOverrides } from './kernel';
+import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
 
 export type BookCompositionOverrides = KernelOverrides & {
@@ -24,8 +25,9 @@ const getCachedBookUseCases = createCachedFactory(() => buildBookUseCases());
 export function getBookUseCases(options?: {
   overrides?: BookCompositionOverrides;
 }) {
-  if (options?.overrides && Object.keys(options.overrides).length > 0) {
-    return buildBookUseCases(options.overrides);
+  const overrides = options?.overrides;
+  if (hasDefinedOverrides(overrides)) {
+    return buildBookUseCases(overrides);
   }
   return getCachedBookUseCases(false);
 }

@@ -17,8 +17,8 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
+import { bookQueries } from '@/modules/book/presentation/queries';
+import { isServerFnError } from '@/modules/kernel/client';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);

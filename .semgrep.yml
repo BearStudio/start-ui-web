@@ -8,6 +8,8 @@ rules:
       include:
         - /src/features/**/*.ts
         - /src/features/**/*.tsx
+        - /src/modules/**/presentation/**/*.ts
+        - /src/modules/**/presentation/**/*.tsx
     pattern-either:
       - pattern: sessionToken
       - pattern: $SESSION.session.token
@@ -20,7 +22,7 @@ rules:
       - typescript
     paths:
       include:
-        - /src/server/functions/**/*.ts
+        - /src/modules/**/transport/**/*.ts
     pattern: |
       z.object({ ..., sessionToken: z.string(), ... })
 
@@ -31,7 +33,7 @@ rules:
       - typescript
     paths:
       include:
-        - /src/server/functions/**/*.ts
+        - /src/modules/user/infrastructure/**/*.ts
     pattern: |
       ctx.db.query.session.findFirst({
         where: eq(session.id, $CURSOR),
@@ -45,7 +47,7 @@ rules:
       - typescript
     paths:
       include:
-        - /src/server/functions/**/*.ts
+        - /src/modules/user/infrastructure/**/*.ts
     patterns:
       - pattern-inside: |
           ctx.db
@@ -83,7 +85,6 @@ rules:
         - src/modules/**/application/**
         - src/modules/**/transport/**
         - src/modules/**/infrastructure/**
-        - src/server/**
       exclude:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
@@ -115,10 +116,30 @@ rules:
         - drizzle.config.ts
 
   - id: cross-feature-deep-import
-    message: Import other modules through their index.ts, not deep paths.
+    message: 'Import other modules through public files: index.ts, presentation.ts, server.ts, or client.ts.'
     languages: [typescript]
     severity: ERROR
-    pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/]+/(?!index)[^"'']+["'']'
+    pattern-either:
+      - pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/"''\n]+/(?!index|presentation|server|client)[^"''\n]+["'']'
+      - pattern-regex: 'from\s+["'']@/modules/(?!kernel/)[^/"''\n]+/(?!index|presentation|server|client)[^"''\n]+["'']'
+    paths:
+      include:
+        - src/routes/**/*.ts
+        - src/routes/**/*.tsx
+        - src/features/**/*.ts
+        - src/features/**/*.tsx
+        - src/layout/**/*.ts
+        - src/layout/**/*.tsx
+        - src/devtools/**/*.ts
+        - src/devtools/**/*.tsx
+        - src/components/**/*.ts
+        - src/components/**/*.tsx
+
+  - id: legacy-server-import
+    message: src/server was removed; use module-owned public APIs or composition roots.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/server(?:/[^"'']*)?["'']'
 
   - id: unsafe-redirect-from-user-input
     message: Validate redirect targets against an allowlist; do not pass raw request input.
@@ -147,10 +168,7 @@ rules:
     message: domain/ must not import React or routing libs.
     languages: [typescript]
     severity: ERROR
-    pattern-either:
-      - pattern: import $X from "react"
-      - pattern: import $X from "@tanstack/react-router"
-      - pattern: import $X from "@tanstack/react-query"
+    pattern-regex: '^\s*import(?:\s+type)?(?:\s+[^;]+?\s+from\s+|\s*)["''](?:react|@tanstack/react-router|@tanstack/react-query)["'']'
     paths:
       include:
         - src/modules/*/domain/**

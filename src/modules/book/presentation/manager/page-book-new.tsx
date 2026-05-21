@@ -21,9 +21,9 @@ import {
 } from '@/layout/manager/page-layout';
 import { FormBook } from '@/modules/book/presentation/manager/form-book';
 import { FormBookCover } from '@/modules/book/presentation/manager/form-book-cover';
+import { bookQueries } from '@/modules/book/presentation/queries';
 import { zFormFieldsBook } from '@/modules/book/presentation/schema';
-import { bookQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
+import { isServerFnError } from '@/modules/kernel/client';
 
 export const PageBookNew = () => {
   const { t } = useTranslation(['book']);

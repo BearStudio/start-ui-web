@@ -6,10 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { authClient } from '@/features/auth/client';
-import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { AccountCardRow } from '@/modules/account/presentation/account-card-row';
 import { ChangeNameDrawer } from '@/modules/account/presentation/change-name-drawer';
+import { authClient } from '@/modules/auth/client';
+import { ConfirmSignOut } from '@/modules/auth/client';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);

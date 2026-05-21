@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { PageError } from '@/components/errors/page-error';
 
-import { PageLogout } from '@/features/auth/page-logout';
+import { PageLogout } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/logout')({
   component: RouteComponent,

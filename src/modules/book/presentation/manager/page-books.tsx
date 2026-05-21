@@ -26,7 +26,7 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/server/functions/queries';
+import { bookQueries } from '@/modules/book/presentation/queries';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();

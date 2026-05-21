@@ -2,8 +2,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import { PageError } from '@/components/errors/page-error';
 
-import { GuardPublicOnly } from '@/features/auth/guard-public-only';
-import { LayoutLogin } from '@/features/auth/layout-login';
+import { GuardPublicOnly, LayoutLogin } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,

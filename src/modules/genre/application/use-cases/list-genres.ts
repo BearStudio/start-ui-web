@@ -26,9 +26,10 @@ export async function listGenres(
   if (!allowed) return { ok: false, reason: 'forbidden' };
 
   deps.logger.info('genre.list', { event: 'genre.list' });
+  const limit = Math.min(Math.max(input.limit, 1), 100);
   const value = await deps.genreRepository.list({
     cursor: input.cursor,
-    limit: input.limit,
+    limit,
     searchTerm: normalizeGenreSearchTerm(input.searchTerm),
   });
   return { ok: true, value };

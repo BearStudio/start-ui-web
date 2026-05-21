@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
@@ -51,7 +51,13 @@ function makeRepo(overrides: Partial<UserRepository> = {}): UserRepository {
       email: toEmailAddress('old@example.com'),
       role: 'user',
     }),
-    update: async () => user,
+    update: async (_id, input) => ({
+      ...user,
+      name: input.name ?? user.name,
+      email: input.email,
+      role: input.role ?? user.role,
+      emailVerified: input.emailVerified ?? user.emailVerified,
+    }),
     listSessions: async () => ({
       items: [
         {
@@ -127,16 +133,46 @@ describe('user use cases', () => {
         user: { email: toEmailAddress('user@example.com'), role: 'user' },
       })
     ).resolves.toEqual({ ok: false, reason: 'duplicate' });
+    await expect(
+      makeUseCases({
+        repo: {
+          create: async () => {
+            throw new AppError({
+              code: 'OTHER_CONFLICT',
+              category: 'conflict',
+              status: 409,
+            });
+          },
+        },
+      }).create({
+        currentUserId: toUserId('admin-1'),
+        user: { email: toEmailAddress('user@example.com'), role: 'user' },
+      })
+    ).rejects.toMatchObject({ code: 'OTHER_CONFLICT' });
   });
 
   it('updates users without self role escalation and handles missing rows', async () => {
-    await expect(
-      makeUseCases().update({
-        currentUserId: toUserId('user-1'),
-        id: toUserId('user-1'),
-        user: { email: toEmailAddress('next@example.com'), role: 'admin' },
-      })
-    ).resolves.toMatchObject({ ok: true });
+    const result = await makeUseCases().update({
+      currentUserId: toUserId('user-1'),
+      id: toUserId('user-1'),
+      user: { email: toEmailAddress('next@example.com'), role: 'admin' },
+    });
+    expect(result).toMatchObject({ ok: true });
+    if (result.ok) {
+      expect(result.value.role).toBe('user');
+    }
+
+    const updateSpy = vi.fn(makeRepo().update);
+    await makeUseCases({ repo: { update: updateSpy } }).update({
+      currentUserId: toUserId('admin-1'),
+      id: toUserId('user-1'),
+      user: { email: toEmailAddress('next@example.com') },
+    });
+    expect(updateSpy).toHaveBeenCalledWith(
+      toUserId('user-1'),
+      expect.not.objectContaining({ name: expect.anything() })
+    );
+
     await expect(
       makeUseCases({ repo: { getUpdateSnapshot: async () => null } }).update({
         currentUserId: toUserId('admin-1'),

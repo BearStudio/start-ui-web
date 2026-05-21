@@ -5,9 +5,7 @@ export function isDuplicateBookCandidate(
   right: Pick<BookWriteInput, 'title' | 'author'>
 ) {
   return (
-    left.title.trim().toLocaleLowerCase() ===
-      right.title.trim().toLocaleLowerCase() &&
-    left.author.trim().toLocaleLowerCase() ===
-      right.author.trim().toLocaleLowerCase()
+    left.title.trim().toLowerCase() === right.title.trim().toLowerCase() &&
+    left.author.trim().toLowerCase() === right.author.trim().toLowerCase()
   );
 }

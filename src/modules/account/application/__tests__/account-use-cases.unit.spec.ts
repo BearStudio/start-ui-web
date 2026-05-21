@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { toUserId } from '@/modules/kernel/domain/ids';
 
@@ -58,5 +58,31 @@ describe('account use cases', () => {
     await expect(
       useCases.updateInfo({ currentUserId: toUserId('missing'), name: 'User' })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
+  });
+
+  it('rejects blank account names before repository writes', async () => {
+    const repositoryWithSpies: AccountRepository = {
+      submitOnboarding: async (id) => ({ id }),
+      updateInfo: async (id) => ({ id }),
+    };
+    const submitSpy = vi.spyOn(repositoryWithSpies, 'submitOnboarding');
+    const updateSpy = vi.spyOn(repositoryWithSpies, 'updateInfo');
+    const useCases = createAccountUseCases({
+      accountRepository: repositoryWithSpies,
+      clock,
+      logger,
+    });
+
+    await expect(
+      useCases.submitOnboarding({
+        currentUserId: toUserId('user-1'),
+        name: '   ',
+      })
+    ).resolves.toEqual({ ok: false, reason: 'invalid' });
+    await expect(
+      useCases.updateInfo({ currentUserId: toUserId('user-1'), name: '   ' })
+    ).resolves.toEqual({ ok: false, reason: 'invalid' });
+    expect(submitSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
   });
 });

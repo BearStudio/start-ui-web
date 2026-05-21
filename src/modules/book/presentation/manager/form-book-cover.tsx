@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { BookCover } from '@/modules/book/presentation/book-cover';
 import { FormFieldsBook } from '@/modules/book/presentation/schema';
-import { genreQueries } from '@/server/functions/queries';
+import { genreQueries } from '@/modules/genre/presentation';
 
 export const FormBookCover = () => {
   const form = useFormContext<FormFieldsBook>();

@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 import { envClient } from '@/env/client';
-import { AUTH_EMAIL_OTP_MOCKED } from '@/features/auth/config';
+import { AUTH_EMAIL_OTP_MOCKED } from '@/modules/auth/client';
 
 const LoginEmailButton = ({
   email,

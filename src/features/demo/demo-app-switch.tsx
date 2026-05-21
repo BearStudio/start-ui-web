@@ -15,8 +15,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { authClient } from '@/features/auth/client';
-import { Role } from '@/features/auth/permissions';
+import { Role } from '@/modules/auth';
+import { authClient } from '@/modules/auth/client';
 
 export const DemoAppSwitch = () => {
   const { t } = useTranslation(['demo']);

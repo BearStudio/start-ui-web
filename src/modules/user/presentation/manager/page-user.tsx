@@ -39,16 +39,16 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 
-import { authClient } from '@/features/auth/client';
-import { WithPermissions } from '@/features/auth/with-permissions';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/manager/page-layout';
-import { userQueries } from '@/server/functions/queries';
-import { isServerFnError } from '@/server/server-fn-error';
+import { authClient } from '@/modules/auth/client';
+import { WithPermissions } from '@/modules/auth/client';
+import { isServerFnError } from '@/modules/kernel/client';
+import { userQueries } from '@/modules/user/presentation/queries';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
