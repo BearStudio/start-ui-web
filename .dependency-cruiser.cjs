@@ -76,6 +76,38 @@ module.exports = {
       to: { path: '^src/modules/[^/]+/infrastructure' },
     },
     {
+      name: 'only-composition-imports-feature-infrastructure',
+      severity: 'error',
+      comment:
+        'Routes, transport, and other features must not import infrastructure adapters directly. Go through composition.',
+      from: {
+        pathNot:
+          '^src/(composition|modules/[^/]+/infrastructure|modules/kernel)',
+      },
+      to: {
+        path: '^src/modules/(?!kernel)[^/]+/infrastructure',
+      },
+    },
+    {
+      name: 'only-composition-imports-module-factory',
+      severity: 'error',
+      comment:
+        'Module factory functions are wired by composition. Production callers use composed entry points.',
+      from: {
+        pathNot:
+          '^src/(composition|modules/[^/]+/index\\.ts|modules/[^/]+/application/__tests__/.*\\.unit\\.(test|spec)\\.ts)',
+      },
+      to: {
+        path: '^src/modules/[^/]+/factory\\.(ts|tsx)$',
+      },
+    },
+    {
+      name: 'composition-does-not-import-routes',
+      severity: 'error',
+      from: { path: '^src/composition' },
+      to: { path: '^src/routes' },
+    },
+    {
       name: 'routes-use-module-public-api',
       severity: 'error',
       from: { path: '^src/(routes|components|layout|devtools)' },

@@ -2,13 +2,14 @@ import { faker } from '@faker-js/faker';
 import { sql } from 'drizzle-orm';
 import { randomInt } from 'node:crypto';
 
-import { db } from '@/modules/kernel/infrastructure/db/client';
+import { getDefaultDbClient } from '@/modules/kernel/infrastructure/db/client';
 import { book, genre } from '@/modules/kernel/infrastructure/db/schema';
 
 import data from './book-data.json';
 
 export async function createBooks() {
   console.log(`⏳ Seeding genre`);
+  const db = getDefaultDbClient();
   const existingGenres = await db.select().from(genre);
 
   const genres = [

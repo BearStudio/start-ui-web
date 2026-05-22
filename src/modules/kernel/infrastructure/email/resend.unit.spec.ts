@@ -58,6 +58,7 @@ describe('Resend email adapter', () => {
       template: createElement('div', null, '123456'),
     });
 
+    expect(testState.resendConstructor).not.toHaveBeenCalled();
     expect(testState.send).not.toHaveBeenCalled();
   });
 
@@ -71,6 +72,7 @@ describe('Resend email adapter', () => {
       template: createElement('div', null, '123456'),
     });
 
+    expect(testState.resendConstructor).not.toHaveBeenCalled();
     expect(testState.send).not.toHaveBeenCalled();
   });
 
@@ -116,7 +118,7 @@ describe('Resend email adapter', () => {
     ).rejects.toMatchObject({
       code: 'EMAIL_SEND_FAILED',
       category: 'system',
-      status: 401,
+      status: 500,
       message: 'Failed to send email',
       details: {
         provider: 'resend',

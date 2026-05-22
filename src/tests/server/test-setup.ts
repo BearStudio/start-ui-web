@@ -16,6 +16,18 @@ vi.mock('@/modules/auth/infrastructure/better-auth/auth', () => ({
       userHasPermission: (...args: unknown[]) => mockUserHasPermission(...args),
     },
   },
+  createAuth: () => ({
+    api: {
+      getSession: (...args: unknown[]) => mockGetSession(...args),
+      userHasPermission: (...args: unknown[]) => mockUserHasPermission(...args),
+    },
+  }),
+  getDefaultAuth: () => ({
+    api: {
+      getSession: (...args: unknown[]) => mockGetSession(...args),
+      userHasPermission: (...args: unknown[]) => mockUserHasPermission(...args),
+    },
+  }),
 }));
 
 vi.mock('@tanstack/react-start/server', () => ({
@@ -37,6 +49,18 @@ vi.mock('@/env/server', () => ({
 }));
 
 vi.mock('@/modules/kernel/infrastructure/logger/pino', () => ({
+  createPinoLogger: () => ({
+    child: () => mockLogger,
+    info: (...args: unknown[]) => mockLogger.info(...args),
+    warn: (...args: unknown[]) => mockLogger.warn(...args),
+    error: (...args: unknown[]) => mockLogger.error(...args),
+  }),
+  getDefaultPinoLogger: () => ({
+    child: () => mockLogger,
+    info: (...args: unknown[]) => mockLogger.info(...args),
+    warn: (...args: unknown[]) => mockLogger.warn(...args),
+    error: (...args: unknown[]) => mockLogger.error(...args),
+  }),
   logger: {
     child: () => mockLogger,
     info: (...args: unknown[]) => mockLogger.info(...args),
@@ -47,6 +71,14 @@ vi.mock('@/modules/kernel/infrastructure/logger/pino', () => ({
 
 vi.mock('@/modules/kernel/infrastructure/db/client', () => ({
   db: mockDb,
+  createDbClient: () => mockDb,
+  getDefaultDbClient: () => mockDb,
+  createTransactionRunner: (database: typeof mockDb = mockDb) => ({
+    run: (work: (tx: typeof mockDb) => Promise<unknown>) => work(database),
+  }),
+  getDefaultTransactionRunner: () => ({
+    run: (work: (tx: typeof mockDb) => Promise<unknown>) => work(mockDb),
+  }),
   transactionRunner: {
     run: (work: (tx: typeof mockDb) => Promise<unknown>) => work(mockDb),
   },

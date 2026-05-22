@@ -1,21 +1,21 @@
-import { getRequestHeaders } from '@tanstack/react-start/server';
-
-import { auth } from '@/modules/auth/server';
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
+import type { Clock } from '@/modules/kernel/application/ports/clock';
+import type { IdGenerator } from '@/modules/kernel/application/ports/id-generator';
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
+import type { TransactionRunner } from '@/modules/kernel/application/ports/transaction-runner';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { systemClock } from '@/modules/kernel/infrastructure/clock/system-clock';
 import {
+  createTransactionRunner,
   type Database,
-  db,
-  transactionRunner,
+  getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
-import { logger as pinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
+import { createPinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
 
-import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
+import type { Overrides } from './shared/types';
 
 type CacheEntry = {
   value: unknown;
@@ -47,52 +47,58 @@ const memoryCache = (): CacheGateway => {
   };
 };
 
-const productionLogger: Logger = {
-  info: (event, fields) => pinoLogger.info({ event, ...fields }, event),
-  warn: (event, fields) => pinoLogger.warn({ event, ...fields }, event),
-  error: (event, fields) => pinoLogger.error({ event, ...fields }, event),
+const createProductionLogger = (): Logger => {
+  const pinoLogger = createPinoLogger();
+  return {
+    info: (event, fields) => pinoLogger.info({ event, ...fields }, event),
+    warn: (event, fields) => pinoLogger.warn({ event, ...fields }, event),
+    error: (event, fields) => pinoLogger.error({ event, ...fields }, event),
+  };
 };
 
-const productionPermissionChecker: PermissionChecker = {
+const createProductionPermissionChecker = (): PermissionChecker => ({
   async hasPermission(userId: UserId, permissions) {
-    const result = await auth.api.userHasPermission({
+    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+      import('@tanstack/react-start/server'),
+      import('./auth'),
+    ]);
+    const result = await getAuth().api.userHasPermission({
       body: { userId, permissions },
       headers: getRequestHeaders(),
     });
-    if (result.error) return false;
-    return result.success;
+    return result.error ? false : result.success;
   },
-};
+});
 
 export type Kernel = {
   db: Database;
   logger: Logger;
-  clock: typeof systemClock;
-  idGenerator: typeof cuidIdGenerator;
+  clock: Clock;
+  idGenerator: IdGenerator;
   cacheGateway: CacheGateway;
-  transactionRunner: typeof transactionRunner;
+  transactionRunner: TransactionRunner;
   permissionChecker: PermissionChecker;
 };
 
-export type KernelOverrides = Partial<Kernel>;
+export type KernelOverrides = Overrides<Kernel>;
 
 const buildKernel = (overrides?: KernelOverrides): Kernel => ({
-  db: overrides?.db ?? db,
-  logger: overrides?.logger ?? productionLogger,
+  db: overrides?.db ?? getDefaultDbClient(),
+  logger: overrides?.logger ?? createProductionLogger(),
   clock: overrides?.clock ?? systemClock,
   idGenerator: overrides?.idGenerator ?? cuidIdGenerator,
   cacheGateway: overrides?.cacheGateway ?? memoryCache(),
-  transactionRunner: overrides?.transactionRunner ?? transactionRunner,
+  transactionRunner:
+    overrides?.transactionRunner ??
+    createTransactionRunner(overrides?.db ?? getDefaultDbClient()),
   permissionChecker:
-    overrides?.permissionChecker ?? productionPermissionChecker,
+    overrides?.permissionChecker ?? createProductionPermissionChecker(),
 });
 
-const getCachedKernel = createCachedFactory(() => buildKernel());
+const factory = createCachedFactory(buildKernel);
 
-export function getKernel(options?: { overrides?: KernelOverrides }): Kernel {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildKernel(overrides);
-  }
-  return getCachedKernel(false);
-}
+export const getKernel = (overrides?: KernelOverrides): Kernel =>
+  factory.get(overrides);
+
+/** Test-only. */
+export const __resetKernelComposition = () => factory.reset();

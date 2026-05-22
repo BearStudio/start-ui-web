@@ -1,17 +1,16 @@
-import type { BookRepository } from '@/modules/book/application/ports/book-repository';
-import { createBookUseCases } from '@/modules/book/factory';
+import { type BookRepository, createBookUseCases } from '@/modules/book';
 import { BookRepositoryDrizzle } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 
-import { getKernel, type KernelOverrides } from './kernel';
-import { hasDefinedOverrides } from './shared/overrides';
+import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
 
-export type BookCompositionOverrides = KernelOverrides & {
+export type BookOverrides = {
+  kernel?: Kernel;
   bookRepository?: BookRepository;
 };
 
-const buildBookUseCases = (overrides?: BookCompositionOverrides) => {
-  const kernel = getKernel({ overrides });
+const buildBookUseCases = (overrides?: BookOverrides) => {
+  const kernel = overrides?.kernel ?? getKernel();
   return createBookUseCases({
     bookRepository:
       overrides?.bookRepository ?? new BookRepositoryDrizzle(kernel.db),
@@ -20,14 +19,10 @@ const buildBookUseCases = (overrides?: BookCompositionOverrides) => {
   });
 };
 
-const getCachedBookUseCases = createCachedFactory(() => buildBookUseCases());
+const factory = createCachedFactory(buildBookUseCases);
 
-export function getBookUseCases(options?: {
-  overrides?: BookCompositionOverrides;
-}) {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildBookUseCases(overrides);
-  }
-  return getCachedBookUseCases(false);
-}
+export const getBookUseCases = (overrides?: BookOverrides) =>
+  factory.get(overrides);
+
+/** Test-only. */
+export const __resetBookComposition = () => factory.reset();

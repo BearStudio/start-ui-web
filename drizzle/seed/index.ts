@@ -1,4 +1,4 @@
-import { db } from '@/modules/kernel/infrastructure/db/client';
+import { getDefaultDbClient } from '@/modules/kernel/infrastructure/db/client';
 
 import { createBooks } from './book';
 import { createUsers } from './user';
@@ -14,5 +14,5 @@ main()
     process.exitCode = 1;
   })
   .finally(async () => {
-    await db.$client.end();
+    await getDefaultDbClient().$client.end();
   });

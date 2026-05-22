@@ -187,7 +187,7 @@ rules:
     message: format:changed pre-commit hooks must set stage_fixed true so formatter edits are committed.
     languages: [generic]
     severity: ERROR
-    pattern-regex: '(?s)pre-commit:.*?format:\s*\n(?=\s*run:\s*pnpm\s+format:changed[^\n]*\n(?!\s*stage_fixed:\s*true))'
+    pattern-regex: '(?ms)^pre-commit:\s*\n(?:(?!^\S).)*?^\s{4}format:\s*\n(?=(?:(?!^\s{4}\S).)*^\s{6}run:\s*pnpm\s+format:changed[^\n]*)(?!(?:(?!^\s{4}\S).)*^\s{6}stage_fixed:\s*true)'
     paths:
       include:
         - lefthook.yml
