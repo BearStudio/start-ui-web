@@ -16,7 +16,7 @@ import {
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/client';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { db } from '@/modules/kernel/infrastructure/db/client';
-import { sendEmail } from '@/modules/kernel/infrastructure/email/nodemailer';
+import { sendEmail } from '@/modules/kernel/infrastructure/email/resend';
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
 
 export type Auth = typeof auth;

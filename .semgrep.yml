@@ -172,3 +172,34 @@ rules:
     paths:
       include:
         - src/modules/*/domain/**
+
+  - id: ci-oxlint-deny-warnings
+    message: CI oxlint runs must include --deny-warnings so warning-level rules fail builds.
+    languages: [generic]
+    severity: ERROR
+    pattern-regex: 'run:\s*pnpm\s+(?:lint|oxlint)(?![^\n]*--deny-warnings)\b[^\n]*'
+    paths:
+      include:
+        - .github/workflows/*.yml
+        - .github/workflows/*.yaml
+
+  - id: lefthook-format-changed-stage-fixed
+    message: format:changed pre-commit hooks must set stage_fixed true so formatter edits are committed.
+    languages: [generic]
+    severity: ERROR
+    pattern-regex: '(?s)pre-commit:.*?format:\s*\n(?=\s*run:\s*pnpm\s+format:changed[^\n]*\n(?!\s*stage_fixed:\s*true))'
+    paths:
+      include:
+        - lefthook.yml
+        - lefthook.yaml
+
+  - id: script-git-diff-through-git-utils
+    message: Use scripts/lib/git-utils.mjs for changed-file discovery so staged files are included consistently.
+    languages: [generic]
+    severity: ERROR
+    pattern-regex: 'runGit\(\[\s*["'']diff["'']'
+    paths:
+      include:
+        - scripts/*.mjs
+      exclude:
+        - scripts/lib/git-utils.mjs
