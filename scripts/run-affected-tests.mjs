@@ -1,52 +1,6 @@
 import { spawnSync } from 'node:child_process';
 
-const runGit = (args) => {
-  const result = spawnSync('git', args, {
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-
-  if (result.status !== 0) {
-    return null;
-  }
-
-  return result.stdout.trim();
-};
-
-const resolveBase = () => {
-  const mainBase = runGit(['merge-base', 'HEAD', 'origin/main']);
-  if (mainBase) {
-    return mainBase;
-  }
-
-  const masterBase = runGit(['merge-base', 'HEAD', 'origin/master']);
-  if (masterBase) {
-    return masterBase;
-  }
-
-  const previousCommit = runGit(['rev-parse', 'HEAD~1']);
-  if (previousCommit) {
-    return previousCommit;
-  }
-
-  return 'HEAD';
-};
-
-const listChangedFiles = (base) => {
-  const committed = runGit([
-    'diff',
-    '--name-only',
-    '--diff-filter=ACMR',
-    `${base}...HEAD`,
-  ]);
-  const unstaged = runGit(['diff', '--name-only', '--diff-filter=ACMR']);
-
-  return new Set(
-    [...(committed?.split('\n') ?? []), ...(unstaged?.split('\n') ?? [])]
-      .map((file) => file.trim())
-      .filter(Boolean)
-  );
-};
+import { listChangedFiles, resolveBase } from './lib/git-utils.mjs';
 
 const shouldRunFullSuite = (file) =>
   file.startsWith('vitest.config.') ||

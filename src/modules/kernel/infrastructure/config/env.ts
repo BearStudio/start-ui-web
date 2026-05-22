@@ -65,7 +65,12 @@ const serverSchema = () =>
       .transform((value) => value?.split(',').map((v) => v.trim())),
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
-    EMAIL_SERVER: z.url(),
+    RESEND_API_KEY: zNonEmptyString().refine(
+      (value) => !isProd() || value !== 'REPLACE ME',
+      {
+        error: 'Update RESEND_API_KEY for production',
+      }
+    ),
     EMAIL_FROM: zNonEmptyString(),
     EMAIL_DELIVERY_DISABLED: z.stringbool().default(false),
     LOGGER_LEVEL: z
@@ -82,7 +87,6 @@ const serverSchema = () =>
     S3_HOST: zNonEmptyString(),
     S3_SECURE: z.stringbool().default(true),
     S3_FORCE_PATH_STYLE: z.stringbool().default(false),
-    DOCKER_MAILDEV_UI_PORT: z.string().optional(),
   });
 
 const clientSchema = () =>

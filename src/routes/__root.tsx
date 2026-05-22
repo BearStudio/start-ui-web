@@ -19,7 +19,6 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
 import { PageError } from '@/components/errors/page-error';
 
-import { MailDevDevtoolPanel } from '@/devtools/maildev';
 import { EnvHint } from '@/features/devtools/env-hint';
 import { getUserLanguage } from '@/modules/kernel/server';
 import { Providers } from '@/providers';
@@ -112,10 +111,6 @@ function RootComponent() {
             {
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
-            },
-            {
-              name: 'MailDev iframe',
-              render: <MailDevDevtoolPanel />,
             },
           ]}
         />

@@ -75,11 +75,12 @@ pnpm verify  # Full local pre-merge gate
 
 ### Emails in development
 
-#### Maildev to catch emails
+#### Resend delivery
 
-In development, the emails will not be sent and will be caught by [maildev](https://github.com/maildev/maildev) which runs as a Docker container.
-
-The maildev UI is available at [localhost:1080](http://localhost:1080) (port configurable via `DOCKER_MAILDEV_UI_PORT` in `.env`).
+Emails are sent with [Resend](https://resend.com). Configure `RESEND_API_KEY`
+with a Resend API key and set `EMAIL_FROM` to a sender from a verified domain.
+Use `EMAIL_DELIVERY_DISABLED=true` when a workflow should skip delivery, such
+as automated end-to-end test runs.
 
 #### Preview emails
 

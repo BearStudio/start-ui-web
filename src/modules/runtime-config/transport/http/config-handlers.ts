@@ -1,5 +1,4 @@
 import { envClient } from '@/env/client';
-import { env as kernelEnv } from '@/modules/kernel/infrastructure/config/env';
 
 const env = () => {
   return {
@@ -11,21 +10,10 @@ const env = () => {
   };
 };
 
-const devtools = () => {
-  return {
-    maildevIframeSrc:
-      import.meta.env.DEV && kernelEnv.DOCKER_MAILDEV_UI_PORT
-        ? `http://localhost:${kernelEnv.DOCKER_MAILDEV_UI_PORT}/#/`
-        : null,
-  };
-};
-
 export type ConfigHandlers = {
   env: typeof env;
-  devtools: typeof devtools;
 };
 
 export const handlers: ConfigHandlers = {
   env,
-  devtools,
 };
