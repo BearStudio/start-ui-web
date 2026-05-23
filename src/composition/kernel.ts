@@ -22,13 +22,16 @@ type CacheEntry = {
   expiresAt?: number;
 };
 
-const memoryCache = (): CacheGateway => {
+const memoryCache = (clock: Clock): CacheGateway => {
   const entries = new Map<string, CacheEntry>();
   return {
     async get<T>(key: string) {
       const entry = entries.get(key);
       if (!entry) return undefined;
-      if (entry.expiresAt !== undefined && entry.expiresAt <= Date.now()) {
+      if (
+        entry.expiresAt !== undefined &&
+        entry.expiresAt <= clock.now().getTime()
+      ) {
         entries.delete(key);
         return undefined;
       }
@@ -38,7 +41,9 @@ const memoryCache = (): CacheGateway => {
       entries.set(key, {
         value,
         expiresAt:
-          options?.ttlMs === undefined ? undefined : Date.now() + options.ttlMs,
+          options?.ttlMs === undefined
+            ? undefined
+            : clock.now().getTime() + options.ttlMs,
       });
     },
     async delete(key: string) {
@@ -82,23 +87,43 @@ export type Kernel = {
 
 export type KernelOverrides = Overrides<Kernel>;
 
-const buildKernel = (overrides?: KernelOverrides): Kernel => ({
-  db: overrides?.db ?? getDefaultDbClient(),
-  logger: overrides?.logger ?? createProductionLogger(),
-  clock: overrides?.clock ?? systemClock,
-  idGenerator: overrides?.idGenerator ?? cuidIdGenerator,
-  cacheGateway: overrides?.cacheGateway ?? memoryCache(),
-  transactionRunner:
-    overrides?.transactionRunner ??
-    createTransactionRunner(overrides?.db ?? getDefaultDbClient()),
-  permissionChecker:
-    overrides?.permissionChecker ?? createProductionPermissionChecker(),
-});
+const buildDefaultKernel = (): Kernel => {
+  const db = getDefaultDbClient();
+  const clock = systemClock;
+  return {
+    db,
+    logger: createProductionLogger(),
+    clock,
+    idGenerator: cuidIdGenerator,
+    cacheGateway: memoryCache(clock),
+    transactionRunner: createTransactionRunner(db),
+    permissionChecker: createProductionPermissionChecker(),
+  };
+};
 
-const factory = createCachedFactory(buildKernel);
+const factory = createCachedFactory<Kernel, KernelOverrides>(
+  buildDefaultKernel
+);
 
-export const getKernel = (overrides?: KernelOverrides): Kernel =>
-  factory.get(overrides);
+export const getKernel = (overrides?: KernelOverrides): Kernel => {
+  if (overrides === undefined) return factory.get();
+
+  const base = factory.get();
+  const db = overrides.db ?? base.db;
+  const clock = overrides.clock ?? base.clock;
+  return {
+    ...base,
+    ...overrides,
+    db,
+    clock,
+    cacheGateway:
+      overrides.cacheGateway ??
+      (overrides.clock ? memoryCache(clock) : base.cacheGateway),
+    transactionRunner:
+      overrides.transactionRunner ??
+      (overrides.db ? createTransactionRunner(db) : base.transactionRunner),
+  };
+};
 
 /** Test-only. */
 export const __resetKernelComposition = () => factory.reset();

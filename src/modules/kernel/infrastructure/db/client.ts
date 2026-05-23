@@ -30,7 +30,7 @@ let defaultDb = globalForDb.db;
 export function getDefaultDbClient(): Database {
   if (!defaultDb) {
     defaultDb = createDbClient();
-    if (import.meta.env.DEV) globalForDb.db = defaultDb;
+    if (import.meta.env?.DEV) globalForDb.db = defaultDb;
   }
   return defaultDb;
 }

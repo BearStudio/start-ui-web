@@ -42,7 +42,7 @@ export const sendEmail = async ({ template, ...options }: SendEmailOptions) => {
     throw new AppError({
       code: 'EMAIL_SEND_FAILED',
       category: 'system',
-      status: 500,
+      status: error.statusCode ?? 500,
       message: 'Failed to send email',
       details: {
         provider: 'resend',

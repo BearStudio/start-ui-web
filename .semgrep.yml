@@ -203,3 +203,30 @@ rules:
         - scripts/*.mjs
       exclude:
         - scripts/lib/git-utils.mjs
+
+  - id: resend-app-error-preserve-provider-status
+    message: Preserve Resend provider statusCode when wrapping send failures; use error.statusCode ?? 500.
+    languages: [typescript]
+    severity: ERROR
+    pattern: |
+      throw new AppError({
+        ...,
+        status: 500,
+        ...
+      })
+    paths:
+      include:
+        - src/modules/kernel/infrastructure/email/**/*.ts
+        - src/modules/kernel/infrastructure/email/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: db-client-no-unguarded-import-meta-env
+    message: Guard import.meta.env access in the DB client because seed scripts can run outside Vite.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'import\.meta\.env\.[A-Za-z_$][A-Za-z0-9_$]*'
+    paths:
+      include:
+        - src/modules/kernel/infrastructure/db/client.ts

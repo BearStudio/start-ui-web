@@ -118,12 +118,38 @@ describe('Resend email adapter', () => {
     ).rejects.toMatchObject({
       code: 'EMAIL_SEND_FAILED',
       category: 'system',
-      status: 500,
+      status: 401,
       message: 'Failed to send email',
       details: {
         provider: 'resend',
         errorName: 'invalid_api_key',
         statusCode: 401,
+      },
+    });
+  });
+
+  it('falls back to a 500 status when Resend does not provide one', async () => {
+    testState.send.mockResolvedValue({
+      data: null,
+      error: {
+        message: 'Unknown failure',
+        name: 'internal_error',
+      },
+      headers: null,
+    });
+    const { sendEmail } = await loadSendEmail();
+
+    await expect(
+      sendEmail({
+        to: 'user@example.com',
+        subject: 'Login code',
+        template: createElement('div', null, '123456'),
+      })
+    ).rejects.toMatchObject({
+      code: 'EMAIL_SEND_FAILED',
+      status: 500,
+      details: {
+        errorName: 'internal_error',
       },
     });
   });

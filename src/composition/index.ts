@@ -32,10 +32,10 @@ import { getUserUseCases, type UserOverrides } from './user';
 
 export type ServicesOverrides = {
   kernel?: KernelOverrides;
-  book?: BookOverrides;
-  user?: UserOverrides;
-  genre?: GenreOverrides;
-  account?: AccountOverrides;
+  book?: Omit<BookOverrides, 'kernel'>;
+  user?: Omit<UserOverrides, 'kernel'>;
+  genre?: Omit<GenreOverrides, 'kernel'>;
+  account?: Omit<AccountOverrides, 'kernel'>;
 };
 
 export function getServices(overrides?: ServicesOverrides) {
