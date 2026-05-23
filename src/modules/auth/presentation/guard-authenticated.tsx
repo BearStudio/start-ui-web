@@ -1,11 +1,11 @@
 import { useLocation, useRouter } from '@tanstack/react-router';
 import { ReactNode, useEffect } from 'react';
 
-import { PageError } from '@/components/errors/page-error';
-import { Spinner } from '@/components/ui/spinner';
+import { PageError } from '@/platform/components/errors/page-error';
+import { Spinner } from '@/platform/components/ui/spinner';
 
 import { Permission, Role } from '@/modules/auth';
-import { authClient } from '@/modules/auth/presentation/client';
+import { checkRolePermission, useAuthSession } from '@/modules/auth/client';
 import { PageOnboarding } from '@/modules/auth/presentation/page-onboarding';
 
 export const GuardAuthenticated = ({
@@ -15,7 +15,7 @@ export const GuardAuthenticated = ({
   children?: ReactNode;
   permissionApps?: Permission['apps'];
 }) => {
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const router = useRouter();
   const location = useLocation();
   const user = session.data?.user;
@@ -56,7 +56,7 @@ export const GuardAuthenticated = ({
   // Unauthorized if the user permission do not match
   if (
     permissionApps &&
-    !authClient.admin.checkRolePermission({
+    !checkRolePermission({
       role: user.role as Role,
       permissions: {
         apps: permissionApps,

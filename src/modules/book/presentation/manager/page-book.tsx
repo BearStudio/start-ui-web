@@ -4,27 +4,28 @@ import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { useNavigateBack } from '@/hooks/use-navigate-back';
+import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
-import { BackButton } from '@/components/back-button';
-import { PageError } from '@/components/errors/page-error';
-import { ButtonLink } from '@/components/ui/button-link';
-import { Card, CardContent } from '@/components/ui/card';
-import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Spinner } from '@/components/ui/spinner';
+import { BackButton } from '@/platform/components/back-button';
+import { PageError } from '@/platform/components/errors/page-error';
+import { ButtonLink } from '@/platform/components/ui/button-link';
+import { Card, CardContent } from '@/platform/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/platform/components/ui/confirm-responsive-drawer';
+import { ResponsiveIconButton } from '@/platform/components/ui/responsive-icon-button';
+import { Skeleton } from '@/platform/components/ui/skeleton';
+import { Spinner } from '@/platform/components/ui/spinner';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
 import { WithPermissions } from '@/modules/auth/client';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/modules/book/presentation/queries';
 import { isServerFnError } from '@/modules/kernel/client';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { bookQueries } from '../queries';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);

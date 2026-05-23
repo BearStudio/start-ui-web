@@ -31,9 +31,7 @@ export async function revokeUserSession(
     return { ok: false, reason: 'self' };
   }
 
-  const revoked = await deps.userAuthGateway.revokeUserSession(
-    targetSession.token
-  );
+  const revoked = await deps.userAuthGateway.revokeUserSession(targetSession);
   if (!revoked) {
     throw new AppError({
       code: 'USER_SESSION_REVOKE_FAILED',

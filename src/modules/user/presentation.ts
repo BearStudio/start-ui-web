@@ -2,7 +2,6 @@ export { PageUser } from './presentation/manager/page-user';
 export { PageUserNew } from './presentation/manager/page-user-new';
 export { PageUserUpdate } from './presentation/manager/page-user-update';
 export { PageUsers } from './presentation/manager/page-users';
-export { userQueries } from './presentation/queries';
 export {
   type FormFieldsUser,
   type Session as SessionSchema,

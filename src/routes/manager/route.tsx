@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-import { PageError } from '@/components/errors/page-error';
+import { PageError } from '@/platform/components/errors/page-error';
 
-import { Layout } from '@/layout/manager/layout';
 import { GuardAuthenticated } from '@/modules/auth/presentation';
+import { ManagerLayout as Layout } from '@/modules/shell/presentation';
 
 export const Route = createFileRoute('/manager')({
   component: RouteComponent,

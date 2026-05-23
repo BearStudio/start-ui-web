@@ -1,9 +1,6 @@
 import { type MutationOptions } from '@tanstack/react-query';
 
-import {
-  accountSubmitOnboarding,
-  accountUpdateInfo,
-} from '../transport/tanstack/account-server-functions';
+import { accountSubmitOnboarding, accountUpdateInfo } from '../server';
 
 export const accountQueries = {
   submitOnboarding: (): MutationOptions<

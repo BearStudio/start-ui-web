@@ -7,7 +7,7 @@
   "trailingComma": "es5",
   "arrowParens": "always",
   "sortTailwindcss": {
-    "stylesheet": "./src/styles/app.css",
+    "stylesheet": "./src/platform/styles/app.css",
     "functions": ["cn", "cva"]
   },
   "ignorePatterns": [

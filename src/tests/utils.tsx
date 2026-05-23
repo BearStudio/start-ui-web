@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { userEvent } from 'vitest/browser';
 import { ComponentRenderOptions, render } from 'vitest-browser-react';
 
-import { Providers } from '@/providers';
+import { Providers } from '@/composition/providers';
 
 const WithProviders = ({ children }: { children: React.ReactNode }) => {
   return <Providers>{children}</Providers>;

@@ -1,12 +1,12 @@
 import { setResponseHeader } from '@tanstack/react-start/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { envClient } from '@/env/client';
 import {
   withProtectedMutation,
   withPublicContext,
 } from '@/modules/auth/server';
 import { ServerFnError } from '@/modules/kernel/server';
+import { envClient } from '@/platform/env/client';
 import { mockGetSession, mockLogger } from '@/tests/server/test-utils';
 
 describe('server function middleware', () => {

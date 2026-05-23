@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-import { PageError } from '@/components/errors/page-error';
+import { PageError } from '@/platform/components/errors/page-error';
 
-import { Layout } from '@/layout/app/layout';
 import { GuardAuthenticated } from '@/modules/auth/presentation';
+import { AppLayout as Layout } from '@/modules/shell/presentation';
 
 export const Route = createFileRoute('/app')({
   component: RouteComponent,

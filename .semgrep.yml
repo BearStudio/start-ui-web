@@ -6,8 +6,8 @@ rules:
       - typescript
     paths:
       include:
-        - /src/features/**/*.ts
-        - /src/features/**/*.tsx
+        - /src/platform/**/*.ts
+        - /src/platform/**/*.tsx
         - /src/modules/**/presentation/**/*.ts
         - /src/modules/**/presentation/**/*.tsx
     pattern-either:
@@ -61,13 +61,14 @@ rules:
           }
 
   - id: raw-env-access-outside-kernel
-    message: Read env via kernel/infrastructure/config/env.ts, not process.env directly.
+    message: Read env via platform/env/config.ts, not process.env directly.
     languages: [typescript]
     severity: ERROR
     pattern: process.env.$X
     paths:
       exclude:
         - src/modules/kernel/infrastructure/config/**
+        - src/platform/env/**
         - '*.config.ts'
         - '*.config.mjs'
         - '*.cosmos.ts'
@@ -126,14 +127,54 @@ rules:
       include:
         - src/routes/**/*.ts
         - src/routes/**/*.tsx
-        - src/features/**/*.ts
-        - src/features/**/*.tsx
-        - src/layout/**/*.ts
-        - src/layout/**/*.tsx
-        - src/devtools/**/*.ts
-        - src/devtools/**/*.tsx
-        - src/components/**/*.ts
-        - src/components/**/*.tsx
+
+  - id: no-platform-imports-app-code
+    message: src/platform must not import modules, routes, or composition.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/(?:modules|routes|composition)(?:/[^"'']*)?["'']'
+    paths:
+      include:
+        - src/platform/**/*.ts
+        - src/platform/**/*.tsx
+
+  - id: no-module-internals-import-composition
+    message: Module internals must receive dependencies from factories/public server barrels, not import composition directly.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/composition(?:/[^"'']*)?["'']'
+    paths:
+      include:
+        - src/modules/**/domain/**/*.ts
+        - src/modules/**/domain/**/*.tsx
+        - src/modules/**/application/**/*.ts
+        - src/modules/**/application/**/*.tsx
+        - src/modules/**/infrastructure/**/*.ts
+        - src/modules/**/infrastructure/**/*.tsx
+        - src/modules/**/transport/**/*.ts
+        - src/modules/**/transport/**/*.tsx
+        - src/modules/**/presentation/**/*.ts
+        - src/modules/**/presentation/**/*.tsx
+        - src/modules/**/factory.ts
+        - src/modules/**/factory.tsx
+
+  - id: no-src-features-imports
+    message: src/features was removed; use src/modules/<capability> or src/platform.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/features(?:/[^"'']*)?["'']'
+
+  - id: no-src-layout-imports
+    message: src/layout was moved into the shell module; import from @/modules/shell/presentation.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/layout(?:/[^"'']*)?["'']'
+
+  - id: no-legacy-platform-root-imports
+    message: Shared UI/helpers live under @/platform.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/(?:components|hooks|lib|env|emails)(?:/[^"'']*)?["'']'
 
   - id: legacy-server-import
     message: src/server was removed; use module-owned public APIs or composition roots.

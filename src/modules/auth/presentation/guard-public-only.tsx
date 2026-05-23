@@ -1,13 +1,13 @@
 import { Activity, ReactNode } from 'react';
 
-import { PageError } from '@/components/errors/page-error';
-import { Spinner } from '@/components/ui/spinner';
+import { PageError } from '@/platform/components/errors/page-error';
+import { Spinner } from '@/platform/components/ui/spinner';
 
-import { authClient } from '@/modules/auth/presentation/client';
+import { useAuthSession } from '@/modules/auth/client';
 import { useRedirectAfterLogin } from '@/modules/auth/presentation/utils';
 
 export const GuardPublicOnly = ({ children }: { children?: ReactNode }) => {
-  const session = authClient.useSession();
+  const session = useAuthSession();
   useRedirectAfterLogin();
 
   if (session.error && session.error.status > 0) {

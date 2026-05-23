@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { z } from 'zod';
 
-import { zu } from '@/lib/zod/zod-utils';
+import { zu } from '@/platform/lib/zod/zod-utils';
 
 export type User = z.infer<ReturnType<typeof zUser>>;
 export const zRole = () => z.enum(['admin', 'user']);

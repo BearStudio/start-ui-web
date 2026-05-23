@@ -7,7 +7,7 @@ import {
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
-} from '@/lib/i18n/constants';
+} from '@/platform/lib/i18n/constants';
 
 /**
  * Retrieves the user's language preference.

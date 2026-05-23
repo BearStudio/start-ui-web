@@ -1,1 +1,1 @@
-import '@/lib/dayjs/config';
+import '@/platform/lib/dayjs/config';

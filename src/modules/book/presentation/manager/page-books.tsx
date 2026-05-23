@@ -4,7 +4,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/platform/components/ui/button';
 import {
   DataList,
   DataListCell,
@@ -14,19 +14,20 @@ import {
   DataListRow,
   DataListRowResults,
   DataListText,
-} from '@/components/ui/datalist';
-import { ResponsiveIconButtonLink } from '@/components/ui/responsive-icon-button-link';
-import { SearchButton } from '@/components/ui/search-button';
-import { SearchInput } from '@/components/ui/search-input';
+} from '@/platform/components/ui/datalist';
+import { ResponsiveIconButtonLink } from '@/platform/components/ui/responsive-icon-button-link';
+import { SearchButton } from '@/platform/components/ui/search-button';
+import { SearchInput } from '@/platform/components/ui/search-input';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/modules/book/presentation/queries';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { bookQueries } from '../queries';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();

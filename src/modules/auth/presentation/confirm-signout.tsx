@@ -3,7 +3,7 @@ import { LogOutIcon } from 'lucide-react';
 import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
+import { ConfirmResponsiveDrawer } from '@/platform/components/ui/confirm-responsive-drawer';
 
 export const ConfirmSignOut = (props: {
   children: ReactElement<{ onClick: () => unknown }>;

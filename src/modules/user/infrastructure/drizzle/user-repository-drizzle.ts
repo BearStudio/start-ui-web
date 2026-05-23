@@ -340,7 +340,7 @@ export class UserRepositoryDrizzle implements UserRepository {
         columns: { id: true, token: true },
       });
 
-      return row ? { id: toSessionId(row.id), token: row.token } : null;
+      return row ? { id: toSessionId(row.id), providerToken: row.token } : null;
     } catch (error) {
       mapDbError(error);
     }

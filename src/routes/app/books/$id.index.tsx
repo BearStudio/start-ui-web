@@ -1,9 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { useShouldShowNav } from '@/layout/app/layout';
+import { bookQueries } from '@/modules/book/client';
 import { AppPageBook as PageBook } from '@/modules/book/presentation';
+import { useShouldShowNav } from '@/modules/shell/presentation';
 
 export const Route = createFileRoute('/app/books/$id/')({
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(bookQueries.getById(params)),
   component: RouteComponent,
 });
 

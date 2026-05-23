@@ -2,17 +2,17 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
-import { PageError } from '@/components/errors/page-error';
-import { Spinner } from '@/components/ui/spinner';
+import { PageError } from '@/platform/components/errors/page-error';
+import { Spinner } from '@/platform/components/ui/spinner';
 
-import { authClient } from '@/modules/auth/presentation/client';
+import { signOut, useAuthSession } from '@/modules/auth/client';
 
 export const PageLogout = () => {
   const navigate = useNavigate();
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const { mutate, error } = useMutation({
     mutationFn: async () => {
-      const response = await authClient.signOut();
+      const response = await signOut();
       if (response.error) {
         throw response.error;
       }

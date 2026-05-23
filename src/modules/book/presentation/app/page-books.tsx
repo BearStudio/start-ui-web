@@ -3,17 +3,18 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-import { PageError } from '@/components/errors/page-error';
-import { Button } from '@/components/ui/button';
+import { PageError } from '@/platform/components/errors/page-error';
+import { Button } from '@/platform/components/ui/button';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/app/page-layout';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/modules/book/presentation/queries';
+import {
+  AppPageLayout as PageLayout,
+  AppPageLayoutContent as PageLayoutContent,
+  AppPageLayoutTopBar as PageLayoutTopBar,
+  AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { bookQueries } from '../queries';
 
 export const PageBooks = () => {
   const { t } = useTranslation(['book']);

@@ -10,8 +10,8 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
-} from '@/components/form';
-import { Button } from '@/components/ui/button';
+} from '@/platform/components/form';
+import { Button } from '@/platform/components/ui/button';
 import {
   ResponsiveDrawer,
   ResponsiveDrawerBody,
@@ -21,19 +21,20 @@ import {
   ResponsiveDrawerHeader,
   ResponsiveDrawerTitle,
   ResponsiveDrawerTrigger,
-} from '@/components/ui/responsive-drawer';
+} from '@/platform/components/ui/responsive-drawer';
 
-import { accountQueries } from '@/modules/account/presentation/queries';
 import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
 } from '@/modules/account/presentation/schema';
-import { authClient } from '@/modules/auth/client';
+import { useAuthSession } from '@/modules/auth/client';
+
+import { accountQueries } from './queries';
 
 export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
   const [open, setOpen] = useState(false);
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const form = useForm<FormFieldsAccountUpdateName>({
     resolver: zodResolver(zFormFieldsAccountUpdateName()),
     values: {

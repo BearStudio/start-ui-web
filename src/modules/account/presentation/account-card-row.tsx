@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { cn } from '@/lib/tailwind/utils';
+import { cn } from '@/platform/lib/tailwind/utils';
 
 export const AccountCardRow = (props: {
   children?: ReactNode;

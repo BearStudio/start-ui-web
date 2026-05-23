@@ -6,15 +6,15 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
-} from '@/components/form';
+} from '@/platform/components/form';
 
 import { rolesNames } from '@/modules/auth';
-import { authClient } from '@/modules/auth/client';
+import { useAuthSession } from '@/modules/auth/client';
 import { FormFieldsUser } from '@/modules/user/presentation/schema';
 
 export const FormUser = (props: { userId?: string }) => {
   const { t } = useTranslation(['user']);
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const form = useFormContext<FormFieldsUser>();
   const isCurrentUser = props.userId === session.data?.user.id;
 

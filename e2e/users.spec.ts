@@ -2,7 +2,7 @@ import { expect, test } from 'e2e/utils';
 import { ADMIN_FILE, USER_FILE } from 'e2e/utils/constants';
 import { randomString } from 'remeda';
 
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
 
 import locales from '@/locales';
 

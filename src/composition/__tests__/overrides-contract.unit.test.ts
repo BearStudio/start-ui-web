@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { makeTestKernel } from './helpers';
 import {
   __resetAccountComposition,
   __resetBookComposition,
@@ -11,7 +12,6 @@ import {
   type ServicesOverrides,
 } from '../index';
 import type { Kernel } from '../kernel';
-import { makeTestKernel } from './helpers';
 
 const _servicesOverridesRejectNestedKernel: ServicesOverrides = {
   book: {

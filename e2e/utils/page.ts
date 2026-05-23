@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { CustomFixture } from 'e2e/utils/types';
 
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
 
 import locales from '@/locales';
 import {

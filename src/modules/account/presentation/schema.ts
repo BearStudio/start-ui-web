@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { zu } from '@/lib/zod/zod-utils';
+import { zu } from '@/platform/lib/zod/zod-utils';
 
 export type FormFieldsAccountUpdateName = z.infer<
   ReturnType<typeof zFormFieldsAccountUpdateName>

@@ -1,4 +1,4 @@
-import { envClient } from '@/env/client';
+import { envClient } from '@/platform/env/client';
 
 export {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,

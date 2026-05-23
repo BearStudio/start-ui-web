@@ -1,4 +1,4 @@
-import { envClient } from '@/env/client';
+import { envClient } from '@/platform/env/client';
 
 const env = () => {
   return {

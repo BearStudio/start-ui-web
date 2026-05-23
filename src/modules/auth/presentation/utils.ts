@@ -2,12 +2,12 @@ import { useRouter, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import { Role } from '@/modules/auth';
-import { authClient } from '@/modules/auth/presentation/client';
+import { checkRolePermission, useAuthSession } from '@/modules/auth/client';
 
 export const useRedirectAfterLogin = () => {
   const search = useSearch({ strict: false });
   const router = useRouter();
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const searchRedirect = search.redirect;
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const useRedirectAfterLogin = () => {
       }
 
       if (
-        authClient.admin.checkRolePermission({
+        checkRolePermission({
           role: userRole as Role,
           permissions: {
             apps: ['manager'],
@@ -52,7 +52,7 @@ export const useRedirectAfterLogin = () => {
       }
 
       if (
-        authClient.admin.checkRolePermission({
+        checkRolePermission({
           role: userRole as Role,
           permissions: {
             apps: ['app'],
