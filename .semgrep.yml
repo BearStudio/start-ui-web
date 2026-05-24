@@ -324,3 +324,20 @@ rules:
     paths:
       include:
         - src/modules/kernel/infrastructure/db/client.ts
+
+  - id: raw-cache-control-public
+    message: 'Do not set Cache-Control: public directly. Use cachePublic({ reason }) from @/platform/http/cache-control, which forces a documented justification and prevents accidental leaks of authenticated responses.'
+    languages: [generic]
+    severity: ERROR
+    pattern-regex: '[Cc]ache-[Cc]ontrol["'']?\s*[:,]\s*["''`][^"''`]*\bpublic\b'
+    paths:
+      include:
+        - src/modules/**/*.ts
+        - src/modules/**/*.tsx
+        - src/routes/**/*.ts
+        - src/routes/**/*.tsx
+      exclude:
+        - src/platform/http/cache-control.ts
+        - '**/*.unit.spec.ts'
+        - '**/*.browser.spec.ts'
+        - '**/*.test.ts'

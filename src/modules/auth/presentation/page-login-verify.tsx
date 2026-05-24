@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -41,6 +43,8 @@ export default function PageLoginVerify({
 }) {
   const { t } = useTranslation(['auth', 'common']);
   const session = useAuthSession();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm({
     mode: 'onSubmit',
@@ -74,8 +78,12 @@ export default function PageLoginVerify({
       return;
     }
 
-    // Refetch session to update guards and redirect
-    session.refetch();
+    // Update Better Auth's client session cache, then invalidate the router
+    // session cache so /login beforeLoad re-runs and redirects to the post-
+    // login destination (search.redirect, /manager, /app, or /).
+    await session.refetch();
+    await queryClient.invalidateQueries({ queryKey: ['session'] });
+    await router.invalidate();
   };
 
   return (

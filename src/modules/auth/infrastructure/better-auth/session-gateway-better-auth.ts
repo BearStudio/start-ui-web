@@ -1,11 +1,11 @@
+import type { Auth } from './auth';
+import { getDefaultAuth } from './auth';
 import type { SessionGateway } from '../../application/ports/session-gateway';
 import type {
   AuthenticatedSession,
   AuthenticatedUser,
   AuthSession,
 } from '../../domain/session';
-import type { Auth } from './auth';
-import { getDefaultAuth } from './auth';
 
 type BetterAuthSession = NonNullable<
   Awaited<ReturnType<Auth['api']['getSession']>>

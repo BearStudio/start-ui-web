@@ -1,0 +1,79 @@
+version: 2
+
+# Keep npm dependencies and GitHub Actions current. Security-only updates land
+# immediately; routine patch/minor bumps are grouped weekly to reduce PR noise.
+# Major bumps are kept separate so framework upgrades get explicit review.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    groups:
+      tanstack:
+        patterns:
+          - '@tanstack/*'
+        update-types:
+          - minor
+          - patch
+      sentry:
+        patterns:
+          - '@sentry/*'
+      react:
+        patterns:
+          - react
+          - react-dom
+          - '@types/react'
+          - '@types/react-dom'
+        update-types:
+          - minor
+          - patch
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+        update-types:
+          - minor
+          - patch
+      dev-tooling:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        exclude-patterns:
+          - '@tanstack/*'
+          - '@sentry/*'
+          - 'react'
+          - 'react-dom'
+          - 'drizzle-*'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns:
+          - '*'
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 5

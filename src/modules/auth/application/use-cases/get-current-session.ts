@@ -1,5 +1,5 @@
-import type { AuthSession } from '../../domain/session';
 import type { AuthUseCaseDeps } from './types';
+import type { AuthSession } from '../../domain/session';
 
 export async function getCurrentSession(
   deps: AuthUseCaseDeps,

@@ -1,6 +1,6 @@
-import type { AuthorizationGateway } from '../../application/ports/authorization-gateway';
 import type { Auth } from './auth';
 import { getDefaultAuth } from './auth';
+import type { AuthorizationGateway } from '../../application/ports/authorization-gateway';
 
 export class AuthorizationGatewayBetterAuth implements AuthorizationGateway {
   constructor(private readonly auth: Auth = getDefaultAuth()) {}

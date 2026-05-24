@@ -1,13 +1,13 @@
 export {
-  __resetAuthComposition,
-  getAuthUseCases,
-  type AuthOverrides,
-} from './auth';
-export {
   __resetAccountComposition,
   type AccountOverrides,
   getAccountUseCases,
 } from './account';
+export {
+  __resetAuthComposition,
+  type AuthOverrides,
+  getAuthUseCases,
+} from './auth';
 export {
   __resetBookComposition,
   type BookOverrides,

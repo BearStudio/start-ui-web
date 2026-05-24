@@ -627,6 +627,8 @@ function SidebarMenuBadge({
   );
 }
 
+const SKELETON_WIDTHS = ['60%', '75%', '85%', '55%', '70%', '90%'] as const;
+
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
@@ -634,11 +636,10 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<'div'> & {
   showIcon?: boolean;
 }) {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    // eslint-disable-next-line sonarjs/pseudo-random, react-hooks/purity
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  // SSR-stable width derived from the component's React id so the server
+  // and client render identical markup. Avoids Math.random() hydration mismatch.
+  const id = React.useId();
+  const width = SKELETON_WIDTHS[id.length % SKELETON_WIDTHS.length] ?? '70%';
 
   return (
     <div

@@ -1,6 +1,6 @@
-import type { UserAdminGateway } from '../../application/ports/user-admin-gateway';
 import type { Auth } from './auth';
 import { getDefaultAuth } from './auth';
+import type { UserAdminGateway } from '../../application/ports/user-admin-gateway';
 
 export class UserAdminGatewayBetterAuth implements UserAdminGateway {
   constructor(private readonly auth: Auth = getDefaultAuth()) {}

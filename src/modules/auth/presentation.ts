@@ -1,5 +1,4 @@
-export { GuardAuthenticated } from './presentation/guard-authenticated';
-export { GuardPublicOnly } from './presentation/guard-public-only';
+export { beforeLoadAuthenticated } from './presentation/before-load-authenticated';
 export { LayoutLogin } from './presentation/layout-login';
 export { default as PageLogin } from './presentation/page-login';
 export { default as PageLoginError } from './presentation/page-login-error';

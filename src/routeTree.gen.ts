@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as OnboardingRouteRouteImport } from './routes/onboarding/route'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as ManagerIndexRouteImport } from './routes/manager/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
@@ -41,6 +43,11 @@ const LogoutRoute = LogoutRouteImport.update({
   path: '/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManagerRouteRoute = ManagerRouteRouteImport.update({
   id: '/manager',
   path: '/manager',
@@ -60,6 +67,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingIndexRoute = OnboardingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OnboardingRouteRoute,
 } as any)
 const ManagerIndexRoute = ManagerIndexRouteImport.update({
   id: '/',
@@ -174,11 +186,13 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/api/upload': typeof ApiUploadRoute
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
@@ -204,6 +218,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/login': typeof LoginIndexRoute
   '/manager': typeof ManagerIndexRoute
+  '/onboarding': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/account': typeof AppAccountIndexRoute
   '/app/books': typeof AppBooksIndexRoute
@@ -228,11 +243,13 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/api/upload': typeof ApiUploadRoute
   '/app/': typeof AppIndexRoute
   '/login/': typeof LoginIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
@@ -258,11 +275,13 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
+    | '/onboarding'
     | '/logout'
     | '/api/upload'
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/onboarding/'
     | '/api/auth/$'
     | '/app/account/'
     | '/app/books/'
@@ -288,6 +307,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
+    | '/onboarding'
     | '/api/auth/$'
     | '/app/account'
     | '/app/books'
@@ -311,11 +331,13 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/manager'
+    | '/onboarding'
     | '/logout'
     | '/api/upload'
     | '/app/'
     | '/login/'
     | '/manager/'
+    | '/onboarding/'
     | '/api/auth/$'
     | '/app/account/'
     | '/app/books/'
@@ -340,6 +362,7 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
+  OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
   LogoutRoute: typeof LogoutRoute
   ApiUploadRoute: typeof ApiUploadRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -353,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/logout'
       fullPath: '/logout'
       preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manager': {
@@ -382,6 +412,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/': {
+      id: '/onboarding/'
+      path: '/'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof OnboardingIndexRouteImport
+      parentRoute: typeof OnboardingRouteRoute
     }
     '/manager/': {
       id: '/manager/'
@@ -599,11 +636,24 @@ const ManagerRouteRouteWithChildren = ManagerRouteRoute._addFileChildren(
   ManagerRouteRouteChildren,
 )
 
+interface OnboardingRouteRouteChildren {
+  OnboardingIndexRoute: typeof OnboardingIndexRoute
+}
+
+const OnboardingRouteRouteChildren: OnboardingRouteRouteChildren = {
+  OnboardingIndexRoute: OnboardingIndexRoute,
+}
+
+const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
+  OnboardingRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRouteWithChildren,
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
+  OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
   LogoutRoute: LogoutRoute,
   ApiUploadRoute: ApiUploadRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

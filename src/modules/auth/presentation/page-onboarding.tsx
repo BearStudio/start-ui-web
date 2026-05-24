@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { LogOutIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -23,14 +24,21 @@ import { zFormFieldsOnboarding } from '@/modules/auth/presentation/schema';
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
   const session = useAuthSession();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const submitOnboarding = useMutation({
     ...accountQueries.submitOnboarding(),
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
       toast.success(
         t('auth:pageOnboarding.successMessage', { name: variables.name })
       );
-      session.refetch();
+      // Refresh both Better Auth's client cache and the router-context
+      // session cache, then invalidate route guards so beforeLoad reruns
+      // and redirects the now-onboarded user out of /onboarding.
+      await session.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['session'] });
+      await router.invalidate();
     },
     onError: () => {
       toast.error(t('auth:pageOnboarding.errorMessage'));
