@@ -1,13 +1,19 @@
-export function createCachedFactory<T>(build: () => T) {
+export function createCachedFactory<T, O>(build: (overrides?: O) => T) {
   let cached: T | undefined;
   let hasCached = false;
 
-  return (hasOverrides = false): T => {
-    if (hasOverrides) return build();
-    if (!hasCached) {
-      cached = build();
-      hasCached = true;
-    }
-    return cached as T;
+  return {
+    get(overrides?: O): T {
+      if (overrides !== undefined) return build(overrides);
+      if (!hasCached) {
+        cached = build();
+        hasCached = true;
+      }
+      return cached as T;
+    },
+    reset(): void {
+      cached = undefined;
+      hasCached = false;
+    },
   };
 }

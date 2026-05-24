@@ -1,34 +1,37 @@
-import { getRequestHeaders } from '@tanstack/react-start/server';
-
-import { auth } from '@/modules/auth/server';
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
+import type { Clock } from '@/modules/kernel/application/ports/clock';
+import type { IdGenerator } from '@/modules/kernel/application/ports/id-generator';
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
+import type { TransactionRunner } from '@/modules/kernel/application/ports/transaction-runner';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { systemClock } from '@/modules/kernel/infrastructure/clock/system-clock';
 import {
+  createTransactionRunner,
   type Database,
-  db,
-  transactionRunner,
+  getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
-import { logger as pinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
+import { createPinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
 
-import { hasDefinedOverrides } from './shared/overrides';
 import { createCachedFactory } from './shared/singleton';
+import type { Overrides } from './shared/types';
 
 type CacheEntry = {
   value: unknown;
   expiresAt?: number;
 };
 
-const memoryCache = (): CacheGateway => {
+const memoryCache = (clock: Clock): CacheGateway => {
   const entries = new Map<string, CacheEntry>();
   return {
     async get<T>(key: string) {
       const entry = entries.get(key);
       if (!entry) return undefined;
-      if (entry.expiresAt !== undefined && entry.expiresAt <= Date.now()) {
+      if (
+        entry.expiresAt !== undefined &&
+        entry.expiresAt <= clock.now().getTime()
+      ) {
         entries.delete(key);
         return undefined;
       }
@@ -38,7 +41,9 @@ const memoryCache = (): CacheGateway => {
       entries.set(key, {
         value,
         expiresAt:
-          options?.ttlMs === undefined ? undefined : Date.now() + options.ttlMs,
+          options?.ttlMs === undefined
+            ? undefined
+            : clock.now().getTime() + options.ttlMs,
       });
     },
     async delete(key: string) {
@@ -47,52 +52,78 @@ const memoryCache = (): CacheGateway => {
   };
 };
 
-const productionLogger: Logger = {
-  info: (event, fields) => pinoLogger.info({ event, ...fields }, event),
-  warn: (event, fields) => pinoLogger.warn({ event, ...fields }, event),
-  error: (event, fields) => pinoLogger.error({ event, ...fields }, event),
+const createProductionLogger = (): Logger => {
+  const pinoLogger = createPinoLogger();
+  return {
+    info: (event, fields) => pinoLogger.info({ event, ...fields }, event),
+    warn: (event, fields) => pinoLogger.warn({ event, ...fields }, event),
+    error: (event, fields) => pinoLogger.error({ event, ...fields }, event),
+  };
 };
 
-const productionPermissionChecker: PermissionChecker = {
+const createProductionPermissionChecker = (): PermissionChecker => ({
   async hasPermission(userId: UserId, permissions) {
-    const result = await auth.api.userHasPermission({
+    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+      import('@tanstack/react-start/server'),
+      import('./auth'),
+    ]);
+    const result = await getAuth().api.userHasPermission({
       body: { userId, permissions },
       headers: getRequestHeaders(),
     });
-    if (result.error) return false;
-    return result.success;
+    return result.error ? false : result.success;
   },
-};
+});
 
 export type Kernel = {
   db: Database;
   logger: Logger;
-  clock: typeof systemClock;
-  idGenerator: typeof cuidIdGenerator;
+  clock: Clock;
+  idGenerator: IdGenerator;
   cacheGateway: CacheGateway;
-  transactionRunner: typeof transactionRunner;
+  transactionRunner: TransactionRunner;
   permissionChecker: PermissionChecker;
 };
 
-export type KernelOverrides = Partial<Kernel>;
+export type KernelOverrides = Overrides<Kernel>;
 
-const buildKernel = (overrides?: KernelOverrides): Kernel => ({
-  db: overrides?.db ?? db,
-  logger: overrides?.logger ?? productionLogger,
-  clock: overrides?.clock ?? systemClock,
-  idGenerator: overrides?.idGenerator ?? cuidIdGenerator,
-  cacheGateway: overrides?.cacheGateway ?? memoryCache(),
-  transactionRunner: overrides?.transactionRunner ?? transactionRunner,
-  permissionChecker:
-    overrides?.permissionChecker ?? productionPermissionChecker,
-});
+const buildDefaultKernel = (): Kernel => {
+  const db = getDefaultDbClient();
+  const clock = systemClock;
+  return {
+    db,
+    logger: createProductionLogger(),
+    clock,
+    idGenerator: cuidIdGenerator,
+    cacheGateway: memoryCache(clock),
+    transactionRunner: createTransactionRunner(db),
+    permissionChecker: createProductionPermissionChecker(),
+  };
+};
 
-const getCachedKernel = createCachedFactory(() => buildKernel());
+const factory = createCachedFactory<Kernel, KernelOverrides>(
+  buildDefaultKernel
+);
 
-export function getKernel(options?: { overrides?: KernelOverrides }): Kernel {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildKernel(overrides);
-  }
-  return getCachedKernel(false);
-}
+export const getKernel = (overrides?: KernelOverrides): Kernel => {
+  if (overrides === undefined) return factory.get();
+
+  const base = factory.get();
+  const db = overrides.db ?? base.db;
+  const clock = overrides.clock ?? base.clock;
+  return {
+    ...base,
+    ...overrides,
+    db,
+    clock,
+    cacheGateway:
+      overrides.cacheGateway ??
+      (overrides.clock ? memoryCache(clock) : base.cacheGateway),
+    transactionRunner:
+      overrides.transactionRunner ??
+      (overrides.db ? createTransactionRunner(db) : base.transactionRunner),
+  };
+};
+
+/** Test-only. */
+export const __resetKernelComposition = () => factory.reset();

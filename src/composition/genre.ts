@@ -1,17 +1,16 @@
-import type { GenreRepository } from '@/modules/genre/application/ports/genre-repository';
-import { createGenreUseCases } from '@/modules/genre/factory';
+import { createGenreUseCases, type GenreRepository } from '@/modules/genre';
 import { GenreRepositoryDrizzle } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
 
-import { getKernel, type KernelOverrides } from './kernel';
-import { hasDefinedOverrides } from './shared/overrides';
+import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
 
-export type GenreCompositionOverrides = KernelOverrides & {
+export type GenreOverrides = {
+  kernel?: Kernel;
   genreRepository?: GenreRepository;
 };
 
-const buildGenreUseCases = (overrides?: GenreCompositionOverrides) => {
-  const kernel = getKernel({ overrides });
+const buildGenreUseCases = (overrides?: GenreOverrides) => {
+  const kernel = overrides?.kernel ?? getKernel();
   return createGenreUseCases({
     genreRepository:
       overrides?.genreRepository ?? new GenreRepositoryDrizzle(kernel.db),
@@ -20,14 +19,10 @@ const buildGenreUseCases = (overrides?: GenreCompositionOverrides) => {
   });
 };
 
-const getCachedGenreUseCases = createCachedFactory(() => buildGenreUseCases());
+const factory = createCachedFactory(buildGenreUseCases);
 
-export function getGenreUseCases(options?: {
-  overrides?: GenreCompositionOverrides;
-}) {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildGenreUseCases(overrides);
-  }
-  return getCachedGenreUseCases(false);
-}
+export const getGenreUseCases = (overrides?: GenreOverrides) =>
+  factory.get(overrides);
+
+/** Test-only. */
+export const __resetGenreComposition = () => factory.reset();

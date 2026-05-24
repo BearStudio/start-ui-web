@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { notInArray, sql } from 'drizzle-orm';
 
-import { db } from '@/modules/kernel/infrastructure/db/client';
+import { getDefaultDbClient } from '@/modules/kernel/infrastructure/db/client';
 import { user } from '@/modules/kernel/infrastructure/db/schema';
 
 import { emphasis } from './_utils';
@@ -10,6 +10,7 @@ const demoUserEmails = ['user@user.com', 'admin@admin.com'];
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
+  const db = getDefaultDbClient();
 
   let createdCounter = 0;
   const [countRow] = await db

@@ -49,7 +49,7 @@ This project uses Vite's native `resolve.tsconfigPaths: true` option to resolve 
 ```bash
 cp .env.example .env  # Setup your env variables
 pnpm install          # Install dependencies
-pnpm dk:init          # Start Docker containers (PostgreSQL, MinIO, Maildev)
+pnpm dk:init          # Start Docker containers (PostgreSQL, MinIO)
 pnpm db:init          # Push the Drizzle schema and seed the database
 ```
 

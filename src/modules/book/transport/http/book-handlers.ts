@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { getBookUseCases } from '@/composition/book';
+import { getKernel } from '@/composition/kernel';
 import type { ProtectedContext } from '@/modules/auth/server';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 import {
@@ -34,13 +35,13 @@ export const zDeleteByIdInput = () => z.object({ id: z.string() });
 
 const getUseCases = (ctx: ProtectedContext) =>
   getBookUseCases({
-    overrides: {
+    kernel: getKernel({
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
         error: (event, fields) => ctx.logger.error(fields ?? {}, event),
       },
-    },
+    }),
   });
 
 const mapReason = (reason: string): never => {

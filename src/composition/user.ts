@@ -1,63 +1,71 @@
-import { getRequestHeaders } from '@tanstack/react-start/server';
-
-import { auth } from '@/modules/auth/server';
-import type { UserAuthGateway } from '@/modules/user/application/ports/user-auth-gateway';
-import type { UserRepository } from '@/modules/user/application/ports/user-repository';
-import { createUserUseCases } from '@/modules/user/factory';
+import {
+  createUserUseCases,
+  type UserAuthGateway,
+  type UserRepository,
+} from '@/modules/user';
 import { UserRepositoryDrizzle } from '@/modules/user/infrastructure/drizzle/user-repository-drizzle';
 
-import { getKernel, type KernelOverrides } from './kernel';
-import { hasDefinedOverrides } from './shared/overrides';
+import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
 
-const productionUserAuthGateway: UserAuthGateway = {
+const createProductionUserAuthGateway = (): UserAuthGateway => ({
   async removeUser(userId) {
-    const response = await auth.api.removeUser({
+    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+      import('@tanstack/react-start/server'),
+      import('./auth'),
+    ]);
+    const response = await getAuth().api.removeUser({
       body: { userId },
       headers: getRequestHeaders(),
     });
     return response.success;
   },
   async revokeUserSessions(userId) {
-    const response = await auth.api.revokeUserSessions({
+    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+      import('@tanstack/react-start/server'),
+      import('./auth'),
+    ]);
+    const response = await getAuth().api.revokeUserSessions({
       body: { userId },
       headers: getRequestHeaders(),
     });
     return response.success;
   },
   async revokeUserSession(sessionToken) {
-    const response = await auth.api.revokeUserSession({
+    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+      import('@tanstack/react-start/server'),
+      import('./auth'),
+    ]);
+    const response = await getAuth().api.revokeUserSession({
       body: { sessionToken },
       headers: getRequestHeaders(),
     });
     return response.success;
   },
-};
+});
 
-export type UserCompositionOverrides = KernelOverrides & {
+export type UserOverrides = {
+  kernel?: Kernel;
   userRepository?: UserRepository;
   userAuthGateway?: UserAuthGateway;
 };
 
-const buildUserUseCases = (overrides?: UserCompositionOverrides) => {
-  const kernel = getKernel({ overrides });
+const buildUserUseCases = (overrides?: UserOverrides) => {
+  const kernel = overrides?.kernel ?? getKernel();
   return createUserUseCases({
     userRepository:
       overrides?.userRepository ?? new UserRepositoryDrizzle(kernel.db),
-    userAuthGateway: overrides?.userAuthGateway ?? productionUserAuthGateway,
+    userAuthGateway:
+      overrides?.userAuthGateway ?? createProductionUserAuthGateway(),
     permissionChecker: kernel.permissionChecker,
     logger: kernel.logger,
   });
 };
 
-const getCachedUserUseCases = createCachedFactory(() => buildUserUseCases());
+const factory = createCachedFactory(buildUserUseCases);
 
-export function getUserUseCases(options?: {
-  overrides?: UserCompositionOverrides;
-}) {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildUserUseCases(overrides);
-  }
-  return getCachedUserUseCases(false);
-}
+export const getUserUseCases = (overrides?: UserOverrides) =>
+  factory.get(overrides);
+
+/** Test-only. */
+export const __resetUserComposition = () => factory.reset();

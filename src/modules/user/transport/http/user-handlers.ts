@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { getKernel } from '@/composition/kernel';
 import { getUserUseCases } from '@/composition/user';
 import type { ProtectedContext } from '@/modules/auth/server';
 import {
@@ -57,13 +58,13 @@ export const zRevokeUserSessionInput = () =>
 
 const getUseCases = (ctx: ProtectedContext) =>
   getUserUseCases({
-    overrides: {
+    kernel: getKernel({
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
         error: (event, fields) => ctx.logger.error(fields ?? {}, event),
       },
-    },
+    }),
   });
 
 const mapReason = (

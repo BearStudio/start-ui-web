@@ -1,17 +1,19 @@
-import type { AccountRepository } from '@/modules/account/application/ports/account-repository';
-import { createAccountUseCases } from '@/modules/account/factory';
+import {
+  type AccountRepository,
+  createAccountUseCases,
+} from '@/modules/account';
 import { AccountRepositoryDrizzle } from '@/modules/account/infrastructure/drizzle/account-repository-drizzle';
 
-import { getKernel, type KernelOverrides } from './kernel';
-import { hasDefinedOverrides } from './shared/overrides';
+import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
 
-export type AccountCompositionOverrides = KernelOverrides & {
+export type AccountOverrides = {
+  kernel?: Kernel;
   accountRepository?: AccountRepository;
 };
 
-const buildAccountUseCases = (overrides?: AccountCompositionOverrides) => {
-  const kernel = getKernel({ overrides });
+const buildAccountUseCases = (overrides?: AccountOverrides) => {
+  const kernel = overrides?.kernel ?? getKernel();
   return createAccountUseCases({
     accountRepository:
       overrides?.accountRepository ?? new AccountRepositoryDrizzle(kernel.db),
@@ -20,16 +22,10 @@ const buildAccountUseCases = (overrides?: AccountCompositionOverrides) => {
   });
 };
 
-const getCachedAccountUseCases = createCachedFactory(() =>
-  buildAccountUseCases()
-);
+const factory = createCachedFactory(buildAccountUseCases);
 
-export function getAccountUseCases(options?: {
-  overrides?: AccountCompositionOverrides;
-}) {
-  const overrides = options?.overrides;
-  if (hasDefinedOverrides(overrides)) {
-    return buildAccountUseCases(overrides);
-  }
-  return getCachedAccountUseCases(false);
-}
+export const getAccountUseCases = (overrides?: AccountOverrides) =>
+  factory.get(overrides);
+
+/** Test-only. */
+export const __resetAccountComposition = () => factory.reset();

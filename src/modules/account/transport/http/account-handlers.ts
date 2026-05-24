@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { getAccountUseCases } from '@/composition/account';
+import { getKernel } from '@/composition/kernel';
 import type { ProtectedContext } from '@/modules/auth/server';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
@@ -12,13 +13,13 @@ export const zUpdateInfoInput = () =>
 
 const getUseCases = (ctx: ProtectedContext) =>
   getAccountUseCases({
-    overrides: {
+    kernel: getKernel({
       logger: {
         info: (event, fields) => ctx.logger.info(fields ?? {}, event),
         warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
         error: (event, fields) => ctx.logger.error(fields ?? {}, event),
       },
-    },
+    }),
   });
 
 const submitOnboarding = async (
