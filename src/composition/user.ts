@@ -10,31 +10,31 @@ import { createCachedFactory } from './shared/singleton';
 
 const createProductionUserAuthGateway = (): UserAuthGateway => ({
   async removeUser(userId) {
-    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthGateway().removeUser({
+    return getAuthUseCases().removeUser({
       userId,
       headers: getRequestHeaders(),
     });
   },
   async revokeUserSessions(userId) {
-    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthGateway().revokeUserSessions({
+    return getAuthUseCases().revokeUserSessions({
       userId,
       headers: getRequestHeaders(),
     });
   },
   async revokeUserSession(target) {
-    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthGateway().revokeUserSession({
+    return getAuthUseCases().revokeUserSession({
       sessionId: target.id,
       providerSessionToken: target.providerToken,
       headers: getRequestHeaders(),

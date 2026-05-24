@@ -1,0 +1,37 @@
+import { describe, expect, it } from 'vitest';
+
+import type { RuntimeConfigSource } from '../ports/runtime-config-source';
+import type { RuntimeConfig } from '../../domain/runtime-config';
+import { createRuntimeConfigUseCases } from '../../factory';
+
+const config: RuntimeConfig = {
+  name: 'TEST',
+  color: 'gold',
+  emoji: 'T',
+  isDemo: false,
+  isDev: true,
+};
+
+describe('runtime-config use cases', () => {
+  it('returns whatever the source provides', () => {
+    const source: RuntimeConfigSource = { read: () => config };
+    const useCases = createRuntimeConfigUseCases({ source });
+
+    expect(useCases.get()).toEqual(config);
+  });
+
+  it('passes through subsequent source reads without internal caching', () => {
+    let calls = 0;
+    const source: RuntimeConfigSource = {
+      read: () => {
+        calls += 1;
+        return { ...config, isDemo: calls % 2 === 0 };
+      },
+    };
+    const useCases = createRuntimeConfigUseCases({ source });
+
+    expect(useCases.get().isDemo).toBe(false);
+    expect(useCases.get().isDemo).toBe(true);
+    expect(calls).toBe(2);
+  });
+});

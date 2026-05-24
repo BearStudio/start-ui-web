@@ -8,20 +8,20 @@ import { performance } from 'node:perf_hooks';
 import type {
   AuthenticatedSession,
   AuthenticatedUser,
-  AuthGateway,
+  AuthUseCases,
   Permission,
 } from '@/modules/auth';
 import { logger } from '@/modules/kernel/infrastructure/logger/pino';
-import { ServerFnError } from '@/modules/kernel/server';
+import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/server';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
 import { envClient } from '@/platform/env/client';
 
 type ServerTimingEntry = { name: string; durationMs: number };
 
 export type ProcedureLogger = {
-  warn: (...args: ExplicitAny[]) => void;
-  error: (...args: ExplicitAny[]) => void;
-  info: (...args: ExplicitAny[]) => void;
+  warn: (...args: unknown[]) => void;
+  error: (...args: unknown[]) => void;
+  info: (...args: unknown[]) => void;
 };
 
 export type ProtectedContext = {
@@ -36,7 +36,7 @@ export type PublicContext = Omit<ProtectedContext, 'user' | 'session'> & {
 };
 
 type ServerContextDeps = {
-  getAuthGateway: () => AuthGateway;
+  getAuthUseCases: () => AuthUseCases;
 };
 
 const formatTiming = (entries: ServerTimingEntry[]) =>
@@ -80,7 +80,12 @@ const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
 
   const logLevel = (() => {
     if (!(mappedError instanceof Error)) return 'error';
-    if (mappedError.message === 'DEMO_MODE_ENABLED') return 'info';
+    if (
+      mappedError instanceof ServerFnError &&
+      mappedError.data?.reason === DEMO_MODE_ERROR
+    ) {
+      return 'info';
+    }
     if (mappedError instanceof ServerFnError) {
       if (mappedError.status >= 500) return 'error';
       if (mappedError.status >= 400) return 'warn';
@@ -103,17 +108,18 @@ function mapTransportError(error: unknown): unknown {
 const assertNotDemoMode = () => {
   if (envClient.VITE_IS_DEMO) {
     throw new ServerFnError('METHOD_NOT_SUPPORTED', {
-      message: 'DEMO_MODE_ENABLED',
+      message: 'Demo mode prevents mutations',
+      data: { reason: DEMO_MODE_ERROR },
     });
   }
 };
 
 export const createServerContextTools = ({
-  getAuthGateway,
+  getAuthUseCases,
 }: ServerContextDeps) => {
   const getSession = async (timings: ServerTimingEntry[]) => {
     const authStart = performance.now();
-    const session = await getAuthGateway().getSession({
+    const session = await getAuthUseCases().getCurrentSession({
       headers: getRequestHeaders(),
     });
     timings.push({ name: 'auth', durationMs: performance.now() - authStart });
@@ -179,7 +185,7 @@ export const createServerContextTools = ({
   };
 
   const assertPermission = async (userId: string, permissions: Permission) => {
-    const allowed = await getAuthGateway().userHasPermission({
+    const allowed = await getAuthUseCases().checkPermission({
       userId,
       permissions,
       headers: getRequestHeaders(),

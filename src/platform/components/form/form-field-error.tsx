@@ -9,6 +9,7 @@ import {
   get,
   useFormState,
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
@@ -40,6 +41,7 @@ export const FormFieldError = <
   ...props
 }: FormFieldErrorProps<TFieldValues, TName>) => {
   const fieldCtx = useFormFieldUnsafe();
+  const { t } = useTranslation();
   const controllerCtx =
     use<FormFieldControllerContextValue<TFieldValues> | null>(
       FormFieldControllerContext as ExplicitAny
@@ -58,7 +60,10 @@ export const FormFieldError = <
   const error = controlled
     ? get<FieldErrors<TFieldValues>>(errors, name)
     : controllerCtx?.fieldState.error;
-  const errorMessage = error?.root?.message ?? error?.message;
+  const rawMessage = error?.root?.message ?? error?.message;
+  const errorMessage = rawMessage
+    ? t(rawMessage, { defaultValue: rawMessage })
+    : undefined;
 
   if (!errorMessage) {
     return null;

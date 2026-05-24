@@ -3,25 +3,25 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
-import i18n from '@/platform/lib/i18n';
-
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
 } from '@/modules/auth';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/client';
-import { TemplateLoginCode } from '@/modules/email/presentation';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
 import {
   type Database,
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
-import { sendEmail } from '@/modules/kernel/infrastructure/email/resend';
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
 import { envClient } from '@/platform/env/client';
 import { envServer } from '@/platform/env/server';
 
+import { AuthEmailPortResend } from './auth-email-port-resend';
 import { betterAuthPermissions } from './permissions';
+
+const authEmailPort = new AuthEmailPortResend();
 
 export function createAuth(database: Database = getDefaultDbClient()) {
   return betterAuth({
@@ -78,14 +78,10 @@ export function createAuth(database: Database = getDefaultDbClient()) {
         async sendVerificationOTP({ email, otp, type }) {
           await match(type)
             .with('sign-in', async () => {
-              await sendEmail({
-                to: email,
-                subject: i18n.t('emails:loginCode.subject', {
-                  lng: getUserLanguage(),
-                }),
-                template: (
-                  <TemplateLoginCode language={getUserLanguage()} code={otp} />
-                ),
+              await authEmailPort.sendSignInOtp({
+                email,
+                otp,
+                language: getUserLanguage(),
               });
             })
             .with('email-verification', async () => {
@@ -125,7 +121,7 @@ export function createAuth(database: Database = getDefaultDbClient()) {
           before: async (user) => {
             if (envClient.VITE_IS_DEMO) {
               throw new AppError({
-                code: 'DEMO_MODE_ENABLED',
+                code: DEMO_MODE_ERROR,
                 category: 'bad_request',
                 status: 405,
                 message: 'DEMO MODE',
@@ -138,7 +134,7 @@ export function createAuth(database: Database = getDefaultDbClient()) {
           before: async (user) => {
             if (envClient.VITE_IS_DEMO) {
               throw new AppError({
-                code: 'DEMO_MODE_ENABLED',
+                code: DEMO_MODE_ERROR,
                 category: 'bad_request',
                 status: 405,
                 message: 'DEMO MODE',

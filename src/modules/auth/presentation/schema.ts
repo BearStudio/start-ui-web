@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { z } from 'zod';
 
 import { zu } from '@/platform/lib/zod/zod-utils';
@@ -7,19 +6,19 @@ export type Otp = z.infer<ReturnType<typeof zOtp>>;
 export const zOtp = () =>
   z
     .string({
-      error: t('auth:common.otp.required'),
+      error: 'auth:common.otp.required',
     })
-    .length(6, t('auth:common.otp.invalidLength'));
+    .length(6, 'auth:common.otp.invalidLength');
 
 export type FormFieldsLogin = z.infer<ReturnType<typeof zFormFieldsLogin>>;
 export const zFormFieldsLogin = () =>
   z.object({
-    email: zu.fieldText.required().pipe(
+    email: zu.fieldText.required({ error: 'auth:common.email.required' }).pipe(
       z.email({
         error: (issue) =>
           issue.input
-            ? t('auth:common.email.invalid')
-            : t('auth:common.email.required'),
+            ? 'auth:common.email.invalid'
+            : 'auth:common.email.required',
       })
     ),
   });

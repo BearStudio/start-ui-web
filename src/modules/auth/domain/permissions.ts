@@ -57,12 +57,19 @@ export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
 export type Role = keyof typeof rolePermissions;
 
 export const hasRolePermission = (role: Role, permissions: Permission) => {
-  const grants = rolePermissions[role];
+  const grants = rolePermissions[role as Role];
+  if (!grants || !permissions || typeof permissions !== 'object') {
+    return false;
+  }
+
   return Object.entries(permissions).every(([resource, actions]) => {
+    if (!Array.isArray(actions)) return false;
     const allowed = grants[resource as keyof typeof permissionStatements];
-    if (!allowed) return false;
-    return actions.every((action) =>
-      (allowed as readonly string[]).includes(action)
+    if (!Array.isArray(allowed)) return false;
+    return actions.every(
+      (action) =>
+        typeof action === 'string' &&
+        (allowed as readonly string[]).includes(action)
     );
   });
 };

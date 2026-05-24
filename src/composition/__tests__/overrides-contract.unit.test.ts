@@ -11,7 +11,7 @@ import {
   getServices,
   type ServicesOverrides,
 } from '../index';
-import type { Kernel } from '../kernel';
+import type { Kernel, KernelOverrides } from '../kernel';
 
 const _servicesOverridesRejectNestedKernel: ServicesOverrides = {
   book: {
@@ -55,6 +55,30 @@ describe('composition override contract', () => {
     await expect(overridden.cacheGateway.get('books:list')).resolves.toEqual([
       'cached',
     ]);
+  });
+
+  it('preserves defaults when kernel overrides contain explicit undefined', () => {
+    const singleton = getKernel();
+    const unsafeOverrides = {
+      db: undefined,
+      logger: undefined,
+      clock: undefined,
+      idGenerator: undefined,
+      cacheGateway: undefined,
+      transactionRunner: undefined,
+      permissionChecker: undefined,
+    } as unknown as KernelOverrides;
+
+    const overridden = getKernel(unsafeOverrides);
+
+    expect(overridden).not.toBe(singleton);
+    expect(overridden.db).toBe(singleton.db);
+    expect(overridden.logger).toBe(singleton.logger);
+    expect(overridden.clock).toBe(singleton.clock);
+    expect(overridden.idGenerator).toBe(singleton.idGenerator);
+    expect(overridden.cacheGateway).toBe(singleton.cacheGateway);
+    expect(overridden.transactionRunner).toBe(singleton.transactionRunner);
+    expect(overridden.permissionChecker).toBe(singleton.permissionChecker);
   });
 
   it('builds an override cache from the override clock', async () => {

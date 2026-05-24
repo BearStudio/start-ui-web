@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { z } from 'zod';
 
 import { zu } from '@/platform/lib/zod/zod-utils';
@@ -10,12 +9,12 @@ export const zUser = () =>
   z.object({
     id: z.string(),
     name: zu.fieldText.nullish(),
-    email: zu.fieldText.required().pipe(
+    email: zu.fieldText.required({ error: 'user:common.email.required' }).pipe(
       z.email({
         error: (issue) =>
           issue.input
-            ? t('user:common.email.invalid')
-            : t('user:common.email.required'),
+            ? 'user:common.email.invalid'
+            : 'user:common.email.required',
       })
     ),
     emailVerified: z.boolean(),

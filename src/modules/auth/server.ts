@@ -1,12 +1,9 @@
 import type { Auth } from '@/composition/auth';
-import { auth, getAuthGateway } from '@/composition/auth';
+import { auth, getAuthUseCases } from '@/composition/auth';
 
 import { createServerContextTools } from './transport/tanstack/server-context';
 
-export type {
-  AuthenticatedSession,
-  AuthenticatedUser,
-} from './application/ports/auth-gateway';
+export type { AuthenticatedSession, AuthenticatedUser } from './domain/session';
 export {
   createServerContextTools,
   type ProcedureLogger,
@@ -14,9 +11,9 @@ export {
   type PublicContext,
 } from './transport/tanstack/server-context';
 
-const serverContextTools = createServerContextTools({ getAuthGateway });
+const serverContextTools = createServerContextTools({ getAuthUseCases });
 
-export { auth, getAuthGateway };
+export { auth, getAuthUseCases };
 export type { Auth };
 export const assertPermission = serverContextTools.assertPermission;
 export const withProtectedContext = serverContextTools.withProtectedContext;
