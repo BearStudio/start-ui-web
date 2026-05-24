@@ -1,21 +1,46 @@
 import { createServerFn } from '@tanstack/react-start';
 
-import { withProtectedMutation } from '@/modules/auth/server';
+import type { ProtectedContext } from '@/modules/auth/server';
 
 import {
-  handlers,
+  type AccountHandlers,
   zSubmitOnboardingInput,
   zUpdateInfoInput,
 } from '../http/account-handlers';
 
-export const accountSubmitOnboarding = createServerFn({ method: 'POST' })
-  .inputValidator(zSubmitOnboardingInput())
-  .handler(async ({ data }) =>
-    withProtectedMutation((ctx) => handlers.submitOnboarding(ctx, data))
-  );
+type ProtectedRunner = <T>(
+  fn: (ctx: ProtectedContext) => Promise<T>
+) => Promise<T>;
 
-export const accountUpdateInfo = createServerFn({ method: 'POST' })
-  .inputValidator(zUpdateInfoInput())
-  .handler(async ({ data }) =>
-    withProtectedMutation((ctx) => handlers.updateInfo(ctx, data))
-  );
+type AccountServerFunctionDeps = {
+  getDeps: () => Promise<AccountServerRuntimeDeps> | AccountServerRuntimeDeps;
+};
+
+type AccountServerRuntimeDeps = {
+  handlers: AccountHandlers;
+  withProtectedMutation: ProtectedRunner;
+};
+
+export const createAccountServerFunctions = ({
+  getDeps,
+}: AccountServerFunctionDeps) => ({
+  accountSubmitOnboarding: createServerFn({ method: 'POST' })
+    .inputValidator(zSubmitOnboardingInput())
+    .handler(async ({ data }) => {
+      const { handlers, withProtectedMutation } = await getDeps();
+      return withProtectedMutation((ctx) =>
+        handlers.submitOnboarding(ctx, data)
+      );
+    }),
+
+  accountUpdateInfo: createServerFn({ method: 'POST' })
+    .inputValidator(zUpdateInfoInput())
+    .handler(async ({ data }) => {
+      const { handlers, withProtectedMutation } = await getDeps();
+      return withProtectedMutation((ctx) => handlers.updateInfo(ctx, data));
+    }),
+});
+
+export type AccountServerFunctions = ReturnType<
+  typeof createAccountServerFunctions
+>;

@@ -4,7 +4,6 @@ export { PageBook as ManagerPageBook } from './presentation/manager/page-book';
 export { PageBookNew } from './presentation/manager/page-book-new';
 export { PageBookUpdate } from './presentation/manager/page-book-update';
 export { PageBooks as ManagerPageBooks } from './presentation/manager/page-books';
-export { bookQueries } from './presentation/queries';
 export {
   bookCoverAcceptedFileTypes,
   type FormFieldsBook,

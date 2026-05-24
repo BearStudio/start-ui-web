@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 
 import { Permission, Role } from '@/modules/auth';
-import { authClient } from '@/modules/auth/presentation/client';
+
+import { checkRolePermission, useAuthSession } from './client';
 
 export const WithPermissions = (props: {
   permissions: Permission[];
@@ -9,7 +10,7 @@ export const WithPermissions = (props: {
   loadingFallback?: ReactNode;
   fallback?: ReactNode;
 }) => {
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const userRole = session.data?.user.role;
 
   if (session.isPending) {
@@ -20,7 +21,7 @@ export const WithPermissions = (props: {
     !userRole ||
     props.permissions.every(
       (permissions) =>
-        !authClient.admin.checkRolePermission({
+        !checkRolePermission({
           role: userRole as Role,
           permissions,
         })

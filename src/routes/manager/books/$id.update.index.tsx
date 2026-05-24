@@ -1,8 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { bookQueries } from '@/modules/book/client';
 import { PageBookUpdate } from '@/modules/book/presentation';
 
 export const Route = createFileRoute('/manager/books/$id/update/')({
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(bookQueries.getById(params)),
   component: RouteComponent,
 });
 

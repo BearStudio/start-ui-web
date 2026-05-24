@@ -31,9 +31,9 @@
         "groups": [
           ["^@?\\w", "^\\u0000"],
           ["^.+\\.s?css$"],
-          ["^@/lib", "^@/hooks"],
+          ["^@/platform/lib", "^@/platform/hooks"],
           ["^@/data"],
-          ["^@/components", "^@/container"],
+          ["^@/platform/components", "^@/container"],
           ["^@/store"],
           ["^@/"],
           [

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PageError } from '@/components/errors/page-error';
+import { PageError } from '@/platform/components/errors/page-error';
 
 import { PageLogout } from '@/modules/auth/presentation';
 

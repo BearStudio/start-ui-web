@@ -10,37 +10,35 @@ import { createCachedFactory } from './shared/singleton';
 
 const createProductionUserAuthGateway = (): UserAuthGateway => ({
   async removeUser(userId) {
-    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    const response = await getAuth().api.removeUser({
-      body: { userId },
+    return getAuthGateway().removeUser({
+      userId,
       headers: getRequestHeaders(),
     });
-    return response.success;
   },
   async revokeUserSessions(userId) {
-    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    const response = await getAuth().api.revokeUserSessions({
-      body: { userId },
+    return getAuthGateway().revokeUserSessions({
+      userId,
       headers: getRequestHeaders(),
     });
-    return response.success;
   },
-  async revokeUserSession(sessionToken) {
-    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+  async revokeUserSession(target) {
+    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    const response = await getAuth().api.revokeUserSession({
-      body: { sessionToken },
+    return getAuthGateway().revokeUserSession({
+      sessionId: target.id,
+      providerSessionToken: target.providerToken,
       headers: getRequestHeaders(),
     });
-    return response.success;
   },
 });
 

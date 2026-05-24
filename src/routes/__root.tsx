@@ -13,16 +13,19 @@ import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getPageTitle } from '@/lib/get-page-title';
-import i18n, { syncLanguage } from '@/lib/i18n';
-import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { getPageTitle } from '@/platform/lib/get-page-title';
+import i18n, { syncLanguage } from '@/platform/lib/i18n';
+import { AVAILABLE_LANGUAGES } from '@/platform/lib/i18n/constants';
 
-import { PageError } from '@/components/errors/page-error';
+import { PageError } from '@/platform/components/errors/page-error';
 
-import { EnvHint } from '@/features/devtools/env-hint';
+import { Providers } from '@/composition/providers';
+import {
+  EnvHint,
+  getEnvHintTitlePrefix,
+} from '@/modules/devtools/presentation';
 import { getUserLanguage } from '@/modules/kernel/server';
-import { Providers } from '@/providers';
-import appCss from '@/styles/app.css?url';
+import appCss from '@/platform/styles/app.css?url';
 
 const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
   return {
@@ -59,11 +62,11 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: getPageTitle(),
+        title: getPageTitle(undefined, getEnvHintTitlePrefix()),
       },
       {
         name: 'apple-mobile-web-app-title',
-        content: getPageTitle(),
+        content: getPageTitle(undefined, getEnvHintTitlePrefix()),
       },
       {
         name: 'apple-mobile-web-app-status-bar-style',

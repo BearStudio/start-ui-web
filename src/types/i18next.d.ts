@@ -1,6 +1,6 @@
 import 'i18next';
 
-import { DEFAULT_NAMESPACE } from '@/lib/i18n/constants';
+import { DEFAULT_NAMESPACE } from '@/platform/lib/i18n/constants';
 
 import locales from '@/locales';
 

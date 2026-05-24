@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { LocalSwitcher } from '@/components/ui/local-switcher';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
+import { Card, CardHeader, CardTitle } from '@/platform/components/ui/card';
+import { LocalSwitcher } from '@/platform/components/ui/local-switcher';
+import { ThemeSwitcher } from '@/platform/components/ui/theme-switcher';
 
 import { AccountCardRow } from '@/modules/account/presentation/account-card-row';
 

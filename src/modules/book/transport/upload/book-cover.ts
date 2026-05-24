@@ -1,15 +1,17 @@
 import { RejectUpload, route } from '@better-upload/server';
 
-import i18n from '@/lib/i18n';
+import i18n from '@/platform/lib/i18n';
 
-import { auth } from '@/modules/auth/server';
+import { getAuthGateway } from '@/modules/auth/server';
 import { bookCoverAcceptedFileTypes } from '@/modules/book/presentation';
 
 export const bookCover = route({
   fileTypes: bookCoverAcceptedFileTypes,
   maxFileSize: 1024 * 1024 * 100, // 100Mb
   onBeforeUpload: async ({ req, file }) => {
-    const session = await auth.api.getSession(req);
+    const session = await getAuthGateway().getSession({
+      headers: req.headers,
+    });
     if (!session?.user) {
       throw new RejectUpload(
         i18n.t('book:manager.uploadErrors.NOT_AUTHENTICATED')
@@ -17,17 +19,15 @@ export const bookCover = route({
     }
 
     // Only admins should be able to update book covers
-    const canUpdateBookCover = await auth.api.userHasPermission({
+    const canUpdateBookCover = await getAuthGateway().userHasPermission({
       headers: req.headers,
-      body: {
-        userId: session.user.id,
-        permissions: {
-          book: ['create', 'update'],
-        },
+      userId: session.user.id,
+      permissions: {
+        book: ['create', 'update'],
       },
     });
 
-    if (!canUpdateBookCover.success) {
+    if (!canUpdateBookCover) {
       throw new RejectUpload(i18n.t('book:manager.uploadErrors.UNAUTHORIZED'));
     }
 

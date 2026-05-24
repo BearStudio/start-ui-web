@@ -1,0 +1,1 @@
+export { envClient } from './config';

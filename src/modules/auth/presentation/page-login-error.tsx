@@ -2,8 +2,12 @@ import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ButtonLink } from '@/components/ui/button-link';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '@/platform/components/ui/alert';
+import { ButtonLink } from '@/platform/components/ui/button-link';
 
 import { useMascot } from '@/modules/auth/presentation/mascot';
 

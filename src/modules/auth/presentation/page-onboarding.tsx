@@ -10,11 +10,11 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
-} from '@/components/form';
-import { Button } from '@/components/ui/button';
+} from '@/platform/components/form';
+import { Button } from '@/platform/components/ui/button';
 
-import { accountQueries } from '@/modules/account/presentation';
-import { authClient } from '@/modules/auth/presentation/client';
+import { accountQueries } from '@/modules/account/client';
+import { useAuthSession } from '@/modules/auth/client';
 import { ConfirmSignOut } from '@/modules/auth/presentation/confirm-signout';
 import { LayoutLogin } from '@/modules/auth/presentation/layout-login';
 import { useMascot } from '@/modules/auth/presentation/mascot';
@@ -22,7 +22,7 @@ import { zFormFieldsOnboarding } from '@/modules/auth/presentation/schema';
 
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
-  const session = authClient.useSession();
+  const session = useAuthSession();
 
   const submitOnboarding = useMutation({
     ...accountQueries.submitOnboarding(),

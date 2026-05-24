@@ -11,21 +11,25 @@ import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { useNavigateBack } from '@/hooks/use-navigate-back';
+import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
-import { BackButton } from '@/components/back-button';
-import { PageError } from '@/components/errors/page-error';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { BackButton } from '@/platform/components/back-button';
+import { PageError } from '@/platform/components/errors/page-error';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/platform/components/ui/avatar';
+import { Badge } from '@/platform/components/ui/badge';
+import { Button } from '@/platform/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
+} from '@/platform/components/ui/card';
+import { ConfirmResponsiveDrawer } from '@/platform/components/ui/confirm-responsive-drawer';
 import {
   DataList,
   DataListCell,
@@ -34,26 +38,27 @@ import {
   DataListLoadingState,
   DataListRow,
   DataListText,
-} from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Spinner } from '@/components/ui/spinner';
+} from '@/platform/components/ui/datalist';
+import { ResponsiveIconButton } from '@/platform/components/ui/responsive-icon-button';
+import { Skeleton } from '@/platform/components/ui/skeleton';
+import { Spinner } from '@/platform/components/ui/spinner';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
-import { authClient } from '@/modules/auth/client';
 import { WithPermissions } from '@/modules/auth/client';
+import { useAuthSession } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
-import { userQueries } from '@/modules/user/presentation/queries';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { userQueries } from '../queries';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const { navigateBack } = useNavigateBack();
-  const session = authClient.useSession();
+  const session = useAuthSession();
   const { t } = useTranslation(['user']);
   const userQuery = useQuery(userQueries.getById({ id: props.params.id }));
 
@@ -345,7 +350,7 @@ const UserSessions = (props: { userId: string }) => {
 
 const RevokeAllSessionsButton = (props: { userId: string }) => {
   const queryClient = useQueryClient();
-  const currentSession = authClient.useSession();
+  const currentSession = useAuthSession();
   const { t } = useTranslation(['user']);
   const revokeAllSessions = useMutation({
     ...userQueries.revokeUserSessions(),
@@ -378,7 +383,7 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
 
 const RevokeSessionButton = (props: { userId: string; sessionId: string }) => {
   const queryClient = useQueryClient();
-  const currentSession = authClient.useSession();
+  const currentSession = useAuthSession();
   const { t } = useTranslation(['user']);
   const revokeSession = useMutation({
     ...userQueries.revokeUserSession(),

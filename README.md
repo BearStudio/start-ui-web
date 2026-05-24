@@ -84,9 +84,9 @@ as automated end-to-end test runs.
 
 #### Preview emails
 
-Emails templates are built with `react-email` components in the `src/emails` folder.
+Emails templates are built with `react-email` components in the `src/modules/email/presentation` folder.
 
-You can preview an email template at `http://localhost:3000/api/dev/email/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
+You can preview an email template at `http://localhost:3000/api/dev/email/{template}` where `{template}` is the name of the template file in the `src/modules/email/presentation/templates` folder.
 
 Example: [Login Code](http://localhost:3000/api/dev/email/login-code)
 
@@ -115,7 +115,7 @@ This interface allows you to:
 
 ### Generate custom icons components from svg files
 
-Put the custom svg files into the `src/components/icons/svg-sources` folder and then run the following command:
+Put the custom svg files into the `src/platform/components/icons/svg-sources` folder and then run the following command:
 
 ```bash
 pnpm gen:icons

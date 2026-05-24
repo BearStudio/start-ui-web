@@ -2,10 +2,10 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
+import { bookQueries } from '@/modules/book/client';
 import { ManagerPageBooks as PageBooks } from '@/modules/book/presentation';
 
 export const Route = createFileRoute('/manager/books/')({
-  component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
       searchTerm: z.string().prefault(''),
@@ -14,6 +14,12 @@ export const Route = createFileRoute('/manager/books/')({
   search: {
     middlewares: [stripSearchParams({ searchTerm: '' })],
   },
+  loaderDeps: ({ search: { searchTerm } }) => ({ searchTerm }),
+  component: RouteComponent,
+  loader: ({ context, deps }) =>
+    context.queryClient.ensureInfiniteQueryData(
+      bookQueries.getAllInfinite({ searchTerm: deps.searchTerm })
+    ),
 });
 
 function RouteComponent() {

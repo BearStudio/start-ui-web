@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { ReactNode } from 'react';
 
-import { Logo } from '@/components/brand/logo';
-import { LocalSwitcher } from '@/components/ui/local-switcher';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
+import { Logo } from '@/platform/components/brand/logo';
+import { LocalSwitcher } from '@/platform/components/ui/local-switcher';
+import { ThemeSwitcher } from '@/platform/components/ui/theme-switcher';
 
 import { useMascotState } from '@/modules/auth/presentation/mascot';
 

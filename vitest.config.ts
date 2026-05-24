@@ -10,6 +10,17 @@ export default defineConfig({
   test: {
     projects: [
       {
+        optimizeDeps: {
+          include: [
+            '@base-ui/react/merge-props',
+            '@base-ui/react/use-render',
+            '@tanstack/react-router',
+            'better-auth/client/plugins',
+            'better-auth/plugins/access',
+            'better-auth/plugins/admin/access',
+            'better-auth/react',
+          ],
+        },
         test: {
           name: 'browser',
           browser: {

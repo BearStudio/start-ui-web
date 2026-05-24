@@ -3,22 +3,23 @@ import { useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { BackButton } from '@/components/back-button';
-import { PageError } from '@/components/errors/page-error';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Spinner } from '@/components/ui/spinner';
+import { BackButton } from '@/platform/components/back-button';
+import { PageError } from '@/platform/components/errors/page-error';
+import { Card, CardContent } from '@/platform/components/ui/card';
+import { Separator } from '@/platform/components/ui/separator';
+import { Skeleton } from '@/platform/components/ui/skeleton';
+import { Spinner } from '@/platform/components/ui/spinner';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/app/page-layout';
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { bookQueries } from '@/modules/book/presentation/queries';
 import { isServerFnError } from '@/modules/kernel/client';
+import {
+  AppPageLayout as PageLayout,
+  AppPageLayoutContent as PageLayoutContent,
+  AppPageLayoutTopBar as PageLayoutTopBar,
+  AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { bookQueries } from '../queries';
 
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);

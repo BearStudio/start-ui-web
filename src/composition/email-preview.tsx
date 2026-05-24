@@ -1,9 +1,9 @@
 import { render } from '@react-email/render';
 import type { ReactElement } from 'react';
 
-import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
+import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
 
-import TemplateLoginCode from '@/emails/templates/login-code';
+import { TemplateLoginCode } from '@/modules/email/presentation';
 
 type PreviewEmailComponent = (props: Record<string, string>) => ReactElement;
 

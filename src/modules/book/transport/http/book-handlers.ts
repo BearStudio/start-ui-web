@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-import { getBookUseCases } from '@/composition/book';
-import { getKernel } from '@/composition/kernel';
 import type { ProtectedContext } from '@/modules/auth/server';
+import type { BookUseCases } from '@/modules/book';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 import {
   mapAppErrorToServerFnError,
@@ -33,16 +32,9 @@ export const zUpdateByIdInput = () =>
   zBookWriteInput().extend({ id: z.string() });
 export const zDeleteByIdInput = () => z.object({ id: z.string() });
 
-const getUseCases = (ctx: ProtectedContext) =>
-  getBookUseCases({
-    kernel: getKernel({
-      logger: {
-        info: (event, fields) => ctx.logger.info(fields ?? {}, event),
-        warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
-        error: (event, fields) => ctx.logger.error(fields ?? {}, event),
-      },
-    }),
-  });
+type BookHandlerDeps = {
+  getUseCases: (ctx: ProtectedContext) => BookUseCases;
+};
 
 const mapReason = (reason: string): never => {
   return throwServerFnErrorForReason(reason, {
@@ -56,103 +48,99 @@ const mapReason = (reason: string): never => {
   });
 };
 
-const getAll = async (
-  ctx: ProtectedContext,
-  data: z.output<ReturnType<typeof zGetAllInput>>
-) => {
-  const result = await getUseCases(ctx)
-    .list({
-      currentUserId: toUserId(ctx.user.id),
-      cursor: data.cursor ? toBookId(data.cursor) : undefined,
-      limit: data.limit,
-      searchTerm: data.searchTerm ?? '',
-    })
-    .catch(mapAppErrorToServerFnError);
-  if (result.ok) return result.value;
-  return mapReason(result.reason);
+export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
+  const getAll = async (
+    ctx: ProtectedContext,
+    data: z.output<ReturnType<typeof zGetAllInput>>
+  ) => {
+    const result = await getUseCases(ctx)
+      .list({
+        currentUserId: toUserId(ctx.user.id),
+        cursor: data.cursor ? toBookId(data.cursor) : undefined,
+        limit: data.limit,
+        searchTerm: data.searchTerm ?? '',
+      })
+      .catch(mapAppErrorToServerFnError);
+    if (result.ok) return result.value;
+    return mapReason(result.reason);
+  };
+
+  const getById = async (
+    ctx: ProtectedContext,
+    data: z.infer<ReturnType<typeof zGetByIdInput>>
+  ) => {
+    const result = await getUseCases(ctx)
+      .get({
+        currentUserId: toUserId(ctx.user.id),
+        id: toBookId(data.id),
+      })
+      .catch(mapAppErrorToServerFnError);
+    if (result.ok) return result.value;
+    return mapReason(result.reason);
+  };
+
+  const create = async (
+    ctx: ProtectedContext,
+    data: z.infer<ReturnType<typeof zBookWriteInput>>
+  ) => {
+    const result = await getUseCases(ctx)
+      .create({
+        currentUserId: toUserId(ctx.user.id),
+        book: {
+          title: data.title,
+          author: data.author,
+          genreId: toGenreId(data.genreId),
+          publisher: data.publisher,
+          coverId: data.coverId,
+        },
+      })
+      .catch(mapAppErrorToServerFnError);
+    if (result.ok) return result.value;
+    return mapReason(result.reason);
+  };
+
+  const updateById = async (
+    ctx: ProtectedContext,
+    data: z.infer<ReturnType<typeof zUpdateByIdInput>>
+  ) => {
+    const result = await getUseCases(ctx)
+      .update({
+        currentUserId: toUserId(ctx.user.id),
+        id: toBookId(data.id),
+        book: {
+          title: data.title,
+          author: data.author,
+          genreId: toGenreId(data.genreId),
+          publisher: data.publisher,
+          coverId: data.coverId,
+        },
+      })
+      .catch(mapAppErrorToServerFnError);
+    if (result.ok) return result.value;
+    return mapReason(result.reason);
+  };
+
+  const deleteById = async (
+    ctx: ProtectedContext,
+    data: z.infer<ReturnType<typeof zDeleteByIdInput>>
+  ) => {
+    const result = await getUseCases(ctx)
+      .delete({
+        currentUserId: toUserId(ctx.user.id),
+        id: toBookId(data.id),
+      })
+      .catch(mapAppErrorToServerFnError);
+    if (result.ok) return;
+    return mapReason(result.reason);
+  };
+
+  return {
+    getAll,
+    getById,
+    create,
+    updateById,
+    deleteById,
+  };
 };
 
-const getById = async (
-  ctx: ProtectedContext,
-  data: z.infer<ReturnType<typeof zGetByIdInput>>
-) => {
-  const result = await getUseCases(ctx)
-    .get({
-      currentUserId: toUserId(ctx.user.id),
-      id: toBookId(data.id),
-    })
-    .catch(mapAppErrorToServerFnError);
-  if (result.ok) return result.value;
-  return mapReason(result.reason);
-};
-
-const create = async (
-  ctx: ProtectedContext,
-  data: z.infer<ReturnType<typeof zBookWriteInput>>
-) => {
-  const result = await getUseCases(ctx)
-    .create({
-      currentUserId: toUserId(ctx.user.id),
-      book: {
-        title: data.title,
-        author: data.author,
-        genreId: toGenreId(data.genreId),
-        publisher: data.publisher,
-        coverId: data.coverId,
-      },
-    })
-    .catch(mapAppErrorToServerFnError);
-  if (result.ok) return result.value;
-  return mapReason(result.reason);
-};
-
-const updateById = async (
-  ctx: ProtectedContext,
-  data: z.infer<ReturnType<typeof zUpdateByIdInput>>
-) => {
-  const result = await getUseCases(ctx)
-    .update({
-      currentUserId: toUserId(ctx.user.id),
-      id: toBookId(data.id),
-      book: {
-        title: data.title,
-        author: data.author,
-        genreId: toGenreId(data.genreId),
-        publisher: data.publisher,
-        coverId: data.coverId,
-      },
-    })
-    .catch(mapAppErrorToServerFnError);
-  if (result.ok) return result.value;
-  return mapReason(result.reason);
-};
-
-const deleteById = async (
-  ctx: ProtectedContext,
-  data: z.infer<ReturnType<typeof zDeleteByIdInput>>
-) => {
-  const result = await getUseCases(ctx)
-    .delete({
-      currentUserId: toUserId(ctx.user.id),
-      id: toBookId(data.id),
-    })
-    .catch(mapAppErrorToServerFnError);
-  if (result.ok) return;
-  return mapReason(result.reason);
-};
-
-export type BookHandlers = {
-  getAll: typeof getAll;
-  getById: typeof getById;
-  create: typeof create;
-  updateById: typeof updateById;
-  deleteById: typeof deleteById;
-};
-
-export const handlers: BookHandlers = {
-  getAll,
-  getById,
-  create,
-  updateById,
-  deleteById,
-};
+export type BookHandlers = ReturnType<typeof createBookHandlers>;

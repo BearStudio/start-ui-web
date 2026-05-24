@@ -13,7 +13,7 @@ import {
   userRevokeUserSession,
   userRevokeUserSessions,
   userUpdateById,
-} from '../transport/tanstack/user-server-functions';
+} from '../server';
 
 type GetAllInput = {
   searchTerm?: string;

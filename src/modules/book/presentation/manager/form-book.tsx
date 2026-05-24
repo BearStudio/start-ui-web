@@ -9,15 +9,15 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
-} from '@/components/form';
+} from '@/platform/components/form';
 
-import { envClient } from '@/env/client';
-import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
 import {
   bookCoverAcceptedFileTypes,
   FormFieldsBook,
 } from '@/modules/book/presentation/schema';
-import { genreQueries } from '@/modules/genre/presentation';
+import { openDemoModeDrawer } from '@/modules/demo/presentation';
+import { genreQueries } from '@/modules/genre/client';
+import { envClient } from '@/platform/env/client';
 
 export const FormBook = () => {
   const form = useFormContext<FormFieldsBook>();

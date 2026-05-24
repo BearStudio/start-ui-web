@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/platform/components/ui/button';
 
-import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
-import { BuildInfoVersion } from '@/features/build-info/build-info-version';
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-} from '@/layout/app/page-layout';
 import { DisplayPreferences } from '@/modules/account/presentation/display-preferences';
 import { UserCard } from '@/modules/account/presentation/user-card';
+import { BuildInfoDrawer } from '@/modules/build-info/presentation';
+import { BuildInfoVersion } from '@/modules/build-info/presentation';
+import {
+  AppPageLayout as PageLayout,
+  AppPageLayoutContent as PageLayoutContent,
+  AppPageLayoutTopBar as PageLayoutTopBar,
+} from '@/modules/shell/presentation';
 
 export const PageAccount = () => {
   const { t } = useTranslation(['account']);

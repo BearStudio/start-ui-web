@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { genreGetAll } from '../transport/tanstack/genre-server-functions';
+import { genreGetAll } from '../server';
 
 type GetAllInput = {
   searchTerm?: string;

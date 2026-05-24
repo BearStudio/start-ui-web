@@ -65,7 +65,7 @@ export type UserUpdateSnapshot = {
 
 export type SessionRevocationTarget = {
   id: SessionId;
-  token: string;
+  providerToken?: string;
 };
 
 export function shouldUnverifyEmail(

@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
 import { StrictMode, useEffect } from 'react';
 
-import type { LanguageKey } from '@/lib/i18n/constants';
+import type { LanguageKey } from '@/platform/lib/i18n/constants';
 import {
   AVAILABLE_LANGUAGES,
   DEFAULT_LANGUAGE_KEY,
-} from '@/lib/i18n/constants';
-import i18nGlobal from '@/lib/i18n/index';
+} from '@/platform/lib/i18n/constants';
+import i18nGlobal from '@/platform/lib/i18n/index';
 
-import { Providers } from '@/providers';
+import { Providers } from '@/composition/providers';
 
 type CosmosFixtureOptions = {
   locale?: LanguageKey;

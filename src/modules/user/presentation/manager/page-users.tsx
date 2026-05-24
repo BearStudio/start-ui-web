@@ -5,11 +5,15 @@ import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { cn } from '@/lib/tailwind/utils';
+import { cn } from '@/platform/lib/tailwind/utils';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/platform/components/ui/avatar';
+import { Badge } from '@/platform/components/ui/badge';
+import { Button } from '@/platform/components/ui/button';
 import {
   DataList,
   DataListCell,
@@ -19,18 +23,19 @@ import {
   DataListRow,
   DataListRowResults,
   DataListText,
-} from '@/components/ui/datalist';
-import { ResponsiveIconButtonLink } from '@/components/ui/responsive-icon-button-link';
-import { SearchButton } from '@/components/ui/search-button';
-import { SearchInput } from '@/components/ui/search-input';
+} from '@/platform/components/ui/datalist';
+import { ResponsiveIconButtonLink } from '@/platform/components/ui/responsive-icon-button-link';
+import { SearchButton } from '@/platform/components/ui/search-button';
+import { SearchInput } from '@/platform/components/ui/search-input';
 
 import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
-import { userQueries } from '@/modules/user/presentation/queries';
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { userQueries } from '../queries';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);

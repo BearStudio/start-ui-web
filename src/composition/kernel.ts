@@ -63,15 +63,15 @@ const createProductionLogger = (): Logger => {
 
 const createProductionPermissionChecker = (): PermissionChecker => ({
   async hasPermission(userId: UserId, permissions) {
-    const [{ getRequestHeaders }, { getAuth }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    const result = await getAuth().api.userHasPermission({
-      body: { userId, permissions },
+    return getAuthGateway().userHasPermission({
+      userId,
+      permissions,
       headers: getRequestHeaders(),
     });
-    return result.error ? false : result.success;
   },
 });
 

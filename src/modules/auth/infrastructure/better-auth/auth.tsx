@@ -3,17 +3,14 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
-import i18n from '@/lib/i18n';
+import i18n from '@/platform/lib/i18n';
 
-import TemplateLoginCode from '@/emails/templates/login-code';
-import { envClient } from '@/env/client';
-import { envServer } from '@/env/server';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
-  permissions,
 } from '@/modules/auth';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/client';
+import { TemplateLoginCode } from '@/modules/email/presentation';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
   type Database,
@@ -21,6 +18,10 @@ import {
 } from '@/modules/kernel/infrastructure/db/client';
 import { sendEmail } from '@/modules/kernel/infrastructure/email/resend';
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
+import { envClient } from '@/platform/env/client';
+import { envServer } from '@/platform/env/server';
+
+import { betterAuthPermissions } from './permissions';
 
 export function createAuth(database: Database = getDefaultDbClient()) {
   return betterAuth({
@@ -65,7 +66,7 @@ export function createAuth(database: Database = getDefaultDbClient()) {
         disableDefaultReference: true,
       }),
       admin({
-        ...permissions,
+        ...betterAuthPermissions,
       }),
       emailOTP({
         disableSignUp: !AUTH_SIGNUP_ENABLED,

@@ -10,7 +10,7 @@ import {
   bookGetAll,
   bookGetById,
   bookUpdateById,
-} from '../transport/tanstack/book-server-functions';
+} from '../server';
 
 type GetAllInput = {
   searchTerm?: string;

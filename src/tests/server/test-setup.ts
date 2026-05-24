@@ -35,13 +35,13 @@ vi.mock('@tanstack/react-start/server', () => ({
   setResponseHeader: vi.fn(),
 }));
 
-vi.mock('@/env/client', () => ({
+vi.mock('@/platform/env/client', () => ({
   envClient: {
     VITE_IS_DEMO: false,
   },
 }));
 
-vi.mock('@/env/server', () => ({
+vi.mock('@/platform/env/server', () => ({
   envServer: {
     LOGGER_LEVEL: 'error',
     LOGGER_PRETTY: false,

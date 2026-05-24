@@ -10,18 +10,22 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
-} from '@/components/form';
-import { Button } from '@/components/ui/button';
+} from '@/platform/components/form';
+import { Button } from '@/platform/components/ui/button';
 
-import { envClient } from '@/env/client';
-import { LoginEmailHint } from '@/features/devtools/login-hint';
-import { authClient } from '@/modules/auth/presentation/client';
+import {
+  authErrorCodes,
+  sendEmailOtp,
+  signInSocial,
+} from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import {
   FormFieldsLogin,
   zFormFieldsLogin,
 } from '@/modules/auth/presentation/schema';
+import { LoginEmailHint } from '@/modules/devtools/presentation';
+import { envClient } from '@/platform/env/client';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   ? ('auth:pageLoginWithSignUp' as const)
@@ -36,12 +40,12 @@ export default function PageLogin({
   const router = useRouter();
   const social = useMutation({
     mutationFn: async (
-      provider: Parameters<typeof authClient.signIn.social>[0]['provider']
+      provider: Parameters<typeof signInSocial>[0]['provider']
     ) => {
       const callbackURL = search.redirect ?? '/';
       let response;
       try {
-        response = await authClient.signIn.social({
+        response = await signInSocial({
           provider,
           callbackURL,
           errorCallbackURL: '/login/error',
@@ -76,7 +80,7 @@ export default function PageLogin({
   const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
     let result;
     try {
-      result = await authClient.emailOtp.sendVerificationOtp({
+      result = await sendEmailOtp({
         email,
         type: 'sign-in',
       });
@@ -88,7 +92,7 @@ export default function PageLogin({
     if (result.error) {
       const errorMessage = result.error.code
         ? t(
-            `auth:errorCode.${result.error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+            `auth:errorCode.${result.error.code as unknown as keyof typeof authErrorCodes}`
           )
         : (typeof result.error.message === 'string' && result.error.message) ||
           t('auth:errorCode.UNKNOWN_ERROR');

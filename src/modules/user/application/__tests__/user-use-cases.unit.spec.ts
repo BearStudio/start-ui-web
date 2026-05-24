@@ -73,7 +73,7 @@ function makeRepo(overrides: Partial<UserRepository> = {}): UserRepository {
     }),
     findSessionForRevocation: async () => ({
       id: toSessionId('session-2'),
-      token: 'session-token',
+      providerToken: 'session-token',
     }),
     ...overrides,
   };

@@ -1,52 +1,75 @@
-import {
-  createAccessControl,
-  type Role as BetterAuthRole,
-} from 'better-auth/plugins/access';
-import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
 import { z } from 'zod';
 
 export const rolesNames = ['admin', 'user'] as const;
 type UserRole = (typeof rolesNames)[number];
 
-const statement = {
-  ...defaultStatements,
+export const permissionStatements = {
+  user: [
+    'create',
+    'list',
+    'update',
+    'set-role',
+    'ban',
+    'impersonate',
+    'delete',
+  ],
+  session: ['list', 'revoke', 'delete'],
   account: ['read', 'update'],
   apps: ['app', 'manager'],
   book: ['read', 'create', 'update', 'delete'],
   genre: ['read'],
 } as const;
 
-const ac = createAccessControl(statement);
+export type Permission = {
+  [Resource in keyof typeof permissionStatements]?: Array<
+    (typeof permissionStatements)[Resource][number]
+  >;
+};
 
-const user = ac.newRole({
+export const rolePermissions = {
+  user: {
+    user: [],
+    session: [],
+    account: ['update'],
+    apps: ['app'],
+    book: ['read'],
+    genre: ['read'],
+  },
+  admin: {
+    user: [
+      'create',
+      'list',
+      'update',
+      'set-role',
+      'ban',
+      'impersonate',
+      'delete',
+    ],
+    session: ['list', 'revoke', 'delete'],
+    account: ['update'],
+    apps: ['app', 'manager'],
+    book: ['read', 'create', 'update', 'delete'],
+    genre: ['read'],
+  },
+} as const satisfies Record<UserRole, Permission>;
+
+export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
+export type Role = keyof typeof rolePermissions;
+
+export const hasRolePermission = (role: Role, permissions: Permission) => {
+  const grants = rolePermissions[role];
+  return Object.entries(permissions).every(([resource, actions]) => {
+    const allowed = grants[resource as keyof typeof permissionStatements];
+    if (!allowed) return false;
+    return actions.every((action) =>
+      (allowed as readonly string[]).includes(action)
+    );
+  });
+};
+
+export const defaultUserPermissions = {
   account: ['update'],
   apps: ['app'],
   book: ['read'],
   genre: ['read'],
-});
-
-const admin = ac.newRole({
-  ...adminAc.statements,
-  account: ['update'],
-  apps: ['app', 'manager'],
-  book: ['read', 'create', 'update', 'delete'],
-  genre: ['read'],
-});
-
-export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
-export type Role = keyof typeof roles;
-const roles = {
-  admin,
-  user,
-} satisfies Record<UserRole, BetterAuthRole>;
-
-export const permissions = {
-  ac,
-  roles,
-};
-
-export type Permission = {
-  [Resource in keyof typeof statement]?: Array<
-    (typeof statement)[Resource][number]
-  >;
-};
+} as const satisfies Permission;

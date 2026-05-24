@@ -4,26 +4,27 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { useNavigateBack } from '@/hooks/use-navigate-back';
+import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
-import { BackButton } from '@/components/back-button';
-import { Form } from '@/components/form';
-import { PreventNavigation } from '@/components/prevent-navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { useIsUploadingFiles } from '@/components/upload/utils';
+import { BackButton } from '@/platform/components/back-button';
+import { Form } from '@/platform/components/form';
+import { PreventNavigation } from '@/platform/components/prevent-navigation';
+import { Button } from '@/platform/components/ui/button';
+import { Card, CardContent } from '@/platform/components/ui/card';
+import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
-import {
-  PageLayout,
-  PageLayoutContent,
-  PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
 import { FormBook } from '@/modules/book/presentation/manager/form-book';
 import { FormBookCover } from '@/modules/book/presentation/manager/form-book-cover';
-import { bookQueries } from '@/modules/book/presentation/queries';
 import { zFormFieldsBook } from '@/modules/book/presentation/schema';
 import { isServerFnError } from '@/modules/kernel/client';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/modules/shell/presentation';
+
+import { bookQueries } from '../queries';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);

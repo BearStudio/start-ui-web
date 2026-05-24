@@ -5,12 +5,16 @@ import {
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
-import { auth } from '@/composition/auth';
-import { envClient } from '@/env/client';
-import type { Permission } from '@/modules/auth';
+import type {
+  AuthenticatedSession,
+  AuthenticatedUser,
+  AuthGateway,
+  Permission,
+} from '@/modules/auth';
 import { logger } from '@/modules/kernel/infrastructure/logger/pino';
 import { ServerFnError } from '@/modules/kernel/server';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
+import { envClient } from '@/platform/env/client';
 
 type ServerTimingEntry = { name: string; durationMs: number };
 
@@ -19,14 +23,6 @@ export type ProcedureLogger = {
   error: (...args: ExplicitAny[]) => void;
   info: (...args: ExplicitAny[]) => void;
 };
-
-export type AuthenticatedUser = NonNullable<
-  Awaited<ReturnType<typeof auth.api.getSession>>
->['user'];
-
-export type AuthenticatedSession = NonNullable<
-  Awaited<ReturnType<typeof auth.api.getSession>>
->['session'];
 
 export type ProtectedContext = {
   user: AuthenticatedUser;
@@ -39,21 +35,16 @@ export type PublicContext = Omit<ProtectedContext, 'user' | 'session'> & {
   session: AuthenticatedSession | null;
 };
 
+type ServerContextDeps = {
+  getAuthGateway: () => AuthGateway;
+};
+
 const formatTiming = (entries: ServerTimingEntry[]) =>
   entries.map((e) => `${e.name};dur=${e.durationMs.toFixed(2)}`).join(', ');
 
 const appendServerTiming = (entries: ServerTimingEntry[]) => {
   if (!entries.length) return;
   setResponseHeader('Server-Timing', formatTiming(entries));
-};
-
-const getSession = async (timings: ServerTimingEntry[]) => {
-  const authStart = performance.now();
-  const session = await auth.api.getSession({
-    headers: getRequestHeaders(),
-  });
-  timings.push({ name: 'auth', durationMs: performance.now() - authStart });
-  return session;
 };
 
 const finalize = (
@@ -117,78 +108,94 @@ const assertNotDemoMode = () => {
   }
 };
 
-export async function withPublicContext<T>(
-  fn: (ctx: PublicContext) => Promise<T>
-): Promise<T> {
-  const start = performance.now();
-  const requestId = randomUUID();
-  const timings: ServerTimingEntry[] = [];
-  let procedureLogger = logger.child({ requestId, scope: 'procedure' });
-  procedureLogger.info('Before');
-
-  return await timingStore.run({ db: [] }, async () => {
-    try {
-      const session = await getSession(timings);
-      if (session?.user?.id) {
-        procedureLogger = logger.child({
-          requestId,
-          userId: session.user.id,
-          scope: 'procedure',
-        });
-      }
-
-      const ctx: PublicContext = {
-        user: session?.user ?? null,
-        session: session?.session ?? null,
-        logger: procedureLogger,
-      };
-      return await fn(ctx);
-    } catch (error) {
-      throw handleError(error, procedureLogger);
-    } finally {
-      finalize(procedureLogger, timings, start);
-    }
-  });
-}
-
-export async function withProtectedContext<T>(
-  fn: (ctx: ProtectedContext) => Promise<T>
-): Promise<T> {
-  return withPublicContext(async (ctx) => {
-    if (!ctx.user || !ctx.session) {
-      throw new ServerFnError('UNAUTHORIZED');
-    }
-    return fn({
-      user: ctx.user,
-      session: ctx.session,
-      logger: ctx.logger,
+export const createServerContextTools = ({
+  getAuthGateway,
+}: ServerContextDeps) => {
+  const getSession = async (timings: ServerTimingEntry[]) => {
+    const authStart = performance.now();
+    const session = await getAuthGateway().getSession({
+      headers: getRequestHeaders(),
     });
-  });
-}
+    timings.push({ name: 'auth', durationMs: performance.now() - authStart });
+    return session;
+  };
 
-export async function withProtectedMutation<T>(
-  fn: (ctx: ProtectedContext) => Promise<T>
-): Promise<T> {
-  return withProtectedContext(async (ctx) => {
-    assertNotDemoMode();
-    return fn(ctx);
-  });
-}
+  const withPublicContext = async <T>(
+    fn: (ctx: PublicContext) => Promise<T>
+  ): Promise<T> => {
+    const start = performance.now();
+    const requestId = randomUUID();
+    const timings: ServerTimingEntry[] = [];
+    let procedureLogger = logger.child({ requestId, scope: 'procedure' });
+    procedureLogger.info('Before');
 
-export async function assertPermission(
-  userId: string,
-  permissions: Permission
-) {
-  const result = await auth.api.userHasPermission({
-    body: { userId, permissions },
-    headers: getRequestHeaders(),
-  });
+    return await timingStore.run({ db: [] }, async () => {
+      try {
+        const session = await getSession(timings);
+        if (session?.user?.id) {
+          procedureLogger = logger.child({
+            requestId,
+            userId: session.user.id,
+            scope: 'procedure',
+          });
+        }
 
-  if (result.error) {
-    throw new ServerFnError('INTERNAL_SERVER_ERROR');
-  }
+        const ctx: PublicContext = {
+          user: session?.user ?? null,
+          session: session?.session ?? null,
+          logger: procedureLogger,
+        };
+        return await fn(ctx);
+      } catch (error) {
+        throw handleError(error, procedureLogger);
+      } finally {
+        finalize(procedureLogger, timings, start);
+      }
+    });
+  };
 
-  if (!result.success) {
-    throw new ServerFnError('FORBIDDEN');
-  }
-}
+  const withProtectedContext = async <T>(
+    fn: (ctx: ProtectedContext) => Promise<T>
+  ): Promise<T> => {
+    return withPublicContext(async (ctx) => {
+      if (!ctx.user || !ctx.session) {
+        throw new ServerFnError('UNAUTHORIZED');
+      }
+      return fn({
+        user: ctx.user,
+        session: ctx.session,
+        logger: ctx.logger,
+      });
+    });
+  };
+
+  const withProtectedMutation = async <T>(
+    fn: (ctx: ProtectedContext) => Promise<T>
+  ): Promise<T> => {
+    return withProtectedContext(async (ctx) => {
+      assertNotDemoMode();
+      return fn(ctx);
+    });
+  };
+
+  const assertPermission = async (userId: string, permissions: Permission) => {
+    const allowed = await getAuthGateway().userHasPermission({
+      userId,
+      permissions,
+      headers: getRequestHeaders(),
+    });
+
+    if (!allowed) {
+      throw new ServerFnError('FORBIDDEN');
+    }
+  };
+
+  return {
+    assertPermission,
+    withProtectedContext,
+    withProtectedMutation,
+    withPublicContext,
+  };
+};
+
+export type ServerContextTools = ReturnType<typeof createServerContextTools>;

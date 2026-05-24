@@ -1,0 +1,1 @@
+export { envServer } from './config';

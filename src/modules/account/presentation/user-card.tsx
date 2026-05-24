@@ -1,19 +1,28 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/platform/components/ui/avatar';
+import { Badge } from '@/platform/components/ui/badge';
+import { Button } from '@/platform/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardHeader,
+  CardTitle,
+} from '@/platform/components/ui/card';
 
 import { AccountCardRow } from '@/modules/account/presentation/account-card-row';
 import { ChangeNameDrawer } from '@/modules/account/presentation/change-name-drawer';
-import { authClient } from '@/modules/auth/client';
 import { ConfirmSignOut } from '@/modules/auth/client';
+import { useAuthSession } from '@/modules/auth/client';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);
-  const session = authClient.useSession();
+  const session = useAuthSession();
   return (
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">

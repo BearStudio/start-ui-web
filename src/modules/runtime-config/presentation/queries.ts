@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { configEnv } from '../transport/tanstack/config-server-functions';
+import { configEnv } from '../server';
 
 export const configQueries = {
   env: () =>

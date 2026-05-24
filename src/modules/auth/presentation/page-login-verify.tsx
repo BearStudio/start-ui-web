@@ -10,12 +10,15 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
-} from '@/components/form';
-import { Button } from '@/components/ui/button';
-import { ButtonLink } from '@/components/ui/button-link';
+} from '@/platform/components/form';
+import { Button } from '@/platform/components/ui/button';
+import { ButtonLink } from '@/platform/components/ui/button-link';
 
-import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
-import { authClient } from '@/modules/auth/presentation/client';
+import {
+  authErrorCodes,
+  signInEmailOtp,
+  useAuthSession,
+} from '@/modules/auth/client';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_SIGNUP_ENABLED,
@@ -25,6 +28,7 @@ import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
 } from '@/modules/auth/presentation/schema';
+import { LoginEmailOtpHint } from '@/modules/devtools/presentation';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   ? ('auth:pageLoginVerifyWithSignUp' as const)
@@ -36,7 +40,7 @@ export default function PageLoginVerify({
   search: { redirect?: string; email: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
-  const session = authClient.useSession();
+  const session = useAuthSession();
 
   const form = useForm({
     mode: 'onSubmit',
@@ -51,7 +55,7 @@ export default function PageLoginVerify({
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,
   }) => {
-    const { error } = await authClient.signIn.emailOtp({
+    const { error } = await signInEmailOtp({
       email: search.email,
       otp,
     });
@@ -60,7 +64,7 @@ export default function PageLoginVerify({
       toast.error(
         error.code
           ? t(
-              `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+              `auth:errorCode.${error.code as unknown as keyof typeof authErrorCodes}`
             )
           : error.message || t('auth:errorCode.UNKNOWN_ERROR')
       );

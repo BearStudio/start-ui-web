@@ -1,8 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { userQueries } from '@/modules/user/client';
 import { PageUser } from '@/modules/user/presentation';
 
 export const Route = createFileRoute('/manager/users/$id/')({
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(userQueries.getById(params)),
   component: RouteComponent,
 });
 
