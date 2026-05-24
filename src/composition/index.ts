@@ -1,4 +1,9 @@
 export {
+  __resetAuthComposition,
+  getAuthUseCases,
+  type AuthOverrides,
+} from './auth';
+export {
   __resetAccountComposition,
   type AccountOverrides,
   getAccountUseCases,
@@ -18,6 +23,11 @@ export {
   getKernel,
   type KernelOverrides,
 } from './kernel';
+export {
+  __resetRuntimeConfigComposition,
+  getRuntimeConfigUseCases,
+  type RuntimeConfigOverrides,
+} from './runtime-config';
 export {
   __resetUserComposition,
   getUserUseCases,

@@ -207,6 +207,24 @@ describe('user use cases', () => {
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
   });
 
+  it('passes the resolved provider token when revoking a single session', async () => {
+    const revokeUserSession = vi.fn(async () => true);
+
+    await expect(
+      makeUseCases({ auth: { revokeUserSession } }).revokeSession({
+        currentUserId: toUserId('admin-1'),
+        currentSessionId: toSessionId('current'),
+        id: toUserId('user-1'),
+        sessionId: toSessionId('session-2'),
+      })
+    ).resolves.toMatchObject({ ok: true });
+
+    expect(revokeUserSession).toHaveBeenCalledWith({
+      id: toSessionId('session-2'),
+      providerToken: 'session-token',
+    });
+  });
+
   it('lists sessions without token exposure', async () => {
     const result = await makeUseCases().listSessions({
       currentUserId: toUserId('admin-1'),

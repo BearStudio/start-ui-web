@@ -37,11 +37,19 @@ describe('strict modular monolith layout', () => {
     expect(fs.existsSync(path.join(root, 'src/hooks'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'src/lib'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'src/layout'))).toBe(false);
+    expect(fs.existsSync(path.join(root, 'src/emails'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'src/platform'))).toBe(true);
   });
 
   it('requires module public split barrels where modules expose adapters', () => {
-    for (const moduleName of ['account', 'auth', 'book', 'genre', 'user']) {
+    for (const moduleName of [
+      'account',
+      'auth',
+      'book',
+      'genre',
+      'runtime-config',
+      'user',
+    ]) {
       const moduleRoot = path.join(root, 'src/modules', moduleName);
       expect(fs.existsSync(path.join(moduleRoot, 'index.ts'))).toBe(true);
       expect(fs.existsSync(path.join(moduleRoot, 'presentation.ts'))).toBe(
@@ -92,6 +100,33 @@ describe('strict modular monolith layout', () => {
         listSourceFiles(path.join(root, 'src/routes')),
         /from\s+['"]@\/modules\/[^/'"]+\/(?!(?:index|presentation|server|client)(?:\.[^/'"]+)?(?:['"]|$))[^'"]+['"]/g
       )
+    ).toEqual([]);
+  });
+
+  it('keeps presentation schemas free of i18n imports', () => {
+    const schemaFiles = listSourceFiles(path.join(root, 'src/modules')).filter(
+      (file) => file.endsWith(path.join('presentation', 'schema.ts'))
+    );
+
+    expect(
+      findImportViolations(
+        schemaFiles,
+        /from\s+['"](?:i18next|react-i18next)['"]/g
+      )
+    ).toEqual([]);
+  });
+
+  it('confines Better Auth imports to auth boundaries', () => {
+    const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
+      const relative = path.relative(root, file);
+      return (
+        !relative.startsWith(`src${path.sep}modules${path.sep}auth`) &&
+        relative !== path.join('src', 'composition', 'auth.ts')
+      );
+    });
+
+    expect(
+      findImportViolations(files, /from\s+['"]better-auth(?:\/[^'"]*)?['"]/g)
     ).toEqual([]);
   });
 });

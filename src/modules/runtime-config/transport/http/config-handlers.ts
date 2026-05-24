@@ -1,19 +1,15 @@
-import { envClient } from '@/platform/env/client';
+import type { RuntimeConfigUseCases } from '../../factory';
 
-const env = () => {
+type ConfigHandlerDeps = {
+  getUseCases: () => RuntimeConfigUseCases;
+};
+
+export const createConfigHandlers = ({ getUseCases }: ConfigHandlerDeps) => {
+  const env = () => getUseCases().get();
+
   return {
-    name: envClient.VITE_ENV_NAME,
-    color: envClient.VITE_ENV_COLOR,
-    emoji: envClient.VITE_ENV_EMOJI,
-    isDemo: envClient.VITE_IS_DEMO,
-    isDev: import.meta.env.DEV,
+    env,
   };
 };
 
-export type ConfigHandlers = {
-  env: typeof env;
-};
-
-export const handlers: ConfigHandlers = {
-  env,
-};
+export type ConfigHandlers = ReturnType<typeof createConfigHandlers>;

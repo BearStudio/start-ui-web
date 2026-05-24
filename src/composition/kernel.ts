@@ -63,11 +63,11 @@ const createProductionLogger = (): Logger => {
 
 const createProductionPermissionChecker = (): PermissionChecker => ({
   async hasPermission(userId: UserId, permissions) {
-    const [{ getRequestHeaders }, { getAuthGateway }] = await Promise.all([
+    const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthGateway().userHasPermission({
+    return getAuthUseCases().checkPermission({
       userId,
       permissions,
       headers: getRequestHeaders(),
@@ -112,16 +112,19 @@ export const getKernel = (overrides?: KernelOverrides): Kernel => {
   const db = overrides.db ?? base.db;
   const clock = overrides.clock ?? base.clock;
   return {
-    ...base,
-    ...overrides,
     db,
+    logger: overrides.logger ?? base.logger,
     clock,
+    idGenerator: overrides.idGenerator ?? base.idGenerator,
     cacheGateway:
       overrides.cacheGateway ??
-      (overrides.clock ? memoryCache(clock) : base.cacheGateway),
+      (overrides.clock !== undefined ? memoryCache(clock) : base.cacheGateway),
     transactionRunner:
       overrides.transactionRunner ??
-      (overrides.db ? createTransactionRunner(db) : base.transactionRunner),
+      (overrides.db !== undefined
+        ? createTransactionRunner(db)
+        : base.transactionRunner),
+    permissionChecker: overrides.permissionChecker ?? base.permissionChecker,
   };
 };
 

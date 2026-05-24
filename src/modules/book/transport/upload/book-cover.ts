@@ -2,14 +2,15 @@ import { RejectUpload, route } from '@better-upload/server';
 
 import i18n from '@/platform/lib/i18n';
 
-import { getAuthGateway } from '@/modules/auth/server';
+import { getAuthUseCases } from '@/modules/auth/server';
 import { bookCoverAcceptedFileTypes } from '@/modules/book/presentation';
 
 export const bookCover = route({
   fileTypes: bookCoverAcceptedFileTypes,
   maxFileSize: 1024 * 1024 * 100, // 100Mb
   onBeforeUpload: async ({ req, file }) => {
-    const session = await getAuthGateway().getSession({
+    const auth = getAuthUseCases();
+    const session = await auth.getCurrentSession({
       headers: req.headers,
     });
     if (!session?.user) {
@@ -19,7 +20,7 @@ export const bookCover = route({
     }
 
     // Only admins should be able to update book covers
-    const canUpdateBookCover = await getAuthGateway().userHasPermission({
+    const canUpdateBookCover = await auth.checkPermission({
       headers: req.headers,
       userId: session.user.id,
       permissions: {

@@ -45,7 +45,7 @@ const makeUserRepository = (
   listSessions: async () => ({ items: [session], total: 1 }),
   findSessionForRevocation: async () => ({
     id: session.id,
-    token: 'session-token',
+    providerToken: 'session-token',
   }),
   ...overrides,
 });

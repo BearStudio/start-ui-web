@@ -55,7 +55,8 @@ describe('server function middleware', () => {
       expect(mockLogger.info).toHaveBeenCalledWith(
         expect.objectContaining({
           code: 'METHOD_NOT_SUPPORTED',
-          message: 'DEMO_MODE_ENABLED',
+          data: { reason: 'DEMO_MODE_ENABLED' },
+          message: 'Demo mode prevents mutations',
         })
       );
     } finally {

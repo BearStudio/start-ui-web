@@ -140,6 +140,24 @@ module.exports = {
       },
     },
     {
+      name: 'presentation-schema-no-i18n',
+      severity: 'error',
+      comment:
+        'presentation/schema.ts must emit error codes, not translated strings. Translation happens at render in platform/components/form/form-field-error.tsx.',
+      from: { path: '^src/modules/[^/]+/presentation/schema\\.ts$' },
+      to: { path: 'node_modules/(?:i18next|react-i18next)/' },
+    },
+    {
+      name: 'better-auth-server-confined',
+      severity: 'error',
+      comment:
+        'better-auth server APIs may only be imported from src/modules/auth/ and src/composition/auth.ts. better-auth/react and better-auth/client/plugins are allowed in auth/presentation/.',
+      from: {
+        pathNot: '^(src/modules/auth/|src/composition/auth\\.ts$)',
+      },
+      to: { path: 'node_modules/better-auth/' },
+    },
+    {
       name: 'legacy-server-entrypoints-removed',
       severity: 'error',
       from: {},
