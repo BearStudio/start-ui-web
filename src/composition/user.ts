@@ -36,7 +36,7 @@ const createProductionUserAuthGateway = (): UserAuthGateway => ({
     ]);
     return getAuthUseCases().revokeUserSession({
       sessionId: target.id,
-      providerSessionToken: target.providerToken,
+      providerToken: target.providerToken,
       headers: getRequestHeaders(),
     });
   },

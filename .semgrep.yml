@@ -182,14 +182,68 @@ rules:
       include:
         - src/modules/*/presentation/schema.ts
 
-  - id: better-auth-server-confined
-    message: better-auth server APIs are only allowed in src/modules/auth/ and src/composition/auth.ts. better-auth/react and better-auth/client/plugins are allowed inside auth/presentation/.
+  - id: no-direct-import-meta-env-dev
+    message: Read the dev-mode flag through platform/env/config.ts instead of import.meta.env.DEV.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth(?:/[^"'']*)?["'']'
+    pattern-regex: 'import\.meta\.env\.DEV'
     paths:
       exclude:
-        - src/modules/auth/**
+        - src/platform/env/**
+        - '*.config.ts'
+        - '*.config.mjs'
+        - 'vite.*.ts'
+        - vite.config.*
+
+  - id: no-provider-role-domain-cast
+    message: Validate provider auth roles through zRole before assigning them to AuthenticatedUser.role.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'role:\s*[^,\n]+\s+as\s+AuthenticatedUser\[''role''\]'
+    paths:
+      include:
+        - src/modules/auth/infrastructure/**/*.ts
+        - src/modules/auth/infrastructure/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: email-template-no-global-language-mutation
+    message: Server-rendered email templates must use fixed translators instead of mutating the global i18n language.
+    languages: [typescript]
+    severity: ERROR
+    pattern: i18n.changeLanguage(...)
+    paths:
+      include:
+        - src/modules/email/presentation/templates/**/*.tsx
+
+  - id: better-auth-client-confined
+    message: better-auth client APIs are only allowed in src/modules/auth/presentation/.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth/(?:react|client/plugins)["'']'
+    paths:
+      exclude:
+        - src/modules/auth/presentation/**
+
+  - id: better-auth-access-helpers-confined
+    message: Better Auth access-control helpers are only allowed in auth presentation and Better Auth infrastructure.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth/plugins/(?:access|admin/access)["'']'
+    paths:
+      exclude:
+        - src/modules/auth/presentation/**
+        - src/modules/auth/infrastructure/better-auth/**
+
+  - id: better-auth-server-confined
+    message: better-auth server APIs are only allowed in Better Auth infrastructure and src/composition/auth.ts.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth(?!(?:/react|/client/plugins|/plugins/(?:access|admin/access))["''])(?:/[^"'']*)?["'']'
+    paths:
+      exclude:
+        - src/modules/auth/infrastructure/better-auth/**
         - src/composition/auth.ts
 
   - id: no-composition-spread-overrides

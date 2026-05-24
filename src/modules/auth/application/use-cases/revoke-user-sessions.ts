@@ -6,14 +6,3 @@ export async function revokeUserSessions(
 ): Promise<boolean> {
   return deps.userAdminGateway.revokeUserSessions(input);
 }
-
-export async function revokeUserSession(
-  deps: AuthUseCaseDeps,
-  input: {
-    sessionId: string;
-    providerSessionToken: string;
-    headers: Headers;
-  }
-): Promise<boolean> {
-  return deps.userAdminGateway.revokeUserSession(input);
-}

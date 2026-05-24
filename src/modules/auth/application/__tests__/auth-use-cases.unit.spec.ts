@@ -118,7 +118,7 @@ describe('auth use cases', () => {
     await useCases.revokeUserSessions({ userId: 'user-1', headers });
     await useCases.revokeUserSession({
       sessionId: 'session-1',
-      providerSessionToken: 'provider-token',
+      providerToken: 'provider-token',
       headers,
     });
 
@@ -132,7 +132,7 @@ describe('auth use cases', () => {
     });
     expect(deps.userAdminGateway.revokeUserSession).toHaveBeenCalledWith({
       sessionId: 'session-1',
-      providerSessionToken: 'provider-token',
+      providerToken: 'provider-token',
       headers,
     });
   });

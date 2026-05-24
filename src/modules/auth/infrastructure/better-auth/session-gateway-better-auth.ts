@@ -1,11 +1,12 @@
+import type { Auth } from './auth';
+import { getDefaultAuth } from './auth';
 import type { SessionGateway } from '../../application/ports/session-gateway';
+import { zRole } from '../../domain/permissions';
 import type {
   AuthenticatedSession,
   AuthenticatedUser,
   AuthSession,
 } from '../../domain/session';
-import type { Auth } from './auth';
-import { getDefaultAuth } from './auth';
 
 type BetterAuthSession = NonNullable<
   Awaited<ReturnType<Auth['api']['getSession']>>
@@ -13,13 +14,23 @@ type BetterAuthSession = NonNullable<
 type BetterAuthUser = BetterAuthSession['user'];
 type BetterAuthSessionRecord = BetterAuthSession['session'];
 
+const authenticatedRole = zRole();
+const defaultAuthenticatedRole = 'user' satisfies AuthenticatedUser['role'];
+
+const toAuthenticatedRole = (
+  role: BetterAuthUser['role']
+): AuthenticatedUser['role'] => {
+  const parsed = authenticatedRole.safeParse(role);
+  return parsed.success ? parsed.data : defaultAuthenticatedRole;
+};
+
 const toAuthenticatedUser = (user: BetterAuthUser): AuthenticatedUser => ({
   id: user.id,
   email: user.email,
   name: user.name,
   image: user.image,
   emailVerified: user.emailVerified,
-  role: user.role as AuthenticatedUser['role'],
+  role: toAuthenticatedRole(user.role),
   onboardedAt: user.onboardedAt,
 });
 
