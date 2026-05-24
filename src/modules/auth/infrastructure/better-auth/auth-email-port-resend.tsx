@@ -10,11 +10,11 @@ import type {
 
 export class AuthEmailPortResend implements AuthEmailPort {
   async sendSignInOtp(input: SendSignInOtpInput): Promise<void> {
+    const t = i18n.getFixedT(input.language, 'emails');
+
     await sendEmail({
       to: input.email,
-      subject: i18n.t('emails:loginCode.subject', {
-        lng: input.language,
-      }),
+      subject: t('loginCode.subject'),
       template: (
         <TemplateLoginCode language={input.language} code={input.otp} />
       ),

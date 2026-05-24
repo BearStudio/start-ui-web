@@ -1,6 +1,8 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
-const networkMode = import.meta.env.DEV ? 'always' : undefined;
+import { envClient } from '@/platform/env/client';
+
+const networkMode = envClient.DEV ? 'always' : undefined;
 
 type QueryClientOptions = {
   onError?: (error: unknown) => void;

@@ -20,10 +20,28 @@ import { envServer } from '@/platform/env/server';
 
 import { AuthEmailPortResend } from './auth-email-port-resend';
 import { betterAuthPermissions } from './permissions';
+import type { AuthEmailPort } from '../../application/ports/auth-email-port';
 
-const authEmailPort = new AuthEmailPortResend();
+type CreateAuthOptions = {
+  database?: Database;
+  authEmailPort?: AuthEmailPort;
+};
 
-export function createAuth(database: Database = getDefaultDbClient()) {
+const isCreateAuthOptions = (
+  input: Database | CreateAuthOptions
+): input is CreateAuthOptions =>
+  'database' in input || 'authEmailPort' in input;
+
+export function createAuth(input?: Database | CreateAuthOptions) {
+  const options =
+    input === undefined
+      ? {}
+      : isCreateAuthOptions(input)
+        ? input
+        : { database: input };
+  const database = options.database ?? getDefaultDbClient();
+  const authEmailPort = options.authEmailPort ?? new AuthEmailPortResend();
+
   return betterAuth({
     baseURL: {
       allowedHosts: [
@@ -72,7 +90,7 @@ export function createAuth(database: Database = getDefaultDbClient()) {
         disableSignUp: !AUTH_SIGNUP_ENABLED,
         expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
         // Use predictable mocked code in dev and demo
-        ...(import.meta.env.DEV || envClient.VITE_IS_DEMO
+        ...(envClient.DEV || envClient.VITE_IS_DEMO
           ? { generateOTP: () => AUTH_EMAIL_OTP_MOCKED }
           : undefined),
         async sendVerificationOTP({ email, otp, type }) {

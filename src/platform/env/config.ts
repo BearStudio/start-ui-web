@@ -97,6 +97,10 @@ const clientSchema = () =>
       .optional()
       .prefault('false')
       .transform((value) => value === 'true'),
+    DEV: z
+      .union([z.boolean(), z.string()])
+      .optional()
+      .transform((value) => (value === undefined ? isDev() : isTruthy(value))),
     VITE_ENV_NAME: z
       .string()
       .optional()
