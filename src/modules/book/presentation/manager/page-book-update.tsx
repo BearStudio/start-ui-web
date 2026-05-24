@@ -1,21 +1,23 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
-import { Form } from '@/platform/components/form';
+import { Form, useAppForm } from '@/platform/components/form';
 import { PreventNavigation } from '@/platform/components/prevent-navigation';
 import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
 import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
-import { FormBook } from '@/modules/book/presentation/manager/form-book';
+import {
+  FormBook,
+  formBookDefaultValues,
+  formBookValidators,
+} from '@/modules/book/presentation/manager/form-book';
 import { FormBookCover } from '@/modules/book/presentation/manager/form-book-cover';
-import { zFormFieldsBook } from '@/modules/book/presentation/schema';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   ManagerPageLayout as PageLayout,
@@ -31,16 +33,6 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
   const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsBook()),
-    values: {
-      title: bookQuery.data?.title ?? '',
-      author: bookQuery.data?.author ?? '',
-      genreId: bookQuery.data?.genre?.id ?? null!,
-      publisher: bookQuery.data?.publisher ?? '',
-      coverId: bookQuery.data?.coverId ?? '',
-    },
-  });
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
@@ -70,9 +62,10 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
           (Array.isArray(target) && target.includes('title'));
 
         if (isTitleConflict) {
-          form.setError('title', {
-            message: t('book:manager.form.titleAlreadyExist'),
-          });
+          form.setFieldMeta('title', (prev) => ({
+            ...prev,
+            errorMap: { onSubmit: t('book:manager.form.titleAlreadyExist') },
+          }));
           return;
         }
       }
@@ -81,15 +74,26 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     },
   });
 
+  const form = useAppForm({
+    defaultValues: formBookDefaultValues({
+      title: bookQuery.data?.title ?? '',
+      author: bookQuery.data?.author ?? '',
+      genreId: bookQuery.data?.genre?.id ?? (null as unknown as string),
+      publisher: bookQuery.data?.publisher ?? '',
+      coverId: bookQuery.data?.coverId ?? '',
+    }),
+    validators: formBookValidators,
+    onSubmit: async ({ value }) => {
+      await bookUpdate.mutateAsync({ id: props.params.id, ...value });
+    },
+  });
+
+  const isDirty = useStore(form.store, (s) => s.isDirty);
+
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={async (values) => {
-          bookUpdate.mutate({ id: props.params.id, ...values });
-        }}
-      >
+      <PreventNavigation shouldBlock={isDirty} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}
@@ -114,7 +118,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
               <div className="flex-2">
                 <Card>
                   <CardContent>
-                    <FormBook />
+                    <FormBook form={form} />
                   </CardContent>
                 </Card>
               </div>
@@ -122,7 +126,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
                 aria-hidden
                 className="mx-auto w-full max-w-64 min-w-48 flex-1"
               >
-                <FormBookCover />
+                <FormBookCover form={form} />
               </div>
             </div>
           </PageLayoutContent>

@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/platform/lib/zod/zod-utils';
@@ -7,11 +5,12 @@ import { zu } from '@/platform/lib/zod/zod-utils';
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldError,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { onSubmit } from '@/platform/components/form/docs.utils';
+import { useFieldContext } from '@/platform/components/form/use-app-form-contexts';
 import { Button } from '@/platform/components/ui/button';
 import {
   InputGroup,
@@ -19,90 +18,55 @@ import {
   InputGroupInput,
   InputGroupText,
 } from '@/platform/components/ui/input-group';
+
 const zFormSchema = () =>
   z.object({
     website: zu.fieldText.required({ error: 'Website is required' }),
   });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-  defaultValues: {
-    website: '',
-  },
-} as const;
-
 /**
- * Usage inside a custom field render function.
- * FormFieldError automatically accesses the FormFieldController context.
+ * Custom field that renders its own error via `FormFieldError`.
  */
 const CustomField = () => {
-  const form = useForm(formOptions);
+  const form = useAppForm({
+    defaultValues: { website: '' },
+    validators: { onSubmit: zFormSchema() },
+    onSubmit: ({ value }) => onSubmit(value),
+  });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website (Custom Field)</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="website"
-            type="custom"
-            render={({ field, fieldState }) => (
-              <>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <InputGroupText>https://</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
-                  />
-                </InputGroup>
-                <FormFieldError />
-              </>
-            )}
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
+    <Form form={form} className="flex flex-col gap-4">
+      <FormField>
+        <FormFieldLabel>Website (Custom Field)</FormFieldLabel>
+        <form.AppField name="website">
+          {() => <CustomWebsiteInput />}
+        </form.AppField>
+      </FormField>
+      <Button type="submit">Submit</Button>
     </Form>
   );
 };
 
-/**
- * Standalone usage outside of FormFieldController render function.
- * Pass `control` and `name` props directly to FormFieldError.
- */
-const Standalone = () => {
-  const form = useForm(formOptions);
-
+const CustomWebsiteInput = () => {
+  const field = useFieldContext<string>();
+  const errors = field.state.meta.errors;
+  const invalid = errors.length > 0 && field.state.meta.isTouched;
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="website"
-            type="text"
-            displayError={false}
-          />
-        </FormField>
-        {/* Error displayed outside of FormFieldController */}
-        <FormFieldError control={form.control} name="website" />
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
+    <>
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>https://</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput
+          value={field.state.value ?? ''}
+          aria-invalid={invalid || undefined}
+          onChange={(e) => field.handleChange(e.target.value)}
+          onBlur={() => field.handleBlur()}
+        />
+      </InputGroup>
+      <FormFieldError errors={errors} />
+    </>
   );
 };
 
-export default {
-  CustomField,
-  Standalone,
-};
+export default { CustomField };

@@ -1,6 +1,6 @@
 import { TerminalIcon } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
 
+import { useFormContext } from '@/platform/components/form';
 import {
   Alert,
   AlertDescription,
@@ -12,15 +12,15 @@ import { envClient } from '@/platform/env/client';
 
 const LoginEmailButton = ({
   email,
-  form,
+  setEmail,
 }: {
   email: string;
-  form: ReturnType<typeof useFormContext>;
+  setEmail: (value: string) => void;
 }) => (
   <button
     type="button"
     className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-    onClick={() => form.setValue('email', email, { shouldValidate: true })}
+    onClick={() => setEmail(email)}
   >
     {email.split('@')[0]}
   </button>
@@ -33,6 +33,13 @@ export const LoginEmailHint = () => {
     return null;
   }
 
+  const setEmail = (value: string) =>
+    (
+      form as unknown as {
+        setFieldValue: (name: 'email', value: string) => void;
+      }
+    ).setFieldValue('email', value);
+
   return (
     <Alert dir="ltr">
       <TerminalIcon className="size-4" />
@@ -41,9 +48,9 @@ export const LoginEmailHint = () => {
       </AlertTitle>
       <AlertDescription className="flex flex-wrap gap-x-1 text-sm leading-4">
         You can login with{' '}
-        <LoginEmailButton email="admin@admin.com" form={form} />
+        <LoginEmailButton email="admin@admin.com" setEmail={setEmail} />
         {' or '}
-        <LoginEmailButton email="user@user.com" form={form} />
+        <LoginEmailButton email="user@user.com" setEmail={setEmail} />
       </AlertDescription>
     </Alert>
   );
@@ -68,9 +75,11 @@ export const LoginEmailOtpHint = () => {
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
           onClick={() =>
-            form.setValue('otp', AUTH_EMAIL_OTP_MOCKED, {
-              shouldValidate: true,
-            })
+            (
+              form as unknown as {
+                setFieldValue: (name: 'otp', value: string) => void;
+              }
+            ).setFieldValue('otp', AUTH_EMAIL_OTP_MOCKED)
           }
         >
           {AUTH_EMAIL_OTP_MOCKED}

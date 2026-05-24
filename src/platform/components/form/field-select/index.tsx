@@ -2,9 +2,9 @@ import type { ComponentProps } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import {
   Select,
   SelectContent,
@@ -33,17 +33,16 @@ export const FieldSelect = <TItem extends Item>(
   const { containerProps, inputProps, children, placeholder, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<TItem['value']>();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Select
         {...rest}
-        inputRef={field.ref}
-        disabled={field.disabled}
+        disabled={field.disabled ?? rest.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
-          field.onChange(value, event);
+          field.onChange(value as TItem['value']);
           rest.onValueChange?.(value, event);
         }}
       >
@@ -51,6 +50,7 @@ export const FieldSelect = <TItem extends Item>(
           aria-invalid={fieldState.invalid ? true : undefined}
           aria-describedby={ctx.describedBy(fieldState.invalid)}
           id={ctx.id}
+          onBlur={field.onBlur}
         >
           <SelectValue {...inputProps} placeholder={placeholder} />
         </SelectTrigger>
@@ -70,7 +70,7 @@ export const FieldSelect = <TItem extends Item>(
           )}
         </SelectContent>
       </Select>
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

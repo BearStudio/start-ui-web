@@ -1,28 +1,44 @@
 import { useQuery } from '@tanstack/react-query';
-import { useFormContext, useWatch } from 'react-hook-form';
+
+import { withForm } from '@/platform/components/form';
 
 import { BookCover } from '@/modules/book/presentation/book-cover';
-import { FormFieldsBook } from '@/modules/book/presentation/schema';
+import { formBookDefaultValues } from '@/modules/book/presentation/manager/form-book';
 import { genreQueries } from '@/modules/genre/client';
 
-export const FormBookCover = () => {
-  const form = useFormContext<FormFieldsBook>();
-  const genresQuery = useQuery(genreQueries.getAllList());
-  const title = useWatch({ name: 'title', control: form.control });
-  const author = useWatch({ name: 'author', control: form.control });
-  const genreId = useWatch({ name: 'genreId', control: form.control });
-  const coverId = useWatch({ name: 'coverId', control: form.control });
-
-  const genre = genresQuery.data?.items.find((item) => item.id === genreId);
-
-  return (
-    <BookCover
-      book={{
-        title,
-        author,
-        genre,
-        coverId,
-      }}
-    />
-  );
-};
+/**
+ * Live preview of the book cover that subscribes to the parent form's
+ * `title`, `author`, `genreId`, and `coverId` and re-renders when any change.
+ */
+export const FormBookCover = withForm({
+  defaultValues: formBookDefaultValues(),
+  render: ({ form }) => {
+    const genresQuery = useQuery(genreQueries.getAllList());
+    return (
+      <form.Subscribe
+        selector={(s) => ({
+          title: s.values.title,
+          author: s.values.author,
+          genreId: s.values.genreId,
+          coverId: s.values.coverId,
+        })}
+      >
+        {({ title, author, genreId, coverId }) => {
+          const genre = genresQuery.data?.items.find(
+            (item) => item.id === genreId
+          );
+          return (
+            <BookCover
+              book={{
+                title,
+                author,
+                genre,
+                coverId,
+              }}
+            />
+          );
+        }}
+      </form.Subscribe>
+    );
+  },
+});

@@ -1,10 +1,6 @@
 import { expect, test, vi } from 'vitest';
 
-import {
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/platform/components/form';
+import { FormField, FormFieldLabel } from '@/platform/components/form';
 import { FormMocked } from '@/platform/components/form/form-test-utils';
 
 import { page, render, setupUser } from '@/tests/utils';
@@ -18,26 +14,21 @@ test('book form translates the schema title-required error code at render', asyn
   render(
     <FormMocked
       schema={zFormFieldsBook()}
-      useFormOptions={{
-        defaultValues: {
-          title: '',
-          author: 'a',
-          publisher: undefined,
-          coverId: undefined,
-          genreId: 'g',
-        },
-        mode: 'onSubmit',
+      defaultValues={{
+        title: '',
+        author: 'a',
+        publisher: undefined,
+        coverId: undefined,
+        genreId: 'g',
       }}
       onSubmit={onSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Title</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="title"
-          />
+          <form.AppField name="title">
+            {(field) => <field.FieldText type="text" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

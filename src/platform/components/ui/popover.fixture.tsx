@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { useDisclosure } from 'react-use-disclosure';
 import { z } from 'zod';
 
@@ -8,9 +6,9 @@ import { zu } from '@/platform/lib/zod/zod-utils';
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { onSubmit } from '@/platform/components/form/docs.utils';
 import { Button } from '@/platform/components/ui/button';
@@ -59,49 +57,38 @@ const zFormSchema = () =>
   });
 
 const WithForm = () => {
-  const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormSchema()),
-    defaultValues: {
-      name: '',
+  const popover = useDisclosure();
+  const form = useAppForm({
+    defaultValues: { name: '' },
+    validators: { onSubmit: zFormSchema() },
+    onSubmit: ({ value }) => {
+      onSubmit(value);
+      popover.close();
+      form.reset();
     },
   });
-  const popover = useDisclosure();
 
   return (
     <Popover
       onOpenChange={(open) => {
         popover.toggle(open);
         if (!open) {
-          // Using setTimeout to prioritize the closing of the popover instead
-          // of the reset. We are resetting because a required input should reset
-          // itself in a popover
-          setTimeout(() => {
-            form.reset();
-          });
+          setTimeout(() => form.reset());
         }
       }}
       open={popover.isOpen}
     >
       <PopoverTrigger render={<Button />}>Info</PopoverTrigger>
       <PopoverContent>
-        <Form
-          {...form}
-          onSubmit={(values) => {
-            onSubmit(values);
-            popover.close();
-            form.reset();
-          }}
-        >
+        <Form form={form}>
           <div className="flex flex-col gap-4">
             <FormField>
               <FormFieldLabel>Name</FormFieldLabel>
-              <FormFieldController
-                type="text"
-                control={form.control}
-                name="name"
-                placeholder="Buzz Pawdrin"
-              />
+              <form.AppField name="name">
+                {(field) => (
+                  <field.FieldText type="text" placeholder="Buzz Pawdrin" />
+                )}
+              </form.AppField>
               <FormFieldHelper>Help</FormFieldHelper>
             </FormField>
             <div>

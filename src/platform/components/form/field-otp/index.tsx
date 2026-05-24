@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { useFormState } from 'react-hook-form';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useFormContext } from '@/platform/components/form/use-app-form-contexts';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import {
   InputOTP,
   InputOTPGroup,
@@ -25,8 +25,9 @@ export const FieldOtp = (
 
   const containerRef = useRef<React.ComponentRef<'div'>>(null);
   const ctx = useFormField();
-  const formState = useFormState();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<string>();
+  const form = useFormContext();
+
   return (
     <FormFieldContainer {...containerProps} ref={containerRef}>
       <InputOTP
@@ -36,7 +37,7 @@ export const FieldOtp = (
         onComplete={(v) => {
           rest.onComplete?.(v);
           // Only auto submit on first try
-          if (!formState.isSubmitted && autoSubmit) {
+          if (autoSubmit && !form.state.isSubmitted) {
             const button = document.createElement('button');
             button.type = 'submit';
             button.style.display = 'none';
@@ -46,10 +47,11 @@ export const FieldOtp = (
           }
         }}
         {...rest}
-        {...field}
-        onChange={(e) => {
-          field.onChange(e);
-          rest.onChange?.(e);
+        value={field.value ?? ''}
+        disabled={field.disabled ?? rest.disabled}
+        onChange={(value) => {
+          field.onChange(value);
+          rest.onChange?.(value);
         }}
         onBlur={(e) => {
           field.onBlur();
@@ -64,7 +66,7 @@ export const FieldOtp = (
         </InputOTPGroup>
       </InputOTP>
 
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

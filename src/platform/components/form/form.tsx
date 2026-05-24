@@ -1,54 +1,55 @@
-import {
-  FieldValues,
-  FormProvider,
-  FormProviderProps,
-  SubmitHandler,
-} from 'react-hook-form';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
-type FormProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TContext = ExplicitAny,
-  TTransformedValues = TFieldValues,
-> = StrictUnion<
-  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
-      noHtmlForm?: false;
-      onSubmit?: SubmitHandler<TTransformedValues>;
-      className?: string;
-    })
-  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
-      noHtmlForm: true;
-    })
->;
+type FormLike = {
+  handleSubmit: () => unknown;
+};
 
-export const Form = <TFieldValues extends FieldValues>({
+type FormProps = Omit<ComponentProps<'form'>, 'onSubmit' | 'children'> & {
+  /**
+   * The TanStack Form instance returned by `useAppForm`. Submission is
+   * delegated to `form.handleSubmit()`; the `onSubmit` config on the form
+   * itself is the only place that runs the actual side-effects.
+   */
+  form: FormLike;
+  /**
+   * Render the bare `<FormProvider>` shape without an HTML `<form>` element.
+   * Useful when a parent already owns the form element or when the form is
+   * embedded in non-form UI (e.g. dialog action bar).
+   */
+  noHtmlForm?: boolean;
+  children?: ReactNode;
+};
+
+/**
+ * Thin wrapper around an HTML form element that wires submission into the
+ * TanStack Form instance. Subforms or composed pages can opt out of the
+ * outer `<form>` via `noHtmlForm`.
+ */
+export const Form = ({
+  form,
   noHtmlForm = false,
   className,
-  ...props
-}: FormProps<TFieldValues>) => {
+  children,
+  ...rest
+}: FormProps) => {
   if (noHtmlForm) {
-    return <FormProvider {...props} />;
+    return <>{children}</>;
   }
 
   return (
-    <FormProvider {...props}>
-      <form
-        noValidate
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (props.onSubmit) {
-            props.handleSubmit(props.onSubmit)(e);
-          } else {
-            console.warn('Missing onSubmit method on <Form>');
-          }
-        }}
-        className={cn('flex flex-1 flex-col', className)}
-      >
-        {props.children}
-      </form>
-    </FormProvider>
+    <form
+      noValidate
+      {...rest}
+      className={cn('flex flex-1 flex-col', className)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+    >
+      {children}
+    </form>
   );
 };

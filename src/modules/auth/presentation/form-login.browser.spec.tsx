@@ -1,11 +1,7 @@
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import {
-  FormField,
-  FormFieldController,
-  FormFieldLabel,
-} from '@/platform/components/form';
+import { FormField, FormFieldLabel } from '@/platform/components/form';
 import { FormMocked } from '@/platform/components/form/form-test-utils';
 
 import { page, render, setupUser } from '@/tests/utils';
@@ -19,17 +15,15 @@ test('login form translates the schema email-invalid error code at render', asyn
   render(
     <FormMocked
       schema={zFormFieldsLogin()}
-      useFormOptions={{ defaultValues: { email: '' }, mode: 'onSubmit' }}
+      defaultValues={{ email: '' }}
       onSubmit={onSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Email</FormFieldLabel>
-          <FormFieldController
-            type="email"
-            control={form.control}
-            name="email"
-          />
+          <form.AppField name="email">
+            {(field) => <field.FieldText type="email" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -50,17 +44,15 @@ test('login form translates the schema email-required error code at render', asy
   render(
     <FormMocked
       schema={zFormFieldsLogin()}
-      useFormOptions={{ defaultValues: { email: '' }, mode: 'onSubmit' }}
+      defaultValues={{ email: '' }}
       onSubmit={onSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Email</FormFieldLabel>
-          <FormFieldController
-            type="email"
-            control={form.control}
-            name="email"
-          />
+          <form.AppField name="email">
+            {(field) => <field.FieldText type="email" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -80,13 +72,15 @@ test('form errors render literal fallback messages that are not translation keys
       schema={z.object({
         code: z.string().min(1, 'Literal fallback message'),
       })}
-      useFormOptions={{ defaultValues: { code: '' }, mode: 'onSubmit' }}
+      defaultValues={{ code: '' }}
       onSubmit={onSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="code" />
+          <form.AppField name="code">
+            {(field) => <field.FieldText type="text" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

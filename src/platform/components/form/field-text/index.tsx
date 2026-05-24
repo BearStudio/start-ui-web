@@ -2,9 +2,9 @@ import { ComponentProps } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { Input } from '@/platform/components/ui/input';
 
 export const FieldText = (
@@ -14,10 +14,10 @@ export const FieldText = (
     } & ComponentProps<typeof Input>
   >
 ) => {
-  const { containerProps, ...rest } = props;
+  const { containerProps, type, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, type } = useFormFieldController();
+  const { field, fieldState } = useTfField<string>();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -27,9 +27,10 @@ export const FieldText = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
-        {...field}
+        value={field.value ?? ''}
+        disabled={field.disabled ?? rest.disabled}
         onChange={(e) => {
-          field.onChange(e);
+          field.onChange(e.target.value);
           rest.onChange?.(e);
         }}
         onBlur={(e) => {
@@ -37,7 +38,7 @@ export const FieldText = (
           rest.onBlur?.(e);
         }}
       />
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

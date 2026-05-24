@@ -1,165 +1,32 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { zu } from '@/platform/lib/zod/zod-utils';
 
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { onSubmit } from '@/platform/components/form/docs.utils';
 import { Button } from '@/platform/components/ui/button';
-const zFormSchema = (options: { length?: number } = {}) => {
-  const length = options.length ?? 6;
-  return z.object({
-    code: zu.fieldText
-      .required({ error: 'Invalid code' })
-      .pipe(
-        z
-          .string()
-          .min(length, `Code is ${length} digits`)
-          .max(length, `Code is ${length} digits`)
-      ),
-  });
-};
-
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-} as const;
 
 const Default = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const DefaultValue = () => {
-  const form = useForm({
-    ...formOptions,
-    defaultValues: {
-      code: '927342',
-    },
+  const form = useAppForm({
+    defaultValues: { code: '' },
+    validators: { onSubmit: z.object({ code: z.string().min(6).max(6) }) },
+    onSubmit: ({ value }) => onSubmit(value),
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
+    <Form form={form} className="flex flex-col gap-4">
+      <FormField>
+        <FormFieldLabel>Code</FormFieldLabel>
+        <form.AppField name="code">
+          {(field) => <field.FieldOtp type="otp" maxLength={6} />}
+        </form.AppField>
+      </FormField>
+      <Button type="submit">Submit</Button>
     </Form>
   );
 };
 
-const Disabled = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            disabled
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const CustomLength = () => {
-  const form = useForm({
-    ...formOptions,
-    resolver: zodResolver(zFormSchema({ length: 4 })),
-  });
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={4}
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const AutoSubmit = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex max-w-sm flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            autoSubmit
-          />
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-export default {
-  Default,
-  DefaultValue,
-  Disabled,
-  CustomLength,
-  AutoSubmit,
-};
+export default { Default };

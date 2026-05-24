@@ -8,7 +8,7 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormField, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 const options = [
@@ -25,18 +25,15 @@ test('should toggle checkbox on click', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -59,18 +56,15 @@ test('should toggle checkbox on label click', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -94,18 +88,15 @@ test('should allow selecting multiple checkboxes', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -133,18 +124,15 @@ test('keyboard interaction: toggle with space', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -169,20 +157,15 @@ test('default values', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{
-        defaultValues: { bears: ['grizzlyrin'] },
-      }}
+      defaultValues={{ bears: ['grizzlyrin'] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -202,21 +185,15 @@ test('disabled group', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{
-        defaultValues: { bears: ['pawdrin'] },
-      }}
+      defaultValues={{ bears: ['pawdrin'] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            disabled
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup disabled options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -230,7 +207,8 @@ test('disabled group', async () => {
       timeout: FAILED_CLICK_TIMEOUT_MS,
     });
   } catch {
-    expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
+    // TanStack Form preserves disabled-field values.
+    expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
   }
 });
 
@@ -241,18 +219,15 @@ test('disabled option', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="checkbox-group"
-            control={form.control}
-            name="bears"
-            options={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldCheckboxGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

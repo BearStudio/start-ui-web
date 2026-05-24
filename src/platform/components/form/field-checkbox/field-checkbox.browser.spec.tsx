@@ -8,7 +8,7 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController } from '..';
+import { FormField } from '..';
 import { FormMocked } from '../form-test-utils';
 
 const zFormSchema = () =>
@@ -25,18 +25,14 @@ test('should select checkbox on button click', async () => {
   render(
     <FormMocked
       schema={zFormSchema()}
-      useFormOptions={{ defaultValues: { lovesBears: false } }}
+      defaultValues={{ lovesBears: false }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
-            I love bears
-          </FormFieldController>
+          <form.AppField name="lovesBears">
+            {(field) => <field.FieldCheckbox>I love bears</field.FieldCheckbox>}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -60,18 +56,14 @@ test('should select checkbox on label click', async () => {
   render(
     <FormMocked
       schema={zFormSchema()}
-      useFormOptions={{ defaultValues: { lovesBears: false } }}
+      defaultValues={{ lovesBears: false }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
-            I love bears
-          </FormFieldController>
+          <form.AppField name="lovesBears">
+            {(field) => <field.FieldCheckbox>I love bears</field.FieldCheckbox>}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -96,18 +88,14 @@ test('default value', async () => {
   render(
     <FormMocked
       schema={zFormSchema()}
-      useFormOptions={{ defaultValues: { lovesBears: true } }}
+      defaultValues={{ lovesBears: true }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
-            I love bears
-          </FormFieldController>
+          <form.AppField name="lovesBears">
+            {(field) => <field.FieldCheckbox>I love bears</field.FieldCheckbox>}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -126,19 +114,16 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ lovesBears: z.boolean() })}
-      useFormOptions={{ defaultValues: { lovesBears: false } }}
+      defaultValues={{ lovesBears: false }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-            disabled
-          >
-            I love bears
-          </FormFieldController>
+          <form.AppField name="lovesBears">
+            {(field) => (
+              <field.FieldCheckbox disabled>I love bears</field.FieldCheckbox>
+            )}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -157,5 +142,6 @@ test('disabled', async () => {
     await expect.element(checkbox).not.toBeChecked();
   }
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: undefined });
+  // TanStack Form preserves disabled-field values; default false stays.
+  expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: false });
 });
