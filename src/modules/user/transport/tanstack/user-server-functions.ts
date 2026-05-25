@@ -1,5 +1,10 @@
 import { createServerFn } from '@tanstack/react-start';
 
+import {
+  createServerFunctionInvoker,
+  type ServerFnContextRunner,
+} from '@/platform/lib/tanstack-start/server-function-handler';
+
 import type { ProtectedContext } from '@/modules/auth/server';
 
 import {
@@ -14,9 +19,7 @@ import {
   zUpdateByIdInput,
 } from '../http/user-handlers';
 
-type ProtectedRunner = <T>(
-  fn: (ctx: ProtectedContext) => Promise<T>
-) => Promise<T>;
+type ProtectedRunner = ServerFnContextRunner<ProtectedContext>;
 
 type UserServerFunctionDeps = {
   getDeps: () => Promise<UserServerRuntimeDeps> | UserServerRuntimeDeps;
@@ -30,66 +33,81 @@ type UserServerRuntimeDeps = {
 
 export const createUserServerFunctions = ({
   getDeps,
-}: UserServerFunctionDeps) => ({
-  userGetAll: createServerFn({ method: 'GET' })
-    .inputValidator(zGetAllInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedContext } = await getDeps();
-      return withProtectedContext((ctx) => handlers.getAll(ctx, data));
-    }),
+}: UserServerFunctionDeps) => {
+  const runProtected = createServerFunctionInvoker({
+    getDeps,
+    selectRunner: (deps) => deps.withProtectedContext,
+  });
+  const runMutation = createServerFunctionInvoker({
+    getDeps,
+    selectRunner: (deps) => deps.withProtectedMutation,
+  });
 
-  userGetById: createServerFn({ method: 'GET' })
-    .inputValidator(zGetByIdInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedContext } = await getDeps();
-      return withProtectedContext((ctx) => handlers.getById(ctx, data));
-    }),
+  return {
+    userGetAll: createServerFn({ method: 'GET' })
+      .inputValidator(zGetAllInput())
+      .handler(async ({ data }) =>
+        runProtected(data, ({ handlers }, ctx, input) =>
+          handlers.getAll(ctx, input)
+        )
+      ),
 
-  userUpdateById: createServerFn({ method: 'POST' })
-    .inputValidator(zUpdateByIdInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) => handlers.updateById(ctx, data));
-    }),
+    userGetById: createServerFn({ method: 'GET' })
+      .inputValidator(zGetByIdInput())
+      .handler(async ({ data }) =>
+        runProtected(data, ({ handlers }, ctx, input) =>
+          handlers.getById(ctx, input)
+        )
+      ),
 
-  userCreate: createServerFn({ method: 'POST' })
-    .inputValidator(zCreateInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) => handlers.create(ctx, data));
-    }),
+    userUpdateById: createServerFn({ method: 'POST' })
+      .inputValidator(zUpdateByIdInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.updateById(ctx, input)
+        )
+      ),
 
-  userDeleteById: createServerFn({ method: 'POST' })
-    .inputValidator(zDeleteByIdInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) => handlers.deleteById(ctx, data));
-    }),
+    userCreate: createServerFn({ method: 'POST' })
+      .inputValidator(zCreateInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.create(ctx, input)
+        )
+      ),
 
-  userGetUserSessions: createServerFn({ method: 'GET' })
-    .inputValidator(zGetUserSessionsInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedContext } = await getDeps();
-      return withProtectedContext((ctx) => handlers.getUserSessions(ctx, data));
-    }),
+    userDeleteById: createServerFn({ method: 'POST' })
+      .inputValidator(zDeleteByIdInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.deleteById(ctx, input)
+        )
+      ),
 
-  userRevokeUserSessions: createServerFn({ method: 'POST' })
-    .inputValidator(zRevokeUserSessionsInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) =>
-        handlers.revokeUserSessions(ctx, data)
-      );
-    }),
+    userGetUserSessions: createServerFn({ method: 'GET' })
+      .inputValidator(zGetUserSessionsInput())
+      .handler(async ({ data }) =>
+        runProtected(data, ({ handlers }, ctx, input) =>
+          handlers.getUserSessions(ctx, input)
+        )
+      ),
 
-  userRevokeUserSession: createServerFn({ method: 'POST' })
-    .inputValidator(zRevokeUserSessionInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) =>
-        handlers.revokeUserSession(ctx, data)
-      );
-    }),
-});
+    userRevokeUserSessions: createServerFn({ method: 'POST' })
+      .inputValidator(zRevokeUserSessionsInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.revokeUserSessions(ctx, input)
+        )
+      ),
+
+    userRevokeUserSession: createServerFn({ method: 'POST' })
+      .inputValidator(zRevokeUserSessionInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.revokeUserSession(ctx, input)
+        )
+      ),
+  };
+};
 
 export type UserServerFunctions = ReturnType<typeof createUserServerFunctions>;

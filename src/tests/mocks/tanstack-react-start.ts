@@ -38,6 +38,12 @@ export function createServerOnlyFn<TArgs extends unknown[], TResult>(
   return fn;
 }
 
+export function createClientOnlyFn<TArgs extends unknown[], TResult>(
+  fn: (...args: TArgs) => TResult
+) {
+  return fn;
+}
+
 export function createCsrfMiddleware(options?: unknown) {
   return {
     type: 'csrf',

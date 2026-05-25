@@ -1,22 +1,16 @@
-import { type MutationOptions } from '@tanstack/react-query';
+import { serverMutationOptions } from '@/platform/lib/tanstack-query/scoped-query-options';
 
 import { accountSubmitOnboarding, accountUpdateInfo } from '../server';
 
 export const accountQueries = {
-  submitOnboarding: (): MutationOptions<
-    Awaited<ReturnType<typeof accountSubmitOnboarding>>,
-    Error,
-    Parameters<typeof accountSubmitOnboarding>[0]['data']
-  > => ({
-    mutationKey: ['account', 'submitOnboarding'],
-    mutationFn: (data) => accountSubmitOnboarding({ data }),
-  }),
-  updateInfo: (): MutationOptions<
-    Awaited<ReturnType<typeof accountUpdateInfo>>,
-    Error,
-    Parameters<typeof accountUpdateInfo>[0]['data']
-  > => ({
-    mutationKey: ['account', 'updateInfo'],
-    mutationFn: (data) => accountUpdateInfo({ data }),
-  }),
+  submitOnboarding: () =>
+    serverMutationOptions({
+      mutationKey: ['account', 'submitOnboarding'],
+      mutationFn: accountSubmitOnboarding,
+    }),
+  updateInfo: () =>
+    serverMutationOptions({
+      mutationKey: ['account', 'updateInfo'],
+      mutationFn: accountUpdateInfo,
+    }),
 };

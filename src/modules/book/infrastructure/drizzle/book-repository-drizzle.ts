@@ -1,11 +1,15 @@
-import { and, asc, eq, gt, ilike, or, sql } from 'drizzle-orm';
+import { and, asc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { BookId } from '@/modules/kernel/domain/ids';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
 import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
-import { escapeLikePattern } from '@/modules/kernel/infrastructure/db/like';
+import {
+  ascendingTextCursorFilter,
+  escapedIlikeFilter,
+  takeCursorPage,
+} from '@/modules/kernel/infrastructure/db/query-helpers';
 import { book as bookTable } from '@/modules/kernel/infrastructure/db/schema';
 
 import type { BookRepository } from '../../application/ports/book-repository';
@@ -85,14 +89,10 @@ export class BookRepositoryDrizzle implements BookRepository {
     searchTerm: string;
   }): Promise<BookListPage> {
     try {
-      const searchTerm = input.searchTerm.trim();
-      const searchPattern = `%${escapeLikePattern(searchTerm)}%`;
-      const searchFilter = searchTerm
-        ? or(
-            ilike(bookTable.title, searchPattern),
-            ilike(bookTable.author, searchPattern)
-          )
-        : undefined;
+      const searchFilter = escapedIlikeFilter(
+        [bookTable.title, bookTable.author],
+        input.searchTerm
+      );
 
       const cursorRow = input.cursor
         ? await this.db.query.book.findFirst({
@@ -114,15 +114,13 @@ export class BookRepositoryDrizzle implements BookRepository {
         };
       }
 
-      const cursorFilter = cursorRow
-        ? or(
-            gt(bookTable.title, cursorRow.title),
-            and(
-              eq(bookTable.title, cursorRow.title),
-              gt(bookTable.id, cursorRow.id)
-            )
-          )
-        : undefined;
+      const cursorFilter = ascendingTextCursorFilter({
+        sortColumn: bookTable.title,
+        idColumn: bookTable.id,
+        cursor: cursorRow
+          ? { id: cursorRow.id, sortValue: cursorRow.title }
+          : undefined,
+      });
 
       const where = and(searchFilter, cursorFilter);
 
@@ -139,13 +137,11 @@ export class BookRepositoryDrizzle implements BookRepository {
         }),
       ]);
 
-      let nextCursor: BookId | undefined;
-      let pageRows = rows;
-      if (rows.length > input.limit) {
-        pageRows = rows.slice(0, input.limit);
-        const lastVisible = pageRows.at(-1);
-        nextCursor = lastVisible ? toBookId(lastVisible.id) : undefined;
-      }
+      const { pageRows, nextCursor } = takeCursorPage(
+        rows,
+        input.limit,
+        (row) => toBookId(row.id)
+      );
 
       return {
         items: pageRows.map(toDomain),

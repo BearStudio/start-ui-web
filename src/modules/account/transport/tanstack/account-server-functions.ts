@@ -1,5 +1,10 @@
 import { createServerFn } from '@tanstack/react-start';
 
+import {
+  createServerFunctionInvoker,
+  type ServerFnContextRunner,
+} from '@/platform/lib/tanstack-start/server-function-handler';
+
 import type { ProtectedContext } from '@/modules/auth/server';
 
 import {
@@ -8,9 +13,7 @@ import {
   zUpdateInfoInput,
 } from '../http/account-handlers';
 
-type ProtectedRunner = <T>(
-  fn: (ctx: ProtectedContext) => Promise<T>
-) => Promise<T>;
+type ProtectedRunner = ServerFnContextRunner<ProtectedContext>;
 
 type AccountServerFunctionDeps = {
   getDeps: () => Promise<AccountServerRuntimeDeps> | AccountServerRuntimeDeps;
@@ -23,23 +26,30 @@ type AccountServerRuntimeDeps = {
 
 export const createAccountServerFunctions = ({
   getDeps,
-}: AccountServerFunctionDeps) => ({
-  accountSubmitOnboarding: createServerFn({ method: 'POST' })
-    .inputValidator(zSubmitOnboardingInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) =>
-        handlers.submitOnboarding(ctx, data)
-      );
-    }),
+}: AccountServerFunctionDeps) => {
+  const runMutation = createServerFunctionInvoker({
+    getDeps,
+    selectRunner: (deps) => deps.withProtectedMutation,
+  });
 
-  accountUpdateInfo: createServerFn({ method: 'POST' })
-    .inputValidator(zUpdateInfoInput())
-    .handler(async ({ data }) => {
-      const { handlers, withProtectedMutation } = await getDeps();
-      return withProtectedMutation((ctx) => handlers.updateInfo(ctx, data));
-    }),
-});
+  return {
+    accountSubmitOnboarding: createServerFn({ method: 'POST' })
+      .inputValidator(zSubmitOnboardingInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.submitOnboarding(ctx, input)
+        )
+      ),
+
+    accountUpdateInfo: createServerFn({ method: 'POST' })
+      .inputValidator(zUpdateInfoInput())
+      .handler(async ({ data }) =>
+        runMutation(data, ({ handlers }, ctx, input) =>
+          handlers.updateInfo(ctx, input)
+        )
+      ),
+  };
+};
 
 export type AccountServerFunctions = ReturnType<
   typeof createAccountServerFunctions

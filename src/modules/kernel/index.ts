@@ -5,6 +5,7 @@ export type * from './application/ports/id-generator';
 export type * from './application/ports/logger';
 export type * from './application/ports/permission-checker';
 export type * from './application/ports/transaction-runner';
+export * from './application/result';
 export * from './domain/errors/app-error';
 export * from './domain/errors/domain-error';
 export * from './domain/ids';

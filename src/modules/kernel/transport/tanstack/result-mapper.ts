@@ -1,3 +1,4 @@
+import type { UseCaseResult } from '@/modules/kernel/application/result';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
 import { ServerFnError, type ServerFnErrorCode } from './server-fn-error';
@@ -49,3 +50,12 @@ export const mapAppErrorToServerFnError = (error: unknown): never => {
   }
   throw error;
 };
+
+export async function unwrapUseCaseResult<T, TReason extends string>(
+  result: Promise<UseCaseResult<T, TReason>>,
+  reasons: Record<TReason, ReasonConfig>
+): Promise<T> {
+  const value = await result.catch(mapAppErrorToServerFnError);
+  if (value.ok) return value.value;
+  return throwServerFnErrorForReason(value.reason, reasons);
+}

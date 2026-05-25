@@ -1,3 +1,5 @@
+import type { UseCaseResult } from '@/modules/kernel/application/result';
+
 import type { AuthEmailPort } from '../ports/auth-email-port';
 import type { AuthorizationGateway } from '../ports/authorization-gateway';
 import type { SessionGateway } from '../ports/session-gateway';
@@ -10,6 +12,4 @@ export type AuthUseCaseDeps = {
   userAdminGateway: UserAdminGateway;
 };
 
-export type UseCaseResult<T, TReason extends string> =
-  | { ok: true; value: T }
-  | { ok: false; reason: TReason };
+export type { UseCaseResult };

@@ -6,10 +6,7 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import {
-  mapAppErrorToServerFnError,
-  throwServerFnErrorForReason,
-} from '@/modules/kernel/transport/tanstack/result-mapper';
+import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
 import type { UserUseCases } from '@/modules/user';
 import type { UserRole } from '@/modules/user/domain/user';
 
@@ -59,11 +56,8 @@ type UserHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => UserUseCases;
 };
 
-const mapReason = (
-  reason: string,
-  options?: { selfMessage?: string }
-): never => {
-  return throwServerFnErrorForReason(reason, {
+const userReasonConfig = (options?: { selfMessage?: string }) =>
+  ({
     duplicate: {
       code: 'CONFLICT',
       message: 'Unique constraint violation',
@@ -75,46 +69,43 @@ const mapReason = (
       code: 'BAD_REQUEST',
       message: options?.selfMessage ?? 'You cannot target yourself',
     },
-  });
-};
+  }) as const;
 
 export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   const getAll = async (
     ctx: ProtectedContext,
     data: z.output<ReturnType<typeof zGetAllInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .list({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).list({
         scope: ctx.scope,
         cursor: data.cursor ? toUserId(data.cursor) : undefined,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return result.value;
-    return mapReason(result.reason);
+      }),
+      userReasonConfig()
+    );
   };
 
   const getById = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zGetByIdInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .get({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).get({
         scope: ctx.scope,
         id: toUserId(data.id),
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return result.value;
-    return mapReason(result.reason);
+      }),
+      userReasonConfig()
+    );
   };
 
   const updateById = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zUpdateByIdInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .update({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).update({
         scope: ctx.scope,
         id: toUserId(data.id),
         user: {
@@ -122,94 +113,84 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
           email: toEmailAddress(data.email),
           role: data.role as UserRole | null | undefined,
         },
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return result.value;
-    return mapReason(result.reason);
+      }),
+      userReasonConfig()
+    );
   };
 
   const create = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zCreateInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .create({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).create({
         scope: ctx.scope,
         user: {
           name: data.name,
           email: toEmailAddress(data.email),
           role: data.role as UserRole | null | undefined,
         },
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return result.value;
-    return mapReason(result.reason);
+      }),
+      userReasonConfig()
+    );
   };
 
   const deleteById = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zDeleteByIdInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .delete({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).delete({
         scope: ctx.scope,
         id: toUserId(data.id),
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return;
-    return mapReason(result.reason, {
-      selfMessage: 'You cannot delete yourself',
-    });
+      }),
+      userReasonConfig({ selfMessage: 'You cannot delete yourself' })
+    );
   };
 
   const getUserSessions = async (
     ctx: ProtectedContext,
     data: z.output<ReturnType<typeof zGetUserSessionsInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .listSessions({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).listSessions({
         scope: ctx.scope,
         userId: toUserId(data.userId),
         cursor: data.cursor ? toSessionId(data.cursor) : undefined,
         limit: data.limit,
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return result.value;
-    return mapReason(result.reason);
+      }),
+      userReasonConfig()
+    );
   };
 
   const revokeUserSessions = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zRevokeUserSessionsInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .revokeSessions({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).revokeSessions({
         scope: ctx.scope,
         id: toUserId(data.id),
-      })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return;
-    return mapReason(result.reason, {
-      selfMessage: 'You cannot revoke your own sessions',
-    });
+      }),
+      userReasonConfig({ selfMessage: 'You cannot revoke your own sessions' })
+    );
   };
 
   const revokeUserSession = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zRevokeUserSessionInput>>
   ) => {
-    const result = await getUseCases(ctx)
-      .revokeSession({
+    return unwrapUseCaseResult(
+      getUseCases(ctx).revokeSession({
         scope: ctx.scope,
         currentSessionId: toSessionId(ctx.session.id),
         id: toUserId(data.id),
         sessionId: toSessionId(data.sessionId),
+      }),
+      userReasonConfig({
+        selfMessage: 'You cannot revoke your current session',
       })
-      .catch(mapAppErrorToServerFnError);
-    if (result.ok) return;
-    return mapReason(result.reason, {
-      selfMessage: 'You cannot revoke your current session',
-    });
+    );
   };
 
   return {

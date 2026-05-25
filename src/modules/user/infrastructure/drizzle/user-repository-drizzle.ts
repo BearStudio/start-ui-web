@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, ilike, lt, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
@@ -9,7 +9,12 @@ import {
 } from '@/modules/kernel/domain/ids';
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
 import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
-import { escapeLikePattern } from '@/modules/kernel/infrastructure/db/like';
+import {
+  ascendingTextCursorFilter,
+  descendingDateCursorFilter,
+  escapedIlikeFilter,
+  takeCursorPage,
+} from '@/modules/kernel/infrastructure/db/query-helpers';
 import {
   session as sessionTable,
   user as userTable,
@@ -100,14 +105,10 @@ export class UserRepositoryDrizzle implements UserRepository {
     searchTerm: string;
   }): Promise<UserListPage> {
     try {
-      const searchTerm = input.searchTerm.trim();
-      const searchPattern = `%${escapeLikePattern(searchTerm)}%`;
-      const searchFilter = searchTerm
-        ? or(
-            ilike(userTable.name, searchPattern),
-            ilike(userTable.email, searchPattern)
-          )
-        : undefined;
+      const searchFilter = escapedIlikeFilter(
+        [userTable.name, userTable.email],
+        input.searchTerm
+      );
 
       const cursorRow = input.cursor
         ? await this.db.query.user.findFirst({
@@ -129,15 +130,13 @@ export class UserRepositoryDrizzle implements UserRepository {
         };
       }
 
-      const cursorFilter = cursorRow
-        ? or(
-            gt(userTable.name, cursorRow.name),
-            and(
-              eq(userTable.name, cursorRow.name),
-              gt(userTable.id, cursorRow.id)
-            )
-          )
-        : undefined;
+      const cursorFilter = ascendingTextCursorFilter({
+        sortColumn: userTable.name,
+        idColumn: userTable.id,
+        cursor: cursorRow
+          ? { id: cursorRow.id, sortValue: cursorRow.name }
+          : undefined,
+      });
 
       const where = and(searchFilter, cursorFilter);
 
@@ -153,13 +152,11 @@ export class UserRepositoryDrizzle implements UserRepository {
         }),
       ]);
 
-      let nextCursor: UserId | undefined;
-      let pageRows = rows;
-      if (rows.length > input.limit) {
-        pageRows = rows.slice(0, input.limit);
-        const lastVisible = pageRows.at(-1);
-        nextCursor = lastVisible ? toUserId(lastVisible.id) : undefined;
-      }
+      const { pageRows, nextCursor } = takeCursorPage(
+        rows,
+        input.limit,
+        (row) => toUserId(row.id)
+      );
 
       return {
         items: pageRows.map(toDomainUser),
@@ -277,15 +274,13 @@ export class UserRepositoryDrizzle implements UserRepository {
         };
       }
 
-      const cursorFilter = cursorRow
-        ? or(
-            and(
-              eq(sessionTable.createdAt, cursorRow.createdAt),
-              gt(sessionTable.id, cursorRow.id)
-            ),
-            lt(sessionTable.createdAt, cursorRow.createdAt)
-          )
-        : undefined;
+      const cursorFilter = descendingDateCursorFilter({
+        sortColumn: sessionTable.createdAt,
+        idColumn: sessionTable.id,
+        cursor: cursorRow
+          ? { id: cursorRow.id, sortValue: cursorRow.createdAt }
+          : undefined,
+      });
 
       const where = and(userIdFilter, cursorFilter);
 
@@ -309,13 +304,11 @@ export class UserRepositoryDrizzle implements UserRepository {
         }),
       ]);
 
-      let nextCursor: SessionId | undefined;
-      let pageRows = rows;
-      if (rows.length > input.limit) {
-        pageRows = rows.slice(0, input.limit);
-        const lastVisible = pageRows.at(-1);
-        nextCursor = lastVisible ? toSessionId(lastVisible.id) : undefined;
-      }
+      const { pageRows, nextCursor } = takeCursorPage(
+        rows,
+        input.limit,
+        (row) => toSessionId(row.id)
+      );
 
       return {
         items: pageRows.map(toDomainSession),

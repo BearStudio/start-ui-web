@@ -87,6 +87,12 @@ export type Kernel = {
 
 export type KernelOverrides = Overrides<Kernel>;
 
+type ProcedureLoggerLike = {
+  info: (fields: Record<string, unknown>, message: string) => void;
+  warn: (fields: Record<string, unknown>, message: string) => void;
+  error: (fields: Record<string, unknown>, message: string) => void;
+};
+
 const buildDefaultKernel = (): Kernel => {
   const db = getDefaultDbClient();
   const clock = systemClock;
@@ -127,6 +133,19 @@ export const getKernel = (overrides?: KernelOverrides): Kernel => {
     permissionChecker: overrides.permissionChecker ?? base.permissionChecker,
   };
 };
+
+export const getKernelForProcedureLogger = (
+  procedureLogger: ProcedureLoggerLike,
+  overrides?: Omit<KernelOverrides, 'logger'>
+) =>
+  getKernel({
+    ...overrides,
+    logger: {
+      info: (event, fields) => procedureLogger.info(fields ?? {}, event),
+      warn: (event, fields) => procedureLogger.warn(fields ?? {}, event),
+      error: (event, fields) => procedureLogger.error(fields ?? {}, event),
+    },
+  });
 
 /** Test-only. */
 export const __resetKernelComposition = () => factory.reset();

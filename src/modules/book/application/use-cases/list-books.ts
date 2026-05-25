@@ -1,6 +1,6 @@
-import type { RequestScope } from '@/modules/auth';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import type { BookId } from '@/modules/kernel/domain/ids';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { BookUseCaseDeps, UseCaseResult } from './types';
 import type { BookListPage } from '../../domain/book';
@@ -16,11 +16,12 @@ export async function listBooks(
   deps: BookUseCaseDeps,
   input: ListBooksInput
 ): Promise<UseCaseResult<BookListPage, 'forbidden'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    book: ['read'],
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { book: ['read'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
 
   deps.logger.info('book.list', { event: 'book.list' });
   const value = await deps.bookRepository.list({
@@ -28,5 +29,5 @@ export async function listBooks(
     limit: input.limit,
     searchTerm: input.searchTerm,
   });
-  return { ok: true, value };
+  return ok(value);
 }
