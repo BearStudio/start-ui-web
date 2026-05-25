@@ -1,11 +1,11 @@
 {
   "name": "start-ui-web",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
-  "description": "Opinionated UI starter from the 🐻 BearStudio Team",
-  "homepage": "https://github.com/bearstudio/start-ui-web#readme",
+  "description": "Opinionated TanStack Start starter",
+  "homepage": "https://github.com/hbmartin/start-ui-web#readme",
   "bugs": {
-    "url": "https://github.com/bearstudio/start-ui-web/issues"
+    "url": "https://github.com/hbmartin/start-ui-web/issues"
   },
   "license": "MIT",
   "author": {
@@ -18,11 +18,16 @@
       "name": "Yoann Fleury",
       "email": "yoannfleurydev@gmail.com",
       "url": "https://github.com/yoannfleurydev"
+    },
+    {
+      "name": "Harold Martin",
+      "email": "harold.martin@gmail.com",
+      "url": "https://www.linkedin.com/in/harold-martin-98526971/"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bearstudio/start-ui-web.git"
+    "url": "git+https://github.com/hbmartin/start-ui-web.git"
   },
   "type": "module",
   "scripts": {
@@ -52,7 +57,8 @@
     "test:affected": "node scripts/run-affected-tests.mjs",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "dotenv -e .env -e .env.example -- cross-env playwright test",
-    "check": "run-p -n format:check lint typecheck depcruise security:audit",
+    "check": "run-p -n format:check lint typecheck depcruise semgrep security:audit",
+    "check:ci": "run-p -n format:check lint typecheck depcruise security:audit",
     "verify": "pnpm check && pnpm test && pnpm build",
     "test:ui": "vitest",
     "e2e:setup": "dotenv -e .env -e .env.example -- cross-env playwright test --project=setup",

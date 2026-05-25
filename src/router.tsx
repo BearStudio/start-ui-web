@@ -4,7 +4,6 @@ import { createClientOnlyFn, createServerOnlyFn } from '@tanstack/react-start';
 import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
 import { authQueries } from '@/modules/auth/client';
-import { envClient } from '@/platform/env/client';
 import { isDevEnvironment } from '@/platform/env/config';
 import { createNoOpFlags } from '@/platform/flags';
 import type { RouterContext } from '@/platform/router/context';
@@ -70,7 +69,7 @@ export function getRouter() {
 
   if (!import.meta.env.SSR) {
     void initTelemetryClientOnly(router).catch((error: unknown) => {
-      if (envClient.DEV) {
+      if (isDevEnvironment()) {
         console.warn('Telemetry init failed (non-fatal):', error);
       }
     });

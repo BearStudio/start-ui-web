@@ -42,7 +42,7 @@ jobs:
           node-version: 24
 
       - name: Run static checks
-        run: pnpm check
+        run: pnpm check:ci
 
   tests:
     name: Tests

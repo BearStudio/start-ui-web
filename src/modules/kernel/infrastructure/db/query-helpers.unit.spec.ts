@@ -12,6 +12,7 @@ describe('db query helpers', () => {
   it('builds escaped LIKE patterns and optional filters', () => {
     expect(escapedLikePattern(' Alpha_ ')).toBe('%Alpha\\_%');
     expect(escapedIlikeFilter([genreTable.name], '')).toBeUndefined();
+    expect(escapedIlikeFilter([], 'Alpha')).toBeUndefined();
     expect(escapedIlikeFilter([genreTable.name], 'Alpha')).toBeDefined();
     expect(
       ascendingTextCursorFilter({
