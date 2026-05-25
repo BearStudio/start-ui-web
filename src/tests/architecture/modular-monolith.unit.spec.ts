@@ -116,6 +116,18 @@ describe('strict modular monolith layout', () => {
     ).toEqual([]);
   });
 
+  it('keeps TanStack server functions assigned to named variables', () => {
+    const files = listSourceFiles(path.join(root, 'src'));
+
+    expect(findImportViolations(files, /:\s*createServerFn\s*\(/g)).toEqual([]);
+    expect(
+      findImportViolations(
+        files,
+        /^[\t ]+const\s+\w+\s*=\s*createServerFn\s*\(/gm
+      )
+    ).toEqual([]);
+  });
+
   it('confines Better Auth imports to auth boundaries', () => {
     const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
       const relative = path.relative(root, file);

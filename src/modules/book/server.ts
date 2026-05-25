@@ -1,9 +1,31 @@
-import { createServerOnlyFn } from '@tanstack/react-start';
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
-import { createBookHandlers } from './transport/http/book-handlers';
-import { createBookServerFunctions } from './transport/tanstack/book-server-functions';
+import {
+  createServerFunctionInvoker,
+  type ServerFnContextRunner,
+} from '@/platform/lib/tanstack-start/server-function-handler';
 
-const getDeps = createServerOnlyFn(async () => {
+import type { ProtectedContext } from '@/modules/auth/server';
+import { zFormFieldsBook } from '@/modules/book/presentation/schema';
+
+import {
+  type BookHandlers,
+  createBookHandlers,
+  zDeleteByIdInput,
+  zGetAllInput,
+  zGetByIdInput,
+  zUpdateByIdInput,
+} from './transport/http/book-handlers';
+
+type ProtectedRunner = ServerFnContextRunner<ProtectedContext>;
+
+type BookServerRuntimeDeps = {
+  handlers: BookHandlers;
+  withProtectedContext: ProtectedRunner;
+  withProtectedMutation: ProtectedRunner;
+};
+
+const getDeps = createServerOnlyFn(async (): Promise<BookServerRuntimeDeps> => {
   const [
     { getBookUseCases },
     { getKernelForProcedureLogger },
@@ -26,11 +48,58 @@ const getDeps = createServerOnlyFn(async () => {
   };
 });
 
-const serverFunctions = createBookServerFunctions({ getDeps });
+const runProtected = createServerFunctionInvoker({
+  getDeps,
+  selectRunner: (deps) => deps.withProtectedContext,
+});
 
-export const bookGetAll = serverFunctions.bookGetAll;
-export const bookGetById = serverFunctions.bookGetById;
-export const bookCreate = serverFunctions.bookCreate;
-export const bookUpdateById = serverFunctions.bookUpdateById;
-export const bookDeleteById = serverFunctions.bookDeleteById;
-export type { BookServerFunctions } from './transport/tanstack/book-server-functions';
+const runMutation = createServerFunctionInvoker({
+  getDeps,
+  selectRunner: (deps) => deps.withProtectedMutation,
+});
+
+export const bookGetAll = createServerFn({ method: 'GET' })
+  .inputValidator(zGetAllInput())
+  .handler(async ({ data }) =>
+    runProtected(data, ({ handlers }, ctx, input) =>
+      handlers.getAll(ctx, input)
+    )
+  );
+
+export const bookGetById = createServerFn({ method: 'GET' })
+  .inputValidator(zGetByIdInput())
+  .handler(async ({ data }) =>
+    runProtected(data, ({ handlers }, ctx, input) =>
+      handlers.getById(ctx, input)
+    )
+  );
+
+export const bookCreate = createServerFn({ method: 'POST' })
+  .inputValidator(zFormFieldsBook())
+  .handler(async ({ data }) =>
+    runMutation(data, ({ handlers }, ctx, input) => handlers.create(ctx, input))
+  );
+
+export const bookUpdateById = createServerFn({ method: 'POST' })
+  .inputValidator(zUpdateByIdInput())
+  .handler(async ({ data }) =>
+    runMutation(data, ({ handlers }, ctx, input) =>
+      handlers.updateById(ctx, input)
+    )
+  );
+
+export const bookDeleteById = createServerFn({ method: 'POST' })
+  .inputValidator(zDeleteByIdInput())
+  .handler(async ({ data }) =>
+    runMutation(data, ({ handlers }, ctx, input) =>
+      handlers.deleteById(ctx, input)
+    )
+  );
+
+export type BookServerFunctions = {
+  bookGetAll: typeof bookGetAll;
+  bookGetById: typeof bookGetById;
+  bookCreate: typeof bookCreate;
+  bookUpdateById: typeof bookUpdateById;
+  bookDeleteById: typeof bookDeleteById;
+};

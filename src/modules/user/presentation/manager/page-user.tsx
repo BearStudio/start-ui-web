@@ -11,6 +11,7 @@ import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { useHydrated } from '@/platform/hooks/use-hydrated';
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
@@ -64,9 +65,12 @@ export const PageUser = (props: { params: { id: string } }) => {
   const session = useAuthSession();
   const { t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
-  const userQuery = useQuery(
-    userQueries.getById({ id: props.params.id, scopeKey })
-  );
+  const hydrated = useHydrated();
+  const canLoadUser = !import.meta.env.SSR && hydrated;
+  const userQuery = useQuery({
+    ...userQueries.getById({ id: props.params.id, scopeKey }),
+    enabled: canLoadUser,
+  });
 
   const deleteUserMutation = useMutation(userQueries.deleteById());
 
@@ -96,6 +100,7 @@ export const PageUser = (props: { params: { id: string } }) => {
   };
 
   const ui = getUiState((set) => {
+    if (!canLoadUser) return set('pending');
     if (userQuery.status === 'pending') return set('pending');
     if (
       userQuery.status === 'error' &&
@@ -245,15 +250,19 @@ export const PageUser = (props: { params: { id: string } }) => {
 const UserSessions = (props: { userId: string }) => {
   const { t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
-  const sessionsQuery = useInfiniteQuery(
-    userQueries.getUserSessionsInfinite({
+  const hydrated = useHydrated();
+  const canLoadSessions = !import.meta.env.SSR && hydrated;
+  const sessionsQuery = useInfiniteQuery({
+    ...userQueries.getUserSessionsInfinite({
       scopeKey,
       userId: props.userId,
       limit: 5,
-    })
-  );
+    }),
+    enabled: canLoadSessions,
+  });
 
   const ui = getUiState((set) => {
+    if (!canLoadSessions) return set('pending');
     if (sessionsQuery.status === 'pending') return set('pending');
     if (sessionsQuery.status === 'error') return set('error');
 

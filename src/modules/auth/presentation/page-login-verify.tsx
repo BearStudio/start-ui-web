@@ -5,6 +5,8 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { useHydrated } from '@/platform/hooks/use-hydrated';
+
 import {
   Form,
   FormField,
@@ -43,6 +45,7 @@ export default function PageLoginVerify({
   const session = useAuthSession();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const hydrated = useHydrated();
 
   const form = useAppForm({
     defaultValues: {
@@ -114,7 +117,12 @@ export default function PageLoginVerify({
   useMascot({ isError: isInvalidAfterSubmit });
 
   return (
-    <Form form={form} className="flex flex-col gap-4 pb-12">
+    <Form
+      form={form}
+      className="flex flex-col gap-4 pb-12"
+      data-hydrated={hydrated ? 'true' : 'false'}
+      data-testid="auth-login-verify-form"
+    >
       <div className="flex flex-col gap-1">
         <ButtonLink variant="link" to="/login">
           <ArrowLeftIcon />

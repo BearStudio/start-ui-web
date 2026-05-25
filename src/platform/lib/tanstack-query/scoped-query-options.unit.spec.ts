@@ -41,7 +41,6 @@ describe('scoped query option helpers', () => {
       'infinite',
       { searchTerm: 'dune' },
     ]);
-
     const entity = scopedEntityQueryOptions({
       baseKey: (scopeKey) => ['book', { scopeKey }, 'getById'] as const,
       input: { scopeKey: 'scope-a', id: 'book-1' },
