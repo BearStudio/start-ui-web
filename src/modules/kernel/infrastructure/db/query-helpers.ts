@@ -19,7 +19,7 @@ export const escapedIlikeFilter = (
   searchTerm: string
 ): SQL | undefined => {
   const term = searchTerm.trim();
-  if (!term) return undefined;
+  if (!term || columns.length === 0) return undefined;
 
   const filters = columns.map((column) =>
     ilike(column, escapedLikePattern(term))

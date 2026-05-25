@@ -34,7 +34,7 @@ export async function runServerFunctionHandler<
   TResult
 >): Promise<TResult> {
   const deps = await getDeps();
-  return selectRunner(deps)((ctx) => Promise.resolve(handler(deps, ctx, data)));
+  return selectRunner(deps)(async (ctx) => handler(deps, ctx, data));
 }
 
 export function createServerFunctionInvoker<TDeps, TContext>(
