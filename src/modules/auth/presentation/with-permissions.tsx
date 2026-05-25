@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Permission, Role } from '@/modules/auth';
+import { Permission } from '@/modules/auth';
 
 import { checkRolePermission, useAuthSession } from './client';
 
@@ -22,7 +22,7 @@ export const WithPermissions = (props: {
     props.permissions.every(
       (permissions) =>
         !checkRolePermission({
-          role: userRole as Role,
+          role: userRole,
           permissions,
         })
     )

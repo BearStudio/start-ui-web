@@ -11,6 +11,7 @@ import { envClient } from '@/platform/env/client';
 
 import {
   hasRolePermission,
+  parseRole,
   type Permission,
   permissionStatements,
   type Role,
@@ -63,6 +64,9 @@ export const signInEmailOtp = (
   input: Parameters<typeof betterAuthClient.signIn.emailOtp>[0]
 ) => betterAuthClient.signIn.emailOtp(input);
 export const checkRolePermission = (input: {
-  role: Role;
+  role: Role | string | null | undefined;
   permissions: Permission;
-}) => hasRolePermission(input.role, input.permissions);
+}) => {
+  const role = parseRole(input.role);
+  return role ? hasRolePermission(role, input.permissions) : false;
+};

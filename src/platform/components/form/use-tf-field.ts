@@ -16,7 +16,6 @@ export type TfFieldAdapter<TValue> = {
     value: TValue | undefined;
     onChange: (value: TValue) => void;
     onBlur: () => void;
-    disabled?: boolean;
   };
   fieldState: {
     invalid: boolean;
@@ -38,7 +37,6 @@ export const useTfField = <TValue>(): TfFieldAdapter<TValue> => {
       value: tf.state.value as TValue | undefined,
       onChange: (value: TValue) => tf.handleChange(value as never),
       onBlur: () => tf.handleBlur(),
-      disabled: (tf.options as { disabled?: boolean } | undefined)?.disabled,
     },
     fieldState: { invalid, errors },
     formState: { isSubmitted: tf.form.state.isSubmitted },

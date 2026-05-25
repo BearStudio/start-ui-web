@@ -46,7 +46,7 @@ export const FieldOtp = (
         }}
         {...rest}
         value={field.value ?? ''}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         onChange={(value) => {
           field.onChange(value);
           rest.onChange?.(value);

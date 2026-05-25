@@ -33,7 +33,7 @@ export const FieldUploadInput = (
     <FormFieldContainer {...containerProps}>
       <UploadInput
         {...rest}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         defaultValue={
           value
             ? { name: value.split('/').at(-1) ?? value, url: value }

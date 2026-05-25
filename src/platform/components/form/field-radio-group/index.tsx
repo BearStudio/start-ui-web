@@ -37,7 +37,7 @@ export const FieldRadioGroup = (
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         value={field.value ?? ''}
         onValueChange={(value, event) => {
-          field.onChange(value as string);
+          field.onChange(value);
           rest.onValueChange?.(value, event);
         }}
       >

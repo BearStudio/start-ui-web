@@ -59,13 +59,14 @@ export default function PageLoginVerify({
           : undefined;
         const providerMessage =
           typeof error.message === 'string' ? error.message : undefined;
-        const translatedErrorMessage = error.code
-          ? i18n.getResource(i18n.language, 'auth', `errorCode.${error.code}`)
-          : undefined;
+        const translatedErrorMessage =
+          errorKey && i18n.exists(errorKey)
+            ? i18n.t(errorKey, { defaultValue: '' })
+            : undefined;
         toast.error(
-          errorKey && typeof translatedErrorMessage === 'string'
-            ? translatedErrorMessage
-            : providerMessage || t('auth:errorCode.UNKNOWN_ERROR')
+          translatedErrorMessage ||
+            providerMessage ||
+            t('auth:errorCode.UNKNOWN_ERROR')
         );
         formApi.setFieldMeta('otp', (prev) => ({
           ...prev,

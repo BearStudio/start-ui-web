@@ -27,7 +27,7 @@ export const FieldCheckbox = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         checked={field.value ?? false}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         onCheckedChange={(checked, event) => {
           field.onChange(Boolean(checked));
           rest.onCheckedChange?.(checked, event);
