@@ -62,6 +62,44 @@ rules:
         ...
       })
 
+  - id: pglite-test-database-created-in-beforeall
+    message: Create PGlite integration test databases inside beforeAll so setup failures are reported by Vitest.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - src/modules/**/__tests__/*.integration.test.ts
+    patterns:
+      - pattern-inside: |
+          describe(..., () => {
+            ...
+          })
+      - pattern: createPgliteTestDatabase(...)
+      - pattern-not-inside: |
+          beforeAll(async () => {
+            ...
+          })
+      - pattern-not-inside: |
+          beforeAll(() => {
+            ...
+          })
+
+  - id: pglite-afterall-close-preserve-setup-error
+    message: Use optional chaining when closing PGlite integration test databases in afterAll so cleanup does not mask setup failures.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - src/modules/**/__tests__/*.integration.test.ts
+    patterns:
+      - pattern-inside: |
+          afterAll(async () => {
+            ...
+          })
+      - pattern-regex: '\bawait\s+[A-Za-z_$][A-Za-z0-9_$]*\.close\(\)'
+
   - id: no-user-update-email-autoverify
     message: User update handlers must not automatically mark changed emails as verified.
     severity: ERROR

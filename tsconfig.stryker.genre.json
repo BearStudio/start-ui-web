@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/modules/genre/domain/**/*.ts",
+    "src/modules/genre/application/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/index.ts",
+    "src/modules/genre/application/ports/**/*.ts",
+    "**/types.ts"
+  ]
+}
