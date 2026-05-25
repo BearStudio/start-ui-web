@@ -71,6 +71,19 @@ export default defineConfig({
           alias: testAliases,
         },
       },
+      {
+        test: {
+          name: 'integration',
+          environment: 'node',
+          include: ['src/**/*.integration.test.?(c|m)[jt]s?(x)'],
+          fileParallelism: false,
+          globalSetup: resolve('src/tests/server/pglite-global-setup.ts'),
+          setupFiles: [resolve('src/tests/setup.base.ts')],
+        },
+        resolve: {
+          alias: testAliases,
+        },
+      },
     ],
   },
 });

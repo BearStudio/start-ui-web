@@ -1,29 +1,57 @@
-import { PGlite } from '@electric-sql/pglite';
-import { drizzle } from 'drizzle-orm/pglite';
-import { readdir, readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { inject } from 'vitest';
 
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
-import * as schema from '@/modules/kernel/infrastructure/db/schema';
+import {
+  createDbClient,
+  type Database,
+} from '@/modules/kernel/infrastructure/db/client';
 
-export async function createPgliteTestDb() {
-  const client = new PGlite();
-  const migrationsDir = path.resolve(process.cwd(), 'drizzle/migrations');
-  const migrationFiles = (await readdir(migrationsDir))
-    .filter((file) => file.endsWith('.sql'))
-    .sort();
+import { pgliteTestDatabaseUrlContextKey } from './pglite-context';
 
-  // Keep test migrations in drizzle/migrations; use drizzle-kit push to keep tests current.
-  for (const migrationFile of migrationFiles) {
-    const migration = await readFile(
-      path.join(migrationsDir, migrationFile),
-      'utf8'
+type TableRow = {
+  schemaname: string;
+  tablename: string;
+};
+
+const quoteIdentifier = (value: string) => `"${value.replaceAll('"', '""')}"`;
+
+const getPublicTableNames = async (db: Database) => {
+  const result = await db.$client.query<TableRow>(
+    "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename"
+  );
+
+  return result.rows.map(
+    ({ schemaname, tablename }) =>
+      `${quoteIdentifier(schemaname)}.${quoteIdentifier(tablename)}`
+  );
+};
+
+const truncateDatabase = async (db: Database) => {
+  const tableNames = await getPublicTableNames(db);
+  if (tableNames.length === 0) return;
+
+  await db.$client.query(
+    `TRUNCATE TABLE ${tableNames.join(', ')} RESTART IDENTITY CASCADE`
+  );
+};
+
+export async function createPgliteTestDatabase(options?: {
+  databaseUrl?: string;
+}) {
+  const databaseUrl =
+    options?.databaseUrl ?? inject(pgliteTestDatabaseUrlContextKey);
+
+  if (!databaseUrl) {
+    throw new Error(
+      'PGlite test database URL was not provided. Use the integration Vitest project.'
     );
-    await client.exec(migration.replaceAll('--> statement-breakpoint', ''));
   }
 
+  const db = createDbClient({ url: databaseUrl });
+
   return {
-    client,
-    db: drizzle(client, { schema, casing: 'camelCase' }) as unknown as Database,
+    db,
+    truncate: () => truncateDatabase(db),
+    reset: () => truncateDatabase(db),
+    close: () => db.$client.end(),
   };
 }
