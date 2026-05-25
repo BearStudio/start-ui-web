@@ -11,6 +11,7 @@ import { PreventNavigation } from '@/platform/components/prevent-navigation';
 import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   ManagerPageLayout as PageLayout,
@@ -30,13 +31,14 @@ export const PageUserNew = () => {
   const { t } = useTranslation(['user']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
+  const scopeKey = useCurrentScopeKey();
 
   const userCreate = useMutation({
     ...userQueries.create(),
     onSuccess: async () => {
       // Invalidate Users list
       await queryClient.invalidateQueries({
-        queryKey: userQueries.getAll(),
+        queryKey: userQueries.getAll(scopeKey),
         type: 'all',
       });
 

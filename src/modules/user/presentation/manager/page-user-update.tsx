@@ -1,6 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -14,7 +15,11 @@ import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
 import { Skeleton } from '@/platform/components/ui/skeleton';
 
-import { useAuthSession } from '@/modules/auth/client';
+import {
+  authQueries,
+  useAuthSession,
+  useCurrentScopeKey,
+} from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   ManagerPageLayout as PageLayout,
@@ -35,23 +40,32 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   const { navigateBack } = useNavigateBack();
   const session = useAuthSession();
   const queryClient = useQueryClient();
-  const userQuery = useQuery(userQueries.getById({ id: props.params.id }));
+  const router = useRouter();
+  const scopeKey = useCurrentScopeKey();
+  const userQuery = useQuery(
+    userQueries.getById({ id: props.params.id, scopeKey })
+  );
   const userUpdate = useMutation({
     ...userQueries.updateById(),
     onSuccess: async (data) => {
       // Update session if user is the connected user
       if (data.id === session.data?.user.id) {
-        session.refetch();
+        await session.refetch();
+        await queryClient.invalidateQueries({
+          queryKey: authQueries.currentSession().queryKey,
+        });
+        await router.invalidate();
       }
 
       await Promise.all([
         // Invalidate User
         queryClient.invalidateQueries({
-          queryKey: userQueries.getById({ id: props.params.id }).queryKey,
+          queryKey: userQueries.getById({ id: props.params.id, scopeKey })
+            .queryKey,
         }),
         // Invalidate Users list
         queryClient.invalidateQueries({
-          queryKey: userQueries.getAll(),
+          queryKey: userQueries.getAll(scopeKey),
           type: 'all',
         }),
       ]);

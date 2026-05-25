@@ -1,11 +1,13 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { userEvent } from 'vitest/browser';
 import { ComponentRenderOptions, render } from 'vitest-browser-react';
 
+import { createClientQueryClient } from '@/composition/client-query';
 import { Providers } from '@/composition/providers';
 
 const WithProviders = ({ children }: { children: React.ReactNode }) => {
-  return <Providers>{children}</Providers>;
+  const [client] = useState(() => createClientQueryClient());
+  return <Providers client={client}>{children}</Providers>;
 };
 
 const customRender = (

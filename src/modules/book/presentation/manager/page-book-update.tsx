@@ -13,6 +13,7 @@ import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
 import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import {
   FormBook,
   formBookDefaultValues,
@@ -33,7 +34,10 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
-  const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
+  const scopeKey = useCurrentScopeKey();
+  const bookQuery = useQuery(
+    bookQueries.getById({ id: props.params.id, scopeKey })
+  );
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
@@ -43,11 +47,12 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
       await Promise.all([
         // Invalidate book entry
         queryClient.invalidateQueries({
-          queryKey: bookQueries.getById({ id: props.params.id }).queryKey,
+          queryKey: bookQueries.getById({ id: props.params.id, scopeKey })
+            .queryKey,
         }),
         // Invalidate books list
         queryClient.invalidateQueries({
-          queryKey: bookQueries.getAll(),
+          queryKey: bookQueries.getAll(scopeKey),
           type: 'all',
         }),
       ]);

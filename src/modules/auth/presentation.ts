@@ -1,4 +1,3 @@
-export { beforeLoadAuthenticated } from './presentation/before-load-authenticated';
 export { LayoutLogin } from './presentation/layout-login';
 export { default as PageLogin } from './presentation/page-login';
 export { default as PageLoginError } from './presentation/page-login-error';
@@ -8,5 +7,13 @@ export { PageOnboarding } from './presentation/page-onboarding';
 export {
   internalRedirectFromLocation,
   normalizeInternalRedirect,
+  parseSafeRedirectPath,
   resolvePostAuthDestination,
 } from './presentation/redirects';
+export {
+  ForbiddenRouteError,
+  isForbiddenRouteError,
+  redirectAuthenticatedRoute,
+  requireAuthenticatedRoute,
+  requireOnboardingRoute,
+} from './presentation/route-guards';

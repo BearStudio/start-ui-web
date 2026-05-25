@@ -161,7 +161,7 @@ module.exports = {
       name: 'legacy-server-entrypoints-removed',
       severity: 'error',
       from: {},
-      to: { path: '^src/server' },
+      to: { path: '^src/server/' },
     },
     {
       name: 'drizzle-confined-to-infrastructure',

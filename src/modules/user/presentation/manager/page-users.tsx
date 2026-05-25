@@ -28,6 +28,7 @@ import { ResponsiveIconButtonLink } from '@/platform/components/ui/responsive-ic
 import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import {
   ManagerPageLayout as PageLayout,
   ManagerPageLayoutContent as PageLayoutContent,
@@ -40,6 +41,7 @@ import { userQueries } from '../queries';
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);
   const router = useRouter();
+  const scopeKey = useCurrentScopeKey();
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -52,7 +54,10 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   };
 
   const usersQuery = useInfiniteQuery(
-    userQueries.getAllInfinite({ searchTerm: props.search.searchTerm })
+    userQueries.getAllInfinite({
+      scopeKey,
+      searchTerm: props.search.searchTerm,
+    })
   );
 
   const ui = getUiState((set) => {

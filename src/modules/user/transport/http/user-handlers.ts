@@ -85,7 +85,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .list({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         cursor: data.cursor ? toUserId(data.cursor) : undefined,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
@@ -101,7 +101,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .get({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toUserId(data.id),
       })
       .catch(mapAppErrorToServerFnError);
@@ -115,7 +115,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .update({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toUserId(data.id),
         user: {
           name: data.name,
@@ -134,7 +134,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .create({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         user: {
           name: data.name,
           email: toEmailAddress(data.email),
@@ -152,7 +152,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .delete({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toUserId(data.id),
       })
       .catch(mapAppErrorToServerFnError);
@@ -168,7 +168,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .listSessions({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         userId: toUserId(data.userId),
         cursor: data.cursor ? toSessionId(data.cursor) : undefined,
         limit: data.limit,
@@ -184,7 +184,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .revokeSessions({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toUserId(data.id),
       })
       .catch(mapAppErrorToServerFnError);
@@ -200,7 +200,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .revokeSession({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         currentSessionId: toSessionId(ctx.session.id),
         id: toUserId(data.id),
         sessionId: toSessionId(data.sessionId),

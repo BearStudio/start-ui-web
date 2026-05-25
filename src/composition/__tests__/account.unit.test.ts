@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { AccountRepository } from '@/modules/account';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel } from './helpers';
 import { __resetAccountComposition, getAccountUseCases } from '../account';
@@ -13,6 +12,9 @@ const makeAccountRepository = (
   updateInfo: async (userId) => ({ id: userId }),
   ...overrides,
 });
+
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
 
 describe('account composition', () => {
   beforeEach(() => {
@@ -46,11 +48,11 @@ describe('account composition', () => {
 
     await expect(
       useCases.updateInfo({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         name: 'Updated User',
       })
-    ).resolves.toMatchObject({ ok: true, value: { id: toUserId('user-1') } });
-    expect(updateInfo).toHaveBeenCalledWith(toUserId('user-1'), {
+    ).resolves.toMatchObject({ ok: true, value: { id: 'user-1' } });
+    expect(updateInfo).toHaveBeenCalledWith('user-1', {
       name: 'Updated User',
     });
   });

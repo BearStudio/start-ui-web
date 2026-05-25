@@ -5,7 +5,9 @@ import { AppPageBooks as PageBooks } from '@/modules/book/presentation';
 
 export const Route = createFileRoute('/app/books/')({
   loader: ({ context }) =>
-    context.queryClient.ensureInfiniteQueryData(bookQueries.getAllInfinite()),
+    context.queryClient.ensureInfiniteQueryData(
+      bookQueries.getAllInfinite({ scopeKey: context.scopeKey })
+    ),
   component: RouteComponent,
 });
 

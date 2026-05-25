@@ -8,6 +8,7 @@ import {
 } from '@/platform/lib/i18n/constants';
 import i18nGlobal from '@/platform/lib/i18n/index';
 
+import { createClientQueryClient } from '@/composition/client-query';
 import { Providers } from '@/composition/providers';
 
 type CosmosFixtureOptions = {
@@ -19,6 +20,8 @@ type CosmosDecoratorProps = {
   children: ReactNode;
   options?: CosmosFixtureOptions;
 };
+
+const queryClient = createClientQueryClient();
 
 export default function CosmosDecorator({
   children,
@@ -41,7 +44,7 @@ export default function CosmosDecorator({
   }, [locale]);
 
   return (
-    <Providers forcedTheme={options?.theme ?? 'light'}>
+    <Providers client={queryClient} forcedTheme={options?.theme ?? 'light'}>
       <StrictMode>
         <div id="preview-container">{children}</div>
       </StrictMode>

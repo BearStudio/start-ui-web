@@ -22,7 +22,7 @@ export type RouterContext = {
    * a single navigation.
    */
   auth: {
-    getSession: () => Promise<AuthSessionLike | null>;
+    getSession: () => Promise<CurrentSessionLike | null>;
   };
   /** Telemetry/error reporting (Sentry-backed in production). */
   telemetry: TelemetryAdapter;
@@ -33,19 +33,28 @@ export type RouterContext = {
 };
 
 /**
- * Minimum shape `beforeLoad` needs from the session. Kept local to avoid a
- * cross-module type import in the platform package — the auth module's
- * `AuthSession` is structurally compatible.
+ * Minimum shape routes need from the sanitized browser current-session query.
+ * Kept local to avoid a cross-module type import in the platform package.
  */
-export type AuthSessionLike = {
+export type CurrentSessionLike = {
   user: {
     id: string;
     email: string;
-    name: string | null;
-    role?: string | null;
-    onboardedAt: Date | string | null;
+    name?: string | null;
+    image?: string | null;
+    role: string;
+    onboardedAt?: Date | string | null;
   };
   session: {
     id: string;
+    expiresAt?: Date | string;
   };
+  scope: {
+    userId: string;
+    role: string;
+    tenantId: null;
+  };
+  scopeKey: string;
 };
+
+export type AuthSessionLike = CurrentSessionLike;

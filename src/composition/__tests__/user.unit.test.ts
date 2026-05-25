@@ -59,6 +59,9 @@ const makeUserAuthGateway = (
   ...overrides,
 });
 
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
+
 describe('user composition', () => {
   beforeEach(() => {
     __resetUserComposition();
@@ -93,7 +96,7 @@ describe('user composition', () => {
 
     await expect(
       useCases.list({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         limit: 20,
         searchTerm: 'user',
       })

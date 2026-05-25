@@ -1,4 +1,5 @@
 import babel from '@rolldown/plugin-babel';
+import { sentryTanstackStart } from '@sentry/tanstackstart-react/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
@@ -68,6 +69,19 @@ function srcJsonImportPlugin(): Plugin {
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const privateEnv = loadEnv(mode, process.cwd(), '');
+  const sentryPlugins =
+    env.VITE_SENTRY_DSN &&
+    privateEnv.SENTRY_ORG &&
+    privateEnv.SENTRY_PROJECT &&
+    privateEnv.SENTRY_AUTH_TOKEN
+      ? sentryTanstackStart({
+          org: privateEnv.SENTRY_ORG,
+          project: privateEnv.SENTRY_PROJECT,
+          authToken: privateEnv.SENTRY_AUTH_TOKEN,
+        })
+      : [];
+
   return {
     server: {
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
@@ -84,6 +98,7 @@ export default defineConfig(({ mode }) => {
       // react's vite plugin must come after start's vite plugin
       viteReact(),
       babel({ presets: [reactCompilerPreset()] }),
+      ...sentryPlugins,
     ],
   };
 });

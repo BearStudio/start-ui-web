@@ -17,6 +17,7 @@ export type SentryLike = {
   setUser: (
     user: { id: string; email?: string; segment?: string } | null
   ) => void;
+  setTag?: (key: string, value: string) => void;
   startSpan: <T>(
     options: {
       name: string;
@@ -46,6 +47,8 @@ export const createSentryTelemetryAdapter = (
       email: user.email ?? undefined,
       segment: user.role ?? undefined,
     });
+    if (user.role) Sentry.setTag?.('role', user.role);
+    Sentry.setTag?.('tenantId', user.tenantId ?? 'none');
   },
   startSpan: (options, fn) =>
     Sentry.startSpan(

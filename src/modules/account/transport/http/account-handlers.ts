@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 import type { AccountUseCases } from '@/modules/account';
 import type { ProtectedContext } from '@/modules/auth/server';
-import { toUserId } from '@/modules/kernel/domain/ids';
 import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zSubmitOnboardingInput = () =>
@@ -20,7 +19,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
     data: z.infer<ReturnType<typeof zSubmitOnboardingInput>>
   ) => {
     const result = await getUseCases(ctx).submitOnboarding({
-      currentUserId: toUserId(ctx.user.id),
+      scope: ctx.scope,
       name: data.name,
     });
     if (!result.ok) {
@@ -36,7 +35,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
     data: z.infer<ReturnType<typeof zUpdateInfoInput>>
   ) => {
     const result = await getUseCases(ctx).updateInfo({
-      currentUserId: toUserId(ctx.user.id),
+      scope: ctx.scope,
       name: data.name,
     });
     if (!result.ok) {

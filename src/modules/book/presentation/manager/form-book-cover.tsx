@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { withForm } from '@/platform/components/form';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import { BookCover } from '@/modules/book/presentation/book-cover';
 import { formBookDefaultValues } from '@/modules/book/presentation/manager/form-book';
 import { genreQueries } from '@/modules/genre/client';
@@ -13,7 +14,8 @@ import { genreQueries } from '@/modules/genre/client';
 export const FormBookCover = withForm({
   defaultValues: formBookDefaultValues(),
   render: ({ form }) => {
-    const genresQuery = useQuery(genreQueries.getAllList());
+    const scopeKey = useCurrentScopeKey();
+    const genresQuery = useQuery(genreQueries.getAllList({ scopeKey }));
     return (
       <form.Subscribe
         selector={(s) => ({

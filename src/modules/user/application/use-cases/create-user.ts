@@ -1,11 +1,12 @@
+import type { RequestScope } from '@/modules/auth';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import type { UserId } from '@/modules/kernel/domain/ids';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { UseCaseResult, UserUseCaseDeps } from './types';
 import type { User, UserCreateInput } from '../../domain/user';
 
 export type CreateUserInput = {
-  currentUserId: UserId;
+  scope: RequestScope;
   user: UserCreateInput;
 };
 
@@ -13,12 +14,10 @@ export async function createUser(
   deps: UserUseCaseDeps,
   input: CreateUserInput
 ): Promise<UseCaseResult<User, 'forbidden' | 'duplicate'>> {
-  const allowed = await deps.permissionChecker.hasPermission(
-    input.currentUserId,
-    {
-      user: ['create'],
-    }
-  );
+  const currentUserId = toUserId(input.scope.userId);
+  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
+    user: ['create'],
+  });
   if (!allowed) return { ok: false, reason: 'forbidden' };
 
   try {

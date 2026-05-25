@@ -32,11 +32,12 @@ export default function PageLogin({
 }) {
   const { i18n, t } = useTranslation(['auth', 'common']);
   const router = useRouter();
+  const safeRedirect = normalizeInternalRedirect(search.redirect);
   const social = useMutation({
     mutationFn: async (
       provider: Parameters<typeof signInSocial>[0]['provider']
     ) => {
-      const callbackURL = normalizeInternalRedirect(search.redirect) ?? '/';
+      const callbackURL = safeRedirect ?? '/';
       let response;
       try {
         response = await signInSocial({
@@ -104,7 +105,7 @@ export default function PageLogin({
         replace: true,
         to: '/login/verify',
         search: {
-          redirect: search.redirect,
+          redirect: safeRedirect,
           email,
         },
       });

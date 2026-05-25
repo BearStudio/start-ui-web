@@ -43,8 +43,11 @@ import { ResponsiveIconButton } from '@/platform/components/ui/responsive-icon-b
 import { Skeleton } from '@/platform/components/ui/skeleton';
 import { Spinner } from '@/platform/components/ui/spinner';
 
-import { WithPermissions } from '@/modules/auth/client';
-import { useAuthSession } from '@/modules/auth/client';
+import {
+  useAuthSession,
+  useCurrentScopeKey,
+  WithPermissions,
+} from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   ManagerPageLayout as PageLayout,
@@ -60,7 +63,10 @@ export const PageUser = (props: { params: { id: string } }) => {
   const { navigateBack } = useNavigateBack();
   const session = useAuthSession();
   const { t } = useTranslation(['user']);
-  const userQuery = useQuery(userQueries.getById({ id: props.params.id }));
+  const scopeKey = useCurrentScopeKey();
+  const userQuery = useQuery(
+    userQueries.getById({ id: props.params.id, scopeKey })
+  );
 
   const deleteUserMutation = useMutation(userQueries.deleteById());
 
@@ -70,12 +76,13 @@ export const PageUser = (props: { params: { id: string } }) => {
       await Promise.all([
         // Invalidate users list
         queryClient.invalidateQueries({
-          queryKey: userQueries.getAll(),
+          queryKey: userQueries.getAll(scopeKey),
           type: 'all',
         }),
         // Remove user from cache
         queryClient.removeQueries({
-          queryKey: userQueries.getById({ id: props.params.id }).queryKey,
+          queryKey: userQueries.getById({ id: props.params.id, scopeKey })
+            .queryKey,
         }),
       ]);
 
@@ -237,8 +244,10 @@ export const PageUser = (props: { params: { id: string } }) => {
 
 const UserSessions = (props: { userId: string }) => {
   const { t } = useTranslation(['user']);
+  const scopeKey = useCurrentScopeKey();
   const sessionsQuery = useInfiniteQuery(
     userQueries.getUserSessionsInfinite({
+      scopeKey,
       userId: props.userId,
       limit: 5,
     })
@@ -351,12 +360,13 @@ const UserSessions = (props: { userId: string }) => {
 const RevokeAllSessionsButton = (props: { userId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = useAuthSession();
+  const scopeKey = useCurrentScopeKey();
   const { t } = useTranslation(['user']);
   const revokeAllSessions = useMutation({
     ...userQueries.revokeUserSessions(),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: userQueries.getUserSessions(),
+        queryKey: userQueries.getUserSessions(scopeKey),
       });
     },
     onError: () => {
@@ -384,12 +394,13 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
 const RevokeSessionButton = (props: { userId: string; sessionId: string }) => {
   const queryClient = useQueryClient();
   const currentSession = useAuthSession();
+  const scopeKey = useCurrentScopeKey();
   const { t } = useTranslation(['user']);
   const revokeSession = useMutation({
     ...userQueries.revokeUserSession(),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: userQueries.getUserSessions(),
+        queryKey: userQueries.getUserSessions(scopeKey),
       });
     },
     onError: () => {

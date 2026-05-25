@@ -9,6 +9,7 @@ const handleDemoModeError = (error: unknown) => {
   }
 };
 
-export const queryClient = createAppQueryClient({
-  onError: handleDemoModeError,
-});
+export const createClientQueryClient = () =>
+  createAppQueryClient({
+    onError: handleDemoModeError,
+  });

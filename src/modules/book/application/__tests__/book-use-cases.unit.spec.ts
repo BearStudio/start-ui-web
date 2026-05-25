@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 
 import type { BookRepository } from '../ports/book-repository';
 import type { Book } from '../../domain/book';
@@ -35,6 +35,8 @@ const forbidden: PermissionChecker = {
   hasPermission: async () => false,
 };
 
+const scope = { userId: 'user-1', role: 'user', tenantId: null } as const;
+
 function makeRepo(overrides: Partial<BookRepository> = {}): BookRepository {
   return {
     list: async () => ({ items: [book], total: 1 }),
@@ -53,7 +55,7 @@ describe('book use cases', () => {
         bookRepository: makeRepo(),
         permissionChecker: allowed,
         logger,
-      }).list({ currentUserId: toUserId('user-1'), limit: 20, searchTerm: '' })
+      }).list({ scope, limit: 20, searchTerm: '' })
     ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
 
     await expect(
@@ -61,7 +63,7 @@ describe('book use cases', () => {
         bookRepository: makeRepo(),
         permissionChecker: forbidden,
         logger,
-      }).list({ currentUserId: toUserId('user-1'), limit: 20, searchTerm: '' })
+      }).list({ scope, limit: 20, searchTerm: '' })
     ).resolves.toEqual({ ok: false, reason: 'forbidden' });
   });
 
@@ -71,7 +73,7 @@ describe('book use cases', () => {
         bookRepository: makeRepo({ getById: async () => null }),
         permissionChecker: allowed,
         logger,
-      }).get({ currentUserId: toUserId('user-1'), id: toBookId('missing') })
+      }).get({ scope, id: toBookId('missing') })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
   });
 
@@ -91,7 +93,7 @@ describe('book use cases', () => {
         bookRepository: makeRepo(),
         permissionChecker: allowed,
         logger,
-      }).create({ currentUserId: toUserId('user-1'), book })
+      }).create({ scope, book })
     ).resolves.toMatchObject({ ok: true });
 
     await expect(
@@ -99,7 +101,7 @@ describe('book use cases', () => {
         bookRepository: duplicateRepo,
         permissionChecker: allowed,
         logger,
-      }).create({ currentUserId: toUserId('user-1'), book })
+      }).create({ scope, book })
     ).resolves.toEqual({ ok: false, reason: 'duplicate' });
   });
 
@@ -115,14 +117,14 @@ describe('book use cases', () => {
 
     await expect(
       useCases.update({
-        currentUserId: toUserId('user-1'),
+        scope,
         id: toBookId('missing'),
         book,
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
     await expect(
       useCases.delete({
-        currentUserId: toUserId('user-1'),
+        scope,
         id: toBookId('missing'),
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });

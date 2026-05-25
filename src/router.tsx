@@ -1,8 +1,8 @@
 import { createRouter } from '@tanstack/react-router';
 
-import { queryClient } from '@/composition/client-query';
-import { fetchSession } from '@/composition/session';
+import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
+import { authQueries } from '@/modules/auth/client';
 import { createNoOpFlags } from '@/platform/flags';
 import type { RouterContext } from '@/platform/router/context';
 
@@ -17,32 +17,29 @@ if (import.meta.env.SSR) {
     .then(({ initTelemetryServer }) => initTelemetryServer())
     .catch(() => {});
 } else {
-  import('@/composition/telemetry/sentry.client')
-    .then(({ initTelemetryClient }) => initTelemetryClient())
-    .catch(() => {});
+  // Client telemetry needs the concrete router instance for Start router
+  // tracing, so it is initialized inside getRouter().
 }
 
 const flags = createNoOpFlags();
 
-const routerContext: RouterContext = {
-  queryClient,
-  // Cached per navigation via the shared query cache so multiple route
-  // beforeLoad calls in a single navigation share a single session fetch.
-  auth: {
-    getSession: () =>
-      queryClient.ensureQueryData({
-        queryKey: ['session'],
-        queryFn: () => fetchSession(),
-        staleTime: 0,
-      }),
-  },
-  telemetry: telemetryProxy,
-  flags,
-  tenant: null,
-};
-
 export function getRouter() {
-  return createRouter({
+  const queryClient = createClientQueryClient();
+  const routerContext: RouterContext = {
+    queryClient,
+    // Cached per router/query client so concurrent route guards within a
+    // navigation share the sanitized current-session fetch without sharing
+    // cache state across SSR requests or router instances.
+    auth: {
+      getSession: () =>
+        queryClient.ensureQueryData(authQueries.currentSession()),
+    },
+    telemetry: telemetryProxy,
+    flags,
+    tenant: null,
+  };
+
+  const router = createRouter({
     context: routerContext,
     defaultPreload: 'intent',
     // Since we're using React Query, we don't want loader calls to ever be stale
@@ -51,4 +48,12 @@ export function getRouter() {
     scrollRestoration: true,
     routeTree,
   });
+
+  if (!import.meta.env.SSR) {
+    import('@/composition/telemetry/sentry.client')
+      .then(({ initTelemetryClient }) => initTelemetryClient(router))
+      .catch(() => {});
+  }
+
+  return router;
 }

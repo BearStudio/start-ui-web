@@ -21,42 +21,58 @@ type GetAllInput = {
   limit?: number;
 };
 
+export type ScopedQueryInput = {
+  scopeKey: string;
+};
+
 export const userQueries = {
   all: () => ['user'] as const,
-  getAll: () => [...userQueries.all(), 'getAll'] as const,
-  getAllList: (input?: GetAllInput) =>
-    queryOptions({
-      queryKey: [...userQueries.getAll(), input ?? {}] as const,
-      queryFn: () => userGetAll({ data: input }),
-    }),
-  getAllInfinite: (input?: Omit<GetAllInput, 'cursor'>) =>
-    infiniteQueryOptions({
-      queryKey: [...userQueries.getAll(), 'infinite', input ?? {}] as const,
+  getAll: (scopeKey: string) =>
+    [...userQueries.all(), { scopeKey }, 'getAll'] as const,
+  getAllList: (input: GetAllInput & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return queryOptions({
+      queryKey: [...userQueries.getAll(scopeKey), data] as const,
+      queryFn: () => userGetAll({ data }),
+    });
+  },
+  getAllInfinite: (input: Omit<GetAllInput, 'cursor'> & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return infiniteQueryOptions({
+      queryKey: [...userQueries.getAll(scopeKey), 'infinite', data] as const,
       queryFn: ({ pageParam }) =>
         userGetAll({
-          data: { ...input, cursor: pageParam },
+          data: { ...data, cursor: pageParam },
         }),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       maxPages: 10,
-    }),
-  getById: (input: { id: string }) =>
-    queryOptions({
-      queryKey: [...userQueries.all(), 'getById', input] as const,
-      queryFn: () => userGetById({ data: input }),
-    }),
-  getUserSessions: () => ['user', 'getUserSessions'] as const,
-  getUserSessionsInfinite: (input: { userId: string; limit?: number }) =>
-    infiniteQueryOptions({
-      queryKey: [...userQueries.getUserSessions(), 'infinite', input] as const,
+    });
+  },
+  getById: (input: { id: string } & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return queryOptions({
+      queryKey: [...userQueries.all(), { scopeKey }, 'getById', data] as const,
+      queryFn: () => userGetById({ data }),
+    });
+  },
+  getUserSessions: (scopeKey: string) =>
+    ['user', { scopeKey }, 'getUserSessions'] as const,
+  getUserSessionsInfinite: (
+    input: { userId: string; limit?: number } & ScopedQueryInput
+  ) => {
+    const { scopeKey, ...data } = input;
+    return infiniteQueryOptions({
+      queryKey: [...userQueries.getUserSessions(scopeKey), 'infinite', data],
       queryFn: ({ pageParam }) =>
         userGetUserSessions({
-          data: { ...input, cursor: pageParam, limit: input.limit ?? 20 },
+          data: { ...data, cursor: pageParam, limit: data.limit ?? 20 },
         }),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       maxPages: 10,
-    }),
+    });
+  },
   create: (): MutationOptions<
     Awaited<ReturnType<typeof userCreate>>,
     Error,

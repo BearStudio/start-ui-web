@@ -13,6 +13,11 @@ export {
   AUTH_SIGNUP_ENABLED,
 } from './presentation/config';
 export { ConfirmSignOut } from './presentation/confirm-signout';
+export {
+  authQueries,
+  useCurrentScopeKey,
+  useCurrentSessionQuery,
+} from './presentation/queries';
 export type {
   FormFieldsLogin,
   FormFieldsLoginVerify,

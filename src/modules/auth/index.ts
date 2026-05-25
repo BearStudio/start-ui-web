@@ -26,6 +26,14 @@ export {
   rolesNames,
   zRole,
 } from './domain/permissions';
+export {
+  type CurrentSession,
+  type RequestScope,
+  sanitizeCurrentSession,
+  scopeFromUser,
+  scopeKeyFromScope,
+  scopeKeyFromSession,
+} from './domain/request-scope';
 export type {
   AuthenticatedSession,
   AuthenticatedUser,

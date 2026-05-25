@@ -10,11 +10,16 @@ import type {
   AuthenticatedUser,
   AuthUseCases,
   Permission,
+  RequestScope,
 } from '@/modules/auth';
+import { scopeFromUser } from '@/modules/auth';
 import { logger } from '@/modules/kernel/infrastructure/logger/pino';
 import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/server';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
 import { envClient } from '@/platform/env/client';
+import { cachePrivateNoStore } from '@/platform/http/cache-control';
+import type { TelemetryAdapter } from '@/platform/telemetry';
+import { createNoOpTelemetry } from '@/platform/telemetry';
 
 type ServerTimingEntry = { name: string; durationMs: number };
 
@@ -27,16 +32,22 @@ export type ProcedureLogger = {
 export type ProtectedContext = {
   user: AuthenticatedUser;
   session: AuthenticatedSession;
+  scope: RequestScope;
   logger: ProcedureLogger;
 };
 
-export type PublicContext = Omit<ProtectedContext, 'user' | 'session'> & {
+export type PublicContext = Omit<
+  ProtectedContext,
+  'user' | 'session' | 'scope'
+> & {
   user: AuthenticatedUser | null;
   session: AuthenticatedSession | null;
+  scope: RequestScope | null;
 };
 
 type ServerContextDeps = {
   getAuthUseCases: () => AuthUseCases;
+  telemetry?: TelemetryAdapter;
 };
 
 const formatTiming = (entries: ServerTimingEntry[]) =>
@@ -45,6 +56,11 @@ const formatTiming = (entries: ServerTimingEntry[]) =>
 const appendServerTiming = (entries: ServerTimingEntry[]) => {
   if (!entries.length) return;
   setResponseHeader('Server-Timing', formatTiming(entries));
+};
+
+const setAuthenticatedResponseCacheHeaders = () => {
+  setResponseHeader('Cache-Control', cachePrivateNoStore());
+  setResponseHeader('Vary', 'Cookie, Authorization');
 };
 
 const finalize = (
@@ -116,6 +132,7 @@ const assertNotDemoMode = () => {
 
 export const createServerContextTools = ({
   getAuthUseCases,
+  telemetry = createNoOpTelemetry(),
 }: ServerContextDeps) => {
   const getSession = async (timings: ServerTimingEntry[]) => {
     const authStart = performance.now();
@@ -139,16 +156,27 @@ export const createServerContextTools = ({
       try {
         const session = await getSession(timings);
         if (session?.user?.id) {
+          setAuthenticatedResponseCacheHeaders();
+          telemetry.setUser({
+            id: session.user.id,
+            email: session.user.email,
+            role: session.user.role,
+            tenantId: null,
+          });
           procedureLogger = logger.child({
             requestId,
             userId: session.user.id,
+            role: session.user.role,
             scope: 'procedure',
           });
+        } else {
+          telemetry.setUser(null);
         }
 
         const ctx: PublicContext = {
           user: session?.user ?? null,
           session: session?.session ?? null,
+          scope: session?.user ? scopeFromUser(session.user) : null,
           logger: procedureLogger,
         };
         return await fn(ctx);
@@ -164,12 +192,13 @@ export const createServerContextTools = ({
     fn: (ctx: ProtectedContext) => Promise<T>
   ): Promise<T> => {
     return withPublicContext(async (ctx) => {
-      if (!ctx.user || !ctx.session) {
+      if (!ctx.user || !ctx.session || !ctx.scope) {
         throw new ServerFnError('UNAUTHORIZED');
       }
       return fn({
         user: ctx.user,
         session: ctx.session,
+        scope: ctx.scope,
         logger: ctx.logger,
       });
     });

@@ -94,6 +94,8 @@ const serverSchema = () =>
       .min(0)
       .max(1)
       .prefault(isProd() ? 0.1 : 1),
+    SENTRY_ORG: z.string().optional(),
+    SENTRY_PROJECT: z.string().optional(),
     SENTRY_AUTH_TOKEN: z.string().optional(),
   });
 
