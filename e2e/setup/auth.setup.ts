@@ -6,27 +6,48 @@ import {
   USER_EMAIL,
   USER_FILE,
 } from 'e2e/utils/constants';
+import type { ExtendedPageInstance } from 'e2e/utils/page';
 
 /**
  * @see https://playwright.dev/docs/auth#multiple-signed-in-roles
  */
 
-setup('authenticate as admin', async ({ page }) => {
+const authenticate = async (
+  page: ExtendedPageInstance,
+  input: {
+    email: string;
+    layoutTestId: string;
+    storageFile: string;
+    targetRoute: '/app' | '/manager';
+  }
+) => {
+  page.authDebug('setup.authenticate.start', input);
   await page.to('/login');
-  await page.login({ email: ADMIN_EMAIL });
+  page.authDebug('setup.login_page.opened', input);
 
-  await page.waitForURL('/manager');
-  await expect(page.getByTestId('layout-manager')).toBeVisible();
+  await page.login({ email: input.email });
+  await page.waitForPostAuthRoute(input.targetRoute);
+  await expect(page.getByTestId(input.layoutTestId)).toBeVisible();
+  page.authDebug('setup.layout.visible', input);
 
-  await page.context().storageState({ path: ADMIN_FILE });
+  await page.context().storageState({ path: input.storageFile });
+  page.authDebug('setup.storage_state.written', input);
+};
+
+setup('authenticate as admin', async ({ page }) => {
+  await authenticate(page, {
+    email: ADMIN_EMAIL,
+    layoutTestId: 'layout-manager',
+    storageFile: ADMIN_FILE,
+    targetRoute: '/manager',
+  });
 });
 
 setup('authenticate as user', async ({ page }) => {
-  await page.to('/login');
-  await page.login({ email: USER_EMAIL });
-
-  await page.waitForURL('/app');
-  await expect(page.getByTestId('layout-app')).toBeVisible();
-
-  await page.context().storageState({ path: USER_FILE });
+  await authenticate(page, {
+    email: USER_EMAIL,
+    layoutTestId: 'layout-app',
+    storageFile: USER_FILE,
+    targetRoute: '/app',
+  });
 });

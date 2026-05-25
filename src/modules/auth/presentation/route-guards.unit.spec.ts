@@ -106,6 +106,32 @@ describe('auth route guards', () => {
     });
   });
 
+  it('redirects onboarded admins to the manager app after login', async () => {
+    const error = await getThrown(() =>
+      redirectAuthenticatedRoute({
+        context: makeContext(makeSession({ role: 'admin' })),
+      })
+    );
+
+    expect(error.options).toMatchObject({
+      to: '/manager',
+      replace: true,
+    });
+  });
+
+  it('redirects onboarded users to the user app after login', async () => {
+    const error = await getThrown(() =>
+      redirectAuthenticatedRoute({
+        context: makeContext(makeSession({ role: 'user' })),
+      })
+    );
+
+    expect(error.options).toMatchObject({
+      to: '/app',
+      replace: true,
+    });
+  });
+
   it('throws forbidden route errors for missing app permissions', async () => {
     await expect(
       requireAuthenticatedRoute({

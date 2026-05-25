@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   internalRedirectFromLocation,
+  isPostAuthDestinationUrl,
   normalizeInternalRedirect,
   resolvePostAuthDestination,
 } from './redirects';
@@ -35,5 +36,29 @@ describe('auth redirect helpers', () => {
     expect(resolvePostAuthDestination({ role: 'admin' })).toBe('/manager');
     expect(resolvePostAuthDestination({ role: 'user' })).toBe('/app');
     expect(resolvePostAuthDestination({ role: null })).toBe('/');
+  });
+
+  it('matches post-auth destinations and nested routes for E2E waits', () => {
+    expect(
+      isPostAuthDestinationUrl('http://localhost:3000/manager', '/manager')
+    ).toBe(true);
+    expect(
+      isPostAuthDestinationUrl(
+        'http://localhost:3000/manager/dashboard',
+        '/manager'
+      )
+    ).toBe(true);
+    expect(
+      isPostAuthDestinationUrl('http://localhost:3000/managerish', '/manager')
+    ).toBe(false);
+    expect(
+      isPostAuthDestinationUrl(
+        'http://localhost:3000/app/books?filter=mine',
+        '/app'
+      )
+    ).toBe(true);
+    expect(
+      isPostAuthDestinationUrl('http://localhost:3000/login/verify', '/manager')
+    ).toBe(false);
   });
 });

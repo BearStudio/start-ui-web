@@ -19,6 +19,7 @@ import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
 import { LoginEmailHint } from '@/modules/devtools/presentation';
 import { envClient } from '@/platform/env/client';
 
+import { authE2eDebug } from './e2e-debug';
 import { normalizeInternalRedirect } from './redirects';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
@@ -67,18 +68,35 @@ export default function PageLogin({
     },
     validators: { onSubmit: zFormFieldsLogin() },
     onSubmit: async ({ value: { email } }) => {
+      authE2eDebug('login.email_otp.submit', {
+        email,
+        redirect: safeRedirect ?? null,
+      });
+
       let result;
       try {
         result = await sendEmailOtp({
           email,
           type: 'sign-in',
         });
-      } catch {
+      } catch (error) {
+        authE2eDebug('login.email_otp.exception', {
+          email,
+          message: error instanceof Error ? error.message : 'Unknown error',
+        });
         toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
         return;
       }
 
       if (result.error) {
+        authE2eDebug('login.email_otp.error', {
+          code: result.error.code ?? null,
+          email,
+          message:
+            typeof result.error.message === 'string'
+              ? result.error.message
+              : null,
+        });
         const errorKey = result.error.code
           ? `auth:errorCode.${result.error.code}`
           : undefined;
@@ -97,6 +115,11 @@ export default function PageLogin({
         toast.error(errorMessage);
         return;
       }
+
+      authE2eDebug('login.email_otp.navigate_verify', {
+        email,
+        redirect: safeRedirect ?? null,
+      });
 
       router.navigate({
         replace: true,
