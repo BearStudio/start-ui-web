@@ -1,6 +1,6 @@
 import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -80,14 +80,26 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     },
   });
 
+  const bookDefaultValues = useMemo(
+    () =>
+      formBookDefaultValues({
+        title: bookQuery.data?.title ?? '',
+        author: bookQuery.data?.author ?? '',
+        genreId: bookQuery.data?.genre?.id ?? '',
+        publisher: bookQuery.data?.publisher ?? '',
+        coverId: bookQuery.data?.coverId ?? '',
+      }),
+    [
+      bookQuery.data?.author,
+      bookQuery.data?.coverId,
+      bookQuery.data?.genre?.id,
+      bookQuery.data?.publisher,
+      bookQuery.data?.title,
+    ]
+  );
+
   const form = useAppForm({
-    defaultValues: formBookDefaultValues({
-      title: bookQuery.data?.title ?? '',
-      author: bookQuery.data?.author ?? '',
-      genreId: bookQuery.data?.genre?.id ?? '',
-      publisher: bookQuery.data?.publisher ?? '',
-      coverId: bookQuery.data?.coverId ?? '',
-    }),
+    defaultValues: bookDefaultValues,
     validators: formBookValidators,
     onSubmit: async ({ value }) => {
       await bookUpdate.mutateAsync({ id: props.params.id, ...value });
@@ -95,20 +107,13 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   });
 
   const isDirty = useStore(form.store, (s) => s.isDirty);
+  const hasBook = bookQuery.data != null;
 
   useEffect(() => {
-    if (!bookQuery.data || form.store.state.isDirty) return;
+    if (!hasBook || form.state.isDirty) return;
 
-    form.reset(
-      formBookDefaultValues({
-        title: bookQuery.data.title,
-        author: bookQuery.data.author,
-        genreId: bookQuery.data.genre?.id ?? '',
-        publisher: bookQuery.data.publisher ?? '',
-        coverId: bookQuery.data.coverId ?? '',
-      })
-    );
-  }, [bookQuery.data, form]);
+    form.reset(bookDefaultValues);
+  }, [bookDefaultValues, form, hasBook]);
 
   return (
     <>
