@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
 import type { AuthSession } from '@/modules/auth';
+import { cachePrivateNoStore } from '@/platform/http/cache-control';
 
 /**
  * Fetch the current Better Auth session from request cookies. Used by route
@@ -27,6 +28,14 @@ const resolveSession = createServerOnlyFn(
   }
 );
 
+const setSessionCachePolicy = createServerOnlyFn(async () => {
+  const { setResponseHeader } = await import('@tanstack/react-start/server');
+  setResponseHeader('Cache-Control', cachePrivateNoStore());
+});
+
 export const fetchSession = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<AuthSession | null> => resolveSession()
+  async (): Promise<AuthSession | null> => {
+    await setSessionCachePolicy();
+    return resolveSession();
+  }
 );

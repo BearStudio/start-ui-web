@@ -37,7 +37,7 @@ export const FormUser = withForm({
   render: ({ form, userId }) => {
     const { t } = useTranslation(['user']);
     const session = useAuthSession();
-    const isCurrentUser = userId === session.data?.user.id;
+    const isCurrentUser = !!userId && userId === session.data?.user.id;
 
     return (
       <div className="flex flex-col gap-4">

@@ -24,7 +24,7 @@ export const formBookDefaultValues = (
 ): FormFieldsBook => ({
   title: values?.title ?? '',
   author: values?.author ?? '',
-  genreId: values?.genreId ?? (null as unknown as string),
+  genreId: values?.genreId ?? '',
   publisher: values?.publisher ?? '',
   coverId: values?.coverId ?? '',
 });

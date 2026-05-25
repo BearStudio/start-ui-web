@@ -26,24 +26,26 @@ export const FieldCheckboxGroup = (
   return (
     <FormFieldContainer {...containerProps}>
       <CheckboxGroup
+        {...rest}
         id={ctx.id}
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
+        disabled={field.disabled || rest.disabled}
         value={field.value ?? []}
         onValueChange={(value, event) => {
           field.onChange(value);
           rest.onValueChange?.(value, event);
         }}
-        {...rest}
       >
         {options.map(({ label, ...option }) => (
           <Checkbox
+            {...option}
             key={`${ctx.id}-${option.value}`}
             aria-invalid={fieldState.invalid ? true : undefined}
             size={ctx.size}
+            disabled={field.disabled || rest.disabled || option.disabled}
             onBlur={field.onBlur}
-            {...option}
           >
             {label}
           </Checkbox>

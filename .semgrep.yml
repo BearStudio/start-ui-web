@@ -246,6 +246,19 @@ rules:
         - src/modules/auth/infrastructure/better-auth/**
         - src/composition/auth.ts
 
+  - id: better-auth-options-no-raw-in-operator
+    message: Normalize Better Auth factory inputs by database shape; do not classify CreateAuthOptions with raw `in` checks.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '["''](?:database|authEmailPort)["'']\s+in\s+[A-Za-z_$][A-Za-z0-9_$]*'
+    paths:
+      include:
+        - src/modules/auth/infrastructure/better-auth/**/*.ts
+        - src/modules/auth/infrastructure/better-auth/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
   - id: no-composition-spread-overrides
     message: Composition factories must merge override keys explicitly with ??; spreading overrides can let explicit undefined erase required dependencies.
     languages: [typescript]
@@ -296,6 +309,69 @@ rules:
     pattern-either:
       - pattern: 'redirect({ to: $REQ.$X.$Y, ... })'
       - pattern: 'Response.redirect($REQ.$X.$Y, ...)'
+
+  - id: no-location-href-login-redirect-search
+    message: Preserve login redirects as app-relative paths; do not put full location.href values into redirect search params.
+    languages: [typescript]
+    severity: ERROR
+    pattern: 'search: { redirect: $LOCATION.href }'
+    paths:
+      include:
+        - src/routes/**/*.ts
+        - src/routes/**/*.tsx
+        - src/modules/auth/presentation/**/*.ts
+        - src/modules/auth/presentation/**/*.tsx
+
+  - id: no-bare-slash-startswith-redirect
+    message: Redirect checks using startsWith('/') must also reject protocol-relative targets like //evil.example; use normalizeInternalRedirect().
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          if ($TARGET.startsWith('/')) {
+            ...
+          }
+      - pattern-either:
+          - pattern: 'redirect({ ..., to: $TARGET, ... })'
+          - pattern: 'redirect({ ..., href: $TARGET, ... })'
+    paths:
+      include:
+        - src/routes/**/*.ts
+        - src/routes/**/*.tsx
+        - src/modules/auth/presentation/**/*.ts
+        - src/modules/auth/presentation/**/*.tsx
+      exclude:
+        - src/modules/auth/presentation/redirects.ts
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: no-root-loader-context-return
+    message: Root route loader data must be serializable; do not return RouterContext from loader payloads.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: return { context };
+      - pattern: |
+          return {
+            ...,
+            context: $CONTEXT,
+            ...
+          };
+    paths:
+      include:
+        - src/routes/__root.tsx
+
+  - id: fetch-session-requires-cache-policy
+    message: fetchSession must set Cache-Control to private no-store before returning session-dependent data.
+    languages: [typescript]
+    severity: ERROR
+    pattern: |
+      export const fetchSession = createServerFn({ method: 'GET' }).handler(
+        async (): Promise<AuthSession | null> => resolveSession()
+      );
+    paths:
+      include:
+        - src/composition/session.ts
 
   - id: token-or-secret-logging
     message: Do not log tokens, secrets, passwords, or Authorization headers.

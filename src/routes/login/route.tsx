@@ -1,11 +1,23 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { fallback, zodValidator } from '@tanstack/zod-adapter';
+import { z } from 'zod';
 
 import { PageError } from '@/platform/components/errors/page-error';
 
-import { hasRolePermission, type Role } from '@/modules/auth';
-import { LayoutLogin } from '@/modules/auth/presentation';
+import {
+  LayoutLogin,
+  normalizeInternalRedirect,
+  resolvePostAuthDestination,
+} from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login')({
+  validateSearch: zodValidator(
+    z
+      .object({
+        redirect: fallback(z.string(), '').optional(),
+      })
+      .passthrough()
+  ),
   // Redirect already-authenticated users away from the login surface before
   // any layout shell paints. The destination mirrors useRedirectAfterLogin():
   // honor an explicit `redirect` search param, otherwise route by role.
@@ -13,19 +25,15 @@ export const Route = createFileRoute('/login')({
     const session = await context.auth.getSession();
     if (!session) return;
 
-    const explicitRedirect = (search as { redirect?: string }).redirect;
-    if (explicitRedirect && explicitRedirect.startsWith('/')) {
-      throw redirect({ to: explicitRedirect, replace: true });
+    const explicitRedirect = normalizeInternalRedirect(search.redirect);
+    if (explicitRedirect) {
+      throw redirect({ href: explicitRedirect, replace: true });
     }
 
-    const role = session.user.role as Role | undefined;
-    if (role && hasRolePermission(role, { apps: ['manager'] })) {
-      throw redirect({ to: '/manager', replace: true });
-    }
-    if (role && hasRolePermission(role, { apps: ['app'] })) {
-      throw redirect({ to: '/app', replace: true });
-    }
-    throw redirect({ to: '/', replace: true });
+    throw redirect({
+      to: resolvePostAuthDestination(session.user),
+      replace: true,
+    });
   },
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,

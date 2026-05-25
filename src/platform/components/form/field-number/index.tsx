@@ -38,7 +38,7 @@ export const FieldNumber = (
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         value={formatValue(field.value ?? null, 'from-cents')}
-        disabled={field.disabled ?? rest.disabled}
+        disabled={field.disabled || rest.disabled}
         onValueChange={(value, event) => {
           field.onChange(formatValue(value, 'to-cents'));
           rest.onValueChange?.(value, event);

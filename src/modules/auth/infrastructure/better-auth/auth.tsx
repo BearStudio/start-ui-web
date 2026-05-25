@@ -19,26 +19,14 @@ import { envClient } from '@/platform/env/client';
 import { envServer } from '@/platform/env/server';
 
 import { AuthEmailPortResend } from './auth-email-port-resend';
+import {
+  type CreateAuthOptions,
+  normalizeCreateAuthInput,
+} from './create-auth-options';
 import { betterAuthPermissions } from './permissions';
-import type { AuthEmailPort } from '../../application/ports/auth-email-port';
-
-type CreateAuthOptions = {
-  database?: Database;
-  authEmailPort?: AuthEmailPort;
-};
-
-const isCreateAuthOptions = (
-  input: Database | CreateAuthOptions
-): input is CreateAuthOptions =>
-  'database' in input || 'authEmailPort' in input;
 
 export function createAuth(input?: Database | CreateAuthOptions) {
-  const options =
-    input === undefined
-      ? {}
-      : isCreateAuthOptions(input)
-        ? input
-        : { database: input };
+  const options = normalizeCreateAuthInput(input);
   const database = options.database ?? getDefaultDbClient();
   const authEmailPort = options.authEmailPort ?? new AuthEmailPortResend();
 

@@ -202,14 +202,11 @@ test('disabled group', async () => {
   const cb = page.getByRole('checkbox', { name: 'Buzz Pawdrin' });
   await expect.element(cb).toBeDisabled();
 
-  try {
-    await user.click(page.getByRole('button', { name: 'Submit' }), {
-      timeout: FAILED_CLICK_TIMEOUT_MS,
-    });
-  } catch {
-    // TanStack Form preserves disabled-field values.
-    expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
-  }
+  await user.click(page.getByRole('button', { name: 'Submit' }), {
+    timeout: FAILED_CLICK_TIMEOUT_MS,
+  });
+  // TanStack Form preserves disabled-field values.
+  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
 });
 
 test('disabled option', async () => {

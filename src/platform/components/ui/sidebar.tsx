@@ -629,6 +629,14 @@ function SidebarMenuBadge({
 
 const SKELETON_WIDTHS = ['60%', '75%', '85%', '55%', '70%', '90%'] as const;
 
+const getStableSkeletonWidth = (id: string) => {
+  const index = Array.from(id).reduce(
+    (total, character) => total + character.charCodeAt(0),
+    0
+  );
+  return SKELETON_WIDTHS[index % SKELETON_WIDTHS.length] ?? '70%';
+};
+
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
@@ -639,7 +647,7 @@ function SidebarMenuSkeleton({
   // SSR-stable width derived from the component's React id so the server
   // and client render identical markup. Avoids Math.random() hydration mismatch.
   const id = React.useId();
-  const width = SKELETON_WIDTHS[id.length % SKELETON_WIDTHS.length] ?? '70%';
+  const width = getStableSkeletonWidth(id);
 
   return (
     <div

@@ -22,17 +22,20 @@ export const FieldCheckbox = (
   return (
     <FormFieldContainer {...containerProps}>
       <Checkbox
+        {...rest}
         id={ctx.id}
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         checked={field.value ?? false}
-        disabled={field.disabled ?? rest.disabled}
+        disabled={field.disabled || rest.disabled}
         onCheckedChange={(checked, event) => {
           field.onChange(Boolean(checked));
           rest.onCheckedChange?.(checked, event);
         }}
-        onBlur={field.onBlur}
-        {...rest}
+        onBlur={(event) => {
+          field.onBlur();
+          rest.onBlur?.(event);
+        }}
       />
       <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>

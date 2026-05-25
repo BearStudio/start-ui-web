@@ -26,13 +26,14 @@ export const FieldDate = (
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
         value={field.value ?? undefined}
-        disabled={field.disabled ?? rest.disabled}
+        disabled={field.disabled || rest.disabled}
         onChange={(value) => {
           field.onChange(value);
           rest.onChange?.(value);
         }}
-        onBlur={() => {
+        onBlur={(event) => {
           field.onBlur();
+          rest.onBlur?.(event);
         }}
       />
       <FormFieldError errors={fieldState.errors} />
