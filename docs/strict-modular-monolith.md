@@ -62,3 +62,58 @@ Routes stay thin. They validate path/search state, seed initial server-backed
 data through loaders, select route error/not-found UX, and render module
 presentation screens. Screens may use React Query for cache reads, continuation
 pages, refresh, and mutations.
+
+Authenticated route subtrees enforce auth in `beforeLoad` via
+`beforeLoadAuthenticated()` from `@/modules/auth/presentation`. Component-level
+session guards are not allowed — guards belong at the route boundary so the
+redirect happens before any layout shell paints. Role/permission and onboarding
+checks live in the same `beforeLoad` helper so every child route inherits them.
+
+## Router Context Contract
+
+The router context is the single read-side contract that every route loader and
+`beforeLoad` reads from. It is constructed once in `src/router.tsx` from the
+composition layer and typed in `src/platform/router/context.ts`. Current shape:
+
+- `queryClient` — shared TanStack Query client used by `ensureQueryData` /
+  `prefetchQuery` in loaders.
+- `auth.getSession()` — per-navigation cached session accessor. Resolves
+  server-side via the Better Auth gateway during SSR and via fetch on client
+  navigations. Used by `beforeLoadAuthenticated()`.
+- `telemetry` — Sentry adapter exposing `captureException`, `setUser`, and a
+  `startSpan` helper. Route loaders, `beforeLoad`, and `errorComponent` call
+  through this slot rather than importing Sentry directly.
+- `flags` — feature-flag adapter (currently a no-op stub). Reserved for an
+  OpenFeature/LaunchDarkly provider when needed.
+- `tenant` — reserved slot for active-tenant context. Always `null` today;
+  populated by `beforeLoad` on `/app` when multi-tenancy is enabled.
+
+Routes that need a dependency must read it off `context` rather than importing
+`@/composition` directly — the composition root is the only file that wires
+concretes into the context.
+
+## Response Cache Policy
+
+Every response that depends on the authenticated session must set a `private`
+cache policy. Use the helpers in `@/platform/http/cache-control`:
+
+- `cachePrivateNoStore()` — default for authenticated reads/mutations.
+- `cachePrivateShortLived(seconds)` — short browser caching with
+  `Vary: Cookie, Authorization`.
+- `cachePublic({ maxAgeSeconds, reason })` — only for genuinely
+  cross-user-safe responses. The `reason` parameter is mandatory so reviewers
+  can audit each shared-cache decision.
+
+Raw `Cache-Control: public` strings outside the helper are rejected by the
+`raw-cache-control-public` semgrep rule.
+
+## CSRF Policy
+
+TanStack Start ships a default CSRF middleware that protects same-origin server
+functions out of the box. This app does not define `src/start.ts`, so the
+default chain is in effect.
+
+If `src/start.ts` is ever added, it must explicitly register the CSRF
+middleware — defining the file replaces the defaults rather than extending
+them. Authenticated server functions and server routes rely on this protection;
+omitting it would expose every browser-callable RPC to cross-site requests.

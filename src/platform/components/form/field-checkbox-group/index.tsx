@@ -1,8 +1,8 @@
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { Checkbox, CheckboxProps } from '@/platform/components/ui/checkbox';
 import { CheckboxGroup } from '@/platform/components/ui/checkbox-group';
 
@@ -21,10 +21,8 @@ export const FieldCheckboxGroup = (
 ) => {
   const { containerProps, options, ...rest } = props;
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState } = useTfField<string[]>();
+
   return (
     <FormFieldContainer {...containerProps}>
       <CheckboxGroup
@@ -32,9 +30,9 @@ export const FieldCheckboxGroup = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
-        value={value}
+        value={field.value ?? []}
         onValueChange={(value, event) => {
-          onChange?.(value);
+          field.onChange(value);
           rest.onValueChange?.(value, event);
         }}
         {...rest}
@@ -44,14 +42,14 @@ export const FieldCheckboxGroup = (
             key={`${ctx.id}-${option.value}`}
             aria-invalid={fieldState.invalid ? true : undefined}
             size={ctx.size}
-            {...field}
+            onBlur={field.onBlur}
             {...option}
           >
             {label}
           </Checkbox>
         ))}
       </CheckboxGroup>
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

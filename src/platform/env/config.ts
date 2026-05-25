@@ -87,6 +87,14 @@ const serverSchema = () =>
     S3_HOST: zNonEmptyString(),
     S3_SECURE: z.stringbool().default(true),
     S3_FORCE_PATH_STYLE: z.stringbool().default(false),
+    SENTRY_DSN: z.string().url().optional(),
+    SENTRY_ENVIRONMENT: z.string().optional(),
+    SENTRY_TRACES_SAMPLE_RATE: z.coerce
+      .number()
+      .min(0)
+      .max(1)
+      .prefault(isProd() ? 0.1 : 1),
+    SENTRY_AUTH_TOKEN: z.string().optional(),
   });
 
 const clientSchema = () =>
@@ -114,6 +122,13 @@ const clientSchema = () =>
       .optional()
       .transform((value) => value ?? (isDev() ? 'gold' : 'plum')),
     VITE_S3_BUCKET_PUBLIC_URL: z.url(),
+    VITE_SENTRY_DSN: z.string().url().optional(),
+    VITE_SENTRY_ENVIRONMENT: z.string().optional(),
+    VITE_SENTRY_TRACES_SAMPLE_RATE: z.coerce
+      .number()
+      .min(0)
+      .max(1)
+      .prefault(isProd() ? 0.1 : 1),
   });
 
 export type EnvServer = z.infer<ReturnType<typeof serverSchema>>;

@@ -1,163 +1,34 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import {
   Form,
   FormField,
-  FormFieldController,
-  FormFieldHelper,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { onSubmit } from '@/platform/components/form/docs.utils';
 import { Button } from '@/platform/components/ui/button';
 
-const zFormSchema = () =>
-  z.object({
-    balance: z.number({ error: 'Required' }).min(0),
-  });
-
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-} as const;
-
 const Default = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const DefaultValue = () => {
-  const form = useForm({
-    ...formOptions,
-    defaultValues: {
-      balance: 30,
+  const form = useAppForm({
+    defaultValues: { balance: 0 as number | null },
+    validators: {
+      onSubmit: z.object({ balance: z.number().nullable() }),
     },
+    onSubmit: ({ value }) => onSubmit(value),
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
+    <Form form={form} className="flex flex-col gap-4">
+      <FormField>
+        <FormFieldLabel>Balance</FormFieldLabel>
+        <form.AppField name="balance">
+          {(field) => <field.FieldNumber />}
+        </form.AppField>
+      </FormField>
+      <Button type="submit">Submit</Button>
     </Form>
   );
 };
 
-const Currency = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-            format={{
-              style: 'currency',
-              currency: 'EUR',
-            }}
-            inCents
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const Disabled = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            disabled
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const ReadOnly = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Balance</FormFieldLabel>
-          <FormFieldController
-            readOnly
-            type="number"
-            control={form.control}
-            name="balance"
-            placeholder="Bearcoin"
-          />
-          <FormFieldHelper>Help</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-export default {
-  Default,
-  DefaultValue,
-  Currency,
-  Disabled,
-  ReadOnly,
-};
+export default { Default };

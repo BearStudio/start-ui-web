@@ -1,15 +1,14 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
-import { Form } from '@/platform/components/form';
+import { Form, useAppForm } from '@/platform/components/form';
 import { PreventNavigation } from '@/platform/components/prevent-navigation';
 import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
@@ -23,8 +22,11 @@ import {
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
-import { FormUser } from '@/modules/user/presentation/manager/form-user';
-import { zFormFieldsUser } from '@/modules/user/presentation/schema';
+import {
+  FormUser,
+  formUserDefaultValues,
+  formUserValidators,
+} from '@/modules/user/presentation/manager/form-user';
 
 import { userQueries } from '../queries';
 
@@ -64,9 +66,10 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
         Array.isArray(error.data?.target) &&
         error.data.target.includes('email')
       ) {
-        form.setError('email', {
-          message: t('user:manager.form.emailAlreadyExist'),
-        });
+        form.setFieldMeta('email', (prev) => ({
+          ...prev,
+          errorMap: { onSubmit: t('user:manager.form.emailAlreadyExist') },
+        }));
         return;
       }
 
@@ -74,14 +77,19 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     },
   });
 
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
+  const form = useAppForm({
+    defaultValues: formUserDefaultValues({
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
       role: userQuery.data?.role ?? 'user',
+    }),
+    validators: formUserValidators,
+    onSubmit: async ({ value }) => {
+      await userUpdate.mutateAsync({ id: props.params.id, ...value });
     },
   });
+
+  const isDirty = useStore(form.store, (s) => s.isDirty);
 
   const ui = getUiState((set) => {
     if (userQuery.status === 'pending') return set('pending');
@@ -98,13 +106,8 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
 
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={(values) => {
-          userUpdate.mutate({ id: props.params.id, ...values });
-        }}
-      >
+      <PreventNavigation shouldBlock={isDirty} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}
@@ -132,7 +135,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           <PageLayoutContent>
             <Card>
               <CardContent>
-                <FormUser userId={props.params.id} />
+                <FormUser form={form} userId={props.params.id} />
               </CardContent>
             </Card>
           </PageLayoutContent>

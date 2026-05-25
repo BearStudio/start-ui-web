@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { page, render, setupUser } from '@/tests/utils';
 
 import { FormField, FormFieldLabel } from '..';
-import { FormFieldController } from '../form-field-controller';
 import { FormMocked } from '../form-test-utils';
 
 test('update value', async () => {
@@ -14,13 +13,15 @@ test('update value', async () => {
   render(
     <FormMocked
       schema={z.object({ name: z.string() })}
-      useFormOptions={{ defaultValues: { name: '' } }}
+      defaultValues={{ name: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
+          <form.AppField name="name">
+            {(field) => <field.FieldText type="text" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -41,17 +42,17 @@ test('default value', async () => {
   render(
     <FormMocked
       schema={z.object({ name: z.string() })}
-      useFormOptions={{
-        defaultValues: {
-          name: 'default value',
-        },
+      defaultValues={{
+        name: 'default value',
       }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
+          <form.AppField name="name">
+            {(field) => <field.FieldText type="text" />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -71,18 +72,15 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ name: z.string() })}
-      useFormOptions={{ defaultValues: { name: 'new value' } }}
+      defaultValues={{ name: 'new value' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            disabled
-          />
+          <form.AppField name="name">
+            {(field) => <field.FieldText type="text" disabled />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -94,7 +92,9 @@ test('disabled', async () => {
     // Expected to fail since input is disabled
   }
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: undefined });
+  // TanStack Form keeps the value of disabled fields in form state, unlike
+  // RHF which unregisters them. The submitted payload retains the default.
+  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });
 
 test('readOnly', async () => {
@@ -104,18 +104,15 @@ test('readOnly', async () => {
   render(
     <FormMocked
       schema={z.object({ name: z.string() })}
-      useFormOptions={{ defaultValues: { name: 'new value' } }}
+      defaultValues={{ name: 'new value' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            readOnly
-          />
+          <form.AppField name="name">
+            {(field) => <field.FieldText type="text" readOnly />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

@@ -2,9 +2,9 @@ import type { ComponentProps } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { UploadInput } from '@/platform/components/upload/upload-input';
 
 import { envClient } from '@/platform/env/client';
@@ -19,7 +19,7 @@ export const FieldUploadInput = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<string | null>();
 
   const getFieldUrl = (raw: unknown): string | undefined => {
     if (typeof raw !== 'string' || !raw) return undefined;
@@ -53,7 +53,7 @@ export const FieldUploadInput = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
       />
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

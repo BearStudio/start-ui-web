@@ -1,15 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useStore } from '@tanstack/react-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { LogOutIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { Button } from '@/platform/components/ui/button';
 
@@ -23,30 +23,42 @@ import { zFormFieldsOnboarding } from '@/modules/auth/presentation/schema';
 export const PageOnboarding = () => {
   const { t } = useTranslation(['auth']);
   const session = useAuthSession();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const submitOnboarding = useMutation({
     ...accountQueries.submitOnboarding(),
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
       toast.success(
         t('auth:pageOnboarding.successMessage', { name: variables.name })
       );
-      session.refetch();
+      // Refresh both Better Auth's client cache and the router-context
+      // session cache, then invalidate route guards so beforeLoad reruns
+      // and redirects the now-onboarded user out of /onboarding.
+      await session.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['session'] });
+      await router.invalidate();
     },
     onError: () => {
       toast.error(t('auth:pageOnboarding.errorMessage'));
     },
   });
 
-  const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsOnboarding()),
-    values: {
+  const form = useAppForm({
+    defaultValues: {
       name: session.data?.user.name ?? '',
+    },
+    validators: { onSubmit: zFormFieldsOnboarding() },
+    onSubmit: async ({ value }) => {
+      await submitOnboarding.mutateAsync(value);
     },
   });
 
-  const { isValid, isSubmitted } = form.formState;
-  useMascot({ isError: !isValid && isSubmitted });
+  const isInvalidAfterSubmit = useStore(
+    form.store,
+    (s) => s.isSubmitted && !s.isValid
+  );
+  useMascot({ isError: isInvalidAfterSubmit });
 
   return (
     <LayoutLogin
@@ -66,13 +78,7 @@ export const PageOnboarding = () => {
         </div>
       }
     >
-      <Form
-        {...form}
-        onSubmit={(values) => {
-          submitOnboarding.mutate(values);
-        }}
-        className="flex flex-col gap-4 pb-12"
-      >
+      <Form form={form} className="flex flex-col gap-4 pb-12">
         <div className="flex flex-col gap-1">
           <h1 className="text-lg font-bold text-balance">
             {t('auth:pageOnboarding.title')}
@@ -86,12 +92,9 @@ export const PageOnboarding = () => {
           <FormFieldLabel>
             {t('auth:common.name.onboardingLabel')}
           </FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            size="lg"
-          />
+          <form.AppField name="name">
+            {(field) => <field.FieldText type="text" size="lg" />}
+          </form.AppField>
         </FormField>
         <Button
           type="submit"

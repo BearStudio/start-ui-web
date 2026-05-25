@@ -1,9 +1,4 @@
 export type {
-  AuthenticatedSession,
-  AuthenticatedUser,
-  AuthSession,
-} from './domain/session';
-export type {
   AuthEmailPort,
   SendSignInOtpInput,
 } from './application/ports/auth-email-port';
@@ -17,7 +12,6 @@ export type {
   AuthUseCaseDeps,
   UseCaseResult,
 } from './application/use-cases/types';
-export { createAuthUseCases, type AuthUseCases } from './factory';
 export {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
@@ -32,3 +26,9 @@ export {
   rolesNames,
   zRole,
 } from './domain/permissions';
+export type {
+  AuthenticatedSession,
+  AuthenticatedUser,
+  AuthSession,
+} from './domain/session';
+export { type AuthUseCases, createAuthUseCases } from './factory';

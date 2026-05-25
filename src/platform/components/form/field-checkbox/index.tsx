@@ -2,9 +2,9 @@ import { ComponentProps } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { Checkbox } from '@/platform/components/ui/checkbox';
 
 export const FieldCheckbox = (
@@ -17,10 +17,7 @@ export const FieldCheckbox = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState } = useTfField<boolean>();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -28,12 +25,16 @@ export const FieldCheckbox = (
         id={ctx.id}
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
-        checked={value}
-        onCheckedChange={onChange}
+        checked={field.value ?? false}
+        disabled={field.disabled ?? rest.disabled}
+        onCheckedChange={(checked, event) => {
+          field.onChange(Boolean(checked));
+          rest.onCheckedChange?.(checked, event);
+        }}
+        onBlur={field.onBlur}
         {...rest}
-        {...field}
       />
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

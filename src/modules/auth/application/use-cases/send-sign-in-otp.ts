@@ -1,5 +1,5 @@
-import type { SendSignInOtpInput } from '../ports/auth-email-port';
 import type { AuthUseCaseDeps } from './types';
+import type { SendSignInOtpInput } from '../ports/auth-email-port';
 
 export async function sendSignInOtp(
   deps: AuthUseCaseDeps,

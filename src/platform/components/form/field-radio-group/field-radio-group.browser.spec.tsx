@@ -8,27 +8,14 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormField, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 const options = [
-  {
-    value: 'bearstrong',
-    label: 'Bearstrong',
-  },
-  {
-    value: 'pawdrin',
-    label: 'Buzz Pawdrin',
-  },
-  {
-    value: 'grizzlyrin',
-    label: 'Yuri Grizzlyrin',
-  },
-  {
-    value: 'jemibear',
-    label: 'Mae Jemibear',
-    disabled: true,
-  },
+  { value: 'bearstrong', label: 'Bearstrong' },
+  { value: 'pawdrin', label: 'Buzz Pawdrin' },
+  { value: 'grizzlyrin', label: 'Yuri Grizzlyrin' },
+  { value: 'jemibear', label: 'Mae Jemibear', disabled: true },
 ];
 
 test('should select radio on button click', async () => {
@@ -38,18 +25,15 @@ test('should select radio on button click', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: '' } }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -72,18 +56,15 @@ test('should select radio on label click', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: '' } }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -94,7 +75,6 @@ test('should select radio on label click', async () => {
 
   await expect.element(radio).not.toBeChecked();
 
-  // Test clicking the label specifically
   await user.click(label);
   await expect.element(radio).toBeChecked();
 
@@ -109,18 +89,15 @@ test('should handle keyboard navigation', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: '' } }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -143,7 +120,7 @@ test('should handle keyboard navigation', async () => {
 
   await user.keyboard('{ArrowUp}');
   await expect.element(secondRadio).toHaveFocus();
-  await expect.element(secondRadio).toBeChecked(); // Second radio should still be checked
+  await expect.element(secondRadio).toBeChecked();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
@@ -155,22 +132,15 @@ test('default value', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{
-        defaultValues: {
-          bear: 'grizzlyrin',
-        },
-      }}
+      defaultValues={{ bear: 'grizzlyrin' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -189,23 +159,15 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{
-        defaultValues: {
-          bear: 'pawdrin',
-        },
-      }}
+      defaultValues={{ bear: 'pawdrin' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            disabled
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup disabled options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -215,7 +177,8 @@ test('disabled', async () => {
   await expect.element(radio).toBeDisabled();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bear: undefined });
+  // TanStack Form preserves disabled-field values.
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
 test('disabled option', async () => {
@@ -224,22 +187,15 @@ test('disabled option', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{
-        defaultValues: {
-          bear: '',
-        },
-      }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="radio-group"
-            control={form.control}
-            name="bear"
-            options={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldRadioGroup options={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

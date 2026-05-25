@@ -2,9 +2,9 @@ import { Fragment } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import {
   Radio,
   RadioGroup,
@@ -26,10 +26,7 @@ export const FieldRadioGroup = (
 ) => {
   const { containerProps, options, renderOption, ...rest } = props;
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState } = useTfField<string>();
   return (
     <FormFieldContainer {...containerProps}>
       <RadioGroup
@@ -37,8 +34,8 @@ export const FieldRadioGroup = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
-        value={value}
-        onValueChange={onChange}
+        value={field.value ?? ''}
+        onValueChange={(value) => field.onChange(value as string)}
         {...rest}
       >
         {options.map(({ label, ...option }) => {
@@ -51,7 +48,7 @@ export const FieldRadioGroup = (
                   label,
                   'aria-invalid': fieldState.invalid,
                   size: ctx.size,
-                  ...field,
+                  onBlur: field.onBlur,
                   ...option,
                 })}
               </Fragment>
@@ -63,7 +60,7 @@ export const FieldRadioGroup = (
               key={radioId}
               aria-invalid={fieldState.invalid ? true : undefined}
               size={ctx.size}
-              {...field}
+              onBlur={field.onBlur}
               {...option}
             >
               {label}
@@ -72,7 +69,7 @@ export const FieldRadioGroup = (
         })}
       </RadioGroup>
 
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

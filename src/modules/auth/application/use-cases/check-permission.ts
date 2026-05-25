@@ -1,5 +1,5 @@
-import type { AuthorizationPermission } from '../ports/authorization-gateway';
 import type { AuthUseCaseDeps } from './types';
+import type { AuthorizationPermission } from '../ports/authorization-gateway';
 
 export async function checkPermission(
   deps: AuthUseCaseDeps,

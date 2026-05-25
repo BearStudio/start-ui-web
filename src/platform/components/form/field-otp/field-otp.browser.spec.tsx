@@ -8,7 +8,7 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormField, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 test('update value', async () => {
@@ -18,18 +18,15 @@ test('update value', async () => {
   render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
-      useFormOptions={{ defaultValues: { code: '' } }}
+      defaultValues={{ code: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
+          <form.AppField name="code">
+            {(field) => <field.FieldOtp type="otp" maxLength={6} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -51,22 +48,17 @@ test('default value', async () => {
   render(
     <FormMocked
       schema={z.object({ code: z.string() })}
-      useFormOptions={{
-        defaultValues: {
-          code: '000000',
-        },
+      defaultValues={{
+        code: '000000',
       }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-          />
+          <form.AppField name="code">
+            {(field) => <field.FieldOtp type="otp" maxLength={6} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -82,19 +74,15 @@ test('auto submit', async () => {
   render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
-      useFormOptions={{ defaultValues: { code: '' } }}
+      defaultValues={{ code: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            autoSubmit
-          />
+          <form.AppField name="code">
+            {(field) => <field.FieldOtp type="otp" maxLength={6} autoSubmit />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -114,19 +102,15 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
-      useFormOptions={{ defaultValues: { code: '000000' } }}
+      defaultValues={{ code: '000000' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
-          <FormFieldController
-            type="otp"
-            control={form.control}
-            name="code"
-            maxLength={6}
-            disabled
-          />
+          <form.AppField name="code">
+            {(field) => <field.FieldOtp type="otp" maxLength={6} disabled />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -143,5 +127,6 @@ test('disabled', async () => {
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
 
-  expect(mockedSubmit).toHaveBeenCalledWith({ code: undefined });
+  // TanStack Form preserves disabled-field values; the default OTP submits.
+  expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });

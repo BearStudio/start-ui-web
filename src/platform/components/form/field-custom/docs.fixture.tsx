@@ -1,18 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { zu } from '@/platform/lib/zod/zod-utils';
 
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldError,
   FormFieldHelper,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { onSubmit } from '@/platform/components/form/docs.utils';
+import { useFieldContext } from '@/platform/components/form/use-app-form-contexts';
 import { Button } from '@/platform/components/ui/button';
 import {
   InputGroup,
@@ -20,196 +17,53 @@ import {
   InputGroupInput,
   InputGroupText,
 } from '@/platform/components/ui/input-group';
-const zFormSchema = () =>
-  z.object({
-    url: zu.fieldText.required({ error: 'URL is required' }),
-  });
 
-const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
-  defaultValues: {
-    url: '',
-  },
-} as const;
-
+/**
+ * Demonstrates a custom field rendered directly via `form.AppField` children
+ * with `useFieldContext`. This replaces the old `type="custom"` controller
+ * pattern.
+ */
 const Default = () => {
-  const form = useForm(formOptions);
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website URL</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="url"
-            type="custom"
-            render={({ field, fieldState }) => (
-              <>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <InputGroupText>https://</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
-                    placeholder="example.com"
-                  />
-                </InputGroup>
-                <FormFieldError />
-              </>
-            )}
-          />
-          <FormFieldHelper>Enter your website URL</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-const DefaultValue = () => {
-  const form = useForm({
-    ...formOptions,
-    defaultValues: {
-      url: 'example.com',
-    },
+  const form = useAppForm({
+    defaultValues: { url: '' },
+    validators: { onSubmit: z.object({ url: z.string().min(1) }) },
+    onSubmit: ({ value }) => onSubmit(value),
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website URL</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="url"
-            type="custom"
-            render={({ field, fieldState }) => (
-              <>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <InputGroupText>https://</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
-                    placeholder="example.com"
-                  />
-                </InputGroup>
-                <FormFieldError />
-              </>
-            )}
-          />
-          <FormFieldHelper>Enter your website URL</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
+    <Form form={form} className="flex flex-col gap-4">
+      <FormField>
+        <FormFieldLabel>Website URL</FormFieldLabel>
+        <form.AppField name="url">{() => <CustomUrlInput />}</form.AppField>
+        <FormFieldHelper>Enter your website URL</FormFieldHelper>
+      </FormField>
+      <Button type="submit">Submit</Button>
     </Form>
   );
 };
 
-const Disabled = () => {
-  const form = useForm({
-    ...formOptions,
-    defaultValues: {
-      url: 'example.com',
-    },
-  });
+const CustomUrlInput = () => {
+  const field = useFieldContext<string>();
+  const errors = field.state.meta.errors;
+  const invalid = errors.length > 0 && field.state.meta.isTouched;
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website URL</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="url"
-            type="custom"
-            disabled
-            render={({ field, fieldState }) => (
-              <>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <InputGroupText>https://</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
-                    placeholder="example.com"
-                    disabled
-                  />
-                </InputGroup>
-                <FormFieldError />
-              </>
-            )}
-          />
-          <FormFieldHelper>Enter your website URL</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
+    <>
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>https://</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput
+          value={field.state.value ?? ''}
+          aria-invalid={invalid || undefined}
+          placeholder="example.com"
+          onChange={(e) => field.handleChange(e.target.value)}
+          onBlur={() => field.handleBlur()}
+        />
+      </InputGroup>
+      <FormFieldError errors={errors} />
+    </>
   );
 };
 
-const ReadOnly = () => {
-  const form = useForm({
-    ...formOptions,
-    defaultValues: {
-      url: 'example.com',
-    },
-  });
-
-  return (
-    <Form {...form} onSubmit={onSubmit}>
-      <div className="flex flex-col gap-4">
-        <FormField>
-          <FormFieldLabel>Website URL</FormFieldLabel>
-          <FormFieldController
-            control={form.control}
-            name="url"
-            type="custom"
-            render={({ field, fieldState }) => (
-              <>
-                <InputGroup>
-                  <InputGroupAddon>
-                    <InputGroupText>https://</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
-                    placeholder="example.com"
-                    readOnly
-                  />
-                </InputGroup>
-                <FormFieldError />
-              </>
-            )}
-          />
-          <FormFieldHelper>Enter your website URL</FormFieldHelper>
-        </FormField>
-        <div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </div>
-    </Form>
-  );
-};
-
-export default {
-  Default,
-  DefaultValue,
-  Disabled,
-  ReadOnly,
-};
+export default { Default };

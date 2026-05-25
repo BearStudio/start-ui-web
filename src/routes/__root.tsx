@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
@@ -20,11 +19,13 @@ import { AVAILABLE_LANGUAGES } from '@/platform/lib/i18n/constants';
 import { PageError } from '@/platform/components/errors/page-error';
 
 import { Providers } from '@/composition/providers';
+import { getTelemetry } from '@/composition/telemetry';
 import {
   EnvHint,
   getEnvHintTitlePrefix,
 } from '@/modules/devtools/presentation';
 import { getUserLanguage } from '@/modules/kernel/server';
+import type { RouterContext } from '@/platform/router/context';
 import appCss from '@/platform/styles/app.css?url';
 
 const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
@@ -33,18 +34,20 @@ const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
   };
 });
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-}>()({
-  loader: async () => {
+export const Route = createRootRouteWithContext<RouterContext>()({
+  loader: async ({ context }) => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
       const { language } = await initSsrApp();
       i18n.changeLanguage(language);
     }
+    return { context };
   },
   notFoundComponent: () => <PageError type="404" />,
-  errorComponent: () => {
+  errorComponent: ({ error }) => {
+    // Report the error to telemetry before rendering the boundary so route
+    // failures surface in Sentry instead of only printing client-side.
+    getTelemetry().captureException(error);
     return (
       <RootDocument>
         <PageError type="error-boundary" />

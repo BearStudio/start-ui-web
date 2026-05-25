@@ -2,9 +2,9 @@ import { isNullish } from 'remeda';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { NumberInput } from '@/platform/components/ui/number-input';
 
 export const FieldNumber = (
@@ -18,7 +18,7 @@ export const FieldNumber = (
   const { containerProps, inCents, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<number | null>();
   const formatValue = (
     value: number | undefined | null,
     type: 'to-cents' | 'from-cents'
@@ -30,7 +30,6 @@ export const FieldNumber = (
     return null;
   };
 
-  const { onChange, value, ...fieldProps } = field;
   return (
     <FormFieldContainer {...containerProps}>
       <NumberInput
@@ -38,10 +37,10 @@ export const FieldNumber = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
-        {...fieldProps}
-        value={formatValue(value, 'from-cents')}
+        value={formatValue(field.value ?? null, 'from-cents')}
+        disabled={field.disabled ?? rest.disabled}
         onValueChange={(value, event) => {
-          onChange(formatValue(value, 'to-cents'));
+          field.onChange(formatValue(value, 'to-cents'));
           rest.onValueChange?.(value, event);
         }}
         onBlur={(e) => {
@@ -49,7 +48,7 @@ export const FieldNumber = (
           rest.onBlur?.(e);
         }}
       />
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

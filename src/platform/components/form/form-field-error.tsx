@@ -1,89 +1,56 @@
 import { AlertCircleIcon } from 'lucide-react';
-import { ComponentProps, ReactNode, use } from 'react';
-import {
-  ControllerProps,
-  FieldError,
-  FieldErrors,
-  FieldPath,
-  FieldValues,
-  get,
-  useFormState,
-} from 'react-hook-form';
+import { ComponentProps, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
 import { useFormFieldUnsafe } from '@/platform/components/form/form-field';
 
-import {
-  FormFieldControllerContext,
-  FormFieldControllerContextValue,
-} from './form-field-controller/context';
+export type FieldErrorInput = unknown;
 
-type FormFieldErrorProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<ComponentProps<'div'>, 'children'> & {
-  children?: (params: { error?: FieldError }) => ReactNode;
-} & (
-    | Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    | {}
-  );
+const extractMessage = (raw: FieldErrorInput): string | undefined => {
+  if (raw == null) return undefined;
+  if (typeof raw === 'string') return raw;
+  if (typeof raw === 'object' && raw !== null && 'message' in raw) {
+    const message = (raw as { message?: unknown }).message;
+    return typeof message === 'string' ? message : undefined;
+  }
+  return undefined;
+};
 
-export const FormFieldError = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
+type FormFieldErrorProps = Omit<ComponentProps<'div'>, 'children'> & {
+  /**
+   * Errors coming from the field. Accepts the TanStack Form
+   * `field.state.meta.errors` array (containing standard-schema issues or
+   * raw strings).
+   */
+  errors?: FieldErrorInput[] | null;
+  children?: (params: { message: string }) => ReactNode;
+};
+
+/**
+ * Renders the first non-empty error message for the surrounding `<FormField>`.
+ * Messages flow through i18n so presentation schemas can emit error codes and
+ * the UI translates at render time.
+ */
+export const FormFieldError = ({
   className,
+  errors,
   children,
-
-  ...props
-}: FormFieldErrorProps<TFieldValues, TName>) => {
+  ...rest
+}: FormFieldErrorProps) => {
   const fieldCtx = useFormFieldUnsafe();
   const { t } = useTranslation();
-  const controllerCtx =
-    use<FormFieldControllerContextValue<TFieldValues> | null>(
-      FormFieldControllerContext as ExplicitAny
-    );
-  const { errors } = useFormState<TFieldValues>();
-  const control = 'control' in props ? props.control : null;
-  const name = 'name' in props ? props.name : null;
-  const controlled = !!(control && name);
 
-  if (!controlled && !controllerCtx) {
-    throw new Error(
-      'Missing <FormFieldController /> parent component or "control" and "name" props on <FormFieldError />'
-    );
-  }
+  const rawMessage = (errors ?? [])
+    .map((e) => extractMessage(e))
+    .find((m): m is string => Boolean(m));
 
-  const error = controlled
-    ? get<FieldErrors<TFieldValues>>(errors, name)
-    : controllerCtx?.fieldState.error;
-  const rawMessage = error?.root?.message ?? error?.message;
-  const errorMessage = rawMessage
-    ? t(rawMessage, { defaultValue: rawMessage })
-    : undefined;
+  if (!rawMessage) return null;
 
-  if (!errorMessage) {
-    return null;
-  }
+  const message = t(rawMessage, { defaultValue: rawMessage });
 
-  if (controllerCtx?.displayError === false) {
-    return null;
-  }
-
-  if (children) {
-    return children({ error });
-  }
-
-  const {
-    control: _,
-    name: __,
-    ...rest
-  } = 'control' in props
-    ? props
-    : { ...props, control: undefined, name: undefined };
+  if (children) return children({ message });
 
   return (
     <div
@@ -96,7 +63,7 @@ export const FormFieldError = <
       {...rest}
     >
       <AlertCircleIcon size="1em" className="my-0.5 flex-none" />
-      {errorMessage}
+      {message}
     </div>
   );
 };

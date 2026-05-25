@@ -1,13 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
-import { Form } from '@/platform/components/form';
+import { Form, useAppForm } from '@/platform/components/form';
 import { PreventNavigation } from '@/platform/components/prevent-navigation';
 import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
@@ -19,8 +18,11 @@ import {
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
-import { FormUser } from '@/modules/user/presentation/manager/form-user';
-import { zFormFieldsUser } from '@/modules/user/presentation/schema';
+import {
+  FormUser,
+  formUserDefaultValues,
+  formUserValidators,
+} from '@/modules/user/presentation/manager/form-user';
 
 import { userQueries } from '../queries';
 
@@ -28,14 +30,6 @@ export const PageUserNew = () => {
   const { t } = useTranslation(['user']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
-      name: '',
-      email: '',
-      role: 'user',
-    },
-  });
 
   const userCreate = useMutation({
     ...userQueries.create(),
@@ -49,16 +43,17 @@ export const PageUserNew = () => {
       // Redirect
       navigateBack({ ignoreBlocker: true });
     },
-    onError: (error) => {
+    onError: (error, _vars, _ctx) => {
       if (
         isServerFnError(error) &&
         error.code === 'CONFLICT' &&
         Array.isArray(error.data?.target) &&
         error.data.target.includes('email')
       ) {
-        form.setError('email', {
-          message: t('user:manager.form.emailAlreadyExist'),
-        });
+        form.setFieldMeta('email', (prev) => ({
+          ...prev,
+          errorMap: { onSubmit: t('user:manager.form.emailAlreadyExist') },
+        }));
         return;
       }
 
@@ -66,15 +61,20 @@ export const PageUserNew = () => {
     },
   });
 
+  const form = useAppForm({
+    defaultValues: formUserDefaultValues(),
+    validators: formUserValidators,
+    onSubmit: async ({ value }) => {
+      await userCreate.mutateAsync(value);
+    },
+  });
+
+  const isDirty = useStore(form.store, (s) => s.isDirty);
+
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={async (values) => {
-          userCreate.mutate(values);
-        }}
-      >
+      <PreventNavigation shouldBlock={isDirty} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}
@@ -96,7 +96,7 @@ export const PageUserNew = () => {
           <PageLayoutContent>
             <Card>
               <CardContent>
-                <FormUser />
+                <FormUser form={form} />
               </CardContent>
             </Card>
           </PageLayoutContent>

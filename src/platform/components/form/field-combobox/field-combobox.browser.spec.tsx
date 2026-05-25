@@ -8,7 +8,7 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormField, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 const options = [
@@ -25,18 +25,15 @@ test('should select item on click', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: '' } }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox"
-            control={form.control}
-            name="bear"
-            items={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldCombobox items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -59,18 +56,15 @@ test('default value', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: 'grizzlyrin' } }}
+      defaultValues={{ bear: 'grizzlyrin' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox"
-            control={form.control}
-            name="bear"
-            items={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldCombobox items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -93,19 +87,15 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: 'pawdrin' } }}
+      defaultValues={{ bear: 'pawdrin' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox"
-            control={form.control}
-            name="bear"
-            disabled
-            items={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldCombobox disabled items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -115,7 +105,8 @@ test('disabled', async () => {
   await expect.element(input).toBeDisabled();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bear: undefined });
+  // TanStack Form preserves disabled-field values.
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
 test('disabled option', async () => {
@@ -125,18 +116,15 @@ test('disabled option', async () => {
   render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
-      useFormOptions={{ defaultValues: { bear: '' } }}
+      defaultValues={{ bear: '' }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox"
-            control={form.control}
-            name="bear"
-            items={options}
-          />
+          <form.AppField name="bear">
+            {(field) => <field.FieldCombobox items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

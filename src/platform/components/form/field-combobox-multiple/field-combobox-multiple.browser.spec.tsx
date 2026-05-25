@@ -8,7 +8,7 @@ import {
   setupUser,
 } from '@/tests/utils';
 
-import { FormField, FormFieldController, FormFieldLabel } from '..';
+import { FormField, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
 
 const options = [
@@ -25,18 +25,15 @@ test('should select item on click', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox-multiple"
-            control={form.control}
-            name="bears"
-            items={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldComboboxMultiple items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -61,18 +58,15 @@ test('should allow selecting multiple items', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox-multiple"
-            control={form.control}
-            name="bears"
-            items={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldComboboxMultiple items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -99,18 +93,15 @@ test('default values', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: ['grizzlyrin'] } }}
+      defaultValues={{ bears: ['grizzlyrin'] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox-multiple"
-            control={form.control}
-            name="bears"
-            items={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldComboboxMultiple items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -129,19 +120,17 @@ test('disabled', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: ['pawdrin'] } }}
+      defaultValues={{ bears: ['pawdrin'] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox-multiple"
-            control={form.control}
-            name="bears"
-            disabled
-            items={options}
-          />
+          <form.AppField name="bears">
+            {(field) => (
+              <field.FieldComboboxMultiple disabled items={options} />
+            )}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>
@@ -151,7 +140,8 @@ test('disabled', async () => {
   await expect.element(input).toBeDisabled();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
+  // TanStack Form preserves disabled-field values.
+  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
 });
 
 test('disabled option', async () => {
@@ -161,18 +151,15 @@ test('disabled option', async () => {
   render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
-      useFormOptions={{ defaultValues: { bears: [] } }}
+      defaultValues={{ bears: [] }}
       onSubmit={mockedSubmit}
     >
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
-          <FormFieldController
-            type="combobox-multiple"
-            control={form.control}
-            name="bears"
-            items={options}
-          />
+          <form.AppField name="bears">
+            {(field) => <field.FieldComboboxMultiple items={options} />}
+          </form.AppField>
         </FormField>
       )}
     </FormMocked>

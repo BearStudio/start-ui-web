@@ -2,9 +2,9 @@ import { ComponentProps } from 'react';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import { DatePicker } from '@/platform/components/ui/date-picker';
 
 export const FieldDate = (
@@ -17,7 +17,7 @@ export const FieldDate = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<Date | null | undefined>();
   return (
     <FormFieldContainer {...containerProps}>
       <DatePicker
@@ -25,17 +25,17 @@ export const FieldDate = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         {...rest}
-        {...field}
-        onChange={(e) => {
-          field.onChange(e);
-          rest.onChange?.(e);
+        value={field.value ?? undefined}
+        disabled={field.disabled ?? rest.disabled}
+        onChange={(value) => {
+          field.onChange(value);
+          rest.onChange?.(value);
         }}
-        onBlur={(e) => {
+        onBlur={() => {
           field.onBlur();
-          rest.onBlur?.(e);
         }}
       />
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

@@ -9,8 +9,8 @@ import type {
 
 import {
   __resetAuthComposition,
-  getAuthUseCases,
   type AuthOverrides,
+  getAuthUseCases,
 } from '../auth';
 
 const makeAuthOverrides = (): Required<AuthOverrides> => ({

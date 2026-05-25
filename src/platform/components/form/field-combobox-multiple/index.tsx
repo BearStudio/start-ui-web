@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
-import { useFormFieldController } from '@/platform/components/form/form-field-controller/context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
+import { useTfField } from '@/platform/components/form/use-tf-field';
 import {
   Combobox,
   ComboboxChip,
@@ -61,7 +61,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
 
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState } = useTfField<Array<TItem['value']>>();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -69,8 +69,11 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         {...rest}
         multiple
         items={items}
-        disabled={field.disabled}
-        value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
+        disabled={field.disabled ?? rest.disabled}
+        value={
+          items?.filter((item) => (field.value ?? []).includes(item.value)) ??
+          []
+        }
         isItemEqualToValue={(item, selectedValue) =>
           (item as TItem).value === (selectedValue as TItem).value
         }
@@ -79,10 +82,9 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         onValueChange={(items, event) => {
           const selectedItems = (items ?? []) as TItem[];
           const selectedValues = selectedItems.map((i) => i.value);
-          field.onChange(selectedValues, event);
+          field.onChange(selectedValues);
           rest.onValueChange?.(selectedValues, event);
         }}
-        inputRef={field.ref}
       >
         <ComboboxChips ref={anchor}>
           <ComboboxValue>
@@ -126,7 +128,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
           )}
         </ComboboxContent>
       </Combobox>
-      <FormFieldError />
+      <FormFieldError errors={fieldState.errors} />
     </FormFieldContainer>
   );
 };

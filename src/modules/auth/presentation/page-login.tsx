@@ -1,15 +1,14 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import {
   Form,
   FormField,
-  FormFieldController,
   FormFieldLabel,
+  useAppForm,
 } from '@/platform/components/form';
 import { Button } from '@/platform/components/ui/button';
 
@@ -20,10 +19,7 @@ import {
 } from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
-import {
-  FormFieldsLogin,
-  zFormFieldsLogin,
-} from '@/modules/auth/presentation/schema';
+import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
 import { LoginEmailHint } from '@/modules/devtools/presentation';
 import { envClient } from '@/platform/env/client';
 
@@ -66,52 +62,55 @@ export default function PageLogin({
     },
   });
 
-  const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsLogin()),
+  const form = useAppForm({
     defaultValues: {
       email: '',
     },
+    validators: { onSubmit: zFormFieldsLogin() },
+    onSubmit: async ({ value: { email } }) => {
+      let result;
+      try {
+        result = await sendEmailOtp({
+          email,
+          type: 'sign-in',
+        });
+      } catch {
+        toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
+        return;
+      }
+
+      if (result.error) {
+        const errorMessage = result.error.code
+          ? t(
+              `auth:errorCode.${result.error.code as unknown as keyof typeof authErrorCodes}`
+            )
+          : (typeof result.error.message === 'string' &&
+              result.error.message) ||
+            t('auth:errorCode.UNKNOWN_ERROR');
+        toast.error(errorMessage);
+        return;
+      }
+
+      router.navigate({
+        replace: true,
+        to: '/login/verify',
+        search: {
+          redirect: search.redirect,
+          email,
+        },
+      });
+    },
   });
 
-  const { isValid, isSubmitted } = form.formState;
-  useMascot({ isError: !isValid && isSubmitted });
-
-  const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
-    let result;
-    try {
-      result = await sendEmailOtp({
-        email,
-        type: 'sign-in',
-      });
-    } catch {
-      toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
-      return;
-    }
-
-    if (result.error) {
-      const errorMessage = result.error.code
-        ? t(
-            `auth:errorCode.${result.error.code as unknown as keyof typeof authErrorCodes}`
-          )
-        : (typeof result.error.message === 'string' && result.error.message) ||
-          t('auth:errorCode.UNKNOWN_ERROR');
-      toast.error(errorMessage);
-      return;
-    }
-
-    router.navigate({
-      replace: true,
-      to: '/login/verify',
-      search: {
-        redirect: search.redirect,
-        email,
-      },
-    });
-  };
+  const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
+  const isInvalidAfterSubmit = useStore(
+    form.store,
+    (s) => s.isSubmitted && !s.isValid
+  );
+  useMascot({ isError: isInvalidAfterSubmit });
 
   return (
-    <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
+    <Form form={form} className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
@@ -126,16 +125,18 @@ export default function PageLogin({
             <FormFieldLabel className="sr-only">
               {t('auth:common.email.label')}
             </FormFieldLabel>
-            <FormFieldController
-              type="email"
-              control={form.control}
-              name="email"
-              size="lg"
-              placeholder={t('auth:common.email.label')}
-            />
+            <form.AppField name="email">
+              {(field) => (
+                <field.FieldText
+                  type="email"
+                  size="lg"
+                  placeholder={t('auth:common.email.label')}
+                />
+              )}
+            </form.AppField>
           </FormField>
           <Button
-            loading={form.formState.isSubmitting}
+            loading={isSubmitting}
             type="submit"
             size="lg"
             className="w-full"
