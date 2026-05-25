@@ -40,6 +40,8 @@ export const createSentryTelemetryAdapter = (
   setUser: (user) => {
     if (!user) {
       Sentry.setUser(null);
+      Sentry.setTag?.('role', 'none');
+      Sentry.setTag?.('tenantId', 'none');
       return;
     }
     Sentry.setUser({
@@ -47,7 +49,7 @@ export const createSentryTelemetryAdapter = (
       email: user.email ?? undefined,
       segment: user.role ?? undefined,
     });
-    if (user.role) Sentry.setTag?.('role', user.role);
+    Sentry.setTag?.('role', user.role ?? 'none');
     Sentry.setTag?.('tenantId', user.tenantId ?? 'none');
   },
   startSpan: (options, fn) =>

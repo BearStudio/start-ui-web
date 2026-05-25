@@ -78,13 +78,13 @@ describe('auth route guards', () => {
     const error = await getThrown(() =>
       redirectAuthenticatedRoute({
         context: makeContext(makeSession({ onboardedAt: null })),
-        redirect: '/manager/users?searchTerm=a',
+        redirect: '/manager/users?searchTerm=a#details',
       })
     );
 
     expect(error.options).toMatchObject({
       to: '/onboarding',
-      search: { redirect: '/manager/users?searchTerm=a' },
+      search: { redirect: '/manager/users?searchTerm=a#details' },
       replace: true,
     });
   });
@@ -94,13 +94,14 @@ describe('auth route guards', () => {
       requireOnboardingRoute({
         context: makeContext(makeSession()),
         location,
-        redirect: '/app/books',
+        redirect: '/app/books#current',
       })
     );
 
     expect(error.options).toMatchObject({
       to: '/app/books',
       search: {},
+      hash: 'current',
       replace: true,
     });
   });
@@ -120,9 +121,10 @@ describe('auth route guards', () => {
     expect(parseSafeRedirectPath('//example.com/app')).toBeNull();
     expect(parseSafeRedirectPath('/login?redirect=/app')).toBeNull();
     expect(parseSafeRedirectPath('/logout')).toBeNull();
-    expect(parseSafeRedirectPath('/manager?tab=users')).toEqual({
+    expect(parseSafeRedirectPath('/manager?tab=users#details')).toEqual({
       to: '/manager',
       search: { tab: 'users' },
+      hash: 'details',
     });
   });
 });

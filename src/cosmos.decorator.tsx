@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { StrictMode, useEffect } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 
 import type { LanguageKey } from '@/platform/lib/i18n/constants';
 import {
@@ -21,12 +21,11 @@ type CosmosDecoratorProps = {
   options?: CosmosFixtureOptions;
 };
 
-const queryClient = createClientQueryClient();
-
 export default function CosmosDecorator({
   children,
   options,
 }: CosmosDecoratorProps) {
+  const [queryClient] = useState(() => createClientQueryClient());
   const locale = options?.locale ?? DEFAULT_LANGUAGE_KEY;
 
   useEffect(() => {

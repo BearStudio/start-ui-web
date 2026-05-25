@@ -27,7 +27,7 @@ export const initTelemetryClient = (router?: unknown) => {
     tracesSampleRate: envClient.VITE_SENTRY_TRACES_SAMPLE_RATE,
     integrations: router
       ? [Sentry.tanstackRouterBrowserTracingIntegration(router)]
-      : undefined,
+      : [Sentry.browserTracingIntegration()],
   });
 
   setTelemetry(createSentryTelemetryAdapter(Sentry));

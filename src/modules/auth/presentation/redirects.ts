@@ -6,6 +6,7 @@ export type PostAuthDestination = '/' | '/app' | '/manager';
 export type ParsedSafeRedirectPath = {
   to: InternalRedirectPath;
   search: Record<string, string>;
+  hash: string;
 };
 
 type RedirectLocation = {
@@ -44,6 +45,7 @@ export const parseSafeRedirectPath = (
   return {
     to: url.pathname as InternalRedirectPath,
     search: Object.fromEntries(url.searchParams),
+    hash: url.hash ? url.hash.slice(1) : '',
   };
 };
 

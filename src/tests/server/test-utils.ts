@@ -110,7 +110,7 @@ export const mockUser = {
 export const mockSession = {
   id: 'session-1',
   token: 'session-token-1',
-  expiresAt: new Date('2024-01-02T00:00:00.000Z'),
+  expiresAt: new Date('2099-01-02T00:00:00.000Z'),
 };
 
 export const expectedPermissionRequest = (permissions: Permission) => ({
