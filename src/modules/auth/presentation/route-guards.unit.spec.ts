@@ -1,8 +1,6 @@
-import { QueryClient } from '@tanstack/react-query';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { CurrentSession } from '@/modules/auth';
-import { authQueries } from '@/modules/auth/client';
 
 import { parseSafeRedirectPath } from './redirects';
 import {
@@ -42,11 +40,11 @@ const makeSession = (
   scopeKey: `user:user-1:role:${overrides.role ?? 'admin'}:tenant:none`,
 });
 
-const makeContext = (session: CurrentSession | null) => {
-  const queryClient = new QueryClient();
-  queryClient.setQueryData(authQueries.currentSession().queryKey, session);
-  return { queryClient };
-};
+const makeContext = (session: CurrentSession | null) => ({
+  auth: {
+    getSession: vi.fn(async () => session),
+  },
+});
 
 const getThrown = async (fn: () => Promise<unknown>) => {
   try {
@@ -130,6 +128,18 @@ describe('auth route guards', () => {
       to: '/app',
       replace: true,
     });
+  });
+
+  it('uses the router auth session accessor for post-login redirects', async () => {
+    const context = makeContext(makeSession({ role: 'admin' }));
+
+    await getThrown(() =>
+      redirectAuthenticatedRoute({
+        context,
+      })
+    );
+
+    expect(context.auth.getSession).toHaveBeenCalledTimes(1);
   });
 
   it('throws forbidden route errors for missing app permissions', async () => {

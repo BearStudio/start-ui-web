@@ -1,9 +1,8 @@
-import type { QueryClient } from '@tanstack/react-query';
 import { redirect } from '@tanstack/react-router';
 
 import type { Permission } from '@/modules/auth';
-import { hasRolePermission } from '@/modules/auth';
-import { authQueries } from '@/modules/auth/client';
+import { hasRolePermission, parseRole } from '@/modules/auth';
+import type { CurrentSessionLike } from '@/platform/router/context';
 
 import {
   internalRedirectFromLocation,
@@ -15,7 +14,9 @@ type PermissionApp = NonNullable<Permission['apps']>[number];
 type PermissionApps = [PermissionApp, ...PermissionApp[]];
 
 type AuthRouteContext = {
-  queryClient: QueryClient;
+  auth: {
+    getSession: () => Promise<CurrentSessionLike | null>;
+  };
 };
 
 type RouteLocation = {
@@ -37,7 +38,7 @@ export const isForbiddenRouteError = (
 ): error is ForbiddenRouteError => error instanceof ForbiddenRouteError;
 
 const getCurrentSession = (context: AuthRouteContext) =>
-  context.queryClient.ensureQueryData(authQueries.currentSession());
+  context.auth.getSession();
 
 const redirectToSafePath = (input: string | null | undefined) => {
   const safeRedirect = parseSafeRedirectPath(input);
@@ -73,11 +74,10 @@ export async function requireAuthenticatedRoute(input: {
     });
   }
 
+  const role = parseRole(currentSession.user.role);
   if (
     input.permissionApps &&
-    !hasRolePermission(currentSession.user.role, {
-      apps: input.permissionApps,
-    })
+    (!role || !hasRolePermission(role, { apps: input.permissionApps }))
   ) {
     throw new ForbiddenRouteError();
   }

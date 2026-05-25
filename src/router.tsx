@@ -49,8 +49,7 @@ export function getRouter() {
     // navigation share the sanitized current-session fetch without sharing
     // cache state across SSR requests or router instances.
     auth: {
-      getSession: () =>
-        queryClient.ensureQueryData(authQueries.currentSession()),
+      getSession: () => queryClient.fetchQuery(authQueries.currentSession()),
     },
     telemetry: telemetryProxy,
     flags,

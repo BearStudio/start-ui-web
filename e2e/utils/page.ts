@@ -217,12 +217,23 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
         }
       )
     ).toBeVisible();
+    await expect(page.getByTestId('auth-login-form')).toHaveAttribute(
+      'data-hydrated',
+      'true'
+    );
+    diagnostics.log('login.form.hydrated', { email: input.email });
+
     diagnostics.log('login.form.visible', { email: input.email });
 
-    await page
-      .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label)
-      .fill(input.email);
-    diagnostics.log('login.email.filled', { email: input.email });
+    const emailInput = page.getByPlaceholder(
+      locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label
+    );
+    await emailInput.fill(input.email);
+    await expect(emailInput).toHaveValue(input.email);
+    diagnostics.log('login.email.filled', {
+      email: input.email,
+      inputValue: await emailInput.inputValue(),
+    });
 
     await page
       .getByRole('button', {
@@ -241,6 +252,11 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
         route: routeLoginVerify,
       }
     );
+    await expect(page.getByTestId('auth-login-verify-form')).toHaveAttribute(
+      'data-hydrated',
+      'true'
+    );
+    diagnostics.log('login.verify.form.hydrated', { email: input.email });
     await page
       .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
       .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);

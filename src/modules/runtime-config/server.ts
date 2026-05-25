@@ -1,20 +1,32 @@
-import { createServerOnlyFn } from '@tanstack/react-start';
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
-import { createConfigHandlers } from './transport/http/config-handlers';
-import { createConfigServerFunctions } from './transport/tanstack/config-server-functions';
+import {
+  type ConfigHandlers,
+  createConfigHandlers,
+} from './transport/http/config-handlers';
 
-const getDeps = createServerOnlyFn(async () => {
-  const { getRuntimeConfigUseCases } =
-    await import('@/composition/runtime-config');
+type ConfigServerRuntimeDeps = {
+  handlers: ConfigHandlers;
+};
 
-  return {
-    handlers: createConfigHandlers({
-      getUseCases: getRuntimeConfigUseCases,
-    }),
-  };
+const getDeps = createServerOnlyFn(
+  async (): Promise<ConfigServerRuntimeDeps> => {
+    const { getRuntimeConfigUseCases } =
+      await import('@/composition/runtime-config');
+
+    return {
+      handlers: createConfigHandlers({
+        getUseCases: getRuntimeConfigUseCases,
+      }),
+    };
+  }
+);
+
+export const configEnv = createServerFn({ method: 'GET' }).handler(async () => {
+  const { handlers } = await getDeps();
+  return handlers.env();
 });
 
-const serverFunctions = createConfigServerFunctions({ getDeps });
-
-export const configEnv = serverFunctions.configEnv;
-export type { ConfigServerFunctions } from './transport/tanstack/config-server-functions';
+export type ConfigServerFunctions = {
+  configEnv: typeof configEnv;
+};

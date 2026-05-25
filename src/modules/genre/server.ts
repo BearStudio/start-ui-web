@@ -1,31 +1,62 @@
-import { createServerOnlyFn } from '@tanstack/react-start';
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
-import { createGenreHandlers } from './transport/http/genre-handlers';
-import { createGenreServerFunctions } from './transport/tanstack/genre-server-functions';
+import {
+  createServerFunctionInvoker,
+  type ServerFnContextRunner,
+} from '@/platform/lib/tanstack-start/server-function-handler';
 
-const getDeps = createServerOnlyFn(async () => {
-  const [
-    { getGenreUseCases },
-    { getKernelForProcedureLogger },
-    { withProtectedContext },
-  ] = await Promise.all([
-    import('@/composition/genre'),
-    import('@/composition/kernel'),
-    import('@/modules/auth/server'),
-  ]);
+import type { ProtectedContext } from '@/modules/auth/server';
 
-  return {
-    handlers: createGenreHandlers({
-      getUseCases: (ctx) =>
-        getGenreUseCases({
-          kernel: getKernelForProcedureLogger(ctx.logger),
-        }),
-    }),
-    withProtectedContext,
-  };
+import {
+  createGenreHandlers,
+  type GenreHandlers,
+  zGetAllInput,
+} from './transport/http/genre-handlers';
+
+type ProtectedRunner = ServerFnContextRunner<ProtectedContext>;
+
+type GenreServerRuntimeDeps = {
+  handlers: GenreHandlers;
+  withProtectedContext: ProtectedRunner;
+};
+
+const getDeps = createServerOnlyFn(
+  async (): Promise<GenreServerRuntimeDeps> => {
+    const [
+      { getGenreUseCases },
+      { getKernelForProcedureLogger },
+      { withProtectedContext },
+    ] = await Promise.all([
+      import('@/composition/genre'),
+      import('@/composition/kernel'),
+      import('@/modules/auth/server'),
+    ]);
+
+    return {
+      handlers: createGenreHandlers({
+        getUseCases: (ctx) =>
+          getGenreUseCases({
+            kernel: getKernelForProcedureLogger(ctx.logger),
+          }),
+      }),
+      withProtectedContext,
+    };
+  }
+);
+
+const runProtected = createServerFunctionInvoker({
+  getDeps,
+  selectRunner: (deps) => deps.withProtectedContext,
 });
 
-const serverFunctions = createGenreServerFunctions({ getDeps });
+export const genreGetAll = createServerFn({ method: 'GET' })
+  .inputValidator(zGetAllInput())
+  .handler(async ({ data }) =>
+    runProtected(data, ({ handlers }, ctx, input) =>
+      handlers.getAll(ctx, input)
+    )
+  );
 
-export const genreGetAll = serverFunctions.genreGetAll;
-export type { GenreServerFunctions } from './transport/tanstack/genre-server-functions';
+export type GenreServerFunctions = {
+  genreGetAll: typeof genreGetAll;
+};

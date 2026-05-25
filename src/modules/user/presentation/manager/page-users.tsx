@@ -6,6 +6,7 @@ import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/platform/lib/tailwind/utils';
+import { useHydrated } from '@/platform/hooks/use-hydrated';
 
 import {
   Avatar,
@@ -42,6 +43,8 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);
   const router = useRouter();
   const scopeKey = useCurrentScopeKey();
+  const hydrated = useHydrated();
+  const canLoadUsers = !import.meta.env.SSR && hydrated;
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -53,14 +56,16 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       }),
   };
 
-  const usersQuery = useInfiniteQuery(
-    userQueries.getAllInfinite({
+  const usersQuery = useInfiniteQuery({
+    ...userQueries.getAllInfinite({
       scopeKey,
       searchTerm: props.search.searchTerm,
-    })
-  );
+    }),
+    enabled: canLoadUsers,
+  });
 
   const ui = getUiState((set) => {
+    if (!canLoadUsers) return set('pending');
     if (usersQuery.status === 'pending') return set('pending');
     if (usersQuery.status === 'error') return set('error');
     const searchTerm = props.search.searchTerm;
@@ -72,7 +77,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     return set('default', {
       items,
       searchTerm,
-      total: usersQuery.data.pages[0]?.total ?? 0,
+      total: usersQuery.data?.pages[0]?.total ?? 0,
     });
   });
 

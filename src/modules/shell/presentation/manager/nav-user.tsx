@@ -42,12 +42,18 @@ import { useAuthSession } from '@/modules/auth/client';
 import { BuildInfoDrawer } from '@/modules/build-info/presentation';
 import { BuildInfoVersion } from '@/modules/build-info/presentation';
 
+type Theme = (typeof themes)[number];
+
+const isTheme = (value: string | undefined): value is Theme =>
+  themes.some((theme) => theme === value);
+
 export function NavUser() {
   const { t } = useTranslation(['common', 'auth', 'layout']);
   const { isMobile } = useSidebar();
   const session = useAuthSession();
   const { setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const selectedTheme = isTheme(theme) ? theme : 'system';
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
@@ -114,12 +120,15 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+            <DropdownMenuRadioGroup
+              value={selectedTheme}
+              onValueChange={setTheme}
+            >
               {themes.map((item) => (
                 <DropdownMenuRadioItem
                   key={item}
                   value={item}
-                  icon={match(theme as (typeof themes)[number])
+                  icon={match(selectedTheme)
                     .with('system', () => (
                       <SunMoonIcon className="text-muted-foreground" />
                     ))

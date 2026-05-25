@@ -4,6 +4,8 @@ import { useRouter } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { useHydrated } from '@/platform/hooks/use-hydrated';
+
 import {
   Form,
   FormField,
@@ -33,6 +35,7 @@ export default function PageLogin({
 }) {
   const { i18n, t } = useTranslation(['auth', 'common']);
   const router = useRouter();
+  const hydrated = useHydrated();
   const safeRedirect = normalizeInternalRedirect(search.redirect);
   const social = useMutation({
     mutationFn: async (
@@ -140,7 +143,12 @@ export default function PageLogin({
   useMascot({ isError: isInvalidAfterSubmit });
 
   return (
-    <Form form={form} className="flex flex-col gap-6">
+    <Form
+      form={form}
+      className="flex flex-col gap-6"
+      data-hydrated={hydrated ? 'true' : 'false'}
+      data-testid="auth-login-form"
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
