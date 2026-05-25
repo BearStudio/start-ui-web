@@ -99,8 +99,19 @@ export function resetMockDb() {
   mockDb.delete = fresh.delete;
 }
 
-export const mockUser = { id: 'user-1', name: 'Test User' };
-export const mockSession = { id: 'session-1', token: 'session-token-1' };
+export const mockUser = {
+  id: 'user-1',
+  name: 'Test User',
+  email: 'user@example.com',
+  image: null,
+  role: 'user' as const,
+  onboardedAt: new Date('2024-01-01T00:00:00.000Z'),
+};
+export const mockSession = {
+  id: 'session-1',
+  token: 'session-token-1',
+  expiresAt: new Date('2024-01-02T00:00:00.000Z'),
+};
 
 export const expectedPermissionRequest = (permissions: Permission) => ({
   body: {
@@ -131,5 +142,10 @@ export const createAuthenticatedContext = (overrides?: {
   ({
     user: overrides?.user ?? mockUser,
     session: overrides?.session ?? mockSession,
+    scope: {
+      userId: (overrides?.user ?? mockUser).id,
+      role: (overrides?.user ?? mockUser).role,
+      tenantId: null,
+    },
     logger: mockLogger,
   }) as ExplicitAny;

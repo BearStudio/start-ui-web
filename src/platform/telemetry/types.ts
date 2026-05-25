@@ -11,6 +11,7 @@ export type TelemetryUser = {
   id: string;
   email?: string | null;
   role?: string | null;
+  tenantId?: string | null;
 };
 
 export type TelemetryCaptureContext = {

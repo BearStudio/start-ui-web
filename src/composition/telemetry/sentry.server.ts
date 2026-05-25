@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/node';
+import * as Sentry from '@sentry/tanstackstart-react';
 
 import { envServer } from '@/platform/env/server';
 

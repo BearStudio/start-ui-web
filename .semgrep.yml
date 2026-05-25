@@ -1,4 +1,11 @@
 rules:
+  - id: no-react-hook-form-imports
+    message: Use TanStack Form via src/platform/components/form/use-app-form.ts; do not add React Hook Form back.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']react-hook-form(?:/[^"'']*)?["'']'
+
   - id: no-session-token-in-client-features
     message: Do not expose or pass raw session tokens through client-facing feature code; use session IDs and resolve tokens server-side.
     severity: ERROR

@@ -1,4 +1,5 @@
-import type { UserId } from '@/modules/kernel/domain/ids';
+import type { RequestScope } from '@/modules/auth';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { AccountUseCaseDeps, UseCaseResult } from './types';
 import type { AccountUpdateResult } from '../../domain/account';
@@ -6,7 +7,7 @@ import { normalizeAccountName } from '../../domain/account';
 import { isAccountNamePresent } from '../../domain/account-policy';
 
 export type UpdateAccountInfoInput = {
-  currentUserId: UserId;
+  scope: RequestScope;
   name: string;
 };
 
@@ -17,11 +18,12 @@ export async function updateAccountInfo(
   if (!isAccountNamePresent(input.name))
     return { ok: false, reason: 'invalid' };
 
+  const currentUserId = toUserId(input.scope.userId);
   deps.logger.info('account.update_info', {
     event: 'account.update_info',
-    userId: input.currentUserId,
+    userId: currentUserId,
   });
-  const value = await deps.accountRepository.updateInfo(input.currentUserId, {
+  const value = await deps.accountRepository.updateInfo(currentUserId, {
     name: normalizeAccountName(input.name),
   });
   if (!value) return { ok: false, reason: 'not_found' };

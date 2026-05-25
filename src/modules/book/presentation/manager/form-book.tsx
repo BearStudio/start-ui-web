@@ -10,6 +10,7 @@ import {
   withForm,
 } from '@/platform/components/form';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import {
   bookCoverAcceptedFileTypes,
   type FormFieldsBook,
@@ -37,7 +38,8 @@ export const FormBook = withForm({
   defaultValues: formBookDefaultValues(),
   render: ({ form }) => {
     const { t } = useTranslation(['book']);
-    const genresQuery = useQuery(genreQueries.getAllList());
+    const scopeKey = useCurrentScopeKey();
+    const genresQuery = useQuery(genreQueries.getAllList({ scopeKey }));
 
     return (
       <div className="flex flex-col gap-4">

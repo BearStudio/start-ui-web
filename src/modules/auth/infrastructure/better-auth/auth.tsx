@@ -7,7 +7,7 @@ import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
 } from '@/modules/auth';
-import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/client';
+import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
 import {

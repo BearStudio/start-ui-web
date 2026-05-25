@@ -15,7 +15,11 @@ import {
 import { Button } from '@/platform/components/ui/button';
 import { ButtonLink } from '@/platform/components/ui/button-link';
 
-import { signInEmailOtp, useAuthSession } from '@/modules/auth/client';
+import {
+  authQueries,
+  signInEmailOtp,
+  useAuthSession,
+} from '@/modules/auth/client';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_SIGNUP_ENABLED,
@@ -74,7 +78,9 @@ export default function PageLoginVerify({
       // session cache so /login beforeLoad re-runs and redirects to the post-
       // login destination (search.redirect, /manager, /app, or /).
       await session.refetch();
-      await queryClient.invalidateQueries({ queryKey: ['session'] });
+      await queryClient.invalidateQueries({
+        queryKey: authQueries.currentSession().queryKey,
+      });
       await router.invalidate();
     },
   });

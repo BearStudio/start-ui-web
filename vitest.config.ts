@@ -5,6 +5,21 @@ import { defineConfig } from 'vitest/config';
 
 const resolve = (filePath: string) => path.resolve(__dirname, filePath);
 
+const testAliases = [
+  {
+    find: /^@tanstack\/react-start$/,
+    replacement: resolve('./src/tests/mocks/tanstack-react-start.ts'),
+  },
+  {
+    find: /^@tanstack\/react-start\/server$/,
+    replacement: resolve('./src/tests/mocks/tanstack-react-start-server.ts'),
+  },
+  {
+    find: '@',
+    replacement: resolve('./src'),
+  },
+];
+
 export default defineConfig({
   plugins: [react()],
   test: {
@@ -39,9 +54,7 @@ export default defineConfig({
           ],
         },
         resolve: {
-          alias: {
-            '@': resolve('./src'),
-          },
+          alias: testAliases,
         },
       },
       {
@@ -55,9 +68,7 @@ export default defineConfig({
           ],
         },
         resolve: {
-          alias: {
-            '@': resolve('./src'),
-          },
+          alias: testAliases,
         },
       },
     ],

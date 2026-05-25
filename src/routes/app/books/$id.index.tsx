@@ -6,7 +6,9 @@ import { useShouldShowNav } from '@/modules/shell/presentation';
 
 export const Route = createFileRoute('/app/books/$id/')({
   loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(bookQueries.getById(params)),
+    context.queryClient.ensureQueryData(
+      bookQueries.getById({ ...params, scopeKey: context.scopeKey })
+    ),
   component: RouteComponent,
 });
 

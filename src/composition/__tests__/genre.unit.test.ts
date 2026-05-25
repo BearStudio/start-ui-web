@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { GenreRepository } from '@/modules/genre';
-import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import { toGenreId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from './helpers';
 import { __resetGenreComposition, getGenreUseCases } from '../genre';
@@ -20,6 +20,9 @@ const makeGenreRepository = (
   list: async () => ({ items: [genre], total: 1 }),
   ...overrides,
 });
+
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
 
 describe('genre composition', () => {
   beforeEach(() => {
@@ -53,7 +56,7 @@ describe('genre composition', () => {
 
     await expect(
       useCases.list({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         limit: 20,
         searchTerm: 'fic',
       })

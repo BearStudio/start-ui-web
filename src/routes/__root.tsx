@@ -6,6 +6,7 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+  useRouteContext,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createServerFn } from '@tanstack/react-start';
@@ -104,9 +105,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootComponent() {
+  const { queryClient } = useRouteContext({ from: Route.id });
+
   return (
     <RootDocument>
-      <Providers>
+      <Providers client={queryClient}>
         <Outlet />
         <TanStackDevtools
           config={{

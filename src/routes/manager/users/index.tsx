@@ -18,7 +18,10 @@ export const Route = createFileRoute('/manager/users/')({
   component: RouteComponent,
   loader: ({ context, deps }) =>
     context.queryClient.ensureInfiniteQueryData(
-      userQueries.getAllInfinite({ searchTerm: deps.searchTerm })
+      userQueries.getAllInfinite({
+        scopeKey: context.scopeKey,
+        searchTerm: deps.searchTerm,
+      })
     ),
 });
 

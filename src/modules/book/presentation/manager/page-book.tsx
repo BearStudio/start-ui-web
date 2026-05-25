@@ -15,7 +15,7 @@ import { ResponsiveIconButton } from '@/platform/components/ui/responsive-icon-b
 import { Skeleton } from '@/platform/components/ui/skeleton';
 import { Spinner } from '@/platform/components/ui/spinner';
 
-import { WithPermissions } from '@/modules/auth/client';
+import { useCurrentScopeKey, WithPermissions } from '@/modules/auth/client';
 import { BookCover } from '@/modules/book/presentation/book-cover';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
@@ -31,7 +31,10 @@ export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
   const queryClient = useQueryClient();
   const { navigateBack } = useNavigateBack();
-  const bookQuery = useQuery(bookQueries.getById({ id: props.params.id }));
+  const scopeKey = useCurrentScopeKey();
+  const bookQuery = useQuery(
+    bookQueries.getById({ id: props.params.id, scopeKey })
+  );
   const deleteBookMutation = useMutation(bookQueries.deleteById());
 
   const ui = getUiState((set) => {
@@ -52,12 +55,13 @@ export const PageBook = (props: { params: { id: string } }) => {
       await Promise.all([
         // Invalidate books list
         queryClient.invalidateQueries({
-          queryKey: bookQueries.getAll(),
+          queryKey: bookQueries.getAll(scopeKey),
           type: 'all',
         }),
         // Remove book from cache
         queryClient.removeQueries({
-          queryKey: bookQueries.getById({ id: props.params.id }).queryKey,
+          queryKey: bookQueries.getById({ id: props.params.id, scopeKey })
+            .queryKey,
         }),
       ]);
 

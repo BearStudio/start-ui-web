@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import { toGenreId } from '@/modules/kernel/domain/ids';
 
 import type { GenreRepository } from '../ports/genre-repository';
 import type { Genre } from '../../domain/genre';
@@ -30,6 +30,8 @@ const allowed: PermissionChecker = {
   hasPermission: async () => true,
 };
 
+const scope = { userId: 'user-1', role: 'user', tenantId: null } as const;
+
 describe('genre use cases', () => {
   it('lists genres and returns forbidden when permission is missing', async () => {
     await expect(
@@ -37,7 +39,7 @@ describe('genre use cases', () => {
         genreRepository: repo,
         permissionChecker: allowed,
         logger,
-      }).list({ currentUserId: toUserId('user-1'), limit: 20 })
+      }).list({ scope, limit: 20 })
     ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
 
     await expect(
@@ -45,7 +47,7 @@ describe('genre use cases', () => {
         genreRepository: repo,
         permissionChecker: { hasPermission: async () => false },
         logger,
-      }).list({ currentUserId: toUserId('user-1'), limit: 20 })
+      }).list({ scope, limit: 20 })
     ).resolves.toEqual({ ok: false, reason: 'forbidden' });
   });
 });

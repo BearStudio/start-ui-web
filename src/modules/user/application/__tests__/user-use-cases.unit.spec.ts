@@ -42,6 +42,9 @@ const authGateway: UserAuthGateway = {
   revokeUserSession: async () => true,
 };
 
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
+
 function makeRepo(overrides: Partial<UserRepository> = {}): UserRepository {
   return {
     list: async () => ({ items: [user], total: 1 }),
@@ -98,7 +101,7 @@ describe('user use cases', () => {
   it('lists and gets users with forbidden and not_found branches', async () => {
     await expect(
       makeUseCases().list({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         limit: 20,
         searchTerm: '',
       })
@@ -106,11 +109,11 @@ describe('user use cases', () => {
     await expect(
       makeUseCases({
         permissionChecker: { hasPermission: async () => false },
-      }).list({ currentUserId: toUserId('admin-1'), limit: 20, searchTerm: '' })
+      }).list({ scope: scope('admin-1'), limit: 20, searchTerm: '' })
     ).resolves.toEqual({ ok: false, reason: 'forbidden' });
     await expect(
       makeUseCases({ repo: { getById: async () => null } }).get({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         id: toUserId('missing'),
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
@@ -129,7 +132,7 @@ describe('user use cases', () => {
           },
         },
       }).create({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         user: { email: toEmailAddress('user@example.com'), role: 'user' },
       })
     ).resolves.toEqual({ ok: false, reason: 'duplicate' });
@@ -145,7 +148,7 @@ describe('user use cases', () => {
           },
         },
       }).create({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         user: { email: toEmailAddress('user@example.com'), role: 'user' },
       })
     ).rejects.toMatchObject({ code: 'OTHER_CONFLICT' });
@@ -153,7 +156,7 @@ describe('user use cases', () => {
 
   it('updates users without self role escalation and handles missing rows', async () => {
     const result = await makeUseCases().update({
-      currentUserId: toUserId('user-1'),
+      scope: scope('user-1'),
       id: toUserId('user-1'),
       user: { email: toEmailAddress('next@example.com'), role: 'admin' },
     });
@@ -164,7 +167,7 @@ describe('user use cases', () => {
 
     const updateSpy = vi.fn(makeRepo().update);
     await makeUseCases({ repo: { update: updateSpy } }).update({
-      currentUserId: toUserId('admin-1'),
+      scope: scope('admin-1'),
       id: toUserId('user-1'),
       user: { email: toEmailAddress('next@example.com') },
     });
@@ -175,7 +178,7 @@ describe('user use cases', () => {
 
     await expect(
       makeUseCases({ repo: { getUpdateSnapshot: async () => null } }).update({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         id: toUserId('missing'),
         user: { email: toEmailAddress('next@example.com') },
       })
@@ -185,13 +188,13 @@ describe('user use cases', () => {
   it('protects destructive self operations and missing sessions', async () => {
     await expect(
       makeUseCases().delete({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         id: toUserId('user-1'),
       })
     ).resolves.toEqual({ ok: false, reason: 'self' });
     await expect(
       makeUseCases().revokeSessions({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         id: toUserId('user-1'),
       })
     ).resolves.toEqual({ ok: false, reason: 'self' });
@@ -199,7 +202,7 @@ describe('user use cases', () => {
       makeUseCases({
         repo: { findSessionForRevocation: async () => null },
       }).revokeSession({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         currentSessionId: toSessionId('current'),
         id: toUserId('user-1'),
         sessionId: toSessionId('missing'),
@@ -212,7 +215,7 @@ describe('user use cases', () => {
 
     await expect(
       makeUseCases({ auth: { revokeUserSession } }).revokeSession({
-        currentUserId: toUserId('admin-1'),
+        scope: scope('admin-1'),
         currentSessionId: toSessionId('current'),
         id: toUserId('user-1'),
         sessionId: toSessionId('session-2'),
@@ -227,7 +230,7 @@ describe('user use cases', () => {
 
   it('lists sessions without token exposure', async () => {
     const result = await makeUseCases().listSessions({
-      currentUserId: toUserId('admin-1'),
+      scope: scope('admin-1'),
       userId: toUserId('user-1'),
       limit: 20,
     });

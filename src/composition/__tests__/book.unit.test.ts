@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { BookRepository } from '@/modules/book';
-import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from './helpers';
 import { __resetBookComposition, getBookUseCases } from '../book';
@@ -28,6 +28,9 @@ const makeBookRepository = (
   delete: async () => true,
   ...overrides,
 });
+
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
 
 describe('book composition', () => {
   beforeEach(() => {
@@ -61,7 +64,7 @@ describe('book composition', () => {
 
     await expect(
       useCases.list({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         limit: 20,
         searchTerm: 'du',
       })

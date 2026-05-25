@@ -22,6 +22,9 @@ export type TfFieldAdapter<TValue> = {
     invalid: boolean;
     errors: unknown[];
   };
+  formState: {
+    isSubmitted: boolean;
+  };
 };
 
 export const useTfField = <TValue>(): TfFieldAdapter<TValue> => {
@@ -38,5 +41,6 @@ export const useTfField = <TValue>(): TfFieldAdapter<TValue> => {
       disabled: (tf.options as { disabled?: boolean } | undefined)?.disabled,
     },
     fieldState: { invalid, errors },
+    formState: { isSubmitted: tf.form.state.isSubmitted },
   };
 };

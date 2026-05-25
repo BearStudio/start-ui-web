@@ -1,10 +1,12 @@
+import type { RequestScope } from '@/modules/auth';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { UseCaseResult, UserUseCaseDeps } from './types';
 
 export type RevokeUserSessionInput = {
-  currentUserId: UserId;
+  scope: RequestScope;
   currentSessionId: SessionId;
   id: UserId;
   sessionId: SessionId;
@@ -14,12 +16,10 @@ export async function revokeUserSession(
   deps: UserUseCaseDeps,
   input: RevokeUserSessionInput
 ): Promise<UseCaseResult<void, 'forbidden' | 'not_found' | 'self'>> {
-  const allowed = await deps.permissionChecker.hasPermission(
-    input.currentUserId,
-    {
-      session: ['revoke'],
-    }
-  );
+  const currentUserId = toUserId(input.scope.userId);
+  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
+    session: ['revoke'],
+  });
   if (!allowed) return { ok: false, reason: 'forbidden' };
 
   const targetSession = await deps.userRepository.findSessionForRevocation({

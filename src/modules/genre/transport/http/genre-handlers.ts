@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { ProtectedContext } from '@/modules/auth/server';
 import type { GenreUseCases } from '@/modules/genre';
-import { toGenreId, toUserId, zGenreId } from '@/modules/kernel/domain/ids';
+import { toGenreId, zGenreId } from '@/modules/kernel/domain/ids';
 import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zGetAllInput = () =>
@@ -24,7 +24,7 @@ export const createGenreHandlers = ({ getUseCases }: GenreHandlerDeps) => {
     data: z.output<ReturnType<typeof zGetAllInput>>
   ) => {
     const result = await getUseCases(ctx).list({
-      currentUserId: toUserId(ctx.user.id),
+      scope: ctx.scope,
       cursor: data.cursor ? toGenreId(data.cursor) : undefined,
       limit: data.limit,
       searchTerm: data.searchTerm ?? '',

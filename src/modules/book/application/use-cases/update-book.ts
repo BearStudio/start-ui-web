@@ -1,12 +1,14 @@
+import type { RequestScope } from '@/modules/auth';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import type { BookId, UserId } from '@/modules/kernel/domain/ids';
+import type { BookId } from '@/modules/kernel/domain/ids';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { BookUseCaseDeps, UseCaseResult } from './types';
 import type { Book, BookWriteInput } from '../../domain/book';
 import { normalizeBookWriteInput } from '../../domain/book';
 
 export type UpdateBookInput = {
-  currentUserId: UserId;
+  scope: RequestScope;
   id: BookId;
   book: BookWriteInput;
 };
@@ -15,12 +17,10 @@ export async function updateBook(
   deps: BookUseCaseDeps,
   input: UpdateBookInput
 ): Promise<UseCaseResult<Book, 'forbidden' | 'not_found' | 'duplicate'>> {
-  const allowed = await deps.permissionChecker.hasPermission(
-    input.currentUserId,
-    {
-      book: ['update'],
-    }
-  );
+  const currentUserId = toUserId(input.scope.userId);
+  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
+    book: ['update'],
+  });
   if (!allowed) return { ok: false, reason: 'forbidden' };
 
   try {

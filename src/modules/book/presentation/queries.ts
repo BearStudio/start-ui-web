@@ -18,30 +18,41 @@ type GetAllInput = {
   limit?: number;
 };
 
+export type ScopedQueryInput = {
+  scopeKey: string;
+};
+
 export const bookQueries = {
   all: () => ['book'] as const,
-  getAll: () => [...bookQueries.all(), 'getAll'] as const,
-  getAllList: (input?: GetAllInput) =>
-    queryOptions({
-      queryKey: [...bookQueries.getAll(), input ?? {}] as const,
-      queryFn: () => bookGetAll({ data: input }),
-    }),
-  getAllInfinite: (input?: Omit<GetAllInput, 'cursor'>) =>
-    infiniteQueryOptions({
-      queryKey: [...bookQueries.getAll(), 'infinite', input ?? {}] as const,
+  getAll: (scopeKey: string) =>
+    [...bookQueries.all(), { scopeKey }, 'getAll'] as const,
+  getAllList: (input: GetAllInput & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return queryOptions({
+      queryKey: [...bookQueries.getAll(scopeKey), data] as const,
+      queryFn: () => bookGetAll({ data }),
+    });
+  },
+  getAllInfinite: (input: Omit<GetAllInput, 'cursor'> & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return infiniteQueryOptions({
+      queryKey: [...bookQueries.getAll(scopeKey), 'infinite', data] as const,
       queryFn: ({ pageParam }) =>
         bookGetAll({
-          data: { ...input, cursor: pageParam },
+          data: { ...data, cursor: pageParam },
         }),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       maxPages: 10,
-    }),
-  getById: (input: { id: string }) =>
-    queryOptions({
-      queryKey: [...bookQueries.all(), 'getById', input] as const,
-      queryFn: () => bookGetById({ data: input }),
-    }),
+    });
+  },
+  getById: (input: { id: string } & ScopedQueryInput) => {
+    const { scopeKey, ...data } = input;
+    return queryOptions({
+      queryKey: [...bookQueries.all(), { scopeKey }, 'getById', data] as const,
+      queryFn: () => bookGetById({ data }),
+    });
+  },
   create: (): MutationOptions<
     Awaited<ReturnType<typeof bookCreate>>,
     Error,

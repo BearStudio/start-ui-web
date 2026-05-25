@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { PageError } from '@/platform/components/errors/page-error';
 import { Button } from '@/platform/components/ui/button';
 
+import { useCurrentScopeKey } from '@/modules/auth/client';
 import { BookCover } from '@/modules/book/presentation/book-cover';
 import {
   AppPageLayout as PageLayout,
@@ -18,7 +19,8 @@ import { bookQueries } from '../queries';
 
 export const PageBooks = () => {
   const { t } = useTranslation(['book']);
-  const booksQuery = useInfiniteQuery(bookQueries.getAllInfinite());
+  const scopeKey = useCurrentScopeKey();
+  const booksQuery = useInfiniteQuery(bookQueries.getAllInfinite({ scopeKey }));
 
   const ui = getUiState((set) => {
     if (booksQuery.status === 'pending') return set('pending');

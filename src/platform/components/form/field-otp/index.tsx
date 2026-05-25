@@ -4,7 +4,6 @@ import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
-import { useFormContext } from '@/platform/components/form/use-app-form-contexts';
 import { useTfField } from '@/platform/components/form/use-tf-field';
 import {
   InputOTP,
@@ -25,8 +24,7 @@ export const FieldOtp = (
 
   const containerRef = useRef<React.ComponentRef<'div'>>(null);
   const ctx = useFormField();
-  const { field, fieldState } = useTfField<string>();
-  const form = useFormContext();
+  const { field, fieldState, formState } = useTfField<string>();
 
   return (
     <FormFieldContainer {...containerProps} ref={containerRef}>
@@ -37,7 +35,7 @@ export const FieldOtp = (
         onComplete={(v) => {
           rest.onComplete?.(v);
           // Only auto submit on first try
-          if (autoSubmit && !form.state.isSubmitted) {
+          if (autoSubmit && !formState.isSubmitted) {
             const button = document.createElement('button');
             button.type = 'submit';
             button.style.display = 'none';

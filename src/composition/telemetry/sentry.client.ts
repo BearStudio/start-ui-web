@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/tanstackstart-react';
 
 import { envClient } from '@/platform/env/client';
 
@@ -13,7 +13,7 @@ let initialized = false;
  * No-op when `VITE_SENTRY_DSN` is unset so previews/local dev keep working
  * without telemetry configuration.
  */
-export const initTelemetryClient = () => {
+export const initTelemetryClient = (router?: unknown) => {
   if (initialized) return;
   initialized = true;
 
@@ -25,7 +25,9 @@ export const initTelemetryClient = () => {
     dsn: envClient.VITE_SENTRY_DSN,
     environment: envClient.VITE_SENTRY_ENVIRONMENT,
     tracesSampleRate: envClient.VITE_SENTRY_TRACES_SAMPLE_RATE,
-    integrations: [Sentry.browserTracingIntegration()],
+    integrations: router
+      ? [Sentry.tanstackRouterBrowserTracingIntegration(router)]
+      : undefined,
   });
 
   setTelemetry(createSentryTelemetryAdapter(Sentry));

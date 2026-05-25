@@ -1,3 +1,4 @@
+import type { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import '@/platform/lib/dayjs/config';
@@ -8,7 +9,6 @@ import { QueryClientProvider } from '@/platform/lib/tanstack-query/provider';
 
 import { Sonner } from '@/platform/components/ui/sonner';
 
-import { queryClient } from '@/composition/client-query';
 import {
   DemoModeDrawer,
   useIsDemoModeDrawerVisible,
@@ -17,6 +17,7 @@ import { envClient } from '@/platform/env/client';
 
 export const Providers = (props: {
   children: ReactNode;
+  client: QueryClient;
   forcedTheme?: string;
 }) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
@@ -27,7 +28,7 @@ export const Providers = (props: {
       disableTransitionOnChange
       forcedTheme={props.forcedTheme}
     >
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={props.client}>
         {props.children}
         {!isDemoModeDrawerVisible && <Sonner />}
         {envClient.VITE_IS_DEMO && <DemoModeDrawer />}

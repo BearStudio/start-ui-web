@@ -1,7 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { toUserId } from '@/modules/kernel/domain/ids';
-
 import type { AccountRepository } from '../ports/account-repository';
 import { createAccountUseCases } from '../../factory';
 
@@ -20,6 +18,9 @@ const repository: AccountRepository = {
   updateInfo: async (id) => ({ id }),
 };
 
+const scope = (userId: string) =>
+  ({ userId, role: 'user', tenantId: null }) as const;
+
 describe('account use cases', () => {
   it('submits onboarding and updates info', async () => {
     const useCases = createAccountUseCases({
@@ -30,12 +31,12 @@ describe('account use cases', () => {
 
     await expect(
       useCases.submitOnboarding({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         name: ' User ',
       })
     ).resolves.toMatchObject({ ok: true, value: { id: 'user-1' } });
     await expect(
-      useCases.updateInfo({ currentUserId: toUserId('user-1'), name: 'User' })
+      useCases.updateInfo({ scope: scope('user-1'), name: 'User' })
     ).resolves.toMatchObject({ ok: true, value: { id: 'user-1' } });
   });
 
@@ -51,12 +52,12 @@ describe('account use cases', () => {
 
     await expect(
       useCases.submitOnboarding({
-        currentUserId: toUserId('missing'),
+        scope: scope('missing'),
         name: 'User',
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
     await expect(
-      useCases.updateInfo({ currentUserId: toUserId('missing'), name: 'User' })
+      useCases.updateInfo({ scope: scope('missing'), name: 'User' })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
   });
 
@@ -75,12 +76,12 @@ describe('account use cases', () => {
 
     await expect(
       useCases.submitOnboarding({
-        currentUserId: toUserId('user-1'),
+        scope: scope('user-1'),
         name: '   ',
       })
     ).resolves.toEqual({ ok: false, reason: 'invalid' });
     await expect(
-      useCases.updateInfo({ currentUserId: toUserId('user-1'), name: '   ' })
+      useCases.updateInfo({ scope: scope('user-1'), name: '   ' })
     ).resolves.toEqual({ ok: false, reason: 'invalid' });
     expect(submitSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();

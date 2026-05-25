@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { ProtectedContext } from '@/modules/auth/server';
 import type { BookUseCases } from '@/modules/book';
-import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import {
   mapAppErrorToServerFnError,
   throwServerFnErrorForReason,
@@ -55,7 +55,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .list({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         cursor: data.cursor ? toBookId(data.cursor) : undefined,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
@@ -71,7 +71,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .get({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toBookId(data.id),
       })
       .catch(mapAppErrorToServerFnError);
@@ -85,7 +85,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .create({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         book: {
           title: data.title,
           author: data.author,
@@ -105,7 +105,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .update({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toBookId(data.id),
         book: {
           title: data.title,
@@ -126,7 +126,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     const result = await getUseCases(ctx)
       .delete({
-        currentUserId: toUserId(ctx.user.id),
+        scope: ctx.scope,
         id: toBookId(data.id),
       })
       .catch(mapAppErrorToServerFnError);

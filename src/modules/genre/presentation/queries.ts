@@ -8,13 +8,18 @@ type GetAllInput = {
   limit?: number;
 };
 
+type ScopedQueryInput = {
+  scopeKey: string;
+};
+
 export const genreQueries = {
   all: () => ['genre'] as const,
-  getAll: () => [...genreQueries.all(), 'getAll'] as const,
-  getAllList: (input?: GetAllInput) => {
-    const norm = input ?? {};
+  getAll: (scopeKey: string) =>
+    [...genreQueries.all(), { scopeKey }, 'getAll'] as const,
+  getAllList: (input: GetAllInput & ScopedQueryInput) => {
+    const { scopeKey, ...norm } = input;
     return queryOptions({
-      queryKey: [...genreQueries.getAll(), norm] as const,
+      queryKey: [...genreQueries.getAll(scopeKey), norm] as const,
       queryFn: () => genreGetAll({ data: norm }),
     });
   },

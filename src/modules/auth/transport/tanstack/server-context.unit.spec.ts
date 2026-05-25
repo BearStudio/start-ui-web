@@ -2,6 +2,7 @@ import { setResponseHeader } from '@tanstack/react-start/server';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  createServerContextTools,
   withProtectedMutation,
   withPublicContext,
 } from '@/modules/auth/server';
@@ -23,6 +24,56 @@ describe('server function middleware', () => {
       'Server-Timing',
       expect.stringContaining('global;dur=')
     );
+  });
+
+  it('sets protected cache headers and request scope for authenticated server functions', async () => {
+    await expect(
+      withPublicContext(async (ctx) => ({
+        scope: ctx.scope,
+        userId: ctx.user?.id,
+      }))
+    ).resolves.toEqual({
+      scope: {
+        userId: 'user-1',
+        role: 'user',
+        tenantId: null,
+      },
+      userId: 'user-1',
+    });
+
+    expect(setResponseHeader).toHaveBeenCalledWith(
+      'Cache-Control',
+      'private, no-store'
+    );
+    expect(setResponseHeader).toHaveBeenCalledWith(
+      'Vary',
+      'Cookie, Authorization'
+    );
+  });
+
+  it('binds authenticated users through the telemetry adapter', async () => {
+    const telemetry = {
+      captureException: vi.fn(),
+      setUser: vi.fn(),
+      startSpan: vi.fn((_options, fn) => fn()),
+    };
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession: mockGetSession,
+          checkPermission: vi.fn(),
+        }) as ExplicitAny,
+      telemetry,
+    });
+
+    await expect(tools.withPublicContext(async () => 'ok')).resolves.toBe('ok');
+
+    expect(telemetry.setUser).toHaveBeenCalledWith({
+      id: 'user-1',
+      email: 'user@example.com',
+      role: 'user',
+      tenantId: null,
+    });
   });
 
   it('maps auth context construction errors through the central handler', async () => {

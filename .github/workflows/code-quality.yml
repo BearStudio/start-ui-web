@@ -10,22 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  linter:
-    name: 🧹 Linter
-    if: github.event.pull_request.draft == false
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup pnpm
-        uses: ./.github/actions/setup-pnpm
-
-      - name: Run oxlint
-        run: pnpm oxlint --deny-warnings .
-
-  typescriptChecker:
-    name: 🟦 TypeScript Checker
+  format:
+    name: Format
     if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -37,11 +23,29 @@ jobs:
         with:
           node-version: 24
 
-      - name: Run Typescript checker
-        run: pnpm typecheck
+      - name: Check formatting
+        run: pnpm format:check
+
+  check:
+    name: Static Check
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run static checks
+        run: pnpm check
 
   tests:
-    name: 🔬 Tests
+    name: Tests
     if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -61,3 +65,23 @@ jobs:
 
       - name: Run tests
         run: SKIP_ENV_VALIDATION=true pnpm test
+
+  build:
+    name: Build
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: true
+      VITE_BASE_URL: http://localhost:3000
+      VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Build app
+        run: pnpm build
