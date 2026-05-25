@@ -21,6 +21,8 @@ const isDev = () => {
   return env.NODE_ENV ? env.NODE_ENV === 'development' : isTruthy(env.DEV);
 };
 
+export const isDevEnvironment = isDev;
+
 const zOptionalWithReplaceMe = () =>
   z
     .string()
