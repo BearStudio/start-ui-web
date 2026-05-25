@@ -1,7 +1,11 @@
-import type { RequestScope } from '@/modules/auth';
+import {
+  hasScopePermission,
+  type RequestScope,
+  scopeUserId,
+} from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { UseCaseResult, UserUseCaseDeps } from './types';
 import { isSelfTarget } from '../../domain/user-policy';
@@ -15,13 +19,15 @@ export async function revokeUserSessions(
   deps: UserUseCaseDeps,
   input: RevokeUserSessionsInput
 ): Promise<UseCaseResult<void, 'forbidden' | 'self'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    session: ['revoke'],
+  const currentUserId = scopeUserId(input.scope);
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { session: ['revoke'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
   if (isSelfTarget(currentUserId, input.id)) {
-    return { ok: false, reason: 'self' };
+    return fail('self');
   }
 
   const revoked = await deps.userAuthGateway.revokeUserSessions(input.id);
@@ -33,5 +39,5 @@ export async function revokeUserSessions(
       message: 'Failed to revoke user sessions',
     });
   }
-  return { ok: true, value: undefined };
+  return ok(undefined);
 }

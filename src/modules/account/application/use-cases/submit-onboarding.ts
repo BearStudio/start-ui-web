@@ -1,5 +1,5 @@
-import type { RequestScope } from '@/modules/auth';
-import { toUserId } from '@/modules/kernel/domain/ids';
+import { type RequestScope, scopeUserId } from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 
 import type { AccountUseCaseDeps, UseCaseResult } from './types';
 import type { AccountUpdateResult } from '../../domain/account';
@@ -15,10 +15,9 @@ export async function submitOnboarding(
   deps: AccountUseCaseDeps,
   input: SubmitOnboardingInput
 ): Promise<UseCaseResult<AccountUpdateResult, 'invalid' | 'not_found'>> {
-  if (!isAccountNamePresent(input.name))
-    return { ok: false, reason: 'invalid' };
+  if (!isAccountNamePresent(input.name)) return fail('invalid');
 
-  const currentUserId = toUserId(input.scope.userId);
+  const currentUserId = scopeUserId(input.scope);
   deps.logger.info('account.submit_onboarding', {
     event: 'account.submit_onboarding',
     userId: currentUserId,
@@ -27,6 +26,6 @@ export async function submitOnboarding(
     name: normalizeAccountName(input.name),
     onboardedAt: deps.clock.now(),
   });
-  if (!value) return { ok: false, reason: 'not_found' };
-  return { ok: true, value };
+  if (!value) return fail('not_found');
+  return ok(value);
 }

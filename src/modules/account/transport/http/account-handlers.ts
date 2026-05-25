@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { AccountUseCases } from '@/modules/account';
 import type { ProtectedContext } from '@/modules/auth/server';
-import { throwServerFnErrorForReason } from '@/modules/kernel/transport/tanstack/result-mapper';
+import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zSubmitOnboardingInput = () =>
   z.object({ name: z.string().trim().min(1) });
@@ -13,37 +13,36 @@ type AccountHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => AccountUseCases;
 };
 
+const accountReasonConfig = {
+  invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
+  not_found: { code: 'NOT_FOUND', message: 'Account not found' },
+} as const;
+
 export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
   const submitOnboarding = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zSubmitOnboardingInput>>
   ) => {
-    const result = await getUseCases(ctx).submitOnboarding({
-      scope: ctx.scope,
-      name: data.name,
-    });
-    if (!result.ok) {
-      throwServerFnErrorForReason(result.reason, {
-        invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
-        not_found: { code: 'NOT_FOUND', message: 'Account not found' },
-      });
-    }
+    await unwrapUseCaseResult(
+      getUseCases(ctx).submitOnboarding({
+        scope: ctx.scope,
+        name: data.name,
+      }),
+      accountReasonConfig
+    );
   };
 
   const updateInfo = async (
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zUpdateInfoInput>>
   ) => {
-    const result = await getUseCases(ctx).updateInfo({
-      scope: ctx.scope,
-      name: data.name,
-    });
-    if (!result.ok) {
-      throwServerFnErrorForReason(result.reason, {
-        invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
-        not_found: { code: 'NOT_FOUND', message: 'Account not found' },
-      });
-    }
+    await unwrapUseCaseResult(
+      getUseCases(ctx).updateInfo({
+        scope: ctx.scope,
+        name: data.name,
+      }),
+      accountReasonConfig
+    );
   };
 
   return {

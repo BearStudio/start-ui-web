@@ -1,6 +1,6 @@
-import type { RequestScope } from '@/modules/auth';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import type { GenreId } from '@/modules/kernel/domain/ids';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { GenreUseCaseDeps, UseCaseResult } from './types';
 import {
@@ -19,11 +19,12 @@ export async function listGenres(
   deps: GenreUseCaseDeps,
   input: ListGenresInput
 ): Promise<UseCaseResult<GenreListPage, 'forbidden'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    genre: ['read'],
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { genre: ['read'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
 
   deps.logger.info('genre.list', { event: 'genre.list' });
   const limit = Math.min(Math.max(input.limit, 1), 100);
@@ -32,5 +33,5 @@ export async function listGenres(
     limit,
     searchTerm: normalizeGenreSearchTerm(input.searchTerm),
   });
-  return { ok: true, value };
+  return ok(value);
 }

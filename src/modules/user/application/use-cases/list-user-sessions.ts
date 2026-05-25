@@ -1,6 +1,6 @@
-import type { RequestScope } from '@/modules/auth';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { UseCaseResult, UserUseCaseDeps } from './types';
 import type { UserSessionListPage } from '../../domain/user';
@@ -16,11 +16,12 @@ export async function listUserSessions(
   deps: UserUseCaseDeps,
   input: ListUserSessionsInput
 ): Promise<UseCaseResult<UserSessionListPage, 'forbidden'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    session: ['list'],
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { session: ['list'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
 
   deps.logger.info('user.sessions.list', {
     event: 'user.sessions.list',
@@ -31,5 +32,5 @@ export async function listUserSessions(
     cursor: input.cursor,
     limit: input.limit,
   });
-  return { ok: true, value };
+  return ok(value);
 }

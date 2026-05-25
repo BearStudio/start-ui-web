@@ -6,7 +6,7 @@ import { createBookServerFunctions } from './transport/tanstack/book-server-func
 const getDeps = createServerOnlyFn(async () => {
   const [
     { getBookUseCases },
-    { getKernel },
+    { getKernelForProcedureLogger },
     { withProtectedContext, withProtectedMutation },
   ] = await Promise.all([
     import('@/composition/book'),
@@ -18,13 +18,7 @@ const getDeps = createServerOnlyFn(async () => {
     handlers: createBookHandlers({
       getUseCases: (ctx) =>
         getBookUseCases({
-          kernel: getKernel({
-            logger: {
-              info: (event, fields) => ctx.logger.info(fields ?? {}, event),
-              warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
-              error: (event, fields) => ctx.logger.error(fields ?? {}, event),
-            },
-          }),
+          kernel: getKernelForProcedureLogger(ctx.logger),
         }),
     }),
     withProtectedContext,

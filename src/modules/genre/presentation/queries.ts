@@ -1,4 +1,7 @@
-import { queryOptions } from '@tanstack/react-query';
+import {
+  scopedListQueryOptions,
+  type ScopedQueryInput,
+} from '@/platform/lib/tanstack-query/scoped-query-options';
 
 import { genreGetAll } from '../server';
 
@@ -8,19 +11,14 @@ type GetAllInput = {
   limit?: number;
 };
 
-type ScopedQueryInput = {
-  scopeKey: string;
-};
-
 export const genreQueries = {
   all: () => ['genre'] as const,
   getAll: (scopeKey: string) =>
     [...genreQueries.all(), { scopeKey }, 'getAll'] as const,
-  getAllList: (input: GetAllInput & ScopedQueryInput) => {
-    const { scopeKey, ...norm } = input;
-    return queryOptions({
-      queryKey: [...genreQueries.getAll(scopeKey), norm] as const,
-      queryFn: () => genreGetAll({ data: norm }),
-    });
-  },
+  getAllList: (input: GetAllInput & ScopedQueryInput) =>
+    scopedListQueryOptions({
+      baseKey: genreQueries.getAll,
+      input,
+      queryFn: (data) => genreGetAll({ data }),
+    }),
 };

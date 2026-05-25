@@ -1,7 +1,11 @@
-import type { RequestScope } from '@/modules/auth';
+import {
+  hasScopePermission,
+  type RequestScope,
+  scopeUserId,
+} from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { UseCaseResult, UserUseCaseDeps } from './types';
 import type { User, UserUpdateInput } from '../../domain/user';
@@ -18,14 +22,16 @@ export async function updateUser(
   deps: UserUseCaseDeps,
   input: UpdateUserInput
 ): Promise<UseCaseResult<User, 'forbidden' | 'not_found' | 'duplicate'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    user: ['update'],
+  const currentUserId = scopeUserId(input.scope);
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { user: ['update'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
 
   const current = await deps.userRepository.getUpdateSnapshot(input.id);
-  if (!current) return { ok: false, reason: 'not_found' };
+  if (!current) return fail('not_found');
 
   const nextRole =
     currentUserId === input.id ? undefined : (input.user.role ?? undefined);
@@ -38,11 +44,12 @@ export async function updateUser(
       currentRole: current.role,
     })
   ) {
-    const canSetRole = await deps.permissionChecker.hasPermission(
-      currentUserId,
-      { user: ['set-role'] }
-    );
-    if (!canSetRole) return { ok: false, reason: 'forbidden' };
+    const canSetRole = await hasScopePermission({
+      permissionChecker: deps.permissionChecker,
+      scope: input.scope,
+      permissions: { user: ['set-role'] },
+    });
+    if (!canSetRole) return fail('forbidden');
   }
 
   try {
@@ -58,11 +65,11 @@ export async function updateUser(
     const value = await deps.userRepository.update(input.id, {
       ...update,
     });
-    if (!value) return { ok: false, reason: 'not_found' };
-    return { ok: true, value };
+    if (!value) return fail('not_found');
+    return ok(value);
   } catch (error) {
     if (error instanceof AppError && error.code === 'USER_DUPLICATE') {
-      return { ok: false, reason: 'duplicate' };
+      return fail('duplicate');
     }
     throw error;
   }

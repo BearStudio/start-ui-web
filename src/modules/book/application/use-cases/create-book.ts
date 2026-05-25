@@ -1,6 +1,6 @@
-import type { RequestScope } from '@/modules/auth';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+import { fail, ok } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { BookUseCaseDeps, UseCaseResult } from './types';
 import type { Book, BookWriteInput } from '../../domain/book';
@@ -15,21 +15,22 @@ export async function createBook(
   deps: BookUseCaseDeps,
   input: CreateBookInput
 ): Promise<UseCaseResult<Book, 'forbidden' | 'duplicate'>> {
-  const currentUserId = toUserId(input.scope.userId);
-  const allowed = await deps.permissionChecker.hasPermission(currentUserId, {
-    book: ['create'],
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { book: ['create'] },
   });
-  if (!allowed) return { ok: false, reason: 'forbidden' };
+  if (!allowed) return fail('forbidden');
 
   try {
     deps.logger.info('book.create', { event: 'book.create' });
     const value = await deps.bookRepository.create(
       normalizeBookWriteInput(input.book)
     );
-    return { ok: true, value };
+    return ok(value);
   } catch (error) {
     if (error instanceof AppError && error.category === 'conflict') {
-      return { ok: false, reason: 'duplicate' };
+      return fail('duplicate');
     }
     throw error;
   }

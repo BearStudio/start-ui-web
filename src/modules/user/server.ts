@@ -6,7 +6,7 @@ import { createUserServerFunctions } from './transport/tanstack/user-server-func
 const getDeps = createServerOnlyFn(async () => {
   const [
     { getUserUseCases },
-    { getKernel },
+    { getKernelForProcedureLogger },
     { withProtectedContext, withProtectedMutation },
   ] = await Promise.all([
     import('@/composition/user'),
@@ -18,13 +18,7 @@ const getDeps = createServerOnlyFn(async () => {
     handlers: createUserHandlers({
       getUseCases: (ctx) =>
         getUserUseCases({
-          kernel: getKernel({
-            logger: {
-              info: (event, fields) => ctx.logger.info(fields ?? {}, event),
-              warn: (event, fields) => ctx.logger.warn(fields ?? {}, event),
-              error: (event, fields) => ctx.logger.error(fields ?? {}, event),
-            },
-          }),
+          kernel: getKernelForProcedureLogger(ctx.logger),
         }),
     }),
     withProtectedContext,
