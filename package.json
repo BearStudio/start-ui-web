@@ -97,7 +97,7 @@
     "e2e": "pnpm test:e2e",
     "e2e:ui": "pnpm test:e2e --ui",
     "e2e:db:init": "run-s db:migrate db:seed",
-    "e2e:dev": "dotenv -e .env -e .env.example -- cross-env EMAIL_DELIVERY_DISABLED=true run-s e2e:db:init dev",
+    "e2e:dev": "dotenv -e .env -e .env.example -- cross-env VITE_ENV_NAME=tests EMAIL_DELIVERY_DISABLED=true run-s e2e:db:init dev",
     "e2e:webserver": "pglite-server --db=memory:// --port=54329 --max-connections=16 --run \"pnpm e2e:dev\" --include-database-url --shutdown-timeout=10000",
     "dk:init": "docker compose --profile init up -d",
     "dk:start": "docker compose start",

@@ -88,3 +88,19 @@ export const resolvePostAuthDestination = (
   }
   return '/';
 };
+
+export const isPostAuthDestinationUrl = (
+  url: string | URL,
+  destination: PostAuthDestination
+) => {
+  const pathname =
+    typeof url === 'string'
+      ? new URL(url, 'http://localhost').pathname
+      : url.pathname;
+
+  if (destination === '/') {
+    return pathname === '/';
+  }
+
+  return pathname === destination || pathname.startsWith(`${destination}/`);
+};

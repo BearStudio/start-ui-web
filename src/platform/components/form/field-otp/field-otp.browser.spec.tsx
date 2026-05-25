@@ -95,6 +95,31 @@ test('auto submit', async () => {
   expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });
 
+test('auto submit after filling the full code without clicking submit', async () => {
+  const mockedSubmit = vi.fn();
+
+  render(
+    <FormMocked
+      schema={z.object({ code: z.string().min(6).max(6) })}
+      defaultValues={{ code: '' }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Code</FormFieldLabel>
+          <form.AppField name="code">
+            {(field) => <field.FieldOtp type="otp" maxLength={6} autoSubmit />}
+          </form.AppField>
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  await page.getByLabelText('Code').fill('000000');
+
+  expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
+});
+
 test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();

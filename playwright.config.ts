@@ -20,13 +20,15 @@ export default defineConfig({
   /* The E2E server uses one shared PGLite database instance. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'github' : 'html',
+  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: process.env.VITE_BASE_URL,
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    /* Collect diagnostics when a test fails in CI. */
+    screenshot: 'only-on-failure',
+    trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
+    video: process.env.CI ? 'retain-on-failure' : 'off',
   },
 
   /* Increase the timeout to absorb initial dev-server compilation. */

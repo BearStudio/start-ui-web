@@ -127,5 +127,7 @@ jobs:
         if: always()
         with:
           name: playwright-report-${{ matrix.browser }}
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 30

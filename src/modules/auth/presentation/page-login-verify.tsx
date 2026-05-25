@@ -28,6 +28,8 @@ import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLoginVerify } from '@/modules/auth/presentation/schema';
 import { LoginEmailOtpHint } from '@/modules/devtools/presentation';
 
+import { authE2eDebug } from './e2e-debug';
+
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   ? ('auth:pageLoginVerifyWithSignUp' as const)
   : ('auth:pageLoginVerify' as const);
@@ -48,12 +50,23 @@ export default function PageLoginVerify({
     },
     validators: { onSubmit: zFormFieldsLoginVerify() },
     onSubmit: async ({ value: { otp }, formApi }) => {
+      authE2eDebug('login.verify.submit', {
+        email: search.email,
+        otpLength: otp.length,
+        redirect: search.redirect ?? null,
+      });
+
       const { error } = await signInEmailOtp({
         email: search.email,
         otp,
       });
 
       if (error) {
+        authE2eDebug('login.verify.error', {
+          code: error.code ?? null,
+          email: search.email,
+          message: typeof error.message === 'string' ? error.message : null,
+        });
         const errorKey = error.code
           ? `auth:errorCode.${error.code}`
           : undefined;
@@ -75,14 +88,21 @@ export default function PageLoginVerify({
         return;
       }
 
+      authE2eDebug('login.verify.sign_in.success', {
+        email: search.email,
+      });
+
       // Update Better Auth's client session cache, then invalidate the router
       // session cache so /login beforeLoad re-runs and redirects to the post-
       // login destination (search.redirect, /manager, /app, or /).
       await session.refetch();
+      authE2eDebug('login.verify.session.refetched');
       await queryClient.invalidateQueries({
         queryKey: authQueries.currentSession().queryKey,
       });
+      authE2eDebug('login.verify.session_query.invalidated');
       await router.invalidate();
+      authE2eDebug('login.verify.router.invalidated');
     },
   });
 
