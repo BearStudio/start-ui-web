@@ -2,6 +2,11 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 import { PageError } from '@/platform/components/errors/page-error';
 
+import {
+  internalRedirectFromLocation,
+  resolvePostAuthDestination,
+} from '@/modules/auth/presentation';
+
 export const Route = createFileRoute('/onboarding')({
   beforeLoad: async ({ context, location }) => {
     const session = await context.auth.getSession();
@@ -9,14 +14,17 @@ export const Route = createFileRoute('/onboarding')({
     if (!session) {
       throw redirect({
         to: '/login',
-        search: { redirect: location.href },
+        search: { redirect: internalRedirectFromLocation(location) },
         replace: true,
       });
     }
 
     // Already onboarded: there's nothing to do here.
     if (session.user.onboardedAt) {
-      throw redirect({ to: '/app', replace: true });
+      throw redirect({
+        to: resolvePostAuthDestination(session.user),
+        replace: true,
+      });
     }
 
     return { session };

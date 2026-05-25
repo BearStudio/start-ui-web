@@ -30,13 +30,16 @@ export const FieldRadioGroup = (
   return (
     <FormFieldContainer {...containerProps}>
       <RadioGroup
+        {...rest}
         id={ctx.id}
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
         value={field.value ?? ''}
-        onValueChange={(value) => field.onChange(value as string)}
-        {...rest}
+        onValueChange={(value, event) => {
+          field.onChange(value as string);
+          rest.onValueChange?.(value, event);
+        }}
       >
         {options.map(({ label, ...option }) => {
           const radioId = `${ctx.id}-${option.value}`;

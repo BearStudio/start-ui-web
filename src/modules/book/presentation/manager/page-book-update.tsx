@@ -1,5 +1,6 @@
 import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -78,7 +79,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     defaultValues: formBookDefaultValues({
       title: bookQuery.data?.title ?? '',
       author: bookQuery.data?.author ?? '',
-      genreId: bookQuery.data?.genre?.id ?? (null as unknown as string),
+      genreId: bookQuery.data?.genre?.id ?? '',
       publisher: bookQuery.data?.publisher ?? '',
       coverId: bookQuery.data?.coverId ?? '',
     }),
@@ -87,6 +88,20 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
       await bookUpdate.mutateAsync({ id: props.params.id, ...value });
     },
   });
+
+  useEffect(() => {
+    if (!bookQuery.data) return;
+
+    form.reset(
+      formBookDefaultValues({
+        title: bookQuery.data.title,
+        author: bookQuery.data.author,
+        genreId: bookQuery.data.genre?.id ?? '',
+        publisher: bookQuery.data.publisher ?? '',
+        coverId: bookQuery.data.coverId ?? '',
+      })
+    );
+  }, [bookQuery.data, form]);
 
   const isDirty = useStore(form.store, (s) => s.isDirty);
 

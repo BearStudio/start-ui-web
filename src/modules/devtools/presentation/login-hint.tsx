@@ -1,13 +1,17 @@
 import { TerminalIcon } from 'lucide-react';
 
-import { useFormContext } from '@/platform/components/form';
+import { useTypedAppFormContext } from '@/platform/components/form';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from '@/platform/components/ui/alert';
 
-import { AUTH_EMAIL_OTP_MOCKED } from '@/modules/auth/client';
+import {
+  AUTH_EMAIL_OTP_MOCKED,
+  type FormFieldsLogin,
+  type FormFieldsLoginVerify,
+} from '@/modules/auth/client';
 import { envClient } from '@/platform/env/client';
 
 const LoginEmailButton = ({
@@ -27,18 +31,15 @@ const LoginEmailButton = ({
 );
 
 export const LoginEmailHint = () => {
-  const form = useFormContext();
+  const form = useTypedAppFormContext({
+    defaultValues: { email: '' } satisfies FormFieldsLogin,
+  });
 
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
   }
 
-  const setEmail = (value: string) =>
-    (
-      form as unknown as {
-        setFieldValue: (name: 'email', value: string) => void;
-      }
-    ).setFieldValue('email', value);
+  const setEmail = (value: string) => form.setFieldValue('email', value);
 
   return (
     <Alert dir="ltr">
@@ -57,7 +58,9 @@ export const LoginEmailHint = () => {
 };
 
 export const LoginEmailOtpHint = () => {
-  const form = useFormContext();
+  const form = useTypedAppFormContext({
+    defaultValues: { otp: '' } satisfies FormFieldsLoginVerify,
+  });
 
   if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
     return null;
@@ -74,13 +77,7 @@ export const LoginEmailOtpHint = () => {
         <button
           type="button"
           className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          onClick={() =>
-            (
-              form as unknown as {
-                setFieldValue: (name: 'otp', value: string) => void;
-              }
-            ).setFieldValue('otp', AUTH_EMAIL_OTP_MOCKED)
-          }
+          onClick={() => form.setFieldValue('otp', AUTH_EMAIL_OTP_MOCKED)}
         >
           {AUTH_EMAIL_OTP_MOCKED}
         </button>

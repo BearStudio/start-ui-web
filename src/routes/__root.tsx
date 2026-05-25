@@ -35,13 +35,13 @@ const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
 });
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  loader: async ({ context }) => {
+  loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
       const { language } = await initSsrApp();
       i18n.changeLanguage(language);
     }
-    return { context };
+    return null;
   },
   notFoundComponent: () => <PageError type="404" />,
   errorComponent: ({ error }) => {

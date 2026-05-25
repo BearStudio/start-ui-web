@@ -3,11 +3,13 @@ import { redirect } from '@tanstack/react-router';
 import { hasRolePermission, type Permission, type Role } from '@/modules/auth';
 import type { AuthSessionLike } from '@/platform/router/context';
 
+import { internalRedirectFromLocation } from './redirects';
+
 type BeforeLoadContext = {
   context: {
     auth: { getSession: () => Promise<AuthSessionLike | null> };
   };
-  location: { href: string; pathname: string };
+  location: { pathname: string; searchStr?: string; hash?: string };
 };
 
 /**
@@ -15,8 +17,8 @@ type BeforeLoadContext = {
  * Returns the session for child loaders and components to read via
  * `Route.useRouteContext()`. Behavior:
  *
- *  - No session → throw redirect to `/login` with the current href preserved
- *    as the `redirect` search param.
+ *  - No session → throw redirect to `/login` with the current internal path
+ *    preserved as the `redirect` search param.
  *  - Session but user not onboarded (and not currently on `/onboarding`) →
  *    throw redirect to `/onboarding`.
  *  - Session present but role lacks the requested `permissionApps` → throw
@@ -34,7 +36,7 @@ export const beforeLoadAuthenticated =
     if (!session) {
       throw redirect({
         to: '/login',
-        search: { redirect: location.href },
+        search: { redirect: internalRedirectFromLocation(location) },
         replace: true,
       });
     }

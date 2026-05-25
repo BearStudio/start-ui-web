@@ -15,11 +15,7 @@ import {
 import { Button } from '@/platform/components/ui/button';
 import { ButtonLink } from '@/platform/components/ui/button-link';
 
-import {
-  authErrorCodes,
-  signInEmailOtp,
-  useAuthSession,
-} from '@/modules/auth/client';
+import { signInEmailOtp, useAuthSession } from '@/modules/auth/client';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_SIGNUP_ENABLED,
@@ -37,7 +33,7 @@ export default function PageLoginVerify({
 }: {
   search: { redirect?: string; email: string };
 }) {
-  const { t } = useTranslation(['auth', 'common']);
+  const { i18n, t } = useTranslation(['auth', 'common']);
   const session = useAuthSession();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -54,12 +50,18 @@ export default function PageLoginVerify({
       });
 
       if (error) {
+        const errorKey = error.code
+          ? `auth:errorCode.${error.code}`
+          : undefined;
+        const providerMessage =
+          typeof error.message === 'string' ? error.message : undefined;
+        const translatedErrorMessage = error.code
+          ? i18n.getResource(i18n.language, 'auth', `errorCode.${error.code}`)
+          : undefined;
         toast.error(
-          error.code
-            ? t(
-                `auth:errorCode.${error.code as unknown as keyof typeof authErrorCodes}`
-              )
-            : error.message || t('auth:errorCode.UNKNOWN_ERROR')
+          errorKey && typeof translatedErrorMessage === 'string'
+            ? translatedErrorMessage
+            : providerMessage || t('auth:errorCode.UNKNOWN_ERROR')
         );
         formApi.setFieldMeta('otp', (prev) => ({
           ...prev,

@@ -69,7 +69,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         {...rest}
         multiple
         items={items}
-        disabled={field.disabled ?? rest.disabled}
+        disabled={field.disabled || rest.disabled}
         value={
           items?.filter((item) => (field.value ?? []).includes(item.value)) ??
           []

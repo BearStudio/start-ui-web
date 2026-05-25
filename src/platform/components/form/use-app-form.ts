@@ -37,7 +37,7 @@ import {
  *
  * Replaces the old `useForm` + `<FormFieldController type="..." />` pattern.
  */
-export const { useAppForm, withForm } = createFormHook({
+export const { useAppForm, useTypedAppFormContext, withForm } = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {

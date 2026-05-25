@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -30,13 +30,14 @@ export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
   const [open, setOpen] = useState(false);
   const session = useAuthSession();
+  const sessionName = session.data?.user.name ?? '';
 
   const updateUser = useMutation({
     ...accountQueries.updateInfo(),
-    onSuccess: async () => {
+    onSuccess: async (_data, variables) => {
       await session.refetch();
       toast.success(t('account:changeNameDrawer.successMessage'));
-      form.reset();
+      form.reset({ name: variables.name });
       setOpen(false);
     },
     onError: () => toast.error(t('account:changeNameDrawer.errorMessage')),
@@ -52,12 +53,18 @@ export const ChangeNameDrawer = (props: { children: ReactElement }) => {
     },
   });
 
+  useEffect(() => {
+    if (open) {
+      form.reset({ name: sessionName });
+    }
+  }, [form, open, sessionName]);
+
   return (
     <ResponsiveDrawer
       open={open}
       onOpenChange={(isOpen: boolean) => {
         setOpen(isOpen);
-        form.reset();
+        form.reset({ name: sessionName });
       }}
     >
       <ResponsiveDrawerTrigger render={props.children} />

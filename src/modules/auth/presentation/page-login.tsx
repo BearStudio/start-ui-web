@@ -12,16 +12,14 @@ import {
 } from '@/platform/components/form';
 import { Button } from '@/platform/components/ui/button';
 
-import {
-  authErrorCodes,
-  sendEmailOtp,
-  signInSocial,
-} from '@/modules/auth/client';
+import { sendEmailOtp, signInSocial } from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
 import { LoginEmailHint } from '@/modules/devtools/presentation';
 import { envClient } from '@/platform/env/client';
+
+import { normalizeInternalRedirect } from './redirects';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   ? ('auth:pageLoginWithSignUp' as const)
@@ -32,13 +30,13 @@ export default function PageLogin({
 }: {
   search: { redirect?: string };
 }) {
-  const { t } = useTranslation(['auth', 'common']);
+  const { i18n, t } = useTranslation(['auth', 'common']);
   const router = useRouter();
   const social = useMutation({
     mutationFn: async (
       provider: Parameters<typeof signInSocial>[0]['provider']
     ) => {
-      const callbackURL = search.redirect ?? '/';
+      const callbackURL = normalizeInternalRedirect(search.redirect) ?? '/';
       let response;
       try {
         response = await signInSocial({
@@ -80,13 +78,24 @@ export default function PageLogin({
       }
 
       if (result.error) {
-        const errorMessage = result.error.code
-          ? t(
-              `auth:errorCode.${result.error.code as unknown as keyof typeof authErrorCodes}`
+        const errorKey = result.error.code
+          ? `auth:errorCode.${result.error.code}`
+          : undefined;
+        const providerMessage =
+          typeof result.error.message === 'string'
+            ? result.error.message
+            : undefined;
+        const translatedErrorMessage = result.error.code
+          ? i18n.getResource(
+              i18n.language,
+              'auth',
+              `errorCode.${result.error.code}`
             )
-          : (typeof result.error.message === 'string' &&
-              result.error.message) ||
-            t('auth:errorCode.UNKNOWN_ERROR');
+          : undefined;
+        const errorMessage =
+          errorKey && typeof translatedErrorMessage === 'string'
+            ? translatedErrorMessage
+            : providerMessage || t('auth:errorCode.UNKNOWN_ERROR');
         toast.error(errorMessage);
         return;
       }

@@ -22,6 +22,9 @@ updates:
       sentry:
         patterns:
           - '@sentry/*'
+        update-types:
+          - minor
+          - patch
       react:
         patterns:
           - react
@@ -53,11 +56,6 @@ updates:
           - 'react'
           - 'react-dom'
           - 'drizzle-*'
-    ignore:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-major
-
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -69,6 +67,9 @@ updates:
       actions:
         patterns:
           - '*'
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: docker
     directory: /

@@ -52,14 +52,14 @@ export const FieldCombobox = <TItem extends Item>(
 
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
-  const { field, fieldState } = useTfField<TItem['value']>();
+  const { field, fieldState } = useTfField<TItem['value'] | null>();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Combobox<TItem>
         {...rest}
         items={items}
-        disabled={field.disabled ?? rest.disabled}
+        disabled={field.disabled || rest.disabled}
         value={items.find((item) => item.value === field.value) ?? null}
         isItemEqualToValue={(item, selectedValue) => {
           const currentItem = item as TItem | null | undefined;
@@ -79,13 +79,13 @@ export const FieldCombobox = <TItem extends Item>(
         }
         onValueChange={(item, event) => {
           const selectedItem = item as TItem | null;
-          field.onChange((selectedItem?.value ?? null) as TItem['value']);
+          field.onChange(selectedItem?.value ?? null);
           rest.onValueChange?.(selectedItem?.value ?? null, event);
         }}
       >
         <ComboboxInput
           {...inputProps}
-          disabled={field.disabled ?? rest.disabled}
+          disabled={field.disabled || rest.disabled}
           onBlur={field.onBlur}
           placeholder={placeholder}
           id={ctx.id}
