@@ -1,13 +1,14 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { redirect } from '@tanstack/react-router';
 
-import type { Permission, Role } from '@/modules/auth';
+import type { Permission } from '@/modules/auth';
 import { hasRolePermission } from '@/modules/auth';
 import { authQueries } from '@/modules/auth/client';
 
 import {
   internalRedirectFromLocation,
   parseSafeRedirectPath,
+  resolvePostAuthDestination,
 } from './redirects';
 
 type PermissionApp = NonNullable<Permission['apps']>[number];
@@ -35,12 +36,6 @@ export const isForbiddenRouteError = (
   error: unknown
 ): error is ForbiddenRouteError => error instanceof ForbiddenRouteError;
 
-const getDefaultAuthenticatedPath = (role: Role) => {
-  if (hasRolePermission(role, { apps: ['manager'] })) return '/manager';
-  if (hasRolePermission(role, { apps: ['app'] })) return '/app';
-  return '/';
-};
-
 const getCurrentSession = (context: AuthRouteContext) =>
   context.queryClient.ensureQueryData(authQueries.currentSession());
 
@@ -50,6 +45,7 @@ const redirectToSafePath = (input: string | null | undefined) => {
   throw redirect({
     to: safeRedirect.to,
     search: safeRedirect.search,
+    hash: safeRedirect.hash || undefined,
     replace: true,
   });
 };
@@ -112,7 +108,7 @@ export async function requireOnboardingRoute(input: {
   if (currentSession.user.onboardedAt) {
     redirectToSafePath(input.redirect);
     throw redirect({
-      to: getDefaultAuthenticatedPath(currentSession.user.role),
+      to: resolvePostAuthDestination(currentSession.user),
       replace: true,
     });
   }
@@ -135,11 +131,13 @@ export async function redirectAuthenticatedRoute(input: {
 
   if (!currentSession.user.onboardedAt) {
     const safeRedirect = parseSafeRedirectPath(input.redirect);
+    const normalizedRedirect = normalizeRedirectForSearch(input.redirect);
     throw redirect({
       to: '/onboarding',
-      search: safeRedirect
-        ? { redirect: normalizeRedirectForSearch(input.redirect) }
-        : undefined,
+      search:
+        safeRedirect && normalizedRedirect
+          ? { redirect: normalizedRedirect }
+          : undefined,
       replace: true,
     });
   }
@@ -147,10 +145,10 @@ export async function redirectAuthenticatedRoute(input: {
   redirectToSafePath(input.redirect);
 
   throw redirect({
-    to: getDefaultAuthenticatedPath(currentSession.user.role),
+    to: resolvePostAuthDestination(currentSession.user),
     replace: true,
   });
 }
 
 const normalizeRedirectForSearch = (input: string | null | undefined) =>
-  input?.trim() ?? '';
+  input?.trim() || undefined;

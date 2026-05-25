@@ -1,25 +1,37 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const sentryMocks = vi.hoisted(() => ({
+  browserTracingIntegration: vi.fn(() => 'browser-tracing'),
   init: vi.fn(),
   tanstackRouterBrowserTracingIntegration: vi.fn(() => 'router-tracing'),
 }));
 
+const envClientMock = vi.hoisted(() => ({
+  VITE_SENTRY_DSN: '',
+  VITE_SENTRY_ENVIRONMENT: undefined as string | undefined,
+  VITE_SENTRY_TRACES_SAMPLE_RATE: 0,
+}));
+
 vi.mock('@sentry/tanstackstart-react', () => ({
+  browserTracingIntegration: sentryMocks.browserTracingIntegration,
   init: sentryMocks.init,
   tanstackRouterBrowserTracingIntegration:
     sentryMocks.tanstackRouterBrowserTracingIntegration,
 }));
 
 vi.mock('@/platform/env/client', () => ({
-  envClient: {
-    VITE_SENTRY_DSN: '',
-    VITE_SENTRY_ENVIRONMENT: undefined,
-    VITE_SENTRY_TRACES_SAMPLE_RATE: 0,
-  },
+  envClient: envClientMock,
 }));
 
 describe('Sentry telemetry composition', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+    envClientMock.VITE_SENTRY_DSN = '';
+    envClientMock.VITE_SENTRY_ENVIRONMENT = undefined;
+    envClientMock.VITE_SENTRY_TRACES_SAMPLE_RATE = 0;
+  });
+
   it('is a no-op when no client DSN is configured', async () => {
     const { initTelemetryClient } = await import('./sentry.client');
 
@@ -29,5 +41,40 @@ describe('Sentry telemetry composition', () => {
     expect(
       sentryMocks.tanstackRouterBrowserTracingIntegration
     ).not.toHaveBeenCalled();
+  });
+
+  it('keeps browser tracing when no router is provided', async () => {
+    envClientMock.VITE_SENTRY_DSN = 'https://example.com/1';
+    const { initTelemetryClient } = await import('./sentry.client');
+
+    initTelemetryClient();
+
+    expect(sentryMocks.browserTracingIntegration).toHaveBeenCalledTimes(1);
+    expect(
+      sentryMocks.tanstackRouterBrowserTracingIntegration
+    ).not.toHaveBeenCalled();
+    expect(sentryMocks.init).toHaveBeenCalledWith(
+      expect.objectContaining({
+        integrations: ['browser-tracing'],
+      })
+    );
+  });
+
+  it('clears Sentry user tags when the telemetry user is unset', async () => {
+    const { createSentryTelemetryAdapter } = await import('./sentry-adapter');
+    const setUser = vi.fn();
+    const setTag = vi.fn();
+    const adapter = createSentryTelemetryAdapter({
+      captureException: vi.fn(() => 'event-id'),
+      setUser,
+      setTag,
+      startSpan: vi.fn((_options, fn) => fn()),
+    });
+
+    adapter.setUser(null);
+
+    expect(setUser).toHaveBeenCalledWith(null);
+    expect(setTag).toHaveBeenCalledWith('role', 'none');
+    expect(setTag).toHaveBeenCalledWith('tenantId', 'none');
   });
 });

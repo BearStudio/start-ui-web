@@ -387,6 +387,46 @@ rules:
       include:
         - src/modules/auth/transport/tanstack/server-context.ts
 
+  - id: sentry-clear-tags-when-unsetting-user
+    message: Clear role and tenantId Sentry tags whenever the telemetry user is unset.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: |
+          if (!user) {
+            ...
+            Sentry.setUser(null);
+            ...
+            return;
+          }
+      - pattern-not: |
+          if (!user) {
+            ...
+            Sentry.setUser(null);
+            ...
+            Sentry.setTag?.('role', ...);
+            ...
+            Sentry.setTag?.('tenantId', ...);
+            ...
+            return;
+          }
+    paths:
+      include:
+        - src/composition/telemetry/sentry-adapter.ts
+
+  - id: auth-server-functions-require-telemetry
+    message: Auth server functions must pass telemetryProxy into createServerContextTools.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: |
+          createServerContextTools({ getAuthUseCases, ... })
+      - pattern-not: |
+          createServerContextTools({ ..., telemetry: $TELEMETRY, ... })
+    paths:
+      include:
+        - src/modules/auth/server-functions.ts
+
   - id: token-or-secret-logging
     message: Do not log tokens, secrets, passwords, or Authorization headers.
     languages: [typescript]
