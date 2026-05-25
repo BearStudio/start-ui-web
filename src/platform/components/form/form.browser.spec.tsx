@@ -8,9 +8,7 @@ import { FormFieldLabel } from './form-field-label';
 import { useAppForm, useTypedAppFormContext } from './use-app-form';
 
 const FormContextSetter = () => {
-  const form = useTypedAppFormContext({
-    defaultValues: { email: '' },
-  });
+  const form = useTypedAppFormContext({});
 
   return (
     <button

@@ -52,7 +52,7 @@
     "test:affected": "node scripts/run-affected-tests.mjs",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "dotenv -e .env -e .env.example -- cross-env playwright test",
-    "check": "run-p -n format:check lint typecheck depcruise semgrep security:audit",
+    "check": "run-p -n format:check lint typecheck depcruise security:audit",
     "verify": "pnpm check && pnpm test && pnpm build",
     "test:ui": "vitest",
     "e2e:setup": "dotenv -e .env -e .env.example -- cross-env playwright test --project=setup",

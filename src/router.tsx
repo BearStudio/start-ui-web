@@ -5,6 +5,7 @@ import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
 import { authQueries } from '@/modules/auth/client';
 import { envClient } from '@/platform/env/client';
+import { isDevEnvironment } from '@/platform/env/config';
 import { createNoOpFlags } from '@/platform/flags';
 import type { RouterContext } from '@/platform/router/context';
 
@@ -30,7 +31,7 @@ const initTelemetryClientOnly = createClientOnlyFn(async (router: unknown) => {
 // adapter so all call sites remain unconditional.
 if (import.meta.env.SSR) {
   void initTelemetryServerOnly().catch((error: unknown) => {
-    if (envClient.DEV) {
+    if (isDevEnvironment()) {
       console.warn('Telemetry init failed (non-fatal):', error);
     }
   });

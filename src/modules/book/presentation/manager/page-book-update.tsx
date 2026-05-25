@@ -110,10 +110,10 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
   const hasBook = bookQuery.data != null;
 
   useEffect(() => {
-    if (!hasBook || form.state.isDirty) return;
+    if (!hasBook || isDirty) return;
 
     form.reset(bookDefaultValues);
-  }, [bookDefaultValues, form, hasBook]);
+  }, [bookDefaultValues, form, hasBook, isDirty]);
 
   return (
     <>
