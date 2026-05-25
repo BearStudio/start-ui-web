@@ -1,6 +1,24 @@
 import { describe, expect, it } from 'vitest';
 
-import { hasRolePermission, type Permission, type Role } from './permissions';
+import {
+  hasRolePermission,
+  isRole,
+  parseRole,
+  type Permission,
+  type Role,
+} from './permissions';
+
+describe('role parsing', () => {
+  it('accepts declared roles', () => {
+    expect(isRole('admin')).toBe(true);
+    expect(parseRole('user')).toBe('user');
+  });
+
+  it('rejects inherited object keys', () => {
+    expect(isRole('toString')).toBe(false);
+    expect(parseRole('constructor')).toBeUndefined();
+  });
+});
 
 describe('hasRolePermission', () => {
   it('allows permissions granted to the role', () => {
