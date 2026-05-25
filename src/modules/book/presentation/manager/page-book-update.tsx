@@ -94,8 +94,10 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
     },
   });
 
+  const isDirty = useStore(form.store, (s) => s.isDirty);
+
   useEffect(() => {
-    if (!bookQuery.data) return;
+    if (!bookQuery.data || isDirty) return;
 
     form.reset(
       formBookDefaultValues({
@@ -106,9 +108,7 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
         coverId: bookQuery.data.coverId ?? '',
       })
     );
-  }, [bookQuery.data, form]);
-
-  const isDirty = useStore(form.store, (s) => s.isDirty);
+  }, [bookQuery.data, form, isDirty]);
 
   return (
     <>

@@ -59,7 +59,7 @@ export const FieldCombobox = <TItem extends Item>(
       <Combobox<TItem>
         {...rest}
         items={items}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         value={items.find((item) => item.value === field.value) ?? null}
         isItemEqualToValue={(item, selectedValue) => {
           const currentItem = item as TItem | null | undefined;
@@ -85,7 +85,7 @@ export const FieldCombobox = <TItem extends Item>(
       >
         <ComboboxInput
           {...inputProps}
-          disabled={field.disabled || rest.disabled}
+          disabled={rest.disabled}
           onBlur={field.onBlur}
           placeholder={placeholder}
           id={ctx.id}

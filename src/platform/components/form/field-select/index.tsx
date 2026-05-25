@@ -39,7 +39,7 @@ export const FieldSelect = <TItem extends Item>(
     <FormFieldContainer {...containerProps}>
       <Select
         {...rest}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
           field.onChange(value as TItem['value']);

@@ -1,4 +1,4 @@
-import { hasRolePermission, type Role } from '@/modules/auth';
+import { hasRolePermission, parseRole } from '@/modules/auth';
 import type { CurrentSessionLike } from '@/platform/router/context';
 
 export type InternalRedirectPath = `/${string}`;
@@ -77,7 +77,7 @@ export const internalRedirectFromLocation = (
 export const resolvePostAuthDestination = (
   user: Pick<CurrentSessionLike['user'], 'role'> | { role?: string | null }
 ): PostAuthDestination => {
-  const role = user.role as Role | undefined;
+  const role = parseRole(user.role);
   if (role && hasRolePermission(role, { apps: ['manager'] })) {
     return '/manager';
   }

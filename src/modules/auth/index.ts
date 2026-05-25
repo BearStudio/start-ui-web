@@ -19,6 +19,8 @@ export {
 export {
   defaultUserPermissions,
   hasRolePermission,
+  isRole,
+  parseRole,
   type Permission,
   permissionStatements,
   type Role,

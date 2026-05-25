@@ -368,17 +368,24 @@ rules:
       include:
         - src/routes/__root.tsx
 
-  - id: fetch-session-requires-cache-policy
-    message: fetchSession must set Cache-Control to private no-store before returning session-dependent data.
+  - id: authenticated-context-requires-cache-policy
+    message: Authenticated server context must apply private no-store cache headers before returning session-dependent data.
     languages: [typescript]
     severity: ERROR
-    pattern: |
-      export const fetchSession = createServerFn({ method: 'GET' }).handler(
-        async (): Promise<AuthSession | null> => resolveSession()
-      );
+    patterns:
+      - pattern: |
+          if ($SESSION?.user?.id) {
+            ...
+          }
+      - pattern-not: |
+          if ($SESSION?.user?.id) {
+            ...
+            setAuthenticatedResponseCacheHeaders();
+            ...
+          }
     paths:
       include:
-        - src/composition/session.ts
+        - src/modules/auth/transport/tanstack/server-context.ts
 
   - id: token-or-secret-logging
     message: Do not log tokens, secrets, passwords, or Authorization headers.

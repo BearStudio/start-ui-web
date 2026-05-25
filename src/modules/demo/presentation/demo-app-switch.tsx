@@ -15,7 +15,6 @@ import {
   CardTitle,
 } from '@/platform/components/ui/card';
 
-import { Role } from '@/modules/auth';
 import { checkRolePermission, useAuthSession } from '@/modules/auth/client';
 
 export const DemoAppSwitch = () => {
@@ -28,14 +27,14 @@ export const DemoAppSwitch = () => {
     : 'app';
 
   const hasAppAccess = checkRolePermission({
-    role: userRole as Role,
+    role: userRole,
     permissions: {
       apps: ['app'],
     },
   });
 
   const hasManagerAccess = checkRolePermission({
-    role: userRole as Role,
+    role: userRole,
     permissions: {
       apps: ['manager'],
     },

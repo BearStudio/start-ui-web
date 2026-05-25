@@ -3,6 +3,7 @@ import { createRouter } from '@tanstack/react-router';
 import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
 import { authQueries } from '@/modules/auth/client';
+import { envClient } from '@/platform/env/client';
 import { createNoOpFlags } from '@/platform/flags';
 import type { RouterContext } from '@/platform/router/context';
 
@@ -15,7 +16,11 @@ import { routeTree } from './routeTree.gen';
 if (import.meta.env.SSR) {
   import('@/composition/telemetry/sentry.server')
     .then(({ initTelemetryServer }) => initTelemetryServer())
-    .catch(() => {});
+    .catch((error: unknown) => {
+      if (envClient.DEV) {
+        console.warn('Telemetry init failed (non-fatal):', error);
+      }
+    });
 } else {
   // Client telemetry needs the concrete router instance for Start router
   // tracing, so it is initialized inside getRouter().
@@ -52,7 +57,11 @@ export function getRouter() {
   if (!import.meta.env.SSR) {
     import('@/composition/telemetry/sentry.client')
       .then(({ initTelemetryClient }) => initTelemetryClient(router))
-      .catch(() => {});
+      .catch((error: unknown) => {
+        if (envClient.DEV) {
+          console.warn('Telemetry init failed (non-fatal):', error);
+        }
+      });
   }
 
   return router;

@@ -31,7 +31,7 @@ export const FieldCheckboxGroup = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
-        disabled={field.disabled || rest.disabled}
+        disabled={rest.disabled}
         value={field.value ?? []}
         onValueChange={(value, event) => {
           field.onChange(value);
@@ -44,7 +44,7 @@ export const FieldCheckboxGroup = (
             key={`${ctx.id}-${option.value}`}
             aria-invalid={fieldState.invalid ? true : undefined}
             size={ctx.size}
-            disabled={field.disabled || rest.disabled || option.disabled}
+            disabled={rest.disabled || option.disabled}
             onBlur={field.onBlur}
           >
             {label}

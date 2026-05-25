@@ -10,6 +10,9 @@ import {
   parseSafeRedirectPath,
 } from './redirects';
 
+type PermissionApp = NonNullable<Permission['apps']>[number];
+type PermissionApps = [PermissionApp, ...PermissionApp[]];
+
 type AuthRouteContext = {
   queryClient: QueryClient;
 };
@@ -54,7 +57,7 @@ const redirectToSafePath = (input: string | null | undefined) => {
 export async function requireAuthenticatedRoute(input: {
   context: AuthRouteContext;
   location: RouteLocation;
-  permissionApps?: Permission['apps'];
+  permissionApps?: PermissionApps;
 }) {
   const currentSession = await getCurrentSession(input.context);
 

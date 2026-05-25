@@ -86,17 +86,14 @@ export default function PageLogin({
           typeof result.error.message === 'string'
             ? result.error.message
             : undefined;
-        const translatedErrorMessage = result.error.code
-          ? i18n.getResource(
-              i18n.language,
-              'auth',
-              `errorCode.${result.error.code}`
-            )
-          : undefined;
+        const translatedErrorMessage =
+          errorKey && i18n.exists(errorKey)
+            ? i18n.t(errorKey, { defaultValue: '' })
+            : undefined;
         const errorMessage =
-          errorKey && typeof translatedErrorMessage === 'string'
-            ? translatedErrorMessage
-            : providerMessage || t('auth:errorCode.UNKNOWN_ERROR');
+          translatedErrorMessage ||
+          providerMessage ||
+          t('auth:errorCode.UNKNOWN_ERROR');
         toast.error(errorMessage);
         return;
       }
