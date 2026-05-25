@@ -57,7 +57,7 @@ export const zRole: () => z.ZodType<Role> = () => z.enum(rolesNames);
 export type Role = keyof typeof rolePermissions;
 
 export const isRole = (value: unknown): value is Role =>
-  typeof value === 'string' && value in rolePermissions;
+  typeof value === 'string' && Object.hasOwn(rolePermissions, value);
 
 export const parseRole = (value: unknown): Role | undefined =>
   isRole(value) ? value : undefined;

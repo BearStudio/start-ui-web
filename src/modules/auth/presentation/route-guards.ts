@@ -131,13 +131,12 @@ export async function redirectAuthenticatedRoute(input: {
 
   if (!currentSession.user.onboardedAt) {
     const safeRedirect = parseSafeRedirectPath(input.redirect);
-    const normalizedRedirect = normalizeRedirectForSearch(input.redirect);
+    const normalizedRedirect = safeRedirect
+      ? normalizeRedirectForSearch(input.redirect)
+      : undefined;
     throw redirect({
       to: '/onboarding',
-      search:
-        safeRedirect && normalizedRedirect
-          ? { redirect: normalizedRedirect }
-          : undefined,
+      search: normalizedRedirect ? { redirect: normalizedRedirect } : undefined,
       replace: true,
     });
   }

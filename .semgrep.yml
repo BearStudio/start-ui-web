@@ -215,6 +215,18 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: no-role-permissions-in-operator
+    message: Use Object.hasOwn(rolePermissions, value) for role validation; the `in` operator accepts inherited keys.
+    languages: [typescript]
+    severity: ERROR
+    pattern: $VALUE in rolePermissions
+    paths:
+      include:
+        - src/modules/auth/domain/**/*.ts
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
   - id: email-template-no-global-language-mutation
     message: Server-rendered email templates must use fixed translators instead of mutating the global i18n language.
     languages: [typescript]
@@ -422,7 +434,7 @@ rules:
       - pattern: |
           createServerContextTools({ getAuthUseCases, ... })
       - pattern-not: |
-          createServerContextTools({ ..., telemetry: $TELEMETRY, ... })
+          createServerContextTools({ ..., telemetry: telemetryProxy, ... })
     paths:
       include:
         - src/modules/auth/server-functions.ts
