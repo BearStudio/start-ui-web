@@ -11,11 +11,10 @@ import { createPgliteTestDatabase } from '@/tests/server/pglite';
 import { UserRepositoryDrizzle } from '../drizzle/user-repository-drizzle';
 
 describe('UserRepositoryDrizzle integration', () => {
-  const testDatabase = createPgliteTestDatabase();
-  let database: Awaited<typeof testDatabase>;
+  let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
 
   beforeAll(async () => {
-    database = await testDatabase;
+    database = await createPgliteTestDatabase();
   });
 
   beforeEach(async () => {
@@ -23,7 +22,7 @@ describe('UserRepositoryDrizzle integration', () => {
   });
 
   afterAll(async () => {
-    await database.close();
+    await database?.close();
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
@@ -77,14 +76,27 @@ describe('UserRepositoryDrizzle integration', () => {
 
   it('covers session cursor pagination with PGlite', async () => {
     const repository = new UserRepositoryDrizzle(database.db);
-    await database.db.insert(userTable).values(
+    await database.db.insert(userTable).values([
       makeUserRow({
         id: 'user-1',
         name: 'User',
         email: 'user@example.com',
-      })
-    );
+      }),
+      makeUserRow({
+        id: 'user-2',
+        name: 'Other User',
+        email: 'other@example.com',
+      }),
+    ]);
     await database.db.insert(sessionTable).values([
+      makeSessionRow({
+        id: 'session-x',
+        token: 'token-x',
+        userId: 'user-2',
+        createdAt: new Date('2026-01-04T00:00:00.000Z'),
+        updatedAt: new Date('2026-01-04T00:00:00.000Z'),
+        expiresAt: new Date('2026-02-04T00:00:00.000Z'),
+      }),
       makeSessionRow({
         id: 'session-a',
         token: 'token-a',
@@ -119,6 +131,9 @@ describe('UserRepositoryDrizzle integration', () => {
       'session-a',
       'session-b',
     ]);
+    expect(firstPage.items.map((session) => session.id)).not.toContain(
+      'session-x'
+    );
     expect(firstPage.nextCursor).toBe('session-b');
 
     const secondPage = await repository.listSessions({
@@ -129,5 +144,8 @@ describe('UserRepositoryDrizzle integration', () => {
     expect(secondPage.items.map((session) => session.id)).toEqual([
       'session-c',
     ]);
+    expect(secondPage.items.map((session) => session.id)).not.toContain(
+      'session-x'
+    );
   });
 });

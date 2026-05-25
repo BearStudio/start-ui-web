@@ -7,11 +7,10 @@ import { createPgliteTestDatabase } from '@/tests/server/pglite';
 import { GenreRepositoryDrizzle } from '../drizzle/genre-repository-drizzle';
 
 describe('GenreRepositoryDrizzle integration', () => {
-  const testDatabase = createPgliteTestDatabase();
-  let database: Awaited<typeof testDatabase>;
+  let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
 
   beforeAll(async () => {
-    database = await testDatabase;
+    database = await createPgliteTestDatabase();
   });
 
   beforeEach(async () => {
@@ -19,7 +18,7 @@ describe('GenreRepositoryDrizzle integration', () => {
   });
 
   afterAll(async () => {
-    await database.close();
+    await database?.close();
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
