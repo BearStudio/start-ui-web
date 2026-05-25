@@ -27,6 +27,8 @@ jobs:
       AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
       EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
+      EMAIL_DELIVERY_DISABLED: true
+      RESEND_API_KEY: re_e2e_disabled
       S3_HOST: localhost:9000
       S3_BUCKET_NAME: default
       S3_ACCESS_KEY_ID: startui-access-key
