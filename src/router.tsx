@@ -1,4 +1,5 @@
 import { createRouter } from '@tanstack/react-router';
+import { createClientOnlyFn, createServerOnlyFn } from '@tanstack/react-start';
 
 import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
@@ -9,18 +10,30 @@ import type { RouterContext } from '@/platform/router/context';
 
 import { routeTree } from './routeTree.gen';
 
+const initTelemetryServerOnly = createServerOnlyFn(async () => {
+  const { initTelemetryServer } =
+    await import('@/composition/telemetry/sentry.server');
+
+  initTelemetryServer();
+});
+
+const initTelemetryClientOnly = createClientOnlyFn(async (router: unknown) => {
+  const { initTelemetryClient } =
+    await import('@/composition/telemetry/sentry.client');
+
+  initTelemetryClient(router);
+});
+
 // Eagerly initialize the right Sentry runtime via dynamic import so the
 // wrong-side SDK is not bundled into each environment. Failure is non-fatal
 // (DSN may not be configured); the telemetry proxy falls back to a no-op
 // adapter so all call sites remain unconditional.
 if (import.meta.env.SSR) {
-  import('@/composition/telemetry/sentry.server')
-    .then(({ initTelemetryServer }) => initTelemetryServer())
-    .catch((error: unknown) => {
-      if (envClient.DEV) {
-        console.warn('Telemetry init failed (non-fatal):', error);
-      }
-    });
+  void initTelemetryServerOnly().catch((error: unknown) => {
+    if (envClient.DEV) {
+      console.warn('Telemetry init failed (non-fatal):', error);
+    }
+  });
 } else {
   // Client telemetry needs the concrete router instance for Start router
   // tracing, so it is initialized inside getRouter().
@@ -55,13 +68,11 @@ export function getRouter() {
   });
 
   if (!import.meta.env.SSR) {
-    import('@/composition/telemetry/sentry.client')
-      .then(({ initTelemetryClient }) => initTelemetryClient(router))
-      .catch((error: unknown) => {
-        if (envClient.DEV) {
-          console.warn('Telemetry init failed (non-fatal):', error);
-        }
-      });
+    void initTelemetryClientOnly(router).catch((error: unknown) => {
+      if (envClient.DEV) {
+        console.warn('Telemetry init failed (non-fatal):', error);
+      }
+    });
   }
 
   return router;

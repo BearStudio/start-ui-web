@@ -1,8 +1,14 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type {
+  ComponentProps,
+  ComponentType,
+  PropsWithChildren,
+  ReactNode,
+} from 'react';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
 type FormLike = {
+  AppForm: ComponentType<PropsWithChildren>;
   handleSubmit: () => unknown;
 };
 
@@ -34,22 +40,26 @@ export const Form = ({
   children,
   ...rest
 }: FormProps) => {
+  const AppForm = form.AppForm;
+
   if (noHtmlForm) {
-    return <>{children}</>;
+    return <AppForm>{children}</AppForm>;
   }
 
   return (
-    <form
-      noValidate
-      {...rest}
-      className={cn('flex flex-1 flex-col', className)}
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
-      {children}
-    </form>
+    <AppForm>
+      <form
+        noValidate
+        {...rest}
+        className={cn('flex flex-1 flex-col', className)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+      >
+        {children}
+      </form>
+    </AppForm>
   );
 };
