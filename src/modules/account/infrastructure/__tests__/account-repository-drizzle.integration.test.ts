@@ -9,11 +9,10 @@ import { createPgliteTestDatabase } from '@/tests/server/pglite';
 import { AccountRepositoryDrizzle } from '../drizzle/account-repository-drizzle';
 
 describe('AccountRepositoryDrizzle integration', () => {
-  const testDatabase = createPgliteTestDatabase();
-  let database: Awaited<typeof testDatabase>;
+  let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
 
   beforeAll(async () => {
-    database = await testDatabase;
+    database = await createPgliteTestDatabase();
   });
 
   beforeEach(async () => {
@@ -21,7 +20,7 @@ describe('AccountRepositoryDrizzle integration', () => {
   });
 
   afterAll(async () => {
-    await database.close();
+    await database?.close();
   });
 
   it('covers account update behavior with PGlite', async () => {
@@ -53,8 +52,17 @@ describe('AccountRepositoryDrizzle integration', () => {
     await expect(
       repository.updateInfo(toUserId('user-1'), { name: 'Final Name' })
     ).resolves.toEqual({ id: 'user-1' });
+    const updatedUser = await database.db.query.user.findFirst({
+      where: eq(userTable.id, 'user-1'),
+    });
+    expect(updatedUser).toMatchObject({ name: 'Final Name' });
+
     await expect(
       repository.updateInfo(toUserId('missing'), { name: 'Missing' })
     ).resolves.toBeNull();
+    const finalUser = await database.db.query.user.findFirst({
+      where: eq(userTable.id, 'user-1'),
+    });
+    expect(finalUser).toMatchObject({ name: 'Final Name' });
   });
 });

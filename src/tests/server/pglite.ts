@@ -16,7 +16,7 @@ const quoteIdentifier = (value: string) => `"${value.replaceAll('"', '""')}"`;
 
 const getPublicTableNames = async (db: Database) => {
   const result = await db.$client.query<TableRow>(
-    "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename"
+    "SELECT schemaname, tablename FROM pg_tables WHERE schemaname = 'public' AND tablename != '__drizzle_migrations' ORDER BY tablename"
   );
 
   return result.rows.map(

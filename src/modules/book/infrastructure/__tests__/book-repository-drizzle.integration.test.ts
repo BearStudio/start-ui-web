@@ -1,3 +1,4 @@
+import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
@@ -11,11 +12,10 @@ import { createPgliteTestDatabase } from '@/tests/server/pglite';
 import { BookRepositoryDrizzle } from '../drizzle/book-repository-drizzle';
 
 describe('BookRepositoryDrizzle integration', () => {
-  const testDatabase = createPgliteTestDatabase();
-  let database: Awaited<typeof testDatabase>;
+  let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
 
   beforeAll(async () => {
-    database = await testDatabase;
+    database = await createPgliteTestDatabase();
   });
 
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('BookRepositoryDrizzle integration', () => {
   });
 
   afterAll(async () => {
-    await database.close();
+    await database?.close();
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
@@ -37,9 +37,11 @@ describe('BookRepositoryDrizzle integration', () => {
     await database.db.insert(bookTable).values([
       makeBookRow({
         id: 'book-a',
-        title: 'Alpha_',
-        author: 'Author A',
+        title: 'Alpha_ Old',
+        author: 'Author A Old',
         genreId: 'genre-1',
+        publisher: 'Old Publisher',
+        coverId: 'old-cover-id',
       }),
       makeBookRow({
         id: 'book-b',
@@ -85,12 +87,24 @@ describe('BookRepositoryDrizzle integration', () => {
     expect(escapedSearch.items.map((book) => book.id)).toEqual(['book-a']);
 
     const updated = await repository.update(toBookId('book-a'), {
-      title: 'Alpha_',
-      author: 'Author A',
+      title: 'Alpha_ New',
+      author: 'Author A New',
       genreId: toGenreId('genre-2'),
       publisher: null,
       coverId: null,
     });
     expect(updated?.genre).toMatchObject({ id: 'genre-2', name: 'Two' });
+
+    const persisted = await database.db.query.book.findFirst({
+      where: eq(bookTable.id, 'book-a'),
+      with: { genre: true },
+    });
+    expect(persisted).toMatchObject({
+      title: 'Alpha_ New',
+      author: 'Author A New',
+      publisher: null,
+      coverId: null,
+      genre: { id: 'genre-2', name: 'Two' },
+    });
   });
 });
