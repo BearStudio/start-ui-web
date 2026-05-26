@@ -123,7 +123,7 @@ describe('strict modular monolith layout', () => {
     expect(
       findImportViolations(
         files,
-        /^[\t ]+const\s+\w+\s*=\s*createServerFn\s*\(/gm
+        /^[\t ]*const\s+\w+\s*=\s*createServerFn\s*\(/gm
       )
     ).toEqual([]);
   });

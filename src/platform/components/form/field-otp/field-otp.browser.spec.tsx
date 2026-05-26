@@ -96,6 +96,7 @@ test('auto submit', async () => {
 });
 
 test('auto submit after filling the full code without clicking submit', async () => {
+  const user = setupUser();
   const mockedSubmit = vi.fn();
 
   render(
@@ -115,7 +116,9 @@ test('auto submit after filling the full code without clicking submit', async ()
     </FormMocked>
   );
 
-  await page.getByLabelText('Code').fill('000000');
+  const input = page.getByLabelText('Code');
+  await user.click(input);
+  await user.keyboard('000000');
 
   expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });

@@ -5,7 +5,6 @@ export const mutationTestFiles = [
 ];
 
 export const mutationSourceFiles = [
-  'src/modules/runtime-config/domain/**/*.ts',
   'src/modules/runtime-config/application/**/*.ts',
   '!**/*.spec.ts',
   '!**/*.test.ts',

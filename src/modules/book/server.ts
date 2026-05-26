@@ -6,11 +6,11 @@ import {
 } from '@/platform/lib/tanstack-start/server-function-handler';
 
 import type { ProtectedContext } from '@/modules/auth/server';
-import { zFormFieldsBook } from '@/modules/book/presentation/schema';
 
 import {
   type BookHandlers,
   createBookHandlers,
+  zCreateInput,
   zDeleteByIdInput,
   zGetAllInput,
   zGetByIdInput,
@@ -75,7 +75,7 @@ export const bookGetById = createServerFn({ method: 'GET' })
   );
 
 export const bookCreate = createServerFn({ method: 'POST' })
-  .inputValidator(zFormFieldsBook())
+  .inputValidator(zCreateInput())
   .handler(async ({ data }) =>
     runMutation(data, ({ handlers }, ctx, input) => handlers.create(ctx, input))
   );

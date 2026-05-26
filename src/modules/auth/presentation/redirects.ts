@@ -93,10 +93,15 @@ export const isPostAuthDestinationUrl = (
   url: string | URL,
   destination: PostAuthDestination
 ) => {
-  const pathname =
-    typeof url === 'string'
-      ? new URL(url, 'http://localhost').pathname
-      : url.pathname;
+  let pathname: string;
+  try {
+    pathname =
+      typeof url === 'string'
+        ? new URL(url, 'http://localhost').pathname
+        : url.pathname;
+  } catch {
+    return false;
+  }
 
   if (destination === '/') {
     return pathname === '/';

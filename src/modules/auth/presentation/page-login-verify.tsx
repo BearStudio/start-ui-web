@@ -54,7 +54,6 @@ export default function PageLoginVerify({
     validators: { onSubmit: zFormFieldsLoginVerify() },
     onSubmit: async ({ value: { otp }, formApi }) => {
       authE2eDebug('login.verify.submit', {
-        email: search.email,
         otpLength: otp.length,
         redirect: search.redirect ?? null,
       });
@@ -67,7 +66,6 @@ export default function PageLoginVerify({
       if (error) {
         authE2eDebug('login.verify.error', {
           code: error.code ?? null,
-          email: search.email,
           message: typeof error.message === 'string' ? error.message : null,
         });
         const errorKey = error.code
@@ -91,9 +89,7 @@ export default function PageLoginVerify({
         return;
       }
 
-      authE2eDebug('login.verify.sign_in.success', {
-        email: search.email,
-      });
+      authE2eDebug('login.verify.sign_in.success');
 
       // Update Better Auth's client session cache, then invalidate the router
       // session cache so /login beforeLoad re-runs and redirects to the post-

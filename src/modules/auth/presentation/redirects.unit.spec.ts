@@ -39,6 +39,10 @@ describe('auth redirect helpers', () => {
   });
 
   it('matches post-auth destinations and nested routes for E2E waits', () => {
+    expect(isPostAuthDestinationUrl('http://localhost:3000/', '/')).toBe(true);
+    expect(isPostAuthDestinationUrl('http://localhost:3000/app', '/')).toBe(
+      false
+    );
     expect(
       isPostAuthDestinationUrl('http://localhost:3000/manager', '/manager')
     ).toBe(true);
@@ -60,5 +64,6 @@ describe('auth redirect helpers', () => {
     expect(
       isPostAuthDestinationUrl('http://localhost:3000/login/verify', '/manager')
     ).toBe(false);
+    expect(isPostAuthDestinationUrl('http://[::1', '/app')).toBe(false);
   });
 });
