@@ -3,6 +3,7 @@ import { createScopedStrykerConfig } from './stryker.shared.config.mjs';
 export const mutationTestFiles = [
   'src/modules/kernel/__tests__/**/*.unit.spec.ts',
   'src/modules/kernel/application/**/*.unit.spec.ts',
+  'src/modules/kernel/domain/**/*.unit.spec.ts',
 ];
 
 export const mutationSourceFiles = [
