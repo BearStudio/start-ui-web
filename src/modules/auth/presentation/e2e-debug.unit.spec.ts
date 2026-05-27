@@ -62,4 +62,28 @@ describe('authE2eDebug', () => {
     expect(payload.self).toBe('[Circular]');
     expect(console.warn).not.toHaveBeenCalled();
   });
+
+  it('serializes non-plain debug values and reused references', async () => {
+    const { authE2eDebug } = await import('./e2e-debug');
+    const shared = { safe: 'kept' };
+
+    authE2eDebug('login.email_otp.debug', {
+      at: new Date('2026-05-26T12:00:00.000Z'),
+      first: shared,
+      pattern: /login-\d+/i,
+      second: shared,
+    });
+
+    const [, serializedPayload] = vi.mocked(console.info).mock.calls[0] ?? [];
+    const payload = JSON.parse(String(serializedPayload));
+
+    expect(payload).toEqual(
+      expect.objectContaining({
+        at: '2026-05-26T12:00:00.000Z',
+        first: { safe: 'kept' },
+        pattern: '/login-\\d+/i',
+        second: { safe: 'kept' },
+      })
+    );
+  });
 });

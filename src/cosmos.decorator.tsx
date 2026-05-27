@@ -1,5 +1,8 @@
+import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import { StrictMode, useEffect, useState } from 'react';
+import '@fontsource-variable/inter';
+import '@/platform/lib/dayjs/config';
 
 import type { LanguageKey } from '@/platform/lib/i18n/constants';
 import {
@@ -7,9 +10,10 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '@/platform/lib/i18n/constants';
 import i18nGlobal from '@/platform/lib/i18n/index';
+import { QueryClientProvider } from '@/platform/lib/tanstack-query/provider';
+import { createAppQueryClient } from '@/platform/lib/tanstack-query/query-client';
 
-import { createClientQueryClient } from '@/composition/client-query';
-import { Providers } from '@/composition/providers';
+import { Sonner } from '@/platform/components/ui/sonner';
 
 type CosmosFixtureOptions = {
   locale?: LanguageKey;
@@ -25,7 +29,7 @@ export default function CosmosDecorator({
   children,
   options,
 }: CosmosDecoratorProps) {
-  const [queryClient] = useState(() => createClientQueryClient());
+  const [queryClient] = useState(() => createAppQueryClient());
   const locale = options?.locale ?? DEFAULT_LANGUAGE_KEY;
 
   useEffect(() => {
@@ -43,10 +47,18 @@ export default function CosmosDecorator({
   }, [locale]);
 
   return (
-    <Providers client={queryClient} forcedTheme={options?.theme ?? 'light'}>
-      <StrictMode>
-        <div id="preview-container">{children}</div>
-      </StrictMode>
-    </Providers>
+    <ThemeProvider
+      attribute="class"
+      storageKey="theme"
+      disableTransitionOnChange
+      forcedTheme={options?.theme ?? 'light'}
+    >
+      <QueryClientProvider client={queryClient}>
+        <StrictMode>
+          <div id="preview-container">{children}</div>
+        </StrictMode>
+        <Sonner />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
