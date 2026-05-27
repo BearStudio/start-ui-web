@@ -50,6 +50,7 @@ describe('sanitizeLogFields', () => {
       at: '2026-05-26T12:00:00.000Z',
       pattern: '/login-\\d+/i',
     });
+    expect(sanitized.at).toBe(at);
   });
 
   it('preserves binary views without converting them to indexed objects', () => {
@@ -68,7 +69,7 @@ describe('sanitizeLogFields', () => {
     expect(sanitized.buffer).toBe(buffer);
   });
 
-  it('does not return raw non-plain objects that can bypass redaction', () => {
+  it('serializes and sanitizes non-plain objects with toJSON methods to prevent bypass', () => {
     class SecretPayload {
       toJSON() {
         return { email: 'person@example.com' };
@@ -78,9 +79,106 @@ describe('sanitizeLogFields', () => {
     const payload = new SecretPayload();
     const sanitized = sanitizeLogFields({ payload }, { sensitiveKeys });
 
-    expect(sanitized.payload).toBe('[NonPlainObject]');
+    expect(sanitized.payload).toEqual({ email: '[REDACTED]' });
     expect(sanitized.payload).not.toBe(payload);
     expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
+  });
+
+  it('does not leak toJSON objects into sibling branches after serialization', () => {
+    class SecretPayload {
+      toJSON() {
+        return { email: 'person@example.com' };
+      }
+    }
+
+    const payload = new SecretPayload();
+
+    expect(
+      sanitizeLogFields({ first: payload, second: payload }, { sensitiveKeys })
+    ).toEqual({
+      first: { email: '[REDACTED]' },
+      second: { email: '[REDACTED]' },
+    });
+  });
+
+  it('falls back when non-plain object serialization throws', () => {
+    class BrokenPayload {
+      toJSON() {
+        throw new Error('boom');
+      }
+    }
+
+    expect(
+      sanitizeLogFields({ payload: new BrokenPayload() }, { sensitiveKeys })
+    ).toEqual({
+      payload: '[NonPlainObject]',
+    });
+  });
+
+  it('marks non-plain empty objects that cannot be serialized safely', () => {
+    class EmptyPayload {}
+
+    expect(
+      sanitizeLogFields({ payload: new EmptyPayload() }, { sensitiveKeys })
+    ).toEqual({
+      payload: '[NonPlainObject]',
+    });
+  });
+
+  it('preserves empty plain objects and objects without prototypes', () => {
+    const nullPrototypeObject = Object.create(null) as Record<string, unknown>;
+    nullPrototypeObject.email = 'person@example.com';
+
+    expect(
+      sanitizeLogFields(
+        {
+          empty: {},
+          nullPrototypeObject,
+        },
+        { sensitiveKeys }
+      )
+    ).toEqual({
+      empty: {},
+      nullPrototypeObject: {
+        email: '[REDACTED]',
+      },
+    });
+  });
+
+  it('preserves sparse array holes while sanitizing entries', () => {
+    const list: Array<string | undefined> = [];
+    list.length = 3;
+    list[0] = 'safe';
+    list[2] = 'person@example.com';
+
+    const sanitized = sanitizeLogFields({ list }, { sensitiveKeys });
+    const sanitizedList = sanitized.list as unknown[];
+
+    expect(Array.isArray(sanitizedList)).toBe(true);
+    expect(sanitizedList).toHaveLength(3);
+    expect(1 in sanitizedList).toBe(false);
+    expect(sanitizedList[0]).toBe('safe');
+    expect(sanitizedList[2]).toBe('[REDACTED]');
+  });
+
+  it('sanitizes array entries without treating the item slot as a sensitive key', () => {
+    const sanitized = sanitizeLogFields(
+      {
+        list: ['safe'],
+      },
+      { sensitiveKeys: new Set(['list', 'Stryker was here!']) }
+    );
+
+    expect(sanitized.list).toBe('[REDACTED]');
+
+    const nested = sanitizeLogFields(
+      {
+        list: [['safe']],
+      },
+      { sensitiveKeys: new Set(['Stryker was here!']) }
+    );
+
+    expect(nested.list).toEqual([['safe']]);
   });
 
   it('marks true circular references without throwing', () => {

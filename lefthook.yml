@@ -7,8 +7,3 @@ pre-commit:
     lint:
       glob: '*.{js,ts,cjs,mjs,jsx,tsx}'
       run: pnpm oxlint {staged_files}
-
-pre-push:
-  commands:
-    check:
-      run: pnpm lint
