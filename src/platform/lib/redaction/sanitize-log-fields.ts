@@ -52,11 +52,7 @@ const sanitizeLogValue = (
     return value;
   }
 
-  if (
-    !Array.isArray(value) &&
-    !isPlainObject(value) &&
-    typeof (value as { toJSON?: unknown }).toJSON === 'function'
-  ) {
+  if (typeof (value as { toJSON?: unknown }).toJSON === 'function') {
     path.add(value);
     try {
       return sanitizeLogValue(
@@ -82,9 +78,19 @@ const sanitizeLogValue = (
   path.add(value);
   try {
     if (Array.isArray(value)) {
-      return value.map((item) =>
-        sanitizeLogValue('', item, { sensitiveKeys }, path)
-      );
+      const sanitized: unknown[] = [];
+      sanitized.length = value.length;
+      for (let index = 0; index < value.length; index += 1) {
+        if (index in value) {
+          sanitized[index] = sanitizeLogValue(
+            '',
+            value[index],
+            { sensitiveKeys },
+            path
+          );
+        }
+      }
+      return sanitized;
     }
 
     return Object.fromEntries(

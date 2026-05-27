@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/platform/http/**/*.ts",
+    "src/platform/lib/dayjs/**/*.ts",
+    "src/platform/lib/get-page-title.ts",
+    "src/platform/lib/redaction/**/*.ts",
+    "src/platform/lib/tailwind/**/*.ts",
+    "src/platform/lib/tanstack-query/scoped-query-options.ts",
+    "src/platform/lib/tanstack-start/**/*.ts",
+    "src/platform/lib/zod/**/*.ts",
+    "src/platform/tenant/**/*.ts"
+  ],
+  "exclude": ["**/index.ts", "**/types.ts", "**/*.spec.ts", "**/*.test.ts"]
+}

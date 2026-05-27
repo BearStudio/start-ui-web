@@ -1,11 +1,1 @@
-import { useSyncExternalStore } from 'react';
-
-const emptySubscribe = () => () => {};
-
-export const useHydrated = () => {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
-};
+export { useHydrated } from '@tanstack/react-router';
