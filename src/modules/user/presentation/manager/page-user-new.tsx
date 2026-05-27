@@ -76,7 +76,7 @@ export const PageUserNew = () => {
   return (
     <>
       <PreventNavigation shouldBlock={isDirty} />
-      <Form form={form}>
+      <Form form={form} data-testid="manager-user-new-form">
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}

@@ -64,7 +64,16 @@ jobs:
         uses: ./.github/actions/setup-playwright
 
       - name: Run tests
-        run: SKIP_ENV_VALIDATION=true pnpm test
+        run: SKIP_ENV_VALIDATION=true pnpm test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@cddd853df119a48c5be31a973f8cd97e12e35e16 # v6.0.1
+        with:
+          files: ./coverage/lcov.info
+          flags: vitest
+          name: vitest
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: Build

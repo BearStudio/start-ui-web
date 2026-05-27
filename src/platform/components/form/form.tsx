@@ -6,6 +6,7 @@ import type {
 } from 'react';
 
 import { cn } from '@/platform/lib/tailwind/utils';
+import { useHydrated } from '@/platform/hooks/use-hydrated';
 
 type FormLike = {
   AppForm: ComponentType<PropsWithChildren>;
@@ -41,6 +42,7 @@ export const Form = ({
   ...rest
 }: FormProps) => {
   const AppForm = form.AppForm;
+  const hydrated = useHydrated();
 
   if (noHtmlForm) {
     return <AppForm>{children}</AppForm>;
@@ -51,6 +53,8 @@ export const Form = ({
       <form
         noValidate
         {...rest}
+        data-hydrated={hydrated ? 'true' : 'false'}
+        inert={hydrated ? undefined : true}
         className={cn('flex flex-1 flex-col', className)}
         onSubmit={(e) => {
           e.preventDefault();
