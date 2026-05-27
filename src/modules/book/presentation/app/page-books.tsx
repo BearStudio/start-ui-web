@@ -7,7 +7,6 @@ import { PageError } from '@/platform/components/errors/page-error';
 import { Button } from '@/platform/components/ui/button';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import { BookCover } from '@/modules/book/presentation/book-cover';
 import {
   AppPageLayout as PageLayout,
   AppPageLayoutContent as PageLayoutContent,
@@ -15,6 +14,7 @@ import {
   AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
 
+import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
 
 export const PageBooks = () => {

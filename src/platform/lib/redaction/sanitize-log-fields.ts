@@ -4,8 +4,12 @@ type SanitizeLogFieldsOptions = {
 
 const CIRCULAR_VALUE = '[Circular]';
 const NON_PLAIN_OBJECT_VALUE = '[NonPlainObject]';
+const OVERSIZED_ARRAY_VALUE = '[OversizedArray]';
 const REDACTED_VALUE = '[REDACTED]';
 const EMAIL_PATTERN = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
+const MAX_ARRAY_INDEX = 2 ** 32 - 2;
+const MAX_SANITIZED_ARRAY_LENGTH = 10_000;
+const MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES = 1_000;
 
 const redactString = (value: string) =>
   value.replace(EMAIL_PATTERN, REDACTED_VALUE);
@@ -17,6 +21,20 @@ const isPlainObject = (value: object) => {
   const prototype = Object.getPrototypeOf(value);
   return prototype === null || prototype === Object.prototype;
 };
+
+const isArrayIndexKey = (key: string) => {
+  const index = Number(key);
+
+  return (
+    Number.isInteger(index) &&
+    index >= 0 &&
+    index <= MAX_ARRAY_INDEX &&
+    String(index) === key
+  );
+};
+
+const getArrayIndexKeys = (value: unknown[]) =>
+  Object.keys(value).filter(isArrayIndexKey);
 
 const sanitizeLogValue = (
   key: string,
@@ -78,17 +96,42 @@ const sanitizeLogValue = (
   path.add(value);
   try {
     if (Array.isArray(value)) {
+      const indexKeys = getArrayIndexKeys(value);
+
+      if (value.length > MAX_SANITIZED_ARRAY_LENGTH) {
+        return {
+          type: OVERSIZED_ARRAY_VALUE,
+          length: value.length,
+          entries: Object.fromEntries(
+            indexKeys
+              .slice(0, MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES)
+              .map((indexKey) => [
+                indexKey,
+                sanitizeLogValue(
+                  '',
+                  value[Number(indexKey)],
+                  { sensitiveKeys },
+                  path
+                ),
+              ])
+          ),
+          truncatedEntries: Math.max(
+            indexKeys.length - MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES,
+            0
+          ),
+        };
+      }
+
       const sanitized: unknown[] = [];
       sanitized.length = value.length;
-      for (let index = 0; index < value.length; index += 1) {
-        if (index in value) {
-          sanitized[index] = sanitizeLogValue(
-            '',
-            value[index],
-            { sensitiveKeys },
-            path
-          );
-        }
+      for (const indexKey of indexKeys) {
+        const index = Number(indexKey);
+        sanitized[index] = sanitizeLogValue(
+          '',
+          value[index],
+          { sensitiveKeys },
+          path
+        );
       }
       return sanitized;
     }

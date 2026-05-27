@@ -20,7 +20,6 @@ import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import { BookCover } from '@/modules/book/presentation/book-cover';
 import {
   ManagerPageLayout as PageLayout,
   ManagerPageLayoutContent as PageLayoutContent,
@@ -28,6 +27,7 @@ import {
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
 
+import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {

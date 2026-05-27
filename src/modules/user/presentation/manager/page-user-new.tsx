@@ -19,12 +19,12 @@ import {
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
+
 import {
   FormUser,
   formUserDefaultValues,
   formUserValidators,
-} from '@/modules/user/presentation/manager/form-user';
-
+} from './form-user';
 import { userQueries } from '../queries';
 
 export const PageUserNew = () => {

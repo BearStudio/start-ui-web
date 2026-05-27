@@ -191,6 +191,25 @@ describe('sanitizeLogFields', () => {
     expect(sanitizedList[2]).toBe('[REDACTED]');
   });
 
+  it('compacts oversized sparse arrays without walking their declared length', () => {
+    const list: Array<string | undefined> = [];
+    list.length = 1_000_000_000;
+    list[0] = 'safe';
+    list[999_999_999] = 'person@example.com';
+
+    expect(sanitizeLogFields({ list }, { sensitiveKeys })).toEqual({
+      list: {
+        type: '[OversizedArray]',
+        length: 1_000_000_000,
+        entries: {
+          '0': 'safe',
+          '999999999': '[REDACTED]',
+        },
+        truncatedEntries: 0,
+      },
+    });
+  });
+
   it('sanitizes array entries without calling an overridden map method', () => {
     const list = ['safe', 'person@example.com'];
     Object.defineProperty(list, 'map', {

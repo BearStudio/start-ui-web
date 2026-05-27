@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from '@/platform/components/ui/card';
 import { LocalSwitcher } from '@/platform/components/ui/local-switcher';
 import { ThemeSwitcher } from '@/platform/components/ui/theme-switcher';
 
-import { AccountCardRow } from '@/modules/account/presentation/account-card-row';
+import { AccountCardRow } from './account-card-row';
 
 export const DisplayPreferences = () => {
   const { t } = useTranslation(['common', 'account']);

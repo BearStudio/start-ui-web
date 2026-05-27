@@ -14,12 +14,6 @@ import { Card, CardContent } from '@/platform/components/ui/card';
 import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import {
-  FormBook,
-  formBookDefaultValues,
-  formBookValidators,
-} from '@/modules/book/presentation/manager/form-book';
-import { FormBookCover } from '@/modules/book/presentation/manager/form-book-cover';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   ManagerPageLayout as PageLayout,
@@ -28,6 +22,12 @@ import {
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
 
+import {
+  FormBook,
+  formBookDefaultValues,
+  formBookValidators,
+} from './form-book';
+import { FormBookCover } from './form-book-cover';
 import { bookQueries } from '../queries';
 
 export const PageBookUpdate = (props: { params: { id: string } }) => {

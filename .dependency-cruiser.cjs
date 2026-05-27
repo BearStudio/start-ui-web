@@ -47,6 +47,12 @@ module.exports = {
       to: { path: '^src/modules/[^/]+/transport' },
     },
     {
+      name: 'domain-no-presentation',
+      severity: 'error',
+      from: { path: '^src/modules/(book|user|genre|account)/domain' },
+      to: { path: '^src/modules/(book|user|genre|account)/presentation' },
+    },
+    {
       name: 'application-no-infrastructure',
       severity: 'error',
       from: { path: '^src/modules/[^/]+/application' },
@@ -57,6 +63,12 @@ module.exports = {
       severity: 'error',
       from: { path: '^src/modules/[^/]+/application' },
       to: { path: '^src/modules/[^/]+/transport' },
+    },
+    {
+      name: 'application-no-presentation',
+      severity: 'error',
+      from: { path: '^src/modules/(book|user|genre|account)/application' },
+      to: { path: '^src/modules/(book|user|genre|account)/presentation' },
     },
     {
       name: 'application-no-react-or-router',
@@ -82,10 +94,22 @@ module.exports = {
       to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
     },
     {
+      name: 'infrastructure-no-presentation',
+      severity: 'error',
+      from: { path: '^src/modules/(book|user|genre|account)/infrastructure' },
+      to: { path: '^src/modules/(book|user|genre|account)/presentation' },
+    },
+    {
       name: 'transport-no-infrastructure',
       severity: 'error',
       from: { path: '^src/modules/[^/]+/transport' },
       to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
+    },
+    {
+      name: 'transport-no-presentation',
+      severity: 'error',
+      from: { path: '^src/modules/(book|user|genre|account)/transport' },
+      to: { path: '^src/modules/(book|user|genre|account)/presentation' },
     },
     {
       name: 'kernel-no-feature-imports',

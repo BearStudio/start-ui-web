@@ -53,8 +53,9 @@ export const Form = ({
       <form
         noValidate
         {...rest}
-        action="javascript:void(0)"
+        action="#"
         data-hydrated={hydrated}
+        inert={hydrated ? undefined : true}
         className={cn('flex flex-1 flex-col', className)}
         onSubmit={(e) => {
           e.preventDefault();

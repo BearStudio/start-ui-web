@@ -2,8 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/platform/components/ui/button';
 
-import { DisplayPreferences } from '@/modules/account/presentation/display-preferences';
-import { UserCard } from '@/modules/account/presentation/user-card';
 import { BuildInfoDrawer } from '@/modules/build-info/presentation';
 import { BuildInfoVersion } from '@/modules/build-info/presentation';
 import {
@@ -12,6 +10,9 @@ import {
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
+
+import { DisplayPreferences } from '../display-preferences';
+import { UserCard } from '../user-card';
 
 export const PageAccount = () => {
   const { t } = useTranslation(['account']);

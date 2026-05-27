@@ -9,10 +9,8 @@ import {
 
 import { rolesNames } from '@/modules/auth';
 import { useAuthSession } from '@/modules/auth/client';
-import {
-  type FormFieldsUser,
-  zFormFieldsUser,
-} from '@/modules/user/presentation/schema';
+
+import { type FormFieldsUser, zFormFieldsUser } from '../schema';
 
 export const formUserDefaultValues = (
   values?: Partial<FormFieldsUser>
