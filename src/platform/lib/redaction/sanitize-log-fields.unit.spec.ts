@@ -84,6 +84,36 @@ describe('sanitizeLogFields', () => {
     expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
   });
 
+  it('serializes and sanitizes plain objects with toJSON methods to prevent bypass', () => {
+    const payload = {
+      safe: 'kept',
+      toJSON() {
+        return { email: 'person@example.com' };
+      },
+    };
+
+    const sanitized = sanitizeLogFields({ payload }, { sensitiveKeys });
+
+    expect(sanitized.payload).toEqual({ email: '[REDACTED]' });
+    expect(sanitized.payload).not.toBe(payload);
+    expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
+  });
+
+  it('serializes and sanitizes array subclasses with toJSON methods to prevent bypass', () => {
+    class SecretList extends Array<string> {
+      toJSON() {
+        return { email: 'person@example.com' };
+      }
+    }
+
+    const list = new SecretList('safe');
+    const sanitized = sanitizeLogFields({ list }, { sensitiveKeys });
+
+    expect(sanitized.list).toEqual({ email: '[REDACTED]' });
+    expect(sanitized.list).not.toBe(list);
+    expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
+  });
+
   it('does not leak toJSON objects into sibling branches after serialization', () => {
     class SecretPayload {
       toJSON() {
@@ -159,6 +189,18 @@ describe('sanitizeLogFields', () => {
     expect(1 in sanitizedList).toBe(false);
     expect(sanitizedList[0]).toBe('safe');
     expect(sanitizedList[2]).toBe('[REDACTED]');
+  });
+
+  it('sanitizes array entries without calling an overridden map method', () => {
+    const list = ['safe', 'person@example.com'];
+    Object.defineProperty(list, 'map', {
+      value: () => ['person@example.com'],
+    });
+
+    const sanitized = sanitizeLogFields({ list }, { sensitiveKeys });
+
+    expect(sanitized.list).toEqual(['safe', '[REDACTED]']);
+    expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
   });
 
   it('sanitizes array entries without treating the item slot as a sensitive key', () => {

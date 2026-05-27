@@ -71,3 +71,6 @@ app.config.timestamp_*.js
 
 reviews_triage/
 triage_decisions.db
+docs
+*.pptx
+*.zip

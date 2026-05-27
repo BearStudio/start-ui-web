@@ -644,7 +644,45 @@ rules:
     paths:
       include:
         - src/platform/lib/redaction/**/*.ts
-    pattern-regex: 'const\s+sanitizeLogValue(?:(?!ArrayBuffer\.isView\(value\))[\s\S])*Object\.entries\(value as Record<string, unknown>\)'
+    patterns:
+      - pattern-either:
+          - pattern: Object.entries($VALUE)
+          - pattern: Object.entries($VALUE as $CAST)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: '^value$'
+      - pattern-not-inside: |
+          const $FUNC = (...): $RETURN => {
+            ...
+            if (ArrayBuffer.isView($VALUE)) {
+              ...
+            }
+            ...
+          };
+      - pattern-not-inside: |
+          const $FUNC = (...) => {
+            ...
+            if (ArrayBuffer.isView($VALUE)) {
+              ...
+            }
+            ...
+          };
+      - pattern-not-inside: |
+          function $FUNC(...): $RETURN {
+            ...
+            if (ArrayBuffer.isView($VALUE)) {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          function $FUNC(...) {
+            ...
+            if (ArrayBuffer.isView($VALUE)) {
+              ...
+            }
+            ...
+          }
 
   - id: sanitizer-no-raw-nonplain-object-return
     message: Sanitizers must not return raw non-plain objects with no enumerable entries; return a safe placeholder instead.
@@ -662,3 +700,46 @@ rules:
           if ($ENTRIES.length === 0) {
             return $VALUE;
           }
+
+  - id: sanitizer-no-array-instance-map
+    message: Recursive log sanitizers must not call map on the array instance; use numeric iteration so Array subclass overrides cannot bypass sanitization.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/lib/redaction/**/*.ts
+    patterns:
+      - pattern: $VALUE.map(...)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: '^value$'
+
+  - id: sanitizer-tojson-branch-not-limited-to-nonplain
+    message: Sanitizers must handle callable toJSON on plain objects and arrays; do not limit toJSON handling to non-plain objects.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/lib/redaction/**/*.ts
+    pattern-regex: '(?s)!\s*Array\.isArray\(value\).*!\s*isPlainObject\(value\).*toJSON.*===\s*[''"]function[''"]'
+
+  - id: shared-form-no-prehydration-lock
+    message: Shared Form must not lock visible controls before hydration; use the form action to prevent native pre-hydration submit instead.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/components/form/form.tsx
+    pattern-either:
+      - pattern: 'disabled={!hydrated}'
+      - pattern: 'inert={hydrated ? undefined : true}'
+
+  - id: codecov-upload-requires-token-guard
+    message: Codecov uploads with fail_ci_if_error must be guarded by CODECOV_TOKEN so fork PR tests do not fail after passing.
+    languages: [generic]
+    severity: ERROR
+    paths:
+      include:
+        - .github/workflows/*.yml
+        - .github/workflows/*.yaml
+    pattern-regex: '(?s)-\s+name:\s*Upload coverage to Codecov(?!(?:(?!\n\s*-\s+name:).)*\n\s*if:\s*\$\{\{\s*secrets\.CODECOV_TOKEN)(?:(?!\n\s*-\s+name:).)*\n\s*uses:\s*codecov/codecov-action@(?:(?!\n\s*-\s+name:).)*\n\s*fail_ci_if_error:\s*true'
