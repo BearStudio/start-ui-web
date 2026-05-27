@@ -636,3 +636,29 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.browser.spec.ts'
         - '**/*.test.ts'
+
+  - id: sanitizer-object-entries-require-binary-view-guard
+    message: Guard recursive sanitizer Object.entries traversal with ArrayBuffer.isView(value) so typed arrays and Buffers are preserved.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/lib/redaction/**/*.ts
+    pattern-regex: 'const\s+sanitizeLogValue(?:(?!ArrayBuffer\.isView\(value\))[\s\S])*Object\.entries\(value as Record<string, unknown>\)'
+
+  - id: sanitizer-no-raw-nonplain-object-return
+    message: Sanitizers must not return raw non-plain objects with no enumerable entries; return a safe placeholder instead.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/lib/redaction/**/*.ts
+    patterns:
+      - pattern-inside: |
+          if (!Array.isArray($VALUE) && !isPlainObject($VALUE)) {
+            ...
+          }
+      - pattern: |
+          if ($ENTRIES.length === 0) {
+            return $VALUE;
+          }

@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 
 import { sanitizeLogFields } from './sanitize-log-fields';
@@ -49,6 +50,37 @@ describe('sanitizeLogFields', () => {
       at: '2026-05-26T12:00:00.000Z',
       pattern: '/login-\\d+/i',
     });
+  });
+
+  it('preserves binary views without converting them to indexed objects', () => {
+    const bytes = new Uint8Array([1, 2, 3]);
+    const buffer = Buffer.from([4, 5, 6]);
+
+    const sanitized = sanitizeLogFields(
+      {
+        buffer,
+        bytes,
+      },
+      { sensitiveKeys }
+    );
+
+    expect(sanitized.bytes).toBe(bytes);
+    expect(sanitized.buffer).toBe(buffer);
+  });
+
+  it('does not return raw non-plain objects that can bypass redaction', () => {
+    class SecretPayload {
+      toJSON() {
+        return { email: 'person@example.com' };
+      }
+    }
+
+    const payload = new SecretPayload();
+    const sanitized = sanitizeLogFields({ payload }, { sensitiveKeys });
+
+    expect(sanitized.payload).toBe('[NonPlainObject]');
+    expect(sanitized.payload).not.toBe(payload);
+    expect(JSON.stringify(sanitized)).not.toContain('person@example.com');
   });
 
   it('marks true circular references without throwing', () => {

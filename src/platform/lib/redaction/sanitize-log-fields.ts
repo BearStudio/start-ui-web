@@ -3,6 +3,7 @@ type SanitizeLogFieldsOptions = {
 };
 
 const CIRCULAR_VALUE = '[Circular]';
+const NON_PLAIN_OBJECT_VALUE = '[NonPlainObject]';
 const REDACTED_VALUE = '[REDACTED]';
 const EMAIL_PATTERN = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
 
@@ -47,17 +48,21 @@ const sanitizeLogValue = (
     return value.toString();
   }
 
+  if (ArrayBuffer.isView(value)) {
+    return value;
+  }
+
   if (!Array.isArray(value) && !isPlainObject(value)) {
     const entries = Object.entries(value as Record<string, unknown>);
     if (entries.length === 0) {
-      return value;
+      return NON_PLAIN_OBJECT_VALUE;
     }
   }
 
   path.add(value);
   try {
     if (Array.isArray(value)) {
-      return value.map((item) =>
+      return Array.from(value, (item) =>
         sanitizeLogValue('', item, { sensitiveKeys }, path)
       );
     }
@@ -75,10 +80,10 @@ const sanitizeLogValue = (
   }
 };
 
-export const sanitizeLogFields = <TFields extends Record<string, unknown>>(
-  fields: TFields,
+export const sanitizeLogFields = (
+  fields: Record<string, unknown>,
   options: SanitizeLogFieldsOptions
-): TFields => {
+): Record<string, unknown> => {
   const path = new WeakSet<object>();
   path.add(fields);
 
@@ -87,5 +92,5 @@ export const sanitizeLogFields = <TFields extends Record<string, unknown>>(
       key,
       sanitizeLogValue(key, value, options, path),
     ])
-  ) as TFields;
+  );
 };
