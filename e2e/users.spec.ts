@@ -35,9 +35,15 @@ test.describe('User management as manager', () => {
 
     // Fill the form
     await page.waitForURL('/manager/users/new');
+    await expect(page.getByTestId('manager-user-new-form')).toHaveAttribute(
+      'data-hydrated',
+      'true'
+    );
     await page.getByLabel(t.user.common.name.label).fill('New user');
     await page.getByLabel(t.user.common.email.label).fill(uniqueEmail);
-    await page.getByText(t.user.manager.new.createButton.label).click();
+    await page
+      .getByRole('button', { name: t.user.manager.new.createButton.label })
+      .click();
 
     await page.waitForURL('/manager/users');
     await page
