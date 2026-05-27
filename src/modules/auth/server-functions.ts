@@ -1,36 +1,44 @@
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
-import { sanitizeCurrentSession } from './domain/request-scope';
+import {
+  type AuthHandlers,
+  createAuthHandlers,
+} from './transport/tanstack/auth-handlers';
+import type { ServerContextTools } from './transport/tanstack/server-context';
 
-const getCurrentSessionDeps = createServerOnlyFn(async () => {
-  const [
-    { getAuthUseCases },
-    { createServerContextTools },
-    { telemetryProxy },
-  ] = await Promise.all([
-    import('@/composition/auth'),
-    import('./transport/tanstack/server-context'),
-    import('@/composition/telemetry'),
-  ]);
+type CurrentSessionDeps = {
+  handlers: AuthHandlers;
+  serverContextTools: ServerContextTools;
+};
 
-  return {
-    serverContextTools: createServerContextTools({
-      getAuthUseCases,
-      telemetry: telemetryProxy,
-    }),
-  };
-});
+const getCurrentSessionDeps = createServerOnlyFn(
+  async (): Promise<CurrentSessionDeps> => {
+    const [
+      { getAuthUseCases },
+      { createServerContextTools },
+      { telemetryProxy },
+    ] = await Promise.all([
+      import('@/composition/auth'),
+      import('./transport/tanstack/server-context'),
+      import('@/composition/telemetry'),
+    ]);
+
+    return {
+      handlers: createAuthHandlers(),
+      serverContextTools: createServerContextTools({
+        getAuthUseCases,
+        telemetry: telemetryProxy,
+      }),
+    };
+  }
+);
 
 export const currentSession = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const { serverContextTools } = await getCurrentSessionDeps();
+    const { handlers, serverContextTools } = await getCurrentSessionDeps();
 
-    return serverContextTools.withPublicContext(async (ctx) =>
-      sanitizeCurrentSession(
-        ctx.user && ctx.session
-          ? { user: ctx.user, session: ctx.session }
-          : null
-      )
+    return serverContextTools.withPublicContext((ctx) =>
+      Promise.resolve(handlers.currentSession(ctx))
     );
   }
 );

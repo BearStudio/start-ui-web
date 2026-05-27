@@ -134,6 +134,35 @@ describe('strict modular monolith layout', () => {
     ).toEqual([]);
   });
 
+  it('keeps transport entry points thin', () => {
+    const moduleTransportFiles = listSourceFiles(
+      path.join(root, 'src/modules')
+    ).filter((file) => file.includes(`${path.sep}transport${path.sep}`));
+    const serverEntrypointFiles = listSourceFiles(
+      path.join(root, 'src/modules')
+    ).filter((file) => /[/\\](server|server-functions)\.ts$/.test(file));
+    const apiRouteFiles = listSourceFiles(path.join(root, 'src/routes/api'));
+
+    expect(
+      findImportViolations(
+        moduleTransportFiles,
+        /from\s+['"]@\/composition(?:\/[^'"]*)?['"]/g
+      )
+    ).toEqual([]);
+    expect(
+      findImportViolations(
+        [...moduleTransportFiles, ...serverEntrypointFiles, ...apiRouteFiles],
+        /from\s+['"]@\/modules\/(?!kernel)[^/'"]+\/(?:infrastructure|presentation)(?:\/[^'"]*)?['"]/g
+      )
+    ).toEqual([]);
+    expect(
+      findImportViolations(
+        [...moduleTransportFiles, ...serverEntrypointFiles, ...apiRouteFiles],
+        /from\s+['"](?:drizzle-orm(?:\/[^'"]*)?|pg|postgres)['"]/g
+      )
+    ).toEqual([]);
+  });
+
   it('keeps TanStack server functions assigned to named variables', () => {
     const files = listSourceFiles(path.join(root, 'src'));
 

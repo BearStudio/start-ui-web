@@ -11,6 +11,14 @@ const emailTemplates: Record<string, PreviewEmailComponent> = {
   'login-code': TemplateLoginCode as PreviewEmailComponent,
 };
 
+type EmailPreviewHandlerDeps = {
+  enabled: boolean;
+  preview: (
+    template: string,
+    props: Record<string, string>
+  ) => Promise<Response>;
+};
+
 export const previewEmailRoute = async (
   template: string,
   props: Record<string, string>
@@ -33,3 +41,22 @@ export const previewEmailRoute = async (
     },
   });
 };
+
+export const createEmailPreviewRequestHandler =
+  ({ enabled, preview }: EmailPreviewHandlerDeps) =>
+  (request: Request, template: string) => {
+    if (!enabled) {
+      return new Response(undefined, {
+        status: 404,
+      });
+    }
+
+    const url = new URL(request.url);
+    const props = Object.fromEntries(url.searchParams);
+    return preview(template, props);
+  };
+
+export const handleEmailPreviewRequest = createEmailPreviewRequestHandler({
+  enabled: !import.meta.env.PROD,
+  preview: previewEmailRoute,
+});

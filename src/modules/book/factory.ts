@@ -2,6 +2,7 @@ import { createBook } from './application/use-cases/create-book';
 import { deleteBook } from './application/use-cases/delete-book';
 import { getBook } from './application/use-cases/get-book';
 import { listBooks } from './application/use-cases/list-books';
+import { prepareBookCoverUpload } from './application/use-cases/prepare-book-cover-upload';
 import type { BookUseCaseDeps } from './application/use-cases/types';
 import { updateBook } from './application/use-cases/update-book';
 
@@ -15,6 +16,8 @@ export function createBookUseCases(deps: BookUseCaseDeps) {
       updateBook(deps, input),
     delete: (input: Parameters<typeof deleteBook>[1]) =>
       deleteBook(deps, input),
+    prepareCoverUpload: (input: Parameters<typeof prepareBookCoverUpload>[1]) =>
+      prepareBookCoverUpload(deps, input),
   };
 }
 

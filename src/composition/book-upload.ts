@@ -1,17 +1,26 @@
 import { handleRequest, type Router } from '@better-upload/server';
 
-import { bookCover } from '@/modules/book/transport/upload/book-cover';
+import { getAuthUseCases } from '@/composition/auth';
+import { getBookUseCases } from '@/composition/book';
+import { createBookCoverUploadRoute } from '@/modules/book/transport/upload/book-cover';
 import { env } from '@/modules/kernel/infrastructure/config/env';
 import { getDefaultUploadClient } from '@/modules/kernel/infrastructure/storage/better-upload';
 
 import { createCachedFactory } from './shared/singleton';
+
+const createBookCoverRoute = () =>
+  createBookCoverUploadRoute({
+    getCurrentSession: (headers) =>
+      getAuthUseCases().getCurrentSession({ headers }),
+    getUseCases: getBookUseCases,
+  });
 
 const createBookUploadRouter = () =>
   ({
     client: getDefaultUploadClient(),
     bucketName: env.S3_BUCKET_NAME,
     routes: {
-      bookCover,
+      bookCover: createBookCoverRoute(),
     },
   }) as const satisfies Router;
 

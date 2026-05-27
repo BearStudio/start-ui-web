@@ -26,6 +26,9 @@ const logger = {
   warn: () => {},
   error: () => {},
 };
+const idGenerator = {
+  createId: () => 'generated-cover-id',
+};
 
 const allowed: PermissionChecker = {
   hasPermission: async () => true,
@@ -53,6 +56,7 @@ describe('book use cases', () => {
     await expect(
       createBookUseCases({
         bookRepository: makeRepo(),
+        idGenerator,
         permissionChecker: allowed,
         logger,
       }).list({ scope, limit: 20, searchTerm: '' })
@@ -61,6 +65,7 @@ describe('book use cases', () => {
     await expect(
       createBookUseCases({
         bookRepository: makeRepo(),
+        idGenerator,
         permissionChecker: forbidden,
         logger,
       }).list({ scope, limit: 20, searchTerm: '' })
@@ -71,6 +76,7 @@ describe('book use cases', () => {
     await expect(
       createBookUseCases({
         bookRepository: makeRepo({ getById: async () => null }),
+        idGenerator,
         permissionChecker: allowed,
         logger,
       }).get({ scope, id: toBookId('missing') })
@@ -91,6 +97,7 @@ describe('book use cases', () => {
     await expect(
       createBookUseCases({
         bookRepository: makeRepo(),
+        idGenerator,
         permissionChecker: allowed,
         logger,
       }).create({ scope, book })
@@ -99,6 +106,7 @@ describe('book use cases', () => {
     await expect(
       createBookUseCases({
         bookRepository: duplicateRepo,
+        idGenerator,
         permissionChecker: allowed,
         logger,
       }).create({ scope, book })
@@ -111,6 +119,7 @@ describe('book use cases', () => {
         update: async () => null,
         delete: async () => false,
       }),
+      idGenerator,
       permissionChecker: allowed,
       logger,
     });
@@ -128,5 +137,37 @@ describe('book use cases', () => {
         id: toBookId('missing'),
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
+  });
+
+  it('prepares cover uploads through permission and object-key policy', async () => {
+    await expect(
+      createBookUseCases({
+        bookRepository: makeRepo(),
+        idGenerator,
+        permissionChecker: allowed,
+        logger,
+      }).prepareCoverUpload({ scope, fileType: 'image/webp' })
+    ).resolves.toEqual({
+      ok: true,
+      value: { objectKey: 'books/generated-cover-id.webp' },
+    });
+
+    await expect(
+      createBookUseCases({
+        bookRepository: makeRepo(),
+        idGenerator,
+        permissionChecker: forbidden,
+        logger,
+      }).prepareCoverUpload({ scope, fileType: 'image/webp' })
+    ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+
+    await expect(
+      createBookUseCases({
+        bookRepository: makeRepo(),
+        idGenerator,
+        permissionChecker: allowed,
+        logger,
+      }).prepareCoverUpload({ scope, fileType: 'text/plain' })
+    ).resolves.toEqual({ ok: false, reason: 'invalid_file_type' });
   });
 });
