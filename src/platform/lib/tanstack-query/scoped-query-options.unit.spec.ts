@@ -41,6 +41,45 @@ describe('scoped query option helpers', () => {
       'infinite',
       { searchTerm: 'dune' },
     ]);
+    const infiniteQueryFn = infinite.queryFn as unknown as (context: {
+      pageParam: string;
+    }) => Promise<{
+      items: [];
+      total: number;
+      nextCursor: string;
+    }>;
+    await expect(infiniteQueryFn({ pageParam: 'cursor-1' })).resolves.toEqual({
+      items: [],
+      total: 0,
+      nextCursor: 'cursor-1',
+    });
+    const getNextPageParam =
+      infinite.getNextPageParam as unknown as (lastPage: {
+        items: [];
+        total: number;
+        nextCursor: string;
+      }) => string | undefined;
+    expect(
+      getNextPageParam({
+        items: [],
+        total: 0,
+        nextCursor: 'cursor-2',
+      })
+    ).toBe('cursor-2');
+    expect(infinite.maxPages).toBe(10);
+
+    const limitedInfinite = scopedInfiniteQueryOptions({
+      baseKey: (scopeKey) => ['book', { scopeKey }, 'getAll'] as const,
+      input: { scopeKey: 'scope-a', searchTerm: 'dune' },
+      maxPages: 3,
+      queryFn: async () => ({
+        items: [],
+        total: 0,
+        nextCursor: undefined,
+      }),
+    });
+    expect(limitedInfinite.maxPages).toBe(3);
+
     const entity = scopedEntityQueryOptions({
       baseKey: (scopeKey) => ['book', { scopeKey }, 'getById'] as const,
       input: { scopeKey: 'scope-a', id: 'book-1' },
@@ -52,6 +91,8 @@ describe('scoped query option helpers', () => {
       'getById',
       { id: 'book-1' },
     ]);
+    const entityQueryFn = entity.queryFn as unknown as () => Promise<string>;
+    await expect(entityQueryFn()).resolves.toBe('book-1');
 
     const mutationFn = vi.fn(async (_input: { data: { id: string } }) => true);
     const mutation = serverMutationOptions({

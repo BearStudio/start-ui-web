@@ -49,6 +49,66 @@ describe('parseStringToDate', () => {
     expect(dayjs(parsed).format(FORMAT)).toBe(expected);
   });
 
+  it.each([
+    '1',
+    '01',
+    '1 5',
+    '01 5',
+    '1 05',
+    '01 05',
+    '1.5',
+    '01.5',
+    '1.05',
+    '01.05',
+    '1/5',
+    '01/5',
+    '1/05',
+    '01/05',
+    '1-5',
+    '01-5',
+    '1-05',
+    '01-05',
+    '1_5',
+    '01_5',
+    '1_05',
+    '01_05',
+  ])('should parse compact day and month input: %s', (input) => {
+    const parsed = parseStringToDate(input);
+
+    expect(dayjs(parsed).format(FORMAT)).toBe(
+      dayjs().set('date', 1).set('month', 4).format(FORMAT)
+    );
+  });
+
+  it.each([
+    '1 5 69',
+    '01 5 69',
+    '1 05 1969',
+    '01 05 1969',
+    '1.5.69',
+    '01.5.69',
+    '1.05.1969',
+    '01.05.1969',
+    '1/5/69',
+    '01/5/69',
+    '1/05/1969',
+    '01/05/1969',
+    '1-5-69',
+    '01-5-69',
+    '1-05-1969',
+    '01-05-1969',
+    '1_5_69',
+    '01_5_69',
+    '1_05_1969',
+    '01_05_1969',
+  ])('should parse compact day, month, and year input: %s', (input) => {
+    const parsed = parseStringToDate(input);
+
+    expect(dayjs(parsed).format(FORMAT)).toBe(
+      dayjs('1969/05/01').format(FORMAT)
+    );
+  });
+
   it('should parse custom format', () => {
     const parsed = parseStringToDate('05/10', ['MM/DD']);
 

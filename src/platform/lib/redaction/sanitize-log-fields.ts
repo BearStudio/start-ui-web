@@ -52,6 +52,26 @@ const sanitizeLogValue = (
     return value;
   }
 
+  if (
+    !Array.isArray(value) &&
+    !isPlainObject(value) &&
+    typeof (value as { toJSON?: unknown }).toJSON === 'function'
+  ) {
+    path.add(value);
+    try {
+      return sanitizeLogValue(
+        key,
+        (value as { toJSON: () => unknown }).toJSON(),
+        { sensitiveKeys },
+        path
+      );
+    } catch {
+      return NON_PLAIN_OBJECT_VALUE;
+    } finally {
+      path.delete(value);
+    }
+  }
+
   if (!Array.isArray(value) && !isPlainObject(value)) {
     const entries = Object.entries(value as Record<string, unknown>);
     if (entries.length === 0) {
@@ -62,7 +82,7 @@ const sanitizeLogValue = (
   path.add(value);
   try {
     if (Array.isArray(value)) {
-      return Array.from(value, (item) =>
+      return value.map((item) =>
         sanitizeLogValue('', item, { sensitiveKeys }, path)
       );
     }
