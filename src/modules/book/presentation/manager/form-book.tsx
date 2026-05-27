@@ -11,14 +11,12 @@ import {
 } from '@/platform/components/form';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import {
-  bookCoverAcceptedFileTypes,
-  type FormFieldsBook,
-  zFormFieldsBook,
-} from '@/modules/book/presentation/schema';
 import { openDemoModeDrawer } from '@/modules/demo/presentation';
 import { genreQueries } from '@/modules/genre/client';
 import { envClient } from '@/platform/env/client';
+
+import { type FormFieldsBook, zFormFieldsBook } from '../schema';
+import { bookCoverAcceptedFileTypes } from '../../domain/book-policy';
 
 export const formBookDefaultValues = (
   values?: Partial<FormFieldsBook>

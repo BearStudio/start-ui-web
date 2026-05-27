@@ -38,6 +38,18 @@ const FormWithContextConsumer = () => {
   );
 };
 
+const FormWithSafeAction = () => {
+  const form = useAppForm({
+    defaultValues: { email: '' },
+  });
+
+  return (
+    <Form form={form} data-testid="form">
+      <button type="submit">Submit</button>
+    </Form>
+  );
+};
+
 test('provides the typed form context to child components', async () => {
   const user = setupUser();
 
@@ -49,4 +61,10 @@ test('provides the typed form context to child components', async () => {
   expect(
     (page.getByLabelText('Email').element() as HTMLInputElement).value
   ).toBe('admin@admin.com');
+});
+
+test('uses a CSP-safe fallback action', async () => {
+  render(<FormWithSafeAction />);
+
+  await expect.element(page.getByTestId('form')).toHaveAttribute('action', '#');
 });

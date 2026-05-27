@@ -15,10 +15,11 @@ import {
   CardTitle,
 } from '@/platform/components/ui/card';
 
-import { AccountCardRow } from '@/modules/account/presentation/account-card-row';
-import { ChangeNameDrawer } from '@/modules/account/presentation/change-name-drawer';
 import { ConfirmSignOut } from '@/modules/auth/client';
 import { useAuthSession } from '@/modules/auth/client';
+
+import { AccountCardRow } from './account-card-row';
+import { ChangeNameDrawer } from './change-name-drawer';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);

@@ -11,7 +11,6 @@ import { Skeleton } from '@/platform/components/ui/skeleton';
 import { Spinner } from '@/platform/components/ui/spinner';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import { BookCover } from '@/modules/book/presentation/book-cover';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   AppPageLayout as PageLayout,
@@ -20,6 +19,7 @@ import {
   AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/modules/shell/presentation';
 
+import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
 
 export const PageBook = (props: { params: { id: string } }) => {

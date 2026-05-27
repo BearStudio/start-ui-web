@@ -3,9 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { withForm } from '@/platform/components/form';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import { BookCover } from '@/modules/book/presentation/book-cover';
-import { formBookDefaultValues } from '@/modules/book/presentation/manager/form-book';
 import { genreQueries } from '@/modules/genre/client';
+
+import { formBookDefaultValues } from './form-book';
+import { BookCover } from '../book-cover';
 
 /**
  * Live preview of the book cover that subscribes to the parent form's

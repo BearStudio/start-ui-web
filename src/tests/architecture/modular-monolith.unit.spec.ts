@@ -60,6 +60,24 @@ describe('strict modular monolith layout', () => {
     }
   });
 
+  it('keeps core business modules in vertical hexagonal slices', () => {
+    for (const moduleName of ['account', 'book', 'genre', 'user']) {
+      const moduleRoot = path.join(root, 'src/modules', moduleName);
+
+      for (const expectedPath of [
+        'domain',
+        path.join('application', 'use-cases'),
+        path.join('application', 'ports'),
+        path.join('infrastructure', 'drizzle'),
+        path.join('transport', 'http'),
+        'factory.ts',
+        'index.ts',
+      ]) {
+        expect(fs.existsSync(path.join(moduleRoot, expectedPath))).toBe(true);
+      }
+    }
+  });
+
   it('keeps platform isolated from app code', () => {
     expect(
       findImportViolations(

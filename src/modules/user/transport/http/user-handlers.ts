@@ -7,8 +7,7 @@ import {
   toUserId,
 } from '@/modules/kernel/domain/ids';
 import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
-import type { UserUseCases } from '@/modules/user';
-import type { UserRole } from '@/modules/user/domain/user';
+import type { UserRole, UserUseCases } from '@/modules/user';
 
 const zRole = () => z.enum(['admin', 'user']);
 

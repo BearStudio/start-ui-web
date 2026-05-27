@@ -21,10 +21,10 @@ import {
   ResponsiveDrawerTrigger,
 } from '@/platform/components/ui/responsive-drawer';
 
-import { zFormFieldsAccountUpdateName } from '@/modules/account/presentation/schema';
 import { useAuthSession } from '@/modules/auth/client';
 
 import { accountQueries } from './queries';
+import { zFormFieldsAccountUpdateName } from './schema';
 
 export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
