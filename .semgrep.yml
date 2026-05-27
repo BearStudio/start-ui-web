@@ -266,6 +266,27 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: recursive-sanitizer-weakset-without-path-cleanup
+    message: Recursive redaction/sanitization helpers must delete values from the WeakSet after traversing so reused references are not treated as circular.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $FN = (..., $SEEN: WeakSet<object>, ...) => {
+            ...
+          }
+      - metavariable-regex:
+          metavariable: $FN
+          regex: '.*(?:sanitize|redact|diagnostic|debug).*'
+      - pattern: |
+          $SEEN.add($VALUE);
+      - pattern-not-inside: |
+          const $FN = (..., $SEEN: WeakSet<object>, ...) => {
+            ...
+            $SEEN.delete($VALUE);
+            ...
+          }
+
   - id: email-template-no-global-language-mutation
     message: Server-rendered email templates must use fixed translators instead of mutating the global i18n language.
     languages: [typescript]

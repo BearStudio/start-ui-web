@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
+import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
 
 import locales from '@/locales';
 import {
@@ -66,64 +67,13 @@ const SENSITIVE_DETAIL_KEYS = new Set([
   'phone',
   'user',
 ]);
-const EMAIL_PATTERN = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
-
-const redactString = (value: string) =>
-  value.replace(EMAIL_PATTERN, '[REDACTED]');
-
-const redactDiagnosticValue = (
-  key: string,
-  value: unknown,
-  seen: WeakSet<object>
-): unknown => {
-  if (SENSITIVE_DETAIL_KEYS.has(key.toLowerCase())) {
-    return '[REDACTED]';
-  }
-
-  if (typeof value === 'string') {
-    return redactString(value);
-  }
-
-  if (!value || typeof value !== 'object') {
-    return value;
-  }
-
-  if (seen.has(value)) {
-    return '[Circular]';
-  }
-
-  seen.add(value);
-
-  if (Array.isArray(value)) {
-    return value.map((item) => redactDiagnosticValue('', item, seen));
-  }
-
-  return Object.fromEntries(
-    Object.entries(value as Record<string, unknown>).map(
-      ([entryKey, entryValue]) => [
-        entryKey,
-        redactDiagnosticValue(entryKey, entryValue, seen),
-      ]
-    )
-  );
-};
 
 const redactDiagnosticDetails = (
   details?: Record<string, unknown>
-): Record<string, unknown> | undefined => {
-  if (!details) {
-    return details;
-  }
-
-  const seen = new WeakSet<object>();
-  seen.add(details);
-  return Object.fromEntries(
-    Object.entries(details).map(([key, value]) => [
-      key,
-      redactDiagnosticValue(key, value, seen),
-    ])
-  );
-};
+): Record<string, unknown> | undefined =>
+  details
+    ? sanitizeLogFields(details, { sensitiveKeys: SENSITIVE_DETAIL_KEYS })
+    : details;
 
 const shouldRecordUrl = (rawUrl: string) => {
   try {

@@ -5,6 +5,7 @@ overrides:
   '@types/node': ^24
   body-parser: 1.20.4
   effect: 3.21.2
+  glob: 13.0.6
 
 allowBuilds:
   '@parcel/watcher': true
