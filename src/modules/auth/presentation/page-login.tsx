@@ -72,7 +72,6 @@ export default function PageLogin({
     validators: { onSubmit: zFormFieldsLogin() },
     onSubmit: async ({ value: { email } }) => {
       authE2eDebug('login.email_otp.submit', {
-        email,
         redirect: safeRedirect ?? null,
       });
 
@@ -84,7 +83,6 @@ export default function PageLogin({
         });
       } catch (error) {
         authE2eDebug('login.email_otp.exception', {
-          email,
           message: error instanceof Error ? error.message : 'Unknown error',
         });
         toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
@@ -94,7 +92,6 @@ export default function PageLogin({
       if (result.error) {
         authE2eDebug('login.email_otp.error', {
           code: result.error.code ?? null,
-          email,
           message:
             typeof result.error.message === 'string'
               ? result.error.message
@@ -120,7 +117,6 @@ export default function PageLogin({
       }
 
       authE2eDebug('login.email_otp.navigate_verify', {
-        email,
         redirect: safeRedirect ?? null,
       });
 

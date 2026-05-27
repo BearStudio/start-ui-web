@@ -58,10 +58,76 @@ export type ExtendedPage = { page: ExtendedPageInstance };
 
 const DEBUG_PATHS = ['/api/auth', '/login', '/manager', '/app'] as const;
 const AUTH_WAIT_TIMEOUT_MS = 25_000;
+const SENSITIVE_DETAIL_KEYS = new Set([
+  'email',
+  'id',
+  'identifier',
+  'name',
+  'phone',
+  'user',
+]);
+const EMAIL_PATTERN = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
+
+const redactString = (value: string) =>
+  value.replace(EMAIL_PATTERN, '[REDACTED]');
+
+const redactDiagnosticValue = (
+  key: string,
+  value: unknown,
+  seen: WeakSet<object>
+): unknown => {
+  if (SENSITIVE_DETAIL_KEYS.has(key.toLowerCase())) {
+    return '[REDACTED]';
+  }
+
+  if (typeof value === 'string') {
+    return redactString(value);
+  }
+
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+
+  if (seen.has(value)) {
+    return '[Circular]';
+  }
+
+  seen.add(value);
+
+  if (Array.isArray(value)) {
+    return value.map((item) => redactDiagnosticValue('', item, seen));
+  }
+
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>).map(
+      ([entryKey, entryValue]) => [
+        entryKey,
+        redactDiagnosticValue(entryKey, entryValue, seen),
+      ]
+    )
+  );
+};
+
+const redactDiagnosticDetails = (
+  details?: Record<string, unknown>
+): Record<string, unknown> | undefined => {
+  if (!details) {
+    return details;
+  }
+
+  const seen = new WeakSet<object>();
+  seen.add(details);
+  return Object.fromEntries(
+    Object.entries(details).map(([key, value]) => [
+      key,
+      redactDiagnosticValue(key, value, seen),
+    ])
+  );
+};
 
 const shouldRecordUrl = (rawUrl: string) => {
   try {
-    const { pathname } = new URL(rawUrl);
+    const { pathname } = new URL(rawUrl, 'http://localhost');
     return DEBUG_PATHS.some(
       (path) => pathname === path || pathname.startsWith(`${path}/`)
     );
@@ -81,12 +147,13 @@ const createAuthDiagnostics = (page: Page, testInfo: TestInfo) => {
   const events: AuthDiagnosticEvent[] = [];
 
   const log = (type: string, details?: Record<string, unknown>) => {
+    const safeDetails = redactDiagnosticDetails(details);
     const event = {
       at: new Date().toISOString(),
       elapsedMs: Date.now() - startedAt,
       type,
       url: page.url(),
-      ...(details ? { details } : {}),
+      ...(safeDetails ? { details: safeDetails } : {}),
     };
 
     events.push(event);
@@ -203,7 +270,6 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
     const routeLoginVerify = '/login/verify' satisfies FileRouteTypes['to'];
 
     await diagnostics.waitForUrl('login.wait_for_login', `**${routeLogin}**`, {
-      email: input.email,
       route: routeLogin,
     });
 
@@ -221,9 +287,9 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       'data-hydrated',
       'true'
     );
-    diagnostics.log('login.form.hydrated', { email: input.email });
+    diagnostics.log('login.form.hydrated');
 
-    diagnostics.log('login.form.visible', { email: input.email });
+    diagnostics.log('login.form.visible');
 
     const emailInput = page.getByPlaceholder(
       locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label
@@ -231,8 +297,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
     await emailInput.fill(input.email);
     await expect(emailInput).toHaveValue(input.email);
     diagnostics.log('login.email.filled', {
-      email: input.email,
-      inputValue: await emailInput.inputValue(),
+      emailInputMatches: (await emailInput.inputValue()) === input.email,
     });
 
     await page
@@ -242,13 +307,12 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
         ].loginWithEmail,
       })
       .click();
-    diagnostics.log('login.email.submitted', { email: input.email });
+    diagnostics.log('login.email.submitted');
 
     await diagnostics.waitForUrl(
       'login.wait_for_verify',
       `**${routeLoginVerify}**`,
       {
-        email: input.email,
         route: routeLoginVerify,
       }
     );
@@ -256,13 +320,12 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       'data-hydrated',
       'true'
     );
-    diagnostics.log('login.verify.form.hydrated', { email: input.email });
+    diagnostics.log('login.verify.form.hydrated');
     await page
       .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
       .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
     diagnostics.log('login.otp.filled', {
       codeLength: (input.code ?? AUTH_EMAIL_OTP_MOCKED).length,
-      email: input.email,
     });
   };
 

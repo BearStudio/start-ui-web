@@ -21,17 +21,23 @@ const authenticate = async (
     targetRoute: '/app' | '/manager';
   }
 ) => {
-  page.authDebug('setup.authenticate.start', input);
+  const debugPayload = {
+    layoutTestId: input.layoutTestId,
+    storageFile: input.storageFile,
+    targetRoute: input.targetRoute,
+  };
+
+  page.authDebug('setup.authenticate.start', debugPayload);
   await page.to('/login');
-  page.authDebug('setup.login_page.opened', input);
+  page.authDebug('setup.login_page.opened', debugPayload);
 
   await page.login({ email: input.email });
   await page.waitForPostAuthRoute(input.targetRoute);
   await expect(page.getByTestId(input.layoutTestId)).toBeVisible();
-  page.authDebug('setup.layout.visible', input);
+  page.authDebug('setup.layout.visible', debugPayload);
 
   await page.context().storageState({ path: input.storageFile });
-  page.authDebug('setup.storage_state.written', input);
+  page.authDebug('setup.storage_state.written', debugPayload);
 };
 
 setup('authenticate as admin', async ({ page }) => {

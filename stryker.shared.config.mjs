@@ -19,7 +19,6 @@ export function createScopedStrykerConfig({
     coverageAnalysis: 'perTest',
     vitest: {
       configFile: 'vitest.config.ts',
-      related: true,
     },
     mutate: mutationSourceFiles,
     testFiles: mutationTestFiles,

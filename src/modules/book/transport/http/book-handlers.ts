@@ -25,6 +25,7 @@ const zBookWriteInput = () =>
     coverId: z.string().nullish(),
   });
 
+export const zCreateInput = () => zBookWriteInput();
 export const zUpdateByIdInput = () =>
   zBookWriteInput().extend({ id: z.string() });
 export const zDeleteByIdInput = () => z.object({ id: z.string() });
@@ -74,7 +75,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
 
   const create = async (
     ctx: ProtectedContext,
-    data: z.infer<ReturnType<typeof zBookWriteInput>>
+    data: z.infer<ReturnType<typeof zCreateInput>>
   ) => {
     return unwrapUseCaseResult(
       getUseCases(ctx).create({

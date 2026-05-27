@@ -29,7 +29,7 @@ import { getUserLanguage } from '@/modules/kernel/server';
 import type { RouterContext } from '@/platform/router/context';
 import appCss from '@/platform/styles/app.css?url';
 
-const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
+export const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
   return {
     language: getUserLanguage(),
   };

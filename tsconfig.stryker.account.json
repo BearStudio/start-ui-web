@@ -5,8 +5,6 @@
     "src/modules/account/application/**/*.ts"
   ],
   "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts",
     "**/index.ts",
     "src/modules/account/application/ports/**/*.ts",
     "**/types.ts"

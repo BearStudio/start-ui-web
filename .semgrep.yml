@@ -98,7 +98,8 @@ rules:
           afterAll(async () => {
             ...
           })
-      - pattern-regex: '\bawait\s+[A-Za-z_$][A-Za-z0-9_$]*\.close\(\)'
+      - pattern: await $DB.close()
+      - pattern-not: await $OPTIONAL_DB?.close()
 
   - id: no-user-update-email-autoverify
     message: User update handlers must not automatically mark changed emails as verified.
@@ -490,6 +491,45 @@ rules:
     paths:
       exclude:
         - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: auth-diagnostics-no-sensitive-fields
+    message: Auth diagnostics must not receive raw sensitive fields; omit them or log derived/redacted values.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: 'authE2eDebug($EVENT, { ..., email: $VALUE, ... })'
+      - pattern: 'authE2eDebug($EVENT, { ..., id: $VALUE, ... })'
+      - pattern: 'authE2eDebug($EVENT, { ..., identifier: $VALUE, ... })'
+      - pattern: 'authE2eDebug($EVENT, { ..., name: $VALUE, ... })'
+      - pattern: 'authE2eDebug($EVENT, { ..., phone: $VALUE, ... })'
+      - pattern: 'authE2eDebug($EVENT, { ..., user: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., email: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., id: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., identifier: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., name: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., phone: $VALUE, ... })'
+      - pattern: '$PAGE.authDebug($EVENT, { ..., user: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., email: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., id: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., identifier: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., name: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., phone: $VALUE, ... })'
+      - pattern: 'diagnostics.log($EVENT, { ..., user: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., email: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., id: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., identifier: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., name: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., phone: $VALUE, ... })'
+      - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., user: $VALUE, ... })'
+    paths:
+      include:
+        - e2e/**/*.ts
+        - src/modules/auth/presentation/**/*.ts
+        - src/modules/auth/presentation/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.browser.spec.tsx'
         - '**/*.test.ts'
 
   - id: domain-imports-react-or-router
