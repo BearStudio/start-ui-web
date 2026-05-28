@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { toUserId } from '@/modules/kernel/domain/ids';
+
 import type { AccountRepository } from '../ports/account-repository';
 import { createAccountUseCases } from '../../factory';
 
@@ -19,7 +21,7 @@ const repository: AccountRepository = {
 };
 
 const scope = (userId: string) =>
-  ({ userId, role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(userId), role: 'user', tenantId: null }) as const;
 
 describe('account use cases', () => {
   it('submits onboarding and updates info', async () => {

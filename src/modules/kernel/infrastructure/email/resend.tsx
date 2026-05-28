@@ -2,9 +2,10 @@ import type { ReactElement } from 'react';
 import { type CreateEmailOptions, Resend } from 'resend';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { env } from '@/modules/kernel/infrastructure/config/env';
+import { getEmailConfig } from '@/modules/kernel/infrastructure/config/email';
+import { envClient } from '@/platform/env/client';
 
-export function createResendClient(apiKey = env.RESEND_API_KEY) {
+export function createResendClient(apiKey = getEmailConfig().resendApiKey) {
   return new Resend(apiKey);
 }
 
@@ -28,12 +29,17 @@ type SendEmailOptions = {
 };
 
 export const sendEmail = async ({ template, ...options }: SendEmailOptions) => {
-  if (env.VITE_IS_DEMO || env.EMAIL_DELIVERY_DISABLED) {
+  if (envClient.VITE_IS_DEMO) {
+    return;
+  }
+
+  const emailConfig = getEmailConfig();
+  if (emailConfig.deliveryDisabled) {
     return;
   }
 
   const { data, error } = await getDefaultResendClient().emails.send({
-    from: env.EMAIL_FROM,
+    from: emailConfig.from,
     react: template,
     ...options,
   });

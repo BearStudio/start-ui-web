@@ -1,8 +1,14 @@
+import type {
+  EmailAddress,
+  SessionId,
+  UserId,
+} from '@/modules/kernel/domain/ids';
+
 import type { Role } from './permissions';
 
 export type AuthenticatedUser = {
-  id: string;
-  email: string;
+  id: UserId;
+  email: EmailAddress;
   name?: string | null;
   image?: string | null;
   emailVerified?: boolean;
@@ -11,8 +17,8 @@ export type AuthenticatedUser = {
 };
 
 export type AuthenticatedSession = {
-  id: string;
-  userId?: string;
+  id: SessionId;
+  userId?: UserId;
   expiresAt?: Date | string;
 };
 

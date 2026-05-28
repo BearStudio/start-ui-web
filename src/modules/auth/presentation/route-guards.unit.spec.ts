@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import type { CurrentSession } from '@/modules/auth';
+import {
+  toEmailAddress,
+  toScopeKey,
+  toSessionId,
+  toUserId,
+} from '@/modules/kernel';
 
 import { parseSafeRedirectPath } from './redirects';
 import {
@@ -20,8 +26,8 @@ const makeSession = (
   overrides: Partial<CurrentSession['user']> = {}
 ): CurrentSession => ({
   user: {
-    id: 'user-1',
-    email: 'user@example.com',
+    id: toUserId('user-1'),
+    email: toEmailAddress('user@example.com'),
     name: 'User One',
     image: null,
     role: 'admin',
@@ -29,15 +35,17 @@ const makeSession = (
     ...overrides,
   },
   session: {
-    id: 'session-1',
+    id: toSessionId('session-1'),
     expiresAt: new Date('2024-01-02T00:00:00.000Z'),
   },
   scope: {
-    userId: 'user-1',
+    userId: toUserId('user-1'),
     role: (overrides.role ?? 'admin') as CurrentSession['scope']['role'],
     tenantId: null,
   },
-  scopeKey: `user:user-1:role:${overrides.role ?? 'admin'}:tenant:none`,
+  scopeKey: toScopeKey(
+    `user:user-1:role:${overrides.role ?? 'admin'}:tenant:none`
+  ),
 });
 
 const makeContext = (session: CurrentSession | null) => ({

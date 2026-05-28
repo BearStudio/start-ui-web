@@ -1,1 +1,1 @@
-export { envServer } from './config';
+export {};

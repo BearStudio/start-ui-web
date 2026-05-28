@@ -1,10 +1,1 @@
-export {
-  type Env,
-  env,
-  type EnvClient,
-  envClient,
-  type EnvServer,
-  envServer,
-  getEnvClient,
-  getEnvServer,
-} from '@/platform/env/config';
+export { type EnvClient, envClient, getEnvClient } from '@/platform/env/config';

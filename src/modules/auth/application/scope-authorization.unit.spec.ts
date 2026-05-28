@@ -1,8 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { toUserId } from '@/modules/kernel';
+
 import { hasScopePermission, scopeUserId } from './scope-authorization';
 
-const scope = { userId: 'user-1', role: 'admin', tenantId: null } as const;
+const scope = {
+  userId: toUserId('user-1'),
+  role: 'admin',
+  tenantId: null,
+} as const;
 
 describe('scope authorization helpers', () => {
   it('resolves the scoped user id and delegates permission checks', async () => {

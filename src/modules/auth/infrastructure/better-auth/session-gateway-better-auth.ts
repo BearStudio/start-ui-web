@@ -1,3 +1,9 @@
+import {
+  toEmailAddress,
+  toSessionId,
+  toUserId,
+} from '@/modules/kernel/domain/ids';
+
 import type { Auth } from './auth';
 import { getDefaultAuth } from './auth';
 import type { SessionGateway } from '../../application/ports/session-gateway';
@@ -25,8 +31,8 @@ const toAuthenticatedRole = (
 };
 
 const toAuthenticatedUser = (user: BetterAuthUser): AuthenticatedUser => ({
-  id: user.id,
-  email: user.email,
+  id: toUserId(user.id),
+  email: toEmailAddress(user.email),
   name: user.name,
   image: user.image,
   emailVerified: user.emailVerified,
@@ -37,8 +43,8 @@ const toAuthenticatedUser = (user: BetterAuthUser): AuthenticatedUser => ({
 const toAuthenticatedSession = (
   session: BetterAuthSessionRecord
 ): AuthenticatedSession => ({
-  id: session.id,
-  userId: session.userId,
+  id: toSessionId(session.id),
+  userId: session.userId ? toUserId(session.userId) : undefined,
   expiresAt: session.expiresAt,
 });
 

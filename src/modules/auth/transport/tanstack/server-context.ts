@@ -13,6 +13,7 @@ import type {
   RequestScope,
 } from '@/modules/auth';
 import { scopeFromUser } from '@/modules/auth';
+import type { UserId } from '@/modules/kernel/domain/ids';
 import { logger } from '@/modules/kernel/infrastructure/logger/pino';
 import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/server';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
@@ -213,7 +214,7 @@ export const createServerContextTools = ({
     });
   };
 
-  const assertPermission = async (userId: string, permissions: Permission) => {
+  const assertPermission = async (userId: UserId, permissions: Permission) => {
     const allowed = await getAuthUseCases().checkPermission({
       userId,
       permissions,

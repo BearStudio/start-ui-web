@@ -6,6 +6,7 @@ import type {
   SessionGateway,
   UserAdminGateway,
 } from '@/modules/auth';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import {
   __resetAuthComposition,
@@ -50,7 +51,7 @@ describe('auth composition', () => {
     expect(second).not.toBe(first);
 
     await first.checkPermission({
-      userId: 'user-1',
+      userId: toUserId('user-1'),
       permissions: { book: ['read'] },
       headers: new Headers(),
     });

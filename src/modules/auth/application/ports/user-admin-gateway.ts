@@ -1,11 +1,13 @@
+import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
+
 export interface UserAdminGateway {
-  removeUser(input: { userId: string; headers: Headers }): Promise<boolean>;
+  removeUser(input: { userId: UserId; headers: Headers }): Promise<boolean>;
   revokeUserSessions(input: {
-    userId: string;
+    userId: UserId;
     headers: Headers;
   }): Promise<boolean>;
   revokeUserSession(input: {
-    sessionId: string;
+    sessionId: SessionId;
     providerToken: string;
     headers: Headers;
   }): Promise<boolean>;

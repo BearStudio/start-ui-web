@@ -5,6 +5,8 @@ overrides:
   '@types/node': ^24
   body-parser: 1.20.4
   effect: 3.21.2
+  # PR #40, 2026-05-27: keep toolchain consumers on a known-good current glob 13 release.
+  # Re-evaluate after the next dependency compatibility pass confirms the override is no longer needed.
   glob: 13.0.6
 
 allowBuilds:

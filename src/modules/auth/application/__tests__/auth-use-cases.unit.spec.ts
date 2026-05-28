@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
+
 import type { AuthEmailPort } from '../ports/auth-email-port';
 import type { AuthorizationGateway } from '../ports/authorization-gateway';
 import type { SessionGateway } from '../ports/session-gateway';
@@ -9,8 +11,8 @@ import { createAuthUseCases } from '../../factory';
 
 const session: AuthSession = {
   user: {
-    id: 'user-1',
-    email: 'user@example.com',
+    id: toUserId('user-1'),
+    email: toEmailAddress('user@example.com'),
     name: 'Test',
     emailVerified: true,
     image: null,
@@ -18,8 +20,8 @@ const session: AuthSession = {
     onboardedAt: new Date('2026-01-01'),
   },
   session: {
-    id: 'session-1',
-    userId: 'user-1',
+    id: toSessionId('session-1'),
+    userId: toUserId('user-1'),
     expiresAt: new Date('2026-12-31'),
   },
 };
@@ -79,14 +81,14 @@ describe('auth use cases', () => {
     const headers = new Headers();
 
     const allowed = await useCases.checkPermission({
-      userId: 'user-1',
+      userId: toUserId('user-1'),
       permissions: { book: ['create'] },
       headers,
     });
 
     expect(allowed).toBe(true);
     expect(deps.authorizationGateway.userHasPermission).toHaveBeenCalledWith({
-      userId: 'user-1',
+      userId: toUserId('user-1'),
       permissions: { book: ['create'] },
       headers,
     });
@@ -114,24 +116,24 @@ describe('auth use cases', () => {
     const useCases = createAuthUseCases(deps);
     const headers = new Headers();
 
-    await useCases.removeUser({ userId: 'user-1', headers });
-    await useCases.revokeUserSessions({ userId: 'user-1', headers });
+    await useCases.removeUser({ userId: toUserId('user-1'), headers });
+    await useCases.revokeUserSessions({ userId: toUserId('user-1'), headers });
     await useCases.revokeUserSession({
-      sessionId: 'session-1',
+      sessionId: toSessionId('session-1'),
       providerToken: 'provider-token',
       headers,
     });
 
     expect(deps.userAdminGateway.removeUser).toHaveBeenCalledWith({
-      userId: 'user-1',
+      userId: toUserId('user-1'),
       headers,
     });
     expect(deps.userAdminGateway.revokeUserSessions).toHaveBeenCalledWith({
-      userId: 'user-1',
+      userId: toUserId('user-1'),
       headers,
     });
     expect(deps.userAdminGateway.revokeUserSession).toHaveBeenCalledWith({
-      sessionId: 'session-1',
+      sessionId: toSessionId('session-1'),
       providerToken: 'provider-token',
       headers,
     });
