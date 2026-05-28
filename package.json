@@ -34,7 +34,7 @@
     "start": "dotenv -- node .output/server/index.mjs",
     "env": "run-p env:*",
     "env:client": "dotenv -- node ./run-jiti ./src/platform/env/client.ts",
-    "env:server": "dotenv -- node ./run-jiti ./src/platform/env/server.ts",
+    "env:server": "dotenv -- node ./run-jiti ./src/modules/kernel/infrastructure/config/server.ts",
     "cosmos": "cosmos",
     "cosmos-export": "cosmos-export",
     "format": "oxfmt .",

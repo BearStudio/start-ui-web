@@ -2,13 +2,13 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 import type { TransactionRunner } from '@/modules/kernel/application/ports/transaction-runner';
-import { env } from '@/modules/kernel/infrastructure/config/env';
+import { getDatabaseConfig } from '@/modules/kernel/infrastructure/config/database';
 
 import * as schema from './schema';
 
 export function createDbClient(options?: { url?: string }) {
   const pool = new Pool({
-    connectionString: options?.url ?? env.DATABASE_URL,
+    connectionString: options?.url ?? getDatabaseConfig().databaseUrl,
   });
 
   return Object.assign(drizzle(pool, { schema, casing: 'camelCase' }), {

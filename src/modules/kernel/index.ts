@@ -7,5 +7,7 @@ export type * from './application/ports/permission-checker';
 export type * from './application/ports/transaction-runner';
 export * from './application/result';
 export * from './domain/errors/app-error';
+export * from './domain/errors/configuration-error';
 export * from './domain/errors/domain-error';
+export * from './domain/errors/id-validation-error';
 export * from './domain/ids';

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { GenreRepository } from '@/modules/genre';
-import { toGenreId } from '@/modules/kernel/domain/ids';
+import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from './helpers';
 import { __resetGenreComposition, getGenreUseCases } from '../genre';
@@ -22,7 +22,7 @@ const makeGenreRepository = (
 });
 
 const scope = (userId: string) =>
-  ({ userId, role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(userId), role: 'user', tenantId: null }) as const;
 
 describe('genre composition', () => {
   beforeEach(() => {

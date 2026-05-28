@@ -1,6 +1,7 @@
 import { expect, vi } from 'vitest';
 
 import type { Permission } from '@/modules/auth';
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 
 const hoisted = vi.hoisted(() => ({
   mockGetSession: vi.fn(),
@@ -100,15 +101,15 @@ export function resetMockDb() {
 }
 
 export const mockUser = {
-  id: 'user-1',
+  id: toUserId('user-1'),
   name: 'Test User',
-  email: 'user@example.com',
+  email: toEmailAddress('user@example.com'),
   image: null,
   role: 'user' as const,
   onboardedAt: new Date('2024-01-01T00:00:00.000Z'),
 };
 export const mockSession = {
-  id: 'session-1',
+  id: toSessionId('session-1'),
   token: 'session-token-1',
   expiresAt: new Date('2099-01-02T00:00:00.000Z'),
 };

@@ -1,24 +1,54 @@
 import { z } from 'zod';
 
-const zCuidCompatibleId = () => z.string().trim().min(1);
+import { IdValidationError } from './errors/id-validation-error';
 
-export const zUserId = () => zCuidCompatibleId().brand<'UserId'>();
-export type UserId = z.infer<ReturnType<typeof zUserId>>;
+type Brand<TValue, TBrand extends string> = TValue & {
+  readonly __brand: TBrand;
+};
 
-export const zBookId = () => zCuidCompatibleId().brand<'BookId'>();
-export type BookId = z.infer<ReturnType<typeof zBookId>>;
+export type UserId = Brand<string, 'UserId'>;
+export type BookId = Brand<string, 'BookId'>;
+export type GenreId = Brand<string, 'GenreId'>;
+export type SessionId = Brand<string, 'SessionId'>;
+export type AuthSessionId = SessionId;
+export type ScopeKey = Brand<string, 'ScopeKey'>;
+export type EmailAddress = Brand<string, 'EmailAddress'>;
 
-export const zGenreId = () => zCuidCompatibleId().brand<'GenreId'>();
-export type GenreId = z.infer<ReturnType<typeof zGenreId>>;
+const ensureNonEmptyId = (value: string, typeName: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    throw new IdValidationError(typeName, value);
+  }
+  return trimmed;
+};
 
-export const zSessionId = () => zCuidCompatibleId().brand<'SessionId'>();
-export type SessionId = z.infer<ReturnType<typeof zSessionId>>;
+export const toUserId = (value: string): UserId =>
+  ensureNonEmptyId(value, 'UserId') as UserId;
+export const toBookId = (value: string): BookId =>
+  ensureNonEmptyId(value, 'BookId') as BookId;
+export const toGenreId = (value: string): GenreId =>
+  ensureNonEmptyId(value, 'GenreId') as GenreId;
+export const toSessionId = (value: string): SessionId =>
+  ensureNonEmptyId(value, 'SessionId') as SessionId;
+export const toScopeKey = (value: string): ScopeKey =>
+  ensureNonEmptyId(value, 'ScopeKey') as ScopeKey;
 
-export const zEmailAddress = () => z.email().brand<'EmailAddress'>();
-export type EmailAddress = z.infer<ReturnType<typeof zEmailAddress>>;
+export const toEmailAddress = (value: string): EmailAddress => {
+  const trimmed = value.trim();
+  const result = z.email().safeParse(trimmed);
+  if (!result.success) {
+    throw new IdValidationError(
+      'EmailAddress',
+      value,
+      'EmailAddress is invalid'
+    );
+  }
+  return result.data as EmailAddress;
+};
 
-export const toUserId = (value: string) => zUserId().parse(value);
-export const toBookId = (value: string) => zBookId().parse(value);
-export const toGenreId = (value: string) => zGenreId().parse(value);
-export const toSessionId = (value: string) => zSessionId().parse(value);
-export const toEmailAddress = (value: string) => zEmailAddress().parse(value);
+export const zUserId = () => z.string().transform(toUserId);
+export const zBookId = () => z.string().transform(toBookId);
+export const zGenreId = () => z.string().transform(toGenreId);
+export const zSessionId = () => z.string().transform(toSessionId);
+export const zScopeKey = () => z.string().transform(toScopeKey);
+export const zEmailAddress = () => z.string().transform(toEmailAddress);

@@ -2,18 +2,24 @@ import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const testState = vi.hoisted(() => ({
-  env: {
-    RESEND_API_KEY: 're_test',
-    EMAIL_FROM: 'Start UI <noreply@example.com>',
-    EMAIL_DELIVERY_DISABLED: false,
+  emailConfig: {
+    resendApiKey: 're_test',
+    from: 'Start UI <noreply@example.com>',
+    deliveryDisabled: false,
+  },
+  envClient: {
     VITE_IS_DEMO: false,
   },
   resendConstructor: vi.fn(),
   send: vi.fn(),
 }));
 
-vi.mock('@/modules/kernel/infrastructure/config/env', () => ({
-  env: testState.env,
+vi.mock('@/modules/kernel/infrastructure/config/email', () => ({
+  getEmailConfig: () => testState.emailConfig,
+}));
+
+vi.mock('@/platform/env/client', () => ({
+  envClient: testState.envClient,
 }));
 
 vi.mock('resend', () => ({
@@ -35,10 +41,12 @@ const loadSendEmail = async () => {
 describe('Resend email adapter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    Object.assign(testState.env, {
-      RESEND_API_KEY: 're_test',
-      EMAIL_FROM: 'Start UI <noreply@example.com>',
-      EMAIL_DELIVERY_DISABLED: false,
+    Object.assign(testState.emailConfig, {
+      resendApiKey: 're_test',
+      from: 'Start UI <noreply@example.com>',
+      deliveryDisabled: false,
+    });
+    Object.assign(testState.envClient, {
       VITE_IS_DEMO: false,
     });
     testState.send.mockResolvedValue({
@@ -49,7 +57,7 @@ describe('Resend email adapter', () => {
   });
 
   it('skips sending in demo mode', async () => {
-    testState.env.VITE_IS_DEMO = true;
+    testState.envClient.VITE_IS_DEMO = true;
     const { sendEmail } = await loadSendEmail();
 
     await sendEmail({
@@ -63,7 +71,7 @@ describe('Resend email adapter', () => {
   });
 
   it('skips sending when delivery is disabled', async () => {
-    testState.env.EMAIL_DELIVERY_DISABLED = true;
+    testState.emailConfig.deliveryDisabled = true;
     const { sendEmail } = await loadSendEmail();
 
     await sendEmail({

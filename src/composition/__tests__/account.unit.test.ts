@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { AccountRepository } from '@/modules/account';
+import { toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel } from './helpers';
 import { __resetAccountComposition, getAccountUseCases } from '../account';
@@ -14,7 +15,7 @@ const makeAccountRepository = (
 });
 
 const scope = (userId: string) =>
-  ({ userId, role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(userId), role: 'user', tenantId: null }) as const;
 
 describe('account composition', () => {
   beforeEach(() => {

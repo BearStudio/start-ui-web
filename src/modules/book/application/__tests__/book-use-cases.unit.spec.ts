@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
+import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import type { BookRepository } from '../ports/book-repository';
 import type { Book } from '../../domain/book';
@@ -38,7 +38,11 @@ const forbidden: PermissionChecker = {
   hasPermission: async () => false,
 };
 
-const scope = { userId: 'user-1', role: 'user', tenantId: null } as const;
+const scope = {
+  userId: toUserId('user-1'),
+  role: 'user',
+  tenantId: null,
+} as const;
 
 function makeRepo(overrides: Partial<BookRepository> = {}): BookRepository {
   return {

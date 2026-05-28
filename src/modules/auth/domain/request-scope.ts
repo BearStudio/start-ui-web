@@ -1,8 +1,11 @@
+import type { ScopeKey, UserId } from '@/modules/kernel/domain/ids';
+import { toScopeKey } from '@/modules/kernel/domain/ids';
+
 import type { Role } from './permissions';
 import type { AuthenticatedUser, AuthSession } from './session';
 
 export type RequestScope = {
-  userId: string;
+  userId: UserId;
   role: Role;
   tenantId: null;
 };
@@ -14,7 +17,7 @@ export type CurrentSession = {
   >;
   session: Pick<AuthSession['session'], 'id' | 'expiresAt'>;
   scope: RequestScope;
-  scopeKey: string;
+  scopeKey: ScopeKey;
 };
 
 export const scopeFromUser = (
@@ -26,12 +29,14 @@ export const scopeFromUser = (
 });
 
 export const scopeKeyFromScope = (scope: RequestScope) =>
-  `user:${scope.userId}:role:${scope.role}:tenant:${scope.tenantId ?? 'none'}`;
+  toScopeKey(
+    `user:${scope.userId}:role:${scope.role}:tenant:${scope.tenantId ?? 'none'}`
+  );
 
 export const scopeKeyFromSession = (
   session: Pick<AuthSession, 'user'> | CurrentSession | null | undefined
 ) => {
-  if (!session?.user) return 'anonymous';
+  if (!session?.user) return toScopeKey('anonymous');
   return scopeKeyFromScope(scopeFromUser(session.user));
 };
 

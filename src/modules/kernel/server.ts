@@ -8,7 +8,9 @@ export {
   type ServerFnErrorCode,
   type ServerFnErrorData,
 } from './client';
+export { ConfigurationError } from './domain/errors/configuration-error';
 export { DEMO_MODE_ERROR } from './domain/errors/demo-mode';
+export { IdValidationError } from './domain/errors/id-validation-error';
 export { getUserLanguage } from './transport/tanstack/user-language';
 
 const ssrAppHandlers = createSsrAppHandlers();

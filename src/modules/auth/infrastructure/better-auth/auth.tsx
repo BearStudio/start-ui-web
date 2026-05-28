@@ -10,13 +10,13 @@ import {
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
+import { getAuthConfig } from '@/modules/kernel/infrastructure/config/auth';
 import {
   type Database,
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
 import { envClient } from '@/platform/env/client';
-import { envServer } from '@/platform/env/server';
 
 import { AuthEmailPortResend } from './auth-email-port-resend';
 import {
@@ -29,19 +29,21 @@ export function createAuth(input?: Database | CreateAuthOptions) {
   const options = normalizeCreateAuthInput(input);
   const database = options.database ?? getDefaultDbClient();
   const authEmailPort = options.authEmailPort ?? new AuthEmailPortResend();
+  const authConfig = getAuthConfig();
 
   return betterAuth({
+    secret: authConfig.secret,
     baseURL: {
       allowedHosts: [
         new URL(envClient.VITE_BASE_URL).host,
-        ...(envServer.AUTH_ALLOWED_HOSTS ?? []),
+        ...(authConfig.allowedHosts ?? []),
       ],
     },
     session: {
-      expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,
-      updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
+      expiresIn: authConfig.sessionExpirationInSeconds,
+      updateAge: authConfig.sessionUpdateAgeInSeconds,
     },
-    trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
+    trustedOrigins: authConfig.trustedOrigins,
     database: drizzleAdapter(database, {
       provider: 'pg',
     }),
@@ -58,11 +60,9 @@ export function createAuth(input?: Database | CreateAuthOptions) {
     },
     socialProviders: {
       github: {
-        enabled: !!(
-          envServer.GITHUB_CLIENT_ID && envServer.GITHUB_CLIENT_SECRET
-        ),
-        clientId: envServer.GITHUB_CLIENT_ID!,
-        clientSecret: envServer.GITHUB_CLIENT_SECRET!,
+        enabled: !!(authConfig.githubClientId && authConfig.githubClientSecret),
+        clientId: authConfig.githubClientId!,
+        clientSecret: authConfig.githubClientSecret!,
         disableImplicitSignUp: !AUTH_SIGNUP_ENABLED,
       },
     },

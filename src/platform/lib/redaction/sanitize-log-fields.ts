@@ -41,10 +41,7 @@ const getBoundedArrayIndexKeys = (value: unknown[], limit: number) => {
   let hasMore = false;
 
   for (const key in value) {
-    if (
-      Object.prototype.hasOwnProperty.call(value, key) &&
-      isArrayIndexKey(key)
-    ) {
+    if (Object.hasOwn(value, key) && isArrayIndexKey(key)) {
       if (indexKeys.length < limit) {
         indexKeys.push(key);
       } else {

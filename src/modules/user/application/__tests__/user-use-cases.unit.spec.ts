@@ -57,7 +57,7 @@ const sessionRevokePermission = {
 } as const satisfies PermissionRequest;
 
 const scope = (id: string) =>
-  ({ userId: id, role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(id), role: 'user', tenantId: null }) as const;
 
 function samePermissionRequest(
   expected: PermissionRequest,

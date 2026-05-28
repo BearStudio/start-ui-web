@@ -1,15 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
+
 import {
   sanitizeCurrentSession,
+  scopeFromUser,
   scopeKeyFromScope,
   scopeKeyFromSession,
 } from './request-scope';
 
 const authSession = {
   user: {
-    id: 'user-1',
-    email: 'user@example.com',
+    id: toUserId('user-1'),
+    email: toEmailAddress('user@example.com'),
     name: 'User One',
     image: null,
     role: 'admin' as const,
@@ -17,7 +20,7 @@ const authSession = {
     token: 'must-not-leak',
   },
   session: {
-    id: 'session-1',
+    id: toSessionId('session-1'),
     token: 'session-token',
     expiresAt: new Date('2024-01-02T00:00:00.000Z'),
   },
@@ -25,8 +28,16 @@ const authSession = {
 
 describe('request scope', () => {
   it('builds stable scope keys with tenant placeholder support', () => {
+    const scope = scopeFromUser(authSession.user);
+
+    expect(scope.userId).toBe(authSession.user.id);
+    expect(scopeKeyFromScope(scope)).toBe('user:user-1:role:admin:tenant:none');
     expect(
-      scopeKeyFromScope({ userId: 'user-1', role: 'admin', tenantId: null })
+      scopeKeyFromScope({
+        userId: toUserId('user-1'),
+        role: 'admin',
+        tenantId: null,
+      })
     ).toBe('user:user-1:role:admin:tenant:none');
     expect(scopeKeyFromSession(null)).toBe('anonymous');
     expect(scopeKeyFromSession(authSession)).toBe(

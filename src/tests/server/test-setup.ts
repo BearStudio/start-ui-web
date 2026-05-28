@@ -41,13 +41,6 @@ vi.mock('@/platform/env/client', () => ({
   },
 }));
 
-vi.mock('@/platform/env/server', () => ({
-  envServer: {
-    LOGGER_LEVEL: 'error',
-    LOGGER_PRETTY: false,
-  },
-}));
-
 vi.mock('@/modules/kernel/infrastructure/logger/pino', () => {
   const defaultPinoLogger = {
     child: () => mockLogger,

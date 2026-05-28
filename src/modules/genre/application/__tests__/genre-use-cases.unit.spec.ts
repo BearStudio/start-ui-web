@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import { toGenreId } from '@/modules/kernel/domain/ids';
+import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import type { GenreRepository } from '../ports/genre-repository';
 import type { Genre } from '../../domain/genre';
@@ -30,7 +30,11 @@ const allowed: PermissionChecker = {
   hasPermission: async () => true,
 };
 
-const scope = { userId: 'user-1', role: 'user', tenantId: null } as const;
+const scope = {
+  userId: toUserId('user-1'),
+  role: 'user',
+  tenantId: null,
+} as const;
 
 describe('genre use cases', () => {
   it('lists genres and returns forbidden when permission is missing', async () => {

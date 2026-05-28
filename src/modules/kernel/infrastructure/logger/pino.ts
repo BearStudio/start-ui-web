@@ -3,15 +3,16 @@ import pino from 'pino';
 import pretty from 'pino-pretty';
 import { z } from 'zod';
 
-import { env } from '@/modules/kernel/infrastructure/config/env';
+import { getLoggerConfig } from '@/modules/kernel/infrastructure/config/logger';
 
 export function createPinoLogger(options?: pino.LoggerOptions) {
+  const loggerConfig = getLoggerConfig();
   const loggerOptions: pino.LoggerOptions = {
-    level: env.LOGGER_LEVEL,
+    level: loggerConfig.level,
     ...options,
   };
 
-  return env.LOGGER_PRETTY
+  return loggerConfig.pretty
     ? pino(
         loggerOptions,
         pretty({

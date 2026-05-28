@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/tanstackstart-react';
 
-import { envServer } from '@/platform/env/server';
+import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
 
 import { setTelemetry } from './index';
 import { createSentryTelemetryAdapter } from './sentry-adapter';
@@ -17,14 +17,15 @@ export const initTelemetryServer = () => {
   if (initialized) return;
   initialized = true;
 
-  if (!envServer.SENTRY_DSN) {
+  const telemetryConfig = getTelemetryConfig();
+  if (!telemetryConfig.dsn) {
     return;
   }
 
   Sentry.init({
-    dsn: envServer.SENTRY_DSN,
-    environment: envServer.SENTRY_ENVIRONMENT,
-    tracesSampleRate: envServer.SENTRY_TRACES_SAMPLE_RATE,
+    dsn: telemetryConfig.dsn,
+    environment: telemetryConfig.environment,
+    tracesSampleRate: telemetryConfig.tracesSampleRate,
     sendDefaultPii: false,
   });
 
