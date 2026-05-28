@@ -44,7 +44,7 @@ export const previewEmailRoute = async (
 
 export const createEmailPreviewRequestHandler =
   ({ enabled, preview }: EmailPreviewHandlerDeps) =>
-  (request: Request, template: string) => {
+  async (request: Request, template: string) => {
     if (!enabled) {
       return new Response(undefined, {
         status: 404,

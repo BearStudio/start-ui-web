@@ -714,6 +714,20 @@ rules:
           metavariable: $VALUE
           regex: '^value$'
 
+  - id: sanitizer-oversized-array-guard-before-key-collection
+    message: Check oversized arrays before collecting all array keys so dense arrays cannot block or OOM logging.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/platform/lib/redaction/**/*.ts
+    pattern: |
+      const $KEYS = getArrayIndexKeys($VALUE);
+      ...
+      if ($VALUE.length > MAX_SANITIZED_ARRAY_LENGTH) {
+        ...
+      }
+
   - id: sanitizer-tojson-branch-not-limited-to-nonplain
     message: Sanitizers must handle callable toJSON on plain objects and arrays; do not limit toJSON handling to non-plain objects.
     languages: [typescript]

@@ -9,23 +9,24 @@ export const bookCoverAcceptedFileTypes = [
 
 export const bookCoverMaxFileSizeBytes = 1024 * 1024 * 100;
 
-const bookCoverFileExtensionsByType: Record<
-  (typeof bookCoverAcceptedFileTypes)[number],
-  string
-> = {
-  'image/gif': 'gif',
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/webp': 'webp',
-};
+type BookCoverAcceptedFileType = (typeof bookCoverAcceptedFileTypes)[number];
+
+const bookCoverFileExtensionsByType: Record<BookCoverAcceptedFileType, string> =
+  {
+    'image/gif': 'gif',
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+  };
+
+const isBookCoverAcceptedFileType = (
+  fileType: string
+): fileType is BookCoverAcceptedFileType =>
+  Object.hasOwn(bookCoverFileExtensionsByType, fileType);
 
 export const getBookCoverFileExtension = (fileType: string) =>
-  bookCoverAcceptedFileTypes.includes(
-    fileType as (typeof bookCoverAcceptedFileTypes)[number]
-  )
-    ? bookCoverFileExtensionsByType[
-        fileType as (typeof bookCoverAcceptedFileTypes)[number]
-      ]
+  isBookCoverAcceptedFileType(fileType)
+    ? bookCoverFileExtensionsByType[fileType]
     : null;
 
 export const createBookCoverObjectKey = (input: {

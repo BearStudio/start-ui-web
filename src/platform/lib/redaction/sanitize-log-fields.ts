@@ -36,6 +36,29 @@ const isArrayIndexKey = (key: string) => {
 const getArrayIndexKeys = (value: unknown[]) =>
   Object.keys(value).filter(isArrayIndexKey);
 
+const getBoundedArrayIndexKeys = (value: unknown[], limit: number) => {
+  const indexKeys: string[] = [];
+  let hasMore = false;
+
+  for (const key in value) {
+    if (
+      Object.prototype.hasOwnProperty.call(value, key) &&
+      isArrayIndexKey(key)
+    ) {
+      if (indexKeys.length < limit) {
+        indexKeys.push(key);
+      } else {
+        hasMore = true;
+        break;
+      }
+    }
+  }
+
+  indexKeys.sort((a, b) => Number(a) - Number(b));
+
+  return { hasMore, indexKeys };
+};
+
 const sanitizeLogValue = (
   key: string,
   value: unknown,
@@ -96,31 +119,33 @@ const sanitizeLogValue = (
   path.add(value);
   try {
     if (Array.isArray(value)) {
-      const indexKeys = getArrayIndexKeys(value);
-
       if (value.length > MAX_SANITIZED_ARRAY_LENGTH) {
+        const { hasMore, indexKeys } = getBoundedArrayIndexKeys(
+          value,
+          MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES
+        );
+
         return {
           type: OVERSIZED_ARRAY_VALUE,
           length: value.length,
           entries: Object.fromEntries(
-            indexKeys
-              .slice(0, MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES)
-              .map((indexKey) => [
-                indexKey,
-                sanitizeLogValue(
-                  '',
-                  value[Number(indexKey)],
-                  { sensitiveKeys },
-                  path
-                ),
-              ])
+            indexKeys.map((indexKey) => [
+              indexKey,
+              sanitizeLogValue(
+                '',
+                value[Number(indexKey)],
+                { sensitiveKeys },
+                path
+              ),
+            ])
           ),
-          truncatedEntries: Math.max(
-            indexKeys.length - MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES,
-            0
-          ),
+          truncatedEntries: hasMore
+            ? Math.max(value.length - MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES, 0)
+            : 0,
         };
       }
+
+      const indexKeys = getArrayIndexKeys(value);
 
       const sanitized: unknown[] = [];
       sanitized.length = value.length;

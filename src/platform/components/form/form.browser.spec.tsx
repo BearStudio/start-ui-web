@@ -68,3 +68,9 @@ test('uses a CSP-safe fallback action', async () => {
 
   await expect.element(page.getByTestId('form')).toHaveAttribute('action', '#');
 });
+
+test('removes inert after hydration', async () => {
+  render(<FormWithSafeAction />);
+
+  await expect.element(page.getByTestId('form')).not.toHaveAttribute('inert');
+});

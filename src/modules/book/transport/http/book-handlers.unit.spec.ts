@@ -49,16 +49,18 @@ describe('book HTTP transport handlers', () => {
       getUseCases: () => ({ create }) as ExplicitAny,
     });
 
-    await handlers.create(
-      ctx,
-      zCreateInput().parse({
-        title: 'Dune',
-        author: 'Frank Herbert',
-        genreId: 'genre-1',
-        publisher: null,
-        coverId: 'cover-1',
-      })
-    );
+    await expect(
+      handlers.create(
+        ctx,
+        zCreateInput().parse({
+          title: 'Dune',
+          author: 'Frank Herbert',
+          genreId: 'genre-1',
+          publisher: null,
+          coverId: 'cover-1',
+        })
+      )
+    ).resolves.toEqual({ id: toBookId('book-1') });
 
     expect(create).toHaveBeenCalledWith({
       scope: ctx.scope,
