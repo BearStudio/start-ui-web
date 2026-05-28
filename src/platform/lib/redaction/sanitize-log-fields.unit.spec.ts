@@ -13,6 +13,20 @@ const sensitiveKeys = new Set([
 ]);
 
 describe('sanitizeLogFields', () => {
+  it('uses production-safe default sensitive keys without redacting stable ids', () => {
+    expect(
+      sanitizeLogFields({
+        id: 'record-1',
+        requestId: 'request-1',
+        token: 'secret-token',
+      })
+    ).toEqual({
+      id: 'record-1',
+      requestId: 'request-1',
+      token: '[REDACTED]',
+    });
+  });
+
   it('redacts sensitive keys and email-shaped strings', () => {
     expect(
       sanitizeLogFields(

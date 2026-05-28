@@ -31,7 +31,7 @@ export const baseEnvSchema = z
   })
   .passthrough();
 
-const fieldNameFromIssue = (issue: z.core.$ZodIssue) =>
+const fieldNameFromIssue = (issue: z.ZodIssue) =>
   issue.path.length ? issue.path.map(String).join('.') : 'environment';
 
 export function parseEnv<TSchema extends z.ZodType>(

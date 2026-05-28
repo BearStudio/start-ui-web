@@ -20,7 +20,10 @@ export async function deleteBook(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('book.delete', { event: 'book.delete', bookId: input.id });
+  deps.logger.info({
+    event: 'book.delete',
+    details: { bookId: input.id },
+  });
   const deleted = await deps.bookRepository.delete(input.id);
   if (!deleted) return fail('not_found');
   return ok(undefined);

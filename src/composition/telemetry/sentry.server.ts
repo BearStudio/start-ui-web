@@ -3,7 +3,10 @@ import * as Sentry from '@sentry/tanstackstart-react';
 import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
 
 import { setTelemetry } from './index';
-import { createSentryTelemetryAdapter } from './sentry-adapter';
+import {
+  createSentryTelemetryAdapter,
+  sanitizeSentryEvent,
+} from './sentry-adapter';
 
 let initialized = false;
 
@@ -27,6 +30,7 @@ export const initTelemetryServer = () => {
     environment: telemetryConfig.environment,
     tracesSampleRate: telemetryConfig.tracesSampleRate,
     sendDefaultPii: false,
+    beforeSend: sanitizeSentryEvent,
   });
 
   setTelemetry(createSentryTelemetryAdapter(Sentry));

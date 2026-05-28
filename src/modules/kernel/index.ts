@@ -2,7 +2,7 @@ export * from './application/cache/cache-aside';
 export type * from './application/ports/cache-gateway';
 export type * from './application/ports/clock';
 export type * from './application/ports/id-generator';
-export type * from './application/ports/logger';
+export * from './application/ports/logger';
 export type * from './application/ports/permission-checker';
 export type * from './application/ports/transaction-runner';
 export * from './application/result';

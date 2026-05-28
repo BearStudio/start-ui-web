@@ -23,7 +23,7 @@ export async function createBook(
   if (!allowed) return fail('forbidden');
 
   try {
-    deps.logger.info('book.create', { event: 'book.create' });
+    deps.logger.info({ event: 'book.create' });
     const value = await deps.bookRepository.create(
       normalizeBookWriteInput(input.book)
     );

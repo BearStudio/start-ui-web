@@ -1,4 +1,8 @@
 type SanitizeLogFieldsOptions = {
+  sensitiveKeys?: ReadonlySet<string>;
+};
+
+type NormalizedSanitizeLogFieldsOptions = {
   sensitiveKeys: ReadonlySet<string>;
 };
 
@@ -11,11 +15,27 @@ const MAX_ARRAY_INDEX = 2 ** 32 - 2;
 const MAX_SANITIZED_ARRAY_LENGTH = 10_000;
 const MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES = 1_000;
 
+export const DEFAULT_SENSITIVE_LOG_KEYS = new Set(
+  [
+    'authorization',
+    'cookie',
+    'email',
+    'idToken',
+    'name',
+    'password',
+    'phone',
+    'refreshToken',
+    'secret',
+    'sessionToken',
+    'token',
+  ].map((key) => key.toLowerCase())
+);
+
 const redactString = (value: string) =>
   value.replace(EMAIL_PATTERN, REDACTED_VALUE);
 
 const isSensitiveKey = (key: string, sensitiveKeys: ReadonlySet<string>) =>
-  sensitiveKeys.has(key.toLowerCase());
+  sensitiveKeys.has(key) || sensitiveKeys.has(key.toLowerCase());
 
 const isPlainObject = (value: object) => {
   const prototype = Object.getPrototypeOf(value);
@@ -59,7 +79,7 @@ const getBoundedArrayIndexKeys = (value: unknown[], limit: number) => {
 const sanitizeLogValue = (
   key: string,
   value: unknown,
-  { sensitiveKeys }: SanitizeLogFieldsOptions,
+  { sensitiveKeys }: NormalizedSanitizeLogFieldsOptions,
   path: WeakSet<object>
 ): unknown => {
   if (isSensitiveKey(key, sensitiveKeys)) {
@@ -173,15 +193,16 @@ const sanitizeLogValue = (
 
 export const sanitizeLogFields = (
   fields: Record<string, unknown>,
-  options: SanitizeLogFieldsOptions
+  options: SanitizeLogFieldsOptions = {}
 ): Record<string, unknown> => {
+  const sensitiveKeys = options.sensitiveKeys ?? DEFAULT_SENSITIVE_LOG_KEYS;
   const path = new WeakSet<object>();
   path.add(fields);
 
   return Object.fromEntries(
     Object.entries(fields).map(([key, value]) => [
       key,
-      sanitizeLogValue(key, value, options, path),
+      sanitizeLogValue(key, value, { sensitiveKeys }, path),
     ])
   );
 };

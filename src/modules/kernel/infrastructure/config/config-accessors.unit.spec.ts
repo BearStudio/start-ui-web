@@ -35,6 +35,17 @@ describe('server config accessors', () => {
     expect(getRedisConfig()).toBeNull();
   });
 
+  it('returns Redis config when both required values are present', async () => {
+    vi.stubEnv('UPSTASH_REDIS_REST_URL', 'https://redis.example.com');
+    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', 'valid-token-value');
+    const { getRedisConfig } = await import('./redis');
+
+    expect(getRedisConfig()).toEqual({
+      restUrl: 'https://redis.example.com',
+      restToken: 'valid-token-value',
+    });
+  });
+
   it('throws ConfigurationError for malformed Redis config', async () => {
     vi.stubEnv('UPSTASH_REDIS_REST_URL', 'not-a-url');
     vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', 'token-value');

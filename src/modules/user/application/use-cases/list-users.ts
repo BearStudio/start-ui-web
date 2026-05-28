@@ -23,7 +23,7 @@ export async function listUsers(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('user.list', { event: 'user.list' });
+  deps.logger.info({ event: 'user.list' });
   const value = await deps.userRepository.list({
     cursor: input.cursor,
     limit: input.limit,

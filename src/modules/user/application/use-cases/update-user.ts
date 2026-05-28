@@ -53,7 +53,10 @@ export async function updateUser(
   }
 
   try {
-    deps.logger.info('user.update', { event: 'user.update', userId: input.id });
+    deps.logger.info({
+      event: 'user.update',
+      details: { targetUserId: input.id },
+    });
     const update = {
       email: input.user.email,
       role: nextRole,

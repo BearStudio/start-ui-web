@@ -49,6 +49,15 @@ describe('server function middleware', () => {
       'Vary',
       'Cookie, Authorization'
     );
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'server_fn.request.finish',
+        requestId: expect.any(String),
+        sessionId: 'session-1',
+        scopeKey: 'user:user-1:role:user:tenant:none',
+        userId: 'user-1',
+      })
+    );
   });
 
   it('binds authenticated users through the telemetry adapter', async () => {
@@ -84,12 +93,17 @@ describe('server function middleware', () => {
       code: 'INTERNAL_SERVER_ERROR',
     });
     expect(mockLogger.error).toHaveBeenCalledWith(
-      error,
-      'Unhandled error before mapping'
+      expect.objectContaining({
+        event: 'server_fn.error.unhandled',
+        exception: error,
+      })
     );
     expect(mockLogger.error).toHaveBeenCalledWith(
       expect.objectContaining({
-        code: 'INTERNAL_SERVER_ERROR',
+        details: expect.objectContaining({
+          code: 'INTERNAL_SERVER_ERROR',
+        }),
+        event: 'server_fn.error.mapped',
       })
     );
   });
@@ -105,9 +119,12 @@ describe('server function middleware', () => {
       });
       expect(mockLogger.info).toHaveBeenCalledWith(
         expect.objectContaining({
-          code: 'METHOD_NOT_SUPPORTED',
-          data: { reason: 'DEMO_MODE_ENABLED' },
-          message: 'Demo mode prevents mutations',
+          details: expect.objectContaining({
+            code: 'METHOD_NOT_SUPPORTED',
+            data: { reason: 'DEMO_MODE_ENABLED' },
+          }),
+          error: 'Demo mode prevents mutations',
+          event: 'server_fn.error.mapped',
         })
       );
     } finally {
@@ -129,6 +146,15 @@ describe('server function middleware', () => {
     });
 
     expect(mockLogger.warn).toHaveBeenCalledTimes(1);
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        details: expect.objectContaining({
+          code: 'CONFLICT',
+          data: { target: ['email'] },
+        }),
+        event: 'server_fn.error.mapped',
+      })
+    );
     expect(mockLogger.error).not.toHaveBeenCalled();
   });
 });

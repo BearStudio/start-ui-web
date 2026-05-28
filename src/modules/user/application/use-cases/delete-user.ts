@@ -30,7 +30,10 @@ export async function deleteUser(
     return fail('self');
   }
 
-  deps.logger.info('user.delete', { event: 'user.delete', userId: input.id });
+  deps.logger.info({
+    event: 'user.delete',
+    details: { targetUserId: input.id },
+  });
   const removed = await deps.userAuthGateway.removeUser(input.id);
   if (!removed) {
     throw new AppError({

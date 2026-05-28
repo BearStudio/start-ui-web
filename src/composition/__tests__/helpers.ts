@@ -7,6 +7,7 @@ export function makeTestKernel(overrides: Partial<Kernel> = {}): Kernel {
   return {
     db: {} as Kernel['db'],
     logger: {
+      debug: () => {},
       info: () => {},
       warn: () => {},
       error: () => {},

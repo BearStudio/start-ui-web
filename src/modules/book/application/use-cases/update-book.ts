@@ -25,7 +25,10 @@ export async function updateBook(
   if (!allowed) return fail('forbidden');
 
   try {
-    deps.logger.info('book.update', { event: 'book.update', bookId: input.id });
+    deps.logger.info({
+      event: 'book.update',
+      details: { bookId: input.id },
+    });
     const value = await deps.bookRepository.update(
       input.id,
       normalizeBookWriteInput(input.book)

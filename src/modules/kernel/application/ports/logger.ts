@@ -1,7 +1,69 @@
-export type LogFields = Record<string, unknown>;
+import type { ScopeKey, SessionId, UserId } from '@/modules/kernel/domain/ids';
+
+export type LogDirection = 'inbound' | 'outbound' | 'internal';
+
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+export interface LogFields {
+  event: string;
+  direction?: LogDirection;
+
+  requestId?: string;
+  correlationId?: string;
+
+  userId?: UserId;
+  sessionId?: SessionId;
+  scopeKey?: ScopeKey;
+  tenantId?: string | null;
+
+  error?: string;
+  exception?: unknown;
+
+  details?: Record<string, unknown>;
+  durationMs?: number;
+
+  sentryTags?: Record<string, string>;
+  sentryExtras?: Record<string, unknown>;
+}
 
 export interface Logger {
-  info(event: string, fields?: LogFields): void;
-  warn(event: string, fields?: LogFields): void;
-  error(event: string, fields?: LogFields): void;
+  debug(fields: LogFields): void;
+  info(fields: LogFields): void;
+  warn(fields: LogFields): void;
+  error(fields: LogFields): void;
 }
+
+export type RequestLoggerInput = {
+  logger: Logger;
+  requestId: string;
+  userId?: UserId;
+  sessionId?: SessionId;
+  scopeKey?: ScopeKey;
+};
+
+export const createRequestLogger = ({
+  logger,
+  requestId,
+  userId,
+  sessionId,
+  scopeKey,
+}: RequestLoggerInput): Logger => {
+  const defaults = {
+    requestId,
+    ...(userId ? { userId } : {}),
+    ...(sessionId ? { sessionId } : {}),
+    ...(scopeKey ? { scopeKey } : {}),
+  } satisfies Partial<LogFields>;
+
+  const withDefaults = (fields: LogFields): LogFields => ({
+    ...fields,
+    ...defaults,
+  });
+
+  return {
+    debug: (fields) => logger.debug(withDefaults(fields)),
+    info: (fields) => logger.info(withDefaults(fields)),
+    warn: (fields) => logger.warn(withDefaults(fields)),
+    error: (fields) => logger.error(withDefaults(fields)),
+  };
+};

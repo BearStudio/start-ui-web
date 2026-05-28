@@ -12,9 +12,13 @@ import type {
   Permission,
   RequestScope,
 } from '@/modules/auth';
-import { scopeFromUser } from '@/modules/auth';
+import { scopeFromUser, scopeKeyFromScope } from '@/modules/auth';
+import {
+  createRequestLogger,
+  type Logger,
+  type LogLevel,
+} from '@/modules/kernel';
 import type { UserId } from '@/modules/kernel/domain/ids';
-import { logger } from '@/modules/kernel/infrastructure/logger/pino';
 import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/server';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
 import { envClient } from '@/platform/env/client';
@@ -24,11 +28,7 @@ import { createNoOpTelemetry } from '@/platform/telemetry';
 
 type ServerTimingEntry = { name: string; durationMs: number };
 
-export type ProcedureLogger = {
-  warn: (...args: unknown[]) => void;
-  error: (...args: unknown[]) => void;
-  info: (...args: unknown[]) => void;
-};
+export type ProcedureLogger = Logger;
 
 export type ProtectedContext = {
   user: AuthenticatedUser;
@@ -48,7 +48,15 @@ export type PublicContext = Omit<
 
 type ServerContextDeps = {
   getAuthUseCases: () => AuthUseCases;
+  logger?: Logger;
   telemetry?: TelemetryAdapter;
+};
+
+const noOpLogger: Logger = {
+  debug: () => {},
+  info: () => {},
+  warn: () => {},
+  error: () => {},
 };
 
 const formatTiming = (entries: ServerTimingEntry[]) =>
@@ -70,7 +78,11 @@ const finalize = (
   start: number
 ) => {
   const totalDuration = performance.now() - start;
-  procedureLogger.info({ durationMs: totalDuration }, 'After');
+  procedureLogger.info({
+    event: 'server_fn.request.finish',
+    direction: 'inbound',
+    durationMs: totalDuration,
+  });
 
   const dbTimings = timingStore.getStore()?.db ?? [];
   const allTimings: ServerTimingEntry[] = [
@@ -92,10 +104,18 @@ const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
     mappedError !== error;
 
   if (shouldLogOriginalError) {
-    procedureLogger.error(error, 'Unhandled error before mapping');
+    procedureLogger.error({
+      event: 'server_fn.error.unhandled',
+      direction: 'inbound',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Unhandled error before mapping',
+      exception: error,
+    });
   }
 
-  const logLevel = (() => {
+  const logLevel: LogLevel = (() => {
     if (!(mappedError instanceof Error)) return 'error';
     if (
       mappedError instanceof ServerFnError &&
@@ -110,7 +130,19 @@ const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
     }
     return 'error';
   })();
-  procedureLogger[logLevel](mappedError);
+  procedureLogger[logLevel]({
+    event: 'server_fn.error.mapped',
+    direction: 'inbound',
+    error: mappedError instanceof Error ? mappedError.message : 'Unknown error',
+    details:
+      mappedError instanceof ServerFnError
+        ? {
+            code: mappedError.code,
+            data: mappedError.data,
+            status: mappedError.status,
+          }
+        : { value: mappedError },
+  });
 
   return mappedError;
 };
@@ -133,6 +165,7 @@ const assertNotDemoMode = () => {
 
 export const createServerContextTools = ({
   getAuthUseCases,
+  logger = noOpLogger,
   telemetry = createNoOpTelemetry(),
 }: ServerContextDeps) => {
   const getSession = async (timings: ServerTimingEntry[]) => {
@@ -150,8 +183,11 @@ export const createServerContextTools = ({
     const start = performance.now();
     const requestId = randomUUID();
     const timings: ServerTimingEntry[] = [];
-    let procedureLogger = logger.child({ requestId, scope: 'procedure' });
-    procedureLogger.info('Before');
+    let procedureLogger = createRequestLogger({ logger, requestId });
+    procedureLogger.info({
+      event: 'server_fn.request.start',
+      direction: 'inbound',
+    });
 
     return await timingStore.run({ db: [] }, async () => {
       try {
@@ -164,11 +200,13 @@ export const createServerContextTools = ({
             role: session.user.role,
             tenantId: null,
           });
-          procedureLogger = logger.child({
+          const scope = scopeFromUser(session.user);
+          procedureLogger = createRequestLogger({
+            logger,
             requestId,
             userId: session.user.id,
-            role: session.user.role,
-            scope: 'procedure',
+            sessionId: session.session.id,
+            scopeKey: scopeKeyFromScope(scope),
           });
         } else {
           telemetry.setUser(null);

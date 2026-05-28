@@ -17,6 +17,7 @@ const genre: Genre = {
 };
 
 const logger = {
+  debug: () => {},
   info: () => {},
   warn: () => {},
   error: () => {},
