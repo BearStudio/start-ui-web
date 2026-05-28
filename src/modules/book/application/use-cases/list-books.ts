@@ -23,7 +23,7 @@ export async function listBooks(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('book.list', { event: 'book.list' });
+  deps.logger.info({ event: 'book.list' });
   const value = await deps.bookRepository.list({
     cursor: input.cursor,
     limit: input.limit,

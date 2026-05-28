@@ -28,7 +28,7 @@ type BookServerRuntimeDeps = {
 const getDeps = createServerOnlyFn(async (): Promise<BookServerRuntimeDeps> => {
   const [
     { getBookUseCases },
-    { getKernelForProcedureLogger },
+    { getKernel },
     { withProtectedContext, withProtectedMutation },
   ] = await Promise.all([
     import('@/composition/book'),
@@ -40,7 +40,7 @@ const getDeps = createServerOnlyFn(async (): Promise<BookServerRuntimeDeps> => {
     handlers: createBookHandlers({
       getUseCases: (ctx) =>
         getBookUseCases({
-          kernel: getKernelForProcedureLogger(ctx.logger),
+          kernel: getKernel({ logger: ctx.logger }),
         }),
     }),
     withProtectedContext,

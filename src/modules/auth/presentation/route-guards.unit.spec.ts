@@ -1,12 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { CurrentSession } from '@/modules/auth';
-import {
-  toEmailAddress,
-  toScopeKey,
-  toSessionId,
-  toUserId,
-} from '@/modules/kernel';
+import { type CurrentSession, scopeKeyFromScope } from '@/modules/auth';
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 
 import { parseSafeRedirectPath } from './redirects';
 import {
@@ -24,29 +19,32 @@ const location = {
 
 const makeSession = (
   overrides: Partial<CurrentSession['user']> = {}
-): CurrentSession => ({
-  user: {
-    id: toUserId('user-1'),
-    email: toEmailAddress('user@example.com'),
-    name: 'User One',
-    image: null,
-    role: 'admin',
-    onboardedAt: new Date('2024-01-01T00:00:00.000Z'),
-    ...overrides,
-  },
-  session: {
-    id: toSessionId('session-1'),
-    expiresAt: new Date('2024-01-02T00:00:00.000Z'),
-  },
-  scope: {
+): CurrentSession => {
+  const role = (overrides.role ?? 'admin') as CurrentSession['scope']['role'];
+  const scope: CurrentSession['scope'] = {
     userId: toUserId('user-1'),
-    role: (overrides.role ?? 'admin') as CurrentSession['scope']['role'],
+    role,
     tenantId: null,
-  },
-  scopeKey: toScopeKey(
-    `user:user-1:role:${overrides.role ?? 'admin'}:tenant:none`
-  ),
-});
+  };
+
+  return {
+    user: {
+      id: toUserId('user-1'),
+      email: toEmailAddress('user@example.com'),
+      name: 'User One',
+      image: null,
+      role: 'admin',
+      onboardedAt: new Date('2024-01-01T00:00:00.000Z'),
+      ...overrides,
+    },
+    session: {
+      id: toSessionId('session-1'),
+      expiresAt: new Date('2024-01-02T00:00:00.000Z'),
+    },
+    scope,
+    scopeKey: scopeKeyFromScope(scope),
+  };
+};
 
 const makeContext = (session: CurrentSession | null) => ({
   auth: {

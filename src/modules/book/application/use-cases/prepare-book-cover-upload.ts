@@ -32,9 +32,11 @@ export async function prepareBookCoverUpload(
   });
   if (!objectKey) return fail('invalid_file_type');
 
-  deps.logger.info('book.cover_upload.prepare', {
+  deps.logger.info({
     event: 'book.cover_upload.prepare',
-    fileType: input.fileType,
+    details: {
+      fileType: input.fileType,
+    },
   });
   return ok({ objectKey });
 }

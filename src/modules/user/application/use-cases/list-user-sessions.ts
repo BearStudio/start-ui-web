@@ -23,9 +23,11 @@ export async function listUserSessions(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('user.sessions.list', {
+  deps.logger.info({
     event: 'user.sessions.list',
-    userId: input.userId,
+    details: {
+      targetUserId: input.userId,
+    },
   });
   const value = await deps.userRepository.listSessions({
     userId: input.userId,

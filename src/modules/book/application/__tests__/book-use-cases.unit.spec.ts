@@ -22,6 +22,7 @@ const book: Book = {
 };
 
 const logger = {
+  debug: () => {},
   info: () => {},
   warn: () => {},
   error: () => {},

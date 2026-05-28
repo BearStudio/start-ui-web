@@ -12,10 +12,14 @@ import {
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
-import { createPinoLogger } from '@/modules/kernel/infrastructure/logger/pino';
+import {
+  createPinoAppLogger,
+  createPinoLogger,
+} from '@/modules/kernel/infrastructure/logger/pino';
 
 import { createCachedFactory } from './shared/singleton';
 import type { Overrides } from './shared/types';
+import { telemetryProxy } from './telemetry';
 
 type CacheEntry = {
   value: unknown;
@@ -54,11 +58,10 @@ const memoryCache = (clock: Clock): CacheGateway => {
 
 const createProductionLogger = (): Logger => {
   const pinoLogger = createPinoLogger();
-  return {
-    info: (event, fields) => pinoLogger.info({ event, ...fields }, event),
-    warn: (event, fields) => pinoLogger.warn({ event, ...fields }, event),
-    error: (event, fields) => pinoLogger.error({ event, ...fields }, event),
-  };
+  return createPinoAppLogger({
+    pino: pinoLogger,
+    telemetry: telemetryProxy,
+  });
 };
 
 const createProductionPermissionChecker = (): PermissionChecker => ({
@@ -86,12 +89,6 @@ export type Kernel = {
 };
 
 export type KernelOverrides = Overrides<Kernel>;
-
-type ProcedureLoggerLike = {
-  info: (fields: Record<string, unknown>, message: string) => void;
-  warn: (fields: Record<string, unknown>, message: string) => void;
-  error: (fields: Record<string, unknown>, message: string) => void;
-};
 
 const buildDefaultKernel = (): Kernel => {
   const db = getDefaultDbClient();
@@ -133,19 +130,6 @@ export const getKernel = (overrides?: KernelOverrides): Kernel => {
     permissionChecker: overrides.permissionChecker ?? base.permissionChecker,
   };
 };
-
-export const getKernelForProcedureLogger = (
-  procedureLogger: ProcedureLoggerLike,
-  overrides?: Omit<KernelOverrides, 'logger'>
-) =>
-  getKernel({
-    ...overrides,
-    logger: {
-      info: (event, fields) => procedureLogger.info(fields ?? {}, event),
-      warn: (event, fields) => procedureLogger.warn(fields ?? {}, event),
-      error: (event, fields) => procedureLogger.error(fields ?? {}, event),
-    },
-  });
 
 /** Test-only. */
 export const __resetKernelComposition = () => factory.reset();

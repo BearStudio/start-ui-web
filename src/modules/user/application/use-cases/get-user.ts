@@ -21,7 +21,10 @@ export async function getUser(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('user.get', { event: 'user.get', userId: input.id });
+  deps.logger.info({
+    event: 'user.get',
+    details: { targetUserId: input.id },
+  });
   const value = await deps.userRepository.getById(input.id);
   if (!value) return fail('not_found');
   return ok(value);

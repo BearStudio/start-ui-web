@@ -188,4 +188,19 @@ describe('strict modular monolith layout', () => {
       findImportViolations(files, /from\s+['"]better-auth(?:\/[^'"]*)?['"]/g)
     ).toEqual([]);
   });
+
+  it('keeps business code off the Sentry SDK', () => {
+    const files = fs
+      .readdirSync(path.join(root, 'src/modules'), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .flatMap((entry) => {
+        const moduleRoot = path.join(root, 'src/modules', entry.name);
+        return [
+          ...listSourceFiles(path.join(moduleRoot, 'domain')),
+          ...listSourceFiles(path.join(moduleRoot, 'application')),
+        ];
+      });
+
+    expect(findImportViolations(files, /from\s+['"]@sentry\//g)).toEqual([]);
+  });
 });

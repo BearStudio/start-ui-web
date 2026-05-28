@@ -1,3 +1,5 @@
+import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
+
 import type { TelemetryAdapter } from '@/platform/telemetry';
 
 /**
@@ -12,6 +14,8 @@ export type SentryLike = {
     context?: {
       tags?: Record<string, string>;
       extra?: Record<string, unknown>;
+      fingerprint?: string[];
+      level?: 'debug' | 'info' | 'warning' | 'error' | 'fatal';
     }
   ) => string;
   setUser: (
@@ -28,6 +32,41 @@ export type SentryLike = {
   ) => T;
 };
 
+type SentryEventLike = {
+  contexts?: Record<string, unknown>;
+  extra?: Record<string, unknown>;
+  tags?: Record<string, unknown>;
+};
+
+const toStringTags = (tags: unknown): Record<string, string> | undefined => {
+  if (!tags || typeof tags !== 'object' || Array.isArray(tags)) {
+    return undefined;
+  }
+
+  const entries = Object.entries(tags).filter(
+    (entry): entry is [string, string] => typeof entry[1] === 'string'
+  );
+
+  return entries.length ? Object.fromEntries(entries) : undefined;
+};
+
+export const sanitizeSentryEvent = <TEvent extends SentryEventLike>(
+  event: TEvent
+): TEvent => {
+  const sanitized = sanitizeLogFields({
+    contexts: event.contexts ?? {},
+    extra: event.extra ?? {},
+    tags: event.tags ?? {},
+  });
+
+  return {
+    ...event,
+    contexts: sanitized.contexts as Record<string, unknown>,
+    extra: sanitized.extra as Record<string, unknown>,
+    tags: toStringTags(sanitized.tags),
+  } as TEvent;
+};
+
 export const createSentryTelemetryAdapter = (
   Sentry: SentryLike
 ): TelemetryAdapter => ({
@@ -35,6 +74,8 @@ export const createSentryTelemetryAdapter = (
     Sentry.captureException(error, {
       tags: context?.tags,
       extra: context?.extra,
+      fingerprint: context?.fingerprint,
+      level: context?.level,
     });
   },
   setUser: (user) => {
@@ -46,7 +87,6 @@ export const createSentryTelemetryAdapter = (
     }
     Sentry.setUser({
       id: user.id,
-      email: user.email ?? undefined,
       segment: user.role ?? undefined,
     });
     Sentry.setTag?.('role', user.role ?? 'none');

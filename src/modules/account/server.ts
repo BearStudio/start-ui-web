@@ -23,21 +23,18 @@ type AccountServerRuntimeDeps = {
 
 const getDeps = createServerOnlyFn(
   async (): Promise<AccountServerRuntimeDeps> => {
-    const [
-      { getAccountUseCases },
-      { getKernelForProcedureLogger },
-      { withProtectedMutation },
-    ] = await Promise.all([
-      import('@/composition/account'),
-      import('@/composition/kernel'),
-      import('@/modules/auth/server'),
-    ]);
+    const [{ getAccountUseCases }, { getKernel }, { withProtectedMutation }] =
+      await Promise.all([
+        import('@/composition/account'),
+        import('@/composition/kernel'),
+        import('@/modules/auth/server'),
+      ]);
 
     return {
       handlers: createAccountHandlers({
         getUseCases: (ctx) =>
           getAccountUseCases({
-            kernel: getKernelForProcedureLogger(ctx.logger),
+            kernel: getKernel({ logger: ctx.logger }),
           }),
       }),
       withProtectedMutation,

@@ -31,7 +31,7 @@ type UserServerRuntimeDeps = {
 const getDeps = createServerOnlyFn(async (): Promise<UserServerRuntimeDeps> => {
   const [
     { getUserUseCases },
-    { getKernelForProcedureLogger },
+    { getKernel },
     { withProtectedContext, withProtectedMutation },
   ] = await Promise.all([
     import('@/composition/user'),
@@ -43,7 +43,7 @@ const getDeps = createServerOnlyFn(async (): Promise<UserServerRuntimeDeps> => {
     handlers: createUserHandlers({
       getUseCases: (ctx) =>
         getUserUseCases({
-          kernel: getKernelForProcedureLogger(ctx.logger),
+          kernel: getKernel({ logger: ctx.logger }),
         }),
     }),
     withProtectedContext,

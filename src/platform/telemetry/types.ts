@@ -19,6 +19,8 @@ export type TelemetryCaptureContext = {
   tags?: Record<string, string>;
   /** High-cardinality structured data (e.g. inputs, ids). */
   extra?: Record<string, unknown>;
+  fingerprint?: string[];
+  level?: 'debug' | 'info' | 'warning' | 'error' | 'fatal';
 };
 
 export type TelemetrySpanOptions = {

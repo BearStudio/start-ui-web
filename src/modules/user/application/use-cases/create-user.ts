@@ -22,7 +22,7 @@ export async function createUser(
   if (!allowed) return fail('forbidden');
 
   try {
-    deps.logger.info('user.create', { event: 'user.create' });
+    deps.logger.info({ event: 'user.create' });
     const value = await deps.userRepository.create(input.user);
     return ok(value);
   } catch (error) {

@@ -93,6 +93,7 @@ function makePermissionChecker(
 
 function makeLogger(): Logger {
   return {
+    debug: vi.fn<Logger['debug']>(),
     info: vi.fn<Logger['info']>(),
     warn: vi.fn<Logger['warn']>(),
     error: vi.fn<Logger['error']>(),
@@ -217,9 +218,7 @@ describe('user use cases', () => {
         limit: 20,
         searchTerm: 'alice',
       });
-      expect(logger.info).toHaveBeenCalledWith('user.list', {
-        event: 'user.list',
-      });
+      expect(logger.info).toHaveBeenCalledWith({ event: 'user.list' });
     });
 
     it('does not list users without permission', async () => {
@@ -255,9 +254,9 @@ describe('user use cases', () => {
         userListPermission
       );
       expect(repo.getById).toHaveBeenCalledWith(userId);
-      expect(logger.info).toHaveBeenCalledWith('user.get', {
+      expect(logger.info).toHaveBeenCalledWith({
         event: 'user.get',
-        userId,
+        details: { targetUserId: userId },
       });
     });
 
@@ -313,9 +312,7 @@ describe('user use cases', () => {
         userCreatePermission
       );
       expect(repo.create).toHaveBeenCalledWith(input);
-      expect(logger.info).toHaveBeenCalledWith('user.create', {
-        event: 'user.create',
-      });
+      expect(logger.info).toHaveBeenCalledWith({ event: 'user.create' });
     });
 
     it('does not create users without permission', async () => {
@@ -437,9 +434,9 @@ describe('user use cases', () => {
         role: undefined,
         emailVerified: false,
       });
-      expect(logger.info).toHaveBeenCalledWith('user.update', {
+      expect(logger.info).toHaveBeenCalledWith({
         event: 'user.update',
-        userId,
+        details: { targetUserId: userId },
       });
     });
 
@@ -644,9 +641,9 @@ describe('user use cases', () => {
         userDeletePermission
       );
       expect(auth.removeUser).toHaveBeenCalledWith(userId);
-      expect(logger.info).toHaveBeenCalledWith('user.delete', {
+      expect(logger.info).toHaveBeenCalledWith({
         event: 'user.delete',
-        userId,
+        details: { targetUserId: userId },
       });
     });
 
@@ -732,9 +729,9 @@ describe('user use cases', () => {
         cursor,
         limit: 10,
       });
-      expect(logger.info).toHaveBeenCalledWith('user.sessions.list', {
+      expect(logger.info).toHaveBeenCalledWith({
         event: 'user.sessions.list',
-        userId,
+        details: { targetUserId: userId },
       });
     });
 

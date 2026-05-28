@@ -3,7 +3,10 @@ import * as Sentry from '@sentry/tanstackstart-react';
 import { envClient } from '@/platform/env/client';
 
 import { setTelemetry } from './index';
-import { createSentryTelemetryAdapter } from './sentry-adapter';
+import {
+  createSentryTelemetryAdapter,
+  sanitizeSentryEvent,
+} from './sentry-adapter';
 
 let initialized = false;
 
@@ -25,6 +28,8 @@ export const initTelemetryClient = (router?: unknown) => {
     dsn: envClient.VITE_SENTRY_DSN,
     environment: envClient.VITE_SENTRY_ENVIRONMENT,
     tracesSampleRate: envClient.VITE_SENTRY_TRACES_SAMPLE_RATE,
+    sendDefaultPii: false,
+    beforeSend: sanitizeSentryEvent,
     integrations: router
       ? [Sentry.tanstackRouterBrowserTracingIntegration(router)]
       : [Sentry.browserTracingIntegration()],

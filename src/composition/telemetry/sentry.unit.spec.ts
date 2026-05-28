@@ -55,9 +55,71 @@ describe('Sentry telemetry composition', () => {
     ).not.toHaveBeenCalled();
     expect(sentryMocks.init).toHaveBeenCalledWith(
       expect.objectContaining({
+        beforeSend: expect.any(Function),
         integrations: ['browser-tracing'],
+        sendDefaultPii: false,
       })
     );
+  });
+
+  it('passes capture context through to Sentry', async () => {
+    const { createSentryTelemetryAdapter } = await import('./sentry-adapter');
+    const captureException = vi.fn(() => 'event-id');
+    const adapter = createSentryTelemetryAdapter({
+      captureException,
+      setUser: vi.fn(),
+      setTag: vi.fn(),
+      startSpan: vi.fn((_options, fn) => fn()),
+    });
+    const error = new Error('boom');
+
+    adapter.captureException(error, {
+      fingerprint: ['email-send'],
+      level: 'error',
+      tags: { event: 'email.send.failed' },
+      extra: { statusCode: 401 },
+    });
+
+    expect(captureException).toHaveBeenCalledWith(error, {
+      fingerprint: ['email-send'],
+      level: 'error',
+      tags: { event: 'email.send.failed' },
+      extra: { statusCode: 401 },
+    });
+  });
+
+  it('sanitizes Sentry event tags, extras, and contexts before send', async () => {
+    const { sanitizeSentryEvent } = await import('./sentry-adapter');
+
+    expect(
+      sanitizeSentryEvent({
+        contexts: {
+          request: {
+            authorization: 'Bearer token',
+          },
+        },
+        extra: {
+          email: 'person@example.com',
+        },
+        tags: {
+          email: 'person@example.com',
+          event: 'email.send.failed',
+        },
+      })
+    ).toEqual({
+      contexts: {
+        request: {
+          authorization: '[REDACTED]',
+        },
+      },
+      extra: {
+        email: '[REDACTED]',
+      },
+      tags: {
+        email: '[REDACTED]',
+        event: 'email.send.failed',
+      },
+    });
   });
 
   it('clears Sentry user tags when the telemetry user is unset', async () => {

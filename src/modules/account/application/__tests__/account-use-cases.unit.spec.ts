@@ -6,6 +6,7 @@ import type { AccountRepository } from '../ports/account-repository';
 import { createAccountUseCases } from '../../factory';
 
 const logger = {
+  debug: () => {},
   info: () => {},
   warn: () => {},
   error: () => {},

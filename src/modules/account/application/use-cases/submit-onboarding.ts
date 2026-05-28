@@ -18,7 +18,7 @@ export async function submitOnboarding(
   if (!isAccountNamePresent(input.name)) return fail('invalid');
 
   const currentUserId = scopeUserId(input.scope);
-  deps.logger.info('account.submit_onboarding', {
+  deps.logger.info({
     event: 'account.submit_onboarding',
     userId: currentUserId,
   });

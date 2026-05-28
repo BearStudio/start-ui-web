@@ -18,7 +18,7 @@ export async function updateAccountInfo(
   if (!isAccountNamePresent(input.name)) return fail('invalid');
 
   const currentUserId = scopeUserId(input.scope);
-  deps.logger.info('account.update_info', {
+  deps.logger.info({
     event: 'account.update_info',
     userId: currentUserId,
   });

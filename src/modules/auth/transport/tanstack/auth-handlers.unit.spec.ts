@@ -41,7 +41,12 @@ describe('auth transport handlers', () => {
         user: null,
         session: null,
         scope: null,
-        logger: { info: () => {}, warn: () => {}, error: () => {} },
+        logger: {
+          debug: () => {},
+          info: () => {},
+          warn: () => {},
+          error: () => {},
+        },
       })
     ).toBeNull();
   });

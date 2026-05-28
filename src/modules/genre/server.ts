@@ -22,21 +22,18 @@ type GenreServerRuntimeDeps = {
 
 const getDeps = createServerOnlyFn(
   async (): Promise<GenreServerRuntimeDeps> => {
-    const [
-      { getGenreUseCases },
-      { getKernelForProcedureLogger },
-      { withProtectedContext },
-    ] = await Promise.all([
-      import('@/composition/genre'),
-      import('@/composition/kernel'),
-      import('@/modules/auth/server'),
-    ]);
+    const [{ getGenreUseCases }, { getKernel }, { withProtectedContext }] =
+      await Promise.all([
+        import('@/composition/genre'),
+        import('@/composition/kernel'),
+        import('@/modules/auth/server'),
+      ]);
 
     return {
       handlers: createGenreHandlers({
         getUseCases: (ctx) =>
           getGenreUseCases({
-            kernel: getKernelForProcedureLogger(ctx.logger),
+            kernel: getKernel({ logger: ctx.logger }),
           }),
       }),
       withProtectedContext,

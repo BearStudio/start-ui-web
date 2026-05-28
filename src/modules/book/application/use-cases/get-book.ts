@@ -21,7 +21,10 @@ export async function getBook(
   });
   if (!allowed) return fail('forbidden');
 
-  deps.logger.info('book.get', { event: 'book.get', bookId: input.id });
+  deps.logger.info({
+    event: 'book.get',
+    details: { bookId: input.id },
+  });
   const value = await deps.bookRepository.getById(input.id);
   if (!value) return fail('not_found');
   return ok(value);
