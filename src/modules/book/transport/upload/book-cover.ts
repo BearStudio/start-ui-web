@@ -2,46 +2,75 @@ import { RejectUpload, route } from '@better-upload/server';
 
 import i18n from '@/platform/lib/i18n';
 
-import { getAuthUseCases } from '@/modules/auth/server';
+import { type AuthSession, scopeFromUser } from '@/modules/auth';
+import type { BookUseCases } from '@/modules/book';
 
-import { bookCoverAcceptedFileTypes } from '../../domain/book-policy';
+import {
+  bookCoverAcceptedFileTypes,
+  bookCoverMaxFileSizeBytes,
+} from '../../domain/book-policy';
 
-export const bookCover = route({
-  fileTypes: bookCoverAcceptedFileTypes,
-  maxFileSize: 1024 * 1024 * 100, // 100Mb
-  onBeforeUpload: async ({ req, file }) => {
-    const auth = getAuthUseCases();
-    const session = await auth.getCurrentSession({
-      headers: req.headers,
-    });
-    if (!session?.user) {
-      throw new RejectUpload(
-        i18n.t('book:manager.uploadErrors.NOT_AUTHENTICATED')
-      );
-    }
+type BookCoverUploadDeps = {
+  getCurrentSession: (headers: Headers) => Promise<AuthSession | null>;
+  getUseCases: () => Pick<BookUseCases, 'prepareCoverUpload'>;
+};
 
-    // Only admins should be able to update book covers
-    const canUpdateBookCover = await auth.checkPermission({
-      headers: req.headers,
-      userId: session.user.id,
-      permissions: {
-        book: ['create', 'update'],
-      },
-    });
+type BookCoverUploadErrorKey =
+  | 'NOT_AUTHENTICATED'
+  | 'UNAUTHORIZED'
+  | 'invalid_file_type';
 
-    if (!canUpdateBookCover) {
-      throw new RejectUpload(i18n.t('book:manager.uploadErrors.UNAUTHORIZED'));
-    }
+const uploadErrorTranslationKeys = {
+  NOT_AUTHENTICATED: 'book:manager.uploadErrors.NOT_AUTHENTICATED',
+  UNAUTHORIZED: 'book:manager.uploadErrors.UNAUTHORIZED',
+  invalid_file_type: 'book:manager.uploadErrors.invalid_file_type',
+} as const satisfies Record<BookCoverUploadErrorKey, string>;
 
-    // normalize file extension from detected mimetype (file.type)
-    const fileExtension = file.type.split('/').at(-1) as string;
+const rejectUpload = (key: BookCoverUploadErrorKey): never => {
+  throw new RejectUpload(i18n.t(uploadErrorTranslationKeys[key]));
+};
+
+export const handleBookCoverBeforeUpload = async (
+  deps: BookCoverUploadDeps,
+  input: { headers: Headers; fileType: string }
+) => {
+  const session = await deps.getCurrentSession(input.headers);
+  const user = session?.user;
+  if (!user) {
+    return rejectUpload('NOT_AUTHENTICATED');
+  }
+
+  const prepared = await deps.getUseCases().prepareCoverUpload({
+    scope: scopeFromUser(user),
+    fileType: input.fileType,
+  });
+
+  if (prepared.ok) {
     return {
-      // I think it is a good idea to create a random file id
-      // This allow us to invalidate cache (because the id will always be random)
-      // and it also prevent the user to upload a file with the same name (aka. objectKey), but different file content
       objectInfo: {
-        key: `books/${crypto.randomUUID()}.${fileExtension}`,
+        key: prepared.value.objectKey,
       },
     };
-  },
-});
+  }
+
+  if (prepared.reason === 'forbidden') {
+    rejectUpload('UNAUTHORIZED');
+  }
+  rejectUpload('invalid_file_type');
+};
+
+export const createBookCoverUploadRoute = (deps: BookCoverUploadDeps) =>
+  route({
+    fileTypes: [...bookCoverAcceptedFileTypes],
+    maxFileSize: bookCoverMaxFileSizeBytes,
+    onBeforeUpload: async ({ req, file }) => {
+      return handleBookCoverBeforeUpload(deps, {
+        headers: req.headers,
+        fileType: file.type,
+      });
+    },
+  });
+
+export type BookCoverUploadRoute = ReturnType<
+  typeof createBookCoverUploadRoute
+>;

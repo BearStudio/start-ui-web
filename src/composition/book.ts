@@ -14,6 +14,7 @@ const buildBookUseCases = (overrides?: BookOverrides) => {
   return createBookUseCases({
     bookRepository:
       overrides?.bookRepository ?? new BookRepositoryDrizzle(kernel.db),
+    idGenerator: kernel.idGenerator,
     permissionChecker: kernel.permissionChecker,
     logger: kernel.logger,
   });

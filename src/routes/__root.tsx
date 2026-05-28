@@ -9,7 +9,6 @@ import {
   useRouteContext,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { createServerFn } from '@tanstack/react-start';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,15 +24,9 @@ import {
   EnvHint,
   getEnvHintTitlePrefix,
 } from '@/modules/devtools/presentation';
-import { getUserLanguage } from '@/modules/kernel/server';
+import { initSsrApp } from '@/modules/kernel/server';
 import type { RouterContext } from '@/platform/router/context';
 import appCss from '@/platform/styles/app.css?url';
-
-export const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
-  return {
-    language: getUserLanguage(),
-  };
-});
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: async () => {

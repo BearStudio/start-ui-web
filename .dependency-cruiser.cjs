@@ -108,8 +108,18 @@ module.exports = {
     {
       name: 'transport-no-presentation',
       severity: 'error',
-      from: { path: '^src/modules/(book|user|genre|account)/transport' },
-      to: { path: '^src/modules/(book|user|genre|account)/presentation' },
+      from: { path: '^src/modules/[^/]+/transport' },
+      to: { path: '^src/modules/(?!kernel)[^/]+/presentation' },
+    },
+    {
+      name: 'server-entrypoints-no-feature-internals',
+      severity: 'error',
+      comment:
+        'Server function entrypoints stay thin; use transport handlers and composition instead of feature internals.',
+      from: { path: '^src/modules/[^/]+/(server|server-functions)\\.ts$' },
+      to: {
+        path: '^src/modules/(?!kernel)[^/]+/(infrastructure|presentation)',
+      },
     },
     {
       name: 'kernel-no-feature-imports',
