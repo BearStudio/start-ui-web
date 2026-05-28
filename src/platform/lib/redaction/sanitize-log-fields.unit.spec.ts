@@ -1,6 +1,8 @@
 import { Buffer } from 'node:buffer';
 import { describe, expect, it, vi } from 'vitest';
 
+import { fc, PROPERTY_DEFAULTS, test } from '@/tests/support/property-testing';
+
 import { sanitizeLogFields } from './sanitize-log-fields';
 
 const sensitiveKeys = new Set([
@@ -11,6 +13,64 @@ const sensitiveKeys = new Set([
   'phone',
   'user',
 ]);
+
+const redactionTextCharacters = [
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  ' ',
+  '-',
+  '_',
+] as const;
+
+const redactionText = fc
+  .array(fc.constantFrom(...redactionTextCharacters), { maxLength: 30 })
+  .map((characters) => characters.join(''));
+
+const sensitiveKeyVariant = fc
+  .constantFrom(...sensitiveKeys)
+  .chain((key) =>
+    fc.constantFrom(
+      key,
+      key.toUpperCase(),
+      `${key.charAt(0).toUpperCase()}${key.slice(1).toLowerCase()}`
+    )
+  );
+
+const secretValue = fc.uuid().map((value) => `secret-${value}`);
 
 describe('sanitizeLogFields', () => {
   it('uses production-safe default sensitive keys without redacting stable ids', () => {
@@ -321,4 +381,53 @@ describe('sanitizeLogFields', () => {
       list: [{ safe: 'kept' }, { safe: 'kept' }],
     });
   });
+
+  test.prop([sensitiveKeyVariant, redactionText], PROPERTY_DEFAULTS)(
+    'redacts generated sensitive keys regardless of casing',
+    (key, value) => {
+      expect(sanitizeLogFields({ [key]: value }, { sensitiveKeys })).toEqual({
+        [key]: '[REDACTED]',
+      });
+    }
+  );
+
+  test.prop(
+    [redactionText, fc.emailAddress(), redactionText],
+    PROPERTY_DEFAULTS
+  )(
+    'redacts generated email-shaped strings inside messages',
+    (before, email, after) => {
+      expect(
+        sanitizeLogFields(
+          { message: `${before} ${email} ${after}` },
+          { sensitiveKeys }
+        )
+      ).toEqual({
+        message: `${before} [REDACTED] ${after}`,
+      });
+    }
+  );
+
+  test.prop([fc.emailAddress(), secretValue], PROPERTY_DEFAULTS)(
+    'does not leak generated nested sensitive values after serialization',
+    (email, secret) => {
+      const sanitized = sanitizeLogFields(
+        {
+          nested: {
+            list: [{ message: `Contact ${email}` }, { name: secret }],
+            object: {
+              phone: secret,
+              user: { email },
+            },
+          },
+        },
+        { sensitiveKeys }
+      );
+      const serialized = JSON.stringify(sanitized);
+
+      expect(serialized).toContain('[REDACTED]');
+      expect(serialized).not.toContain(email);
+      expect(serialized).not.toContain(secret);
+    }
+  );
 });

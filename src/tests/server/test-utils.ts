@@ -26,6 +26,7 @@ type MockedDb = {
     genre: DrizzleQueryMock;
     account: DrizzleQueryMock;
     verification: DrizzleQueryMock;
+    emailStatus: DrizzleQueryMock;
   };
   select: Mock;
   insert: Mock;
@@ -81,6 +82,7 @@ function buildMockDb(): MockedDb {
       genre: makeQueryMock(),
       account: makeQueryMock(),
       verification: makeQueryMock(),
+      emailStatus: makeQueryMock(),
     },
     select: vi.fn(() => chainResult([])),
     insert: vi.fn(() => chainResult([])),

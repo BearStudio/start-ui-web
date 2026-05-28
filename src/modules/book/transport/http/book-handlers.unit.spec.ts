@@ -2,12 +2,22 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import { createAuthenticatedContext } from '@/tests/server/test-utils';
+import { fc, PROPERTY_DEFAULTS, test } from '@/tests/support/property-testing';
 
 import {
   createBookHandlers,
   zCreateInput,
   zGetAllInput,
 } from './book-handlers';
+
+const validPaginationLimit = fc.integer({ max: 100, min: 1 });
+const invalidPaginationLimit = fc.oneof(
+  fc.integer({ max: 0, min: -1_000 }),
+  fc.integer({ max: 1_000, min: 101 }),
+  fc.integer({ max: 99, min: 1 }).map((value) => value + 0.5),
+  fc.constantFrom('NaN', 'abc', '1.5')
+);
+const searchTerm = fc.string({ maxLength: 80 });
 
 describe('book HTTP transport handlers', () => {
   it('maps list input and protected scope to the list use case', async () => {
@@ -73,4 +83,35 @@ describe('book HTTP transport handlers', () => {
       },
     });
   });
+
+  test.prop([validPaginationLimit, fc.boolean()], PROPERTY_DEFAULTS)(
+    'parses generated valid list pagination limits',
+    (limit, asString) => {
+      expect(
+        zGetAllInput().parse({ limit: asString ? String(limit) : limit }).limit
+      ).toBe(limit);
+    }
+  );
+
+  it('defaults missing list pagination limits', () => {
+    expect(zGetAllInput().parse({}).limit).toBe(20);
+  });
+
+  test.prop([invalidPaginationLimit], PROPERTY_DEFAULTS)(
+    'rejects generated invalid list pagination limits',
+    (limit) => {
+      expect(() => zGetAllInput().parse({ limit })).toThrow();
+    }
+  );
+
+  test.prop([searchTerm], PROPERTY_DEFAULTS)(
+    'trims generated list search terms',
+    (term) => {
+      expect(
+        zGetAllInput().parse({ searchTerm: ` \t${term}\n ` })
+      ).toMatchObject({
+        searchTerm: term.trim(),
+      });
+    }
+  );
 });

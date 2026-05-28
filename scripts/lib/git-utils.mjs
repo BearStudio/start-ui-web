@@ -13,6 +13,23 @@ export const runGit = (args) => {
   return result.stdout.trim();
 };
 
+export const runGitStrict = (args) => {
+  const result = spawnSync('git', args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  if (result.status !== 0) {
+    throw new Error(result.stderr.trim() || `git ${args.join(' ')} failed`);
+  }
+
+  return result.stdout;
+};
+
 export const resolveBase = () => {
   const mainBase = runGit(['merge-base', 'HEAD', 'origin/main']);
   if (mainBase) {

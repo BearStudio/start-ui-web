@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { fc, PROPERTY_DEFAULTS, test } from '@/tests/support/property-testing';
+
 import { IdValidationError } from './errors/id-validation-error';
 import {
   toBookId,
@@ -15,6 +17,17 @@ import {
   zSessionId,
   zUserId,
 } from './ids';
+
+const nonBlankString = fc
+  .string({ maxLength: 80 })
+  .filter((value) => value.trim().length > 0);
+
+const whitespaceOnlyString = fc
+  .array(fc.constantFrom(' ', '\t', '\n', '\r', '\v', '\f'), {
+    minLength: 1,
+    maxLength: 32,
+  })
+  .map((characters) => characters.join(''));
 
 describe('kernel domain ids', () => {
   it('parses branded IDs from trimmed strings', () => {
@@ -73,4 +86,39 @@ describe('kernel domain ids', () => {
       });
     }
   });
+
+  test.prop([nonBlankString], PROPERTY_DEFAULTS)(
+    'trims nonblank primitive IDs for all branded constructors',
+    (value) => {
+      const expected = value.trim();
+
+      expect(toUserId(value)).toBe(expected);
+      expect(toBookId(value)).toBe(expected);
+      expect(toGenreId(value)).toBe(expected);
+      expect(toSessionId(value)).toBe(expected);
+      expect(toScopeKey(value)).toBe(expected);
+    }
+  );
+
+  test.prop([whitespaceOnlyString], PROPERTY_DEFAULTS)(
+    'throws first-class validation errors for whitespace-only IDs',
+    (value) => {
+      expect(() => toUserId(value)).toThrow(IdValidationError);
+      expect(() => toBookId(value)).toThrow(IdValidationError);
+      expect(() => toGenreId(value)).toThrow(IdValidationError);
+      expect(() => toSessionId(value)).toThrow(IdValidationError);
+      expect(() => toScopeKey(value)).toThrow(IdValidationError);
+    }
+  );
+
+  test.prop([nonBlankString], PROPERTY_DEFAULTS)(
+    'keeps Zod ID schemas aligned with branded ID constructors',
+    (value) => {
+      expect(zUserId().parse(value)).toBe(toUserId(value));
+      expect(zBookId().parse(value)).toBe(toBookId(value));
+      expect(zGenreId().parse(value)).toBe(toGenreId(value));
+      expect(zSessionId().parse(value)).toBe(toSessionId(value));
+      expect(zScopeKey().parse(value)).toBe(toScopeKey(value));
+    }
+  );
 });

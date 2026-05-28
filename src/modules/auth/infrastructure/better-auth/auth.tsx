@@ -18,17 +18,27 @@ import {
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
 import { envClient } from '@/platform/env/client';
 
-import { AuthEmailPortResend } from './auth-email-port-resend';
 import {
   type CreateAuthOptions,
   normalizeCreateAuthInput,
 } from './create-auth-options';
 import { betterAuthPermissions } from './permissions';
 
+const missingAuthEmailPort = {
+  async sendSignInOtp() {
+    throw new AppError({
+      code: 'AUTH_EMAIL_PORT_NOT_CONFIGURED',
+      category: 'system',
+      status: 500,
+      message: 'Auth email port is not configured',
+    });
+  },
+};
+
 export function createAuth(input?: Database | CreateAuthOptions) {
   const options = normalizeCreateAuthInput(input);
   const database = options.database ?? getDefaultDbClient();
-  const authEmailPort = options.authEmailPort ?? new AuthEmailPortResend();
+  const authEmailPort = options.authEmailPort ?? missingAuthEmailPort;
   const authConfig = getAuthConfig();
 
   return betterAuth({

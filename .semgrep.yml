@@ -6,6 +6,17 @@ rules:
       - typescript
     pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']react-hook-form(?:/[^"'']*)?["'']'
 
+  - id: no-zod-core-usage
+    message: Use Zod's public API; z.core.* is internal and can break across Zod releases.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\bz\.core\.[A-Za-z_$][A-Za-z0-9_$]*'
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
+
   - id: no-session-token-in-client-features
     message: Do not expose or pass raw session tokens through client-facing feature code; use session IDs and resolve tokens server-side.
     severity: ERROR
@@ -150,6 +161,46 @@ rules:
       exclude:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
+
+  - id: no-ambient-new-date-in-business-core
+    message: Domain and application code must use an injected Clock instead of ambient new Date().
+    languages: [typescript]
+    severity: ERROR
+    pattern: new Date()
+    paths:
+      include:
+        - src/modules/*/domain/**/*.ts
+        - src/modules/*/domain/**/*.tsx
+        - src/modules/*/application/**/*.ts
+        - src/modules/*/application/**/*.tsx
+      exclude:
+        - '**/__tests__/**'
+        - '**/*.unit.spec.ts'
+        - '**/*.unit.spec.tsx'
+        - '**/*.spec.ts'
+        - '**/*.spec.tsx'
+        - '**/*.test.ts'
+        - '**/*.test.tsx'
+
+  - id: no-ambient-date-now-in-business-core
+    message: Domain and application code must use an injected Clock instead of ambient Date.now().
+    languages: [typescript]
+    severity: ERROR
+    pattern: Date.now()
+    paths:
+      include:
+        - src/modules/*/domain/**/*.ts
+        - src/modules/*/domain/**/*.tsx
+        - src/modules/*/application/**/*.ts
+        - src/modules/*/application/**/*.tsx
+      exclude:
+        - '**/__tests__/**'
+        - '**/*.unit.spec.ts'
+        - '**/*.unit.spec.tsx'
+        - '**/*.spec.ts'
+        - '**/*.spec.tsx'
+        - '**/*.test.ts'
+        - '**/*.test.tsx'
 
   - id: unescaped-like-pattern
     message: Use escapeLikePattern() from kernel before interpolating into LIKE.

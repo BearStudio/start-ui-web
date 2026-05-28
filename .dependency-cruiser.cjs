@@ -77,6 +77,14 @@ module.exports = {
       to: { path: '^(react|@tanstack/react-router|@tanstack/react-query)' },
     },
     {
+      name: 'business-code-no-sentry-sdk',
+      severity: 'error',
+      comment:
+        'Domain and application code must log through the Logger port instead of importing Sentry directly.',
+      from: { path: '^src/modules/[^/]+/(domain|application)' },
+      to: { path: 'node_modules/@sentry/' },
+    },
+    {
       name: 'no-cross-feature-deep-import',
       severity: 'error',
       comment:
