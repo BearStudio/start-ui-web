@@ -20,6 +20,12 @@ type BookCoverUploadErrorKey =
   | 'UNAUTHORIZED'
   | 'invalid_file_type';
 
+type BookCoverBeforeUploadResult = {
+  objectInfo: {
+    key: string;
+  };
+};
+
 const uploadErrorTranslationKeys = {
   NOT_AUTHENTICATED: 'book:manager.uploadErrors.NOT_AUTHENTICATED',
   UNAUTHORIZED: 'book:manager.uploadErrors.UNAUTHORIZED',
@@ -33,12 +39,9 @@ const rejectUpload = (key: BookCoverUploadErrorKey): never => {
 export const handleBookCoverBeforeUpload = async (
   deps: BookCoverUploadDeps,
   input: { headers: Headers; fileType: string }
-) => {
+): Promise<BookCoverBeforeUploadResult> => {
   const session = await deps.getCurrentSession(input.headers);
-  const user = session?.user;
-  if (!user) {
-    return rejectUpload('NOT_AUTHENTICATED');
-  }
+  const user = session?.user ?? rejectUpload('NOT_AUTHENTICATED');
 
   const prepared = await deps.getUseCases().prepareCoverUpload({
     scope: scopeFromUser(user),
@@ -54,9 +57,9 @@ export const handleBookCoverBeforeUpload = async (
   }
 
   if (prepared.reason === 'forbidden') {
-    rejectUpload('UNAUTHORIZED');
+    return rejectUpload('UNAUTHORIZED');
   }
-  rejectUpload('invalid_file_type');
+  return rejectUpload('invalid_file_type');
 };
 
 export const createBookCoverUploadRoute = (deps: BookCoverUploadDeps) =>

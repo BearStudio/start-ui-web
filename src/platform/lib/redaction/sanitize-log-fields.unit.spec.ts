@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { sanitizeLogFields } from './sanitize-log-fields';
 
@@ -208,6 +208,43 @@ describe('sanitizeLogFields', () => {
         truncatedEntries: 0,
       },
     });
+  });
+
+  it('compacts oversized dense arrays without collecting every array key', () => {
+    const list = Array.from({ length: 10_001 }, (_, index) =>
+      index === 0 ? 'person@example.com' : `safe-${index}`
+    );
+    const originalObjectKeys = Object.keys;
+    const objectKeys = vi
+      .spyOn(Object, 'keys')
+      .mockImplementation((value: object) => {
+        if (value === list) {
+          throw new Error('Oversized arrays must not call Object.keys');
+        }
+
+        return originalObjectKeys(value);
+      });
+
+    let sanitized: Record<string, unknown>;
+    try {
+      sanitized = sanitizeLogFields({ list }, { sensitiveKeys });
+    } finally {
+      objectKeys.mockRestore();
+    }
+
+    const sanitizedList = sanitized.list as {
+      entries: Record<string, unknown>;
+      length: number;
+      truncatedEntries: number;
+      type: string;
+    };
+
+    expect(sanitizedList.type).toBe('[OversizedArray]');
+    expect(sanitizedList.length).toBe(10_001);
+    expect(Object.keys(sanitizedList.entries)).toHaveLength(1_000);
+    expect(sanitizedList.entries['0']).toBe('[REDACTED]');
+    expect(sanitizedList.entries['999']).toBe('safe-999');
+    expect(sanitizedList.truncatedEntries).toBe(9_001);
   });
 
   it('sanitizes array entries without calling an overridden map method', () => {

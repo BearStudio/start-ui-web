@@ -55,7 +55,7 @@ export const Form = ({
         {...rest}
         action="#"
         data-hydrated={hydrated}
-        inert={hydrated ? undefined : true}
+        inert={!hydrated}
         className={cn('flex flex-1 flex-col', className)}
         onSubmit={(e) => {
           e.preventDefault();

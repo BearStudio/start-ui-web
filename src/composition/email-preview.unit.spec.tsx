@@ -4,9 +4,10 @@ import { createEmailPreviewRequestHandler } from './email-preview';
 
 describe('email preview request handler', () => {
   it('hides the debug route when disabled', async () => {
+    const preview = vi.fn();
     const handler = createEmailPreviewRequestHandler({
       enabled: false,
-      preview: vi.fn(),
+      preview,
     });
 
     const response = await handler(
@@ -15,6 +16,7 @@ describe('email preview request handler', () => {
     );
 
     expect(response.status).toBe(404);
+    expect(preview).not.toHaveBeenCalled();
   });
 
   it('parses query props and delegates preview rendering', async () => {

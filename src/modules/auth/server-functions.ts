@@ -37,8 +37,8 @@ export const currentSession = createServerFn({ method: 'GET' }).handler(
   async () => {
     const { handlers, serverContextTools } = await getCurrentSessionDeps();
 
-    return serverContextTools.withPublicContext((ctx) =>
-      Promise.resolve(handlers.currentSession(ctx))
+    return serverContextTools.withPublicContext(async (ctx) =>
+      handlers.currentSession(ctx)
     );
   }
 );
