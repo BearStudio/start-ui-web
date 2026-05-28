@@ -32,7 +32,7 @@ export function createPinoLogger(options?: pino.LoggerOptions) {
         loggerOptions,
         pretty({
           ignore:
-            'event,scope,type,path,pid,hostname,requestId,correlationId,sessionId,scopeKey,tenantId,durationMs,userId,errorCode,errorMessage',
+            'event,scope,type,path,pid,hostname,requestId,correlationId,sessionId,scopeKey,durationMs,userId,errorCode,errorMessage',
           messageFormat: (log, messageKey) => {
             const {
               requestId,
@@ -170,15 +170,22 @@ const prepareLogRecord = (fields: LogFields): Record<string, unknown> => {
 };
 
 const toSanitizedTagMap = (
-  tags: Record<string, string>,
+  tags: Record<string, unknown>,
   redactor: LogRedactor
 ): Record<string, string> | undefined => {
   const sanitized = redactor({ tags }).tags;
   if (!isRecord(sanitized)) return undefined;
 
-  const entries = Object.entries(sanitized).filter(
-    (entry): entry is [string, string] =>
-      typeof entry[1] === 'string' && entry[1].length > 0
+  const entries: Array<[string, string]> = Object.entries(sanitized).flatMap(
+    ([key, value]) => {
+      const tagValue =
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+          ? String(value)
+          : undefined;
+      return tagValue && tagValue.length > 0 ? [[key, tagValue]] : [];
+    }
   );
 
   return entries.length ? Object.fromEntries(entries) : undefined;
@@ -200,7 +207,7 @@ const buildTelemetryCaptureContext = ({
   redactor: LogRedactor;
   sanitizedLogRecord: Record<string, unknown>;
 }): TelemetryCaptureContext => {
-  const tagCandidates: Record<string, string> = {
+  const tagCandidates: Record<string, unknown> = {
     ...fields.sentryTags,
     event: fields.event,
     ...(fields.requestId ? { requestId: fields.requestId } : {}),

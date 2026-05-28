@@ -8,8 +8,7 @@
     "src/platform/lib/tailwind/**/*.ts",
     "src/platform/lib/tanstack-query/scoped-query-options.ts",
     "src/platform/lib/tanstack-start/**/*.ts",
-    "src/platform/lib/zod/**/*.ts",
-    "src/platform/tenant/**/*.ts"
+    "src/platform/lib/zod/**/*.ts"
   ],
   "exclude": ["**/index.ts", "**/types.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

@@ -62,7 +62,7 @@ describe('Sentry telemetry composition', () => {
     );
   });
 
-  it('passes capture context through to Sentry', async () => {
+  it('passes capture context through to Sentry with primitive tags stringified', async () => {
     const { createSentryTelemetryAdapter } = await import('./sentry-adapter');
     const captureException = vi.fn(() => 'event-id');
     const adapter = createSentryTelemetryAdapter({
@@ -76,14 +76,18 @@ describe('Sentry telemetry composition', () => {
     adapter.captureException(error, {
       fingerprint: ['email-send'],
       level: 'error',
-      tags: { event: 'email.send.failed' },
+      tags: { attempt: 2, event: 'email.send.failed', retryable: false },
       extra: { statusCode: 401 },
     });
 
     expect(captureException).toHaveBeenCalledWith(error, {
       fingerprint: ['email-send'],
       level: 'error',
-      tags: { event: 'email.send.failed' },
+      tags: {
+        attempt: '2',
+        event: 'email.send.failed',
+        retryable: 'false',
+      },
       extra: { statusCode: 401 },
     });
   });
@@ -102,8 +106,10 @@ describe('Sentry telemetry composition', () => {
           email: 'person@example.com',
         },
         tags: {
+          attempt: 2,
           email: 'person@example.com',
           event: 'email.send.failed',
+          retryable: false,
         },
       })
     ).toEqual({
@@ -116,8 +122,10 @@ describe('Sentry telemetry composition', () => {
         email: '[REDACTED]',
       },
       tags: {
+        attempt: '2',
         email: '[REDACTED]',
         event: 'email.send.failed',
+        retryable: 'false',
       },
     });
   });
@@ -137,6 +145,5 @@ describe('Sentry telemetry composition', () => {
 
     expect(setUser).toHaveBeenCalledWith(null);
     expect(setTag).toHaveBeenCalledWith('role', 'none');
-    expect(setTag).toHaveBeenCalledWith('tenantId', 'none');
   });
 });

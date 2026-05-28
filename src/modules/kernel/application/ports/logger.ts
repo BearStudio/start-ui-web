@@ -4,6 +4,8 @@ export type LogDirection = 'inbound' | 'outbound' | 'internal';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
+export type LogTagValue = string | number | boolean;
+
 export interface LogFields {
   event: string;
   direction?: LogDirection;
@@ -14,7 +16,6 @@ export interface LogFields {
   userId?: UserId;
   sessionId?: SessionId;
   scopeKey?: ScopeKey;
-  tenantId?: string | null;
 
   error?: string;
   exception?: unknown;
@@ -22,7 +23,7 @@ export interface LogFields {
   details?: Record<string, unknown>;
   durationMs?: number;
 
-  sentryTags?: Record<string, string>;
+  sentryTags?: Record<string, LogTagValue>;
   sentryExtras?: Record<string, unknown>;
 }
 

@@ -39,7 +39,7 @@ export async function updateUser(
   if (
     canChangeRole({
       currentUserId,
-      targetUserId: input.id,
+      userId: input.id,
       nextRole,
       currentRole: current.role,
     })
@@ -55,7 +55,7 @@ export async function updateUser(
   try {
     deps.logger.info({
       event: 'user.update',
-      details: { targetUserId: input.id },
+      details: { userId: input.id },
     });
     const update = {
       email: input.user.email,

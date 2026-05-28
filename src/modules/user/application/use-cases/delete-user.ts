@@ -32,7 +32,7 @@ export async function deleteUser(
 
   deps.logger.info({
     event: 'user.delete',
-    details: { targetUserId: input.id },
+    details: { userId: input.id },
   });
   const removed = await deps.userAuthGateway.removeUser(input.id);
   if (!removed) {

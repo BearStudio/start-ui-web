@@ -2,7 +2,6 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import type { FlagsAdapter } from '@/platform/flags';
 import type { TelemetryAdapter } from '@/platform/telemetry';
-import type { TenantContext } from '@/platform/tenant';
 
 /**
  * Single typed contract every route loader and `beforeLoad` reads from. The
@@ -28,8 +27,6 @@ export type RouterContext = {
   telemetry: TelemetryAdapter;
   /** Feature flag adapter (no-op by default). */
   flags: FlagsAdapter;
-  /** Reserved for active-tenant context; always `null` until tenancy lands. */
-  tenant: TenantContext | null;
 };
 
 /**
@@ -52,7 +49,6 @@ export type CurrentSessionLike = {
   scope: {
     userId: string;
     role: string;
-    tenantId: null;
   };
   scopeKey: string;
 };

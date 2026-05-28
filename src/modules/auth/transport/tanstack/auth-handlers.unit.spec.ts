@@ -26,9 +26,8 @@ describe('auth transport handlers', () => {
         scope: {
           userId: mockUser.id,
           role: mockUser.role,
-          tenantId: null,
         },
-        scopeKey: `user:${mockUser.id}:role:${mockUser.role}:tenant:none`,
+        scopeKey: `user:${mockUser.id}:role:${mockUser.role}`,
       }
     );
   });

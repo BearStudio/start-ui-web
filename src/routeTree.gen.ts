@@ -28,6 +28,7 @@ import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.inde
 import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
 import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
 import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
+import { Route as ApiWebhooksResendRouteImport } from './routes/api/webhooks.resend'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
@@ -133,6 +134,11 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const ApiWebhooksResendRoute = ApiWebhooksResendRouteImport.update({
+  id: '/api/webhooks/resend',
+  path: '/api/webhooks/resend',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/manager/': typeof ManagerIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
@@ -220,6 +227,7 @@ export interface FileRoutesByTo {
   '/manager': typeof ManagerIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account': typeof AppAccountIndexRoute
   '/app/books': typeof AppBooksIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
@@ -251,6 +259,7 @@ export interface FileRoutesById {
   '/manager/': typeof ManagerIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
@@ -283,6 +292,7 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/onboarding/'
     | '/api/auth/$'
+    | '/api/webhooks/resend'
     | '/app/account/'
     | '/app/books/'
     | '/login/error/'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/manager'
     | '/onboarding'
     | '/api/auth/$'
+    | '/api/webhooks/resend'
     | '/app/account'
     | '/app/books'
     | '/login/error'
@@ -339,6 +350,7 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/onboarding/'
     | '/api/auth/$'
+    | '/api/webhooks/resend'
     | '/app/account/'
     | '/app/books/'
     | '/login/error/'
@@ -366,6 +378,7 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   ApiUploadRoute: typeof ApiUploadRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiWebhooksResendRoute: typeof ApiWebhooksResendRoute
   ApiDevEmailTemplateRoute: typeof ApiDevEmailTemplateRoute
 }
 
@@ -503,6 +516,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/account/'
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/api/webhooks/resend': {
+      id: '/api/webhooks/resend'
+      path: '/api/webhooks/resend'
+      fullPath: '/api/webhooks/resend'
+      preLoaderRoute: typeof ApiWebhooksResendRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -657,6 +677,7 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   ApiUploadRoute: ApiUploadRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiWebhooksResendRoute: ApiWebhooksResendRoute,
   ApiDevEmailTemplateRoute: ApiDevEmailTemplateRoute,
 }
 export const routeTree = rootRouteImport

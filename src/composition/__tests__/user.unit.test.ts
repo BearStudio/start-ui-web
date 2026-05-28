@@ -60,7 +60,7 @@ const makeUserAuthGateway = (
 });
 
 const scope = (userId: string) =>
-  ({ userId: toUserId(userId), role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(userId), role: 'user' }) as const;
 
 describe('user composition', () => {
   beforeEach(() => {

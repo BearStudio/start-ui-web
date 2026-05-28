@@ -56,8 +56,7 @@ const sessionRevokePermission = {
   session: ['revoke'],
 } as const satisfies PermissionRequest;
 
-const scope = (id: string) =>
-  ({ userId: toUserId(id), role: 'user', tenantId: null }) as const;
+const scope = (id: string) => ({ userId: toUserId(id), role: 'user' }) as const;
 
 function samePermissionRequest(
   expected: PermissionRequest,
@@ -256,7 +255,7 @@ describe('user use cases', () => {
       expect(repo.getById).toHaveBeenCalledWith(userId);
       expect(logger.info).toHaveBeenCalledWith({
         event: 'user.get',
-        details: { targetUserId: userId },
+        details: { userId },
       });
     });
 
@@ -436,7 +435,7 @@ describe('user use cases', () => {
       });
       expect(logger.info).toHaveBeenCalledWith({
         event: 'user.update',
-        details: { targetUserId: userId },
+        details: { userId },
       });
     });
 
@@ -643,7 +642,7 @@ describe('user use cases', () => {
       expect(auth.removeUser).toHaveBeenCalledWith(userId);
       expect(logger.info).toHaveBeenCalledWith({
         event: 'user.delete',
-        details: { targetUserId: userId },
+        details: { userId },
       });
     });
 
@@ -731,7 +730,7 @@ describe('user use cases', () => {
       });
       expect(logger.info).toHaveBeenCalledWith({
         event: 'user.sessions.list',
-        details: { targetUserId: userId },
+        details: { userId },
       });
     });
 

@@ -33,7 +33,6 @@ describe('book cover upload transport', () => {
       scope: {
         userId: mockUser.id,
         role: mockUser.role,
-        tenantId: null,
       },
       fileType: 'image/webp',
     });

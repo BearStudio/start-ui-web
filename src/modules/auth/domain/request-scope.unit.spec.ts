@@ -27,22 +27,19 @@ const authSession = {
 } as ExplicitAny;
 
 describe('request scope', () => {
-  it('builds stable scope keys with tenant placeholder support', () => {
+  it('builds stable scope keys', () => {
     const scope = scopeFromUser(authSession.user);
 
     expect(scope.userId).toBe(authSession.user.id);
-    expect(scopeKeyFromScope(scope)).toBe('user:user-1:role:admin:tenant:none');
+    expect(scopeKeyFromScope(scope)).toBe('user:user-1:role:admin');
     expect(
       scopeKeyFromScope({
         userId: toUserId('user-1'),
         role: 'admin',
-        tenantId: null,
       })
-    ).toBe('user:user-1:role:admin:tenant:none');
+    ).toBe('user:user-1:role:admin');
     expect(scopeKeyFromSession(null)).toBe('anonymous');
-    expect(scopeKeyFromSession(authSession)).toBe(
-      'user:user-1:role:admin:tenant:none'
-    );
+    expect(scopeKeyFromSession(authSession)).toBe('user:user-1:role:admin');
   });
 
   it('sanitizes current session data for browser queries', () => {
@@ -62,9 +59,8 @@ describe('request scope', () => {
       scope: {
         userId: 'user-1',
         role: 'admin',
-        tenantId: null,
       },
-      scopeKey: 'user:user-1:role:admin:tenant:none',
+      scopeKey: 'user:user-1:role:admin',
     });
   });
 });

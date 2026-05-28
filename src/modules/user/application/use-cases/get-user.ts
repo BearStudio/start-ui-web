@@ -23,7 +23,7 @@ export async function getUser(
 
   deps.logger.info({
     event: 'user.get',
-    details: { targetUserId: input.id },
+    details: { userId: input.id },
   });
   const value = await deps.userRepository.getById(input.id);
   if (!value) return fail('not_found');

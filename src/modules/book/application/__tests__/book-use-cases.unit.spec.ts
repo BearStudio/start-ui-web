@@ -42,7 +42,6 @@ const forbidden: PermissionChecker = {
 const scope = {
   userId: toUserId('user-1'),
   role: 'user',
-  tenantId: null,
 } as const;
 
 function makeRepo(overrides: Partial<BookRepository> = {}): BookRepository {

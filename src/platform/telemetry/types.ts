@@ -11,12 +11,13 @@ export type TelemetryUser = {
   id: string;
   email?: string | null;
   role?: string | null;
-  tenantId?: string | null;
 };
+
+export type TelemetryTagValue = string | number | boolean;
 
 export type TelemetryCaptureContext = {
   /** Short, low-cardinality labels (e.g. routeId). */
-  tags?: Record<string, string>;
+  tags?: Record<string, TelemetryTagValue>;
   /** High-cardinality structured data (e.g. inputs, ids). */
   extra?: Record<string, unknown>;
   fingerprint?: string[];

@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import {
   boolean,
   index,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -220,6 +221,41 @@ export const publisher = pgTable(
   (table) => [uniqueIndex('publisher_name_key').on(table.name)]
 );
 
+export const emailStatus = pgTable(
+  'email_status',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    createdAt: timestamp('createdAt', { precision: 3, mode: 'date' })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updatedAt', { precision: 3, mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+    provider: text('provider').notNull(),
+    externalId: text('externalId'),
+    recipient: text('recipient').notNull(),
+    subject: text('subject').notNull(),
+    status: text('status').notNull(),
+    idempotencyKey: text('idempotencyKey'),
+    lastWebhookEventId: text('lastWebhookEventId'),
+    metadata: jsonb('metadata')
+      .$type<Record<string, unknown>>()
+      .default({})
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('email_status_provider_external_id_key').on(
+      table.provider,
+      table.externalId
+    ),
+    index('email_status_status_idx').on(table.status),
+    index('email_status_created_at_idx').on(table.createdAt),
+  ]
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -258,6 +294,8 @@ export type Account = typeof account.$inferSelect;
 export type NewAccount = typeof account.$inferInsert;
 export type Verification = typeof verification.$inferSelect;
 export type NewVerification = typeof verification.$inferInsert;
+export type EmailStatus = typeof emailStatus.$inferSelect;
+export type NewEmailStatus = typeof emailStatus.$inferInsert;
 export type Book = typeof book.$inferSelect;
 export type NewBook = typeof book.$inferInsert;
 export type Genre = typeof genre.$inferSelect;

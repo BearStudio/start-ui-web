@@ -7,7 +7,6 @@ import { hasScopePermission, scopeUserId } from './scope-authorization';
 const scope = {
   userId: toUserId('user-1'),
   role: 'admin',
-  tenantId: null,
 } as const;
 
 describe('scope authorization helpers', () => {

@@ -26,7 +26,7 @@ export async function listUserSessions(
   deps.logger.info({
     event: 'user.sessions.list',
     details: {
-      targetUserId: input.userId,
+      userId: input.userId,
     },
   });
   const value = await deps.userRepository.listSessions({

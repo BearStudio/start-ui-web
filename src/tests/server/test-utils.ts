@@ -149,7 +149,6 @@ export const createAuthenticatedContext = (overrides?: {
     scope: {
       userId: (overrides?.user ?? mockUser).id,
       role: (overrides?.user ?? mockUser).role,
-      tenantId: null,
     },
     logger: mockLogger,
   }) as ExplicitAny;

@@ -34,7 +34,6 @@ const allowed: PermissionChecker = {
 const scope = {
   userId: toUserId('user-1'),
   role: 'user',
-  tenantId: null,
 } as const;
 
 describe('genre use cases', () => {

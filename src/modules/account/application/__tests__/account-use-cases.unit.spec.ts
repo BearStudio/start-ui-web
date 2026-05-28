@@ -22,7 +22,7 @@ const repository: AccountRepository = {
 };
 
 const scope = (userId: string) =>
-  ({ userId: toUserId(userId), role: 'user', tenantId: null }) as const;
+  ({ userId: toUserId(userId), role: 'user' }) as const;
 
 describe('account use cases', () => {
   it('submits onboarding and updates info', async () => {

@@ -511,7 +511,7 @@ rules:
         - src/modules/auth/transport/tanstack/server-context.ts
 
   - id: sentry-clear-tags-when-unsetting-user
-    message: Clear role and tenantId Sentry tags whenever the telemetry user is unset.
+    message: Clear Sentry user tags whenever the telemetry user is unset.
     languages: [typescript]
     severity: ERROR
     patterns:
@@ -528,8 +528,6 @@ rules:
             Sentry.setUser(null);
             ...
             Sentry.setTag?.('role', ...);
-            ...
-            Sentry.setTag?.('tenantId', ...);
             ...
             return;
           }

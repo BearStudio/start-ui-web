@@ -198,7 +198,6 @@ export const createServerContextTools = ({
             id: session.user.id,
             email: session.user.email,
             role: session.user.role,
-            tenantId: null,
           });
           const scope = scopeFromUser(session.user);
           procedureLogger = createRequestLogger({

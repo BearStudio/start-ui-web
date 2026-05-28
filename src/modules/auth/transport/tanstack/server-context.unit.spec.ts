@@ -36,7 +36,6 @@ describe('server function middleware', () => {
       scope: {
         userId: 'user-1',
         role: 'user',
-        tenantId: null,
       },
       userId: 'user-1',
     });
@@ -54,7 +53,7 @@ describe('server function middleware', () => {
         event: 'server_fn.request.finish',
         requestId: expect.any(String),
         sessionId: 'session-1',
-        scopeKey: 'user:user-1:role:user:tenant:none',
+        scopeKey: 'user:user-1:role:user',
         userId: 'user-1',
       })
     );
@@ -81,7 +80,6 @@ describe('server function middleware', () => {
       id: 'user-1',
       email: 'user@example.com',
       role: 'user',
-      tenantId: null,
     });
   });
 

@@ -7,7 +7,6 @@ import type { AuthenticatedUser, AuthSession } from './session';
 export type RequestScope = {
   userId: UserId;
   role: Role;
-  tenantId: null;
 };
 
 export type CurrentSession = {
@@ -25,13 +24,10 @@ export const scopeFromUser = (
 ): RequestScope => ({
   userId: user.id,
   role: user.role,
-  tenantId: null,
 });
 
 export const scopeKeyFromScope = (scope: RequestScope) =>
-  toScopeKey(
-    `user:${scope.userId}:role:${scope.role}:tenant:${scope.tenantId ?? 'none'}`
-  );
+  toScopeKey(`user:${scope.userId}:role:${scope.role}`);
 
 export const scopeKeyFromSession = (
   session: Pick<AuthSession, 'user'> | CurrentSession | null | undefined

@@ -11,7 +11,6 @@ export const mutationSourceFiles = [
   'src/platform/lib/tanstack-query/scoped-query-options.ts',
   'src/platform/lib/tanstack-start/**/*.ts',
   'src/platform/lib/zod/**/*.ts',
-  'src/platform/tenant/**/*.ts',
   '!**/*.spec.ts',
   '!**/*.test.ts',
   '!**/index.ts',

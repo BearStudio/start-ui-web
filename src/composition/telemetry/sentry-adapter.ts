@@ -43,8 +43,16 @@ const toStringTags = (tags: unknown): Record<string, string> | undefined => {
     return undefined;
   }
 
-  const entries = Object.entries(tags).filter(
-    (entry): entry is [string, string] => typeof entry[1] === 'string'
+  const entries: Array<[string, string]> = Object.entries(tags).flatMap(
+    ([key, value]) => {
+      const tagValue =
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+          ? String(value)
+          : undefined;
+      return tagValue && tagValue.length > 0 ? [[key, tagValue]] : [];
+    }
   );
 
   return entries.length ? Object.fromEntries(entries) : undefined;
@@ -72,7 +80,7 @@ export const createSentryTelemetryAdapter = (
 ): TelemetryAdapter => ({
   captureException: (error, context) => {
     Sentry.captureException(error, {
-      tags: context?.tags,
+      tags: toStringTags(context?.tags),
       extra: context?.extra,
       fingerprint: context?.fingerprint,
       level: context?.level,
@@ -82,7 +90,6 @@ export const createSentryTelemetryAdapter = (
     if (!user) {
       Sentry.setUser(null);
       Sentry.setTag?.('role', 'none');
-      Sentry.setTag?.('tenantId', 'none');
       return;
     }
     Sentry.setUser({
@@ -90,7 +97,6 @@ export const createSentryTelemetryAdapter = (
       segment: user.role ?? undefined,
     });
     Sentry.setTag?.('role', user.role ?? 'none');
-    Sentry.setTag?.('tenantId', user.tenantId ?? 'none');
   },
   startSpan: (options, fn) =>
     Sentry.startSpan(

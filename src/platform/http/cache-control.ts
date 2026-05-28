@@ -1,11 +1,10 @@
 /**
  * Safe defaults for HTTP `Cache-Control` headers on responses.
  *
- * Authenticated or tenant-personalized responses default to `private, no-store`
- * so that intermediaries and shared caches never replay one user's response to
- * another. Public caching is available only through the explicit
- * `cachePublic()` helper, which makes the security tradeoff obvious in code
- * review.
+ * Authenticated responses default to `private, no-store` so that intermediaries
+ * and shared caches never replay one user's response to another. Public caching
+ * is available only through the explicit `cachePublic()` helper, which makes
+ * the security tradeoff obvious in code review.
  *
  * Apply via `setResponseHeader('Cache-Control', cachePrivateNoStore())` inside
  * server function or server route handlers.
@@ -13,7 +12,7 @@
 
 /**
  * Disables all storage and caching. Use for any response that depends on the
- * authenticated session or contains tenant/user-specific data.
+ * authenticated session or contains user-specific data.
  */
 export const cachePrivateNoStore = (): string => 'private, no-store';
 
@@ -37,8 +36,8 @@ export const cachePrivateShortLived = (
 
 /**
  * Cross-user (public/shared) cache. Only safe for responses that do not depend
- * on the session, the user, or the tenant. The doc explanation parameter is
- * required so reviewers can audit the reasoning at the call site.
+ * on the session or the user. The doc explanation parameter is required so
+ * reviewers can audit the reasoning at the call site.
  *
  * Example: `cachePublic({ maxAgeSeconds: 300, reason: 'static marketing copy' })`
  */

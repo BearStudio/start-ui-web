@@ -5,12 +5,12 @@ import {
   type SessionGateway,
   type UserAdminGateway,
 } from '@/modules/auth';
+import {
+  type Auth,
+  createAuth,
+} from '@/modules/auth/infrastructure/better-auth/auth';
 import { AuthEmailPortResend } from '@/modules/auth/infrastructure/better-auth/auth-email-port-resend';
 import { AuthorizationGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/authorization-gateway-better-auth';
-import {
-  createAuth,
-  type Auth,
-} from '@/modules/auth/infrastructure/better-auth/auth';
 import { SessionGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/session-gateway-better-auth';
 import { UserAdminGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/user-admin-gateway-better-auth';
 

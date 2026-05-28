@@ -24,7 +24,6 @@ const makeSession = (
   const scope: CurrentSession['scope'] = {
     userId: toUserId('user-1'),
     role,
-    tenantId: null,
   };
 
   return {

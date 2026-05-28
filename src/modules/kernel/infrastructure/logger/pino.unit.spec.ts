@@ -76,8 +76,10 @@ describe('createPinoAppLogger', () => {
         authorization: 'Bearer token',
       },
       sentryTags: {
+        attempt: 2,
         email: 'person@example.com',
         provider: 'resend',
+        retryable: false,
       },
       sentryExtras: {
         email: 'person@example.com',
@@ -99,10 +101,12 @@ describe('createPinoAppLogger', () => {
     expect(telemetry.captureException).toHaveBeenCalledWith(exception, {
       tags: {
         correlationId: 'correlation-1',
+        attempt: '2',
         email: '[REDACTED]',
         event: 'email.send.failed',
         provider: 'resend',
         requestId: 'request-1',
+        retryable: 'false',
       },
       extra: {
         email: '[REDACTED]',
@@ -171,7 +175,7 @@ describe('createPinoAppLogger', () => {
     );
   });
 
-  it('adds request context while keeping request fields authoritative', () => {
+  it('adds request context and prevents caller fields from overriding it', () => {
     const logger: Logger = {
       debug: vi.fn(),
       info: vi.fn(),
@@ -188,14 +192,14 @@ describe('createPinoAppLogger', () => {
       event: 'user.update',
       requestId: 'caller-request',
       userId: toUserId('target-1'),
-      details: { targetUserId: 'target-1' },
+      details: { userId: 'target-1' },
     });
 
     expect(logger.info).toHaveBeenCalledWith({
       event: 'user.update',
       requestId: 'request-1',
       userId: 'actor-1',
-      details: { targetUserId: 'target-1' },
+      details: { userId: 'target-1' },
     });
   });
 

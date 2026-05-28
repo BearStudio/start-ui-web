@@ -4,17 +4,17 @@ import type { UserRole } from './user';
 
 export function canChangeRole(input: {
   currentUserId: UserId;
-  targetUserId: UserId;
+  userId: UserId;
   nextRole?: UserRole;
   currentRole: UserRole;
 }) {
   return (
-    input.currentUserId !== input.targetUserId &&
+    input.currentUserId !== input.userId &&
     input.nextRole !== undefined &&
     input.nextRole !== input.currentRole
   );
 }
 
-export function isSelfTarget(currentUserId: UserId, targetUserId: UserId) {
-  return currentUserId === targetUserId;
+export function isSelfTarget(currentUserId: UserId, userId: UserId) {
+  return currentUserId === userId;
 }

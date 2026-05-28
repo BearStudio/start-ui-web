@@ -15,10 +15,10 @@ export {
 } from './book';
 export {
   __resetEmailComposition,
+  type EmailOverrides,
   getEmailGateway,
   getEmailServices,
   getEmailUseCases,
-  type EmailOverrides,
 } from './email';
 export {
   __resetGenreComposition,
@@ -54,7 +54,7 @@ export type ServicesOverrides = {
   user?: Omit<UserOverrides, 'kernel'>;
   genre?: Omit<GenreOverrides, 'kernel'>;
   account?: Omit<AccountOverrides, 'kernel'>;
-  email?: Omit<EmailOverrides, 'kernel'>;
+  email?: Omit<EmailOverrides, 'db'>;
 };
 
 export function getServices(overrides?: ServicesOverrides) {
@@ -76,6 +76,6 @@ export function getServices(overrides?: ServicesOverrides) {
     user: getUserUseCases({ ...overrides.user, kernel }),
     genre: getGenreUseCases({ ...overrides.genre, kernel }),
     account: getAccountUseCases({ ...overrides.account, kernel }),
-    email: getEmailServices({ ...overrides.email, kernel }),
+    email: getEmailServices({ ...overrides.email, db: kernel.db }),
   } as const;
 }

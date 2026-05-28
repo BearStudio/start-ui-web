@@ -31,7 +31,7 @@ describe('user domain', () => {
     expect(
       canChangeRole({
         currentUserId: toUserId('admin-1'),
-        targetUserId: toUserId('user-1'),
+        userId: toUserId('user-1'),
         nextRole: 'admin',
         currentRole: 'user',
       })
@@ -40,7 +40,7 @@ describe('user domain', () => {
     expect(
       canChangeRole({
         currentUserId: toUserId('user-1'),
-        targetUserId: toUserId('user-1'),
+        userId: toUserId('user-1'),
         nextRole: 'admin',
         currentRole: 'user',
       })
@@ -48,7 +48,7 @@ describe('user domain', () => {
     expect(
       canChangeRole({
         currentUserId: toUserId('admin-1'),
-        targetUserId: toUserId('user-1'),
+        userId: toUserId('user-1'),
         nextRole: undefined,
         currentRole: 'user',
       })
@@ -56,7 +56,7 @@ describe('user domain', () => {
     expect(
       canChangeRole({
         currentUserId: toUserId('admin-1'),
-        targetUserId: toUserId('user-1'),
+        userId: toUserId('user-1'),
         nextRole: 'user',
         currentRole: 'user',
       })

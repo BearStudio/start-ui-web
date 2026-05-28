@@ -79,6 +79,8 @@ pnpm verify  # Full local pre-merge gate
 
 Emails are sent with [Resend](https://resend.com). Configure `RESEND_API_KEY`
 with a Resend API key and set `EMAIL_FROM` to a sender from a verified domain.
+Set `RESEND_WEBHOOK_SECRET` to the Resend/Svix signing secret for
+`/api/webhooks/resend` delivery status callbacks.
 Use `EMAIL_DELIVERY_DISABLED=true` when a workflow should skip delivery, such
 as automated end-to-end test runs.
 
