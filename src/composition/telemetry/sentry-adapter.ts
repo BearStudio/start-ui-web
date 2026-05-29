@@ -51,7 +51,7 @@ const toStringTags = (tags: unknown): Record<string, string> | undefined => {
         typeof value === 'boolean'
           ? String(value)
           : undefined;
-      return tagValue && tagValue.length > 0 ? [[key, tagValue]] : [];
+      return tagValue === undefined ? [] : [[key, tagValue]];
     }
   );
 

@@ -130,6 +130,30 @@ describe('Sentry telemetry composition', () => {
     });
   });
 
+  it('drops unsupported Sentry event tag values after sanitizing', async () => {
+    const { sanitizeSentryEvent } = await import('./sentry-adapter');
+
+    expect(
+      sanitizeSentryEvent({
+        tags: {
+          empty: '',
+          nested: { value: 'object' },
+          nullable: null,
+          optional: undefined,
+          sequence: ['array'],
+          zero: 0,
+        },
+      })
+    ).toEqual({
+      contexts: {},
+      extra: {},
+      tags: {
+        empty: '',
+        zero: '0',
+      },
+    });
+  });
+
   it('clears Sentry user tags when the telemetry user is unset', async () => {
     const { createSentryTelemetryAdapter } = await import('./sentry-adapter');
     const setUser = vi.fn();
