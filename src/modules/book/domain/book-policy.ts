@@ -7,7 +7,7 @@ export const bookCoverAcceptedFileTypes = [
   'image/gif',
 ] as const;
 
-export const bookCoverMaxFileSizeBytes = 1024 * 1024 * 100;
+export const bookCoverMaxFileSizeBytes = 1024 * 1024 * 10;
 
 type BookCoverAcceptedFileType = (typeof bookCoverAcceptedFileTypes)[number];
 

@@ -14,6 +14,7 @@ type AccountHandlerDeps = {
 };
 
 const accountReasonConfig = {
+  forbidden: { code: 'FORBIDDEN', message: 'Forbidden' },
   invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
   not_found: { code: 'NOT_FOUND', message: 'Account not found' },
 } as const;

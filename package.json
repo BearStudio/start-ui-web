@@ -52,7 +52,8 @@
     "lint:sheriff": "sheriff verify",
     "semgrep": "semgrep scan --config .semgrep.yml --error --quiet",
     "check:migrations": "node scripts/check-migration-edits.mjs",
-    "security:audit": "pnpm audit --audit-level=high",
+    "security:audit": "pnpm audit --audit-level=high && pnpm security:tanstack",
+    "security:tanstack": "node scripts/check-tanstack-security.mjs",
     "gen:build-info": "dotenv -- node ./run-jiti ./src/modules/build-info/infrastructure/generate-build-info.ts",
     "gen:icons": "svgr --config-file src/platform/components/icons/svgr.config.cjs src/platform/components/icons/svg-sources && oxfmt src/platform/components/icons/generated",
     "test": "vitest run",
@@ -226,7 +227,7 @@
     "@types/node": "^24"
   },
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   },
   "packageManager": "pnpm@11.1.3",
   "jscpd": {

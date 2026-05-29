@@ -287,6 +287,7 @@ rules:
     paths:
       exclude:
         - src/platform/env/**
+        - src/modules/devtools/presentation/tanstack-devtools.tsx
         - '*.config.ts'
         - '*.config.mjs'
         - 'vite.*.ts'
@@ -707,25 +708,7 @@ rules:
     message: Initial Resend send attempts must inspect recordSendAttempt() so duplicate idempotency keys with an existing externalId can short-circuit before another provider call.
     languages: [typescript]
     severity: ERROR
-    patterns:
-      - pattern: |
-          await $REPOSITORY.recordSendAttempt({
-            ...
-          });
-      - pattern-not-inside: |
-          const $RESULT = await $REPOSITORY.recordSendAttempt({
-            ...
-          });
-      - pattern-not-inside: |
-          let $RESULT = await $REPOSITORY.recordSendAttempt({
-            ...
-          });
-      - pattern-not: |
-          await $REPOSITORY.recordSendAttempt({
-            ...,
-            status: $STATUS,
-            ...
-          });
+    pattern-regex: '(?s)^[\t ]*await\s+[A-Za-z0-9_.$]+\.recordSendAttempt\(\{\s*(?:(?!\bstatus\s*:).)*?\}\);'
     paths:
       include:
         - src/modules/email/infrastructure/resend/**/*.ts

@@ -14,7 +14,10 @@ import {
 import { Button } from '@/platform/components/ui/button';
 
 import { accountQueries } from '@/modules/account/client';
-import { authQueries, useAuthSession } from '@/modules/auth/client';
+import {
+  clearAuthScopedQueryState,
+  useAuthSession,
+} from '@/modules/auth/client';
 import { ConfirmSignOut } from '@/modules/auth/presentation/confirm-signout';
 import { LayoutLogin } from '@/modules/auth/presentation/layout-login';
 import { useMascot } from '@/modules/auth/presentation/mascot';
@@ -36,9 +39,7 @@ export const PageOnboarding = () => {
       // session cache, then invalidate route guards so beforeLoad reruns
       // and redirects the now-onboarded user out of /onboarding.
       await session.refetch();
-      await queryClient.invalidateQueries({
-        queryKey: authQueries.currentSession().queryKey,
-      });
+      clearAuthScopedQueryState(queryClient);
       await router.invalidate();
     },
     onError: () => {

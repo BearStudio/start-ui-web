@@ -30,6 +30,19 @@ function findImportViolations(files: string[], pattern: RegExp) {
   });
 }
 
+function findServerFunctionExports(files: string[]) {
+  const pattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*createServerFn\s*\(/g;
+
+  return files.flatMap((file) => {
+    const source = fs.readFileSync(file, 'utf8');
+    return Array.from(source.matchAll(pattern), ([, name]) => ({
+      file,
+      name: name ?? '',
+      source,
+    }));
+  });
+}
+
 describe('strict modular monolith layout', () => {
   it('keeps legacy feature and shared roots removed', () => {
     expect(fs.existsSync(path.join(root, 'src/features'))).toBe(false);
@@ -173,6 +186,31 @@ describe('strict modular monolith layout', () => {
         /^[\t ]*const\s+\w+\s*=\s*createServerFn\s*\(/gm
       )
     ).toEqual([]);
+  });
+
+  it('requires privileged server functions to use protected runners', () => {
+    const publicServerFunctions = new Set([
+      'configEnv',
+      'currentSession',
+      'initSsrApp',
+    ]);
+    const serverFiles = listSourceFiles(path.join(root, 'src/modules')).filter(
+      (file) => /[/\\](server|server-functions)\.ts$/.test(file)
+    );
+
+    const violations = findServerFunctionExports(serverFiles)
+      .filter(({ name }) => !publicServerFunctions.has(name))
+      .filter(
+        ({ source }) =>
+          !source.includes('createServerFunctionInvoker') ||
+          !(
+            source.includes('withProtectedContext') ||
+            source.includes('withProtectedMutation')
+          )
+      )
+      .map(({ file, name }) => `${path.relative(root, file)}:${name}`);
+
+    expect(violations).toEqual([]);
   });
 
   it('confines Better Auth imports to auth boundaries', () => {

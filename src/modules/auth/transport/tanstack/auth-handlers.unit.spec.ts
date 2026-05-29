@@ -30,6 +30,9 @@ describe('auth transport handlers', () => {
         scopeKey: `user:${mockUser.id}:role:${mockUser.role}`,
       }
     );
+    expect(
+      JSON.stringify(handlers.currentSession(createAuthenticatedContext()))
+    ).not.toContain(mockSession.token);
   });
 
   it('returns null when no authenticated session is bound', () => {

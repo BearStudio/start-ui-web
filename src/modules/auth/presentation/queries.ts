@@ -1,4 +1,8 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import {
+  type QueryClient,
+  queryOptions,
+  useQuery,
+} from '@tanstack/react-query';
 
 import { authServerFunctions } from '../server-functions';
 
@@ -16,3 +20,7 @@ export const useCurrentSessionQuery = () =>
 
 export const useCurrentScopeKey = () =>
   useCurrentSessionQuery().data?.scopeKey ?? 'anonymous';
+
+export function clearAuthScopedQueryState(queryClient: QueryClient) {
+  queryClient.clear();
+}

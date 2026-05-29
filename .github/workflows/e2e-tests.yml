@@ -9,6 +9,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+permissions:
+  contents: read
+
 jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
@@ -40,7 +43,7 @@ jobs:
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:9000/default
     services:
       postgres:
-        image: postgres:16.1
+        image: postgres:16.1@sha256:09f23e02d76670d3b346a3c00aa33a27cf57aab8341eedfcdaed41459d14f5c4
 
         env:
           POSTGRES_PASSWORD: startui
@@ -56,7 +59,7 @@ jobs:
           - 5432:5432
 
       maildev:
-        image: maildev/maildev:2.2.1
+        image: maildev/maildev:2.2.1@sha256:180ef51f65eefebb0e7122d8308813c1fd7bff164bc440ce5a3c2feee167a810
         options: >-
           --health-cmd "wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz"
           --health-interval 5s
@@ -87,7 +90,7 @@ jobs:
             -p 9001:9001 \
             -e MINIO_ROOT_USER=minioadmin \
             -e MINIO_ROOT_PASSWORD=minioadmin \
-            minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1 \
+            minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1@sha256:7330be2e7320a7a699b36f72bd06a94d8a21ec9f6f397345d9c38fc6751141f5 \
             server /data --console-address :9001
 
           # Wait for MinIO to be ready
@@ -101,6 +104,7 @@ jobs:
         run: |
           # Install MinIO client
           curl -sSL https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc
+          echo "01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891  /usr/local/bin/mc" | sha256sum -c -
           chmod +x /usr/local/bin/mc
 
           # Configure MinIO client

@@ -5,7 +5,11 @@ import { useEffect } from 'react';
 import { PageError } from '@/platform/components/errors/page-error';
 import { Spinner } from '@/platform/components/ui/spinner';
 
-import { authQueries, signOut, useAuthSession } from '@/modules/auth/client';
+import {
+  clearAuthScopedQueryState,
+  signOut,
+  useAuthSession,
+} from '@/modules/auth/client';
 
 export const PageLogout = () => {
   const navigate = useNavigate();
@@ -18,9 +22,7 @@ export const PageLogout = () => {
         throw response.error;
       }
       await session.refetch();
-      await queryClient.invalidateQueries({
-        queryKey: authQueries.currentSession().queryKey,
-      });
+      clearAuthScopedQueryState(queryClient);
     },
     onSuccess: () => {
       navigate({

@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
+import { tanstackStartCookies } from 'better-auth/tanstack-start';
 import { match } from 'ts-pattern';
 
 import {
@@ -18,6 +19,7 @@ import {
 import { getUserLanguage } from '@/modules/kernel/transport/tanstack/user-language';
 import { envClient } from '@/platform/env/client';
 
+import { createAuthCookieSecurityOptions } from './cookie-options';
 import {
   type CreateAuthOptions,
   normalizeCreateAuthInput,
@@ -53,6 +55,7 @@ export function createAuth(input?: Database | CreateAuthOptions) {
       expiresIn: authConfig.sessionExpirationInSeconds,
       updateAge: authConfig.sessionUpdateAgeInSeconds,
     },
+    advanced: createAuthCookieSecurityOptions(envClient.VITE_BASE_URL),
     trustedOrigins: authConfig.trustedOrigins,
     database: drizzleAdapter(database, {
       provider: 'pg',
@@ -130,6 +133,7 @@ export function createAuth(input?: Database | CreateAuthOptions) {
             .exhaustive();
         },
       }),
+      tanstackStartCookies(),
     ],
     databaseHooks: {
       user: {

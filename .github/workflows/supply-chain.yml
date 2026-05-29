@@ -1,0 +1,54 @@
+name: Supply Chain Artifacts
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  attestations: write
+  contents: read
+  id-token: write
+
+jobs:
+  artifacts:
+    name: SBOM, Audit, and Provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run dependency audit
+        run: pnpm audit --audit-level=high --json > pnpm-audit.json
+
+      - name: Run TanStack lockfile policy
+        run: pnpm security:tanstack
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          format: spdx-json
+          output-file: sbom.spdx.json
+          path: .
+          upload-artifact: false
+
+      - name: Upload supply-chain artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: supply-chain-artifacts
+          path: |
+            pnpm-audit.json
+            sbom.spdx.json
+          retention-days: 30
+
+      - name: Attest supply-chain artifacts
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
+        with:
+          subject-path: |
+            pnpm-audit.json
+            sbom.spdx.json

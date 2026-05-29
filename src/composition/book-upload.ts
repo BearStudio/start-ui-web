@@ -2,6 +2,7 @@ import { handleRequest, type Router } from '@better-upload/server';
 
 import { getAuthUseCases } from '@/composition/auth';
 import { getBookUseCases } from '@/composition/book';
+import { getKernel } from '@/composition/kernel';
 import { createBookCoverUploadRoute } from '@/modules/book/transport/upload/book-cover';
 import { getStorageConfig } from '@/modules/kernel/infrastructure/config/storage';
 import { getDefaultUploadClient } from '@/modules/kernel/infrastructure/storage/better-upload';
@@ -14,6 +15,7 @@ const createBookCoverRoute = () =>
     getCurrentSession: (headers) =>
       getAuthUseCases().getCurrentSession({ headers }),
     getUseCases: getBookUseCases,
+    logger: getKernel().logger,
   });
 
 const createBookUploadRouter = () =>

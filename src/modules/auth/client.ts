@@ -15,6 +15,7 @@ export {
 export { ConfirmSignOut } from './presentation/confirm-signout';
 export {
   authQueries,
+  clearAuthScopedQueryState,
   useCurrentScopeKey,
   useCurrentSessionQuery,
 } from './presentation/queries';

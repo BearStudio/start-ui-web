@@ -41,5 +41,12 @@ export async function revokeUserSession(
       message: 'Failed to revoke user session',
     });
   }
+  deps.logger.warn({
+    details: {
+      mode: 'single',
+      targetUserId: input.id,
+    },
+    event: 'security.session_revoked',
+  });
   return ok(undefined);
 }

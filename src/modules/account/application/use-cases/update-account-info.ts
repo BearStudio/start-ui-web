@@ -1,4 +1,8 @@
-import { type RequestScope, scopeUserId } from '@/modules/auth';
+import {
+  hasScopePermission,
+  type RequestScope,
+  scopeUserId,
+} from '@/modules/auth';
 import { fail, ok } from '@/modules/kernel';
 
 import type { AccountUseCaseDeps, UseCaseResult } from './types';
@@ -14,7 +18,16 @@ export type UpdateAccountInfoInput = {
 export async function updateAccountInfo(
   deps: AccountUseCaseDeps,
   input: UpdateAccountInfoInput
-): Promise<UseCaseResult<AccountUpdateResult, 'invalid' | 'not_found'>> {
+): Promise<
+  UseCaseResult<AccountUpdateResult, 'forbidden' | 'invalid' | 'not_found'>
+> {
+  const allowed = await hasScopePermission({
+    permissionChecker: deps.permissionChecker,
+    scope: input.scope,
+    permissions: { account: ['update'] },
+  });
+  if (!allowed) return fail('forbidden');
+
   if (!isAccountNamePresent(input.name)) return fail('invalid');
 
   const currentUserId = scopeUserId(input.scope);

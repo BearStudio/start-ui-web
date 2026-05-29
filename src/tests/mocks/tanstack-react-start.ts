@@ -44,6 +44,22 @@ export function createClientOnlyFn<TArgs extends unknown[], TResult>(
   return fn;
 }
 
+export function createMiddleware(options?: unknown) {
+  return {
+    server: (handler: unknown) => ({
+      handler,
+      options,
+      type:
+        typeof options === 'object' &&
+        options !== null &&
+        'type' in options &&
+        options.type === 'request'
+          ? 'request'
+          : 'middleware',
+    }),
+  };
+}
+
 export function createCsrfMiddleware(options?: unknown) {
   return {
     type: 'csrf',

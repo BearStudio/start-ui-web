@@ -28,4 +28,8 @@ runs:
 
     - name: Install deps
       shell: bash
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
+
+    - name: Generate trusted local build metadata
+      shell: bash
+      run: pnpm gen:build-info

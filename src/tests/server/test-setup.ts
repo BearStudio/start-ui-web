@@ -31,7 +31,9 @@ vi.mock('@/modules/auth/infrastructure/better-auth/auth', () => {
 });
 
 vi.mock('@tanstack/react-start/server', () => ({
+  getCookie: vi.fn(() => undefined),
   getRequestHeaders: () => new Headers(),
+  setCookie: vi.fn(),
   setResponseHeader: vi.fn(),
 }));
 

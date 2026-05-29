@@ -130,6 +130,19 @@ const handleError = (error: unknown, procedureLogger: ProcedureLogger) => {
     }
     return 'error';
   })();
+  if (
+    mappedError instanceof ServerFnError &&
+    (mappedError.code === 'UNAUTHORIZED' || mappedError.code === 'FORBIDDEN')
+  ) {
+    procedureLogger.warn({
+      event: 'security.authz_denied',
+      direction: 'inbound',
+      details: {
+        code: mappedError.code,
+        status: mappedError.status,
+      },
+    });
+  }
   procedureLogger[logLevel]({
     event: 'server_fn.error.mapped',
     direction: 'inbound',

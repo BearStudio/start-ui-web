@@ -1,6 +1,4 @@
 /// <reference types="vite/client" />
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -8,7 +6,6 @@ import {
   Scripts,
   useRouteContext,
 } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +20,7 @@ import { getTelemetry } from '@/composition/telemetry';
 import {
   EnvHint,
   getEnvHintTitlePrefix,
+  TanStackDevtoolsPanel,
 } from '@/modules/devtools/presentation';
 import { initSsrApp } from '@/modules/kernel/server';
 import type { RouterContext } from '@/platform/router/context';
@@ -104,18 +102,7 @@ function RootComponent() {
     <RootDocument>
       <Providers client={queryClient}>
         <Outlet />
-        <TanStackDevtools
-          config={{
-            openHotkey: [], // Disable keyboard shortcut
-          }}
-          plugins={[
-            { name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <TanStackDevtoolsPanel />
       </Providers>
     </RootDocument>
   );

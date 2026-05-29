@@ -19,6 +19,7 @@ const buildAccountUseCases = (overrides?: AccountOverrides) => {
       overrides?.accountRepository ?? new AccountRepositoryDrizzle(kernel.db),
     clock: kernel.clock,
     logger: kernel.logger,
+    permissionChecker: kernel.permissionChecker,
   });
 };
 

@@ -5,6 +5,7 @@ import {
   type EmailStatus,
   type EmailUseCases,
 } from '@/modules/email';
+import type { Logger } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
 type VerifyResendWebhookInput = {
@@ -22,6 +23,7 @@ type ResendWebhookVerifier = {
 
 type ResendWebhookHandlerDeps = {
   getUseCases: () => EmailUseCases;
+  logger?: Pick<Logger, 'warn'>;
   verifier: ResendWebhookVerifier;
 };
 
@@ -69,17 +71,31 @@ const recipientFromEvent = (
 
 export const createResendWebhookHandlers = ({
   getUseCases,
+  logger,
   verifier,
 }: ResendWebhookHandlerDeps) => {
   const receive = async (request: Request) => {
     const payload = await request.text();
-    const resendSdkHeaders = {
-      id: requiredHeader(request.headers, 'svix-id'),
-      timestamp: requiredHeader(request.headers, 'svix-timestamp'),
-      signature: requiredHeader(request.headers, 'svix-signature'),
-    };
+    let resendSdkHeaders: VerifyResendWebhookInput['headers'];
+    let event: WebhookEventPayload;
 
-    const event = verifier.verify({ payload, headers: resendSdkHeaders });
+    try {
+      resendSdkHeaders = {
+        id: requiredHeader(request.headers, 'svix-id'),
+        timestamp: requiredHeader(request.headers, 'svix-timestamp'),
+        signature: requiredHeader(request.headers, 'svix-signature'),
+      };
+      event = verifier.verify({ payload, headers: resendSdkHeaders });
+    } catch (error) {
+      logger?.warn({
+        details: {
+          provider: EMAIL_PROVIDER_RESEND,
+          reason: error instanceof Error ? error.message : 'unknown',
+        },
+        event: 'security.webhook_signature_rejected',
+      });
+      throw error;
+    }
 
     if (!isTrackedEmailEvent(event)) {
       return Response.json({ ok: true, ignored: true });

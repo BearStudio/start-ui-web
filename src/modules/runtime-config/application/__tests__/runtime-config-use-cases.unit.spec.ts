@@ -18,6 +18,13 @@ describe('runtime-config use cases', () => {
     const useCases = createRuntimeConfigUseCases({ source });
 
     expect(useCases.get()).toEqual(config);
+    expect(Object.keys(useCases.get()).sort()).toEqual([
+      'color',
+      'emoji',
+      'isDemo',
+      'isDev',
+      'name',
+    ]);
   });
 
   it('passes through subsequent source reads without internal caching', () => {

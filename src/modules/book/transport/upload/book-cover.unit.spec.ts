@@ -3,11 +3,28 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { mockSession, mockUser } from '@/tests/server/test-utils';
 
-import { handleBookCoverBeforeUpload } from './book-cover';
+import {
+  bookCoverUploadConstraints,
+  handleBookCoverBeforeUpload,
+} from './book-cover';
+import {
+  bookCoverAcceptedFileTypes,
+  bookCoverMaxFileSizeBytes,
+} from '../../domain/book-policy';
 
 const headers = new Headers();
 
 describe('book cover upload transport', () => {
+  it('keeps upload route limits server-side', () => {
+    expect(bookCoverUploadConstraints.maxFileSize).toBe(
+      bookCoverMaxFileSizeBytes
+    );
+    expect(bookCoverUploadConstraints.maxFileSize).toBe(10 * 1024 * 1024);
+    expect(bookCoverUploadConstraints.fileTypes).toEqual([
+      ...bookCoverAcceptedFileTypes,
+    ]);
+  });
+
   it('binds session context and returns the prepared object key', async () => {
     const prepareCoverUpload = vi.fn(async () => ({
       ok: true as const,
