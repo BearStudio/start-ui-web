@@ -87,18 +87,106 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     await expect(repository.countByStatus()).resolves.toEqual({ sent: 1 });
   });
 
+  it('returns an existing sent record for repeated idempotency keys', async () => {
+    const repository = new EmailStatusRepositoryDrizzle(database.db);
+
+    const attempt = await repository.recordSendAttempt({
+      provider: 'resend',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      idempotencyKey: 'key-1',
+      metadata: { source: 'auth.signInOtp' },
+    });
+    const sent = await repository.upsertStatusByExternalId({
+      provider: 'resend',
+      externalId: 'email_123',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      status: 'sent',
+      idempotencyKey: 'key-1',
+    });
+
+    const duplicate = await repository.recordSendAttempt({
+      provider: 'resend',
+      recipient: 'other@example.com',
+      subject: 'Retry login code',
+      idempotencyKey: 'key-1',
+    });
+
+    expect(duplicate).toMatchObject({
+      id: sent.id,
+      idempotencyKey: 'key-1',
+      externalId: 'email_123',
+      status: 'sent',
+    });
+    expect(sent.id).toBe(attempt.id);
+    await expect(repository.listRecent()).resolves.toHaveLength(1);
+  });
+
+  it('preserves an existing idempotency key during webhook status updates', async () => {
+    const repository = new EmailStatusRepositoryDrizzle(database.db);
+
+    await repository.upsertStatusByExternalId({
+      provider: 'resend',
+      externalId: 'email_123',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      status: 'sent',
+      idempotencyKey: 'key-1',
+    });
+
+    const delivered = await repository.upsertStatusByExternalId({
+      provider: 'resend',
+      externalId: 'email_123',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      status: 'delivered',
+      idempotencyKey: null,
+      lastWebhookEventId: 'evt_1',
+    });
+
+    expect(delivered).toMatchObject({
+      externalId: 'email_123',
+      status: 'delivered',
+      idempotencyKey: 'key-1',
+      lastWebhookEventId: 'evt_1',
+    });
+  });
+
+  it('enforces provider idempotency key uniqueness in the database', async () => {
+    await database.db.insert(emailStatusTable).values(
+      makeEmailStatusRow({
+        id: 'email-status-1',
+        externalId: null,
+        idempotencyKey: 'key-1',
+      })
+    );
+
+    await expect(
+      database.db.insert(emailStatusTable).values(
+        makeEmailStatusRow({
+          id: 'email-status-2',
+          externalId: null,
+          idempotencyKey: 'key-1',
+        })
+      )
+    ).rejects.toThrow();
+  });
+
   it('lists recent statuses newest first', async () => {
     const repository = new EmailStatusRepositoryDrizzle(database.db);
     await database.db.insert(emailStatusTable).values([
       makeEmailStatusRow({
         id: 'email-status-old',
         externalId: 'email_old',
+        idempotencyKey: 'key-old',
         createdAt: new Date('2026-01-01T00:00:00.000Z'),
         updatedAt: new Date('2026-01-01T00:00:00.000Z'),
       }),
       makeEmailStatusRow({
         id: 'email-status-new',
         externalId: 'email_new',
+        idempotencyKey: 'key-new',
         createdAt: new Date('2026-01-02T00:00:00.000Z'),
         updatedAt: new Date('2026-01-02T00:00:00.000Z'),
       }),

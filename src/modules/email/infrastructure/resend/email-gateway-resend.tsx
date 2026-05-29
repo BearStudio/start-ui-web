@@ -75,13 +75,21 @@ export class EmailGatewayResend implements EmailGateway {
     }
 
     const recipient = recipientToStatusValue(input.to);
-    await this.statusRepository.recordSendAttempt({
+    const attempt = await this.statusRepository.recordSendAttempt({
       provider: EMAIL_PROVIDER_RESEND,
       recipient,
       subject: input.subject,
       idempotencyKey: input.idempotencyKey,
       metadata: input.metadata,
     });
+
+    if (attempt.externalId) {
+      return {
+        provider: EMAIL_PROVIDER_RESEND,
+        externalId: attempt.externalId,
+        skipped: false,
+      };
+    }
 
     const text = await render(input.template as ReactElement, {
       plainText: true,

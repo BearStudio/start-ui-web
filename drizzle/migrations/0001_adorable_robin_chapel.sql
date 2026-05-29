@@ -12,6 +12,7 @@ CREATE TABLE "email_status" (
 	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX "email_status_provider_external_id_key" ON "email_status" USING btree ("provider","externalId");--> statement-breakpoint
+CREATE UNIQUE INDEX "email_status_provider_external_id_key" ON "email_status" USING btree ("provider","externalId") WHERE "externalId" IS NOT NULL;--> statement-breakpoint
+CREATE UNIQUE INDEX "email_status_provider_idempotency_key" ON "email_status" USING btree ("provider","idempotencyKey") WHERE "idempotencyKey" IS NOT NULL;--> statement-breakpoint
 CREATE INDEX "email_status_status_idx" ON "email_status" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "email_status_created_at_idx" ON "email_status" USING btree ("createdAt");

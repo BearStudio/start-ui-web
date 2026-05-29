@@ -73,13 +73,13 @@ export const createResendWebhookHandlers = ({
 }: ResendWebhookHandlerDeps) => {
   const receive = async (request: Request) => {
     const payload = await request.text();
-    const headers = {
+    const resendSdkHeaders = {
       id: requiredHeader(request.headers, 'svix-id'),
       timestamp: requiredHeader(request.headers, 'svix-timestamp'),
       signature: requiredHeader(request.headers, 'svix-signature'),
     };
 
-    const event = verifier.verify({ payload, headers });
+    const event = verifier.verify({ payload, headers: resendSdkHeaders });
 
     if (!isTrackedEmailEvent(event)) {
       return Response.json({ ok: true, ignored: true });
@@ -91,7 +91,7 @@ export const createResendWebhookHandlers = ({
       recipient: recipientFromEvent(event),
       subject: event.data.subject,
       status: resendEmailStatusByEventType[event.type],
-      webhookEventId: headers.id,
+      webhookEventId: resendSdkHeaders.id,
       providerEventType: event.type,
       providerEventCreatedAt: event.created_at,
       metadata: {

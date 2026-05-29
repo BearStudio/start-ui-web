@@ -180,6 +180,46 @@ describe('EmailGatewayResend', () => {
     });
   });
 
+  it('short-circuits duplicate sends when the idempotency key already has an external ID', async () => {
+    const statusRepository = makeStatusRepository();
+    vi.mocked(statusRepository.recordSendAttempt).mockResolvedValueOnce({
+      id: 'status-1',
+      provider: 'resend',
+      externalId: 'email_existing',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      status: 'sent',
+      idempotencyKey: 'key-1',
+      lastWebhookEventId: null,
+      metadata: {},
+      createdAt: new Date('2026-01-01T00:00:00.000Z'),
+      updatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    const resend = {
+      emails: {
+        send: vi.fn(),
+      },
+    } as unknown as Resend;
+    const { EmailGatewayResend } = await loadGateway();
+
+    await expect(
+      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+        to: 'user@example.com',
+        subject: 'Login code',
+        template: createElement('div', null, '123456'),
+        idempotencyKey: 'key-1',
+      })
+    ).resolves.toEqual({
+      provider: 'resend',
+      externalId: 'email_existing',
+      skipped: false,
+    });
+
+    expect(testState.render).not.toHaveBeenCalled();
+    expect(resend.emails.send).not.toHaveBeenCalled();
+    expect(statusRepository.upsertStatusByExternalId).not.toHaveBeenCalled();
+  });
+
   it('records send_failed status and throws AppError when Resend rejects the send', async () => {
     const statusRepository = makeStatusRepository();
     const resend = {

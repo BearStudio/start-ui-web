@@ -5,7 +5,7 @@ inputs:
   node-version:
     description: Node.js version to use
     required: false
-    default: 'lts/*'
+    default: '24'
   pnpm-version:
     description: pnpm version to install
     required: false

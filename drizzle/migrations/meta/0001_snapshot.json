@@ -401,6 +401,29 @@
             }
           ],
           "isUnique": true,
+          "where": "\"email_status\".\"externalId\" is not null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "email_status_provider_idempotency_key": {
+          "name": "email_status_provider_idempotency_key",
+          "columns": [
+            {
+              "expression": "provider",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "idempotencyKey",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"email_status\".\"idempotencyKey\" is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}

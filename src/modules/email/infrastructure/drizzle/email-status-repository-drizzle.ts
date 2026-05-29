@@ -1,4 +1,4 @@
-import { and, desc, eq, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 
 import type {
   EmailMetadata,
@@ -49,6 +49,9 @@ const toDomain = (row: EmailStatusRow): EmailStatusRecord => ({
   updatedAt: row.updatedAt,
 });
 
+const emailStatusIdempotencyKeyIsNotNull = sql`${emailStatusTable.idempotencyKey} is not null`;
+const emailStatusExternalIdIsNotNull = sql`${emailStatusTable.externalId} is not null`;
+
 function mapDbError(error: unknown): never {
   if (error instanceof AppError) throw error;
 
@@ -64,18 +67,56 @@ function mapDbError(error: unknown): never {
 export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
   constructor(private readonly db: Database) {}
 
+  private findByIdempotencyKey(
+    provider: EmailProvider,
+    idempotencyKey: string
+  ) {
+    return this.db.query.emailStatus.findFirst({
+      where: and(
+        eq(emailStatusTable.provider, provider),
+        eq(emailStatusTable.idempotencyKey, idempotencyKey)
+      ),
+      orderBy: [desc(emailStatusTable.createdAt), desc(emailStatusTable.id)],
+    });
+  }
+
+  private async updateSendAttempt(
+    row: EmailStatusRow,
+    input: RecordEmailSendAttemptInput,
+    values: NewEmailStatus
+  ) {
+    const [updated] = await this.db
+      .update(emailStatusTable)
+      .set({
+        recipient: values.recipient,
+        subject: values.subject,
+        status: values.status,
+        metadata: mergeMetadata(row.metadata, input.metadata),
+        updatedAt: new Date(),
+      })
+      .where(eq(emailStatusTable.id, row.id))
+      .returning();
+
+    if (!updated) {
+      throw new AppError({
+        code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
+        category: 'system',
+        status: 500,
+        message: 'Email status update returned no row',
+      });
+    }
+
+    return toDomain(updated);
+  }
+
   async recordSendAttempt(
     input: RecordEmailSendAttemptInput
   ): Promise<EmailStatusRecord> {
     try {
-      const existingAttempt = await this.db.query.emailStatus.findFirst({
-        where: and(
-          eq(emailStatusTable.provider, input.provider),
-          eq(emailStatusTable.idempotencyKey, input.idempotencyKey),
-          isNull(emailStatusTable.externalId)
-        ),
-        orderBy: [desc(emailStatusTable.createdAt)],
-      });
+      const existingAttempt = await this.findByIdempotencyKey(
+        input.provider,
+        input.idempotencyKey
+      );
 
       const values = {
         provider: input.provider,
@@ -87,36 +128,32 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
       } satisfies NewEmailStatus;
 
       if (existingAttempt) {
-        const [updated] = await this.db
-          .update(emailStatusTable)
-          .set({
-            recipient: values.recipient,
-            subject: values.subject,
-            status: values.status,
-            metadata: mergeMetadata(existingAttempt.metadata, input.metadata),
-            updatedAt: new Date(),
-          })
-          .where(eq(emailStatusTable.id, existingAttempt.id))
-          .returning();
-
-        if (!updated) {
-          throw new AppError({
-            code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
-            category: 'system',
-            status: 500,
-            message: 'Email status update returned no row',
-          });
+        if (existingAttempt.externalId) {
+          return toDomain(existingAttempt);
         }
 
-        return toDomain(updated);
+        return await this.updateSendAttempt(existingAttempt, input, values);
       }
 
       const [created] = await this.db
         .insert(emailStatusTable)
         .values(values)
+        .onConflictDoNothing({
+          target: [emailStatusTable.provider, emailStatusTable.idempotencyKey],
+          where: emailStatusIdempotencyKeyIsNotNull,
+        })
         .returning();
 
-      if (!created) {
+      if (created) {
+        return toDomain(created);
+      }
+
+      const racedAttempt = await this.findByIdempotencyKey(
+        input.provider,
+        input.idempotencyKey
+      );
+
+      if (!racedAttempt) {
         throw new AppError({
           code: 'EMAIL_STATUS_CREATE_EMPTY_RESULT',
           category: 'system',
@@ -125,7 +162,11 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
         });
       }
 
-      return toDomain(created);
+      if (racedAttempt.externalId) {
+        return toDomain(racedAttempt);
+      }
+
+      return await this.updateSendAttempt(racedAttempt, input, values);
     } catch (error) {
       mapDbError(error);
     }
@@ -147,10 +188,6 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
             recipient: input.recipient,
             subject: input.subject,
             status: input.status,
-            idempotencyKey:
-              input.idempotencyKey === undefined
-                ? existing.idempotencyKey
-                : input.idempotencyKey,
             lastWebhookEventId:
               input.lastWebhookEventId === undefined
                 ? existing.lastWebhookEventId
@@ -174,16 +211,12 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
       }
 
       if (input.idempotencyKey) {
-        const existingAttempt = await this.db.query.emailStatus.findFirst({
-          where: and(
-            eq(emailStatusTable.provider, input.provider),
-            eq(emailStatusTable.idempotencyKey, input.idempotencyKey),
-            isNull(emailStatusTable.externalId)
-          ),
-          orderBy: [desc(emailStatusTable.createdAt)],
-        });
+        const existingAttempt = await this.findByIdempotencyKey(
+          input.provider,
+          input.idempotencyKey
+        );
 
-        if (existingAttempt) {
+        if (existingAttempt && !existingAttempt.externalId) {
           const [updated] = await this.db
             .update(emailStatusTable)
             .set({
@@ -225,11 +258,11 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
         })
         .onConflictDoUpdate({
           target: [emailStatusTable.provider, emailStatusTable.externalId],
+          targetWhere: emailStatusExternalIdIsNotNull,
           set: {
             recipient: input.recipient,
             subject: input.subject,
             status: input.status,
-            idempotencyKey: input.idempotencyKey ?? null,
             lastWebhookEventId: input.lastWebhookEventId ?? null,
             metadata: input.metadata ?? {},
             updatedAt: new Date(),

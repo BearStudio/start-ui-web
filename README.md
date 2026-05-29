@@ -16,7 +16,7 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Requirements
 
-* [Node.js](https://nodejs.org) >= 22
+* [Node.js](https://nodejs.org) 24.x
 * [pnpm](https://pnpm.io/)
 * [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 

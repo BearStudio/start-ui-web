@@ -30,7 +30,7 @@ const makeEmailEvent = (type = 'email.delivered') =>
   }) as ExplicitAny;
 
 describe('Resend webhook HTTP handlers', () => {
-  it('passes the raw request body and Svix headers to the verifier', async () => {
+  it('passes the raw request body and Resend SDK header shape to the verifier', async () => {
     const processStatusEvent = vi.fn(async () => ({
       duplicate: false,
       record: {} as ExplicitAny,

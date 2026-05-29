@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -247,10 +247,12 @@ export const emailStatus = pgTable(
       .notNull(),
   },
   (table) => [
-    uniqueIndex('email_status_provider_external_id_key').on(
-      table.provider,
-      table.externalId
-    ),
+    uniqueIndex('email_status_provider_external_id_key')
+      .on(table.provider, table.externalId)
+      .where(sql`${table.externalId} is not null`),
+    uniqueIndex('email_status_provider_idempotency_key')
+      .on(table.provider, table.idempotencyKey)
+      .where(sql`${table.idempotencyKey} is not null`),
     index('email_status_status_idx').on(table.status),
     index('email_status_created_at_idx').on(table.createdAt),
   ]

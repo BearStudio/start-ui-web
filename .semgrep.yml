@@ -660,6 +660,80 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: resend-sdk-webhook-verify-uses-sdk-header-shape
+    message: Resend SDK webhooks.verify expects headers.id, headers.timestamp, and headers.signature mapped from incoming svix-* headers; pass raw svix-* headers only when using Svix directly.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: |
+          $RESEND.webhooks.verify({
+            ...,
+            headers: {
+              ...,
+              'svix-id': $ID,
+              ...
+            },
+            ...
+          })
+      - pattern: |
+          $RESEND.webhooks.verify({
+            ...,
+            headers: {
+              ...,
+              'svix-timestamp': $TIMESTAMP,
+              ...
+            },
+            ...
+          })
+      - pattern: |
+          $RESEND.webhooks.verify({
+            ...,
+            headers: {
+              ...,
+              'svix-signature': $SIGNATURE,
+              ...
+            },
+            ...
+          })
+    paths:
+      include:
+        - src/modules/email/**/*.ts
+        - src/modules/email/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: email-gateway-record-send-attempt-result-required
+    message: Initial Resend send attempts must inspect recordSendAttempt() so duplicate idempotency keys with an existing externalId can short-circuit before another provider call.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: |
+          await $REPOSITORY.recordSendAttempt({
+            ...
+          });
+      - pattern-not-inside: |
+          const $RESULT = await $REPOSITORY.recordSendAttempt({
+            ...
+          });
+      - pattern-not-inside: |
+          let $RESULT = await $REPOSITORY.recordSendAttempt({
+            ...
+          });
+      - pattern-not: |
+          await $REPOSITORY.recordSendAttempt({
+            ...,
+            status: $STATUS,
+            ...
+          });
+    paths:
+      include:
+        - src/modules/email/infrastructure/resend/**/*.ts
+        - src/modules/email/infrastructure/resend/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
   - id: db-client-no-unguarded-import-meta-env
     message: Guard import.meta.env access in the DB client because seed scripts can run outside Vite.
     languages: [typescript]
