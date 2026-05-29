@@ -705,10 +705,10 @@ rules:
         - '**/*.test.ts'
 
   - id: email-gateway-record-send-attempt-result-required
-    message: Initial Resend send attempts must inspect recordSendAttempt() so duplicate idempotency keys with an existing externalId can short-circuit before another provider call.
+    message: Resend send attempts must inspect recordSendAttempt() so duplicate idempotency keys with an existing externalId can short-circuit instead of sending or throwing.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '(?s)^[\t ]*await\s+[A-Za-z0-9_.$]+\.recordSendAttempt\(\{\s*(?:(?!\bstatus\s*:).)*?\}\);'
+    pattern-regex: '(?m)^\s*await\s+[A-Za-z0-9_.$]+\.recordSendAttempt\('
     paths:
       include:
         - src/modules/email/infrastructure/resend/**/*.ts

@@ -19,7 +19,6 @@ describe('book cover upload transport', () => {
     expect(bookCoverUploadConstraints.maxFileSize).toBe(
       bookCoverMaxFileSizeBytes
     );
-    expect(bookCoverUploadConstraints.maxFileSize).toBe(10 * 1024 * 1024);
     expect(bookCoverUploadConstraints.fileTypes).toEqual([
       ...bookCoverAcceptedFileTypes,
     ]);

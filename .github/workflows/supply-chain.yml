@@ -5,9 +5,15 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
+  # Required for actions/attest-build-provenance to create attestations.
   attestations: write
   contents: read
+  # Required for OIDC token signing of provenance attestations.
   id-token: write
 
 jobs:
@@ -17,6 +23,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -24,6 +32,8 @@ jobs:
           node-version: 24
 
       - name: Run dependency audit
+        id: dependency-audit
+        continue-on-error: true
         run: pnpm audit --audit-level=high --json > pnpm-audit.json
 
       - name: Run TanStack lockfile policy
@@ -52,3 +62,9 @@ jobs:
           subject-path: |
             pnpm-audit.json
             sbom.spdx.json
+
+      - name: Fail on dependency audit findings
+        if: steps.dependency-audit.outcome == 'failure'
+        run: |
+          echo "pnpm audit reported high-severity vulnerabilities; see pnpm-audit.json in the uploaded artifact."
+          exit 1

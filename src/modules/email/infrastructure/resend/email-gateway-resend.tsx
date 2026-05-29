@@ -119,7 +119,7 @@ export class EmailGatewayResend implements EmailGateway {
     });
 
     if (error) {
-      await this.statusRepository.recordSendAttempt({
+      const failedAttempt = await this.statusRepository.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -130,6 +130,14 @@ export class EmailGatewayResend implements EmailGateway {
           ...providerErrorMetadata(error),
         },
       });
+
+      if (failedAttempt.externalId) {
+        return {
+          provider: EMAIL_PROVIDER_RESEND,
+          externalId: failedAttempt.externalId,
+          skipped: false,
+        };
+      }
 
       throw new AppError({
         code: 'EMAIL_SEND_FAILED',
@@ -146,7 +154,7 @@ export class EmailGatewayResend implements EmailGateway {
     }
 
     if (!data?.id) {
-      await this.statusRepository.recordSendAttempt({
+      const failedAttempt = await this.statusRepository.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -154,6 +162,14 @@ export class EmailGatewayResend implements EmailGateway {
         status: 'send_failed',
         metadata: input.metadata,
       });
+
+      if (failedAttempt.externalId) {
+        return {
+          provider: EMAIL_PROVIDER_RESEND,
+          externalId: failedAttempt.externalId,
+          skipped: false,
+        };
+      }
 
       throw new AppError({
         code: 'EMAIL_SEND_EMPTY_RESULT',

@@ -8,10 +8,18 @@ import {
   createStart,
 } from '@tanstack/react-start';
 
+import type { Logger } from '@/modules/kernel';
+import {
+  createPinoAppLogger,
+  createPinoLogger,
+} from '@/modules/kernel/infrastructure/logger/pino';
+import { createNoOpTelemetry } from '@/platform/telemetry';
+
 type StartHandlerType = 'serverFn' | 'router';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 const ORIGIN_PROTECTED_SERVER_ROUTES = new Set(['/api/upload']);
+const ORIGIN_PROTECTED_SERVER_ROUTE_PREFIXES = ['/api/auth/'] as const;
 const SECURITY_HEADERS = {
   'Content-Security-Policy-Report-Only': [
     "default-src 'self'",
@@ -44,6 +52,24 @@ type OriginGuardInput = {
   pathname: string;
 };
 
+let originGuardLogger: Pick<Logger, 'warn'> | undefined;
+
+const getOriginGuardLogger = () => {
+  originGuardLogger ??= createPinoAppLogger({
+    pino: createPinoLogger(),
+    telemetry: createNoOpTelemetry(),
+  });
+
+  return originGuardLogger;
+};
+
+const isOriginProtectedRoute = (pathname: string) =>
+  ORIGIN_PROTECTED_SERVER_ROUTES.has(pathname) ||
+  pathname === '/api/auth' ||
+  ORIGIN_PROTECTED_SERVER_ROUTE_PREFIXES.some((prefix) =>
+    pathname.startsWith(prefix)
+  );
+
 export function shouldValidateOrigin({
   handlerType,
   method,
@@ -52,7 +78,7 @@ export function shouldValidateOrigin({
   return (
     handlerType === 'router' &&
     !SAFE_METHODS.has(method.toUpperCase()) &&
-    ORIGIN_PROTECTED_SERVER_ROUTES.has(pathname)
+    isOriginProtectedRoute(pathname)
   );
 }
 
@@ -91,9 +117,13 @@ export const originGuardMiddleware = createMiddleware({
     shouldValidateOrigin({ handlerType, method: request.method, pathname }) &&
     !hasSameOriginHeader(request)
   ) {
-    console.warn('security.origin_rejected', {
-      method: request.method,
-      pathname,
+    getOriginGuardLogger().warn({
+      details: {
+        method: request.method,
+        pathname,
+      },
+      direction: 'inbound',
+      event: 'security.origin_rejected',
     });
 
     return applySecurityHeaders(new Response('Forbidden', { status: 403 }));

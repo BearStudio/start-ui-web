@@ -96,6 +96,32 @@ describe('Resend webhook HTTP handlers', () => {
     });
   });
 
+  it('logs a warning when signature verification fails', async () => {
+    const logger = { warn: vi.fn() };
+    const verifyError = new Error('Invalid signature');
+    const handlers = createResendWebhookHandlers({
+      getUseCases: () => ({ processStatusEvent: vi.fn() }),
+      logger,
+      verifier: {
+        verify: vi.fn(() => {
+          throw verifyError;
+        }),
+      },
+    });
+
+    await expect(handlers.receive(makeRequest())).rejects.toThrow(
+      'Invalid signature'
+    );
+
+    expect(logger.warn).toHaveBeenCalledWith({
+      details: {
+        provider: 'resend',
+        reason: 'Invalid signature',
+      },
+      event: 'security.webhook_signature_rejected',
+    });
+  });
+
   it('ignores non-email webhook events with a successful response', async () => {
     const processStatusEvent = vi.fn();
     const handlers = createResendWebhookHandlers({

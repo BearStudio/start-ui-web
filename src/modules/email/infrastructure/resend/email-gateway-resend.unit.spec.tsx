@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import type { Resend } from 'resend';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { EmailStatusRepository } from '@/modules/email';
+import type { EmailStatusRecord, EmailStatusRepository } from '@/modules/email';
 
 const testState = vi.hoisted(() => ({
   emailConfig: {
@@ -29,34 +29,29 @@ vi.mock('@react-email/render', () => ({
   render: testState.render,
 }));
 
+const makeEmailStatusRecord = (
+  overrides: Partial<EmailStatusRecord> = {}
+): EmailStatusRecord => ({
+  id: 'status-1',
+  provider: 'resend',
+  externalId: null,
+  recipient: 'user@example.com',
+  subject: 'Login code',
+  status: 'send_attempted',
+  idempotencyKey: 'key-1',
+  lastWebhookEventId: null,
+  metadata: {},
+  createdAt: new Date('2026-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2026-01-01T00:00:00.000Z'),
+  ...overrides,
+});
+
 const makeStatusRepository = (): EmailStatusRepository =>
   ({
-    recordSendAttempt: vi.fn(async () => ({
-      id: 'status-1',
-      provider: 'resend' as const,
-      externalId: null,
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'send_attempted' as const,
-      idempotencyKey: 'key-1',
-      lastWebhookEventId: null,
-      metadata: {},
-      createdAt: new Date('2026-01-01T00:00:00.000Z'),
-      updatedAt: new Date('2026-01-01T00:00:00.000Z'),
-    })),
-    upsertStatusByExternalId: vi.fn(async () => ({
-      id: 'status-1',
-      provider: 'resend' as const,
-      externalId: 'email_123',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'sent' as const,
-      idempotencyKey: 'key-1',
-      lastWebhookEventId: null,
-      metadata: {},
-      createdAt: new Date('2026-01-01T00:00:00.000Z'),
-      updatedAt: new Date('2026-01-01T00:00:00.000Z'),
-    })),
+    recordSendAttempt: vi.fn(async () => makeEmailStatusRecord()),
+    upsertStatusByExternalId: vi.fn(async () =>
+      makeEmailStatusRecord({ externalId: 'email_123', status: 'sent' })
+    ),
     getByExternalId: vi.fn(),
     listRecent: vi.fn(),
     countByStatus: vi.fn(),
@@ -267,6 +262,80 @@ describe('EmailGatewayResend', () => {
           message: 'Invalid API key',
         },
       },
+    });
+  });
+
+  it('returns an existing external ID if a failed send races with a completed attempt', async () => {
+    const statusRepository = makeStatusRepository();
+    vi.mocked(statusRepository.recordSendAttempt)
+      .mockResolvedValueOnce(makeEmailStatusRecord())
+      .mockResolvedValueOnce(
+        makeEmailStatusRecord({
+          externalId: 'email_existing',
+          status: 'sent',
+        })
+      );
+    const resend = {
+      emails: {
+        send: vi.fn(async () => ({
+          data: null,
+          error: {
+            message: 'Invalid API key',
+            name: 'invalid_api_key',
+            statusCode: 401,
+          },
+          headers: null,
+        })),
+      },
+    } as unknown as Resend;
+    const { EmailGatewayResend } = await loadGateway();
+
+    await expect(
+      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+        to: 'user@example.com',
+        subject: 'Login code',
+        template: createElement('div', null, '123456'),
+        idempotencyKey: 'key-1',
+      })
+    ).resolves.toEqual({
+      provider: 'resend',
+      externalId: 'email_existing',
+      skipped: false,
+    });
+  });
+
+  it('returns an existing external ID if an empty provider result races with a completed attempt', async () => {
+    const statusRepository = makeStatusRepository();
+    vi.mocked(statusRepository.recordSendAttempt)
+      .mockResolvedValueOnce(makeEmailStatusRecord())
+      .mockResolvedValueOnce(
+        makeEmailStatusRecord({
+          externalId: 'email_existing',
+          status: 'sent',
+        })
+      );
+    const resend = {
+      emails: {
+        send: vi.fn(async () => ({
+          data: null,
+          error: null,
+          headers: null,
+        })),
+      },
+    } as unknown as Resend;
+    const { EmailGatewayResend } = await loadGateway();
+
+    await expect(
+      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+        to: 'user@example.com',
+        subject: 'Login code',
+        template: createElement('div', null, '123456'),
+        idempotencyKey: 'key-1',
+      })
+    ).resolves.toEqual({
+      provider: 'resend',
+      externalId: 'email_existing',
+      skipped: false,
     });
   });
 });

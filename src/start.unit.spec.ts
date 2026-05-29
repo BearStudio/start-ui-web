@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { mockLogger } from '@/tests/server/test-utils';
+
 const sentryMiddleware = vi.hoisted(() => ({
   function: { type: 'sentry-function' },
   request: { type: 'sentry-request' },
@@ -36,6 +38,13 @@ describe('TanStack Start instance', () => {
         handlerType: 'router',
         method: 'POST',
         pathname: '/api/upload',
+      })
+    ).toBe(true);
+    expect(
+      shouldValidateOrigin({
+        handlerType: 'router',
+        method: 'POST',
+        pathname: '/api/auth/sign-in/email-otp',
       })
     ).toBe(true);
     expect(
@@ -83,6 +92,14 @@ describe('TanStack Start instance', () => {
     });
 
     expect(next).not.toHaveBeenCalled();
+    expect(mockLogger.warn).toHaveBeenCalledWith({
+      details: {
+        method: 'POST',
+        pathname: '/api/upload',
+      },
+      direction: 'inbound',
+      event: 'security.origin_rejected',
+    });
     expect(response.status).toBe(403);
     expect(response.headers.get('X-Frame-Options')).toBe('DENY');
     expect(

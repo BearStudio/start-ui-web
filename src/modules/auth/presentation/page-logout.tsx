@@ -6,7 +6,7 @@ import { PageError } from '@/platform/components/errors/page-error';
 import { Spinner } from '@/platform/components/ui/spinner';
 
 import {
-  clearAuthScopedQueryState,
+  clearAllQueryStateForAuthBoundary,
   signOut,
   useAuthSession,
 } from '@/modules/auth/client';
@@ -22,7 +22,7 @@ export const PageLogout = () => {
         throw response.error;
       }
       await session.refetch();
-      clearAuthScopedQueryState(queryClient);
+      clearAllQueryStateForAuthBoundary(queryClient);
     },
     onSuccess: () => {
       navigate({

@@ -18,7 +18,7 @@ import { Button } from '@/platform/components/ui/button';
 import { ButtonLink } from '@/platform/components/ui/button-link';
 
 import {
-  clearAuthScopedQueryState,
+  clearAllQueryStateForAuthBoundary,
   signInEmailOtp,
   useAuthSession,
 } from '@/modules/auth/client';
@@ -96,7 +96,7 @@ export default function PageLoginVerify({
       // login destination (search.redirect, /manager, /app, or /).
       await session.refetch();
       authE2eDebug('login.verify.session.refetched');
-      clearAuthScopedQueryState(queryClient);
+      clearAllQueryStateForAuthBoundary(queryClient);
       authE2eDebug('login.verify.query_cache.cleared');
       await router.invalidate();
       authE2eDebug('login.verify.router.invalidated');

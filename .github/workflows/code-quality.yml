@@ -26,6 +26,9 @@ jobs:
       - name: Check formatting
         run: pnpm format:check
 
+      - name: Ensure formatting check did not mutate files
+        run: git diff --exit-code -- .
+
   check:
     name: Static Check
     if: github.event.pull_request.draft == false
@@ -43,6 +46,9 @@ jobs:
 
       - name: Run static checks
         run: pnpm check:ci
+
+      - name: Ensure static checks did not mutate files
+        run: git diff --exit-code -- .
 
   tests:
     name: Tests

@@ -21,6 +21,10 @@ export const useCurrentSessionQuery = () =>
 export const useCurrentScopeKey = () =>
   useCurrentSessionQuery().data?.scopeKey ?? 'anonymous';
 
-export function clearAuthScopedQueryState(queryClient: QueryClient) {
+/**
+ * Clears every query and mutation after an auth boundary change so cached
+ * user-specific data cannot leak between sessions.
+ */
+export function clearAllQueryStateForAuthBoundary(queryClient: QueryClient) {
   queryClient.clear();
 }

@@ -15,7 +15,7 @@ import { Button } from '@/platform/components/ui/button';
 
 import { accountQueries } from '@/modules/account/client';
 import {
-  clearAuthScopedQueryState,
+  clearAllQueryStateForAuthBoundary,
   useAuthSession,
 } from '@/modules/auth/client';
 import { ConfirmSignOut } from '@/modules/auth/presentation/confirm-signout';
@@ -39,7 +39,7 @@ export const PageOnboarding = () => {
       // session cache, then invalidate route guards so beforeLoad reruns
       // and redirects the now-onboarded user out of /onboarding.
       await session.refetch();
-      clearAuthScopedQueryState(queryClient);
+      clearAllQueryStateForAuthBoundary(queryClient);
       await router.invalidate();
     },
     onError: () => {

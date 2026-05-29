@@ -11,7 +11,7 @@ type QueryClientOptions = {
   onError?: (error: unknown) => void;
 };
 
-function getHttpStatus(error: unknown) {
+function getHttpStatus(error: unknown): number | undefined {
   if (
     typeof error === 'object' &&
     error !== null &&
@@ -24,7 +24,10 @@ function getHttpStatus(error: unknown) {
   return undefined;
 }
 
-export function shouldRetryQuery(failureCount: number, error: unknown) {
+export function shouldRetryQuery(
+  failureCount: number,
+  error: unknown
+): boolean {
   const status = getHttpStatus(error);
 
   if (status !== undefined && status >= 400 && status < 500) {
