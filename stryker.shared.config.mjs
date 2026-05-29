@@ -22,6 +22,15 @@ export function createScopedStrykerConfig({
     },
     mutate: mutationSourceFiles,
     testFiles: mutationTestFiles,
+    ignorePatterns: [
+      '/coverage',
+      '/playwright-report',
+      '/test-results',
+      '/cosmos-export',
+      '/.output',
+      '/dist',
+      '/build',
+    ],
     thresholds: {
       high: 80,
       low: 70,

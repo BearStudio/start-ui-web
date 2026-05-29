@@ -11,7 +11,7 @@ export type FieldErrorInput = unknown;
 const extractMessage = (raw: FieldErrorInput): string | undefined => {
   if (raw == null) return undefined;
   if (typeof raw === 'string') return raw;
-  if (typeof raw === 'object' && raw !== null && 'message' in raw) {
+  if (typeof raw === 'object' && 'message' in raw) {
     const message = (raw as { message?: unknown }).message;
     return typeof message === 'string' ? message : undefined;
   }

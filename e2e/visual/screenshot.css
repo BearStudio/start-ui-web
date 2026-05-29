@@ -10,6 +10,8 @@
 }
 
 [data-sonner-toaster],
-[data-radix-popper-content-wrapper] {
+[data-radix-popper-content-wrapper],
+button[aria-label*='TanStack' i],
+button[aria-label*='Devtools' i] {
   visibility: hidden !important;
 }

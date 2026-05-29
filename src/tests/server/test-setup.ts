@@ -40,6 +40,7 @@ vi.mock('@tanstack/react-start/server', () => ({
 vi.mock('@/platform/env/client', () => ({
   envClient: {
     VITE_IS_DEMO: false,
+    VITE_VISUAL_TEST: false,
   },
 }));
 

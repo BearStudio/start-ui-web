@@ -14,6 +14,8 @@ import {
 } from '@/modules/auth/client';
 import { FileRouteTypes } from '@/routeTree.gen';
 
+import { installConsoleErrorGuard } from './console-error-guard';
+
 type PostAuthRoute = '/app' | '/manager';
 
 type AuthDiagnosticEvent = {
@@ -44,6 +46,11 @@ export interface PageUtils {
    * Wait for a post-auth route or any nested route below it.
    */
   waitForPostAuthRoute: (route: PostAuthRoute) => Promise<void>;
+
+  /**
+   * Fail if the page emitted unexpected browser console errors or page errors.
+   */
+  assertNoUnexpectedConsoleErrors: () => Promise<void>;
 
   /**
    * Override of the `page.goto` method with typed routes from the app
@@ -214,6 +221,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
   testInfo
 ) => {
   const diagnostics = createAuthDiagnostics(page, testInfo);
+  const consoleGuard = installConsoleErrorGuard(page, testInfo);
 
   page.login = async function login(input: { email: string; code?: string }) {
     const routeLogin = '/login' satisfies FileRouteTypes['to'];
@@ -280,6 +288,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
   };
 
   page.attachAuthDiagnostics = diagnostics.attach;
+  page.assertNoUnexpectedConsoleErrors = consoleGuard.assertNoUnexpectedIssues;
   page.authDebug = diagnostics.log;
   page.waitForPostAuthRoute = async function waitForPostAuthRoute(route) {
     await diagnostics.waitForUrl(
@@ -292,6 +301,12 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
   page.to = page.goto;
 
   await apply(page);
+
+  if (testInfo.status === testInfo.expectedStatus) {
+    await consoleGuard.assertNoUnexpectedIssues();
+  } else {
+    await consoleGuard.attach();
+  }
 
   if (testInfo.status !== testInfo.expectedStatus) {
     await diagnostics.attach();

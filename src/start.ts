@@ -56,7 +56,7 @@ const getOriginGuardLogger = async () => {
     return originGuardLogger;
   }
 
-  originGuardLoggerPromise ??=
+  return (originGuardLoggerPromise ??=
     import('@/modules/kernel/infrastructure/logger/pino')
       .then(({ createPinoAppLogger, createPinoLogger }) => {
         const logger = createPinoAppLogger({
@@ -70,9 +70,7 @@ const getOriginGuardLogger = async () => {
       .catch((error: unknown) => {
         originGuardLoggerPromise = undefined;
         throw error;
-      });
-
-  return originGuardLoggerPromise;
+      }));
 };
 
 const isOriginProtectedRoute = (pathname: string) =>
@@ -129,15 +127,19 @@ export const originGuardMiddleware = createMiddleware({
     shouldValidateOrigin({ handlerType, method: request.method, pathname }) &&
     !hasSameOriginHeader(request)
   ) {
-    const logger = await getOriginGuardLogger();
-    logger.warn({
-      details: {
-        method: request.method,
-        pathname,
-      },
-      direction: 'inbound',
-      event: 'security.origin_rejected',
-    });
+    try {
+      const logger = await getOriginGuardLogger();
+      logger.warn({
+        details: {
+          method: request.method,
+          pathname,
+        },
+        direction: 'inbound',
+        event: 'security.origin_rejected',
+      });
+    } catch {
+      // Keep enforcement deterministic even if logger initialization fails.
+    }
 
     return applySecurityHeaders(new Response('Forbidden', { status: 403 }));
   }

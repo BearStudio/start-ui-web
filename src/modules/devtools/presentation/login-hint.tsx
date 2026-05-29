@@ -35,7 +35,10 @@ export const LoginEmailHint = () => {
     defaultValues: { email: '' } satisfies FormFieldsLogin,
   });
 
-  if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
+  if (
+    envClient.VITE_VISUAL_TEST ||
+    (import.meta.env.PROD && !envClient.VITE_IS_DEMO)
+  ) {
     return null;
   }
 
@@ -62,7 +65,10 @@ export const LoginEmailOtpHint = () => {
     defaultValues: { otp: '' } satisfies FormFieldsLoginVerify,
   });
 
-  if (import.meta.env.PROD && !envClient.VITE_IS_DEMO) {
+  if (
+    envClient.VITE_VISUAL_TEST ||
+    (import.meta.env.PROD && !envClient.VITE_IS_DEMO)
+  ) {
     return null;
   }
 

@@ -38,9 +38,18 @@ function cosmosIndexHtmlPlugin(): Plugin {
         }
 
         try {
+          // SECURITY: This React Cosmos middleware only serves the fixed
+          // repo-local renderer template for the exact root HTML routes during
+          // local Vite development, so the filesystem path is not
+          // request-controlled and this is not a production endpoint that
+          // needs external traffic rate limiting.
           const html = readFileSync(cosmosIndexHtmlPath, 'utf8');
+          // SECURITY: Only the allowlisted pathname above is passed as Vite
+          // transform context for dev-time asset/HMR rewriting; query strings
+          // and other request input are not concatenated into the HTML returned
+          // below.
           const transformedHtml = await server.transformIndexHtml(
-            req.url ?? '/',
+            pathname,
             html
           );
 

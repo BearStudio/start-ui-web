@@ -9,6 +9,7 @@ describe('TanStackDevtoolsPanel', () => {
 
   it('does not render devtools outside development', async () => {
     vi.doMock('@/platform/env/config', () => ({
+      envClient: { VITE_VISUAL_TEST: false },
       isDevEnvironment: () => false,
     }));
     const { shouldRenderTanStackDevtools, TanStackDevtoolsPanel } =
@@ -20,11 +21,24 @@ describe('TanStackDevtoolsPanel', () => {
 
   it('enables dynamic devtools rendering in development', async () => {
     vi.doMock('@/platform/env/config', () => ({
+      envClient: { VITE_VISUAL_TEST: false },
       isDevEnvironment: () => true,
     }));
     const { shouldRenderTanStackDevtools } =
       await import('./tanstack-devtools');
 
     expect(shouldRenderTanStackDevtools()).toBe(true);
+  });
+
+  it('does not render devtools during visual testing', async () => {
+    vi.doMock('@/platform/env/config', () => ({
+      envClient: { VITE_VISUAL_TEST: true },
+      isDevEnvironment: () => true,
+    }));
+    const { shouldRenderTanStackDevtools, TanStackDevtoolsPanel } =
+      await import('./tanstack-devtools');
+
+    expect(shouldRenderTanStackDevtools()).toBe(false);
+    expect(renderToStaticMarkup(<TanStackDevtoolsPanel />)).toBe('');
   });
 });

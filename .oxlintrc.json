@@ -1,12 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "unicorn", "typescript", "node"],
+  "plugins": ["react", "unicorn", "typescript", "node", "vitest", "promise"],
   "jsPlugins": [
     "@tanstack/eslint-plugin-query",
     "@tanstack/eslint-plugin-router",
     "eslint-plugin-simple-import-sort",
     "eslint-plugin-sonarjs"
   ],
+  "ignorePatterns": [".github/codeql/**", "**/*.testproj/**"],
   "categories": {
     "correctness": "error"
   },
@@ -25,6 +26,35 @@
       }
     ],
     "unicorn/filename-case": ["error", { "case": "kebabCase" }],
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "promise/always-return": "warn",
+    "promise/catch-or-return": "warn",
+    "promise/no-multiple-resolved": "error",
+    "promise/no-new-statics": "error",
+    "promise/no-return-in-finally": "error",
+    "promise/no-return-wrap": "error",
+    "promise/param-names": "error",
+    "promise/valid-params": "error",
+    "vitest/expect-expect": "warn",
+    "vitest/no-commented-out-tests": "warn",
+    "vitest/no-conditional-expect": "warn",
+    "vitest/no-conditional-in-test": "warn",
+    "vitest/no-disabled-tests": "warn",
+    "vitest/no-duplicate-hooks": "warn",
+    "vitest/no-focused-tests": "error",
+    "vitest/no-identical-title": "error",
+    "vitest/no-import-node-test": "error",
+    "vitest/no-standalone-expect": "off",
+    "vitest/require-mock-type-parameters": "off",
+    "vitest/require-to-throw-message": "off",
+    "vitest/valid-expect": "error",
+    "vitest/valid-expect-in-promise": "error",
+    "vitest/valid-title": "error",
     "simple-import-sort/imports": [
       "warn",
       {
@@ -76,10 +106,18 @@
     {
       "files": [
         "src/routes/**/*.*",
+        "**/*.fixture.tsx",
+        "**/*.unit.spec.*",
+        "**/*.unit.test.*",
+        "**/*.browser.spec.*",
+        "**/*.integration.test.*",
+        "src/tests/**/*.*",
         "**/generated/**/*.*",
         "src/routeTree.gen.ts"
       ],
       "rules": {
+        "promise/param-names": "off",
+        "react/only-export-components": "off",
         "unicorn/filename-case": "off"
       }
     }

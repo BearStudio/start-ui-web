@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { sql } from 'drizzle-orm';
-import { randomInt } from 'node:crypto';
 
 import { getDefaultDbClient } from '@/modules/kernel/infrastructure/db/client';
 import { book, genre } from '@/modules/kernel/infrastructure/db/schema';
@@ -54,14 +53,14 @@ export async function createBooks() {
   const existingGenresAfterSeed = await db.select().from(genre);
 
   if (existingGenresAfterSeed.length > 0) {
-    const booksToSeed = data.books.map(({ author, title }) => {
-      const randomGenre =
-        existingGenresAfterSeed[randomInt(existingGenresAfterSeed.length)]!;
+    const booksToSeed = data.books.map(({ author, title }, index) => {
+      const deterministicGenre =
+        existingGenresAfterSeed[index % existingGenresAfterSeed.length]!;
 
       return {
         author,
         title,
-        genreId: randomGenre.id,
+        genreId: deterministicGenre.id,
         publisher: faker.book.publisher(),
       };
     });

@@ -121,4 +121,31 @@ describe('TanStack Start instance', () => {
       'strict-origin-when-cross-origin'
     );
   });
+
+  it('rejects foreign origins even when origin guard logger initialization fails', async () => {
+    vi.resetModules();
+    vi.doMock('@/modules/kernel/infrastructure/logger/pino', () => ({
+      createPinoAppLogger: () => {
+        throw new Error('logger init failed');
+      },
+      createPinoLogger: () => ({}),
+    }));
+
+    const { originGuardMiddleware } = await import('./start');
+    const next = vi.fn();
+
+    const response = await (originGuardMiddleware as ExplicitAny).handler({
+      handlerType: 'router',
+      next,
+      pathname: '/api/upload',
+      request: new Request('https://app.example/api/upload', {
+        headers: { origin: 'https://evil.example' },
+        method: 'POST',
+      }),
+    });
+
+    expect(next).not.toHaveBeenCalled();
+    expect(response.status).toBe(403);
+    expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+  });
 });

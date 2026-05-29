@@ -41,6 +41,11 @@ const clientSchema = () =>
       .optional()
       .prefault('false')
       .transform((value) => value === 'true'),
+    VITE_VISUAL_TEST: z
+      .enum(['true', 'false'])
+      .optional()
+      .prefault('false')
+      .transform((value) => value === 'true'),
     DEV: z
       .union([z.boolean(), z.string()])
       .optional()

@@ -68,9 +68,23 @@ pnpm dev
 ## Verification
 
 ```bash
-pnpm check   # Static checks: format, lint, types, architecture, security, audit
-pnpm test    # Unit and integration tests
-pnpm verify  # Full local pre-merge gate
+pnpm check           # Static checks: format, lint, types, architecture, test layering, security, audit
+pnpm test            # Unit, browser, and integration tests
+pnpm test:property   # Focused property/invariant tests
+pnpm test:e2e        # Full Playwright user journeys
+pnpm verify          # Full local pre-merge gate
+```
+
+See [Testing Strategy](TESTING.md) for the layer map, escalation rules, and mutation-testing workflow.
+
+### CodeQL
+
+CodeQL runs in GitHub Actions with the default and `security-extended` query suites plus repo-local queries under `.github/codeql/start-ui-web-queries`. Local CodeQL is opt-in and requires the [CodeQL CLI](https://github.com/github/codeql-cli-binaries/releases) on your `PATH`.
+
+```bash
+pnpm codeql:test     # Compile and test local custom queries
+pnpm codeql:db       # Create test-results/codeql/start-ui-web-db
+pnpm codeql:analyze  # Analyze that DB and write test-results/codeql/start-ui-web.sarif
 ```
 
 ### Emails in development

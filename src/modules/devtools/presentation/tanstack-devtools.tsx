@@ -1,9 +1,11 @@
 import { type ComponentType, lazy, Suspense } from 'react';
 
-import { isDevEnvironment } from '@/platform/env/config';
+import { envClient, isDevEnvironment } from '@/platform/env/config';
 
 export function shouldRenderTanStackDevtools() {
-  return import.meta.env.DEV && isDevEnvironment();
+  return (
+    import.meta.env.DEV && isDevEnvironment() && !envClient.VITE_VISUAL_TEST
+  );
 }
 
 type LazyDevtoolsModule = {

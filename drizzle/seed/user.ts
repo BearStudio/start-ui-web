@@ -7,6 +7,7 @@ import { user } from '@/modules/kernel/infrastructure/db/schema';
 import { emphasis } from './_utils';
 
 const demoUserEmails = ['user@user.com', 'admin@admin.com'];
+const demoOnboardedAt = new Date('2024-01-01T00:00:00.000Z');
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
@@ -44,7 +45,7 @@ export async function createUsers() {
       name: 'User',
       email: 'user@user.com',
       emailVerified: true,
-      onboardedAt: new Date(),
+      onboardedAt: demoOnboardedAt,
       role: 'user',
     })
     .onConflictDoNothing()
@@ -60,7 +61,7 @@ export async function createUsers() {
       email: 'admin@admin.com',
       emailVerified: true,
       role: 'admin',
-      onboardedAt: new Date(),
+      onboardedAt: demoOnboardedAt,
     })
     .onConflictDoNothing()
     .returning({ id: user.id });

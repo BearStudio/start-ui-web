@@ -23,6 +23,7 @@
     "public",
     "**/*.md",
     "**/*.mdx",
+    "**/diagnostic/cli-diagnostics-*.json",
     ".env*",
     "**/*.gen.ts",
     "src/server/db/generated"

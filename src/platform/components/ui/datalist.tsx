@@ -102,6 +102,10 @@ export const DataListEmptyState = ({
   className?: string;
 }) => {
   const { t } = useTranslation(['components']);
+  const emptyContent = children ?? (
+    <div>{t('components:datalist.emptyTitle')}</div>
+  );
+
   return (
     <DataListRow className={cn('flex-1', className)}>
       <DataListCell className="flex-1 items-center justify-center py-4 text-sm text-muted-foreground">
@@ -112,7 +116,7 @@ export const DataListEmptyState = ({
             })}
           </div>
         ) : (
-          (children ?? <div>{t('components:datalist.emptyTitle')}</div>)
+          emptyContent
         )}
       </DataListCell>
     </DataListRow>

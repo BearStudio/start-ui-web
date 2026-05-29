@@ -1,0 +1,99 @@
+# Agent Instructions for start-ui-web
+
+
+## What This Codebase Is
+
+A TanStack Start application in TypeScript, organized as a strict modular monolith with hexagonal boundaries per capability. UI primitives and shared technical utilities live under `src/platform`; business and shell capabilities live under `src/modules`; production wiring lives under `src/composition`.
+
+## Canonical Commands
+
+Use these commands instead of invoking underlying tools directly.
+
+| Command | Purpose |
+|---|---|
+| `pnpm dev` | Start the local dev server. |
+| `pnpm check` | Static checks: format, lint, typecheck, depcruise, semgrep, audit. |
+| `pnpm test` | Vitest unit and browser projects. |
+| `pnpm test:affected` | Run tests associated with changed files. |
+| `pnpm test:e2e:visual` | Local Chromium visual regression check for stable critical screens. |
+| `pnpm test:e2e:visual:auth` | Local Chromium visual regression check for login and verification screens. |
+| `pnpm test:e2e:visual:app-shell` | Local Chromium visual regression check for the authenticated app shell. |
+| `pnpm test:e2e:visual:manager-users` | Local Chromium visual regression check for manager user screens. |
+| `pnpm test:e2e:visual:update` | Update local visual baselines for review. |
+| `pnpm build` | Production build. |
+| `pnpm verify` | Full pre-merge gate: `check` + `test` + `build`. |
+| `pnpm verify:task` | Task-level verification runner with timestamped logs under `test-results/task-verification/`. |
+| `pnpm format:changed` | Format changed files only. |
+
+After code changes, run `pnpm format:changed && pnpm check && pnpm test:affected`. Before merge, run `pnpm verify`.
+
+## Task Verification Loop
+
+Use a layered verification loop rather than relying on one broad command.
+
+- Start with the narrowest relevant unit, browser, or E2E checks for the behavior being changed.
+- For UI changes, start the local app with `pnpm dev` or the E2E webserver path, inspect the affected flow in the Codex in-app Browser, and check desktop and mobile viewports for console errors, broken interactions, text overflow, and layout overlap.
+- Capture screenshots or Playwright artifacts for meaningful UI changes. Prefer local Playwright screenshots for visual regression with `pnpm test:e2e:visual`; update baselines for review with `pnpm test:e2e:visual:update`. Do not add Percy, Applitools, Cypress, BrowserStack, or another external visual/browser service unless explicitly requested.
+- After code changes, run `pnpm format:changed && pnpm check && pnpm test:affected`.
+- Use `pnpm verify:task` when a single command/report is more useful than separate commands. Add `-- --visual` for UI changes, `-- --e2e-chromium` for auth/routing/session/persistence risk, and `-- --build` for production runtime risk.
+- Escalate to `pnpm test:e2e --project=chromium` when auth, routing, session, persistence, upload, or full-stack behavior is touched.
+- Escalate to all Playwright projects or the CI matrix when a change is likely to vary by browser.
+- Run `pnpm build` for production build/runtime changes, and `pnpm verify` before merge-level handoff.
+- When tests fail, inspect Playwright traces, screenshots, videos, console output, network evidence, and auth diagnostics before changing code. Treat retries as a diagnostic signal, not proof of correctness.
+
+Local full-stack verification with seeded data, Maildev, MinIO, and the local database is the default realism level for agent work. Production smoke testing is out of scope unless read-only routes, credentials, and data safety rules are explicitly provided.
+
+Task verification artifacts should be grouped under `test-results/task-verification/<timestamp>/` when using `pnpm verify:task`. Keep Playwright traces, screenshots, videos, and failure attachments in their default `test-results/` locations and link or summarize the relevant paths in the final handoff. Visual test baselines are reviewed repo artifacts; do not silently update them without saying why.
+
+## Public Gates
+
+Cross-module imports must use one of these public files:
+
+| File | Contents |
+|---|---|
+| `index.ts` | Domain types, application ports, factories, stable constants. |
+| `server.ts` | Server-only public API and composed server functions. |
+| `client.ts` | Client-only public API, query options, client facades. |
+| `presentation.ts` | React components and presentation exports. |
+
+Do not deep-import another module's `domain/`, `application/`, `infrastructure/`, `transport/`, or `presentation/` internals. `kernel` internals are the practical exception for cross-cutting primitives.
+
+## Module Rules
+
+
+`domain/` is pure TypeScript. `application/` depends on ports, not adapters. `infrastructure/` owns SDKs and provider/database adapters. `transport/` maps protocol inputs to use cases. `presentation/` owns React UI, query options, and form schemas.
+
+## Common Guardrails
+
+- `src/platform` must not import `modules`, `routes`, or `composition`.
+- Module internals must not import `@/composition`; dependencies are injected through factories or public server barrels.
+- Routes import modules only through `index.ts`, `server.ts`, `client.ts`, or `presentation.ts`.
+- `src/modules/*/presentation/schema.ts` must emit static error keys, not import `i18next` or `react-i18next`; `src/platform/components/form/form-field-error.tsx` translates at render time.
+- Better Auth server APIs are confined to `src/modules/auth` and `src/composition/auth.ts`.
+- Provider-specific auth tokens stay server-side and do not cross client/public boundaries.
+- Legacy roots `src/components`, `src/hooks`, `src/lib`, `src/layout`, `src/features`, and `src/emails` are forbidden; use `src/platform` or `src/modules/<capability>`.
+- Route loaders that read search params must declare `validateSearch` and `loaderDeps`, and query keys must include the same normalized values.
+
+## Auth Boundary
+
+Auth is provider-neutral above infrastructure. Application code depends on focused ports:
+
+- `SessionGateway`
+- `AuthorizationGateway`
+- `AuthEmailPort`
+- `UserAdminGateway`
+
+Better Auth is the current adapter under `src/modules/auth/infrastructure/better-auth`. A future provider should implement the same ports and be selected in `src/composition/auth.ts`.
+
+## Tests
+
+Use the cheapest test that proves the behavior:
+
+| Type | Location |
+|---|---|
+| Unit | `*.unit.spec.ts` next to source |
+| Browser/component | `*.browser.spec.tsx` next to source |
+| E2E | `e2e/*.spec.ts` |
+| Fixtures | `*.fixture.tsx` |
+
+When a regression class is likely to repeat, add a guardrail through depcruise, Semgrep, or an architecture test.

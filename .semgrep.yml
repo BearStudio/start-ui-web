@@ -232,7 +232,7 @@ rules:
     message: src/start.ts is reachable from the client entry; load server-only infrastructure with dynamic imports inside server middleware.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '^\s*import\s+[^;]+from\s+["'']@/modules/[^/"'']+/infrastructure(?:/[^"'']*)?["'']'
+    pattern-regex: '^\s*import(?!\s+type\b)\s+(?:[^;]+from\s+)?["'']@/modules/[^/"'']+/infrastructure(?:/[^"'']*)?["'']'
     paths:
       include:
         - src/start.ts
