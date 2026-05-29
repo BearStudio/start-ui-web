@@ -9,10 +9,6 @@ import {
 } from '@tanstack/react-start';
 
 import type { Logger } from '@/modules/kernel';
-import {
-  createPinoAppLogger,
-  createPinoLogger,
-} from '@/modules/kernel/infrastructure/logger/pino';
 import { createNoOpTelemetry } from '@/platform/telemetry';
 
 type StartHandlerType = 'serverFn' | 'router';
@@ -53,14 +49,30 @@ type OriginGuardInput = {
 };
 
 let originGuardLogger: Pick<Logger, 'warn'> | undefined;
+let originGuardLoggerPromise: Promise<Pick<Logger, 'warn'>> | undefined;
 
-const getOriginGuardLogger = () => {
-  originGuardLogger ??= createPinoAppLogger({
-    pino: createPinoLogger(),
-    telemetry: createNoOpTelemetry(),
-  });
+const getOriginGuardLogger = async () => {
+  if (originGuardLogger) {
+    return originGuardLogger;
+  }
 
-  return originGuardLogger;
+  originGuardLoggerPromise ??=
+    import('@/modules/kernel/infrastructure/logger/pino')
+      .then(({ createPinoAppLogger, createPinoLogger }) => {
+        const logger = createPinoAppLogger({
+          pino: createPinoLogger(),
+          telemetry: createNoOpTelemetry(),
+        });
+        originGuardLogger = logger;
+
+        return logger;
+      })
+      .catch((error: unknown) => {
+        originGuardLoggerPromise = undefined;
+        throw error;
+      });
+
+  return originGuardLoggerPromise;
 };
 
 const isOriginProtectedRoute = (pathname: string) =>
@@ -117,7 +129,8 @@ export const originGuardMiddleware = createMiddleware({
     shouldValidateOrigin({ handlerType, method: request.method, pathname }) &&
     !hasSameOriginHeader(request)
   ) {
-    getOriginGuardLogger().warn({
+    const logger = await getOriginGuardLogger();
+    logger.warn({
       details: {
         method: request.method,
         pathname,

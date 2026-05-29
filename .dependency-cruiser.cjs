@@ -142,6 +142,17 @@ module.exports = {
       to: { path: '^src/modules/[^/]+/infrastructure' },
     },
     {
+      name: 'start-no-static-infrastructure-imports',
+      severity: 'error',
+      comment:
+        'src/start.ts is reachable from the client entry; load server-only infrastructure lazily from server middleware.',
+      from: { path: '^src/start\\.ts$' },
+      to: {
+        path: '^src/modules/[^/]+/infrastructure',
+        dependencyTypesNot: ['dynamic-import', 'type-only'],
+      },
+    },
+    {
       name: 'only-composition-imports-feature-infrastructure',
       severity: 'error',
       comment:

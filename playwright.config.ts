@@ -7,6 +7,7 @@ import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
  */
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: process.env.CI ? /visual\.spec\.ts/ : undefined,
   /* Max time for the full CI tests */
   globalTimeout: 15 * 60 * 1000,
   /* Max test failure */

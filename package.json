@@ -96,6 +96,8 @@
     "test:mutation:shared:dry": "stryker run stryker.shared-only.config.mjs --dryRunOnly",
     "test:mutation:shared:fast:dry": "cross-env STRYKER_FAST=1 stryker run stryker.shared-only.config.mjs --dryRunOnly",
     "test:e2e": "dotenv -e .env -e .env.example -- cross-env playwright test",
+    "test:e2e:visual": "pnpm test:e2e --project=chromium e2e/visual.spec.ts",
+    "test:e2e:visual:update": "pnpm test:e2e:visual --update-snapshots",
     "check": "run-p -n format:check lint typecheck depcruise semgrep security:audit",
     "check:ci": "run-p -n format:check lint typecheck depcruise security:audit",
     "verify": "pnpm check && pnpm test && pnpm build",
