@@ -72,7 +72,7 @@ const runStep = async (step) =>
 
     const child = spawn(step.command, step.args, {
       env: process.env,
-      shell: false,
+      shell: process.platform === 'win32',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 

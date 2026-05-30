@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { toEmailAddress, toUserId } from '@/modules/kernel/domain/ids';
 import { fc, PROPERTY_DEFAULTS, test } from '@/tests/support/property-testing';
 
-import { shouldUnverifyEmail } from '../user';
-import { canChangeRole, isSelfTarget } from '../user-policy';
+import { shouldUnverifyEmail } from './user';
+import { canChangeRole, isSelfTarget } from './user-policy';
 
 const localEmailCharacter = fc.constantFrom(
   'a',

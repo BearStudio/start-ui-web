@@ -76,10 +76,11 @@ class InMemoryBookRepository implements BookRepository {
   }
 
   async update(id: BookId, input: BookWriteInput) {
-    if (!this.books.has(id)) return null;
+    const existing = this.books.get(id);
+    if (!existing) return null;
     this.#throwOnDuplicate(input, id);
 
-    const book = this.#toBook(id, input);
+    const book = this.#toBook(id, input, existing.createdAt);
     this.books.set(id, book);
     return book;
   }
@@ -88,11 +89,11 @@ class InMemoryBookRepository implements BookRepository {
     return this.books.delete(id);
   }
 
-  #toBook(id: BookId, input: BookWriteInput): Book {
+  #toBook(id: BookId, input: BookWriteInput, createdAt = now): Book {
     return {
       author: input.author,
       coverId: input.coverId ?? null,
-      createdAt: now,
+      createdAt,
       genre: null,
       genreId: input.genreId,
       id,

@@ -47,6 +47,7 @@ const result = spawnSync(
   'vitest',
   ['run', '--project=integration', ...selectedFiles],
   {
+    shell: process.platform === 'win32',
     stdio: 'inherit',
   }
 );

@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
@@ -30,20 +30,13 @@ if (propertyTestFiles.length === 0) {
   process.exit(1);
 }
 
-for (const filePath of propertyTestFiles) {
-  const stats = statSync(path.join(root, filePath));
-  if (!stats.isFile()) {
-    console.error(`Property test path is not a file: ${filePath}`);
-    process.exit(1);
-  }
-}
-
 console.log(`Running ${propertyTestFiles.length} property test files.`);
 
 const result = spawnSync(
   'vitest',
   ['run', '--project=unit', ...propertyTestFiles],
   {
+    shell: process.platform === 'win32',
     stdio: 'inherit',
   }
 );

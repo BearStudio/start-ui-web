@@ -14,7 +14,10 @@ const isTypeScriptSource = (file) =>
   file.startsWith('src/') && (file.endsWith('.ts') || file.endsWith('.tsx'));
 
 const runVitest = (args) => {
-  const result = spawnSync('vitest', args, { stdio: 'inherit' });
+  const result = spawnSync('vitest', args, {
+    shell: process.platform === 'win32',
+    stdio: 'inherit',
+  });
 
   if (result.error) {
     console.error(result.error.message);

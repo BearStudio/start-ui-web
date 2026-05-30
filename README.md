@@ -73,9 +73,10 @@ pnpm test            # Unit, browser, and integration tests
 pnpm test:property   # Focused property/invariant tests
 pnpm test:e2e        # Full Playwright user journeys
 pnpm verify          # Full local pre-merge gate
+pnpm verify:task     # Task verification logs; add --visual, --e2e-chromium, or --build as needed
 ```
 
-See [Testing Strategy](TESTING.md) for the layer map, escalation rules, and mutation-testing workflow.
+`pnpm verify:task` writes timestamped logs under `test-results/task-verification/`. Its optional flags add visual regression tests (`--visual`), Chromium E2E (`--e2e-chromium`), and a production build (`--build`). See [AGENTS.md](AGENTS.md) and [Testing Strategy](TESTING.md) for the full verification workflow.
 
 ### CodeQL
 

@@ -10,6 +10,8 @@
 /reports
 /.stryker-tmp
 **/__screenshots__/**
+.github/codeql/**/*.actual
+.github/codeql/**/*.testproj/
 
 # production
 .output

@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { fc, PROPERTY_DEFAULTS, test } from '@/tests/support/property-testing';
 
-import { normalizeGenreSearchTerm } from '../genre';
-import { isValidGenreColor } from '../genre-policy';
+import { normalizeGenreSearchTerm } from './genre';
+import { isValidGenreColor } from './genre-policy';
 
 const hexCharacter = fc.constantFrom(
   '0',

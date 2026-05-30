@@ -1,0 +1,50 @@
+name: Mutation Testing
+
+on:
+  schedule:
+    - cron: 23 5 * * 1
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  critical:
+    name: Stryker (${{ matrix.scope }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: [auth, kernel, user, book, shared]
+    env:
+      SKIP_ENV_VALIDATION: true
+      VITE_BASE_URL: http://localhost:3000
+      VITE_S3_BUCKET_PUBLIC_URL: http://localhost:9000/default
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run scoped mutation tests
+        run: pnpm test:mutation:${{ matrix.scope }}
+
+      - name: Upload mutation report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: mutation-report-${{ matrix.scope }}
+          path: |
+            reports/mutation/${{ matrix.scope }}/
+            reports/stryker-incremental/${{ matrix.scope }}.json
+          if-no-files-found: ignore
+          retention-days: 30

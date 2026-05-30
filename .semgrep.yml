@@ -652,6 +652,35 @@ rules:
       exclude:
         - scripts/lib/git-utils.mjs
 
+  - id: node-script-cli-spawn-requires-windows-shell
+    message: Spawning package-manager or npm-bin CLIs from Node scripts must set shell to process.platform === 'win32' so Windows .cmd wrappers resolve.
+    languages: [javascript]
+    severity: ERROR
+    paths:
+      include:
+        - scripts/*.mjs
+    patterns:
+      - pattern-either:
+          - pattern: spawnSync($CMD, $ARGS, $OPTS)
+          - pattern: spawn($CMD, $ARGS, $OPTS)
+      - metavariable-regex:
+          metavariable: $CMD
+          regex: '^[''"](pnpm|vitest)[''"]$'
+      - pattern-not: |
+          spawnSync($CMD, $ARGS, { ..., shell: process.platform === 'win32', ... })
+      - pattern-not: |
+          spawn($CMD, $ARGS, { ..., shell: process.platform === 'win32', ... })
+
+  - id: task-verify-no-shell-false
+    message: task-verify spawns pnpm; keep the Windows shell fallback instead of forcing shell false.
+    languages: [javascript]
+    severity: ERROR
+    paths:
+      include:
+        - scripts/task-verify.mjs
+    pattern: |
+      spawn($COMMAND, $ARGS, { ..., shell: false, ... })
+
   - id: resend-app-error-preserve-provider-status
     message: Preserve Resend provider statusCode when wrapping send failures; use error.statusCode ?? 500.
     languages: [typescript]
@@ -854,14 +883,12 @@ rules:
 
   - id: shared-form-no-prehydration-lock
     message: Shared Form must not lock visible controls before hydration; use the form action to prevent native pre-hydration submit instead.
-    languages: [typescript]
+    languages: [generic]
     severity: ERROR
     paths:
       include:
         - src/platform/components/form/form.tsx
-    pattern-either:
-      - pattern: 'disabled={!hydrated}'
-      - pattern: 'inert={hydrated ? undefined : true}'
+    pattern-regex: '(?:disabled=\{!hydrated\}|inert=\{hydrated\s*\?\s*undefined\s*:\s*true\})'
 
   - id: codecov-upload-requires-token-guard
     message: Codecov uploads with fail_ci_if_error must be guarded by CODECOV_TOKEN so fork PR tests do not fail after passing.

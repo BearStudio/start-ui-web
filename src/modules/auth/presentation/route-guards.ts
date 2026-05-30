@@ -6,6 +6,7 @@ import type { CurrentSessionLike } from '@/platform/router/context';
 
 import {
   internalRedirectFromLocation,
+  normalizeInternalRedirect,
   parseSafeRedirectPath,
   resolvePostAuthDestination,
 } from './redirects';
@@ -51,6 +52,9 @@ const redirectToSafePath = (input: string | null | undefined) => {
   });
 };
 
+const safeRedirectFromLocation = (location: RouteLocation) =>
+  normalizeInternalRedirect(internalRedirectFromLocation(location)) ?? '/';
+
 export async function requireAuthenticatedRoute(input: {
   context: AuthRouteContext;
   location: RouteLocation;
@@ -61,7 +65,7 @@ export async function requireAuthenticatedRoute(input: {
   if (!currentSession) {
     throw redirect({
       to: '/login',
-      search: { redirect: internalRedirectFromLocation(input.location) },
+      search: { redirect: safeRedirectFromLocation(input.location) },
       replace: true,
     });
   }
@@ -69,7 +73,7 @@ export async function requireAuthenticatedRoute(input: {
   if (!currentSession.user.onboardedAt) {
     throw redirect({
       to: '/onboarding',
-      search: { redirect: internalRedirectFromLocation(input.location) },
+      search: { redirect: safeRedirectFromLocation(input.location) },
       replace: true,
     });
   }
@@ -100,7 +104,7 @@ export async function requireOnboardingRoute(input: {
   if (!currentSession) {
     throw redirect({
       to: '/login',
-      search: { redirect: internalRedirectFromLocation(input.location) },
+      search: { redirect: safeRedirectFromLocation(input.location) },
       replace: true,
     });
   }

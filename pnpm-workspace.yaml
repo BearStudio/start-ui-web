@@ -9,6 +9,11 @@ overrides:
   # Re-evaluate after the next dependency compatibility pass confirms the override is no longer needed.
   glob: 13.0.6
 
+peerDependencyRules:
+  allowedVersions:
+    '@tailwindcss/typography>tailwindcss': '4'
+    '@tanstack/zod-adapter>zod': '4'
+
 allowBuilds:
   '@parcel/watcher': true
   '@sentry/cli': true

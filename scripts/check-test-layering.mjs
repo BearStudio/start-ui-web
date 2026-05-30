@@ -97,6 +97,17 @@ for (const filePath of sourceFiles) {
   }
 
   if (
+    /^src\/modules\/[^/]+\/domain\/__tests__\/[^/]+\.unit\.spec\.tsx?$/.test(
+      projectPath
+    ) &&
+    importSpecifiers.includes('@/tests/support/property-testing')
+  ) {
+    failures.push(
+      `${projectPath}: property-based domain unit tests must sit next to the source file they test`
+    );
+  }
+
+  if (
     projectPath.endsWith('.workflow.integration.test.ts') ||
     projectPath.endsWith('.workflow.integration.test.tsx')
   ) {
