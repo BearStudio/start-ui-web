@@ -94,6 +94,10 @@ vi.mock('@/modules/kernel/infrastructure/db/client', () => {
       run: (work: (tx: typeof mockDb) => Promise<unknown>) => work(database),
     }),
     getDefaultTransactionRunner: () => defaultTransactionRunner,
+    runWithDbTransaction: (
+      database: typeof mockDb,
+      work: (tx: typeof mockDb) => Promise<unknown>
+    ) => work(database),
     transactionRunner: defaultTransactionRunner,
   };
 });

@@ -1,7 +1,10 @@
 import { resolveBase, runGitStrict } from './lib/git-utils.mjs';
 
 const MIGRATIONS_DIR = 'drizzle/migrations';
-const SCHEMA_FILE = 'src/modules/kernel/infrastructure/db/schema.ts';
+const SCHEMA_PATHS = [
+  'src/modules/kernel/infrastructure/db/schema.ts',
+  'src/modules/kernel/infrastructure/db/schema',
+];
 const SQL_MIGRATION_PATTERN = /^drizzle\/migrations\/.*\.sql$/;
 
 const splitNul = (output) => output.split('\0').filter(Boolean);
@@ -101,22 +104,33 @@ const collectUntrackedSqlMigrations = () =>
     ])
   ).filter((filePath) => SQL_MIGRATION_PATTERN.test(filePath));
 
-const hasSchemaChanges = (base) =>
-  splitNul(
+const hasSchemaChanges = (base) => {
+  const committed = splitNul(
     runGitStrict([
       'diff',
       '--name-only',
       '-z',
       `${base}...HEAD`,
       '--',
-      SCHEMA_FILE,
+      ...SCHEMA_PATHS,
     ])
-  ).length > 0 ||
-  splitNul(
-    runGitStrict(['diff', '--name-only', '-z', '--cached', '--', SCHEMA_FILE])
-  ).length > 0 ||
-  splitNul(runGitStrict(['diff', '--name-only', '-z', '--', SCHEMA_FILE]))
-    .length > 0;
+  ).length;
+  const staged = splitNul(
+    runGitStrict([
+      'diff',
+      '--name-only',
+      '-z',
+      '--cached',
+      '--',
+      ...SCHEMA_PATHS,
+    ])
+  ).length;
+  const unstaged = splitNul(
+    runGitStrict(['diff', '--name-only', '-z', '--', ...SCHEMA_PATHS])
+  ).length;
+
+  return committed > 0 || staged > 0 || unstaged > 0;
+};
 
 const formatChange = (change) => {
   if (change.oldPath) {
@@ -203,7 +217,9 @@ if (immutableMigrationViolations.size > 0) {
 
 if (newMigrationViolations.length > 0) {
   console.error(
-    `\nNew migration SQL files require schema changes in ${SCHEMA_FILE}:`
+    `\nNew migration SQL files require schema changes in ${SCHEMA_PATHS.join(
+      ' or '
+    )}:`
   );
   for (const violation of newMigrationViolations) {
     console.error(`- ${violation}`);

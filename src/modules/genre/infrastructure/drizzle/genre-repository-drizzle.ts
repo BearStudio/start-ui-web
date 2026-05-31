@@ -3,14 +3,17 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { GenreId } from '@/modules/kernel/domain/ids';
 import { toGenreId } from '@/modules/kernel/domain/ids';
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
-import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
+import {
+  getConstraintName,
+  isUniqueConstraintViolation,
+} from '@/modules/kernel/infrastructure/db/errors';
 import {
   ascendingTextCursorFilter,
   escapedIlikeFilter,
   takeCursorPage,
 } from '@/modules/kernel/infrastructure/db/query-helpers';
 import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
+import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { GenreRepository } from '../../application/ports/genre-repository';
 import type { Genre, GenreListPage } from '../../domain/genre';
@@ -26,7 +29,10 @@ function toDomain(row: typeof genreTable.$inferSelect): Genre {
 }
 
 function mapDbError(error: unknown): never {
-  if (isPgError(error) && error.code === '23505') {
+  if (
+    isUniqueConstraintViolation(error) &&
+    getConstraintName(error) === 'genre_name_key'
+  ) {
     throw new AppError({
       code: 'GENRE_DUPLICATE',
       category: 'conflict',
@@ -47,7 +53,7 @@ function mapDbError(error: unknown): never {
 }
 
 export class GenreRepositoryDrizzle implements GenreRepository {
-  constructor(private readonly db: Database) {}
+  constructor(private readonly db: DbLike) {}
 
   async list(input: {
     cursor?: GenreId;

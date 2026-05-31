@@ -82,6 +82,22 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  postgres-integration:
+    name: PostgreSQL Integration
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run PostgreSQL integration tests
+        run: pnpm test:integration:postgres
+
   build:
     name: Build
     if: github.event.pull_request.draft == false

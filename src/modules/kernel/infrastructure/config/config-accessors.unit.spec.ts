@@ -17,6 +17,38 @@ describe('server config accessors', () => {
     expect(getDatabaseConfig().databaseUrl).toBe(
       'postgres://user:pass@localhost:5432/first'
     );
+    expect(getDatabaseConfig().driver).toBe('node-pg');
+  });
+
+  it('parses explicit database driver config', async () => {
+    vi.stubEnv('DATABASE_URL', 'postgres://user:pass@localhost:5432/app');
+    vi.stubEnv('DATABASE_DRIVER', 'neon-http');
+    const { getDatabaseConfig } = await import('./database');
+
+    expect(getDatabaseConfig()).toEqual({
+      databaseUrl: 'postgres://user:pass@localhost:5432/app',
+      driver: 'neon-http',
+    });
+  });
+
+  it('detects likely transaction-pooled database URLs', async () => {
+    const { isLikelyTransactionPooledDatabaseUrl } = await import('./database');
+
+    expect(
+      isLikelyTransactionPooledDatabaseUrl(
+        'postgres://user:pass@ep-example-pooler.us-east-1.aws.neon.tech/db'
+      )
+    ).toBe(true);
+    expect(
+      isLikelyTransactionPooledDatabaseUrl(
+        'postgres://user:pass@localhost:5432/db?pool_mode=transaction'
+      )
+    ).toBe(true);
+    expect(
+      isLikelyTransactionPooledDatabaseUrl(
+        'postgres://user:pass@localhost:5432/db'
+      )
+    ).toBe(false);
   });
 
   it('returns null for absent optional Redis config', async () => {

@@ -3,14 +3,18 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { BookId } from '@/modules/kernel/domain/ids';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
-import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
+import { runWithDbTransaction } from '@/modules/kernel/infrastructure/db/client';
+import {
+  getConstraintName,
+  isUniqueConstraintViolation,
+} from '@/modules/kernel/infrastructure/db/errors';
 import {
   ascendingTextCursorFilter,
   escapedIlikeFilter,
   takeCursorPage,
 } from '@/modules/kernel/infrastructure/db/query-helpers';
 import { book as bookTable } from '@/modules/kernel/infrastructure/db/schema';
+import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { BookRepository } from '../../application/ports/book-repository';
 import type { Book, BookListPage, BookWriteInput } from '../../domain/book';
@@ -48,19 +52,23 @@ function toDomain(row: BookRow): Book {
 }
 
 function mapDbError(error: unknown): never {
-  if (isPgError(error)) {
-    if (error.code === '23505') {
-      throw new AppError({
-        code: 'BOOK_DUPLICATE',
-        category: 'conflict',
-        status: 409,
-        message: 'Book already exists',
-        details: { target: ['title', 'author'] },
-        cause: error,
-      });
-    }
+  if (
+    isUniqueConstraintViolation(error) &&
+    getConstraintName(error) === 'book_title_author_key'
+  ) {
+    throw new AppError({
+      code: 'BOOK_DUPLICATE',
+      category: 'conflict',
+      status: 409,
+      message: 'Book already exists',
+      details: { target: ['title', 'author'] },
+      cause: error,
+    });
+  }
 
-    if (error.code === '23503') {
+  if (error && typeof error === 'object' && 'code' in error) {
+    const code = (error as { code?: unknown }).code;
+    if (code === '23503') {
       throw new AppError({
         code: 'BOOK_FOREIGN_KEY',
         category: 'bad_request',
@@ -81,7 +89,15 @@ function mapDbError(error: unknown): never {
 }
 
 export class BookRepositoryDrizzle implements BookRepository {
-  constructor(private readonly db: Database) {}
+  constructor(private readonly db: DbLike) {}
+
+  private async getByIdWithDb(db: DbLike, id: BookId): Promise<Book | null> {
+    const row = await db.query.book.findFirst({
+      where: eq(bookTable.id, id),
+      with: { genre: true },
+    });
+    return row ? toDomain(row) : null;
+  }
 
   async list(input: {
     cursor?: BookId;
@@ -155,11 +171,7 @@ export class BookRepositoryDrizzle implements BookRepository {
 
   async getById(id: BookId): Promise<Book | null> {
     try {
-      const row = await this.db.query.book.findFirst({
-        where: eq(bookTable.id, id),
-        with: { genre: true },
-      });
-      return row ? toDomain(row) : null;
+      return await this.getByIdWithDb(this.db, id);
     } catch (error) {
       mapDbError(error);
     }
@@ -196,20 +208,22 @@ export class BookRepositoryDrizzle implements BookRepository {
 
   async update(id: BookId, input: BookWriteInput): Promise<Book | null> {
     try {
-      const [updated] = await this.db
-        .update(bookTable)
-        .set({
-          title: input.title,
-          author: input.author,
-          genreId: input.genreId,
-          publisher: input.publisher ?? null,
-          coverId: input.coverId ?? null,
-        })
-        .where(eq(bookTable.id, id))
-        .returning();
+      return await runWithDbTransaction(this.db, async (db) => {
+        const [updated] = await db
+          .update(bookTable)
+          .set({
+            title: input.title,
+            author: input.author,
+            genreId: input.genreId,
+            publisher: input.publisher ?? null,
+            coverId: input.coverId ?? null,
+          })
+          .where(eq(bookTable.id, id))
+          .returning();
 
-      if (!updated) return null;
-      return this.getById(id);
+        if (!updated) return null;
+        return this.getByIdWithDb(db, id);
+      });
     } catch (error) {
       mapDbError(error);
     }

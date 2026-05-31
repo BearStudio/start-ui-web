@@ -27,22 +27,39 @@ private predicate isLoaderFunction(Property loader, Function loaderFn) {
   loaderFn = loader.getInit().(FunctionExpr)
   or
   loaderFn = loader.getInit().(ArrowFunctionExpr)
+  or
+  exists(VarAccess access |
+    access = loader.getInit().getUnderlyingReference() and
+    loaderFn = access.getVariable().getAnAssignedExpr().(Function)
+  )
+  or
+  exists(VarAccess access |
+    access = loader.getInit().getUnderlyingReference() and
+    loaderFn.getVariable() = access.getVariable()
+  )
 }
 
-private predicate loaderParameterDestructuresSearch(Property loader) {
-  exists(Function loaderFn |
-    isLoaderFunction(loader, loaderFn) and
-    exists(loaderFn.getParameter(0).(ObjectPattern).getPropertyPatternByName("search"))
+private predicate loaderParameterDestructuresSearch(Function loaderFn) {
+  exists(loaderFn.getParameter(0).(ObjectPattern).getPropertyPatternByName("search"))
+}
+
+private predicate accessReadsSearchFromLoaderContext(Function loaderFn, PropAccess access) {
+  exists(VarAccess contextAccess |
+    access = loaderFn.getBody().getAChild*() and
+    access.getPropertyName() = "search" and
+    contextAccess = access.getBase().getUnderlyingReference() and
+    contextAccess.getVariable() = loaderFn.getParameter(0).getAVariable()
   )
 }
 
 predicate readsSearch(Property loader) {
-  exists(PropAccess access |
-    access = loader.getAChild*() and
-    access.getPropertyName() = "search"
+  exists(Function loaderFn |
+    isLoaderFunction(loader, loaderFn) and
+    (
+      accessReadsSearchFromLoaderContext(loaderFn, _) or
+      loaderParameterDestructuresSearch(loaderFn)
+    )
   )
-  or
-  loaderParameterDestructuresSearch(loader)
 }
 
 from ObjectExpr routeConfig, Property loader

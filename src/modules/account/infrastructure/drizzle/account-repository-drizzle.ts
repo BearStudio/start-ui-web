@@ -3,9 +3,9 @@ import { eq } from 'drizzle-orm';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { toUserId } from '@/modules/kernel/domain/ids';
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
 import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
 import { user as userTable } from '@/modules/kernel/infrastructure/db/schema';
+import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { AccountRepository } from '../../application/ports/account-repository';
 import type {
@@ -35,7 +35,7 @@ function mapDbError(error: unknown): never {
 }
 
 export class AccountRepositoryDrizzle implements AccountRepository {
-  constructor(private readonly db: Database) {}
+  constructor(private readonly db: DbLike) {}
 
   async submitOnboarding(
     userId: UserId,

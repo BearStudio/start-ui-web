@@ -1,3 +1,5 @@
+import { extractDatabaseErrorDetails } from './db-error-details';
+
 export type PgError = Error & {
   code: string;
   constraint?: string;
@@ -16,7 +18,12 @@ type PgErrorCandidate = Error & {
 };
 
 export const isPgError = (error: unknown): error is PgError => {
-  if (!(error instanceof Error)) return false;
+  if (!(error instanceof Error)) {
+    const details = extractDatabaseErrorDetails(error);
+    return (
+      typeof details?.code === 'string' && /^[A-Z0-9]{5}$/.test(details.code)
+    );
+  }
 
   const candidate = error as PgErrorCandidate;
   const hasPgSource =
@@ -31,3 +38,12 @@ export const isPgError = (error: unknown): error is PgError => {
     hasPgSource
   );
 };
+
+export {
+  buildDatabaseErrorLogFields,
+  extractDatabaseErrorDetails,
+  getConstraintName,
+  getErrorDetail,
+  isUniqueConstraintViolation,
+  withDatabaseErrorDetails,
+} from './db-error-details';

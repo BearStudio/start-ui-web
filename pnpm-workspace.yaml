@@ -18,6 +18,10 @@ allowBuilds:
   '@parcel/watcher': true
   '@sentry/cli': true
   '@tailwindcss/oxide': true
+  bufferutil: false
+  cpu-features: false
   esbuild: true
   lefthook: true
+  protobufjs: false
   sharp: true
+  ssh2: false

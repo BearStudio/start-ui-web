@@ -37,7 +37,7 @@ module.exports = {
       severity: 'error',
       from: { path: '^src/modules/[^/]+/domain' },
       to: {
-        path: '(^src/modules/[^/]+/infrastructure|^drizzle-orm|^pg|^postgres)',
+        path: '(^src/modules/[^/]+/infrastructure|^drizzle-orm|^@neondatabase/serverless|^pg|^postgres)',
       },
     },
     {
@@ -223,7 +223,7 @@ module.exports = {
         pathNot:
           '^src/(modules/[^/]+/infrastructure|modules/kernel/infrastructure|composition|drizzle)',
       },
-      to: { path: '^drizzle-orm' },
+      to: { path: '^(drizzle-orm|@neondatabase/serverless|pg|postgres)' },
     },
     {
       name: 'server-only-from-client',

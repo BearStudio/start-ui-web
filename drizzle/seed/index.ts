@@ -19,5 +19,5 @@ main()
     process.exitCode = 1;
   })
   .finally(async () => {
-    await getDefaultDbClient().$client.end();
+    await getDefaultDbClient().$close();
   });

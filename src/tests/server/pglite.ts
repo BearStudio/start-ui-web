@@ -52,6 +52,6 @@ export async function createPgliteTestDatabase(options?: {
     db,
     truncate: () => truncateDatabase(db),
     reset: () => truncateDatabase(db),
-    close: () => db.$client.end(),
+    close: () => db.$close(),
   };
 }

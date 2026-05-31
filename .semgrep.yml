@@ -219,7 +219,7 @@ rules:
     message: Drizzle/pg/postgres SDKs are confined to infrastructure or composition.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '^\s*import\s+.*\s+from\s+["''](?:drizzle-orm(?:/[^"'']*)?|postgres|pg)["'']'
+    pattern-regex: '^\s*import\s+.*\s+from\s+["''](?:drizzle-orm(?:/[^"'']*)?|@neondatabase/serverless|postgres|pg)["'']'
     paths:
       exclude:
         - src/modules/*/infrastructure/**
@@ -227,6 +227,30 @@ rules:
         - src/composition/**
         - drizzle/**
         - drizzle.config.ts
+
+  - id: no-concrete-database-repository-dependency
+    message: Drizzle repositories should depend on DbLike so they can run against root clients or active transactions.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'constructor\s*\([^)]*\bDatabase\b'
+    paths:
+      include:
+        - src/modules/*/infrastructure/drizzle/**/*.ts
+
+  - id: no-direct-db-execute-rows
+    message: Normalize db.execute(...) results with queryRowsSchema(...) instead of reading .rows directly.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include:
+        - src/modules/**/infrastructure/**/*.ts
+    pattern-either:
+      - pattern: (await $DB.execute(...)).rows
+      - patterns:
+          - pattern-inside: |
+              const $RESULT = await $DB.execute(...);
+              ...
+          - pattern: $RESULT.rows
 
   - id: no-start-static-infrastructure-import
     message: src/start.ts is reachable from the client entry; load server-only infrastructure with dynamic imports inside server middleware.

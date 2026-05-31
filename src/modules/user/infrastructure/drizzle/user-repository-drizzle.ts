@@ -7,8 +7,10 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
-import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
+import {
+  getConstraintName,
+  isUniqueConstraintViolation,
+} from '@/modules/kernel/infrastructure/db/errors';
 import {
   ascendingTextCursorFilter,
   descendingDateCursorFilter,
@@ -19,6 +21,7 @@ import {
   session as sessionTable,
   user as userTable,
 } from '@/modules/kernel/infrastructure/db/schema';
+import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { UserRepository } from '../../application/ports/user-repository';
 import type {
@@ -64,19 +67,23 @@ function toDomainSession(
 }
 
 function mapDbError(error: unknown): never {
-  if (isPgError(error)) {
-    if (error.code === '23505') {
-      throw new AppError({
-        code: 'USER_DUPLICATE',
-        category: 'conflict',
-        status: 409,
-        message: 'User already exists',
-        details: { target: ['email'] },
-        cause: error,
-      });
-    }
+  if (
+    isUniqueConstraintViolation(error) &&
+    getConstraintName(error) === 'user_email_key'
+  ) {
+    throw new AppError({
+      code: 'USER_DUPLICATE',
+      category: 'conflict',
+      status: 409,
+      message: 'User already exists',
+      details: { target: ['email'] },
+      cause: error,
+    });
+  }
 
-    if (error.code === '23503') {
+  if (error && typeof error === 'object' && 'code' in error) {
+    const code = (error as { code?: unknown }).code;
+    if (code === '23503') {
       throw new AppError({
         code: 'USER_FOREIGN_KEY',
         category: 'bad_request',
@@ -97,7 +104,7 @@ function mapDbError(error: unknown): never {
 }
 
 export class UserRepositoryDrizzle implements UserRepository {
-  constructor(private readonly db: Database) {}
+  constructor(private readonly db: DbLike) {}
 
   async list(input: {
     cursor?: UserId;

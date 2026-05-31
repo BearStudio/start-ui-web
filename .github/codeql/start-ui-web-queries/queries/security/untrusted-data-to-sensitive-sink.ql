@@ -66,19 +66,17 @@ private predicate isSearchExpr(Expr expr) {
 }
 
 private predicate isRequestExpr(Expr expr) {
-  expressionHasAstName(expr, "request") or
-  expressionHasAstName(expr, "req")
+  exists(string name |
+    expressionHasAstName(expr, name) and
+    name.toLowerCase() in ["request", "req"]
+  )
 }
 
 private predicate isUploadOrFileExpr(Expr expr) {
-  expressionHasAstName(expr, "file") or
-  expressionHasAstName(expr, "File") or
-  expressionHasAstName(expr, "upload") or
-  expressionHasAstName(expr, "Upload") or
-  expressionHasAstName(expr, "blob") or
-  expressionHasAstName(expr, "Blob") or
-  expressionHasAstName(expr, "cover") or
-  expressionHasAstName(expr, "Cover")
+  exists(string name |
+    expressionHasAstName(expr, name) and
+    name.toLowerCase() in ["file", "upload", "blob", "cover"]
+  )
 }
 
 private predicate isServerFunctionDataSource(DataFlow::Node node) {
