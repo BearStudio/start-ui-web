@@ -2,6 +2,7 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
+import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { userQueries } from '@/modules/user/client';
 import { PageUsers } from '@/modules/user/presentation';
 
@@ -16,13 +17,16 @@ export const Route = createFileRoute('/manager/users/')({
   },
   loaderDeps: ({ search: { searchTerm } }) => ({ searchTerm }),
   component: RouteComponent,
-  loader: ({ context, deps }) =>
-    context.queryClient.ensureInfiniteQueryData(
+  loader: ({ context, deps }) => {
+    if (isForbiddenRouteContext(context)) return undefined;
+
+    return context.queryClient.ensureInfiniteQueryData(
       userQueries.getAllInfinite({
         scopeKey: context.scopeKey,
         searchTerm: deps.searchTerm,
       })
-    ),
+    );
+  },
 });
 
 function RouteComponent() {

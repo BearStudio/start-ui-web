@@ -14,8 +14,10 @@ export {
 } from './presentation/redirects';
 export {
   ForbiddenRouteError,
+  isForbiddenRouteContext,
   isForbiddenRouteError,
   redirectAuthenticatedRoute,
   requireAuthenticatedRoute,
+  requireAuthenticatedRouteOrForbidden,
   requireOnboardingRoute,
 } from './presentation/route-guards';

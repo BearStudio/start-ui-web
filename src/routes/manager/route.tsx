@@ -3,14 +3,15 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { PageError } from '@/platform/components/errors/page-error';
 
 import {
+  isForbiddenRouteContext,
   isForbiddenRouteError,
-  requireAuthenticatedRoute,
+  requireAuthenticatedRouteOrForbidden,
 } from '@/modules/auth/presentation';
 import { ManagerLayout as Layout } from '@/modules/shell/presentation';
 
 export const Route = createFileRoute('/manager')({
   beforeLoad: ({ context, location }) =>
-    requireAuthenticatedRoute({
+    requireAuthenticatedRouteOrForbidden({
       context,
       location,
       permissionApps: ['manager'],
@@ -26,6 +27,12 @@ export const Route = createFileRoute('/manager')({
 });
 
 function RouteComponent() {
+  const context = Route.useRouteContext();
+
+  if (isForbiddenRouteContext(context)) {
+    return <PageError type="403" />;
+  }
+
   return (
     <Layout>
       <Outlet />

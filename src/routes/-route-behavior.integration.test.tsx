@@ -91,7 +91,10 @@ vi.mock('@/modules/demo/presentation', () => ({
   openDemoModeDrawer: vi.fn(),
 }));
 
-import { ForbiddenRouteError } from '@/modules/auth/presentation';
+import {
+  ForbiddenRouteError,
+  isForbiddenRouteContext,
+} from '@/modules/auth/presentation';
 import { bookQueries } from '@/modules/book/client';
 import { userQueries } from '@/modules/user/client';
 
@@ -322,18 +325,28 @@ describe('route integration behavior', () => {
     });
   });
 
-  it('maps authorization failures to route error boundary variants', () => {
-    const forbiddenElement = routeOptions(ManagerRoute).errorComponent({
-      error: new ForbiddenRouteError(),
+  it('maps authorization failures to forbidden route context', async () => {
+    const forbiddenContext = await routeOptions(ManagerRoute).beforeLoad({
+      context: makeRouteContext({ session: makeSession('user') }),
+      location: {
+        hash: '',
+        href: '/manager/users',
+        pathname: '/manager/users',
+        searchStr: '',
+      },
     });
     const genericErrorElement = routeOptions(ManagerRoute).errorComponent({
       error: new Error('boom'),
     });
+    const forbiddenErrorElement = routeOptions(ManagerRoute).errorComponent({
+      error: new ForbiddenRouteError(),
+    });
 
-    expect(isValidElement<{ type: string }>(forbiddenElement)).toBe(true);
+    expect(isForbiddenRouteContext(forbiddenContext)).toBe(true);
     expect(isValidElement<{ type: string }>(genericErrorElement)).toBe(true);
-    expect(forbiddenElement.props.type).toBe('403');
+    expect(isValidElement<{ type: string }>(forbiddenErrorElement)).toBe(true);
     expect(genericErrorElement.props.type).toBe('error-boundary');
+    expect(forbiddenErrorElement.props.type).toBe('403');
   });
 
   it('seeds the app book loader cache without manager search params', async () => {

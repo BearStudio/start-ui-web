@@ -6,8 +6,10 @@ import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 import { parseSafeRedirectPath } from './redirects';
 import {
   ForbiddenRouteError,
+  isForbiddenRouteContext,
   redirectAuthenticatedRoute,
   requireAuthenticatedRoute,
+  requireAuthenticatedRouteOrForbidden,
   requireOnboardingRoute,
 } from './route-guards';
 
@@ -155,6 +157,16 @@ describe('auth route guards', () => {
         permissionApps: ['manager'],
       })
     ).rejects.toBeInstanceOf(ForbiddenRouteError);
+  });
+
+  it('can map missing app permissions to forbidden route context', async () => {
+    const result = await requireAuthenticatedRouteOrForbidden({
+      context: makeContext(makeSession({ role: 'user' })),
+      location,
+      permissionApps: ['manager'],
+    });
+
+    expect(isForbiddenRouteContext(result)).toBe(true);
   });
 
   it('rejects unsafe redirect targets', () => {

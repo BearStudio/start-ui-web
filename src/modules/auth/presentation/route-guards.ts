@@ -27,6 +27,14 @@ type RouteLocation = {
   hash?: string;
 };
 
+export type ForbiddenRouteContext = {
+  forbiddenRoute: true;
+};
+
+const forbiddenRouteContext: ForbiddenRouteContext = {
+  forbiddenRoute: true,
+};
+
 export class ForbiddenRouteError extends Error {
   constructor() {
     super('Forbidden route');
@@ -37,6 +45,14 @@ export class ForbiddenRouteError extends Error {
 export const isForbiddenRouteError = (
   error: unknown
 ): error is ForbiddenRouteError => error instanceof ForbiddenRouteError;
+
+export const isForbiddenRouteContext = (
+  context: unknown
+): context is ForbiddenRouteContext =>
+  typeof context === 'object' &&
+  context !== null &&
+  'forbiddenRoute' in context &&
+  context.forbiddenRoute === true;
 
 const getCurrentSession = (context: AuthRouteContext) =>
   context.auth.getSession();
@@ -92,6 +108,22 @@ export async function requireAuthenticatedRoute(input: {
     scope: currentSession.scope,
     scopeKey: currentSession.scopeKey,
   };
+}
+
+export async function requireAuthenticatedRouteOrForbidden(input: {
+  context: AuthRouteContext;
+  location: RouteLocation;
+  permissionApps?: PermissionApps;
+}) {
+  try {
+    return await requireAuthenticatedRoute(input);
+  } catch (error) {
+    if (isForbiddenRouteError(error)) {
+      return forbiddenRouteContext;
+    }
+
+    throw error;
+  }
 }
 
 export async function requireOnboardingRoute(input: {
