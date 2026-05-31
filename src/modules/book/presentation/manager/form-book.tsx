@@ -11,12 +11,15 @@ import {
 } from '@/platform/components/form';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import { openDemoModeDrawer } from '@/modules/demo/presentation';
 import { genreQueries } from '@/modules/genre/client';
 import { envClient } from '@/platform/env/client';
 
 import { type FormFieldsBook, zFormFieldsBook } from '../schema';
 import { bookCoverAcceptedFileTypes } from '../../domain/book-policy';
+
+type FormBookProps = {
+  onDemoUploadBlocked?: () => void;
+};
 
 export const formBookDefaultValues = (
   values?: Partial<FormFieldsBook>
@@ -34,7 +37,8 @@ export const formBookValidators = {
 
 export const FormBook = withForm({
   defaultValues: formBookDefaultValues(),
-  render: ({ form }) => {
+  props: {} as FormBookProps,
+  render: ({ form, onDemoUploadBlocked }) => {
     const { t } = useTranslation(['book']);
     const scopeKey = useCurrentScopeKey();
     const genresQuery = useQuery(genreQueries.getAllList({ scopeKey }));
@@ -86,7 +90,7 @@ export const FormBook = withForm({
                 }}
                 onError={() => {
                   if (envClient.VITE_IS_DEMO) {
-                    openDemoModeDrawer();
+                    onDemoUploadBlocked?.();
                     return;
                   }
                   toast.error(t('book:manager.uploadErrors.failed'));

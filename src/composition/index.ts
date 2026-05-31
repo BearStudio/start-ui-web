@@ -31,11 +31,6 @@ export {
   type KernelOverrides,
 } from './kernel';
 export {
-  __resetRuntimeConfigComposition,
-  getRuntimeConfigUseCases,
-  type RuntimeConfigOverrides,
-} from './runtime-config';
-export {
   __resetUserComposition,
   getUserUseCases,
   type UserOverrides,

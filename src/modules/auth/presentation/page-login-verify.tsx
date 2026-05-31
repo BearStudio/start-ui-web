@@ -2,6 +2,7 @@ import { useStore } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -28,7 +29,6 @@ import {
 } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLoginVerify } from '@/modules/auth/presentation/schema';
-import { LoginEmailOtpHint } from '@/modules/devtools/presentation';
 
 import { authE2eDebug } from './e2e-debug';
 
@@ -37,8 +37,10 @@ const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   : ('auth:pageLoginVerify' as const);
 
 export default function PageLoginVerify({
+  emailOtpHint,
   search,
 }: {
+  emailOtpHint?: ReactNode;
   search: { redirect?: string; email: string };
 }) {
   const { i18n, t } = useTranslation(['auth', 'common']);
@@ -161,7 +163,7 @@ export default function PageLoginVerify({
         <Button loading={isSubmitting} type="submit" size="lg">
           {t(`${I18N_KEY_PAGE_PREFIX}.confirm`)}
         </Button>
-        <LoginEmailOtpHint />
+        {emailOtpHint}
       </div>
     </Form>
   );

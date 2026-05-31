@@ -20,9 +20,17 @@ module.exports = {
       comment:
         'Composition is the wiring root. Module internals receive dependencies through factories or public server barrels.',
       from: {
-        path: '^src/modules/[^/]+/(domain|application|infrastructure|transport|presentation|factory)',
+        path: '^src/modules/[^/]+/(domain|application|infrastructure|transport/(?!server-functions)|presentation|factory)',
       },
       to: { path: '^src/composition' },
+    },
+    {
+      name: 'module-internals-do-not-import-app',
+      severity: 'error',
+      comment:
+        'src/app composes shell and support UI around feature modules; modules must not depend on app code.',
+      from: { path: '^src/modules' },
+      to: { path: '^src/app' },
     },
     {
       name: 'domain-no-react-or-router',
@@ -91,8 +99,9 @@ module.exports = {
         'Cross-module imports must go through module public files: index.ts, presentation.ts, server.ts, or client.ts',
       from: { path: '^src/modules/([^/]+)/' },
       to: {
-        path: '^src/modules/(?!\\1)([^/]+)/(?!index\\.|presentation\\.|server\\.|client\\.)',
-        pathNot: '^src/modules/kernel/',
+        path: '^src/modules/(?!\\1)([^/]+)/(?!index\\.|presentation\\.|server\\.|backend\\.|client\\.|testing\\.)',
+        pathNot:
+          '^src/modules/(kernel/|[^/]+/infrastructure/drizzle/schema\\.ts$)',
       },
     },
     {
@@ -135,7 +144,11 @@ module.exports = {
     {
       name: 'kernel-no-feature-imports',
       severity: 'error',
-      from: { path: '^src/modules/kernel' },
+      from: {
+        path: '^src/modules/kernel',
+        pathNot:
+          '^src/modules/kernel/infrastructure/db/schema/(index|relations)\\.ts$',
+      },
       to: { path: '^src/modules/(?!kernel)' },
     },
     {
@@ -162,7 +175,7 @@ module.exports = {
         'Routes, transport, and other features must not import infrastructure adapters directly. Go through composition.',
       from: {
         pathNot:
-          '^src/(composition|modules/[^/]+/infrastructure|modules/[^/]+/server\\.ts$|modules/kernel)',
+          '^src/(composition|modules/[^/]+/infrastructure|modules/[^/]+/server\\.ts$|modules/[^/]+/testing\\.ts$|modules/kernel)',
       },
       to: {
         path: '^src/modules/(?!kernel)[^/]+/infrastructure',
@@ -175,10 +188,24 @@ module.exports = {
         'Module factory functions are wired by composition. Production callers use composed entry points.',
       from: {
         pathNot:
-          '^src/(composition|modules/[^/]+/index\\.ts|modules/[^/]+/.*\\.unit\\.(test|spec)\\.ts)',
+          '^src/(composition|modules/[^/]+/(index|testing)\\.ts|modules/[^/]+/.*\\.unit\\.(test|spec)\\.ts)',
       },
       to: {
         path: '^src/modules/[^/]+/factory\\.(ts|tsx)$',
+      },
+    },
+    {
+      name: 'testing-gates-only-for-tests',
+      severity: 'error',
+      comment:
+        'testing.ts public gates expose owner internals for tests and must not be imported by production source.',
+      from: {
+        path: '^src',
+        pathNot:
+          '^src/(modules/[^/]+/testing\\.ts$|platform/runtime-config/testing\\.ts$)',
+      },
+      to: {
+        path: '^src/(modules/[^/]+|platform/runtime-config)/testing\\.ts$',
       },
     },
     {
@@ -192,7 +219,7 @@ module.exports = {
       severity: 'error',
       from: { path: '^src/routes' },
       to: {
-        path: '^src/modules/[^/]+/(?!index\\.|presentation\\.|server\\.|client\\.)',
+        path: '^src/modules/[^/]+/(?!index\\.|presentation\\.|server\\.|backend\\.|client\\.|testing\\.)',
       },
     },
     {

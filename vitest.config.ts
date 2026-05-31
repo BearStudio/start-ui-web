@@ -8,11 +8,15 @@ const resolve = (filePath: string) => path.resolve(__dirname, filePath);
 const testAliases = [
   {
     find: /^@tanstack\/react-start$/,
-    replacement: resolve('./src/tests/mocks/tanstack-react-start.ts'),
+    replacement: resolve('./tests/mocks/tanstack-react-start.ts'),
   },
   {
     find: /^@tanstack\/react-start\/server$/,
-    replacement: resolve('./src/tests/mocks/tanstack-react-start-server.ts'),
+    replacement: resolve('./tests/mocks/tanstack-react-start-server.ts'),
+  },
+  {
+    find: /^@tests\/(.*)$/,
+    replacement: resolve('./tests/$1'),
   },
   {
     find: '@',
@@ -24,7 +28,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     coverage: {
-      exclude: [...coverageConfigDefaults.exclude, 'src/locales/**/*.json'],
+      exclude: [...coverageConfigDefaults.exclude, 'src/app/i18n/**/*.json'],
       provider: 'v8',
       reportsDirectory: './coverage',
       reporter: ['text', 'html', 'lcov'],
@@ -53,10 +57,10 @@ export default defineConfig({
             }),
             instances: [{ browser: 'chromium' }],
           },
-          include: ['src/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
+          include: ['tests/browser/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
           setupFiles: [
-            resolve('src/tests/setup.base.ts'),
-            resolve('src/tests/setup.browser.ts'),
+            resolve('tests/setup.base.ts'),
+            resolve('tests/setup.browser.ts'),
           ],
         },
         resolve: {
@@ -67,10 +71,14 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'node',
-          include: ['src/**/*.unit.{test,spec}.?(c|m)[jt]s?(x)'],
+          include: [
+            'tests/unit/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+            'tests/architecture/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+            'tests/security/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+          ],
           setupFiles: [
-            resolve('src/tests/setup.base.ts'),
-            resolve('src/tests/server/test-setup.ts'),
+            resolve('tests/setup.base.ts'),
+            resolve('tests/server/test-setup.ts'),
           ],
         },
         resolve: {
@@ -81,10 +89,10 @@ export default defineConfig({
         test: {
           name: 'integration',
           environment: 'node',
-          include: ['src/**/*.integration.test.?(c|m)[jt]s?(x)'],
+          include: ['tests/integration/**/*.integration.test.?(c|m)[jt]s?(x)'],
           fileParallelism: false,
-          globalSetup: resolve('src/tests/server/pglite-global-setup.ts'),
-          setupFiles: [resolve('src/tests/setup.base.ts')],
+          globalSetup: resolve('tests/server/pglite-global-setup.ts'),
+          setupFiles: [resolve('tests/setup.base.ts')],
         },
         resolve: {
           alias: testAliases,

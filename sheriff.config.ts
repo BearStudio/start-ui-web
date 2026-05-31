@@ -18,23 +18,28 @@ const kernelInternal: RuleMatcher = ({ toModulePath }) =>
     toModulePath
   );
 
-const isAppCodeTargetPath = (toModulePath: string) =>
-  !/\/src\/composition(?:\/|$)/.test(toModulePath);
+const isModuleInternalTargetPath = (toModulePath: string) =>
+  !/\/src\/(?:app|composition)(?:\/|$)/.test(toModulePath);
+
+const isServerFunctionEntrypoint = (fromFilePath: string) =>
+  /\/src\/modules\/[^/]+\/transport\/server-functions(?:\/|$)/.test(
+    fromFilePath
+  );
 
 const transportTarget: RuleMatcher = ({ toModulePath }) =>
-  isAppCodeTargetPath(toModulePath) &&
+  isModuleInternalTargetPath(toModulePath) &&
   !/\/src\/modules\/(?!kernel\/)[^/]+\/(?:infrastructure|presentation)(?:\/|$)/.test(
     toModulePath
   );
 
 const presentationTarget: RuleMatcher = ({ toModulePath }) =>
-  isAppCodeTargetPath(toModulePath) &&
+  isModuleInternalTargetPath(toModulePath) &&
   !/\/src\/modules\/(?!kernel\/)[^/]+\/infrastructure(?:\/|$)/.test(
     toModulePath
   );
 
 const infrastructureTarget: RuleMatcher = ({ fromModulePath, toModulePath }) =>
-  isAppCodeTargetPath(toModulePath) &&
+  isModuleInternalTargetPath(toModulePath) &&
   !(
     /\/src\/modules\/(?:account|book|genre|user)\/infrastructure(?:\/|$)/.test(
       fromModulePath
@@ -73,7 +78,8 @@ export const config: SheriffConfig = {
   encapsulationPattern: '__sheriff_internal__',
   modules: {
     'src/platform': ['area:platform', 'layer:platform'],
-    'src/locales': ['area:locales', 'layer:platform-support'],
+    'src/app': ['area:app', 'layer:app'],
+    'src/app/i18n': ['area:locales', 'layer:platform-support'],
     'src/routes': ['area:routes', 'layer:routes'],
     'src/composition': ['area:composition', 'layer:composition'],
     'src/modules/<module>': (placeholders) =>
@@ -98,6 +104,12 @@ export const config: SheriffConfig = {
     'layer:composition': () => true,
     'layer:platform': ['layer:platform', 'layer:platform-support'],
     'layer:platform-support': ['layer:platform', 'layer:platform-support'],
+    'layer:app': [
+      'layer:app',
+      'layer:platform',
+      'layer:platform-support',
+      publicModuleApi,
+    ],
     'layer:domain': [publicModuleApi, ({ to }) => to === 'layer:domain'],
     'layer:application': [
       publicModuleApi,
@@ -106,7 +118,13 @@ export const config: SheriffConfig = {
       ({ to }) => to === 'layer:application',
     ],
     'layer:infrastructure': [infrastructureTarget],
-    'layer:transport': [publicModuleApi, kernelInternal, transportTarget],
+    'layer:transport': [
+      publicModuleApi,
+      kernelInternal,
+      ({ fromFilePath, to }) =>
+        isServerFunctionEntrypoint(fromFilePath) && to === 'layer:composition',
+      transportTarget,
+    ],
     'layer:presentation': [publicModuleApi, presentationTarget],
   },
 };

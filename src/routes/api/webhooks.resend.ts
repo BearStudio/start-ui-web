@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { handleResendWebhookRequest } from '@/modules/email/server';
+import { handleResendWebhookRequest } from '@/modules/email/backend';
 
 export const Route = createFileRoute('/api/webhooks/resend')({
   server: {

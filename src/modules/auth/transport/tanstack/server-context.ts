@@ -19,7 +19,7 @@ import {
   type LogLevel,
 } from '@/modules/kernel';
 import type { UserId } from '@/modules/kernel/domain/ids';
-import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/server';
+import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/client';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
 import { envClient } from '@/platform/env/client';
 import { cachePrivateNoStore } from '@/platform/http/cache-control';

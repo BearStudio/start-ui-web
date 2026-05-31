@@ -111,7 +111,7 @@
         "**/*.unit.test.*",
         "**/*.browser.spec.*",
         "**/*.integration.test.*",
-        "src/tests/**/*.*",
+        "tests/**/*.*",
         "**/generated/**/*.*",
         "src/routeTree.gen.ts"
       ],

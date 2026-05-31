@@ -21,7 +21,7 @@ import {
   EnvHint,
   getEnvHintTitlePrefix,
   TanStackDevtoolsPanel,
-} from '@/modules/devtools/presentation';
+} from '@/app/devtools/presentation';
 import { initSsrApp } from '@/modules/kernel/server';
 import type { RouterContext } from '@/platform/router/context';
 import appCss from '@/platform/styles/app.css?url';

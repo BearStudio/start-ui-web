@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { bookQueries } from '@/modules/book/client';
 import { AppPageBook as PageBook } from '@/modules/book/presentation';
-import { useShouldShowNav } from '@/modules/shell/presentation';
+import { useShouldShowNav } from '@/app/shell/presentation';
 
 export const Route = createFileRoute('/app/books/$id/')({
   loader: ({ context, params }) =>

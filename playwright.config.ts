@@ -6,7 +6,7 @@ import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
   testIgnore: process.env.CI ? /visual[/\\].*\.visual\.spec\.ts/ : undefined,
   /* Max time for the full CI tests */
   globalTimeout: 15 * 60 * 1000,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { ProtectedContext } from '@/modules/auth/server';
+import type { ProtectedContext } from '@/modules/auth/backend';
 import type { BookUseCases } from '@/modules/book';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';

@@ -19,7 +19,7 @@ import {
   ManagerPageLayoutContent as PageLayoutContent,
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/modules/shell/presentation';
+} from '@/platform/components/page-layout';
 
 import {
   FormBook,
@@ -29,7 +29,7 @@ import {
 import { FormBookCover } from './form-book-cover';
 import { bookQueries } from '../queries';
 
-export const PageBookNew = () => {
+export const PageBookNew = (props: { onDemoUploadBlocked?: () => void }) => {
   const { t } = useTranslation(['book']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
@@ -107,7 +107,10 @@ export const PageBookNew = () => {
               <div className="flex-2">
                 <Card>
                   <CardContent>
-                    <FormBook form={form} />
+                    <FormBook
+                      form={form}
+                      onDemoUploadBlocked={props.onDemoUploadBlocked}
+                    />
                   </CardContent>
                 </Card>
               </div>

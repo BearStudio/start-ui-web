@@ -2,7 +2,7 @@ import {
   type AccountRepository,
   createAccountUseCases,
 } from '@/modules/account';
-import { AccountRepositoryDrizzle } from '@/modules/account/infrastructure/drizzle/account-repository-drizzle';
+import { AccountRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 
 import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';

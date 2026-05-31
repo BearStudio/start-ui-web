@@ -13,6 +13,7 @@ import javascript
 
 private predicate isServerEntrypoint(File file) {
   file.getRelativePath().regexpMatch("src/modules/.+/(server|server-functions)\\.ts") or
+  file.getRelativePath().regexpMatch("src/modules/.+/transport/server-functions/.+\\.ts") or
   file.getRelativePath().regexpMatch(".*unprotected-server-function\\.ts")
 }
 

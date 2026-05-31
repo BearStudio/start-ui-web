@@ -21,7 +21,7 @@ import { cn } from '@/platform/lib/tailwind/utils';
 
 import { Button, buttonVariants } from '@/platform/components/ui/button';
 
-import { REACT_DAY_PICKER_LOCALE_MAP } from '@/locales/react-day-picker';
+import { REACT_DAY_PICKER_LOCALE_MAP } from '@/app/i18n/react-day-picker';
 
 const ChevronWrapper = ({ orientation }: ChevronProps) =>
   match(orientation)

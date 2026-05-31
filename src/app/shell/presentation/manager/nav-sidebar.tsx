@@ -1,0 +1,142 @@
+import { Link } from '@tanstack/react-router';
+import {
+  LayoutDashboardIcon,
+  PanelLeftIcon,
+  UsersIcon,
+  XIcon,
+} from 'lucide-react';
+import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Logo } from '@/platform/components/brand/logo';
+import { IconBookOpen } from '@/platform/components/icons/generated';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/platform/components/ui/sidebar';
+
+import { WithPermissions } from '@/modules/auth/client';
+import { NavUser } from '@/app/shell/presentation/manager/nav-user';
+
+export const NavSidebar = (props: { children?: ReactNode }) => {
+  const { t } = useTranslation(['layout']);
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex items-center">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="h-auto"
+                  render={
+                    <Link to="/manager">
+                      <span>
+                        <Logo className="w-24 group-data-[collapsible=icon]:w-18" />
+                      </span>
+                    </Link>
+                  }
+                />
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarTrigger
+              className="group-data-[collapsible=icon]:hidden"
+              icon={
+                <>
+                  <XIcon className="md:hidden" />
+                  <PanelLeftIcon className="hidden md:block rtl:rotate-180" />
+                </>
+              }
+            />
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>{t('layout:nav.application')}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <Link to="/manager/dashboard">
+                    {({ isActive }) => (
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        render={
+                          <span>
+                            <LayoutDashboardIcon />
+                            <span>{t('layout:nav.dashboard')}</span>
+                          </span>
+                        }
+                      />
+                    )}
+                  </Link>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <Link to="/manager/books">
+                    {({ isActive }) => (
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        render={
+                          <span>
+                            <IconBookOpen />
+                            <span>{t('layout:nav.books')}</span>
+                          </span>
+                        }
+                      />
+                    )}
+                  </Link>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          <WithPermissions
+            permissions={[
+              {
+                user: ['list'],
+              },
+            ]}
+          >
+            <SidebarGroup>
+              <SidebarGroupLabel>
+                {t('layout:nav.configuration')}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <Link to="/manager/users">
+                      {({ isActive }) => (
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          render={
+                            <span>
+                              <UsersIcon />
+                              <span>{t('layout:nav.users')}</span>
+                            </span>
+                          }
+                        />
+                      )}
+                    </Link>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </WithPermissions>
+        </SidebarContent>
+        <SidebarFooter>
+          <NavUser />
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>{props.children}</SidebarInset>
+    </SidebarProvider>
+  );
+};

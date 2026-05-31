@@ -6,7 +6,7 @@ import {
   isForbiddenRouteError,
   requireAuthenticatedRoute,
 } from '@/modules/auth/presentation';
-import { AppLayout as Layout } from '@/modules/shell/presentation';
+import { AppLayout as Layout } from '@/app/shell/presentation';
 
 export const Route = createFileRoute('/app')({
   beforeLoad: ({ context, location }) =>

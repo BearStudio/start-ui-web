@@ -6,7 +6,7 @@ import {
   DEFAULT_NAMESPACE,
 } from '@/platform/lib/i18n/constants';
 
-import locales from '@/locales';
+import locales from '@/app/i18n';
 
 export const i18nConfig: InitOptions = {
   defaultNS: DEFAULT_NAMESPACE,

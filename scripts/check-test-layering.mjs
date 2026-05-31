@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const sourceRoot = path.join(root, 'src');
+const testRoot = path.join(root, 'tests');
 const sourceFilePattern = /\.[cm]?[jt]sx?$/;
 const publicModuleFiles = new Set([
   'index',
@@ -48,6 +49,10 @@ function resolveLocalImport(importer, specifier) {
     return path.resolve(root, 'src', specifier.slice(2));
   }
 
+  if (specifier.startsWith('@tests/')) {
+    return path.resolve(root, 'tests', specifier.slice(7));
+  }
+
   if (specifier.startsWith('.')) {
     return path.resolve(path.dirname(importer), specifier);
   }
@@ -78,8 +83,8 @@ function moduleImportViolation(resolvedImport) {
 }
 
 const failures = [];
-const sourceFiles = listFiles(sourceRoot).filter((filePath) =>
-  sourceFilePattern.test(filePath)
+const sourceFiles = [...listFiles(sourceRoot), ...listFiles(testRoot)].filter(
+  (filePath) => sourceFilePattern.test(filePath)
 );
 
 for (const filePath of sourceFiles) {
@@ -88,19 +93,19 @@ for (const filePath of sourceFiles) {
   const importSpecifiers = readImportSpecifiers(source);
 
   if (
-    projectPath !== 'src/tests/support/property-testing.ts' &&
+    projectPath !== 'tests/support/property-testing.ts' &&
     importSpecifiers.includes('@fast-check/vitest')
   ) {
     failures.push(
-      `${projectPath}: import property-test helpers from @/tests/support/property-testing instead of @fast-check/vitest`
+      `${projectPath}: import property-test helpers from @tests/support/property-testing instead of @fast-check/vitest`
     );
   }
 
   if (
-    /^src\/modules\/[^/]+\/domain\/__tests__\/[^/]+\.unit\.spec\.tsx?$/.test(
+    /^tests\/unit\/modules\/[^/]+\/domain\/__tests__\/[^/]+\.unit\.spec\.tsx?$/.test(
       projectPath
     ) &&
-    importSpecifiers.includes('@/tests/support/property-testing')
+    importSpecifiers.includes('@tests/support/property-testing')
   ) {
     failures.push(
       `${projectPath}: property-based domain unit tests must sit next to the source file they test`

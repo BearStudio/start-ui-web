@@ -1,6 +1,6 @@
 import { createAppQueryClient } from '@/platform/lib/tanstack-query/query-client';
 
-import { openDemoModeDrawer } from '@/modules/demo/presentation';
+import { openDemoModeDrawer } from '@/app/demo/presentation';
 import { DEMO_MODE_ERROR, isServerFnError } from '@/modules/kernel/client';
 
 const handleDemoModeError = (error: unknown) => {

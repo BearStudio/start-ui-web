@@ -3,7 +3,7 @@
 
 ## What This Codebase Is
 
-A TanStack Start application in TypeScript, organized as a strict modular monolith with hexagonal boundaries per capability. UI primitives and shared technical utilities live under `src/platform`; business and shell capabilities live under `src/modules`; production wiring lives under `src/composition`.
+A TanStack Start application in TypeScript, organized as a strict modular monolith with hexagonal boundaries per capability. UI primitives and shared technical utilities live under `src/platform`; app-owned shell/support resources live under `src/app`; business capabilities live under `src/modules`; production wiring lives under `src/composition`.
 
 ## Canonical Commands
 
@@ -52,9 +52,11 @@ Cross-module imports must use one of these public files:
 | File | Contents |
 |---|---|
 | `index.ts` | Domain types, application ports, factories, stable constants. |
-| `server.ts` | Server-only public API and composed server functions. |
+| `server.ts` | TanStack `createServerFn` exports only. |
+| `backend.ts` | Server-only non-server-function APIs, protected runners, HTTP route handlers. |
 | `client.ts` | Client-only public API, query options, client facades. |
 | `presentation.ts` | React components and presentation exports. |
+| `testing.ts` | Test-only public gate for owner internals. |
 
 Do not deep-import another module's `domain/`, `application/`, `infrastructure/`, `transport/`, or `presentation/` internals. `kernel` internals are the practical exception for cross-cutting primitives.
 
@@ -66,8 +68,10 @@ Do not deep-import another module's `domain/`, `application/`, `infrastructure/`
 ## Common Guardrails
 
 - `src/platform` must not import `modules`, `routes`, or `composition`.
+- `src/modules` must not import `src/app`; routes/app containers compose app shell/support UI around module presentation.
+- `src/modules/*/testing.ts` and platform testing gates are test-only and must not be imported by production source.
 - Module internals must not import `@/composition`; dependencies are injected through factories or public server barrels.
-- Routes import modules only through `index.ts`, `server.ts`, `client.ts`, or `presentation.ts`.
+- Routes import modules only through `index.ts`, `server.ts`, `backend.ts`, `client.ts`, or `presentation.ts`.
 - `src/modules/*/presentation/schema.ts` must emit static error keys, not import `i18next` or `react-i18next`; `src/platform/components/form/form-field-error.tsx` translates at render time.
 - Better Auth server APIs are confined to `src/modules/auth` and `src/composition/auth.ts`.
 - Provider-specific auth tokens stay server-side and do not cross client/public boundaries.
@@ -91,9 +95,11 @@ Use the cheapest test that proves the behavior:
 
 | Type | Location |
 |---|---|
-| Unit | `*.unit.spec.ts` next to source |
-| Browser/component | `*.browser.spec.tsx` next to source |
-| E2E | `e2e/*.spec.ts` |
-| Fixtures | `*.fixture.tsx` |
+| Unit | `tests/unit/**/*.unit.{test,spec}.{ts,tsx}` |
+| Browser/component | `tests/browser/**/*.browser.{test,spec}.tsx` |
+| Integration | `tests/integration/**/*.integration.test.ts` |
+| Architecture/security | `tests/architecture/**/*.unit.spec.ts`, `tests/security/**/*.unit.spec.ts` |
+| E2E | `tests/e2e/*.spec.ts` |
+| Fixtures/support | `tests/support`, `tests/server`, nearest `*.fixture.tsx` when useful |
 
 When a regression class is likely to repeat, add a guardrail through depcruise, Semgrep, or an architecture test.

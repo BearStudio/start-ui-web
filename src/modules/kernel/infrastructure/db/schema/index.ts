@@ -1,12 +1,23 @@
-export * from './auth';
-export * from './catalog';
 export * from './common';
-export * from './email';
 export * from './relations';
+export * from '@/modules/auth/infrastructure/drizzle/schema';
+export * from '@/modules/book/infrastructure/drizzle/schema';
+export * from '@/modules/email/infrastructure/drizzle/schema';
+export * from '@/modules/genre/infrastructure/drizzle/schema';
 
-import { account, session, user, verification } from './auth';
-import { author, book, genre, publisher } from './catalog';
-import { emailStatus } from './email';
+import {
+  account,
+  session,
+  user,
+  verification,
+} from '@/modules/auth/infrastructure/drizzle/schema';
+import {
+  author,
+  book,
+  publisher,
+} from '@/modules/book/infrastructure/drizzle/schema';
+import { emailStatus } from '@/modules/email/infrastructure/drizzle/schema';
+import { genre } from '@/modules/genre/infrastructure/drizzle/schema';
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;

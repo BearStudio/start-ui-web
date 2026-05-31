@@ -55,7 +55,7 @@ import {
   ManagerPageLayoutContent as PageLayoutContent,
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/modules/shell/presentation';
+} from '@/platform/components/page-layout';
 
 import { userQueries } from '../queries';
 

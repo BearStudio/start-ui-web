@@ -12,7 +12,7 @@ import { Sonner } from '@/platform/components/ui/sonner';
 import {
   DemoModeDrawer,
   useIsDemoModeDrawerVisible,
-} from '@/modules/demo/presentation';
+} from '@/app/demo/presentation';
 import { envClient } from '@/platform/env/client';
 
 export const Providers = (props: {

@@ -37,7 +37,10 @@ if (isLikelyTransactionPooledDatabaseUrl(databaseUrl)) {
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './src/modules/kernel/infrastructure/db/schema/**/*.ts',
+  schema: [
+    './src/modules/kernel/infrastructure/db/schema/**/*.ts',
+    './src/modules/*/infrastructure/drizzle/schema.ts',
+  ],
   out: './drizzle/migrations',
   dbCredentials: {
     url: databaseUrl,

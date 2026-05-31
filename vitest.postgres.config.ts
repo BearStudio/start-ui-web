@@ -6,9 +6,9 @@ const resolve = (filePath: string) => path.resolve(__dirname, filePath);
 export default defineConfig({
   test: {
     environment: 'node',
-    include: ['src/**/*.postgres.test.ts'],
+    include: ['tests/integration/**/*.postgres.test.ts'],
     fileParallelism: false,
-    setupFiles: [resolve('src/tests/setup.base.ts')],
+    setupFiles: [resolve('tests/setup.base.ts')],
     testTimeout: 60_000,
   },
   resolve: {
@@ -16,6 +16,10 @@ export default defineConfig({
       {
         find: '@',
         replacement: resolve('./src'),
+      },
+      {
+        find: /^@tests\/(.*)$/,
+        replacement: resolve('./tests/$1'),
       },
     ],
   },

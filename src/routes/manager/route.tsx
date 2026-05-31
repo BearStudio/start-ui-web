@@ -7,7 +7,7 @@ import {
   isForbiddenRouteError,
   requireAuthenticatedRouteOrForbidden,
 } from '@/modules/auth/presentation';
-import { ManagerLayout as Layout } from '@/modules/shell/presentation';
+import { ManagerLayout as Layout } from '@/app/shell/presentation';
 
 export const Route = createFileRoute('/manager')({
   beforeLoad: ({ context, location }) =>

@@ -1,7 +1,12 @@
 import { relations } from 'drizzle-orm';
 
-import { account, session, user } from './auth';
-import { book, genre } from './catalog';
+import {
+  account,
+  session,
+  user,
+} from '@/modules/auth/infrastructure/drizzle/schema';
+import { book } from '@/modules/book/infrastructure/drizzle/schema';
+import { genre } from '@/modules/genre/infrastructure/drizzle/schema';
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),

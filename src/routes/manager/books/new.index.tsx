@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { openDemoModeDrawer } from '@/app/demo/presentation';
 import { PageBookNew } from '@/modules/book/presentation';
 
 export const Route = createFileRoute('/manager/books/new/')({
@@ -7,5 +8,5 @@ export const Route = createFileRoute('/manager/books/new/')({
 });
 
 function RouteComponent() {
-  return <PageBookNew />;
+  return <PageBookNew onDemoUploadBlocked={openDemoModeDrawer} />;
 }

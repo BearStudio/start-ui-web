@@ -1,12 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "src/modules/runtime-config/domain/**/*.ts",
-    "src/modules/runtime-config/application/**/*.ts"
+    "src/platform/runtime-config/domain/**/*.ts",
+    "src/platform/runtime-config/application/**/*.ts"
   ],
   "exclude": [
     "**/index.ts",
-    "src/modules/runtime-config/application/ports/**/*.ts",
+    "src/platform/runtime-config/application/ports/**/*.ts",
     "**/types.ts"
   ]
 }

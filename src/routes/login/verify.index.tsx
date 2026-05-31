@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
+import { LoginEmailOtpHint } from '@/app/devtools/presentation';
 import { PageLoginVerify } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login/verify/')({
@@ -16,5 +17,7 @@ export const Route = createFileRoute('/login/verify/')({
 
 function RouteComponent() {
   const search = Route.useSearch();
-  return <PageLoginVerify search={search} />;
+  return (
+    <PageLoginVerify emailOtpHint={<LoginEmailOtpHint />} search={search} />
+  );
 }

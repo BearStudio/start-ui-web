@@ -12,7 +12,7 @@ import {
   bookGetAll,
   bookGetById,
   bookUpdateById,
-} from '../server-functions';
+} from '../server';
 
 type GetAllInput = {
   searchTerm?: string;

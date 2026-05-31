@@ -4,6 +4,10 @@ const MIGRATIONS_DIR = 'drizzle/migrations';
 const SCHEMA_PATHS = [
   'src/modules/kernel/infrastructure/db/schema.ts',
   'src/modules/kernel/infrastructure/db/schema',
+  'src/modules/auth/infrastructure/drizzle/schema.ts',
+  'src/modules/book/infrastructure/drizzle/schema.ts',
+  'src/modules/email/infrastructure/drizzle/schema.ts',
+  'src/modules/genre/infrastructure/drizzle/schema.ts',
 ];
 const SQL_MIGRATION_PATTERN = /^drizzle\/migrations\/.*\.sql$/;
 

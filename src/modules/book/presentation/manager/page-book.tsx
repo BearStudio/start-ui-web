@@ -22,7 +22,7 @@ import {
   ManagerPageLayoutContent as PageLayoutContent,
   ManagerPageLayoutTopBar as PageLayoutTopBar,
   ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/modules/shell/presentation';
+} from '@/platform/components/page-layout';
 
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';

@@ -8,12 +8,12 @@ import tseslint from 'typescript-eslint';
 
 const tsFiles = ['**/*.{ts,tsx,mts,cts}'];
 const sourceTsFiles = ['src/**/*.{ts,tsx}'];
-const e2eFiles = ['e2e/**/*.ts'];
+const e2eFiles = ['tests/e2e/**/*.ts'];
 const nonProductionFiles = [
   '**/*.{spec,test}.{ts,tsx}',
   '**/__tests__/**/*.{ts,tsx}',
   '**/*.fixture.tsx',
-  'src/tests/**/*.{ts,tsx}',
+  'tests/**/*.{ts,tsx}',
 ];
 
 const warnRules = (rules) =>

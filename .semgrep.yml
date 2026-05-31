@@ -80,7 +80,7 @@ rules:
       - typescript
     paths:
       include:
-        - src/modules/**/__tests__/*.integration.test.ts
+        - tests/integration/modules/**/__tests__/*.integration.test.ts
     patterns:
       - pattern-inside: |
           describe(..., () => {
@@ -103,7 +103,7 @@ rules:
       - typescript
     paths:
       include:
-        - src/modules/**/__tests__/*.integration.test.ts
+        - tests/integration/modules/**/__tests__/*.integration.test.ts
     patterns:
       - pattern-inside: |
           afterAll(async () => {
@@ -266,8 +266,8 @@ rules:
     languages: [typescript]
     severity: ERROR
     pattern-either:
-      - pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|client)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
-      - pattern-regex: 'from\s+["'']@/modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|client)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
+      - pattern-regex: 'from\s+["''](?:\.{1,2}/)+modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|backend|client|testing)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
+      - pattern-regex: 'from\s+["'']@/modules/(?!kernel/)[^/"''\n]+/(?!(?:index|presentation|server|backend|client|testing)(?:\.[^/"''\n]+)?(?:["'']|$))[^"''\n]+["'']'
     paths:
       include:
         - src/routes/**/*.ts
@@ -282,6 +282,26 @@ rules:
       include:
         - src/platform/**/*.ts
         - src/platform/**/*.tsx
+
+  - id: no-module-imports-app-code
+    message: src/app composes shell and support UI around modules; modules must not import app code.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/app(?:/[^"'']*)?["'']'
+    paths:
+      include:
+        - src/modules/**/*.ts
+        - src/modules/**/*.tsx
+
+  - id: no-production-testing-gate-imports
+    message: testing.ts public gates are for tests only; production source must not import them.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/(?:modules/[^/"'']+|platform/runtime-config)/testing(?:\.[^"'']*)?["'']'
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
 
   - id: no-module-internals-import-composition
     message: Module internals must receive dependencies from factories/public server barrels, not import composition directly.
@@ -320,7 +340,7 @@ rules:
     paths:
       exclude:
         - src/platform/env/**
-        - src/modules/devtools/presentation/tanstack-devtools.tsx
+        - src/app/devtools/presentation/tanstack-devtools.tsx
         - '*.config.ts'
         - '*.config.mjs'
         - 'vite.*.ts'
@@ -449,7 +469,7 @@ rules:
     pattern-regex: 'from\s+["'']@/features(?:/[^"'']*)?["'']'
 
   - id: no-src-layout-imports
-    message: src/layout was moved into the shell module; import from @/modules/shell/presentation.
+    message: src/layout was moved into src/app/shell; import from @/app/shell/presentation.
     languages: [typescript]
     severity: ERROR
     pattern-regex: 'from\s+["'']@/layout(?:/[^"'']*)?["'']'
@@ -580,7 +600,7 @@ rules:
           createServerContextTools({ ..., telemetry: telemetryProxy, ... })
     paths:
       include:
-        - src/modules/auth/server-functions.ts
+        - src/modules/auth/transport/server-functions/server-functions.ts
 
   - id: token-or-secret-logging
     message: Do not log tokens, secrets, passwords, or Authorization headers.
@@ -628,7 +648,7 @@ rules:
       - pattern: 'diagnostics.waitForUrl($TYPE, $URL, { ..., user: $VALUE, ... })'
     paths:
       include:
-        - e2e/**/*.ts
+        - tests/e2e/**/*.ts
         - src/modules/auth/presentation/**/*.ts
         - src/modules/auth/presentation/**/*.tsx
       exclude:

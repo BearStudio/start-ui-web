@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { ProtectedContext } from '@/modules/auth/server';
+import type { ProtectedContext } from '@/modules/auth/backend';
 import {
   toEmailAddress,
   toSessionId,

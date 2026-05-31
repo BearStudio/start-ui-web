@@ -94,6 +94,7 @@ export function createDbClient(options?: {
       },
       close: async () => {
         await transactionDb?.$close();
+        transactionDb = undefined;
       },
     });
   }

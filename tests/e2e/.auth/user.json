@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "i18next",
+      "value": "en",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "better-auth.session_token",
+      "value": "Lsx32iynPzct4JWKn1K3l5DCugXDnqxN.IHymuW4Z3TcHdV9T3XfV2va2ey8GxCcXPUdWOnyFtOo%3D",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1782830433.395812,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

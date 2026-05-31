@@ -1,6 +1,7 @@
 import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -18,7 +19,6 @@ import { sendEmailOtp, signInSocial } from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
-import { LoginEmailHint } from '@/modules/devtools/presentation';
 import { envClient } from '@/platform/env/client';
 
 import { authE2eDebug } from './e2e-debug';
@@ -29,8 +29,10 @@ const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   : ('auth:pageLogin' as const);
 
 export default function PageLogin({
+  emailHint,
   search,
 }: {
+  emailHint?: ReactNode;
   search: { redirect?: string };
 }) {
   const { i18n, t } = useTranslation(['auth', 'common']);
@@ -177,7 +179,7 @@ export default function PageLogin({
           >
             {t(`${I18N_KEY_PAGE_PREFIX}.loginWithEmail`)}
           </Button>
-          <LoginEmailHint />
+          {emailHint}
         </div>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">

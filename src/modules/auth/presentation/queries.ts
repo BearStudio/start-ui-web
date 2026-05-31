@@ -4,7 +4,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
-import { authServerFunctions } from '../server-functions';
+import { authServerFunctions } from '../server';
 
 export const authQueries = {
   all: () => ['auth'] as const,

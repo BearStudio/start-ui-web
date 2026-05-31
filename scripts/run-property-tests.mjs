@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const sourceRoot = path.join(root, 'src');
+const testRoot = path.join(root, 'tests');
 const testFilePattern = /\.(?:unit\.)?(?:test|spec)\.[cm]?[jt]sx?$/;
 
 function listFiles(directory) {
@@ -17,10 +17,10 @@ function listFiles(directory) {
   });
 }
 
-const propertyTestFiles = listFiles(sourceRoot)
+const propertyTestFiles = listFiles(testRoot)
   .filter((filePath) => testFilePattern.test(filePath))
   .filter((filePath) =>
-    readFileSync(filePath, 'utf8').includes('@/tests/support/property-testing')
+    readFileSync(filePath, 'utf8').includes('@tests/support/property-testing')
   )
   .map((filePath) => path.relative(root, filePath))
   .sort();

@@ -3,7 +3,7 @@ import {
   type UserAuthGateway,
   type UserRepository,
 } from '@/modules/user';
-import { UserRepositoryDrizzle } from '@/modules/user/infrastructure/drizzle/user-repository-drizzle';
+import { UserRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
 
 import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';

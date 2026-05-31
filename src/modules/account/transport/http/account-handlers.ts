@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import type { AccountUseCases } from '@/modules/account';
-import type { ProtectedContext } from '@/modules/auth/server';
+import type { ProtectedContext } from '@/modules/auth/backend';
 import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zSubmitOnboardingInput = () =>
