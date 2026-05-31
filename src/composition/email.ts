@@ -2,19 +2,26 @@ import {
   createEmailUseCases,
   type EmailGateway,
   type EmailStatusRepository,
+  type EmailTransactionContext,
   type EmailUseCases,
 } from '@/modules/email';
 import { EmailStatusRepositoryDrizzle } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
 import { EmailGatewayResend } from '@/modules/email/infrastructure/resend/email-gateway-resend';
 import { ResendWebhookVerifier } from '@/modules/email/infrastructure/resend/resend-webhook-verifier';
+import type { TransactionRunner } from '@/modules/kernel';
 import {
+  createTransactionRunner,
   type Database,
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 
+import type { Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
 
+type EmailKernel = Pick<Kernel, 'db' | 'transactionRunner'>;
+
 export type EmailOverrides = {
+  kernel?: EmailKernel;
   db?: Database;
   emailGateway?: EmailGateway;
   emailStatusRepository?: EmailStatusRepository;
@@ -27,21 +34,56 @@ type EmailServices = {
   resendWebhookVerifier: ResendWebhookVerifier;
 };
 
+const createEmailStatusTransactionRunner = (
+  kernel: EmailKernel,
+  emailStatusRepositoryOverride?: EmailStatusRepository
+): TransactionRunner<EmailTransactionContext> => {
+  if (emailStatusRepositoryOverride) {
+    return {
+      run: (work) =>
+        work({ emailStatusRepository: emailStatusRepositoryOverride }),
+    };
+  }
+
+  return {
+    run: (work) =>
+      kernel.transactionRunner.run((db) =>
+        work({ emailStatusRepository: new EmailStatusRepositoryDrizzle(db) })
+      ),
+  };
+};
+
+const createEmailKernel = (db: Database): EmailKernel => ({
+  db,
+  transactionRunner: createTransactionRunner(db),
+});
+
+const getDefaultEmailKernel = (): EmailKernel =>
+  createEmailKernel(getDefaultDbClient());
+
 const buildEmailServices = (overrides?: EmailOverrides): EmailServices => {
-  const db = overrides?.db ?? getDefaultDbClient();
+  const kernel =
+    overrides?.kernel ??
+    (overrides?.db ? createEmailKernel(overrides.db) : getDefaultEmailKernel());
   const emailStatusRepository =
-    overrides?.emailStatusRepository ?? new EmailStatusRepositoryDrizzle(db);
+    overrides?.emailStatusRepository ??
+    new EmailStatusRepositoryDrizzle(kernel.db);
+  const statusTransactionRunner = createEmailStatusTransactionRunner(
+    kernel,
+    overrides?.emailStatusRepository
+  );
 
   const gateway =
     overrides?.emailGateway ??
     new EmailGatewayResend({
-      statusRepository: emailStatusRepository,
+      statusTransactionRunner,
     });
 
   return {
     gateway,
     useCases: createEmailUseCases({
       emailStatusRepository,
+      transactionRunner: statusTransactionRunner,
     }),
     resendWebhookVerifier:
       overrides?.resendWebhookVerifier ?? new ResendWebhookVerifier(),

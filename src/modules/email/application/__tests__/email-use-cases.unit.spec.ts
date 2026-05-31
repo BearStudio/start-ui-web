@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import type { EmailStatusRepository } from '../ports/email-status-repository';
+import type { EmailUseCaseDeps } from '../use-cases/types';
 import {
   EMAIL_PROVIDER_RESEND,
   type EmailStatusRecord,
@@ -70,12 +71,26 @@ function makeRepository(overrides: Partial<EmailStatusRepository> = {}) {
   return Object.assign(repository, overrides);
 }
 
+function makeDeps(
+  repository: EmailStatusRepository,
+  onTransactionRun?: () => void
+): EmailUseCaseDeps {
+  return {
+    emailStatusRepository: repository,
+    transactionRunner: {
+      run: (work) => {
+        onTransactionRun?.();
+        return work({ emailStatusRepository: repository });
+      },
+    },
+  };
+}
+
 describe('email use cases', () => {
   it('upserts new webhook status events without DB or provider clients', async () => {
     const repository = makeRepository();
-    const useCases = createEmailUseCases({
-      emailStatusRepository: repository,
-    });
+    const transactionRun = vi.fn();
+    const useCases = createEmailUseCases(makeDeps(repository, transactionRun));
 
     await expect(useCases.processStatusEvent(input)).resolves.toMatchObject({
       duplicate: false,
@@ -111,6 +126,7 @@ describe('email use cases', () => {
         processedWebhookEventIds: ['evt_1'],
       },
     });
+    expect(transactionRun).toHaveBeenCalledTimes(1);
   });
 
   it('returns duplicate results without writing when a webhook event was processed', async () => {
@@ -124,9 +140,7 @@ describe('email use cases', () => {
         async () => existing
       ),
     });
-    const useCases = createEmailUseCases({
-      emailStatusRepository: repository,
-    });
+    const useCases = createEmailUseCases(makeDeps(repository));
 
     await expect(useCases.processStatusEvent(input)).resolves.toEqual({
       duplicate: true,
@@ -151,9 +165,7 @@ describe('email use cases', () => {
         async () => existing
       ),
     });
-    const useCases = createEmailUseCases({
-      emailStatusRepository: repository,
-    });
+    const useCases = createEmailUseCases(makeDeps(repository));
 
     await expect(
       useCases.processStatusEvent({

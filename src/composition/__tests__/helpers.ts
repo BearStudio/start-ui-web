@@ -30,7 +30,7 @@ export function makeTestKernel(overrides: Partial<Kernel> = {}): Kernel {
       },
     },
     transactionRunner: {
-      run: (work) => work({}),
+      run: (work) => work({} as never),
     },
     permissionChecker: {
       hasPermission: async () => true,

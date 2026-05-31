@@ -2,14 +2,17 @@ import { render } from '@react-email/render';
 import type { ReactElement } from 'react';
 import type { CreateEmailOptions, Resend } from 'resend';
 
-import type { EmailStatusRepository } from '@/modules/email';
 import {
   EMAIL_PROVIDER_RESEND,
   type EmailGateway,
   type EmailMetadata,
+  type EmailTransactionContext,
+  type RecordEmailSendAttemptInput,
   type SendEmailParams,
   type SendEmailResult,
+  type UpsertEmailStatusInput,
 } from '@/modules/email';
+import type { TransactionRunner } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { getEmailConfig } from '@/modules/kernel/infrastructure/config/email';
 import { envClient } from '@/platform/env/client';
@@ -17,7 +20,7 @@ import { envClient } from '@/platform/env/client';
 import { getDefaultResendClient } from './resend-client';
 
 type EmailGatewayResendDeps = {
-  statusRepository: EmailStatusRepository;
+  statusTransactionRunner: TransactionRunner<EmailTransactionContext>;
   resend?: Resend;
 };
 
@@ -49,11 +52,23 @@ const providerErrorMetadata = (error: {
 
 export class EmailGatewayResend implements EmailGateway {
   private readonly resend?: Resend;
-  private readonly statusRepository: EmailStatusRepository;
+  private readonly statusTransactionRunner: TransactionRunner<EmailTransactionContext>;
 
   constructor(deps: EmailGatewayResendDeps) {
     this.resend = deps.resend;
-    this.statusRepository = deps.statusRepository;
+    this.statusTransactionRunner = deps.statusTransactionRunner;
+  }
+
+  private recordSendAttempt(input: RecordEmailSendAttemptInput) {
+    return this.statusTransactionRunner.run(({ emailStatusRepository }) =>
+      emailStatusRepository.recordSendAttempt(input)
+    );
+  }
+
+  private upsertStatusByExternalId(input: UpsertEmailStatusInput) {
+    return this.statusTransactionRunner.run(({ emailStatusRepository }) =>
+      emailStatusRepository.upsertStatusByExternalId(input)
+    );
   }
 
   async sendEmail(input: SendEmailParams): Promise<SendEmailResult> {
@@ -75,7 +90,7 @@ export class EmailGatewayResend implements EmailGateway {
     }
 
     const recipient = recipientToStatusValue(input.to);
-    const attempt = await this.statusRepository.recordSendAttempt({
+    const attempt = await this.recordSendAttempt({
       provider: EMAIL_PROVIDER_RESEND,
       recipient,
       subject: input.subject,
@@ -119,7 +134,7 @@ export class EmailGatewayResend implements EmailGateway {
     });
 
     if (error) {
-      const failedAttempt = await this.statusRepository.recordSendAttempt({
+      const failedAttempt = await this.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -154,7 +169,7 @@ export class EmailGatewayResend implements EmailGateway {
     }
 
     if (!data?.id) {
-      const failedAttempt = await this.statusRepository.recordSendAttempt({
+      const failedAttempt = await this.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -179,7 +194,7 @@ export class EmailGatewayResend implements EmailGateway {
       });
     }
 
-    await this.statusRepository.upsertStatusByExternalId({
+    await this.upsertStatusByExternalId({
       provider: EMAIL_PROVIDER_RESEND,
       externalId: data.id,
       recipient,

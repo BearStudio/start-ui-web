@@ -29,9 +29,9 @@ export async function updateBook(
       event: 'book.update',
       details: { bookId: input.id },
     });
-    const value = await deps.bookRepository.update(
-      input.id,
-      normalizeBookWriteInput(input.book)
+    const book = normalizeBookWriteInput(input.book);
+    const value = await deps.transactionRunner.run(({ bookRepository }) =>
+      bookRepository.update(input.id, book)
     );
     if (!value) return fail('not_found');
     return ok(value);

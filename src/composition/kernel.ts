@@ -9,6 +9,7 @@ import { systemClock } from '@/modules/kernel/infrastructure/clock/system-clock'
 import {
   createTransactionRunner,
   type Database,
+  type DbTransaction,
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
@@ -84,7 +85,7 @@ export type Kernel = {
   clock: Clock;
   idGenerator: IdGenerator;
   cacheGateway: CacheGateway;
-  transactionRunner: TransactionRunner;
+  transactionRunner: TransactionRunner<DbTransaction>;
   permissionChecker: PermissionChecker;
 };
 

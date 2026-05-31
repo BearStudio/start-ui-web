@@ -5,6 +5,7 @@ import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import type { BookRepository } from '../ports/book-repository';
+import type { BookUseCaseDeps } from '../use-cases/types';
 import type { Book } from '../../domain/book';
 import { createBookUseCases } from '../../factory';
 
@@ -55,35 +56,53 @@ function makeRepo(overrides: Partial<BookRepository> = {}): BookRepository {
   };
 }
 
+function makeDeps(
+  input: {
+    bookRepository?: BookRepository;
+    permissionChecker?: PermissionChecker;
+    onTransactionRun?: () => void;
+  } = {}
+): BookUseCaseDeps {
+  const bookRepository = input.bookRepository ?? makeRepo();
+
+  return {
+    bookRepository,
+    transactionRunner: {
+      run: (work) => {
+        input.onTransactionRun?.();
+        return work({ bookRepository });
+      },
+    },
+    idGenerator,
+    permissionChecker: input.permissionChecker ?? allowed,
+    logger,
+  };
+}
+
 describe('book use cases', () => {
   it('lists books and returns forbidden when permission is missing', async () => {
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).list({ scope, limit: 20, searchTerm: '' })
+      createBookUseCases(makeDeps()).list({
+        scope,
+        limit: 20,
+        searchTerm: '',
+      })
     ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
 
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: forbidden,
-        logger,
-      }).list({ scope, limit: 20, searchTerm: '' })
+      createBookUseCases(makeDeps({ permissionChecker: forbidden })).list({
+        scope,
+        limit: 20,
+        searchTerm: '',
+      })
     ).resolves.toEqual({ ok: false, reason: 'forbidden' });
   });
 
   it('gets a book or returns not_found', async () => {
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo({ getById: async () => null }),
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).get({ scope, id: toBookId('missing') })
+      createBookUseCases(
+        makeDeps({ bookRepository: makeRepo({ getById: async () => null }) })
+      ).get({ scope, id: toBookId('missing') })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
   });
 
@@ -99,34 +118,30 @@ describe('book use cases', () => {
     });
 
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).create({ scope, book })
+      createBookUseCases(makeDeps()).create({ scope, book })
     ).resolves.toMatchObject({ ok: true });
 
     await expect(
-      createBookUseCases({
-        bookRepository: duplicateRepo,
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).create({ scope, book })
+      createBookUseCases(makeDeps({ bookRepository: duplicateRepo })).create({
+        scope,
+        book,
+      })
     ).resolves.toEqual({ ok: false, reason: 'duplicate' });
   });
 
   it('updates and deletes with not_found branches', async () => {
-    const useCases = createBookUseCases({
-      bookRepository: makeRepo({
-        update: async () => null,
-        delete: async () => false,
-      }),
-      idGenerator,
-      permissionChecker: allowed,
-      logger,
-    });
+    let transactionRuns = 0;
+    const useCases = createBookUseCases(
+      makeDeps({
+        bookRepository: makeRepo({
+          update: async () => null,
+          delete: async () => false,
+        }),
+        onTransactionRun: () => {
+          transactionRuns += 1;
+        },
+      })
+    );
 
     await expect(
       useCases.update({
@@ -135,43 +150,63 @@ describe('book use cases', () => {
         book,
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    expect(transactionRuns).toBe(1);
     await expect(
       useCases.delete({
         scope,
         id: toBookId('missing'),
       })
     ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    expect(transactionRuns).toBe(1);
+  });
+
+  it('uses the transaction context repository for updates', async () => {
+    const outsideRepository = makeRepo({
+      update: async () => {
+        throw new Error('outside repository should not update');
+      },
+    });
+    const transactionRepository = makeRepo({
+      update: async () => book,
+    });
+    const useCases = createBookUseCases({
+      ...makeDeps({ bookRepository: outsideRepository }),
+      transactionRunner: {
+        run: (work) => work({ bookRepository: transactionRepository }),
+      },
+    });
+
+    await expect(
+      useCases.update({
+        scope,
+        id: toBookId('book-1'),
+        book,
+      })
+    ).resolves.toMatchObject({ ok: true, value: book });
   });
 
   it('prepares cover uploads through permission and object-key policy', async () => {
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).prepareCoverUpload({ scope, fileType: 'image/webp' })
+      createBookUseCases(makeDeps()).prepareCoverUpload({
+        scope,
+        fileType: 'image/webp',
+      })
     ).resolves.toEqual({
       ok: true,
       value: { objectKey: 'books/generated-cover-id.webp' },
     });
 
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: forbidden,
-        logger,
-      }).prepareCoverUpload({ scope, fileType: 'image/webp' })
+      createBookUseCases(
+        makeDeps({ permissionChecker: forbidden })
+      ).prepareCoverUpload({ scope, fileType: 'image/webp' })
     ).resolves.toEqual({ ok: false, reason: 'forbidden' });
 
     await expect(
-      createBookUseCases({
-        bookRepository: makeRepo(),
-        idGenerator,
-        permissionChecker: allowed,
-        logger,
-      }).prepareCoverUpload({ scope, fileType: 'text/plain' })
+      createBookUseCases(makeDeps()).prepareCoverUpload({
+        scope,
+        fileType: 'text/plain',
+      })
     ).resolves.toEqual({ ok: false, reason: 'invalid_file_type' });
   });
 });

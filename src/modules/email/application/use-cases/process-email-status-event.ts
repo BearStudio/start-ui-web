@@ -29,41 +29,43 @@ export async function processEmailStatusEvent(
   deps: EmailUseCaseDeps,
   input: ProcessEmailStatusEventInput
 ): Promise<ProcessEmailStatusEventResult> {
-  const existing = await deps.emailStatusRepository.getByExternalId(
-    input.provider,
-    input.externalId
-  );
+  return deps.transactionRunner.run(async ({ emailStatusRepository }) => {
+    const existing = await emailStatusRepository.getByExternalId(
+      input.provider,
+      input.externalId
+    );
 
-  if (existing && hasProcessedWebhookEvent(existing, input.webhookEventId)) {
+    if (existing && hasProcessedWebhookEvent(existing, input.webhookEventId)) {
+      return {
+        duplicate: true,
+        record: existing,
+      };
+    }
+
+    const metadata = withProcessedWebhookEventId(
+      {
+        ...existing?.metadata,
+        ...input.metadata,
+        providerEventType: input.providerEventType,
+        providerEventCreatedAt: input.providerEventCreatedAt,
+      },
+      input.webhookEventId
+    );
+
+    const record = await emailStatusRepository.upsertStatusByExternalId({
+      provider: input.provider,
+      externalId: input.externalId,
+      recipient: input.recipient,
+      subject: input.subject,
+      status: input.status,
+      idempotencyKey: existing?.idempotencyKey ?? null,
+      lastWebhookEventId: input.webhookEventId,
+      metadata,
+    });
+
     return {
-      duplicate: true,
-      record: existing,
+      duplicate: false,
+      record,
     };
-  }
-
-  const metadata = withProcessedWebhookEventId(
-    {
-      ...existing?.metadata,
-      ...input.metadata,
-      providerEventType: input.providerEventType,
-      providerEventCreatedAt: input.providerEventCreatedAt,
-    },
-    input.webhookEventId
-  );
-
-  const record = await deps.emailStatusRepository.upsertStatusByExternalId({
-    provider: input.provider,
-    externalId: input.externalId,
-    recipient: input.recipient,
-    subject: input.subject,
-    status: input.status,
-    idempotencyKey: existing?.idempotencyKey ?? null,
-    lastWebhookEventId: input.webhookEventId,
-    metadata,
   });
-
-  return {
-    duplicate: false,
-    record,
-  };
 }

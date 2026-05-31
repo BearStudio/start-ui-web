@@ -18,7 +18,6 @@ import {
   type Database,
   type DbLike,
   type DbTransaction,
-  isRootDatabase,
   isTransactionCapableDatabase,
 } from './types';
 
@@ -150,20 +149,3 @@ export const transactionRunner = new Proxy(
     },
   }
 );
-
-export async function runWithDbTransaction<T>(
-  database: DbLike,
-  work: (db: DbLike) => Promise<T>
-): Promise<T> {
-  if (isRootDatabase(database)) {
-    if (!isTransactionCapableDatabase(database)) {
-      throw new ConfigurationError(
-        `Database driver ${database.$driver} does not support interactive transactions.`
-      );
-    }
-
-    return database.transaction((tx) => work(tx));
-  }
-
-  return work(database);
-}

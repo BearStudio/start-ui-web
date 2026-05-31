@@ -3,7 +3,6 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { BookId } from '@/modules/kernel/domain/ids';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
-import { runWithDbTransaction } from '@/modules/kernel/infrastructure/db/client';
 import {
   getConstraintName,
   isUniqueConstraintViolation,
@@ -208,22 +207,20 @@ export class BookRepositoryDrizzle implements BookRepository {
 
   async update(id: BookId, input: BookWriteInput): Promise<Book | null> {
     try {
-      return await runWithDbTransaction(this.db, async (db) => {
-        const [updated] = await db
-          .update(bookTable)
-          .set({
-            title: input.title,
-            author: input.author,
-            genreId: input.genreId,
-            publisher: input.publisher ?? null,
-            coverId: input.coverId ?? null,
-          })
-          .where(eq(bookTable.id, id))
-          .returning();
+      const [updated] = await this.db
+        .update(bookTable)
+        .set({
+          title: input.title,
+          author: input.author,
+          genreId: input.genreId,
+          publisher: input.publisher ?? null,
+          coverId: input.coverId ?? null,
+        })
+        .where(eq(bookTable.id, id))
+        .returning();
 
-        if (!updated) return null;
-        return this.getByIdWithDb(db, id);
-      });
+      if (!updated) return null;
+      return this.getByIdWithDb(this.db, id);
     } catch (error) {
       mapDbError(error);
     }

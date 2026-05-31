@@ -197,10 +197,33 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     expect(rows.map((row) => row.id)).toEqual(['email-status-new']);
   });
 
+  it('rejects invalid persisted metadata instead of replacing it with an empty object', async () => {
+    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    await database.db.insert(emailStatusTable).values(
+      makeEmailStatusRow({
+        metadata: [] as unknown as Record<string, unknown>,
+      })
+    );
+
+    await expect(
+      repository.getByExternalId('resend', 'email_1')
+    ).rejects.toMatchObject({
+      code: 'EMAIL_STATUS_METADATA_INVALID',
+    });
+  });
+
   it('dedupes webhook event IDs and keeps bounded metadata through the use case', async () => {
     const repository = new EmailStatusRepositoryDrizzle(database.db);
     const useCases = createEmailUseCases({
       emailStatusRepository: repository,
+      transactionRunner: {
+        run: (work) =>
+          database.db.transaction((tx) =>
+            work({
+              emailStatusRepository: new EmailStatusRepositoryDrizzle(tx),
+            })
+          ),
+      },
     });
 
     const input = {

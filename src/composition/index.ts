@@ -54,7 +54,7 @@ export type ServicesOverrides = {
   user?: Omit<UserOverrides, 'kernel'>;
   genre?: Omit<GenreOverrides, 'kernel'>;
   account?: Omit<AccountOverrides, 'kernel'>;
-  email?: Omit<EmailOverrides, 'db'>;
+  email?: Omit<EmailOverrides, 'kernel' | 'db'>;
 };
 
 export function getServices(overrides?: ServicesOverrides) {
@@ -76,6 +76,6 @@ export function getServices(overrides?: ServicesOverrides) {
     user: getUserUseCases({ ...overrides.user, kernel }),
     genre: getGenreUseCases({ ...overrides.genre, kernel }),
     account: getAccountUseCases({ ...overrides.account, kernel }),
-    email: getEmailServices({ ...overrides.email, db: kernel.db }),
+    email: getEmailServices({ ...overrides.email, kernel }),
   } as const;
 }

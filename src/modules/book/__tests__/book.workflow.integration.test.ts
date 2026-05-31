@@ -126,6 +126,9 @@ describe('book public workflow integration', () => {
     const bookRepository = new InMemoryBookRepository();
     const useCases = createBookUseCases({
       bookRepository,
+      transactionRunner: {
+        run: (work) => work({ bookRepository }),
+      },
       idGenerator: { createId: () => 'cover-id' },
       logger,
       permissionChecker,

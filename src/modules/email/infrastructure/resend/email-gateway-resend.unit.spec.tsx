@@ -2,7 +2,12 @@ import { createElement } from 'react';
 import type { Resend } from 'resend';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { EmailStatusRecord, EmailStatusRepository } from '@/modules/email';
+import type {
+  EmailStatusRecord,
+  EmailStatusRepository,
+  EmailTransactionContext,
+} from '@/modules/email';
+import type { TransactionRunner } from '@/modules/kernel';
 
 const testState = vi.hoisted(() => ({
   emailConfig: {
@@ -57,6 +62,16 @@ const makeStatusRepository = (): EmailStatusRepository =>
     countByStatus: vi.fn(),
   }) satisfies EmailStatusRepository;
 
+const makeStatusTransactionRunner = (
+  emailStatusRepository: EmailStatusRepository,
+  onRun?: () => void
+): TransactionRunner<EmailTransactionContext> => ({
+  run: (work) => {
+    onRun?.();
+    return work({ emailStatusRepository });
+  },
+});
+
 const loadGateway = async () => import('./email-gateway-resend');
 
 describe('EmailGatewayResend', () => {
@@ -81,7 +96,7 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     const result = await new EmailGatewayResend({
-      statusRepository,
+      statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
       to: 'user@example.com',
@@ -102,7 +117,7 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     const result = await new EmailGatewayResend({
-      statusRepository,
+      statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
       to: 'user@example.com',
@@ -119,6 +134,7 @@ describe('EmailGatewayResend', () => {
   it('renders text fallback, sends the idempotency key, and records sent status', async () => {
     const template = createElement('div', null, '123456');
     const statusRepository = makeStatusRepository();
+    const transactionRun = vi.fn();
     const resend = {
       emails: {
         send: vi.fn(async () => ({
@@ -131,7 +147,13 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     await expect(
-      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+      new EmailGatewayResend({
+        statusTransactionRunner: makeStatusTransactionRunner(
+          statusRepository,
+          transactionRun
+        ),
+        resend,
+      }).sendEmail({
         to: 'user@example.com',
         subject: 'Login code',
         template,
@@ -173,6 +195,7 @@ describe('EmailGatewayResend', () => {
       idempotencyKey: 'key-1',
       metadata: { source: 'test' },
     });
+    expect(transactionRun).toHaveBeenCalledTimes(2);
   });
 
   it('short-circuits duplicate sends when the idempotency key already has an external ID', async () => {
@@ -198,7 +221,10 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     await expect(
-      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+      new EmailGatewayResend({
+        statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+        resend,
+      }).sendEmail({
         to: 'user@example.com',
         subject: 'Login code',
         template: createElement('div', null, '123456'),
@@ -233,7 +259,10 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     await expect(
-      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+      new EmailGatewayResend({
+        statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+        resend,
+      }).sendEmail({
         to: 'user@example.com',
         subject: 'Login code',
         template: createElement('div', null, '123456'),
@@ -291,7 +320,10 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     await expect(
-      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+      new EmailGatewayResend({
+        statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+        resend,
+      }).sendEmail({
         to: 'user@example.com',
         subject: 'Login code',
         template: createElement('div', null, '123456'),
@@ -326,7 +358,10 @@ describe('EmailGatewayResend', () => {
     const { EmailGatewayResend } = await loadGateway();
 
     await expect(
-      new EmailGatewayResend({ statusRepository, resend }).sendEmail({
+      new EmailGatewayResend({
+        statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+        resend,
+      }).sendEmail({
         to: 'user@example.com',
         subject: 'Login code',
         template: createElement('div', null, '123456'),

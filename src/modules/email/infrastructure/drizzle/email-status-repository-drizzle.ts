@@ -13,7 +13,6 @@ import type {
   UpsertEmailStatusInput,
 } from '@/modules/email';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { runWithDbTransaction } from '@/modules/kernel/infrastructure/db/client';
 import {
   getConstraintName,
   isUniqueConstraintViolation,
@@ -30,7 +29,19 @@ const emailMetadataSchema = z.record(z.string(), z.unknown());
 
 const toMetadata = (metadata: unknown): EmailMetadata => {
   const result = emailMetadataSchema.safeParse(metadata);
-  return result.success ? result.data : {};
+
+  if (!result.success) {
+    throw new AppError({
+      code: 'EMAIL_STATUS_METADATA_INVALID',
+      category: 'system',
+      status: 500,
+      message: 'Email status metadata is invalid',
+      details: { issues: result.error.issues },
+      cause: result.error,
+    });
+  }
+
+  return result.data;
 };
 
 const mergeMetadata = (
@@ -206,9 +217,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
     input: RecordEmailSendAttemptInput
   ): Promise<EmailStatusRecord> {
     try {
-      return await runWithDbTransaction(this.db, (db) =>
-        this.recordSendAttemptWithDb(db, input)
-      );
+      return await this.recordSendAttemptWithDb(this.db, input);
     } catch (error) {
       mapDbError(error);
     }
@@ -331,9 +340,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
     input: UpsertEmailStatusInput
   ): Promise<EmailStatusRecord> {
     try {
-      return await runWithDbTransaction(this.db, (db) =>
-        this.upsertStatusByExternalIdWithDb(db, input)
-      );
+      return await this.upsertStatusByExternalIdWithDb(this.db, input);
     } catch (error) {
       mapDbError(error);
     }

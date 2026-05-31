@@ -8,6 +8,7 @@ export type {
   RecordEmailSendAttemptInput,
   UpsertEmailStatusInput,
 } from './application/ports/email-status-repository';
+export type { EmailTransactionContext } from './application/use-cases/types';
 export {
   EMAIL_PROVIDER_RESEND,
   type EmailMetadata,

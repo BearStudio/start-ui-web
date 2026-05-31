@@ -125,6 +125,24 @@ describe('strict modular monolith layout', () => {
     ).toEqual([]);
   });
 
+  it('keeps feature repositories from starting database transactions directly', () => {
+    const featureInfrastructureFiles = fs
+      .readdirSync(path.join(root, 'src/modules'), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name !== 'kernel')
+      .flatMap((entry) =>
+        listSourceFiles(
+          path.join(root, 'src/modules', entry.name, 'infrastructure')
+        )
+      );
+
+    expect(
+      findImportViolations(
+        featureInfrastructureFiles,
+        /\brunWithDbTransaction\b/g
+      )
+    ).toEqual([]);
+  });
+
   it('keeps routes on module public APIs', () => {
     expect(
       findImportViolations(
