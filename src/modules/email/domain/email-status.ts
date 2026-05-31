@@ -37,6 +37,7 @@ export type EmailStatusRecord = {
 };
 
 const processedWebhookEventIdsKey = 'processedWebhookEventIds';
+const processedWebhookEventIdsDefaultLimit = 20;
 
 const toProcessedWebhookEventIds = (metadata: EmailMetadata): string[] => {
   const value = metadata[processedWebhookEventIdsKey];
@@ -54,11 +55,12 @@ export const hasProcessedWebhookEvent = (
 export const withProcessedWebhookEventId = (
   metadata: EmailMetadata,
   eventId: string,
-  limit = 20
+  limit = processedWebhookEventIdsDefaultLimit
 ): EmailMetadata => {
-  const boundedLimit = Number.isFinite(limit)
-    ? Math.max(0, Math.trunc(limit))
-    : limit;
+  const boundedLimit =
+    Number.isFinite(limit) && limit >= 0
+      ? Math.trunc(limit)
+      : processedWebhookEventIdsDefaultLimit;
   const ids = toProcessedWebhookEventIds(metadata).filter(
     (id) => id !== eventId
   );

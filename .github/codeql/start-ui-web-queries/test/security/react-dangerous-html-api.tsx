@@ -9,3 +9,7 @@ export function Dangerous() {
   new Function(code);
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }
+
+export function SafeRead() {
+  return element.innerHTML;
+}

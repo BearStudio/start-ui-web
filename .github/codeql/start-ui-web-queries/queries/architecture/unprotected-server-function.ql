@@ -41,11 +41,6 @@ private predicate usesProtectedRunner(Expr expr) {
     call = expr.getAChild*() and
     isProtectedRunnerName(call.getCalleeName())
   )
-  or
-  exists(VarRef ref |
-    ref = expr.getAChild*() and
-    isProtectedRunnerName(ref.getName())
-  )
 }
 
 from ExportDeclaration export, Variable variable, Expr assigned

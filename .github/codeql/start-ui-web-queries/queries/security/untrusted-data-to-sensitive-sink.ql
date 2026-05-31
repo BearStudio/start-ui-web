@@ -49,6 +49,38 @@ private predicate isApprovedBarrierNode(DataFlow::Node node) {
   )
 }
 
+private predicate expressionHasAstName(Expr expr, string name) {
+  exists(VarAccess access |
+    access = expr.getUnderlyingReference() and
+    access.getName() = name
+  )
+  or
+  exists(PropAccess access |
+    access = expr.getUnderlyingReference() and
+    access.getPropertyName() = name
+  )
+}
+
+private predicate isSearchExpr(Expr expr) {
+  expressionHasAstName(expr, "search")
+}
+
+private predicate isRequestExpr(Expr expr) {
+  expressionHasAstName(expr, "request") or
+  expressionHasAstName(expr, "req")
+}
+
+private predicate isUploadOrFileExpr(Expr expr) {
+  expressionHasAstName(expr, "file") or
+  expressionHasAstName(expr, "File") or
+  expressionHasAstName(expr, "upload") or
+  expressionHasAstName(expr, "Upload") or
+  expressionHasAstName(expr, "blob") or
+  expressionHasAstName(expr, "Blob") or
+  expressionHasAstName(expr, "cover") or
+  expressionHasAstName(expr, "Cover")
+}
+
 private predicate isServerFunctionDataSource(DataFlow::Node node) {
   exists(Parameter param |
     node = DataFlow::parameterNode(param) and
@@ -66,7 +98,7 @@ private predicate isSearchParamSource(DataFlow::Node node) {
       isRouteSearchSourceFile(access.getFile())
       or
       access.getPropertyName() = "redirect" and
-      access.getBase().toString().regexpMatch(".*search.*")
+      isSearchExpr(access.getBase())
     )
   )
   or
@@ -82,7 +114,7 @@ private predicate isRequestUrlSource(DataFlow::Node node) {
     node = DataFlow::exprNode(access) and
     isAnalyzedFile(access.getFile()) and
     access.getPropertyName() = "url" and
-    access.getBase().toString().regexpMatch("(request|req).*")
+    isRequestExpr(access.getBase())
   )
 }
 
@@ -94,7 +126,7 @@ private predicate isUploadOrHeaderSource(DataFlow::Node node) {
       access.getPropertyName() in ["headers", "metadata"] or
       (
         access.getPropertyName() in ["type", "name"] and
-        access.getBase().toString().regexpMatch(".*([Ff]ile|[Uu]pload|[Bb]lob|[Cc]over).*")
+        isUploadOrFileExpr(access.getBase())
       )
     )
   )
@@ -120,7 +152,8 @@ private predicate isHtmlResponseSink(DataFlow::Node node) {
     node = DataFlow::exprNode(response.getArgument(0)) and
     options = response.getArgument(1) and
     headers = options.getPropertyByName("headers") and
-    contentType = headers.getInit().(ObjectExpr).getPropertyByName("Content-Type") and
+    contentType = headers.getInit().(ObjectExpr).getAProperty() and
+    contentType.getName().toLowerCase() = "content-type" and
     contentType.getInit().getStringValue().regexpMatch("text/html.*")
   )
 }

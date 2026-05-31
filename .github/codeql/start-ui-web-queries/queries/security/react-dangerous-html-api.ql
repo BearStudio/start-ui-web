@@ -20,10 +20,11 @@ where
     attr.getName() = api
   )
   or
-  exists(PropAccess access |
+  exists(Assignment assign, PropAccess access |
     node = access and
     api = access.getPropertyName() and
-    api in ["innerHTML", "outerHTML"]
+    api in ["innerHTML", "outerHTML"] and
+    access = assign.getLhs()
   )
   or
   exists(MethodCallExpr call |

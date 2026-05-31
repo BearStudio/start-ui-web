@@ -54,7 +54,7 @@
     "check:test-layering": "node scripts/check-test-layering.mjs",
     "semgrep": "semgrep scan --config .semgrep.yml --error --quiet",
     "codeql:db": "mkdir -p test-results/codeql && codeql version && codeql pack install .github/codeql/start-ui-web-queries && codeql database create test-results/codeql/start-ui-web-db --language=javascript-typescript --source-root . --codescanning-config .github/codeql/codeql-local-extraction.yml --overwrite",
-    "codeql:analyze": "mkdir -p test-results/codeql && codeql version && codeql pack install .github/codeql/start-ui-web-queries && test -d test-results/codeql/start-ui-web-db && codeql database analyze test-results/codeql/start-ui-web-db .github/codeql/start-ui-web-queries/start-ui-web-codeql.qls --format=sarifv2.1.0 --output=test-results/codeql/start-ui-web.sarif --rerun",
+    "codeql:analyze": "mkdir -p test-results/codeql && db=test-results/codeql/start-ui-web-db; if [ ! -d \"$db\" ]; then echo \"CodeQL database not found at $db. Run pnpm codeql:db to create it before pnpm codeql:analyze.\" >&2; exit 1; fi; codeql version && codeql pack install .github/codeql/start-ui-web-queries && codeql database analyze \"$db\" .github/codeql/start-ui-web-queries/start-ui-web-codeql.qls --format=sarifv2.1.0 --output=test-results/codeql/start-ui-web.sarif --rerun",
     "codeql:test": "mkdir -p test-results/codeql && codeql version && codeql pack install .github/codeql/start-ui-web-queries && codeql test run .github/codeql/start-ui-web-queries/test",
     "check:migrations": "node scripts/check-migration-edits.mjs",
     "security:audit": "pnpm audit --audit-level=high && pnpm security:tanstack",

@@ -1,1 +1,4 @@
 | missing-route-search-deps.tsx:4:3:4:34 | loader: ... ch.term | This route loader reads search params but the route config does not declare both validateSearch and loaderDeps. |
+| missing-route-search-deps.tsx:8:3:8:37 | loader: ... ch.term | This route loader reads search params but the route config does not declare both validateSearch and loaderDeps. |
+| missing-route-search-deps.tsx:14:3:14:55 | loader: ... ch.term | This route loader reads search params but the route config does not declare both validateSearch and loaderDeps. |
+| missing-route-search-deps.tsx:20:3:20:40 | loader: ... => term | This route loader reads search params but the route config does not declare both validateSearch and loaderDeps. |

@@ -15,3 +15,15 @@ export function safeRedirect(input: { search: { redirect: string } }) {
 export function unsafeLog(input: { headers: Headers }) {
   logger.warn(input.headers);
 }
+
+export function unrelatedResearchRedirect(research: { redirect: string }) {
+  throw redirect({ to: research.redirect });
+}
+
+export function unrelatedRequestInfoUrl(requestInfo: { url: string }) {
+  logger.warn(requestInfo.url);
+}
+
+export function unrelatedProfileName(profile: { name: string }) {
+  logger.warn(profile.name);
+}

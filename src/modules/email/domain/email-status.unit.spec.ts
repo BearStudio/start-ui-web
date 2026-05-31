@@ -80,6 +80,21 @@ describe('email status domain', () => {
     });
   });
 
+  it('falls back to the default processed webhook ID limit for invalid limits', () => {
+    const ids = Array.from({ length: 25 }, (_, index) => `evt_${index}`);
+
+    for (const limit of [Number.POSITIVE_INFINITY, Number.NaN, -1]) {
+      const metadata = withProcessedWebhookEventId(
+        { processedWebhookEventIds: ids },
+        'evt_new',
+        limit
+      );
+
+      expect(metadata.processedWebhookEventIds).toHaveLength(20);
+      expect(metadata.processedWebhookEventIds).toContain('evt_new');
+    }
+  });
+
   test.prop(
     [
       fc.array(eventId, { maxLength: 30 }),

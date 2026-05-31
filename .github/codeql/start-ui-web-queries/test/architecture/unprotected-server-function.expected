@@ -1,1 +1,2 @@
 | unprotected-server-function.ts:3:31:5:1 | createS ...  data\\n) | Exported server function 'unsafeMutation' is not routed through a protected server-function runner. |
+| unprotected-server-function.ts:13:36:19:1 | createS ... ;\\n  }\\n) | Exported server function 'wrapperOnlyMutation' is not routed through a protected server-function runner. |

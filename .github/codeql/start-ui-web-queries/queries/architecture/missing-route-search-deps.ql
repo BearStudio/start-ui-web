@@ -23,11 +23,26 @@ predicate objectHasProperty(ObjectExpr object, string name) {
   )
 }
 
-predicate readsSearch(AstNode node) {
+private predicate isLoaderFunction(Property loader, Function loaderFn) {
+  loaderFn = loader.getInit().(FunctionExpr)
+  or
+  loaderFn = loader.getInit().(ArrowFunctionExpr)
+}
+
+private predicate loaderParameterDestructuresSearch(Property loader) {
+  exists(Function loaderFn |
+    isLoaderFunction(loader, loaderFn) and
+    exists(loaderFn.getParameter(0).(ObjectPattern).getPropertyPatternByName("search"))
+  )
+}
+
+predicate readsSearch(Property loader) {
   exists(PropAccess access |
-    access = node.getAChild*() and
+    access = loader.getAChild*() and
     access.getPropertyName() = "search"
   )
+  or
+  loaderParameterDestructuresSearch(loader)
 }
 
 from ObjectExpr routeConfig, Property loader
