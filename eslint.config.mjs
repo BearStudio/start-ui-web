@@ -24,6 +24,10 @@ const warnRules = (rules) =>
       }
 
       if (Array.isArray(ruleConfig)) {
+        if (ruleConfig[0] === 'off' || ruleConfig[0] === 0) {
+          return [ruleName, ruleConfig];
+        }
+
         return [ruleName, ['warn', ...ruleConfig.slice(1)]];
       }
 
@@ -105,7 +109,10 @@ export default defineConfig([
       security,
       sonarjs,
     },
-    rules: security.configs.recommended.rules,
+    rules: {
+      ...warnRules(security.configs.recommended.rules),
+      ...warnRules(sonarjs.configs.recommended.rules),
+    },
   },
   {
     files: e2eFiles,

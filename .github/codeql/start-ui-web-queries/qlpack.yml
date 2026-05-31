@@ -1,0 +1,5 @@
+name: start-ui-web/codeql-queries
+version: 0.0.1
+extractor: javascript
+dependencies:
+  codeql/javascript-all: '*'

@@ -1,0 +1,18 @@
+name: start-ui-web-codeql
+
+disable-default-queries: false
+
+queries:
+  - uses: security-extended
+  - uses: ./.github/codeql/start-ui-web-queries/start-ui-web-codeql.qls
+
+paths-ignore:
+  - .output/**
+  - .github/codeql/start-ui-web-queries/test/**
+  - coverage/**
+  - cosmos-export/**
+  - dist/**
+  - node_modules/**
+  - playwright-report/**
+  - reports/**
+  - test-results/**

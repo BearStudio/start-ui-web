@@ -1,0 +1,5 @@
+| react-dangerous-html-api.tsx:6:3:6:19 | element.innerHTML | Use of 'innerHTML' should have an explicit sanitizer or documented exception. |
+| react-dangerous-html-api.tsx:7:3:7:47 | element ... , html) | Use of 'insertAdjacentHTML' should have an explicit sanitizer or documented exception. |
+| react-dangerous-html-api.tsx:8:3:8:12 | eval(code) | Use of 'eval' should have an explicit sanitizer or documented exception. |
+| react-dangerous-html-api.tsx:9:3:9:20 | new Function(code) | Use of 'Function' should have an explicit sanitizer or documented exception. |
+| react-dangerous-html-api.tsx:10:15:10:56 | dangero ... html }} | Use of 'dangerouslySetInnerHTML' should have an explicit sanitizer or documented exception. |

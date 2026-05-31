@@ -1,0 +1,11 @@
+edges
+| untrusted-data-to-sensitive-sink.ts:7:24:7:35 | input.search | untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | provenance |  |
+nodes
+| untrusted-data-to-sensitive-sink.ts:7:24:7:35 | input.search | semmle.label | input.search |
+| untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | semmle.label | input.s ... edirect |
+| untrusted-data-to-sensitive-sink.ts:16:15:16:27 | input.headers | semmle.label | input.headers |
+subpaths
+#select
+| untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | untrusted-data-to-sensitive-sink.ts:7:24:7:35 | input.search | untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | Untrusted data reaches this sensitive sink. |
+| untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | untrusted-data-to-sensitive-sink.ts:7:24:7:44 | input.s ... edirect | Untrusted data reaches this sensitive sink. |
+| untrusted-data-to-sensitive-sink.ts:16:15:16:27 | input.headers | untrusted-data-to-sensitive-sink.ts:16:15:16:27 | input.headers | untrusted-data-to-sensitive-sink.ts:16:15:16:27 | input.headers | Untrusted data reaches this sensitive sink. |

@@ -80,7 +80,7 @@ pnpm verify:task     # Task verification logs; add --visual, --e2e-chromium, or 
 
 ### CodeQL
 
-CodeQL runs in GitHub Actions with the default and `security-extended` query suites plus repo-local queries under `.github/codeql/start-ui-web-queries`. Local CodeQL is opt-in and requires the [CodeQL CLI](https://github.com/github/codeql-cli-binaries/releases) on your `PATH`.
+CodeQL runs in GitHub Actions with the default and `security-extended` query suites plus repo-local queries under `.github/codeql/start-ui-web-queries`. Local CodeQL commands call the CodeQL CLI directly, install the local query pack dependencies first, and require the [CodeQL CLI](https://github.com/github/codeql-cli-binaries/releases) on your `PATH`.
 
 ```bash
 pnpm codeql:test     # Compile and test local custom queries

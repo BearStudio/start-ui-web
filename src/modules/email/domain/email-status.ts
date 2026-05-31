@@ -56,6 +56,9 @@ export const withProcessedWebhookEventId = (
   eventId: string,
   limit = 20
 ): EmailMetadata => {
+  const boundedLimit = Number.isFinite(limit)
+    ? Math.max(0, Math.trunc(limit))
+    : limit;
   const ids = toProcessedWebhookEventIds(metadata).filter(
     (id) => id !== eventId
   );
@@ -63,6 +66,8 @@ export const withProcessedWebhookEventId = (
 
   return {
     ...metadata,
-    [processedWebhookEventIdsKey]: ids.slice(-limit),
+    [processedWebhookEventIdsKey]: ids.slice(
+      Math.max(0, ids.length - boundedLimit)
+    ),
   };
 };

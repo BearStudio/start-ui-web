@@ -1,0 +1,9 @@
+<!DOCTYPE qhelp SYSTEM "qhelp.dtd">
+<qhelp>
+  <overview>
+    <p>HTML and dynamic-code APIs can interpret strings as markup or JavaScript.</p>
+  </overview>
+  <recommendation>
+    <p>Avoid these APIs. If one is required, use a reviewed sanitizer and document the reason at the call site.</p>
+  </recommendation>
+</qhelp>

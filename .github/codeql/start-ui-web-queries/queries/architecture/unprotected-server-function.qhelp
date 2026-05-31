@@ -1,0 +1,9 @@
+<!DOCTYPE qhelp SYSTEM "qhelp.dtd">
+<qhelp>
+  <overview>
+    <p>Privileged TanStack server functions must run inside the authenticated or mutation context wrapper.</p>
+  </overview>
+  <recommendation>
+    <p>Route non-public server functions through <code>runProtected</code>, <code>runMutation</code>, <code>withProtectedContext</code>, or <code>withProtectedMutation</code>.</p>
+  </recommendation>
+</qhelp>

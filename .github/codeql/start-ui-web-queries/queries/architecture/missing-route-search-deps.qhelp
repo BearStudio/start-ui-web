@@ -1,0 +1,9 @@
+<!DOCTYPE qhelp SYSTEM "qhelp.dtd">
+<qhelp>
+  <overview>
+    <p>Route loaders that read search params need matching <code>validateSearch</code> and <code>loaderDeps</code> declarations.</p>
+  </overview>
+  <recommendation>
+    <p>Normalize search params in <code>validateSearch</code>, copy the same normalized values into <code>loaderDeps</code>, and use <code>deps</code> inside the loader.</p>
+  </recommendation>
+</qhelp>

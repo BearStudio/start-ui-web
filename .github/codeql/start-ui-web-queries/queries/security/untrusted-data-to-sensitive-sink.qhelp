@@ -1,0 +1,9 @@
+<!DOCTYPE qhelp SYSTEM "qhelp.dtd">
+<qhelp>
+  <overview>
+    <p>Request, route, upload, header, and server-function input can cross trust boundaries before reaching sensitive sinks.</p>
+  </overview>
+  <recommendation>
+    <p>Route the data through an approved parser, sanitizer, escaping helper, or domain use case before using it in redirects, HTML, SQL-like patterns, logs, storage keys, or provider-token fields.</p>
+  </recommendation>
+</qhelp>

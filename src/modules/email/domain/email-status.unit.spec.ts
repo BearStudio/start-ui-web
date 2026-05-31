@@ -68,13 +68,23 @@ describe('email status domain', () => {
     ).toEqual({
       processedWebhookEventIds: ['evt_3', 'evt_4'],
     });
+
+    expect(
+      withProcessedWebhookEventId(
+        { processedWebhookEventIds: ['evt_1', 'evt_2'] },
+        'evt_3',
+        0
+      )
+    ).toEqual({
+      processedWebhookEventIds: [],
+    });
   });
 
   test.prop(
     [
       fc.array(eventId, { maxLength: 30 }),
       eventId,
-      fc.integer({ min: 1, max: 10 }),
+      fc.integer({ min: 0, max: 10 }),
     ],
     PROPERTY_DEFAULTS
   )(
@@ -92,10 +102,15 @@ describe('email status domain', () => {
       const processedWebhookEventIds = processedIds as string[];
 
       expect(processedWebhookEventIds.length).toBeLessThanOrEqual(limit);
-      expect(processedWebhookEventIds.at(-1)).toBe(id);
-      expect(
-        processedWebhookEventIds.filter((processedId) => processedId === id)
-      ).toHaveLength(1);
+
+      if (limit === 0) {
+        expect(processedWebhookEventIds).toHaveLength(0);
+      } else {
+        expect(processedWebhookEventIds.at(-1)).toBe(id);
+        expect(
+          processedWebhookEventIds.filter((processedId) => processedId === id)
+        ).toHaveLength(1);
+      }
     }
   );
 });

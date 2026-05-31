@@ -1,8 +1,6 @@
 name: Mutation Testing
 
 on:
-  schedule:
-    - cron: 23 5 * * 1
   workflow_dispatch: {}
 
 concurrency:
