@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import type { PermissionChecker } from '@/modules/kernel';
+import { AppError, toBookId, toGenreId, toUserId } from '@/modules/kernel';
 
+import type { BookUseCaseDeps } from './types';
 import type { BookRepository } from '../ports/book-repository';
-import type { BookUseCaseDeps } from '../use-cases/types';
 import type { Book } from '../../domain/book';
 import { createBookUseCases } from '../../factory';
 

@@ -6,6 +6,7 @@ import path from 'node:path';
 import type { TestProject } from 'vitest/node';
 
 import { pgliteTestDatabaseUrlContextKey } from './pglite-context';
+import { makeTestDatabaseUrl } from './test-database-url';
 
 const migrationsDirectory = path.resolve(process.cwd(), 'drizzle/migrations');
 
@@ -42,7 +43,13 @@ export async function setup(project: TestProject) {
 
   project.provide(
     pgliteTestDatabaseUrlContextKey,
-    `postgresql://postgres:postgres@${server.getServerConn()}/postgres`
+    makeTestDatabaseUrl({
+      credentialLabel: 'pglite',
+      databaseName: 'postgres',
+      host: server.getServerConn(),
+      port: null,
+      protocol: 'postgresql',
+    })
   );
 
   return async () => {

@@ -212,6 +212,22 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     });
   });
 
+  it('uses empty metadata for invalid persisted metadata in recent list reads', async () => {
+    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    await database.db.insert(emailStatusTable).values(
+      makeEmailStatusRow({
+        metadata: [] as unknown as Record<string, unknown>,
+      })
+    );
+
+    await expect(repository.listRecent()).resolves.toMatchObject([
+      {
+        id: 'email-status-1',
+        metadata: {},
+      },
+    ]);
+  });
+
   it('dedupes webhook event IDs and keeps bounded metadata through the use case', async () => {
     const repository = new EmailStatusRepositoryDrizzle(database.db);
     const useCases = createEmailUseCases({

@@ -1,5 +1,5 @@
-import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
@@ -7,7 +7,10 @@ import {
   createDbClient,
   type Database,
 } from '@/modules/kernel/infrastructure/db/client';
-import { migrateDatabase } from '@/modules/kernel/infrastructure/db/migrate';
+import {
+  createMigrationDbClient,
+  migrateDatabase,
+} from '@/modules/kernel/infrastructure/db/migrate';
 import {
   book as bookTable,
   genre as genreTable,
@@ -45,11 +48,20 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
 
   beforeAll(async () => {
     container = await new PostgreSqlContainer('postgres:16-alpine').start();
+    const databaseUrl = container.getConnectionUri();
+    const migrationDb = await createMigrationDbClient({
+      databaseUrl,
+      driver: 'node-pg',
+    });
+    try {
+      await migrateDatabase(migrationDb);
+    } finally {
+      await migrationDb.$close();
+    }
     db = createDbClient({
       driver: 'node-pg',
-      url: container.getConnectionUri(),
+      url: databaseUrl,
     });
-    await migrateDatabase(db);
   });
 
   beforeEach(async () => {

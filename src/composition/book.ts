@@ -3,7 +3,7 @@ import {
   type BookTransactionContext,
   createBookUseCases,
 } from '@/modules/book';
-import { BookRepositoryDrizzle } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
+import { createServerBookRepository } from '@/modules/book/server';
 import type { TransactionRunner } from '@/modules/kernel';
 
 import { getKernel, type Kernel } from './kernel';
@@ -27,7 +27,7 @@ const createBookTransactionRunner = (
   return {
     run: (work) =>
       kernel.transactionRunner.run((db) =>
-        work({ bookRepository: new BookRepositoryDrizzle(db) })
+        work({ bookRepository: createServerBookRepository(db) })
       ),
   };
 };
@@ -35,7 +35,7 @@ const createBookTransactionRunner = (
 const buildBookUseCases = (overrides?: BookOverrides) => {
   const kernel = overrides?.kernel ?? getKernel();
   const bookRepository =
-    overrides?.bookRepository ?? new BookRepositoryDrizzle(kernel.db);
+    overrides?.bookRepository ?? createServerBookRepository(kernel.db);
   return createBookUseCases({
     bookRepository,
     transactionRunner: createBookTransactionRunner(

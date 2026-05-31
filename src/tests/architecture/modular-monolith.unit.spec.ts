@@ -43,6 +43,10 @@ function findServerFunctionExports(files: string[]) {
   });
 }
 
+function isServerFunctionEntrypoint(file: string) {
+  return fs.readFileSync(file, 'utf8').includes('createServerFn');
+}
+
 describe('strict modular monolith layout', () => {
   it('keeps legacy feature and shared roots removed', () => {
     expect(fs.existsSync(path.join(root, 'src/features'))).toBe(false);
@@ -171,7 +175,9 @@ describe('strict modular monolith layout', () => {
     ).filter((file) => file.includes(`${path.sep}transport${path.sep}`));
     const serverEntrypointFiles = listSourceFiles(
       path.join(root, 'src/modules')
-    ).filter((file) => /[/\\](server|server-functions)\.ts$/.test(file));
+    )
+      .filter((file) => /[/\\](server|server-functions)\.ts$/.test(file))
+      .filter(isServerFunctionEntrypoint);
     const apiRouteFiles = listSourceFiles(path.join(root, 'src/routes/api'));
 
     expect(

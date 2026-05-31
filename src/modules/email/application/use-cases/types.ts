@@ -1,4 +1,4 @@
-import type { TransactionRunner } from '@/modules/kernel/application/ports/transaction-runner';
+import type { TransactionRunner } from '@/modules/kernel';
 
 import type { EmailStatusRepository } from '../ports/email-status-repository';
 

@@ -1,8 +1,10 @@
-import type { IdGenerator } from '@/modules/kernel/application/ports/id-generator';
-import type { Logger } from '@/modules/kernel/application/ports/logger';
-import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { TransactionRunner } from '@/modules/kernel/application/ports/transaction-runner';
-import type { UseCaseResult } from '@/modules/kernel/application/result';
+import type {
+  IdGenerator,
+  Logger,
+  PermissionChecker,
+  TransactionRunner,
+  UseCaseResult,
+} from '@/modules/kernel';
 
 import type { BookRepository } from '../ports/book-repository';
 

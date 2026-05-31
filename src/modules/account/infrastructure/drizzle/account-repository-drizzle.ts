@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { toUserId } from '@/modules/kernel/domain/ids';
-import { isPgError } from '@/modules/kernel/infrastructure/db/errors';
+import { extractDatabaseErrorDetails } from '@/modules/kernel/infrastructure/db/errors';
 import { user as userTable } from '@/modules/kernel/infrastructure/db/schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
@@ -14,8 +14,13 @@ import type {
   AccountUpdateResult,
 } from '../../domain/account';
 
+const isSqlStateCode = (code: unknown): code is string =>
+  typeof code === 'string' && /^[A-Z0-9]{5}$/.test(code);
+
 function mapDbError(error: unknown): never {
-  if (isPgError(error)) {
+  const details = extractDatabaseErrorDetails(error);
+
+  if (isSqlStateCode(details?.code)) {
     throw new AppError({
       code: 'ACCOUNT_REPOSITORY_DB_ERROR',
       category: 'system',

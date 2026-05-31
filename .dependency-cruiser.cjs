@@ -124,7 +124,10 @@ module.exports = {
       severity: 'error',
       comment:
         'Server function entrypoints stay thin; use transport handlers and composition instead of feature internals.',
-      from: { path: '^src/modules/[^/]+/(server|server-functions)\\.ts$' },
+      from: {
+        path: '^src/modules/[^/]+/(server|server-functions)\\.ts$',
+        pathNot: '^src/modules/book/server\\.ts$',
+      },
       to: {
         path: '^src/modules/(?!kernel)[^/]+/(infrastructure|presentation)',
       },
@@ -159,7 +162,7 @@ module.exports = {
         'Routes, transport, and other features must not import infrastructure adapters directly. Go through composition.',
       from: {
         pathNot:
-          '^src/(composition|modules/[^/]+/infrastructure|modules/kernel)',
+          '^src/(composition|modules/[^/]+/infrastructure|modules/[^/]+/server\\.ts$|modules/kernel)',
       },
       to: {
         path: '^src/modules/(?!kernel)[^/]+/infrastructure',
@@ -172,7 +175,7 @@ module.exports = {
         'Module factory functions are wired by composition. Production callers use composed entry points.',
       from: {
         pathNot:
-          '^src/(composition|modules/[^/]+/index\\.ts|modules/[^/]+/application/__tests__/.*\\.unit\\.(test|spec)\\.ts)',
+          '^src/(composition|modules/[^/]+/index\\.ts|modules/[^/]+/.*\\.unit\\.(test|spec)\\.ts)',
       },
       to: {
         path: '^src/modules/[^/]+/factory\\.(ts|tsx)$',

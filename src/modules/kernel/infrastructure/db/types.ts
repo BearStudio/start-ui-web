@@ -12,6 +12,9 @@ export type DbTransaction = Parameters<
 
 export type DbLike = DbClient | DbTransaction;
 export type TransactionCapableDb = DbClient;
+export type RunInTransaction = <T>(
+  work: (transaction: DbTransaction) => Promise<T>
+) => Promise<T>;
 
 export type DatabaseClientHandle = {
   query: <TRow extends Record<string, unknown> = Record<string, unknown>>(
@@ -25,6 +28,7 @@ export type DatabaseMetadata = {
   $client: DatabaseClientHandle;
   $driver: DatabaseDriver;
   $transactionCapable: boolean;
+  $runInTransaction?: RunInTransaction;
   $close: () => Promise<void>;
 };
 
@@ -32,7 +36,7 @@ export type Database = DbClient & DatabaseMetadata;
 
 export type TransactionCapableDatabase = TransactionCapableDb &
   DatabaseMetadata & {
-    $transactionCapable: true;
+    $runInTransaction: RunInTransaction;
   };
 
 export function isRootDatabase(db: DbLike): db is Database {
@@ -47,5 +51,5 @@ export function isRootDatabase(db: DbLike): db is Database {
 export function isTransactionCapableDatabase(
   db: DbLike
 ): db is TransactionCapableDatabase {
-  return isRootDatabase(db) && db.$transactionCapable;
+  return isRootDatabase(db) && typeof db.$runInTransaction === 'function';
 }

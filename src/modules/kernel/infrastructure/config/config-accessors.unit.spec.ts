@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { makeTestDatabaseUrl } from '@/tests/server/test-database-url';
+
 describe('server config accessors', () => {
   beforeEach(() => {
     vi.resetModules();
@@ -7,28 +9,112 @@ describe('server config accessors', () => {
   });
 
   it('caches parsed database config', async () => {
-    vi.stubEnv('DATABASE_URL', 'postgres://user:pass@localhost:5432/first');
+    const firstDatabaseUrl = makeTestDatabaseUrl({
+      credentialLabel: 'first',
+      databaseName: 'first',
+    });
+    const secondDatabaseUrl = makeTestDatabaseUrl({
+      credentialLabel: 'second',
+      databaseName: 'second',
+    });
+
+    vi.stubEnv('DATABASE_URL', firstDatabaseUrl);
     const { getDatabaseConfig } = await import('./database');
 
     const first = getDatabaseConfig();
-    vi.stubEnv('DATABASE_URL', 'postgres://user:pass@localhost:5432/second');
+    vi.stubEnv('DATABASE_URL', secondDatabaseUrl);
 
     expect(getDatabaseConfig()).toBe(first);
-    expect(getDatabaseConfig().databaseUrl).toBe(
-      'postgres://user:pass@localhost:5432/first'
-    );
+    expect(getDatabaseConfig().databaseUrl).toBe(firstDatabaseUrl);
     expect(getDatabaseConfig().driver).toBe('node-pg');
   });
 
   it('parses explicit database driver config', async () => {
-    vi.stubEnv('DATABASE_URL', 'postgres://user:pass@localhost:5432/app');
+    const databaseUrl = makeTestDatabaseUrl();
+
+    vi.stubEnv('DATABASE_URL', databaseUrl);
     vi.stubEnv('DATABASE_DRIVER', 'neon-http');
     const { getDatabaseConfig } = await import('./database');
 
     expect(getDatabaseConfig()).toEqual({
-      databaseUrl: 'postgres://user:pass@localhost:5432/app',
+      databaseUrl,
       driver: 'neon-http',
     });
+  });
+
+  it('defaults migration config to node-pg for node-pg runtime drivers', async () => {
+    const databaseUrl = makeTestDatabaseUrl();
+
+    vi.stubEnv('DATABASE_URL', databaseUrl);
+    vi.stubEnv('DATABASE_DRIVER', 'node-pg');
+    const { getMigrationDatabaseConfig } = await import('./database');
+
+    expect(getMigrationDatabaseConfig()).toEqual({
+      databaseUrl,
+      driver: 'node-pg',
+    });
+  });
+
+  it.each(['neon-http', 'neon-websocket'] as const)(
+    'defaults migration config to Neon WebSocket for %s runtime drivers',
+    async (driver) => {
+      const databaseUrl = makeTestDatabaseUrl();
+
+      vi.stubEnv('DATABASE_URL', databaseUrl);
+      vi.stubEnv('DATABASE_DRIVER', driver);
+      const { getMigrationDatabaseConfig } = await import('./database');
+
+      expect(getMigrationDatabaseConfig()).toEqual({
+        databaseUrl,
+        driver: 'neon-websocket',
+      });
+    }
+  );
+
+  it('uses explicit migration URL and driver config', async () => {
+    const runtimeDatabaseUrl = makeTestDatabaseUrl({
+      credentialLabel: 'runtime',
+    });
+    const migrationDatabaseUrl = makeTestDatabaseUrl({
+      credentialLabel: 'migration',
+    });
+
+    vi.stubEnv('DATABASE_URL', runtimeDatabaseUrl);
+    vi.stubEnv('DATABASE_DRIVER', 'neon-http');
+    vi.stubEnv('DATABASE_MIGRATION_URL', migrationDatabaseUrl);
+    vi.stubEnv('DATABASE_MIGRATION_DRIVER', 'node-pg');
+    const { getMigrationDatabaseConfig } = await import('./database');
+
+    expect(getMigrationDatabaseConfig()).toEqual({
+      databaseUrl: migrationDatabaseUrl,
+      driver: 'node-pg',
+    });
+  });
+
+  it('rejects Neon HTTP as a migration driver', async () => {
+    vi.stubEnv('DATABASE_URL', makeTestDatabaseUrl());
+    vi.stubEnv('DATABASE_MIGRATION_DRIVER', 'neon-http');
+    const { getMigrationDatabaseConfig } = await import('./database');
+    const { ConfigurationError } =
+      await import('../../domain/errors/configuration-error');
+
+    expect(() => getMigrationDatabaseConfig()).toThrow(ConfigurationError);
+  });
+
+  it('rejects likely transaction-pooled migration URLs', async () => {
+    vi.stubEnv('DATABASE_URL', makeTestDatabaseUrl());
+    vi.stubEnv(
+      'DATABASE_MIGRATION_URL',
+      makeTestDatabaseUrl({
+        host: 'ep-example-pooler.us-east-1.aws.neon.tech',
+        port: null,
+      })
+    );
+    const { getMigrationDatabaseConfig } = await import('./database');
+    const { ConfigurationError } =
+      await import('../../domain/errors/configuration-error');
+
+    expect(() => getMigrationDatabaseConfig()).toThrow(ConfigurationError);
   });
 
   it('detects likely transaction-pooled database URLs', async () => {
@@ -36,17 +122,24 @@ describe('server config accessors', () => {
 
     expect(
       isLikelyTransactionPooledDatabaseUrl(
-        'postgres://user:pass@ep-example-pooler.us-east-1.aws.neon.tech/db'
+        makeTestDatabaseUrl({
+          databaseName: 'db',
+          host: 'ep-example-pooler.us-east-1.aws.neon.tech',
+          port: null,
+        })
       )
     ).toBe(true);
     expect(
       isLikelyTransactionPooledDatabaseUrl(
-        'postgres://user:pass@localhost:5432/db?pool_mode=transaction'
+        makeTestDatabaseUrl({
+          databaseName: 'db',
+          searchParams: { pool_mode: 'transaction' },
+        })
       )
     ).toBe(true);
     expect(
       isLikelyTransactionPooledDatabaseUrl(
-        'postgres://user:pass@localhost:5432/db'
+        makeTestDatabaseUrl({ databaseName: 'db' })
       )
     ).toBe(false);
   });

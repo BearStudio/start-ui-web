@@ -1,5 +1,5 @@
-import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import {
   afterAll,
   beforeAll,
@@ -14,7 +14,10 @@ import {
   createDbClient,
   type Database,
 } from '@/modules/kernel/infrastructure/db/client';
-import { migrateDatabase } from '@/modules/kernel/infrastructure/db/migrate';
+import {
+  createMigrationDbClient,
+  migrateDatabase,
+} from '@/modules/kernel/infrastructure/db/migrate';
 import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeGenreRow } from '@/tests/server/db-fixtures';
 
@@ -52,8 +55,16 @@ describe('PostgreSQL database integration', () => {
     databaseUrl = container.getConnectionUri();
     vi.stubEnv('DATABASE_URL', databaseUrl);
     vi.stubEnv('DATABASE_DRIVER', 'node-pg');
+    const migrationDb = await createMigrationDbClient({
+      databaseUrl,
+      driver: 'node-pg',
+    });
+    try {
+      await migrateDatabase(migrationDb);
+    } finally {
+      await migrationDb.$close();
+    }
     db = createDbClient({ driver: 'node-pg', url: databaseUrl });
-    await migrateDatabase(db);
   });
 
   beforeEach(async () => {

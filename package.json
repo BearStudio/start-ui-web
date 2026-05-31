@@ -136,7 +136,7 @@
     "db:init": "pnpm db:push && pnpm db:seed",
     "db:push": "dotenv -- drizzle-kit push",
     "db:generate": "dotenv -- drizzle-kit generate",
-    "db:migrate": "dotenv -- node ./run-jiti ./src/modules/kernel/infrastructure/db/migrate.ts",
+    "db:migrate": "dotenv -- node ./run-jiti ./src/modules/kernel/infrastructure/db/migrate-cli.ts",
     "db:ui": "dotenv -- drizzle-kit studio",
     "db:seed": "dotenv -- cross-env node ./run-jiti ./drizzle/seed/index.ts"
   },

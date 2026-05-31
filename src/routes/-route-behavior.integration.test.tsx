@@ -60,7 +60,7 @@ vi.mock('@/modules/auth/client', () => ({
   useCurrentScopeKey: () => 'test-scope',
 }));
 
-vi.mock('@/modules/book/server', () => ({
+vi.mock('@/modules/book/server-functions', () => ({
   bookCreate: mocks.bookCreate,
   bookDeleteById: mocks.bookDeleteById,
   bookGetAll: mocks.bookGetAll,

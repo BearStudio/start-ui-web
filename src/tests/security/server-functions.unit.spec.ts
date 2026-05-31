@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { accountUpdateInfo } from '@/modules/account/server';
-import { bookGetAll } from '@/modules/book/server';
+import { bookGetAll } from '@/modules/book/server-functions';
 import { genreGetAll } from '@/modules/genre/server';
 import { userGetAll } from '@/modules/user/server';
 import {

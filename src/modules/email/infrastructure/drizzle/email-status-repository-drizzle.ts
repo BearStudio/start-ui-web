@@ -44,6 +44,12 @@ const toMetadata = (metadata: unknown): EmailMetadata => {
   return result.data;
 };
 
+const toMetadataOrEmpty = (metadata: unknown): EmailMetadata => {
+  const result = emailMetadataSchema.safeParse(metadata);
+
+  return result.success ? result.data : {};
+};
+
 const mergeMetadata = (
   current: unknown,
   incoming?: EmailMetadata
@@ -52,7 +58,10 @@ const mergeMetadata = (
   ...incoming,
 });
 
-const toDomain = (row: EmailStatusRow): EmailStatusRecord => ({
+const toDomain = (
+  row: EmailStatusRow,
+  options?: { tolerateInvalidMetadata?: boolean }
+): EmailStatusRecord => ({
   id: row.id,
   provider: row.provider as EmailProvider,
   externalId: row.externalId,
@@ -61,7 +70,9 @@ const toDomain = (row: EmailStatusRow): EmailStatusRecord => ({
   status: row.status as EmailStatus,
   idempotencyKey: row.idempotencyKey,
   lastWebhookEventId: row.lastWebhookEventId,
-  metadata: toMetadata(row.metadata),
+  metadata: options?.tolerateInvalidMetadata
+    ? toMetadataOrEmpty(row.metadata)
+    : toMetadata(row.metadata),
   createdAt: row.createdAt,
   updatedAt: row.updatedAt,
 });
@@ -366,7 +377,9 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
         limit: input?.limit ?? 20,
       });
 
-      return rows.map(toDomain);
+      return rows.map((row) =>
+        toDomain(row, { tolerateInvalidMetadata: true })
+      );
     } catch (error) {
       mapDbError(error);
     }

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
+import { makeTestDatabaseUrl } from '@/tests/server/test-database-url';
+
 import { baseEnvSchema, parseEnv } from './env-schema';
 import { ConfigurationError } from '../../domain/errors/configuration-error';
 
@@ -9,14 +11,15 @@ describe('server env parser', () => {
     const schema = baseEnvSchema.extend({
       DATABASE_URL: z.url(),
     });
+    const databaseUrl = makeTestDatabaseUrl();
 
     expect(
       parseEnv(schema, {
-        DATABASE_URL: 'postgres://user:pass@localhost:5432/app',
+        DATABASE_URL: databaseUrl,
         EXTRA_VALUE: 'kept',
       })
     ).toMatchObject({
-      DATABASE_URL: 'postgres://user:pass@localhost:5432/app',
+      DATABASE_URL: databaseUrl,
       EXTRA_VALUE: 'kept',
     });
   });
