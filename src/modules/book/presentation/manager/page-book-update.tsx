@@ -15,6 +15,7 @@ import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
+import { toBookId } from '@/modules/kernel/domain/ids';
 import {
   ManagerPageLayout as PageLayout,
   ManagerPageLayoutContent as PageLayoutContent,
@@ -38,9 +39,8 @@ export const PageBookUpdate = (props: {
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
   const scopeKey = useCurrentScopeKey();
-  const bookQuery = useQuery(
-    bookQueries.getById({ id: props.params.id, scopeKey })
-  );
+  const bookId = toBookId(props.params.id);
+  const bookQuery = useQuery(bookQueries.getById({ id: bookId, scopeKey }));
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
@@ -50,8 +50,7 @@ export const PageBookUpdate = (props: {
       await Promise.all([
         // Invalidate book entry
         queryClient.invalidateQueries({
-          queryKey: bookQueries.getById({ id: props.params.id, scopeKey })
-            .queryKey,
+          queryKey: bookQueries.getById({ id: bookId, scopeKey }).queryKey,
         }),
         // Invalidate books list
         queryClient.invalidateQueries({
@@ -105,7 +104,7 @@ export const PageBookUpdate = (props: {
     defaultValues: bookDefaultValues,
     validators: formBookValidators,
     onSubmit: async ({ value }) => {
-      await bookUpdate.mutateAsync({ id: props.params.id, ...value });
+      await bookUpdate.mutateAsync({ id: bookId, ...value });
     },
   });
 

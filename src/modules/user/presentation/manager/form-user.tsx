@@ -9,6 +9,7 @@ import {
 
 import { rolesNames } from '@/modules/auth';
 import { useAuthSession } from '@/modules/auth/client';
+import type { UserId } from '@/modules/kernel/domain/ids';
 
 import { type FormFieldsUser, zFormFieldsUser } from '../schema';
 
@@ -31,7 +32,7 @@ export const formUserValidators = {
  */
 export const FormUser = withForm({
   defaultValues: formUserDefaultValues(),
-  props: {} as { userId?: string },
+  props: {} as { userId?: UserId },
   render: ({ form, userId }) => {
     const { t } = useTranslation(['user']);
     const session = useAuthSession();

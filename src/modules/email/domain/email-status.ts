@@ -1,5 +1,13 @@
 import { concat, filter, isString, pipe, takeLast } from 'remeda';
 
+import type {
+  EmailIdempotencyKey,
+  EmailProviderMessageId,
+  EmailRecipientList,
+  EmailStatusId,
+  EmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
+
 export const EMAIL_PROVIDER_RESEND = 'resend' as const;
 
 export type EmailProvider = typeof EMAIL_PROVIDER_RESEND;
@@ -25,14 +33,14 @@ export type EmailStatus = (typeof emailStatusValues)[number];
 export type EmailMetadata = Record<string, unknown>;
 
 export type EmailStatusRecord = {
-  id: string;
+  id: EmailStatusId;
   provider: EmailProvider;
-  externalId: string | null;
-  recipient: string;
+  externalId: EmailProviderMessageId | null;
+  recipient: EmailRecipientList;
   subject: string;
   status: EmailStatus;
-  idempotencyKey: string | null;
-  lastWebhookEventId: string | null;
+  idempotencyKey: EmailIdempotencyKey | null;
+  lastWebhookEventId: EmailWebhookEventId | null;
   metadata: EmailMetadata;
   createdAt: Date;
   updatedAt: Date;
@@ -49,14 +57,14 @@ const toProcessedWebhookEventIds = (metadata: EmailMetadata): string[] => {
 
 export const hasProcessedWebhookEvent = (
   record: EmailStatusRecord,
-  eventId: string
+  eventId: EmailWebhookEventId
 ) =>
   record.lastWebhookEventId === eventId ||
   toProcessedWebhookEventIds(record.metadata).includes(eventId);
 
 export const withProcessedWebhookEventId = (
   metadata: EmailMetadata,
-  eventId: string,
+  eventId: EmailWebhookEventId,
   limit = processedWebhookEventIdsDefaultLimit
 ): EmailMetadata => {
   const boundedLimit =

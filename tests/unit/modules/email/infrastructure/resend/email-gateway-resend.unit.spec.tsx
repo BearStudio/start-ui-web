@@ -9,6 +9,12 @@ import type {
   EmailTransactionContext,
 } from '@/modules/email';
 import type { ApplicationResult, TransactionRunner } from '@/modules/kernel';
+import {
+  toEmailIdempotencyKey,
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailStatusId,
+} from '@/modules/kernel/domain/ids';
 
 const testState = vi.hoisted(() => ({
   emailConfig: {
@@ -35,16 +41,21 @@ vi.mock('@react-email/render', () => ({
   render: testState.render,
 }));
 
+const recipient = toEmailRecipientList('user@example.com');
+const idempotencyKey = toEmailIdempotencyKey('key-1');
+const sentExternalId = toEmailProviderMessageId('email_123');
+const existingExternalId = toEmailProviderMessageId('email_existing');
+
 const makeEmailStatusRecord = (
   overrides: Partial<EmailStatusRecord> = {}
 ): EmailStatusRecord => ({
-  id: 'status-1',
+  id: toEmailStatusId('status-1'),
   provider: 'resend',
   externalId: null,
-  recipient: 'user@example.com',
+  recipient,
   subject: 'Login code',
   status: 'send_attempted',
-  idempotencyKey: 'key-1',
+  idempotencyKey,
   lastWebhookEventId: null,
   metadata: {},
   createdAt: new Date('2026-01-01T00:00:00.000Z'),
@@ -64,7 +75,7 @@ const makeStatusRepository = (): EmailStatusRepository =>
       Result.Ok({
         type: 'email_status_recorded' as const,
         record: makeEmailStatusRecord({
-          externalId: 'email_123',
+          externalId: sentExternalId,
           status: 'sent',
         }),
       })
@@ -128,10 +139,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getOk(result)).toEqual({
@@ -152,10 +163,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getOk(result)).toEqual({
@@ -188,10 +199,10 @@ describe('EmailGatewayResend', () => {
       ),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template,
-      idempotencyKey: 'key-1',
+      idempotencyKey,
       metadata: { source: 'test' },
     });
 
@@ -239,7 +250,7 @@ describe('EmailGatewayResend', () => {
       Result.Ok({
         type: 'email_status_recorded' as const,
         record: makeEmailStatusRecord({
-          externalId: 'email_existing',
+          externalId: existingExternalId,
           status: 'sent',
         }),
       })
@@ -255,10 +266,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getOk(result)).toEqual({
@@ -293,10 +304,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getError(result)).toMatchObject({
@@ -317,9 +328,96 @@ describe('EmailGatewayResend', () => {
       status: 'send_failed',
       metadata: {
         providerError: {
+          provider: 'resend',
           name: 'invalid_api_key',
           statusCode: 401,
           message: 'Invalid API key',
+        },
+      },
+    });
+  });
+
+  it('records send_failed status when text rendering rejects', async () => {
+    const statusRepository = makeStatusRepository();
+    const renderError = new Error('render failed');
+    testState.render.mockRejectedValueOnce(renderError);
+    const resend = {
+      emails: {
+        send: vi.fn(),
+      },
+    } as unknown as Resend;
+    const { EmailGatewayResend } = await loadGateway();
+
+    const result = await new EmailGatewayResend({
+      statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+      resend,
+    }).sendEmail({
+      to: recipient,
+      subject: 'Login code',
+      template: createElement('div', null, '123456'),
+      idempotencyKey,
+      metadata: { source: 'test' },
+    });
+
+    expect(getError(result)).toMatchObject({
+      code: 'EMAIL_RENDER_FAILED',
+      status: 500,
+    });
+    expect(resend.emails.send).not.toHaveBeenCalled();
+    expect(statusRepository.recordSendAttempt).toHaveBeenLastCalledWith({
+      provider: 'resend',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      idempotencyKey: 'key-1',
+      status: 'send_failed',
+      metadata: {
+        source: 'test',
+        providerError: {
+          provider: 'resend',
+          name: 'Error',
+          message: 'render failed',
+        },
+      },
+    });
+  });
+
+  it('records send_failed status when Resend promise rejects', async () => {
+    const statusRepository = makeStatusRepository();
+    const sendError = new Error('network unavailable');
+    const resend = {
+      emails: {
+        send: vi.fn(async () => {
+          throw sendError;
+        }),
+      },
+    } as unknown as Resend;
+    const { EmailGatewayResend } = await loadGateway();
+
+    const result = await new EmailGatewayResend({
+      statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
+      resend,
+    }).sendEmail({
+      to: recipient,
+      subject: 'Login code',
+      template: createElement('div', null, '123456'),
+      idempotencyKey,
+    });
+
+    expect(getError(result)).toMatchObject({
+      code: 'EMAIL_SEND_FAILED',
+      status: 500,
+    });
+    expect(statusRepository.recordSendAttempt).toHaveBeenLastCalledWith({
+      provider: 'resend',
+      recipient: 'user@example.com',
+      subject: 'Login code',
+      idempotencyKey: 'key-1',
+      status: 'send_failed',
+      metadata: {
+        providerError: {
+          provider: 'resend',
+          name: 'Error',
+          message: 'network unavailable',
         },
       },
     });
@@ -338,7 +436,7 @@ describe('EmailGatewayResend', () => {
         Result.Ok({
           type: 'email_status_recorded' as const,
           record: makeEmailStatusRecord({
-            externalId: 'email_existing',
+            externalId: existingExternalId,
             status: 'sent',
           }),
         })
@@ -362,10 +460,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getOk(result)).toEqual({
@@ -388,7 +486,7 @@ describe('EmailGatewayResend', () => {
         Result.Ok({
           type: 'email_status_recorded' as const,
           record: makeEmailStatusRecord({
-            externalId: 'email_existing',
+            externalId: existingExternalId,
             status: 'sent',
           }),
         })
@@ -408,10 +506,10 @@ describe('EmailGatewayResend', () => {
       statusTransactionRunner: makeStatusTransactionRunner(statusRepository),
       resend,
     }).sendEmail({
-      to: 'user@example.com',
+      to: recipient,
       subject: 'Login code',
       template: createElement('div', null, '123456'),
-      idempotencyKey: 'key-1',
+      idempotencyKey,
     });
 
     expect(getOk(result)).toEqual({

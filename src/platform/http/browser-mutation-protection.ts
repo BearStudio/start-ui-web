@@ -146,7 +146,13 @@ const validateRefererSignal = (
 export function validateSameOriginBrowserMutationRequest(
   request: Request
 ): BrowserMutationValidationResult {
-  const requestOrigin = new URL(request.url).origin;
+  let requestOrigin: string;
+  try {
+    requestOrigin = new URL(request.url).origin;
+  } catch {
+    return { ok: false, reason: 'origin_malformed' };
+  }
+
   let hasSameOriginSignal = false;
   const signalResults = [
     validateSecFetchSiteSignal(request.headers.get('Sec-Fetch-Site')),

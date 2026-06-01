@@ -1,4 +1,6 @@
 import { RejectUpload, route } from '@better-upload/server';
+import { Result } from '@swan-io/boxed';
+import { match, P } from 'ts-pattern';
 
 import i18n from '@/platform/lib/i18n';
 
@@ -66,21 +68,29 @@ export const handleBookCoverBeforeUpload = async (
     scope: scopeFromUser(user),
     fileType: input.fileType,
   });
-  if (prepared.isError()) throw prepared.getError();
 
-  const outcome = prepared.get();
-  if (outcome.type === 'book_cover_upload_prepared') {
-    return {
-      objectInfo: {
-        key: outcome.upload.objectKey,
-      },
-    };
-  }
-
-  if (outcome.type === 'book_cover_upload_forbidden') {
-    return rejectUpload(deps, 'UNAUTHORIZED', input.fileType);
-  }
-  return rejectUpload(deps, 'invalid_file_type', input.fileType);
+  return match(prepared)
+    .with(Result.P.Error(P.select()), (error) => {
+      throw error;
+    })
+    .with(
+      Result.P.Ok({
+        type: 'book_cover_upload_prepared',
+        upload: P.select(),
+      }),
+      (upload) => ({
+        objectInfo: {
+          key: upload.objectKey,
+        },
+      })
+    )
+    .with(Result.P.Ok({ type: 'book_cover_upload_forbidden' }), () =>
+      rejectUpload(deps, 'UNAUTHORIZED', input.fileType)
+    )
+    .with(Result.P.Ok({ type: 'book_cover_upload_invalid_file_type' }), () =>
+      rejectUpload(deps, 'invalid_file_type', input.fileType)
+    )
+    .exhaustive();
 };
 
 export const createBookCoverUploadRoute = (deps: BookCoverUploadDeps) =>

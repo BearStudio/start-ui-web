@@ -2,7 +2,7 @@ import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import type { GenreRepository } from '@/modules/genre/application/ports/genre-repository';

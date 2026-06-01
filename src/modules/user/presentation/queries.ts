@@ -5,6 +5,7 @@ import {
   type ScopedQueryInput,
   serverMutationOptions,
 } from '@/platform/lib/tanstack-query/scoped-query-options';
+import type { ScopeKey, SessionId, UserId } from '@/modules/kernel/domain/ids';
 
 import {
   userCreate,
@@ -19,45 +20,47 @@ import {
 
 type GetAllInput = {
   searchTerm?: string;
-  cursor?: string;
+  cursor?: UserId;
   limit?: number;
 };
 
 export const userQueries = {
   all: () => ['user'] as const,
-  getAll: (scopeKey: string) =>
+  getAll: (scopeKey: ScopeKey) =>
     [...userQueries.all(), { scopeKey }, 'getAll'] as const,
-  getAllList: (input: GetAllInput & ScopedQueryInput) =>
+  getAllList: (input: GetAllInput & ScopedQueryInput<ScopeKey>) =>
     scopedListQueryOptions({
       baseKey: userQueries.getAll,
       input,
       queryFn: (data) => userGetAll({ data }),
     }),
-  getAllInfinite: (input: Omit<GetAllInput, 'cursor'> & ScopedQueryInput) =>
+  getAllInfinite: (
+    input: Omit<GetAllInput, 'cursor'> & ScopedQueryInput<ScopeKey>
+  ) =>
     scopedInfiniteQueryOptions({
       baseKey: userQueries.getAll,
       input,
-      queryFn: (data, pageParam: string | undefined) =>
+      queryFn: (data, pageParam: UserId | undefined) =>
         userGetAll({
           data: { ...data, cursor: pageParam },
         }),
     }),
-  getById: (input: { id: string } & ScopedQueryInput) =>
+  getById: (input: { id: UserId } & ScopedQueryInput<ScopeKey>) =>
     scopedEntityQueryOptions({
       baseKey: (scopeKey) =>
         [...userQueries.all(), { scopeKey }, 'getById'] as const,
       input,
       queryFn: (data) => userGetById({ data }),
     }),
-  getUserSessions: (scopeKey: string) =>
+  getUserSessions: (scopeKey: ScopeKey) =>
     ['user', { scopeKey }, 'getUserSessions'] as const,
   getUserSessionsInfinite: (
-    input: { userId: string; limit?: number } & ScopedQueryInput
+    input: { userId: UserId; limit?: number } & ScopedQueryInput<ScopeKey>
   ) =>
     scopedInfiniteQueryOptions({
       baseKey: userQueries.getUserSessions,
       input,
-      queryFn: (data, pageParam: string | undefined) =>
+      queryFn: (data, pageParam: SessionId | undefined) =>
         userGetUserSessions({
           data: { ...data, cursor: pageParam, limit: data.limit ?? 20 },
         }),

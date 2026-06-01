@@ -1,15 +1,23 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
-import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
+import type { ApplicationResult } from '@/modules/kernel/testing';
+import {
+  toEmailAddress,
+  toLanguageCode,
+  toOtpCode,
+  toSessionId,
+  toUserId,
+} from '@/modules/kernel';
 
-import type { AuthEmailPort } from '@/modules/auth/application/ports/auth-email-port';
-import type { AuthorizationGateway } from '@/modules/auth/application/ports/authorization-gateway';
-import type { SessionGateway } from '@/modules/auth/application/ports/session-gateway';
-import type { UserAdminGateway } from '@/modules/auth/application/ports/user-admin-gateway';
-import type { AuthSession } from '@/modules/auth/domain/session';
-import { createAuthUseCases } from '@/modules/auth/factory';
+import {
+  type AuthEmailPort,
+  type AuthSession,
+  type AuthorizationGateway,
+  createAuthUseCases,
+  type SessionGateway,
+  type UserAdminGateway,
+} from '@/modules/auth/testing';
 
 const session: AuthSession = {
   user: {
@@ -121,16 +129,16 @@ describe('auth use cases', () => {
     const useCases = createAuthUseCases(deps);
 
     const result = await useCases.sendSignInOtp({
-      email: 'a@b.com',
-      otp: '123456',
-      language: 'en',
+      email: toEmailAddress('a@b.com'),
+      otp: toOtpCode('123456'),
+      language: toLanguageCode('en'),
     });
 
     expect(getOk(result)).toEqual({ type: 'auth_sign_in_otp_sent' });
     expect(deps.authEmailPort.sendSignInOtp).toHaveBeenCalledWith({
-      email: 'a@b.com',
-      otp: '123456',
-      language: 'en',
+      email: toEmailAddress('a@b.com'),
+      otp: toOtpCode('123456'),
+      language: toLanguageCode('en'),
     });
   });
 

@@ -1,4 +1,10 @@
-import type { ScopeKey, SessionId, UserId } from '@/modules/kernel/domain/ids';
+import type {
+  CorrelationId,
+  RequestId,
+  ScopeKey,
+  SessionId,
+  UserId,
+} from '@/modules/kernel/domain/ids';
 
 export type LogDirection = 'inbound' | 'outbound' | 'internal';
 
@@ -10,8 +16,8 @@ export interface LogFields {
   event: string;
   direction?: LogDirection;
 
-  requestId?: string;
-  correlationId?: string;
+  requestId?: RequestId;
+  correlationId?: CorrelationId;
 
   userId?: UserId;
   sessionId?: SessionId;
@@ -36,7 +42,7 @@ export interface Logger {
 
 export type RequestLoggerInput = {
   logger: Logger;
-  requestId: string;
+  requestId: RequestId;
   userId?: UserId;
   sessionId?: SessionId;
   scopeKey?: ScopeKey;

@@ -4,13 +4,16 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 
-export type ScopedQueryInput = {
-  scopeKey: string;
+export type ScopedQueryInput<TScopeKey extends string = string> = {
+  scopeKey: TScopeKey;
 };
 
-type WithoutScope<TInput extends ScopedQueryInput> = Omit<TInput, 'scopeKey'>;
+type WithoutScope<TInput extends ScopedQueryInput<string>> = Omit<
+  TInput,
+  'scopeKey'
+>;
 
-function withoutScope<TInput extends ScopedQueryInput>(
+function withoutScope<TInput extends ScopedQueryInput<string>>(
   input: TInput
 ): WithoutScope<TInput> {
   const { scopeKey: _scopeKey, ...data } = input;
@@ -18,10 +21,11 @@ function withoutScope<TInput extends ScopedQueryInput>(
 }
 
 export function scopedListQueryOptions<
-  TInput extends ScopedQueryInput,
+  TScopeKey extends string,
+  TInput extends ScopedQueryInput<TScopeKey>,
   TData,
 >(input: {
-  baseKey: (scopeKey: string) => readonly unknown[];
+  baseKey: (scopeKey: TScopeKey) => readonly unknown[];
   input: TInput;
   queryFn: (data: WithoutScope<TInput>) => Promise<TData>;
 }) {
@@ -33,11 +37,12 @@ export function scopedListQueryOptions<
 }
 
 export function scopedInfiniteQueryOptions<
-  TInput extends ScopedQueryInput,
+  TScopeKey extends string,
+  TInput extends ScopedQueryInput<TScopeKey>,
   TCursor,
   TPage extends { nextCursor?: TCursor },
 >(input: {
-  baseKey: (scopeKey: string) => readonly unknown[];
+  baseKey: (scopeKey: TScopeKey) => readonly unknown[];
   input: TInput;
   queryFn: (
     data: WithoutScope<TInput>,
@@ -61,10 +66,11 @@ export function scopedInfiniteQueryOptions<
 }
 
 export function scopedEntityQueryOptions<
-  TInput extends ScopedQueryInput,
+  TScopeKey extends string,
+  TInput extends ScopedQueryInput<TScopeKey>,
   TData,
 >(input: {
-  baseKey: (scopeKey: string) => readonly unknown[];
+  baseKey: (scopeKey: TScopeKey) => readonly unknown[];
   input: TInput;
   queryFn: (data: WithoutScope<TInput>) => Promise<TData>;
 }) {

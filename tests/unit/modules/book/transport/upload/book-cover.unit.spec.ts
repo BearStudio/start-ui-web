@@ -12,6 +12,7 @@ import {
   bookCoverAcceptedFileTypes,
   bookCoverMaxFileSizeBytes,
 } from '@/modules/book/domain/book-policy';
+import { toBookCoverObjectKey } from '@/modules/kernel/domain/ids';
 
 const headers = new Headers();
 
@@ -29,7 +30,7 @@ describe('book cover upload transport', () => {
     const prepareCoverUpload = vi.fn(async () =>
       Result.Ok({
         type: 'book_cover_upload_prepared' as const,
-        upload: { objectKey: 'books/generated.webp' },
+        upload: { objectKey: toBookCoverObjectKey('books/generated.webp') },
       })
     );
 

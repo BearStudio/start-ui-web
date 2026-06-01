@@ -1,4 +1,5 @@
 import { createRouter } from '@tanstack/react-router';
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { createClientOnlyFn, createServerOnlyFn } from '@tanstack/react-start';
 
 import { createClientQueryClient } from '@/composition/client-query';
@@ -63,6 +64,12 @@ export function getRouter() {
     defaultPreloadStaleTime: 0,
     scrollRestoration: true,
     routeTree,
+  });
+
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+    wrapQueryClient: false,
   });
 
   if (!import.meta.env.SSR) {

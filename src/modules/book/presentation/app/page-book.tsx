@@ -2,6 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { match, P } from 'ts-pattern';
 
 import { BackButton } from '@/platform/components/back-button';
 import { PageError } from '@/platform/components/errors/page-error';
@@ -12,6 +13,7 @@ import { Spinner } from '@/platform/components/ui/spinner';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
+import { toBookId } from '@/modules/kernel/domain/ids';
 import {
   AppPageLayout as PageLayout,
   AppPageLayoutContent as PageLayoutContent,
@@ -22,24 +24,27 @@ import {
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
 
+const isNotFoundError = (error: unknown) =>
+  isServerFnError(error) && error.code === 'NOT_FOUND';
+
 export const PageBook = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['book']);
   const scopeKey = useCurrentScopeKey();
-  const bookQuery = useQuery(
-    bookQueries.getById({ id: props.params.id, scopeKey })
-  );
+  const bookId = toBookId(props.params.id);
+  const bookQuery = useQuery(bookQueries.getById({ id: bookId, scopeKey }));
 
-  const ui = getUiState((set) => {
-    if (bookQuery.status === 'pending') return set('pending');
-    if (
-      bookQuery.status === 'error' &&
-      isServerFnError(bookQuery.error) &&
-      bookQuery.error.code === 'NOT_FOUND'
-    )
-      return set('not-found');
-    if (bookQuery.status === 'error') return set('error');
-    return set('default', { book: bookQuery.data });
-  });
+  const ui = getUiState((set) =>
+    match(bookQuery)
+      .with({ status: 'pending' }, () => set('pending'))
+      .with({ status: 'error', error: P.when(isNotFoundError) }, () =>
+        set('not-found')
+      )
+      .with({ status: 'error' }, () => set('error'))
+      .with({ status: 'success', data: P.select() }, (book) =>
+        set('default', { book })
+      )
+      .exhaustive()
+  );
 
   return (
     <PageLayout>

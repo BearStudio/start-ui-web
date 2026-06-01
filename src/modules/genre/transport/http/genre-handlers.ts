@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { ProtectedContext } from '@/modules/auth/backend';
 import type { GenreUseCases } from '@/modules/genre';
-import { toGenreId, zGenreId } from '@/modules/kernel/domain/ids';
+import { zGenreId } from '@/modules/kernel/domain/ids';
 import {
   type OutcomeHandlerConfig,
   unwrapApplicationResult,
@@ -37,7 +37,7 @@ export const createGenreHandlers = ({ getUseCases }: GenreHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
         scope: ctx.scope,
-        cursor: data.cursor ? toGenreId(data.cursor) : undefined,
+        cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
       }),

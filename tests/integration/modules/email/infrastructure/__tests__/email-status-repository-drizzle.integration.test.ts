@@ -1,14 +1,27 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { createEmailUseCases } from '@/modules/email';
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import {
   emailStatus as emailStatusTable,
   type NewEmailStatus,
 } from '@/modules/kernel/infrastructure/db/schema';
+import {
+  toEmailIdempotencyKey,
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
 import { createEmailStatusRepository } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
+
+const recipient = toEmailRecipientList('user@example.com');
+const otherRecipient = toEmailRecipientList('other@example.com');
+const idempotencyKey = toEmailIdempotencyKey('key-1');
+const providerMessageId = toEmailProviderMessageId('email_123');
+const webhookEventId = toEmailWebhookEventId('evt_1');
+const nextWebhookEventId = toEmailWebhookEventId('evt_2');
 
 const makeEmailStatusRow = (
   overrides: Partial<NewEmailStatus> = {}
@@ -64,9 +77,9 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     const attempt = getOk(
       await repository.recordSendAttempt({
         provider: 'resend',
-        recipient: 'user@example.com',
+        recipient,
         subject: 'Login code',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
         metadata: { source: 'auth.signInOtp' },
       })
     ).record;
@@ -81,11 +94,11 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     const sent = getOk(
       await repository.upsertStatusByExternalId({
         provider: 'resend',
-        externalId: 'email_123',
-        recipient: 'user@example.com',
+        externalId: providerMessageId,
+        recipient,
         subject: 'Login code',
         status: 'sent',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
         metadata: { external: true },
       })
     ).record;
@@ -100,7 +113,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       },
     });
     const found = getOk(
-      await repository.getByExternalId('resend', 'email_123')
+      await repository.getByExternalId('resend', providerMessageId)
     );
     expect(found).toMatchObject({
       type: 'email_status_found',
@@ -115,29 +128,29 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     const attempt = getOk(
       await repository.recordSendAttempt({
         provider: 'resend',
-        recipient: 'user@example.com',
+        recipient,
         subject: 'Login code',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
         metadata: { source: 'auth.signInOtp' },
       })
     ).record;
     const sent = getOk(
       await repository.upsertStatusByExternalId({
         provider: 'resend',
-        externalId: 'email_123',
-        recipient: 'user@example.com',
+        externalId: providerMessageId,
+        recipient,
         subject: 'Login code',
         status: 'sent',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
       })
     ).record;
 
     const duplicate = getOk(
       await repository.recordSendAttempt({
         provider: 'resend',
-        recipient: 'other@example.com',
+        recipient: otherRecipient,
         subject: 'Retry login code',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
       })
     ).record;
 
@@ -157,23 +170,23 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     getOk(
       await repository.upsertStatusByExternalId({
         provider: 'resend',
-        externalId: 'email_123',
-        recipient: 'user@example.com',
+        externalId: providerMessageId,
+        recipient,
         subject: 'Login code',
         status: 'sent',
-        idempotencyKey: 'key-1',
+        idempotencyKey,
       })
     );
 
     const delivered = getOk(
       await repository.upsertStatusByExternalId({
         provider: 'resend',
-        externalId: 'email_123',
-        recipient: 'user@example.com',
+        externalId: providerMessageId,
+        recipient,
         subject: 'Login code',
         status: 'delivered',
         idempotencyKey: null,
-        lastWebhookEventId: 'evt_1',
+        lastWebhookEventId: webhookEventId,
       })
     ).record;
 
@@ -182,6 +195,46 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       status: 'delivered',
       idempotencyKey: 'key-1',
       lastWebhookEventId: 'evt_1',
+    });
+  });
+
+  it('merges metadata and preserves webhook IDs across racing external ID upserts', async () => {
+    const repository = createEmailStatusRepository({ db: database.db });
+
+    const results = await Promise.all([
+      repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: providerMessageId,
+        recipient,
+        subject: 'Login code',
+        status: 'delivered',
+        lastWebhookEventId: webhookEventId,
+        metadata: { first: true },
+      }),
+      repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: providerMessageId,
+        recipient,
+        subject: 'Login code',
+        status: 'opened',
+        metadata: { second: true },
+      }),
+    ]);
+    for (const result of results) getOk(result);
+
+    const found = getOk(
+      await repository.getByExternalId('resend', providerMessageId)
+    );
+
+    expect(found).toMatchObject({
+      type: 'email_status_found',
+      record: {
+        lastWebhookEventId: 'evt_1',
+        metadata: {
+          first: true,
+          second: true,
+        },
+      },
     });
   });
 
@@ -238,7 +291,12 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
     );
 
     expect(
-      getError(await repository.getByExternalId('resend', 'email_1'))
+      getError(
+        await repository.getByExternalId(
+          'resend',
+          toEmailProviderMessageId('email_1')
+        )
+      )
     ).toMatchObject({
       code: 'EMAIL_STATUS_METADATA_INVALID',
     });
@@ -276,11 +334,11 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
 
     const input = {
       provider: 'resend' as const,
-      externalId: 'email_123',
-      recipient: 'user@example.com',
+      externalId: providerMessageId,
+      recipient,
       subject: 'Login code',
       status: 'delivered' as const,
-      webhookEventId: 'evt_1',
+      webhookEventId,
       providerEventType: 'email.delivered',
       providerEventCreatedAt: '2026-01-01T00:00:00.000Z',
       metadata: { source: 'webhook' },
@@ -305,7 +363,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
         await useCases.processStatusEvent({
           ...input,
           status: 'opened',
-          webhookEventId: 'evt_2',
+          webhookEventId: nextWebhookEventId,
           providerEventType: 'email.opened',
         })
       )

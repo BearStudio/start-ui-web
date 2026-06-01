@@ -1,6 +1,11 @@
 import { Result } from '@swan-io/boxed';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type {
+  EmailProviderMessageId,
+  EmailRecipientList,
+  EmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 import type {
   EmailResult,
@@ -17,11 +22,11 @@ import {
 
 export type ProcessEmailStatusEventInput = {
   provider: EmailProvider;
-  externalId: string;
-  recipient: string;
+  externalId: EmailProviderMessageId;
+  recipient: EmailRecipientList;
   subject: string;
   status: EmailStatus;
-  webhookEventId: string;
+  webhookEventId: EmailWebhookEventId;
   providerEventType: string;
   providerEventCreatedAt: string;
   metadata?: EmailMetadata;
@@ -38,10 +43,10 @@ export async function processEmailStatusEvent(
           input.provider,
           input.externalId
         );
+
         if (existingResult.isError()) {
           return Result.Error(existingResult.getError());
         }
-
         const existingOutcome = existingResult.get();
         const existing =
           existingOutcome.type === 'email_status_found'
@@ -79,8 +84,9 @@ export async function processEmailStatusEvent(
             lastWebhookEventId: input.webhookEventId,
             metadata,
           });
-        if (recordResult.isError())
+        if (recordResult.isError()) {
           return Result.Error(recordResult.getError());
+        }
 
         return Result.Ok({
           type: 'email_status_event_processed',

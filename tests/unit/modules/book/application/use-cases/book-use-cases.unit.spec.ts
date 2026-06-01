@@ -2,8 +2,8 @@ import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel';
-import type { ApplicationResult } from '@/modules/kernel/application/result';
-import { toBookId, toGenreId, toUserId } from '@/modules/kernel';
+import type { ApplicationResult } from '@/modules/kernel/testing';
+import { toBookId, toGeneratedId, toGenreId, toUserId } from '@/modules/kernel';
 
 import type { BookUseCaseDeps } from '@/modules/book/application/use-cases/types';
 import type { BookRepository } from '@/modules/book/application/ports/book-repository';
@@ -30,7 +30,7 @@ const logger = {
   error: () => {},
 };
 const idGenerator = {
-  createId: () => 'generated-cover-id',
+  createId: () => toGeneratedId('generated-cover-id'),
 };
 
 const allowed: PermissionChecker = {

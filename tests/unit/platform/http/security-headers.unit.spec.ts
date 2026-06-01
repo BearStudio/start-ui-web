@@ -21,7 +21,8 @@ describe('security headers', () => {
     expect(policy).toContain("object-src 'none'");
     expect(policy).toContain("frame-ancestors 'none'");
     expect(policy).toContain("form-action 'self'");
-    expect(policy).toContain("script-src 'self' 'unsafe-inline'");
+    expect(policy).toContain("script-src 'self'");
+    expect(policy).not.toContain("script-src 'self' 'unsafe-inline'");
     expect(policy).toContain("script-src-attr 'none'");
     expect(policy).toContain("style-src 'self' 'unsafe-inline'");
     expect(policy).toContain(
@@ -100,5 +101,17 @@ describe('security headers', () => {
     expect(response.headers.get('Vary')).toBe(
       'Cookie, origin, Sec-Fetch-Site, Referer'
     );
+  });
+
+  it('keeps wildcard Vary as the only value', () => {
+    const response = new Response('ok', {
+      headers: {
+        Vary: 'Cookie, *',
+      },
+    });
+
+    appendVaryHeader(response, ['Origin']);
+
+    expect(response.headers.get('Vary')).toBe('*');
   });
 });

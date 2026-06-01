@@ -2,6 +2,7 @@ import { redirect } from '@tanstack/react-router';
 
 import type { Permission } from '@/modules/auth';
 import { hasRolePermission, parseRole } from '@/modules/auth';
+import { toScopeKey } from '@/modules/kernel/domain/ids';
 import type { CurrentSessionLike } from '@/platform/router/context';
 
 import {
@@ -106,7 +107,7 @@ export async function requireAuthenticatedRoute(input: {
     currentSession,
     session: currentSession,
     scope: currentSession.scope,
-    scopeKey: currentSession.scopeKey,
+    scopeKey: toScopeKey(currentSession.scopeKey),
   };
 }
 
@@ -153,7 +154,7 @@ export async function requireOnboardingRoute(input: {
     currentSession,
     session: currentSession,
     scope: currentSession.scope,
-    scopeKey: currentSession.scopeKey,
+    scopeKey: toScopeKey(currentSession.scopeKey),
   };
 }
 

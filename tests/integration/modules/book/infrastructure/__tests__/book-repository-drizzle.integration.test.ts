@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import {
   book as bookTable,

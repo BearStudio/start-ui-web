@@ -1,8 +1,8 @@
 import type { Logger } from '@/modules/kernel/application/ports/logger';
-import type { UserId } from '@/modules/kernel/domain/ids';
+import type { RequestId, UserId } from '@/modules/kernel/domain/ids';
 
 export type RequestContext = {
-  requestId: string;
+  requestId: RequestId;
   userId?: UserId;
   logger: Logger;
 };

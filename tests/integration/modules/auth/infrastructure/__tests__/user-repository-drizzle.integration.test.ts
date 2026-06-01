@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import {
   session as sessionTable,

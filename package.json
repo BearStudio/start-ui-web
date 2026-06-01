@@ -158,6 +158,7 @@
     "@tanstack/react-query-devtools": "5.100.14",
     "@tanstack/react-router": "1.170.8",
     "@tanstack/react-router-devtools": "1.167.0",
+    "@tanstack/react-router-ssr-query": "1.167.1",
     "@tanstack/react-start": "1.168.13",
     "@tanstack/zod-adapter": "1.167.0",
     "@uidotdev/usehooks": "2.4.1",

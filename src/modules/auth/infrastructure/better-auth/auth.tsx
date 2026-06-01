@@ -12,6 +12,11 @@ import {
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
+import {
+  toEmailAddress,
+  toLanguageCode,
+  toOtpCode,
+} from '@/modules/kernel/domain/ids';
 import { getBetterAuthConfig } from '@/modules/kernel/infrastructure/config/auth';
 import {
   type Database,
@@ -101,9 +106,9 @@ export function createAuth(input?: Database | CreateAuthOptions) {
           await match(type)
             .with('sign-in', async () => {
               const result = await authEmailPort.sendSignInOtp({
-                email,
-                otp,
-                language: getUserLanguage(),
+                email: toEmailAddress(email),
+                otp: toOtpCode(otp),
+                language: toLanguageCode(getUserLanguage()),
               });
               if (result.isError()) throw result.getError();
             })

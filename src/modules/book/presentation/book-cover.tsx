@@ -7,7 +7,9 @@ import { envClient } from '@/platform/env/client';
 import type { Book } from './schema';
 
 export const BookCover = (props: {
-  book: Partial<Pick<Book, 'title' | 'author' | 'genre' | 'coverId'>>;
+  book: Partial<Pick<Book, 'title' | 'author' | 'genre'>> & {
+    coverId?: string | null;
+  };
   variant?: 'default' | 'tiny';
   className?: string;
 }) => {

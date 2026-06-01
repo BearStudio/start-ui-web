@@ -3,7 +3,11 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { BookId } from '@/modules/kernel/domain/ids';
-import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
+import {
+  toBookCoverObjectKey,
+  toBookId,
+  toGenreId,
+} from '@/modules/kernel/domain/ids';
 import {
   getConstraintName,
   isUniqueConstraintViolation,
@@ -14,7 +18,10 @@ import {
   takeCursorPage,
 } from '@/modules/kernel/infrastructure/db/query-helpers';
 import { book as bookTable } from '@/modules/kernel/infrastructure/db/schema';
-import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
+import type {
+  DbLike,
+  RunInTransaction,
+} from '@/modules/kernel/infrastructure/db/types';
 
 import type { BookRepository } from '../../application/ports/book-repository';
 import type { Book, BookWriteInput } from '../../domain/book';
@@ -45,7 +52,7 @@ function toDomain(row: BookRow): Book {
         }
       : null,
     publisher: row.publisher,
-    coverId: row.coverId,
+    coverId: row.coverId ? toBookCoverObjectKey(row.coverId) : null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -103,6 +110,40 @@ export class BookRepositoryDrizzle implements BookRepository {
       with: { genre: true },
     });
     return row ? toDomain(row) : null;
+  }
+
+  private async runInSingleDbUnit<T>(
+    work: (db: DbLike) => Promise<T>
+  ): Promise<T> {
+    const runInTransaction = (
+      this.db as { $runInTransaction?: RunInTransaction }
+    ).$runInTransaction;
+
+    if (runInTransaction) return runInTransaction(work);
+
+    return work(this.db);
+  }
+
+  private async updateWithDb(
+    db: DbLike,
+    id: BookId,
+    input: BookWriteInput
+  ): Promise<Book | null> {
+    const [updated] = await db
+      .update(bookTable)
+      .set({
+        title: input.title,
+        author: input.author,
+        genreId: input.genreId,
+        publisher: input.publisher ?? null,
+        coverId: input.coverId ?? null,
+      })
+      .where(eq(bookTable.id, id))
+      .returning({ id: bookTable.id });
+
+    if (!updated) return null;
+
+    return this.getByIdWithDb(db, id);
   }
 
   async list(input: Parameters<BookRepository['list']>[0]) {
@@ -228,20 +269,9 @@ export class BookRepositoryDrizzle implements BookRepository {
 
   async update(id: BookId, input: BookWriteInput) {
     try {
-      const [updated] = await this.db
-        .update(bookTable)
-        .set({
-          title: input.title,
-          author: input.author,
-          genreId: input.genreId,
-          publisher: input.publisher ?? null,
-          coverId: input.coverId ?? null,
-        })
-        .where(eq(bookTable.id, id))
-        .returning();
-
-      if (!updated) return Result.Ok({ type: 'book_not_found' as const });
-      const book = await this.getByIdWithDb(this.db, id);
+      const book = await this.runInSingleDbUnit((db) =>
+        this.updateWithDb(db, id, input)
+      );
       return Result.Ok(
         book
           ? { type: 'book_updated' as const, book }

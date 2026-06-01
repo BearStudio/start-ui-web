@@ -6,7 +6,7 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import type { UserAuthGateway, UserRepository } from '@/modules/user';
 
 import { makeTestKernel, now } from '@tests/unit/composition/helpers';

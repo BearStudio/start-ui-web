@@ -2,7 +2,7 @@ import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { BookRepository } from '@/modules/book';
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from '@tests/unit/composition/helpers';

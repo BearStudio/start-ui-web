@@ -5,6 +5,7 @@ import { useRouter } from '@tanstack/react-router';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { match, P } from 'ts-pattern';
 
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
@@ -21,6 +22,7 @@ import {
   useCurrentScopeKey,
 } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
+import { toUserId } from '@/modules/kernel/domain/ids';
 import {
   ManagerPageLayout as PageLayout,
   ManagerPageLayoutContent as PageLayoutContent,
@@ -35,6 +37,9 @@ import {
 } from './form-user';
 import { userQueries } from '../queries';
 
+const isNotFoundError = (error: unknown) =>
+  isServerFnError(error) && error.code === 'NOT_FOUND';
+
 export const PageUserUpdate = (props: { params: { id: string } }) => {
   const { t } = useTranslation(['user']);
   const { navigateBack } = useNavigateBack();
@@ -42,9 +47,8 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const scopeKey = useCurrentScopeKey();
-  const userQuery = useQuery(
-    userQueries.getById({ id: props.params.id, scopeKey })
-  );
+  const userId = toUserId(props.params.id);
+  const userQuery = useQuery(userQueries.getById({ id: userId, scopeKey }));
   const userUpdate = useMutation({
     ...userQueries.updateById(),
     onSuccess: async (data) => {
@@ -60,8 +64,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
       await Promise.all([
         // Invalidate User
         queryClient.invalidateQueries({
-          queryKey: userQueries.getById({ id: props.params.id, scopeKey })
-            .queryKey,
+          queryKey: userQueries.getById({ id: userId, scopeKey }).queryKey,
         }),
         // Invalidate Users list
         queryClient.invalidateQueries({
@@ -99,24 +102,24 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
     }),
     validators: formUserValidators,
     onSubmit: async ({ value }) => {
-      await userUpdate.mutateAsync({ id: props.params.id, ...value });
+      await userUpdate.mutateAsync({ id: userId, ...value });
     },
   });
 
   const isDirty = useStore(form.store, (s) => s.isDirty);
 
-  const ui = getUiState((set) => {
-    if (userQuery.status === 'pending') return set('pending');
-    if (
-      userQuery.status === 'error' &&
-      isServerFnError(userQuery.error) &&
-      userQuery.error.code === 'NOT_FOUND'
-    )
-      return set('not-found');
-    if (userQuery.status === 'error') return set('error');
-
-    return set('default', { user: userQuery.data });
-  });
+  const ui = getUiState((set) =>
+    match(userQuery)
+      .with({ status: 'pending' }, () => set('pending'))
+      .with({ status: 'error', error: P.when(isNotFoundError) }, () =>
+        set('not-found')
+      )
+      .with({ status: 'error' }, () => set('error'))
+      .with({ status: 'success', data: P.select() }, (user) =>
+        set('default', { user })
+      )
+      .exhaustive()
+  );
 
   return (
     <>
@@ -149,7 +152,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           <PageLayoutContent>
             <Card>
               <CardContent>
-                <FormUser form={form} userId={props.params.id} />
+                <FormUser form={form} userId={userId} />
               </CardContent>
             </Card>
           </PageLayoutContent>

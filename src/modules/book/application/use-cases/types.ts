@@ -5,6 +5,7 @@ import type {
   PermissionChecker,
   TransactionRunner,
 } from '@/modules/kernel';
+import type { BookCoverObjectKey } from '@/modules/kernel/domain/ids';
 
 import type {
   BookCreateRepositoryOutcome,
@@ -46,7 +47,7 @@ export type BookDeleteOutcome =
   | BookForbiddenOutcome;
 
 export type PreparedBookCoverUpload = {
-  objectKey: string;
+  objectKey: BookCoverObjectKey;
 };
 
 export type BookCoverUploadOutcome =

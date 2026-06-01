@@ -94,8 +94,8 @@ export class UserAdminGatewayBetterAuth implements UserAdminGateway {
         return Result.Error(
           new AppError({
             code: 'AUTH_USER_SESSION_TOKEN_NOT_FOUND',
-            category: 'system',
-            status: 500,
+            category: 'not_found',
+            status: 404,
             message: 'Auth user session token was not found',
           })
         );
@@ -113,8 +113,8 @@ export class UserAdminGatewayBetterAuth implements UserAdminGateway {
         return Result.Error(
           new AppError({
             code: 'AUTH_USER_SESSION_OWNER_MISMATCH',
-            category: 'system',
-            status: 500,
+            category: 'forbidden',
+            status: 403,
             message: 'Auth user session owner did not match',
           })
         );

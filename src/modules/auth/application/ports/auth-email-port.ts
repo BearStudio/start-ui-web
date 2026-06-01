@@ -1,9 +1,14 @@
 import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type {
+  EmailAddress,
+  LanguageCode,
+  OtpCode,
+} from '@/modules/kernel/domain/ids';
 
 export type SendSignInOtpInput = {
-  email: string;
-  otp: string;
-  language: string;
+  email: EmailAddress;
+  otp: OtpCode;
+  language: LanguageCode;
 };
 
 export type AuthEmailSendSignInOtpOutcome = {

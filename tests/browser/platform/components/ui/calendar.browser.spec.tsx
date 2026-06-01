@@ -9,8 +9,10 @@ import { Calendar } from '@/platform/components/ui/calendar';
 // https://vitest.dev/guide/browser/#limitations
 vi.mock('react-i18next', { spy: true });
 vi.mocked(module.useTranslation).mockImplementation(
-  // @ts-expect-error We don't bother typing properly for this test
-  () => ({ t: (key) => key })
+  () =>
+    ({
+      t: (key: string) => key,
+    }) as ReturnType<typeof module.useTranslation>
 );
 
 describe('Calendar', () => {

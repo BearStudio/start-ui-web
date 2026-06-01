@@ -3,6 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { match, P } from 'ts-pattern';
 
 import { Button } from '@/platform/components/ui/button';
 import {
@@ -52,23 +53,26 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
     })
   );
 
-  const ui = getUiState((set) => {
-    if (booksQuery.status === 'pending') return set('pending');
-    if (booksQuery.status === 'error') return set('error');
-
-    const searchTerm = props.search.searchTerm;
-    const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length && searchTerm) {
-      return set('empty-search', { searchTerm });
-    }
-    if (!items.length) return set('empty');
-
-    return set('default', {
-      items,
-      searchTerm,
-      total: booksQuery.data.pages[0]?.total ?? 0,
-    });
-  });
+  const searchTerm = props.search.searchTerm;
+  const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
+  const total = booksQuery.data?.pages[0]?.total ?? 0;
+  const ui = getUiState((set) =>
+    match([booksQuery.status, items.length, Boolean(searchTerm)] as const)
+      .with(['pending', P._, P._], () => set('pending'))
+      .with(['error', P._, P._], () => set('error'))
+      .with(['success', 0, true], () =>
+        set('empty-search', { searchTerm: searchTerm ?? '' })
+      )
+      .with(['success', 0, false], () => set('empty'))
+      .with(['success', P._, P._], () =>
+        set('default', {
+          items,
+          searchTerm,
+          total,
+        })
+      )
+      .exhaustive()
+  );
 
   return (
     <PageLayout>

@@ -15,6 +15,17 @@ import type {
   UpsertEmailStatusInput,
 } from '@/modules/email';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type {
+  EmailIdempotencyKey,
+  EmailProviderMessageId,
+} from '@/modules/kernel/domain/ids';
+import {
+  toEmailIdempotencyKey,
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailStatusId,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 import {
   getConstraintName,
   isUniqueConstraintViolation,
@@ -80,14 +91,20 @@ const toDomain = (
   if (metadata.isError()) return Result.Error(metadata.getError());
 
   return Result.Ok({
-    id: row.id,
+    id: toEmailStatusId(row.id),
     provider: row.provider as EmailProvider,
-    externalId: row.externalId,
-    recipient: row.recipient,
+    externalId: row.externalId
+      ? toEmailProviderMessageId(row.externalId)
+      : null,
+    recipient: toEmailRecipientList(row.recipient),
     subject: row.subject,
     status: row.status as EmailStatus,
-    idempotencyKey: row.idempotencyKey,
-    lastWebhookEventId: row.lastWebhookEventId,
+    idempotencyKey: row.idempotencyKey
+      ? toEmailIdempotencyKey(row.idempotencyKey)
+      : null,
+    lastWebhookEventId: row.lastWebhookEventId
+      ? toEmailWebhookEventId(row.lastWebhookEventId)
+      : null,
     metadata: metadata.get(),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
@@ -131,7 +148,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
   private findByIdempotencyKey(
     db: DbLike,
     provider: EmailProvider,
-    idempotencyKey: string
+    idempotencyKey: EmailIdempotencyKey
   ) {
     return db.query.emailStatus.findFirst({
       where: and(
@@ -145,7 +162,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
   private findByExternalId(
     db: DbLike,
     provider: EmailProvider,
-    externalId: string
+    externalId: EmailProviderMessageId
   ) {
     return db.query.emailStatus.findFirst({
       where: and(
@@ -370,8 +387,11 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
           recipient: input.recipient,
           subject: input.subject,
           status: input.status,
-          lastWebhookEventId: input.lastWebhookEventId ?? null,
-          metadata: input.metadata ?? {},
+          lastWebhookEventId:
+            input.lastWebhookEventId === undefined
+              ? sql`${emailStatusTable.lastWebhookEventId}`
+              : input.lastWebhookEventId,
+          metadata: sql<EmailMetadata>`coalesce(${emailStatusTable.metadata}, '{}'::jsonb) || ${input.metadata ?? {}}::jsonb`,
           updatedAt: new Date(),
         },
       })
@@ -406,7 +426,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
 
   async getByExternalId(
     provider: EmailProvider,
-    externalId: string
+    externalId: EmailProviderMessageId
   ): ReturnType<EmailStatusRepository['getByExternalId']> {
     try {
       const row = await this.findByExternalId(this.db, provider, externalId);

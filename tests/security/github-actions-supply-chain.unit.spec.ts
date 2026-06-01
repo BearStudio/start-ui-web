@@ -105,42 +105,172 @@ function collectYamlDockerImages(projectPath: string, workflow: YamlRecord) {
 function collectDockerRunImages(projectPath: string, workflow: YamlRecord) {
   const dockerRunImagePattern =
     /^[a-z0-9][a-z0-9._/-]*(?::[a-z0-9._-]+)?(?:@sha256:[a-f0-9]{64})?$/i;
+  const optionsWithValue = new Set([
+    '-e',
+    '-h',
+    '-l',
+    '-m',
+    '-p',
+    '-u',
+    '-v',
+    '-w',
+    '--add-host',
+    '--cidfile',
+    '--cpuset-cpus',
+    '--dns',
+    '--dns-option',
+    '--dns-search',
+    '--entrypoint',
+    '--env',
+    '--env-file',
+    '--expose',
+    '--hostname',
+    '--ip',
+    '--label',
+    '--label-file',
+    '--link',
+    '--log-driver',
+    '--log-opt',
+    '--memory',
+    '--mount',
+    '--name',
+    '--network',
+    '--network-alias',
+    '--platform',
+    '--pull',
+    '--user',
+    '--volume',
+    '--volumes-from',
+    '--workdir',
+  ]);
+
+  const collectShellCommands = (script: string) => {
+    const commands: string[] = [];
+    let currentCommand = '';
+
+    for (const line of script.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const isContinued = trimmed.endsWith('\\');
+      const segment = isContinued ? trimmed.slice(0, -1).trim() : trimmed;
+      currentCommand = [currentCommand, segment].filter(Boolean).join(' ');
+
+      if (!isContinued) {
+        commands.push(currentCommand);
+        currentCommand = '';
+      }
+    }
+
+    if (currentCommand) commands.push(currentCommand);
+
+    return commands;
+  };
+
+  const tokenizeShellCommand = (command: string) =>
+    command.match(/(?:[^\s"'\\]+|"(?:\\.|[^"])*"|'[^']*')+/g) ?? [];
+
+  const stripShellQuotes = (value: string) =>
+    value.replace(/^(['"])(.*)\1$/, '$2');
+
+  const dockerRunImageFromCommand = (command: string) => {
+    const tokens = tokenizeShellCommand(command);
+    if (tokens[0] !== 'docker' || tokens[1] !== 'run') return undefined;
+
+    for (let index = 2; index < tokens.length; index += 1) {
+      const token = stripShellQuotes(tokens[index] ?? '');
+
+      if (token === '--') continue;
+      if (token.startsWith('-')) {
+        const [optionName = ''] = token.split('=', 1);
+        if (!token.includes('=') && optionsWithValue.has(optionName)) {
+          index += 1;
+        }
+        continue;
+      }
+
+      return dockerRunImagePattern.test(token) ? token : undefined;
+    }
+
+    return undefined;
+  };
 
   return stepEntries(projectPath, workflow).flatMap(
     ({ jobName, index, step }) => {
       if (typeof step.run !== 'string') return [];
 
-      let insideDockerRun = false;
-      const images: Array<{ context: string; image: string }> = [];
-      const lines = step.run.split('\n');
-
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (/^docker\s+run\b/.test(trimmed)) {
-          insideDockerRun = true;
-          continue;
-        }
-
-        if (!insideDockerRun) continue;
-
-        const image = trimmed.replace(/\s*\\$/, '');
-        if (
-          dockerRunImagePattern.test(image) &&
-          (image.includes('/') || image.includes(':'))
-        ) {
-          images.push({
-            context: `${projectPath}:jobs.${jobName}.steps.${index}.run`,
-            image,
-          });
-        }
-
-        if (!trimmed.endsWith('\\')) insideDockerRun = false;
-      }
-
-      return images;
+      return collectShellCommands(step.run).flatMap((command) => {
+        const image = dockerRunImageFromCommand(command);
+        return image
+          ? [
+              {
+                context: `${projectPath}:jobs.${jobName}.steps.${index}.run`,
+                image,
+              },
+            ]
+          : [];
+      });
     }
   );
 }
+
+describe('Docker run image collection', () => {
+  it('extracts single-line and multiline docker run images without command false positives', () => {
+    const images = collectDockerRunImages('workflow.yml', {
+      jobs: {
+        check: {
+          steps: [
+            {
+              run: [
+                'docker run --rm ghcr.io/acme/tool@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                'docker run \\',
+                '  --rm \\',
+                '  -v "$PWD:/work" \\',
+                '  ghcr.io/acme/other@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \\',
+                '  bin/start',
+                'npm run build',
+              ].join('\n'),
+            },
+          ],
+        },
+      },
+    });
+
+    expect(images).toEqual([
+      {
+        context: 'workflow.yml:jobs.check.steps.0.run',
+        image:
+          'ghcr.io/acme/tool@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      },
+      {
+        context: 'workflow.yml:jobs.check.steps.0.run',
+        image:
+          'ghcr.io/acme/other@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      },
+    ]);
+  });
+
+  it('collects bare docker images so they must also be digest-pinned', () => {
+    const images = collectDockerRunImages('workflow.yml', {
+      jobs: {
+        check: {
+          steps: [
+            {
+              run: 'docker run --rm alpine',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(images).toEqual([
+      {
+        context: 'workflow.yml:jobs.check.steps.0.run',
+        image: 'alpine',
+      },
+    ]);
+  });
+});
 
 function collectDockerComposeImages() {
   const composePath = 'docker-compose.yml';

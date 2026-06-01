@@ -113,6 +113,15 @@ for (const filePath of sourceFiles) {
   }
 
   if (
+    projectPath.startsWith('tests/integration/') &&
+    !/\.integration\.test\.tsx?$/.test(projectPath)
+  ) {
+    failures.push(
+      `${projectPath}: integration tests must end with .integration.test.ts or .integration.test.tsx`
+    );
+  }
+
+  if (
     projectPath.endsWith('.workflow.integration.test.ts') ||
     projectPath.endsWith('.workflow.integration.test.tsx')
   ) {

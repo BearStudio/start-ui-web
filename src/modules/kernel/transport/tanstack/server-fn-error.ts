@@ -1,3 +1,5 @@
+import { isMatching, P } from 'ts-pattern';
+
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
 export const SERVER_FN_ERROR_CODES = [
@@ -73,15 +75,11 @@ export class ServerFnError extends AppError {
 
 export function isServerFnError(error: unknown): error is ServerFnError {
   if (error instanceof ServerFnError) return true;
-  if (
-    error &&
-    typeof error === 'object' &&
-    'name' in error &&
-    error.name === ServerFnError.NAME &&
-    'code' in error &&
-    typeof (error as { code: unknown }).code === 'string'
-  ) {
-    return true;
-  }
-  return false;
+  return isMatching(
+    {
+      code: P.string,
+      name: ServerFnError.NAME,
+    },
+    error
+  );
 }

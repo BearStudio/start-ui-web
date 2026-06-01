@@ -3,6 +3,7 @@ import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
 import { isForbiddenRouteContext } from '@/modules/auth/presentation';
+import { toScopeKey } from '@/modules/kernel';
 import { userQueries } from '@/modules/user/client';
 import { PageUsers } from '@/modules/user/presentation';
 
@@ -22,7 +23,7 @@ export const Route = createFileRoute('/manager/users/')({
 
     return context.queryClient.ensureInfiniteQueryData(
       userQueries.getAllInfinite({
-        scopeKey: context.scopeKey,
+        scopeKey: toScopeKey(context.scopeKey),
         searchTerm: deps.searchTerm,
       })
     );

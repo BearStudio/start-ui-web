@@ -1,4 +1,6 @@
 import { handleRequest, type Router } from '@better-upload/server';
+import { Result } from '@swan-io/boxed';
+import { match, P } from 'ts-pattern';
 
 import { getAuthUseCases } from '@/composition/auth';
 import { getBookUseCases } from '@/composition/book';
@@ -14,9 +16,16 @@ const createBookCoverRoute = () =>
   createBookCoverUploadRoute({
     getCurrentSession: async (headers) => {
       const result = await getAuthUseCases().getCurrentSession({ headers });
-      if (result.isError()) throw result.getError();
-      const outcome = result.get();
-      return outcome.type === 'auth_session_found' ? outcome.session : null;
+      return match(result)
+        .with(Result.P.Error(P.select()), (error) => {
+          throw error;
+        })
+        .with(
+          Result.P.Ok({ type: 'auth_session_found', session: P.select() }),
+          (session) => session
+        )
+        .with(Result.P.Ok({ type: 'auth_session_missing' }), () => null)
+        .exhaustive();
     },
     getUseCases: getBookUseCases,
     logger: getKernel().logger,

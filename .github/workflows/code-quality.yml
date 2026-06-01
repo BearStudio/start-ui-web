@@ -15,8 +15,8 @@ concurrency:
 
 jobs:
   format:
-    name: Format
-    if: github.event.pull_request.draft == false
+    name: Format Check
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -35,9 +35,9 @@ jobs:
       - name: Ensure formatting check did not mutate files
         run: git diff --exit-code -- .
 
-  check:
-    name: Static Check
-    if: github.event.pull_request.draft == false
+  lint-typecheck:
+    name: Lint and Typecheck
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
@@ -52,8 +52,31 @@ jobs:
         with:
           node-version: 24
 
-      - name: Run static checks
-        run: pnpm check:ci
+      - name: Run lint and typecheck
+        run: pnpm exec run-p -n lint lint:eslint typecheck
+
+      - name: Ensure lint and typecheck did not mutate files
+        run: git diff --exit-code -- .
+
+  dependency-cruiser:
+    name: Dependency Cruiser
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run dependency-cruiser
+        run: pnpm depcruise
 
       - name: Generate dependency graphs
         if: always()
@@ -76,12 +99,70 @@ jobs:
       - name: Ensure static checks did not mutate files
         run: git diff --exit-code -- .
 
-  tests:
-    name: Tests
-    if: github.event.pull_request.draft == false
+  audit:
+    name: Audit
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run dependency audit
+        run: pnpm security:audit
+
+      - name: Ensure audit did not mutate files
+        run: git diff --exit-code -- .
+
+  architecture:
+    name: Architecture Checks
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:
+      SKIP_ENV_VALIDATION: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+
+      - name: Run test layering check
+        run: pnpm check:test-layering
+
+      - name: Run architecture tests
+        run: |
+          mkdir -p test-results/architecture
+          pnpm exec vitest run --project=unit tests/architecture --reporter=default --reporter=junit --outputFile.junit=test-results/architecture/junit.xml
+
+      - name: Upload architecture test report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: architecture-test-report
+          path: test-results/architecture/
+          retention-days: 30
+
+      - name: Ensure architecture checks did not mutate files
+        run: git diff --exit-code -- .
+
+  coverage:
+    name: Coverage
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       VITE_BASE_URL: http://localhost:3000
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
     steps:
@@ -120,11 +201,11 @@ jobs:
           flags: vitest
           name: vitest
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
 
   postgres-integration:
     name: PostgreSQL Integration
-    if: github.event.pull_request.draft == false
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -152,7 +233,7 @@ jobs:
 
   build:
     name: Build
-    if: github.event.pull_request.draft == false
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
     env:

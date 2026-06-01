@@ -1,4 +1,5 @@
 import { Result } from '@swan-io/boxed';
+import { match, P } from 'ts-pattern';
 
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
 import type { Clock } from '@/modules/kernel/application/ports/clock';
@@ -78,12 +79,15 @@ const createProductionPermissionChecker = (): PermissionChecker => ({
       permissions,
       headers: getRequestHeaders(),
     });
-    if (result.isError()) return Result.Error(result.getError());
-    return Result.Ok(
-      result.get().type === 'auth_permission_granted'
-        ? { type: 'permission_granted' }
-        : { type: 'permission_denied' }
-    );
+    return match(result)
+      .with(Result.P.Error(P.select()), (error) => Result.Error(error))
+      .with(Result.P.Ok({ type: 'auth_permission_granted' }), () =>
+        Result.Ok({ type: 'permission_granted' as const })
+      )
+      .with(Result.P.Ok({ type: 'auth_permission_denied' }), () =>
+        Result.Ok({ type: 'permission_denied' as const })
+      )
+      .exhaustive();
   },
 });
 

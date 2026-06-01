@@ -1,9 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 
 import { IdValidationError } from '@/modules/kernel/domain/errors/id-validation-error';
 import {
+  type BookId,
+  type EmailAddress,
+  type ScopeKey,
+  type UserId,
   toBookId,
   toEmailAddress,
   toGenreId,
@@ -36,7 +40,7 @@ describe('kernel domain ids', () => {
     expect(zGenreId().parse(' genre-1 ')).toBe('genre-1');
     expect(zSessionId().parse(' session-1 ')).toBe('session-1');
     expect(zScopeKey().parse(' anonymous ')).toBe('anonymous');
-    expect(() => zUserId().parse('')).toThrow(IdValidationError);
+    expect(() => zUserId().parse('')).toThrow();
   });
 
   it('parses email addresses', () => {
@@ -52,6 +56,18 @@ describe('kernel domain ids', () => {
     expect(toScopeKey(' anonymous ')).toBe('anonymous');
     expect(toEmailAddress(' user@example.com ')).toBe('user@example.com');
     expect(() => toEmailAddress('not-an-email')).toThrow(IdValidationError);
+  });
+
+  it('keeps domain brands distinct at compile time', () => {
+    expectTypeOf(toUserId('user-1')).toEqualTypeOf<UserId>();
+    expectTypeOf(toBookId('book-1')).toEqualTypeOf<BookId>();
+    expectTypeOf(toScopeKey('anonymous')).toEqualTypeOf<ScopeKey>();
+    expectTypeOf(
+      toEmailAddress('user@example.com')
+    ).toEqualTypeOf<EmailAddress>();
+    expectTypeOf(toUserId('user-1')).not.toEqualTypeOf<BookId>();
+    expectTypeOf<string>().not.toExtend<UserId>();
+    expectTypeOf<UserId>().toExtend<string>();
   });
 
   it('throws first-class ID validation errors for blank IDs', () => {

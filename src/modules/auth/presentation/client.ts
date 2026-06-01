@@ -1,4 +1,5 @@
 import { useMatches } from '@tanstack/react-router';
+import { isMatching, match, P } from 'ts-pattern';
 
 import {
   hasRolePermission,
@@ -71,11 +72,14 @@ const unknownErrorResult = (error: unknown): AuthClientResult<never> => ({
   message: error instanceof Error ? error.message : undefined,
 });
 
-const readRedirectUrl = (value: unknown) => {
-  if (!value || typeof value !== 'object') return undefined;
-  const url = (value as { url?: unknown }).url;
-  return typeof url === 'string' && url ? url : undefined;
-};
+const hasRedirectUrl = isMatching({
+  url: P.when(
+    (url): url is string => typeof url === 'string' && url.length > 0
+  ),
+});
+
+const readRedirectUrl = (value: unknown) =>
+  hasRedirectUrl(value) ? value.url : undefined;
 
 const mapProviderResponse = <TValue, TData = unknown>(
   response: AuthProviderResponse<TData>,
@@ -119,30 +123,31 @@ export const startSignIn = async (
   input: StartSignInInput
 ): Promise<AuthClientResult<StartSignInResult>> => {
   try {
-    if (input.strategy === 'email-otp') {
-      const response = await betterAuthBrowserClient.sendEmailOtp({
-        email: input.email,
-      });
-      return mapProviderResponse(response, {
-        status: 'verification_required',
-        email: input.email,
-        redirectTo: input.redirectTo,
-      });
-    }
+    return await match(input)
+      .with({ strategy: 'email-otp' }, async ({ email, redirectTo }) => {
+        const response = await betterAuthBrowserClient.sendEmailOtp({ email });
+        return mapProviderResponse(response, {
+          status: 'verification_required' as const,
+          email,
+          redirectTo,
+        });
+      })
+      .with({ strategy: 'social' }, async ({ provider, redirectTo }) => {
+        const response = await betterAuthBrowserClient.signInSocial({
+          provider,
+          callbackURL: redirectTo ?? '/',
+          errorCallbackURL: '/login/error',
+        });
+        const redirectUrl = readRedirectUrl(response.data);
 
-    const response = await betterAuthBrowserClient.signInSocial({
-      provider: input.provider,
-      callbackURL: input.redirectTo ?? '/',
-      errorCallbackURL: '/login/error',
-    });
-    const redirectUrl = readRedirectUrl(response.data);
-
-    return mapProviderResponse(
-      response,
-      redirectUrl
-        ? { status: 'redirect', url: redirectUrl }
-        : { status: 'complete' }
-    );
+        return mapProviderResponse(
+          response,
+          redirectUrl
+            ? { status: 'redirect' as const, url: redirectUrl }
+            : { status: 'complete' as const }
+        );
+      })
+      .exhaustive();
   } catch (error) {
     return unknownErrorResult(error);
   }

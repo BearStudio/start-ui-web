@@ -2,6 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
+import { match, P } from 'ts-pattern';
 
 import { PageError } from '@/platform/components/errors/page-error';
 import { Button } from '@/platform/components/ui/button';
@@ -22,14 +23,15 @@ export const PageBooks = () => {
   const scopeKey = useCurrentScopeKey();
   const booksQuery = useInfiniteQuery(bookQueries.getAllInfinite({ scopeKey }));
 
-  const ui = getUiState((set) => {
-    if (booksQuery.status === 'pending') return set('pending');
-    if (booksQuery.status === 'error') return set('error');
-
-    const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length) return set('empty');
-    return set('default', { items });
-  });
+  const items = booksQuery.data?.pages.flatMap((p) => p.items) ?? [];
+  const ui = getUiState((set) =>
+    match([booksQuery.status, items.length] as const)
+      .with(['pending', P._], () => set('pending'))
+      .with(['error', P._], () => set('error'))
+      .with(['success', 0], () => set('empty'))
+      .with(['success', P._], () => set('default', { items }))
+      .exhaustive()
+  );
 
   return (
     <PageLayout>

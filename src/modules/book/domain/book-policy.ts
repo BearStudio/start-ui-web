@@ -1,3 +1,9 @@
+import type {
+  BookCoverObjectKey,
+  GeneratedId,
+} from '@/modules/kernel/domain/ids';
+import { toBookCoverObjectKey } from '@/modules/kernel/domain/ids';
+
 import type { BookWriteInput } from './book';
 
 export const bookCoverAcceptedFileTypes = [
@@ -30,12 +36,12 @@ export const getBookCoverFileExtension = (fileType: string) =>
     : null;
 
 export const createBookCoverObjectKey = (input: {
-  fileId: string;
+  fileId: GeneratedId;
   fileType: string;
-}) => {
+}): BookCoverObjectKey | null => {
   const extension = getBookCoverFileExtension(input.fileType);
   if (!extension) return null;
-  return `books/${input.fileId}.${extension}`;
+  return toBookCoverObjectKey(`books/${input.fileId}.${extension}`);
 };
 
 export function isDuplicateBookCandidate(

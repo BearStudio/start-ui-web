@@ -1,13 +1,13 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
+  AppError,
+  type ApplicationResult,
   type OutcomeHandlerConfig,
+  ServerFnError,
   unwrapApplicationResult,
-} from '@/modules/kernel/transport/tanstack/result-mapper';
-import { ServerFnError } from '@/modules/kernel/transport/tanstack/server-fn-error';
+} from '@/modules/kernel/testing';
 
 type TestOutcome =
   | { type: 'test_completed'; value: string }

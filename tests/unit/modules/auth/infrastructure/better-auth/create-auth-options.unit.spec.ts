@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
 
 import { normalizeCreateAuthInput } from '@/modules/auth/infrastructure/better-auth/create-auth-options';
-import type { AuthEmailPort } from '@/modules/auth/application/ports/auth-email-port';
+import type { AuthEmailPort } from '@/modules/auth/testing';
 
 const database = {
   select: () => undefined,

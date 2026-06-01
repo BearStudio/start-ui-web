@@ -1,13 +1,10 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toUserId } from '@/modules/kernel';
 
-import {
-  hasScopePermission,
-  scopeUserId,
-} from '@/modules/auth/application/scope-authorization';
+import { hasScopePermission, scopeUserId } from '@/modules/auth/testing';
 
 const scope = {
   userId: toUserId('user-1'),

@@ -6,14 +6,22 @@ import { shouldProtectBrowserMutation } from '@/platform/http/browser-mutation-p
 
 const root = process.cwd();
 
+const listRouteFiles = (directory: string): string[] =>
+  fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const filePath = path.join(directory, entry.name);
+
+    if (entry.isDirectory()) return listRouteFiles(filePath);
+    if (entry.isFile() && entry.name.endsWith('.ts')) return [filePath];
+
+    return [];
+  });
+
 const listApiRoutePostPaths = () => {
   const routesDir = path.join(root, 'src/routes/api');
   const routePaths: string[] = [];
 
-  for (const file of fs.readdirSync(routesDir)) {
-    if (!file.endsWith('.ts')) continue;
-
-    const source = fs.readFileSync(path.join(routesDir, file), 'utf8');
+  for (const file of listRouteFiles(routesDir)) {
+    const source = fs.readFileSync(file, 'utf8');
     if (!/\bPOST\s*:/.test(source)) continue;
 
     const routeMatch = source.match(/createFileRoute\('([^']+)'\)/);

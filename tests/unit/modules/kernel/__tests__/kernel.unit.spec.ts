@@ -4,6 +4,7 @@ import { cacheAside } from '@/modules/kernel/application/cache/cache-aside';
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
 import { AppError, isAppError } from '@/modules/kernel/domain/errors/app-error';
 import { DomainError } from '@/modules/kernel/domain/errors/domain-error';
+import { toCacheKey } from '@/modules/kernel/domain/ids';
 import { escapeLikePattern } from '@/modules/kernel/infrastructure/db/like';
 import { appErrorToResponse } from '@/modules/kernel/transport/http/error-mapper';
 
@@ -111,11 +112,12 @@ describe('kernel primitives', () => {
         store.delete(key);
       },
     };
+    const key = toCacheKey('k');
 
-    await expect(
-      cacheAside({ cache, key: 'k', load, ttlMs: 30_000 })
-    ).resolves.toBe('value');
-    await expect(cacheAside({ cache, key: 'k', load })).resolves.toBe('value');
+    await expect(cacheAside({ cache, key, load, ttlMs: 30_000 })).resolves.toBe(
+      'value'
+    );
+    await expect(cacheAside({ cache, key, load })).resolves.toBe('value');
 
     expect(load).toHaveBeenCalledTimes(1);
     expect(set).toHaveBeenCalledTimes(1);

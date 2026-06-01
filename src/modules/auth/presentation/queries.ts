@@ -4,6 +4,9 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
+import type { ScopeKey } from '@/modules/kernel/domain/ids';
+import { toScopeKey } from '@/modules/kernel/domain/ids';
+
 import type { CurrentSession } from '../domain/request-scope';
 import { authServerFunctions } from '../server';
 
@@ -22,8 +25,8 @@ export const useCurrentSessionQuery = (initialData?: CurrentSession | null) =>
     ...(initialData === undefined ? {} : { initialData }),
   });
 
-export const useCurrentScopeKey = () =>
-  useCurrentSessionQuery().data?.scopeKey ?? 'anonymous';
+export const useCurrentScopeKey = (): ScopeKey =>
+  useCurrentSessionQuery().data?.scopeKey ?? toScopeKey('anonymous');
 
 /**
  * Clears every query and mutation after an auth boundary change so cached

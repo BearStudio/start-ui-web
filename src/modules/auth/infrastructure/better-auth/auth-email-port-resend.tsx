@@ -5,6 +5,10 @@ import i18n from '@/platform/lib/i18n';
 
 import type { EmailGateway } from '@/modules/email';
 import { TemplateLoginCode } from '@/modules/email/presentation';
+import {
+  toEmailIdempotencyKey,
+  toEmailRecipientList,
+} from '@/modules/kernel/domain/ids';
 
 import type {
   AuthEmailPort,
@@ -18,7 +22,7 @@ const signInOtpIdempotencyKey = (input: SendSignInOtpInput) => {
     )
     .digest('hex');
 
-  return `auth:sign-in-otp:v1:${digest}`;
+  return toEmailIdempotencyKey(`auth:sign-in-otp:v1:${digest}`);
 };
 
 export class AuthEmailPortResend implements AuthEmailPort {
@@ -30,7 +34,7 @@ export class AuthEmailPortResend implements AuthEmailPort {
     const t = i18n.getFixedT(input.language, 'emails');
 
     const result = await this.emailGateway.sendEmail({
-      to: input.email,
+      to: toEmailRecipientList(input.email),
       subject: t('loginCode.subject'),
       template: (
         <TemplateLoginCode language={input.language} code={input.otp} />

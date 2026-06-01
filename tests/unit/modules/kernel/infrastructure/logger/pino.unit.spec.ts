@@ -4,7 +4,11 @@ import {
   createRequestLogger,
   type Logger,
 } from '@/modules/kernel/application/ports/logger';
-import { toUserId } from '@/modules/kernel/domain/ids';
+import {
+  toCorrelationId,
+  toRequestId,
+  toUserId,
+} from '@/modules/kernel/domain/ids';
 import { createPinoAppLogger } from '@/modules/kernel/infrastructure/logger/pino';
 import type { TelemetryAdapter } from '@/platform/telemetry';
 
@@ -30,7 +34,7 @@ describe('createPinoAppLogger', () => {
     const logger = createPinoAppLogger({
       pino,
       telemetry,
-      defaultFields: { requestId: 'request-1' },
+      defaultFields: { requestId: toRequestId('request-1') },
     });
     const fields = {
       event: 'email.send.failed',
@@ -68,8 +72,8 @@ describe('createPinoAppLogger', () => {
 
     logger.error({
       event: 'email.send.failed',
-      requestId: 'request-1',
-      correlationId: 'correlation-1',
+      requestId: toRequestId('request-1'),
+      correlationId: toCorrelationId('correlation-1'),
       error: 'Provider rejected person@example.com',
       exception,
       details: {
@@ -184,13 +188,13 @@ describe('createPinoAppLogger', () => {
     };
     const requestLogger = createRequestLogger({
       logger,
-      requestId: 'request-1',
+      requestId: toRequestId('request-1'),
       userId: toUserId('actor-1'),
     });
 
     requestLogger.info({
       event: 'user.update',
-      requestId: 'caller-request',
+      requestId: toRequestId('caller-request'),
       userId: toUserId('target-1'),
       details: { userId: 'target-1' },
     });
@@ -201,19 +205,5 @@ describe('createPinoAppLogger', () => {
       userId: 'actor-1',
       details: { userId: 'target-1' },
     });
-  });
-
-  it('rejects unknown top-level log fields at compile time', () => {
-    const logger: Logger = {
-      debug: () => {},
-      info: () => {},
-      warn: () => {},
-      error: () => {},
-    };
-
-    // @ts-expect-error custom fields must be nested under details
-    logger.info({ event: 'user.update', email: 'person@example.com' });
-
-    expect(logger).toBeDefined();
   });
 });

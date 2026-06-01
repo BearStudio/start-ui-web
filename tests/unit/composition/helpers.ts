@@ -1,6 +1,7 @@
 import { Result } from '@swan-io/boxed';
 
 import type { Kernel } from '@/composition/kernel';
+import { toGeneratedId } from '@/modules/kernel/domain/ids';
 
 export const now = new Date('2026-01-01T00:00:00.000Z');
 
@@ -18,7 +19,7 @@ export function makeTestKernel(overrides: Partial<Kernel> = {}): Kernel {
       now: () => now,
     },
     idGenerator: {
-      createId: () => 'generated-id',
+      createId: () => toGeneratedId('generated-id'),
     },
     cacheGateway: {
       async get<T>(key: string) {

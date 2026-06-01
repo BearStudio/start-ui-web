@@ -1,4 +1,6 @@
+import { Result } from '@swan-io/boxed';
 import type { WebhookEventPayload } from 'resend';
+import { match, P } from 'ts-pattern';
 
 import {
   EMAIL_PROVIDER_RESEND,
@@ -7,6 +9,11 @@ import {
 } from '@/modules/email';
 import type { Logger } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import {
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 type VerifyResendWebhookInput = {
   payload: string;
@@ -67,7 +74,7 @@ const isTrackedEmailEvent = (
 
 const recipientFromEvent = (
   event: Extract<WebhookEventPayload, { data: { to: string[] } }>
-) => event.data.to.join(', ');
+) => toEmailRecipientList(event.data.to.join(', '));
 
 export const createResendWebhookHandlers = ({
   getUseCases,
@@ -103,24 +110,29 @@ export const createResendWebhookHandlers = ({
 
     const result = await getUseCases().processStatusEvent({
       provider: EMAIL_PROVIDER_RESEND,
-      externalId: event.data.email_id,
+      externalId: toEmailProviderMessageId(event.data.email_id),
       recipient: recipientFromEvent(event),
       subject: event.data.subject,
       status: resendEmailStatusByEventType[event.type],
-      webhookEventId: resendSdkHeaders.id,
+      webhookEventId: toEmailWebhookEventId(resendSdkHeaders.id),
       providerEventType: event.type,
       providerEventCreatedAt: event.created_at,
       metadata: {
         resendEvent: event,
       },
     });
-    if (result.isError()) throw result.getError();
-    const outcome = result.get();
 
-    return Response.json({
-      ok: true,
-      duplicate: outcome.type === 'email_status_event_duplicate',
-    });
+    return match(result)
+      .with(Result.P.Error(P.select()), (error) => {
+        throw error;
+      })
+      .with(Result.P.Ok({ type: 'email_status_event_processed' }), () =>
+        Response.json({ ok: true, duplicate: false })
+      )
+      .with(Result.P.Ok({ type: 'email_status_event_duplicate' }), () =>
+        Response.json({ ok: true, duplicate: true })
+      )
+      .exhaustive();
   };
 
   return { receive };

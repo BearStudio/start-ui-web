@@ -7,6 +7,7 @@ import {
   withProtectedMutation,
   withPublicContext,
 } from '@/modules/auth/backend';
+import { toUserId } from '@/modules/kernel';
 import { ServerFnError } from '@/modules/kernel/client';
 import { envClient } from '@/platform/env/client';
 import {
@@ -95,6 +96,25 @@ describe('server function middleware', () => {
       id: 'user-1',
       email: 'user@example.com',
       role: 'user',
+    });
+  });
+
+  it('fails closed for unexpected permission outcomes', async () => {
+    const checkPermission = vi.fn(async () =>
+      Result.Ok({ type: 'auth_permission_unknown' as const })
+    );
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession: vi.fn(),
+          checkPermission,
+        }) as ExplicitAny,
+    });
+
+    await expect(
+      tools.assertPermission(toUserId('user-1'), { book: ['read'] })
+    ).rejects.toMatchObject({
+      code: 'FORBIDDEN',
     });
   });
 

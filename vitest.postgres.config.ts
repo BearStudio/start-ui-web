@@ -6,7 +6,7 @@ const resolve = (filePath: string) => path.resolve(__dirname, filePath);
 export default defineConfig({
   test: {
     environment: 'node',
-    include: ['tests/integration/**/*.postgres.test.ts'],
+    include: ['tests/integration/**/*.postgres.integration.test.ts'],
     fileParallelism: false,
     setupFiles: [resolve('tests/setup.base.ts')],
     testTimeout: 60_000,

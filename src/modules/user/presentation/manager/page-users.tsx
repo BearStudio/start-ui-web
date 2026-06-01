@@ -4,6 +4,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { match, P } from 'ts-pattern';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 import { useHydrated } from '@/platform/hooks/use-hydrated';
@@ -64,22 +65,32 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
     enabled: canLoadUsers,
   });
 
-  const ui = getUiState((set) => {
-    if (!canLoadUsers) return set('pending');
-    if (usersQuery.status === 'pending') return set('pending');
-    if (usersQuery.status === 'error') return set('error');
-    const searchTerm = props.search.searchTerm;
-    const items = usersQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length && searchTerm) {
-      return set('empty-search', { searchTerm });
-    }
-    if (!items.length) return set('empty');
-    return set('default', {
-      items,
-      searchTerm,
-      total: usersQuery.data?.pages[0]?.total ?? 0,
-    });
-  });
+  const searchTerm = props.search.searchTerm;
+  const items = usersQuery.data?.pages.flatMap((p) => p.items) ?? [];
+  const total = usersQuery.data?.pages[0]?.total ?? 0;
+  const ui = getUiState((set) =>
+    match([
+      canLoadUsers,
+      usersQuery.status,
+      items.length,
+      Boolean(searchTerm),
+    ] as const)
+      .with([false, P._, P._, P._], () => set('pending'))
+      .with([true, 'pending', P._, P._], () => set('pending'))
+      .with([true, 'error', P._, P._], () => set('error'))
+      .with([true, 'success', 0, true], () =>
+        set('empty-search', { searchTerm: searchTerm ?? '' })
+      )
+      .with([true, 'success', 0, false], () => set('empty'))
+      .with([true, 'success', P._, P._], () =>
+        set('default', {
+          items,
+          searchTerm,
+          total,
+        })
+      )
+      .exhaustive()
+  );
 
   return (
     <PageLayout>

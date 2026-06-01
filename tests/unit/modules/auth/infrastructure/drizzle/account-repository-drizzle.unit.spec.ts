@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 

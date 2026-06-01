@@ -56,7 +56,7 @@ export function buildContentSecurityPolicy(
     formatDirective('object-src', ["'none'"]),
     formatDirective('frame-ancestors', ["'none'"]),
     formatDirective('form-action', ["'self'"]),
-    formatDirective('script-src', ["'self'", "'unsafe-inline'"]),
+    formatDirective('script-src', ["'self'"]),
     formatDirective('script-src-attr', ["'none'"]),
     formatDirective('style-src', ["'self'", "'unsafe-inline'"]),
     formatDirective('img-src', imgSources),
@@ -116,12 +116,18 @@ export function applySecurityHeaders(
 }
 
 export function appendVaryHeader(response: Response, values: string[]) {
-  const varyValues = pipe(
+  const mergedValues = pipe(
     [...(response.headers.get('Vary')?.split(',') ?? []), ...values],
     map((value) => value.trim()),
-    filter(isTruthy),
-    uniqueBy((value) => value.toLowerCase())
+    filter(isTruthy)
   );
+
+  if (mergedValues.includes('*')) {
+    response.headers.set('Vary', '*');
+    return response;
+  }
+
+  const varyValues = uniqueBy(mergedValues, (value) => value.toLowerCase());
 
   if (varyValues.length > 0) {
     response.headers.set('Vary', join(varyValues, ', '));

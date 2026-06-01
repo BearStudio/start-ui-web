@@ -103,7 +103,11 @@ describe('UserAdminGatewayBetterAuth', () => {
     expect(result.isError()).toBe(true);
     expect(result).toMatchObject({
       tag: 'Error',
-      error: { code: 'AUTH_USER_SESSION_OWNER_MISMATCH' },
+      error: {
+        category: 'forbidden',
+        code: 'AUTH_USER_SESSION_OWNER_MISMATCH',
+        status: 403,
+      },
     });
 
     expect(auth.api.revokeUserSession).not.toHaveBeenCalled();
@@ -125,7 +129,11 @@ describe('UserAdminGatewayBetterAuth', () => {
     expect(result.isError()).toBe(true);
     expect(result).toMatchObject({
       tag: 'Error',
-      error: { code: 'AUTH_USER_SESSION_TOKEN_NOT_FOUND' },
+      error: {
+        category: 'not_found',
+        code: 'AUTH_USER_SESSION_TOKEN_NOT_FOUND',
+        status: 404,
+      },
     });
 
     expect(auth.api.revokeUserSession).not.toHaveBeenCalled();

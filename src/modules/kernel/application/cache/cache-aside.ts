@@ -1,8 +1,9 @@
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
+import type { CacheKey } from '@/modules/kernel/domain/ids';
 
 export async function cacheAside<T>(options: {
   cache: CacheGateway;
-  key: string;
+  key: CacheKey;
   load: () => Promise<T>;
   ttlMs?: number;
 }): Promise<T> {

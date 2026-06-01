@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 import type { ProtectedContext } from '@/modules/auth/backend';
 import type { BookUseCases } from '@/modules/book';
-import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
+import {
+  zBookCoverObjectKey,
+  zBookId,
+  zGenreId,
+} from '@/modules/kernel/domain/ids';
 import {
   type OutcomeHandlerConfig,
   unwrapApplicationResult,
@@ -20,27 +24,33 @@ import type { Book, BookListPage } from '../../domain/book';
 export const zGetAllInput = () =>
   z
     .object({
-      cursor: z.string().optional(),
+      cursor: zBookId().optional(),
       limit: z.coerce.number().int().min(1).max(100).prefault(20),
       searchTerm: z.string().trim().optional(),
     })
     .prefault({});
 
-export const zGetByIdInput = () => z.object({ id: z.string() });
+export const zGetByIdInput = () => z.object({ id: zBookId() });
+
+const zBookCoverInput = () =>
+  z
+    .union([z.literal(''), zBookCoverObjectKey()])
+    .nullish()
+    .transform((value) => value || null);
 
 const zBookWriteInput = () =>
   z.object({
     title: z.string().trim().min(1),
     author: z.string().trim().min(1),
-    genreId: z.string().trim().min(1),
+    genreId: zGenreId(),
     publisher: z.string().nullish(),
-    coverId: z.string().nullish(),
+    coverId: zBookCoverInput(),
   });
 
 export const zCreateInput = () => zBookWriteInput();
 export const zUpdateByIdInput = () =>
-  zBookWriteInput().extend({ id: z.string() });
-export const zDeleteByIdInput = () => z.object({ id: z.string() });
+  zBookWriteInput().extend({ id: zBookId() });
+export const zDeleteByIdInput = () => z.object({ id: zBookId() });
 
 type BookHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => BookUseCases;
@@ -92,7 +102,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
         scope: ctx.scope,
-        cursor: data.cursor ? toBookId(data.cursor) : undefined,
+        cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
       }),
@@ -107,7 +117,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).get({
         scope: ctx.scope,
-        id: toBookId(data.id),
+        id: data.id,
       }),
       bookGetConfig
     );
@@ -123,7 +133,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
         book: {
           title: data.title,
           author: data.author,
-          genreId: toGenreId(data.genreId),
+          genreId: data.genreId,
           publisher: data.publisher,
           coverId: data.coverId,
         },
@@ -139,11 +149,11 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).update({
         scope: ctx.scope,
-        id: toBookId(data.id),
+        id: data.id,
         book: {
           title: data.title,
           author: data.author,
-          genreId: toGenreId(data.genreId),
+          genreId: data.genreId,
           publisher: data.publisher,
           coverId: data.coverId,
         },
@@ -159,7 +169,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).delete({
         scope: ctx.scope,
-        id: toBookId(data.id),
+        id: data.id,
       }),
       bookDeleteConfig
     );

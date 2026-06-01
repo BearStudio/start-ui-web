@@ -1,4 +1,5 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
+import { isMatching, P } from 'ts-pattern';
 
 import { envClient } from '@/platform/env/client';
 
@@ -12,16 +13,7 @@ type QueryClientOptions = {
 };
 
 function getHttpStatus(error: unknown): number | undefined {
-  if (
-    typeof error === 'object' &&
-    error !== null &&
-    'status' in error &&
-    typeof error.status === 'number'
-  ) {
-    return error.status;
-  }
-
-  return undefined;
+  return isMatching({ status: P.number }, error) ? error.status : undefined;
 }
 
 export function shouldRetryQuery(

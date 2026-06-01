@@ -105,7 +105,6 @@ export const verification = pgTable(
     updatedAt: updatedAtColumn(),
   },
   (table) => [
-    index('verification_identifier_idx').on(table.identifier),
     uniqueIndex('verification_identifier_value_key').on(
       table.identifier,
       table.value

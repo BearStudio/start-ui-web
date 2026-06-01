@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { match, P } from 'ts-pattern';
 
 import { useHydrated } from '@/platform/hooks/use-hydrated';
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
@@ -51,6 +52,11 @@ import {
 } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import {
+  type SessionId,
+  type UserId,
+  toUserId,
+} from '@/modules/kernel/domain/ids';
+import {
   ManagerPageLayout as PageLayout,
   ManagerPageLayoutContent as PageLayoutContent,
   ManagerPageLayoutTopBar as PageLayoutTopBar,
@@ -58,6 +64,9 @@ import {
 } from '@/platform/components/page-layout';
 
 import { userQueries } from '../queries';
+
+const isNotFoundError = (error: unknown) =>
+  isServerFnError(error) && error.code === 'NOT_FOUND';
 
 export const PageUser = (props: { params: { id: string } }) => {
   const queryClient = useQueryClient();
@@ -67,8 +76,9 @@ export const PageUser = (props: { params: { id: string } }) => {
   const scopeKey = useCurrentScopeKey();
   const hydrated = useHydrated();
   const canLoadUser = !import.meta.env.SSR && hydrated;
+  const userId = toUserId(props.params.id);
   const userQuery = useQuery({
-    ...userQueries.getById({ id: props.params.id, scopeKey }),
+    ...userQueries.getById({ id: userId, scopeKey }),
     enabled: canLoadUser,
   });
 
@@ -76,7 +86,7 @@ export const PageUser = (props: { params: { id: string } }) => {
 
   const deleteUser = async () => {
     try {
-      await deleteUserMutation.mutateAsync({ id: props.params.id });
+      await deleteUserMutation.mutateAsync({ id: userId });
       await Promise.all([
         // Invalidate users list
         queryClient.invalidateQueries({
@@ -85,8 +95,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         }),
         // Remove user from cache
         queryClient.removeQueries({
-          queryKey: userQueries.getById({ id: props.params.id, scopeKey })
-            .queryKey,
+          queryKey: userQueries.getById({ id: userId, scopeKey }).queryKey,
         }),
       ]);
 
@@ -99,19 +108,19 @@ export const PageUser = (props: { params: { id: string } }) => {
     }
   };
 
-  const ui = getUiState((set) => {
-    if (!canLoadUser) return set('pending');
-    if (userQuery.status === 'pending') return set('pending');
-    if (
-      userQuery.status === 'error' &&
-      isServerFnError(userQuery.error) &&
-      userQuery.error.code === 'NOT_FOUND'
-    )
-      return set('not-found');
-    if (userQuery.status === 'error') return set('error');
-
-    return set('default', { user: userQuery.data });
-  });
+  const ui = getUiState((set) =>
+    match([canLoadUser, userQuery] as const)
+      .with([false, P._], () => set('pending'))
+      .with([true, { status: 'pending' }], () => set('pending'))
+      .with([true, { status: 'error', error: P.when(isNotFoundError) }], () =>
+        set('not-found')
+      )
+      .with([true, { status: 'error' }], () => set('error'))
+      .with([true, { status: 'success', data: P.select() }], (user) =>
+        set('default', { user })
+      )
+      .exhaustive()
+  );
 
   return (
     <PageLayout>
@@ -119,7 +128,7 @@ export const PageUser = (props: { params: { id: string } }) => {
         startActions={<BackButton />}
         endActions={
           <>
-            {session.data?.user.id !== props.params.id && (
+            {session.data?.user.id !== userId && (
               <WithPermissions
                 permissions={[
                   {
@@ -236,7 +245,7 @@ export const PageUser = (props: { params: { id: string } }) => {
 
               <div className="flex min-w-0 flex-2 flex-col">
                 <WithPermissions permissions={[{ session: ['list'] }]}>
-                  <UserSessions userId={props.params.id} />
+                  <UserSessions userId={userId} />
                 </WithPermissions>
               </div>
             </div>
@@ -247,7 +256,7 @@ export const PageUser = (props: { params: { id: string } }) => {
   );
 };
 
-const UserSessions = (props: { userId: string }) => {
+const UserSessions = (props: { userId: UserId }) => {
   const { t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
   const hydrated = useHydrated();
@@ -261,17 +270,16 @@ const UserSessions = (props: { userId: string }) => {
     enabled: canLoadSessions,
   });
 
-  const ui = getUiState((set) => {
-    if (!canLoadSessions) return set('pending');
-    if (sessionsQuery.status === 'pending') return set('pending');
-    if (sessionsQuery.status === 'error') return set('error');
-
-    const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length) return set('empty');
-    return set('default', {
-      items,
-    });
-  });
+  const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
+  const ui = getUiState((set) =>
+    match([canLoadSessions, sessionsQuery.status, items.length] as const)
+      .with([false, P._, P._], () => set('pending'))
+      .with([true, 'pending', P._], () => set('pending'))
+      .with([true, 'error', P._], () => set('error'))
+      .with([true, 'success', 0], () => set('empty'))
+      .with([true, 'success', P._], () => set('default', { items }))
+      .exhaustive()
+  );
 
   return (
     <WithPermissions permissions={[{ session: ['list'] }]}>
@@ -366,7 +374,7 @@ const UserSessions = (props: { userId: string }) => {
   );
 };
 
-const RevokeAllSessionsButton = (props: { userId: string }) => {
+const RevokeAllSessionsButton = (props: { userId: UserId }) => {
   const queryClient = useQueryClient();
   const currentSession = useAuthSession();
   const scopeKey = useCurrentScopeKey();
@@ -400,7 +408,10 @@ const RevokeAllSessionsButton = (props: { userId: string }) => {
   );
 };
 
-const RevokeSessionButton = (props: { userId: string; sessionId: string }) => {
+const RevokeSessionButton = (props: {
+  userId: UserId;
+  sessionId: SessionId;
+}) => {
   const queryClient = useQueryClient();
   const currentSession = useAuthSession();
   const scopeKey = useCurrentScopeKey();

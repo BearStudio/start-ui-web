@@ -2,15 +2,15 @@ import { z } from 'zod';
 
 import type { ProtectedContext } from '@/modules/auth/backend';
 import {
-  toEmailAddress,
-  toSessionId,
-  toUserId,
+  zEmailAddress,
+  zSessionId,
+  zUserId,
 } from '@/modules/kernel/domain/ids';
 import {
   type OutcomeHandlerConfig,
   unwrapApplicationResult,
 } from '@/modules/kernel/transport/tanstack/result-mapper';
-import type { UserRole, UserUseCases } from '@/modules/user';
+import type { UserUseCases } from '@/modules/user';
 
 import type {
   UserCreateOutcome,
@@ -33,42 +33,42 @@ const zRole = () => z.enum(['admin', 'user']);
 export const zGetAllInput = () =>
   z
     .object({
-      cursor: z.string().optional(),
+      cursor: zUserId().optional(),
       limit: z.coerce.number().int().min(1).max(100).prefault(20),
       searchTerm: z.string().trim().optional(),
     })
     .prefault({});
 
-export const zGetByIdInput = () => z.object({ id: z.string() });
+export const zGetByIdInput = () => z.object({ id: zUserId() });
 
 export const zUpdateByIdInput = () =>
   z.object({
-    id: z.string(),
+    id: zUserId(),
     name: z.string().nullish(),
-    email: z.email(),
+    email: zEmailAddress(),
     role: zRole().nullish(),
   });
 
 export const zCreateInput = () =>
   z.object({
     name: z.string().nullish(),
-    email: z.email(),
+    email: zEmailAddress(),
     role: zRole().nullish(),
   });
 
-export const zDeleteByIdInput = () => z.object({ id: z.string() });
+export const zDeleteByIdInput = () => z.object({ id: zUserId() });
 
 export const zGetUserSessionsInput = () =>
   z.object({
-    userId: z.string(),
-    cursor: z.string().optional(),
+    userId: zUserId(),
+    cursor: zSessionId().optional(),
     limit: z.coerce.number().int().min(1).max(100).prefault(20),
   });
 
-export const zRevokeUserSessionsInput = () => z.object({ id: z.string() });
+export const zRevokeUserSessionsInput = () => z.object({ id: zUserId() });
 
 export const zRevokeUserSessionInput = () =>
-  z.object({ id: z.string(), sessionId: z.string() });
+  z.object({ id: zUserId(), sessionId: zSessionId() });
 
 type UserHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => UserUseCases;
@@ -152,7 +152,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
         scope: ctx.scope,
-        cursor: data.cursor ? toUserId(data.cursor) : undefined,
+        cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
       }),
@@ -167,7 +167,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).get({
         scope: ctx.scope,
-        id: toUserId(data.id),
+        id: data.id,
       }),
       userGetConfig
     );
@@ -180,11 +180,11 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).update({
         scope: ctx.scope,
-        id: toUserId(data.id),
+        id: data.id,
         user: {
           name: data.name,
-          email: toEmailAddress(data.email),
-          role: data.role as UserRole | null | undefined,
+          email: data.email,
+          role: data.role,
         },
       }),
       userUpdateConfig
@@ -200,8 +200,8 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
         scope: ctx.scope,
         user: {
           name: data.name,
-          email: toEmailAddress(data.email),
-          role: data.role as UserRole | null | undefined,
+          email: data.email,
+          role: data.role,
         },
       }),
       userCreateConfig
@@ -215,7 +215,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).delete({
         scope: ctx.scope,
-        id: toUserId(data.id),
+        id: data.id,
       }),
       userDeleteConfig({ selfMessage: 'You cannot delete yourself' })
     );
@@ -228,8 +228,8 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).listSessions({
         scope: ctx.scope,
-        userId: toUserId(data.userId),
-        cursor: data.cursor ? toSessionId(data.cursor) : undefined,
+        userId: data.userId,
+        cursor: data.cursor,
         limit: data.limit,
       }),
       userSessionsListConfig
@@ -243,7 +243,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).revokeSessions({
         scope: ctx.scope,
-        id: toUserId(data.id),
+        id: data.id,
       }),
       userRevokeSessionsConfig({
         selfMessage: 'You cannot revoke your own sessions',
@@ -258,9 +258,9 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     return unwrapApplicationResult(
       getUseCases(ctx).revokeSession({
         scope: ctx.scope,
-        currentSessionId: toSessionId(ctx.session.id),
-        id: toUserId(data.id),
-        sessionId: toSessionId(data.sessionId),
+        currentSessionId: ctx.session.id,
+        id: data.id,
+        sessionId: data.sessionId,
       }),
       userRevokeSessionConfig({
         selfMessage: 'You cannot revoke your current session',

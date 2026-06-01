@@ -1,7 +1,7 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
 describe('application result contract', () => {

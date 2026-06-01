@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { isForbiddenRouteContext } from '@/modules/auth/presentation';
+import { toScopeKey, toUserId } from '@/modules/kernel';
 import { userQueries } from '@/modules/user/client';
 import { PageUser } from '@/modules/user/presentation';
 
@@ -9,7 +10,10 @@ export const Route = createFileRoute('/manager/users/$id/')({
     if (isForbiddenRouteContext(context)) return undefined;
 
     return context.queryClient.ensureQueryData(
-      userQueries.getById({ ...params, scopeKey: context.scopeKey })
+      userQueries.getById({
+        id: toUserId(params.id),
+        scopeKey: toScopeKey(context.scopeKey),
+      })
     );
   },
   component: RouteComponent,

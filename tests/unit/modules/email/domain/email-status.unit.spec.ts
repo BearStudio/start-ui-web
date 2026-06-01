@@ -8,18 +8,26 @@ import {
   hasProcessedWebhookEvent,
   withProcessedWebhookEventId,
 } from '@/modules/email/domain/email-status';
+import {
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailStatusId,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
-const eventId = fc.stringMatching(/^evt_[a-z0-9]{1,12}$/);
+const eventId = fc
+  .stringMatching(/^evt_[a-z0-9]{1,12}$/)
+  .map(toEmailWebhookEventId);
 
 function makeRecord(
   overrides: Partial<EmailStatusRecord> = {}
 ): EmailStatusRecord {
   return {
-    id: 'email-status-1',
+    id: toEmailStatusId('email-status-1'),
     provider: EMAIL_PROVIDER_RESEND,
-    externalId: 'email_123',
-    recipient: 'user@example.com',
+    externalId: toEmailProviderMessageId('email_123'),
+    recipient: toEmailRecipientList('user@example.com'),
     subject: 'Login code',
     status: 'sent',
     idempotencyKey: null,
@@ -34,15 +42,21 @@ function makeRecord(
 describe('email status domain', () => {
   it('detects webhook events from the latest event field and processed metadata', () => {
     const record = makeRecord({
-      lastWebhookEventId: 'evt_latest',
+      lastWebhookEventId: toEmailWebhookEventId('evt_latest'),
       metadata: {
         processedWebhookEventIds: ['evt_older', 123, 'evt_oldest'],
       },
     });
 
-    expect(hasProcessedWebhookEvent(record, 'evt_latest')).toBe(true);
-    expect(hasProcessedWebhookEvent(record, 'evt_older')).toBe(true);
-    expect(hasProcessedWebhookEvent(record, 'evt_missing')).toBe(false);
+    expect(
+      hasProcessedWebhookEvent(record, toEmailWebhookEventId('evt_latest'))
+    ).toBe(true);
+    expect(
+      hasProcessedWebhookEvent(record, toEmailWebhookEventId('evt_older'))
+    ).toBe(true);
+    expect(
+      hasProcessedWebhookEvent(record, toEmailWebhookEventId('evt_missing'))
+    ).toBe(false);
   });
 
   it('preserves metadata while deduping and bounding processed webhook IDs', () => {
@@ -52,7 +66,7 @@ describe('email status domain', () => {
           campaign: 'login',
           processedWebhookEventIds: ['evt_1', 'evt_2', 'evt_2'],
         },
-        'evt_2'
+        toEmailWebhookEventId('evt_2')
       )
     ).toEqual({
       campaign: 'login',
@@ -62,7 +76,7 @@ describe('email status domain', () => {
     expect(
       withProcessedWebhookEventId(
         { processedWebhookEventIds: ['evt_1', 'evt_2', 'evt_3'] },
-        'evt_4',
+        toEmailWebhookEventId('evt_4'),
         2
       )
     ).toEqual({
@@ -72,7 +86,7 @@ describe('email status domain', () => {
     expect(
       withProcessedWebhookEventId(
         { processedWebhookEventIds: ['evt_1', 'evt_2'] },
-        'evt_3',
+        toEmailWebhookEventId('evt_3'),
         0
       )
     ).toEqual({
@@ -86,7 +100,7 @@ describe('email status domain', () => {
     for (const limit of [Number.POSITIVE_INFINITY, Number.NaN, -1]) {
       const metadata = withProcessedWebhookEventId(
         { processedWebhookEventIds: ids },
-        'evt_new',
+        toEmailWebhookEventId('evt_new'),
         limit
       );
 

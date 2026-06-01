@@ -14,6 +14,10 @@ import {
 } from '@/modules/email';
 import type { TransactionRunner } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import {
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+} from '@/modules/kernel/domain/ids';
 import { getEmailConfig } from '@/modules/kernel/infrastructure/config/email';
 import { envClient } from '@/platform/env/client';
 
@@ -24,8 +28,12 @@ type EmailGatewayResendDeps = {
   resend?: Resend;
 };
 
+type SendEmailResult = Awaited<ReturnType<EmailGateway['sendEmail']>>;
+
 const recipientToStatusValue = (recipient: SendEmailParams['to']) =>
-  Array.isArray(recipient) ? recipient.join(', ') : recipient;
+  toEmailRecipientList(
+    Array.isArray(recipient) ? recipient.join(', ') : recipient
+  );
 
 const idempotencyKeyError = () =>
   new AppError({
@@ -35,17 +43,37 @@ const idempotencyKeyError = () =>
     message: 'Email sends require a non-empty idempotency key',
   });
 
-const providerErrorMetadata = (error: {
-  name?: string;
-  statusCode?: number | null;
-  message?: string;
-}): EmailMetadata => ({
-  providerError: {
-    name: error.name,
-    statusCode: error.statusCode,
-    message: error.message,
-  },
-});
+const providerErrorMetadata = (error: unknown): EmailMetadata => {
+  const errorRecord =
+    error && typeof error === 'object'
+      ? (error as {
+          name?: unknown;
+          statusCode?: unknown;
+          message?: unknown;
+        })
+      : {};
+  const providerError: EmailMetadata = {
+    provider: EMAIL_PROVIDER_RESEND,
+  };
+  if (typeof errorRecord.name === 'string') {
+    providerError.name = errorRecord.name;
+  }
+  if (
+    typeof errorRecord.statusCode === 'number' ||
+    errorRecord.statusCode === null
+  ) {
+    providerError.statusCode = errorRecord.statusCode;
+  }
+  if (typeof errorRecord.message === 'string') {
+    providerError.message = errorRecord.message;
+  } else if (error instanceof Error) {
+    providerError.message = error.message;
+  }
+
+  return {
+    providerError,
+  };
+};
 
 export class EmailGatewayResend implements EmailGateway {
   private readonly resend?: Resend;
@@ -109,12 +137,47 @@ export class EmailGatewayResend implements EmailGateway {
       });
     }
 
+    const recordFailedAttempt = async (
+      metadata?: EmailMetadata
+    ): Promise<SendEmailResult | null> => {
+      const failedAttemptResult = await this.recordSendAttempt({
+        provider: EMAIL_PROVIDER_RESEND,
+        recipient,
+        subject: input.subject,
+        idempotencyKey: input.idempotencyKey,
+        status: 'send_failed',
+        metadata: {
+          ...input.metadata,
+          ...metadata,
+        },
+      });
+      if (failedAttemptResult.isError()) {
+        return Result.Error(failedAttemptResult.getError());
+      }
+
+      const failedAttempt = failedAttemptResult.get().record;
+      if (failedAttempt.externalId) {
+        return Result.Ok({
+          type: 'email_send_recorded',
+          provider: EMAIL_PROVIDER_RESEND,
+          externalId: failedAttempt.externalId,
+        });
+      }
+
+      return null;
+    };
+
     const textResult = await Result.fromPromise(
       render(input.template as ReactElement, {
         plainText: true,
       })
     );
     if (textResult.isError()) {
+      const failedAttempt = await recordFailedAttempt(
+        providerErrorMetadata(textResult.getError())
+      );
+      if (failedAttempt) return failedAttempt;
+
       return Result.Error(
         new AppError({
           code: 'EMAIL_RENDER_FAILED',
@@ -151,6 +214,11 @@ export class EmailGatewayResend implements EmailGateway {
       })
     );
     if (responseResult.isError()) {
+      const failedAttempt = await recordFailedAttempt(
+        providerErrorMetadata(responseResult.getError())
+      );
+      if (failedAttempt) return failedAttempt;
+
       return Result.Error(
         new AppError({
           code: 'EMAIL_SEND_FAILED',
@@ -165,29 +233,10 @@ export class EmailGatewayResend implements EmailGateway {
     const { data, error } = responseResult.get();
 
     if (error) {
-      const failedAttemptResult = await this.recordSendAttempt({
-        provider: EMAIL_PROVIDER_RESEND,
-        recipient,
-        subject: input.subject,
-        idempotencyKey: input.idempotencyKey,
-        status: 'send_failed',
-        metadata: {
-          ...input.metadata,
-          ...providerErrorMetadata(error),
-        },
-      });
-      if (failedAttemptResult.isError()) {
-        return Result.Error(failedAttemptResult.getError());
-      }
-
-      const failedAttempt = failedAttemptResult.get().record;
-      if (failedAttempt.externalId) {
-        return Result.Ok({
-          type: 'email_send_recorded',
-          provider: EMAIL_PROVIDER_RESEND,
-          externalId: failedAttempt.externalId,
-        });
-      }
+      const failedAttempt = await recordFailedAttempt(
+        providerErrorMetadata(error)
+      );
+      if (failedAttempt) return failedAttempt;
 
       return Result.Error(
         new AppError({
@@ -206,26 +255,8 @@ export class EmailGatewayResend implements EmailGateway {
     }
 
     if (!data?.id) {
-      const failedAttemptResult = await this.recordSendAttempt({
-        provider: EMAIL_PROVIDER_RESEND,
-        recipient,
-        subject: input.subject,
-        idempotencyKey: input.idempotencyKey,
-        status: 'send_failed',
-        metadata: input.metadata,
-      });
-      if (failedAttemptResult.isError()) {
-        return Result.Error(failedAttemptResult.getError());
-      }
-
-      const failedAttempt = failedAttemptResult.get().record;
-      if (failedAttempt.externalId) {
-        return Result.Ok({
-          type: 'email_send_recorded',
-          provider: EMAIL_PROVIDER_RESEND,
-          externalId: failedAttempt.externalId,
-        });
-      }
+      const failedAttempt = await recordFailedAttempt();
+      if (failedAttempt) return failedAttempt;
 
       return Result.Error(
         new AppError({
@@ -237,9 +268,10 @@ export class EmailGatewayResend implements EmailGateway {
       );
     }
 
+    const externalId = toEmailProviderMessageId(data.id);
     const upsertResult = await this.upsertStatusByExternalId({
       provider: EMAIL_PROVIDER_RESEND,
-      externalId: data.id,
+      externalId,
       recipient,
       subject: input.subject,
       status: 'sent',
@@ -251,7 +283,7 @@ export class EmailGatewayResend implements EmailGateway {
     return Result.Ok({
       type: 'email_send_recorded',
       provider: EMAIL_PROVIDER_RESEND,
-      externalId: data.id,
+      externalId,
     });
   }
 }

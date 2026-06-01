@@ -1,7 +1,7 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import type { EmailStatusRepository } from '@/modules/email/application/ports/email-status-repository';
 import type { EmailUseCaseDeps } from '@/modules/email/application/use-cases/types';
 import {
@@ -9,15 +9,28 @@ import {
   type EmailStatusRecord,
 } from '@/modules/email/domain/email-status';
 import { createEmailUseCases } from '@/modules/email/factory';
+import {
+  toEmailIdempotencyKey,
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailStatusId,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
+const statusId = toEmailStatusId('email-status-1');
+const externalId = toEmailProviderMessageId('email_123');
+const recipient = toEmailRecipientList('user@example.com');
+const webhookEventId = toEmailWebhookEventId('evt_1');
+const nextWebhookEventId = toEmailWebhookEventId('evt_2');
+const sendIdempotencyKey = toEmailIdempotencyKey('send-key-1');
 const input = {
   provider: EMAIL_PROVIDER_RESEND,
-  externalId: 'email_123',
-  recipient: 'user@example.com',
+  externalId,
+  recipient,
   subject: 'Login code',
   status: 'delivered' as const,
-  webhookEventId: 'evt_1',
+  webhookEventId,
   providerEventType: 'email.delivered',
   providerEventCreatedAt: '2026-01-01T00:00:00.000Z',
   metadata: { source: 'webhook' },
@@ -27,10 +40,10 @@ function makeRecord(
   overrides: Partial<EmailStatusRecord> = {}
 ): EmailStatusRecord {
   return {
-    id: 'email-status-1',
+    id: statusId,
     provider: EMAIL_PROVIDER_RESEND,
-    externalId: 'email_123',
-    recipient: 'user@example.com',
+    externalId,
+    recipient,
     subject: 'Login code',
     status: 'sent',
     idempotencyKey: null,
@@ -126,16 +139,16 @@ describe('email use cases', () => {
 
     expect(repository.getByExternalId).toHaveBeenCalledWith(
       EMAIL_PROVIDER_RESEND,
-      'email_123'
+      externalId
     );
     expect(repository.upsertStatusByExternalId).toHaveBeenCalledWith({
       provider: EMAIL_PROVIDER_RESEND,
-      externalId: 'email_123',
-      recipient: 'user@example.com',
+      externalId,
+      recipient,
       subject: 'Login code',
       status: 'delivered',
       idempotencyKey: null,
-      lastWebhookEventId: 'evt_1',
+      lastWebhookEventId: webhookEventId,
       metadata: {
         source: 'webhook',
         providerEventType: 'email.delivered',
@@ -149,7 +162,7 @@ describe('email use cases', () => {
   it('returns duplicate results without writing when a webhook event was processed', async () => {
     const existing = makeRecord({
       status: 'delivered',
-      lastWebhookEventId: 'evt_1',
+      lastWebhookEventId: webhookEventId,
       metadata: { processedWebhookEventIds: ['evt_1'] },
     });
     const repository = makeRepository({
@@ -171,8 +184,8 @@ describe('email use cases', () => {
 
   it('merges existing metadata, event metadata, and send idempotency', async () => {
     const existing = makeRecord({
-      idempotencyKey: 'send-key-1',
-      lastWebhookEventId: 'evt_1',
+      idempotencyKey: sendIdempotencyKey,
+      lastWebhookEventId: webhookEventId,
       metadata: {
         source: 'send',
         keep: true,
@@ -189,7 +202,7 @@ describe('email use cases', () => {
     const processed = await useCases.processStatusEvent({
       ...input,
       status: 'opened',
-      webhookEventId: 'evt_2',
+      webhookEventId: nextWebhookEventId,
       providerEventType: 'email.opened',
       metadata: { source: 'webhook', attempt: 2 },
     });

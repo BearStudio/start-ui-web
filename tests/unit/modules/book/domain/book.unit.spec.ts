@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { toGenreId } from '@/modules/kernel/domain/ids';
+import { toBookCoverObjectKey, toGenreId } from '@/modules/kernel/domain/ids';
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 
 import { normalizeBookWriteInput } from '@/modules/book/domain/book';
@@ -10,6 +10,9 @@ const text = fc.string({ maxLength: 80 });
 const nonBlankText = text.filter((value) => value.trim().length > 0);
 const optionalText = fc.option(text, { nil: undefined });
 const genreId = nonBlankText.map((value) => toGenreId(value));
+const coverId = fc.option(nonBlankText.map(toBookCoverObjectKey), {
+  nil: null,
+});
 const duplicateText = fc.stringMatching(/^[a-z]{1,40}$/);
 
 describe('book domain', () => {
@@ -20,7 +23,7 @@ describe('book domain', () => {
         author: ' Author ',
         genreId: toGenreId('genre-1'),
         publisher: ' ',
-        coverId: ' cover ',
+        coverId: toBookCoverObjectKey(' cover '),
       })
     ).toEqual({
       title: 'Title',
@@ -47,7 +50,7 @@ describe('book domain', () => {
         author: text,
         genreId,
         publisher: optionalText,
-        coverId: fc.option(text, { nil: null }),
+        coverId,
       }),
     ],
     PROPERTY_DEFAULTS

@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import { user as userTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeUserRow } from '@tests/server/db-fixtures';

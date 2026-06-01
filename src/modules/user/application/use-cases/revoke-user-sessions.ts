@@ -1,4 +1,5 @@
 import { Result } from '@swan-io/boxed';
+import { match, P } from 'ts-pattern';
 
 import {
   hasScopePermission,
@@ -29,8 +30,20 @@ export async function revokeUserSessions(
     scope: input.scope,
     permissions: { session: ['revoke'] },
   });
-  if (allowed.isError()) return Result.Error(allowed.getError());
-  if (allowed.get().type === 'permission_denied') {
+  const permission = match(allowed)
+    .with(Result.P.Error(P.select()), (error) => ({
+      type: 'error' as const,
+      error,
+    }))
+    .with(Result.P.Ok({ type: 'permission_denied' }), () => ({
+      type: 'denied' as const,
+    }))
+    .with(Result.P.Ok({ type: 'permission_granted' }), () => ({
+      type: 'granted' as const,
+    }))
+    .exhaustive();
+  if (permission.type === 'error') return Result.Error(permission.error);
+  if (permission.type === 'denied') {
     return Result.Ok({ type: 'user_forbidden' });
   }
   if (isSelfTarget(currentUserId, input.id)) {
@@ -38,7 +51,16 @@ export async function revokeUserSessions(
   }
 
   const result = await deps.userAuthGateway.revokeUserSessions(input.id);
-  if (result.isError()) return Result.Error(result.getError());
+  const revoked = match(result)
+    .with(Result.P.Error(P.select()), (error) => ({
+      type: 'error' as const,
+      error,
+    }))
+    .with(Result.P.Ok({ type: 'user_auth_sessions_revoked' }), () => ({
+      type: 'revoked' as const,
+    }))
+    .exhaustive();
+  if (revoked.type === 'error') return Result.Error(revoked.error);
   deps.logger.warn({
     details: {
       mode: 'all',

@@ -1,4 +1,9 @@
-import type { BookId, GenreId } from '@/modules/kernel/domain/ids';
+import type {
+  BookCoverObjectKey,
+  BookId,
+  GenreId,
+} from '@/modules/kernel/domain/ids';
+import { toBookCoverObjectKey } from '@/modules/kernel/domain/ids';
 
 export type BookGenreSummary = {
   id: GenreId;
@@ -15,7 +20,7 @@ export type Book = {
   genreId: GenreId;
   genre: BookGenreSummary | null;
   publisher: string | null;
-  coverId: string | null;
+  coverId: BookCoverObjectKey | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -25,7 +30,7 @@ export type BookWriteInput = {
   author: string;
   genreId: GenreId;
   publisher?: string | null;
-  coverId?: string | null;
+  coverId?: BookCoverObjectKey | null;
 };
 
 export type BookListPage = {
@@ -35,11 +40,13 @@ export type BookListPage = {
 };
 
 export function normalizeBookWriteInput(input: BookWriteInput): BookWriteInput {
+  const coverId = input.coverId?.trim();
+
   return {
     title: input.title.trim(),
     author: input.author.trim(),
     genreId: input.genreId,
     publisher: input.publisher?.trim() || null,
-    coverId: input.coverId?.trim() || null,
+    coverId: coverId ? toBookCoverObjectKey(coverId) : null,
   };
 }

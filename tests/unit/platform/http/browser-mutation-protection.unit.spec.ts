@@ -69,6 +69,18 @@ describe('browser mutation protection', () => {
     });
   });
 
+  it('rejects malformed request URLs without throwing', () => {
+    const request = {
+      headers: new Headers({ Origin: 'https://app.example' }),
+      url: '/api/upload',
+    } as Request;
+
+    expect(validateSameOriginBrowserMutationRequest(request)).toEqual({
+      ok: false,
+      reason: 'origin_malformed',
+    });
+  });
+
   it('rejects same-site, cross-site, none, and malformed Fetch Metadata values', () => {
     for (const value of ['same-site', 'cross-site', 'none']) {
       expect(

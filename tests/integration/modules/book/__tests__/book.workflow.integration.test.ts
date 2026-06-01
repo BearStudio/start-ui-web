@@ -13,7 +13,9 @@ import {
   type BookId,
   type Logger,
   type PermissionChecker,
+  toBookCoverObjectKey,
   toBookId,
+  toGeneratedId,
   toGenreId,
   toUserId,
 } from '@/modules/kernel';
@@ -147,7 +149,7 @@ describe('book public workflow integration', () => {
       transactionRunner: {
         run: (work) => work({ bookRepository }),
       },
-      idGenerator: { createId: () => 'cover-id' },
+      idGenerator: { createId: () => toGeneratedId('cover-id') },
       logger,
       permissionChecker,
     });
@@ -155,7 +157,7 @@ describe('book public workflow integration', () => {
     const created = await useCases.create({
       book: {
         author: ' Frank Herbert ',
-        coverId: ' cover-1 ',
+        coverId: toBookCoverObjectKey(' cover-1 '),
         genreId,
         publisher: ' Ace ',
         title: ' Dune ',

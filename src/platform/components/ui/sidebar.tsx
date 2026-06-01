@@ -180,8 +180,7 @@ function Sidebar({
 
   React.useEffect(() => {
     return () => {
-      //@ts-expect-error Remove the 'pointer-events: none' from the sidebar
-      document.body.style.pointerEvents = null;
+      document.body.style.pointerEvents = '';
     };
   }, []);
 

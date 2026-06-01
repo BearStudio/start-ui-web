@@ -2,6 +2,11 @@ import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import {
+  toEmailProviderMessageId,
+  toEmailRecipientList,
+  toEmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 import { createResendWebhookHandlers } from '@/modules/email/transport/http/resend-webhook-handlers';
 
@@ -179,11 +184,11 @@ describe('Resend webhook HTTP handlers', () => {
     });
     expect(processStatusEvent).toHaveBeenCalledWith({
       provider: 'resend',
-      externalId: 'email_123',
-      recipient: 'user@example.com',
+      externalId: toEmailProviderMessageId('email_123'),
+      recipient: toEmailRecipientList('user@example.com'),
       subject: 'Login code',
       status: 'delivered',
-      webhookEventId: 'evt_1',
+      webhookEventId: toEmailWebhookEventId('evt_1'),
       providerEventType: 'email.delivered',
       providerEventCreatedAt: '2026-01-01T00:00:00.000Z',
       metadata: {

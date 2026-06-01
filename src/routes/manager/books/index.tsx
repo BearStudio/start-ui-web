@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { bookQueries } from '@/modules/book/client';
 import { ManagerPageBooks as PageBooks } from '@/modules/book/presentation';
+import { toScopeKey } from '@/modules/kernel';
 
 export const Route = createFileRoute('/manager/books/')({
   validateSearch: zodValidator(
@@ -22,7 +23,7 @@ export const Route = createFileRoute('/manager/books/')({
 
     return context.queryClient.ensureInfiniteQueryData(
       bookQueries.getAllInfinite({
-        scopeKey: context.scopeKey,
+        scopeKey: toScopeKey(context.scopeKey),
         searchTerm: deps.searchTerm,
       })
     );

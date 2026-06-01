@@ -1,4 +1,10 @@
 import type { ApplicationResult } from '@/modules/kernel/application/result';
+import type {
+  EmailIdempotencyKey,
+  EmailProviderMessageId,
+  EmailRecipientList,
+  EmailWebhookEventId,
+} from '@/modules/kernel/domain/ids';
 
 import type {
   EmailMetadata,
@@ -9,21 +15,21 @@ import type {
 
 export type RecordEmailSendAttemptInput = {
   provider: EmailProvider;
-  recipient: string;
+  recipient: EmailRecipientList;
   subject: string;
-  idempotencyKey: string;
+  idempotencyKey: EmailIdempotencyKey;
   status?: Extract<EmailStatus, 'send_attempted' | 'send_failed'>;
   metadata?: EmailMetadata;
 };
 
 export type UpsertEmailStatusInput = {
   provider: EmailProvider;
-  externalId: string;
-  recipient: string;
+  externalId: EmailProviderMessageId;
+  recipient: EmailRecipientList;
   subject: string;
   status: EmailStatus;
-  idempotencyKey?: string | null;
-  lastWebhookEventId?: string | null;
+  idempotencyKey?: EmailIdempotencyKey | null;
+  lastWebhookEventId?: EmailWebhookEventId | null;
   metadata?: EmailMetadata;
 };
 
@@ -55,7 +61,7 @@ export interface EmailStatusRepository {
   ): Promise<ApplicationResult<EmailStatusRecordRepositoryOutcome>>;
   getByExternalId(
     provider: EmailProvider,
-    externalId: string
+    externalId: EmailProviderMessageId
   ): Promise<ApplicationResult<EmailStatusGetRepositoryOutcome>>;
   listRecent(input?: {
     limit?: number;

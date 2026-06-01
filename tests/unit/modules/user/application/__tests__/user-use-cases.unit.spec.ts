@@ -1,23 +1,25 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/application/result';
-import type { Logger } from '@/modules/kernel/application/ports/logger';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import type {
+  Logger,
   PermissionChecker,
   PermissionRequest,
-} from '@/modules/kernel/application/ports/permission-checker';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
+} from '@/modules/kernel';
 import {
+  AppError,
   toEmailAddress,
   toSessionId,
   toUserId,
-} from '@/modules/kernel/domain/ids';
+} from '@/modules/kernel';
 
-import type { UserAuthGateway } from '@/modules/user/application/ports/user-auth-gateway';
-import type { UserRepository } from '@/modules/user/application/ports/user-repository';
-import type { User } from '@/modules/user/domain/user';
-import { createUserUseCases } from '@/modules/user/factory';
+import {
+  createUserUseCases,
+  type User,
+  type UserAuthGateway,
+  type UserRepository,
+} from '@/modules/user/testing';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
 const userId = toUserId('user-1');

@@ -2,8 +2,10 @@ import {
   getRequestHeaders,
   setResponseHeader,
 } from '@tanstack/react-start/server';
+import { Result } from '@swan-io/boxed';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
+import { match, P } from 'ts-pattern';
 
 import type {
   AuthenticatedSession,
@@ -19,6 +21,7 @@ import {
   type LogLevel,
 } from '@/modules/kernel';
 import type { UserId } from '@/modules/kernel/domain/ids';
+import { toRequestId } from '@/modules/kernel/domain/ids';
 import { DEMO_MODE_ERROR, ServerFnError } from '@/modules/kernel/client';
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
 import { envClient } from '@/platform/env/client';
@@ -187,16 +190,23 @@ export const createServerContextTools = ({
       headers: getRequestHeaders(),
     });
     timings.push({ name: 'auth', durationMs: performance.now() - authStart });
-    if (result.isError()) throw result.getError();
-    const outcome = result.get();
-    return outcome.type === 'auth_session_found' ? outcome.session : null;
+    return match(result)
+      .with(Result.P.Error(P.select()), (error) => {
+        throw error;
+      })
+      .with(
+        Result.P.Ok({ type: 'auth_session_found', session: P.select() }),
+        (session) => session
+      )
+      .with(Result.P.Ok({ type: 'auth_session_missing' }), () => null)
+      .exhaustive();
   };
 
   const withPublicContext = async <T>(
     fn: (ctx: PublicContext) => Promise<T>
   ): Promise<T> => {
     const start = performance.now();
-    const requestId = randomUUID();
+    const requestId = toRequestId(randomUUID());
     const timings: ServerTimingEntry[] = [];
     let procedureLogger = createRequestLogger({ logger, requestId });
     procedureLogger.info({
@@ -272,11 +282,15 @@ export const createServerContextTools = ({
       permissions,
       headers: getRequestHeaders(),
     });
-    if (result.isError()) throw result.getError();
-
-    if (result.get().type === 'auth_permission_denied') {
-      throw new ServerFnError('FORBIDDEN');
-    }
+    return match(result)
+      .with(Result.P.Error(P.select()), (error) => {
+        throw error;
+      })
+      .with(Result.P.Ok({ type: 'auth_permission_granted' }), () => undefined)
+      .with(Result.P.Ok(P.select()), () => {
+        throw new ServerFnError('FORBIDDEN');
+      })
+      .exhaustive();
   };
 
   return {
