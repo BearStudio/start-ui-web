@@ -6,7 +6,7 @@ import { user as userTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeUserRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
-import { AccountRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
+import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 
 describe('AccountRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -24,7 +24,7 @@ describe('AccountRepositoryDrizzle integration', () => {
   });
 
   it('covers account update behavior with PGlite', async () => {
-    const repository = new AccountRepositoryDrizzle(database.db);
+    const repository = createAccountRepository({ db: database.db });
     const now = new Date('2026-01-01T00:00:00.000Z');
     await database.db.insert(userTable).values(
       makeUserRow({

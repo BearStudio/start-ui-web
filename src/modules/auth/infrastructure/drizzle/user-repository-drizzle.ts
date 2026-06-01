@@ -340,3 +340,13 @@ export class UserRepositoryDrizzle implements UserRepository {
     }
   }
 }
+
+export interface UserRepositoryDrizzleDependencies {
+  db: DbLike;
+}
+
+export function createUserRepository(
+  dependencies: UserRepositoryDrizzleDependencies
+): UserRepository {
+  return new UserRepositoryDrizzle(dependencies.db);
+}

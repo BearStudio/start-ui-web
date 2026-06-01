@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
@@ -71,6 +75,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -103,9 +109,10 @@ jobs:
       - name: Setup MinIO bucket
         run: |
           # Install MinIO client
-          curl -sSL https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc
-          echo "01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891  /usr/local/bin/mc" | sha256sum -c -
-          chmod +x /usr/local/bin/mc
+          curl -sSL https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2025-08-13T08-35-41Z -o "$RUNNER_TEMP/mc"
+          echo "01f866e9c5f9b87c2b09116fa5d7c06695b106242d829a8bb32990c00312e891  $RUNNER_TEMP/mc" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/mc"
+          sudo mv "$RUNNER_TEMP/mc" /usr/local/bin/mc
 
           # Configure MinIO client
           mc alias set minio http://localhost:9000 minioadmin minioadmin
@@ -127,10 +134,11 @@ jobs:
       - name: Run Playwright tests
         run: pnpm test:e2e --project=${{ matrix.browser }}
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - name: Upload Playwright report and traces
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
-          name: playwright-report-${{ matrix.browser }}
+          name: playwright-report-and-traces-${{ matrix.browser }}
           path: |
             playwright-report/
             test-results/

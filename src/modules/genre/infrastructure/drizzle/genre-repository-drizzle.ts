@@ -124,3 +124,13 @@ export class GenreRepositoryDrizzle implements GenreRepository {
     }
   }
 }
+
+export interface GenreRepositoryDrizzleDependencies {
+  db: DbLike;
+}
+
+export function createGenreRepository(
+  dependencies: GenreRepositoryDrizzleDependencies
+): GenreRepository {
+  return new GenreRepositoryDrizzle(dependencies.db);
+}

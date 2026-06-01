@@ -2,7 +2,7 @@ import {
   type AccountRepository,
   createAccountUseCases,
 } from '@/modules/account';
-import { AccountRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
+import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 
 import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
@@ -16,7 +16,8 @@ const buildAccountUseCases = (overrides?: AccountOverrides) => {
   const kernel = overrides?.kernel ?? getKernel();
   return createAccountUseCases({
     accountRepository:
-      overrides?.accountRepository ?? new AccountRepositoryDrizzle(kernel.db),
+      overrides?.accountRepository ??
+      createAccountRepository({ db: kernel.db }),
     clock: kernel.clock,
     logger: kernel.logger,
     permissionChecker: kernel.permissionChecker,

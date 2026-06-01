@@ -7,7 +7,7 @@ import {
 } from '@/modules/kernel/infrastructure/db/schema';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
-import { EmailStatusRepositoryDrizzle } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
+import { createEmailStatusRepository } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
 
 const makeEmailStatusRow = (
   overrides: Partial<NewEmailStatus> = {}
@@ -42,7 +42,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('promotes a send attempt to the Resend external ID and counts final status', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
 
     const attempt = await repository.recordSendAttempt({
       provider: 'resend',
@@ -88,7 +88,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('returns an existing sent record for repeated idempotency keys', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
 
     const attempt = await repository.recordSendAttempt({
       provider: 'resend',
@@ -124,7 +124,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('preserves an existing idempotency key during webhook status updates', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
 
     await repository.upsertStatusByExternalId({
       provider: 'resend',
@@ -174,7 +174,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('lists recent statuses newest first', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
     await database.db.insert(emailStatusTable).values([
       makeEmailStatusRow({
         id: 'email-status-old',
@@ -198,7 +198,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('rejects invalid persisted metadata instead of replacing it with an empty object', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
     await database.db.insert(emailStatusTable).values(
       makeEmailStatusRow({
         metadata: [] as unknown as Record<string, unknown>,
@@ -213,7 +213,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('uses empty metadata for invalid persisted metadata in recent list reads', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
     await database.db.insert(emailStatusTable).values(
       makeEmailStatusRow({
         metadata: [] as unknown as Record<string, unknown>,
@@ -229,14 +229,14 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   });
 
   it('dedupes webhook event IDs and keeps bounded metadata through the use case', async () => {
-    const repository = new EmailStatusRepositoryDrizzle(database.db);
+    const repository = createEmailStatusRepository({ db: database.db });
     const useCases = createEmailUseCases({
       emailStatusRepository: repository,
       transactionRunner: {
         run: (work) =>
           database.db.transaction((tx) =>
             work({
-              emailStatusRepository: new EmailStatusRepositoryDrizzle(tx),
+              emailStatusRepository: createEmailStatusRepository({ db: tx }),
             })
           ),
       },

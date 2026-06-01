@@ -403,3 +403,13 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
     }
   }
 }
+
+export interface EmailStatusRepositoryDrizzleDependencies {
+  db: DbLike;
+}
+
+export function createEmailStatusRepository(
+  dependencies: EmailStatusRepositoryDrizzleDependencies
+): EmailStatusRepository {
+  return new EmailStatusRepositoryDrizzle(dependencies.db);
+}

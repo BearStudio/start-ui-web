@@ -1,5 +1,6 @@
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 
+import type { TransactionOptions } from '@/modules/kernel/application/ports/transaction-runner';
 import type { DatabaseDriver } from '@/modules/kernel/infrastructure/config/database';
 
 import type * as schema from './schema';
@@ -13,7 +14,8 @@ export type DbTransaction = Parameters<
 export type DbLike = DbClient | DbTransaction;
 export type TransactionCapableDb = DbClient;
 export type RunInTransaction = <T>(
-  work: (transaction: DbTransaction) => Promise<T>
+  work: (transaction: DbTransaction) => Promise<T>,
+  options?: TransactionOptions
 ) => Promise<T>;
 
 export type DatabaseClientHandle = {

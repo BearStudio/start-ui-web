@@ -239,3 +239,13 @@ export class BookRepositoryDrizzle implements BookRepository {
     }
   }
 }
+
+export interface BookRepositoryDrizzleDependencies {
+  db: DbLike;
+}
+
+export function createBookRepository(
+  dependencies: BookRepositoryDrizzleDependencies
+): BookRepository {
+  return new BookRepositoryDrizzle(dependencies.db);
+}

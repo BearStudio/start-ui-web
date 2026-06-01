@@ -9,7 +9,7 @@ import {
 import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
-import { BookRepositoryDrizzle } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
+import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 
 describe('BookRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -27,7 +27,7 @@ describe('BookRepositoryDrizzle integration', () => {
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
-    const repository = new BookRepositoryDrizzle(database.db);
+    const repository = createBookRepository({ db: database.db });
     await database.db
       .insert(genreTable)
       .values([

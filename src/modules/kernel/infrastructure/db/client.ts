@@ -51,7 +51,8 @@ function createNeonWebsocketDb(url: string): Database {
   return withDatabaseMetadata(database, {
     driver: 'neon-websocket',
     transactionCapable: true,
-    runInTransaction: (work) => database.transaction((tx) => work(tx)),
+    runInTransaction: (work, options) =>
+      database.transaction((tx) => work(tx), options),
     close: () => database.$client.end(),
   });
 }
@@ -82,7 +83,7 @@ export function createDbClient(options?: {
     return withDatabaseMetadata(database, {
       driver,
       transactionCapable: false,
-      runInTransaction: (work) => {
+      runInTransaction: (work, options) => {
         const runInTransaction = getTransactionDb().$runInTransaction;
         if (!runInTransaction) {
           throw new ConfigurationError(
@@ -90,7 +91,7 @@ export function createDbClient(options?: {
           );
         }
 
-        return runInTransaction(work);
+        return runInTransaction(work, options);
       },
       close: async () => {
         await transactionDb?.$close();
@@ -111,7 +112,8 @@ export function createDbClient(options?: {
   return withDatabaseMetadata(database, {
     driver,
     transactionCapable: true,
-    runInTransaction: (work) => database.transaction((tx) => work(tx)),
+    runInTransaction: (work, options) =>
+      database.transaction((tx) => work(tx), options),
     close: () => pool.end(),
   });
 }
@@ -138,14 +140,14 @@ export function createTransactionRunner(
   database: Database
 ): TransactionRunner<DbTransaction> {
   return {
-    async run(work) {
+    async run(work, options) {
       if (!database.$runInTransaction) {
         throw new ConfigurationError(
           `Database driver ${database.$driver} does not support interactive transactions.`
         );
       }
 
-      return database.$runInTransaction(work);
+      return database.$runInTransaction(work, options);
     },
   };
 }

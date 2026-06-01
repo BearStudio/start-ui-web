@@ -81,10 +81,14 @@ describe('database client', () => {
       transaction,
     }));
 
-    await expect(createTransactionRunner(db).run(work)).resolves.toEqual({
+    const transactionOptions = { isolationLevel: 'serializable' } as const;
+
+    await expect(
+      createTransactionRunner(db).run(work, transactionOptions)
+    ).resolves.toEqual({
       transaction: tx,
     });
-    expect(runInTransaction).toHaveBeenCalledWith(work);
+    expect(runInTransaction).toHaveBeenCalledWith(work, transactionOptions);
     expect(work).toHaveBeenCalledWith(tx);
   });
 });

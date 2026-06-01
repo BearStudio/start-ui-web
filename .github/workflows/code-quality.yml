@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   format:
     name: Format
@@ -17,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -38,6 +44,8 @@ jobs:
       SKIP_ENV_VALIDATION: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -46,6 +54,24 @@ jobs:
 
       - name: Run static checks
         run: pnpm check:ci
+
+      - name: Generate dependency graphs
+        if: always()
+        run: |
+          mkdir -p test-results/dependency-cruiser
+          status=0
+          pnpm exec depcruise --config .dependency-cruiser.cjs --output-type json --output-to test-results/dependency-cruiser/dependency-cruiser.json src || status=$?
+          pnpm exec depcruise --config .dependency-cruiser.cjs --output-type dot --output-to test-results/dependency-cruiser/dependency-cruiser.dot src || status=$?
+          pnpm exec depcruise --config .dependency-cruiser.cjs --output-type mermaid --output-to test-results/dependency-cruiser/dependency-cruiser.mmd src || status=$?
+          exit "$status"
+
+      - name: Upload dependency graphs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dependency-cruiser-graphs
+          path: test-results/dependency-cruiser/
+          retention-days: 30
 
       - name: Ensure static checks did not mutate files
         run: git diff --exit-code -- .
@@ -60,6 +86,8 @@ jobs:
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -70,7 +98,19 @@ jobs:
         uses: ./.github/actions/setup-playwright
 
       - name: Run tests
-        run: SKIP_ENV_VALIDATION=true pnpm test:coverage
+        run: |
+          mkdir -p test-results/vitest
+          SKIP_ENV_VALIDATION=true pnpm test:coverage -- --reporter=default --reporter=junit --outputFile.junit=test-results/vitest/junit.xml
+
+      - name: Upload Vitest reports and coverage
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: vitest-reports-and-coverage
+          path: |
+            test-results/vitest/
+            coverage/
+          retention-days: 30
 
       - name: Upload coverage to Codecov
         if: ${{ secrets.CODECOV_TOKEN != '' }}
@@ -89,6 +129,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -96,7 +138,17 @@ jobs:
           node-version: 24
 
       - name: Run PostgreSQL integration tests
-        run: pnpm test:integration:postgres
+        run: |
+          mkdir -p test-results/vitest-postgres
+          pnpm test:integration:postgres -- --reporter=default --reporter=junit --outputFile.junit=test-results/vitest-postgres/junit.xml
+
+      - name: Upload PostgreSQL integration test report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: postgres-integration-test-report
+          path: test-results/vitest-postgres/
+          retention-days: 30
 
   build:
     name: Build
@@ -109,6 +161,8 @@ jobs:
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -116,4 +170,15 @@ jobs:
           node-version: 24
 
       - name: Build app
-        run: pnpm build
+        run: |
+          mkdir -p test-results/build
+          set -o pipefail
+          pnpm build 2>&1 | tee test-results/build/build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: build-log
+          path: test-results/build/build.log
+          retention-days: 30

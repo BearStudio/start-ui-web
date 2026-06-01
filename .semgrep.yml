@@ -128,11 +128,12 @@ rules:
       - typescript
     paths:
       include:
+        - /src/modules/auth/infrastructure/drizzle/user-repository-drizzle.ts
         - /src/modules/user/infrastructure/**/*.ts
     patterns:
       - pattern-inside: |
-          ctx.db
-            .update(user)
+          $DB
+            .update($TABLE)
             ...
       - pattern: |
           {

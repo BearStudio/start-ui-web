@@ -3,7 +3,7 @@ import {
   type UserAuthGateway,
   type UserRepository,
 } from '@/modules/user';
-import { UserRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
+import { createUserRepository } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
 
 import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
@@ -52,7 +52,7 @@ const buildUserUseCases = (overrides?: UserOverrides) => {
   const kernel = overrides?.kernel ?? getKernel();
   return createUserUseCases({
     userRepository:
-      overrides?.userRepository ?? new UserRepositoryDrizzle(kernel.db),
+      overrides?.userRepository ?? createUserRepository({ db: kernel.db }),
     userAuthGateway:
       overrides?.userAuthGateway ?? createProductionUserAuthGateway(),
     permissionChecker: kernel.permissionChecker,

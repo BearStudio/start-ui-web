@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
-import { AccountRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
+import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 
 function makeThrowingDb(error: unknown): DbLike {
   return {
@@ -29,9 +29,9 @@ describe('AccountRepositoryDrizzle', () => {
     const wrappedError = new Error('Failed query');
     wrappedError.cause = databaseError;
 
-    const repository = new AccountRepositoryDrizzle(
-      makeThrowingDb(wrappedError)
-    );
+    const repository = createAccountRepository({
+      db: makeThrowingDb(wrappedError),
+    });
 
     await expect(
       repository.submitOnboarding(toUserId('user-1'), {

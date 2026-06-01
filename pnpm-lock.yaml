@@ -354,6 +354,9 @@ importers:
       vitest-browser-react:
         specifier: 2.2.0
         version: 2.2.0(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vitest@4.1.7)
+      yaml:
+        specifier: 2.9.0
+        version: 2.9.0
 
 packages:
 

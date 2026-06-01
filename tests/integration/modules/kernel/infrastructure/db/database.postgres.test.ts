@@ -19,6 +19,7 @@ import {
   migrateDatabase,
 } from '@/modules/kernel/infrastructure/db/migrate';
 import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
+import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 import { makeGenreRow } from '@tests/server/db-fixtures';
 
 import { tryAcquirePostgresAdvisoryLock } from '@/modules/kernel/infrastructure/db/postgres-advisory-lock';
@@ -51,7 +52,9 @@ describe('PostgreSQL database integration', () => {
   let databaseUrl: string;
 
   beforeAll(async () => {
-    container = await new PostgreSqlContainer('postgres:16-alpine').start();
+    container = await new PostgreSqlContainer(
+      POSTGRES_TESTCONTAINER_IMAGE
+    ).start();
     databaseUrl = container.getConnectionUri();
     vi.stubEnv('DATABASE_URL', databaseUrl);
     vi.stubEnv('DATABASE_DRIVER', 'node-pg');

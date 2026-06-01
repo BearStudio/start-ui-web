@@ -4,7 +4,7 @@ import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeGenreRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
-import { GenreRepositoryDrizzle } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
+import { createGenreRepository } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
 
 describe('GenreRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -22,7 +22,7 @@ describe('GenreRepositoryDrizzle integration', () => {
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
-    const repository = new GenreRepositoryDrizzle(database.db);
+    const repository = createGenreRepository({ db: database.db });
     await database.db
       .insert(genreTable)
       .values([

@@ -5,7 +5,7 @@ import {
   type EmailTransactionContext,
   type EmailUseCases,
 } from '@/modules/email';
-import { EmailStatusRepositoryDrizzle } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
+import { createEmailStatusRepository } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
 import { EmailGatewayResend } from '@/modules/email/infrastructure/resend/email-gateway-resend';
 import { ResendWebhookVerifier } from '@/modules/email/infrastructure/resend/resend-webhook-verifier';
 import type { TransactionRunner } from '@/modules/kernel';
@@ -46,9 +46,13 @@ const createEmailStatusTransactionRunner = (
   }
 
   return {
-    run: (work) =>
-      kernel.transactionRunner.run((db) =>
-        work({ emailStatusRepository: new EmailStatusRepositoryDrizzle(db) })
+    run: (work, options) =>
+      kernel.transactionRunner.run(
+        (db) =>
+          work({
+            emailStatusRepository: createEmailStatusRepository({ db }),
+          }),
+        options
       ),
   };
 };
@@ -67,7 +71,7 @@ const buildEmailServices = (overrides?: EmailOverrides): EmailServices => {
     (overrides?.db ? createEmailKernel(overrides.db) : getDefaultEmailKernel());
   const emailStatusRepository =
     overrides?.emailStatusRepository ??
-    new EmailStatusRepositoryDrizzle(kernel.db);
+    createEmailStatusRepository({ db: kernel.db });
   const statusTransactionRunner = createEmailStatusTransactionRunner(
     kernel,
     overrides?.emailStatusRepository

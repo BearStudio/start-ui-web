@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16.1
+    image: postgres:16.1@sha256:09f23e02d76670d3b346a3c00aa33a27cf57aab8341eedfcdaed41459d14f5c4
     env_file:
       - .env
     ports:
@@ -16,7 +16,7 @@ services:
       retries: 5
 
   minio:
-    image: minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1@sha256:7330be2e7320a7a699b36f72bd06a94d8a21ec9f6f397345d9c38fc6751141f5
     ports:
       - '${DOCKER_MINIO_API_PORT}:9000'
       - '${DOCKER_MINIO_UI_PORT}:9001'
@@ -33,7 +33,7 @@ services:
       retries: 5
 
   createbucket:
-    image: minio/mc:RELEASE.2025-08-13T08-35-41Z-cpuv1
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z-cpuv1@sha256:95b5f3f7969a5c5a9f3a700ba72d5c84172819e13385aaf916e237cf111ab868
     profiles:
       - init
     depends_on:

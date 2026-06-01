@@ -9,154 +9,122 @@ import {
 } from '@tanstack/react-start';
 
 import type { Logger } from '@/modules/kernel';
+import { envClient } from '@/platform/env/client';
+import {
+  appendBrowserMutationVaryHeader,
+  shouldProtectBrowserMutation,
+  validateSameOriginBrowserMutationRequest,
+} from '@/platform/http/browser-mutation-protection';
+import { applySecurityHeaders } from '@/platform/http/security-headers';
 import { createNoOpTelemetry } from '@/platform/telemetry';
 
-type StartHandlerType = 'serverFn' | 'router';
+let browserMutationGuardLogger: Pick<Logger, 'warn'> | undefined;
+let browserMutationGuardLoggerPromise:
+  | Promise<Pick<Logger, 'warn'>>
+  | undefined;
 
-const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
-const ORIGIN_PROTECTED_SERVER_ROUTES = new Set(['/api/upload']);
-const ORIGIN_PROTECTED_SERVER_ROUTE_PREFIXES = ['/api/auth/'] as const;
-const SECURITY_HEADERS = {
-  'Content-Security-Policy-Report-Only': [
-    "default-src 'self'",
-    "base-uri 'self'",
-    "object-src 'none'",
-    "frame-ancestors 'none'",
-    "form-action 'self'",
-    "img-src 'self' data: blob:",
-    "style-src 'self' 'unsafe-inline'",
-    "script-src 'self' 'unsafe-inline'",
-    "connect-src 'self'",
-    'upgrade-insecure-requests',
-  ].join('; '),
-  'Permissions-Policy': [
-    'camera=()',
-    'display-capture=()',
-    'fullscreen=(self)',
-    'geolocation=()',
-    'microphone=()',
-    'payment=()',
-  ].join(', '),
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-} as const;
+const getSecurityHeaderOptions = () => ({
+  baseUrl: envClient.VITE_BASE_URL,
+  isProduction: import.meta.env.PROD,
+  s3BucketPublicUrl: envClient.VITE_S3_BUCKET_PUBLIC_URL,
+  sentryDsn: envClient.VITE_SENTRY_DSN,
+});
 
-type OriginGuardInput = {
-  handlerType: StartHandlerType;
-  method: string;
-  pathname: string;
-};
+const applyAppSecurityHeaders = (response: Response) =>
+  applySecurityHeaders(response, getSecurityHeaderOptions());
 
-let originGuardLogger: Pick<Logger, 'warn'> | undefined;
-let originGuardLoggerPromise: Promise<Pick<Logger, 'warn'>> | undefined;
-
-const getOriginGuardLogger = async () => {
-  if (originGuardLogger) {
-    return originGuardLogger;
+const getBrowserMutationGuardLogger = async () => {
+  if (browserMutationGuardLogger) {
+    return browserMutationGuardLogger;
   }
 
-  return (originGuardLoggerPromise ??=
-    import('@/modules/kernel/infrastructure/logger/pino')
-      .then(({ createPinoAppLogger, createPinoLogger }) => {
-        const logger = createPinoAppLogger({
-          pino: createPinoLogger(),
-          telemetry: createNoOpTelemetry(),
+  if (!browserMutationGuardLoggerPromise) {
+    browserMutationGuardLoggerPromise =
+      import('@/modules/kernel/infrastructure/logger/pino')
+        .then(({ createPinoAppLogger, createPinoLogger }) => {
+          const logger = createPinoAppLogger({
+            pino: createPinoLogger(),
+            telemetry: createNoOpTelemetry(),
+          });
+          browserMutationGuardLogger = logger;
+
+          return logger;
+        })
+        .catch((error: unknown) => {
+          browserMutationGuardLoggerPromise = undefined;
+          throw error;
         });
-        originGuardLogger = logger;
+  }
 
-        return logger;
-      })
-      .catch((error: unknown) => {
-        originGuardLoggerPromise = undefined;
-        throw error;
-      }));
+  return browserMutationGuardLoggerPromise;
 };
-
-const isOriginProtectedRoute = (pathname: string) =>
-  ORIGIN_PROTECTED_SERVER_ROUTES.has(pathname) ||
-  pathname === '/api/auth' ||
-  ORIGIN_PROTECTED_SERVER_ROUTE_PREFIXES.some((prefix) =>
-    pathname.startsWith(prefix)
-  );
-
-export function shouldValidateOrigin({
-  handlerType,
-  method,
-  pathname,
-}: OriginGuardInput) {
-  return (
-    handlerType === 'router' &&
-    !SAFE_METHODS.has(method.toUpperCase()) &&
-    isOriginProtectedRoute(pathname)
-  );
-}
-
-export function hasSameOriginHeader(request: Request) {
-  const origin = request.headers.get('origin');
-  return origin !== null && origin === new URL(request.url).origin;
-}
-
-function applySecurityHeaders(response: Response) {
-  for (const [header, value] of Object.entries(SECURITY_HEADERS)) {
-    response.headers.set(header, value);
-  }
-
-  if (import.meta.env.PROD) {
-    response.headers.set(
-      'Strict-Transport-Security',
-      'max-age=63072000; includeSubDomains; preload'
-    );
-  }
-
-  return response;
-}
 
 export const securityHeadersMiddleware = createMiddleware({
   type: 'request',
 }).server(async ({ next }) => {
   const result = await next();
-  applySecurityHeaders(result.response);
+  applyAppSecurityHeaders(result.response);
   return result;
 });
 
-export const originGuardMiddleware = createMiddleware({
+export const browserMutationGuardMiddleware = createMiddleware({
   type: 'request',
 }).server(async ({ request, pathname, handlerType, next }) => {
   if (
-    shouldValidateOrigin({ handlerType, method: request.method, pathname }) &&
-    !hasSameOriginHeader(request)
+    !shouldProtectBrowserMutation({
+      handlerType,
+      method: request.method,
+      pathname,
+    })
   ) {
+    return next();
+  }
+
+  const validation = validateSameOriginBrowserMutationRequest(request);
+  if (!validation.ok) {
     try {
-      const logger = await getOriginGuardLogger();
+      const logger = await getBrowserMutationGuardLogger();
       logger.warn({
         details: {
           method: request.method,
           pathname,
+          reason: validation.reason,
         },
         direction: 'inbound',
-        event: 'security.origin_rejected',
+        event: 'security.browser_mutation_rejected',
       });
     } catch {
       // Keep enforcement deterministic even if logger initialization fails.
     }
 
-    return applySecurityHeaders(new Response('Forbidden', { status: 403 }));
+    const response = appendBrowserMutationVaryHeader(
+      new Response('Forbidden', { status: 403 })
+    );
+    return applyAppSecurityHeaders(response);
   }
 
-  return next();
+  const result = await next();
+  appendBrowserMutationVaryHeader(result.response);
+  return result;
 });
 
 const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === 'serverFn',
+  referer: true,
+  secFetchSite: 'same-origin',
 });
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [
     sentryGlobalRequestMiddleware,
     securityHeadersMiddleware,
-    originGuardMiddleware,
+    browserMutationGuardMiddleware,
     csrfMiddleware,
   ],
   functionMiddleware: [sentryGlobalFunctionMiddleware],
 }));
+
+export {
+  shouldProtectBrowserMutation,
+  validateSameOriginBrowserMutationRequest,
+};

@@ -8,7 +8,7 @@ import {
 import { makeSessionRow, makeUserRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
-import { UserRepositoryDrizzle } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
+import { createUserRepository } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
 
 describe('UserRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -26,7 +26,7 @@ describe('UserRepositoryDrizzle integration', () => {
   });
 
   it('covers search pagination and escaped LIKE behavior with PGlite', async () => {
-    const repository = new UserRepositoryDrizzle(database.db);
+    const repository = createUserRepository({ db: database.db });
     await database.db.insert(userTable).values([
       makeUserRow({
         id: 'user-a',
@@ -75,7 +75,7 @@ describe('UserRepositoryDrizzle integration', () => {
   });
 
   it('covers session cursor pagination with PGlite', async () => {
-    const repository = new UserRepositoryDrizzle(database.db);
+    const repository = createUserRepository({ db: database.db });
     await database.db.insert(userTable).values([
       makeUserRow({
         id: 'user-1',

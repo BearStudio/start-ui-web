@@ -16,9 +16,10 @@ import {
   genre as genreTable,
 } from '@/modules/kernel/infrastructure/db/schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
+import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
 
-import { BookRepositoryDrizzle } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
+import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 
 type TableRow = {
   schemaname: string;
@@ -47,7 +48,9 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
   let db: Database | undefined;
 
   beforeAll(async () => {
-    container = await new PostgreSqlContainer('postgres:16-alpine').start();
+    container = await new PostgreSqlContainer(
+      POSTGRES_TESTCONTAINER_IMAGE
+    ).start();
     const databaseUrl = container.getConnectionUri();
     const migrationDb = await createMigrationDbClient({
       databaseUrl,
@@ -91,7 +94,7 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
 
     await expect(
       db.transaction(async (tx) => {
-        const repository = new BookRepositoryDrizzle(tx as DbLike);
+        const repository = createBookRepository({ db: tx as DbLike });
         await repository.update(toBookId('book-1'), {
           title: 'Updated Title',
           author: 'Updated Author',

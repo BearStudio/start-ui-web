@@ -79,3 +79,13 @@ export class AccountRepositoryDrizzle implements AccountRepository {
     }
   }
 }
+
+export interface AccountRepositoryDrizzleDependencies {
+  db: DbLike;
+}
+
+export function createAccountRepository(
+  dependencies: AccountRepositoryDrizzleDependencies
+): AccountRepository {
+  return new AccountRepositoryDrizzle(dependencies.db);
+}
