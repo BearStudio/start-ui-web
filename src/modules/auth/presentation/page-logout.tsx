@@ -18,8 +18,8 @@ export const PageLogout = () => {
   const { mutate, error } = useMutation({
     mutationFn: async () => {
       const response = await signOut();
-      if (response.error) {
-        throw response.error;
+      if (!response.ok) {
+        throw new Error(response.message ?? response.code);
       }
       await session.refetch();
       clearAllQueryStateForAuthBoundary(queryClient);

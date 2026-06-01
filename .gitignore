@@ -54,7 +54,7 @@ build-info.gen.json
 /test-results/
 /playwright-report/
 /playwright/.cache/
-e2e/.auth
+/tests/e2e/.auth/
 
 certificates
 

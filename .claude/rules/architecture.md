@@ -4,7 +4,7 @@ Authoritative reference: `AGENTS.md`.
 
 ## Imports
 
-- Cross-module imports go through public gates only: `index.ts`, `server.ts`, `client.ts`, `presentation.ts`.
+- Cross-module imports go through public gates only: `index.ts`, `server.ts`, `backend.ts`, `client.ts`, `presentation.ts`, or test-only `testing.ts`.
 - `src/platform` must not import `modules`, `routes`, or `composition`.
 - Module internals must not import `@/composition`.
 - `drizzle-orm`, `pg`, and `postgres` stay in infrastructure, kernel infrastructure, composition, or drizzle tooling.

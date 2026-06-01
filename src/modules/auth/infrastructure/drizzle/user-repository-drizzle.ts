@@ -25,7 +25,6 @@ import type {
   User,
   UserCreateInput,
   UserListPage,
-  UserRole,
   UserSession,
   UserSessionListPage,
   UserUpdatePersistenceInput,
@@ -39,7 +38,7 @@ function toDomainUser(row: typeof userTable.$inferSelect): User {
     name: row.name,
     email: toEmailAddress(row.email),
     emailVerified: row.emailVerified,
-    role: row.role as UserRole,
+    role: row.role,
     image: row.image,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
@@ -217,9 +216,7 @@ export class UserRepositoryDrizzle implements UserRepository {
         where: eq(userTable.id, id),
         columns: { email: true, role: true },
       });
-      return row
-        ? { email: toEmailAddress(row.email), role: row.role as UserRole }
-        : null;
+      return row ? { email: toEmailAddress(row.email), role: row.role } : null;
     } catch (error) {
       mapDbError(error);
     }
@@ -334,10 +331,10 @@ export class UserRepositoryDrizzle implements UserRepository {
           eq(sessionTable.id, input.sessionId),
           eq(sessionTable.userId, input.userId)
         ),
-        columns: { id: true, token: true },
+        columns: { id: true },
       });
 
-      return row ? { id: toSessionId(row.id), providerToken: row.token } : null;
+      return row ? { id: toSessionId(row.id) } : null;
     } catch (error) {
       mapDbError(error);
     }

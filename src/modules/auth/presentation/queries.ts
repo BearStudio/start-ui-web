@@ -4,6 +4,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
+import type { CurrentSession } from '../domain/request-scope';
 import { authServerFunctions } from '../server';
 
 export const authQueries = {
@@ -15,8 +16,11 @@ export const authQueries = {
     }),
 };
 
-export const useCurrentSessionQuery = () =>
-  useQuery(authQueries.currentSession());
+export const useCurrentSessionQuery = (initialData?: CurrentSession | null) =>
+  useQuery({
+    ...authQueries.currentSession(),
+    ...(initialData === undefined ? {} : { initialData }),
+  });
 
 export const useCurrentScopeKey = () =>
   useCurrentSessionQuery().data?.scopeKey ?? 'anonymous';

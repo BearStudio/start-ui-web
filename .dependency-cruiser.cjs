@@ -234,11 +234,22 @@ module.exports = {
       name: 'better-auth-server-confined',
       severity: 'error',
       comment:
-        'better-auth server APIs may only be imported from src/modules/auth/ and src/composition/auth.ts. better-auth/react and better-auth/client/plugins are allowed in auth/presentation/.',
+        'Better Auth SDK imports stay inside the auth-owned Better Auth adapter/facade.',
       from: {
-        pathNot: '^(src/modules/auth/|src/composition/auth\\.ts$)',
+        pathNot:
+          '^src/modules/auth/(infrastructure/better-auth/|presentation/better-auth-client\\.ts$)',
       },
       to: { path: 'node_modules/better-auth/' },
+    },
+    {
+      name: 'workos-sdk-confined',
+      severity: 'error',
+      comment:
+        'WorkOS SDK imports must stay inside the future auth-owned WorkOS adapter.',
+      from: {
+        pathNot: '^src/modules/auth/infrastructure/workos/',
+      },
+      to: { path: 'node_modules/@workos/' },
     },
     {
       name: 'legacy-server-entrypoints-removed',

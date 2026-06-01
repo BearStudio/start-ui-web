@@ -1,4 +1,4 @@
-import { getAuthConfig } from './auth';
+import { getAuthProviderConfig, getBetterAuthConfig } from './auth';
 import { getDatabaseConfig } from './database';
 import { getEmailConfig } from './email';
 import { getLoggerConfig } from './logger';
@@ -7,7 +7,10 @@ import { getStorageConfig } from './storage';
 import { getTelemetryConfig } from './telemetry';
 
 export function validateServerConfig() {
-  getAuthConfig();
+  const authProviderConfig = getAuthProviderConfig();
+  if (authProviderConfig.provider === 'better-auth') {
+    getBetterAuthConfig();
+  }
   getDatabaseConfig();
   getEmailConfig();
   getLoggerConfig();

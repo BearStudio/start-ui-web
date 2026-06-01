@@ -1,10 +1,13 @@
 export {
   authErrorCodes,
   checkRolePermission,
-  sendEmailOtp,
-  signInEmailOtp,
-  signInSocial,
   signOut,
+  startSignIn,
+  type AuthClientResult,
+  type AuthSignInProvider,
+  type StartSignInInput,
+  type StartSignInResult,
+  verifyEmailOtp,
   useAuthSession,
 } from './presentation/client';
 export {

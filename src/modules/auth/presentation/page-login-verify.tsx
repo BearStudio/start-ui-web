@@ -20,8 +20,8 @@ import { ButtonLink } from '@/platform/components/ui/button-link';
 
 import {
   clearAllQueryStateForAuthBoundary,
-  signInEmailOtp,
   useAuthSession,
+  verifyEmailOtp,
 } from '@/modules/auth/client';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
@@ -60,21 +60,20 @@ export default function PageLoginVerify({
         redirect: search.redirect ?? null,
       });
 
-      const { error } = await signInEmailOtp({
+      const result = await verifyEmailOtp({
         email: search.email,
         otp,
       });
 
-      if (error) {
+      if (!result.ok) {
         authE2eDebug('login.verify.error', {
-          code: error.code ?? null,
-          message: typeof error.message === 'string' ? error.message : null,
+          code: result.code,
+          message: result.message ?? null,
         });
-        const errorKey = error.code
-          ? `auth:errorCode.${error.code}`
+        const errorKey = result.code
+          ? `auth:errorCode.${result.code}`
           : undefined;
-        const providerMessage =
-          typeof error.message === 'string' ? error.message : undefined;
+        const providerMessage = result.message;
         const translatedErrorMessage =
           errorKey && i18n.exists(errorKey)
             ? i18n.t(errorKey, { defaultValue: '' })

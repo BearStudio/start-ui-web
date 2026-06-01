@@ -11,9 +11,8 @@ const mocks = vi.hoisted(() => ({
   bookUpdateById: vi.fn(),
   currentSession: vi.fn(),
   refetchSession: vi.fn(),
-  sendEmailOtp: vi.fn(),
-  signInEmailOtp: vi.fn(),
-  signInSocial: vi.fn(),
+  startSignIn: vi.fn(),
+  verifyEmailOtp: vi.fn(),
   userCreate: vi.fn(),
   userDeleteById: vi.fn(),
   userGetAll: vi.fn(),
@@ -53,9 +52,8 @@ vi.mock('@/modules/auth/client', () => ({
   checkRolePermission: () => true,
   clearAllQueryStateForAuthBoundary: (queryClient: QueryClient) =>
     queryClient.clear(),
-  sendEmailOtp: mocks.sendEmailOtp,
-  signInEmailOtp: mocks.signInEmailOtp,
-  signInSocial: mocks.signInSocial,
+  startSignIn: mocks.startSignIn,
+  verifyEmailOtp: mocks.verifyEmailOtp,
   useAuthSession: () => ({ data: null, refetch: mocks.refetchSession }),
   useCurrentScopeKey: () => 'test-scope',
 }));

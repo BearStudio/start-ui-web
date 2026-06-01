@@ -15,7 +15,11 @@ const splitCsv = (value?: string) =>
     .map((item) => item.trim())
     .filter(Boolean);
 
-const authEnvSchema = baseEnvSchema
+const authProviderEnvSchema = baseEnvSchema.extend({
+  AUTH_PROVIDER: z.enum(['better-auth', 'workos']).prefault('better-auth'),
+});
+
+const betterAuthEnvSchema = baseEnvSchema
   .extend({
     AUTH_SECRET: zNonEmptyEnvString(),
     AUTH_SESSION_EXPIRATION_IN_SECONDS: z.coerce
@@ -56,7 +60,13 @@ const authEnvSchema = baseEnvSchema
         : env.GITHUB_CLIENT_SECRET,
   }));
 
-export type AuthConfig = {
+export type AuthProvider = 'better-auth' | 'workos';
+
+export type AuthProviderConfig = {
+  provider: AuthProvider;
+};
+
+export type BetterAuthConfig = {
   secret: string;
   sessionExpirationInSeconds: number;
   sessionUpdateAgeInSeconds: number;
@@ -66,13 +76,24 @@ export type AuthConfig = {
   githubClientSecret?: string;
 };
 
-let cachedAuthConfig: AuthConfig | undefined;
+let cachedAuthProviderConfig: AuthProviderConfig | undefined;
+let cachedBetterAuthConfig: BetterAuthConfig | undefined;
 
-export function getAuthConfig(): AuthConfig {
-  if (cachedAuthConfig) return cachedAuthConfig;
+export function getAuthProviderConfig(): AuthProviderConfig {
+  if (cachedAuthProviderConfig) return cachedAuthProviderConfig;
 
-  const env = parseEnv(authEnvSchema);
-  cachedAuthConfig = {
+  const env = parseEnv(authProviderEnvSchema);
+  cachedAuthProviderConfig = {
+    provider: env.AUTH_PROVIDER,
+  };
+  return cachedAuthProviderConfig;
+}
+
+export function getBetterAuthConfig(): BetterAuthConfig {
+  if (cachedBetterAuthConfig) return cachedBetterAuthConfig;
+
+  const env = parseEnv(betterAuthEnvSchema);
+  cachedBetterAuthConfig = {
     secret: env.AUTH_SECRET,
     sessionExpirationInSeconds: env.AUTH_SESSION_EXPIRATION_IN_SECONDS,
     sessionUpdateAgeInSeconds: env.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
@@ -81,5 +102,7 @@ export function getAuthConfig(): AuthConfig {
     githubClientId: env.GITHUB_CLIENT_ID,
     githubClientSecret: env.GITHUB_CLIENT_SECRET,
   };
-  return cachedAuthConfig;
+  return cachedBetterAuthConfig;
 }
+
+export const getAuthConfig = getBetterAuthConfig;

@@ -36,11 +36,13 @@ import {
 } from '@/platform/components/ui/sidebar';
 import { themes } from '@/platform/components/ui/theme-switcher';
 
+import {
+  BuildInfoDrawer,
+  BuildInfoVersion,
+} from '@/app/build-info/presentation';
 import { ConfirmSignOut } from '@/modules/auth/client';
 import { WithPermissions } from '@/modules/auth/client';
 import { useAuthSession } from '@/modules/auth/client';
-import { BuildInfoDrawer } from '@/app/build-info/presentation';
-import { BuildInfoVersion } from '@/app/build-info/presentation';
 
 type Theme = (typeof themes)[number];
 
@@ -57,7 +59,7 @@ export function NavUser() {
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
-    name: session.data?.user.name,
+    name: session.data?.user.name ?? undefined,
     email: session.data?.user.email,
   };
 

@@ -39,6 +39,7 @@ export type CurrentSessionLike = {
     email: string;
     name?: string | null;
     image?: string | null;
+    emailVerified?: boolean;
     role: string;
     onboardedAt?: Date | string | null;
   };

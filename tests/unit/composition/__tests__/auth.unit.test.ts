@@ -11,6 +11,7 @@ import { toUserId } from '@/modules/kernel/domain/ids';
 import {
   __resetAuthComposition,
   type AuthOverrides,
+  getAuthHttpGateway,
   getAuthUseCases,
 } from '@/composition/auth';
 
@@ -66,5 +67,19 @@ describe('auth composition', () => {
     const second = getAuthUseCases();
 
     expect(second).not.toBe(first);
+  });
+
+  it('allows auth HTTP handling to be overridden without exposing provider handlers', async () => {
+    const response = new Response('ok');
+    const handle = vi.fn(async () => response);
+    const gateway = getAuthHttpGateway({
+      authHttpGateway: {
+        handle,
+      },
+    });
+    const request = new Request('http://localhost/api/auth/session');
+
+    await expect(gateway.handle(request)).resolves.toBe(response);
+    expect(handle).toHaveBeenCalledWith(request);
   });
 });

@@ -12,7 +12,7 @@ export type RequestScope = {
 export type CurrentSession = {
   user: Pick<
     AuthenticatedUser,
-    'id' | 'email' | 'name' | 'image' | 'role' | 'onboardedAt'
+    'id' | 'email' | 'name' | 'image' | 'emailVerified' | 'role' | 'onboardedAt'
   >;
   session: Pick<AuthSession['session'], 'id' | 'expiresAt'>;
   scope: RequestScope;
@@ -49,6 +49,7 @@ export const sanitizeCurrentSession = (
       email: authSession.user.email,
       name: authSession.user.name,
       image: authSession.user.image,
+      emailVerified: authSession.user.emailVerified,
       role: authSession.user.role,
       onboardedAt: authSession.user.onboardedAt,
     },

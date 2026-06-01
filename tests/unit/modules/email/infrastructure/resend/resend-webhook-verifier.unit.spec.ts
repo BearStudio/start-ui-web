@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const testState = vi.hoisted(() => ({
   emailConfig: {
-    resendApiKey: 're_test',
-    resendWebhookSecret: 'whsec_test',
+    resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
+    resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
     from: 'Start UI <noreply@example.com>',
     deliveryDisabled: false,
   },
@@ -17,7 +17,8 @@ vi.mock('@/modules/kernel/infrastructure/config/email', () => ({
 describe('ResendWebhookVerifier', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    testState.emailConfig.resendWebhookSecret = 'whsec_test';
+    testState.emailConfig.resendWebhookSecret =
+      'resend_webhook_secret_placeholder'; // pragma: allowlist secret
   });
 
   it('verifies the raw payload with the configured webhook secret', async () => {
@@ -53,7 +54,7 @@ describe('ResendWebhookVerifier', () => {
         timestamp: '1704067200',
         signature: 'sig_1',
       },
-      webhookSecret: 'whsec_test',
+      webhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
     });
   });
 

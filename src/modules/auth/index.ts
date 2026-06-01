@@ -2,6 +2,7 @@ export type {
   AuthEmailPort,
   SendSignInOtpInput,
 } from './application/ports/auth-email-port';
+export type { AuthHttpGateway } from './application/ports/auth-http-gateway';
 export type {
   AuthorizationGateway,
   AuthorizationPermission,

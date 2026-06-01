@@ -1,5 +1,4 @@
-import type { Auth } from '@/composition/auth';
-import { auth, getAuthUseCases } from '@/composition/auth';
+import { getAuthHttpGateway, getAuthUseCases } from '@/composition/auth';
 import { getKernel } from '@/composition/kernel';
 import { telemetryProxy } from '@/composition/telemetry';
 import type { Logger } from '@/modules/kernel';
@@ -27,8 +26,9 @@ const serverContextTools = createServerContextTools({
   telemetry: telemetryProxy,
 });
 
-export { auth, getAuthUseCases };
-export type { Auth };
+export { getAuthUseCases };
+export const handleAuthRequest = (request: Request) =>
+  getAuthHttpGateway().handle(request);
 export const assertPermission = serverContextTools.assertPermission;
 export const withProtectedContext = serverContextTools.withProtectedContext;
 export const withProtectedMutation = serverContextTools.withProtectedMutation;

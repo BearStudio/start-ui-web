@@ -264,8 +264,9 @@ describe('strict modular monolith layout', () => {
         const source = fs.readFileSync(file, 'utf8');
         const relative = path.relative(root, file);
         const reexportsServerFunctions =
-          source.trim() ===
-          "export * from './transport/server-functions/server-functions';";
+          /^export\s+\*\s+from\s+['"]\.\/transport\/server-functions\/server-functions['"];?$/.test(
+            source.trim()
+          );
         const definesServerFunction =
           source.includes('createServerFn') &&
           !/export\s+\{[\s\S]*?\}\s+from\s+['"][^'"]+['"];/.test(source);
@@ -307,14 +308,45 @@ describe('strict modular monolith layout', () => {
     const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
       const relative = path.relative(root, file);
       return (
-        !relative.startsWith(`src${path.sep}modules${path.sep}auth`) &&
-        relative !== path.join('src', 'composition', 'auth.ts')
+        !relative.startsWith(
+          path.join('src', 'modules', 'auth', 'infrastructure', 'better-auth')
+        ) &&
+        relative !==
+          path.join(
+            'src',
+            'modules',
+            'auth',
+            'presentation',
+            'better-auth-client.ts'
+          )
       );
     });
 
     expect(
       findImportViolations(files, /from\s+['"]better-auth(?:\/[^'"]*)?['"]/g)
     ).toEqual([]);
+  });
+
+  it('keeps provider session tokens out of app-facing code', () => {
+    const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
+      const relative = path.relative(root, file);
+      return !relative.startsWith(
+        path.join('src', 'modules', 'auth', 'infrastructure', 'better-auth')
+      );
+    });
+
+    expect(findImportViolations(files, /\bproviderToken\b/g)).toEqual([]);
+  });
+
+  it('reserves WorkOS SDK imports for the future WorkOS adapter', () => {
+    const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
+      const relative = path.relative(root, file);
+      return !relative.startsWith(
+        path.join('src', 'modules', 'auth', 'infrastructure', 'workos')
+      );
+    });
+
+    expect(findImportViolations(files, /from\s+['"]@workos\//g)).toEqual([]);
   });
 
   it('keeps business code off the Sentry SDK', () => {

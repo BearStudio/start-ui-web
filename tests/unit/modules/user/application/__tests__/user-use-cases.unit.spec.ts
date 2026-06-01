@@ -139,7 +139,6 @@ function makeRepo(overrides: Partial<UserRepository> = {}) {
     findSessionForRevocation: vi.fn<UserRepository['findSessionForRevocation']>(
       async () => ({
         id: targetSessionId,
-        providerToken: 'session-token',
       })
     ),
   };
@@ -813,7 +812,7 @@ describe('user use cases', () => {
   });
 
   describe('revokeSession', () => {
-    it('revokes one resolved provider session token', async () => {
+    it('revokes one resolved session through the auth gateway', async () => {
       const { useCases, repo, auth, permissionChecker } = makeContext({
         permissionChecker: makePermissionChecker(sessionRevokePermission),
       });
@@ -836,8 +835,8 @@ describe('user use cases', () => {
         sessionId: targetSessionId,
       });
       expect(auth.revokeUserSession).toHaveBeenCalledWith({
-        id: targetSessionId,
-        providerToken: 'session-token',
+        userId,
+        sessionId: targetSessionId,
       });
     });
 

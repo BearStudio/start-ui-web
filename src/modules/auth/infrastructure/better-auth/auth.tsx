@@ -11,7 +11,7 @@ import {
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
-import { getAuthConfig } from '@/modules/kernel/infrastructure/config/auth';
+import { getBetterAuthConfig } from '@/modules/kernel/infrastructure/config/auth';
 import {
   type Database,
   getDefaultDbClient,
@@ -41,7 +41,7 @@ export function createAuth(input?: Database | CreateAuthOptions) {
   const options = normalizeCreateAuthInput(input);
   const database = options.database ?? getDefaultDbClient();
   const authEmailPort = options.authEmailPort ?? missingAuthEmailPort;
-  const authConfig = getAuthConfig();
+  const authConfig = getBetterAuthConfig();
 
   return betterAuth({
     secret: authConfig.secret,

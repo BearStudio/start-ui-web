@@ -11,8 +11,8 @@ import type { TransactionRunner } from '@/modules/kernel';
 
 const testState = vi.hoisted(() => ({
   emailConfig: {
-    resendApiKey: 're_test',
-    resendWebhookSecret: 'whsec_test',
+    resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
+    resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
     from: 'Start UI <noreply@example.com>',
     deliveryDisabled: false,
   },
@@ -79,8 +79,8 @@ describe('EmailGatewayResend', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     Object.assign(testState.emailConfig, {
-      resendApiKey: 're_test',
-      resendWebhookSecret: 'whsec_test',
+      resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
+      resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
       from: 'Start UI <noreply@example.com>',
       deliveryDisabled: false,
     });

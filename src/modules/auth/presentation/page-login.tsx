@@ -15,7 +15,7 @@ import {
 } from '@/platform/components/form';
 import { Button } from '@/platform/components/ui/button';
 
-import { sendEmailOtp, signInSocial } from '@/modules/auth/client';
+import { startSignIn, type AuthSignInProvider } from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
@@ -40,26 +40,20 @@ export default function PageLogin({
   const hydrated = useHydrated();
   const safeRedirect = normalizeInternalRedirect(search.redirect);
   const social = useMutation({
-    mutationFn: async (
-      provider: Parameters<typeof signInSocial>[0]['provider']
-    ) => {
+    mutationFn: async (provider: AuthSignInProvider) => {
       const callbackURL = safeRedirect ?? '/';
-      let response;
-      try {
-        response = await signInSocial({
-          provider,
-          callbackURL,
-          errorCallbackURL: '/login/error',
-        });
-      } catch (error) {
-        throw error instanceof Error
-          ? error
-          : new Error(t('auth:errorCode.UNKNOWN_ERROR'));
+      const result = await startSignIn({
+        strategy: 'social',
+        provider,
+        redirectTo: callbackURL,
+      });
+      if (!result.ok) {
+        throw new Error(result.message ?? t('auth:errorCode.UNKNOWN_ERROR'));
       }
-      if (response.error) {
-        throw new Error(response.error.message);
+      if (result.value.status === 'redirect') {
+        window.location.assign(result.value.url);
       }
-      return response.data;
+      return result.value;
     },
     onError: (error) => {
       const message = error.message || t('auth:errorCode.UNKNOWN_ERROR');
@@ -77,35 +71,21 @@ export default function PageLogin({
         redirect: safeRedirect ?? null,
       });
 
-      let result;
-      try {
-        result = await sendEmailOtp({
-          email,
-          type: 'sign-in',
-        });
-      } catch (error) {
-        authE2eDebug('login.email_otp.exception', {
-          message: error instanceof Error ? error.message : 'Unknown error',
-        });
-        toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
-        return;
-      }
+      const result = await startSignIn({
+        strategy: 'email-otp',
+        email,
+        redirectTo: safeRedirect,
+      });
 
-      if (result.error) {
+      if (!result.ok) {
         authE2eDebug('login.email_otp.error', {
-          code: result.error.code ?? null,
-          message:
-            typeof result.error.message === 'string'
-              ? result.error.message
-              : null,
+          code: result.code,
+          message: result.message ?? null,
         });
-        const errorKey = result.error.code
-          ? `auth:errorCode.${result.error.code}`
+        const errorKey = result.code
+          ? `auth:errorCode.${result.code}`
           : undefined;
-        const providerMessage =
-          typeof result.error.message === 'string'
-            ? result.error.message
-            : undefined;
+        const providerMessage = result.message;
         const translatedErrorMessage =
           errorKey && i18n.exists(errorKey)
             ? i18n.t(errorKey, { defaultValue: '' })
@@ -118,6 +98,11 @@ export default function PageLogin({
         return;
       }
 
+      if (result.value.status === 'redirect') {
+        window.location.assign(result.value.url);
+        return;
+      }
+
       authE2eDebug('login.email_otp.navigate_verify', {
         redirect: safeRedirect ?? null,
       });
@@ -127,7 +112,10 @@ export default function PageLogin({
         to: '/login/verify',
         search: {
           redirect: safeRedirect,
-          email,
+          email:
+            result.value.status === 'verification_required'
+              ? result.value.email
+              : email,
         },
       });
     },

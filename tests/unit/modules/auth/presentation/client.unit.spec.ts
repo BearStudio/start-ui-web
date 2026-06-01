@@ -1,0 +1,138 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const mocks = vi.hoisted(() => ({
+  betterAuthBrowserClient: {
+    sendEmailOtp: vi.fn(),
+    signInEmailOtp: vi.fn(),
+    signInSocial: vi.fn(),
+    signOut: vi.fn(),
+  },
+  useCurrentSessionQuery: vi.fn(),
+  useMatches: vi.fn(),
+}));
+
+vi.mock('@/modules/auth/presentation/better-auth-client', () => ({
+  authErrorCodes: {},
+  betterAuthBrowserClient: mocks.betterAuthBrowserClient,
+}));
+
+vi.mock('@/modules/auth/presentation/queries', () => ({
+  useCurrentSessionQuery: mocks.useCurrentSessionQuery,
+}));
+
+vi.mock('@tanstack/react-router', () => ({
+  useMatches: mocks.useMatches,
+}));
+
+import {
+  signOut,
+  startSignIn,
+  useAuthSession,
+  verifyEmailOtp,
+} from '@/modules/auth/presentation/client';
+
+describe('auth client facade', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.useMatches.mockReturnValue(undefined);
+  });
+
+  it('starts the email OTP flow without exposing Better Auth response shapes', async () => {
+    mocks.betterAuthBrowserClient.sendEmailOtp.mockResolvedValue({
+      data: null,
+      error: null,
+    });
+
+    await expect(
+      startSignIn({
+        strategy: 'email-otp',
+        email: 'user@example.com',
+        redirectTo: '/app',
+      })
+    ).resolves.toEqual({
+      ok: true,
+      value: {
+        status: 'verification_required',
+        email: 'user@example.com',
+        redirectTo: '/app',
+      },
+    });
+    expect(mocks.betterAuthBrowserClient.sendEmailOtp).toHaveBeenCalledWith({
+      email: 'user@example.com',
+    });
+  });
+
+  it('maps provider errors into neutral auth action results', async () => {
+    mocks.betterAuthBrowserClient.signInEmailOtp.mockResolvedValue({
+      data: null,
+      error: {
+        code: 'INVALID_OTP',
+        message: 'Invalid code',
+      },
+    });
+
+    await expect(
+      verifyEmailOtp({ email: 'user@example.com', otp: '000000' })
+    ).resolves.toEqual({
+      ok: false,
+      code: 'INVALID_OTP',
+      message: 'Invalid code',
+    });
+  });
+
+  it('starts social sign-in with neutral redirect input', async () => {
+    mocks.betterAuthBrowserClient.signInSocial.mockResolvedValue({
+      data: { url: 'https://auth.example.com' },
+      error: null,
+    });
+
+    await expect(
+      startSignIn({
+        strategy: 'social',
+        provider: 'github',
+        redirectTo: '/manager',
+      })
+    ).resolves.toEqual({
+      ok: true,
+      value: {
+        status: 'redirect',
+        url: 'https://auth.example.com',
+      },
+    });
+    expect(mocks.betterAuthBrowserClient.signInSocial).toHaveBeenCalledWith({
+      provider: 'github',
+      callbackURL: '/manager',
+      errorCallbackURL: '/login/error',
+    });
+  });
+
+  it('signs out through a neutral result contract', async () => {
+    mocks.betterAuthBrowserClient.signOut.mockResolvedValue({
+      data: null,
+      error: null,
+    });
+
+    await expect(signOut()).resolves.toEqual({
+      ok: true,
+      value: undefined,
+    });
+  });
+
+  it('uses the sanitized current-session query for session reads', () => {
+    const query = { data: null, isPending: false };
+    mocks.useCurrentSessionQuery.mockReturnValue(query);
+
+    expect(useAuthSession()).toBe(query);
+    expect(mocks.useCurrentSessionQuery).toHaveBeenCalledWith(undefined);
+  });
+
+  it('seeds session reads from protected route context during hydration', () => {
+    const routeSession = { user: { id: 'user-1' } };
+    const query = { data: routeSession, isPending: false };
+    mocks.useMatches.mockReturnValue(routeSession);
+    mocks.useCurrentSessionQuery.mockReturnValue(query);
+
+    expect(useAuthSession()).toBe(query);
+    expect(mocks.useCurrentSessionQuery).toHaveBeenCalledWith(routeSession);
+  });
+});

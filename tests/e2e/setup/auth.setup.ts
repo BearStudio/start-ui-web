@@ -1,5 +1,7 @@
 import { expect } from '@playwright/test';
 import { test as setup } from '@tests/e2e/utils';
+import { mkdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import {
   ADMIN_EMAIL,
   ADMIN_FILE,
@@ -36,6 +38,7 @@ const authenticate = async (
   await expect(page.getByTestId(input.layoutTestId)).toBeVisible();
   page.authDebug('setup.layout.visible', debugPayload);
 
+  await mkdir(dirname(input.storageFile), { recursive: true });
   await page.context().storageState({ path: input.storageFile });
   page.authDebug('setup.storage_state.written', debugPayload);
 };

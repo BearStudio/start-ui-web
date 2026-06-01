@@ -3,6 +3,7 @@ import {
   index,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -15,6 +16,10 @@ import {
 } from '@/modules/kernel/infrastructure/db/schema/common';
 
 export const userRoleEnum = pgEnum('UserRole', ['user', 'admin']);
+export const authProviderEnum = pgEnum('AuthProvider', [
+  'better-auth',
+  'workos',
+]);
 
 export const user = pgTable(
   'user',
@@ -107,6 +112,30 @@ export const verification = pgTable(
     uniqueIndex('verification_identifier_value_key').on(
       table.identifier,
       table.value
+    ),
+  ]
+);
+
+export const authIdentity = pgTable(
+  'auth_identity',
+  {
+    provider: authProviderEnum('provider').notNull(),
+    providerUserId: text('providerUserId').notNull(),
+    userId: text('userId')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    createdAt: createdAtColumn(),
+    updatedAt: updatedAtColumn(),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.provider, table.providerUserId],
+      name: 'auth_identity_provider_provider_user_id_pk',
+    }),
+    index('auth_identity_user_id_idx').on(table.userId),
+    uniqueIndex('auth_identity_provider_user_id_key').on(
+      table.provider,
+      table.userId
     ),
   ]
 );

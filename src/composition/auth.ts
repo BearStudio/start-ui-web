@@ -1,5 +1,6 @@
 import {
   type AuthEmailPort,
+  type AuthHttpGateway,
   type AuthorizationGateway,
   createAuthUseCases,
   type SessionGateway,
@@ -13,6 +14,8 @@ import { AuthEmailPortResend } from '@/modules/auth/infrastructure/better-auth/a
 import { AuthorizationGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/authorization-gateway-better-auth';
 import { SessionGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/session-gateway-better-auth';
 import { UserAdminGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/user-admin-gateway-better-auth';
+import { ConfigurationError } from '@/modules/kernel/domain/errors/configuration-error';
+import { getAuthProviderConfig } from '@/modules/kernel/infrastructure/config/auth';
 
 import { getEmailGateway } from './email';
 import { createCachedFactory } from './shared/singleton';
@@ -28,13 +31,28 @@ type AuthInstanceOverrides = {
   authEmailPort?: AuthEmailPort;
 };
 
+type AuthHttpOverrides = AuthInstanceOverrides & {
+  authHttpGateway?: AuthHttpGateway;
+};
+
 const buildAuthEmailPort = (overrides?: AuthInstanceOverrides) =>
   overrides?.authEmailPort ?? new AuthEmailPortResend(getEmailGateway());
 
-const buildAuth = (overrides?: AuthInstanceOverrides) =>
-  createAuth({
+const assertBetterAuthProvider = () => {
+  const { provider } = getAuthProviderConfig();
+  if (provider !== 'better-auth') {
+    throw new ConfigurationError(
+      `AUTH_PROVIDER=${provider} is not implemented in this build.`
+    );
+  }
+};
+
+const buildAuth = (overrides?: AuthInstanceOverrides) => {
+  assertBetterAuthProvider();
+  return createAuth({
     authEmailPort: buildAuthEmailPort(overrides),
   });
+};
 
 const authFactory = createCachedFactory<Auth, AuthInstanceOverrides>(buildAuth);
 
@@ -48,6 +66,24 @@ export const auth = new Proxy({} as Auth, {
     return typeof value === 'function' ? value.bind(instance) : value;
   },
 });
+
+const buildAuthHttpGateway = (
+  overrides?: AuthHttpOverrides
+): AuthHttpGateway => {
+  if (overrides?.authHttpGateway) return overrides.authHttpGateway;
+  const authInstance = getAuth(overrides);
+
+  return {
+    handle: (request) => authInstance.handler(request),
+  };
+};
+
+const authHttpFactory = createCachedFactory<AuthHttpGateway, AuthHttpOverrides>(
+  buildAuthHttpGateway
+);
+
+export const getAuthHttpGateway = (overrides?: AuthHttpOverrides) =>
+  authHttpFactory.get(overrides);
 
 const buildAuthUseCases = (overrides?: AuthOverrides) => {
   const authEmailPort = buildAuthEmailPort(overrides);
@@ -75,6 +111,7 @@ export const getAuthUseCases = (overrides?: AuthOverrides) =>
 export const __resetAuthComposition = () => {
   factory.reset();
   authFactory.reset();
+  authHttpFactory.reset();
 };
 
 export { createAuth };

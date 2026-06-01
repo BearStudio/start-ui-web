@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { BuildInfoDrawer } from '@/app/build-info/presentation';
-import { BuildInfoVersion } from '@/app/build-info/presentation';
+import {
+  BuildInfoDrawer,
+  BuildInfoVersion,
+} from '@/app/build-info/presentation';
 import { AppPageAccount as PageAccount } from '@/modules/account/presentation';
 import { Button } from '@/platform/components/ui/button';
 

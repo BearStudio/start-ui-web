@@ -6,8 +6,10 @@
 src/modules/<capability>/
   index.ts
   server.ts
+  backend.ts
   client.ts
   presentation.ts
+  testing.ts
   factory.ts
   domain/
   application/
@@ -19,6 +21,9 @@ src/modules/<capability>/
 ```
 
 Only add folders and public gates when the module needs them.
+
+- `backend.ts` exports server-only non-server-function APIs, protected runners, and HTTP route handlers.
+- `testing.ts` exposes test-only public gates for owner internals.
 
 ## Layers
 

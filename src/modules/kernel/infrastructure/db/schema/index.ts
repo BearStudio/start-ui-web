@@ -7,6 +7,7 @@ export * from '@/modules/genre/infrastructure/drizzle/schema';
 
 import {
   account,
+  authIdentity,
   session,
   user,
   verification,
@@ -25,6 +26,8 @@ export type Session = typeof session.$inferSelect;
 export type NewSession = typeof session.$inferInsert;
 export type Account = typeof account.$inferSelect;
 export type NewAccount = typeof account.$inferInsert;
+export type AuthIdentity = typeof authIdentity.$inferSelect;
+export type NewAuthIdentity = typeof authIdentity.$inferInsert;
 export type Verification = typeof verification.$inferSelect;
 export type NewVerification = typeof verification.$inferInsert;
 export type EmailStatus = typeof emailStatus.$inferSelect;

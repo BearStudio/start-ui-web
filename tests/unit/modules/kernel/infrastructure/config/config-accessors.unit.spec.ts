@@ -152,6 +152,22 @@ describe('server config accessors', () => {
     ).toBe(false);
   });
 
+  it('defaults the auth provider to Better Auth', async () => {
+    const { getAuthProviderConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+
+    expect(getAuthProviderConfig()).toEqual({ provider: 'better-auth' });
+  });
+
+  it('parses WorkOS as a reserved auth provider without Better Auth secrets', async () => {
+    vi.stubEnv('AUTH_PROVIDER', 'workos');
+    vi.stubEnv('AUTH_SECRET', undefined);
+    const { getAuthProviderConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+
+    expect(getAuthProviderConfig()).toEqual({ provider: 'workos' });
+  });
+
   it('returns null for absent optional Redis config', async () => {
     vi.stubEnv('UPSTASH_REDIS_REST_URL', undefined);
     vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', undefined);

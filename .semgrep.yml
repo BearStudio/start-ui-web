@@ -44,6 +44,15 @@ rules:
     pattern: |
       z.object({ ..., sessionToken: z.string(), ... })
 
+  - id: no-committed-better-auth-session-token
+    message: Do not commit Playwright storage state containing better-auth.session_token; generate auth state during e2e setup.
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: '"name"\s*:\s*"better-auth\.session_token"'
+    paths:
+      include:
+        - tests/e2e/**/*.json
+
   - id: no-silent-session-revocation-noop
     message: Session revocation must not silently return false when a provider token is missing; make the token contract explicit or throw.
     severity: ERROR
@@ -262,7 +271,7 @@ rules:
         - src/start.ts
 
   - id: cross-feature-deep-import
-    message: 'Import other modules through public files: index.ts, presentation.ts, server.ts, or client.ts.'
+    message: 'Import other modules through public files: index.ts, presentation.ts, server.ts, backend.ts, client.ts, or testing.ts.'
     languages: [typescript]
     severity: ERROR
     pattern-either:
@@ -402,33 +411,41 @@ rules:
         - src/modules/email/presentation/templates/**/*.tsx
 
   - id: better-auth-client-confined
-    message: better-auth client APIs are only allowed in src/modules/auth/presentation/.
+    message: Better Auth client APIs are only allowed in the auth Better Auth browser facade.
     languages: [typescript]
     severity: ERROR
     pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth/(?:react|client/plugins)["'']'
     paths:
       exclude:
-        - src/modules/auth/presentation/**
+        - src/modules/auth/presentation/better-auth-client.ts
 
   - id: better-auth-access-helpers-confined
-    message: Better Auth access-control helpers are only allowed in auth presentation and Better Auth infrastructure.
+    message: Better Auth access-control helpers are only allowed in Better Auth adapters/facades.
     languages: [typescript]
     severity: ERROR
     pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth/plugins/(?:access|admin/access)["'']'
     paths:
       exclude:
-        - src/modules/auth/presentation/**
+        - src/modules/auth/presentation/better-auth-client.ts
         - src/modules/auth/infrastructure/better-auth/**
 
   - id: better-auth-server-confined
-    message: better-auth server APIs are only allowed in Better Auth infrastructure and src/composition/auth.ts.
+    message: Better Auth server APIs are only allowed in Better Auth infrastructure.
     languages: [typescript]
     severity: ERROR
     pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']better-auth(?!(?:/react|/client/plugins|/plugins/(?:access|admin/access))["''])(?:/[^"'']*)?["'']'
     paths:
       exclude:
         - src/modules/auth/infrastructure/better-auth/**
-        - src/composition/auth.ts
+
+  - id: workos-sdk-confined
+    message: WorkOS SDK imports must stay inside the future auth WorkOS adapter.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']@workos/[^"'']+["'']'
+    paths:
+      exclude:
+        - src/modules/auth/infrastructure/workos/**
 
   - id: better-auth-options-no-raw-in-operator
     message: Normalize Better Auth factory inputs by database shape; do not classify CreateAuthOptions with raw `in` checks.

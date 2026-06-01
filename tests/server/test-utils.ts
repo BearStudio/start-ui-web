@@ -25,6 +25,7 @@ type MockedDb = {
     book: DrizzleQueryMock;
     genre: DrizzleQueryMock;
     account: DrizzleQueryMock;
+    authIdentity: DrizzleQueryMock;
     verification: DrizzleQueryMock;
     emailStatus: DrizzleQueryMock;
   };
@@ -81,6 +82,7 @@ function buildMockDb(): MockedDb {
       book: makeQueryMock(),
       genre: makeQueryMock(),
       account: makeQueryMock(),
+      authIdentity: makeQueryMock(),
       verification: makeQueryMock(),
       emailStatus: makeQueryMock(),
     },
@@ -106,6 +108,7 @@ export const mockUser = {
   id: toUserId('user-1'),
   name: 'Test User',
   email: toEmailAddress('user@example.com'),
+  emailVerified: true,
   image: null,
   role: 'user' as const,
   onboardedAt: new Date('2024-01-01T00:00:00.000Z'),

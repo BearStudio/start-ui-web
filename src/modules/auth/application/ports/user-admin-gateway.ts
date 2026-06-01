@@ -7,8 +7,8 @@ export interface UserAdminGateway {
     headers: Headers;
   }): Promise<boolean>;
   revokeUserSession(input: {
+    userId: UserId;
     sessionId: SessionId;
-    providerToken: string;
     headers: Headers;
   }): Promise<boolean>;
 }
