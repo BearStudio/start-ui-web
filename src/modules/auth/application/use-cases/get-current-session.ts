@@ -1,9 +1,8 @@
-import type { AuthUseCaseDeps } from './types';
-import type { AuthSession } from '../../domain/session';
+import type { AuthResult, AuthSessionOutcome, AuthUseCaseDeps } from './types';
 
 export async function getCurrentSession(
   deps: AuthUseCaseDeps,
   input: { headers: Headers }
-): Promise<AuthSession | null> {
+): Promise<AuthResult<AuthSessionOutcome>> {
   return deps.sessionGateway.getSession(input);
 }

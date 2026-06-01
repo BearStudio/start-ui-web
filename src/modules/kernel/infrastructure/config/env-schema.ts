@@ -1,4 +1,5 @@
 /* oxlint-disable no-process-env */
+import { join, map, pipe, unique } from 'remeda';
 import { z } from 'zod';
 
 import { ConfigurationError } from '../../domain/errors/configuration-error';
@@ -41,11 +42,19 @@ export function parseEnv<TSchema extends z.ZodType>(
   const result = schema.safeParse(source ?? runtimeEnv());
   if (result.success) return result.data;
 
-  const issues = result.error.issues.map((issue) => ({
-    field: fieldNameFromIssue(issue),
-    message: issue.message,
-  }));
-  const fields = [...new Set(issues.map((issue) => issue.field))].join(', ');
+  const issues = pipe(
+    result.error.issues,
+    map((issue) => ({
+      field: fieldNameFromIssue(issue),
+      message: issue.message,
+    }))
+  );
+  const fields = pipe(
+    issues,
+    map((issue) => issue.field),
+    unique(),
+    join(', ')
+  );
 
   throw new ConfigurationError(`Invalid environment configuration: ${fields}`, {
     details: { issues },

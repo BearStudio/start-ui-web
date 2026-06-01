@@ -1,15 +1,9 @@
-export type UseCaseResult<T, TReason extends string> =
-  | { ok: true; value: T }
-  | { ok: false; reason: TReason };
+import type { Result } from '@swan-io/boxed';
 
-export const ok = <T>(value: T): UseCaseResult<T, never> => ({
-  ok: true,
-  value,
-});
+import type { AppError } from '../domain/errors/app-error';
 
-export const fail = <TReason extends string>(
-  reason: TReason
-): UseCaseResult<never, TReason> => ({
-  ok: false,
-  reason,
-});
+export type ApplicationResult<TOutcome> = Result<TOutcome, AppError>;
+
+export type DomainOutcome = {
+  type: string;
+};

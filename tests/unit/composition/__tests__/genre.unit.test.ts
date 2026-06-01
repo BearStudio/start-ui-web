@@ -1,6 +1,8 @@
+import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { GenreRepository } from '@/modules/genre';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from '@tests/unit/composition/helpers';
@@ -17,12 +19,20 @@ const genre = {
 const makeGenreRepository = (
   overrides: Partial<GenreRepository> = {}
 ): GenreRepository => ({
-  list: async () => ({ items: [genre], total: 1 }),
+  list: async () =>
+    Result.Ok({ type: 'genre_listed', page: { items: [genre], total: 1 } }),
   ...overrides,
 });
 
 const scope = (userId: string) =>
   ({ userId: toUserId(userId), role: 'user' }) as const;
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('genre composition', () => {
   beforeEach(() => {
@@ -48,19 +58,27 @@ describe('genre composition', () => {
   });
 
   it('routes use case calls through the overridden repository', async () => {
-    const list = vi.fn(async () => ({ items: [genre], total: 1 }));
+    const list = vi.fn(async () =>
+      Result.Ok({
+        type: 'genre_listed' as const,
+        page: { items: [genre], total: 1 },
+      })
+    );
     const useCases = getGenreUseCases({
       kernel: makeTestKernel(),
       genreRepository: makeGenreRepository({ list }),
     });
 
-    await expect(
-      useCases.list({
-        scope: scope('user-1'),
-        limit: 20,
-        searchTerm: 'fic',
-      })
-    ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
+    const result = await useCases.list({
+      scope: scope('user-1'),
+      limit: 20,
+      searchTerm: 'fic',
+    });
+
+    expect(getOk(result)).toMatchObject({
+      type: 'genre_listed',
+      page: { total: 1 },
+    });
     expect(list).toHaveBeenCalledWith({
       cursor: undefined,
       limit: 20,

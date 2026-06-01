@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { setResponseHeader } from '@tanstack/react-start/server';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -8,7 +9,12 @@ import {
 } from '@/modules/auth/backend';
 import { ServerFnError } from '@/modules/kernel/client';
 import { envClient } from '@/platform/env/client';
-import { mockGetSession, mockLogger } from '@tests/server/test-utils';
+import {
+  mockGetSession,
+  mockLogger,
+  mockSession,
+  mockUser,
+} from '@tests/server/test-utils';
 
 describe('server function middleware', () => {
   it('finalizes server timing on handled error paths', async () => {
@@ -65,10 +71,19 @@ describe('server function middleware', () => {
       setUser: vi.fn(),
       startSpan: vi.fn((_options, fn) => fn()),
     };
+    const getCurrentSession = vi.fn(async () =>
+      Result.Ok({
+        type: 'auth_session_found' as const,
+        session: {
+          session: mockSession,
+          user: mockUser,
+        },
+      })
+    );
     const tools = createServerContextTools({
       getAuthUseCases: () =>
         ({
-          getCurrentSession: mockGetSession,
+          getCurrentSession,
           checkPermission: vi.fn(),
         }) as ExplicitAny,
       telemetry,
@@ -93,7 +108,10 @@ describe('server function middleware', () => {
     expect(mockLogger.error).toHaveBeenCalledWith(
       expect.objectContaining({
         event: 'server_fn.error.unhandled',
-        exception: error,
+        exception: expect.objectContaining({
+          cause: error,
+          code: 'AUTH_SESSION_GATEWAY_ERROR',
+        }),
       })
     );
     expect(mockLogger.error).toHaveBeenCalledWith(

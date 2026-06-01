@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type {
@@ -17,18 +18,26 @@ import {
 
 const makeAuthOverrides = (): Required<AuthOverrides> => ({
   sessionGateway: {
-    getSession: vi.fn(async () => null),
+    getSession: vi.fn(async () => Result.Ok({ type: 'auth_session_missing' })),
   } as SessionGateway,
   authorizationGateway: {
-    userHasPermission: vi.fn(async () => true),
+    userHasPermission: vi.fn(async () =>
+      Result.Ok({ type: 'auth_permission_granted' })
+    ),
   } as AuthorizationGateway,
   authEmailPort: {
-    sendSignInOtp: vi.fn(async () => {}),
+    sendSignInOtp: vi.fn(async () =>
+      Result.Ok({ type: 'auth_sign_in_otp_sent' })
+    ),
   } as AuthEmailPort,
   userAdminGateway: {
-    removeUser: vi.fn(async () => true),
-    revokeUserSessions: vi.fn(async () => true),
-    revokeUserSession: vi.fn(async () => true),
+    removeUser: vi.fn(async () => Result.Ok({ type: 'auth_user_removed' })),
+    revokeUserSessions: vi.fn(async () =>
+      Result.Ok({ type: 'auth_user_sessions_revoked' })
+    ),
+    revokeUserSession: vi.fn(async () =>
+      Result.Ok({ type: 'auth_user_session_revoked' })
+    ),
   } as UserAdminGateway,
 });
 

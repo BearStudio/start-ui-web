@@ -1,3 +1,5 @@
+import { Result } from '@swan-io/boxed';
+
 import {
   createUserUseCases,
   type UserAuthGateway,
@@ -14,31 +16,37 @@ const createProductionUserAuthGateway = (): UserAuthGateway => ({
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthUseCases().removeUser({
+    const result = await getAuthUseCases().removeUser({
       userId,
       headers: getRequestHeaders(),
     });
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok({ type: 'user_auth_removed' });
   },
   async revokeUserSessions(userId) {
     const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthUseCases().revokeUserSessions({
+    const result = await getAuthUseCases().revokeUserSessions({
       userId,
       headers: getRequestHeaders(),
     });
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok({ type: 'user_auth_sessions_revoked' });
   },
   async revokeUserSession(target) {
     const [{ getRequestHeaders }, { getAuthUseCases }] = await Promise.all([
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthUseCases().revokeUserSession({
+    const result = await getAuthUseCases().revokeUserSession({
       userId: target.userId,
       sessionId: target.sessionId,
       headers: getRequestHeaders(),
     });
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok({ type: 'user_auth_session_revoked' });
   },
 });
 

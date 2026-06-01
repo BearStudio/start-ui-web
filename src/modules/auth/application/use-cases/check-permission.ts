@@ -1,6 +1,10 @@
 import type { UserId } from '@/modules/kernel/domain/ids';
 
-import type { AuthUseCaseDeps } from './types';
+import type {
+  AuthPermissionOutcome,
+  AuthResult,
+  AuthUseCaseDeps,
+} from './types';
 import type { AuthorizationPermission } from '../ports/authorization-gateway';
 
 export async function checkPermission(
@@ -10,6 +14,6 @@ export async function checkPermission(
     permissions: AuthorizationPermission;
     headers: Headers;
   }
-): Promise<boolean> {
+): Promise<AuthResult<AuthPermissionOutcome>> {
   return deps.authorizationGateway.userHasPermission(input);
 }

@@ -41,6 +41,9 @@ importers:
       '@sentry/tanstackstart-react':
         specifier: ^10.54.0
         version: 10.54.0(react@19.2.6)
+      '@swan-io/boxed':
+        specifier: 3.2.1
+        version: 3.2.1(typescript@6.0.3)
       '@t3-oss/env-core':
         specifier: 0.13.11
         version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
@@ -2796,6 +2799,15 @@ packages:
     engines: {node: '>=14'}
     peerDependencies:
       '@svgr/core': '*'
+
+  '@swan-io/boxed@3.2.1':
+    resolution: {integrity: sha512-MQqSpe09PdjDjTR4HCPpUxO9XsacNguCkce1C2wm1eIb6ycWXQoV+biYvLEuI/LiMqB31KySdgY2YFwrVucLCw==}
+    deprecated: This package has been transferred to @bloodyowl/boxed
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@t3-oss/env-core@0.13.11':
     resolution: {integrity: sha512-sM7GYY+KL7H/Hl0BE0inWfk3nRHZOLhmVn7sHGxaZt9FAR6KqREXAE+6TqKfiavfXmpRxO/OZ2QgKRd+oiBYRQ==}
@@ -9364,6 +9376,10 @@ snapshots:
       svgo: 3.3.3
     transitivePeerDependencies:
       - typescript
+
+  '@swan-io/boxed@3.2.1(typescript@6.0.3)':
+    optionalDependencies:
+      typescript: 6.0.3
 
   '@t3-oss/env-core@0.13.11(typescript@6.0.3)(zod@4.4.3)':
     optionalDependencies:

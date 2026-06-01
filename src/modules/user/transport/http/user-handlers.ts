@@ -6,8 +6,27 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
+import {
+  type OutcomeHandlerConfig,
+  unwrapApplicationResult,
+} from '@/modules/kernel/transport/tanstack/result-mapper';
 import type { UserRole, UserUseCases } from '@/modules/user';
+
+import type {
+  UserCreateOutcome,
+  UserDeleteOutcome,
+  UserGetOutcome,
+  UserListOutcome,
+  UserRevokeSessionOutcome,
+  UserRevokeSessionsOutcome,
+  UserSessionsListOutcome,
+  UserUpdateOutcome,
+} from '../../application/use-cases/types';
+import type {
+  User,
+  UserListPage,
+  UserSessionListPage,
+} from '../../domain/user';
 
 const zRole = () => z.enum(['admin', 'user']);
 
@@ -55,34 +74,89 @@ type UserHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => UserUseCases;
 };
 
-const userReasonConfig = (options?: { selfMessage?: string }) =>
+const userDuplicateConfig = {
+  user_duplicate: {
+    code: 'CONFLICT',
+    message: 'Unique constraint violation',
+    data: { target: ['email'] },
+  },
+} as const;
+
+const userSelfConfig = (options?: { selfMessage?: string }) =>
   ({
-    duplicate: {
-      code: 'CONFLICT',
-      message: 'Unique constraint violation',
-      data: { target: ['email'] },
-    },
-    forbidden: 'FORBIDDEN',
-    not_found: 'NOT_FOUND',
-    self: {
+    user_self: {
       code: 'BAD_REQUEST',
       message: options?.selfMessage ?? 'You cannot target yourself',
     },
   }) as const;
+
+const userListConfig = {
+  user_forbidden: 'FORBIDDEN',
+  user_listed: (outcome) => outcome.page,
+} as const satisfies OutcomeHandlerConfig<UserListOutcome, UserListPage>;
+
+const userGetConfig = {
+  user_forbidden: 'FORBIDDEN',
+  user_found: (outcome) => outcome.user,
+  user_not_found: 'NOT_FOUND',
+} as const satisfies OutcomeHandlerConfig<UserGetOutcome, User>;
+
+const userCreateConfig = {
+  user_created: (outcome) => outcome.user,
+  user_forbidden: 'FORBIDDEN',
+  ...userDuplicateConfig,
+} as const satisfies OutcomeHandlerConfig<UserCreateOutcome, User>;
+
+const userUpdateConfig = {
+  user_forbidden: 'FORBIDDEN',
+  user_not_found: 'NOT_FOUND',
+  user_updated: (outcome) => outcome.user,
+  ...userDuplicateConfig,
+} as const satisfies OutcomeHandlerConfig<UserUpdateOutcome, User>;
+
+const userDeleteConfig = (options?: { selfMessage?: string }) =>
+  ({
+    user_deleted: () => undefined,
+    user_forbidden: 'FORBIDDEN',
+    ...userSelfConfig(options),
+  }) as const satisfies OutcomeHandlerConfig<UserDeleteOutcome, void>;
+
+const userSessionsListConfig = {
+  user_forbidden: 'FORBIDDEN',
+  user_sessions_listed: (outcome) => outcome.page,
+} as const satisfies OutcomeHandlerConfig<
+  UserSessionsListOutcome,
+  UserSessionListPage
+>;
+
+const userRevokeSessionsConfig = (options?: { selfMessage?: string }) =>
+  ({
+    user_forbidden: 'FORBIDDEN',
+    user_sessions_revoked: () => undefined,
+    ...userSelfConfig(options),
+  }) as const satisfies OutcomeHandlerConfig<UserRevokeSessionsOutcome, void>;
+
+const userRevokeSessionConfig = (options?: { selfMessage?: string }) =>
+  ({
+    user_forbidden: 'FORBIDDEN',
+    user_session_not_found: 'NOT_FOUND',
+    user_session_revoked: () => undefined,
+    ...userSelfConfig(options),
+  }) as const satisfies OutcomeHandlerConfig<UserRevokeSessionOutcome, void>;
 
 export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   const getAll = async (
     ctx: ProtectedContext,
     data: z.output<ReturnType<typeof zGetAllInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).list({
         scope: ctx.scope,
         cursor: data.cursor ? toUserId(data.cursor) : undefined,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
       }),
-      userReasonConfig()
+      userListConfig
     );
   };
 
@@ -90,12 +164,12 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zGetByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).get({
         scope: ctx.scope,
         id: toUserId(data.id),
       }),
-      userReasonConfig()
+      userGetConfig
     );
   };
 
@@ -103,7 +177,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zUpdateByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).update({
         scope: ctx.scope,
         id: toUserId(data.id),
@@ -113,7 +187,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
           role: data.role as UserRole | null | undefined,
         },
       }),
-      userReasonConfig()
+      userUpdateConfig
     );
   };
 
@@ -121,7 +195,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zCreateInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).create({
         scope: ctx.scope,
         user: {
@@ -130,7 +204,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
           role: data.role as UserRole | null | undefined,
         },
       }),
-      userReasonConfig()
+      userCreateConfig
     );
   };
 
@@ -138,12 +212,12 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zDeleteByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).delete({
         scope: ctx.scope,
         id: toUserId(data.id),
       }),
-      userReasonConfig({ selfMessage: 'You cannot delete yourself' })
+      userDeleteConfig({ selfMessage: 'You cannot delete yourself' })
     );
   };
 
@@ -151,14 +225,14 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.output<ReturnType<typeof zGetUserSessionsInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).listSessions({
         scope: ctx.scope,
         userId: toUserId(data.userId),
         cursor: data.cursor ? toSessionId(data.cursor) : undefined,
         limit: data.limit,
       }),
-      userReasonConfig()
+      userSessionsListConfig
     );
   };
 
@@ -166,12 +240,14 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zRevokeUserSessionsInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).revokeSessions({
         scope: ctx.scope,
         id: toUserId(data.id),
       }),
-      userReasonConfig({ selfMessage: 'You cannot revoke your own sessions' })
+      userRevokeSessionsConfig({
+        selfMessage: 'You cannot revoke your own sessions',
+      })
     );
   };
 
@@ -179,14 +255,14 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zRevokeUserSessionInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).revokeSession({
         scope: ctx.scope,
         currentSessionId: toSessionId(ctx.session.id),
         id: toUserId(data.id),
         sessionId: toSessionId(data.sessionId),
       }),
-      userReasonConfig({
+      userRevokeSessionConfig({
         selfMessage: 'You cannot revoke your current session',
       })
     );

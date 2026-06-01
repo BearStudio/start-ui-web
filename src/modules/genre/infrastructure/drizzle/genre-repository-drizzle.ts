@@ -1,7 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { and, asc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import type { GenreId } from '@/modules/kernel/domain/ids';
 import { toGenreId } from '@/modules/kernel/domain/ids';
 import {
   getConstraintName,
@@ -16,7 +16,7 @@ import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { GenreRepository } from '../../application/ports/genre-repository';
-import type { Genre, GenreListPage } from '../../domain/genre';
+import type { Genre } from '../../domain/genre';
 
 function toDomain(row: typeof genreTable.$inferSelect): Genre {
   return {
@@ -28,12 +28,14 @@ function toDomain(row: typeof genreTable.$inferSelect): Genre {
   };
 }
 
-function mapDbError(error: unknown): never {
+function mapDbError(error: unknown): AppError {
+  if (error instanceof AppError) return error;
+
   if (
     isUniqueConstraintViolation(error) &&
     getConstraintName(error) === 'genre_name_key'
   ) {
-    throw new AppError({
+    return new AppError({
       code: 'GENRE_DUPLICATE',
       category: 'conflict',
       status: 409,
@@ -43,7 +45,7 @@ function mapDbError(error: unknown): never {
     });
   }
 
-  throw new AppError({
+  return new AppError({
     code: 'GENRE_REPOSITORY_ERROR',
     category: 'system',
     status: 500,
@@ -55,11 +57,7 @@ function mapDbError(error: unknown): never {
 export class GenreRepositoryDrizzle implements GenreRepository {
   constructor(private readonly db: DbLike) {}
 
-  async list(input: {
-    cursor?: GenreId;
-    limit: number;
-    searchTerm: string;
-  }): Promise<GenreListPage> {
+  async list(input: Parameters<GenreRepository['list']>[0]) {
     try {
       const searchFilter = escapedIlikeFilter(
         [genreTable.name],
@@ -79,11 +77,14 @@ export class GenreRepositoryDrizzle implements GenreRepository {
           .from(genreTable)
           .where(searchFilter);
 
-        return {
-          items: [],
-          nextCursor: undefined,
-          total: totalResult?.count ?? 0,
-        };
+        return Result.Ok({
+          type: 'genre_listed' as const,
+          page: {
+            items: [],
+            nextCursor: undefined,
+            total: totalResult?.count ?? 0,
+          },
+        });
       }
 
       const cursorFilter = ascendingTextCursorFilter({
@@ -114,13 +115,16 @@ export class GenreRepositoryDrizzle implements GenreRepository {
         (row) => toGenreId(row.id)
       );
 
-      return {
-        items: pageRows.map(toDomain),
-        nextCursor,
-        total: total[0]?.count ?? 0,
-      };
+      return Result.Ok({
+        type: 'genre_listed' as const,
+        page: {
+          items: pageRows.map(toDomain),
+          nextCursor,
+          total: total[0]?.count ?? 0,
+        },
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 }

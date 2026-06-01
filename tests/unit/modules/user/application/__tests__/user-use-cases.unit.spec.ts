@@ -1,5 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type {
   PermissionChecker,
@@ -82,10 +84,14 @@ function makePermissionChecker(
 ): PermissionChecker {
   return {
     hasPermission: vi.fn<PermissionChecker['hasPermission']>(
-      async (_userId, permissions) =>
-        allowedRequests.some((request) =>
+      async (_userId, permissions) => {
+        const allowed = allowedRequests.some((request) =>
           samePermissionRequest(request, permissions)
-        )
+        );
+        return Result.Ok({
+          type: allowed ? 'permission_granted' : 'permission_denied',
+        });
+      }
     ),
   };
 }
@@ -101,45 +107,74 @@ function makeLogger(): Logger {
 
 function makeRepo(overrides: Partial<UserRepository> = {}) {
   const repo = {
-    list: vi.fn<UserRepository['list']>(async () => ({
-      items: [user],
-      total: 1,
-    })),
-    getById: vi.fn<UserRepository['getById']>(async () => user),
-    create: vi.fn<UserRepository['create']>(async (input) => ({
-      ...user,
-      name: input.name ?? user.name,
-      email: input.email,
-      role: input.role ?? user.role,
-    })),
-    getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(async () => ({
-      email: toEmailAddress('old@example.com'),
-      role: 'user',
-    })),
-    update: vi.fn<UserRepository['update']>(async (_id, input) => ({
-      ...user,
-      name: input.name ?? user.name,
-      email: input.email,
-      role: input.role ?? user.role,
-      emailVerified: input.emailVerified ?? user.emailVerified,
-    })),
-    listSessions: vi.fn<UserRepository['listSessions']>(async () => ({
-      items: [
-        {
-          id: targetSessionId,
-          createdAt: now,
-          updatedAt: now,
-          expiresAt: now,
-          ipAddress: null,
-          userAgent: null,
+    list: vi.fn<UserRepository['list']>(async () =>
+      Result.Ok({
+        type: 'user_listed',
+        page: {
+          items: [user],
+          total: 1,
         },
-      ],
-      total: 1,
-    })),
-    findSessionForRevocation: vi.fn<UserRepository['findSessionForRevocation']>(
-      async () => ({
-        id: targetSessionId,
       })
+    ),
+    getById: vi.fn<UserRepository['getById']>(async () =>
+      Result.Ok({ type: 'user_found', user })
+    ),
+    create: vi.fn<UserRepository['create']>(async (input) =>
+      Result.Ok({
+        type: 'user_created',
+        user: {
+          ...user,
+          name: input.name ?? user.name,
+          email: input.email,
+          role: input.role ?? user.role,
+        },
+      })
+    ),
+    getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(async () =>
+      Result.Ok({
+        type: 'user_update_snapshot_found',
+        snapshot: {
+          email: toEmailAddress('old@example.com'),
+          role: 'user',
+        },
+      })
+    ),
+    update: vi.fn<UserRepository['update']>(async (_id, input) =>
+      Result.Ok({
+        type: 'user_updated',
+        user: {
+          ...user,
+          name: input.name ?? user.name,
+          email: input.email,
+          role: input.role ?? user.role,
+          emailVerified: input.emailVerified ?? user.emailVerified,
+        },
+      })
+    ),
+    listSessions: vi.fn<UserRepository['listSessions']>(async () =>
+      Result.Ok({
+        type: 'user_sessions_listed',
+        page: {
+          items: [
+            {
+              id: targetSessionId,
+              createdAt: now,
+              updatedAt: now,
+              expiresAt: now,
+              ipAddress: null,
+              userAgent: null,
+            },
+          ],
+          total: 1,
+        },
+      })
+    ),
+    findSessionForRevocation: vi.fn<UserRepository['findSessionForRevocation']>(
+      async () =>
+        Result.Ok({
+          type: 'user_session_revocation_target_found',
+          target: { id: targetSessionId },
+        })
     ),
   };
 
@@ -148,12 +183,14 @@ function makeRepo(overrides: Partial<UserRepository> = {}) {
 
 function makeAuthGateway(overrides: Partial<UserAuthGateway> = {}) {
   const gateway = {
-    removeUser: vi.fn<UserAuthGateway['removeUser']>(async () => true),
-    revokeUserSessions: vi.fn<UserAuthGateway['revokeUserSessions']>(
-      async () => true
+    removeUser: vi.fn<UserAuthGateway['removeUser']>(async () =>
+      Result.Ok({ type: 'user_auth_removed' })
     ),
-    revokeUserSession: vi.fn<UserAuthGateway['revokeUserSession']>(
-      async () => true
+    revokeUserSessions: vi.fn<UserAuthGateway['revokeUserSessions']>(async () =>
+      Result.Ok({ type: 'user_auth_sessions_revoked' })
+    ),
+    revokeUserSession: vi.fn<UserAuthGateway['revokeUserSession']>(async () =>
+      Result.Ok({ type: 'user_auth_session_revoked' })
     ),
   };
 
@@ -190,6 +227,24 @@ function appError(code: string) {
   });
 }
 
+async function expectOk<TOutcome extends { type: string }>(
+  promise: Promise<ApplicationResult<TOutcome>>
+) {
+  const result = await promise;
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
+
+async function expectFailure<TOutcome extends { type: string }>(
+  promise: Promise<ApplicationResult<TOutcome>>
+) {
+  const result = await promise;
+  if (result.isOk()) {
+    throw new Error(`Expected Result.Error, got ${result.get().type}`);
+  }
+  return result.getError();
+}
+
 describe('user use cases', () => {
   describe('list', () => {
     it('lists users after checking the exact user list permission', async () => {
@@ -199,13 +254,18 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.list({
-          scope: scope('admin-1'),
-          cursor,
-          limit: 20,
-          searchTerm: 'alice',
-        })
-      ).resolves.toEqual({ ok: true, value: { items: [user], total: 1 } });
+        expectOk(
+          useCases.list({
+            scope: scope('admin-1'),
+            cursor,
+            limit: 20,
+            searchTerm: 'alice',
+          })
+        )
+      ).resolves.toEqual({
+        type: 'user_listed',
+        page: { items: [user], total: 1 },
+      });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
         adminId,
@@ -225,12 +285,14 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.list({
-          scope: scope('admin-1'),
-          limit: 20,
-          searchTerm: '',
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.list({
+            scope: scope('admin-1'),
+            limit: 20,
+            searchTerm: '',
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.list).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
@@ -244,8 +306,8 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.get({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: true, value: user });
+        expectOk(useCases.get({ scope: scope('admin-1'), id: userId }))
+      ).resolves.toEqual({ type: 'user_found', user });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
         adminId,
@@ -264,8 +326,8 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.get({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(useCases.get({ scope: scope('admin-1'), id: userId }))
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.getById).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
@@ -274,12 +336,18 @@ describe('user use cases', () => {
     it('returns not_found when the user row is missing', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userListPermission),
-        repo: { getById: vi.fn<UserRepository['getById']>(async () => null) },
+        repo: {
+          getById: vi.fn<UserRepository['getById']>(async () =>
+            Result.Ok({ type: 'user_not_found' })
+          ),
+        },
       });
 
       await expect(
-        useCases.get({ scope: scope('admin-1'), id: toUserId('missing') })
-      ).resolves.toEqual({ ok: false, reason: 'not_found' });
+        expectOk(
+          useCases.get({ scope: scope('admin-1'), id: toUserId('missing') })
+        )
+      ).resolves.toEqual({ type: 'user_not_found' });
     });
   });
 
@@ -295,10 +363,10 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.create({ scope: scope('admin-1'), user: input })
+        expectOk(useCases.create({ scope: scope('admin-1'), user: input }))
       ).resolves.toMatchObject({
-        ok: true,
-        value: {
+        type: 'user_created',
+        user: {
           name: 'New User',
           email: toEmailAddress('new@example.com'),
           role: 'admin',
@@ -319,11 +387,13 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.create({
-          scope: scope('admin-1'),
-          user: { email: toEmailAddress('new@example.com'), role: 'user' },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.create({
+            scope: scope('admin-1'),
+            user: { email: toEmailAddress('new@example.com'), role: 'user' },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.create).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
@@ -333,36 +403,40 @@ describe('user use cases', () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userCreatePermission),
         repo: {
-          create: vi.fn<UserRepository['create']>(async () => {
-            throw appError('USER_DUPLICATE');
-          }),
+          create: vi.fn<UserRepository['create']>(async () =>
+            Result.Ok({ type: 'user_duplicate' })
+          ),
         },
       });
 
       await expect(
-        useCases.create({
-          scope: scope('admin-1'),
-          user: { email: toEmailAddress('user@example.com'), role: 'user' },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'duplicate' });
+        expectOk(
+          useCases.create({
+            scope: scope('admin-1'),
+            user: { email: toEmailAddress('user@example.com'), role: 'user' },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_duplicate' });
     });
 
-    it('rethrows non-duplicate create conflicts', async () => {
+    it('returns non-duplicate create conflicts as app errors', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userCreatePermission),
         repo: {
-          create: vi.fn<UserRepository['create']>(async () => {
-            throw appError('OTHER_CONFLICT');
-          }),
+          create: vi.fn<UserRepository['create']>(async () =>
+            Result.Error(appError('OTHER_CONFLICT'))
+          ),
         },
       });
 
       await expect(
-        useCases.create({
-          scope: scope('admin-1'),
-          user: { email: toEmailAddress('user@example.com'), role: 'user' },
-        })
-      ).rejects.toMatchObject({ code: 'OTHER_CONFLICT' });
+        expectFailure(
+          useCases.create({
+            scope: scope('admin-1'),
+            user: { email: toEmailAddress('user@example.com'), role: 'user' },
+          })
+        )
+      ).resolves.toMatchObject({ code: 'OTHER_CONFLICT' });
     });
   });
 
@@ -373,12 +447,14 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: toEmailAddress('next@example.com') },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: toEmailAddress('next@example.com') },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.getUpdateSnapshot).not.toHaveBeenCalled();
       expect(repo.update).not.toHaveBeenCalled();
@@ -389,18 +465,20 @@ describe('user use cases', () => {
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
           getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(
-            async () => null
+            async () => Result.Ok({ type: 'user_not_found' })
           ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: toUserId('missing'),
-          user: { email: toEmailAddress('next@example.com') },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'not_found' });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: toUserId('missing'),
+            user: { email: toEmailAddress('next@example.com') },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_not_found' });
 
       expect(repo.update).not.toHaveBeenCalled();
     });
@@ -412,14 +490,16 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.update({
-          scope: scope('user-1'),
-          id: userId,
-          user: { email: nextEmail, role: 'admin' },
-        })
+        expectOk(
+          useCases.update({
+            scope: scope('user-1'),
+            id: userId,
+            user: { email: nextEmail, role: 'admin' },
+          })
+        )
       ).resolves.toMatchObject({
-        ok: true,
-        value: { email: nextEmail, role: 'user', emailVerified: false },
+        type: 'user_updated',
+        user: { email: nextEmail, role: 'user', emailVerified: false },
       });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledTimes(1);
@@ -446,27 +526,33 @@ describe('user use cases', () => {
         ),
         repo: {
           getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(
-            async () => ({
-              email: user.email,
-              role: 'user',
-            })
+            async () =>
+              Result.Ok({
+                type: 'user_update_snapshot_found',
+                snapshot: {
+                  email: user.email,
+                  role: 'user',
+                },
+              })
           ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: {
-            name: 'Updated User',
-            email: user.email,
-            role: 'admin',
-          },
-        })
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: {
+              name: 'Updated User',
+              email: user.email,
+              role: 'admin',
+            },
+          })
+        )
       ).resolves.toMatchObject({
-        ok: true,
-        value: { name: 'Updated User', role: 'admin', emailVerified: true },
+        type: 'user_updated',
+        user: { name: 'Updated User', role: 'admin', emailVerified: true },
       });
 
       expect(permissionChecker.hasPermission).toHaveBeenNthCalledWith(
@@ -492,21 +578,27 @@ describe('user use cases', () => {
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
           getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(
-            async () => ({
-              email: user.email,
-              role: 'user',
-            })
+            async () =>
+              Result.Ok({
+                type: 'user_update_snapshot_found',
+                snapshot: {
+                  email: user.email,
+                  role: 'user',
+                },
+              })
           ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: user.email, role: 'admin' },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: user.email, role: 'admin' },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledTimes(2);
       expect(repo.update).not.toHaveBeenCalled();
@@ -517,21 +609,30 @@ describe('user use cases', () => {
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
           getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(
-            async () => ({
-              email: user.email,
-              role: 'user',
-            })
+            async () =>
+              Result.Ok({
+                type: 'user_update_snapshot_found',
+                snapshot: {
+                  email: user.email,
+                  role: 'user',
+                },
+              })
           ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: user.email, role: 'user' },
-        })
-      ).resolves.toMatchObject({ ok: true, value: { role: 'user' } });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: user.email, role: 'user' },
+          })
+        )
+      ).resolves.toMatchObject({
+        type: 'user_updated',
+        user: { role: 'user' },
+      });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledTimes(1);
       expect(repo.update).toHaveBeenCalledWith(userId, {
@@ -546,21 +647,30 @@ describe('user use cases', () => {
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
           getUpdateSnapshot: vi.fn<UserRepository['getUpdateSnapshot']>(
-            async () => ({
-              email: user.email,
-              role: 'user',
-            })
+            async () =>
+              Result.Ok({
+                type: 'user_update_snapshot_found',
+                snapshot: {
+                  email: user.email,
+                  role: 'user',
+                },
+              })
           ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { name: null, email: user.email },
-        })
-      ).resolves.toMatchObject({ ok: true, value: { name: '' } });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { name: null, email: user.email },
+          })
+        )
+      ).resolves.toMatchObject({
+        type: 'user_updated',
+        user: { name: '' },
+      });
 
       expect(repo.update).toHaveBeenCalledWith(userId, {
         email: user.email,
@@ -573,54 +683,64 @@ describe('user use cases', () => {
     it('returns not_found when the update write misses after a snapshot', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userUpdatePermission),
-        repo: { update: vi.fn<UserRepository['update']>(async () => null) },
+        repo: {
+          update: vi.fn<UserRepository['update']>(async () =>
+            Result.Ok({ type: 'user_not_found' })
+          ),
+        },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: user.email },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'not_found' });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: user.email },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_not_found' });
     });
 
     it('maps duplicate email conflicts', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
-          update: vi.fn<UserRepository['update']>(async () => {
-            throw appError('USER_DUPLICATE');
-          }),
+          update: vi.fn<UserRepository['update']>(async () =>
+            Result.Ok({ type: 'user_duplicate' })
+          ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: toEmailAddress('duplicate@example.com') },
-        })
-      ).resolves.toEqual({ ok: false, reason: 'duplicate' });
+        expectOk(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: toEmailAddress('duplicate@example.com') },
+          })
+        )
+      ).resolves.toEqual({ type: 'user_duplicate' });
     });
 
-    it('rethrows non-duplicate update conflicts', async () => {
+    it('returns non-duplicate update conflicts as app errors', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userUpdatePermission),
         repo: {
-          update: vi.fn<UserRepository['update']>(async () => {
-            throw appError('OTHER_CONFLICT');
-          }),
+          update: vi.fn<UserRepository['update']>(async () =>
+            Result.Error(appError('OTHER_CONFLICT'))
+          ),
         },
       });
 
       await expect(
-        useCases.update({
-          scope: scope('admin-1'),
-          id: userId,
-          user: { email: toEmailAddress('duplicate@example.com') },
-        })
-      ).rejects.toMatchObject({ code: 'OTHER_CONFLICT' });
+        expectFailure(
+          useCases.update({
+            scope: scope('admin-1'),
+            id: userId,
+            user: { email: toEmailAddress('duplicate@example.com') },
+          })
+        )
+      ).resolves.toMatchObject({ code: 'OTHER_CONFLICT' });
     });
   });
 
@@ -631,8 +751,8 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.delete({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: true, value: undefined });
+        expectOk(useCases.delete({ scope: scope('admin-1'), id: userId }))
+      ).resolves.toEqual({ type: 'user_deleted' });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
         adminId,
@@ -651,8 +771,8 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.delete({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(useCases.delete({ scope: scope('admin-1'), id: userId }))
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(auth.removeUser).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
@@ -664,23 +784,32 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.delete({ scope: scope('user-1'), id: userId })
-      ).resolves.toEqual({ ok: false, reason: 'self' });
+        expectOk(useCases.delete({ scope: scope('user-1'), id: userId }))
+      ).resolves.toEqual({ type: 'user_self' });
 
       expect(auth.removeUser).not.toHaveBeenCalled();
     });
 
-    it('throws when the auth provider cannot delete the user', async () => {
+    it('returns auth provider delete failures as app errors', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(userDeletePermission),
         auth: {
-          removeUser: vi.fn<UserAuthGateway['removeUser']>(async () => false),
+          removeUser: vi.fn<UserAuthGateway['removeUser']>(async () =>
+            Result.Error(
+              new AppError({
+                code: 'USER_DELETE_FAILED',
+                category: 'system',
+                status: 500,
+                message: 'Failed to delete user',
+              })
+            )
+          ),
         },
       });
 
       await expect(
-        useCases.delete({ scope: scope('admin-1'), id: userId })
-      ).rejects.toMatchObject({
+        expectFailure(useCases.delete({ scope: scope('admin-1'), id: userId }))
+      ).resolves.toMatchObject({
         code: 'USER_DELETE_FAILED',
         message: 'Failed to delete user',
       });
@@ -695,15 +824,17 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.listSessions({
-          scope: scope('admin-1'),
-          userId,
-          cursor,
-          limit: 10,
-        })
+        expectOk(
+          useCases.listSessions({
+            scope: scope('admin-1'),
+            userId,
+            cursor,
+            limit: 10,
+          })
+        )
       ).resolves.toEqual({
-        ok: true,
-        value: {
+        type: 'user_sessions_listed',
+        page: {
           items: [
             {
               id: targetSessionId,
@@ -739,12 +870,14 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.listSessions({
-          scope: scope('admin-1'),
-          userId,
-          limit: 10,
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.listSessions({
+            scope: scope('admin-1'),
+            userId,
+            limit: 10,
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.listSessions).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
@@ -758,8 +891,10 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: true, value: undefined });
+        expectOk(
+          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+        )
+      ).resolves.toEqual({ type: 'user_sessions_revoked' });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
         adminId,
@@ -774,8 +909,10 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(auth.revokeUserSessions).not.toHaveBeenCalled();
     });
@@ -786,25 +923,37 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSessions({ scope: scope('user-1'), id: userId })
-      ).resolves.toEqual({ ok: false, reason: 'self' });
+        expectOk(
+          useCases.revokeSessions({ scope: scope('user-1'), id: userId })
+        )
+      ).resolves.toEqual({ type: 'user_self' });
 
       expect(auth.revokeUserSessions).not.toHaveBeenCalled();
     });
 
-    it('throws when the auth provider cannot revoke all sessions', async () => {
+    it('returns auth provider revoke-all failures as app errors', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(sessionRevokePermission),
         auth: {
           revokeUserSessions: vi.fn<UserAuthGateway['revokeUserSessions']>(
-            async () => false
+            async () =>
+              Result.Error(
+                new AppError({
+                  code: 'USER_SESSIONS_REVOKE_FAILED',
+                  category: 'system',
+                  status: 500,
+                  message: 'Failed to revoke user sessions',
+                })
+              )
           ),
         },
       });
 
       await expect(
-        useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
-      ).rejects.toMatchObject({
+        expectFailure(
+          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+        )
+      ).resolves.toMatchObject({
         code: 'USER_SESSIONS_REVOKE_FAILED',
         message: 'Failed to revoke user sessions',
       });
@@ -818,13 +967,15 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSession({
-          scope: scope('admin-1'),
-          currentSessionId,
-          id: userId,
-          sessionId: targetSessionId,
-        })
-      ).resolves.toEqual({ ok: true, value: undefined });
+        expectOk(
+          useCases.revokeSession({
+            scope: scope('admin-1'),
+            currentSessionId,
+            id: userId,
+            sessionId: targetSessionId,
+          })
+        )
+      ).resolves.toEqual({ type: 'user_session_revoked' });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
         adminId,
@@ -846,13 +997,15 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSession({
-          scope: scope('admin-1'),
-          currentSessionId,
-          id: userId,
-          sessionId: targetSessionId,
-        })
-      ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+        expectOk(
+          useCases.revokeSession({
+            scope: scope('admin-1'),
+            currentSessionId,
+            id: userId,
+            sessionId: targetSessionId,
+          })
+        )
+      ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.findSessionForRevocation).not.toHaveBeenCalled();
       expect(auth.revokeUserSession).not.toHaveBeenCalled();
@@ -864,18 +1017,20 @@ describe('user use cases', () => {
         repo: {
           findSessionForRevocation: vi.fn<
             UserRepository['findSessionForRevocation']
-          >(async () => null),
+          >(async () => Result.Ok({ type: 'user_session_not_found' })),
         },
       });
 
       await expect(
-        useCases.revokeSession({
-          scope: scope('admin-1'),
-          currentSessionId,
-          id: userId,
-          sessionId: targetSessionId,
-        })
-      ).resolves.toEqual({ ok: false, reason: 'not_found' });
+        expectOk(
+          useCases.revokeSession({
+            scope: scope('admin-1'),
+            currentSessionId,
+            id: userId,
+            sessionId: targetSessionId,
+          })
+        )
+      ).resolves.toEqual({ type: 'user_session_not_found' });
 
       expect(auth.revokeUserSession).not.toHaveBeenCalled();
     });
@@ -886,35 +1041,47 @@ describe('user use cases', () => {
       });
 
       await expect(
-        useCases.revokeSession({
-          scope: scope('admin-1'),
-          currentSessionId: targetSessionId,
-          id: userId,
-          sessionId: targetSessionId,
-        })
-      ).resolves.toEqual({ ok: false, reason: 'self' });
+        expectOk(
+          useCases.revokeSession({
+            scope: scope('admin-1'),
+            currentSessionId: targetSessionId,
+            id: userId,
+            sessionId: targetSessionId,
+          })
+        )
+      ).resolves.toEqual({ type: 'user_self' });
 
       expect(auth.revokeUserSession).not.toHaveBeenCalled();
     });
 
-    it('throws when the auth provider cannot revoke the session', async () => {
+    it('returns auth provider revoke-one failures as app errors', async () => {
       const { useCases } = makeContext({
         permissionChecker: makePermissionChecker(sessionRevokePermission),
         auth: {
           revokeUserSession: vi.fn<UserAuthGateway['revokeUserSession']>(
-            async () => false
+            async () =>
+              Result.Error(
+                new AppError({
+                  code: 'USER_SESSION_REVOKE_FAILED',
+                  category: 'system',
+                  status: 500,
+                  message: 'Failed to revoke user session',
+                })
+              )
           ),
         },
       });
 
       await expect(
-        useCases.revokeSession({
-          scope: scope('admin-1'),
-          currentSessionId,
-          id: userId,
-          sessionId: targetSessionId,
-        })
-      ).rejects.toMatchObject({
+        expectFailure(
+          useCases.revokeSession({
+            scope: scope('admin-1'),
+            currentSessionId,
+            id: userId,
+            sessionId: targetSessionId,
+          })
+        )
+      ).resolves.toMatchObject({
         code: 'USER_SESSION_REVOKE_FAILED',
         message: 'Failed to revoke user session',
       });

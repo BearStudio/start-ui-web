@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
@@ -57,7 +58,9 @@ describe('Better Auth security configuration', () => {
 
     createAuth({
       authEmailPort: {
-        sendSignInOtp: vi.fn(async () => {}),
+        sendSignInOtp: vi.fn(async () =>
+          Result.Ok({ type: 'auth_sign_in_otp_sent' as const })
+        ),
       },
     });
 

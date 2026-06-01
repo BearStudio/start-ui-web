@@ -1,7 +1,7 @@
 export type {
   EmailGateway,
+  SendEmailOutcome,
   SendEmailParams,
-  SendEmailResult,
 } from './application/ports/email-gateway';
 export type {
   EmailStatusRepository,

@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { toGenreId } from '@/modules/kernel/domain/ids';
@@ -21,10 +22,12 @@ const searchTerm = fc.string({ maxLength: 80 });
 describe('genre HTTP transport handlers', () => {
   it('maps list input and protected scope to the list use case', async () => {
     const ctx = createAuthenticatedContext();
-    const list = vi.fn(async () => ({
-      ok: true as const,
-      value: { items: [], total: 0 },
-    }));
+    const list = vi.fn(async () =>
+      Result.Ok({
+        type: 'genre_listed' as const,
+        page: { items: [], total: 0 },
+      })
+    );
     const handlers = createGenreHandlers({
       getUseCases: () => ({ list }) as ExplicitAny,
     });

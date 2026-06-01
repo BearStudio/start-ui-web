@@ -1,8 +1,9 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
 import type { BookId } from '@/modules/kernel/domain/ids';
 
-import type { BookUseCaseDeps, UseCaseResult } from './types';
+import type { BookDeleteOutcome, BookResult, BookUseCaseDeps } from './types';
 
 export type DeleteBookInput = {
   scope: RequestScope;
@@ -12,19 +13,22 @@ export type DeleteBookInput = {
 export async function deleteBook(
   deps: BookUseCaseDeps,
   input: DeleteBookInput
-): Promise<UseCaseResult<void, 'forbidden' | 'not_found'>> {
+): Promise<BookResult<BookDeleteOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { book: ['delete'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'book_forbidden' });
+  }
 
   deps.logger.info({
     event: 'book.delete',
     details: { bookId: input.id },
   });
-  const deleted = await deps.bookRepository.delete(input.id);
-  if (!deleted) return fail('not_found');
-  return ok(undefined);
+  const result = await deps.bookRepository.delete(input.id);
+  if (result.isError()) return Result.Error(result.getError());
+  return Result.Ok(result.get());
 }

@@ -1,9 +1,9 @@
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import { Result } from '@swan-io/boxed';
 
-import type { BookUseCaseDeps, UseCaseResult } from './types';
-import type { Book, BookWriteInput } from '../../domain/book';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+
+import type { BookCreateOutcome, BookResult, BookUseCaseDeps } from './types';
+import type { BookWriteInput } from '../../domain/book';
 import { normalizeBookWriteInput } from '../../domain/book';
 
 export type CreateBookInput = {
@@ -14,24 +14,21 @@ export type CreateBookInput = {
 export async function createBook(
   deps: BookUseCaseDeps,
   input: CreateBookInput
-): Promise<UseCaseResult<Book, 'forbidden' | 'duplicate'>> {
+): Promise<BookResult<BookCreateOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { book: ['create'] },
   });
-  if (!allowed) return fail('forbidden');
-
-  try {
-    deps.logger.info({ event: 'book.create' });
-    const value = await deps.bookRepository.create(
-      normalizeBookWriteInput(input.book)
-    );
-    return ok(value);
-  } catch (error) {
-    if (error instanceof AppError && error.category === 'conflict') {
-      return fail('duplicate');
-    }
-    throw error;
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'book_forbidden' });
   }
+
+  deps.logger.info({ event: 'book.create' });
+  const result = await deps.bookRepository.create(
+    normalizeBookWriteInput(input.book)
+  );
+  if (result.isError()) return Result.Error(result.getError());
+  return Result.Ok(result.get());
 }

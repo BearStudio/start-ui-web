@@ -1,9 +1,23 @@
-import type { UseCaseResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 
-import type { AuthEmailPort } from '../ports/auth-email-port';
-import type { AuthorizationGateway } from '../ports/authorization-gateway';
-import type { SessionGateway } from '../ports/session-gateway';
-import type { UserAdminGateway } from '../ports/user-admin-gateway';
+import type {
+  AuthEmailPort,
+  AuthEmailSendSignInOtpOutcome,
+} from '../ports/auth-email-port';
+import type {
+  AuthorizationGateway,
+  AuthorizationGatewayOutcome,
+} from '../ports/authorization-gateway';
+import type {
+  SessionGateway,
+  SessionGatewayOutcome,
+} from '../ports/session-gateway';
+import type {
+  UserAdminGateway,
+  UserAdminRemoveOutcome,
+  UserAdminRevokeSessionOutcome,
+  UserAdminRevokeSessionsOutcome,
+} from '../ports/user-admin-gateway';
 
 export type AuthUseCaseDeps = {
   sessionGateway: SessionGateway;
@@ -12,4 +26,16 @@ export type AuthUseCaseDeps = {
   userAdminGateway: UserAdminGateway;
 };
 
-export type { UseCaseResult };
+export type AuthSessionOutcome = SessionGatewayOutcome;
+
+export type AuthPermissionOutcome = AuthorizationGatewayOutcome;
+
+export type AuthSendSignInOtpOutcome = AuthEmailSendSignInOtpOutcome;
+
+export type AuthRemoveUserOutcome = UserAdminRemoveOutcome;
+
+export type AuthRevokeUserSessionsOutcome = UserAdminRevokeSessionsOutcome;
+
+export type AuthRevokeUserSessionOutcome = UserAdminRevokeSessionOutcome;
+
+export type AuthResult<TOutcome> = ApplicationResult<TOutcome>;

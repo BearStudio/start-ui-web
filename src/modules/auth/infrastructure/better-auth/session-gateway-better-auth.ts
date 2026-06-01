@@ -1,5 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { and, eq } from 'drizzle-orm';
 
+import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
   toEmailAddress,
   toSessionId,
@@ -18,7 +20,6 @@ import { zRole } from '../../domain/permissions';
 import type {
   AuthenticatedSession,
   AuthenticatedUser,
-  AuthSession,
 } from '../../domain/session';
 
 type BetterAuthSession = NonNullable<
@@ -73,7 +74,7 @@ export class SessionGatewayBetterAuth implements SessionGateway {
 
   private async resolveAppUser(
     providerUser: AuthenticatedUserSource
-  ): Promise<AuthenticatedUserSource> {
+  ): Promise<AuthenticatedUserSource | null> {
     const identity = await this.db.query.authIdentity.findFirst({
       where: and(
         eq(authIdentity.provider, 'better-auth'),
@@ -98,18 +99,40 @@ export class SessionGatewayBetterAuth implements SessionGateway {
       where: eq(userTable.id, userId),
     });
 
-    return appUser ?? { ...providerUser, id: userId };
+    return appUser ?? null;
   }
 
-  async getSession(input: { headers: Headers }): Promise<AuthSession | null> {
-    const session = await this.auth.api.getSession({
-      headers: input.headers,
-    });
-    if (!session?.user || !session.session) return null;
-    const user = await this.resolveAppUser(session.user);
-    return {
-      user: toAuthenticatedUser(user),
-      session: toAuthenticatedSession(session.session, user.id),
-    };
+  async getSession(input: {
+    headers: Headers;
+  }): ReturnType<SessionGateway['getSession']> {
+    try {
+      const session = await this.auth.api.getSession({
+        headers: input.headers,
+      });
+      if (!session?.user || !session.session) {
+        return Result.Ok({ type: 'auth_session_missing' });
+      }
+      const user = await this.resolveAppUser(session.user);
+      if (!user) return Result.Ok({ type: 'auth_session_missing' });
+      return Result.Ok({
+        type: 'auth_session_found',
+        session: {
+          user: toAuthenticatedUser(user),
+          session: toAuthenticatedSession(session.session, user.id),
+        },
+      });
+    } catch (error) {
+      return Result.Error(
+        error instanceof AppError
+          ? error
+          : new AppError({
+              code: 'AUTH_SESSION_GATEWAY_ERROR',
+              category: 'system',
+              status: 500,
+              message: 'Auth session gateway error',
+              cause: error,
+            })
+      );
+    }
   }
 }

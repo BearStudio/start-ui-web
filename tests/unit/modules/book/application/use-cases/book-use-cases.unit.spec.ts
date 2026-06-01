@@ -1,7 +1,9 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel';
-import { AppError, toBookId, toGenreId, toUserId } from '@/modules/kernel';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
+import { toBookId, toGenreId, toUserId } from '@/modules/kernel';
 
 import type { BookUseCaseDeps } from '@/modules/book/application/use-cases/types';
 import type { BookRepository } from '@/modules/book/application/ports/book-repository';
@@ -32,11 +34,11 @@ const idGenerator = {
 };
 
 const allowed: PermissionChecker = {
-  hasPermission: async () => true,
+  hasPermission: async () => Result.Ok({ type: 'permission_granted' }),
 };
 
 const forbidden: PermissionChecker = {
-  hasPermission: async () => false,
+  hasPermission: async () => Result.Ok({ type: 'permission_denied' }),
 };
 
 const scope = {
@@ -46,11 +48,15 @@ const scope = {
 
 function makeRepo(overrides: Partial<BookRepository> = {}): BookRepository {
   return {
-    list: async () => ({ items: [book], total: 1 }),
-    getById: async () => book,
-    create: async () => book,
-    update: async () => book,
-    delete: async () => true,
+    list: async () =>
+      Result.Ok({
+        type: 'book_listed',
+        page: { items: [book], total: 1 },
+      }),
+    getById: async () => Result.Ok({ type: 'book_found', book }),
+    create: async () => Result.Ok({ type: 'book_created', book }),
+    update: async () => Result.Ok({ type: 'book_updated', book }),
+    delete: async () => Result.Ok({ type: 'book_deleted' }),
     ...overrides,
   };
 }
@@ -78,54 +84,68 @@ function makeDeps(
   };
 }
 
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
+
 describe('book use cases', () => {
   it('lists books and returns forbidden when permission is missing', async () => {
-    await expect(
-      createBookUseCases(makeDeps()).list({
-        scope,
-        limit: 20,
-        searchTerm: '',
-      })
-    ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
+    const listed = await createBookUseCases(makeDeps()).list({
+      scope,
+      limit: 20,
+      searchTerm: '',
+    });
 
-    await expect(
-      createBookUseCases(makeDeps({ permissionChecker: forbidden })).list({
-        scope,
-        limit: 20,
-        searchTerm: '',
-      })
-    ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+    expect(getOk(listed)).toMatchObject({
+      type: 'book_listed',
+      page: { total: 1 },
+    });
+
+    const denied = await createBookUseCases(
+      makeDeps({ permissionChecker: forbidden })
+    ).list({
+      scope,
+      limit: 20,
+      searchTerm: '',
+    });
+
+    expect(getOk(denied)).toEqual({ type: 'book_forbidden' });
   });
 
   it('gets a book or returns not_found', async () => {
-    await expect(
-      createBookUseCases(
-        makeDeps({ bookRepository: makeRepo({ getById: async () => null }) })
-      ).get({ scope, id: toBookId('missing') })
-    ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    const missing = await createBookUseCases(
+      makeDeps({
+        bookRepository: makeRepo({
+          getById: async () => Result.Ok({ type: 'book_not_found' }),
+        }),
+      })
+    ).get({ scope, id: toBookId('missing') });
+
+    expect(getOk(missing)).toEqual({ type: 'book_not_found' });
   });
 
   it('creates and maps duplicate conflicts', async () => {
     const duplicateRepo = makeRepo({
-      create: async () => {
-        throw new AppError({
-          code: 'BOOK_DUPLICATE',
-          category: 'conflict',
-          status: 409,
-        });
-      },
+      create: async () => Result.Ok({ type: 'book_duplicate' }),
     });
 
-    await expect(
-      createBookUseCases(makeDeps()).create({ scope, book })
-    ).resolves.toMatchObject({ ok: true });
+    const created = await createBookUseCases(makeDeps()).create({
+      scope,
+      book,
+    });
+    expect(getOk(created)).toEqual({ type: 'book_created', book });
 
-    await expect(
-      createBookUseCases(makeDeps({ bookRepository: duplicateRepo })).create({
-        scope,
-        book,
-      })
-    ).resolves.toEqual({ ok: false, reason: 'duplicate' });
+    const duplicate = await createBookUseCases(
+      makeDeps({ bookRepository: duplicateRepo })
+    ).create({
+      scope,
+      book,
+    });
+
+    expect(getOk(duplicate)).toEqual({ type: 'book_duplicate' });
   });
 
   it('updates and deletes with not_found branches', async () => {
@@ -133,8 +153,8 @@ describe('book use cases', () => {
     const useCases = createBookUseCases(
       makeDeps({
         bookRepository: makeRepo({
-          update: async () => null,
-          delete: async () => false,
+          update: async () => Result.Ok({ type: 'book_not_found' }),
+          delete: async () => Result.Ok({ type: 'book_not_found' }),
         }),
         onTransactionRun: () => {
           transactionRuns += 1;
@@ -142,20 +162,20 @@ describe('book use cases', () => {
       })
     );
 
-    await expect(
-      useCases.update({
-        scope,
-        id: toBookId('missing'),
-        book,
-      })
-    ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    const updated = await useCases.update({
+      scope,
+      id: toBookId('missing'),
+      book,
+    });
+
+    expect(getOk(updated)).toEqual({ type: 'book_not_found' });
     expect(transactionRuns).toBe(1);
-    await expect(
-      useCases.delete({
-        scope,
-        id: toBookId('missing'),
-      })
-    ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    const deleted = await useCases.delete({
+      scope,
+      id: toBookId('missing'),
+    });
+
+    expect(getOk(deleted)).toEqual({ type: 'book_not_found' });
     expect(transactionRuns).toBe(1);
   });
 
@@ -166,7 +186,7 @@ describe('book use cases', () => {
       },
     });
     const transactionRepository = makeRepo({
-      update: async () => book,
+      update: async () => Result.Ok({ type: 'book_updated', book }),
     });
     const useCases = createBookUseCases({
       ...makeDeps({ bookRepository: outsideRepository }),
@@ -175,37 +195,36 @@ describe('book use cases', () => {
       },
     });
 
-    await expect(
-      useCases.update({
-        scope,
-        id: toBookId('book-1'),
-        book,
-      })
-    ).resolves.toMatchObject({ ok: true, value: book });
+    const updated = await useCases.update({
+      scope,
+      id: toBookId('book-1'),
+      book,
+    });
+
+    expect(getOk(updated)).toEqual({ type: 'book_updated', book });
   });
 
   it('prepares cover uploads through permission and object-key policy', async () => {
-    await expect(
-      createBookUseCases(makeDeps()).prepareCoverUpload({
-        scope,
-        fileType: 'image/webp',
-      })
-    ).resolves.toEqual({
-      ok: true,
-      value: { objectKey: 'books/generated-cover-id.webp' },
+    const prepared = await createBookUseCases(makeDeps()).prepareCoverUpload({
+      scope,
+      fileType: 'image/webp',
+    });
+    expect(getOk(prepared)).toEqual({
+      type: 'book_cover_upload_prepared',
+      upload: { objectKey: 'books/generated-cover-id.webp' },
     });
 
-    await expect(
-      createBookUseCases(
-        makeDeps({ permissionChecker: forbidden })
-      ).prepareCoverUpload({ scope, fileType: 'image/webp' })
-    ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+    const denied = await createBookUseCases(
+      makeDeps({ permissionChecker: forbidden })
+    ).prepareCoverUpload({ scope, fileType: 'image/webp' });
+    expect(getOk(denied)).toEqual({ type: 'book_cover_upload_forbidden' });
 
-    await expect(
-      createBookUseCases(makeDeps()).prepareCoverUpload({
-        scope,
-        fileType: 'text/plain',
-      })
-    ).resolves.toEqual({ ok: false, reason: 'invalid_file_type' });
+    const invalid = await createBookUseCases(makeDeps()).prepareCoverUpload({
+      scope,
+      fileType: 'text/plain',
+    });
+    expect(getOk(invalid)).toEqual({
+      type: 'book_cover_upload_invalid_file_type',
+    });
   });
 });

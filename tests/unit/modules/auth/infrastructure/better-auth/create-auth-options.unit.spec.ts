@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
@@ -10,7 +11,7 @@ const database = {
 } as unknown as Database;
 
 const authEmailPort = {
-  sendSignInOtp: async () => {},
+  sendSignInOtp: async () => Result.Ok({ type: 'auth_sign_in_otp_sent' }),
 } satisfies AuthEmailPort;
 
 describe('normalizeCreateAuthInput', () => {

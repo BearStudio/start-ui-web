@@ -1,10 +1,18 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeGenreRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
 import { createGenreRepository } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('GenreRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -32,27 +40,33 @@ describe('GenreRepositoryDrizzle integration', () => {
         makeGenreRow({ id: 'genre-d', name: 'Gamma', color: '#444444' }),
       ]);
 
-    const firstPage = await repository.list({ limit: 2, searchTerm: '' });
+    const firstPage = getOk(
+      await repository.list({ limit: 2, searchTerm: '' })
+    ).page;
     expect(firstPage.items.map((genre) => genre.id)).toEqual([
       'genre-b',
       'genre-a',
     ]);
     expect(firstPage.nextCursor).toBe('genre-a');
 
-    const secondPage = await repository.list({
-      cursor: firstPage.nextCursor,
-      limit: 2,
-      searchTerm: '',
-    });
+    const secondPage = getOk(
+      await repository.list({
+        cursor: firstPage.nextCursor,
+        limit: 2,
+        searchTerm: '',
+      })
+    ).page;
     expect(secondPage.items.map((genre) => genre.id)).toEqual([
       'genre-c',
       'genre-d',
     ]);
 
-    const escapedSearch = await repository.list({
-      limit: 10,
-      searchTerm: 'Alpha_',
-    });
+    const escapedSearch = getOk(
+      await repository.list({
+        limit: 10,
+        searchTerm: 'Alpha_',
+      })
+    ).page;
     expect(escapedSearch.items.map((genre) => genre.id)).toEqual(['genre-a']);
   });
 });

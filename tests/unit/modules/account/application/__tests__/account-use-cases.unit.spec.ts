@@ -1,6 +1,8 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { toUserId } from '@/modules/kernel/domain/ids';
 
 import type { AccountRepository } from '@/modules/account/application/ports/account-repository';
@@ -18,20 +20,29 @@ const clock = {
 };
 
 const repository: AccountRepository = {
-  submitOnboarding: async (id) => ({ id }),
-  updateInfo: async (id) => ({ id }),
+  submitOnboarding: async (id) =>
+    Result.Ok({ type: 'account_updated', account: { id } }),
+  updateInfo: async (id) =>
+    Result.Ok({ type: 'account_updated', account: { id } }),
 };
 
 const allowed: PermissionChecker = {
-  hasPermission: async () => true,
+  hasPermission: async () => Result.Ok({ type: 'permission_granted' }),
 };
 
 const forbidden: PermissionChecker = {
-  hasPermission: async () => false,
+  hasPermission: async () => Result.Ok({ type: 'permission_denied' }),
 };
 
 const scope = (userId: string) =>
   ({ userId: toUserId(userId), role: 'user' }) as const;
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('account use cases', () => {
   it('submits onboarding and updates info', async () => {
@@ -42,43 +53,55 @@ describe('account use cases', () => {
       permissionChecker: allowed,
     });
 
-    await expect(
-      useCases.submitOnboarding({
-        scope: scope('user-1'),
-        name: ' User ',
-      })
-    ).resolves.toMatchObject({ ok: true, value: { id: 'user-1' } });
-    await expect(
-      useCases.updateInfo({ scope: scope('user-1'), name: 'User' })
-    ).resolves.toMatchObject({ ok: true, value: { id: 'user-1' } });
+    const submitted = await useCases.submitOnboarding({
+      scope: scope('user-1'),
+      name: ' User ',
+    });
+    const updated = await useCases.updateInfo({
+      scope: scope('user-1'),
+      name: 'User',
+    });
+
+    expect(getOk(submitted)).toEqual({
+      type: 'account_updated',
+      account: { id: 'user-1' },
+    });
+    expect(getOk(updated)).toEqual({
+      type: 'account_updated',
+      account: { id: 'user-1' },
+    });
   });
 
   it('returns not_found when account rows are missing', async () => {
     const useCases = createAccountUseCases({
       accountRepository: {
-        submitOnboarding: async () => null,
-        updateInfo: async () => null,
+        submitOnboarding: async () => Result.Ok({ type: 'account_not_found' }),
+        updateInfo: async () => Result.Ok({ type: 'account_not_found' }),
       },
       clock,
       logger,
       permissionChecker: allowed,
     });
 
-    await expect(
-      useCases.submitOnboarding({
-        scope: scope('missing'),
-        name: 'User',
-      })
-    ).resolves.toEqual({ ok: false, reason: 'not_found' });
-    await expect(
-      useCases.updateInfo({ scope: scope('missing'), name: 'User' })
-    ).resolves.toEqual({ ok: false, reason: 'not_found' });
+    const submitted = await useCases.submitOnboarding({
+      scope: scope('missing'),
+      name: 'User',
+    });
+    const updated = await useCases.updateInfo({
+      scope: scope('missing'),
+      name: 'User',
+    });
+
+    expect(getOk(submitted)).toEqual({ type: 'account_not_found' });
+    expect(getOk(updated)).toEqual({ type: 'account_not_found' });
   });
 
   it('rejects blank account names before repository writes', async () => {
     const repositoryWithSpies: AccountRepository = {
-      submitOnboarding: async (id) => ({ id }),
-      updateInfo: async (id) => ({ id }),
+      submitOnboarding: async (id) =>
+        Result.Ok({ type: 'account_updated', account: { id } }),
+      updateInfo: async (id) =>
+        Result.Ok({ type: 'account_updated', account: { id } }),
     };
     const submitSpy = vi.spyOn(repositoryWithSpies, 'submitOnboarding');
     const updateSpy = vi.spyOn(repositoryWithSpies, 'updateInfo');
@@ -89,23 +112,27 @@ describe('account use cases', () => {
       permissionChecker: allowed,
     });
 
-    await expect(
-      useCases.submitOnboarding({
-        scope: scope('user-1'),
-        name: '   ',
-      })
-    ).resolves.toEqual({ ok: false, reason: 'invalid' });
-    await expect(
-      useCases.updateInfo({ scope: scope('user-1'), name: '   ' })
-    ).resolves.toEqual({ ok: false, reason: 'invalid' });
+    const submitted = await useCases.submitOnboarding({
+      scope: scope('user-1'),
+      name: '   ',
+    });
+    const updated = await useCases.updateInfo({
+      scope: scope('user-1'),
+      name: '   ',
+    });
+
+    expect(getOk(submitted)).toEqual({ type: 'account_invalid' });
+    expect(getOk(updated)).toEqual({ type: 'account_invalid' });
     expect(submitSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
   });
 
   it('rejects account writes without account update permission', async () => {
     const repositoryWithSpies: AccountRepository = {
-      submitOnboarding: async (id) => ({ id }),
-      updateInfo: async (id) => ({ id }),
+      submitOnboarding: async (id) =>
+        Result.Ok({ type: 'account_updated', account: { id } }),
+      updateInfo: async (id) =>
+        Result.Ok({ type: 'account_updated', account: { id } }),
     };
     const submitSpy = vi.spyOn(repositoryWithSpies, 'submitOnboarding');
     const updateSpy = vi.spyOn(repositoryWithSpies, 'updateInfo');
@@ -116,15 +143,17 @@ describe('account use cases', () => {
       permissionChecker: forbidden,
     });
 
-    await expect(
-      useCases.submitOnboarding({
-        scope: scope('user-1'),
-        name: 'User',
-      })
-    ).resolves.toEqual({ ok: false, reason: 'forbidden' });
-    await expect(
-      useCases.updateInfo({ scope: scope('user-1'), name: 'User' })
-    ).resolves.toEqual({ ok: false, reason: 'forbidden' });
+    const submitted = await useCases.submitOnboarding({
+      scope: scope('user-1'),
+      name: 'User',
+    });
+    const updated = await useCases.updateInfo({
+      scope: scope('user-1'),
+      name: 'User',
+    });
+
+    expect(getOk(submitted)).toEqual({ type: 'account_forbidden' });
+    expect(getOk(updated)).toEqual({ type: 'account_forbidden' });
     expect(submitSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
   });

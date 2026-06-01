@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -27,10 +28,12 @@ const searchTerm = fc.string({ maxLength: 80 });
 describe('user HTTP transport handlers', () => {
   it('maps update input into typed user values', async () => {
     const ctx = createAuthenticatedContext();
-    const update = vi.fn(async () => ({
-      ok: true as const,
-      value: { id: toUserId('user-2') },
-    }));
+    const update = vi.fn(async () =>
+      Result.Ok({
+        type: 'user_updated' as const,
+        user: { id: toUserId('user-2') },
+      })
+    );
     const handlers = createUserHandlers({
       getUseCases: () => ({ update }) as ExplicitAny,
     });
@@ -58,10 +61,12 @@ describe('user HTTP transport handlers', () => {
 
   it('maps session pagination input to the list-sessions use case', async () => {
     const ctx = createAuthenticatedContext();
-    const listSessions = vi.fn(async () => ({
-      ok: true as const,
-      value: { items: [], total: 0 },
-    }));
+    const listSessions = vi.fn(async () =>
+      Result.Ok({
+        type: 'user_sessions_listed' as const,
+        page: { items: [], total: 0 },
+      })
+    );
     const handlers = createUserHandlers({
       getUseCases: () => ({ listSessions }) as ExplicitAny,
     });

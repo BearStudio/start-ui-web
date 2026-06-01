@@ -443,7 +443,7 @@ rules:
     message: WorkOS SDK imports must stay inside the future auth WorkOS adapter.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']@workos/[^"'']+["'']'
+    pattern-regex: '^\s*import(?:\s+type)?\s+[^;]+from\s+["'']@workos(?:-inc)?/[^"'']+["'']'
     paths:
       exclude:
         - src/modules/auth/infrastructure/workos/**

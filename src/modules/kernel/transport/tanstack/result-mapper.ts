@@ -1,4 +1,10 @@
-import type { UseCaseResult } from '@/modules/kernel/application/result';
+import { Result } from '@swan-io/boxed';
+import { match, P } from 'ts-pattern';
+
+import type {
+  ApplicationResult,
+  DomainOutcome,
+} from '@/modules/kernel/application/result';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
 import { ServerFnError, type ServerFnErrorCode } from './server-fn-error';
@@ -51,11 +57,52 @@ export const mapAppErrorToServerFnError = (error: unknown): never => {
   throw error;
 };
 
-export async function unwrapUseCaseResult<T, TReason extends string>(
-  result: Promise<UseCaseResult<T, TReason>>,
-  reasons: Record<TReason, ReasonConfig>
-): Promise<T> {
-  const value = await result.catch(mapAppErrorToServerFnError);
-  if (value.ok) return value.value;
-  return throwServerFnErrorForReason(value.reason, reasons);
+type OutcomeHandler<TOutcome extends DomainOutcome, TResult> =
+  | ReasonConfig
+  | ((outcome: TOutcome) => TResult);
+
+export type OutcomeHandlerConfig<TOutcome extends DomainOutcome, TResult> = {
+  [TType in TOutcome['type']]: OutcomeHandler<
+    Extract<TOutcome, { type: TType }>,
+    TResult
+  >;
+};
+
+type OutcomeHandlerReturn<THandlers> = {
+  [TKey in keyof THandlers]: THandlers[TKey] extends (
+    outcome: ExplicitAny
+  ) => infer TResult
+    ? TResult
+    : never;
+}[keyof THandlers];
+
+export async function unwrapApplicationResult<
+  TOutcome extends DomainOutcome,
+  THandlers extends OutcomeHandlerConfig<TOutcome, unknown>,
+>(
+  result: Promise<ApplicationResult<TOutcome>> | ApplicationResult<TOutcome>,
+  handlers: THandlers
+): Promise<OutcomeHandlerReturn<THandlers>> {
+  const value = await Promise.resolve(result).catch(mapAppErrorToServerFnError);
+
+  const mapped = match(value as ApplicationResult<TOutcome>)
+    .with(Result.P.Ok(P.select()), (outcome) => {
+      const typedOutcome = outcome as unknown as TOutcome;
+      const outcomeType = typedOutcome.type as TOutcome['type'];
+      const handler = handlers[outcomeType];
+      if (typeof handler === 'function') {
+        return (
+          handler as (outcome: TOutcome) => OutcomeHandlerReturn<THandlers>
+        )(typedOutcome);
+      }
+      return throwServerFnErrorForReason(outcomeType, {
+        [outcomeType]: handler,
+      });
+    })
+    .with(Result.P.Error(P.select()), (error) =>
+      mapAppErrorToServerFnError(error)
+    )
+    .exhaustive();
+
+  return mapped as OutcomeHandlerReturn<THandlers>;
 }

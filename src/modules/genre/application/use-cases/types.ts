@@ -1,8 +1,11 @@
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { UseCaseResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 
-import type { GenreRepository } from '../ports/genre-repository';
+import type {
+  GenreListRepositoryOutcome,
+  GenreRepository,
+} from '../ports/genre-repository';
 
 export type GenreUseCaseDeps = {
   genreRepository: GenreRepository;
@@ -10,4 +13,8 @@ export type GenreUseCaseDeps = {
   logger: Logger;
 };
 
-export type { UseCaseResult };
+export type GenreListOutcome =
+  | GenreListRepositoryOutcome
+  | { type: 'genre_forbidden' };
+
+export type GenreResult<TOutcome> = ApplicationResult<TOutcome>;

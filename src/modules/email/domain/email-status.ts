@@ -1,3 +1,5 @@
+import { concat, filter, isString, pipe, takeLast } from 'remeda';
+
 export const EMAIL_PROVIDER_RESEND = 'resend' as const;
 
 export type EmailProvider = typeof EMAIL_PROVIDER_RESEND;
@@ -42,7 +44,7 @@ const processedWebhookEventIdsDefaultLimit = 20;
 const toProcessedWebhookEventIds = (metadata: EmailMetadata): string[] => {
   const value = metadata[processedWebhookEventIdsKey];
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === 'string');
+  return filter(value, isString);
 };
 
 export const hasProcessedWebhookEvent = (
@@ -61,15 +63,15 @@ export const withProcessedWebhookEventId = (
     Number.isFinite(limit) && limit >= 0
       ? Math.trunc(limit)
       : processedWebhookEventIdsDefaultLimit;
-  const ids = toProcessedWebhookEventIds(metadata).filter(
-    (id) => id !== eventId
+  const ids = pipe(
+    toProcessedWebhookEventIds(metadata),
+    filter((id) => id !== eventId),
+    concat([eventId]),
+    takeLast(boundedLimit)
   );
-  ids.push(eventId);
 
   return {
     ...metadata,
-    [processedWebhookEventIdsKey]: ids.slice(
-      Math.max(0, ids.length - boundedLimit)
-    ),
+    [processedWebhookEventIdsKey]: ids,
   };
 };

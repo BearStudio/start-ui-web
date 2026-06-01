@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { createHash } from 'node:crypto';
 
 import i18n from '@/platform/lib/i18n';
@@ -23,10 +24,12 @@ const signInOtpIdempotencyKey = (input: SendSignInOtpInput) => {
 export class AuthEmailPortResend implements AuthEmailPort {
   constructor(private readonly emailGateway: EmailGateway) {}
 
-  async sendSignInOtp(input: SendSignInOtpInput): Promise<void> {
+  async sendSignInOtp(
+    input: SendSignInOtpInput
+  ): ReturnType<AuthEmailPort['sendSignInOtp']> {
     const t = i18n.getFixedT(input.language, 'emails');
 
-    await this.emailGateway.sendEmail({
+    const result = await this.emailGateway.sendEmail({
       to: input.email,
       subject: t('loginCode.subject'),
       template: (
@@ -38,5 +41,7 @@ export class AuthEmailPortResend implements AuthEmailPort {
         language: input.language,
       },
     });
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok({ type: 'auth_sign_in_otp_sent' });
   }
 }

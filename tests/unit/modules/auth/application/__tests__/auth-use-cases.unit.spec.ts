@@ -1,5 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 
 import type { AuthEmailPort } from '@/modules/auth/application/ports/auth-email-port';
@@ -33,24 +35,41 @@ const makeDeps = (overrides?: {
   userAdminGateway?: Partial<UserAdminGateway>;
 }) => ({
   sessionGateway: {
-    getSession: vi.fn(async () => session),
+    getSession: vi.fn(async () =>
+      Result.Ok({ type: 'auth_session_found', session })
+    ),
     ...overrides?.sessionGateway,
   } as SessionGateway,
   authorizationGateway: {
-    userHasPermission: vi.fn(async () => true),
+    userHasPermission: vi.fn(async () =>
+      Result.Ok({ type: 'auth_permission_granted' })
+    ),
     ...overrides?.authorizationGateway,
   } as AuthorizationGateway,
   authEmailPort: {
-    sendSignInOtp: vi.fn(async () => {}),
+    sendSignInOtp: vi.fn(async () =>
+      Result.Ok({ type: 'auth_sign_in_otp_sent' })
+    ),
     ...overrides?.authEmailPort,
   } as AuthEmailPort,
   userAdminGateway: {
-    removeUser: vi.fn(async () => true),
-    revokeUserSessions: vi.fn(async () => true),
-    revokeUserSession: vi.fn(async () => true),
+    removeUser: vi.fn(async () => Result.Ok({ type: 'auth_user_removed' })),
+    revokeUserSessions: vi.fn(async () =>
+      Result.Ok({ type: 'auth_user_sessions_revoked' })
+    ),
+    revokeUserSession: vi.fn(async () =>
+      Result.Ok({ type: 'auth_user_session_revoked' })
+    ),
     ...overrides?.userAdminGateway,
   } as UserAdminGateway,
 });
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('auth use cases', () => {
   it('returns session from the gateway', async () => {
@@ -60,19 +79,22 @@ describe('auth use cases', () => {
 
     const result = await useCases.getCurrentSession({ headers });
 
-    expect(result).toEqual(session);
+    expect(getOk(result)).toEqual({ type: 'auth_session_found', session });
     expect(deps.sessionGateway.getSession).toHaveBeenCalledWith({ headers });
   });
 
   it('returns null when there is no session', async () => {
     const deps = makeDeps({
-      sessionGateway: { getSession: vi.fn(async () => null) },
+      sessionGateway: {
+        getSession: vi.fn(async () =>
+          Result.Ok({ type: 'auth_session_missing' as const })
+        ),
+      },
     });
     const useCases = createAuthUseCases(deps);
 
-    await expect(
-      useCases.getCurrentSession({ headers: new Headers() })
-    ).resolves.toBeNull();
+    const result = await useCases.getCurrentSession({ headers: new Headers() });
+    expect(getOk(result)).toEqual({ type: 'auth_session_missing' });
   });
 
   it('delegates checkPermission to the authorization gateway', async () => {
@@ -86,7 +108,7 @@ describe('auth use cases', () => {
       headers,
     });
 
-    expect(allowed).toBe(true);
+    expect(getOk(allowed)).toEqual({ type: 'auth_permission_granted' });
     expect(deps.authorizationGateway.userHasPermission).toHaveBeenCalledWith({
       userId: toUserId('user-1'),
       permissions: { book: ['create'] },
@@ -98,12 +120,13 @@ describe('auth use cases', () => {
     const deps = makeDeps();
     const useCases = createAuthUseCases(deps);
 
-    await useCases.sendSignInOtp({
+    const result = await useCases.sendSignInOtp({
       email: 'a@b.com',
       otp: '123456',
       language: 'en',
     });
 
+    expect(getOk(result)).toEqual({ type: 'auth_sign_in_otp_sent' });
     expect(deps.authEmailPort.sendSignInOtp).toHaveBeenCalledWith({
       email: 'a@b.com',
       otp: '123456',
@@ -116,14 +139,27 @@ describe('auth use cases', () => {
     const useCases = createAuthUseCases(deps);
     const headers = new Headers();
 
-    await useCases.removeUser({ userId: toUserId('user-1'), headers });
-    await useCases.revokeUserSessions({ userId: toUserId('user-1'), headers });
-    await useCases.revokeUserSession({
+    const removed = await useCases.removeUser({
+      userId: toUserId('user-1'),
+      headers,
+    });
+    const revokedSessions = await useCases.revokeUserSessions({
+      userId: toUserId('user-1'),
+      headers,
+    });
+    const revokedSession = await useCases.revokeUserSession({
       userId: toUserId('user-1'),
       sessionId: toSessionId('session-1'),
       headers,
     });
 
+    expect(getOk(removed)).toEqual({ type: 'auth_user_removed' });
+    expect(getOk(revokedSessions)).toEqual({
+      type: 'auth_user_sessions_revoked',
+    });
+    expect(getOk(revokedSession)).toEqual({
+      type: 'auth_user_session_revoked',
+    });
     expect(deps.userAdminGateway.removeUser).toHaveBeenCalledWith({
       userId: toUserId('user-1'),
       headers,

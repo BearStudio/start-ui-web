@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
@@ -22,10 +23,12 @@ const searchTerm = fc.string({ maxLength: 80 });
 describe('book HTTP transport handlers', () => {
   it('maps list input and protected scope to the list use case', async () => {
     const ctx = createAuthenticatedContext();
-    const list = vi.fn(async () => ({
-      ok: true as const,
-      value: { items: [], total: 0 },
-    }));
+    const list = vi.fn(async () =>
+      Result.Ok({
+        type: 'book_listed' as const,
+        page: { items: [], total: 0 },
+      })
+    );
     const handlers = createBookHandlers({
       getUseCases: () => ({ list }) as ExplicitAny,
     });
@@ -51,10 +54,12 @@ describe('book HTTP transport handlers', () => {
 
   it('maps create input into domain write values', async () => {
     const ctx = createAuthenticatedContext();
-    const create = vi.fn(async () => ({
-      ok: true as const,
-      value: { id: toBookId('book-1') },
-    }));
+    const create = vi.fn(async () =>
+      Result.Ok({
+        type: 'book_created' as const,
+        book: { id: toBookId('book-1') },
+      })
+    );
     const handlers = createBookHandlers({
       getUseCases: () => ({ create }) as ExplicitAny,
     });

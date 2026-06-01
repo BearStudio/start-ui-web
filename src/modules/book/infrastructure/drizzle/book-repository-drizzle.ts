@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { and, asc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
@@ -16,7 +17,7 @@ import { book as bookTable } from '@/modules/kernel/infrastructure/db/schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type { BookRepository } from '../../application/ports/book-repository';
-import type { Book, BookListPage, BookWriteInput } from '../../domain/book';
+import type { Book, BookWriteInput } from '../../domain/book';
 
 type BookRow = typeof bookTable.$inferSelect & {
   genre?: {
@@ -50,12 +51,18 @@ function toDomain(row: BookRow): Book {
   };
 }
 
-function mapDbError(error: unknown): never {
-  if (
+function isBookDuplicateError(error: unknown) {
+  return (
     isUniqueConstraintViolation(error) &&
     getConstraintName(error) === 'book_title_author_key'
-  ) {
-    throw new AppError({
+  );
+}
+
+function mapDbError(error: unknown): AppError {
+  if (error instanceof AppError) return error;
+
+  if (isBookDuplicateError(error)) {
+    return new AppError({
       code: 'BOOK_DUPLICATE',
       category: 'conflict',
       status: 409,
@@ -68,7 +75,7 @@ function mapDbError(error: unknown): never {
   if (error && typeof error === 'object' && 'code' in error) {
     const code = (error as { code?: unknown }).code;
     if (code === '23503') {
-      throw new AppError({
+      return new AppError({
         code: 'BOOK_FOREIGN_KEY',
         category: 'bad_request',
         status: 400,
@@ -78,7 +85,7 @@ function mapDbError(error: unknown): never {
     }
   }
 
-  throw new AppError({
+  return new AppError({
     code: 'BOOK_REPOSITORY_ERROR',
     category: 'system',
     status: 500,
@@ -98,11 +105,7 @@ export class BookRepositoryDrizzle implements BookRepository {
     return row ? toDomain(row) : null;
   }
 
-  async list(input: {
-    cursor?: BookId;
-    limit: number;
-    searchTerm: string;
-  }): Promise<BookListPage> {
+  async list(input: Parameters<BookRepository['list']>[0]) {
     try {
       const searchFilter = escapedIlikeFilter(
         [bookTable.title, bookTable.author],
@@ -122,11 +125,14 @@ export class BookRepositoryDrizzle implements BookRepository {
           .from(bookTable)
           .where(searchFilter);
 
-        return {
-          items: [],
-          nextCursor: undefined,
-          total: totalResult?.count ?? 0,
-        };
+        return Result.Ok({
+          type: 'book_listed' as const,
+          page: {
+            items: [],
+            nextCursor: undefined,
+            total: totalResult?.count ?? 0,
+          },
+        });
       }
 
       const cursorFilter = ascendingTextCursorFilter({
@@ -158,25 +164,33 @@ export class BookRepositoryDrizzle implements BookRepository {
         (row) => toBookId(row.id)
       );
 
-      return {
-        items: pageRows.map(toDomain),
-        nextCursor,
-        total: total[0]?.count ?? 0,
-      };
+      return Result.Ok({
+        type: 'book_listed' as const,
+        page: {
+          items: pageRows.map(toDomain),
+          nextCursor,
+          total: total[0]?.count ?? 0,
+        },
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async getById(id: BookId): Promise<Book | null> {
+  async getById(id: BookId) {
     try {
-      return await this.getByIdWithDb(this.db, id);
+      const book = await this.getByIdWithDb(this.db, id);
+      return Result.Ok(
+        book
+          ? { type: 'book_found' as const, book }
+          : { type: 'book_not_found' as const }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async create(input: BookWriteInput): Promise<Book> {
+  async create(input: BookWriteInput) {
     try {
       const [created] = await this.db
         .insert(bookTable)
@@ -190,22 +204,29 @@ export class BookRepositoryDrizzle implements BookRepository {
         .returning();
 
       if (!created) {
-        throw new AppError({
-          code: 'BOOK_CREATE_EMPTY_RESULT',
-          category: 'system',
-          status: 500,
-          message: 'Book create returned no row',
-        });
+        return Result.Error(
+          new AppError({
+            code: 'BOOK_CREATE_EMPTY_RESULT',
+            category: 'system',
+            status: 500,
+            message: 'Book create returned no row',
+          })
+        );
       }
 
-      return toDomain(created);
+      return Result.Ok({
+        type: 'book_created' as const,
+        book: toDomain(created),
+      });
     } catch (error) {
-      if (error instanceof AppError) throw error;
-      mapDbError(error);
+      if (isBookDuplicateError(error)) {
+        return Result.Ok({ type: 'book_duplicate' as const });
+      }
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async update(id: BookId, input: BookWriteInput): Promise<Book | null> {
+  async update(id: BookId, input: BookWriteInput) {
     try {
       const [updated] = await this.db
         .update(bookTable)
@@ -219,23 +240,35 @@ export class BookRepositoryDrizzle implements BookRepository {
         .where(eq(bookTable.id, id))
         .returning();
 
-      if (!updated) return null;
-      return this.getByIdWithDb(this.db, id);
+      if (!updated) return Result.Ok({ type: 'book_not_found' as const });
+      const book = await this.getByIdWithDb(this.db, id);
+      return Result.Ok(
+        book
+          ? { type: 'book_updated' as const, book }
+          : { type: 'book_not_found' as const }
+      );
     } catch (error) {
-      mapDbError(error);
+      if (isBookDuplicateError(error)) {
+        return Result.Ok({ type: 'book_duplicate' as const });
+      }
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async delete(id: BookId): Promise<boolean> {
+  async delete(id: BookId) {
     try {
       const [deleted] = await this.db
         .delete(bookTable)
         .where(eq(bookTable.id, id))
         .returning({ id: bookTable.id });
 
-      return Boolean(deleted);
+      return Result.Ok(
+        deleted
+          ? { type: 'book_deleted' as const }
+          : { type: 'book_not_found' as const }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 }

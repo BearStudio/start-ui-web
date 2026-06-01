@@ -1,3 +1,5 @@
+import { filter, isTruthy, join, map, pipe, unique, uniqueBy } from 'remeda';
+
 type ContentSecurityPolicyOptions = {
   baseUrl?: string;
   isProduction?: boolean;
@@ -15,18 +17,8 @@ const sourceOriginFromUrl = (value: string | undefined) => {
   }
 };
 
-const uniqueSources = (sources: Array<string | undefined>) => {
-  const seen = new Set<string>();
-  const result: string[] = [];
-
-  for (const source of sources) {
-    if (!source || seen.has(source)) continue;
-    seen.add(source);
-    result.push(source);
-  }
-
-  return result;
-};
+const uniqueSources = (sources: Array<string | undefined>) =>
+  pipe(sources, filter(isTruthy), unique());
 
 const isProductionHttps = (options: ContentSecurityPolicyOptions) => {
   if (!options.isProduction || !options.baseUrl) return false;
@@ -124,23 +116,15 @@ export function applySecurityHeaders(
 }
 
 export function appendVaryHeader(response: Response, values: string[]) {
-  const existing = response.headers
-    .get('Vary')
-    ?.split(',')
-    .map((value) => value.trim())
-    .filter(Boolean);
-  const existingValues = existing ?? [];
-  const seen = new Set(existingValues.map((value) => value.toLowerCase()));
+  const varyValues = pipe(
+    [...(response.headers.get('Vary')?.split(',') ?? []), ...values],
+    map((value) => value.trim()),
+    filter(isTruthy),
+    uniqueBy((value) => value.toLowerCase())
+  );
 
-  for (const value of values) {
-    const normalized = value.trim();
-    if (!normalized || seen.has(normalized.toLowerCase())) continue;
-    seen.add(normalized.toLowerCase());
-    existingValues.push(normalized);
-  }
-
-  if (existingValues.length > 0) {
-    response.headers.set('Vary', existingValues.join(', '));
+  if (varyValues.length > 0) {
+    response.headers.set('Vary', join(varyValues, ', '));
   }
 
   return response;

@@ -1,4 +1,5 @@
 import { RejectUpload } from '@better-upload/server';
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { mockSession, mockUser } from '@tests/server/test-utils';
@@ -25,10 +26,12 @@ describe('book cover upload transport', () => {
   });
 
   it('binds session context and returns the prepared object key', async () => {
-    const prepareCoverUpload = vi.fn(async () => ({
-      ok: true as const,
-      value: { objectKey: 'books/generated.webp' },
-    }));
+    const prepareCoverUpload = vi.fn(async () =>
+      Result.Ok({
+        type: 'book_cover_upload_prepared' as const,
+        upload: { objectKey: 'books/generated.webp' },
+      })
+    );
 
     await expect(
       handleBookCoverBeforeUpload(
@@ -75,10 +78,8 @@ describe('book cover upload transport', () => {
             session: mockSession,
           }),
           getUseCases: () => ({
-            prepareCoverUpload: async () => ({
-              ok: false as const,
-              reason: 'forbidden' as const,
-            }),
+            prepareCoverUpload: async () =>
+              Result.Ok({ type: 'book_cover_upload_forbidden' as const }),
           }),
         },
         { headers, fileType: 'image/png' }
@@ -93,10 +94,10 @@ describe('book cover upload transport', () => {
             session: mockSession,
           }),
           getUseCases: () => ({
-            prepareCoverUpload: async () => ({
-              ok: false as const,
-              reason: 'invalid_file_type' as const,
-            }),
+            prepareCoverUpload: async () =>
+              Result.Ok({
+                type: 'book_cover_upload_invalid_file_type' as const,
+              }),
           }),
         },
         { headers, fileType: 'text/plain' }

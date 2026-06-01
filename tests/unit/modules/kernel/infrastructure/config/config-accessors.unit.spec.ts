@@ -153,6 +153,7 @@ describe('server config accessors', () => {
   });
 
   it('defaults the auth provider to Better Auth', async () => {
+    vi.stubEnv('AUTH_PROVIDER', undefined);
     const { getAuthProviderConfig } =
       await import('@/modules/kernel/infrastructure/config/auth');
 
@@ -166,6 +167,17 @@ describe('server config accessors', () => {
       await import('@/modules/kernel/infrastructure/config/auth');
 
     expect(getAuthProviderConfig()).toEqual({ provider: 'workos' });
+  });
+
+  it('rejects reserved auth providers through the Better Auth config accessor', async () => {
+    vi.stubEnv('AUTH_PROVIDER', 'workos');
+    vi.stubEnv('AUTH_SECRET', undefined);
+    const { getAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    expect(() => getAuthConfig()).toThrow(ConfigurationError);
   });
 
   it('returns null for absent optional Redis config', async () => {

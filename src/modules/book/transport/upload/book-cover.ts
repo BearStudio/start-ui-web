@@ -66,16 +66,18 @@ export const handleBookCoverBeforeUpload = async (
     scope: scopeFromUser(user),
     fileType: input.fileType,
   });
+  if (prepared.isError()) throw prepared.getError();
 
-  if (prepared.ok) {
+  const outcome = prepared.get();
+  if (outcome.type === 'book_cover_upload_prepared') {
     return {
       objectInfo: {
-        key: prepared.value.objectKey,
+        key: outcome.upload.objectKey,
       },
     };
   }
 
-  if (prepared.reason === 'forbidden') {
+  if (outcome.type === 'book_cover_upload_forbidden') {
     return rejectUpload(deps, 'UNAUTHORIZED', input.fileType);
   }
   return rejectUpload(deps, 'invalid_file_type', input.fileType);

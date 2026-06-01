@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
@@ -31,10 +32,12 @@ const makeEmailEvent = (type = 'email.delivered') =>
 
 describe('Resend webhook HTTP handlers', () => {
   it('passes the raw request body and Resend SDK header shape to the verifier', async () => {
-    const processStatusEvent = vi.fn(async () => ({
-      duplicate: false,
-      record: {} as ExplicitAny,
-    }));
+    const processStatusEvent = vi.fn(async () =>
+      Result.Ok({
+        type: 'email_status_event_processed' as const,
+        record: {} as ExplicitAny,
+      })
+    );
     const verifier = {
       verify: vi.fn(() => makeEmailEvent()),
     };
@@ -156,10 +159,12 @@ describe('Resend webhook HTTP handlers', () => {
   });
 
   it('maps email events to status upserts by Resend email ID', async () => {
-    const processStatusEvent = vi.fn(async () => ({
-      duplicate: false,
-      record: {} as ExplicitAny,
-    }));
+    const processStatusEvent = vi.fn(async () =>
+      Result.Ok({
+        type: 'email_status_event_processed' as const,
+        record: {} as ExplicitAny,
+      })
+    );
     const event = makeEmailEvent('email.delivered');
     const handlers = createResendWebhookHandlers({
       getUseCases: () => ({ processStatusEvent }),
@@ -188,10 +193,12 @@ describe('Resend webhook HTTP handlers', () => {
   });
 
   it('returns duplicate status when the use case dedupes a webhook event ID', async () => {
-    const processStatusEvent = vi.fn(async () => ({
-      duplicate: true,
-      record: {} as ExplicitAny,
-    }));
+    const processStatusEvent = vi.fn(async () =>
+      Result.Ok({
+        type: 'email_status_event_duplicate' as const,
+        record: {} as ExplicitAny,
+      })
+    );
     const handlers = createResendWebhookHandlers({
       getUseCases: () => ({ processStatusEvent }),
       verifier: { verify: vi.fn(() => makeEmailEvent()) },

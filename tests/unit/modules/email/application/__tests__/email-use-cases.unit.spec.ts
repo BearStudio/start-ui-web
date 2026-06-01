@@ -1,5 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import type { EmailStatusRepository } from '@/modules/email/application/ports/email-status-repository';
 import type { EmailUseCaseDeps } from '@/modules/email/application/use-cases/types';
 import {
@@ -43,32 +45,45 @@ function makeRecord(
 function makeRepository(overrides: Partial<EmailStatusRepository> = {}) {
   const repository = {
     recordSendAttempt: vi.fn<EmailStatusRepository['recordSendAttempt']>(
-      async () => makeRecord()
+      async () =>
+        Result.Ok({ type: 'email_status_recorded', record: makeRecord() })
     ),
     upsertStatusByExternalId: vi.fn<
       EmailStatusRepository['upsertStatusByExternalId']
     >(async (statusInput) =>
-      makeRecord({
-        provider: statusInput.provider,
-        externalId: statusInput.externalId,
-        recipient: statusInput.recipient,
-        subject: statusInput.subject,
-        status: statusInput.status,
-        idempotencyKey: statusInput.idempotencyKey ?? null,
-        lastWebhookEventId: statusInput.lastWebhookEventId ?? null,
-        metadata: statusInput.metadata ?? {},
+      Result.Ok({
+        type: 'email_status_recorded',
+        record: makeRecord({
+          provider: statusInput.provider,
+          externalId: statusInput.externalId,
+          recipient: statusInput.recipient,
+          subject: statusInput.subject,
+          status: statusInput.status,
+          idempotencyKey: statusInput.idempotencyKey ?? null,
+          lastWebhookEventId: statusInput.lastWebhookEventId ?? null,
+          metadata: statusInput.metadata ?? {},
+        }),
       })
     ),
-    getByExternalId: vi.fn<EmailStatusRepository['getByExternalId']>(
-      async () => null
+    getByExternalId: vi.fn<EmailStatusRepository['getByExternalId']>(async () =>
+      Result.Ok({ type: 'email_status_not_found' })
     ),
-    listRecent: vi.fn<EmailStatusRepository['listRecent']>(async () => []),
-    countByStatus: vi.fn<EmailStatusRepository['countByStatus']>(
-      async () => ({})
+    listRecent: vi.fn<EmailStatusRepository['listRecent']>(async () =>
+      Result.Ok({ type: 'email_status_recent_listed', records: [] })
+    ),
+    countByStatus: vi.fn<EmailStatusRepository['countByStatus']>(async () =>
+      Result.Ok({ type: 'email_status_counted', counts: {} })
     ),
   };
 
   return Object.assign(repository, overrides);
+}
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
 }
 
 function makeDeps(
@@ -92,8 +107,10 @@ describe('email use cases', () => {
     const transactionRun = vi.fn();
     const useCases = createEmailUseCases(makeDeps(repository, transactionRun));
 
-    await expect(useCases.processStatusEvent(input)).resolves.toMatchObject({
-      duplicate: false,
+    const processed = await useCases.processStatusEvent(input);
+
+    expect(getOk(processed)).toMatchObject({
+      type: 'email_status_event_processed',
       record: {
         externalId: 'email_123',
         status: 'delivered',
@@ -137,13 +154,15 @@ describe('email use cases', () => {
     });
     const repository = makeRepository({
       getByExternalId: vi.fn<EmailStatusRepository['getByExternalId']>(
-        async () => existing
+        async () => Result.Ok({ type: 'email_status_found', record: existing })
       ),
     });
     const useCases = createEmailUseCases(makeDeps(repository));
 
-    await expect(useCases.processStatusEvent(input)).resolves.toEqual({
-      duplicate: true,
+    const duplicate = await useCases.processStatusEvent(input);
+
+    expect(getOk(duplicate)).toEqual({
+      type: 'email_status_event_duplicate',
       record: existing,
     });
 
@@ -162,20 +181,22 @@ describe('email use cases', () => {
     });
     const repository = makeRepository({
       getByExternalId: vi.fn<EmailStatusRepository['getByExternalId']>(
-        async () => existing
+        async () => Result.Ok({ type: 'email_status_found', record: existing })
       ),
     });
     const useCases = createEmailUseCases(makeDeps(repository));
 
-    await expect(
-      useCases.processStatusEvent({
-        ...input,
-        status: 'opened',
-        webhookEventId: 'evt_2',
-        providerEventType: 'email.opened',
-        metadata: { source: 'webhook', attempt: 2 },
-      })
-    ).resolves.toMatchObject({ duplicate: false });
+    const processed = await useCases.processStatusEvent({
+      ...input,
+      status: 'opened',
+      webhookEventId: 'evt_2',
+      providerEventType: 'email.opened',
+      metadata: { source: 'webhook', attempt: 2 },
+    });
+
+    expect(getOk(processed)).toMatchObject({
+      type: 'email_status_event_processed',
+    });
 
     expect(repository.upsertStatusByExternalId).toHaveBeenCalledWith(
       expect.objectContaining({

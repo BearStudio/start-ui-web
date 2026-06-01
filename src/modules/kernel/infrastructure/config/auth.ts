@@ -1,3 +1,4 @@
+import { filter, isTruthy, map, pipe } from 'remeda';
 import { z } from 'zod';
 
 import {
@@ -6,14 +7,18 @@ import {
   parseEnv,
   zNonEmptyEnvString,
 } from './env-schema';
+import { ConfigurationError } from '../../domain/errors/configuration-error';
 
 const zOptionalProviderSecret = () => z.string().optional();
 
 const splitCsv = (value?: string) =>
-  value
-    ?.split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
+  value === undefined
+    ? undefined
+    : pipe(
+        value.split(','),
+        map((item) => item.trim()),
+        filter(isTruthy)
+      );
 
 const authProviderEnvSchema = baseEnvSchema.extend({
   AUTH_PROVIDER: z.enum(['better-auth', 'workos']).prefault('better-auth'),
@@ -76,6 +81,8 @@ export type BetterAuthConfig = {
   githubClientSecret?: string;
 };
 
+export type AuthConfig = BetterAuthConfig;
+
 let cachedAuthProviderConfig: AuthProviderConfig | undefined;
 let cachedBetterAuthConfig: BetterAuthConfig | undefined;
 
@@ -105,4 +112,12 @@ export function getBetterAuthConfig(): BetterAuthConfig {
   return cachedBetterAuthConfig;
 }
 
-export const getAuthConfig = getBetterAuthConfig;
+export function getAuthConfig(): AuthConfig {
+  const { provider } = getAuthProviderConfig();
+  if (provider !== 'better-auth') {
+    throw new ConfigurationError(
+      `AUTH_PROVIDER=${provider} is not implemented in this build.`
+    );
+  }
+  return getBetterAuthConfig();
+}

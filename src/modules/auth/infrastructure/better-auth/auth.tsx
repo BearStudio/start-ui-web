@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, emailOTP, openAPI } from 'better-auth/plugins';
@@ -28,12 +29,14 @@ import { betterAuthPermissions } from './permissions';
 
 const missingAuthEmailPort = {
   async sendSignInOtp() {
-    throw new AppError({
-      code: 'AUTH_EMAIL_PORT_NOT_CONFIGURED',
-      category: 'system',
-      status: 500,
-      message: 'Auth email port is not configured',
-    });
+    return Result.Error(
+      new AppError({
+        code: 'AUTH_EMAIL_PORT_NOT_CONFIGURED',
+        category: 'system',
+        status: 500,
+        message: 'Auth email port is not configured',
+      })
+    );
   },
 };
 
@@ -97,11 +100,12 @@ export function createAuth(input?: Database | CreateAuthOptions) {
         async sendVerificationOTP({ email, otp, type }) {
           await match(type)
             .with('sign-in', async () => {
-              await authEmailPort.sendSignInOtp({
+              const result = await authEmailPort.sendSignInOtp({
                 email,
                 otp,
                 language: getUserLanguage(),
               });
+              if (result.isError()) throw result.getError();
             })
             .with('email-verification', async () => {
               throw new AppError({

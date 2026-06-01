@@ -84,7 +84,14 @@ describe('SessionGatewayBetterAuth', () => {
 
     const session = await gateway.getSession({ headers: new Headers() });
 
-    expect(session?.user.role).toBe('admin');
+    expect(session.isOk()).toBe(true);
+    expect(session).toMatchObject({
+      tag: 'Ok',
+      value: {
+        type: 'auth_session_found',
+        session: { user: { role: 'admin' } },
+      },
+    });
     expect(db.__insertValues).toHaveBeenCalledWith({
       provider: 'better-auth',
       providerUserId: 'user-1',
@@ -98,7 +105,14 @@ describe('SessionGatewayBetterAuth', () => {
 
     const session = await gateway.getSession({ headers: new Headers() });
 
-    expect(session?.user.role).toBe('user');
+    expect(session.isOk()).toBe(true);
+    expect(session).toMatchObject({
+      tag: 'Ok',
+      value: {
+        type: 'auth_session_found',
+        session: { user: { role: 'user' } },
+      },
+    });
   });
 
   it('maps provider users to local app users through auth identity', async () => {
@@ -124,16 +138,45 @@ describe('SessionGatewayBetterAuth', () => {
 
     const session = await gateway.getSession({ headers: new Headers() });
 
+    expect(session.isOk()).toBe(true);
     expect(session).toMatchObject({
-      user: {
-        id: 'app-user-1',
-        email: 'app@example.com',
-        role: 'admin',
+      tag: 'Ok',
+      value: {
+        type: 'auth_session_found',
+        session: {
+          user: {
+            id: 'app-user-1',
+            email: 'app@example.com',
+            role: 'admin',
+          },
+          session: {
+            id: 'session-1',
+            userId: 'app-user-1',
+          },
+        },
       },
-      session: {
-        id: 'session-1',
-        userId: 'app-user-1',
-      },
+    });
+  });
+
+  it('treats orphaned auth identities as unauthenticated', async () => {
+    const { SessionGatewayBetterAuth } = await loadGateway();
+    const gateway = new SessionGatewayBetterAuth(
+      makeAuth('user', {
+        userId: 'provider-user-1',
+        email: 'provider@example.com',
+      }),
+      makeDb({
+        identityUserId: 'deleted-app-user',
+        appUser: null,
+      })
+    );
+
+    const session = await gateway.getSession({ headers: new Headers() });
+
+    expect(session.isOk()).toBe(true);
+    expect(session).toMatchObject({
+      tag: 'Ok',
+      value: { type: 'auth_session_missing' },
     });
   });
 });

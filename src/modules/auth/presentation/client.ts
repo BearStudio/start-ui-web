@@ -8,7 +8,6 @@ import {
 } from '../domain/permissions';
 import type { CurrentSession } from '../domain/request-scope';
 import {
-  authErrorCodes,
   betterAuthBrowserClient,
   type BetterAuthSocialProvider,
 } from './better-auth-client';
@@ -178,4 +177,4 @@ export const checkRolePermission = (input: {
   return role ? hasRolePermission(role, input.permissions) : false;
 };
 
-export { authErrorCodes };
+export { authErrorCodes } from './better-auth-client';

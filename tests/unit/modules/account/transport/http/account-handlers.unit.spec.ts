@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createAuthenticatedContext } from '@tests/server/test-utils';
@@ -10,10 +11,12 @@ import {
 describe('account HTTP transport handlers', () => {
   it('maps account update input and protected scope to the use case', async () => {
     const ctx = createAuthenticatedContext();
-    const updateInfo = vi.fn(async () => ({
-      ok: true as const,
-      value: { name: 'Acme' },
-    }));
+    const updateInfo = vi.fn(async () =>
+      Result.Ok({
+        type: 'account_updated' as const,
+        account: { id: ctx.scope.userId },
+      })
+    );
     const handlers = createAccountHandlers({
       getUseCases: () => ({ updateInfo }) as ExplicitAny,
     });

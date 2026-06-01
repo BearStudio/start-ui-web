@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import {
   session as sessionTable,
@@ -9,6 +10,13 @@ import { makeSessionRow, makeUserRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
 
 import { createUserRepository } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('UserRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
@@ -50,27 +58,33 @@ describe('UserRepositoryDrizzle integration', () => {
       }),
     ]);
 
-    const firstPage = await repository.list({ limit: 2, searchTerm: '' });
+    const firstPage = getOk(
+      await repository.list({ limit: 2, searchTerm: '' })
+    ).page;
     expect(firstPage.items.map((user) => user.id)).toEqual([
       'user-b',
       'user-a',
     ]);
     expect(firstPage.nextCursor).toBe('user-a');
 
-    const secondPage = await repository.list({
-      cursor: firstPage.nextCursor,
-      limit: 2,
-      searchTerm: '',
-    });
+    const secondPage = getOk(
+      await repository.list({
+        cursor: firstPage.nextCursor,
+        limit: 2,
+        searchTerm: '',
+      })
+    ).page;
     expect(secondPage.items.map((user) => user.id)).toEqual([
       'user-c',
       'user-d',
     ]);
 
-    const escapedSearch = await repository.list({
-      limit: 10,
-      searchTerm: 'Alpha_',
-    });
+    const escapedSearch = getOk(
+      await repository.list({
+        limit: 10,
+        searchTerm: 'Alpha_',
+      })
+    ).page;
     expect(escapedSearch.items.map((user) => user.id)).toEqual(['user-a']);
   });
 
@@ -123,10 +137,12 @@ describe('UserRepositoryDrizzle integration', () => {
       }),
     ]);
 
-    const firstPage = await repository.listSessions({
-      userId: toUserId('user-1'),
-      limit: 2,
-    });
+    const firstPage = getOk(
+      await repository.listSessions({
+        userId: toUserId('user-1'),
+        limit: 2,
+      })
+    ).page;
     expect(firstPage.items.map((session) => session.id)).toEqual([
       'session-a',
       'session-b',
@@ -136,11 +152,13 @@ describe('UserRepositoryDrizzle integration', () => {
     );
     expect(firstPage.nextCursor).toBe('session-b');
 
-    const secondPage = await repository.listSessions({
-      userId: toUserId('user-1'),
-      cursor: firstPage.nextCursor,
-      limit: 2,
-    });
+    const secondPage = getOk(
+      await repository.listSessions({
+        userId: toUserId('user-1'),
+        cursor: firstPage.nextCursor,
+        limit: 2,
+      })
+    ).page;
     expect(secondPage.items.map((session) => session.id)).toEqual([
       'session-c',
     ]);

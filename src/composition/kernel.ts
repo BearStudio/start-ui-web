@@ -1,3 +1,5 @@
+import { Result } from '@swan-io/boxed';
+
 import type { CacheGateway } from '@/modules/kernel/application/ports/cache-gateway';
 import type { Clock } from '@/modules/kernel/application/ports/clock';
 import type { IdGenerator } from '@/modules/kernel/application/ports/id-generator';
@@ -71,11 +73,17 @@ const createProductionPermissionChecker = (): PermissionChecker => ({
       import('@tanstack/react-start/server'),
       import('./auth'),
     ]);
-    return getAuthUseCases().checkPermission({
+    const result = await getAuthUseCases().checkPermission({
       userId,
       permissions,
       headers: getRequestHeaders(),
     });
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok(
+      result.get().type === 'auth_permission_granted'
+        ? { type: 'permission_granted' }
+        : { type: 'permission_denied' }
+    );
   },
 });
 

@@ -114,10 +114,12 @@ export const createResendWebhookHandlers = ({
         resendEvent: event,
       },
     });
+    if (result.isError()) throw result.getError();
+    const outcome = result.get();
 
     return Response.json({
       ok: true,
-      duplicate: result.duplicate,
+      duplicate: outcome.type === 'email_status_event_duplicate',
     });
   };
 

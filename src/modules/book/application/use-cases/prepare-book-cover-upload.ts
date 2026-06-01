@@ -1,7 +1,12 @@
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
+import { Result } from '@swan-io/boxed';
 
-import type { BookUseCaseDeps, UseCaseResult } from './types';
+import { hasScopePermission, type RequestScope } from '@/modules/auth';
+
+import type {
+  BookCoverUploadOutcome,
+  BookResult,
+  BookUseCaseDeps,
+} from './types';
 import { createBookCoverObjectKey } from '../../domain/book-policy';
 
 export type PrepareBookCoverUploadInput = {
@@ -9,28 +14,27 @@ export type PrepareBookCoverUploadInput = {
   fileType: string;
 };
 
-export type PreparedBookCoverUpload = {
-  objectKey: string;
-};
-
 export async function prepareBookCoverUpload(
   deps: BookUseCaseDeps,
   input: PrepareBookCoverUploadInput
-): Promise<
-  UseCaseResult<PreparedBookCoverUpload, 'forbidden' | 'invalid_file_type'>
-> {
+): Promise<BookResult<BookCoverUploadOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { book: ['create', 'update'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'book_cover_upload_forbidden' });
+  }
 
   const objectKey = createBookCoverObjectKey({
     fileId: deps.idGenerator.createId(),
     fileType: input.fileType,
   });
-  if (!objectKey) return fail('invalid_file_type');
+  if (!objectKey) {
+    return Result.Ok({ type: 'book_cover_upload_invalid_file_type' });
+  }
 
   deps.logger.info({
     event: 'book.cover_upload.prepare',
@@ -38,5 +42,8 @@ export async function prepareBookCoverUpload(
       fileType: input.fileType,
     },
   });
-  return ok({ objectKey });
+  return Result.Ok({
+    type: 'book_cover_upload_prepared',
+    upload: { objectKey },
+  });
 }

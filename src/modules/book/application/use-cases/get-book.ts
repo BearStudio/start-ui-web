@@ -1,9 +1,9 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
 import type { BookId } from '@/modules/kernel/domain/ids';
 
-import type { BookUseCaseDeps, UseCaseResult } from './types';
-import type { Book } from '../../domain/book';
+import type { BookGetOutcome, BookResult, BookUseCaseDeps } from './types';
 
 export type GetBookInput = {
   scope: RequestScope;
@@ -13,19 +13,22 @@ export type GetBookInput = {
 export async function getBook(
   deps: BookUseCaseDeps,
   input: GetBookInput
-): Promise<UseCaseResult<Book, 'forbidden' | 'not_found'>> {
+): Promise<BookResult<BookGetOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { book: ['read'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'book_forbidden' });
+  }
 
   deps.logger.info({
     event: 'book.get',
     details: { bookId: input.id },
   });
-  const value = await deps.bookRepository.getById(input.id);
-  if (!value) return fail('not_found');
-  return ok(value);
+  const result = await deps.bookRepository.getById(input.id);
+  if (result.isError()) return Result.Error(result.getError());
+  return Result.Ok(result.get());
 }

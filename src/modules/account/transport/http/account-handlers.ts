@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { AccountUseCases } from '@/modules/account';
 import type { ProtectedContext } from '@/modules/auth/backend';
-import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
+import { unwrapApplicationResult } from '@/modules/kernel/transport/tanstack/result-mapper';
 
 export const zSubmitOnboardingInput = () =>
   z.object({ name: z.string().trim().min(1) });
@@ -14,9 +14,10 @@ type AccountHandlerDeps = {
 };
 
 const accountReasonConfig = {
-  forbidden: { code: 'FORBIDDEN', message: 'Forbidden' },
-  invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
-  not_found: { code: 'NOT_FOUND', message: 'Account not found' },
+  account_forbidden: { code: 'FORBIDDEN', message: 'Forbidden' },
+  account_invalid: { code: 'BAD_REQUEST', message: 'Account name is required' },
+  account_not_found: { code: 'NOT_FOUND', message: 'Account not found' },
+  account_updated: () => undefined,
 } as const;
 
 export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
@@ -24,7 +25,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zSubmitOnboardingInput>>
   ) => {
-    await unwrapUseCaseResult(
+    await unwrapApplicationResult(
       getUseCases(ctx).submitOnboarding({
         scope: ctx.scope,
         name: data.name,
@@ -37,7 +38,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zUpdateInfoInput>>
   ) => {
-    await unwrapUseCaseResult(
+    await unwrapApplicationResult(
       getUseCases(ctx).updateInfo({
         scope: ctx.scope,
         name: data.name,

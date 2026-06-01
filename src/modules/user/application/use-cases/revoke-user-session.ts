@@ -1,9 +1,13 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
 
-import type { UseCaseResult, UserUseCaseDeps } from './types';
+import type {
+  UserResult,
+  UserRevokeSessionOutcome,
+  UserUseCaseDeps,
+} from './types';
 
 export type RevokeUserSessionInput = {
   scope: RequestScope;
@@ -15,35 +19,36 @@ export type RevokeUserSessionInput = {
 export async function revokeUserSession(
   deps: UserUseCaseDeps,
   input: RevokeUserSessionInput
-): Promise<UseCaseResult<void, 'forbidden' | 'not_found' | 'self'>> {
+): Promise<UserResult<UserRevokeSessionOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { session: ['revoke'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'user_forbidden' });
+  }
 
-  const targetSession = await deps.userRepository.findSessionForRevocation({
+  const targetResult = await deps.userRepository.findSessionForRevocation({
     userId: input.id,
     sessionId: input.sessionId,
   });
-  if (!targetSession) return fail('not_found');
+  if (targetResult.isError()) return Result.Error(targetResult.getError());
+  const targetOutcome = targetResult.get();
+  if (targetOutcome.type === 'user_session_not_found') {
+    return Result.Ok(targetOutcome);
+  }
+  const targetSession = targetOutcome.target;
   if (input.currentSessionId === targetSession.id) {
-    return fail('self');
+    return Result.Ok({ type: 'user_self' });
   }
 
-  const revoked = await deps.userAuthGateway.revokeUserSession({
+  const result = await deps.userAuthGateway.revokeUserSession({
     userId: input.id,
     sessionId: targetSession.id,
   });
-  if (!revoked) {
-    throw new AppError({
-      code: 'USER_SESSION_REVOKE_FAILED',
-      category: 'system',
-      status: 500,
-      message: 'Failed to revoke user session',
-    });
-  }
+  if (result.isError()) return Result.Error(result.getError());
   deps.logger.warn({
     details: {
       mode: 'single',
@@ -51,5 +56,5 @@ export async function revokeUserSession(
     },
     event: 'security.session_revoked',
   });
-  return ok(undefined);
+  return Result.Ok({ type: 'user_session_revoked' });
 }

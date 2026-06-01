@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { eq } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
@@ -10,18 +11,19 @@ import type {
   AccountRepository,
   AccountOnboardingUpdate,
   AccountProfileUpdate,
-  AccountUpdateResult,
 } from '@/modules/account';
 import { user as userTable } from './schema';
 
 const isSqlStateCode = (code: unknown): code is string =>
   typeof code === 'string' && /^[A-Z0-9]{5}$/.test(code);
 
-function mapDbError(error: unknown): never {
+function mapDbError(error: unknown): AppError {
+  if (error instanceof AppError) return error;
+
   const details = extractDatabaseErrorDetails(error);
 
   if (isSqlStateCode(details?.code)) {
-    throw new AppError({
+    return new AppError({
       code: 'ACCOUNT_REPOSITORY_DB_ERROR',
       category: 'system',
       status: 500,
@@ -30,7 +32,7 @@ function mapDbError(error: unknown): never {
     });
   }
 
-  throw new AppError({
+  return new AppError({
     code: 'ACCOUNT_REPOSITORY_ERROR',
     category: 'system',
     status: 500,
@@ -45,7 +47,7 @@ export class AccountRepositoryDrizzle implements AccountRepository {
   async submitOnboarding(
     userId: UserId,
     input: AccountOnboardingUpdate
-  ): Promise<AccountUpdateResult | null> {
+  ): ReturnType<AccountRepository['submitOnboarding']> {
     try {
       const [updatedUser] = await this.db
         .update(userTable)
@@ -56,16 +58,23 @@ export class AccountRepositoryDrizzle implements AccountRepository {
         .where(eq(userTable.id, userId))
         .returning({ id: userTable.id });
 
-      return updatedUser ? { id: toUserId(updatedUser.id) } : null;
+      return Result.Ok(
+        updatedUser
+          ? {
+              type: 'account_updated',
+              account: { id: toUserId(updatedUser.id) },
+            }
+          : { type: 'account_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
   async updateInfo(
     userId: UserId,
     input: AccountProfileUpdate
-  ): Promise<AccountUpdateResult | null> {
+  ): ReturnType<AccountRepository['updateInfo']> {
     try {
       const [updatedUser] = await this.db
         .update(userTable)
@@ -73,9 +82,16 @@ export class AccountRepositoryDrizzle implements AccountRepository {
         .where(eq(userTable.id, userId))
         .returning({ id: userTable.id });
 
-      return updatedUser ? { id: toUserId(updatedUser.id) } : null;
+      return Result.Ok(
+        updatedUser
+          ? {
+              type: 'account_updated',
+              account: { id: toUserId(updatedUser.id) },
+            }
+          : { type: 'account_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 }

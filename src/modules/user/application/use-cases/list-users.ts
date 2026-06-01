@@ -1,9 +1,9 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
 import type { UserId } from '@/modules/kernel/domain/ids';
 
-import type { UseCaseResult, UserUseCaseDeps } from './types';
-import type { UserListPage } from '../../domain/user';
+import type { UserListOutcome, UserResult, UserUseCaseDeps } from './types';
 
 export type ListUsersInput = {
   scope: RequestScope;
@@ -15,19 +15,23 @@ export type ListUsersInput = {
 export async function listUsers(
   deps: UserUseCaseDeps,
   input: ListUsersInput
-): Promise<UseCaseResult<UserListPage, 'forbidden'>> {
+): Promise<UserResult<UserListOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { user: ['list'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'user_forbidden' });
+  }
 
   deps.logger.info({ event: 'user.list' });
-  const value = await deps.userRepository.list({
+  const result = await deps.userRepository.list({
     cursor: input.cursor,
     limit: input.limit,
     searchTerm: input.searchTerm,
   });
-  return ok(value);
+  if (result.isError()) return Result.Error(result.getError());
+  return Result.Ok(result.get());
 }

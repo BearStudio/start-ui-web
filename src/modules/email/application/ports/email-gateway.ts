@@ -1,3 +1,5 @@
+import type { ApplicationResult } from '@/modules/kernel/application/result';
+
 import type { EmailMetadata, EmailProvider } from '../../domain/email-status';
 
 export type EmailRecipient = string | string[];
@@ -21,12 +23,19 @@ export type SendEmailParams = {
   metadata?: EmailMetadata;
 };
 
-export type SendEmailResult = {
-  provider: EmailProvider;
-  externalId?: string;
-  skipped: boolean;
-};
+export type SendEmailOutcome =
+  | {
+      type: 'email_send_recorded';
+      provider: EmailProvider;
+      externalId: string;
+    }
+  | {
+      type: 'email_send_skipped';
+      provider: EmailProvider;
+    };
 
 export interface EmailGateway {
-  sendEmail(params: SendEmailParams): Promise<SendEmailResult>;
+  sendEmail(
+    params: SendEmailParams
+  ): Promise<ApplicationResult<SendEmailOutcome>>;
 }

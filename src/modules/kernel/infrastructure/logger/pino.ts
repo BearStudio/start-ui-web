@@ -11,9 +11,10 @@ import type {
   LogLevel,
 } from '@/modules/kernel/application/ports/logger';
 import { getLoggerConfig } from '@/modules/kernel/infrastructure/config/logger';
-import type {
-  TelemetryAdapter,
-  TelemetryCaptureContext,
+import {
+  type TelemetryAdapter,
+  type TelemetryCaptureContext,
+  toTelemetryStringTags,
 } from '@/platform/telemetry';
 
 export type LogRedactor = (
@@ -176,19 +177,7 @@ const toSanitizedTagMap = (
   const sanitized = redactor({ tags }).tags;
   if (!isRecord(sanitized)) return undefined;
 
-  const entries: Array<[string, string]> = Object.entries(sanitized).flatMap(
-    ([key, value]) => {
-      const tagValue =
-        typeof value === 'string' ||
-        typeof value === 'number' ||
-        typeof value === 'boolean'
-          ? String(value)
-          : undefined;
-      return tagValue && tagValue.length > 0 ? [[key, tagValue]] : [];
-    }
-  );
-
-  return entries.length ? Object.fromEntries(entries) : undefined;
+  return toTelemetryStringTags(sanitized);
 };
 
 const toSanitizedExtras = (

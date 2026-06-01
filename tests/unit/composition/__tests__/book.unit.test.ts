@@ -1,6 +1,8 @@
+import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { BookRepository } from '@/modules/book';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import { toBookId, toGenreId, toUserId } from '@/modules/kernel/domain/ids';
 
 import { makeTestKernel, now } from '@tests/unit/composition/helpers';
@@ -21,16 +23,24 @@ const book = {
 const makeBookRepository = (
   overrides: Partial<BookRepository> = {}
 ): BookRepository => ({
-  list: async () => ({ items: [book], total: 1 }),
-  getById: async () => book,
-  create: async () => book,
-  update: async () => book,
-  delete: async () => true,
+  list: async () =>
+    Result.Ok({ type: 'book_listed', page: { items: [book], total: 1 } }),
+  getById: async () => Result.Ok({ type: 'book_found', book }),
+  create: async () => Result.Ok({ type: 'book_created', book }),
+  update: async () => Result.Ok({ type: 'book_updated', book }),
+  delete: async () => Result.Ok({ type: 'book_deleted' }),
   ...overrides,
 });
 
 const scope = (userId: string) =>
   ({ userId: toUserId(userId), role: 'user' }) as const;
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('book composition', () => {
   beforeEach(() => {
@@ -56,19 +66,27 @@ describe('book composition', () => {
   });
 
   it('routes use case calls through the overridden repository', async () => {
-    const list = vi.fn(async () => ({ items: [book], total: 1 }));
+    const list = vi.fn(async () =>
+      Result.Ok({
+        type: 'book_listed' as const,
+        page: { items: [book], total: 1 },
+      })
+    );
     const useCases = getBookUseCases({
       kernel: makeTestKernel(),
       bookRepository: makeBookRepository({ list }),
     });
 
-    await expect(
-      useCases.list({
-        scope: scope('user-1'),
-        limit: 20,
-        searchTerm: 'du',
-      })
-    ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
+    const result = await useCases.list({
+      scope: scope('user-1'),
+      limit: 20,
+      searchTerm: 'du',
+    });
+
+    expect(getOk(result)).toMatchObject({
+      type: 'book_listed',
+      page: { total: 1 },
+    });
     expect(list).toHaveBeenCalledWith({
       cursor: undefined,
       limit: 20,

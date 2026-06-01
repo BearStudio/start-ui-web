@@ -249,7 +249,7 @@ module.exports = {
       from: {
         pathNot: '^src/modules/auth/infrastructure/workos/',
       },
-      to: { path: 'node_modules/@workos/' },
+      to: { path: 'node_modules/@workos(?:-inc)?/' },
     },
     {
       name: 'legacy-server-entrypoints-removed',

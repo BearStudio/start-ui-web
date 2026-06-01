@@ -1,3 +1,5 @@
+import { Result } from '@swan-io/boxed';
+
 import type { Kernel } from '@/composition/kernel';
 
 export const now = new Date('2026-01-01T00:00:00.000Z');
@@ -33,7 +35,7 @@ export function makeTestKernel(overrides: Partial<Kernel> = {}): Kernel {
       run: (work) => work({} as never),
     },
     permissionChecker: {
-      hasPermission: async () => true,
+      hasPermission: async () => Result.Ok({ type: 'permission_granted' }),
     },
     ...overrides,
   };

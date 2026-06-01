@@ -1,3 +1,5 @@
+import type { ApplicationResult } from '@/modules/kernel/application/result';
+
 import type {
   EmailMetadata,
   EmailProvider,
@@ -25,17 +27,40 @@ export type UpsertEmailStatusInput = {
   metadata?: EmailMetadata;
 };
 
+export type EmailStatusRecordRepositoryOutcome = {
+  type: 'email_status_recorded';
+  record: EmailStatusRecord;
+};
+
+export type EmailStatusGetRepositoryOutcome =
+  | { type: 'email_status_found'; record: EmailStatusRecord }
+  | { type: 'email_status_not_found' };
+
+export type EmailStatusListRecentRepositoryOutcome = {
+  type: 'email_status_recent_listed';
+  records: EmailStatusRecord[];
+};
+
+export type EmailStatusCountRepositoryOutcome = {
+  type: 'email_status_counted';
+  counts: Partial<Record<EmailStatus, number>>;
+};
+
 export interface EmailStatusRepository {
   recordSendAttempt(
     input: RecordEmailSendAttemptInput
-  ): Promise<EmailStatusRecord>;
+  ): Promise<ApplicationResult<EmailStatusRecordRepositoryOutcome>>;
   upsertStatusByExternalId(
     input: UpsertEmailStatusInput
-  ): Promise<EmailStatusRecord>;
+  ): Promise<ApplicationResult<EmailStatusRecordRepositoryOutcome>>;
   getByExternalId(
     provider: EmailProvider,
     externalId: string
-  ): Promise<EmailStatusRecord | null>;
-  listRecent(input?: { limit?: number }): Promise<EmailStatusRecord[]>;
-  countByStatus(): Promise<Partial<Record<EmailStatus, number>>>;
+  ): Promise<ApplicationResult<EmailStatusGetRepositoryOutcome>>;
+  listRecent(input?: {
+    limit?: number;
+  }): Promise<ApplicationResult<EmailStatusListRecentRepositoryOutcome>>;
+  countByStatus(): Promise<
+    ApplicationResult<EmailStatusCountRepositoryOutcome>
+  >;
 }

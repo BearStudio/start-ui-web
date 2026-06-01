@@ -1,9 +1,12 @@
 import type { Clock } from '@/modules/kernel/application/ports/clock';
 import type { Logger } from '@/modules/kernel/application/ports/logger';
 import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { UseCaseResult } from '@/modules/kernel/application/result';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 
-import type { AccountRepository } from '../ports/account-repository';
+import type {
+  AccountRepository,
+  AccountUpdateRepositoryOutcome,
+} from '../ports/account-repository';
 
 export type AccountUseCaseDeps = {
   accountRepository: AccountRepository;
@@ -12,4 +15,9 @@ export type AccountUseCaseDeps = {
   permissionChecker: PermissionChecker;
 };
 
-export type { UseCaseResult };
+export type AccountUpdateOutcome =
+  | AccountUpdateRepositoryOutcome
+  | { type: 'account_forbidden' }
+  | { type: 'account_invalid' };
+
+export type AccountResult<TOutcome> = ApplicationResult<TOutcome>;

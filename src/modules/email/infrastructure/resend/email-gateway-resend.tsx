@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { render } from '@react-email/render';
 import type { ReactElement } from 'react';
 import type { CreateEmailOptions, Resend } from 'resend';
@@ -9,7 +10,6 @@ import {
   type EmailTransactionContext,
   type RecordEmailSendAttemptInput,
   type SendEmailParams,
-  type SendEmailResult,
   type UpsertEmailStatusInput,
 } from '@/modules/email';
 import type { TransactionRunner } from '@/modules/kernel';
@@ -27,16 +27,13 @@ type EmailGatewayResendDeps = {
 const recipientToStatusValue = (recipient: SendEmailParams['to']) =>
   Array.isArray(recipient) ? recipient.join(', ') : recipient;
 
-const assertIdempotencyKey = (idempotencyKey: string) => {
-  if (idempotencyKey.trim()) return;
-
-  throw new AppError({
+const idempotencyKeyError = () =>
+  new AppError({
     code: 'EMAIL_IDEMPOTENCY_KEY_REQUIRED',
     category: 'system',
     status: 500,
     message: 'Email sends require a non-empty idempotency key',
   });
-};
 
 const providerErrorMetadata = (error: {
   name?: string;
@@ -71,51 +68,70 @@ export class EmailGatewayResend implements EmailGateway {
     );
   }
 
-  async sendEmail(input: SendEmailParams): Promise<SendEmailResult> {
-    assertIdempotencyKey(input.idempotencyKey);
+  async sendEmail(
+    input: SendEmailParams
+  ): ReturnType<EmailGateway['sendEmail']> {
+    if (!input.idempotencyKey.trim()) {
+      return Result.Error(idempotencyKeyError());
+    }
 
     if (envClient.VITE_IS_DEMO) {
-      return {
+      return Result.Ok({
+        type: 'email_send_skipped',
         provider: EMAIL_PROVIDER_RESEND,
-        skipped: true,
-      };
+      });
     }
 
     const emailConfig = getEmailConfig();
     if (emailConfig.deliveryDisabled) {
-      return {
+      return Result.Ok({
+        type: 'email_send_skipped',
         provider: EMAIL_PROVIDER_RESEND,
-        skipped: true,
-      };
+      });
     }
 
     const recipient = recipientToStatusValue(input.to);
-    const attempt = await this.recordSendAttempt({
+    const attemptResult = await this.recordSendAttempt({
       provider: EMAIL_PROVIDER_RESEND,
       recipient,
       subject: input.subject,
       idempotencyKey: input.idempotencyKey,
       metadata: input.metadata,
     });
+    if (attemptResult.isError()) return Result.Error(attemptResult.getError());
 
+    const attempt = attemptResult.get().record;
     if (attempt.externalId) {
-      return {
+      return Result.Ok({
+        type: 'email_send_recorded',
         provider: EMAIL_PROVIDER_RESEND,
         externalId: attempt.externalId,
-        skipped: false,
-      };
+      });
     }
 
-    const text = await render(input.template as ReactElement, {
-      plainText: true,
-    });
+    const textResult = await Result.fromPromise(
+      render(input.template as ReactElement, {
+        plainText: true,
+      })
+    );
+    if (textResult.isError()) {
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_RENDER_FAILED',
+          category: 'system',
+          status: 500,
+          message: 'Failed to render email',
+          cause: textResult.getError(),
+        })
+      );
+    }
 
     const payload: CreateEmailOptions = {
       from: emailConfig.from,
       to: input.to,
       subject: input.subject,
       react: input.template as ReactElement,
-      text,
+      text: textResult.get(),
       ...(input.cc ? { cc: input.cc } : {}),
       ...(input.bcc ? { bcc: input.bcc } : {}),
       ...(input.replyTo ? { replyTo: input.replyTo } : {}),
@@ -129,12 +145,27 @@ export class EmailGatewayResend implements EmailGateway {
     };
 
     const resend = this.resend ?? getDefaultResendClient();
-    const { data, error } = await resend.emails.send(payload, {
-      idempotencyKey: input.idempotencyKey,
-    });
+    const responseResult = await Result.fromPromise(
+      resend.emails.send(payload, {
+        idempotencyKey: input.idempotencyKey,
+      })
+    );
+    if (responseResult.isError()) {
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_SEND_FAILED',
+          category: 'system',
+          status: 500,
+          message: 'Failed to send email',
+          cause: responseResult.getError(),
+        })
+      );
+    }
+
+    const { data, error } = responseResult.get();
 
     if (error) {
-      const failedAttempt = await this.recordSendAttempt({
+      const failedAttemptResult = await this.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -145,31 +176,37 @@ export class EmailGatewayResend implements EmailGateway {
           ...providerErrorMetadata(error),
         },
       });
-
-      if (failedAttempt.externalId) {
-        return {
-          provider: EMAIL_PROVIDER_RESEND,
-          externalId: failedAttempt.externalId,
-          skipped: false,
-        };
+      if (failedAttemptResult.isError()) {
+        return Result.Error(failedAttemptResult.getError());
       }
 
-      throw new AppError({
-        code: 'EMAIL_SEND_FAILED',
-        category: 'system',
-        status: error.statusCode ?? 500,
-        message: 'Failed to send email',
-        details: {
+      const failedAttempt = failedAttemptResult.get().record;
+      if (failedAttempt.externalId) {
+        return Result.Ok({
+          type: 'email_send_recorded',
           provider: EMAIL_PROVIDER_RESEND,
-          errorName: error.name,
-          statusCode: error.statusCode,
-        },
-        cause: error,
-      });
+          externalId: failedAttempt.externalId,
+        });
+      }
+
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_SEND_FAILED',
+          category: 'system',
+          status: error.statusCode ?? 500,
+          message: 'Failed to send email',
+          details: {
+            provider: EMAIL_PROVIDER_RESEND,
+            errorName: error.name,
+            statusCode: error.statusCode,
+          },
+          cause: error,
+        })
+      );
     }
 
     if (!data?.id) {
-      const failedAttempt = await this.recordSendAttempt({
+      const failedAttemptResult = await this.recordSendAttempt({
         provider: EMAIL_PROVIDER_RESEND,
         recipient,
         subject: input.subject,
@@ -177,24 +214,30 @@ export class EmailGatewayResend implements EmailGateway {
         status: 'send_failed',
         metadata: input.metadata,
       });
-
-      if (failedAttempt.externalId) {
-        return {
-          provider: EMAIL_PROVIDER_RESEND,
-          externalId: failedAttempt.externalId,
-          skipped: false,
-        };
+      if (failedAttemptResult.isError()) {
+        return Result.Error(failedAttemptResult.getError());
       }
 
-      throw new AppError({
-        code: 'EMAIL_SEND_EMPTY_RESULT',
-        category: 'system',
-        status: 500,
-        message: 'Email provider returned no external ID',
-      });
+      const failedAttempt = failedAttemptResult.get().record;
+      if (failedAttempt.externalId) {
+        return Result.Ok({
+          type: 'email_send_recorded',
+          provider: EMAIL_PROVIDER_RESEND,
+          externalId: failedAttempt.externalId,
+        });
+      }
+
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_SEND_EMPTY_RESULT',
+          category: 'system',
+          status: 500,
+          message: 'Email provider returned no external ID',
+        })
+      );
     }
 
-    await this.upsertStatusByExternalId({
+    const upsertResult = await this.upsertStatusByExternalId({
       provider: EMAIL_PROVIDER_RESEND,
       externalId: data.id,
       recipient,
@@ -203,11 +246,12 @@ export class EmailGatewayResend implements EmailGateway {
       idempotencyKey: input.idempotencyKey,
       metadata: input.metadata,
     });
+    if (upsertResult.isError()) return Result.Error(upsertResult.getError());
 
-    return {
+    return Result.Ok({
+      type: 'email_send_recorded',
       provider: EMAIL_PROVIDER_RESEND,
       externalId: data.id,
-      skipped: false,
-    };
+    });
   }
 }

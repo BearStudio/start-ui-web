@@ -1,10 +1,11 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { BookId } from '@/modules/kernel/domain/ids';
 
-import type { BookUseCaseDeps, UseCaseResult } from './types';
-import type { Book, BookWriteInput } from '../../domain/book';
+import type { BookResult, BookUpdateOutcome, BookUseCaseDeps } from './types';
+import type { BookWriteInput } from '../../domain/book';
 import { normalizeBookWriteInput } from '../../domain/book';
 
 export type UpdateBookInput = {
@@ -16,13 +17,16 @@ export type UpdateBookInput = {
 export async function updateBook(
   deps: BookUseCaseDeps,
   input: UpdateBookInput
-): Promise<UseCaseResult<Book, 'forbidden' | 'not_found' | 'duplicate'>> {
+): Promise<BookResult<BookUpdateOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { book: ['update'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'book_forbidden' });
+  }
 
   try {
     deps.logger.info({
@@ -30,15 +34,22 @@ export async function updateBook(
       details: { bookId: input.id },
     });
     const book = normalizeBookWriteInput(input.book);
-    const value = await deps.transactionRunner.run(({ bookRepository }) =>
+    const result = await deps.transactionRunner.run(({ bookRepository }) =>
       bookRepository.update(input.id, book)
     );
-    if (!value) return fail('not_found');
-    return ok(value);
+    if (result.isError()) return Result.Error(result.getError());
+    return Result.Ok(result.get());
   } catch (error) {
-    if (error instanceof AppError && error.category === 'conflict') {
-      return fail('duplicate');
-    }
-    throw error;
+    return Result.Error(
+      error instanceof AppError
+        ? error
+        : new AppError({
+            code: 'BOOK_TRANSACTION_ERROR',
+            category: 'system',
+            status: 500,
+            message: 'Book transaction error',
+            cause: error,
+          })
+    );
   }
 }

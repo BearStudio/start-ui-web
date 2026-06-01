@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { and, asc, desc, eq, sql } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
@@ -21,14 +22,10 @@ import { session as sessionTable, user as userTable } from './schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type {
-  SessionRevocationTarget,
   User,
   UserCreateInput,
-  UserListPage,
   UserSession,
-  UserSessionListPage,
   UserUpdatePersistenceInput,
-  UserUpdateSnapshot,
   UserRepository,
 } from '@/modules/user';
 
@@ -62,12 +59,18 @@ function toDomainSession(
   };
 }
 
-function mapDbError(error: unknown): never {
-  if (
+function isUserDuplicateError(error: unknown) {
+  return (
     isUniqueConstraintViolation(error) &&
     getConstraintName(error) === 'user_email_key'
-  ) {
-    throw new AppError({
+  );
+}
+
+function mapDbError(error: unknown): AppError {
+  if (error instanceof AppError) return error;
+
+  if (isUserDuplicateError(error)) {
+    return new AppError({
       code: 'USER_DUPLICATE',
       category: 'conflict',
       status: 409,
@@ -80,7 +83,7 @@ function mapDbError(error: unknown): never {
   if (error && typeof error === 'object' && 'code' in error) {
     const code = (error as { code?: unknown }).code;
     if (code === '23503') {
-      throw new AppError({
+      return new AppError({
         code: 'USER_FOREIGN_KEY',
         category: 'bad_request',
         status: 400,
@@ -90,7 +93,7 @@ function mapDbError(error: unknown): never {
     }
   }
 
-  throw new AppError({
+  return new AppError({
     code: 'USER_REPOSITORY_ERROR',
     category: 'system',
     status: 500,
@@ -106,7 +109,7 @@ export class UserRepositoryDrizzle implements UserRepository {
     cursor?: UserId;
     limit: number;
     searchTerm: string;
-  }): Promise<UserListPage> {
+  }): ReturnType<UserRepository['list']> {
     try {
       const searchFilter = escapedIlikeFilter(
         [userTable.name, userTable.email],
@@ -126,11 +129,14 @@ export class UserRepositoryDrizzle implements UserRepository {
           .from(userTable)
           .where(searchFilter);
 
-        return {
-          items: [],
-          nextCursor: undefined,
-          total: totalResult?.count ?? 0,
-        };
+        return Result.Ok({
+          type: 'user_listed',
+          page: {
+            items: [],
+            nextCursor: undefined,
+            total: totalResult?.count ?? 0,
+          },
+        });
       }
 
       const cursorFilter = ascendingTextCursorFilter({
@@ -161,28 +167,35 @@ export class UserRepositoryDrizzle implements UserRepository {
         (row) => toUserId(row.id)
       );
 
-      return {
-        items: pageRows.map(toDomainUser),
-        nextCursor,
-        total: total[0]?.count ?? 0,
-      };
+      return Result.Ok({
+        type: 'user_listed',
+        page: {
+          items: pageRows.map(toDomainUser),
+          nextCursor,
+          total: total[0]?.count ?? 0,
+        },
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async getById(id: UserId): Promise<User | null> {
+  async getById(id: UserId): ReturnType<UserRepository['getById']> {
     try {
       const row = await this.db.query.user.findFirst({
         where: eq(userTable.id, id),
       });
-      return row ? toDomainUser(row) : null;
+      return Result.Ok(
+        row
+          ? { type: 'user_found', user: toDomainUser(row) }
+          : { type: 'user_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async create(input: UserCreateInput): Promise<User> {
+  async create(input: UserCreateInput): ReturnType<UserRepository['create']> {
     try {
       const [created] = await this.db
         .insert(userTable)
@@ -195,37 +208,49 @@ export class UserRepositoryDrizzle implements UserRepository {
         .returning();
 
       if (!created) {
-        throw new AppError({
-          code: 'USER_CREATE_EMPTY_RESULT',
-          category: 'system',
-          status: 500,
-          message: 'User create returned no row',
-        });
+        return Result.Error(
+          new AppError({
+            code: 'USER_CREATE_EMPTY_RESULT',
+            category: 'system',
+            status: 500,
+            message: 'User create returned no row',
+          })
+        );
       }
 
-      return toDomainUser(created);
+      return Result.Ok({ type: 'user_created', user: toDomainUser(created) });
     } catch (error) {
-      if (error instanceof AppError) throw error;
-      mapDbError(error);
+      if (isUserDuplicateError(error))
+        return Result.Ok({ type: 'user_duplicate' });
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async getUpdateSnapshot(id: UserId): Promise<UserUpdateSnapshot | null> {
+  async getUpdateSnapshot(
+    id: UserId
+  ): ReturnType<UserRepository['getUpdateSnapshot']> {
     try {
       const row = await this.db.query.user.findFirst({
         where: eq(userTable.id, id),
         columns: { email: true, role: true },
       });
-      return row ? { email: toEmailAddress(row.email), role: row.role } : null;
+      return Result.Ok(
+        row
+          ? {
+              type: 'user_update_snapshot_found',
+              snapshot: { email: toEmailAddress(row.email), role: row.role },
+            }
+          : { type: 'user_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
   async update(
     id: UserId,
     input: UserUpdatePersistenceInput
-  ): Promise<User | null> {
+  ): ReturnType<UserRepository['update']> {
     try {
       const [updated] = await this.db
         .update(userTable)
@@ -238,9 +263,15 @@ export class UserRepositoryDrizzle implements UserRepository {
         .where(eq(userTable.id, id))
         .returning();
 
-      return updated ? toDomainUser(updated) : null;
+      return Result.Ok(
+        updated
+          ? { type: 'user_updated', user: toDomainUser(updated) }
+          : { type: 'user_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      if (isUserDuplicateError(error))
+        return Result.Ok({ type: 'user_duplicate' });
+      return Result.Error(mapDbError(error));
     }
   }
 
@@ -248,7 +279,7 @@ export class UserRepositoryDrizzle implements UserRepository {
     userId: UserId;
     cursor?: SessionId;
     limit: number;
-  }): Promise<UserSessionListPage> {
+  }): ReturnType<UserRepository['listSessions']> {
     try {
       const userIdFilter = eq(sessionTable.userId, input.userId);
 
@@ -268,11 +299,14 @@ export class UserRepositoryDrizzle implements UserRepository {
           .from(sessionTable)
           .where(userIdFilter);
 
-        return {
-          items: [],
-          nextCursor: undefined,
-          total: totalResult?.count ?? 0,
-        };
+        return Result.Ok({
+          type: 'user_sessions_listed',
+          page: {
+            items: [],
+            nextCursor: undefined,
+            total: totalResult?.count ?? 0,
+          },
+        });
       }
 
       const cursorFilter = descendingDateCursorFilter({
@@ -311,20 +345,23 @@ export class UserRepositoryDrizzle implements UserRepository {
         (row) => toSessionId(row.id)
       );
 
-      return {
-        items: pageRows.map(toDomainSession),
-        nextCursor,
-        total: total[0]?.count ?? 0,
-      };
+      return Result.Ok({
+        type: 'user_sessions_listed',
+        page: {
+          items: pageRows.map(toDomainSession),
+          nextCursor,
+          total: total[0]?.count ?? 0,
+        },
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
   async findSessionForRevocation(input: {
     userId: UserId;
     sessionId: SessionId;
-  }): Promise<SessionRevocationTarget | null> {
+  }): ReturnType<UserRepository['findSessionForRevocation']> {
     try {
       const row = await this.db.query.session.findFirst({
         where: and(
@@ -334,9 +371,16 @@ export class UserRepositoryDrizzle implements UserRepository {
         columns: { id: true },
       });
 
-      return row ? { id: toSessionId(row.id) } : null;
+      return Result.Ok(
+        row
+          ? {
+              type: 'user_session_revocation_target_found',
+              target: { id: toSessionId(row.id) },
+            }
+          : { type: 'user_session_not_found' }
+      );
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 }

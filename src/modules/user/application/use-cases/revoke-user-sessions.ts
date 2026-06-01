@@ -1,13 +1,17 @@
+import { Result } from '@swan-io/boxed';
+
 import {
   hasScopePermission,
   type RequestScope,
   scopeUserId,
 } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
-import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
 
-import type { UseCaseResult, UserUseCaseDeps } from './types';
+import type {
+  UserResult,
+  UserRevokeSessionsOutcome,
+  UserUseCaseDeps,
+} from './types';
 import { isSelfTarget } from '../../domain/user-policy';
 
 export type RevokeUserSessionsInput = {
@@ -18,27 +22,23 @@ export type RevokeUserSessionsInput = {
 export async function revokeUserSessions(
   deps: UserUseCaseDeps,
   input: RevokeUserSessionsInput
-): Promise<UseCaseResult<void, 'forbidden' | 'self'>> {
+): Promise<UserResult<UserRevokeSessionsOutcome>> {
   const currentUserId = scopeUserId(input.scope);
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { session: ['revoke'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'user_forbidden' });
+  }
   if (isSelfTarget(currentUserId, input.id)) {
-    return fail('self');
+    return Result.Ok({ type: 'user_self' });
   }
 
-  const revoked = await deps.userAuthGateway.revokeUserSessions(input.id);
-  if (!revoked) {
-    throw new AppError({
-      code: 'USER_SESSIONS_REVOKE_FAILED',
-      category: 'system',
-      status: 500,
-      message: 'Failed to revoke user sessions',
-    });
-  }
+  const result = await deps.userAuthGateway.revokeUserSessions(input.id);
+  if (result.isError()) return Result.Error(result.getError());
   deps.logger.warn({
     details: {
       mode: 'all',
@@ -47,5 +47,5 @@ export async function revokeUserSessions(
     },
     event: 'security.session_revoked',
   });
-  return ok(undefined);
+  return Result.Ok({ type: 'user_sessions_revoked' });
 }

@@ -183,11 +183,13 @@ export const createServerContextTools = ({
 }: ServerContextDeps) => {
   const getSession = async (timings: ServerTimingEntry[]) => {
     const authStart = performance.now();
-    const session = await getAuthUseCases().getCurrentSession({
+    const result = await getAuthUseCases().getCurrentSession({
       headers: getRequestHeaders(),
     });
     timings.push({ name: 'auth', durationMs: performance.now() - authStart });
-    return session;
+    if (result.isError()) throw result.getError();
+    const outcome = result.get();
+    return outcome.type === 'auth_session_found' ? outcome.session : null;
   };
 
   const withPublicContext = async <T>(
@@ -265,13 +267,14 @@ export const createServerContextTools = ({
   };
 
   const assertPermission = async (userId: UserId, permissions: Permission) => {
-    const allowed = await getAuthUseCases().checkPermission({
+    const result = await getAuthUseCases().checkPermission({
       userId,
       permissions,
       headers: getRequestHeaders(),
     });
+    if (result.isError()) throw result.getError();
 
-    if (!allowed) {
+    if (result.get().type === 'auth_permission_denied') {
       throw new ServerFnError('FORBIDDEN');
     }
   };

@@ -1,4 +1,6 @@
+import { Result, type Result as BoxedResult } from '@swan-io/boxed';
 import { and, desc, eq, sql } from 'drizzle-orm';
+import { pullObject } from 'remeda';
 import { z } from 'zod';
 
 import type {
@@ -27,21 +29,25 @@ type EmailStatusRow = typeof emailStatusTable.$inferSelect;
 
 const emailMetadataSchema = z.record(z.string(), z.unknown());
 
-const toMetadata = (metadata: unknown): EmailMetadata => {
+const toMetadata = (
+  metadata: unknown
+): BoxedResult<EmailMetadata, AppError> => {
   const result = emailMetadataSchema.safeParse(metadata);
 
   if (!result.success) {
-    throw new AppError({
-      code: 'EMAIL_STATUS_METADATA_INVALID',
-      category: 'system',
-      status: 500,
-      message: 'Email status metadata is invalid',
-      details: { issues: result.error.issues },
-      cause: result.error,
-    });
+    return Result.Error(
+      new AppError({
+        code: 'EMAIL_STATUS_METADATA_INVALID',
+        category: 'system',
+        status: 500,
+        message: 'Email status metadata is invalid',
+        details: { issues: result.error.issues },
+        cause: result.error,
+      })
+    );
   }
 
-  return result.data;
+  return Result.Ok(result.data);
 };
 
 const toMetadataOrEmpty = (metadata: unknown): EmailMetadata => {
@@ -53,35 +59,46 @@ const toMetadataOrEmpty = (metadata: unknown): EmailMetadata => {
 const mergeMetadata = (
   current: unknown,
   incoming?: EmailMetadata
-): EmailMetadata => ({
-  ...toMetadata(current),
-  ...incoming,
-});
+): BoxedResult<EmailMetadata, AppError> => {
+  const currentMetadata = toMetadata(current);
+  if (currentMetadata.isError())
+    return Result.Error(currentMetadata.getError());
+
+  return Result.Ok({
+    ...currentMetadata.get(),
+    ...incoming,
+  });
+};
 
 const toDomain = (
   row: EmailStatusRow,
   options?: { tolerateInvalidMetadata?: boolean }
-): EmailStatusRecord => ({
-  id: row.id,
-  provider: row.provider as EmailProvider,
-  externalId: row.externalId,
-  recipient: row.recipient,
-  subject: row.subject,
-  status: row.status as EmailStatus,
-  idempotencyKey: row.idempotencyKey,
-  lastWebhookEventId: row.lastWebhookEventId,
-  metadata: options?.tolerateInvalidMetadata
-    ? toMetadataOrEmpty(row.metadata)
-    : toMetadata(row.metadata),
-  createdAt: row.createdAt,
-  updatedAt: row.updatedAt,
-});
+): BoxedResult<EmailStatusRecord, AppError> => {
+  const metadata = options?.tolerateInvalidMetadata
+    ? Result.Ok(toMetadataOrEmpty(row.metadata))
+    : toMetadata(row.metadata);
+  if (metadata.isError()) return Result.Error(metadata.getError());
+
+  return Result.Ok({
+    id: row.id,
+    provider: row.provider as EmailProvider,
+    externalId: row.externalId,
+    recipient: row.recipient,
+    subject: row.subject,
+    status: row.status as EmailStatus,
+    idempotencyKey: row.idempotencyKey,
+    lastWebhookEventId: row.lastWebhookEventId,
+    metadata: metadata.get(),
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  });
+};
 
 const emailStatusIdempotencyKeyIsNotNull = sql`${emailStatusTable.idempotencyKey} is not null`;
 const emailStatusExternalIdIsNotNull = sql`${emailStatusTable.externalId} is not null`;
 
-function mapDbError(error: unknown): never {
-  if (error instanceof AppError) throw error;
+function mapDbError(error: unknown): AppError {
+  if (error instanceof AppError) return error;
 
   if (isUniqueConstraintViolation(error)) {
     const constraint = getConstraintName(error);
@@ -89,7 +106,7 @@ function mapDbError(error: unknown): never {
       constraint === 'email_status_provider_external_id_key' ||
       constraint === 'email_status_provider_idempotency_key'
     ) {
-      throw new AppError({
+      return new AppError({
         code: 'EMAIL_STATUS_DUPLICATE',
         category: 'conflict',
         status: 409,
@@ -99,7 +116,7 @@ function mapDbError(error: unknown): never {
     }
   }
 
-  throw new AppError({
+  return new AppError({
     code: 'EMAIL_STATUS_REPOSITORY_ERROR',
     category: 'system',
     status: 500,
@@ -143,26 +160,31 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
     row: EmailStatusRow,
     input: RecordEmailSendAttemptInput,
     values: NewEmailStatus
-  ) {
+  ): Promise<BoxedResult<EmailStatusRecord, AppError>> {
+    const metadata = mergeMetadata(row.metadata, input.metadata);
+    if (metadata.isError()) return Result.Error(metadata.getError());
+
     const [updated] = await db
       .update(emailStatusTable)
       .set({
         recipient: values.recipient,
         subject: values.subject,
         status: values.status,
-        metadata: mergeMetadata(row.metadata, input.metadata),
+        metadata: metadata.get(),
         updatedAt: new Date(),
       })
       .where(eq(emailStatusTable.id, row.id))
       .returning();
 
     if (!updated) {
-      throw new AppError({
-        code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
-        category: 'system',
-        status: 500,
-        message: 'Email status update returned no row',
-      });
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
+          category: 'system',
+          status: 500,
+          message: 'Email status update returned no row',
+        })
+      );
     }
 
     return toDomain(updated);
@@ -171,7 +193,7 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
   private async recordSendAttemptWithDb(
     db: DbLike,
     input: RecordEmailSendAttemptInput
-  ): Promise<EmailStatusRecord> {
+  ): Promise<BoxedResult<EmailStatusRecord, AppError>> {
     const existingAttempt = await this.findByIdempotencyKey(
       db,
       input.provider,
@@ -211,12 +233,14 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
     );
 
     if (!racedAttempt) {
-      throw new AppError({
-        code: 'EMAIL_STATUS_CREATE_EMPTY_RESULT',
-        category: 'system',
-        status: 500,
-        message: 'Email status create returned no row',
-      });
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_STATUS_CREATE_EMPTY_RESULT',
+          category: 'system',
+          status: 500,
+          message: 'Email status create returned no row',
+        })
+      );
     }
 
     if (racedAttempt.externalId) return toDomain(racedAttempt);
@@ -226,26 +250,34 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
 
   async recordSendAttempt(
     input: RecordEmailSendAttemptInput
-  ): Promise<EmailStatusRecord> {
+  ): ReturnType<EmailStatusRepository['recordSendAttempt']> {
     try {
-      return await this.recordSendAttemptWithDb(this.db, input);
+      const record = await this.recordSendAttemptWithDb(this.db, input);
+      if (record.isError()) return Result.Error(mapDbError(record.getError()));
+
+      return Result.Ok({ type: 'email_status_recorded', record: record.get() });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
   private async upsertStatusByExternalIdWithDb(
     db: DbLike,
     input: UpsertEmailStatusInput
-  ): Promise<EmailStatusRecord> {
+  ): Promise<BoxedResult<EmailStatusRecord, AppError>> {
     const existingRow = await this.findByExternalId(
       db,
       input.provider,
       input.externalId
     );
-    const existing = existingRow ? toDomain(existingRow) : null;
+    if (existingRow) {
+      const existing = toDomain(existingRow);
+      if (existing.isError()) return Result.Error(existing.getError());
 
-    if (existing) {
+      const existingRecord = existing.get();
+      const metadata = mergeMetadata(existingRecord.metadata, input.metadata);
+      if (metadata.isError()) return Result.Error(metadata.getError());
+
       const [updated] = await db
         .update(emailStatusTable)
         .set({
@@ -254,21 +286,23 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
           status: input.status,
           lastWebhookEventId:
             input.lastWebhookEventId === undefined
-              ? existing.lastWebhookEventId
+              ? existingRecord.lastWebhookEventId
               : input.lastWebhookEventId,
-          metadata: mergeMetadata(existing.metadata, input.metadata),
+          metadata: metadata.get(),
           updatedAt: new Date(),
         })
-        .where(eq(emailStatusTable.id, existing.id))
+        .where(eq(emailStatusTable.id, existingRecord.id))
         .returning();
 
       if (!updated) {
-        throw new AppError({
-          code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
-          category: 'system',
-          status: 500,
-          message: 'Email status update returned no row',
-        });
+        return Result.Error(
+          new AppError({
+            code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
+            category: 'system',
+            status: 500,
+            message: 'Email status update returned no row',
+          })
+        );
       }
 
       return toDomain(updated);
@@ -282,6 +316,12 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
       );
 
       if (existingAttempt && !existingAttempt.externalId) {
+        const metadata = mergeMetadata(
+          existingAttempt.metadata,
+          input.metadata
+        );
+        if (metadata.isError()) return Result.Error(metadata.getError());
+
         const [updated] = await db
           .update(emailStatusTable)
           .set({
@@ -290,19 +330,21 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
             subject: input.subject,
             status: input.status,
             lastWebhookEventId: input.lastWebhookEventId ?? null,
-            metadata: mergeMetadata(existingAttempt.metadata, input.metadata),
+            metadata: metadata.get(),
             updatedAt: new Date(),
           })
           .where(eq(emailStatusTable.id, existingAttempt.id))
           .returning();
 
         if (!updated) {
-          throw new AppError({
-            code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
-            category: 'system',
-            status: 500,
-            message: 'Email status update returned no row',
-          });
+          return Result.Error(
+            new AppError({
+              code: 'EMAIL_STATUS_UPDATE_EMPTY_RESULT',
+              category: 'system',
+              status: 500,
+              message: 'Email status update returned no row',
+            })
+          );
         }
 
         return toDomain(updated);
@@ -336,12 +378,14 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
       .returning();
 
     if (!created) {
-      throw new AppError({
-        code: 'EMAIL_STATUS_UPSERT_EMPTY_RESULT',
-        category: 'system',
-        status: 500,
-        message: 'Email status upsert returned no row',
-      });
+      return Result.Error(
+        new AppError({
+          code: 'EMAIL_STATUS_UPSERT_EMPTY_RESULT',
+          category: 'system',
+          status: 500,
+          message: 'Email status upsert returned no row',
+        })
+      );
     }
 
     return toDomain(created);
@@ -349,43 +393,65 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
 
   async upsertStatusByExternalId(
     input: UpsertEmailStatusInput
-  ): Promise<EmailStatusRecord> {
+  ): ReturnType<EmailStatusRepository['upsertStatusByExternalId']> {
     try {
-      return await this.upsertStatusByExternalIdWithDb(this.db, input);
+      const record = await this.upsertStatusByExternalIdWithDb(this.db, input);
+      if (record.isError()) return Result.Error(mapDbError(record.getError()));
+
+      return Result.Ok({ type: 'email_status_recorded', record: record.get() });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
   async getByExternalId(
     provider: EmailProvider,
     externalId: string
-  ): Promise<EmailStatusRecord | null> {
+  ): ReturnType<EmailStatusRepository['getByExternalId']> {
     try {
       const row = await this.findByExternalId(this.db, provider, externalId);
 
-      return row ? toDomain(row) : null;
+      if (!row) return Result.Ok({ type: 'email_status_not_found' });
+
+      const record = toDomain(row);
+      if (record.isError()) return Result.Error(mapDbError(record.getError()));
+
+      return Result.Ok({
+        type: 'email_status_found',
+        record: record.get(),
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async listRecent(input?: { limit?: number }): Promise<EmailStatusRecord[]> {
+  async listRecent(input?: {
+    limit?: number;
+  }): ReturnType<EmailStatusRepository['listRecent']> {
     try {
       const rows = await this.db.query.emailStatus.findMany({
         orderBy: [desc(emailStatusTable.createdAt), desc(emailStatusTable.id)],
         limit: input?.limit ?? 20,
       });
 
-      return rows.map((row) =>
-        toDomain(row, { tolerateInvalidMetadata: true })
-      );
+      const records: EmailStatusRecord[] = [];
+      for (const row of rows) {
+        const record = toDomain(row, { tolerateInvalidMetadata: true });
+        if (record.isError())
+          return Result.Error(mapDbError(record.getError()));
+        records.push(record.get());
+      }
+
+      return Result.Ok({
+        type: 'email_status_recent_listed',
+        records,
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 
-  async countByStatus(): Promise<Partial<Record<EmailStatus, number>>> {
+  async countByStatus(): ReturnType<EmailStatusRepository['countByStatus']> {
     try {
       const rows = await this.db
         .select({
@@ -395,11 +461,16 @@ export class EmailStatusRepositoryDrizzle implements EmailStatusRepository {
         .from(emailStatusTable)
         .groupBy(emailStatusTable.status);
 
-      return Object.fromEntries(
-        rows.map((row) => [row.status as EmailStatus, row.count])
-      );
+      return Result.Ok({
+        type: 'email_status_counted',
+        counts: pullObject(
+          rows,
+          (row) => row.status as EmailStatus,
+          (row) => row.count
+        ),
+      });
     } catch (error) {
-      mapDbError(error);
+      return Result.Error(mapDbError(error));
     }
   }
 }

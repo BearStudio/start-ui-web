@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -5,6 +6,7 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import type { UserAuthGateway, UserRepository } from '@/modules/user';
 
 import { makeTestKernel, now } from '@tests/unit/composition/helpers';
@@ -34,32 +36,52 @@ const session = {
 const makeUserRepository = (
   overrides: Partial<UserRepository> = {}
 ): UserRepository => ({
-  list: async () => ({ items: [user], total: 1 }),
-  getById: async () => user,
-  create: async () => user,
-  getUpdateSnapshot: async () => ({
-    email: user.email,
-    role: user.role,
-  }),
-  update: async () => user,
-  listSessions: async () => ({ items: [session], total: 1 }),
-  findSessionForRevocation: async () => ({
-    id: session.id,
-  }),
+  list: async () =>
+    Result.Ok({ type: 'user_listed', page: { items: [user], total: 1 } }),
+  getById: async () => Result.Ok({ type: 'user_found', user }),
+  create: async () => Result.Ok({ type: 'user_created', user }),
+  getUpdateSnapshot: async () =>
+    Result.Ok({
+      type: 'user_update_snapshot_found',
+      snapshot: {
+        email: user.email,
+        role: user.role,
+      },
+    }),
+  update: async () => Result.Ok({ type: 'user_updated', user }),
+  listSessions: async () =>
+    Result.Ok({
+      type: 'user_sessions_listed',
+      page: { items: [session], total: 1 },
+    }),
+  findSessionForRevocation: async () =>
+    Result.Ok({
+      type: 'user_session_revocation_target_found',
+      target: { id: session.id },
+    }),
   ...overrides,
 });
 
 const makeUserAuthGateway = (
   overrides: Partial<UserAuthGateway> = {}
 ): UserAuthGateway => ({
-  removeUser: async () => true,
-  revokeUserSessions: async () => true,
-  revokeUserSession: async () => true,
+  removeUser: async () => Result.Ok({ type: 'user_auth_removed' }),
+  revokeUserSessions: async () =>
+    Result.Ok({ type: 'user_auth_sessions_revoked' }),
+  revokeUserSession: async () =>
+    Result.Ok({ type: 'user_auth_session_revoked' }),
   ...overrides,
 });
 
 const scope = (userId: string) =>
   ({ userId: toUserId(userId), role: 'user' }) as const;
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
 
 describe('user composition', () => {
   beforeEach(() => {
@@ -86,20 +108,28 @@ describe('user composition', () => {
   });
 
   it('routes use case calls through the overridden repository', async () => {
-    const list = vi.fn(async () => ({ items: [user], total: 1 }));
+    const list = vi.fn(async () =>
+      Result.Ok({
+        type: 'user_listed' as const,
+        page: { items: [user], total: 1 },
+      })
+    );
     const useCases = getUserUseCases({
       kernel: makeTestKernel(),
       userRepository: makeUserRepository({ list }),
       userAuthGateway: makeUserAuthGateway(),
     });
 
-    await expect(
-      useCases.list({
-        scope: scope('admin-1'),
-        limit: 20,
-        searchTerm: 'user',
-      })
-    ).resolves.toMatchObject({ ok: true, value: { total: 1 } });
+    const result = await useCases.list({
+      scope: scope('admin-1'),
+      limit: 20,
+      searchTerm: 'user',
+    });
+
+    expect(getOk(result)).toMatchObject({
+      type: 'user_listed',
+      page: { total: 1 },
+    });
     expect(list).toHaveBeenCalledWith({
       cursor: undefined,
       limit: 20,

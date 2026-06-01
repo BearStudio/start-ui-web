@@ -1,12 +1,10 @@
+import { Result } from '@swan-io/boxed';
+
 import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import { fail, ok } from '@/modules/kernel';
 import type { GenreId } from '@/modules/kernel/domain/ids';
 
-import type { GenreUseCaseDeps, UseCaseResult } from './types';
-import {
-  type GenreListPage,
-  normalizeGenreSearchTerm,
-} from '../../domain/genre';
+import type { GenreListOutcome, GenreResult, GenreUseCaseDeps } from './types';
+import { normalizeGenreSearchTerm } from '../../domain/genre';
 
 export type ListGenresInput = {
   scope: RequestScope;
@@ -18,20 +16,24 @@ export type ListGenresInput = {
 export async function listGenres(
   deps: GenreUseCaseDeps,
   input: ListGenresInput
-): Promise<UseCaseResult<GenreListPage, 'forbidden'>> {
+): Promise<GenreResult<GenreListOutcome>> {
   const allowed = await hasScopePermission({
     permissionChecker: deps.permissionChecker,
     scope: input.scope,
     permissions: { genre: ['read'] },
   });
-  if (!allowed) return fail('forbidden');
+  if (allowed.isError()) return Result.Error(allowed.getError());
+  if (allowed.get().type === 'permission_denied') {
+    return Result.Ok({ type: 'genre_forbidden' });
+  }
 
   deps.logger.info({ event: 'genre.list' });
   const limit = Math.min(Math.max(input.limit, 1), 100);
-  const value = await deps.genreRepository.list({
+  const result = await deps.genreRepository.list({
     cursor: input.cursor,
     limit,
     searchTerm: normalizeGenreSearchTerm(input.searchTerm),
   });
-  return ok(value);
+  if (result.isError()) return Result.Error(result.getError());
+  return Result.Ok(result.get());
 }

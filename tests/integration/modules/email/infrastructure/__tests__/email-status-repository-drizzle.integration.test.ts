@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { createEmailUseCases } from '@/modules/email';
+import type { ApplicationResult } from '@/modules/kernel/application/result';
 import {
   emailStatus as emailStatusTable,
   type NewEmailStatus,
@@ -26,6 +27,22 @@ const makeEmailStatusRow = (
   ...overrides,
 });
 
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
+}
+
+function getError<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isOk()) {
+    throw new Error(`Expected Result.Error, got ${result.get().type}`);
+  }
+  return result.getError();
+}
+
 describe('EmailStatusRepositoryDrizzle integration', () => {
   let database: Awaited<ReturnType<typeof createPgliteTestDatabase>>;
 
@@ -44,13 +61,15 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
   it('promotes a send attempt to the Resend external ID and counts final status', async () => {
     const repository = createEmailStatusRepository({ db: database.db });
 
-    const attempt = await repository.recordSendAttempt({
-      provider: 'resend',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      idempotencyKey: 'key-1',
-      metadata: { source: 'auth.signInOtp' },
-    });
+    const attempt = getOk(
+      await repository.recordSendAttempt({
+        provider: 'resend',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        idempotencyKey: 'key-1',
+        metadata: { source: 'auth.signInOtp' },
+      })
+    ).record;
 
     expect(attempt).toMatchObject({
       provider: 'resend',
@@ -59,15 +78,17 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       idempotencyKey: 'key-1',
     });
 
-    const sent = await repository.upsertStatusByExternalId({
-      provider: 'resend',
-      externalId: 'email_123',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'sent',
-      idempotencyKey: 'key-1',
-      metadata: { external: true },
-    });
+    const sent = getOk(
+      await repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: 'email_123',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        status: 'sent',
+        idempotencyKey: 'key-1',
+        metadata: { external: true },
+      })
+    ).record;
 
     expect(sent).toMatchObject({
       id: attempt.id,
@@ -78,40 +99,47 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
         external: true,
       },
     });
-    await expect(
-      repository.getByExternalId('resend', 'email_123')
-    ).resolves.toMatchObject({
-      id: attempt.id,
-      status: 'sent',
+    const found = getOk(
+      await repository.getByExternalId('resend', 'email_123')
+    );
+    expect(found).toMatchObject({
+      type: 'email_status_found',
+      record: { id: attempt.id, status: 'sent' },
     });
-    await expect(repository.countByStatus()).resolves.toEqual({ sent: 1 });
+    expect(getOk(await repository.countByStatus()).counts).toEqual({ sent: 1 });
   });
 
   it('returns an existing sent record for repeated idempotency keys', async () => {
     const repository = createEmailStatusRepository({ db: database.db });
 
-    const attempt = await repository.recordSendAttempt({
-      provider: 'resend',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      idempotencyKey: 'key-1',
-      metadata: { source: 'auth.signInOtp' },
-    });
-    const sent = await repository.upsertStatusByExternalId({
-      provider: 'resend',
-      externalId: 'email_123',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'sent',
-      idempotencyKey: 'key-1',
-    });
+    const attempt = getOk(
+      await repository.recordSendAttempt({
+        provider: 'resend',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        idempotencyKey: 'key-1',
+        metadata: { source: 'auth.signInOtp' },
+      })
+    ).record;
+    const sent = getOk(
+      await repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: 'email_123',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        status: 'sent',
+        idempotencyKey: 'key-1',
+      })
+    ).record;
 
-    const duplicate = await repository.recordSendAttempt({
-      provider: 'resend',
-      recipient: 'other@example.com',
-      subject: 'Retry login code',
-      idempotencyKey: 'key-1',
-    });
+    const duplicate = getOk(
+      await repository.recordSendAttempt({
+        provider: 'resend',
+        recipient: 'other@example.com',
+        subject: 'Retry login code',
+        idempotencyKey: 'key-1',
+      })
+    ).record;
 
     expect(duplicate).toMatchObject({
       id: sent.id,
@@ -120,30 +148,34 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       status: 'sent',
     });
     expect(sent.id).toBe(attempt.id);
-    await expect(repository.listRecent()).resolves.toHaveLength(1);
+    expect(getOk(await repository.listRecent()).records).toHaveLength(1);
   });
 
   it('preserves an existing idempotency key during webhook status updates', async () => {
     const repository = createEmailStatusRepository({ db: database.db });
 
-    await repository.upsertStatusByExternalId({
-      provider: 'resend',
-      externalId: 'email_123',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'sent',
-      idempotencyKey: 'key-1',
-    });
+    getOk(
+      await repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: 'email_123',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        status: 'sent',
+        idempotencyKey: 'key-1',
+      })
+    );
 
-    const delivered = await repository.upsertStatusByExternalId({
-      provider: 'resend',
-      externalId: 'email_123',
-      recipient: 'user@example.com',
-      subject: 'Login code',
-      status: 'delivered',
-      idempotencyKey: null,
-      lastWebhookEventId: 'evt_1',
-    });
+    const delivered = getOk(
+      await repository.upsertStatusByExternalId({
+        provider: 'resend',
+        externalId: 'email_123',
+        recipient: 'user@example.com',
+        subject: 'Login code',
+        status: 'delivered',
+        idempotencyKey: null,
+        lastWebhookEventId: 'evt_1',
+      })
+    ).record;
 
     expect(delivered).toMatchObject({
       externalId: 'email_123',
@@ -192,7 +224,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       }),
     ]);
 
-    const rows = await repository.listRecent({ limit: 1 });
+    const rows = getOk(await repository.listRecent({ limit: 1 })).records;
 
     expect(rows.map((row) => row.id)).toEqual(['email-status-new']);
   });
@@ -205,9 +237,9 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       })
     );
 
-    await expect(
-      repository.getByExternalId('resend', 'email_1')
-    ).rejects.toMatchObject({
+    expect(
+      getError(await repository.getByExternalId('resend', 'email_1'))
+    ).toMatchObject({
       code: 'EMAIL_STATUS_METADATA_INVALID',
     });
   });
@@ -220,7 +252,7 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       })
     );
 
-    await expect(repository.listRecent()).resolves.toMatchObject([
+    expect(getOk(await repository.listRecent()).records).toMatchObject([
       {
         id: 'email-status-1',
         metadata: {},
@@ -254,29 +286,31 @@ describe('EmailStatusRepositoryDrizzle integration', () => {
       metadata: { source: 'webhook' },
     };
 
-    await expect(useCases.processStatusEvent(input)).resolves.toMatchObject({
-      duplicate: false,
+    expect(getOk(await useCases.processStatusEvent(input))).toMatchObject({
+      type: 'email_status_event_processed',
       record: {
         externalId: 'email_123',
         status: 'delivered',
       },
     });
-    await expect(useCases.processStatusEvent(input)).resolves.toMatchObject({
-      duplicate: true,
+    expect(getOk(await useCases.processStatusEvent(input))).toMatchObject({
+      type: 'email_status_event_duplicate',
       record: {
         externalId: 'email_123',
         status: 'delivered',
       },
     });
-    await expect(
-      useCases.processStatusEvent({
-        ...input,
-        status: 'opened',
-        webhookEventId: 'evt_2',
-        providerEventType: 'email.opened',
-      })
-    ).resolves.toMatchObject({
-      duplicate: false,
+    expect(
+      getOk(
+        await useCases.processStatusEvent({
+          ...input,
+          status: 'opened',
+          webhookEventId: 'evt_2',
+          providerEventType: 'email.opened',
+        })
+      )
+    ).toMatchObject({
+      type: 'email_status_event_processed',
       record: {
         status: 'opened',
         lastWebhookEventId: 'evt_2',

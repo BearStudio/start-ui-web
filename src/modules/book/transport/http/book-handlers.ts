@@ -3,7 +3,19 @@ import { z } from 'zod';
 import type { ProtectedContext } from '@/modules/auth/backend';
 import type { BookUseCases } from '@/modules/book';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
-import { unwrapUseCaseResult } from '@/modules/kernel/transport/tanstack/result-mapper';
+import {
+  type OutcomeHandlerConfig,
+  unwrapApplicationResult,
+} from '@/modules/kernel/transport/tanstack/result-mapper';
+
+import type {
+  BookCreateOutcome,
+  BookDeleteOutcome,
+  BookGetOutcome,
+  BookListOutcome,
+  BookUpdateOutcome,
+} from '../../application/use-cases/types';
+import type { Book, BookListPage } from '../../domain/book';
 
 export const zGetAllInput = () =>
   z
@@ -34,29 +46,57 @@ type BookHandlerDeps = {
   getUseCases: (ctx: ProtectedContext) => BookUseCases;
 };
 
-const bookReasonConfig = {
-  duplicate: {
+const bookDuplicateConfig = {
+  book_duplicate: {
     code: 'CONFLICT',
     message: 'Unique constraint violation',
     data: { target: ['title', 'author'] },
   },
-  forbidden: 'FORBIDDEN',
-  not_found: 'NOT_FOUND',
 } as const;
+
+const bookListConfig = {
+  book_forbidden: 'FORBIDDEN',
+  book_listed: (outcome) => outcome.page,
+} as const satisfies OutcomeHandlerConfig<BookListOutcome, BookListPage>;
+
+const bookGetConfig = {
+  book_forbidden: 'FORBIDDEN',
+  book_found: (outcome) => outcome.book,
+  book_not_found: 'NOT_FOUND',
+} as const satisfies OutcomeHandlerConfig<BookGetOutcome, Book>;
+
+const bookCreateConfig = {
+  book_created: (outcome) => outcome.book,
+  book_forbidden: 'FORBIDDEN',
+  ...bookDuplicateConfig,
+} as const satisfies OutcomeHandlerConfig<BookCreateOutcome, Book>;
+
+const bookUpdateConfig = {
+  book_forbidden: 'FORBIDDEN',
+  book_not_found: 'NOT_FOUND',
+  book_updated: (outcome) => outcome.book,
+  ...bookDuplicateConfig,
+} as const satisfies OutcomeHandlerConfig<BookUpdateOutcome, Book>;
+
+const bookDeleteConfig = {
+  book_deleted: () => undefined,
+  book_forbidden: 'FORBIDDEN',
+  book_not_found: 'NOT_FOUND',
+} as const satisfies OutcomeHandlerConfig<BookDeleteOutcome, void>;
 
 export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   const getAll = async (
     ctx: ProtectedContext,
     data: z.output<ReturnType<typeof zGetAllInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).list({
         scope: ctx.scope,
         cursor: data.cursor ? toBookId(data.cursor) : undefined,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
       }),
-      bookReasonConfig
+      bookListConfig
     );
   };
 
@@ -64,12 +104,12 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zGetByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).get({
         scope: ctx.scope,
         id: toBookId(data.id),
       }),
-      bookReasonConfig
+      bookGetConfig
     );
   };
 
@@ -77,7 +117,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zCreateInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).create({
         scope: ctx.scope,
         book: {
@@ -88,7 +128,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
           coverId: data.coverId,
         },
       }),
-      bookReasonConfig
+      bookCreateConfig
     );
   };
 
@@ -96,7 +136,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zUpdateByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).update({
         scope: ctx.scope,
         id: toBookId(data.id),
@@ -108,7 +148,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
           coverId: data.coverId,
         },
       }),
-      bookReasonConfig
+      bookUpdateConfig
     );
   };
 
@@ -116,12 +156,12 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
     ctx: ProtectedContext,
     data: z.infer<ReturnType<typeof zDeleteByIdInput>>
   ) => {
-    return unwrapUseCaseResult(
+    return unwrapApplicationResult(
       getUseCases(ctx).delete({
         scope: ctx.scope,
         id: toBookId(data.id),
       }),
-      bookReasonConfig
+      bookDeleteConfig
     );
   };
 

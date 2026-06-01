@@ -1,6 +1,9 @@
 import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
 
-import type { TelemetryAdapter } from '@/platform/telemetry';
+import {
+  type TelemetryAdapter,
+  toTelemetryStringTags,
+} from '@/platform/telemetry';
 
 /**
  * Minimum shape both `@sentry/node` and `@sentry/react` expose. Captured here
@@ -43,19 +46,9 @@ const toStringTags = (tags: unknown): Record<string, string> | undefined => {
     return undefined;
   }
 
-  const entries: Array<[string, string]> = Object.entries(tags).flatMap(
-    ([key, value]) => {
-      const tagValue =
-        typeof value === 'string' ||
-        typeof value === 'number' ||
-        typeof value === 'boolean'
-          ? String(value)
-          : undefined;
-      return tagValue === undefined ? [] : [[key, tagValue]];
-    }
-  );
-
-  return entries.length ? Object.fromEntries(entries) : undefined;
+  return toTelemetryStringTags(tags as Record<string, unknown>, {
+    allowEmpty: true,
+  });
 };
 
 export const sanitizeSentryEvent = <TEvent extends SentryEventLike>(

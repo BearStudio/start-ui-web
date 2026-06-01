@@ -11,11 +11,19 @@ const makeAuth = () => ({
   },
 });
 
-const makeDb = (session: { token: string } | null) =>
+const makeDb = (input: {
+  session: { token: string; userId: string } | null;
+  identityUserId?: string;
+}) =>
   ({
     query: {
       session: {
-        findFirst: vi.fn(async () => session),
+        findFirst: vi.fn(async () => input.session),
+      },
+      authIdentity: {
+        findFirst: vi.fn(async () =>
+          input.identityUserId ? { userId: input.identityUserId } : null
+        ),
       },
     },
   }) as unknown as Database;
@@ -25,17 +33,21 @@ describe('UserAdminGatewayBetterAuth', () => {
     const auth = makeAuth();
     const gateway = new UserAdminGatewayBetterAuth(
       auth as unknown as Auth,
-      makeDb({ token: 'session-token' })
+      makeDb({ session: { token: 'session-token', userId: 'user-1' } })
     );
     const headers = new Headers();
 
-    await expect(
-      gateway.revokeUserSession({
-        userId: toUserId('user-1'),
-        sessionId: toSessionId('session-1'),
-        headers,
-      })
-    ).resolves.toBe(true);
+    const result = await gateway.revokeUserSession({
+      userId: toUserId('user-1'),
+      sessionId: toSessionId('session-1'),
+      headers,
+    });
+
+    expect(result.isOk()).toBe(true);
+    expect(result).toMatchObject({
+      tag: 'Ok',
+      value: { type: 'auth_user_session_revoked' },
+    });
 
     expect(auth.api.revokeUserSession).toHaveBeenCalledWith({
       body: { sessionToken: 'session-token' },
@@ -43,20 +55,78 @@ describe('UserAdminGatewayBetterAuth', () => {
     });
   });
 
+  it('revokes a provider session mapped to the requested app user', async () => {
+    const auth = makeAuth();
+    const gateway = new UserAdminGatewayBetterAuth(
+      auth as unknown as Auth,
+      makeDb({
+        session: { token: 'session-token', userId: 'provider-user-1' },
+        identityUserId: 'app-user-1',
+      })
+    );
+
+    const result = await gateway.revokeUserSession({
+      userId: toUserId('app-user-1'),
+      sessionId: toSessionId('session-1'),
+      headers: new Headers(),
+    });
+
+    expect(result.isOk()).toBe(true);
+    expect(result).toMatchObject({
+      tag: 'Ok',
+      value: { type: 'auth_user_session_revoked' },
+    });
+
+    expect(auth.api.revokeUserSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        body: { sessionToken: 'session-token' },
+      })
+    );
+  });
+
   it('does not call Better Auth when the session does not belong to the user', async () => {
     const auth = makeAuth();
     const gateway = new UserAdminGatewayBetterAuth(
       auth as unknown as Auth,
-      makeDb(null)
+      makeDb({
+        session: { token: 'session-token', userId: 'provider-user-1' },
+        identityUserId: 'other-app-user',
+      })
     );
 
-    await expect(
-      gateway.revokeUserSession({
-        userId: toUserId('user-1'),
-        sessionId: toSessionId('session-1'),
-        headers: new Headers(),
-      })
-    ).resolves.toBe(false);
+    const result = await gateway.revokeUserSession({
+      userId: toUserId('user-1'),
+      sessionId: toSessionId('session-1'),
+      headers: new Headers(),
+    });
+
+    expect(result.isError()).toBe(true);
+    expect(result).toMatchObject({
+      tag: 'Error',
+      error: { code: 'AUTH_USER_SESSION_OWNER_MISMATCH' },
+    });
+
+    expect(auth.api.revokeUserSession).not.toHaveBeenCalled();
+  });
+
+  it('does not call Better Auth when the session is missing', async () => {
+    const auth = makeAuth();
+    const gateway = new UserAdminGatewayBetterAuth(
+      auth as unknown as Auth,
+      makeDb({ session: null })
+    );
+
+    const result = await gateway.revokeUserSession({
+      userId: toUserId('user-1'),
+      sessionId: toSessionId('session-1'),
+      headers: new Headers(),
+    });
+
+    expect(result.isError()).toBe(true);
+    expect(result).toMatchObject({
+      tag: 'Error',
+      error: { code: 'AUTH_USER_SESSION_TOKEN_NOT_FOUND' },
+    });
 
     expect(auth.api.revokeUserSession).not.toHaveBeenCalled();
   });

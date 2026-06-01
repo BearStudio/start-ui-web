@@ -13,10 +13,7 @@ export {
   hasScopePermission,
   scopeUserId,
 } from './application/scope-authorization';
-export type {
-  AuthUseCaseDeps,
-  UseCaseResult,
-} from './application/use-cases/types';
+export type { AuthUseCaseDeps } from './application/use-cases/types';
 export {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,

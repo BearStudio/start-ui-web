@@ -25,9 +25,9 @@ const betterAuthClientPermissions = {
 
 const betterAuthClient = createAuthClient({
   baseURL:
-    typeof window === 'undefined'
+    typeof globalThis.window === 'undefined'
       ? envClient.VITE_BASE_URL
-      : window.location.origin,
+      : globalThis.window.location.origin,
   plugins: [
     inferAdditionalFields({
       user: {

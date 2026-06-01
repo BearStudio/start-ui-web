@@ -1,5 +1,7 @@
+import { Result } from '@swan-io/boxed';
 import { and, eq } from 'drizzle-orm';
 
+import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
   getDefaultDbClient,
   type Database,
@@ -7,7 +9,7 @@ import {
 
 import type { Auth } from './auth';
 import { getDefaultAuth } from './auth';
-import { session as sessionTable } from '../drizzle/schema';
+import { authIdentity, session as sessionTable } from '../drizzle/schema';
 import type { UserAdminGateway } from '../../application/ports/user-admin-gateway';
 
 export class UserAdminGatewayBetterAuth implements UserAdminGateway {
@@ -18,40 +20,131 @@ export class UserAdminGatewayBetterAuth implements UserAdminGateway {
 
   async removeUser(
     input: Parameters<UserAdminGateway['removeUser']>[0]
-  ): Promise<boolean> {
-    const response = await this.auth.api.removeUser({
-      body: { userId: input.userId },
-      headers: input.headers,
-    });
-    return response.success;
+  ): ReturnType<UserAdminGateway['removeUser']> {
+    try {
+      const response = await this.auth.api.removeUser({
+        body: { userId: input.userId },
+        headers: input.headers,
+      });
+      if (!response.success) {
+        return Result.Error(
+          new AppError({
+            code: 'AUTH_USER_REMOVE_FAILED',
+            category: 'system',
+            status: 500,
+            message: 'Failed to remove auth user',
+          })
+        );
+      }
+      return Result.Ok({ type: 'auth_user_removed' });
+    } catch (error) {
+      return Result.Error(
+        new AppError({
+          code: 'AUTH_USER_REMOVE_FAILED',
+          category: 'system',
+          status: 500,
+          message: 'Failed to remove auth user',
+          cause: error,
+        })
+      );
+    }
   }
 
   async revokeUserSessions(
     input: Parameters<UserAdminGateway['revokeUserSessions']>[0]
-  ): Promise<boolean> {
-    const response = await this.auth.api.revokeUserSessions({
-      body: { userId: input.userId },
-      headers: input.headers,
-    });
-    return response.success;
+  ): ReturnType<UserAdminGateway['revokeUserSessions']> {
+    try {
+      const response = await this.auth.api.revokeUserSessions({
+        body: { userId: input.userId },
+        headers: input.headers,
+      });
+      if (!response.success) {
+        return Result.Error(
+          new AppError({
+            code: 'AUTH_USER_SESSIONS_REVOKE_FAILED',
+            category: 'system',
+            status: 500,
+            message: 'Failed to revoke auth user sessions',
+          })
+        );
+      }
+      return Result.Ok({ type: 'auth_user_sessions_revoked' });
+    } catch (error) {
+      return Result.Error(
+        new AppError({
+          code: 'AUTH_USER_SESSIONS_REVOKE_FAILED',
+          category: 'system',
+          status: 500,
+          message: 'Failed to revoke auth user sessions',
+          cause: error,
+        })
+      );
+    }
   }
 
   async revokeUserSession(
     input: Parameters<UserAdminGateway['revokeUserSession']>[0]
-  ): Promise<boolean> {
-    const session = await this.db.query.session.findFirst({
-      where: and(
-        eq(sessionTable.id, input.sessionId),
-        eq(sessionTable.userId, input.userId)
-      ),
-      columns: { token: true },
-    });
-    if (!session) return false;
+  ): ReturnType<UserAdminGateway['revokeUserSession']> {
+    try {
+      const session = await this.db.query.session.findFirst({
+        where: eq(sessionTable.id, input.sessionId),
+        columns: { token: true, userId: true },
+      });
+      if (!session) {
+        return Result.Error(
+          new AppError({
+            code: 'AUTH_USER_SESSION_TOKEN_NOT_FOUND',
+            category: 'system',
+            status: 500,
+            message: 'Auth user session token was not found',
+          })
+        );
+      }
 
-    const response = await this.auth.api.revokeUserSession({
-      body: { sessionToken: session.token },
-      headers: input.headers,
-    });
-    return response.success;
+      const identity = await this.db.query.authIdentity.findFirst({
+        where: and(
+          eq(authIdentity.provider, 'better-auth'),
+          eq(authIdentity.providerUserId, session.userId)
+        ),
+        columns: { userId: true },
+      });
+      const appUserId = identity?.userId ?? session.userId;
+      if (appUserId !== input.userId) {
+        return Result.Error(
+          new AppError({
+            code: 'AUTH_USER_SESSION_OWNER_MISMATCH',
+            category: 'system',
+            status: 500,
+            message: 'Auth user session owner did not match',
+          })
+        );
+      }
+
+      const response = await this.auth.api.revokeUserSession({
+        body: { sessionToken: session.token },
+        headers: input.headers,
+      });
+      if (!response.success) {
+        return Result.Error(
+          new AppError({
+            code: 'AUTH_USER_SESSION_REVOKE_FAILED',
+            category: 'system',
+            status: 500,
+            message: 'Failed to revoke auth user session',
+          })
+        );
+      }
+      return Result.Ok({ type: 'auth_user_session_revoked' });
+    } catch (error) {
+      return Result.Error(
+        new AppError({
+          code: 'AUTH_USER_SESSION_REVOKE_FAILED',
+          category: 'system',
+          status: 500,
+          message: 'Failed to revoke auth user session',
+          cause: error,
+        })
+      );
+    }
   }
 }

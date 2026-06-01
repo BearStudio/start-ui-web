@@ -150,6 +150,7 @@
     "@paralleldrive/cuid2": "^3.3.0",
     "@react-email/render": "2.0.8",
     "@sentry/tanstackstart-react": "^10.54.0",
+    "@swan-io/boxed": "3.2.1",
     "@t3-oss/env-core": "0.13.11",
     "@tanstack/react-devtools": "0.10.5",
     "@tanstack/react-form": "^1.32.0",

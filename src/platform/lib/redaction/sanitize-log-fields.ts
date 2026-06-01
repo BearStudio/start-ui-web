@@ -1,3 +1,5 @@
+import { mapValues, pullObject } from 'remeda';
+
 type SanitizeLogFieldsOptions = {
   sensitiveKeys?: ReadonlySet<string>;
 };
@@ -145,16 +147,16 @@ const sanitizeLogValue = (
         return {
           type: OVERSIZED_ARRAY_VALUE,
           length: value.length,
-          entries: Object.fromEntries(
-            indexKeys.map((indexKey) => [
-              indexKey,
+          entries: pullObject(
+            indexKeys,
+            (indexKey) => indexKey,
+            (indexKey) =>
               sanitizeLogValue(
                 '',
                 value[Number(indexKey)],
                 { sensitiveKeys },
                 path
-              ),
-            ])
+              )
           ),
           truncatedEntries: hasMore
             ? Math.max(value.length - MAX_SANITIZED_OVERSIZED_ARRAY_ENTRIES, 0)
@@ -178,13 +180,8 @@ const sanitizeLogValue = (
       return sanitized;
     }
 
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>).map(
-        ([entryKey, entryValue]) => [
-          entryKey,
-          sanitizeLogValue(entryKey, entryValue, { sensitiveKeys }, path),
-        ]
-      )
+    return mapValues(value as Record<string, unknown>, (entryValue, entryKey) =>
+      sanitizeLogValue(entryKey, entryValue, { sensitiveKeys }, path)
     );
   } finally {
     path.delete(value);
@@ -199,10 +196,7 @@ export const sanitizeLogFields = (
   const path = new WeakSet<object>();
   path.add(fields);
 
-  return Object.fromEntries(
-    Object.entries(fields).map(([key, value]) => [
-      key,
-      sanitizeLogValue(key, value, { sensitiveKeys }, path),
-    ])
+  return mapValues(fields, (value, key) =>
+    sanitizeLogValue(key, value, { sensitiveKeys }, path)
   );
 };

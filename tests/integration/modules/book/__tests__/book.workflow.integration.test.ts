@@ -1,3 +1,4 @@
+import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
 import type { RequestScope } from '@/modules/auth';
@@ -8,7 +9,7 @@ import {
   createBookUseCases,
 } from '@/modules/book';
 import {
-  AppError,
+  type ApplicationResult,
   type BookId,
   type Logger,
   type PermissionChecker,
@@ -30,7 +31,7 @@ const logger: Logger = {
   warn: () => {},
 };
 const permissionChecker: PermissionChecker = {
-  hasPermission: async () => true,
+  hasPermission: async () => Result.Ok({ type: 'permission_granted' }),
 };
 
 class InMemoryBookRepository implements BookRepository {
@@ -54,39 +55,55 @@ class InMemoryBookRepository implements BookRepository {
     const items = allItems.slice(startIndex, startIndex + input.limit);
     const nextItem = allItems[startIndex + input.limit];
 
-    return {
-      items,
-      total: allItems.length,
-      ...(nextItem ? { nextCursor: nextItem.id } : {}),
-    };
+    return Result.Ok({
+      type: 'book_listed' as const,
+      page: {
+        items,
+        total: allItems.length,
+        ...(nextItem ? { nextCursor: nextItem.id } : {}),
+      },
+    });
   }
 
   async getById(id: BookId) {
-    return this.books.get(id) ?? null;
+    const book = this.books.get(id);
+    return Result.Ok(
+      book
+        ? { type: 'book_found' as const, book }
+        : { type: 'book_not_found' as const }
+    );
   }
 
   async create(input: BookWriteInput) {
-    this.#throwOnDuplicate(input);
+    if (this.#isDuplicate(input)) {
+      return Result.Ok({ type: 'book_duplicate' as const });
+    }
 
     const id = toBookId(`book-${this.#nextId}`);
     this.#nextId += 1;
     const book = this.#toBook(id, input);
     this.books.set(id, book);
-    return book;
+    return Result.Ok({ type: 'book_created' as const, book });
   }
 
   async update(id: BookId, input: BookWriteInput) {
     const existing = this.books.get(id);
-    if (!existing) return null;
-    this.#throwOnDuplicate(input, id);
+    if (!existing) return Result.Ok({ type: 'book_not_found' as const });
+    if (this.#isDuplicate(input, id)) {
+      return Result.Ok({ type: 'book_duplicate' as const });
+    }
 
     const book = this.#toBook(id, input, existing.createdAt);
     this.books.set(id, book);
-    return book;
+    return Result.Ok({ type: 'book_updated' as const, book });
   }
 
   async delete(id: BookId) {
-    return this.books.delete(id);
+    return Result.Ok(
+      this.books.delete(id)
+        ? { type: 'book_deleted' as const }
+        : { type: 'book_not_found' as const }
+    );
   }
 
   #toBook(id: BookId, input: BookWriteInput, createdAt = now): Book {
@@ -103,7 +120,7 @@ class InMemoryBookRepository implements BookRepository {
     };
   }
 
-  #throwOnDuplicate(input: BookWriteInput, currentId?: BookId) {
+  #isDuplicate(input: BookWriteInput, currentId?: BookId) {
     const duplicate = [...this.books.values()].find(
       (book) =>
         book.id !== currentId &&
@@ -111,14 +128,15 @@ class InMemoryBookRepository implements BookRepository {
         book.author.toLowerCase() === input.author.toLowerCase()
     );
 
-    if (!duplicate) return;
-
-    throw new AppError({
-      category: 'conflict',
-      code: 'BOOK_DUPLICATE',
-      status: 409,
-    });
+    return duplicate !== undefined;
   }
+}
+
+function getOk<TOutcome extends { type: string }>(
+  result: ApplicationResult<TOutcome>
+) {
+  if (result.isError()) throw result.getError();
+  return result.get();
 }
 
 describe('book public workflow integration', () => {
@@ -145,9 +163,9 @@ describe('book public workflow integration', () => {
       scope,
     });
 
-    expect(created).toMatchObject({
-      ok: true,
-      value: {
+    expect(getOk(created)).toMatchObject({
+      type: 'book_created',
+      book: {
         author: 'Frank Herbert',
         coverId: 'cover-1',
         publisher: 'Ace',
@@ -157,62 +175,61 @@ describe('book public workflow integration', () => {
 
     const createdId = expectBookId(created);
 
-    await expect(
-      useCases.list({ limit: 10, scope, searchTerm: 'dune' })
-    ).resolves.toMatchObject({
-      ok: true,
-      value: {
+    const listed = await useCases.list({
+      limit: 10,
+      scope,
+      searchTerm: 'dune',
+    });
+    expect(getOk(listed)).toMatchObject({
+      type: 'book_listed',
+      page: {
         items: [{ id: createdId, title: 'Dune' }],
         total: 1,
       },
     });
 
-    await expect(
-      useCases.update({
-        book: {
-          author: 'Ursula K. Le Guin',
-          genreId,
-          publisher: ' ',
-          title: ' A Wizard of Earthsea ',
-        },
-        id: createdId,
-        scope,
-      })
-    ).resolves.toMatchObject({
-      ok: true,
-      value: {
+    const updated = await useCases.update({
+      book: {
+        author: 'Ursula K. Le Guin',
+        genreId,
+        publisher: ' ',
+        title: ' A Wizard of Earthsea ',
+      },
+      id: createdId,
+      scope,
+    });
+    expect(getOk(updated)).toMatchObject({
+      type: 'book_updated',
+      book: {
         author: 'Ursula K. Le Guin',
         publisher: null,
         title: 'A Wizard of Earthsea',
       },
     });
 
-    await expect(
-      useCases.create({
-        book: {
-          author: ' ursula k. le guin ',
-          genreId,
-          title: ' a wizard of earthsea ',
-        },
-        scope,
-      })
-    ).resolves.toEqual({ ok: false, reason: 'duplicate' });
-
-    await expect(
-      useCases.delete({ id: createdId, scope })
-    ).resolves.toMatchObject({ ok: true });
-    await expect(useCases.get({ id: createdId, scope })).resolves.toEqual({
-      ok: false,
-      reason: 'not_found',
+    const duplicate = await useCases.create({
+      book: {
+        author: ' ursula k. le guin ',
+        genreId,
+        title: ' a wizard of earthsea ',
+      },
+      scope,
     });
+    expect(getOk(duplicate)).toEqual({ type: 'book_duplicate' });
+
+    const deleted = await useCases.delete({ id: createdId, scope });
+    expect(getOk(deleted)).toEqual({ type: 'book_deleted' });
+    const missing = await useCases.get({ id: createdId, scope });
+    expect(getOk(missing)).toEqual({ type: 'book_not_found' });
   });
 });
 
 function expectBookId(
   result: Awaited<ReturnType<ReturnType<typeof createBookUseCases>['create']>>
 ) {
-  expect(result).toMatchObject({ ok: true });
-  if (!result.ok)
-    throw new Error(`Expected created book, got ${result.reason}`);
-  return result.value.id;
+  const outcome = getOk(result);
+  if (outcome.type !== 'book_created') {
+    throw new Error(`Expected created book, got ${outcome.type}`);
+  }
+  return outcome.book.id;
 }
