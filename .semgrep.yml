@@ -44,6 +44,79 @@ rules:
     pattern: |
       z.object({ ..., sessionToken: z.string(), ... })
 
+  - id: protected-routes-no-ssr-disabled
+    message: Protected route trees must not disable SSR; review the hydration policy before changing SSR behavior.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\b(?:defaultSsr|ssr)\s*:\s*false\b'
+    paths:
+      include:
+        - src/routes/app/**/*.ts
+        - src/routes/app/**/*.tsx
+        - src/routes/manager/**/*.ts
+        - src/routes/manager/**/*.tsx
+        - src/routes/onboarding/**/*.ts
+        - src/routes/onboarding/**/*.tsx
+
+  - id: no-csrf-origin-weakeners
+    message: Do not weaken CSRF or origin checks; keep Start CSRF and Better Auth origin checks enabled.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\b(?:allowRequestsWithoutOriginCheck|disableCSRFCheck|disableOriginCheck)\s*:\s*true\b'
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: no-auth-token-browser-storage
+    message: Do not store auth, session, JWT, or token values in localStorage/sessionStorage; keep provider tokens server-side.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\b(?:localStorage|sessionStorage)\s*\.\s*(?:setItem|getItem|removeItem)\s*\(\s*["''][^"'']*(?:auth|jwt|session|token)[^"'']*["'']'
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: no-auth-token-document-cookie
+    message: Do not write auth, session, JWT, or token cookies from client code; auth cookies are provider/server owned.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\bdocument\.cookie\s*=\s*["''][^"'']*(?:auth|jwt|session|token)[^"'']*'
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
+  - id: no-provider-token-fields-in-client-facing-code
+    message: Provider token fields must not appear in client-facing route or presentation code.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\b(?:accessToken|refreshToken|idToken|sessionToken)\b'
+    paths:
+      include:
+        - src/routes/**/*.ts
+        - src/routes/**/*.tsx
+        - src/modules/**/presentation/**/*.ts
+        - src/modules/**/presentation/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
+
   - id: no-committed-better-auth-session-token
     message: Do not commit Playwright storage state containing better-auth.session_token; generate auth state during e2e setup.
     severity: ERROR

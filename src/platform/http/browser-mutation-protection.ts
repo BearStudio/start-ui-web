@@ -7,7 +7,10 @@ const SEC_FETCH_SITE_VALUES = new Set([
   'cross-site',
   'none',
 ]);
-const DEFAULT_PROTECTED_BROWSER_MUTATION_PATHNAMES = ['/api/upload'] as const;
+const DEFAULT_PROTECTED_BROWSER_MUTATION_PATHNAMES = [
+  '/api/upload',
+  '/logout',
+] as const;
 
 export const browserMutationVaryHeaders = [
   'Sec-Fetch-Site',

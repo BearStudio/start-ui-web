@@ -47,6 +47,13 @@ describe('TanStack Start instance', () => {
       shouldProtectBrowserMutation({
         handlerType: 'router',
         method: 'POST',
+        pathname: '/logout',
+      })
+    ).toBe(true);
+    expect(
+      shouldProtectBrowserMutation({
+        handlerType: 'router',
+        method: 'POST',
         pathname: '/api/auth/sign-in/email-otp',
       })
     ).toBe(false);

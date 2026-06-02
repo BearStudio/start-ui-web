@@ -68,6 +68,7 @@ describe('Better Auth security configuration', () => {
 
     expect(options.advanced.disableCSRFCheck).toBeUndefined();
     expect(options.advanced.disableOriginCheck).toBeUndefined();
+    expect(options.account.encryptOAuthTokens).toBe(true);
     expect(options.trustedOrigins).toEqual(['https://app.example']);
   });
 });

@@ -63,7 +63,12 @@ export function createAuth(input?: Database | CreateAuthOptions) {
       expiresIn: authConfig.sessionExpirationInSeconds,
       updateAge: authConfig.sessionUpdateAgeInSeconds,
     },
-    advanced: createAuthCookieSecurityOptions(envClient.VITE_BASE_URL),
+    advanced: createAuthCookieSecurityOptions(envClient.VITE_BASE_URL, {
+      isProduction: import.meta.env.PROD,
+    }),
+    account: {
+      encryptOAuthTokens: true,
+    },
     trustedOrigins: authConfig.trustedOrigins,
     database: drizzleAdapter(database, {
       provider: 'pg',

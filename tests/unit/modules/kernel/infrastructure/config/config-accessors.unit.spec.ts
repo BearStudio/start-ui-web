@@ -180,6 +180,58 @@ describe('server config accessors', () => {
     expect(() => getAuthConfig()).toThrow(ConfigurationError);
   });
 
+  it('rejects short AUTH_SECRET values without exposing the value', async () => {
+    expect.assertions(3);
+    const secret = 'short-auth-secret';
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', secret);
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    let error: unknown;
+    try {
+      getBetterAuthConfig();
+    } catch (caughtError) {
+      error = caughtError;
+    }
+
+    expect(error).toBeInstanceOf(ConfigurationError);
+    expect((error as Error).message).toContain('AUTH_SECRET');
+    expect((error as Error).message).not.toContain(secret);
+  });
+
+  it('rejects placeholder AUTH_SECRET values', async () => {
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', 'replace me');
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    expect(() => getBetterAuthConfig()).toThrow(ConfigurationError);
+  });
+
+  it('accepts strong AUTH_SECRET values', async () => {
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', 'a'.repeat(32));
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+
+    expect(getBetterAuthConfig().secret).toBe('a'.repeat(32));
+  });
+
+  it('allows weak AUTH_SECRET values only when env validation is skipped', async () => {
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', 'short-auth-secret');
+    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+
+    expect(getBetterAuthConfig().secret).toBe('short-auth-secret');
+  });
+
   it('skips server config validation when SKIP_ENV_VALIDATION is true', async () => {
     vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
     vi.stubEnv('AUTH_SECRET', undefined);

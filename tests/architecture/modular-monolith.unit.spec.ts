@@ -22,6 +22,24 @@ const transactionApplicationErrorBoundaryFiles = new Set([
     'process-email-status-event.ts'
   ),
 ]);
+const protectedRouteGuardSpecs = [
+  {
+    file: path.join(root, 'src', 'routes', 'app', 'route.tsx'),
+    guard: 'requireAuthenticatedRoute',
+  },
+  {
+    file: path.join(root, 'src', 'routes', 'manager', 'route.tsx'),
+    guard: 'requireAuthenticatedRouteOrForbidden',
+  },
+  {
+    file: path.join(root, 'src', 'routes', 'onboarding', 'route.tsx'),
+    guard: 'requireOnboardingRoute',
+  },
+  {
+    file: path.join(root, 'src', 'routes', 'login', 'route.tsx'),
+    guard: 'redirectAuthenticatedRoute',
+  },
+];
 
 function listSourceFiles(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
@@ -48,16 +66,38 @@ function findImportViolations(files: string[], pattern: RegExp) {
   });
 }
 
+function readSource(file: string) {
+  return fs.readFileSync(file, 'utf8');
+}
+
+function relativePath(file: string) {
+  return path.relative(root, file);
+}
+
 function findServerFunctionExports(files: string[]) {
   const pattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*createServerFn\s*\(/g;
 
   return files.flatMap((file) => {
     const source = fs.readFileSync(file, 'utf8');
-    return Array.from(source.matchAll(pattern), ([, name]) => ({
-      file,
-      name: name ?? '',
-      source,
-    }));
+    const matches = Array.from(source.matchAll(pattern));
+
+    return matches.map((match, index) => {
+      const [, name] = match;
+      const start = match.index ?? 0;
+      const end = matches[index + 1]?.index ?? source.length;
+      const declaration = source.slice(start, end);
+      const methodMatch = declaration.match(
+        /createServerFn\s*\(\s*\{\s*method:\s*['"]([A-Z]+)['"]/
+      );
+
+      return {
+        declaration,
+        file,
+        method: methodMatch?.[1] ?? 'UNKNOWN',
+        name: name ?? '',
+        source,
+      };
+    });
   });
 }
 
@@ -69,6 +109,85 @@ function isPathInside(relativeFile: string, relativeDir: string) {
   return (
     relativeFile === relativeDir ||
     relativeFile.startsWith(`${relativeDir}${path.sep}`)
+  );
+}
+
+function findProtectedRouteGuardViolations() {
+  const forbiddenAuthImports =
+    /from\s+['"](?:@\/composition\/auth|@\/modules\/auth\/(?:backend|client|infrastructure)(?:\/[^'"]*)?|better-auth(?:\/[^'"]*)?|@workos(?:-inc)?\/[^'"]+)['"]/g;
+
+  return protectedRouteGuardSpecs.flatMap(({ file, guard }) => {
+    const source = readSource(file);
+    const relative = relativePath(file);
+    const checks = [
+      {
+        ok: source.includes('beforeLoad'),
+        violation: `${relative}:missing beforeLoad`,
+      },
+      {
+        ok: source.includes(guard),
+        violation: `${relative}:missing ${guard}`,
+      },
+      {
+        ok: !forbiddenAuthImports.test(source),
+        violation: `${relative}:provider import`,
+      },
+    ];
+
+    forbiddenAuthImports.lastIndex = 0;
+    return checks.filter((check) => !check.ok).map((check) => check.violation);
+  });
+}
+
+function findPrivilegedServerFunctionRunnerViolations(
+  serverFiles: string[],
+  publicServerFunctions: ReadonlySet<string>
+) {
+  return findServerFunctionExports(serverFiles).flatMap(
+    ({ declaration, file, method, name, source }) => {
+      if (publicServerFunctions.has(name)) return [];
+
+      const relative = path.relative(root, file);
+      const methodRunnerChecks =
+        method === 'GET'
+          ? [
+              {
+                ok: source.includes('withProtectedContext'),
+                violation: `${relative}:${name}:missing read runner`,
+              },
+              {
+                ok: declaration.includes('runProtected('),
+                violation: `${relative}:${name}:not using read runner`,
+              },
+            ]
+          : method === 'POST'
+            ? [
+                {
+                  ok: source.includes('withProtectedMutation'),
+                  violation: `${relative}:${name}:missing mutation runner`,
+                },
+                {
+                  ok: declaration.includes('runMutation('),
+                  violation: `${relative}:${name}:not using mutation runner`,
+                },
+              ]
+            : [
+                {
+                  ok: false,
+                  violation: `${relative}:${name}:unsupported method ${method}`,
+                },
+              ];
+
+      return [
+        {
+          ok: source.includes('createServerFunctionInvoker'),
+          violation: `${relative}:${name}:missing invoker`,
+        },
+        ...methodRunnerChecks,
+      ]
+        .filter((check) => !check.ok && check.violation)
+        .map((check) => check.violation);
+    }
   );
 }
 
@@ -245,6 +364,80 @@ describe('strict modular monolith layout', () => {
     ).toEqual([]);
   });
 
+  it('keeps router SSR query integration request scoped', () => {
+    const source = readSource(path.join(root, 'src', 'router.tsx'));
+    const getRouterIndex = source.indexOf('export function getRouter()');
+
+    expect(getRouterIndex).toBeGreaterThan(-1);
+    expect(source.slice(0, getRouterIndex)).not.toMatch(
+      /\bcreateClientQueryClient\s*\(/
+    );
+    expect(source).toMatch(
+      /export function getRouter\(\)\s*\{[\s\S]*?\bconst queryClient = createClientQueryClient\(\);/
+    );
+    expect(source).toContain('setupRouterSsrQueryIntegration({');
+    expect(source).toContain('wrapQueryClient: false');
+  });
+
+  it('keeps protected route trees SSR-enabled', () => {
+    const protectedRouteFiles = [
+      ...listSourceFiles(path.join(root, 'src', 'routes', 'app')),
+      ...listSourceFiles(path.join(root, 'src', 'routes', 'manager')),
+      ...listSourceFiles(path.join(root, 'src', 'routes', 'onboarding')),
+    ];
+    const violations = protectedRouteFiles
+      .filter((file) =>
+        /\b(?:defaultSsr|ssr)\s*:\s*false\b/.test(readSource(file))
+      )
+      .map(relativePath);
+
+    expect(violations).toEqual([]);
+  });
+
+  it('keeps protected route beforeLoad guards provider-neutral', () => {
+    expect(findProtectedRouteGuardViolations()).toEqual([]);
+  });
+
+  it('keeps logout as a POST-only side effect', () => {
+    const logoutRoute = readSource(
+      path.join(root, 'src', 'routes', 'logout.tsx')
+    );
+    const logoutPage = readSource(
+      path.join(
+        root,
+        'src',
+        'modules',
+        'auth',
+        'presentation',
+        'page-logout.tsx'
+      )
+    );
+    const confirmSignOut = readSource(
+      path.join(
+        root,
+        'src',
+        'modules',
+        'auth',
+        'presentation',
+        'confirm-signout.tsx'
+      )
+    );
+
+    expect(logoutRoute).toContain('handleLogoutGetRequest');
+    expect(logoutRoute).toContain('handleLogoutPostRequest');
+    expect(logoutRoute).toMatch(
+      /\bGET:\s*\(\)\s*=>\s*handleLogoutGetRequest\(\)/
+    );
+    expect(logoutRoute).toMatch(
+      /\bPOST:\s*\(\{\s*request\s*\}\)\s*=>\s*handleLogoutPostRequest\(request\)/
+    );
+    expect(logoutPage).not.toContain('signOut(');
+    expect(logoutPage).not.toContain('useEffect');
+    expect(confirmSignOut).not.toContain("to: '/logout'");
+    expect(confirmSignOut).toContain('signOut()');
+    expect(confirmSignOut).toContain('clearAllQueryStateForAuthBoundary');
+  });
+
   it('keeps presentation schemas free of i18n imports', () => {
     const schemaFiles = listSourceFiles(path.join(root, 'src/modules')).filter(
       (file) => file.endsWith(path.join('presentation', 'schema.ts'))
@@ -347,19 +540,12 @@ describe('strict modular monolith layout', () => {
       (file) => /[/\\](server|server-functions)\.ts$/.test(file)
     );
 
-    const violations = findServerFunctionExports(serverFiles)
-      .filter(({ name }) => !publicServerFunctions.has(name))
-      .filter(
-        ({ source }) =>
-          !source.includes('createServerFunctionInvoker') ||
-          !(
-            source.includes('withProtectedContext') ||
-            source.includes('withProtectedMutation')
-          )
+    expect(
+      findPrivilegedServerFunctionRunnerViolations(
+        serverFiles,
+        publicServerFunctions
       )
-      .map(({ file, name }) => `${path.relative(root, file)}:${name}`);
-
-    expect(violations).toEqual([]);
+    ).toEqual([]);
   });
 
   it('confines Better Auth imports to auth boundaries', () => {
@@ -396,6 +582,22 @@ describe('strict modular monolith layout', () => {
     expect(findImportViolations(files, /\bproviderToken\b/g)).toEqual([]);
   });
 
+  it('keeps provider token fields out of client-facing route and presentation code', () => {
+    const files = [
+      ...listSourceFiles(path.join(root, 'src', 'routes')),
+      ...listSourceFiles(path.join(root, 'src', 'modules')).filter((file) =>
+        file.includes(`${path.sep}presentation${path.sep}`)
+      ),
+    ];
+
+    expect(
+      findImportViolations(
+        files,
+        /\b(?:accessToken|refreshToken|idToken|sessionToken)\b/g
+      )
+    ).toEqual([]);
+  });
+
   it('reserves WorkOS SDK imports for the future WorkOS adapter', () => {
     const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
       const relative = path.relative(root, file);
@@ -404,7 +606,9 @@ describe('strict modular monolith layout', () => {
       );
     });
 
-    expect(findImportViolations(files, /from\s+['"]@workos\//g)).toEqual([]);
+    expect(
+      findImportViolations(files, /from\s+['"]@workos(?:-inc)?\//g)
+    ).toEqual([]);
   });
 
   it('keeps business code off the Sentry SDK', () => {

@@ -5,11 +5,21 @@ import {
   baseEnvSchema,
   isProdRuntimeEnvironment,
   parseEnv,
-  zNonEmptyEnvString,
+  shouldSkipEnvValidation,
 } from './env-schema';
 import { ConfigurationError } from '../../domain/errors/configuration-error';
 
 const zOptionalProviderSecret = () => z.string().optional();
+const AUTH_SECRET_MIN_LENGTH = 32;
+const AUTH_SECRET_PLACEHOLDERS = new Set([
+  'changeme',
+  'change-me',
+  'change_me',
+  'password',
+  'replace me',
+  'secret',
+  'test-auth-key',
+]);
 
 const splitCsv = (value?: string) =>
   value === undefined
@@ -20,13 +30,16 @@ const splitCsv = (value?: string) =>
         filter(isTruthy)
       );
 
+const isPlaceholderAuthSecret = (value: string) =>
+  AUTH_SECRET_PLACEHOLDERS.has(value.trim().toLowerCase());
+
 const authProviderEnvSchema = baseEnvSchema.extend({
   AUTH_PROVIDER: z.enum(['better-auth', 'workos']).prefault('better-auth'),
 });
 
 const betterAuthEnvSchema = baseEnvSchema
   .extend({
-    AUTH_SECRET: zNonEmptyEnvString(),
+    AUTH_SECRET: z.string().trim(),
     AUTH_SESSION_EXPIRATION_IN_SECONDS: z.coerce
       .number()
       .int()
@@ -43,6 +56,24 @@ const betterAuthEnvSchema = baseEnvSchema
     GITHUB_CLIENT_SECRET: zOptionalProviderSecret(),
   })
   .superRefine((env, ctx) => {
+    if (!shouldSkipEnvValidation(env)) {
+      if (env.AUTH_SECRET.length < AUTH_SECRET_MIN_LENGTH) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['AUTH_SECRET'],
+          message: `AUTH_SECRET must be at least ${AUTH_SECRET_MIN_LENGTH} characters`,
+        });
+      }
+
+      if (isPlaceholderAuthSecret(env.AUTH_SECRET)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['AUTH_SECRET'],
+          message: 'AUTH_SECRET must not use a placeholder value',
+        });
+      }
+    }
+
     if (!isProdRuntimeEnvironment(env)) return;
 
     for (const field of ['GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET'] as const) {

@@ -57,6 +57,7 @@ export type StartSignInResult =
     };
 
 const authUnknownErrorCode = 'UNKNOWN_ERROR';
+const authSignOutErrorCode = 'SIGN_OUT_FAILED';
 
 const providerErrorResult = (
   error: AuthProviderError | null | undefined
@@ -167,8 +168,20 @@ export const verifyEmailOtp = async (input: {
 
 export const signOut = async (): Promise<AuthClientResult<void>> => {
   try {
-    const response = await betterAuthBrowserClient.signOut();
-    return mapProviderResponse(response, undefined);
+    const response = await fetch('/logout', {
+      credentials: 'same-origin',
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        code: authSignOutErrorCode,
+        message: response.statusText || undefined,
+      };
+    }
+
+    return { ok: true, value: undefined };
   } catch (error) {
     return unknownErrorResult(error);
   }

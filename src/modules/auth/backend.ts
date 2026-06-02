@@ -1,4 +1,8 @@
-import { getAuthHttpGateway, getAuthUseCases } from '@/composition/auth';
+import {
+  getAuth,
+  getAuthHttpGateway,
+  getAuthUseCases,
+} from '@/composition/auth';
 import { getKernel } from '@/composition/kernel';
 import { telemetryProxy } from '@/composition/telemetry';
 import type { Logger } from '@/modules/kernel';
@@ -29,6 +33,11 @@ const serverContextTools = createServerContextTools({
 export { getAuthUseCases };
 export const handleAuthRequest = (request: Request) =>
   getAuthHttpGateway().handle(request);
+export const handleLogoutRequest = (request: Request) =>
+  getAuth().api.signOut({
+    asResponse: true,
+    headers: request.headers,
+  });
 export const assertPermission = serverContextTools.assertPermission;
 export const withProtectedContext = serverContextTools.withProtectedContext;
 export const withProtectedMutation = serverContextTools.withProtectedMutation;

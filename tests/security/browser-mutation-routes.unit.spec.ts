@@ -11,13 +11,18 @@ const listRouteFiles = (directory: string): string[] =>
     const filePath = path.join(directory, entry.name);
 
     if (entry.isDirectory()) return listRouteFiles(filePath);
-    if (entry.isFile() && entry.name.endsWith('.ts')) return [filePath];
+    if (
+      entry.isFile() &&
+      (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))
+    ) {
+      return [filePath];
+    }
 
     return [];
   });
 
-const listApiRoutePostPaths = () => {
-  const routesDir = path.join(root, 'src/routes/api');
+const listRouterPostPaths = () => {
+  const routesDir = path.join(root, 'src/routes');
   const routePaths: string[] = [];
 
   for (const file of listRouteFiles(routesDir)) {
@@ -34,8 +39,8 @@ const listApiRoutePostPaths = () => {
 };
 
 describe('browser mutation route coverage', () => {
-  it('classifies every API POST route as app-guarded, auth-owned, or signed webhook', () => {
-    const postRoutes = listApiRoutePostPaths();
+  it('classifies every router POST route as app-guarded, auth-owned, or signed webhook', () => {
+    const postRoutes = listRouterPostPaths();
     const appGuardedRoutes = postRoutes.filter((pathname) =>
       shouldProtectBrowserMutation({
         handlerType: 'router',
@@ -51,8 +56,9 @@ describe('browser mutation route coverage', () => {
       '/api/auth/$',
       '/api/upload',
       '/api/webhooks/resend',
+      '/logout',
     ]);
-    expect(appGuardedRoutes).toEqual(['/api/upload']);
+    expect(appGuardedRoutes).toEqual(['/api/upload', '/logout']);
     expect(externallyProtectedRoutes).toEqual([
       '/api/auth/$',
       '/api/webhooks/resend',

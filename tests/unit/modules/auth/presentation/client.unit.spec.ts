@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
     signInSocial: vi.fn(),
     signOut: vi.fn(),
   },
+  fetch: vi.fn(),
   useCurrentSessionQuery: vi.fn(),
   useMatches: vi.fn(),
 }));
@@ -34,6 +35,7 @@ import {
 describe('auth client facade', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubGlobal('fetch', mocks.fetch);
     mocks.useMatches.mockReturnValue(undefined);
   });
 
@@ -107,15 +109,17 @@ describe('auth client facade', () => {
   });
 
   it('signs out through a neutral result contract', async () => {
-    mocks.betterAuthBrowserClient.signOut.mockResolvedValue({
-      data: null,
-      error: null,
-    });
+    mocks.fetch.mockResolvedValue(new Response(null, { status: 200 }));
 
     await expect(signOut()).resolves.toEqual({
       ok: true,
       value: undefined,
     });
+    expect(mocks.fetch).toHaveBeenCalledWith('/logout', {
+      credentials: 'same-origin',
+      method: 'POST',
+    });
+    expect(mocks.betterAuthBrowserClient.signOut).not.toHaveBeenCalled();
   });
 
   it('uses the sanitized current-session query for session reads', () => {
