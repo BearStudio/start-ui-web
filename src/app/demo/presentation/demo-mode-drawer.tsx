@@ -1,5 +1,3 @@
-import { create } from 'zustand';
-
 import {
   ResponsiveDrawer,
   ResponsiveDrawerBody,
@@ -9,27 +7,11 @@ import {
   ResponsiveDrawerTitle,
 } from '@/platform/components/ui/responsive-drawer';
 
-type Store = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
-
-const useStore = create<Store>()((set) => ({
-  open: false,
-  setOpen: (open) => set(() => ({ open })),
-}));
-
-export const useIsDemoModeDrawerVisible = () => {
-  return useStore((state) => state.open);
-};
-
-export const openDemoModeDrawer = () => {
-  useStore.getState().setOpen(true);
-};
+import { useDemoModeDrawerStore } from './demo-mode-state';
 
 export const DemoModeDrawer = () => {
-  const open = useStore((state) => state.open);
-  const setOpen = useStore((state) => state.setOpen);
+  const open = useDemoModeDrawerStore((state) => state.open);
+  const setOpen = useDemoModeDrawerStore((state) => state.setOpen);
 
   return (
     <ResponsiveDrawer

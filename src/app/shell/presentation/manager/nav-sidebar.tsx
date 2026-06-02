@@ -26,8 +26,8 @@ import {
   SidebarTrigger,
 } from '@/platform/components/ui/sidebar';
 
-import { WithPermissions } from '@/modules/auth/client';
 import { NavUser } from '@/app/shell/presentation/manager/nav-user';
+import { WithPermissions } from '@/modules/auth/client';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
   const { t } = useTranslation(['layout']);

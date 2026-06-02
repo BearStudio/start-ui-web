@@ -17,10 +17,6 @@ import { envClient } from '@/platform/env/client';
 
 import { type FormFieldsBook, zFormFieldsBook } from '../schema';
 
-type FormBookProps = {
-  onDemoUploadBlocked?: () => void;
-};
-
 export const formBookDefaultValues = (
   values?: Partial<FormFieldsBook>
 ): FormFieldsBook => ({
@@ -35,9 +31,16 @@ export const formBookValidators = {
   onSubmit: zFormFieldsBook(),
 } as const;
 
+type FormBookProps = {
+  onDemoUploadBlocked?: () => void;
+};
+
+const formBookProps: FormBookProps = {};
+
+/* eslint-disable react-hooks/rules-of-hooks -- TanStack Form's withForm render callback is invoked as a component body; hooks below are unconditional. */
 export const FormBook = withForm({
   defaultValues: formBookDefaultValues(),
-  props: {} as FormBookProps,
+  props: formBookProps,
   render: ({ form, onDemoUploadBlocked }) => {
     const { t } = useTranslation(['book']);
     const scopeKey = useCurrentScopeKey();
@@ -106,3 +109,4 @@ export const FormBook = withForm({
     );
   },
 });
+/* eslint-enable react-hooks/rules-of-hooks */

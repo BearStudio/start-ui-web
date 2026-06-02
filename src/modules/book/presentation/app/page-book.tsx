@@ -6,6 +6,12 @@ import { match, P } from 'ts-pattern';
 
 import { BackButton } from '@/platform/components/back-button';
 import { PageError } from '@/platform/components/errors/page-error';
+import {
+  AppPageLayout as PageLayout,
+  AppPageLayoutContent as PageLayoutContent,
+  AppPageLayoutTopBar as PageLayoutTopBar,
+  AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import { Card, CardContent } from '@/platform/components/ui/card';
 import { Separator } from '@/platform/components/ui/separator';
 import { Skeleton } from '@/platform/components/ui/skeleton';
@@ -14,12 +20,6 @@ import { Spinner } from '@/platform/components/ui/spinner';
 import { useCurrentScopeKey } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import { toBookId } from '@/modules/kernel/domain/ids';
-import {
-  AppPageLayout as PageLayout,
-  AppPageLayoutContent as PageLayoutContent,
-  AppPageLayoutTopBar as PageLayoutTopBar,
-  AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';

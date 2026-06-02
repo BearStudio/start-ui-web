@@ -24,7 +24,7 @@ test.describe('browser telemetry transport', () => {
       }
     });
 
-    await page.goto('/login');
+    await page.goto('/login', { waitUntil: 'commit' });
     await page.evaluate(() =>
       fetch('/api/telemetry/logs', {
         body: JSON.stringify({

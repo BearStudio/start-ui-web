@@ -43,7 +43,7 @@ export const parseSafeRedirectPath = (
   }
 
   return {
-    to: url.pathname as InternalRedirectPath,
+    to: url.pathname,
     search: Object.fromEntries(url.searchParams),
     hash: url.hash ? url.hash.slice(1) : '',
   };
@@ -55,7 +55,7 @@ export const normalizeInternalRedirect = (
   const parsed = parseSafeRedirectPath(value);
   if (!parsed) return undefined;
   const url = new URL(value?.trim() ?? '/', 'http://localhost');
-  return `${parsed.to}${url.search}${url.hash}` as InternalRedirectPath;
+  return `${parsed.to}${url.search}${url.hash}`;
 };
 
 export const internalRedirectFromLocation = (
@@ -73,7 +73,7 @@ export const internalRedirectFromLocation = (
       : `#${location.hash}`
     : '';
 
-  return `${pathname}${search}${hash}` as InternalRedirectPath;
+  return `${pathname}${search}${hash}`;
 };
 
 export const resolvePostAuthDestination = (

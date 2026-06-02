@@ -11,13 +11,14 @@ describe('scoped query option helpers', () => {
   it('builds list, infinite, entity, and mutation options without leaking scope into data', async () => {
     const listFn = vi.fn(async () => ({ items: [], total: 0 }));
     const list = scopedListQueryOptions({
-      baseKey: (scopeKey) => ['book', { scopeKey }, 'getAll'] as const,
+      baseKey: (scopeKey) => ['book', 'v1', { scopeKey }, 'getAll'] as const,
       input: { scopeKey: 'scope-a', searchTerm: 'dune' },
       queryFn: listFn,
     });
 
     expect(list.queryKey).toEqual([
       'book',
+      'v1',
       { scopeKey: 'scope-a' },
       'getAll',
       { searchTerm: 'dune' },
@@ -26,7 +27,7 @@ describe('scoped query option helpers', () => {
     expect(listFn).toHaveBeenCalledWith({ searchTerm: 'dune' });
 
     const infinite = scopedInfiniteQueryOptions({
-      baseKey: (scopeKey) => ['book', { scopeKey }, 'getAll'] as const,
+      baseKey: (scopeKey) => ['book', 'v1', { scopeKey }, 'getAll'] as const,
       input: { scopeKey: 'scope-a', searchTerm: 'dune' },
       queryFn: async (_data, cursor: string | undefined) => ({
         items: [],
@@ -36,6 +37,7 @@ describe('scoped query option helpers', () => {
     });
     expect(infinite.queryKey).toEqual([
       'book',
+      'v1',
       { scopeKey: 'scope-a' },
       'getAll',
       'infinite',
@@ -69,7 +71,7 @@ describe('scoped query option helpers', () => {
     expect(infinite.maxPages).toBe(10);
 
     const limitedInfinite = scopedInfiniteQueryOptions({
-      baseKey: (scopeKey) => ['book', { scopeKey }, 'getAll'] as const,
+      baseKey: (scopeKey) => ['book', 'v1', { scopeKey }, 'getAll'] as const,
       input: { scopeKey: 'scope-a', searchTerm: 'dune' },
       maxPages: 3,
       queryFn: async () => ({
@@ -81,12 +83,13 @@ describe('scoped query option helpers', () => {
     expect(limitedInfinite.maxPages).toBe(3);
 
     const entity = scopedEntityQueryOptions({
-      baseKey: (scopeKey) => ['book', { scopeKey }, 'getById'] as const,
+      baseKey: (scopeKey) => ['book', 'v1', { scopeKey }, 'getById'] as const,
       input: { scopeKey: 'scope-a', id: 'book-1' },
       queryFn: async (data) => data.id,
     });
     expect(entity.queryKey).toEqual([
       'book',
+      'v1',
       { scopeKey: 'scope-a' },
       'getById',
       { id: 'book-1' },
@@ -96,7 +99,7 @@ describe('scoped query option helpers', () => {
 
     const mutationFn = vi.fn(async (_input: { data: { id: string } }) => true);
     const mutation = serverMutationOptions({
-      mutationKey: ['book', 'deleteById'],
+      mutationKey: ['book', 'v1', 'deleteById'],
       mutationFn,
     });
     await (

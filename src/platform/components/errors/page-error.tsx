@@ -37,7 +37,7 @@ export const PageError = (props: {
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-x-4">
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
         {props.children ?? (
           <>
             <PageErrorButtonBack />

@@ -1,11 +1,11 @@
 import { Result } from '@swan-io/boxed';
 
+import { createUserRepository } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
 import {
   createUserUseCases,
   type UserAuthGateway,
   type UserRepository,
 } from '@/modules/user';
-import { createUserRepository } from '@/modules/auth/infrastructure/drizzle/user-repository-drizzle';
 
 import { getKernel, type Kernel } from './kernel';
 import { createCachedFactory } from './shared/singleton';
@@ -60,6 +60,8 @@ const buildUserUseCases = (overrides?: UserOverrides) => {
   const kernel = overrides?.kernel ?? getKernel();
   return createUserUseCases({
     userRepository:
+      // User-admin persistence intentionally reads the auth-owned identity store.
+      // Keep the Drizzle adapter with auth until the identity store ownership changes.
       overrides?.userRepository ?? createUserRepository({ db: kernel.db }),
     userAuthGateway:
       overrides?.userAuthGateway ?? createProductionUserAuthGateway(),

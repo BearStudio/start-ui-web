@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
-import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
+import { useFormField } from '@/platform/components/form/form-field-context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import { FieldProps } from '@/platform/components/form/types';
 import { useTfField } from '@/platform/components/form/use-tf-field';

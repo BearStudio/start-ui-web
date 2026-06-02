@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
+import { useFormField } from '@/platform/components/form/form-field-context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
 import { useTfField } from '@/platform/components/form/use-tf-field';
@@ -78,7 +78,7 @@ export const FieldCombobox = <TItem extends Item>(
           String((item as TItem | null | undefined)?.value ?? '')
         }
         onValueChange={(item, event) => {
-          const selectedItem = item as TItem | null;
+          const selectedItem = item;
           field.onChange(selectedItem?.value ?? null);
           rest.onValueChange?.(selectedItem?.value ?? null, event);
         }}

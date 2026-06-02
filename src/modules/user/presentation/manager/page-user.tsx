@@ -12,11 +12,16 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { match, P } from 'ts-pattern';
 
-import { useHydrated } from '@/platform/hooks/use-hydrated';
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
 import { PageError } from '@/platform/components/errors/page-error';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import {
   Avatar,
   AvatarFallback,
@@ -53,15 +58,9 @@ import {
 import { isServerFnError } from '@/modules/kernel/client';
 import {
   type SessionId,
-  type UserId,
   toUserId,
+  type UserId,
 } from '@/modules/kernel/domain/ids';
-import {
-  ManagerPageLayout as PageLayout,
-  ManagerPageLayoutContent as PageLayoutContent,
-  ManagerPageLayoutTopBar as PageLayoutTopBar,
-  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import { userQueries } from '../queries';
 
@@ -74,30 +73,21 @@ export const PageUser = (props: { params: { id: string } }) => {
   const session = useAuthSession();
   const { t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
-  const hydrated = useHydrated();
-  const canLoadUser = !import.meta.env.SSR && hydrated;
   const userId = toUserId(props.params.id);
-  const userQuery = useQuery({
-    ...userQueries.getById({ id: userId, scopeKey }),
-    enabled: canLoadUser,
-  });
+  const userQuery = useQuery(userQueries.getById({ id: userId, scopeKey }));
 
   const deleteUserMutation = useMutation(userQueries.deleteById());
 
   const deleteUser = async () => {
     try {
       await deleteUserMutation.mutateAsync({ id: userId });
-      await Promise.all([
-        // Invalidate users list
-        queryClient.invalidateQueries({
-          queryKey: userQueries.getAll(scopeKey),
-          type: 'all',
-        }),
-        // Remove user from cache
-        queryClient.removeQueries({
-          queryKey: userQueries.getById({ id: userId, scopeKey }).queryKey,
-        }),
-      ]);
+      await queryClient.invalidateQueries({
+        queryKey: userQueries.getAll(scopeKey),
+        type: 'all',
+      });
+      queryClient.removeQueries({
+        queryKey: userQueries.getById({ id: userId, scopeKey }).queryKey,
+      });
 
       toast.success(t('user:manager.detail.userDeleted'));
 
@@ -109,14 +99,13 @@ export const PageUser = (props: { params: { id: string } }) => {
   };
 
   const ui = getUiState((set) =>
-    match([canLoadUser, userQuery] as const)
-      .with([false, P._], () => set('pending'))
-      .with([true, { status: 'pending' }], () => set('pending'))
-      .with([true, { status: 'error', error: P.when(isNotFoundError) }], () =>
+    match(userQuery)
+      .with({ status: 'pending' }, () => set('pending'))
+      .with({ status: 'error', error: P.when(isNotFoundError) }, () =>
         set('not-found')
       )
-      .with([true, { status: 'error' }], () => set('error'))
-      .with([true, { status: 'success', data: P.select() }], (user) =>
+      .with({ status: 'error' }, () => set('error'))
+      .with({ status: 'success', data: P.select() }, (user) =>
         set('default', { user })
       )
       .exhaustive()
@@ -259,25 +248,21 @@ export const PageUser = (props: { params: { id: string } }) => {
 const UserSessions = (props: { userId: UserId }) => {
   const { t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
-  const hydrated = useHydrated();
-  const canLoadSessions = !import.meta.env.SSR && hydrated;
-  const sessionsQuery = useInfiniteQuery({
-    ...userQueries.getUserSessionsInfinite({
+  const sessionsQuery = useInfiniteQuery(
+    userQueries.getUserSessionsInfinite({
       scopeKey,
       userId: props.userId,
       limit: 5,
-    }),
-    enabled: canLoadSessions,
-  });
+    })
+  );
 
   const items = sessionsQuery.data?.pages.flatMap((p) => p.items) ?? [];
   const ui = getUiState((set) =>
-    match([canLoadSessions, sessionsQuery.status, items.length] as const)
-      .with([false, P._, P._], () => set('pending'))
-      .with([true, 'pending', P._], () => set('pending'))
-      .with([true, 'error', P._], () => set('error'))
-      .with([true, 'success', 0], () => set('empty'))
-      .with([true, 'success', P._], () => set('default', { items }))
+    match([sessionsQuery.status, items.length] as const)
+      .with(['pending', P._], () => set('pending'))
+      .with(['error', P._], () => set('error'))
+      .with(['success', 0], () => set('empty'))
+      .with(['success', P._], () => set('default', { items }))
       .exhaustive()
   );
 

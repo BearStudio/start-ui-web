@@ -1,8 +1,8 @@
+import { getTelemetry } from '@/platform/telemetry';
 import {
   deriveOperationMetadataFromKey,
   type OperationMetadata,
 } from '@/platform/telemetry/metadata';
-import { getTelemetry } from '@/platform/telemetry';
 
 type OperationType = 'mutation' | 'query';
 

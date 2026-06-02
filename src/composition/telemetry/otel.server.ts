@@ -1,3 +1,5 @@
+import { metrics } from '@opentelemetry/api';
+import { logs } from '@opentelemetry/api-logs';
 import {
   CompositePropagator,
   W3CBaggagePropagator,
@@ -8,8 +10,8 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import {
-  LoggerProvider,
   BatchLogRecordProcessor,
+  LoggerProvider,
 } from '@opentelemetry/sdk-logs';
 import {
   MeterProvider,
@@ -26,8 +28,6 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
-import { metrics } from '@opentelemetry/api';
-import { logs } from '@opentelemetry/api-logs';
 
 import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
 import type { TelemetryAdapter } from '@/platform/telemetry';

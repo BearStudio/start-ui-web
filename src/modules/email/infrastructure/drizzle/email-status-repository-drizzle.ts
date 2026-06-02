@@ -1,4 +1,4 @@
-import { Result, type Result as BoxedResult } from '@swan-io/boxed';
+import { type Result as BoxedResult, Result } from '@swan-io/boxed';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { pullObject } from 'remeda';
 import { z } from 'zod';

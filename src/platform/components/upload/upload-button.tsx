@@ -18,6 +18,8 @@ import { cn } from '@/platform/lib/tailwind/utils';
 
 import { Button } from '@/platform/components/ui/button';
 
+import { fileUploadMutationKey } from './utils';
+
 export type UploadButtonProps = {
   uploadRoute: string;
   /**
@@ -50,7 +52,7 @@ export const UploadButton = ({
   const innerId = useId();
 
   const uploadMutation = useMutation({
-    mutationKey: ['fileUpload', uploadRoute],
+    mutationKey: fileUploadMutationKey(uploadRoute),
     mutationFn: async (file: File) => {
       return uploadFile({
         file,

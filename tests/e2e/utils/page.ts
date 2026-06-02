@@ -99,6 +99,38 @@ const stringifyDiagnostics = (events: AuthDiagnosticEvent[]) =>
 const isPostAuthRouteUrl = (url: URL, route: PostAuthRoute) =>
   url.pathname === route || url.pathname.startsWith(`${route}/`);
 
+const isCurrentUrlMatch = (
+  currentUrl: string,
+  target: Parameters<Page['waitForURL']>[0]
+) => {
+  if (typeof target === 'function') {
+    return target(new URL(currentUrl));
+  }
+
+  if (target instanceof RegExp) {
+    return target.test(currentUrl);
+  }
+
+  if (isUrlPattern(target)) {
+    return target.test(currentUrl);
+  }
+
+  if (typeof target !== 'string') {
+    return false;
+  }
+
+  if (target.includes('*')) {
+    const expected = target.replaceAll('*', '');
+    return expected.length === 0 || currentUrl.includes(expected);
+  }
+
+  const current = new URL(currentUrl);
+  return currentUrl === target || current.pathname === target;
+};
+
+const isUrlPattern = (target: unknown): target is URLPattern =>
+  typeof URLPattern !== 'undefined' && target instanceof URLPattern;
+
 const createAuthDiagnostics = (page: Page, testInfo: TestInfo) => {
   const startedAt = Date.now();
   const events: AuthDiagnosticEvent[] = [];
@@ -140,7 +172,15 @@ const createAuthDiagnostics = (page: Page, testInfo: TestInfo) => {
     log(`${type}.start`, details);
 
     try {
-      await page.waitForURL(url, { timeout: AUTH_WAIT_TIMEOUT_MS });
+      if (isCurrentUrlMatch(page.url(), url)) {
+        log(`${type}.done`, details);
+        return;
+      }
+
+      await page.waitForURL(url, {
+        timeout: AUTH_WAIT_TIMEOUT_MS,
+        waitUntil: 'commit',
+      });
     } catch (error) {
       log(`${type}.failed`, {
         ...details,
@@ -298,7 +338,8 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
     );
   };
 
-  page.to = page.goto;
+  page.to = (url, options) =>
+    page.goto(url, { waitUntil: 'commit', ...options });
 
   await apply(page);
 

@@ -11,6 +11,12 @@ import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
 import { Form, useAppForm } from '@/platform/components/form';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import { PreventNavigation } from '@/platform/components/prevent-navigation';
 import { Button } from '@/platform/components/ui/button';
 import { Card, CardContent } from '@/platform/components/ui/card';
@@ -23,12 +29,6 @@ import {
 } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import { toUserId } from '@/modules/kernel/domain/ids';
-import {
-  ManagerPageLayout as PageLayout,
-  ManagerPageLayoutContent as PageLayoutContent,
-  ManagerPageLayoutTopBar as PageLayoutTopBar,
-  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import {
   FormUser,

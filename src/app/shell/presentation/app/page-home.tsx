@@ -1,13 +1,13 @@
 import { Logo } from '@/platform/components/brand/logo';
-
-import { DemoAppSwitch } from '@/app/demo/presentation';
-import { DemoMarketingBento } from '@/app/demo/presentation';
-import { DemoWelcome } from '@/app/demo/presentation';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
 } from '@/platform/components/page-layout/app';
+
+import { DemoAppSwitch } from '@/app/demo/presentation';
+import { DemoMarketingBento } from '@/app/demo/presentation';
+import { DemoWelcome } from '@/app/demo/presentation';
 
 export const PageHome = () => {
   return (

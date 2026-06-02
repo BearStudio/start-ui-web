@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { useShouldShowNav } from '@/app/shell/presentation';
 import { bookQueries } from '@/modules/book/client';
 import { AppPageBook as PageBook } from '@/modules/book/presentation';
 import { toBookId, toScopeKey } from '@/modules/kernel';
-import { useShouldShowNav } from '@/app/shell/presentation';
 import { observedLoader } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/app/books/$id/')({

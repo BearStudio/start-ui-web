@@ -27,7 +27,9 @@ export const dynamicUserMetadataMasks = (page: Page) => [
 ];
 
 export const openManagerUsersSearch = async (page: Page, email: string) => {
-  await page.goto(`/manager/users?searchTerm=${encodeURIComponent(email)}`);
+  await page.goto(`/manager/users?searchTerm=${encodeURIComponent(email)}`, {
+    waitUntil: 'commit',
+  });
   await expect(page.getByText(email, { exact: true })).toBeVisible();
 };
 

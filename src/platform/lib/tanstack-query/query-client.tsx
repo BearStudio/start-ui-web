@@ -1,10 +1,11 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { isMatching, P } from 'ts-pattern';
 
-import { envClient } from '@/platform/env/client';
 import { recordQueryCacheEvent } from '@/platform/lib/tanstack-query/observability';
-import { deriveOperationMetadataFromKey } from '@/platform/telemetry/metadata';
+
+import { envClient } from '@/platform/env/client';
 import { frontendLogger } from '@/platform/telemetry/frontend-logger';
+import { deriveOperationMetadataFromKey } from '@/platform/telemetry/metadata';
 
 const networkMode = envClient.DEV ? 'always' : undefined;
 const DEFAULT_STALE_TIME_MS = 60_000;

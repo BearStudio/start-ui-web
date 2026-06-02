@@ -3,6 +3,7 @@ import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
 import { PageError } from '@/platform/components/errors/page-error';
+import { RouteError } from '@/platform/components/errors/route-error';
 
 import {
   LayoutLogin,
@@ -27,7 +28,7 @@ export const Route = createFileRoute('/login')({
     ),
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
-  errorComponent: () => <PageError type="error-boundary" />,
+  errorComponent: () => <RouteError />,
 });
 
 function RouteComponent() {

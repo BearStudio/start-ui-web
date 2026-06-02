@@ -4,7 +4,8 @@ import { cn } from '@/platform/lib/tailwind/utils';
 
 import { ScrollArea } from '@/platform/components/ui/scroll-area';
 import { Separator } from '@/platform/components/ui/separator';
-import { SidebarTrigger, useSidebar } from '@/platform/components/ui/sidebar';
+import { SidebarTrigger } from '@/platform/components/ui/sidebar';
+import { useSidebar } from '@/platform/components/ui/sidebar-context';
 
 export const PageLayoutContainer = (props: {
   children?: ReactNode;

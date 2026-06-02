@@ -8,6 +8,13 @@ describe('user query keys', () => {
     const scopeA = toScopeKey('scope-a');
     const scopeB = toScopeKey('scope-b');
 
+    expect(userQueries.all()).toEqual(['user', 'v1']);
+    expect(userQueries.getAll(scopeA)).toEqual([
+      'user',
+      'v1',
+      { scopeKey: scopeA },
+      'getAll',
+    ]);
     expect(
       userQueries.getAllInfinite({ scopeKey: scopeA }).queryKey
     ).not.toEqual(userQueries.getAllInfinite({ scopeKey: scopeB }).queryKey);
@@ -18,5 +25,29 @@ describe('user query keys', () => {
         scopeKey: scopeA,
       }).queryKey
     ).toContainEqual({ scopeKey: scopeA });
+  });
+
+  it('versions mutation keys', () => {
+    expect(userQueries.create().mutationKey).toEqual(['user', 'v1', 'create']);
+    expect(userQueries.updateById().mutationKey).toEqual([
+      'user',
+      'v1',
+      'updateById',
+    ]);
+    expect(userQueries.deleteById().mutationKey).toEqual([
+      'user',
+      'v1',
+      'deleteById',
+    ]);
+    expect(userQueries.revokeUserSessions().mutationKey).toEqual([
+      'user',
+      'v1',
+      'revokeUserSessions',
+    ]);
+    expect(userQueries.revokeUserSession().mutationKey).toEqual([
+      'user',
+      'v1',
+      'revokeUserSession',
+    ]);
   });
 });

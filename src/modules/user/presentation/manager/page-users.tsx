@@ -7,8 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { match, P } from 'ts-pattern';
 
 import { cn } from '@/platform/lib/tailwind/utils';
-import { useHydrated } from '@/platform/hooks/use-hydrated';
 
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import {
   Avatar,
   AvatarFallback,
@@ -31,12 +36,6 @@ import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import {
-  ManagerPageLayout as PageLayout,
-  ManagerPageLayoutContent as PageLayoutContent,
-  ManagerPageLayoutTopBar as PageLayoutTopBar,
-  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import { userQueries } from '../queries';
 
@@ -44,8 +43,6 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);
   const router = useRouter();
   const scopeKey = useCurrentScopeKey();
-  const hydrated = useHydrated();
-  const canLoadUsers = !import.meta.env.SSR && hydrated;
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
@@ -57,32 +54,25 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
       }),
   };
 
-  const usersQuery = useInfiniteQuery({
-    ...userQueries.getAllInfinite({
+  const usersQuery = useInfiniteQuery(
+    userQueries.getAllInfinite({
       scopeKey,
       searchTerm: props.search.searchTerm,
-    }),
-    enabled: canLoadUsers,
-  });
+    })
+  );
 
   const searchTerm = props.search.searchTerm;
   const items = usersQuery.data?.pages.flatMap((p) => p.items) ?? [];
   const total = usersQuery.data?.pages[0]?.total ?? 0;
   const ui = getUiState((set) =>
-    match([
-      canLoadUsers,
-      usersQuery.status,
-      items.length,
-      Boolean(searchTerm),
-    ] as const)
-      .with([false, P._, P._, P._], () => set('pending'))
-      .with([true, 'pending', P._, P._], () => set('pending'))
-      .with([true, 'error', P._, P._], () => set('error'))
-      .with([true, 'success', 0, true], () =>
+    match([usersQuery.status, items.length, Boolean(searchTerm)] as const)
+      .with(['pending', P._, P._], () => set('pending'))
+      .with(['error', P._, P._], () => set('error'))
+      .with(['success', 0, true], () =>
         set('empty-search', { searchTerm: searchTerm ?? '' })
       )
-      .with([true, 'success', 0, false], () => set('empty'))
-      .with([true, 'success', P._, P._], () =>
+      .with(['success', 0, false], () => set('empty'))
+      .with(['success', P._, P._], () =>
         set('default', {
           items,
           searchTerm,
@@ -137,7 +127,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                   <DataListRowResults
                     withClearButton
                     onClear={() => {
-                      router.navigate({
+                      void router.navigate({
                         to: '.',
                         search: { searchTerm: '' },
                         replace: true,

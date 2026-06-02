@@ -43,7 +43,7 @@ export const ConfirmResponsiveDrawer = (props: {
     // eslint-disable-next-line @eslint-react/no-clone-element
     const childrenWithOnConfirm = cloneElement(props.children, {
       onClick: () => {
-        props.onConfirm();
+        void props.onConfirm();
       },
     });
     return <>{childrenWithOnConfirm}</>;
@@ -87,7 +87,7 @@ export const ConfirmResponsiveDrawer = (props: {
           onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              handleConfirm();
+              void handleConfirm();
             }
           }}
         >

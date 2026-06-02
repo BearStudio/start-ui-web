@@ -7,10 +7,19 @@ import {
 } from '@/modules/auth/presentation/queries';
 
 describe('clearAllQueryStateForAuthBoundary', () => {
+  it('uses a versioned session query key', () => {
+    expect(authQueries.all()).toEqual(['auth', 'v1']);
+    expect(authQueries.currentSession().queryKey).toEqual([
+      'auth',
+      'v1',
+      'currentSession',
+    ]);
+  });
+
   it('clears all query and mutation state after an auth boundary changes', () => {
     const queryClient = new QueryClient();
     const bookListQuery = queryOptions({
-      queryKey: ['book', 'list', 'user-1'] as const,
+      queryKey: ['book', 'v1', 'list', 'user-1'] as const,
       queryFn: async () => [{ id: 'book-1' }],
     });
 

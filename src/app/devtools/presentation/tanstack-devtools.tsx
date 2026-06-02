@@ -1,25 +1,15 @@
 import { type ComponentType, lazy, Suspense } from 'react';
 
-import { envClient, isDevEnvironment } from '@/platform/env/config';
+import { isDevEnvironment } from '@/platform/env/config';
 
-export function shouldRenderTanStackDevtools() {
-  const envName = envClient.VITE_ENV_NAME?.toLowerCase();
-
-  return (
-    import.meta.env.DEV &&
-    isDevEnvironment() &&
-    !envClient.VITE_VISUAL_TEST &&
-    envName !== 'test' &&
-    envName !== 'tests'
-  );
-}
+import { shouldRenderTanStackDevtools } from './tanstack-devtools-visibility';
 
 type LazyDevtoolsModule = {
   default: ComponentType;
 };
 
 const LazyTanStackDevtools = lazy(async (): Promise<LazyDevtoolsModule> => {
-  if (!import.meta.env.DEV) {
+  if (!isDevEnvironment()) {
     return { default: () => null };
   }
 

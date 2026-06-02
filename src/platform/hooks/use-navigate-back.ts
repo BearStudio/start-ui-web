@@ -12,7 +12,7 @@ export const useNavigateBack = () => {
     if (canGoBack) {
       router.history.back({ ignoreBlocker: options?.ignoreBlocker });
     } else {
-      router.navigate({
+      void router.navigate({
         to: '..',
         replace: true,
         ...options,

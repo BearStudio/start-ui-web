@@ -23,7 +23,7 @@ export const FormMocked = <T extends ZodType<Record<string, unknown>>>({
   onSubmit?: (values: z.infer<T>) => void | Promise<void>;
 }) => {
   const form = useAppForm({
-    defaultValues: (defaultValues ?? {}) as Record<string, unknown>,
+    defaultValues: defaultValues ?? {},
     // zod 4 implements standard-schema, which is what TF expects here.
     // The cast is required because TF's validator type is wider than zod.
     validators: { onSubmit: schema as unknown as never },

@@ -11,7 +11,9 @@ test.describe('Protected route navigation', () => {
   test('returns to a protected deep link after login with search intact', async ({
     page,
   }) => {
-    await page.goto('/manager/books?searchTerm=Hobbit');
+    await page.goto('/manager/books?searchTerm=Hobbit', {
+      waitUntil: 'commit',
+    });
 
     await expect(page).toHaveURL(/\/login\?/);
     expect(new URL(page.url()).searchParams.get('redirect')).toBe(
@@ -33,7 +35,9 @@ test.describe('Protected route navigation as manager', () => {
   test('opens and refreshes a nested book route from a direct URL', async ({
     page,
   }) => {
-    await page.goto('/manager/books?searchTerm=Hobbit');
+    await page.goto('/manager/books?searchTerm=Hobbit', {
+      waitUntil: 'commit',
+    });
 
     const bookLink = page.getByRole('link', { name: 'The Hobbit' });
     await expect(bookLink).toBeVisible();
@@ -73,7 +77,9 @@ test.describe('Protected route navigation as manager', () => {
   test('preserves manager list search params across reloads', async ({
     page,
   }) => {
-    await page.goto('/manager/users?searchTerm=admin%40admin.com');
+    await page.goto('/manager/users?searchTerm=admin%40admin.com', {
+      waitUntil: 'commit',
+    });
 
     await expect(
       page.getByPlaceholder(t.components.searchInput.placeholder)

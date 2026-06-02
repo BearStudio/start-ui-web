@@ -65,7 +65,7 @@ export const sanitizeSentryEvent = <TEvent extends SentryEventLike>(
     contexts: sanitized.contexts as Record<string, unknown>,
     extra: sanitized.extra as Record<string, unknown>,
     tags: toStringTags(sanitized.tags),
-  } as TEvent;
+  };
 };
 
 export const createSentryTelemetryAdapter = (

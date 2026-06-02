@@ -293,6 +293,82 @@ describe('security headers', () => {
     );
   });
 
+  it('streams rewritten script chunks before the HTML response closes', async () => {
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    let controller: ReadableStreamDefaultController<Uint8Array> | undefined;
+    const response = new Response(
+      new ReadableStream<Uint8Array>({
+        start(streamController) {
+          controller = streamController;
+        },
+      }),
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+    const reader = replaced.body?.getReader();
+
+    controller?.enqueue(
+      encoder.encode(
+        `${'x'.repeat(80)}<script nonce="${CSP_NONCE_PLACEHOLDER}"></script>${'y'.repeat(80)}`
+      )
+    );
+
+    const firstChunk = await reader?.read();
+    expect(firstChunk?.done).toBe(false);
+    expect(decoder.decode(firstChunk?.value)).toContain(
+      '<script nonce="request-nonce"></script>'
+    );
+
+    controller?.close();
+    reader?.releaseLock();
+  });
+
+  it('does not buffer a complete client entry script while waiting for response close', async () => {
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    let controller: ReadableStreamDefaultController<Uint8Array> | undefined;
+    const response = new Response(
+      new ReadableStream<Uint8Array>({
+        start(streamController) {
+          controller = streamController;
+        },
+      }),
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+    const reader = replaced.body?.getReader();
+
+    controller?.enqueue(
+      encoder.encode(
+        '<script type="module" async src="/@id/virtual:tanstack-start-dev-client-entry" nonce="request-nonce"></script>'
+      )
+    );
+
+    const firstChunk = await reader?.read();
+    expect(firstChunk?.done).toBe(false);
+    expect(decoder.decode(firstChunk?.value)).toContain(
+      '<script type="module" async src="/@id/virtual:tanstack-start-dev-client-entry" nonce="request-nonce"></script>'
+    );
+
+    controller?.close();
+    reader?.releaseLock();
+  });
+
   it('reads the CSP nonce from meta content before browser-hidden nonce attributes', () => {
     const getAttribute = vi
       .fn<(name: string) => string>()

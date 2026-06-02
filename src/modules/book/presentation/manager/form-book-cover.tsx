@@ -12,6 +12,7 @@ import { BookCover } from '../book-cover';
  * Live preview of the book cover that subscribes to the parent form's
  * `title`, `author`, `genreId`, and `coverId` and re-renders when any change.
  */
+/* eslint-disable react-hooks/rules-of-hooks -- TanStack Form's withForm render callback is invoked as a component body; hooks below are unconditional. */
 export const FormBookCover = withForm({
   defaultValues: formBookDefaultValues(),
   render: ({ form }) => {
@@ -45,3 +46,4 @@ export const FormBookCover = withForm({
     );
   },
 });
+/* eslint-enable react-hooks/rules-of-hooks */

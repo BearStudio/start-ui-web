@@ -61,7 +61,7 @@ test.describe('Book cover uploads', () => {
       });
     });
 
-    await page.goto('/manager/books/new');
+    await page.goto('/manager/books/new', { waitUntil: 'commit' });
 
     await expect(page.getByText(t.book.manager.new.title)).toBeVisible();
     const fileChooserPromise = page.waitForEvent('filechooser');

@@ -39,7 +39,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
           <DropdownMenuItem
             key={language.key}
             onClick={() => {
-              i18n.changeLanguage(language.key);
+              void i18n.changeLanguage(language.key);
             }}
           >
             <CheckIcon

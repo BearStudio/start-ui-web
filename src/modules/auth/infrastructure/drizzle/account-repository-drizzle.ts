@@ -1,6 +1,11 @@
 import { Result } from '@swan-io/boxed';
 import { eq } from 'drizzle-orm';
 
+import type {
+  AccountOnboardingUpdate,
+  AccountProfileUpdate,
+  AccountRepository,
+} from '@/modules/account';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { toUserId } from '@/modules/kernel/domain/ids';
@@ -8,11 +13,6 @@ import { extractDatabaseErrorDetails } from '@/modules/kernel/infrastructure/db/
 import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
-import type {
-  AccountRepository,
-  AccountOnboardingUpdate,
-  AccountProfileUpdate,
-} from '@/modules/account';
 import { user as userTable } from './schema';
 
 const isSqlStateCode = (code: unknown): code is string =>

@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
+import { useFormField } from '@/platform/components/form/form-field-context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
 import { useTfField } from '@/platform/components/form/use-tf-field';
@@ -42,7 +42,7 @@ export const FieldSelect = <TItem extends Item>(
         disabled={rest.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
-          field.onChange(value as TItem['value']);
+          field.onChange(value);
           rest.onValueChange?.(value, event);
         }}
       >

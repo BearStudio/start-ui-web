@@ -3,7 +3,7 @@ export const CSP_NONCE_PLACEHOLDER = '__START_UI_CSP_NONCE__';
 const CSP_NONCE_META_SELECTOR = 'meta[property="csp-nonce"]';
 const CSP_NONCE_GLOBAL_KEY = '__nonce__';
 const CSP_NONCE_BRIDGE_INSTALLED_KEY = '__startUiCspNonceBridgeInstalled';
-const HTML_REWRITE_SAFE_TAIL_LENGTH = 512;
+const STYLE_OPEN_TAG_PREFIX = '<style';
 const STYLE_OPEN_TAG_PATTERN = /<style\b([^>]*)>/gi;
 const NONCE_ATTRIBUTE_PATTERN = /\snonce\s*=/i;
 
@@ -135,11 +135,7 @@ function shouldReplaceCspNoncePlaceholder(response: Response) {
 }
 
 function replaceBufferedCspNoncePlaceholders(value: string, nonce: string) {
-  const searchableLength = Math.max(
-    0,
-    value.length -
-      Math.max(CSP_NONCE_PLACEHOLDER.length - 1, HTML_REWRITE_SAFE_TAIL_LENGTH)
-  );
+  const searchableLength = getSearchableHtmlLength(value);
   const output = rewriteHtmlNonceMarkers(
     value.slice(0, searchableLength),
     nonce
@@ -149,6 +145,46 @@ function replaceBufferedCspNoncePlaceholders(value: string, nonce: string) {
     output,
     remaining: value.slice(searchableLength),
   };
+}
+
+function getSearchableHtmlLength(value: string) {
+  const placeholderTailLength = getPrefixTailLength(
+    value,
+    CSP_NONCE_PLACEHOLDER
+  );
+  const stylePrefixTailLength = getPrefixTailLength(
+    value.toLowerCase(),
+    STYLE_OPEN_TAG_PREFIX
+  );
+  const searchableLength = Math.max(
+    0,
+    value.length - Math.max(placeholderTailLength, stylePrefixTailLength)
+  );
+  const searchableValue = value.slice(0, searchableLength);
+  const lastStyleOpenTagStart = searchableValue
+    .toLowerCase()
+    .lastIndexOf(STYLE_OPEN_TAG_PREFIX);
+
+  if (
+    lastStyleOpenTagStart >= 0 &&
+    searchableValue.indexOf('>', lastStyleOpenTagStart) === -1
+  ) {
+    return lastStyleOpenTagStart;
+  }
+
+  return searchableLength;
+}
+
+function getPrefixTailLength(value: string, prefix: string) {
+  const maxTailLength = Math.min(value.length, prefix.length - 1);
+
+  for (let length = maxTailLength; length > 0; length--) {
+    if (value.endsWith(prefix.slice(0, length))) {
+      return length;
+    }
+  }
+
+  return 0;
 }
 
 function isElementWithNonceProperty(

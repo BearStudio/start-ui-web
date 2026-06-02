@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
-import { useFormFieldUnsafe } from '@/platform/components/form/form-field';
+import { useFormFieldUnsafe } from '@/platform/components/form/form-field-context';
 
 export type FieldErrorInput = unknown;
 

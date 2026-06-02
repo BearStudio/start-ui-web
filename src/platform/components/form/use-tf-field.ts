@@ -34,8 +34,8 @@ export const useTfField = <TValue>(): TfFieldAdapter<TValue> => {
   return {
     field: {
       name: tf.name,
-      value: tf.state.value as TValue | undefined,
-      onChange: (value: TValue) => tf.handleChange(value as never),
+      value: tf.state.value,
+      onChange: (value: TValue) => tf.handleChange(value),
       onBlur: () => tf.handleBlur(),
     },
     fieldState: { invalid, errors },

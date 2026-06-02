@@ -19,7 +19,8 @@ import { match } from 'ts-pattern';
 
 import { cn } from '@/platform/lib/tailwind/utils';
 
-import { Button, buttonVariants } from '@/platform/components/ui/button';
+import { Button } from '@/platform/components/ui/button';
+import { buttonVariants } from '@/platform/components/ui/button-variants';
 
 import { REACT_DAY_PICKER_LOCALE_MAP } from '@/app/i18n/react-day-picker';
 

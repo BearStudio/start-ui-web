@@ -32,9 +32,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from '@/platform/components/ui/sidebar';
-import { themes } from '@/platform/components/ui/theme-switcher';
+import { useSidebar } from '@/platform/components/ui/sidebar-context';
+import { themes } from '@/platform/components/ui/theme-options';
 
 import {
   BuildInfoDrawer,

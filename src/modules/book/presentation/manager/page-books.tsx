@@ -5,6 +5,12 @@ import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { match, P } from 'ts-pattern';
 
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import { Button } from '@/platform/components/ui/button';
 import {
   DataList,
@@ -21,12 +27,6 @@ import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-import {
-  ManagerPageLayout as PageLayout,
-  ManagerPageLayoutContent as PageLayoutContent,
-  ManagerPageLayoutTopBar as PageLayoutTopBar,
-  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
@@ -119,7 +119,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                   <DataListRowResults
                     withClearButton
                     onClear={() => {
-                      router.navigate({
+                      void router.navigate({
                         to: '.',
                         search: { searchTerm: '' },
                         replace: true,

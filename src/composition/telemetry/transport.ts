@@ -1,12 +1,13 @@
-import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
+import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
+
 import { getKernel } from '@/composition/kernel';
+import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
 import {
   appendBrowserMutationVaryHeader,
   validateSameOriginBrowserMutationRequest,
 } from '@/platform/http/browser-mutation-protection';
-import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
-import { getTelemetry } from '@/platform/telemetry';
 import type { TelemetryLogLevel } from '@/platform/telemetry';
+import { getTelemetry } from '@/platform/telemetry';
 
 import { recordLocalTelemetrySummary } from './local-sqlite-sink';
 

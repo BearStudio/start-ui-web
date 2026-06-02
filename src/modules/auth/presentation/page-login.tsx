@@ -15,7 +15,7 @@ import {
 } from '@/platform/components/form';
 import { Button } from '@/platform/components/ui/button';
 
-import { startSignIn, type AuthSignInProvider } from '@/modules/auth/client';
+import { type AuthSignInProvider, startSignIn } from '@/modules/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { useMascot } from '@/modules/auth/presentation/mascot';
 import { zFormFieldsLogin } from '@/modules/auth/presentation/schema';
@@ -107,7 +107,7 @@ export default function PageLogin({
         redirect: safeRedirect ?? null,
       });
 
-      router.navigate({
+      void router.navigate({
         replace: true,
         to: '/login/verify',
         search: {

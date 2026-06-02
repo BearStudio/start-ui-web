@@ -25,14 +25,21 @@ export const formUserValidators = {
   onSubmit: zFormFieldsUser(),
 } as const;
 
+type FormUserProps = {
+  userId?: UserId;
+};
+
+const formUserProps: FormUserProps = {};
+
 /**
  * Reusable user form fields bound to a parent form's `name`, `email`, `role`.
  * Designed to be embedded inside `useAppForm({ defaultValues, validators })`
  * on the page that owns the submit handler.
  */
+/* eslint-disable react-hooks/rules-of-hooks -- TanStack Form's withForm render callback is invoked as a component body; hooks below are unconditional. */
 export const FormUser = withForm({
   defaultValues: formUserDefaultValues(),
-  props: {} as { userId?: UserId },
+  props: formUserProps,
   render: ({ form, userId }) => {
     const { t } = useTranslation(['user']);
     const session = useAuthSession();
@@ -75,3 +82,4 @@ export const FormUser = withForm({
     );
   },
 });
+/* eslint-enable react-hooks/rules-of-hooks */

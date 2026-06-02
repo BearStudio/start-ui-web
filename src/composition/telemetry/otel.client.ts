@@ -1,3 +1,4 @@
+import { metrics } from '@opentelemetry/api';
 import {
   CompositePropagator,
   W3CBaggagePropagator,
@@ -24,7 +25,6 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
-import { metrics } from '@opentelemetry/api';
 
 import { envClient } from '@/platform/env/client';
 import type { TelemetryAdapter } from '@/platform/telemetry';

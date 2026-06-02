@@ -1,5 +1,5 @@
-import { getTelemetry } from '@/platform/telemetry';
 import type { TelemetrySpanHandle } from '@/platform/telemetry';
+import { getTelemetry } from '@/platform/telemetry';
 
 type RouterLifecycleEvent = {
   fromLocation?: { href: string; pathname: string };

@@ -8,8 +8,8 @@ import {
   toUserId,
 } from '@/modules/kernel/domain/ids';
 import {
-  getDefaultDbClient,
   type Database,
+  getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 
 import type { Auth } from './auth';

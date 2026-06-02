@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { match, P } from 'ts-pattern';
 
 import { PageError } from '@/platform/components/errors/page-error';
-import { Button } from '@/platform/components/ui/button';
-
-import { useCurrentScopeKey } from '@/modules/auth/client';
 import {
   AppPageLayout as PageLayout,
   AppPageLayoutContent as PageLayoutContent,
   AppPageLayoutTopBar as PageLayoutTopBar,
   AppPageLayoutTopBarTitle as PageLayoutTopBarTitle,
 } from '@/platform/components/page-layout';
+import { Button } from '@/platform/components/ui/button';
+
+import { useCurrentScopeKey } from '@/modules/auth/client';
 
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';

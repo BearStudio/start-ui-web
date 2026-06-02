@@ -4,17 +4,18 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
-import type { ScopeKey } from '@/modules/kernel/domain/ids';
-import { toScopeKey } from '@/modules/kernel/domain/ids';
 import { observeQueryOperation } from '@/platform/lib/tanstack-query/observability';
 
 import type { CurrentSession } from '@/modules/auth';
+import type { ScopeKey } from '@/modules/kernel/domain/ids';
+import { toScopeKey } from '@/modules/kernel/domain/ids';
+
 import { authServerFunctions } from '../server';
 
 const currentSessionQueryKey = [...authQueriesAll(), 'currentSession'] as const;
 
 function authQueriesAll() {
-  return ['auth'] as const;
+  return ['auth', 'v1'] as const;
 }
 
 export const authQueries = {

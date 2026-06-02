@@ -28,6 +28,8 @@ import { cn } from '@/platform/lib/tailwind/utils';
 import { Button } from '@/platform/components/ui/button';
 import { Spinner } from '@/platform/components/ui/spinner';
 
+import { fileUploadMutationKey } from './utils';
+
 const uploadInputVariants = cva(
   cn(
     'flex w-full items-center gap-2 rounded-md border text-left text-xs transition-[color,box-shadow]',
@@ -154,7 +156,7 @@ export const UploadInput = ({
     !!defaultValue && !selectedFile && defaultValue !== clearedDefaultValue;
 
   const uploadMutation = useMutation({
-    mutationKey: ['fileUpload', uploadRoute],
+    mutationKey: fileUploadMutationKey(uploadRoute),
     mutationFn: async (file: File) => {
       return uploadFile({
         file,
@@ -177,7 +179,7 @@ export const UploadInput = ({
 
   const ui = getUiState((set) => {
     if (selectedFile) return set('selected', { file: selectedFile });
-    if (showDefault) return set('default', { defaultValue: defaultValue! });
+    if (showDefault) return set('default', { defaultValue: defaultValue });
     return set('empty');
   });
 

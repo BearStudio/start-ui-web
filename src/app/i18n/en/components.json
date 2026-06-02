@@ -34,7 +34,8 @@
       "message": "We encountered an unexpected error"
     },
     "goHome": "Home",
-    "goBack": "Back"
+    "goBack": "Back",
+    "retry": "Retry"
   },
   "searchInput": {
     "clear": "Clear search",

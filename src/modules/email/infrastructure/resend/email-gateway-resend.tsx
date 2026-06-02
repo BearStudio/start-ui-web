@@ -1,5 +1,5 @@
-import { Result } from '@swan-io/boxed';
 import { render } from '@react-email/render';
+import { Result } from '@swan-io/boxed';
 import type { ReactElement } from 'react';
 import type { CreateEmailOptions, Resend } from 'resend';
 

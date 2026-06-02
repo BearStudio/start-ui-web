@@ -9,6 +9,12 @@ import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
 import { PageError } from '@/platform/components/errors/page-error';
+import {
+  ManagerPageLayout as PageLayout,
+  ManagerPageLayoutContent as PageLayoutContent,
+  ManagerPageLayoutTopBar as PageLayoutTopBar,
+  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
+} from '@/platform/components/page-layout';
 import { ButtonLink } from '@/platform/components/ui/button-link';
 import { Card, CardContent } from '@/platform/components/ui/card';
 import { ConfirmResponsiveDrawer } from '@/platform/components/ui/confirm-responsive-drawer';
@@ -19,12 +25,6 @@ import { Spinner } from '@/platform/components/ui/spinner';
 import { useCurrentScopeKey, WithPermissions } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import { toBookId } from '@/modules/kernel/domain/ids';
-import {
-  ManagerPageLayout as PageLayout,
-  ManagerPageLayoutContent as PageLayoutContent,
-  ManagerPageLayoutTopBar as PageLayoutTopBar,
-  ManagerPageLayoutTopBarTitle as PageLayoutTopBarTitle,
-} from '@/platform/components/page-layout';
 
 import { BookCover } from '../book-cover';
 import { bookQueries } from '../queries';
@@ -57,17 +57,13 @@ export const PageBook = (props: { params: { id: string } }) => {
   const deleteBook = async () => {
     try {
       await deleteBookMutation.mutateAsync({ id: bookId });
-      await Promise.all([
-        // Invalidate books list
-        queryClient.invalidateQueries({
-          queryKey: bookQueries.getAll(scopeKey),
-          type: 'all',
-        }),
-        // Remove book from cache
-        queryClient.removeQueries({
-          queryKey: bookQueries.getById({ id: bookId, scopeKey }).queryKey,
-        }),
-      ]);
+      await queryClient.invalidateQueries({
+        queryKey: bookQueries.getAll(scopeKey),
+        type: 'all',
+      });
+      queryClient.removeQueries({
+        queryKey: bookQueries.getById({ id: bookId, scopeKey }).queryKey,
+      });
 
       toast.success(t('book:manager.detail.deleted'));
 

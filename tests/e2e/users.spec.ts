@@ -45,7 +45,7 @@ test.describe('User management as manager', () => {
       .getByRole('button', { name: t.user.manager.new.createButton.label })
       .click();
 
-    await page.waitForURL('/manager/users');
+    await expect(page).toHaveURL(/\/manager\/users$/);
     await page
       .getByPlaceholder(t.components.searchInput.placeholder)
       .fill(`new-user-${randomId}`);

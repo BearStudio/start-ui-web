@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { ConfigurationError } from '../../domain/errors/configuration-error';
 import {
   baseEnvSchema,
   isProdRuntimeEnvironment,
   parseEnv,
 } from './env-schema';
+import { ConfigurationError } from '../../domain/errors/configuration-error';
 
 const telemetryEnvSchema = baseEnvSchema.extend({
   SENTRY_DSN: z.string().url().optional(),

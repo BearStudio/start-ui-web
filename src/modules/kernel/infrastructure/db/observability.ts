@@ -1,6 +1,6 @@
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
-import { getTelemetry } from '@/platform/telemetry';
 import type { TelemetryAttributes } from '@/platform/telemetry';
+import { getTelemetry } from '@/platform/telemetry';
 
 type DbOperationInput = {
   model: string;

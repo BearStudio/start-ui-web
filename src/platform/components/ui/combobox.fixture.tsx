@@ -12,8 +12,8 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxValue,
-  useComboboxAnchor,
 } from './combobox';
+import { useComboboxAnchor } from './combobox-anchor';
 const options = [
   { id: 1, label: 'Apple' },
   { id: 2, label: 'Banana' },

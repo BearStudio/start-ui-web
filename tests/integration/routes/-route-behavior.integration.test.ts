@@ -45,7 +45,7 @@ vi.mock('@/modules/auth/client', () => ({
   WithPermissions: ({ children }: { children: ReactNode }) => children,
   authQueries: {
     currentSession: () => ({
-      queryKey: ['auth', 'currentSession'],
+      queryKey: ['auth', 'v1', 'currentSession'],
       queryFn: mocks.currentSession,
     }),
   },
@@ -96,6 +96,7 @@ import {
 import { bookQueries } from '@/modules/book/client';
 import { toBookId, toScopeKey } from '@/modules/kernel/testing';
 import { userQueries } from '@/modules/user/client';
+import { RouteError } from '@/platform/components/errors/route-error';
 
 import { Route as AppBooksIndexRoute } from '@/routes/app/books/index';
 import { Route as LoginRoute } from '@/routes/login/route';
@@ -344,7 +345,7 @@ describe('route integration behavior', () => {
     expect(isForbiddenRouteContext(forbiddenContext)).toBe(true);
     expect(isValidElement<{ type: string }>(genericErrorElement)).toBe(true);
     expect(isValidElement<{ type: string }>(forbiddenErrorElement)).toBe(true);
-    expect(genericErrorElement.props.type).toBe('error-boundary');
+    expect(genericErrorElement.type).toBe(RouteError);
     expect(forbiddenErrorElement.props.type).toBe('403');
   });
 

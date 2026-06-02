@@ -12,7 +12,9 @@ describe('TanStackDevtoolsPanel', () => {
       envClient: { VITE_VISUAL_TEST: false },
       isDevEnvironment: () => false,
     }));
-    const { shouldRenderTanStackDevtools, TanStackDevtoolsPanel } =
+    const { shouldRenderTanStackDevtools } =
+      await import('@/app/devtools/presentation/tanstack-devtools-visibility');
+    const { TanStackDevtoolsPanel } =
       await import('@/app/devtools/presentation/tanstack-devtools');
 
     expect(shouldRenderTanStackDevtools()).toBe(false);
@@ -25,7 +27,7 @@ describe('TanStackDevtoolsPanel', () => {
       isDevEnvironment: () => true,
     }));
     const { shouldRenderTanStackDevtools } =
-      await import('@/app/devtools/presentation/tanstack-devtools');
+      await import('@/app/devtools/presentation/tanstack-devtools-visibility');
 
     expect(shouldRenderTanStackDevtools()).toBe(true);
   });
@@ -35,7 +37,9 @@ describe('TanStackDevtoolsPanel', () => {
       envClient: { VITE_ENV_NAME: 'tests', VITE_VISUAL_TEST: false },
       isDevEnvironment: () => true,
     }));
-    const { shouldRenderTanStackDevtools, TanStackDevtoolsPanel } =
+    const { shouldRenderTanStackDevtools } =
+      await import('@/app/devtools/presentation/tanstack-devtools-visibility');
+    const { TanStackDevtoolsPanel } =
       await import('@/app/devtools/presentation/tanstack-devtools');
 
     expect(shouldRenderTanStackDevtools()).toBe(false);
@@ -47,7 +51,9 @@ describe('TanStackDevtoolsPanel', () => {
       envClient: { VITE_VISUAL_TEST: true },
       isDevEnvironment: () => true,
     }));
-    const { shouldRenderTanStackDevtools, TanStackDevtoolsPanel } =
+    const { shouldRenderTanStackDevtools } =
+      await import('@/app/devtools/presentation/tanstack-devtools-visibility');
+    const { TanStackDevtoolsPanel } =
       await import('@/app/devtools/presentation/tanstack-devtools');
 
     expect(shouldRenderTanStackDevtools()).toBe(false);

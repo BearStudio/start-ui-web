@@ -62,8 +62,13 @@ const dynamicValueLabel = (value: unknown) => {
   return hashTelemetryValue(value);
 };
 
+const isQueryKeyVersionSegment = (segment: string) => /^v\d+$/.test(segment);
+
 const stringSegmentsFromQueryKey = (queryKey: QueryKey): string[] =>
-  queryKey.filter((segment): segment is string => typeof segment === 'string');
+  queryKey.filter(
+    (segment): segment is string =>
+      typeof segment === 'string' && !isQueryKeyVersionSegment(segment)
+  );
 
 const dynamicSegmentsFromQueryKey = (queryKey: QueryKey) =>
   queryKey.filter((segment) => typeof segment !== 'string');

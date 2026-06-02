@@ -5,6 +5,7 @@ import {
   type ScopedQueryInput,
   serverMutationOptions,
 } from '@/platform/lib/tanstack-query/scoped-query-options';
+
 import type { ScopeKey, SessionId, UserId } from '@/modules/kernel/domain/ids';
 
 import {
@@ -24,8 +25,10 @@ type GetAllInput = {
   limit?: number;
 };
 
+const userQueryVersion = 'v1';
+
 export const userQueries = {
-  all: () => ['user'] as const,
+  all: () => ['user', userQueryVersion] as const,
   getAll: (scopeKey: ScopeKey) =>
     [...userQueries.all(), { scopeKey }, 'getAll'] as const,
   getAllList: (input: GetAllInput & ScopedQueryInput<ScopeKey>) =>
@@ -53,7 +56,7 @@ export const userQueries = {
       queryFn: (data) => userGetById({ data }),
     }),
   getUserSessions: (scopeKey: ScopeKey) =>
-    ['user', { scopeKey }, 'getUserSessions'] as const,
+    [...userQueries.all(), { scopeKey }, 'getUserSessions'] as const,
   getUserSessionsInfinite: (
     input: { userId: UserId; limit?: number } & ScopedQueryInput<ScopeKey>
   ) =>
@@ -67,27 +70,27 @@ export const userQueries = {
     }),
   create: () =>
     serverMutationOptions({
-      mutationKey: ['user', 'create'],
+      mutationKey: ['user', userQueryVersion, 'create'],
       mutationFn: userCreate,
     }),
   updateById: () =>
     serverMutationOptions({
-      mutationKey: ['user', 'updateById'],
+      mutationKey: ['user', userQueryVersion, 'updateById'],
       mutationFn: userUpdateById,
     }),
   deleteById: () =>
     serverMutationOptions({
-      mutationKey: ['user', 'deleteById'],
+      mutationKey: ['user', userQueryVersion, 'deleteById'],
       mutationFn: userDeleteById,
     }),
   revokeUserSessions: () =>
     serverMutationOptions({
-      mutationKey: ['user', 'revokeUserSessions'],
+      mutationKey: ['user', userQueryVersion, 'revokeUserSessions'],
       mutationFn: userRevokeUserSessions,
     }),
   revokeUserSession: () =>
     serverMutationOptions({
-      mutationKey: ['user', 'revokeUserSession'],
+      mutationKey: ['user', userQueryVersion, 'revokeUserSession'],
       mutationFn: userRevokeUserSession,
     }),
 };

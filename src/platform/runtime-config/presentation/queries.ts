@@ -4,7 +4,8 @@ import { observeQueryOperation } from '@/platform/lib/tanstack-query/observabili
 
 import { configEnv } from '../server';
 
-const configEnvQueryKey = ['config', 'env'] as const;
+const configQueryVersion = 'v1';
+const configEnvQueryKey = ['config', configQueryVersion, 'env'] as const;
 
 export const configQueries = {
   env: () =>

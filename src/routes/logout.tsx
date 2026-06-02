@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerOnlyFn } from '@tanstack/react-start';
 
-import { PageError } from '@/platform/components/errors/page-error';
+import { RouteError } from '@/platform/components/errors/route-error';
 
 import { PageLogout } from '@/modules/auth/presentation';
 
@@ -40,7 +40,7 @@ export const Route = createFileRoute('/logout')({
     },
   },
   component: RouteComponent,
-  errorComponent: () => <PageError type="error-boundary" />,
+  errorComponent: () => <RouteError />,
 });
 
 function RouteComponent() {

@@ -1,6 +1,5 @@
-export { EnvHint, getEnvHintTitlePrefix } from './presentation/env-hint';
+export { EnvHint } from './presentation/env-hint';
+export { getEnvHintTitlePrefix } from './presentation/env-title-prefix';
 export { LoginEmailHint, LoginEmailOtpHint } from './presentation/login-hint';
-export {
-  shouldRenderTanStackDevtools,
-  TanStackDevtoolsPanel,
-} from './presentation/tanstack-devtools';
+export { TanStackDevtoolsPanel } from './presentation/tanstack-devtools';
+export { shouldRenderTanStackDevtools } from './presentation/tanstack-devtools-visibility';

@@ -9,7 +9,7 @@ import {
 describe('telemetry metadata', () => {
   it('derives operation names from static query key segments', () => {
     const metadata = deriveOperationMetadataFromKey(
-      ['book', { scopeKey: 'scope-a' }, 'getAll', { searchTerm: 'dune' }],
+      ['book', 'v1', { scopeKey: 'scope-a' }, 'getAll', { searchTerm: 'dune' }],
       'query'
     );
 
@@ -20,6 +20,18 @@ describe('telemetry metadata', () => {
       'operation.type': 'query',
     });
     expect(metadata.attributes['operation.key_dynamic_hash']).toMatch(/^h/);
+  });
+
+  it('hides version segments from static operation labels', () => {
+    const metadata = deriveOperationMetadataFromKey(
+      ['fileUpload', 'v12', 'avatar'],
+      'mutation'
+    );
+
+    expect(metadata.operationName).toBe('fileUpload.avatar');
+    expect(metadata.attributes['operation.key_static']).toBe(
+      'fileUpload.avatar'
+    );
   });
 
   it('hashes dynamic values with stable object key ordering', () => {

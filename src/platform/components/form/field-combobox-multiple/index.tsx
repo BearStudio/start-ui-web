@@ -6,8 +6,8 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFormField } from '@/platform/components/form/form-field';
 import { FormFieldContainer } from '@/platform/components/form/form-field-container';
+import { useFormField } from '@/platform/components/form/form-field-context';
 import { FormFieldError } from '@/platform/components/form/form-field-error';
 import type { FieldProps } from '@/platform/components/form/types';
 import { useTfField } from '@/platform/components/form/use-tf-field';
@@ -22,8 +22,8 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxValue,
-  useComboboxAnchor,
 } from '@/platform/components/ui/combobox';
+import { useComboboxAnchor } from '@/platform/components/ui/combobox-anchor';
 
 type Item = {
   label: string;
@@ -75,12 +75,12 @@ export const FieldComboboxMultiple = <TItem extends Item>(
           []
         }
         isItemEqualToValue={(item, selectedValue) =>
-          (item as TItem).value === (selectedValue as TItem).value
+          item.value === selectedValue.value
         }
-        itemToStringLabel={(item) => (item as TItem).label?.toString() ?? ''}
-        itemToStringValue={(item) => String((item as TItem).value ?? '')}
+        itemToStringLabel={(item) => item.label?.toString() ?? ''}
+        itemToStringValue={(item) => String(item.value ?? '')}
         onValueChange={(items, event) => {
-          const selectedItems = (items ?? []) as TItem[];
+          const selectedItems = items ?? [];
           const selectedValues = selectedItems.map((i) => i.value);
           field.onChange(selectedValues);
           rest.onValueChange?.(selectedValues, event);

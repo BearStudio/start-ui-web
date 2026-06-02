@@ -7,7 +7,6 @@ import {
 } from '@opentelemetry/api';
 import { logs, SeverityNumber } from '@opentelemetry/api-logs';
 
-import { hashUserIdForMetrics } from '@/platform/telemetry/metadata';
 import type {
   TelemetryAdapter,
   TelemetryAttributes,
@@ -16,6 +15,7 @@ import type {
   TelemetrySpanOptions,
   TelemetryUser,
 } from '@/platform/telemetry';
+import { hashUserIdForMetrics } from '@/platform/telemetry/metadata';
 
 const tracer = trace.getTracer('start-ui-web');
 const meter = metrics.getMeter('start-ui-web');

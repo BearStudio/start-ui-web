@@ -34,7 +34,8 @@
       "message": "Nous avons rencontré une erreur inattendue"
     },
     "goHome": "Accueil",
-    "goBack": "Retour"
+    "goBack": "Retour",
+    "retry": "Réessayer"
   },
   "searchInput": {
     "clear": "Effacer la recherche",

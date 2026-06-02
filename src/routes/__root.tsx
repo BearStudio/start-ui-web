@@ -15,14 +15,15 @@ import i18n, { syncLanguage } from '@/platform/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/platform/lib/i18n/constants';
 
 import { PageError } from '@/platform/components/errors/page-error';
+import { RouteError } from '@/platform/components/errors/route-error';
 
-import { Providers } from '@/composition/providers';
-import { getTelemetry } from '@/composition/telemetry';
 import {
   EnvHint,
   getEnvHintTitlePrefix,
   TanStackDevtoolsPanel,
 } from '@/app/devtools/presentation';
+import { Providers } from '@/composition/providers';
+import { getTelemetry } from '@/composition/telemetry';
 import { initSsrApp } from '@/modules/kernel/server';
 import { createCspNonceBridgeScript } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
@@ -35,7 +36,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
       const { language } = await initSsrApp();
-      i18n.changeLanguage(language);
+      await i18n.changeLanguage(language);
     }
     return null;
   }),
@@ -101,7 +102,7 @@ function RootErrorBoundary({ error }: Readonly<{ error: unknown }>) {
 
   return (
     <RootDocument>
-      <PageError type="error-boundary" />
+      <RouteError />
     </RootDocument>
   );
 }

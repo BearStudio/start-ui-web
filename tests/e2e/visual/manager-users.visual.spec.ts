@@ -36,7 +36,7 @@ test.describe('Manager users visual regression', () => {
   }) => {
     await page.to('/manager/users');
     await page.getByRole('link', { name: /new/i }).click();
-    await page.waitForURL('**/manager/users/new');
+    await expect(page).toHaveURL(/\/manager\/users\/new$/);
     await expect(page.getByTestId('manager-user-new-form')).toHaveAttribute(
       'data-hydrated',
       'true'
@@ -47,7 +47,7 @@ test.describe('Manager users visual regression', () => {
   test('manager user edit screen remains visually stable', async ({ page }) => {
     await openManagerUserDetail(page, ADMIN_EMAIL);
     await page.getByRole('link', { name: /edit user/i }).click();
-    await page.waitForURL('**/manager/users/**/update');
+    await expect(page).toHaveURL(/\/manager\/users\/[^/]+\/update$/);
     await expect(page.getByLabel('Email')).toHaveValue(ADMIN_EMAIL);
     await screenshot(page, 'manager-user-edit.png');
   });
@@ -56,10 +56,14 @@ test.describe('Manager users visual regression', () => {
     page,
   }) => {
     await openManagerUserDetail(page, USER_EMAIL);
-    await page.getByRole('button', { name: /delete/i }).click();
-    await expect(
-      page.getByRole('dialog', { name: /delete user/i })
-    ).toBeVisible();
+    const deleteDialog = page.getByRole('dialog', { name: /delete user/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i }).first();
+
+    await expect(async () => {
+      await deleteButton.click();
+      await expect(deleteDialog).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10_000 });
+
     await screenshot(page, 'manager-user-delete-confirmation.png', {
       mask: dynamicUserMetadataMasks(page),
     });

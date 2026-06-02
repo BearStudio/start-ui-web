@@ -2,6 +2,7 @@ import {
   scopedListQueryOptions,
   type ScopedQueryInput,
 } from '@/platform/lib/tanstack-query/scoped-query-options';
+
 import type { GenreId, ScopeKey } from '@/modules/kernel/domain/ids';
 
 import { genreGetAll } from '../server';
@@ -12,8 +13,10 @@ type GetAllInput = {
   limit?: number;
 };
 
+const genreQueryVersion = 'v1';
+
 export const genreQueries = {
-  all: () => ['genre'] as const,
+  all: () => ['genre', genreQueryVersion] as const,
   getAll: (scopeKey: ScopeKey) =>
     [...genreQueries.all(), { scopeKey }, 'getAll'] as const,
   getAllList: (input: GetAllInput & ScopedQueryInput<ScopeKey>) =>

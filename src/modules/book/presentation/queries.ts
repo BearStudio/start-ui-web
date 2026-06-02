@@ -5,6 +5,7 @@ import {
   type ScopedQueryInput,
   serverMutationOptions,
 } from '@/platform/lib/tanstack-query/scoped-query-options';
+
 import type { BookId, ScopeKey } from '@/modules/kernel/domain/ids';
 
 import {
@@ -21,8 +22,10 @@ type GetAllInput = {
   limit?: number;
 };
 
+const bookQueryVersion = 'v1';
+
 export const bookQueries = {
-  all: () => ['book'] as const,
+  all: () => ['book', bookQueryVersion] as const,
   getAll: (scopeKey: ScopeKey) =>
     [...bookQueries.all(), { scopeKey }, 'getAll'] as const,
   getAllList: (input: GetAllInput & ScopedQueryInput<ScopeKey>) =>
@@ -51,17 +54,17 @@ export const bookQueries = {
     }),
   create: () =>
     serverMutationOptions({
-      mutationKey: ['book', 'create'],
+      mutationKey: ['book', bookQueryVersion, 'create'],
       mutationFn: bookCreate,
     }),
   updateById: () =>
     serverMutationOptions({
-      mutationKey: ['book', 'updateById'],
+      mutationKey: ['book', bookQueryVersion, 'updateById'],
       mutationFn: bookUpdateById,
     }),
   deleteById: () =>
     serverMutationOptions({
-      mutationKey: ['book', 'deleteById'],
+      mutationKey: ['book', bookQueryVersion, 'deleteById'],
       mutationFn: bookDeleteById,
     }),
 };

@@ -3,8 +3,8 @@ import { and, eq } from 'drizzle-orm';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
-  getDefaultDbClient,
   type Database,
+  getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 
 import type { Auth } from './auth';

@@ -19,8 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/platform/components/ui/dropdown-menu';
-
-export const themes = ['system', 'light', 'dark'] as const;
+import { themes } from '@/platform/components/ui/theme-options';
 
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);

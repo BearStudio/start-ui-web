@@ -50,7 +50,7 @@ export const mapAppErrorToServerFnError = (error: unknown): never => {
       message: error.message,
       data:
         error.exposeDetails && typeof error.details === 'object'
-          ? (error.details as Record<string, unknown>)
+          ? error.details
           : undefined,
     });
   }
@@ -85,7 +85,7 @@ export async function unwrapApplicationResult<
 ): Promise<OutcomeHandlerReturn<THandlers>> {
   const value = await Promise.resolve(result).catch(mapAppErrorToServerFnError);
 
-  const mapped = match(value as ApplicationResult<TOutcome>)
+  return match(value)
     .with(Result.P.Ok(P.select()), (outcome) => {
       const typedOutcome = outcome as unknown as TOutcome;
       const outcomeType = typedOutcome.type as TOutcome['type'];
@@ -103,6 +103,4 @@ export async function unwrapApplicationResult<
       mapAppErrorToServerFnError(error)
     )
     .exhaustive();
-
-  return mapped as OutcomeHandlerReturn<THandlers>;
 }

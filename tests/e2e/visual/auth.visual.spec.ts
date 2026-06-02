@@ -32,7 +32,7 @@ test.describe('Auth visual regression', () => {
     await page
       .getByRole('button', { name: /continue with email|login with email/i })
       .click();
-    await page.waitForURL('**/login/verify**');
+    await expect(page).toHaveURL(/\/login\/verify(?:\?|$)/);
     await expect(page.getByTestId('auth-login-verify-form')).toHaveAttribute(
       'data-hydrated',
       'true'

@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Label } from '@/platform/components/ui/label';
 
-import { useFormField } from './form-field';
+import { useFormField } from './form-field-context';
 
 type FormFieldLabelProps = Omit<ComponentProps<'label'>, 'id' | 'htmlFor'>;
 

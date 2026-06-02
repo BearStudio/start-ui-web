@@ -16,7 +16,7 @@ const nonProductionFiles = [
   'tests/**/*.{ts,tsx}',
 ];
 
-const warnRules = (rules) =>
+const rulesWithSeverity = (rules, severity) =>
   Object.fromEntries(
     Object.entries(rules).map(([ruleName, ruleConfig]) => {
       if (ruleConfig === 'off' || ruleConfig === 0) {
@@ -28,12 +28,15 @@ const warnRules = (rules) =>
           return [ruleName, ruleConfig];
         }
 
-        return [ruleName, ['warn', ...ruleConfig.slice(1)]];
+        return [ruleName, [severity, ...ruleConfig.slice(1)]];
       }
 
-      return [ruleName, 'warn'];
+      return [ruleName, severity];
     })
   );
+
+const warnRules = (rules) => rulesWithSeverity(rules, 'warn');
+const errorRules = (rules) => rulesWithSeverity(rules, 'error');
 
 export default defineConfig([
   {
@@ -80,11 +83,11 @@ export default defineConfig([
       },
     },
     rules: {
-      '@typescript-eslint/await-thenable': 'warn',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-for-in-array': 'warn',
+      '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-for-in-array': 'error',
       '@typescript-eslint/no-misused-promises': [
-        'warn',
+        'error',
         {
           checksVoidReturn: {
             arguments: false,
@@ -92,15 +95,15 @@ export default defineConfig([
           },
         },
       ],
-      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
-      '@typescript-eslint/return-await': ['warn', 'in-try-catch'],
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/return-await': ['error', 'in-try-catch'],
     },
   },
   {
     files: sourceTsFiles,
     ignores: nonProductionFiles,
     plugins: reactHooks.configs.flat['recommended-latest'].plugins,
-    rules: warnRules(reactHooks.configs.flat['recommended-latest'].rules),
+    rules: errorRules(reactHooks.configs.flat['recommended-latest'].rules),
   },
   {
     files: tsFiles,

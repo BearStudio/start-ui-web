@@ -6,8 +6,8 @@ import {
   type TelemetryAdapter,
 } from '@/platform/telemetry';
 
-import { setTelemetry } from './index';
 import { createTelemetryAdapterChain } from './adapter-chain';
+import { setTelemetry } from './index';
 import { initOpenTelemetryClient } from './otel.client';
 import {
   createSentryTelemetryAdapter,

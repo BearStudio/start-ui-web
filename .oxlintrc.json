@@ -100,13 +100,52 @@
     {
       "files": ["src/**/*"],
       "rules": {
-        "node/no-process-env": "error"
+        "node/no-process-env": "error",
+        "react/only-export-components": [
+          "error",
+          {
+            "allowConstantExport": true
+          }
+        ],
+        "promise/always-return": "error",
+        "promise/catch-or-return": "error",
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              ["^@?\\w", "^\\u0000"],
+              ["^.+\\.s?css$"],
+              ["^@/platform/lib", "^@/platform/hooks"],
+              ["^@/data"],
+              ["^@/platform/components", "^@/container"],
+              ["^@/store"],
+              ["^@/"],
+              [
+                "^\\./?$",
+                "^\\.(?!/?$)",
+                "^\\.\\./?$",
+                "^\\.\\.(?!/?$)",
+                "^\\.\\./\\.\\./?$",
+                "^\\.\\./\\.\\.(?!/?$)",
+                "^\\.\\./\\.\\./\\.\\./?$",
+                "^\\.\\./\\.\\./\\.\\.\\.(?!/?$)"
+              ],
+              ["^@/types"],
+              ["^"]
+            ]
+          }
+        ],
+        "simple-import-sort/exports": "error",
+        "@tanstack/query/prefer-query-options": "error",
+        "sonarjs/cognitive-complexity": ["error", 50],
+        "sonarjs/prefer-immediate-return": "error",
+        "sonarjs/todo-tag": "error"
       }
     },
     {
       "files": [
         "src/routes/**/*.*",
-        "**/*.fixture.tsx",
+        "**/*.fixture.*",
         "**/*.unit.spec.*",
         "**/*.unit.test.*",
         "**/*.browser.spec.*",

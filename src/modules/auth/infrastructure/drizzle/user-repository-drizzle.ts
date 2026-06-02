@@ -19,16 +19,16 @@ import {
   escapedIlikeFilter,
   takeCursorPage,
 } from '@/modules/kernel/infrastructure/db/query-helpers';
-import { session as sessionTable, user as userTable } from './schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
-
 import type {
   User,
   UserCreateInput,
+  UserRepository,
   UserSession,
   UserUpdatePersistenceInput,
-  UserRepository,
 } from '@/modules/user';
+
+import { session as sessionTable, user as userTable } from './schema';
 
 function toDomainUser(row: typeof userTable.$inferSelect): User {
   return {

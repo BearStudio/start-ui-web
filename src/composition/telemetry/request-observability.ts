@@ -1,8 +1,8 @@
-import { context, propagation } from '@opentelemetry/api';
 import type { TextMapGetter } from '@opentelemetry/api';
+import { context, propagation } from '@opentelemetry/api';
 
-import { getTelemetry } from '@/platform/telemetry';
 import type { TelemetryAttributes } from '@/platform/telemetry';
+import { getTelemetry } from '@/platform/telemetry';
 
 type RequestObservationInput = {
   request: Request;

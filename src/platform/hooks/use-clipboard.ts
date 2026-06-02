@@ -6,7 +6,7 @@ export const useClipboard = (options: { showDuration?: number } = {}) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (text: string) => {
-    copy(text);
+    void copy(text);
     setIsCopied(true);
   };
 

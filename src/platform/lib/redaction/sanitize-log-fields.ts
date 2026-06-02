@@ -62,8 +62,13 @@ const getBoundedArrayIndexKeys = (value: unknown[], limit: number) => {
   const indexKeys: string[] = [];
   let hasMore = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-for-in-array -- Oversized sparse arrays need present-index enumeration without collecting all keys or walking declared length.
   for (const key in value) {
-    if (Object.hasOwn(value, key) && isArrayIndexKey(key)) {
+    if (!Object.hasOwn(value, key)) {
+      continue;
+    }
+
+    if (isArrayIndexKey(key)) {
       if (indexKeys.length < limit) {
         indexKeys.push(key);
       } else {

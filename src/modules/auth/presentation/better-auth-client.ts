@@ -7,9 +7,8 @@ import { createAccessControl } from 'better-auth/plugins/access';
 import { adminAc } from 'better-auth/plugins/admin/access';
 import { createAuthClient } from 'better-auth/react';
 
-import { envClient } from '@/platform/env/client';
-
 import { permissionStatements, rolePermissions } from '@/modules/auth';
+import { envClient } from '@/platform/env/client';
 
 const ac = createAccessControl(permissionStatements);
 const betterAuthClientPermissions = {

@@ -8,6 +8,13 @@ describe('genre query keys', () => {
     const scopeA = toScopeKey('scope-a');
     const scopeB = toScopeKey('scope-b');
 
+    expect(genreQueries.all()).toEqual(['genre', 'v1']);
+    expect(genreQueries.getAll(scopeA)).toEqual([
+      'genre',
+      'v1',
+      { scopeKey: scopeA },
+      'getAll',
+    ]);
     expect(genreQueries.getAllList({ scopeKey: scopeA }).queryKey).not.toEqual(
       genreQueries.getAllList({ scopeKey: scopeB }).queryKey
     );

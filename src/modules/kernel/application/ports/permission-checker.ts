@@ -1,5 +1,6 @@
-import type { ApplicationResult } from '../result';
 import type { UserId } from '@/modules/kernel/domain/ids';
+
+import type { ApplicationResult } from '../result';
 
 export type PermissionRequest = Record<string, readonly string[]>;
 

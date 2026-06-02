@@ -2,12 +2,13 @@ import { useMatches } from '@tanstack/react-router';
 import { isMatching, match, P } from 'ts-pattern';
 
 import {
+  type CurrentSession,
   hasRolePermission,
   parseRole,
-  type CurrentSession,
   type Permission,
   type Role,
 } from '@/modules/auth';
+
 import {
   betterAuthBrowserClient,
   type BetterAuthSocialProvider,

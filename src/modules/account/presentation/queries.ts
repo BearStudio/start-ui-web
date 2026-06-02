@@ -2,15 +2,17 @@ import { serverMutationOptions } from '@/platform/lib/tanstack-query/scoped-quer
 
 import { accountSubmitOnboarding, accountUpdateInfo } from '../server';
 
+const accountQueryVersion = 'v1';
+
 export const accountQueries = {
   submitOnboarding: () =>
     serverMutationOptions({
-      mutationKey: ['account', 'submitOnboarding'],
+      mutationKey: ['account', accountQueryVersion, 'submitOnboarding'],
       mutationFn: accountSubmitOnboarding,
     }),
   updateInfo: () =>
     serverMutationOptions({
-      mutationKey: ['account', 'updateInfo'],
+      mutationKey: ['account', accountQueryVersion, 'updateInfo'],
       mutationFn: accountUpdateInfo,
     }),
 };

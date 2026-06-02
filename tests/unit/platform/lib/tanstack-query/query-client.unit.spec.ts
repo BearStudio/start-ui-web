@@ -36,11 +36,11 @@ describe('createAppQueryClient', () => {
 
     await client.fetchQuery({
       queryFn: async () => 'ok',
-      queryKey: ['book', 'getAll'] as const,
+      queryKey: ['book', 'v1', 'getAll'] as const,
     });
     const mutation = client.getMutationCache().build(client, {
       mutationFn: async () => 'ok',
-      mutationKey: ['book', 'create'] as const,
+      mutationKey: ['book', 'v1', 'create'] as const,
     });
     await mutation.execute(undefined);
 
