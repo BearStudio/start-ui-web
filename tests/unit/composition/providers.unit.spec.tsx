@@ -24,6 +24,10 @@ vi.mock('@/app/demo/presentation', () => ({
   useIsDemoModeDrawerVisible: () => false,
 }));
 
+vi.mock('@/modules/auth/client', () => ({
+  useCurrentSessionQuery: () => ({ data: null }),
+}));
+
 vi.mock('@/platform/env/client', () => ({
   envClient: {
     VITE_IS_DEMO: false,

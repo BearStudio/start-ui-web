@@ -1,15 +1,14 @@
 import { Result } from '@swan-io/boxed';
 
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
-import type { BookId } from '@/modules/kernel/domain/ids';
+import type { BookId, UserId } from '@/modules/kernel/domain/ids';
 
 import type { BookResult, BookUpdateOutcome, BookUseCaseDeps } from './types';
 import type { BookWriteInput } from '../../domain/book';
 import { normalizeBookWriteInput } from '../../domain/book';
 
 export type UpdateBookInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   id: BookId;
   book: BookWriteInput;
 };
@@ -18,11 +17,10 @@ export async function updateBook(
   deps: BookUseCaseDeps,
   input: UpdateBookInput
 ): Promise<BookResult<BookUpdateOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { book: ['update'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { book: ['update'] }
+  );
   if (allowed.isError()) return Result.Error(allowed.getError());
   if (allowed.get().type === 'permission_denied') {
     return Result.Ok({ type: 'book_forbidden' });

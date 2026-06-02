@@ -151,7 +151,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
@@ -166,7 +166,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).get({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
       }),
       userGetConfig
@@ -179,7 +179,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).update({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
         user: {
           name: data.name,
@@ -197,7 +197,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).create({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         user: {
           name: data.name,
           email: data.email,
@@ -214,7 +214,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).delete({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
       }),
       userDeleteConfig({ selfMessage: 'You cannot delete yourself' })
@@ -227,7 +227,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).listSessions({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         userId: data.userId,
         cursor: data.cursor,
         limit: data.limit,
@@ -242,7 +242,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).revokeSessions({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
       }),
       userRevokeSessionsConfig({
@@ -257,7 +257,7 @@ export const createUserHandlers = ({ getUseCases }: UserHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).revokeSession({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         currentSessionId: ctx.session.id,
         id: data.id,
         sessionId: data.sessionId,

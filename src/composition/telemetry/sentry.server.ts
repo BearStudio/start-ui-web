@@ -1,14 +1,24 @@
 import * as Sentry from '@sentry/tanstackstart-react';
 
 import { getTelemetryConfig } from '@/modules/kernel/infrastructure/config/telemetry';
+import {
+  createNoOpTelemetry,
+  type TelemetryAdapter,
+} from '@/platform/telemetry';
 
 import { setTelemetry } from './index';
+import { createTelemetryAdapterChain } from './adapter-chain';
+import { initOpenTelemetryServer } from './otel.server';
 import {
   createSentryTelemetryAdapter,
   sanitizeSentryEvent,
 } from './sentry-adapter';
 
 let initialized = false;
+
+const isTelemetryAdapter = (
+  adapter: TelemetryAdapter | undefined
+): adapter is TelemetryAdapter => Boolean(adapter);
 
 /**
  * Initialize Sentry for the Node server runtime. Safe to call multiple times;
@@ -21,17 +31,26 @@ export const initTelemetryServer = () => {
   initialized = true;
 
   const telemetryConfig = getTelemetryConfig();
+  const adapters = [initOpenTelemetryServer()].filter(isTelemetryAdapter);
   if (!telemetryConfig.dsn) {
+    if (adapters.length > 0) {
+      setTelemetry(createTelemetryAdapterChain(adapters));
+    }
     return;
   }
 
   Sentry.init({
     dsn: telemetryConfig.dsn,
     environment: telemetryConfig.environment,
-    tracesSampleRate: telemetryConfig.tracesSampleRate,
+    tracesSampleRate: 0,
     sendDefaultPii: false,
     beforeSend: sanitizeSentryEvent,
   });
 
-  setTelemetry(createSentryTelemetryAdapter(Sentry));
+  adapters.push(createSentryTelemetryAdapter(Sentry));
+  setTelemetry(
+    createTelemetryAdapterChain(
+      adapters.length > 0 ? adapters : [createNoOpTelemetry()]
+    )
+  );
 };

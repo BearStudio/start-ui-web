@@ -1,8 +1,13 @@
 import { envClient } from '@/platform/env/client';
 
-export {
+import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
-} from '../domain/auth-policy';
+  isAuthSignupEnabled,
+} from '@/modules/auth';
 
-export const AUTH_SIGNUP_ENABLED = envClient.VITE_IS_DEMO ? false : true;
+export { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES, AUTH_EMAIL_OTP_MOCKED };
+
+export const AUTH_SIGNUP_ENABLED = isAuthSignupEnabled({
+  isDemo: envClient.VITE_IS_DEMO,
+});

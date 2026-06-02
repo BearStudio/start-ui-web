@@ -94,7 +94,7 @@ function getOk<TOutcome extends { type: string }>(
 describe('book use cases', () => {
   it('lists books and returns forbidden when permission is missing', async () => {
     const listed = await createBookUseCases(makeDeps()).list({
-      scope,
+      currentUserId: scope.userId,
       limit: 20,
       searchTerm: '',
     });
@@ -107,7 +107,7 @@ describe('book use cases', () => {
     const denied = await createBookUseCases(
       makeDeps({ permissionChecker: forbidden })
     ).list({
-      scope,
+      currentUserId: scope.userId,
       limit: 20,
       searchTerm: '',
     });
@@ -122,7 +122,7 @@ describe('book use cases', () => {
           getById: async () => Result.Ok({ type: 'book_not_found' }),
         }),
       })
-    ).get({ scope, id: toBookId('missing') });
+    ).get({ currentUserId: scope.userId, id: toBookId('missing') });
 
     expect(getOk(missing)).toEqual({ type: 'book_not_found' });
   });
@@ -133,7 +133,7 @@ describe('book use cases', () => {
     });
 
     const created = await createBookUseCases(makeDeps()).create({
-      scope,
+      currentUserId: scope.userId,
       book,
     });
     expect(getOk(created)).toEqual({ type: 'book_created', book });
@@ -141,7 +141,7 @@ describe('book use cases', () => {
     const duplicate = await createBookUseCases(
       makeDeps({ bookRepository: duplicateRepo })
     ).create({
-      scope,
+      currentUserId: scope.userId,
       book,
     });
 
@@ -163,7 +163,7 @@ describe('book use cases', () => {
     );
 
     const updated = await useCases.update({
-      scope,
+      currentUserId: scope.userId,
       id: toBookId('missing'),
       book,
     });
@@ -171,7 +171,7 @@ describe('book use cases', () => {
     expect(getOk(updated)).toEqual({ type: 'book_not_found' });
     expect(transactionRuns).toBe(1);
     const deleted = await useCases.delete({
-      scope,
+      currentUserId: scope.userId,
       id: toBookId('missing'),
     });
 
@@ -196,7 +196,7 @@ describe('book use cases', () => {
     });
 
     const updated = await useCases.update({
-      scope,
+      currentUserId: scope.userId,
       id: toBookId('book-1'),
       book,
     });
@@ -206,7 +206,7 @@ describe('book use cases', () => {
 
   it('prepares cover uploads through permission and object-key policy', async () => {
     const prepared = await createBookUseCases(makeDeps()).prepareCoverUpload({
-      scope,
+      currentUserId: scope.userId,
       fileType: 'image/webp',
     });
     expect(getOk(prepared)).toEqual({
@@ -216,11 +216,14 @@ describe('book use cases', () => {
 
     const denied = await createBookUseCases(
       makeDeps({ permissionChecker: forbidden })
-    ).prepareCoverUpload({ scope, fileType: 'image/webp' });
+    ).prepareCoverUpload({
+      currentUserId: scope.userId,
+      fileType: 'image/webp',
+    });
     expect(getOk(denied)).toEqual({ type: 'book_cover_upload_forbidden' });
 
     const invalid = await createBookUseCases(makeDeps()).prepareCoverUpload({
-      scope,
+      currentUserId: scope.userId,
       fileType: 'text/plain',
     });
     expect(getOk(invalid)).toEqual({

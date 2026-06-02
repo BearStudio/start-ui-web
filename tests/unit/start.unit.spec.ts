@@ -61,6 +61,13 @@ describe('TanStack Start instance', () => {
       shouldProtectBrowserMutation({
         handlerType: 'router',
         method: 'POST',
+        pathname: '/api/telemetry/otel/v1/traces',
+      })
+    ).toBe(true);
+    expect(
+      shouldProtectBrowserMutation({
+        handlerType: 'router',
+        method: 'POST',
         pathname: '/api/webhooks/resend',
       })
     ).toBe(false);

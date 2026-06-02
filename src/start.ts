@@ -36,13 +36,18 @@ const getCspNonceFromContext = (context: unknown) => {
   return typeof cspNonce === 'string' ? cspNonce : undefined;
 };
 
-const getSecurityHeaderOptions = (context?: unknown) => ({
-  baseUrl: envClient.VITE_BASE_URL,
-  cspNonce: getCspNonceFromContext(context),
-  isProduction: import.meta.env.PROD,
-  s3BucketPublicUrl: envClient.VITE_S3_BUCKET_PUBLIC_URL,
-  sentryDsn: envClient.VITE_SENTRY_DSN,
-});
+const getSecurityHeaderOptions = (context?: unknown) => {
+  const isTestRuntime = envClient.VITE_ENV_NAME === 'tests';
+
+  return {
+    allowDevServerCspRelaxations: isTestRuntime,
+    allowPlaywrightScreenshotStyles: isTestRuntime,
+    baseUrl: envClient.VITE_BASE_URL,
+    cspNonce: getCspNonceFromContext(context),
+    isProduction: import.meta.env.PROD,
+    s3BucketPublicUrl: envClient.VITE_S3_BUCKET_PUBLIC_URL,
+  };
+};
 
 const applyAppSecurityHeaders = (response: Response, context?: unknown) =>
   applySecurityHeaders(response, getSecurityHeaderOptions(context));

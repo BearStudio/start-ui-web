@@ -45,7 +45,7 @@ describe('book HTTP transport handlers', () => {
     ).resolves.toEqual({ items: [], total: 0 });
 
     expect(list).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       cursor: toBookId('book-1'),
       limit: 7,
       searchTerm: 'dune',
@@ -78,7 +78,7 @@ describe('book HTTP transport handlers', () => {
     ).resolves.toEqual({ id: toBookId('book-1') });
 
     expect(create).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       book: {
         title: 'Dune',
         author: 'Frank Herbert',

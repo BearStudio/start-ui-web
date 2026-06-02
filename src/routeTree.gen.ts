@@ -29,6 +29,8 @@ import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
 import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
 import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
 import { Route as ApiWebhooksResendRouteImport } from './routes/api/webhooks.resend'
+import { Route as ApiTelemetrySentryTunnelRouteImport } from './routes/api/telemetry.sentry-tunnel'
+import { Route as ApiTelemetryLogsRouteImport } from './routes/api/telemetry.logs'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
@@ -38,6 +40,8 @@ import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.inde
 import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
 import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
+import { Route as ApiTelemetryOtelV1TracesRouteImport } from './routes/api/telemetry.otel.v1.traces'
+import { Route as ApiTelemetryOtelV1MetricsRouteImport } from './routes/api/telemetry.otel.v1.metrics'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -139,6 +143,17 @@ const ApiWebhooksResendRoute = ApiWebhooksResendRouteImport.update({
   path: '/api/webhooks/resend',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTelemetrySentryTunnelRoute =
+  ApiTelemetrySentryTunnelRouteImport.update({
+    id: '/api/telemetry/sentry-tunnel',
+    path: '/api/telemetry/sentry-tunnel',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiTelemetryLogsRoute = ApiTelemetryLogsRouteImport.update({
+  id: '/api/telemetry/logs',
+  path: '/api/telemetry/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -186,6 +201,18 @@ const ManagerBooksIdUpdateIndexRoute =
     path: '/books/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const ApiTelemetryOtelV1TracesRoute =
+  ApiTelemetryOtelV1TracesRouteImport.update({
+    id: '/api/telemetry/otel/v1/traces',
+    path: '/api/telemetry/otel/v1/traces',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiTelemetryOtelV1MetricsRoute =
+  ApiTelemetryOtelV1MetricsRouteImport.update({
+    id: '/api/telemetry/otel/v1/metrics',
+    path: '/api/telemetry/otel/v1/metrics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -200,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/manager/': typeof ManagerIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/telemetry/logs': typeof ApiTelemetryLogsRoute
+  '/api/telemetry/sentry-tunnel': typeof ApiTelemetrySentryTunnelRoute
   '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
@@ -215,6 +244,8 @@ export interface FileRoutesByFullPath {
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
+  '/api/telemetry/otel/v1/metrics': typeof ApiTelemetryOtelV1MetricsRoute
+  '/api/telemetry/otel/v1/traces': typeof ApiTelemetryOtelV1TracesRoute
   '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -227,6 +258,8 @@ export interface FileRoutesByTo {
   '/manager': typeof ManagerIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/telemetry/logs': typeof ApiTelemetryLogsRoute
+  '/api/telemetry/sentry-tunnel': typeof ApiTelemetrySentryTunnelRoute
   '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account': typeof AppAccountIndexRoute
   '/app/books': typeof AppBooksIndexRoute
@@ -242,6 +275,8 @@ export interface FileRoutesByTo {
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
+  '/api/telemetry/otel/v1/metrics': typeof ApiTelemetryOtelV1MetricsRoute
+  '/api/telemetry/otel/v1/traces': typeof ApiTelemetryOtelV1TracesRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -259,6 +294,8 @@ export interface FileRoutesById {
   '/manager/': typeof ManagerIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/telemetry/logs': typeof ApiTelemetryLogsRoute
+  '/api/telemetry/sentry-tunnel': typeof ApiTelemetrySentryTunnelRoute
   '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/app/account/': typeof AppAccountIndexRoute
   '/app/books/': typeof AppBooksIndexRoute
@@ -274,6 +311,8 @@ export interface FileRoutesById {
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
+  '/api/telemetry/otel/v1/metrics': typeof ApiTelemetryOtelV1MetricsRoute
+  '/api/telemetry/otel/v1/traces': typeof ApiTelemetryOtelV1TracesRoute
   '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -292,6 +331,8 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/onboarding/'
     | '/api/auth/$'
+    | '/api/telemetry/logs'
+    | '/api/telemetry/sentry-tunnel'
     | '/api/webhooks/resend'
     | '/app/account/'
     | '/app/books/'
@@ -307,6 +348,8 @@ export interface FileRouteTypes {
     | '/manager/books/new/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
+    | '/api/telemetry/otel/v1/metrics'
+    | '/api/telemetry/otel/v1/traces'
     | '/manager/books/$id/update/'
     | '/manager/users/$id/update/'
   fileRoutesByTo: FileRoutesByTo
@@ -319,6 +362,8 @@ export interface FileRouteTypes {
     | '/manager'
     | '/onboarding'
     | '/api/auth/$'
+    | '/api/telemetry/logs'
+    | '/api/telemetry/sentry-tunnel'
     | '/api/webhooks/resend'
     | '/app/account'
     | '/app/books'
@@ -334,6 +379,8 @@ export interface FileRouteTypes {
     | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
+    | '/api/telemetry/otel/v1/metrics'
+    | '/api/telemetry/otel/v1/traces'
     | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   id:
@@ -350,6 +397,8 @@ export interface FileRouteTypes {
     | '/manager/'
     | '/onboarding/'
     | '/api/auth/$'
+    | '/api/telemetry/logs'
+    | '/api/telemetry/sentry-tunnel'
     | '/api/webhooks/resend'
     | '/app/account/'
     | '/app/books/'
@@ -365,6 +414,8 @@ export interface FileRouteTypes {
     | '/manager/books/new/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
+    | '/api/telemetry/otel/v1/metrics'
+    | '/api/telemetry/otel/v1/traces'
     | '/manager/books/$id/update/'
     | '/manager/users/$id/update/'
   fileRoutesById: FileRoutesById
@@ -378,8 +429,12 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   ApiUploadRoute: typeof ApiUploadRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiTelemetryLogsRoute: typeof ApiTelemetryLogsRoute
+  ApiTelemetrySentryTunnelRoute: typeof ApiTelemetrySentryTunnelRoute
   ApiWebhooksResendRoute: typeof ApiWebhooksResendRoute
   ApiDevEmailTemplateRoute: typeof ApiDevEmailTemplateRoute
+  ApiTelemetryOtelV1MetricsRoute: typeof ApiTelemetryOtelV1MetricsRoute
+  ApiTelemetryOtelV1TracesRoute: typeof ApiTelemetryOtelV1TracesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -524,6 +579,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWebhooksResendRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/telemetry/sentry-tunnel': {
+      id: '/api/telemetry/sentry-tunnel'
+      path: '/api/telemetry/sentry-tunnel'
+      fullPath: '/api/telemetry/sentry-tunnel'
+      preLoaderRoute: typeof ApiTelemetrySentryTunnelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/telemetry/logs': {
+      id: '/api/telemetry/logs'
+      path: '/api/telemetry/logs'
+      fullPath: '/api/telemetry/logs'
+      preLoaderRoute: typeof ApiTelemetryLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -586,6 +655,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/manager/books/$id/update/'
       preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
+    }
+    '/api/telemetry/otel/v1/traces': {
+      id: '/api/telemetry/otel/v1/traces'
+      path: '/api/telemetry/otel/v1/traces'
+      fullPath: '/api/telemetry/otel/v1/traces'
+      preLoaderRoute: typeof ApiTelemetryOtelV1TracesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/telemetry/otel/v1/metrics': {
+      id: '/api/telemetry/otel/v1/metrics'
+      path: '/api/telemetry/otel/v1/metrics'
+      fullPath: '/api/telemetry/otel/v1/metrics'
+      preLoaderRoute: typeof ApiTelemetryOtelV1MetricsRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -677,8 +760,12 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   ApiUploadRoute: ApiUploadRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiTelemetryLogsRoute: ApiTelemetryLogsRoute,
+  ApiTelemetrySentryTunnelRoute: ApiTelemetrySentryTunnelRoute,
   ApiWebhooksResendRoute: ApiWebhooksResendRoute,
   ApiDevEmailTemplateRoute: ApiDevEmailTemplateRoute,
+  ApiTelemetryOtelV1MetricsRoute: ApiTelemetryOtelV1MetricsRoute,
+  ApiTelemetryOtelV1TracesRoute: ApiTelemetryOtelV1TracesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

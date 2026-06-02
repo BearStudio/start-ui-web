@@ -6,16 +6,26 @@ import {
 
 import type { ScopeKey } from '@/modules/kernel/domain/ids';
 import { toScopeKey } from '@/modules/kernel/domain/ids';
+import { observeQueryOperation } from '@/platform/lib/tanstack-query/observability';
 
-import type { CurrentSession } from '../domain/request-scope';
+import type { CurrentSession } from '@/modules/auth';
 import { authServerFunctions } from '../server';
 
+const currentSessionQueryKey = [...authQueriesAll(), 'currentSession'] as const;
+
+function authQueriesAll() {
+  return ['auth'] as const;
+}
+
 export const authQueries = {
-  all: () => ['auth'] as const,
+  all: authQueriesAll,
   currentSession: () =>
     queryOptions({
-      queryKey: [...authQueries.all(), 'currentSession'] as const,
-      queryFn: () => authServerFunctions.currentSession(),
+      queryKey: currentSessionQueryKey,
+      queryFn: () =>
+        observeQueryOperation(currentSessionQueryKey, 'query', () =>
+          authServerFunctions.currentSession()
+        ),
     }),
 };
 

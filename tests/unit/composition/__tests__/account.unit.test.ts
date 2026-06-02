@@ -64,7 +64,7 @@ describe('account composition', () => {
     });
 
     const result = await useCases.updateInfo({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: 'Updated User',
     });
 

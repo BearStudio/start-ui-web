@@ -1,9 +1,18 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createAppQueryClient,
   shouldRetryQuery,
 } from '@/platform/lib/tanstack-query/query-client';
+import {
+  createNoOpTelemetry,
+  setTelemetry,
+  type TelemetryAdapter,
+} from '@/platform/telemetry';
+
+afterEach(() => {
+  setTelemetry(createNoOpTelemetry());
+});
 
 describe('createAppQueryClient', () => {
   it('sets bounded query and mutation defaults', () => {
@@ -15,6 +24,44 @@ describe('createAppQueryClient', () => {
     expect(queryDefaults?.staleTime).toBe(60_000);
     expect(queryDefaults?.retry).toBe(shouldRetryQuery);
     expect(mutationDefaults?.retry).toBe(0);
+  });
+
+  it('records query and mutation cache telemetry callbacks', async () => {
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(),
+    };
+    setTelemetry(telemetry);
+    const client = createAppQueryClient();
+
+    await client.fetchQuery({
+      queryFn: async () => 'ok',
+      queryKey: ['book', 'getAll'] as const,
+    });
+    const mutation = client.getMutationCache().build(client, {
+      mutationFn: async () => 'ok',
+      mutationKey: ['book', 'create'] as const,
+    });
+    await mutation.execute(undefined);
+
+    expect(telemetry.recordMetric).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: expect.objectContaining({
+          'operation.name': 'book.getAll',
+          status: 'success',
+        }),
+        name: 'app.query.cache.event',
+      })
+    );
+    expect(telemetry.recordMetric).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: expect.objectContaining({
+          'operation.name': 'book.create',
+          status: 'success',
+        }),
+        name: 'app.query.cache.event',
+      })
+    );
   });
 });
 

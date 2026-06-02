@@ -70,6 +70,24 @@ const clientSchema = () =>
       .min(0)
       .max(1)
       .prefault(isProd() ? 0.1 : 1),
+    VITE_OTEL_BROWSER_ENABLED: z
+      .enum(['true', 'false'])
+      .optional()
+      .prefault('true')
+      .transform((value) => value === 'true'),
+    VITE_OTEL_SERVICE_NAME: z.string().optional().prefault('start-ui-web'),
+    VITE_OTEL_SERVICE_VERSION: z.string().optional(),
+    VITE_OTEL_ENVIRONMENT: z.string().optional(),
+    VITE_OTEL_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).prefault(1),
+    VITE_TELEMETRY_DEBUG_RAW_VALUES: z
+      .enum(['true', 'false'])
+      .optional()
+      .prefault('false')
+      .transform((value) => value === 'true'),
+    VITE_SENTRY_TUNNEL_PATH: z
+      .string()
+      .optional()
+      .prefault('/api/telemetry/sentry-tunnel'),
   });
 
 export type EnvClient = z.infer<ReturnType<typeof clientSchema>>;

@@ -19,7 +19,7 @@ vi.mock('@/platform/lib/i18n', () => ({
   },
 }));
 
-describe('AuthEmailPortResend', () => {
+describe('AuthEmailPortEmailGateway', () => {
   it('sends OTP emails through EmailGateway with deterministic hashed idempotency keys', async () => {
     const sendEmail = vi.fn(async () =>
       Result.Ok({
@@ -29,10 +29,10 @@ describe('AuthEmailPortResend', () => {
       })
     );
     const gateway = { sendEmail } satisfies EmailGateway;
-    const { AuthEmailPortResend } =
-      await import('@/modules/auth/infrastructure/better-auth/auth-email-port-resend');
+    const { AuthEmailPortEmailGateway } =
+      await import('@/composition/auth-email-port');
 
-    const result = await new AuthEmailPortResend(gateway).sendSignInOtp({
+    const result = await new AuthEmailPortEmailGateway(gateway).sendSignInOtp({
       email: toEmailAddress(' User@Example.com '),
       otp: toOtpCode('123456'),
       language: toLanguageCode('en'),
@@ -73,10 +73,10 @@ describe('AuthEmailPortResend', () => {
     });
     const sendEmail = vi.fn(async () => Result.Error(error));
     const gateway = { sendEmail } satisfies EmailGateway;
-    const { AuthEmailPortResend } =
-      await import('@/modules/auth/infrastructure/better-auth/auth-email-port-resend');
+    const { AuthEmailPortEmailGateway } =
+      await import('@/composition/auth-email-port');
 
-    const result = await new AuthEmailPortResend(gateway).sendSignInOtp({
+    const result = await new AuthEmailPortEmailGateway(gateway).sendSignInOtp({
       email: toEmailAddress('user@example.com'),
       otp: toOtpCode('123456'),
       language: toLanguageCode('en'),

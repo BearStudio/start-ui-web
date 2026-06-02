@@ -4,9 +4,10 @@ import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { toScopeKey, toUserId } from '@/modules/kernel';
 import { userQueries } from '@/modules/user/client';
 import { PageUser } from '@/modules/user/presentation';
+import { observedLoader } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/manager/users/$id/')({
-  loader: ({ context, params }) => {
+  loader: observedLoader('/manager/users/$id/', ({ context, params }) => {
     if (isForbiddenRouteContext(context)) return undefined;
 
     return context.queryClient.ensureQueryData(
@@ -15,7 +16,7 @@ export const Route = createFileRoute('/manager/users/$id/')({
         scopeKey: toScopeKey(context.scopeKey),
       })
     );
-  },
+  }),
   component: RouteComponent,
 });
 

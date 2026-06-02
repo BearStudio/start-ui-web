@@ -1,6 +1,6 @@
 import { Result } from '@swan-io/boxed';
 
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
+import type { UserId } from '@/modules/kernel/domain/ids';
 
 import type {
   BookCoverUploadOutcome,
@@ -10,7 +10,7 @@ import type {
 import { createBookCoverObjectKey } from '../../domain/book-policy';
 
 export type PrepareBookCoverUploadInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   fileType: string;
 };
 
@@ -18,11 +18,10 @@ export async function prepareBookCoverUpload(
   deps: BookUseCaseDeps,
   input: PrepareBookCoverUploadInput
 ): Promise<BookResult<BookCoverUploadOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { book: ['create', 'update'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { book: ['create', 'update'] }
+  );
   if (allowed.isError()) return Result.Error(allowed.getError());
   if (allowed.get().type === 'permission_denied') {
     return Result.Ok({ type: 'book_cover_upload_forbidden' });

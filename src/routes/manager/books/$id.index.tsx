@@ -4,9 +4,10 @@ import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { bookQueries } from '@/modules/book/client';
 import { ManagerPageBook as PageBook } from '@/modules/book/presentation';
 import { toBookId, toScopeKey } from '@/modules/kernel';
+import { observedLoader } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/manager/books/$id/')({
-  loader: ({ context, params }) => {
+  loader: observedLoader('/manager/books/$id/', ({ context, params }) => {
     if (isForbiddenRouteContext(context)) return undefined;
 
     return context.queryClient.ensureQueryData(
@@ -15,7 +16,7 @@ export const Route = createFileRoute('/manager/books/$id/')({
         scopeKey: toScopeKey(context.scopeKey),
       })
     );
-  },
+  }),
   component: RouteComponent,
 });
 

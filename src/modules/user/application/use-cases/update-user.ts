@@ -1,11 +1,6 @@
 import { Result } from '@swan-io/boxed';
 import { match, P } from 'ts-pattern';
 
-import {
-  hasScopePermission,
-  type RequestScope,
-  scopeUserId,
-} from '@/modules/auth';
 import type { UserId } from '@/modules/kernel/domain/ids';
 
 import type { UserResult, UserUpdateOutcome, UserUseCaseDeps } from './types';
@@ -14,7 +9,7 @@ import { shouldUnverifyEmail } from '../../domain/user';
 import { canChangeRole } from '../../domain/user-policy';
 
 export type UpdateUserInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   id: UserId;
   user: UserUpdateInput;
 };
@@ -23,12 +18,10 @@ export async function updateUser(
   deps: UserUseCaseDeps,
   input: UpdateUserInput
 ): Promise<UserResult<UserUpdateOutcome>> {
-  const currentUserId = scopeUserId(input.scope);
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { user: ['update'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { user: ['update'] }
+  );
   const permission = match(allowed)
     .with(Result.P.Error(P.select()), (error) => ({
       type: 'error' as const,
@@ -72,21 +65,22 @@ export async function updateUser(
   const current = currentSnapshot.snapshot;
 
   const nextRole =
-    currentUserId === input.id ? undefined : (input.user.role ?? undefined);
+    input.currentUserId === input.id
+      ? undefined
+      : (input.user.role ?? undefined);
 
   if (
     canChangeRole({
-      currentUserId,
+      currentUserId: input.currentUserId,
       userId: input.id,
       nextRole,
       currentRole: current.role,
     })
   ) {
-    const canSetRole = await hasScopePermission({
-      permissionChecker: deps.permissionChecker,
-      scope: input.scope,
-      permissions: { user: ['set-role'] },
-    });
+    const canSetRole = await deps.permissionChecker.hasPermission(
+      input.currentUserId,
+      { user: ['set-role'] }
+    );
     const setRolePermission = match(canSetRole)
       .with(Result.P.Error(P.select()), (error) => ({
         type: 'error' as const,

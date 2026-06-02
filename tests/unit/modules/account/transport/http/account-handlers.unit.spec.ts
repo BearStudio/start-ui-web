@@ -27,7 +27,7 @@ describe('account HTTP transport handlers', () => {
     );
 
     expect(updateInfo).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       name: 'Acme',
     });
   });

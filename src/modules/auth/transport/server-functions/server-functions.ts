@@ -1,5 +1,7 @@
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start';
 
+import { getTelemetry } from '@/platform/telemetry';
+
 import {
   type AuthHandlers,
   createAuthHandlers,
@@ -38,7 +40,17 @@ export const currentSession = createServerFn({ method: 'GET' }).handler(
     const { handlers, serverContextTools } = await getCurrentSessionDeps();
 
     return serverContextTools.withPublicContext(async (ctx) =>
-      handlers.currentSession(ctx)
+      getTelemetry().startSpan(
+        {
+          attributes: {
+            'operation.name': 'auth.currentSession',
+            'operation.type': 'server_function',
+          },
+          name: 'auth.currentSession',
+          op: 'server.function',
+        },
+        () => handlers.currentSession(ctx)
+      )
     );
   }
 );

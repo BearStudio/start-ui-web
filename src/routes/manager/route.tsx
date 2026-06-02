@@ -8,14 +8,17 @@ import {
   requireAuthenticatedRouteOrForbidden,
 } from '@/modules/auth/presentation';
 import { ManagerLayout as Layout } from '@/app/shell/presentation';
+import { observeBeforeLoad } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/manager')({
   beforeLoad: ({ context, location }) =>
-    requireAuthenticatedRouteOrForbidden({
-      context,
-      location,
-      permissionApps: ['manager'],
-    }),
+    observeBeforeLoad('/manager', () =>
+      requireAuthenticatedRouteOrForbidden({
+        context,
+        location,
+        permissionApps: ['manager'],
+      })
+    ),
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
   errorComponent: ({ error }) =>

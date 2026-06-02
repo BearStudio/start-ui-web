@@ -121,7 +121,7 @@ describe('user composition', () => {
     });
 
     const result = await useCases.list({
-      scope: scope('admin-1'),
+      currentUserId: scope('admin-1').userId,
       limit: 20,
       searchTerm: 'user',
     });

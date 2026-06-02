@@ -60,8 +60,6 @@ const sessionRevokePermission = {
   session: ['revoke'],
 } as const satisfies PermissionRequest;
 
-const scope = (id: string) => ({ userId: toUserId(id), role: 'user' }) as const;
-
 function samePermissionRequest(
   expected: PermissionRequest,
   actual: PermissionRequest
@@ -258,7 +256,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.list({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             cursor,
             limit: 20,
             searchTerm: 'alice',
@@ -289,7 +287,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.list({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             limit: 20,
             searchTerm: '',
           })
@@ -308,7 +306,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.get({ scope: scope('admin-1'), id: userId }))
+        expectOk(useCases.get({ currentUserId: adminId, id: userId }))
       ).resolves.toEqual({ type: 'user_found', user });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
@@ -328,7 +326,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.get({ scope: scope('admin-1'), id: userId }))
+        expectOk(useCases.get({ currentUserId: adminId, id: userId }))
       ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(repo.getById).not.toHaveBeenCalled();
@@ -347,7 +345,7 @@ describe('user use cases', () => {
 
       await expect(
         expectOk(
-          useCases.get({ scope: scope('admin-1'), id: toUserId('missing') })
+          useCases.get({ currentUserId: adminId, id: toUserId('missing') })
         )
       ).resolves.toEqual({ type: 'user_not_found' });
     });
@@ -365,7 +363,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.create({ scope: scope('admin-1'), user: input }))
+        expectOk(useCases.create({ currentUserId: adminId, user: input }))
       ).resolves.toMatchObject({
         type: 'user_created',
         user: {
@@ -391,7 +389,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.create({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             user: { email: toEmailAddress('new@example.com'), role: 'user' },
           })
         )
@@ -414,7 +412,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.create({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             user: { email: toEmailAddress('user@example.com'), role: 'user' },
           })
         )
@@ -434,7 +432,7 @@ describe('user use cases', () => {
       await expect(
         expectFailure(
           useCases.create({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             user: { email: toEmailAddress('user@example.com'), role: 'user' },
           })
         )
@@ -451,7 +449,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: toEmailAddress('next@example.com') },
           })
@@ -475,7 +473,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: toUserId('missing'),
             user: { email: toEmailAddress('next@example.com') },
           })
@@ -494,7 +492,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('user-1'),
+            currentUserId: userId,
             id: userId,
             user: { email: nextEmail, role: 'admin' },
           })
@@ -543,7 +541,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: {
               name: 'Updated User',
@@ -595,7 +593,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: user.email, role: 'admin' },
           })
@@ -626,7 +624,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: user.email, role: 'user' },
           })
@@ -664,7 +662,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { name: null, email: user.email },
           })
@@ -695,7 +693,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: user.email },
           })
@@ -716,7 +714,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: toEmailAddress('duplicate@example.com') },
           })
@@ -737,7 +735,7 @@ describe('user use cases', () => {
       await expect(
         expectFailure(
           useCases.update({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             id: userId,
             user: { email: toEmailAddress('duplicate@example.com') },
           })
@@ -753,7 +751,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.delete({ scope: scope('admin-1'), id: userId }))
+        expectOk(useCases.delete({ currentUserId: adminId, id: userId }))
       ).resolves.toEqual({ type: 'user_deleted' });
 
       expect(permissionChecker.hasPermission).toHaveBeenCalledWith(
@@ -773,7 +771,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.delete({ scope: scope('admin-1'), id: userId }))
+        expectOk(useCases.delete({ currentUserId: adminId, id: userId }))
       ).resolves.toEqual({ type: 'user_forbidden' });
 
       expect(auth.removeUser).not.toHaveBeenCalled();
@@ -786,7 +784,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(useCases.delete({ scope: scope('user-1'), id: userId }))
+        expectOk(useCases.delete({ currentUserId: userId, id: userId }))
       ).resolves.toEqual({ type: 'user_self' });
 
       expect(auth.removeUser).not.toHaveBeenCalled();
@@ -810,7 +808,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectFailure(useCases.delete({ scope: scope('admin-1'), id: userId }))
+        expectFailure(useCases.delete({ currentUserId: adminId, id: userId }))
       ).resolves.toMatchObject({
         code: 'USER_DELETE_FAILED',
         message: 'Failed to delete user',
@@ -828,7 +826,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.listSessions({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             userId,
             cursor,
             limit: 10,
@@ -874,7 +872,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.listSessions({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             userId,
             limit: 10,
           })
@@ -894,7 +892,7 @@ describe('user use cases', () => {
 
       await expect(
         expectOk(
-          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+          useCases.revokeSessions({ currentUserId: adminId, id: userId })
         )
       ).resolves.toEqual({ type: 'user_sessions_revoked' });
 
@@ -912,7 +910,7 @@ describe('user use cases', () => {
 
       await expect(
         expectOk(
-          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+          useCases.revokeSessions({ currentUserId: adminId, id: userId })
         )
       ).resolves.toEqual({ type: 'user_forbidden' });
 
@@ -925,9 +923,7 @@ describe('user use cases', () => {
       });
 
       await expect(
-        expectOk(
-          useCases.revokeSessions({ scope: scope('user-1'), id: userId })
-        )
+        expectOk(useCases.revokeSessions({ currentUserId: userId, id: userId }))
       ).resolves.toEqual({ type: 'user_self' });
 
       expect(auth.revokeUserSessions).not.toHaveBeenCalled();
@@ -953,7 +949,7 @@ describe('user use cases', () => {
 
       await expect(
         expectFailure(
-          useCases.revokeSessions({ scope: scope('admin-1'), id: userId })
+          useCases.revokeSessions({ currentUserId: adminId, id: userId })
         )
       ).resolves.toMatchObject({
         code: 'USER_SESSIONS_REVOKE_FAILED',
@@ -971,7 +967,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.revokeSession({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             currentSessionId,
             id: userId,
             sessionId: targetSessionId,
@@ -1001,7 +997,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.revokeSession({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             currentSessionId,
             id: userId,
             sessionId: targetSessionId,
@@ -1026,7 +1022,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.revokeSession({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             currentSessionId,
             id: userId,
             sessionId: targetSessionId,
@@ -1045,7 +1041,7 @@ describe('user use cases', () => {
       await expect(
         expectOk(
           useCases.revokeSession({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             currentSessionId: targetSessionId,
             id: userId,
             sessionId: targetSessionId,
@@ -1077,7 +1073,7 @@ describe('user use cases', () => {
       await expect(
         expectFailure(
           useCases.revokeSession({
-            scope: scope('admin-1'),
+            currentUserId: adminId,
             currentSessionId,
             id: userId,
             sessionId: targetSessionId,

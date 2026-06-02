@@ -54,11 +54,11 @@ describe('account use cases', () => {
     });
 
     const submitted = await useCases.submitOnboarding({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: ' User ',
     });
     const updated = await useCases.updateInfo({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: 'User',
     });
 
@@ -84,11 +84,11 @@ describe('account use cases', () => {
     });
 
     const submitted = await useCases.submitOnboarding({
-      scope: scope('missing'),
+      currentUserId: scope('missing').userId,
       name: 'User',
     });
     const updated = await useCases.updateInfo({
-      scope: scope('missing'),
+      currentUserId: scope('missing').userId,
       name: 'User',
     });
 
@@ -113,11 +113,11 @@ describe('account use cases', () => {
     });
 
     const submitted = await useCases.submitOnboarding({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: '   ',
     });
     const updated = await useCases.updateInfo({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: '   ',
     });
 
@@ -144,11 +144,11 @@ describe('account use cases', () => {
     });
 
     const submitted = await useCases.submitOnboarding({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: 'User',
     });
     const updated = await useCases.updateInfo({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       name: 'User',
     });
 

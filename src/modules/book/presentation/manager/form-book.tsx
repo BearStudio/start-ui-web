@@ -11,11 +11,11 @@ import {
 } from '@/platform/components/form';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
+import { bookCoverAcceptedFileTypes } from '@/modules/book';
 import { genreQueries } from '@/modules/genre/client';
 import { envClient } from '@/platform/env/client';
 
 import { type FormFieldsBook, zFormFieldsBook } from '../schema';
-import { bookCoverAcceptedFileTypes } from '../../domain/book-policy';
 
 type FormBookProps = {
   onDemoUploadBlocked?: () => void;

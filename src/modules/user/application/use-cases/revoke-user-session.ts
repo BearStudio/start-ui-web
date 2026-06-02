@@ -1,7 +1,6 @@
 import { Result } from '@swan-io/boxed';
 import { match, P } from 'ts-pattern';
 
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
 import type { SessionId, UserId } from '@/modules/kernel/domain/ids';
 
 import type {
@@ -11,7 +10,7 @@ import type {
 } from './types';
 
 export type RevokeUserSessionInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   currentSessionId: SessionId;
   id: UserId;
   sessionId: SessionId;
@@ -21,11 +20,10 @@ export async function revokeUserSession(
   deps: UserUseCaseDeps,
   input: RevokeUserSessionInput
 ): Promise<UserResult<UserRevokeSessionOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { session: ['revoke'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { session: ['revoke'] }
+  );
   const permission = match(allowed)
     .with(Result.P.Error(P.select()), (error) => ({
       type: 'error' as const,

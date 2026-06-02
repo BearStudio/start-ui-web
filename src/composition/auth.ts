@@ -10,13 +10,13 @@ import {
   type Auth,
   createAuth,
 } from '@/modules/auth/infrastructure/better-auth/auth';
-import { AuthEmailPortResend } from '@/modules/auth/infrastructure/better-auth/auth-email-port-resend';
 import { AuthorizationGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/authorization-gateway-better-auth';
 import { SessionGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/session-gateway-better-auth';
 import { UserAdminGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/user-admin-gateway-better-auth';
 import { ConfigurationError } from '@/modules/kernel/domain/errors/configuration-error';
 import { getAuthProviderConfig } from '@/modules/kernel/infrastructure/config/auth';
 
+import { AuthEmailPortEmailGateway } from './auth-email-port';
 import { getEmailGateway } from './email';
 import { createCachedFactory } from './shared/singleton';
 
@@ -36,7 +36,7 @@ type AuthHttpOverrides = AuthInstanceOverrides & {
 };
 
 const buildAuthEmailPort = (overrides?: AuthInstanceOverrides) =>
-  overrides?.authEmailPort ?? new AuthEmailPortResend(getEmailGateway());
+  overrides?.authEmailPort ?? new AuthEmailPortEmailGateway(getEmailGateway());
 
 const assertBetterAuthProvider = () => {
   const { provider } = getAuthProviderConfig();

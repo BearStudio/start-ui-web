@@ -7,7 +7,7 @@ import {
   useRouteContext,
   useRouter,
 } from '@tanstack/react-router';
-import { type ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getPageTitle } from '@/platform/lib/get-page-title';
@@ -26,28 +26,21 @@ import {
 import { initSsrApp } from '@/modules/kernel/server';
 import { createCspNonceBridgeScript } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
+import { observedLoader } from '@/platform/router/route-observability';
 import appCss from '@/platform/styles/app.css?url';
+import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  loader: async () => {
+  loader: observedLoader('__root__', async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
       const { language } = await initSsrApp();
       i18n.changeLanguage(language);
     }
     return null;
-  },
+  }),
   notFoundComponent: () => <PageError type="404" />,
-  errorComponent: ({ error }) => {
-    // Report the error to telemetry before rendering the boundary so route
-    // failures surface in Sentry instead of only printing client-side.
-    getTelemetry().captureException(error);
-    return (
-      <RootDocument>
-        <PageError type="error-boundary" />
-      </RootDocument>
-    );
-  },
+  errorComponent: ({ error }) => <RootErrorBoundary error={error} />,
   component: RootComponent,
   head: () => ({
     meta: [
@@ -96,6 +89,22 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     ],
   }),
 });
+
+function RootErrorBoundary({ error }: Readonly<{ error: unknown }>) {
+  useEffect(() => {
+    getTelemetry().captureException(error);
+    frontendLogger.error('route.error_boundary', {
+      error,
+      message: error instanceof Error ? error.message : 'Route error',
+    });
+  }, [error]);
+
+  return (
+    <RootDocument>
+      <PageError type="error-boundary" />
+    </RootDocument>
+  );
+}
 
 function RootComponent() {
   const { queryClient } = useRouteContext({ from: Route.id });

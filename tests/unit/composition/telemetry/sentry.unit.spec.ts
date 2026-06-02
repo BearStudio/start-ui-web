@@ -7,8 +7,10 @@ const sentryMocks = vi.hoisted(() => ({
 }));
 
 const envClientMock = vi.hoisted(() => ({
+  VITE_OTEL_BROWSER_ENABLED: false,
   VITE_SENTRY_DSN: '',
   VITE_SENTRY_ENVIRONMENT: undefined as string | undefined,
+  VITE_SENTRY_TUNNEL_PATH: '/api/telemetry/sentry-tunnel',
   VITE_SENTRY_TRACES_SAMPLE_RATE: 0,
 }));
 
@@ -29,6 +31,7 @@ describe('Sentry telemetry composition', () => {
     vi.resetModules();
     envClientMock.VITE_SENTRY_DSN = '';
     envClientMock.VITE_SENTRY_ENVIRONMENT = undefined;
+    envClientMock.VITE_SENTRY_TUNNEL_PATH = '/api/telemetry/sentry-tunnel';
     envClientMock.VITE_SENTRY_TRACES_SAMPLE_RATE = 0;
   });
 
@@ -44,22 +47,24 @@ describe('Sentry telemetry composition', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('keeps browser tracing when no router is provided', async () => {
+  it('configures browser Sentry for tunneled error capture without tracing', async () => {
     envClientMock.VITE_SENTRY_DSN = 'https://example.com/1';
     const { initTelemetryClient } =
       await import('@/composition/telemetry/sentry.client');
 
     initTelemetryClient();
 
-    expect(sentryMocks.browserTracingIntegration).toHaveBeenCalledTimes(1);
+    expect(sentryMocks.browserTracingIntegration).not.toHaveBeenCalled();
     expect(
       sentryMocks.tanstackRouterBrowserTracingIntegration
     ).not.toHaveBeenCalled();
     expect(sentryMocks.init).toHaveBeenCalledWith(
       expect.objectContaining({
         beforeSend: expect.any(Function),
-        integrations: ['browser-tracing'],
+        integrations: [],
         sendDefaultPii: false,
+        tracesSampleRate: 0,
+        tunnel: '/api/telemetry/sentry-tunnel',
       })
     );
   });

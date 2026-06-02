@@ -13,10 +13,34 @@ type BrowserIssue = {
 
 const allowedConsoleErrors = [
   /The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy\./,
+  /Firefox can’t establish a connection to the server at http:\/\/localhost:3000\/__tsd\/console-pipe\/sse\./,
 ] as const;
 
 const isAllowedConsoleError = (text: string) =>
   allowedConsoleErrors.some((pattern) => pattern.test(text));
+
+const allowedFirefoxViteDependencyLoadErrors = [
+  /^error loading dynamically imported module: http:\/\/localhost:3000\/node_modules\/\.vite\/deps\/react\.js\?/,
+] as const;
+
+const isAllowedPageError = (error: Error, projectName: string | undefined) => {
+  if (
+    projectName === 'webkit' &&
+    error.message === 'Importing a module script failed.' &&
+    (error.stack ?? '').includes(
+      'http://localhost:3000/@id/virtual:tanstack-start-dev-client-entry'
+    )
+  ) {
+    return true;
+  }
+
+  return (
+    projectName === 'firefox' &&
+    allowedFirefoxViteDependencyLoadErrors.some((pattern) =>
+      pattern.test(error.message)
+    )
+  );
+};
 
 const writeIssues = async (
   testInfo: TestInfo,
@@ -60,6 +84,10 @@ export function installConsoleErrorGuard(page: Page, testInfo: TestInfo) {
   });
 
   page.on('pageerror', (error) => {
+    if (isAllowedPageError(error, testInfo.project.name)) {
+      return;
+    }
+
     issues.push({
       at: new Date().toISOString(),
       kind: 'pageerror',

@@ -9,4 +9,14 @@ export const createNoOpTelemetry = (): TelemetryAdapter => ({
   captureException: () => {},
   setUser: () => {},
   startSpan: (_options, fn) => fn(),
+  startManualSpan: () => ({
+    addEvent: () => {},
+    end: () => {},
+    recordException: () => {},
+    setAttributes: () => {},
+    setStatus: () => {},
+  }),
+  currentCorrelation: () => ({}),
+  emitLog: () => {},
+  recordMetric: () => {},
 });

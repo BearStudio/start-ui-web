@@ -9,10 +9,11 @@ import {
 import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
 import { authQueries } from '@/modules/auth/client';
-import { isDevEnvironment } from '@/platform/env/config';
 import { createNoOpFlags } from '@/platform/flags';
 import { readCspNonceFromMeta } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
+import { attachRouterObservability } from '@/platform/router/observability';
+import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 import { routeTree } from './routeTree.gen';
 
@@ -34,11 +35,11 @@ const initTelemetryClientOnly = createClientOnlyFn(async (router: unknown) => {
 // wrong-side SDK is not bundled into each environment. Failure is non-fatal
 // (DSN may not be configured); the telemetry proxy falls back to a no-op
 // adapter so all call sites remain unconditional.
-if (import.meta.env.SSR) {
+const shouldAutoInitTelemetry = import.meta.env.MODE !== 'test';
+
+if (import.meta.env.SSR && shouldAutoInitTelemetry) {
   void initTelemetryServerOnly().catch((error: unknown) => {
-    if (isDevEnvironment()) {
-      console.warn('Telemetry init failed (non-fatal):', error);
-    }
+    frontendLogger.warn('telemetry.server_init_failed', { error });
   });
 } else {
   // Client telemetry needs the concrete router instance for Start router
@@ -96,11 +97,12 @@ export function getRouter() {
   });
 
   if (!import.meta.env.SSR) {
-    void initTelemetryClientOnly(router).catch((error: unknown) => {
-      if (isDevEnvironment()) {
-        console.warn('Telemetry init failed (non-fatal):', error);
-      }
-    });
+    attachRouterObservability(router);
+    if (shouldAutoInitTelemetry) {
+      void initTelemetryClientOnly(router).catch((error: unknown) => {
+        frontendLogger.warn('telemetry.client_init_failed', { error });
+      });
+    }
   }
 
   return router;

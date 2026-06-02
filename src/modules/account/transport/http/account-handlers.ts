@@ -27,7 +27,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
   ) => {
     await unwrapApplicationResult(
       getUseCases(ctx).submitOnboarding({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         name: data.name,
       }),
       accountReasonConfig
@@ -40,7 +40,7 @@ export const createAccountHandlers = ({ getUseCases }: AccountHandlerDeps) => {
   ) => {
     await unwrapApplicationResult(
       getUseCases(ctx).updateInfo({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         name: data.name,
       }),
       accountReasonConfig

@@ -10,11 +10,15 @@ import {
   toUserId,
 } from '@/modules/kernel/domain/ids';
 import { createPinoAppLogger } from '@/modules/kernel/infrastructure/logger/pino';
-import type { TelemetryAdapter } from '@/platform/telemetry';
+import {
+  createNoOpTelemetry,
+  type TelemetryAdapter,
+} from '@/platform/telemetry';
 
 vi.unmock('@/modules/kernel/infrastructure/logger/pino');
 
 const makeTelemetry = (): TelemetryAdapter => ({
+  ...createNoOpTelemetry(),
   captureException: vi.fn(),
   setUser: vi.fn(),
   startSpan: vi.fn((_options, fn) => fn()),

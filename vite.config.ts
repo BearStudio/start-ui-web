@@ -72,6 +72,8 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   const privateEnv = loadEnv(mode, process.cwd(), '');
+  const envName = env.VITE_ENV_NAME?.toLowerCase();
+  const isTestRuntime = envName === 'test' || envName === 'tests';
   const sentryPlugins =
     env.VITE_SENTRY_DSN &&
     privateEnv.SENTRY_ORG &&
@@ -85,6 +87,9 @@ export default defineConfig(({ mode }) => {
       : [];
 
   return {
+    build: {
+      target: 'baseline-widely-available',
+    },
     html: {
       cspNonce: CSP_NONCE_PLACEHOLDER,
     },
@@ -96,7 +101,7 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
-      devtools(),
+      ...(isTestRuntime ? [] : devtools()),
       srcJsonImportPlugin(),
       tanstackStart(),
       nitro(),

@@ -10,6 +10,7 @@ import {
 import { toUserId } from '@/modules/kernel';
 import { ServerFnError } from '@/modules/kernel/client';
 import { envClient } from '@/platform/env/client';
+import { createNoOpTelemetry } from '@/platform/telemetry';
 import {
   mockGetSession,
   mockLogger,
@@ -68,6 +69,7 @@ describe('server function middleware', () => {
 
   it('binds authenticated users through the telemetry adapter', async () => {
     const telemetry = {
+      ...createNoOpTelemetry(),
       captureException: vi.fn(),
       setUser: vi.fn(),
       startSpan: vi.fn((_options, fn) => fn()),

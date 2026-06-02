@@ -61,38 +61,44 @@ const runMutation = createServerFunctionInvoker({
 export const bookGetAll = createServerFn({ method: 'GET' })
   .inputValidator(zGetAllInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getAll(ctx, input)
+    runProtected.withOperation('book.getAll')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getAll(ctx, input)
     )
   );
 
 export const bookGetById = createServerFn({ method: 'GET' })
   .inputValidator(zGetByIdInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getById(ctx, input)
+    runProtected.withOperation('book.getById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getById(ctx, input)
     )
   );
 
 export const bookCreate = createServerFn({ method: 'POST' })
   .inputValidator(zCreateInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) => handlers.create(ctx, input))
+    runMutation.withOperation('book.create')(data, ({ handlers }, ctx, input) =>
+      handlers.create(ctx, input)
+    )
   );
 
 export const bookUpdateById = createServerFn({ method: 'POST' })
   .inputValidator(zUpdateByIdInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.updateById(ctx, input)
+    runMutation.withOperation('book.updateById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.updateById(ctx, input)
     )
   );
 
 export const bookDeleteById = createServerFn({ method: 'POST' })
   .inputValidator(zDeleteByIdInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.deleteById(ctx, input)
+    runMutation.withOperation('book.deleteById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.deleteById(ctx, input)
     )
   );
 

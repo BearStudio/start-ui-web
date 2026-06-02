@@ -8,8 +8,8 @@ import { match } from 'ts-pattern';
 import {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
+  isAuthSignupEnabled,
 } from '@/modules/auth';
-import { AUTH_SIGNUP_ENABLED } from '@/modules/auth/presentation/config';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import { DEMO_MODE_ERROR } from '@/modules/kernel/domain/errors/demo-mode';
 import {
@@ -50,6 +50,9 @@ export function createAuth(input?: Database | CreateAuthOptions) {
   const database = options.database ?? getDefaultDbClient();
   const authEmailPort = options.authEmailPort ?? missingAuthEmailPort;
   const authConfig = getBetterAuthConfig();
+  const authSignupEnabled = isAuthSignupEnabled({
+    isDemo: envClient.VITE_IS_DEMO,
+  });
 
   return betterAuth({
     secret: authConfig.secret,
@@ -89,7 +92,7 @@ export function createAuth(input?: Database | CreateAuthOptions) {
         enabled: !!(authConfig.githubClientId && authConfig.githubClientSecret),
         clientId: authConfig.githubClientId!,
         clientSecret: authConfig.githubClientSecret!,
-        disableImplicitSignUp: !AUTH_SIGNUP_ENABLED,
+        disableImplicitSignUp: !authSignupEnabled,
       },
     },
 
@@ -101,7 +104,7 @@ export function createAuth(input?: Database | CreateAuthOptions) {
         ...betterAuthPermissions,
       }),
       emailOTP({
-        disableSignUp: !AUTH_SIGNUP_ENABLED,
+        disableSignUp: !authSignupEnabled,
         expiresIn: AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES * 60,
         // Use predictable mocked code in dev and demo
         ...(envClient.DEV || envClient.VITE_IS_DEMO

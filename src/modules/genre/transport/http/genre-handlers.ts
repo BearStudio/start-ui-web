@@ -36,7 +36,7 @@ export const createGenreHandlers = ({ getUseCases }: GenreHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',

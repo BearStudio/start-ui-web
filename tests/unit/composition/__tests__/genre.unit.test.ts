@@ -70,7 +70,7 @@ describe('genre composition', () => {
     });
 
     const result = await useCases.list({
-      scope: scope('user-1'),
+      currentUserId: scope('user-1').userId,
       limit: 20,
       searchTerm: 'fic',
     });

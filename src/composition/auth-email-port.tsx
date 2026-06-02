@@ -3,17 +3,13 @@ import { createHash } from 'node:crypto';
 
 import i18n from '@/platform/lib/i18n';
 
+import type { AuthEmailPort, SendSignInOtpInput } from '@/modules/auth';
 import type { EmailGateway } from '@/modules/email';
 import { TemplateLoginCode } from '@/modules/email/presentation';
 import {
   toEmailIdempotencyKey,
   toEmailRecipientList,
 } from '@/modules/kernel/domain/ids';
-
-import type {
-  AuthEmailPort,
-  SendSignInOtpInput,
-} from '../../application/ports/auth-email-port';
 
 const signInOtpIdempotencyKey = (input: SendSignInOtpInput) => {
   const digest = createHash('sha256')
@@ -25,7 +21,7 @@ const signInOtpIdempotencyKey = (input: SendSignInOtpInput) => {
   return toEmailIdempotencyKey(`auth:sign-in-otp:v1:${digest}`);
 };
 
-export class AuthEmailPortResend implements AuthEmailPort {
+export class AuthEmailPortEmailGateway implements AuthEmailPort {
   constructor(private readonly emailGateway: EmailGateway) {}
 
   async sendSignInOtp(

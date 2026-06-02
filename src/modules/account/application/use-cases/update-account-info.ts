@@ -1,10 +1,6 @@
 import { Result } from '@swan-io/boxed';
 
-import {
-  hasScopePermission,
-  type RequestScope,
-  scopeUserId,
-} from '@/modules/auth';
+import type { UserId } from '@/modules/kernel/domain/ids';
 
 import type {
   AccountResult,
@@ -15,7 +11,7 @@ import { normalizeAccountName } from '../../domain/account';
 import { isAccountNamePresent } from '../../domain/account-policy';
 
 export type UpdateAccountInfoInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   name: string;
 };
 
@@ -23,11 +19,10 @@ export async function updateAccountInfo(
   deps: AccountUseCaseDeps,
   input: UpdateAccountInfoInput
 ): Promise<AccountResult<AccountUpdateOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { account: ['update'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { account: ['update'] }
+  );
   if (allowed.isError()) return Result.Error(allowed.getError());
   if (allowed.get().type === 'permission_denied') {
     return Result.Ok({ type: 'account_forbidden' });
@@ -37,12 +32,11 @@ export async function updateAccountInfo(
     return Result.Ok({ type: 'account_invalid' });
   }
 
-  const currentUserId = scopeUserId(input.scope);
   deps.logger.info({
     event: 'account.update_info',
-    userId: currentUserId,
+    userId: input.currentUserId,
   });
-  const result = await deps.accountRepository.updateInfo(currentUserId, {
+  const result = await deps.accountRepository.updateInfo(input.currentUserId, {
     name: normalizeAccountName(input.name),
   });
   if (result.isError()) return Result.Error(result.getError());

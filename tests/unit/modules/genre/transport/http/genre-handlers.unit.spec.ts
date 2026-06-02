@@ -42,7 +42,7 @@ describe('genre HTTP transport handlers', () => {
     );
 
     expect(list).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       cursor: toGenreId('genre-1'),
       limit: 3,
       searchTerm: 'sci-fi',

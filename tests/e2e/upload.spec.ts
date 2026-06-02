@@ -53,10 +53,10 @@ test.describe('Book cover uploads', () => {
     await page.route('**/books/e2e-cover.webp', async (route) => {
       await route.fulfill({
         body: Buffer.from(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+          'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
           'base64'
         ),
-        contentType: 'image/png',
+        contentType: 'image/webp',
         status: 200,
       });
     });

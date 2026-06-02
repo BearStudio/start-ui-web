@@ -768,6 +768,24 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: no-console-in-production-source
+    message: Use frontendLogger or the backend logger; console.* is allowed only in tests, fixtures, scripts, and localhost/debug diagnostics.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: '\bconsole\.(?:debug|error|info|log|trace|warn)\s*\('
+    paths:
+      include:
+        - src/**/*.ts
+        - src/**/*.tsx
+      exclude:
+        - '**/*.fixture.tsx'
+        - '**/*.unit.spec.ts'
+        - '**/*.unit.test.ts'
+        - '**/*.browser.spec.tsx'
+        - '**/*.integration.test.ts'
+        - 'src/app/build-info/infrastructure/generate-build-info.ts'
+        - 'src/modules/auth/presentation/e2e-debug.ts'
+
   - id: auth-diagnostics-no-sensitive-fields
     message: Auth diagnostics must not receive raw sensitive fields; omit them or log derived/redacted values.
     languages: [typescript]

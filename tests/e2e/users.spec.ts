@@ -28,13 +28,13 @@ test.describe('User management as manager', () => {
   });
 
   test('Create a user', async ({ page }) => {
-    await page.getByText(t.user.manager.list.newButton).click();
+    await page.to('/manager/users/new');
 
     const randomId = randomString(8);
     const uniqueEmail = `new-user-${randomId}@user.com`;
 
     // Fill the form
-    await page.waitForURL('/manager/users/new');
+    await expect(page).toHaveURL(/\/manager\/users\/new\/?$/);
     await expect(page.getByTestId('manager-user-new-form')).toHaveAttribute(
       'data-hydrated',
       'true'

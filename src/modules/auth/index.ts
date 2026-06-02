@@ -17,6 +17,7 @@ export type { AuthUseCaseDeps } from './application/use-cases/types';
 export {
   AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES,
   AUTH_EMAIL_OTP_MOCKED,
+  isAuthSignupEnabled,
 } from './domain/auth-policy';
 export {
   defaultUserPermissions,

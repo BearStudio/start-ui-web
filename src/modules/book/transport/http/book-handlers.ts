@@ -101,7 +101,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).list({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         cursor: data.cursor,
         limit: data.limit,
         searchTerm: data.searchTerm ?? '',
@@ -116,7 +116,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).get({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
       }),
       bookGetConfig
@@ -129,7 +129,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).create({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         book: {
           title: data.title,
           author: data.author,
@@ -148,7 +148,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).update({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
         book: {
           title: data.title,
@@ -168,7 +168,7 @@ export const createBookHandlers = ({ getUseCases }: BookHandlerDeps) => {
   ) => {
     return unwrapApplicationResult(
       getUseCases(ctx).delete({
-        scope: ctx.scope,
+        currentUserId: ctx.scope.userId,
         id: data.id,
       }),
       bookDeleteConfig

@@ -7,14 +7,17 @@ import {
   requireAuthenticatedRoute,
 } from '@/modules/auth/presentation';
 import { AppLayout as Layout } from '@/app/shell/presentation';
+import { observeBeforeLoad } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/app')({
   beforeLoad: ({ context, location }) =>
-    requireAuthenticatedRoute({
-      context,
-      location,
-      permissionApps: ['app'],
-    }),
+    observeBeforeLoad('/app', () =>
+      requireAuthenticatedRoute({
+        context,
+        location,
+        permissionApps: ['app'],
+      })
+    ),
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
   errorComponent: ({ error }) =>

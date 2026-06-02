@@ -1,8 +1,11 @@
+/* oxlint-disable @tanstack/query/exhaustive-deps */
 import {
   infiniteQueryOptions,
   type MutationOptions,
   queryOptions,
 } from '@tanstack/react-query';
+
+import { observeQueryOperation } from './observability';
 
 export type ScopedQueryInput<TScopeKey extends string = string> = {
   scopeKey: TScopeKey;
@@ -30,9 +33,11 @@ export function scopedListQueryOptions<
   queryFn: (data: WithoutScope<TInput>) => Promise<TData>;
 }) {
   const data = withoutScope(input.input);
+  const queryKey = [...input.baseKey(input.input.scopeKey), data] as const;
   return queryOptions({
-    queryKey: [...input.baseKey(input.input.scopeKey), data] as const,
-    queryFn: () => input.queryFn(data),
+    queryKey,
+    queryFn: () =>
+      observeQueryOperation(queryKey, 'query', () => input.queryFn(data)),
   });
 }
 
@@ -51,14 +56,17 @@ export function scopedInfiniteQueryOptions<
   maxPages?: number;
 }) {
   const data = withoutScope(input.input);
+  const queryKey = [
+    ...input.baseKey(input.input.scopeKey),
+    'infinite',
+    data,
+  ] as const;
   return infiniteQueryOptions({
-    queryKey: [
-      ...input.baseKey(input.input.scopeKey),
-      'infinite',
-      data,
-    ] as const,
+    queryKey,
     queryFn: ({ pageParam }) =>
-      input.queryFn(data, pageParam as TCursor | undefined),
+      observeQueryOperation(queryKey, 'query', () =>
+        input.queryFn(data, pageParam as TCursor | undefined)
+      ),
     initialPageParam: undefined as TCursor | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     maxPages: input.maxPages ?? 10,
@@ -75,9 +83,11 @@ export function scopedEntityQueryOptions<
   queryFn: (data: WithoutScope<TInput>) => Promise<TData>;
 }) {
   const data = withoutScope(input.input);
+  const queryKey = [...input.baseKey(input.input.scopeKey), data] as const;
   return queryOptions({
-    queryKey: [...input.baseKey(input.input.scopeKey), data] as const,
-    queryFn: () => input.queryFn(data),
+    queryKey,
+    queryFn: () =>
+      observeQueryOperation(queryKey, 'query', () => input.queryFn(data)),
   });
 }
 
@@ -87,6 +97,9 @@ export function serverMutationOptions<TData, TResult>(input: {
 }): MutationOptions<TResult, Error, TData> {
   return {
     mutationKey: input.mutationKey,
-    mutationFn: (data) => input.mutationFn({ data }),
+    mutationFn: (data) =>
+      observeQueryOperation(input.mutationKey, 'mutation', () =>
+        input.mutationFn({ data })
+      ),
   };
 }

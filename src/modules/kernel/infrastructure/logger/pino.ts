@@ -222,9 +222,12 @@ export function createPinoAppLogger({
   redactor = sanitizeLogFields,
 }: PinoAppLoggerInput): Logger {
   const write = (level: LogLevel, fields: LogFields) => {
+    const correlation = telemetry.currentCorrelation();
     const mergedFields = {
       ...defaultFields,
       ...fields,
+      ...(correlation.traceId ? { traceId: correlation.traceId } : {}),
+      ...(correlation.spanId ? { spanId: correlation.spanId } : {}),
     };
     const logRecord = prepareLogRecord(mergedFields);
     const sanitizedLogRecord = redactor(logRecord);
@@ -234,6 +237,38 @@ export function createPinoAppLogger({
         : fields.event;
 
     pino[level](sanitizedLogRecord, message);
+    telemetry.emitLog({
+      attributes: {
+        ...(mergedFields.correlationId
+          ? { correlationId: mergedFields.correlationId }
+          : {}),
+        ...(mergedFields.requestId
+          ? { requestId: mergedFields.requestId }
+          : {}),
+        ...(mergedFields.scopeKey ? { scopeKey: mergedFields.scopeKey } : {}),
+        ...(mergedFields.sessionId
+          ? { sessionId: mergedFields.sessionId }
+          : {}),
+        ...(mergedFields.spanId ? { spanId: mergedFields.spanId } : {}),
+        ...(mergedFields.traceId ? { traceId: mergedFields.traceId } : {}),
+        ...(mergedFields.userId ? { userId: mergedFields.userId } : {}),
+      },
+      details:
+        sanitizedLogRecord.details &&
+        typeof sanitizedLogRecord.details === 'object' &&
+        !Array.isArray(sanitizedLogRecord.details)
+          ? (sanitizedLogRecord.details as Record<string, unknown>)
+          : undefined,
+      direction: mergedFields.direction,
+      error:
+        typeof sanitizedLogRecord.error === 'string'
+          ? sanitizedLogRecord.error
+          : undefined,
+      event: message,
+      exception: mergedFields.exception,
+      level,
+      message,
+    });
 
     if (level === 'error' && Object.hasOwn(mergedFields, 'exception')) {
       telemetry.captureException(

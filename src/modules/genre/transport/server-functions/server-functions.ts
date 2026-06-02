@@ -49,8 +49,9 @@ const runProtected = createServerFunctionInvoker({
 export const genreGetAll = createServerFn({ method: 'GET' })
   .inputValidator(zGetAllInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getAll(ctx, input)
+    runProtected.withOperation('genre.getAll')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getAll(ctx, input)
     )
   );
 

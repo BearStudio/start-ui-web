@@ -5,18 +5,22 @@ import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { bookQueries } from '@/modules/book/client';
 import { PageBookUpdate } from '@/modules/book/presentation';
 import { toBookId, toScopeKey } from '@/modules/kernel';
+import { observedLoader } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/manager/books/$id/update/')({
-  loader: ({ context, params }) => {
-    if (isForbiddenRouteContext(context)) return undefined;
+  loader: observedLoader(
+    '/manager/books/$id/update/',
+    ({ context, params }) => {
+      if (isForbiddenRouteContext(context)) return undefined;
 
-    return context.queryClient.ensureQueryData(
-      bookQueries.getById({
-        id: toBookId(params.id),
-        scopeKey: toScopeKey(context.scopeKey),
-      })
-    );
-  },
+      return context.queryClient.ensureQueryData(
+        bookQueries.getById({
+          id: toBookId(params.id),
+          scopeKey: toScopeKey(context.scopeKey),
+        })
+      );
+    }
+  ),
   component: RouteComponent,
 });
 

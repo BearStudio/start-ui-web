@@ -1,12 +1,18 @@
 import { filter, isTruthy, join, map, pipe, unique, uniqueBy } from 'remeda';
 
 type ContentSecurityPolicyOptions = {
+  allowDevServerCspRelaxations?: boolean;
+  allowPlaywrightScreenshotStyles?: boolean;
   baseUrl?: string;
   cspNonce?: string;
   isProduction?: boolean;
   s3BucketPublicUrl?: string;
-  sentryDsn?: string;
 };
+
+const PLAYWRIGHT_SCREENSHOT_STYLE_HASH_SOURCES = [
+  "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='",
+  "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='",
+] as const;
 
 const sourceOriginFromUrl = (value: string | undefined) => {
   if (!value) return undefined;
@@ -38,16 +44,28 @@ export function buildContentSecurityPolicy(
   options: ContentSecurityPolicyOptions = {}
 ) {
   const s3PublicOrigin = sourceOriginFromUrl(options.s3BucketPublicUrl);
-  const sentryOrigin = sourceOriginFromUrl(options.sentryDsn);
   const nonceSource = options.cspNonce
     ? `'nonce-${options.cspNonce}'`
     : undefined;
-  const scriptSources = uniqueSources(["'self'", nonceSource]);
+  const allowDevServerCspRelaxations =
+    options.allowDevServerCspRelaxations && !options.isProduction;
+  const scriptSources = uniqueSources([
+    "'self'",
+    nonceSource,
+    allowDevServerCspRelaxations ? "'unsafe-eval'" : undefined,
+  ]);
   const styleSources = uniqueSources([
     "'self'",
     nonceSource,
     options.cspNonce ? undefined : "'unsafe-inline'",
+    allowDevServerCspRelaxations ? "'unsafe-inline'" : undefined,
+    ...(options.allowPlaywrightScreenshotStyles && !options.isProduction
+      ? PLAYWRIGHT_SCREENSHOT_STYLE_HASH_SOURCES
+      : []),
   ]);
+  const styleElementSources = allowDevServerCspRelaxations
+    ? uniqueSources(["'self'", "'unsafe-inline'"])
+    : undefined;
   const imgSources = uniqueSources([
     "'self'",
     'data:',
@@ -55,11 +73,7 @@ export function buildContentSecurityPolicy(
     s3PublicOrigin,
     'https://raw.githubusercontent.com',
   ]);
-  const connectSources = uniqueSources([
-    "'self'",
-    s3PublicOrigin,
-    sentryOrigin,
-  ]);
+  const connectSources = uniqueSources(["'self'", s3PublicOrigin]);
   const directives = [
     formatDirective('default-src', ["'self'"]),
     formatDirective('base-uri', ["'self'"]),
@@ -69,6 +83,9 @@ export function buildContentSecurityPolicy(
     formatDirective('script-src', scriptSources),
     formatDirective('script-src-attr', ["'none'"]),
     formatDirective('style-src', styleSources),
+    ...(styleElementSources
+      ? [formatDirective('style-src-elem', styleElementSources)]
+      : []),
     formatDirective('style-src-attr', ["'unsafe-inline'"]),
     formatDirective('img-src', imgSources),
     formatDirective('connect-src', connectSources),

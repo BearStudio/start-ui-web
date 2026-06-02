@@ -49,7 +49,7 @@ describe('user HTTP transport handlers', () => {
     );
 
     expect(update).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       id: toUserId('user-2'),
       user: {
         name: 'Ada',
@@ -81,7 +81,7 @@ describe('user HTTP transport handlers', () => {
     );
 
     expect(listSessions).toHaveBeenCalledWith({
-      scope: ctx.scope,
+      currentUserId: ctx.scope.userId,
       userId: toUserId('user-2'),
       cursor: toSessionId('session-2'),
       limit: 5,

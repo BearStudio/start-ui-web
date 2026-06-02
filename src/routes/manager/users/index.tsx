@@ -6,6 +6,7 @@ import { isForbiddenRouteContext } from '@/modules/auth/presentation';
 import { toScopeKey } from '@/modules/kernel';
 import { userQueries } from '@/modules/user/client';
 import { PageUsers } from '@/modules/user/presentation';
+import { observedLoader } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/manager/users/')({
   validateSearch: zodValidator(
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/manager/users/')({
   },
   loaderDeps: ({ search: { searchTerm } }) => ({ searchTerm }),
   component: RouteComponent,
-  loader: ({ context, deps }) => {
+  loader: observedLoader('/manager/users/', ({ context, deps }) => {
     if (isForbiddenRouteContext(context)) return undefined;
 
     return context.queryClient.ensureInfiniteQueryData(
@@ -27,7 +28,7 @@ export const Route = createFileRoute('/manager/users/')({
         searchTerm: deps.searchTerm,
       })
     );
-  },
+  }),
 });
 
 function RouteComponent() {

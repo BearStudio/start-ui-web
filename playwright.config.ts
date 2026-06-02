@@ -2,12 +2,17 @@ import { defineConfig, devices } from '@playwright/test';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/platform/lib/i18n/constants';
 
+const shouldRunVisualTests = process.env.VITE_VISUAL_TEST === 'true';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   testDir: './tests/e2e',
-  testIgnore: process.env.CI ? /visual[/\\].*\.visual\.spec\.ts/ : undefined,
+  testIgnore:
+    process.env.CI || !shouldRunVisualTests
+      ? /visual[/\\].*\.visual\.spec\.ts/
+      : undefined,
   /* Max time for the full CI tests */
   globalTimeout: 15 * 60 * 1000,
   /* Max test failure */

@@ -28,7 +28,6 @@ describe('security headers', () => {
       baseUrl: 'https://app.example',
       isProduction: true,
       s3BucketPublicUrl: 'https://assets.example/books',
-      sentryDsn: 'https://public@o123.ingest.sentry.io/456',
     });
 
     expect(policy).toContain("default-src 'self'");
@@ -45,9 +44,8 @@ describe('security headers', () => {
     expect(policy).toContain(
       "img-src 'self' data: blob: https://assets.example https://raw.githubusercontent.com"
     );
-    expect(policy).toContain(
-      "connect-src 'self' https://assets.example https://o123.ingest.sentry.io"
-    );
+    expect(policy).toContain("connect-src 'self' https://assets.example");
+    expect(policy).not.toContain('sentry.io');
     expect(policy).toContain("font-src 'self' data:");
     expect(policy).toContain("manifest-src 'self'");
     expect(policy).toContain("media-src 'self' blob:");
@@ -70,6 +68,59 @@ describe('security headers', () => {
     expect(directiveValue(policy, 'style-src-attr')).toBe(
       "style-src-attr 'unsafe-inline'"
     );
+  });
+
+  it('can allow Playwright screenshot styles outside production only', () => {
+    const testPolicy = buildContentSecurityPolicy({
+      allowPlaywrightScreenshotStyles: true,
+      cspNonce: 'test-nonce',
+      isProduction: false,
+    });
+    const productionPolicy = buildContentSecurityPolicy({
+      allowPlaywrightScreenshotStyles: true,
+      cspNonce: 'test-nonce',
+      isProduction: true,
+    });
+
+    expect(directiveValue(testPolicy, 'style-src')).toContain(
+      "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='"
+    );
+    expect(directiveValue(testPolicy, 'style-src')).toContain(
+      "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='"
+    );
+    expect(directiveValue(productionPolicy, 'style-src')).not.toContain(
+      'sha256-7kYjkz6pduUs3kVL'
+    );
+  });
+
+  it('can relax script and style sources for the local test dev server only', () => {
+    const testPolicy = buildContentSecurityPolicy({
+      allowDevServerCspRelaxations: true,
+      cspNonce: 'test-nonce',
+      isProduction: false,
+    });
+    const productionPolicy = buildContentSecurityPolicy({
+      allowDevServerCspRelaxations: true,
+      cspNonce: 'test-nonce',
+      isProduction: true,
+    });
+
+    expect(directiveValue(testPolicy, 'script-src')).toBe(
+      "script-src 'self' 'nonce-test-nonce' 'unsafe-eval'"
+    );
+    expect(directiveValue(testPolicy, 'style-src')).toBe(
+      "style-src 'self' 'nonce-test-nonce' 'unsafe-inline'"
+    );
+    expect(directiveValue(testPolicy, 'style-src-elem')).toBe(
+      "style-src-elem 'self' 'unsafe-inline'"
+    );
+    expect(directiveValue(productionPolicy, 'script-src')).toBe(
+      "script-src 'self' 'nonce-test-nonce'"
+    );
+    expect(directiveValue(productionPolicy, 'style-src')).toBe(
+      "style-src 'self' 'nonce-test-nonce'"
+    );
+    expect(directiveValue(productionPolicy, 'style-src-elem')).toBeUndefined();
   });
 
   it('does not add HTTPS upgrade directives outside production HTTPS', () => {
@@ -170,6 +221,26 @@ describe('security headers', () => {
     expect(replaced.headers.get('Content-Length')).toBe(null);
     expect(replaced.headers.get('Content-Type')).toBe(
       'text/html; charset=utf-8'
+    );
+  });
+
+  it('adds the request nonce to SSR style tags without replacing existing style nonces', async () => {
+    const response = new Response(
+      '<style>.base-ui-disable-scrollbar{scrollbar-width:none}</style><style data-test="x" nonce="existing-nonce">.already{color:red}</style>',
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    await expect(replaced.text()).resolves.toBe(
+      '<style nonce="request-nonce">.base-ui-disable-scrollbar{scrollbar-width:none}</style><style data-test="x" nonce="existing-nonce">.already{color:red}</style>'
     );
   });
 

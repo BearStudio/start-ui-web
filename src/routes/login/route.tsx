@@ -8,6 +8,7 @@ import {
   LayoutLogin,
   redirectAuthenticatedRoute,
 } from '@/modules/auth/presentation';
+import { observeBeforeLoad } from '@/platform/router/route-observability';
 
 export const Route = createFileRoute('/login')({
   validateSearch: zodValidator(
@@ -17,12 +18,13 @@ export const Route = createFileRoute('/login')({
       })
       .passthrough()
   ),
-  beforeLoad: async ({ context, search }) => {
-    return redirectAuthenticatedRoute({
-      context,
-      redirect: search.redirect,
-    });
-  },
+  beforeLoad: ({ context, search }) =>
+    observeBeforeLoad('/login', () =>
+      redirectAuthenticatedRoute({
+        context,
+        redirect: search.redirect,
+      })
+    ),
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
   errorComponent: () => <PageError type="error-boundary" />,

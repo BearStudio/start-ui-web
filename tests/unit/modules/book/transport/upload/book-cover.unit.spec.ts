@@ -50,10 +50,7 @@ describe('book cover upload transport', () => {
     });
 
     expect(prepareCoverUpload).toHaveBeenCalledWith({
-      scope: {
-        userId: mockUser.id,
-        role: mockUser.role,
-      },
+      currentUserId: mockUser.id,
       fileType: 'image/webp',
     });
   });

@@ -32,6 +32,13 @@ describe('browser mutation protection', () => {
       shouldProtectBrowserMutation({
         handlerType: 'router',
         method: 'POST',
+        pathname: '/api/telemetry/logs',
+      })
+    ).toBe(true);
+    expect(
+      shouldProtectBrowserMutation({
+        handlerType: 'router',
+        method: 'POST',
         pathname: '/api/auth/sign-in/email-otp',
       })
     ).toBe(false);

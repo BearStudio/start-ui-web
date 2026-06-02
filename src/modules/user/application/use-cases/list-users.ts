@@ -1,12 +1,11 @@
 import { Result } from '@swan-io/boxed';
 
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
 import type { UserId } from '@/modules/kernel/domain/ids';
 
 import type { UserListOutcome, UserResult, UserUseCaseDeps } from './types';
 
 export type ListUsersInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   cursor?: UserId;
   limit: number;
   searchTerm: string;
@@ -16,11 +15,10 @@ export async function listUsers(
   deps: UserUseCaseDeps,
   input: ListUsersInput
 ): Promise<UserResult<UserListOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { user: ['list'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { user: ['list'] }
+  );
   if (allowed.isError()) return Result.Error(allowed.getError());
   if (allowed.get().type === 'permission_denied') {
     return Result.Ok({ type: 'user_forbidden' });

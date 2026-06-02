@@ -54,11 +54,22 @@ describe('browser mutation route coverage', () => {
 
     expect(postRoutes).toEqual([
       '/api/auth/$',
+      '/api/telemetry/logs',
+      '/api/telemetry/otel/v1/metrics',
+      '/api/telemetry/otel/v1/traces',
+      '/api/telemetry/sentry-tunnel',
       '/api/upload',
       '/api/webhooks/resend',
       '/logout',
     ]);
-    expect(appGuardedRoutes).toEqual(['/api/upload', '/logout']);
+    expect(appGuardedRoutes).toEqual([
+      '/api/telemetry/logs',
+      '/api/telemetry/otel/v1/metrics',
+      '/api/telemetry/otel/v1/traces',
+      '/api/telemetry/sentry-tunnel',
+      '/api/upload',
+      '/logout',
+    ]);
     expect(externallyProtectedRoutes).toEqual([
       '/api/auth/$',
       '/api/webhooks/resend',

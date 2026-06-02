@@ -4,10 +4,10 @@ import { isMatching, match, P } from 'ts-pattern';
 import {
   hasRolePermission,
   parseRole,
+  type CurrentSession,
   type Permission,
   type Role,
-} from '../domain/permissions';
-import type { CurrentSession } from '../domain/request-scope';
+} from '@/modules/auth';
 import {
   betterAuthBrowserClient,
   type BetterAuthSocialProvider,

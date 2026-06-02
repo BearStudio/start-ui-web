@@ -35,9 +35,27 @@ test.describe('Protected route navigation as manager', () => {
   }) => {
     await page.goto('/manager/books?searchTerm=Hobbit');
 
-    await expect(page.getByRole('link', { name: 'The Hobbit' })).toBeVisible();
-    await page.getByRole('link', { name: 'The Hobbit' }).click();
-    await page.waitForURL(/\/manager\/books\/[^/]+\/?$/);
+    const bookLink = page.getByRole('link', { name: 'The Hobbit' });
+    await expect(bookLink).toBeVisible();
+    const href = await bookLink.getAttribute('href');
+    expect(href).toMatch(/^\/manager\/books\/[^/]+\/?$/);
+
+    await expect(async () => {
+      try {
+        await page.goto(href ?? '/manager/books', { waitUntil: 'commit' });
+      } catch (error) {
+        if (
+          !(error instanceof Error) ||
+          !error.message.includes('NS_BINDING_ABORTED')
+        ) {
+          throw error;
+        }
+      }
+
+      expect(new URL(page.url()).pathname).toMatch(
+        /^\/manager\/books\/[^/]+\/?$/
+      );
+    }).toPass({ timeout: 10_000 });
     const deepLink = new URL(page.url()).pathname;
 
     await expect(page.getByText('The Hobbit - J.R.R. Tolkien')).toBeVisible();

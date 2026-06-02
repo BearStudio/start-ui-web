@@ -64,62 +64,71 @@ const runMutation = createServerFunctionInvoker({
 export const userGetAll = createServerFn({ method: 'GET' })
   .inputValidator(zGetAllInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getAll(ctx, input)
+    runProtected.withOperation('user.getAll')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getAll(ctx, input)
     )
   );
 
 export const userGetById = createServerFn({ method: 'GET' })
   .inputValidator(zGetByIdInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getById(ctx, input)
+    runProtected.withOperation('user.getById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getById(ctx, input)
     )
   );
 
 export const userUpdateById = createServerFn({ method: 'POST' })
   .inputValidator(zUpdateByIdInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.updateById(ctx, input)
+    runMutation.withOperation('user.updateById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.updateById(ctx, input)
     )
   );
 
 export const userCreate = createServerFn({ method: 'POST' })
   .inputValidator(zCreateInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) => handlers.create(ctx, input))
+    runMutation.withOperation('user.create')(data, ({ handlers }, ctx, input) =>
+      handlers.create(ctx, input)
+    )
   );
 
 export const userDeleteById = createServerFn({ method: 'POST' })
   .inputValidator(zDeleteByIdInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.deleteById(ctx, input)
+    runMutation.withOperation('user.deleteById')(
+      data,
+      ({ handlers }, ctx, input) => handlers.deleteById(ctx, input)
     )
   );
 
 export const userGetUserSessions = createServerFn({ method: 'GET' })
   .inputValidator(zGetUserSessionsInput())
   .handler(async ({ data }) =>
-    runProtected(data, ({ handlers }, ctx, input) =>
-      handlers.getUserSessions(ctx, input)
+    runProtected.withOperation('user.getUserSessions')(
+      data,
+      ({ handlers }, ctx, input) => handlers.getUserSessions(ctx, input)
     )
   );
 
 export const userRevokeUserSessions = createServerFn({ method: 'POST' })
   .inputValidator(zRevokeUserSessionsInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.revokeUserSessions(ctx, input)
+    runMutation.withOperation('user.revokeUserSessions')(
+      data,
+      ({ handlers }, ctx, input) => handlers.revokeUserSessions(ctx, input)
     )
   );
 
 export const userRevokeUserSession = createServerFn({ method: 'POST' })
   .inputValidator(zRevokeUserSessionInput())
   .handler(async ({ data }) =>
-    runMutation(data, ({ handlers }, ctx, input) =>
-      handlers.revokeUserSession(ctx, input)
+    runMutation.withOperation('user.revokeUserSession')(
+      data,
+      ({ handlers }, ctx, input) => handlers.revokeUserSession(ctx, input)
     )
   );
 

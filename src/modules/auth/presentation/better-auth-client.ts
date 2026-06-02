@@ -9,7 +9,7 @@ import { createAuthClient } from 'better-auth/react';
 
 import { envClient } from '@/platform/env/client';
 
-import { permissionStatements, rolePermissions } from '../domain/permissions';
+import { permissionStatements, rolePermissions } from '@/modules/auth';
 
 const ac = createAccessControl(permissionStatements);
 const betterAuthClientPermissions = {

@@ -4,7 +4,7 @@ import { match, P } from 'ts-pattern';
 
 import i18n from '@/platform/lib/i18n';
 
-import { type AuthSession, scopeFromUser } from '@/modules/auth';
+import type { AuthSession } from '@/modules/auth';
 import type { BookUseCases } from '@/modules/book';
 import type { Logger } from '@/modules/kernel';
 
@@ -65,7 +65,7 @@ export const handleBookCoverBeforeUpload = async (
     session?.user ?? rejectUpload(deps, 'NOT_AUTHENTICATED', input.fileType);
 
   const prepared = await deps.getUseCases().prepareCoverUpload({
-    scope: scopeFromUser(user),
+    currentUserId: user.id,
     fileType: input.fileType,
   });
 

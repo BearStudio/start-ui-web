@@ -55,7 +55,7 @@ describe('genre use cases', () => {
       genreRepository: repo,
       permissionChecker: allowed,
       logger,
-    }).list({ scope, limit: 20 });
+    }).list({ currentUserId: scope.userId, limit: 20 });
 
     expect(getOk(listed)).toMatchObject({
       type: 'genre_listed',
@@ -68,7 +68,7 @@ describe('genre use cases', () => {
         hasPermission: async () => Result.Ok({ type: 'permission_denied' }),
       },
       logger,
-    }).list({ scope, limit: 20 });
+    }).list({ currentUserId: scope.userId, limit: 20 });
 
     expect(getOk(forbidden)).toEqual({ type: 'genre_forbidden' });
   });

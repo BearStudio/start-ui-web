@@ -142,6 +142,10 @@ function findPrivilegedServerFunctionRunnerViolations(
   serverFiles: string[],
   publicServerFunctions: ReadonlySet<string>
 ) {
+  const usesRunner = (declaration: string, runnerName: string) =>
+    declaration.includes(`${runnerName}(`) ||
+    declaration.includes(`${runnerName}.withOperation(`);
+
   return findServerFunctionExports(serverFiles).flatMap(
     ({ declaration, file, method, name, source }) => {
       if (publicServerFunctions.has(name)) return [];
@@ -155,7 +159,7 @@ function findPrivilegedServerFunctionRunnerViolations(
                 violation: `${relative}:${name}:missing read runner`,
               },
               {
-                ok: declaration.includes('runProtected('),
+                ok: usesRunner(declaration, 'runProtected'),
                 violation: `${relative}:${name}:not using read runner`,
               },
             ]
@@ -166,7 +170,7 @@ function findPrivilegedServerFunctionRunnerViolations(
                   violation: `${relative}:${name}:missing mutation runner`,
                 },
                 {
-                  ok: declaration.includes('runMutation('),
+                  ok: usesRunner(declaration, 'runMutation'),
                   violation: `${relative}:${name}:not using mutation runner`,
                 },
               ]

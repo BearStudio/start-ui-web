@@ -8,6 +8,10 @@ const SEC_FETCH_SITE_VALUES = new Set([
   'none',
 ]);
 const DEFAULT_PROTECTED_BROWSER_MUTATION_PATHNAMES = [
+  '/api/telemetry/logs',
+  '/api/telemetry/otel/v1/metrics',
+  '/api/telemetry/otel/v1/traces',
+  '/api/telemetry/sentry-tunnel',
   '/api/upload',
   '/logout',
 ] as const;

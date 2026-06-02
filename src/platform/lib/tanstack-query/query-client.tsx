@@ -2,6 +2,9 @@ import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { isMatching, P } from 'ts-pattern';
 
 import { envClient } from '@/platform/env/client';
+import { recordQueryCacheEvent } from '@/platform/lib/tanstack-query/observability';
+import { deriveOperationMetadataFromKey } from '@/platform/telemetry/metadata';
+import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 const networkMode = envClient.DEV ? 'always' : undefined;
 const DEFAULT_STALE_TIME_MS = 60_000;
@@ -29,13 +32,56 @@ export function shouldRetryQuery(
   return failureCount < MAX_QUERY_RETRIES;
 }
 
+const logQueryCacheEvent = (
+  queryKey: readonly unknown[],
+  operationType: 'mutation' | 'query',
+  status: 'error' | 'success',
+  error?: unknown
+) => {
+  const metadata = deriveOperationMetadataFromKey(queryKey, operationType);
+  const event = `query.${operationType}.${status}`;
+  const details = {
+    operationName: metadata.operationName,
+    operationType,
+    status,
+  };
+
+  if (status === 'error') {
+    frontendLogger.error(event, {
+      details,
+      error,
+    });
+    return;
+  }
+
+  frontendLogger.debug(event, { details });
+};
+
 export const createAppQueryClient = (options: QueryClientOptions = {}) =>
   new QueryClient({
     queryCache: new QueryCache({
-      onError: options.onError,
+      onError: (error, query) => {
+        recordQueryCacheEvent(query.queryKey, 'query', 'error');
+        logQueryCacheEvent(query.queryKey, 'query', 'error', error);
+        options.onError?.(error);
+      },
+      onSuccess: (_data, query) => {
+        recordQueryCacheEvent(query.queryKey, 'query', 'success');
+        logQueryCacheEvent(query.queryKey, 'query', 'success');
+      },
     }),
     mutationCache: new MutationCache({
-      onError: options.onError,
+      onError: (error, _variables, _onMutateResult, mutation) => {
+        const mutationKey = mutation.options.mutationKey ?? ['mutation'];
+        recordQueryCacheEvent(mutationKey, 'mutation', 'error');
+        logQueryCacheEvent(mutationKey, 'mutation', 'error', error);
+        options.onError?.(error);
+      },
+      onSuccess: (_data, _variables, _onMutateResult, mutation) => {
+        const mutationKey = mutation.options.mutationKey ?? ['mutation'];
+        recordQueryCacheEvent(mutationKey, 'mutation', 'success');
+        logQueryCacheEvent(mutationKey, 'mutation', 'success');
+      },
     }),
     defaultOptions: {
       queries: {

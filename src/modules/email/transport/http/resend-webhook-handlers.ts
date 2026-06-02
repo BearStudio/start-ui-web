@@ -1,5 +1,4 @@
 import { Result } from '@swan-io/boxed';
-import type { WebhookEventPayload } from 'resend';
 import { match, P } from 'ts-pattern';
 
 import {
@@ -24,8 +23,23 @@ type VerifyResendWebhookInput = {
   };
 };
 
+type ResendWebhookEvent = {
+  created_at: string;
+  data: unknown;
+  type: string;
+};
+
+type TrackedResendEmailEvent = ResendWebhookEvent & {
+  data: {
+    email_id: string;
+    subject: string;
+    to: string[];
+  };
+  type: keyof typeof resendEmailStatusByEventType;
+};
+
 type ResendWebhookVerifier = {
-  verify(input: VerifyResendWebhookInput): WebhookEventPayload;
+  verify(input: VerifyResendWebhookInput): ResendWebhookEvent;
 };
 
 type ResendWebhookHandlerDeps = {
@@ -62,19 +76,22 @@ const requiredHeader = (headers: Headers, name: string) => {
   });
 };
 
-const isTrackedEmailEvent = (
-  event: WebhookEventPayload
-): event is Extract<
-  WebhookEventPayload,
-  { type: keyof typeof resendEmailStatusByEventType }
-> =>
-  event.type in resendEmailStatusByEventType &&
-  'email_id' in event.data &&
-  typeof event.data.email_id === 'string';
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
-const recipientFromEvent = (
-  event: Extract<WebhookEventPayload, { data: { to: string[] } }>
-) => toEmailRecipientList(event.data.to.join(', '));
+const isTrackedEmailEvent = (
+  event: ResendWebhookEvent
+): event is TrackedResendEmailEvent =>
+  event.type in resendEmailStatusByEventType &&
+  typeof event.created_at === 'string' &&
+  isRecord(event.data) &&
+  typeof event.data.email_id === 'string' &&
+  typeof event.data.subject === 'string' &&
+  Array.isArray(event.data.to) &&
+  event.data.to.every((recipient) => typeof recipient === 'string');
+
+const recipientFromEvent = (event: TrackedResendEmailEvent) =>
+  toEmailRecipientList(event.data.to.join(', '));
 
 export const createResendWebhookHandlers = ({
   getUseCases,
@@ -84,7 +101,7 @@ export const createResendWebhookHandlers = ({
   const receive = async (request: Request) => {
     const payload = await request.text();
     let resendSdkHeaders: VerifyResendWebhookInput['headers'];
-    let event: WebhookEventPayload;
+    let event: ResendWebhookEvent;
 
     try {
       resendSdkHeaders = {

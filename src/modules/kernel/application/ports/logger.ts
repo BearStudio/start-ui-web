@@ -25,6 +25,8 @@ export interface LogFields {
 
   error?: string;
   exception?: unknown;
+  spanId?: string;
+  traceId?: string;
 
   details?: Record<string, unknown>;
   durationMs?: number;

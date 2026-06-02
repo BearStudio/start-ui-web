@@ -1,13 +1,12 @@
 import { Result } from '@swan-io/boxed';
 
-import { hasScopePermission, type RequestScope } from '@/modules/auth';
-import type { GenreId } from '@/modules/kernel/domain/ids';
+import type { GenreId, UserId } from '@/modules/kernel/domain/ids';
 
 import type { GenreListOutcome, GenreResult, GenreUseCaseDeps } from './types';
 import { normalizeGenreSearchTerm } from '../../domain/genre';
 
 export type ListGenresInput = {
-  scope: RequestScope;
+  currentUserId: UserId;
   cursor?: GenreId;
   limit: number;
   searchTerm?: string;
@@ -17,11 +16,10 @@ export async function listGenres(
   deps: GenreUseCaseDeps,
   input: ListGenresInput
 ): Promise<GenreResult<GenreListOutcome>> {
-  const allowed = await hasScopePermission({
-    permissionChecker: deps.permissionChecker,
-    scope: input.scope,
-    permissions: { genre: ['read'] },
-  });
+  const allowed = await deps.permissionChecker.hasPermission(
+    input.currentUserId,
+    { genre: ['read'] }
+  );
   if (allowed.isError()) return Result.Error(allowed.getError());
   if (allowed.get().type === 'permission_denied') {
     return Result.Ok({ type: 'genre_forbidden' });

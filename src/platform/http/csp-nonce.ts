@@ -3,6 +3,9 @@ export const CSP_NONCE_PLACEHOLDER = '__START_UI_CSP_NONCE__';
 const CSP_NONCE_META_SELECTOR = 'meta[property="csp-nonce"]';
 const CSP_NONCE_GLOBAL_KEY = '__nonce__';
 const CSP_NONCE_BRIDGE_INSTALLED_KEY = '__startUiCspNonceBridgeInstalled';
+const HTML_REWRITE_SAFE_TAIL_LENGTH = 512;
+const STYLE_OPEN_TAG_PATTERN = /<style\b([^>]*)>/gi;
+const NONCE_ATTRIBUTE_PATTERN = /\snonce\s*=/i;
 
 declare global {
   interface Window {
@@ -13,6 +16,23 @@ declare global {
 
 export const replaceCspNoncePlaceholder = (value: string, nonce: string) =>
   value.replaceAll(CSP_NONCE_PLACEHOLDER, nonce);
+
+const escapeHtmlAttribute = (value: string) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+
+const addNonceToStyleTags = (value: string, nonce: string) =>
+  value.replace(STYLE_OPEN_TAG_PATTERN, (tag, attributes: string) =>
+    NONCE_ATTRIBUTE_PATTERN.test(attributes)
+      ? tag
+      : `<style nonce="${escapeHtmlAttribute(nonce)}"${attributes}>`
+  );
+
+const rewriteHtmlNonceMarkers = (value: string, nonce: string) =>
+  addNonceToStyleTags(replaceCspNoncePlaceholder(value, nonce), nonce);
 
 export const createCspNonceBridgeScript = (nonce: string) => `
 (function(nonceKey, installedKey, nonce) {
@@ -76,7 +96,7 @@ export async function replaceCspNoncePlaceholderInHtmlResponse(
 
       if (bufferedText) {
         controller.enqueue(
-          encoder.encode(replaceCspNoncePlaceholder(bufferedText, nonce))
+          encoder.encode(rewriteHtmlNonceMarkers(bufferedText, nonce))
         );
       }
     },
@@ -117,28 +137,17 @@ function shouldReplaceCspNoncePlaceholder(response: Response) {
 function replaceBufferedCspNoncePlaceholders(value: string, nonce: string) {
   const searchableLength = Math.max(
     0,
-    value.length - (CSP_NONCE_PLACEHOLDER.length - 1)
+    value.length -
+      Math.max(CSP_NONCE_PLACEHOLDER.length - 1, HTML_REWRITE_SAFE_TAIL_LENGTH)
   );
-  let index = 0;
-  let output = '';
-
-  while (index < searchableLength) {
-    const placeholderIndex = value.indexOf(CSP_NONCE_PLACEHOLDER, index);
-
-    if (placeholderIndex === -1 || placeholderIndex >= searchableLength) {
-      output += value.slice(index, searchableLength);
-      index = searchableLength;
-      break;
-    }
-
-    output += value.slice(index, placeholderIndex);
-    output += nonce;
-    index = placeholderIndex + CSP_NONCE_PLACEHOLDER.length;
-  }
+  const output = rewriteHtmlNonceMarkers(
+    value.slice(0, searchableLength),
+    nonce
+  );
 
   return {
     output,
-    remaining: value.slice(index),
+    remaining: value.slice(searchableLength),
   };
 }
 

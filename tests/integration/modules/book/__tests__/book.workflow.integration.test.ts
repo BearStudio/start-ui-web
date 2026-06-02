@@ -1,7 +1,6 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { RequestScope } from '@/modules/auth';
 import {
   type Book,
   type BookRepository,
@@ -22,10 +21,7 @@ import {
 
 const now = new Date('2026-01-01T00:00:00.000Z');
 const genreId = toGenreId('genre-1');
-const scope: RequestScope = {
-  role: 'admin',
-  userId: toUserId('admin-1'),
-};
+const currentUserId = toUserId('admin-1');
 const logger: Logger = {
   debug: () => {},
   error: () => {},
@@ -162,7 +158,7 @@ describe('book public workflow integration', () => {
         publisher: ' Ace ',
         title: ' Dune ',
       },
-      scope,
+      currentUserId,
     });
 
     expect(getOk(created)).toMatchObject({
@@ -178,8 +174,8 @@ describe('book public workflow integration', () => {
     const createdId = expectBookId(created);
 
     const listed = await useCases.list({
+      currentUserId,
       limit: 10,
-      scope,
       searchTerm: 'dune',
     });
     expect(getOk(listed)).toMatchObject({
@@ -197,8 +193,8 @@ describe('book public workflow integration', () => {
         publisher: ' ',
         title: ' A Wizard of Earthsea ',
       },
+      currentUserId,
       id: createdId,
-      scope,
     });
     expect(getOk(updated)).toMatchObject({
       type: 'book_updated',
@@ -215,13 +211,13 @@ describe('book public workflow integration', () => {
         genreId,
         title: ' a wizard of earthsea ',
       },
-      scope,
+      currentUserId,
     });
     expect(getOk(duplicate)).toEqual({ type: 'book_duplicate' });
 
-    const deleted = await useCases.delete({ id: createdId, scope });
+    const deleted = await useCases.delete({ currentUserId, id: createdId });
     expect(getOk(deleted)).toEqual({ type: 'book_deleted' });
-    const missing = await useCases.get({ id: createdId, scope });
+    const missing = await useCases.get({ currentUserId, id: createdId });
     expect(getOk(missing)).toEqual({ type: 'book_not_found' });
   });
 });
