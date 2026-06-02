@@ -94,7 +94,7 @@ import {
   isForbiddenRouteContext,
 } from '@/modules/auth/presentation';
 import { bookQueries } from '@/modules/book/client';
-import { toBookId, toScopeKey } from '@/modules/kernel/domain/ids';
+import { toBookId, toScopeKey } from '@/modules/kernel/testing';
 import { userQueries } from '@/modules/user/client';
 
 import { Route as AppBooksIndexRoute } from '@/routes/app/books/index';

@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   useRouteContext,
+  useRouter,
 } from '@tanstack/react-router';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -128,6 +129,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       }}
     >
       <head>
+        <CspNonceMeta />
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">
@@ -137,4 +139,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </body>
     </html>
   );
+}
+
+function CspNonceMeta() {
+  const nonce = useRouter().options.ssr?.nonce;
+
+  return nonce ? <meta property="csp-nonce" nonce={nonce} /> : null;
 }

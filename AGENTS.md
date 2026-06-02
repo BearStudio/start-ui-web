@@ -65,6 +65,23 @@ Do not deep-import another module's `domain/`, `application/`, `infrastructure/`
 
 `domain/` is pure TypeScript. `application/` depends on ports, not adapters. `infrastructure/` owns SDKs and provider/database adapters. `transport/` maps protocol inputs to use cases. `presentation/` owns React UI, query options, and form schemas.
 
+## Result and Outcome Policy
+
+- Expected business outcomes must be domain-tagged `Result.Ok` variants from `@swan-io/boxed`, such as `{ type: 'book_found'; book: Book }` or `{ type: 'book_not_found' }`.
+- Internal, external-service, system, and persistence failures must be `Result.Error(AppError)`.
+- Use direct Boxed APIs (`Result.Ok`, `Result.Error`, `isOk`, `isError`, `get`, `getError`) instead of local `ok` / `fail` wrappers.
+- Use `ts-pattern` with Boxed interop (`Result.P.Ok(...)` and `Result.P.Error(...)`) for exhaustive result handling at mapping boundaries.
+- Do not return nullable or boolean business outcomes from app-owned ports; model those branches as tagged outcomes.
+- Do not throw or catch for normal app-owned business flow. Code under `src/modules/*/application/**` should return `Result.Ok(...)` for expected outcomes and `Result.Error(AppError)` for failures.
+- Catch failures only at external, service, and persistence boundaries such as Drizzle, Better Auth, and Resend adapters. Keep `TransactionRunner.run` as the low-level promise primitive and map transaction failures at the DB-backed boundary or use case boundary that owns the transaction. Any application-layer `try/catch` must be limited to a use case that owns a transaction boundary and must convert the failure to `Result.Error(AppError)`.
+- Transport, composition, HTTP, and framework adapter boundaries may throw only when the underlying contract is exception-driven, such as TanStack `ServerFnError`, Better Upload `RejectUpload`, Better Auth callbacks, startup/config validation, or final HTTP error mapping.
+
+## Utility Library Guidance
+
+- Use `ts-pattern` when branching over discriminated unions, Boxed `Result` values, tuple-derived UI states, or non-trivial unknown-shape guards where `.exhaustive()` / `isMatching` improves safety. Keep simple one-condition guards as plain `if` checks.
+- Use Remeda for non-trivial production collection and object transforms when it improves readability or type narrowing: `pipe`, data-last `map` / `filter` / `flatMap`, `pickBy`, `mapValues`, `pullObject`, `fromEntries`, typed guards such as `isString` / `isTruthy`, and `unique` / `uniqueBy`.
+- Keep native APIs for straightforward JSX render loops, framework-specific chains such as fast-check arbitraries or Drizzle builders, and simple one-off array operations where Remeda would only add indirection.
+
 ## Common Guardrails
 
 - `src/platform` must not import `modules`, `routes`, or `composition`.

@@ -12,7 +12,7 @@ import {
   bookCoverAcceptedFileTypes,
   bookCoverMaxFileSizeBytes,
 } from '@/modules/book/domain/book-policy';
-import { toBookCoverObjectKey } from '@/modules/kernel/domain/ids';
+import { toBookCoverObjectKey } from '@/modules/kernel/testing';
 
 const headers = new Headers();
 

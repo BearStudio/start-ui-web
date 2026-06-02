@@ -167,8 +167,59 @@ function collectDockerRunImages(projectPath: string, workflow: YamlRecord) {
     return commands;
   };
 
-  const tokenizeShellCommand = (command: string) =>
-    command.match(/(?:[^\s"'\\]+|"(?:\\.|[^"])*"|'[^']*')+/g) ?? [];
+  const tokenizeShellCommand = (command: string) => {
+    const tokens: string[] = [];
+    let currentToken = '';
+    let quote: '"' | "'" | undefined;
+    let escaping = false;
+
+    const pushCurrentToken = () => {
+      if (!currentToken) return;
+
+      tokens.push(currentToken);
+      currentToken = '';
+    };
+
+    const isShellWhitespace = (char: string) =>
+      char === ' ' || char === '\t' || char === '\n' || char === '\r';
+
+    for (const char of command) {
+      if (escaping) {
+        currentToken += char;
+        escaping = false;
+        continue;
+      }
+
+      if (char === '\\' && quote !== "'") {
+        currentToken += char;
+        escaping = true;
+        continue;
+      }
+
+      if ((char === '"' || char === "'") && !quote) {
+        currentToken += char;
+        quote = char;
+        continue;
+      }
+
+      if (char === quote) {
+        currentToken += char;
+        quote = undefined;
+        continue;
+      }
+
+      if (!quote && isShellWhitespace(char)) {
+        pushCurrentToken();
+        continue;
+      }
+
+      currentToken += char;
+    }
+
+    pushCurrentToken();
+
+    return tokens;
+  };
 
   const stripShellQuotes = (value: string) =>
     value.replace(/^(['"])(.*)\1$/, '$2');
@@ -257,6 +308,28 @@ describe('Docker run image collection', () => {
           steps: [
             {
               run: 'docker run --rm alpine',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(images).toEqual([
+      {
+        context: 'workflow.yml:jobs.check.steps.0.run',
+        image: 'alpine',
+      },
+    ]);
+  });
+
+  it('tokenizes long escaped docker arguments without regex backtracking', () => {
+    const escapedOptionValue = String.raw`\!`.repeat(1_000);
+    const images = collectDockerRunImages('workflow.yml', {
+      jobs: {
+        check: {
+          steps: [
+            {
+              run: `docker run --name "${escapedOptionValue}" alpine`,
             },
           ],
         },

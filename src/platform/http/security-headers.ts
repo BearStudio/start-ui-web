@@ -2,6 +2,7 @@ import { filter, isTruthy, join, map, pipe, unique, uniqueBy } from 'remeda';
 
 type ContentSecurityPolicyOptions = {
   baseUrl?: string;
+  cspNonce?: string;
   isProduction?: boolean;
   s3BucketPublicUrl?: string;
   sentryDsn?: string;
@@ -38,6 +39,15 @@ export function buildContentSecurityPolicy(
 ) {
   const s3PublicOrigin = sourceOriginFromUrl(options.s3BucketPublicUrl);
   const sentryOrigin = sourceOriginFromUrl(options.sentryDsn);
+  const nonceSource = options.cspNonce
+    ? `'nonce-${options.cspNonce}'`
+    : undefined;
+  const scriptSources = uniqueSources(["'self'", nonceSource]);
+  const styleSources = uniqueSources([
+    "'self'",
+    nonceSource,
+    options.cspNonce ? undefined : "'unsafe-inline'",
+  ]);
   const imgSources = uniqueSources([
     "'self'",
     'data:',
@@ -56,9 +66,10 @@ export function buildContentSecurityPolicy(
     formatDirective('object-src', ["'none'"]),
     formatDirective('frame-ancestors', ["'none'"]),
     formatDirective('form-action', ["'self'"]),
-    formatDirective('script-src', ["'self'"]),
+    formatDirective('script-src', scriptSources),
     formatDirective('script-src-attr', ["'none'"]),
-    formatDirective('style-src', ["'self'", "'unsafe-inline'"]),
+    formatDirective('style-src', styleSources),
+    formatDirective('style-src-attr', ["'unsafe-inline'"]),
     formatDirective('img-src', imgSources),
     formatDirective('connect-src', connectSources),
     formatDirective('font-src', ["'self'", 'data:']),

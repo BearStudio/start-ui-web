@@ -172,6 +172,41 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: no-throw-in-module-application
+    message: Module application code must return Result.Error(AppError) instead of throwing.
+    languages: [typescript]
+    severity: ERROR
+    pattern: throw $ERROR
+    paths:
+      include:
+        - src/modules/*/application/**/*.ts
+        - src/modules/*/application/**/*.tsx
+
+  - id: no-try-catch-in-module-application
+    message: Module application code should not catch normal business flow; only transaction-owning use cases may catch TransactionRunner.run failures and map them to Result.Error(AppError).
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: |
+          try {
+            ...
+          } catch ($ERROR) {
+            ...
+          }
+      - pattern: |
+          try {
+            ...
+          } catch {
+            ...
+          }
+    paths:
+      include:
+        - src/modules/*/application/**/*.ts
+        - src/modules/*/application/**/*.tsx
+      exclude:
+        - src/modules/book/application/use-cases/update-book.ts
+        - src/modules/email/application/use-cases/process-email-status-event.ts
+
   - id: no-ambient-new-date-in-business-core
     message: Domain and application code must use an injected Clock instead of ambient new Date().
     languages: [typescript]
@@ -282,6 +317,16 @@ rules:
       include:
         - src/routes/**/*.ts
         - src/routes/**/*.tsx
+
+  - id: no-kernel-application-result-test-import
+    message: Import ApplicationResult from @/modules/kernel/testing in tests.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'from\s+["'']@/modules/kernel/application/result["'']'
+    paths:
+      include:
+        - tests/**/*.ts
+        - tests/**/*.tsx
 
   - id: no-platform-imports-app-code
     message: src/platform must not import modules, routes, or composition.
@@ -447,6 +492,19 @@ rules:
     paths:
       exclude:
         - src/modules/auth/infrastructure/workos/**
+
+  - id: better-auth-session-revocation-no-direct-app-user-match
+    message: Resolve Better Auth session ownership through auth_identity before comparing to app user ids.
+    languages: [typescript]
+    severity: ERROR
+    pattern-regex: 'eq\s*\(\s*sessionTable\.userId\s*,\s*input\.userId\s*\)'
+    paths:
+      include:
+        - src/modules/auth/infrastructure/better-auth/**/*.ts
+        - src/modules/auth/infrastructure/better-auth/**/*.tsx
+      exclude:
+        - '**/*.unit.spec.ts'
+        - '**/*.test.ts'
 
   - id: better-auth-options-no-raw-in-operator
     message: Normalize Better Auth factory inputs by database shape; do not classify CreateAuthOptions with raw `in` checks.
@@ -960,4 +1018,4 @@ rules:
       include:
         - .github/workflows/*.yml
         - .github/workflows/*.yaml
-    pattern-regex: '(?s)-\s+name:\s*Upload coverage to Codecov(?!(?:(?!\n\s*-\s+name:).)*\n\s*if:\s*\$\{\{\s*secrets\.CODECOV_TOKEN)(?:(?!\n\s*-\s+name:).)*\n\s*uses:\s*codecov/codecov-action@(?:(?!\n\s*-\s+name:).)*\n\s*fail_ci_if_error:\s*true'
+    pattern-regex: '(?s)-\s+name:\s*Upload coverage to Codecov(?!(?:(?!\n\s*-\s+name:).)*\n\s*if:\s*(?:\$\{\{\s*)?(?:secrets|env)\.CODECOV_TOKEN)(?:(?!\n\s*-\s+name:).)*\n\s*uses:\s*codecov/codecov-action@(?:(?!\n\s*-\s+name:).)*\n\s*fail_ci_if_error:\s*true'

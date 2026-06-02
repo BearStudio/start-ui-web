@@ -1,4 +1,5 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
+import { ZodError } from 'zod';
 
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 
@@ -40,7 +41,7 @@ describe('kernel domain ids', () => {
     expect(zGenreId().parse(' genre-1 ')).toBe('genre-1');
     expect(zSessionId().parse(' session-1 ')).toBe('session-1');
     expect(zScopeKey().parse(' anonymous ')).toBe('anonymous');
-    expect(() => zUserId().parse('')).toThrow();
+    expect(() => zUserId().parse('')).toThrow(ZodError);
   });
 
   it('parses email addresses', () => {

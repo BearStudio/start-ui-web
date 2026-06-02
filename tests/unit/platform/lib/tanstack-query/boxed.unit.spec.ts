@@ -26,23 +26,31 @@ function queryState<TData, TError = Error>(input: {
 
 describe('Boxed TanStack Query adapters', () => {
   it('maps an idle pending query to AsyncData.NotAsked', () => {
-    const value = queryToAsyncData(queryState<string>({ status: 'pending' }));
+    const value = queryToAsyncData({
+      data: undefined as string | undefined,
+      fetchStatus: 'idle',
+      status: 'pending',
+    });
 
     expect(value.isNotAsked()).toBe(true);
   });
 
   it('maps an in-flight pending query to AsyncData.Loading', () => {
-    const value = queryToAsyncData(
-      queryState<string>({ status: 'pending', fetchStatus: 'fetching' })
-    );
+    const value = queryToAsyncData({
+      data: undefined as string | undefined,
+      fetchStatus: 'fetching',
+      status: 'pending',
+    });
 
     expect(value.isLoading()).toBe(true);
   });
 
   it('maps a successful query to AsyncData.Done', () => {
-    const value = queryToAsyncData(
-      queryState({ data: 'loaded', status: 'success' })
-    );
+    const value = queryToAsyncData({
+      data: 'loaded',
+      fetchStatus: 'idle',
+      status: 'success',
+    });
 
     expect(value.isDone()).toBe(true);
     expect(value).toMatchObject({ tag: 'Done', value: 'loaded' });
@@ -74,12 +82,16 @@ describe('Boxed TanStack Query adapters', () => {
   });
 
   it('maps nullable successful data to AsyncData.Done(Option)', () => {
-    const some = nullableQueryToAsyncOption(
-      queryState<string | null>({ data: 'loaded', status: 'success' })
-    );
-    const none = nullableQueryToAsyncOption(
-      queryState<string | null>({ data: null, status: 'success' })
-    );
+    const some = nullableQueryToAsyncOption({
+      data: 'loaded',
+      fetchStatus: 'idle',
+      status: 'success',
+    });
+    const none = nullableQueryToAsyncOption({
+      data: null,
+      fetchStatus: 'idle',
+      status: 'success',
+    });
 
     expect(some).toMatchObject({
       tag: 'Done',

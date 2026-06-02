@@ -1,12 +1,17 @@
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
-import { createClientOnlyFn, createServerOnlyFn } from '@tanstack/react-start';
+import {
+  createClientOnlyFn,
+  createServerOnlyFn,
+  getGlobalStartContext,
+} from '@tanstack/react-start';
 
 import { createClientQueryClient } from '@/composition/client-query';
 import { telemetryProxy } from '@/composition/telemetry';
 import { authQueries } from '@/modules/auth/client';
 import { isDevEnvironment } from '@/platform/env/config';
 import { createNoOpFlags } from '@/platform/flags';
+import { readCspNonceFromMeta } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
 
 import { routeTree } from './routeTree.gen';
@@ -42,8 +47,25 @@ if (import.meta.env.SSR) {
 
 const flags = createNoOpFlags();
 
+type RequestContextWithCspNonce = {
+  cspNonce?: unknown;
+};
+
+const getCspNonceFromStartContext = () => {
+  try {
+    const context = getGlobalStartContext() as RequestContextWithCspNonce;
+    return typeof context.cspNonce === 'string' ? context.cspNonce : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const getRouterCspNonce = () =>
+  getCspNonceFromStartContext() ?? readCspNonceFromMeta();
+
 export function getRouter() {
   const queryClient = createClientQueryClient();
+  const cspNonce = getRouterCspNonce();
   const routerContext: RouterContext = {
     queryClient,
     // Cached per router/query client so concurrent route guards within a
@@ -63,6 +85,7 @@ export function getRouter() {
     // This will ensure that the loader is always called when the route is preloaded or visited
     defaultPreloadStaleTime: 0,
     scrollRestoration: true,
+    ssr: cspNonce ? { nonce: cspNonce } : undefined,
     routeTree,
   });
 

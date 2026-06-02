@@ -214,7 +214,7 @@ export const createServerContextTools = ({
       direction: 'inbound',
     });
 
-    return await timingStore.run({ db: [] }, async () => {
+    return timingStore.run({ db: [] }, async () => {
       try {
         const session = await getSession(timings);
         if (session?.user?.id) {
@@ -287,7 +287,7 @@ export const createServerContextTools = ({
         throw error;
       })
       .with(Result.P.Ok({ type: 'auth_permission_granted' }), () => undefined)
-      .with(Result.P.Ok(P.select()), () => {
+      .with(Result.P.Ok(P._), () => {
         throw new ServerFnError('FORBIDDEN');
       })
       .exhaustive();

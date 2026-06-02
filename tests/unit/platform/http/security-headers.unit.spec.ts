@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  CSP_NONCE_PLACEHOLDER,
+  replaceCspNoncePlaceholderInHtmlResponse,
+} from '@/platform/http/csp-nonce';
+import {
   appendVaryHeader,
   applySecurityHeaders,
   buildContentSecurityPolicy,
   getSecurityHeaders,
 } from '@/platform/http/security-headers';
+
+const directiveValue = (policy: string, directiveName: string) =>
+  policy
+    .split('; ')
+    .find((directive) => directive.startsWith(`${directiveName} `));
 
 describe('security headers', () => {
   it('builds an enforced CSP with configured image and connection origins', () => {
@@ -21,10 +30,12 @@ describe('security headers', () => {
     expect(policy).toContain("object-src 'none'");
     expect(policy).toContain("frame-ancestors 'none'");
     expect(policy).toContain("form-action 'self'");
-    expect(policy).toContain("script-src 'self'");
-    expect(policy).not.toContain("script-src 'self' 'unsafe-inline'");
+    expect(directiveValue(policy, 'script-src')).toBe("script-src 'self'");
     expect(policy).toContain("script-src-attr 'none'");
-    expect(policy).toContain("style-src 'self' 'unsafe-inline'");
+    expect(directiveValue(policy, 'style-src')).toBe(
+      "style-src 'self' 'unsafe-inline'"
+    );
+    expect(policy).toContain("style-src-attr 'unsafe-inline'");
     expect(policy).toContain(
       "img-src 'self' data: blob: https://assets.example https://raw.githubusercontent.com"
     );
@@ -37,6 +48,22 @@ describe('security headers', () => {
     expect(policy).toContain("worker-src 'self' blob:");
     expect(policy).toContain("frame-src 'none'");
     expect(policy).toContain('upgrade-insecure-requests');
+  });
+
+  it('adds a CSP nonce for script and style elements when provided', () => {
+    const policy = buildContentSecurityPolicy({
+      cspNonce: 'test-nonce',
+    });
+
+    expect(directiveValue(policy, 'script-src')).toBe(
+      "script-src 'self' 'nonce-test-nonce'"
+    );
+    expect(directiveValue(policy, 'style-src')).toBe(
+      "style-src 'self' 'nonce-test-nonce'"
+    );
+    expect(directiveValue(policy, 'style-src-attr')).toBe(
+      "style-src-attr 'unsafe-inline'"
+    );
   });
 
   it('does not add HTTPS upgrade directives outside production HTTPS', () => {
@@ -113,5 +140,51 @@ describe('security headers', () => {
     appendVaryHeader(response, ['Origin']);
 
     expect(response.headers.get('Vary')).toBe('*');
+  });
+
+  it('replaces Vite CSP nonce placeholders in HTML responses', async () => {
+    const response = new Response(
+      `<meta property="csp-nonce" nonce="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}"></script>`,
+      {
+        headers: {
+          'Content-Length': '999',
+          'Content-Type': 'text/html; charset=utf-8',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    await expect(replaced.text()).resolves.toBe(
+      '<meta property="csp-nonce" nonce="request-nonce"><script nonce="request-nonce"></script>'
+    );
+    expect(replaced.headers.get('Content-Length')).toBe(null);
+    expect(replaced.headers.get('Content-Type')).toBe(
+      'text/html; charset=utf-8'
+    );
+  });
+
+  it('does not replace Vite CSP nonce placeholders in non-HTML responses', async () => {
+    const response = new Response(
+      JSON.stringify({ nonce: CSP_NONCE_PLACEHOLDER }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    expect(replaced).toBe(response);
+    await expect(replaced.text()).resolves.toBe(
+      JSON.stringify({ nonce: CSP_NONCE_PLACEHOLDER })
+    );
   });
 });

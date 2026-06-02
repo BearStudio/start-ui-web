@@ -114,10 +114,10 @@ for (const filePath of sourceFiles) {
 
   if (
     projectPath.startsWith('tests/integration/') &&
-    !/\.integration\.test\.tsx?$/.test(projectPath)
+    !projectPath.endsWith('.integration.test.ts')
   ) {
     failures.push(
-      `${projectPath}: integration tests must end with .integration.test.ts or .integration.test.tsx`
+      `${projectPath}: integration tests must end with .integration.test.ts`
     );
   }
 

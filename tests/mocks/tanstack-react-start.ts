@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 type ServerFunctionInput = {
   data?: unknown;
 };
@@ -43,6 +45,8 @@ export function createClientOnlyFn<TArgs extends unknown[], TResult>(
 ) {
   return fn;
 }
+
+export const getGlobalStartContext = vi.fn(() => undefined);
 
 export function createMiddleware(options?: unknown) {
   return {

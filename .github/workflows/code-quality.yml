@@ -194,10 +194,11 @@ jobs:
           retention-days: 30
 
       - name: Upload coverage to Codecov
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        if: env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@cddd853df119a48c5be31a973f8cd97e12e35e16 # v6.0.1
         with:
           files: ./coverage/lcov.info
+          disable_search: true
           flags: vitest
           name: vitest
           fail_ci_if_error: true

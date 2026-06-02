@@ -15,6 +15,8 @@ import {
   shouldProtectBrowserMutation,
   validateSameOriginBrowserMutationRequest,
 } from '@/platform/http/browser-mutation-protection';
+import { replaceCspNoncePlaceholderInHtmlResponse } from '@/platform/http/csp-nonce';
+import { createCspNonce } from '@/platform/http/csp-nonce-server';
 import { applySecurityHeaders } from '@/platform/http/security-headers';
 import { createNoOpTelemetry } from '@/platform/telemetry';
 
@@ -23,15 +25,27 @@ let browserMutationGuardLoggerPromise:
   | Promise<Pick<Logger, 'warn'>>
   | undefined;
 
-const getSecurityHeaderOptions = () => ({
+type RequestContextWithCspNonce = {
+  cspNonce?: unknown;
+};
+
+const getCspNonceFromContext = (context: unknown) => {
+  if (typeof context !== 'object' || context === null) return undefined;
+
+  const { cspNonce } = context as RequestContextWithCspNonce;
+  return typeof cspNonce === 'string' ? cspNonce : undefined;
+};
+
+const getSecurityHeaderOptions = (context?: unknown) => ({
   baseUrl: envClient.VITE_BASE_URL,
+  cspNonce: getCspNonceFromContext(context),
   isProduction: import.meta.env.PROD,
   s3BucketPublicUrl: envClient.VITE_S3_BUCKET_PUBLIC_URL,
   sentryDsn: envClient.VITE_SENTRY_DSN,
 });
 
-const applyAppSecurityHeaders = (response: Response) =>
-  applySecurityHeaders(response, getSecurityHeaderOptions());
+const applyAppSecurityHeaders = (response: Response, context?: unknown) =>
+  applySecurityHeaders(response, getSecurityHeaderOptions(context));
 
 const getBrowserMutationGuardLogger = async () => {
   if (browserMutationGuardLogger) {
@@ -62,14 +76,23 @@ const getBrowserMutationGuardLogger = async () => {
 export const securityHeadersMiddleware = createMiddleware({
   type: 'request',
 }).server(async ({ next }) => {
-  const result = await next();
-  applyAppSecurityHeaders(result.response);
-  return result;
+  const cspNonce = createCspNonce();
+  const context = { cspNonce };
+  const result = await next({ context });
+  const response = applyAppSecurityHeaders(
+    await replaceCspNoncePlaceholderInHtmlResponse(result.response, cspNonce),
+    context
+  );
+
+  return {
+    ...result,
+    response,
+  };
 });
 
 export const browserMutationGuardMiddleware = createMiddleware({
   type: 'request',
-}).server(async ({ request, pathname, handlerType, next }) => {
+}).server(async ({ context, request, pathname, handlerType, next }) => {
   if (
     !shouldProtectBrowserMutation({
       handlerType,
@@ -100,7 +123,7 @@ export const browserMutationGuardMiddleware = createMiddleware({
     const response = appendBrowserMutationVaryHeader(
       new Response('Forbidden', { status: 403 })
     );
-    return applyAppSecurityHeaders(response);
+    return applyAppSecurityHeaders(response, context);
   }
 
   const result = await next();

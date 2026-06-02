@@ -11,7 +11,7 @@ import {
   toEmailRecipientList,
   toLanguageCode,
   toOtpCode,
-} from '@/modules/kernel/domain/ids';
+} from '@/modules/kernel/testing';
 
 vi.mock('@/platform/lib/i18n', () => ({
   default: {
