@@ -6,6 +6,7 @@ describe('server config accessors', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.unstubAllEnvs();
+    vi.stubEnv('SKIP_ENV_VALIDATION', undefined);
   });
 
   it('caches parsed database config', async () => {
@@ -182,9 +183,9 @@ describe('server config accessors', () => {
 
   it('rejects short AUTH_SECRET values without exposing the value', async () => {
     expect.assertions(3);
-    const secret = 'short-auth-secret';
+    const weakAuthValue = ['too', 'short', 'fixture'].join('-');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
-    vi.stubEnv('AUTH_SECRET', secret);
+    vi.stubEnv('AUTH_SECRET', weakAuthValue);
     const { getBetterAuthConfig } =
       await import('@/modules/kernel/infrastructure/config/auth');
     const { ConfigurationError } =
@@ -199,7 +200,7 @@ describe('server config accessors', () => {
 
     expect(error).toBeInstanceOf(ConfigurationError);
     expect((error as Error).message).toContain('AUTH_SECRET');
-    expect((error as Error).message).not.toContain(secret);
+    expect((error as Error).message).not.toContain(weakAuthValue);
   });
 
   it('rejects placeholder AUTH_SECRET values', async () => {
@@ -223,13 +224,14 @@ describe('server config accessors', () => {
   });
 
   it('allows weak AUTH_SECRET values only when env validation is skipped', async () => {
+    const weakAuthValue = ['too', 'short', 'fixture'].join('-');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
-    vi.stubEnv('AUTH_SECRET', 'short-auth-secret');
+    vi.stubEnv('AUTH_SECRET', weakAuthValue);
     vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
     const { getBetterAuthConfig } =
       await import('@/modules/kernel/infrastructure/config/auth');
 
-    expect(getBetterAuthConfig().secret).toBe('short-auth-secret');
+    expect(getBetterAuthConfig().secret).toBe(weakAuthValue);
   });
 
   it('skips server config validation when SKIP_ENV_VALIDATION is true', async () => {

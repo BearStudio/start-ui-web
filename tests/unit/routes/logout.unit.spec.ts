@@ -41,11 +41,30 @@ describe('logout route handlers', () => {
     const response = await handleLogoutPostRequest(request);
 
     expect(mocks.handleLogoutRequest).toHaveBeenCalledWith(request);
-    expect(response.status).toBe(303);
-    expect(response.headers.get('Location')).toBe('/');
+    expect(response.status).toBe(204);
+    expect(response.headers.get('Location')).toBeNull();
     expect(response.headers.get('Set-Cookie')).toContain('__Host-session=');
     expect(response.headers.get('Set-Cookie')).toContain('Secure');
     expect(response.headers.get('Set-Cookie')).toContain('HttpOnly');
     expect(response.headers.get('Set-Cookie')).toContain('SameSite=Lax');
+  });
+
+  it('propagates non-OK auth logout responses', async () => {
+    mocks.handleLogoutRequest.mockResolvedValueOnce(
+      new Response('Logout failed', {
+        status: 503,
+        statusText: 'Service Unavailable',
+      })
+    );
+
+    const request = new Request('https://app.example/logout', {
+      method: 'POST',
+    });
+    const response = await handleLogoutPostRequest(request);
+
+    expect(mocks.handleLogoutRequest).toHaveBeenCalledWith(request);
+    expect(response.status).toBe(503);
+    expect(response.statusText).toBe('Service Unavailable');
+    await expect(response.text()).resolves.toBe('Logout failed');
   });
 });

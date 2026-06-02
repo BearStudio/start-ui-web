@@ -115,7 +115,7 @@ describe('TanStack Start instance', () => {
     type NextOptions = { context: { cspNonce: string } };
     const next = vi.fn(async (_options: NextOptions) => ({
       response: new Response(
-        `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}">`,
+        `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}" nonce="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}">window.__nonce__="${CSP_NONCE_PLACEHOLDER}"</script>`,
         {
           headers: {
             'Content-Type': 'text/html; charset=utf-8',
@@ -150,7 +150,7 @@ describe('TanStack Start instance', () => {
       'same-origin-allow-popups'
     );
     await expect(result.response.text()).resolves.toBe(
-      `<meta property="csp-nonce" content="${cspNonce}">`
+      `<meta property="csp-nonce" content="${cspNonce}" nonce="${cspNonce}"><script nonce="${cspNonce}">window.__nonce__="${cspNonce}"</script>`
     );
   });
 

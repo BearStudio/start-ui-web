@@ -24,6 +24,7 @@ import {
   TanStackDevtoolsPanel,
 } from '@/app/devtools/presentation';
 import { initSsrApp } from '@/modules/kernel/server';
+import { createCspNonceBridgeScript } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
 import appCss from '@/platform/styles/app.css?url';
 
@@ -98,10 +99,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootComponent() {
   const { queryClient } = useRouteContext({ from: Route.id });
+  const cspNonce = useRouter().options.ssr?.nonce;
 
   return (
     <RootDocument>
-      <Providers client={queryClient}>
+      <Providers client={queryClient} cspNonce={cspNonce}>
         <Outlet />
         <TanStackDevtoolsPanel />
       </Providers>
@@ -129,7 +131,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       }}
     >
       <head>
-        <CspNonceMeta />
+        <CspNonceTags />
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">
@@ -141,8 +143,22 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   );
 }
 
-function CspNonceMeta() {
+function CspNonceTags() {
   const nonce = useRouter().options.ssr?.nonce;
 
-  return nonce ? <meta property="csp-nonce" content={nonce} /> : null;
+  return nonce ? (
+    <>
+      <meta
+        property="csp-nonce"
+        content={nonce}
+        nonce={nonce}
+        suppressHydrationWarning
+      />
+      <script
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: createCspNonceBridgeScript(nonce) }}
+      />
+    </>
+  ) : null;
 }

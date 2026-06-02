@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 import { ConfirmResponsiveDrawer } from '@/platform/components/ui/confirm-responsive-drawer';
 
-import { signOut, useAuthSession } from './client';
+import { signOut } from './client';
 import { clearAllQueryStateForAuthBoundary } from './queries';
 
 export const ConfirmSignOut = (props: {
@@ -15,7 +15,6 @@ export const ConfirmSignOut = (props: {
 }) => {
   const { t } = useTranslation(['auth']);
   const navigate = useNavigate();
-  const session = useAuthSession();
   const queryClient = useQueryClient();
   return (
     <ConfirmResponsiveDrawer
@@ -26,7 +25,6 @@ export const ConfirmSignOut = (props: {
           return;
         }
 
-        await session.refetch();
         clearAllQueryStateForAuthBoundary(queryClient);
         await navigate({
           to: '/',

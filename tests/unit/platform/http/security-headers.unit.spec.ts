@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  createCspNonceBridgeScript,
   CSP_NONCE_PLACEHOLDER,
   readCspNonceFromMeta,
   replaceCspNoncePlaceholderInHtmlResponse,
@@ -149,7 +150,7 @@ describe('security headers', () => {
 
   it('replaces Vite CSP nonce placeholders in HTML responses', async () => {
     const response = new Response(
-      `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}"></script>`,
+      `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}" nonce="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}"></script>`,
       {
         headers: {
           'Content-Length': '999',
@@ -164,7 +165,7 @@ describe('security headers', () => {
     );
 
     await expect(replaced.text()).resolves.toBe(
-      '<meta property="csp-nonce" content="request-nonce"><script nonce="request-nonce"></script>'
+      '<meta property="csp-nonce" content="request-nonce" nonce="request-nonce"><script nonce="request-nonce"></script>'
     );
     expect(replaced.headers.get('Content-Length')).toBe(null);
     expect(replaced.headers.get('Content-Type')).toBe(
@@ -235,6 +236,65 @@ describe('security headers', () => {
     expect(readCspNonceFromMeta()).toBe('request-nonce');
     expect(querySelector).toHaveBeenCalledWith('meta[property="csp-nonce"]');
     expect(getAttribute).toHaveBeenNthCalledWith(1, 'content');
+  });
+
+  it('falls back to nonce property and nonce attribute when meta content is empty', () => {
+    const attributeValues = new Map([
+      ['content', ''],
+      ['nonce', 'attribute-nonce'],
+    ]);
+    const getAttribute = vi.fn((name: string) => attributeValues.get(name));
+    const querySelector = vi.fn(() => ({
+      getAttribute,
+      nonce: 'property-nonce',
+    }));
+    vi.stubGlobal('document', { querySelector });
+
+    expect(readCspNonceFromMeta()).toBe('property-nonce');
+    expect(getAttribute).toHaveBeenNthCalledWith(1, 'content');
+    expect(getAttribute).not.toHaveBeenCalledWith('nonce');
+
+    querySelector.mockReturnValueOnce({
+      getAttribute,
+      nonce: '',
+    });
+
+    expect(readCspNonceFromMeta()).toBe('attribute-nonce');
+  });
+
+  it('creates a bridge script that exposes the nonce and nonces dynamic style elements', () => {
+    type FakeElement = {
+      getAttribute: (name: string) => string | undefined;
+      setAttribute: (name: string, value: string) => void;
+    };
+    class FakeDocument {
+      createElement() {
+        const attributes = new Map<string, string>();
+
+        return {
+          getAttribute: (name: string) => attributes.get(name),
+          setAttribute: (name: string, value: string) => {
+            attributes.set(name, value);
+          },
+        };
+      }
+    }
+    const fakeWindow = {};
+    vi.stubGlobal('window', fakeWindow);
+    vi.stubGlobal('Document', FakeDocument);
+
+    new Function(createCspNonceBridgeScript('bridge-nonce'))();
+
+    const document = new FakeDocument() as unknown as Document;
+    const styleElement = document.createElement(
+      'style'
+    ) as unknown as FakeElement;
+    const divElement = document.createElement('div') as unknown as FakeElement;
+
+    expect(window.__nonce__).toBe('bridge-nonce');
+    expect(window.__startUiCspNonceBridgeInstalled).toBe(true);
+    expect(styleElement.getAttribute('nonce')).toBe('bridge-nonce');
+    expect(divElement.getAttribute('nonce')).toBeUndefined();
   });
 });
 

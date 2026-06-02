@@ -109,7 +109,7 @@ describe('auth client facade', () => {
   });
 
   it('signs out through a neutral result contract', async () => {
-    mocks.fetch.mockResolvedValue(new Response(null, { status: 200 }));
+    mocks.fetch.mockResolvedValue(new Response(null, { status: 204 }));
 
     await expect(signOut()).resolves.toEqual({
       ok: true,
@@ -120,6 +120,36 @@ describe('auth client facade', () => {
       method: 'POST',
     });
     expect(mocks.betterAuthBrowserClient.signOut).not.toHaveBeenCalled();
+  });
+
+  it('maps logout HTTP failures into a neutral error result', async () => {
+    mocks.fetch.mockResolvedValue(
+      new Response(null, {
+        status: 500,
+        statusText: 'Internal Server Error',
+      })
+    );
+
+    await expect(signOut()).resolves.toEqual({
+      ok: false,
+      code: 'SIGN_OUT_FAILED',
+      message: 'Internal Server Error',
+    });
+    expect(mocks.fetch).toHaveBeenCalledWith('/logout', {
+      credentials: 'same-origin',
+      method: 'POST',
+    });
+    expect(mocks.betterAuthBrowserClient.signOut).not.toHaveBeenCalled();
+  });
+
+  it('includes the HTTP status when logout failure status text is empty', async () => {
+    mocks.fetch.mockResolvedValue(new Response(null, { status: 502 }));
+
+    await expect(signOut()).resolves.toEqual({
+      ok: false,
+      code: 'SIGN_OUT_FAILED',
+      message: 'HTTP error 502',
+    });
   });
 
   it('uses the sanitized current-session query for session reads', () => {

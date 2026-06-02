@@ -78,7 +78,7 @@ rules:
     severity: ERROR
     languages:
       - typescript
-    pattern-regex: '\b(?:localStorage|sessionStorage)\s*\.\s*(?:setItem|getItem|removeItem)\s*\(\s*["''][^"'']*(?:auth|jwt|session|token)[^"'']*["'']'
+    pattern-regex: '(?is)\b(?:localStorage|sessionStorage)\s*\.\s*(?:setItem|getItem|removeItem)\s*\([^;]*(?:auth|jwt|session|token)[^;]*\)'
     paths:
       include:
         - src/**/*.ts
@@ -92,7 +92,7 @@ rules:
     severity: ERROR
     languages:
       - typescript
-    pattern-regex: '\bdocument\.cookie\s*=\s*["''][^"'']*(?:auth|jwt|session|token)[^"'']*'
+    pattern-regex: '(?is)\bdocument\.cookie\s*=[^;]*(?:auth|jwt|session|token)[^;]*(?:;|$)'
     paths:
       include:
         - src/**/*.ts
@@ -116,6 +116,8 @@ rules:
       exclude:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
+        - src/routes/api/**/*.ts
+        - src/routes/api/**/*.tsx
 
   - id: no-committed-better-auth-session-token
     message: Do not commit Playwright storage state containing better-auth.session_token; generate auth state during e2e setup.

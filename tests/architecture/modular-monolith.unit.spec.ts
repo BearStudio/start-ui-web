@@ -114,7 +114,7 @@ function isPathInside(relativeFile: string, relativeDir: string) {
 
 function findProtectedRouteGuardViolations() {
   const forbiddenAuthImports =
-    /from\s+['"](?:@\/composition\/auth|@\/modules\/auth\/(?:backend|client|infrastructure)(?:\/[^'"]*)?|better-auth(?:\/[^'"]*)?|@workos(?:-inc)?\/[^'"]+)['"]/g;
+    /from\s+['"](?:@\/composition\/auth|@\/modules\/auth\/(?:backend|client|infrastructure)(?:\/[^'"]*)?|better-auth(?:\/[^'"]*)?|@workos(?:-inc)?\/[^'"]+)['"]/;
 
   return protectedRouteGuardSpecs.flatMap(({ file, guard }) => {
     const source = readSource(file);
@@ -134,7 +134,6 @@ function findProtectedRouteGuardViolations() {
       },
     ];
 
-    forbiddenAuthImports.lastIndex = 0;
     return checks.filter((check) => !check.ok).map((check) => check.violation);
   });
 }

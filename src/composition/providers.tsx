@@ -18,6 +18,7 @@ import { envClient } from '@/platform/env/client';
 export const Providers = (props: {
   children: ReactNode;
   client: QueryClient;
+  cspNonce?: string;
   forcedTheme?: string;
 }) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
@@ -26,6 +27,7 @@ export const Providers = (props: {
       attribute="class"
       storageKey="theme"
       disableTransitionOnChange
+      nonce={props.cspNonce}
       forcedTheme={props.forcedTheme}
     >
       <QueryClientProvider client={props.client}>

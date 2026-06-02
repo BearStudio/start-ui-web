@@ -5,9 +5,9 @@ import { PageError } from '@/platform/components/errors/page-error';
 
 import { PageLogout } from '@/modules/auth/presentation';
 
-const signOutOnServer = createServerOnlyFn(async (request: Request) => {
+const loadHandleLogoutRequest = createServerOnlyFn(async () => {
   const { handleLogoutRequest } = await import('@/modules/auth/backend');
-  return handleLogoutRequest(request);
+  return handleLogoutRequest;
 });
 
 export const handleLogoutGetRequest = () =>
@@ -19,13 +19,16 @@ export const handleLogoutGetRequest = () =>
   });
 
 export const handleLogoutPostRequest = async (request: Request) => {
-  const authResponse = await signOutOnServer(request);
-  const headers = new Headers(authResponse.headers);
-  headers.set('Location', '/');
+  const handleLogoutRequest = await loadHandleLogoutRequest();
+  const authResponse = await handleLogoutRequest(request);
+
+  if (!authResponse.ok) {
+    return authResponse;
+  }
 
   return new Response(null, {
-    headers,
-    status: 303,
+    headers: authResponse.headers,
+    status: 204,
   });
 };
 

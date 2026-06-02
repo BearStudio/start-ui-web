@@ -177,7 +177,7 @@ export const signOut = async (): Promise<AuthClientResult<void>> => {
       return {
         ok: false,
         code: authSignOutErrorCode,
-        message: response.statusText || undefined,
+        message: response.statusText || `HTTP error ${response.status}`,
       };
     }
 
