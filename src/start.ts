@@ -8,6 +8,7 @@ import {
   createStart,
 } from '@tanstack/react-start';
 
+import { observeHttpRequest } from '@/composition/telemetry/request-observability';
 import type { Logger } from '@/modules/kernel';
 import { envClient } from '@/platform/env/client';
 import {
@@ -136,6 +137,12 @@ export const browserMutationGuardMiddleware = createMiddleware({
   return result;
 });
 
+export const telemetryRequestMiddleware = createMiddleware({
+  type: 'request',
+}).server(({ request, pathname, handlerType, next }) =>
+  observeHttpRequest({ handlerType, pathname, request }, () => next())
+);
+
 const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === 'serverFn',
   referer: true,
@@ -145,6 +152,7 @@ const csrfMiddleware = createCsrfMiddleware({
 export const startInstance = createStart(() => ({
   requestMiddleware: [
     sentryGlobalRequestMiddleware,
+    telemetryRequestMiddleware,
     securityHeadersMiddleware,
     browserMutationGuardMiddleware,
     csrfMiddleware,

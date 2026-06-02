@@ -16,6 +16,10 @@ import {
 
 let initialized = false;
 
+// OpenTelemetry owns tracing; Sentry stays error-only even if
+// SENTRY_TRACES_SAMPLE_RATE is present to avoid duplicate span reporting.
+const SENTRY_ERROR_ONLY_TRACES_SAMPLE_RATE = 0;
+
 const isTelemetryAdapter = (
   adapter: TelemetryAdapter | undefined
 ): adapter is TelemetryAdapter => Boolean(adapter);
@@ -42,7 +46,7 @@ export const initTelemetryServer = () => {
   Sentry.init({
     dsn: telemetryConfig.dsn,
     environment: telemetryConfig.environment,
-    tracesSampleRate: 0,
+    tracesSampleRate: SENTRY_ERROR_ONLY_TRACES_SAMPLE_RATE,
     sendDefaultPii: false,
     beforeSend: sanitizeSentryEvent,
   });

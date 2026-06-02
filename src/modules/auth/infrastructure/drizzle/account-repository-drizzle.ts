@@ -5,6 +5,7 @@ import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import type { UserId } from '@/modules/kernel/domain/ids';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import { extractDatabaseErrorDetails } from '@/modules/kernel/infrastructure/db/errors';
+import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
 
 import type {
@@ -103,5 +104,8 @@ export interface AccountRepositoryDrizzleDependencies {
 export function createAccountRepository(
   dependencies: AccountRepositoryDrizzleDependencies
 ): AccountRepository {
-  return new AccountRepositoryDrizzle(dependencies.db);
+  return observeRepository(
+    new AccountRepositoryDrizzle(dependencies.db),
+    'account'
+  );
 }

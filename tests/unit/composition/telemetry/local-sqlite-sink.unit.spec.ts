@@ -55,4 +55,17 @@ describe('local telemetry SQLite sink', () => {
     });
     __resetLocalTelemetrySinkForTests();
   });
+
+  it('does not propagate local SQLite setup failures to callers', async () => {
+    mkdirSync(dbPath, { recursive: true });
+    const { recordLocalTelemetrySummary } =
+      await import('@/composition/telemetry/local-sqlite-sink');
+
+    expect(() =>
+      recordLocalTelemetrySummary({
+        kind: 'otlp_proxy',
+        statusCode: 204,
+      })
+    ).not.toThrow();
+  });
 });

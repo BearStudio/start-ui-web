@@ -44,29 +44,33 @@ const getDatabase = () => {
 };
 
 export const recordLocalTelemetrySummary = (input: LocalTelemetrySummary) => {
-  const db = getDatabase();
-  if (!db) return;
+  try {
+    const db = getDatabase();
+    if (!db) return;
 
-  db.prepare(
-    `
-      INSERT INTO telemetry_summary (
-        kind,
-        signal,
-        bytes,
-        event_count,
-        status_code,
-        summary_json
-      )
-      VALUES (?, ?, ?, ?, ?, ?)
-    `
-  ).run(
-    input.kind,
-    input.signal ?? null,
-    input.bytes ?? null,
-    input.eventCount ?? null,
-    input.statusCode ?? null,
-    JSON.stringify(input.summary ?? {})
-  );
+    db.prepare(
+      `
+        INSERT INTO telemetry_summary (
+          kind,
+          signal,
+          bytes,
+          event_count,
+          status_code,
+          summary_json
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+      `
+    ).run(
+      input.kind,
+      input.signal ?? null,
+      input.bytes ?? null,
+      input.eventCount ?? null,
+      input.statusCode ?? null,
+      JSON.stringify(input.summary ?? {})
+    );
+  } catch {
+    // Local telemetry persistence must never turn observability into app failure.
+  }
 };
 
 /** Test-only. */

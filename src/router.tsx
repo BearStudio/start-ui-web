@@ -41,9 +41,12 @@ if (import.meta.env.SSR && shouldAutoInitTelemetry) {
   void initTelemetryServerOnly().catch((error: unknown) => {
     frontendLogger.warn('telemetry.server_init_failed', { error });
   });
-} else {
-  // Client telemetry needs the concrete router instance for Start router
-  // tracing, so it is initialized inside getRouter().
+} else if (shouldAutoInitTelemetry) {
+  // Start client instrumentation at module evaluation so document/fetch
+  // telemetry is active before router subscriptions begin handling navigation.
+  void initTelemetryClientOnly(undefined).catch((error: unknown) => {
+    frontendLogger.warn('telemetry.client_init_failed', { error });
+  });
 }
 
 const flags = createNoOpFlags();
@@ -98,11 +101,6 @@ export function getRouter() {
 
   if (!import.meta.env.SSR) {
     attachRouterObservability(router);
-    if (shouldAutoInitTelemetry) {
-      void initTelemetryClientOnly(router).catch((error: unknown) => {
-        frontendLogger.warn('telemetry.client_init_failed', { error });
-      });
-    }
   }
 
   return router;

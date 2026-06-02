@@ -772,7 +772,7 @@ rules:
     message: Use frontendLogger or the backend logger; console.* is allowed only in tests, fixtures, scripts, and localhost/debug diagnostics.
     languages: [typescript]
     severity: ERROR
-    pattern-regex: '\bconsole\.(?:debug|error|info|log|trace|warn)\s*\('
+    pattern-regex: '\bconsole\.(?:assert|clear|count|countReset|debug|dir|dirxml|error|group|groupCollapsed|groupEnd|info|log|table|time|timeEnd|timeLog|trace|warn)\s*\('
     paths:
       include:
         - src/**/*.ts

@@ -284,4 +284,27 @@ describe('server config accessors', () => {
 
     expect(() => getRedisConfig()).toThrow(ConfigurationError);
   });
+
+  it('requires an OpenTelemetry Collector URL in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('OTEL_COLLECTOR_URL', undefined);
+    const { getTelemetryConfig } =
+      await import('@/modules/kernel/infrastructure/config/telemetry');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    expect(() => getTelemetryConfig()).toThrow(ConfigurationError);
+    expect(() => getTelemetryConfig()).toThrow('OTEL_COLLECTOR_URL');
+  });
+
+  it('accepts production telemetry config when the Collector URL is present', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('OTEL_COLLECTOR_URL', 'https://collector.example/v1');
+    const { getTelemetryConfig } =
+      await import('@/modules/kernel/infrastructure/config/telemetry');
+
+    expect(getTelemetryConfig().collectorUrl).toBe(
+      'https://collector.example/v1'
+    );
+  });
 });

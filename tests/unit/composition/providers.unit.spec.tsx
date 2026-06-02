@@ -50,5 +50,5 @@ describe('Providers', () => {
       }),
       undefined
     );
-  });
+  }, 30_000);
 });

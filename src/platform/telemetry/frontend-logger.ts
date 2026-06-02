@@ -82,12 +82,16 @@ const sendWithBeacon = (records: FrontendLogPayload[]) => {
 };
 
 const sendWithFetch = async (records: FrontendLogPayload[]) => {
-  await fetch(TELEMETRY_LOG_ENDPOINT, {
+  const response = await fetch(TELEMETRY_LOG_ENDPOINT, {
     body: JSON.stringify({ records }),
     headers: { 'Content-Type': 'application/json' },
     keepalive: true,
     method: 'POST',
   });
+
+  if (!response.ok) {
+    throw new Error(`Failed to send frontend logs: ${response.status}`);
+  }
 };
 
 export const flushFrontendLogs = async () => {

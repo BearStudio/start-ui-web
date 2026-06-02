@@ -7,6 +7,7 @@ import {
   getConstraintName,
   isUniqueConstraintViolation,
 } from '@/modules/kernel/infrastructure/db/errors';
+import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import {
   ascendingTextCursorFilter,
   escapedIlikeFilter,
@@ -136,5 +137,8 @@ export interface GenreRepositoryDrizzleDependencies {
 export function createGenreRepository(
   dependencies: GenreRepositoryDrizzleDependencies
 ): GenreRepository {
-  return new GenreRepositoryDrizzle(dependencies.db);
+  return observeRepository(
+    new GenreRepositoryDrizzle(dependencies.db),
+    'genre'
+  );
 }

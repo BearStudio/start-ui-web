@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { ConfigurationError } from '../../domain/errors/configuration-error';
 import {
   baseEnvSchema,
   isProdRuntimeEnvironment,
@@ -56,6 +57,12 @@ export function getTelemetryConfig(): TelemetryConfig {
 
   const env = parseEnv(telemetryEnvSchema);
   const isProduction = isProdRuntimeEnvironment(env);
+  if (isProduction && !env.OTEL_COLLECTOR_URL) {
+    throw new ConfigurationError(
+      'OTEL_COLLECTOR_URL is required in production telemetry configuration.'
+    );
+  }
+
   cachedTelemetryConfig = {
     dsn: env.SENTRY_DSN,
     browserDsn: env.VITE_SENTRY_DSN ?? env.SENTRY_DSN,

@@ -2,6 +2,10 @@ import { getTelemetry } from '@/platform/telemetry';
 import type { TelemetrySpanHandle } from '@/platform/telemetry';
 
 type RouterLifecycleEvent = {
+  fromLocation?: { href: string; pathname: string };
+  hashChanged?: boolean;
+  hrefChanged?: boolean;
+  pathChanged?: boolean;
   toLocation: { href: string; pathname: string };
 };
 
@@ -25,8 +29,38 @@ type ActiveNavigation = {
   start: number;
 };
 
-const normalizePathname = (pathname: string) =>
-  pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
+const normalizePathname = (pathname: string) => {
+  let end = pathname.length;
+  while (end > 1 && pathname.charCodeAt(end - 1) === 47) end -= 1;
+  return pathname.slice(0, end);
+};
+
+const isAlphaNumeric = (charCode: number) =>
+  (charCode >= 48 && charCode <= 57) ||
+  (charCode >= 65 && charCode <= 90) ||
+  (charCode >= 97 && charCode <= 122);
+
+const isHex = (charCode: number) =>
+  (charCode >= 48 && charCode <= 57) ||
+  (charCode >= 65 && charCode <= 70) ||
+  (charCode >= 97 && charCode <= 102);
+
+const everyCharCode = (
+  value: string,
+  predicate: (charCode: number) => boolean
+) => {
+  for (let index = 0; index < value.length; index += 1) {
+    if (!predicate(value.charCodeAt(index))) return false;
+  }
+
+  return true;
+};
+
+const isIdPathSegment = (segment: string) =>
+  (segment.length >= 21 &&
+    segment[0]?.toLowerCase() === 'c' &&
+    everyCharCode(segment, isAlphaNumeric)) ||
+  (segment.length >= 8 && everyCharCode(segment, isHex));
 
 const routeTemplateFromRouterState = (router: ObservableRouter) => {
   const routeId = router.state?.matches?.at(-1)?.routeId;
@@ -34,16 +68,20 @@ const routeTemplateFromRouterState = (router: ObservableRouter) => {
 };
 
 const routeTemplateFromPathname = (pathname: string) =>
-  normalizePathname(pathname).replace(
-    /\/(?:c[a-z0-9]{20,}|[0-9a-f]{8,})(?=\/|$)/gi,
-    '/$id'
-  );
+  normalizePathname(pathname)
+    .split('/')
+    .map((segment) => (isIdPathSegment(segment) ? '$id' : segment))
+    .join('/');
+
+const shouldTraceNavigation = (event: RouterLifecycleEvent) =>
+  event.hrefChanged !== false &&
+  !(event.hashChanged === true && event.pathChanged === false);
 
 const finishNavigation = (
   router: ObservableRouter,
   active: ActiveNavigation | undefined,
   event: RouterLifecycleEvent,
-  status: 'rendered' | 'resolved'
+  status: 'rendered'
 ) => {
   if (!active || active.href !== event.toLocation.href) return undefined;
 
@@ -80,6 +118,8 @@ export const attachRouterObservability = (router: ObservableRouter) => {
   const unsubscribeBeforeNavigate = router.subscribe(
     'onBeforeNavigate',
     (event) => {
+      if (!shouldTraceNavigation(event)) return;
+
       activeNavigation?.span.end();
 
       const routeTemplate = routeTemplateFromPathname(
@@ -90,6 +130,11 @@ export const attachRouterObservability = (router: ObservableRouter) => {
         span: getTelemetry().startManualSpan({
           attributes: {
             'navigation.href': event.toLocation.href,
+            'navigation.hash_changed': event.hashChanged,
+            'navigation.path_changed': event.pathChanged,
+            ...(event.fromLocation
+              ? { 'navigation.from': event.fromLocation.href }
+              : {}),
             'route.template': routeTemplate,
           },
           name: `router.navigation ${routeTemplate}`,
@@ -101,12 +146,11 @@ export const attachRouterObservability = (router: ObservableRouter) => {
   );
 
   const unsubscribeResolved = router.subscribe('onResolved', (event) => {
-    activeNavigation = finishNavigation(
-      router,
-      activeNavigation,
-      event,
-      'resolved'
-    );
+    if (!activeNavigation || activeNavigation.href !== event.toLocation.href) {
+      return;
+    }
+
+    activeNavigation.span.addEvent('navigation.resolved');
   });
 
   const unsubscribeRendered = router.subscribe('onRendered', (event) => {

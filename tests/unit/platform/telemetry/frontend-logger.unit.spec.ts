@@ -57,4 +57,42 @@ describe('frontend logger', () => {
       traceId: 'trace-1',
     });
   });
+
+  it('keeps logs queued for retry when the backend log route returns an error status', async () => {
+    vi.stubGlobal('window', {
+      addEventListener: vi.fn(),
+      location: { hostname: 'localhost' },
+    });
+    vi.stubGlobal('document', {
+      addEventListener: vi.fn(),
+      visibilityState: 'visible',
+    });
+    vi.stubGlobal('navigator', {
+      sendBeacon: vi.fn(() => false),
+    });
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce(new Response(null, { status: 500 }))
+        .mockResolvedValueOnce(new Response(null, { status: 202 }))
+    );
+    const { flushFrontendLogs, frontendLogger } =
+      await import('@/platform/telemetry/frontend-logger');
+
+    frontendLogger.warn('query.retry', {
+      details: { operationName: 'book.getAll' },
+    });
+    await flushFrontendLogs();
+    await flushFrontendLogs();
+
+    expect(fetch).toHaveBeenCalledTimes(2);
+    const retryBody = JSON.parse(
+      vi.mocked(fetch).mock.calls[1]?.[1]?.body as string
+    ) as { records: Array<Record<string, unknown>> };
+    expect(retryBody.records[0]).toMatchObject({
+      event: 'query.retry',
+      level: 'warn',
+    });
+  });
 });

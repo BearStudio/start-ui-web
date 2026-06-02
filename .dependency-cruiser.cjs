@@ -143,10 +143,11 @@ module.exports = {
       name: 'presentation-uses-feature-public-api',
       severity: 'error',
       comment:
-        'Feature presentation reaches feature behavior through public module gates, not direct domain/application/transport/infrastructure internals.',
-      from: { path: '^src/modules/(?!kernel)[^/]+/presentation(?:/|$)' },
+        'Feature presentation reaches other feature behavior through public module gates, not direct domain/application/transport/infrastructure internals.',
+      from: { path: '^src/modules/(?!kernel/)([^/]+)/presentation(?:/|$)' },
       to: {
-        path: '^src/modules/(?!kernel)[^/]+/(domain|application|infrastructure|transport)(?:/|$)|^src/modules/(?!kernel)[^/]+/factory\\.(ts|tsx)$',
+        path: '^src/modules/(?!kernel)[^/]+/(?:domain|application|infrastructure|transport)(?:/|$)|^src/modules/(?!kernel)[^/]+/factory\\.(?:ts|tsx)$',
+        pathNot: '^src/modules/$1/',
       },
     },
     {

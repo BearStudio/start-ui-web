@@ -12,6 +12,7 @@ import {
   getConstraintName,
   isUniqueConstraintViolation,
 } from '@/modules/kernel/infrastructure/db/errors';
+import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import {
   ascendingTextCursorFilter,
   escapedIlikeFilter,
@@ -310,5 +311,5 @@ export interface BookRepositoryDrizzleDependencies {
 export function createBookRepository(
   dependencies: BookRepositoryDrizzleDependencies
 ): BookRepository {
-  return new BookRepositoryDrizzle(dependencies.db);
+  return observeRepository(new BookRepositoryDrizzle(dependencies.db), 'book');
 }

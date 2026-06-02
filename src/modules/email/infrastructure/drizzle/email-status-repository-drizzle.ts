@@ -30,6 +30,7 @@ import {
   getConstraintName,
   isUniqueConstraintViolation,
 } from '@/modules/kernel/infrastructure/db/errors';
+import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import {
   emailStatus as emailStatusTable,
   type NewEmailStatus,
@@ -502,5 +503,8 @@ export interface EmailStatusRepositoryDrizzleDependencies {
 export function createEmailStatusRepository(
   dependencies: EmailStatusRepositoryDrizzleDependencies
 ): EmailStatusRepository {
-  return new EmailStatusRepositoryDrizzle(dependencies.db);
+  return observeRepository(
+    new EmailStatusRepositoryDrizzle(dependencies.db),
+    'email_status'
+  );
 }

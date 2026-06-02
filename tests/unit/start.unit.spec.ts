@@ -14,15 +14,17 @@ vi.mock('@sentry/tanstackstart-react', () => ({
 }));
 
 describe('TanStack Start instance', () => {
-  it('adds Sentry, security headers, browser mutation guard, and server-function CSRF middleware', async () => {
+  it('adds Sentry, telemetry, security headers, browser mutation guard, and server-function CSRF middleware', async () => {
     const { startInstance } = await import('@/start');
     const options = (startInstance as ExplicitAny).options;
-    const securityHeaders = options.requestMiddleware[1] as ExplicitAny;
-    const browserMutationGuard = options.requestMiddleware[2] as ExplicitAny;
-    const csrf = options.requestMiddleware[3] as ExplicitAny;
+    const telemetry = options.requestMiddleware[1] as ExplicitAny;
+    const securityHeaders = options.requestMiddleware[2] as ExplicitAny;
+    const browserMutationGuard = options.requestMiddleware[3] as ExplicitAny;
+    const csrf = options.requestMiddleware[4] as ExplicitAny;
 
     expect(options.requestMiddleware[0]).toBe(sentryMiddleware.request);
     expect(options.functionMiddleware).toEqual([sentryMiddleware.function]);
+    expect(telemetry.type).toBe('request');
     expect(securityHeaders.type).toBe('request');
     expect(browserMutationGuard.type).toBe('request');
     expect(csrf.type).toBe('csrf');

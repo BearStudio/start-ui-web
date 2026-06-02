@@ -60,6 +60,12 @@ const payloadTooLarge = () =>
     status: 413,
   });
 
+const badRequest = () =>
+  new Response(JSON.stringify({ error: 'invalid_request_body' }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 400,
+  });
+
 const tooManyEvents = () =>
   new Response(JSON.stringify({ error: 'too_many_events' }), {
     headers: { 'Content-Type': 'application/json' },
@@ -95,12 +101,40 @@ const readBoundedBody = async (request: Request) => {
     return { ok: false as const, response: payloadTooLarge() };
   }
 
-  const body = await request.arrayBuffer();
-  if (body.byteLength > config.proxyMaxBytes) {
-    return { ok: false as const, response: payloadTooLarge() };
+  if (!request.body) {
+    return { ok: true as const, body: new ArrayBuffer(0) };
   }
 
-  return { ok: true as const, body };
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+
+      totalBytes += value.byteLength;
+      if (totalBytes > config.proxyMaxBytes) {
+        await reader.cancel();
+        return { ok: false as const, response: payloadTooLarge() };
+      }
+
+      chunks.push(value);
+    }
+  } catch {
+    return { ok: false as const, response: badRequest() };
+  }
+
+  const body = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return { ok: true as const, body: body.buffer };
 };
 
 const forwardToCollector = async (

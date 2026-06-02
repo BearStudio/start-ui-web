@@ -127,6 +127,44 @@ describe('telemetry transport handlers', () => {
     expect(response.status).toBe(415);
   });
 
+  it('rejects streamed telemetry bodies as soon as the configured byte limit is exceeded', async () => {
+    configMock.proxyMaxBytes = 3;
+    let canceled = false;
+    const body = new ReadableStream<Uint8Array>({
+      cancel() {
+        canceled = true;
+      },
+      start(controller) {
+        controller.enqueue(new Uint8Array([1, 2]));
+        controller.enqueue(new Uint8Array([1, 2]));
+        controller.enqueue(new Uint8Array([1, 2]));
+        controller.close();
+      },
+    });
+    const streamingRequest = new Request(
+      'http://localhost/api/telemetry/otel/v1/traces',
+      {
+        body,
+        headers: {
+          ...sameOriginHeaders('application/x-protobuf'),
+          'Content-Length': '1',
+        },
+        method: 'POST',
+        duplex: 'half',
+      } as RequestInit & { duplex: 'half' }
+    );
+    const arrayBufferSpy = vi.spyOn(streamingRequest, 'arrayBuffer');
+    const { handleOtlpProxyRequest } =
+      await import('@/composition/telemetry/transport');
+
+    const response = await handleOtlpProxyRequest(streamingRequest, 'traces');
+
+    expect(response.status).toBe(413);
+    expect(arrayBufferSpy).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+    expect(canceled).toBe(true);
+  });
+
   it('forwards tunneled Sentry envelopes to the DSN envelope endpoint', async () => {
     configMock.browserDsn = 'https://public@o123.ingest.sentry.io/456';
     vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 200 }));

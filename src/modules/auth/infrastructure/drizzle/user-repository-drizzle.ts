@@ -12,6 +12,7 @@ import {
   getConstraintName,
   isUniqueConstraintViolation,
 } from '@/modules/kernel/infrastructure/db/errors';
+import { observeRepository } from '@/modules/kernel/infrastructure/db/observability';
 import {
   ascendingTextCursorFilter,
   descendingDateCursorFilter,
@@ -392,5 +393,5 @@ export interface UserRepositoryDrizzleDependencies {
 export function createUserRepository(
   dependencies: UserRepositoryDrizzleDependencies
 ): UserRepository {
-  return new UserRepositoryDrizzle(dependencies.db);
+  return observeRepository(new UserRepositoryDrizzle(dependencies.db), 'user');
 }
