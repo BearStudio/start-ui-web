@@ -65,6 +65,32 @@ function isServerFunctionEntrypoint(file: string) {
   return fs.readFileSync(file, 'utf8').includes('createServerFn');
 }
 
+function isPathInside(relativeFile: string, relativeDir: string) {
+  return (
+    relativeFile === relativeDir ||
+    relativeFile.startsWith(`${relativeDir}${path.sep}`)
+  );
+}
+
+function isDrizzleImportAllowedSource(relativeFile: string) {
+  const segments = relativeFile.split(path.sep);
+
+  return (
+    isPathInside(
+      relativeFile,
+      path.join('src', 'modules', 'kernel', 'infrastructure', 'db')
+    ) ||
+    isPathInside(
+      relativeFile,
+      path.join('src', 'modules', 'auth', 'infrastructure', 'better-auth')
+    ) ||
+    (segments[0] === 'src' &&
+      segments[1] === 'modules' &&
+      segments[3] === 'infrastructure' &&
+      segments[4] === 'drizzle')
+  );
+}
+
 describe('strict modular monolith layout', () => {
   it('keeps legacy feature and shared roots removed', () => {
     expect(fs.existsSync(path.join(root, 'src/features'))).toBe(false);
@@ -259,6 +285,20 @@ describe('strict modular monolith layout', () => {
       findImportViolations(
         [...moduleTransportFiles, ...serverEntrypointFiles, ...apiRouteFiles],
         /from\s+['"](?:drizzle-orm(?:\/[^'"]*)?|pg|postgres)['"]/g
+      )
+    ).toEqual([]);
+  });
+
+  it('confines Drizzle imports to persistence infrastructure', () => {
+    const files = listSourceFiles(path.join(root, 'src')).filter((file) => {
+      const relative = path.relative(root, file);
+      return !isDrizzleImportAllowedSource(relative);
+    });
+
+    expect(
+      findImportViolations(
+        files,
+        /(?:from\s+['"]|import\s*\(\s*['"])(?:drizzle-orm(?:\/[^'"]*)?|better-auth\/adapters\/drizzle)['"]/g
       )
     ).toEqual([]);
   });

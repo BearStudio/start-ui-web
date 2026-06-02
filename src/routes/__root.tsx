@@ -144,5 +144,5 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 function CspNonceMeta() {
   const nonce = useRouter().options.ssr?.nonce;
 
-  return nonce ? <meta property="csp-nonce" nonce={nonce} /> : null;
+  return nonce ? <meta property="csp-nonce" content={nonce} /> : null;
 }

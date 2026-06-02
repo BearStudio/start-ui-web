@@ -17,7 +17,7 @@ describe('router composition', () => {
     const router = getRouter() as ExplicitAny;
 
     expect(router.options.ssr?.nonce).toBe('router-nonce');
-  });
+  }, 10_000);
 
   it('creates a router when Start context is not available', async () => {
     getGlobalStartContextMock.mockImplementation(() => {

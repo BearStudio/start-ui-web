@@ -180,6 +180,16 @@ describe('server config accessors', () => {
     expect(() => getAuthConfig()).toThrow(ConfigurationError);
   });
 
+  it('skips server config validation when SKIP_ENV_VALIDATION is true', async () => {
+    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
+    vi.stubEnv('AUTH_SECRET', undefined);
+    vi.stubEnv('DATABASE_URL', undefined);
+
+    await expect(
+      import('@/modules/kernel/infrastructure/config/server')
+    ).resolves.toHaveProperty('validateServerConfig');
+  });
+
   it('returns null for absent optional Redis config', async () => {
     vi.stubEnv('UPSTASH_REDIS_REST_URL', undefined);
     vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', undefined);

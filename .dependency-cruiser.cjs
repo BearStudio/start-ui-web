@@ -258,13 +258,27 @@ module.exports = {
       to: { path: '^src/server/' },
     },
     {
-      name: 'drizzle-confined-to-infrastructure',
+      name: 'drizzle-confined-to-persistence-infrastructure',
       severity: 'error',
+      comment:
+        'Drizzle ORM imports stay in persistence infrastructure: kernel DB, module Drizzle adapters/schemas, and the auth Better Auth adapter.',
       from: {
         pathNot:
-          '^src/(modules/[^/]+/infrastructure|modules/kernel/infrastructure|composition|drizzle)',
+          '^src/(?:modules/kernel/infrastructure/db(?:/|$)|modules/[^/]+/infrastructure/drizzle(?:/|$)|modules/auth/infrastructure/better-auth(?:/|$))',
       },
-      to: { path: '^(drizzle-orm|@neondatabase/serverless|pg|postgres)' },
+      to: {
+        path: '^(?:drizzle-orm(?:/|$)|better-auth/adapters/drizzle(?:/|$))',
+      },
+    },
+    {
+      name: 'database-drivers-confined-to-kernel-db',
+      severity: 'error',
+      comment:
+        'Low-level database drivers are owned by kernel DB infrastructure.',
+      from: {
+        pathNot: '^src/modules/kernel/infrastructure/db(?:/|$)',
+      },
+      to: { path: '^(?:@neondatabase/serverless|pg|postgres)(?:/|$)' },
     },
     {
       name: 'server-only-from-client',

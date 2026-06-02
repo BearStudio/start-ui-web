@@ -181,7 +181,10 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p test-results/vitest
-          SKIP_ENV_VALIDATION=true pnpm test:coverage -- --reporter=default --reporter=junit --outputFile.junit=test-results/vitest/junit.xml
+          SKIP_ENV_VALIDATION=true pnpm test:coverage --reporter=default --reporter=junit --outputFile.junit=test-results/vitest/junit.xml
+
+      - name: Ensure lcov report was generated
+        run: test -s coverage/lcov.info
 
       - name: Upload Vitest reports and coverage
         if: always()
@@ -218,6 +221,9 @@ jobs:
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: 24
+
+      - name: Pre-pull PostgreSQL test image
+        run: docker pull postgres:16-alpine@sha256:16bc17c64a573ef34162af9298258d1aec548232985b33ed7b1eac33ba35c229
 
       - name: Run PostgreSQL integration tests
         run: |

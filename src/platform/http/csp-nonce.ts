@@ -9,21 +9,49 @@ export async function replaceCspNoncePlaceholderInHtmlResponse(
   response: Response,
   nonce: string
 ) {
-  if (!shouldReplaceCspNoncePlaceholder(response)) {
+  const body = response.body;
+
+  if (!body || !shouldReplaceCspNoncePlaceholder(response)) {
     return response;
   }
 
   const headers = new Headers(response.headers);
   headers.delete('Content-Length');
 
-  return new Response(
-    replaceCspNoncePlaceholder(await response.text(), nonce),
-    {
-      headers,
-      status: response.status,
-      statusText: response.statusText,
-    }
-  );
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let bufferedText = '';
+
+  const transformStream = new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      bufferedText += decoder.decode(chunk, { stream: true });
+
+      const { output, remaining } = replaceBufferedCspNoncePlaceholders(
+        bufferedText,
+        nonce
+      );
+      bufferedText = remaining;
+
+      if (output) {
+        controller.enqueue(encoder.encode(output));
+      }
+    },
+    flush(controller) {
+      bufferedText += decoder.decode();
+
+      if (bufferedText) {
+        controller.enqueue(
+          encoder.encode(replaceCspNoncePlaceholder(bufferedText, nonce))
+        );
+      }
+    },
+  });
+
+  return new Response(body.pipeThrough(transformStream), {
+    headers,
+    status: response.status,
+    statusText: response.statusText,
+  });
 }
 
 export function readCspNonceFromMeta() {
@@ -32,15 +60,11 @@ export function readCspNonceFromMeta() {
   const element = document.querySelector(CSP_NONCE_META_SELECTOR);
   if (!element) return undefined;
 
-  const nonce =
-    'nonce' in element && typeof element.nonce === 'string'
-      ? element.nonce
-      : undefined;
+  const contentNonce = element.getAttribute('content') ?? undefined;
+  const nonce = isElementWithNonceProperty(element) ? element.nonce : undefined;
   const attributeNonce = element.getAttribute('nonce') ?? undefined;
-  const contentNonce =
-    element instanceof HTMLMetaElement ? element.content : undefined;
 
-  return nonce || attributeNonce || contentNonce;
+  return contentNonce || nonce || attributeNonce;
 }
 
 function shouldReplaceCspNoncePlaceholder(response: Response) {
@@ -52,4 +76,38 @@ function shouldReplaceCspNoncePlaceholder(response: Response) {
     .get('Content-Type')
     ?.toLowerCase()
     .includes('text/html');
+}
+
+function replaceBufferedCspNoncePlaceholders(value: string, nonce: string) {
+  const searchableLength = Math.max(
+    0,
+    value.length - (CSP_NONCE_PLACEHOLDER.length - 1)
+  );
+  let index = 0;
+  let output = '';
+
+  while (index < searchableLength) {
+    const placeholderIndex = value.indexOf(CSP_NONCE_PLACEHOLDER, index);
+
+    if (placeholderIndex === -1 || placeholderIndex >= searchableLength) {
+      output += value.slice(index, searchableLength);
+      index = searchableLength;
+      break;
+    }
+
+    output += value.slice(index, placeholderIndex);
+    output += nonce;
+    index = placeholderIndex + CSP_NONCE_PLACEHOLDER.length;
+  }
+
+  return {
+    output,
+    remaining: value.slice(index),
+  };
+}
+
+function isElementWithNonceProperty(
+  element: Element
+): element is Element & { nonce: string } {
+  return 'nonce' in element && typeof element.nonce === 'string';
 }

@@ -23,6 +23,11 @@ export const isDevRuntimeEnvironment = (source?: RuntimeEnv) => {
   return env.NODE_ENV ? env.NODE_ENV === 'development' : isTruthy(env.DEV);
 };
 
+export const shouldSkipEnvValidation = (source?: RuntimeEnv) => {
+  const env = source ?? runtimeEnv();
+  return isTruthy(env.SKIP_ENV_VALIDATION);
+};
+
 export const zNonEmptyEnvString = () => z.string().trim().min(1);
 
 export const baseEnvSchema = z

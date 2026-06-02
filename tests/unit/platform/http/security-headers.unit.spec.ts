@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   CSP_NONCE_PLACEHOLDER,
+  readCspNonceFromMeta,
   replaceCspNoncePlaceholderInHtmlResponse,
 } from '@/platform/http/csp-nonce';
 import {
@@ -15,6 +16,10 @@ const directiveValue = (policy: string, directiveName: string) =>
   policy
     .split('; ')
     .find((directive) => directive.startsWith(`${directiveName} `));
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe('security headers', () => {
   it('builds an enforced CSP with configured image and connection origins', () => {
@@ -144,7 +149,7 @@ describe('security headers', () => {
 
   it('replaces Vite CSP nonce placeholders in HTML responses', async () => {
     const response = new Response(
-      `<meta property="csp-nonce" nonce="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}"></script>`,
+      `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}"></script>`,
       {
         headers: {
           'Content-Length': '999',
@@ -159,7 +164,7 @@ describe('security headers', () => {
     );
 
     await expect(replaced.text()).resolves.toBe(
-      '<meta property="csp-nonce" nonce="request-nonce"><script nonce="request-nonce"></script>'
+      '<meta property="csp-nonce" content="request-nonce"><script nonce="request-nonce"></script>'
     );
     expect(replaced.headers.get('Content-Length')).toBe(null);
     expect(replaced.headers.get('Content-Type')).toBe(
@@ -187,4 +192,59 @@ describe('security headers', () => {
       JSON.stringify({ nonce: CSP_NONCE_PLACEHOLDER })
     );
   });
+
+  it('replaces split Vite CSP nonce placeholders without reading the whole response first', async () => {
+    const response = new Response(
+      streamTextChunks([
+        `<script nonce="${CSP_NONCE_PLACEHOLDER.slice(0, 8)}`,
+        CSP_NONCE_PLACEHOLDER.slice(8, 19),
+        `${CSP_NONCE_PLACEHOLDER.slice(19)}"></script>`,
+      ]),
+      {
+        headers: {
+          'Content-Length': '999',
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+    const textSpy = vi.spyOn(response, 'text');
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    expect(textSpy).not.toHaveBeenCalled();
+    expect(replaced.headers.get('Content-Length')).toBe(null);
+    await expect(replaced.text()).resolves.toBe(
+      '<script nonce="request-nonce"></script>'
+    );
+  });
+
+  it('reads the CSP nonce from meta content before browser-hidden nonce attributes', () => {
+    const getAttribute = vi
+      .fn<(name: string) => string>()
+      .mockReturnValueOnce('request-nonce')
+      .mockReturnValueOnce('');
+    const querySelector = vi.fn(() => ({
+      getAttribute,
+      nonce: '',
+    }));
+    vi.stubGlobal('document', { querySelector });
+
+    expect(readCspNonceFromMeta()).toBe('request-nonce');
+    expect(querySelector).toHaveBeenCalledWith('meta[property="csp-nonce"]');
+    expect(getAttribute).toHaveBeenNthCalledWith(1, 'content');
+  });
 });
+
+function streamTextChunks(chunks: string[]) {
+  const encoder = new TextEncoder();
+
+  return new ReadableStream<Uint8Array>({
+    start(controller) {
+      chunks.forEach((chunk) => controller.enqueue(encoder.encode(chunk)));
+      controller.close();
+    },
+  });
+}
