@@ -491,7 +491,7 @@ describe('strict modular monolith layout', () => {
     expect(
       findImportViolations(
         files,
-        /(?:from\s+['"]|import\s*\(\s*['"])(?:drizzle-orm(?:\/[^'"]*)?|better-auth\/adapters\/drizzle)['"]/g
+        /(?:from\s+['"]|import\s*\(\s*['"])(?:drizzle-orm(?:\/[^'"]*)?|better-auth\/adapters\/drizzle(?:\/[^'"]*)?)['"]/g
       )
     ).toEqual([]);
   });

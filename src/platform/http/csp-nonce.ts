@@ -60,11 +60,12 @@ export function readCspNonceFromMeta() {
   const element = document.querySelector(CSP_NONCE_META_SELECTOR);
   if (!element) return undefined;
 
-  const contentNonce = element.getAttribute('content') ?? undefined;
-  const nonce = isElementWithNonceProperty(element) ? element.nonce : undefined;
-  const attributeNonce = element.getAttribute('nonce') ?? undefined;
-
-  return contentNonce || nonce || attributeNonce;
+  return (
+    element.getAttribute('content') ||
+    (isElementWithNonceProperty(element) ? element.nonce : undefined) ||
+    element.getAttribute('nonce') ||
+    undefined
+  );
 }
 
 function shouldReplaceCspNoncePlaceholder(response: Response) {

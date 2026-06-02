@@ -165,6 +165,7 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       VITE_BASE_URL: http://localhost:3000
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
+      SKIP_ENV_VALIDATION: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -181,7 +182,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p test-results/vitest
-          SKIP_ENV_VALIDATION=true pnpm test:coverage --reporter=default --reporter=junit --outputFile.junit=test-results/vitest/junit.xml
+          pnpm test:coverage --reporter=default --reporter=junit --outputFile.junit=test-results/vitest/junit.xml
 
       - name: Ensure lcov report was generated
         run: test -s coverage/lcov.info
