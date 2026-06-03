@@ -118,7 +118,11 @@ export const attachRouterObservability = (router: ObservableRouter) => {
   const unsubscribeBeforeNavigate = router.subscribe(
     'onBeforeNavigate',
     (event) => {
-      if (!shouldTraceNavigation(event)) return;
+      if (!shouldTraceNavigation(event)) {
+        activeNavigation?.span.end();
+        activeNavigation = undefined;
+        return;
+      }
 
       activeNavigation?.span.end();
 

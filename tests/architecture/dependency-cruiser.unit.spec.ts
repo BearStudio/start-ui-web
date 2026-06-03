@@ -1,5 +1,6 @@
 import { cruise } from 'dependency-cruiser';
 import extractDepcruiseOptions from 'dependency-cruiser/config-utl/extract-depcruise-options';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -18,4 +19,14 @@ describe('dependency-cruiser architecture rules', () => {
     },
     DEPCRUISE_TEST_TIMEOUT_MS
   );
+
+  it('scopes kernel module regex exceptions to the kernel path segment', () => {
+    const config = readFileSync(
+      path.resolve(process.cwd(), '.dependency-cruiser.cjs'),
+      'utf8'
+    );
+
+    expect(config).not.toContain('(?!kernel)');
+    expect(config).toContain('(?!kernel/)');
+  });
 });

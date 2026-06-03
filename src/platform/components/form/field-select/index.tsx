@@ -20,15 +20,17 @@ type Item = {
   disabled?: boolean;
 };
 
+type FieldSelectProps<TItem extends Item> = FieldProps<
+  {
+    containerProps?: ComponentProps<typeof FormFieldContainer>;
+    inputProps?: ComponentProps<typeof SelectValue>;
+  } & Omit<ComponentProps<typeof Select<TItem['value']>>, 'items'> & {
+      items: TItem[];
+    } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
+>;
+
 export const FieldSelect = <TItem extends Item>(
-  props: FieldProps<
-    {
-      containerProps?: ComponentProps<typeof FormFieldContainer>;
-      inputProps?: ComponentProps<typeof SelectValue>;
-    } & Omit<ComponentProps<typeof Select>, 'items'> & {
-        items: TItem[];
-      } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
-  >
+  props: FieldSelectProps<TItem>
 ) => {
   const { containerProps, inputProps, children, placeholder, ...rest } = props;
 
@@ -42,7 +44,9 @@ export const FieldSelect = <TItem extends Item>(
         disabled={rest.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
-          field.onChange(value);
+          if (value !== null) {
+            field.onChange(value);
+          }
           rest.onValueChange?.(value, event);
         }}
       >

@@ -67,7 +67,7 @@ test.describe('Protected route navigation as manager', () => {
       page.getByText('J.R.R. Tolkien', { exact: true })
     ).toBeVisible();
 
-    await page.reload();
+    await page.reload({ waitUntil: 'commit' });
 
     await expect(page).toHaveURL(new RegExp(`${deepLink}/?$`));
     await expect(page.getByTestId('layout-manager')).toBeVisible();
@@ -91,7 +91,7 @@ test.describe('Protected route navigation as manager', () => {
       page.getByText('1 results for "admin@admin.com"')
     ).toBeVisible();
 
-    await page.reload();
+    await page.reload({ waitUntil: 'commit' });
 
     await expect(page).toHaveURL(
       /\/manager\/users\?searchTerm=admin%40admin\.com$/

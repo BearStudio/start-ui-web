@@ -106,11 +106,12 @@ const readBoundedBody = async (request: Request) => {
     return { ok: true as const, body: new ArrayBuffer(0) };
   }
 
-  const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
   let totalBytes = 0;
 
   try {
+    const reader = request.body.getReader();
+
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;

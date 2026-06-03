@@ -19,6 +19,8 @@ describe('manager user query hydration policy', () => {
       const source = await readFile(file, 'utf8');
 
       expect(source).not.toContain('useHydrated');
+      // User manager queries must not be hydration-gated; `enabled:` is
+      // intentionally disallowed in these files to prevent reintroducing it.
       expect(source).not.toMatch(/\benabled\s*:/);
     }
   });

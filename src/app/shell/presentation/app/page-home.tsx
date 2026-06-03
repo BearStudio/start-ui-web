@@ -5,9 +5,11 @@ import {
   PageLayoutTopBar,
 } from '@/platform/components/page-layout/app';
 
-import { DemoAppSwitch } from '@/app/demo/presentation';
-import { DemoMarketingBento } from '@/app/demo/presentation';
-import { DemoWelcome } from '@/app/demo/presentation';
+import {
+  DemoAppSwitch,
+  DemoMarketingBento,
+  DemoWelcome,
+} from '@/app/demo/presentation';
 
 export const PageHome = () => {
   return (

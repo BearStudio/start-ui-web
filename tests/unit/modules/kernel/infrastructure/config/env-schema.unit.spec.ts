@@ -39,7 +39,7 @@ describe('server env parser', () => {
       SECRET_TOKEN: z.string().min(32),
       SERVICE_URL: z.url(),
     });
-    const secret = 'short-secret-value';
+    const secret = 'short-secret-value'; // pragma: allowlist secret
 
     try {
       parseEnv(schema, {

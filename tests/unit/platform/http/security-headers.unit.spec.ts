@@ -83,13 +83,13 @@ describe('security headers', () => {
     });
 
     expect(directiveValue(testPolicy, 'style-src')).toContain(
-      "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='"
+      "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='" // pragma: allowlist secret
     );
     expect(directiveValue(testPolicy, 'style-src')).toContain(
-      "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='"
+      "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='" // pragma: allowlist secret
     );
     expect(directiveValue(productionPolicy, 'style-src')).not.toContain(
-      'sha256-7kYjkz6pduUs3kVL'
+      'sha256-7kYjkz6pduUs3kVL' // pragma: allowlist secret
     );
   });
 
@@ -329,6 +329,26 @@ describe('security headers', () => {
 
     controller?.close();
     reader?.releaseLock();
+  });
+
+  it('nonces style tags whose opening tag is split across streamed chunks', async () => {
+    const response = new Response(
+      streamTextChunks(['<sty', 'le data-test="x"', '>.a{color:red}</style>']),
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    await expect(replaced.text()).resolves.toBe(
+      '<style nonce="request-nonce" data-test="x">.a{color:red}</style>'
+    );
   });
 
   it('does not buffer a complete client entry script while waiting for response close', async () => {

@@ -6,8 +6,9 @@ export const useClipboard = (options: { showDuration?: number } = {}) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (text: string) => {
-    void copy(text);
-    setIsCopied(true);
+    void copy(text)
+      .then(() => setIsCopied(true))
+      .catch(() => setIsCopied(false));
   };
 
   useEffect(() => {
@@ -20,5 +21,5 @@ export const useClipboard = (options: { showDuration?: number } = {}) => {
     return () => clearTimeout(timer);
   }, [options?.showDuration, isCopied]);
 
-  return { copyToClipboard: copyToClipboard, isCopied };
+  return { copyToClipboard, isCopied };
 };

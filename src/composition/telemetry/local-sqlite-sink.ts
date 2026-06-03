@@ -15,6 +15,15 @@ type LocalTelemetrySummary = {
 
 let database: DatabaseSync | undefined;
 
+const resetDatabase = () => {
+  try {
+    database?.close();
+  } catch {
+    // The connection may already be unusable; clearing it is enough.
+  }
+  database = undefined;
+};
+
 const getDatabase = () => {
   const config = getTelemetryConfig();
   if (!config.localSqliteEnabled) return undefined;
@@ -69,12 +78,12 @@ export const recordLocalTelemetrySummary = (input: LocalTelemetrySummary) => {
       JSON.stringify(input.summary ?? {})
     );
   } catch {
+    resetDatabase();
     // Local telemetry persistence must never turn observability into app failure.
   }
 };
 
 /** Test-only. */
 export const __resetLocalTelemetrySinkForTests = () => {
-  database?.close();
-  database = undefined;
+  resetDatabase();
 };

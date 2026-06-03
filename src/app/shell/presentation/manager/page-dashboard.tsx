@@ -5,9 +5,11 @@ import {
   PageLayoutTopBarTitle,
 } from '@/platform/components/page-layout/manager';
 
-import { DemoAppSwitch } from '@/app/demo/presentation';
-import { DemoMarketingBento } from '@/app/demo/presentation';
-import { DemoWelcome } from '@/app/demo/presentation';
+import {
+  DemoAppSwitch,
+  DemoMarketingBento,
+  DemoWelcome,
+} from '@/app/demo/presentation';
 
 export const PageDashboard = () => {
   return (

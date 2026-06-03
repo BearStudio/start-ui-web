@@ -1,7 +1,5 @@
 import { type ComponentType, lazy, Suspense } from 'react';
 
-import { isDevEnvironment } from '@/platform/env/config';
-
 import { shouldRenderTanStackDevtools } from './tanstack-devtools-visibility';
 
 type LazyDevtoolsModule = {
@@ -9,7 +7,7 @@ type LazyDevtoolsModule = {
 };
 
 const LazyTanStackDevtools = lazy(async (): Promise<LazyDevtoolsModule> => {
-  if (!isDevEnvironment()) {
+  if (!import.meta.env.DEV) {
     return { default: () => null };
   }
 

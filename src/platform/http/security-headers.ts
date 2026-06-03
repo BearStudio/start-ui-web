@@ -10,8 +10,8 @@ type ContentSecurityPolicyOptions = {
 };
 
 const PLAYWRIGHT_SCREENSHOT_STYLE_HASH_SOURCES = [
-  "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='",
-  "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='",
+  "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='", // pragma: allowlist secret
+  "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='", // pragma: allowlist secret
 ] as const;
 
 const sourceOriginFromUrl = (value: string | undefined) => {

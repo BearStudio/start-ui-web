@@ -61,11 +61,18 @@ describe('database observability', () => {
     });
     expect(span.setStatus).toHaveBeenCalledWith('ok');
     expect(span.end).toHaveBeenCalledOnce();
-    expect(telemetry.recordMetric).toHaveBeenCalledWith(
+    expect(span.setAttributes).toHaveBeenCalledWith(
+      expect.objectContaining({
+        'db.operation.duration_ms': 30,
+        status: 'success',
+      })
+    );
+    expect(telemetry.recordMetric).toHaveBeenCalledOnce();
+    const metric = vi.mocked(telemetry.recordMetric).mock.calls[0]![0];
+    expect(metric).toEqual(
       expect.objectContaining({
         attributes: expect.objectContaining({
           'db.collection.name': 'book',
-          'db.operation.duration_ms': 30,
           'db.operation.name': 'list',
           status: 'success',
         }),
@@ -73,6 +80,7 @@ describe('database observability', () => {
         value: 30,
       })
     );
+    expect(metric.attributes).not.toHaveProperty('db.operation.duration_ms');
   });
 
   it('marks Result.Error repository outcomes as telemetry errors', async () => {
@@ -110,5 +118,106 @@ describe('database observability', () => {
         value: 2,
       })
     );
+    expect(telemetry.recordMetric).toHaveBeenCalledOnce();
+    const metric = vi.mocked(telemetry.recordMetric).mock.calls[0]![0];
+    expect(metric.attributes).not.toHaveProperty('db.operation.duration_ms');
+  });
+
+  it('does not let telemetry completion failures replace repository results', () => {
+    const span: TelemetrySpanHandle = {
+      addEvent: vi.fn(() => {
+        throw new Error('span event failed');
+      }),
+      end: vi.fn(() => {
+        throw new Error('span end failed');
+      }),
+      recordException: vi.fn(() => {
+        throw new Error('span exception failed');
+      }),
+      setAttributes: vi.fn(() => {
+        throw new Error('span attributes failed');
+      }),
+      setStatus: vi.fn(() => {
+        throw new Error('span status failed');
+      }),
+    };
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(() => {
+        throw new Error('metric failed');
+      }),
+      startManualSpan: vi.fn(() => span),
+    };
+    const repository = observeRepository(
+      {
+        list() {
+          return Result.Ok({ type: 'listed' as const });
+        },
+      },
+      'book'
+    );
+    setTelemetry(telemetry);
+
+    expect(repository.list()).toEqual(Result.Ok({ type: 'listed' }));
+  });
+
+  it('does not let span creation failures skip repository work', () => {
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(),
+      startManualSpan: vi.fn(() => {
+        throw new Error('span failed');
+      }),
+    };
+    const repository = observeRepository(
+      {
+        list() {
+          return 'listed';
+        },
+      },
+      'book'
+    );
+    setTelemetry(telemetry);
+
+    expect(repository.list()).toBe('listed');
+    expect(telemetry.recordMetric).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'app.db.operation.duration',
+      })
+    );
+  });
+
+  it('rethrows repository failures even when telemetry completion fails', () => {
+    const span: TelemetrySpanHandle = {
+      addEvent: vi.fn(),
+      end: vi.fn(() => {
+        throw new Error('span end failed');
+      }),
+      recordException: vi.fn(() => {
+        throw new Error('span exception failed');
+      }),
+      setAttributes: vi.fn(),
+      setStatus: vi.fn(() => {
+        throw new Error('span status failed');
+      }),
+    };
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(() => {
+        throw new Error('metric failed');
+      }),
+      startManualSpan: vi.fn(() => span),
+    };
+    const repository = observeRepository(
+      {
+        list() {
+          throw new Error('repository failed');
+        },
+      },
+      'book'
+    );
+    setTelemetry(telemetry);
+
+    expect(() => repository.list()).toThrow('repository failed');
   });
 });

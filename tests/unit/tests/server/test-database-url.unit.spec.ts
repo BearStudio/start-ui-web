@@ -22,7 +22,7 @@ describe('test database URL helpers', () => {
     });
 
     expect(url).toBe(
-      'postgres://generated-database-pr-62-principal:generated-database-pr-62-verifier@localhost:5432/start-ui-test?sslmode=require'
+      'postgres://generated-database-pr-62-principal:generated-database-pr-62-verifier@localhost:5432/start-ui-test?sslmode=require' // pragma: allowlist secret
     );
   });
 });

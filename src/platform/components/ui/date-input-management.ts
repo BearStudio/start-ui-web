@@ -35,7 +35,7 @@ export const useDatePickerInputManagement = (
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.currentTarget.value);
-    const date = dayjs(e.currentTarget.value, dateFormat);
+    const date = dayjs(e.currentTarget.value, dateFormat, true);
     if (date.isValid()) {
       const dateValue = date.startOf('day').toDate();
       onChange(dateValue);
@@ -60,7 +60,7 @@ export const useDatePickerInputManagement = (
 
     const isNewValue = !date.isSame(dateValue, 'date');
     if (!isNewValue) {
-      setInputValue(date.format('DD/MM/YYYY'));
+      setInputValue(date.format(dateFormat));
       // To avoid the issue of non-selection when:
       // * The input is focused with an already selected value
       // * A new date is clicked directly

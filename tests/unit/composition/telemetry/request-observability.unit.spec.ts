@@ -86,4 +86,45 @@ describe('request observability', () => {
     expect(telemetry.startSpan).not.toHaveBeenCalled();
     expect(telemetry.recordMetric).not.toHaveBeenCalled();
   });
+
+  it('records an error metric with response status and rethrows when next rejects', async () => {
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(),
+      startSpan: vi.fn((_options, fn) => fn()),
+    };
+    vi.spyOn(performance, 'now')
+      .mockReturnValueOnce(10)
+      .mockReturnValueOnce(45);
+    setTelemetry(telemetry);
+    const thrown = { response: new Response('denied', { status: 403 }) };
+
+    await expect(
+      observeHttpRequest(
+        {
+          handlerType: 'router',
+          pathname: '/manager/books/c12345678901234567890',
+          request: new Request(
+            'https://app.example/manager/books/c12345678901234567890',
+            { method: 'GET' }
+          ),
+        },
+        async () => {
+          throw thrown;
+        }
+      )
+    ).rejects.toBe(thrown);
+
+    expect(telemetry.recordMetric).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: expect.objectContaining({
+          'http.response.status_class': '4xx',
+          'http.response.status_code': 403,
+          status: 'error',
+        }),
+        name: 'app.http.request.duration',
+        value: 35,
+      })
+    );
+  });
 });

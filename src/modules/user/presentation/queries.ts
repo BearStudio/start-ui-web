@@ -70,27 +70,27 @@ export const userQueries = {
     }),
   create: () =>
     serverMutationOptions({
-      mutationKey: ['user', userQueryVersion, 'create'],
+      mutationKey: [...userQueries.all(), 'create'],
       mutationFn: userCreate,
     }),
   updateById: () =>
     serverMutationOptions({
-      mutationKey: ['user', userQueryVersion, 'updateById'],
+      mutationKey: [...userQueries.all(), 'updateById'],
       mutationFn: userUpdateById,
     }),
   deleteById: () =>
     serverMutationOptions({
-      mutationKey: ['user', userQueryVersion, 'deleteById'],
+      mutationKey: [...userQueries.all(), 'deleteById'],
       mutationFn: userDeleteById,
     }),
   revokeUserSessions: () =>
     serverMutationOptions({
-      mutationKey: ['user', userQueryVersion, 'revokeUserSessions'],
+      mutationKey: [...userQueries.all(), 'revokeUserSessions'],
       mutationFn: userRevokeUserSessions,
     }),
   revokeUserSession: () =>
     serverMutationOptions({
-      mutationKey: ['user', userQueryVersion, 'revokeUserSession'],
+      mutationKey: [...userQueries.all(), 'revokeUserSession'],
       mutationFn: userRevokeUserSession,
     }),
 };

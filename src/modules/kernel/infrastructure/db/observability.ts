@@ -1,5 +1,9 @@
 import { timingStore } from '@/modules/kernel/transport/tanstack/timing-store';
-import type { TelemetryAttributes } from '@/platform/telemetry';
+import type {
+  TelemetryAttributes,
+  TelemetrySpanHandle,
+  TelemetrySpanOptions,
+} from '@/platform/telemetry';
 import { getTelemetry } from '@/platform/telemetry';
 
 type DbOperationInput = {
@@ -37,13 +41,97 @@ const attributesForOperation = ({
   'db.system': 'postgresql',
 });
 
+const noopSpan: TelemetrySpanHandle = {
+  addEvent: () => {},
+  end: () => {},
+  recordException: () => {},
+  setAttributes: () => {},
+  setStatus: () => {},
+};
+
+const safelyRecordTelemetry = (record: () => void) => {
+  try {
+    record();
+  } catch {
+    // Observability must never change repository behavior.
+  }
+};
+
+const startManualSpan = (options: TelemetrySpanOptions) => {
+  try {
+    return getTelemetry().startManualSpan(options);
+  } catch {
+    return noopSpan;
+  }
+};
+
+const completeDbObservation = ({
+  attributes,
+  durationMs,
+  error,
+  input,
+  span,
+  status,
+}: {
+  attributes: TelemetryAttributes;
+  durationMs: number;
+  error?: unknown;
+  input: DbOperationInput;
+  span: TelemetrySpanHandle;
+  status: 'success' | 'error';
+}) => {
+  const metricAttributes = {
+    ...attributes,
+    status,
+  } satisfies TelemetryAttributes;
+  const spanAttributes = {
+    ...metricAttributes,
+    'db.operation.duration_ms': durationMs,
+  } satisfies TelemetryAttributes;
+
+  safelyRecordTelemetry(() => {
+    timingStore.getStore()?.db?.push({
+      duration: durationMs,
+      model: input.model,
+      operation: input.operation,
+    });
+  });
+  safelyRecordTelemetry(() => span.setAttributes(spanAttributes));
+  if (error !== undefined) {
+    safelyRecordTelemetry(() => span.recordException(error));
+  }
+  safelyRecordTelemetry(() => {
+    if (status === 'error') {
+      if (error instanceof Error) {
+        span.setStatus('error', error.message);
+        return;
+      }
+
+      span.setStatus('error');
+      return;
+    }
+
+    span.setStatus('ok');
+  });
+  safelyRecordTelemetry(() => span.end());
+  safelyRecordTelemetry(() => {
+    getTelemetry().recordMetric({
+      attributes: metricAttributes,
+      name: 'app.db.operation.duration',
+      type: 'histogram',
+      unit: 'ms',
+      value: durationMs,
+    });
+  });
+};
+
 export function observeDbOperation<T>(
   input: DbOperationInput,
   work: () => T
 ): T {
   const attributes = attributesForOperation(input);
   const startedAt = performance.now();
-  const span = getTelemetry().startManualSpan({
+  const span = startManualSpan({
     attributes,
     name: `db.${input.model}.${input.operation}`,
     op: 'db.repository',
@@ -52,26 +140,12 @@ export function observeDbOperation<T>(
   const finish = <TValue>(value: TValue): TValue => {
     const durationMs = performance.now() - startedAt;
     const status = resultStatus(value);
-    const statusAttributes = {
-      ...attributes,
-      'db.operation.duration_ms': durationMs,
+    completeDbObservation({
+      attributes,
+      durationMs,
+      input,
+      span,
       status,
-    } satisfies TelemetryAttributes;
-
-    timingStore.getStore()?.db.push({
-      duration: durationMs,
-      model: input.model,
-      operation: input.operation,
-    });
-    span.setAttributes(statusAttributes);
-    span.setStatus(status === 'error' ? 'error' : 'ok');
-    span.end();
-    getTelemetry().recordMetric({
-      attributes: statusAttributes,
-      name: 'app.db.operation.duration',
-      type: 'histogram',
-      unit: 'ms',
-      value: durationMs,
     });
 
     return value;
@@ -79,27 +153,13 @@ export function observeDbOperation<T>(
 
   const fail = (error: unknown): never => {
     const durationMs = performance.now() - startedAt;
-    const statusAttributes = {
-      ...attributes,
-      'db.operation.duration_ms': durationMs,
+    completeDbObservation({
+      attributes,
+      durationMs,
+      error,
+      input,
+      span,
       status: 'error',
-    } satisfies TelemetryAttributes;
-
-    timingStore.getStore()?.db.push({
-      duration: durationMs,
-      model: input.model,
-      operation: input.operation,
-    });
-    span.setAttributes(statusAttributes);
-    span.recordException(error);
-    span.setStatus('error', error instanceof Error ? error.message : undefined);
-    span.end();
-    getTelemetry().recordMetric({
-      attributes: statusAttributes,
-      name: 'app.db.operation.duration',
-      type: 'histogram',
-      unit: 'ms',
-      value: durationMs,
     });
 
     throw error;
@@ -109,7 +169,7 @@ export function observeDbOperation<T>(
     const result = work();
     if (!isPromiseLike(result)) return finish(result);
 
-    return result.then(finish).catch(fail) as T;
+    return result.then(finish, fail) as T;
   } catch (error) {
     return fail(error);
   }

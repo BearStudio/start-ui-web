@@ -45,6 +45,56 @@ describe('router observability', () => {
     expect(telemetry.startManualSpan).not.toHaveBeenCalled();
   });
 
+  it('closes an active navigation span before ignoring hash-only navigation', () => {
+    const span: TelemetrySpanHandle = {
+      addEvent: vi.fn(),
+      end: vi.fn(),
+      recordException: vi.fn(),
+      setAttributes: vi.fn(),
+      setStatus: vi.fn(),
+    };
+    const telemetry: TelemetryAdapter = {
+      ...createNoOpTelemetry(),
+      recordMetric: vi.fn(),
+      startManualSpan: vi.fn(() => span),
+    };
+    const handlers = new Map<string, RouterHandler>();
+    const router: ObservableRouter = {
+      subscribe: (eventType, fn) => {
+        handlers.set(eventType, fn);
+        return vi.fn();
+      },
+    };
+    setTelemetry(telemetry);
+    attachRouterObservability(router);
+
+    handlers.get('onBeforeNavigate')?.({
+      toLocation: {
+        href: '/manager/books',
+        pathname: '/manager/books',
+      },
+    });
+    handlers.get('onBeforeNavigate')?.({
+      hashChanged: true,
+      hrefChanged: true,
+      pathChanged: false,
+      toLocation: {
+        href: '/manager/books#details',
+        pathname: '/manager/books',
+      },
+    });
+    handlers.get('onRendered')?.({
+      toLocation: {
+        href: '/manager/books',
+        pathname: '/manager/books',
+      },
+    });
+
+    expect(telemetry.startManualSpan).toHaveBeenCalledOnce();
+    expect(span.end).toHaveBeenCalledOnce();
+    expect(telemetry.recordMetric).not.toHaveBeenCalled();
+  });
+
   it('keeps navigation spans open through onResolved and finishes on onRendered', () => {
     const span: TelemetrySpanHandle = {
       addEvent: vi.fn(),

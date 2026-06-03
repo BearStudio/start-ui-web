@@ -116,7 +116,7 @@ module.exports = {
       severity: 'error',
       comment:
         'Feature application code may use kernel domain/application primitives, not kernel adapters or protocol mappers.',
-      from: { path: '^src/modules/(?!kernel)[^/]+/application' },
+      from: { path: '^src/modules/(?!kernel/)[^/]+/application' },
       to: { path: '^src/modules/kernel/(infrastructure|transport)' },
     },
     {
@@ -146,7 +146,7 @@ module.exports = {
         'Feature presentation reaches other feature behavior through public module gates, not direct domain/application/transport/infrastructure internals.',
       from: { path: '^src/modules/(?!kernel/)([^/]+)/presentation(?:/|$)' },
       to: {
-        path: '^src/modules/(?!kernel)[^/]+/(?:domain|application|infrastructure|transport)(?:/|$)|^src/modules/(?!kernel)[^/]+/factory\\.(?:ts|tsx)$',
+        path: '^src/modules/(?!kernel/)[^/]+/(?:domain|application|infrastructure|transport)(?:/|$)|^src/modules/(?!kernel/)[^/]+/factory\\.(?:ts|tsx)$',
         pathNot: '^src/modules/$1/',
       },
     },
@@ -154,7 +154,7 @@ module.exports = {
       name: 'presentation-no-infrastructure',
       severity: 'error',
       from: { path: '^src/modules/[^/]+/presentation' },
-      to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
+      to: { path: '^src/modules/(?!kernel/)[^/]+/infrastructure' },
     },
     {
       name: 'infrastructure-no-presentation',
@@ -167,9 +167,9 @@ module.exports = {
       severity: 'error',
       comment:
         'Infrastructure adapters stay isolated from feature UI, protocol handlers, and public client/server entrypoints.',
-      from: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
+      from: { path: '^src/modules/(?!kernel/)[^/]+/infrastructure' },
       to: {
-        path: '^src/modules/(?!kernel)[^/]+/(presentation|transport)(?:/|$)|^src/modules/(?!kernel)[^/]+/(client|server|backend)\\.tsx?$',
+        path: '^src/modules/(?!kernel/)[^/]+/(presentation|transport)(?:/|$)|^src/modules/(?!kernel/)[^/]+/(client|server|backend)\\.tsx?$',
       },
     },
     {
@@ -191,13 +191,13 @@ module.exports = {
       name: 'transport-no-infrastructure',
       severity: 'error',
       from: { path: '^src/modules/[^/]+/transport' },
-      to: { path: '^src/modules/(?!kernel)[^/]+/infrastructure' },
+      to: { path: '^src/modules/(?!kernel/)[^/]+/infrastructure' },
     },
     {
       name: 'transport-no-presentation',
       severity: 'error',
       from: { path: '^src/modules/[^/]+/transport' },
-      to: { path: '^src/modules/(?!kernel)[^/]+/presentation' },
+      to: { path: '^src/modules/(?!kernel/)[^/]+/presentation' },
     },
     {
       name: 'server-entrypoints-no-feature-internals',
@@ -209,7 +209,7 @@ module.exports = {
         pathNot: '^src/modules/book/server\\.ts$',
       },
       to: {
-        path: '^src/modules/(?!kernel)[^/]+/(infrastructure|presentation)',
+        path: '^src/modules/(?!kernel/)[^/]+/(infrastructure|presentation)',
       },
     },
     {
@@ -220,7 +220,7 @@ module.exports = {
         pathNot:
           '^src/modules/kernel/infrastructure/db/schema/(index|relations)\\.ts$',
       },
-      to: { path: '^src/modules/(?!kernel)' },
+      to: { path: '^src/modules/(?!kernel/)' },
     },
     {
       name: 'routes-no-direct-infrastructure',
@@ -249,7 +249,7 @@ module.exports = {
           '^src/(composition|modules/[^/]+/infrastructure|modules/[^/]+/server\\.ts$|modules/[^/]+/testing\\.ts$|modules/kernel)',
       },
       to: {
-        path: '^src/modules/(?!kernel)[^/]+/infrastructure',
+        path: '^src/modules/(?!kernel/)[^/]+/infrastructure',
       },
     },
     {
@@ -442,7 +442,7 @@ module.exports = {
       comment:
         'Client public gates cannot import server entrypoints, server-only files, transport, or infrastructure.',
       from: {
-        path: '^src/modules/(?!kernel)[^/]+/client\\.tsx?$|^src/platform/runtime-config/client\\.tsx?$|\\.client\\.(ts|tsx)$',
+        path: '^src/modules/(?!kernel/)[^/]+/client\\.tsx?$|^src/platform/runtime-config/client\\.tsx?$|\\.client\\.(ts|tsx)$',
       },
       to: {
         path: '^src/modules/[^/]+/(server|backend)\\.tsx?$|^src/modules/[^/]+/(infrastructure|transport)(?:/|$)|\\.server\\.(ts|tsx)$|^src/platform/env/server\\.ts$',

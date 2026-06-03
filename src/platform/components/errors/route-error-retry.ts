@@ -13,6 +13,8 @@ export async function retryRouteError({
   queryClient?: QueryErrorResetClient;
   router: RouteRetryRouter;
 }) {
-  await queryClient?.resetQueries();
+  await queryClient?.resetQueries({
+    predicate: (query) => query.state.status === 'error',
+  });
   await router.invalidate();
 }

@@ -99,6 +99,12 @@ const stringifyDiagnostics = (events: AuthDiagnosticEvent[]) =>
 const isPostAuthRouteUrl = (url: URL, route: PostAuthRoute) =>
   url.pathname === route || url.pathname.startsWith(`${route}/`);
 
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const globToRegExp = (glob: string) =>
+  new RegExp(`^${glob.split('*').map(escapeRegExp).join('.*')}$`);
+
 const isCurrentUrlMatch = (
   currentUrl: string,
   target: Parameters<Page['waitForURL']>[0]
@@ -120,8 +126,9 @@ const isCurrentUrlMatch = (
   }
 
   if (target.includes('*')) {
-    const expected = target.replaceAll('*', '');
-    return expected.length === 0 || currentUrl.includes(expected);
+    const pattern = globToRegExp(target);
+    const current = new URL(currentUrl);
+    return pattern.test(currentUrl) || pattern.test(current.pathname);
   }
 
   const current = new URL(currentUrl);
@@ -173,6 +180,7 @@ const createAuthDiagnostics = (page: Page, testInfo: TestInfo) => {
 
     try {
       if (isCurrentUrlMatch(page.url(), url)) {
+        log(`${type}.already_matched`, { ...details, skippedWait: true });
         log(`${type}.done`, details);
         return;
       }
@@ -267,9 +275,13 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
     const routeLogin = '/login' satisfies FileRouteTypes['to'];
     const routeLoginVerify = '/login/verify' satisfies FileRouteTypes['to'];
 
-    await diagnostics.waitForUrl('login.wait_for_login', `**${routeLogin}**`, {
-      route: routeLogin,
-    });
+    await diagnostics.waitForUrl(
+      'login.wait_for_login',
+      (url) => url.pathname === routeLogin,
+      {
+        route: routeLogin,
+      }
+    );
 
     await expect(
       page.getByText(
@@ -309,7 +321,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
 
     await diagnostics.waitForUrl(
       'login.wait_for_verify',
-      `**${routeLoginVerify}**`,
+      (url) => url.pathname === routeLoginVerify,
       {
         route: routeLoginVerify,
       }

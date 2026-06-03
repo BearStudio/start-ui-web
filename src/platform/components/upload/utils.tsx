@@ -1,7 +1,9 @@
 import { useIsMutating } from '@tanstack/react-query';
 
+const fileUploadMutationVersion = 'v1';
+
 export const fileUploadMutationKey = (uploadRoute: string) =>
-  ['fileUpload', 'v1', uploadRoute] as const;
+  ['fileUpload', fileUploadMutationVersion, uploadRoute] as const;
 
 export const useIsUploadingFiles = (uploadRoute: string) =>
   useIsMutating({

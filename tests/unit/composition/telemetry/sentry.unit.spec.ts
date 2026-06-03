@@ -164,6 +164,42 @@ describe('Sentry telemetry composition', () => {
     });
   });
 
+  it('preserves the specific Sentry event subtype when sanitizing', async () => {
+    const { sanitizeSentryEvent } =
+      await import('@/composition/telemetry/sentry-adapter');
+    type SpecificSentryEvent = {
+      contexts?: Record<string, unknown>;
+      event_id: string;
+      extra?: Record<string, unknown>;
+      tags?: Record<string, unknown>;
+      type: 'transaction';
+    };
+    const event: SpecificSentryEvent = {
+      event_id: 'event-1',
+      extra: {
+        authorization: 'Bearer token',
+      },
+      tags: {
+        event: 'auth.failure',
+      },
+      type: 'transaction',
+    };
+
+    const sanitized: SpecificSentryEvent = sanitizeSentryEvent(event);
+
+    expect(sanitized).toEqual({
+      contexts: {},
+      event_id: 'event-1',
+      extra: {
+        authorization: '[REDACTED]',
+      },
+      tags: {
+        event: 'auth.failure',
+      },
+      type: 'transaction',
+    });
+  });
+
   it('clears Sentry user tags when the telemetry user is unset', async () => {
     const { createSentryTelemetryAdapter } =
       await import('@/composition/telemetry/sentry-adapter');

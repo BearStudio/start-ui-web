@@ -179,7 +179,7 @@ export const UploadInput = ({
 
   const ui = getUiState((set) => {
     if (selectedFile) return set('selected', { file: selectedFile });
-    if (showDefault) return set('default', { defaultValue: defaultValue });
+    if (showDefault) return set('default', { defaultValue });
     return set('empty');
   });
 

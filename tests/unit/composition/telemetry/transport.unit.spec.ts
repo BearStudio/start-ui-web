@@ -165,6 +165,26 @@ describe('telemetry transport handlers', () => {
     expect(canceled).toBe(true);
   });
 
+  it('returns invalid request body when the telemetry request body is already locked', async () => {
+    const lockedRequest = request(
+      '/api/telemetry/otel/v1/traces',
+      'application/x-protobuf',
+      'payload'
+    );
+    const reader = lockedRequest.body?.getReader();
+    const { handleOtlpProxyRequest } =
+      await import('@/composition/telemetry/transport');
+
+    try {
+      const response = await handleOtlpProxyRequest(lockedRequest, 'traces');
+
+      expect(response.status).toBe(400);
+      expect(fetch).not.toHaveBeenCalled();
+    } finally {
+      reader?.releaseLock();
+    }
+  });
+
   it('forwards tunneled Sentry envelopes to the DSN envelope endpoint', async () => {
     configMock.browserDsn = 'https://public@o123.ingest.sentry.io/456';
     vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 200 }));

@@ -1,7 +1,10 @@
 import type { TextMapGetter } from '@opentelemetry/api';
 import { context, propagation } from '@opentelemetry/api';
 
-import type { TelemetryAttributes } from '@/platform/telemetry';
+import type {
+  TelemetryAttributes,
+  TelemetryMetricInput,
+} from '@/platform/telemetry';
 import { getTelemetry } from '@/platform/telemetry';
 
 type RequestObservationInput = {
@@ -91,6 +94,14 @@ const requestMetricAttributes = (
   };
 };
 
+const recordRequestMetric = (input: TelemetryMetricInput) => {
+  try {
+    getTelemetry().recordMetric(input);
+  } catch {
+    // Request telemetry must never change request handling behavior.
+  }
+};
+
 export function observeHttpRequest<T>(
   { request, pathname, handlerType }: RequestObservationInput,
   next: () => T
@@ -110,7 +121,7 @@ export function observeHttpRequest<T>(
 
   const finish = <TValue>(value: TValue): TValue => {
     const durationMs = performance.now() - startedAt;
-    getTelemetry().recordMetric({
+    recordRequestMetric({
       attributes: requestMetricAttributes(attributes, value, 'success'),
       name: 'app.http.request.duration',
       type: 'histogram',
@@ -123,8 +134,8 @@ export function observeHttpRequest<T>(
 
   const fail = (error: unknown): never => {
     const durationMs = performance.now() - startedAt;
-    getTelemetry().recordMetric({
-      attributes: requestMetricAttributes(attributes, undefined, 'error'),
+    recordRequestMetric({
+      attributes: requestMetricAttributes(attributes, error, 'error'),
       name: 'app.http.request.duration',
       type: 'histogram',
       unit: 'ms',
@@ -151,7 +162,7 @@ export function observeHttpRequest<T>(
           const result = next();
           if (!isPromiseLike(result)) return finish(result);
 
-          return result.then(finish).catch(fail) as T;
+          return result.then(finish, fail) as T;
         } catch (error) {
           return fail(error);
         }
