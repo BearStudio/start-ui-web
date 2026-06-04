@@ -14,7 +14,9 @@ import {
   findAffectedTests,
   findRelatedTestsInGraph,
   formatOutput,
+  isCliEntrypoint,
   main,
+  normalizePath,
   parseCliArguments,
   parseNullDelimitedPaths,
   runStrategyB,
@@ -218,10 +220,12 @@ describe('mirror path strategy', () => {
     const paths = computeMirrorTestPaths([
       'scripts/affected-tests.ts',
       'src/modules/book/domain/book.ts',
+      'src/router.tsx',
       'src/routes/(auth)/actions.ts',
     ]);
 
     expect(paths).toContain('tests/unit/scripts/affected-tests.unit.spec.ts');
+    expect(paths).toContain('tests/unit/__tests__/router.unit.spec.ts');
     expect(paths).toContain(
       'tests/unit/modules/book/domain/__tests__/book.unit.spec.ts'
     );
@@ -231,8 +235,12 @@ describe('mirror path strategy', () => {
     expect(paths).toContain(
       'tests/integration/modules/book/domain/book.integration.test.ts'
     );
+    expect(paths).toContain(
+      'tests/integration/modules/book/domain/book.integration.spec.ts'
+    );
     expect(paths).toContain('tests/unit/routes/(auth)/actions.unit.spec.ts');
     expect(paths).toContain('tests/unit/routes/auth/actions.unit.spec.ts');
+    expect(paths.some((candidate) => candidate.includes('/./'))).toBe(false);
   });
 
   it('keeps only mirror candidates that exist', () => {
@@ -309,6 +317,35 @@ describe('dependency graph strategy', () => {
       'tests/security/server-functions.unit.spec.ts',
       'tests/unit/modules/foo/foo-graph.unit.spec.ts',
       'tests/unit/modules/foo/foo.unit.spec.ts',
+    ]);
+  });
+
+  it('runs all tests when dependency-cruiser fails for test support changes', async () => {
+    const cwd = makeTempCwd([
+      'tests/browser/components/form.browser.spec.tsx',
+      'tests/server/test-utils.ts',
+      'tests/unit/a.unit.spec.ts',
+    ]);
+
+    const result = await findAffectedTests({
+      changedFiles: ['tests/server/test-utils.ts'],
+      cwd,
+      dependencyCruiser: async () => {
+        throw new Error('dependency-cruiser failed');
+      },
+    });
+
+    expect(result.dependencyCruiserFailed).toBe(true);
+    expect(result.runAll).toBe(true);
+    expect(result.runAllReason).toBe(
+      'dependency-cruiser failed for test support changes'
+    );
+    expect(result.testFiles).toEqual([
+      'tests/browser/components/form.browser.spec.tsx',
+      'tests/unit/a.unit.spec.ts',
+    ]);
+    expect(result.warnings).toEqual([
+      'Warning: dependency-cruiser failed, continuing with mirror-path strategy only',
     ]);
   });
 });
@@ -412,5 +449,29 @@ describe('sorting helpers', () => {
       'a.ts',
       'b.ts',
     ]);
+    expect(normalizePath('./tests/unit/./__tests__/router.unit.spec.ts')).toBe(
+      'tests/unit/__tests__/router.unit.spec.ts'
+    );
+  });
+});
+
+describe('CLI entrypoint detection', () => {
+  it('compares Windows entrypoint paths case-insensitively', () => {
+    expect(
+      isCliEntrypoint(
+        String.raw`c:\repo\scripts\affected-tests.ts`,
+        String.raw`C:\repo\scripts\affected-tests.ts`,
+        'win32'
+      )
+    ).toBe(true);
+  });
+
+  it('keeps non-Windows entrypoint checks case-sensitive', () => {
+    expect(isCliEntrypoint('/repo/script.ts', '/repo/script.ts', 'linux')).toBe(
+      true
+    );
+    expect(isCliEntrypoint('/repo/script.ts', '/Repo/script.ts', 'linux')).toBe(
+      false
+    );
   });
 });

@@ -10,12 +10,12 @@ const loggerEnvSchema = baseEnvSchema.extend({
   LOGGER_LEVEL: z
     .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
     .optional(),
-  LOGGER_PRETTY: z.stringbool().optional(),
+  LOGGER_CONSOLE_MIRROR: z.stringbool().optional(),
 });
 
 export type LoggerConfig = {
   level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
-  pretty: boolean;
+  consoleMirror: boolean;
 };
 
 let cachedLoggerConfig: LoggerConfig | undefined;
@@ -27,7 +27,7 @@ export function getLoggerConfig(): LoggerConfig {
   const isProd = isProdRuntimeEnvironment(env);
   cachedLoggerConfig = {
     level: env.LOGGER_LEVEL ?? (isProd ? 'error' : 'info'),
-    pretty: env.LOGGER_PRETTY ?? !isProd,
+    consoleMirror: env.LOGGER_CONSOLE_MIRROR ?? !isProd,
   };
   return cachedLoggerConfig;
 }

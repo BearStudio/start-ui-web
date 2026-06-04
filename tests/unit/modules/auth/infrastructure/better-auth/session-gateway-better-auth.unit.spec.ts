@@ -1,10 +1,18 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Auth } from '@/modules/auth/infrastructure/better-auth/auth';
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
 
 vi.mock('@/modules/auth/infrastructure/better-auth/auth', () => ({
   getDefaultAuth: vi.fn(),
+}));
+
+const telemetryMock = vi.hoisted(() => ({
+  startSpan: vi.fn((_options: unknown, fn: () => unknown) => fn()),
+}));
+
+vi.mock('@/platform/telemetry', () => ({
+  getTelemetry: () => telemetryMock,
 }));
 
 const loadGateway = async () =>
@@ -77,6 +85,10 @@ const makeDb = (
 };
 
 describe('SessionGatewayBetterAuth', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('keeps valid provider roles', async () => {
     const { SessionGatewayBetterAuth } = await loadGateway();
     const db = makeDb();
@@ -97,6 +109,17 @@ describe('SessionGatewayBetterAuth', () => {
       providerUserId: 'user-1',
       userId: 'user-1',
     });
+    expect(telemetryMock.startSpan).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: expect.objectContaining({
+          'auth.provider': 'better-auth',
+          'operation.name': 'auth.getSession',
+        }),
+        name: 'auth.getSession',
+        op: 'auth.provider',
+      }),
+      expect.any(Function)
+    );
   });
 
   it('falls back to the least-privileged role for unknown provider roles', async () => {

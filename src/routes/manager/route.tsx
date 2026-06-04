@@ -24,7 +24,11 @@ export const Route = createFileRoute('/manager')({
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
   errorComponent: ({ error }) =>
-    isForbiddenRouteError(error) ? <PageError type="403" /> : <RouteError />,
+    isForbiddenRouteError(error) ? (
+      <PageError type="403" />
+    ) : (
+      <RouteError error={error} routeId="/manager" />
+    ),
 });
 
 function RouteComponent() {

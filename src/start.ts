@@ -96,10 +96,9 @@ const getBrowserMutationGuardLogger = async () => {
 
   if (!browserMutationGuardLoggerPromise) {
     browserMutationGuardLoggerPromise =
-      import('@/modules/kernel/infrastructure/logger/pino')
-        .then(({ createPinoAppLogger, createPinoLogger }) => {
-          const logger = createPinoAppLogger({
-            pino: createPinoLogger(),
+      import('@/modules/kernel/infrastructure/logger/telemetry')
+        .then(({ createTelemetryLogger }) => {
+          const logger = createTelemetryLogger({
             telemetry: createNoOpTelemetry(),
           });
           browserMutationGuardLogger = logger;

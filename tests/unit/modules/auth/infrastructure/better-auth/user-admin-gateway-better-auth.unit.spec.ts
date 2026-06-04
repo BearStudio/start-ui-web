@@ -1,9 +1,17 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Auth } from '@/modules/auth/infrastructure/better-auth/auth';
 import { UserAdminGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/user-admin-gateway-better-auth';
 import { toSessionId, toUserId } from '@/modules/kernel/domain/ids';
 import type { Database } from '@/modules/kernel/infrastructure/db/client';
+
+const telemetryMock = vi.hoisted(() => ({
+  startSpan: vi.fn((_options: unknown, fn: () => unknown) => fn()),
+}));
+
+vi.mock('@/platform/telemetry', () => ({
+  getTelemetry: () => telemetryMock,
+}));
 
 const makeAuth = () => ({
   api: {
@@ -29,6 +37,10 @@ const makeDb = (input: {
   }) as unknown as Database;
 
 describe('UserAdminGatewayBetterAuth', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('resolves the provider session token inside the adapter', async () => {
     const auth = makeAuth();
     const gateway = new UserAdminGatewayBetterAuth(
@@ -53,6 +65,17 @@ describe('UserAdminGatewayBetterAuth', () => {
       body: { sessionToken: 'session-token' },
       headers,
     });
+    expect(telemetryMock.startSpan).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: expect.objectContaining({
+          'auth.provider': 'better-auth',
+          'operation.name': 'auth.revokeUserSession',
+        }),
+        name: 'auth.revokeUserSession',
+        op: 'auth.provider',
+      }),
+      expect.any(Function)
+    );
   });
 
   it('revokes a provider session mapped to the requested app user', async () => {

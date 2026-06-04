@@ -192,11 +192,10 @@ describe('TanStack Start instance', () => {
 
   it('rejects untrusted browser mutations even when guard logger initialization fails', async () => {
     vi.resetModules();
-    vi.doMock('@/modules/kernel/infrastructure/logger/pino', () => ({
-      createPinoAppLogger: () => {
+    vi.doMock('@/modules/kernel/infrastructure/logger/telemetry', () => ({
+      createTelemetryLogger: () => {
         throw new Error('logger init failed');
       },
-      createPinoLogger: () => ({}),
     }));
 
     const { browserMutationGuardMiddleware } = await import('@/start');

@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const routeErrorMocks = vi.hoisted(() => ({
+  captureException: vi.fn(),
   retryClick: undefined as (() => void) | undefined,
   retryLoading: undefined as boolean | undefined,
   router: {
@@ -13,6 +14,16 @@ const routeErrorMocks = vi.hoisted(() => ({
   },
   loggerError: vi.fn(),
 }));
+
+vi.mock('react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react')>();
+  return {
+    ...actual,
+    useEffect: (effect: () => void) => {
+      effect();
+    },
+  };
+});
 
 vi.mock('@tanstack/react-router', () => ({
   useRouter: () => routeErrorMocks.router,
@@ -50,6 +61,12 @@ vi.mock('@/platform/telemetry/frontend-logger', () => ({
   },
 }));
 
+vi.mock('@/platform/telemetry', () => ({
+  getTelemetry: () => ({
+    captureException: routeErrorMocks.captureException,
+  }),
+}));
+
 import { RouteError } from '@/platform/components/errors/route-error';
 import { retryRouteError } from '@/platform/components/errors/route-error-retry';
 
@@ -66,6 +83,7 @@ beforeEach(() => {
   routeErrorMocks.retryLoading = undefined;
   routeErrorMocks.router.options.context = {};
   routeErrorMocks.router.invalidate = vi.fn(async () => undefined);
+  routeErrorMocks.captureException.mockReset();
   routeErrorMocks.loggerError.mockReset();
 });
 
@@ -111,6 +129,31 @@ describe('retryRouteError', () => {
 });
 
 describe('RouteError', () => {
+  it('captures and logs route boundary errors with route context', () => {
+    const error = new Error('route failed');
+
+    renderToStaticMarkup(
+      createElement(RouteError, { error, routeId: '/manager' })
+    );
+
+    expect(routeErrorMocks.captureException).toHaveBeenCalledWith(error, {
+      extra: { routeId: '/manager' },
+      level: 'error',
+      tags: {
+        event: 'route.error_boundary',
+        routeId: '/manager',
+      },
+    });
+    expect(routeErrorMocks.loggerError).toHaveBeenCalledWith(
+      'route.error_boundary',
+      {
+        details: { routeId: '/manager' },
+        error,
+        message: 'route failed',
+      }
+    );
+  });
+
   it('resets errored queries from a valid route query client before retrying the route', async () => {
     const calls: string[] = [];
     const queryClient = {

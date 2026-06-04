@@ -296,9 +296,6 @@ const toFrontendLogBatch = async (request: Request) => {
   };
 };
 
-const pinoLevel = (level: TelemetryLogLevel) =>
-  level === 'warn' ? 'warn' : level;
-
 export const handleFrontendLogsRequest = async (request: Request) => {
   const invalid = validateTelemetryMutationRequest(
     request,
@@ -330,7 +327,7 @@ export const handleFrontendLogsRequest = async (request: Request) => {
         ? (sanitized.level as TelemetryLogLevel)
         : 'info';
 
-    logger[pinoLevel(level)]({
+    logger[level]({
       details: {
         ...details,
         ...(typeof sanitized.spanId === 'string'
@@ -343,8 +340,8 @@ export const handleFrontendLogsRequest = async (request: Request) => {
       direction: 'inbound',
       error: typeof sanitized.error === 'string' ? sanitized.error : undefined,
       event,
-      sentryExtras: { frontendLog: sanitized },
-      sentryTags: { source: 'frontend' },
+      telemetryExtras: { frontendLog: sanitized },
+      telemetryTags: { source: 'frontend' },
     });
 
     telemetry.emitLog({

@@ -31,8 +31,8 @@ export interface LogFields {
   details?: Record<string, unknown>;
   durationMs?: number;
 
-  sentryTags?: Record<string, LogTagValue>;
-  sentryExtras?: Record<string, unknown>;
+  telemetryTags?: Record<string, LogTagValue>;
+  telemetryExtras?: Record<string, unknown>;
 }
 
 export interface Logger {

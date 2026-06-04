@@ -40,7 +40,7 @@ export const Route = createFileRoute('/logout')({
     },
   },
   component: RouteComponent,
-  errorComponent: () => <RouteError />,
+  errorComponent: ({ error }) => <RouteError error={error} routeId="/logout" />,
 });
 
 function RouteComponent() {

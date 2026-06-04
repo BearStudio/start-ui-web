@@ -6,6 +6,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DEPENDENCY_CRUISE_ROOT_CANDIDATES = ['src', 'tests', 'scripts'] as const;
+const GIT_COMMAND =
+  process.platform === 'win32'
+    ? String.raw`C:\Program Files\Git\cmd\git.exe`
+    : '/usr/bin/git';
 
 const GLOBAL_CONFIG_FILES = new Set([
   'vitest.config.ts',
@@ -125,6 +129,28 @@ export type MainDependencies = {
   stdout?: (message: string) => void;
 };
 
+type BooleanCliOption = Exclude<keyof CliOptions, 'base'>;
+
+const BOOLEAN_CLI_FLAGS = {
+  '--help': 'help',
+  '--json': 'json',
+  '--run': 'run',
+  '--summary': 'summary',
+  '--verbose': 'verbose',
+} as const satisfies Record<string, BooleanCliOption>;
+
+const isBooleanCliFlag = (arg: string): arg is keyof typeof BOOLEAN_CLI_FLAGS =>
+  arg in BOOLEAN_CLI_FLAGS;
+
+const parseBaseOption = (args: string[], index: number) => {
+  const value = args[index + 1];
+  if (!value || value === '--' || value.startsWith('--')) {
+    return { ok: false as const, error: 'Missing value for --base.' };
+  }
+
+  return { ok: true as const, value };
+};
+
 export const parseCliArguments = (args: string[]): ParseCliArgumentsResult => {
   const options: CliOptions = {
     help: false,
@@ -136,41 +162,20 @@ export const parseCliArguments = (args: string[]): ParseCliArgumentsResult => {
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
+    if (!arg) continue;
     if (arg === '--') continue;
 
     if (arg === '--base') {
-      const value = args[index + 1];
-      if (!value || value === '--' || value.startsWith('--')) {
-        return { ok: false, error: 'Missing value for --base.' };
-      }
+      const parsed = parseBaseOption(args, index);
+      if (!parsed.ok) return { ok: false, error: parsed.error };
 
-      options.base = value;
+      options.base = parsed.value;
       index += 1;
       continue;
     }
 
-    if (arg === '--run') {
-      options.run = true;
-      continue;
-    }
-
-    if (arg === '--verbose') {
-      options.verbose = true;
-      continue;
-    }
-
-    if (arg === '--json') {
-      options.json = true;
-      continue;
-    }
-
-    if (arg === '--summary') {
-      options.summary = true;
-      continue;
-    }
-
-    if (arg === '--help') {
-      options.help = true;
+    if (isBooleanCliFlag(arg)) {
+      options[BOOLEAN_CLI_FLAGS[arg]] = true;
       continue;
     }
 
@@ -184,11 +189,17 @@ export const parseCliArguments = (args: string[]): ParseCliArgumentsResult => {
   return { ok: true, options };
 };
 
-export const normalizePath = (filePath: string) =>
-  filePath.replace(/\\/g, '/').replace(/^\.\//, '').trim();
+export const normalizePath = (filePath: string) => {
+  const normalized = path.posix.normalize(
+    filePath.replaceAll('\\', '/').trim()
+  );
+  return normalized === '.' ? '' : normalized.replace(/^\.\//, '');
+};
 
 export const deduplicateAndSort = (filePaths: string[]) =>
-  [...new Set(filePaths.map(normalizePath).filter(Boolean))].sort();
+  [...new Set(filePaths.map(normalizePath).filter(Boolean))].sort(
+    (left, right) => left.localeCompare(right)
+  );
 
 export const parseNullDelimitedPaths = (output: string) =>
   deduplicateAndSort(output.split('\0'));
@@ -196,7 +207,7 @@ export const parseNullDelimitedPaths = (output: string) =>
 const runGitStrict =
   (cwd: string): GitRunner =>
   (args, description) => {
-    const result = spawnSync('git', args, {
+    const result = spawnSync(GIT_COMMAND, args, {
       cwd,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -327,7 +338,12 @@ const removeSourcePrefix = (filePath: string) => {
 
 const testSuffixesForKind = (kind: 'browser' | 'integration' | 'unit') => {
   if (kind === 'integration') {
-    return ['.integration.test.ts', '.integration.test.tsx'];
+    return [
+      '.integration.test.ts',
+      '.integration.spec.ts',
+      '.integration.test.tsx',
+      '.integration.spec.tsx',
+    ];
   }
 
   return [
@@ -336,6 +352,27 @@ const testSuffixesForKind = (kind: 'browser' | 'integration' | 'unit') => {
     `.${kind}.test.tsx`,
     `.${kind}.spec.tsx`,
   ];
+};
+
+const addMirrorCandidates = ({
+  base,
+  basename,
+  candidates,
+  directory,
+  kind,
+}: {
+  base: string;
+  basename: string;
+  candidates: string[];
+  directory: string;
+  kind: 'browser' | 'integration' | 'unit';
+}) => {
+  for (const suffix of testSuffixesForKind(kind)) {
+    candidates.push(
+      `tests/${kind}/${base}${suffix}`,
+      `tests/${kind}/${directory}/__tests__/${basename}${suffix}`
+    );
+  }
 };
 
 export const computeMirrorTestPaths = (sourceFiles: string[]) => {
@@ -354,32 +391,31 @@ export const computeMirrorTestPaths = (sourceFiles: string[]) => {
       const directory = path.posix.dirname(base);
       const basename = path.posix.basename(base);
 
-      for (const suffix of testSuffixesForKind('unit')) {
-        candidates.push(`tests/unit/${base}${suffix}`);
-        candidates.push(
-          `tests/unit/${directory}/__tests__/${basename}${suffix}`
-        );
-      }
-
-      for (const suffix of testSuffixesForKind('browser')) {
-        candidates.push(`tests/browser/${base}${suffix}`);
-        candidates.push(
-          `tests/browser/${directory}/__tests__/${basename}${suffix}`
-        );
-      }
-
-      for (const suffix of testSuffixesForKind('integration')) {
-        candidates.push(`tests/integration/${base}${suffix}`);
-        candidates.push(
-          `tests/integration/${directory}/__tests__/${basename}${suffix}`
-        );
-      }
+      addMirrorCandidates({
+        base,
+        basename,
+        candidates,
+        directory,
+        kind: 'unit',
+      });
+      addMirrorCandidates({
+        base,
+        basename,
+        candidates,
+        directory,
+        kind: 'browser',
+      });
+      addMirrorCandidates({
+        base,
+        basename,
+        candidates,
+        directory,
+        kind: 'integration',
+      });
     }
   }
 
-  return deduplicateAndSort(candidates).filter(
-    (candidate) => !candidate.includes('/./')
-  );
+  return deduplicateAndSort(candidates);
 };
 
 export const filterExistingFiles = (filePaths: string[], cwd = process.cwd()) =>
@@ -573,6 +609,23 @@ export const findAffectedTests = async ({
     }
   }
 
+  if (dependencyCruiserFailed && classified.testSupportFiles.length > 0) {
+    return {
+      changedFiles: normalizedChangedFiles,
+      consideredSourceFiles: [],
+      dependencyCruiserFailed,
+      directTestFiles: filterExistingFiles(classified.directTestFiles, cwd),
+      excludedChangedFiles: classified.excludedFiles,
+      rootsCruised,
+      runAll: true,
+      runAllReason: 'dependency-cruiser failed for test support changes',
+      strategyAFiles: [],
+      strategyBFiles: [],
+      testFiles: allTestFiles ?? collectAllRunnableVitestTestFiles(cwd),
+      warnings,
+    };
+  }
+
   const strategyBFiles = runStrategyB(classified.sourceFiles, cwd);
   const directTestFiles = filterExistingFiles(classified.directTestFiles, cwd);
   const graphSeedFilesMissingFromGraph = graphSeeds.filter(
@@ -748,6 +801,18 @@ const entryPointPath = process.argv[1]
   : undefined;
 const modulePath = fileURLToPath(import.meta.url);
 
-if (entryPointPath === modulePath) {
+export const isCliEntrypoint = (
+  entryPointPath: string | undefined,
+  modulePath: string,
+  platform: typeof process.platform = process.platform
+) => {
+  if (!entryPointPath) return false;
+
+  return platform === 'win32'
+    ? entryPointPath.toLowerCase() === modulePath.toLowerCase()
+    : entryPointPath === modulePath;
+};
+
+if (isCliEntrypoint(entryPointPath, modulePath)) {
   process.exitCode = await main();
 }

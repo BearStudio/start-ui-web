@@ -374,13 +374,11 @@ module.exports = {
       to: { path: 'node_modules/@opentelemetry/' },
     },
     {
-      name: 'pino-confined-to-kernel-logger',
+      name: 'pino-forbidden',
       severity: 'error',
-      comment: 'Pino imports stay in kernel logger infrastructure.',
-      from: {
-        pathNot: '^src/modules/kernel/infrastructure/logger/',
-      },
-      to: { path: 'node_modules/pino' },
+      comment: 'Pino is replaced by the OpenTelemetry-backed logger facade.',
+      from: {},
+      to: { path: 'node_modules/(pino|pino-pretty)/' },
     },
     {
       name: 'id-sdk-confined-to-kernel-infrastructure',

@@ -6,5 +6,7 @@ import { PageOnboarding } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/onboarding/')({
   component: PageOnboarding,
-  errorComponent: () => <RouteError />,
+  errorComponent: ({ error }) => (
+    <RouteError error={error} routeId="/onboarding/" />
+  ),
 });

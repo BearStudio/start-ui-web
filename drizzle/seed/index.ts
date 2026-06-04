@@ -13,11 +13,16 @@ async function main() {
   await createUsers();
 }
 
-main()
-  .finally(async () => {
+try {
+  await main();
+} catch (error) {
+  console.error(error);
+  process.exitCode = 1;
+} finally {
+  try {
     await getDefaultDbClient().$close();
-  })
-  .catch((e) => {
-    console.error(e);
+  } catch (closeError) {
+    console.error(closeError);
     process.exitCode = 1;
-  });
+  }
+}

@@ -16,10 +16,7 @@ import {
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
 import { cuidIdGenerator } from '@/modules/kernel/infrastructure/id/nanoid';
-import {
-  createPinoAppLogger,
-  createPinoLogger,
-} from '@/modules/kernel/infrastructure/logger/pino';
+import { createTelemetryLogger } from '@/modules/kernel/infrastructure/logger/telemetry';
 
 import { createCachedFactory } from './shared/singleton';
 import type { Overrides } from './shared/types';
@@ -60,13 +57,8 @@ const memoryCache = (clock: Clock): CacheGateway => {
   };
 };
 
-const createProductionLogger = (): Logger => {
-  const pinoLogger = createPinoLogger();
-  return createPinoAppLogger({
-    pino: pinoLogger,
-    telemetry: telemetryProxy,
-  });
-};
+const createProductionLogger = (): Logger =>
+  createTelemetryLogger({ telemetry: telemetryProxy });
 
 const createProductionPermissionChecker = (): PermissionChecker => ({
   async hasPermission(userId: UserId, permissions) {

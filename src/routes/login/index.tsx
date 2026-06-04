@@ -7,7 +7,7 @@ import { PageLogin } from '@/modules/auth/presentation';
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
-  errorComponent: () => <RouteError />,
+  errorComponent: ({ error }) => <RouteError error={error} routeId="/login/" />,
 });
 
 function RouteComponent() {

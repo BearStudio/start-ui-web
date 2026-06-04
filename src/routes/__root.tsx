@@ -7,7 +7,7 @@ import {
   useRouteContext,
   useRouter,
 } from '@tanstack/react-router';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getPageTitle } from '@/platform/lib/get-page-title';
@@ -23,13 +23,11 @@ import {
   TanStackDevtoolsPanel,
 } from '@/app/devtools/presentation';
 import { Providers } from '@/composition/providers';
-import { getTelemetry } from '@/composition/telemetry';
 import { initSsrApp } from '@/modules/kernel/server';
 import { createCspNonceBridgeScript } from '@/platform/http/csp-nonce';
 import type { RouterContext } from '@/platform/router/context';
 import { observedLoader } from '@/platform/router/route-observability';
 import appCss from '@/platform/styles/app.css?url';
-import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: observedLoader('__root__', async () => {
@@ -92,17 +90,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootErrorBoundary({ error }: Readonly<{ error: unknown }>) {
-  useEffect(() => {
-    getTelemetry().captureException(error);
-    frontendLogger.error('route.error_boundary', {
-      error,
-      message: error instanceof Error ? error.message : 'Route error',
-    });
-  }, [error]);
-
   return (
     <RootDocument>
-      <RouteError />
+      <RouteError error={error} routeId="__root__" />
     </RootDocument>
   );
 }

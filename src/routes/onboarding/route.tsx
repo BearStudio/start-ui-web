@@ -24,5 +24,7 @@ export const Route = createFileRoute('/onboarding')({
     ),
   component: Outlet,
   notFoundComponent: () => <PageError type="404" />,
-  errorComponent: () => <RouteError />,
+  errorComponent: ({ error }) => (
+    <RouteError error={error} routeId="/onboarding" />
+  ),
 });

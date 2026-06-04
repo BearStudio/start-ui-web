@@ -241,6 +241,12 @@ describe('telemetry transport handlers', () => {
           traceId: 'trace-1',
         }),
         event: 'frontend.query.error',
+        telemetryExtras: {
+          frontendLog: expect.objectContaining({
+            details: { email: '[REDACTED]' },
+          }),
+        },
+        telemetryTags: { source: 'frontend' },
       })
     );
     expect(telemetryMock.emitLog).toHaveBeenCalledWith(

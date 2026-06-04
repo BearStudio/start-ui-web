@@ -11,6 +11,7 @@ import {
   type Database,
   getDefaultDbClient,
 } from '@/modules/kernel/infrastructure/db/client';
+import { getTelemetry } from '@/platform/telemetry';
 
 import type { Auth } from './auth';
 import { getDefaultAuth } from './auth';
@@ -105,34 +106,47 @@ export class SessionGatewayBetterAuth implements SessionGateway {
   async getSession(input: {
     headers: Headers;
   }): ReturnType<SessionGateway['getSession']> {
-    try {
-      const session = await this.auth.api.getSession({
-        headers: input.headers,
-      });
-      if (!session?.user || !session.session) {
-        return Result.Ok({ type: 'auth_session_missing' });
-      }
-      const user = await this.resolveAppUser(session.user);
-      if (!user) return Result.Ok({ type: 'auth_session_missing' });
-      return Result.Ok({
-        type: 'auth_session_found',
-        session: {
-          user: toAuthenticatedUser(user),
-          session: toAuthenticatedSession(session.session, user.id),
+    return getTelemetry().startSpan(
+      {
+        attributes: {
+          'auth.provider': 'better-auth',
+          'operation.name': 'auth.getSession',
+          'operation.type': 'provider_operation',
         },
-      });
-    } catch (error) {
-      return Result.Error(
-        error instanceof AppError
-          ? error
-          : new AppError({
-              code: 'AUTH_SESSION_GATEWAY_ERROR',
-              category: 'system',
-              status: 500,
-              message: 'Auth session gateway error',
-              cause: error,
-            })
-      );
-    }
+        name: 'auth.getSession',
+        op: 'auth.provider',
+      },
+      async () => {
+        try {
+          const session = await this.auth.api.getSession({
+            headers: input.headers,
+          });
+          if (!session?.user || !session.session) {
+            return Result.Ok({ type: 'auth_session_missing' });
+          }
+          const user = await this.resolveAppUser(session.user);
+          if (!user) return Result.Ok({ type: 'auth_session_missing' });
+          return Result.Ok({
+            type: 'auth_session_found',
+            session: {
+              user: toAuthenticatedUser(user),
+              session: toAuthenticatedSession(session.session, user.id),
+            },
+          });
+        } catch (error) {
+          return Result.Error(
+            error instanceof AppError
+              ? error
+              : new AppError({
+                  code: 'AUTH_SESSION_GATEWAY_ERROR',
+                  category: 'system',
+                  status: 500,
+                  message: 'Auth session gateway error',
+                  cause: error,
+                })
+          );
+        }
+      }
+    );
   }
 }

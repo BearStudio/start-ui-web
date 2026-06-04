@@ -10,6 +10,7 @@ import { logs, SeverityNumber } from '@opentelemetry/api-logs';
 import type {
   TelemetryAdapter,
   TelemetryAttributes,
+  TelemetryCaptureContext,
   TelemetryLogLevel,
   TelemetrySpanHandle,
   TelemetrySpanOptions,
@@ -31,6 +32,17 @@ const severityByLevel = {
   warn: SeverityNumber.WARN,
 } as const satisfies Record<TelemetryLogLevel, SeverityNumber>;
 
+const captureSeverityByLevel = {
+  debug: SeverityNumber.DEBUG,
+  error: SeverityNumber.ERROR,
+  fatal: SeverityNumber.FATAL,
+  info: SeverityNumber.INFO,
+  warning: SeverityNumber.WARN,
+} as const satisfies Record<
+  NonNullable<TelemetryCaptureContext['level']>,
+  SeverityNumber
+>;
+
 const statusCodeByStatus = {
   error: SpanStatusCode.ERROR,
   ok: SpanStatusCode.OK,
@@ -46,6 +58,17 @@ const isPromiseLike = <T>(value: T): value is T & Promise<Awaited<T>> =>
 
 const toOtelException = (error: unknown) =>
   error instanceof Error ? error : String(error);
+
+const errorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
+
+const safeJson = (value: unknown) => {
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return '[Unserializable]';
+  }
+};
 
 const compactAttributes = (
   attributes: TelemetryAttributes | undefined
@@ -72,6 +95,26 @@ const spanAttributes = (
   user: TelemetryUser | null
 ) => ({
   ...compactAttributes(attributes),
+  ...(user?.id ? { 'user.id': user.id } : {}),
+});
+
+type ActiveSpanContext = {
+  spanId?: string;
+  traceId?: string;
+};
+
+const captureAttributes = (
+  captureContext: TelemetryCaptureContext | undefined,
+  spanContext: ActiveSpanContext | undefined,
+  user: TelemetryUser | null
+) => ({
+  ...captureContext?.tags,
+  ...(captureContext?.fingerprint
+    ? { fingerprint: safeJson(captureContext.fingerprint) }
+    : {}),
+  ...(captureContext?.extra ? { extra: safeJson(captureContext.extra) } : {}),
+  ...(spanContext?.spanId ? { 'span.id': spanContext.spanId } : {}),
+  ...(spanContext?.traceId ? { 'trace.id': spanContext.traceId } : {}),
   ...(user?.id ? { 'user.id': user.id } : {}),
 });
 
@@ -123,7 +166,32 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
   let activeUser: TelemetryUser | null = null;
 
   return {
-    captureException: () => {},
+    captureException: (error, captureContext) => {
+      const activeSpan = trace.getActiveSpan();
+      const spanContext = activeSpan?.spanContext();
+      const exception = toOtelException(error);
+      const message = errorMessage(error);
+      const level = captureContext?.level ?? 'error';
+
+      activeSpan?.recordException(exception);
+      activeSpan?.setStatus({
+        code: SpanStatusCode.ERROR,
+        ...(message ? { message } : {}),
+      });
+
+      otelLogger.emit({
+        attributes: captureAttributes(captureContext, spanContext, activeUser),
+        body: message,
+        eventName:
+          typeof captureContext?.tags?.event === 'string'
+            ? captureContext.tags.event
+            : 'exception.captured',
+        exception,
+        severityNumber: captureSeverityByLevel[level],
+        severityText: level,
+        context: context.active(),
+      });
+    },
     currentCorrelation: () => {
       const activeSpan = trace.getActiveSpan();
       const spanContext = activeSpan?.spanContext();

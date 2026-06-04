@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createRequestLogger,
@@ -9,36 +9,38 @@ import {
   toRequestId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import { createPinoAppLogger } from '@/modules/kernel/infrastructure/logger/pino';
+import { createTelemetryLogger } from '@/modules/kernel/infrastructure/logger/telemetry';
 import {
   createNoOpTelemetry,
   type TelemetryAdapter,
+  type TelemetryCorrelation,
 } from '@/platform/telemetry';
 
-vi.unmock('@/modules/kernel/infrastructure/logger/pino');
+vi.unmock('@/modules/kernel/infrastructure/logger/telemetry');
 
-const makeTelemetry = (): TelemetryAdapter => ({
+const makeTelemetry = (
+  correlation: TelemetryCorrelation = {}
+): TelemetryAdapter => ({
   ...createNoOpTelemetry(),
   captureException: vi.fn(),
+  currentCorrelation: vi.fn(() => correlation),
+  emitLog: vi.fn(),
   setUser: vi.fn(),
   startSpan: vi.fn((_options, fn) => fn()),
 });
 
-const makePino = () => ({
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-});
+describe('createTelemetryLogger', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-describe('createPinoAppLogger', () => {
-  it('writes sanitized structured fields with the event as the message', () => {
-    const pino = makePino();
+  it('emits sanitized structured OTel logs with the event as the message', () => {
     const telemetry = makeTelemetry();
-    const logger = createPinoAppLogger({
-      pino,
+    const logger = createTelemetryLogger({
       telemetry,
+      consoleMirror: false,
       defaultFields: { requestId: toRequestId('request-1') },
+      level: 'debug',
     });
     const fields = {
       event: 'email.send.failed',
@@ -46,32 +48,36 @@ describe('createPinoAppLogger', () => {
         email: 'person@example.com',
         nested: { token: 'secret-token' },
       },
-      sentryTags: { provider: 'resend' },
-      sentryExtras: { statusCode: 401 },
+      telemetryExtras: { statusCode: 401 },
+      telemetryTags: { provider: 'resend' },
     };
 
     logger.error(fields);
 
-    expect(pino.error).toHaveBeenCalledWith(
-      {
-        event: 'email.send.failed',
-        requestId: 'request-1',
+    expect(telemetry.emitLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attributes: { requestId: 'request-1' },
         details: {
           email: '[REDACTED]',
           nested: { token: '[REDACTED]' },
         },
-      },
-      'email.send.failed'
+        event: 'email.send.failed',
+        level: 'error',
+        message: 'email.send.failed',
+      })
     );
     expect(fields.details.email).toBe('person@example.com');
     expect(fields.details.nested.token).toBe('secret-token');
     expect(telemetry.captureException).not.toHaveBeenCalled();
   });
 
-  it('captures provided exceptions once with sanitized Sentry context', () => {
-    const pino = makePino();
-    const telemetry = makeTelemetry();
-    const logger = createPinoAppLogger({ pino, telemetry });
+  it('captures provided exceptions once with sanitized telemetry context and trace correlation', () => {
+    const telemetry = makeTelemetry({ spanId: 'span-1', traceId: 'trace-1' });
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: false,
+      level: 'debug',
+    });
     const exception = new Error('Resend rejected person@example.com');
 
     logger.error({
@@ -83,33 +89,36 @@ describe('createPinoAppLogger', () => {
       details: {
         authorization: 'Bearer token',
       },
-      sentryTags: {
+      telemetryExtras: {
+        email: 'person@example.com',
+        statusCode: 401,
+      },
+      telemetryTags: {
         attempt: 2,
         email: 'person@example.com',
         provider: 'resend',
         retryable: false,
       },
-      sentryExtras: {
-        email: 'person@example.com',
-        statusCode: 401,
-      },
     });
 
-    expect(pino.error).toHaveBeenCalledWith(
+    expect(telemetry.emitLog).toHaveBeenCalledWith(
       expect.objectContaining({
-        error: 'Provider rejected [REDACTED]',
-        exception: expect.objectContaining({
-          message: 'Resend rejected [REDACTED]',
-          type: 'Error',
+        attributes: expect.objectContaining({
+          correlationId: 'correlation-1',
+          requestId: 'request-1',
+          spanId: 'span-1',
+          traceId: 'trace-1',
         }),
-      }),
-      'email.send.failed'
+        error: 'Provider rejected [REDACTED]',
+        event: 'email.send.failed',
+        exception,
+      })
     );
     expect(telemetry.captureException).toHaveBeenCalledTimes(1);
     expect(telemetry.captureException).toHaveBeenCalledWith(exception, {
       tags: {
-        correlationId: 'correlation-1',
         attempt: '2',
+        correlationId: 'correlation-1',
         email: '[REDACTED]',
         event: 'email.send.failed',
         provider: 'resend',
@@ -127,6 +136,8 @@ describe('createPinoAppLogger', () => {
             message: 'Resend rejected [REDACTED]',
             type: 'Error',
           }),
+          spanId: 'span-1',
+          traceId: 'trace-1',
         }),
       },
       level: 'error',
@@ -134,24 +145,81 @@ describe('createPinoAppLogger', () => {
   });
 
   it('does not invent exceptions for error logs without one', () => {
-    const pino = makePino();
     const telemetry = makeTelemetry();
-    const logger = createPinoAppLogger({ pino, telemetry });
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: false,
+      level: 'debug',
+    });
 
     logger.error({
       event: 'email.send.failed',
       error: 'Provider rejected the send',
     });
 
-    expect(pino.error).toHaveBeenCalledTimes(1);
+    expect(telemetry.emitLog).toHaveBeenCalledTimes(1);
     expect(telemetry.captureException).not.toHaveBeenCalled();
   });
 
+  it('applies LOGGER_LEVEL-style filtering before emitting logs or console mirrors', () => {
+    const telemetry = makeTelemetry();
+    const infoSpy = vi
+      .spyOn(globalThis.console, 'info')
+      .mockImplementation(() => undefined);
+    const warnSpy = vi
+      .spyOn(globalThis.console, 'warn')
+      .mockImplementation(() => undefined);
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: true,
+      level: 'warn',
+    });
+
+    logger.info({ event: 'filtered.info' });
+    logger.warn({ event: 'visible.warn' });
+
+    expect(telemetry.emitLog).toHaveBeenCalledTimes(1);
+    expect(telemetry.emitLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'visible.warn',
+        level: 'warn',
+      })
+    );
+    expect(infoSpy).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('mirrors sanitized structured logs to the console when enabled', () => {
+    const telemetry = makeTelemetry();
+    const infoSpy = vi
+      .spyOn(globalThis.console, 'info')
+      .mockImplementation(() => undefined);
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: true,
+      level: 'debug',
+    });
+
+    logger.info({
+      event: 'profile.loaded',
+      details: { email: 'person@example.com' },
+    });
+
+    expect(infoSpy).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(String(infoSpy.mock.calls[0]?.[0]))).toEqual({
+      level: 'info',
+      message: 'profile.loaded',
+      event: 'profile.loaded',
+      details: { email: '[REDACTED]' },
+    });
+  });
+
   it('handles circular details and oversized arrays without crashing', () => {
-    const pino = makePino();
-    const logger = createPinoAppLogger({
-      pino,
-      telemetry: makeTelemetry(),
+    const telemetry = makeTelemetry();
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: false,
+      level: 'debug',
     });
     const payload: Record<string, unknown> = {};
     payload.self = payload;
@@ -165,9 +233,8 @@ describe('createPinoAppLogger', () => {
       },
     });
 
-    expect(pino.info).toHaveBeenCalledWith(
-      {
-        event: 'payload.inspect',
+    expect(telemetry.emitLog).toHaveBeenCalledWith(
+      expect.objectContaining({
         details: {
           list: expect.objectContaining({
             length: 10_001,
@@ -178,8 +245,7 @@ describe('createPinoAppLogger', () => {
             self: '[Circular]',
           },
         },
-      },
-      'payload.inspect'
+      })
     );
   });
 

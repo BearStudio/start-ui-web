@@ -1,6 +1,6 @@
 import { useRouter } from '@tanstack/react-router';
 import { RefreshCwIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,6 +10,7 @@ import {
 } from '@/platform/components/errors/page-error';
 import { Button } from '@/platform/components/ui/button';
 
+import { getTelemetry } from '@/platform/telemetry';
 import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 import {
@@ -39,11 +40,36 @@ function getRouteQueryClient(
   return hasResetQueries(queryClient) ? queryClient : undefined;
 }
 
-export const RouteError = () => {
+type RouteErrorProps = {
+  error?: unknown;
+  routeId?: string;
+};
+
+export const RouteError = ({ error, routeId }: RouteErrorProps) => {
   const router = useRouter();
   const queryClient = getRouteQueryClient(router.options.context);
   const [retrying, setRetrying] = useState(false);
   const { t } = useTranslation(['components']);
+
+  useEffect(() => {
+    if (error === undefined) return;
+
+    const message = error instanceof Error ? error.message : 'Route error';
+    const details = routeId ? { routeId } : undefined;
+    getTelemetry().captureException(error, {
+      extra: details,
+      level: 'error',
+      tags: {
+        event: 'route.error_boundary',
+        ...(routeId ? { routeId } : {}),
+      },
+    });
+    frontendLogger.error('route.error_boundary', {
+      error,
+      message,
+      ...(details ? { details } : {}),
+    });
+  }, [error, routeId]);
 
   const handleRetry = () => {
     setRetrying(true);

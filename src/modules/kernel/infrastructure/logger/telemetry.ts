@@ -1,8 +1,3 @@
-import { black, blue, cyan, gray, green, magenta, red } from 'colorette';
-import pino from 'pino';
-import pretty from 'pino-pretty';
-import { z } from 'zod';
-
 import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
 
 import type {
@@ -10,7 +5,10 @@ import type {
   Logger,
   LogLevel,
 } from '@/modules/kernel/application/ports/logger';
-import { getLoggerConfig } from '@/modules/kernel/infrastructure/config/logger';
+import {
+  getLoggerConfig,
+  type LoggerConfig,
+} from '@/modules/kernel/infrastructure/config/logger';
 import {
   type TelemetryAdapter,
   type TelemetryCaptureContext,
@@ -21,114 +19,51 @@ export type LogRedactor = (
   fields: Record<string, unknown>
 ) => Record<string, unknown>;
 
-export function createPinoLogger(options?: pino.LoggerOptions) {
-  const loggerConfig = getLoggerConfig();
-  const loggerOptions: pino.LoggerOptions = {
-    level: loggerConfig.level,
-    ...options,
-  };
-
-  return loggerConfig.pretty
-    ? pino(
-        loggerOptions,
-        pretty({
-          ignore:
-            'event,scope,type,path,pid,hostname,requestId,correlationId,sessionId,scopeKey,durationMs,userId,errorCode,errorMessage',
-          messageFormat: (log, messageKey) => {
-            const {
-              requestId,
-              scope,
-              type,
-              path,
-              durationMs,
-              message,
-              userId,
-              errorCode,
-              errorMessage,
-            } = z
-              .object({
-                requestId: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? `${gray(v)} - ` : '')),
-                userId: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) =>
-                    v ? `👤 ${cyan(v)} - ` : magenta('🕶️  Anonymous ')
-                  ),
-                scope: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? gray(`(${v})`) : '')),
-                type: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) =>
-                    v ? `${green(v.toLocaleUpperCase())} on ` : ''
-                  ),
-                path: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? `${blue(v)} ` : '')),
-                durationMs: z
-                  .number()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? gray(`(took ${v}ms) `) : '')),
-                message: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? black(`${v} `) : '')),
-                errorCode: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? red(`[${v}] `) : '')),
-                errorMessage: z
-                  .string()
-                  .optional()
-                  .catch(undefined)
-                  .transform((v) => (v ? black(`${v} `) : '')),
-              })
-              .parse({ ...log, message: log[messageKey] });
-
-            const error =
-              errorCode || errorMessage ? `· ${errorCode}${errorMessage}` : '';
-
-            return black(
-              `${userId}${requestId}${type}${path}· ${message}${error}${scope}${durationMs}`
-            );
-          },
-        })
-      )
-    : pino(loggerOptions);
-}
-
-export type PinoLogger = ReturnType<typeof createPinoLogger>;
-
-type PinoAppLoggerInput = {
-  pino: Pick<PinoLogger, 'debug' | 'info' | 'warn' | 'error'>;
+type TelemetryLoggerInput = {
   telemetry: TelemetryAdapter;
   defaultFields?: Partial<LogFields>;
   redactor?: LogRedactor;
+  level?: LoggerConfig['level'];
+  consoleMirror?: boolean;
 };
 
-const SENTRY_LEVEL_BY_LOG_LEVEL = {
+const CAPTURE_LEVEL_BY_LOG_LEVEL = {
   debug: 'debug',
   info: 'info',
   warn: 'warning',
   error: 'error',
 } as const satisfies Record<LogLevel, TelemetryCaptureContext['level']>;
 
+const LOG_LEVEL_RANK = {
+  debug: 1,
+  error: 4,
+  info: 2,
+  warn: 3,
+} as const satisfies Record<LogLevel, number>;
+
+const CONFIG_LEVEL_RANK = {
+  trace: 0,
+  debug: 1,
+  info: 2,
+  warn: 3,
+  error: 4,
+  fatal: 5,
+} as const satisfies Record<LoggerConfig['level'], number>;
+
+const CONSOLE_METHOD_BY_LOG_LEVEL = {
+  debug: 'debug',
+  error: 'error',
+  info: 'info',
+  warn: 'warn',
+} as const satisfies Record<LogLevel, keyof Pick<Console, LogLevel>>;
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+const shouldEmitLog = (
+  logLevel: LogLevel,
+  configuredLevel: LoggerConfig['level']
+) => LOG_LEVEL_RANK[logLevel] >= CONFIG_LEVEL_RANK[configuredLevel];
 
 const serializeException = (
   exception: unknown,
@@ -159,8 +94,8 @@ const serializeException = (
 
 const prepareLogRecord = (fields: LogFields): Record<string, unknown> => {
   const rest = { ...fields } as Record<string, unknown>;
-  delete rest.sentryExtras;
-  delete rest.sentryTags;
+  delete rest.telemetryExtras;
+  delete rest.telemetryTags;
 
   return {
     ...rest,
@@ -197,31 +132,59 @@ const buildTelemetryCaptureContext = ({
   sanitizedLogRecord: Record<string, unknown>;
 }): TelemetryCaptureContext => {
   const tagCandidates: Record<string, unknown> = {
-    ...fields.sentryTags,
+    ...fields.telemetryTags,
     event: fields.event,
     ...(fields.requestId ? { requestId: fields.requestId } : {}),
     ...(fields.correlationId ? { correlationId: fields.correlationId } : {}),
   };
   const tags = toSanitizedTagMap(tagCandidates, redactor);
-  const sentryExtras = toSanitizedExtras(fields.sentryExtras, redactor);
+  const telemetryExtras = toSanitizedExtras(fields.telemetryExtras, redactor);
 
   return {
     ...(tags ? { tags } : {}),
     extra: {
-      ...sentryExtras,
+      ...telemetryExtras,
       log: sanitizedLogRecord,
     },
-    level: SENTRY_LEVEL_BY_LOG_LEVEL[level],
+    level: CAPTURE_LEVEL_BY_LOG_LEVEL[level],
   };
 };
 
-export function createPinoAppLogger({
-  pino,
+const writeConsoleMirror = ({
+  level,
+  message,
+  sanitizedLogRecord,
+}: {
+  level: LogLevel;
+  message: string;
+  sanitizedLogRecord: Record<string, unknown>;
+}) => {
+  const consoleLike = globalThis.console;
+  const method = consoleLike?.[CONSOLE_METHOD_BY_LOG_LEVEL[level]];
+  if (typeof method !== 'function') return;
+
+  method.call(
+    consoleLike,
+    JSON.stringify({
+      level,
+      message,
+      ...sanitizedLogRecord,
+    })
+  );
+};
+
+export function createTelemetryLogger({
   telemetry,
   defaultFields,
   redactor = sanitizeLogFields,
-}: PinoAppLoggerInput): Logger {
-  const write = (level: LogLevel, fields: LogFields) => {
+  level,
+  consoleMirror,
+}: TelemetryLoggerInput): Logger {
+  const config = getLoggerConfig();
+  const configuredLevel = level ?? config.level;
+  const shouldMirrorToConsole = consoleMirror ?? config.consoleMirror;
+
+  const write = (logLevel: LogLevel, fields: LogFields) => {
     const correlation = telemetry.currentCorrelation();
     const mergedFields = {
       ...defaultFields,
@@ -236,7 +199,16 @@ export function createPinoAppLogger({
         ? sanitizedLogRecord.event
         : fields.event;
 
-    pino[level](sanitizedLogRecord, message);
+    if (!shouldEmitLog(logLevel, configuredLevel)) return;
+
+    if (shouldMirrorToConsole) {
+      writeConsoleMirror({
+        level: logLevel,
+        message,
+        sanitizedLogRecord,
+      });
+    }
+
     telemetry.emitLog({
       attributes: {
         ...(mergedFields.correlationId
@@ -266,16 +238,16 @@ export function createPinoAppLogger({
           : undefined,
       event: message,
       exception: mergedFields.exception,
-      level,
+      level: logLevel,
       message,
     });
 
-    if (level === 'error' && Object.hasOwn(mergedFields, 'exception')) {
+    if (logLevel === 'error' && Object.hasOwn(mergedFields, 'exception')) {
       telemetry.captureException(
         mergedFields.exception,
         buildTelemetryCaptureContext({
           fields: mergedFields,
-          level,
+          level: logLevel,
           redactor,
           sanitizedLogRecord,
         })
@@ -290,18 +262,3 @@ export function createPinoAppLogger({
     error: (fields) => write('error', fields),
   };
 }
-
-let defaultLogger: PinoLogger | undefined;
-
-export function getDefaultPinoLogger() {
-  defaultLogger ??= createPinoLogger();
-  return defaultLogger;
-}
-
-export const logger = new Proxy({} as PinoLogger, {
-  get(_target, prop) {
-    const instance = getDefaultPinoLogger();
-    const value = Reflect.get(instance, prop, instance);
-    return typeof value === 'function' ? value.bind(instance) : value;
-  },
-});

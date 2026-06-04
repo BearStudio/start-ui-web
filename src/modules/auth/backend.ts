@@ -32,12 +32,37 @@ const serverContextTools = createServerContextTools({
 
 export { getAuthUseCases };
 export const handleAuthRequest = (request: Request) =>
-  getAuthHttpGateway().handle(request);
+  telemetryProxy.startSpan(
+    {
+      attributes: {
+        'auth.provider': 'better-auth',
+        'http.request.method': request.method,
+        'operation.name': 'auth.httpRequest',
+        'operation.type': 'http_handler',
+      },
+      name: 'auth.httpRequest',
+      op: 'auth.http',
+    },
+    () => getAuthHttpGateway().handle(request)
+  );
 export const handleLogoutRequest = (request: Request) =>
-  getAuth().api.signOut({
-    asResponse: true,
-    headers: request.headers,
-  });
+  telemetryProxy.startSpan(
+    {
+      attributes: {
+        'auth.provider': 'better-auth',
+        'http.request.method': request.method,
+        'operation.name': 'auth.signOut',
+        'operation.type': 'provider_operation',
+      },
+      name: 'auth.signOut',
+      op: 'auth.provider',
+    },
+    () =>
+      getAuth().api.signOut({
+        asResponse: true,
+        headers: request.headers,
+      })
+  );
 export const assertPermission = serverContextTools.assertPermission;
 export const withProtectedContext = serverContextTools.withProtectedContext;
 export const withProtectedMutation = serverContextTools.withProtectedMutation;

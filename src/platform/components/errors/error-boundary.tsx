@@ -1,8 +1,9 @@
 import { CheckIcon, CircleAlertIcon, CopyIcon } from 'lucide-react';
-import { PropsWithChildren, useState } from 'react';
+import { type ErrorInfo, useState } from 'react';
 import {
   ErrorBoundary as ReactErrorBoundary,
-  FallbackProps,
+  type ErrorBoundaryPropsWithComponent,
+  type FallbackProps,
 } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +25,9 @@ import {
   ResponsiveDrawerTitle,
   ResponsiveDrawerTrigger,
 } from '@/platform/components/ui/responsive-drawer';
+
+import { getTelemetry } from '@/platform/telemetry';
+import { frontendLogger } from '@/platform/telemetry/frontend-logger';
 
 const ErrorFallback = (props: FallbackProps) => {
   const { t } = useTranslation(['common', 'components']);
@@ -94,6 +98,38 @@ const ErrorFallback = (props: FallbackProps) => {
   );
 };
 
-export const ErrorBoundary = (props: PropsWithChildren<unknown>) => {
-  return <ReactErrorBoundary FallbackComponent={ErrorFallback} {...props} />;
+type ErrorBoundaryProps = Omit<
+  ErrorBoundaryPropsWithComponent,
+  'FallbackComponent'
+>;
+
+const captureFeatureBoundaryError = (error: unknown, info: ErrorInfo) => {
+  const details = info.componentStack
+    ? { componentStack: info.componentStack }
+    : undefined;
+  const message = error instanceof Error ? error.message : 'Feature error';
+
+  getTelemetry().captureException(error, {
+    extra: details,
+    level: 'error',
+    tags: { event: 'feature.error_boundary' },
+  });
+  frontendLogger.error('feature.error_boundary', {
+    error,
+    message,
+    ...(details ? { details } : {}),
+  });
+};
+
+export const ErrorBoundary = ({ onError, ...props }: ErrorBoundaryProps) => {
+  return (
+    <ReactErrorBoundary
+      {...props}
+      FallbackComponent={ErrorFallback}
+      onError={(error, info) => {
+        captureFeatureBoundaryError(error, info);
+        onError?.(error, info);
+      }}
+    />
+  );
 };

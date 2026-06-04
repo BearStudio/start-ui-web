@@ -7,6 +7,7 @@ import i18n from '@/platform/lib/i18n';
 import type { AuthSession } from '@/modules/auth';
 import type { BookUseCases } from '@/modules/book';
 import type { Logger } from '@/modules/kernel';
+import { getTelemetry } from '@/platform/telemetry';
 
 import {
   bookCoverAcceptedFileTypes,
@@ -59,39 +60,54 @@ const rejectUpload = (
 export const handleBookCoverBeforeUpload = async (
   deps: BookCoverUploadDeps,
   input: { headers: Headers; fileType: string }
-): Promise<BookCoverBeforeUploadResult> => {
-  const session = await deps.getCurrentSession(input.headers);
-  const user =
-    session?.user ?? rejectUpload(deps, 'NOT_AUTHENTICATED', input.fileType);
+): Promise<BookCoverBeforeUploadResult> =>
+  getTelemetry().startSpan(
+    {
+      attributes: {
+        'file.mime_type': input.fileType,
+        'operation.name': 'book.coverUpload.beforeUpload',
+        'operation.type': 'upload_hook',
+        'upload.route': 'bookCover',
+      },
+      name: 'book.coverUpload.beforeUpload',
+      op: 'upload.before_upload',
+    },
+    async () => {
+      const session = await deps.getCurrentSession(input.headers);
+      const user =
+        session?.user ??
+        rejectUpload(deps, 'NOT_AUTHENTICATED', input.fileType);
 
-  const prepared = await deps.getUseCases().prepareCoverUpload({
-    currentUserId: user.id,
-    fileType: input.fileType,
-  });
+      const prepared = await deps.getUseCases().prepareCoverUpload({
+        currentUserId: user.id,
+        fileType: input.fileType,
+      });
 
-  return match(prepared)
-    .with(Result.P.Error(P.select()), (error) => {
-      throw error;
-    })
-    .with(
-      Result.P.Ok({
-        type: 'book_cover_upload_prepared',
-        upload: P.select(),
-      }),
-      (upload) => ({
-        objectInfo: {
-          key: upload.objectKey,
-        },
-      })
-    )
-    .with(Result.P.Ok({ type: 'book_cover_upload_forbidden' }), () =>
-      rejectUpload(deps, 'UNAUTHORIZED', input.fileType)
-    )
-    .with(Result.P.Ok({ type: 'book_cover_upload_invalid_file_type' }), () =>
-      rejectUpload(deps, 'invalid_file_type', input.fileType)
-    )
-    .exhaustive();
-};
+      return match(prepared)
+        .with(Result.P.Error(P.select()), (error) => {
+          throw error;
+        })
+        .with(
+          Result.P.Ok({
+            type: 'book_cover_upload_prepared',
+            upload: P.select(),
+          }),
+          (upload) => ({
+            objectInfo: {
+              key: upload.objectKey,
+            },
+          })
+        )
+        .with(Result.P.Ok({ type: 'book_cover_upload_forbidden' }), () =>
+          rejectUpload(deps, 'UNAUTHORIZED', input.fileType)
+        )
+        .with(
+          Result.P.Ok({ type: 'book_cover_upload_invalid_file_type' }),
+          () => rejectUpload(deps, 'invalid_file_type', input.fileType)
+        )
+        .exhaustive();
+    }
+  );
 
 export const createBookCoverUploadRoute = (deps: BookCoverUploadDeps) =>
   route({

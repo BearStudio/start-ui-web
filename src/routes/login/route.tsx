@@ -28,7 +28,7 @@ export const Route = createFileRoute('/login')({
     ),
   component: RouteComponent,
   notFoundComponent: () => <PageError type="404" />,
-  errorComponent: () => <RouteError />,
+  errorComponent: ({ error }) => <RouteError error={error} routeId="/login" />,
 });
 
 function RouteComponent() {
