@@ -4,6 +4,7 @@ import {
   createAppQueryClient,
   shouldRetryQuery,
 } from '@/platform/lib/tanstack-query/query-client';
+
 import {
   createNoOpTelemetry,
   setTelemetry,

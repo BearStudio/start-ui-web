@@ -14,10 +14,10 @@ async function main() {
 }
 
 main()
+  .finally(async () => {
+    await getDefaultDbClient().$close();
+  })
   .catch((e) => {
     console.error(e);
     process.exitCode = 1;
-  })
-  .finally(async () => {
-    await getDefaultDbClient().$close();
   });

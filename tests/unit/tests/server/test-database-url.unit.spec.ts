@@ -1,9 +1,8 @@
-import { describe, expect, it } from 'vitest';
-
 import {
   makeTestCredential,
   makeTestDatabaseUrl,
 } from '@tests/server/test-database-url';
+import { describe, expect, it } from 'vitest';
 
 describe('test database URL helpers', () => {
   it('normalizes credential labels without regex backtracking risk', () => {

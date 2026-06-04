@@ -1,11 +1,10 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 import { makeGenreRow } from '@tests/server/db-fixtures';
 import { createPgliteTestDatabase } from '@tests/server/pglite';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { createGenreRepository } from '@/modules/genre/infrastructure/drizzle/genre-repository-drizzle';
+import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 function getOk<TOutcome extends { type: string }>(
   result: ApplicationResult<TOutcome>

@@ -1,12 +1,11 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import { toUserId } from '@/modules/kernel/domain/ids';
-
 import type { AccountRepository } from '@/modules/account/application/ports/account-repository';
 import { createAccountUseCases } from '@/modules/account/factory';
+import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
+import { toUserId } from '@/modules/kernel/domain/ids';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const logger = {
   debug: () => {},

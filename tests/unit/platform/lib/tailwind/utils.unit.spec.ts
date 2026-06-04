@@ -4,12 +4,10 @@ import { cn } from '@/platform/lib/tailwind/utils';
 
 describe('cn', () => {
   it('combines conditional class values and resolves tailwind conflicts', () => {
-    const isHidden = false;
-
     expect(
       cn(
         'px-2 text-sm text-muted-foreground',
-        isHidden && 'hidden',
+        false,
         ['py-1', 'px-4'],
         { 'font-medium': true, 'opacity-50': false },
         'text-foreground'

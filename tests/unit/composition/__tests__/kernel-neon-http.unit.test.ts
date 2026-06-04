@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('kernel composition with Neon HTTP', () => {
   let dbToClose: { $close: () => Promise<void> } | undefined;

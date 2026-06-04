@@ -1,7 +1,6 @@
+import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 import { Buffer } from 'node:buffer';
 import { describe, expect, it, vi } from 'vitest';
-
-import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 
 import { sanitizeLogFields } from '@/platform/lib/redaction/sanitize-log-fields';
 
@@ -71,6 +70,25 @@ const sensitiveKeyVariant = fc
   );
 
 const secretValue = fc.uuid().map((value) => `secret-${value}`);
+
+function sanitizeLogFieldsWithObjectKeysGuard(fields: Record<string, unknown>) {
+  const originalObjectKeys = Object.keys;
+  const objectKeys = vi
+    .spyOn(Object, 'keys')
+    .mockImplementation((value: object) => {
+      if (value === fields.list) {
+        throw new Error('Oversized arrays must not call Object.keys');
+      }
+
+      return originalObjectKeys(value);
+    });
+
+  try {
+    return sanitizeLogFields(fields, { sensitiveKeys });
+  } finally {
+    objectKeys.mockRestore();
+  }
+}
 
 describe('sanitizeLogFields', () => {
   it('uses production-safe default sensitive keys without redacting stable ids', () => {
@@ -285,26 +303,9 @@ describe('sanitizeLogFields', () => {
   });
 
   it('compacts oversized dense arrays without collecting every array key', () => {
-    const list = Array.from({ length: 10_001 }, (_, index) =>
-      index === 0 ? 'person@example.com' : `safe-${index}`
-    );
-    const originalObjectKeys = Object.keys;
-    const objectKeys = vi
-      .spyOn(Object, 'keys')
-      .mockImplementation((value: object) => {
-        if (value === list) {
-          throw new Error('Oversized arrays must not call Object.keys');
-        }
-
-        return originalObjectKeys(value);
-      });
-
-    let sanitized: Record<string, unknown>;
-    try {
-      sanitized = sanitizeLogFields({ list }, { sensitiveKeys });
-    } finally {
-      objectKeys.mockRestore();
-    }
+    const list = Array.from({ length: 10_001 }, (_, index) => `safe-${index}`);
+    list[0] = 'person@example.com';
+    const sanitized = sanitizeLogFieldsWithObjectKeysGuard({ list });
 
     const sanitizedList = sanitized.list as {
       entries: Record<string, unknown>;

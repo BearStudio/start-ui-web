@@ -1,6 +1,12 @@
 import { Result } from '@swan-io/boxed';
 import { getGlobalStartContext } from '@tanstack/react-start';
 import { setResponseHeader } from '@tanstack/react-start/server';
+import {
+  mockGetSession,
+  mockLogger,
+  mockSession,
+  mockUser,
+} from '@tests/server/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -12,12 +18,6 @@ import { toUserId } from '@/modules/kernel';
 import { ServerFnError } from '@/modules/kernel/client';
 import { envClient } from '@/platform/env/client';
 import { createNoOpTelemetry } from '@/platform/telemetry';
-import {
-  mockGetSession,
-  mockLogger,
-  mockSession,
-  mockUser,
-} from '@tests/server/test-utils';
 
 const getGlobalStartContextMock = vi.mocked(getGlobalStartContext);
 
@@ -137,6 +137,37 @@ describe('server function middleware', () => {
         requestId: 'request-1',
       })
     );
+  });
+
+  it('preserves the Start auth session method context', async () => {
+    const auth = {
+      currentSession: {
+        session: mockSession,
+        user: mockUser,
+      },
+      async getSession() {
+        return this.currentSession;
+      },
+    };
+    const getCurrentSession = vi.fn();
+    getGlobalStartContextMock.mockReturnValue({
+      auth,
+      requestId: 'request-1',
+    } as never);
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession,
+          checkPermission: vi.fn(),
+        }) as ExplicitAny,
+      logger: mockLogger,
+    });
+
+    await expect(
+      tools.withPublicContext(async (ctx) => ctx.session)
+    ).resolves.toEqual(mockSession);
+
+    expect(getCurrentSession).not.toHaveBeenCalled();
   });
 
   it('treats null Start request context as absent', async () => {

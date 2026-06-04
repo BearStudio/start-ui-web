@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest';
-
-import { toBookCoverObjectKey, toGenreId } from '@/modules/kernel/domain/ids';
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
+import { describe, expect, it } from 'vitest';
 
 import { normalizeBookWriteInput } from '@/modules/book/domain/book';
 import { isDuplicateBookCandidate } from '@/modules/book/domain/book-policy';
+import { toBookCoverObjectKey, toGenreId } from '@/modules/kernel/domain/ids';
 
 const text = fc.string({ maxLength: 80 });
 const nonBlankText = text.filter((value) => value.trim().length > 0);

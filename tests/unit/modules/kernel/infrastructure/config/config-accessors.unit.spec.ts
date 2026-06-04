@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('server config accessors', () => {
   beforeEach(() => {

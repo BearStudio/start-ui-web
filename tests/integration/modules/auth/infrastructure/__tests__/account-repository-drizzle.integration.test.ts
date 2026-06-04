@@ -1,13 +1,12 @@
+import { makeUserRow } from '@tests/server/db-fixtures';
+import { createPgliteTestDatabase } from '@tests/server/pglite';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
+import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import { user as userTable } from '@/modules/kernel/infrastructure/db/schema';
-import { makeUserRow } from '@tests/server/db-fixtures';
-import { createPgliteTestDatabase } from '@tests/server/pglite';
-
-import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 function getOk<TOutcome extends { type: string }>(
   result: ApplicationResult<TOutcome>

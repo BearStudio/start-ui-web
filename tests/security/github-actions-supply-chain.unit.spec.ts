@@ -1,9 +1,10 @@
+/* oxlint-disable vitest/no-conditional-in-test -- Supply-chain policy tests branch over workflow metadata to collect exact violations. */
+
+import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-
-import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 
 const root = process.cwd();
 const workflowRoot = path.join(root, '.github/workflows');

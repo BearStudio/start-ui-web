@@ -211,8 +211,8 @@ const getStartRequestId = () => {
 };
 
 const getStartAuthSession = () => {
-  const getSession = getStartRequestContext()?.auth?.getSession;
-  return typeof getSession === 'function' ? getSession() : undefined;
+  const auth = getStartRequestContext()?.auth;
+  return typeof auth?.getSession === 'function' ? auth.getSession() : undefined;
 };
 
 export const createServerContextTools = ({

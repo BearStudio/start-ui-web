@@ -1,7 +1,5 @@
 import { expect } from '@playwright/test';
 import { test as setup } from '@tests/e2e/utils';
-import { mkdir } from 'node:fs/promises';
-import { dirname } from 'node:path';
 import {
   ADMIN_EMAIL,
   ADMIN_FILE,
@@ -9,6 +7,8 @@ import {
   USER_FILE,
 } from '@tests/e2e/utils/constants';
 import type { ExtendedPageInstance } from '@tests/e2e/utils/page';
+import { mkdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 /**
  * @see https://playwright.dev/docs/auth#multiple-signed-in-roles

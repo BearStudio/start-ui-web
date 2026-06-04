@@ -1,6 +1,6 @@
+import { makeTestKernel } from '@tests/unit/composition/helpers';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { makeTestKernel } from '@tests/unit/composition/helpers';
 import {
   __resetAccountComposition,
   __resetBookComposition,

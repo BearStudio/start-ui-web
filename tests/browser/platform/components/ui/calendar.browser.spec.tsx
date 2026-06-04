@@ -1,8 +1,7 @@
+import { page, render } from '@tests/utils';
 import dayjs from 'dayjs';
 import * as module from 'react-i18next';
 import { describe, expect, it, vi } from 'vitest';
-
-import { page, render } from '@tests/utils';
 
 import { Calendar } from '@/platform/components/ui/calendar';
 

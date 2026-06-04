@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest';
-
 import {
   createAuthenticatedContext,
   mockSession,
   mockUser,
 } from '@tests/server/test-utils';
+import { describe, expect, it } from 'vitest';
 
 import { createAuthHandlers } from '@/modules/auth/transport/tanstack/auth-handlers';
 

@@ -1,14 +1,13 @@
 import { Result } from '@swan-io/boxed';
-import { describe, expect, it, vi } from 'vitest';
-
-import { toGenreId } from '@/modules/kernel/domain/ids';
 import { createAuthenticatedContext } from '@tests/server/test-utils';
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   createGenreHandlers,
   zGetAllInput,
 } from '@/modules/genre/transport/http/genre-handlers';
+import { toGenreId } from '@/modules/kernel/domain/ids';
 
 const validPaginationLimit = fc.integer({ max: 100, min: 1 });
 const invalidPaginationLimit = fc.oneof(

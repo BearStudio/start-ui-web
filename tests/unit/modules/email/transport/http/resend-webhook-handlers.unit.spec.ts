@@ -1,14 +1,13 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
+import { createResendWebhookHandlers } from '@/modules/email/transport/http/resend-webhook-handlers';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 import {
   toEmailProviderMessageId,
   toEmailRecipientList,
   toEmailWebhookEventId,
 } from '@/modules/kernel/domain/ids';
-
-import { createResendWebhookHandlers } from '@/modules/email/transport/http/resend-webhook-handlers';
 
 const makeRequest = (body = 'raw-body', headers?: HeadersInit) =>
   new Request('https://example.test/api/webhooks/resend', {

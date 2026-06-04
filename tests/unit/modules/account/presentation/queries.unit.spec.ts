@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { accountQueries } from '@/modules/account/client';
 import {
-  createAccountQueries,
   type AccountQueryFacade,
+  createAccountQueries,
 } from '@/modules/account/presentation/queries';
 
 describe('account mutation keys', () => {

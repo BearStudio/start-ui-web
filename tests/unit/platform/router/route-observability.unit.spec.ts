@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  observeBeforeLoad,
+  observedLoader,
+} from '@/platform/router/route-observability';
+import {
   createNoOpTelemetry,
   setTelemetry,
   type TelemetryAdapter,
 } from '@/platform/telemetry';
-import {
-  observeBeforeLoad,
-  observedLoader,
-} from '@/platform/router/route-observability';
 
 const makeTelemetry = (): TelemetryAdapter => ({
   ...createNoOpTelemetry(),

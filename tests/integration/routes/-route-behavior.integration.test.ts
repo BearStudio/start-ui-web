@@ -89,6 +89,8 @@ vi.mock('@/app/demo/presentation', () => ({
   openDemoModeDrawer: vi.fn(),
 }));
 
+import { RouteError } from '@/platform/components/errors/route-error';
+
 import {
   ForbiddenRouteError,
   isForbiddenRouteContext,
@@ -96,8 +98,6 @@ import {
 import { bookQueries } from '@/modules/book/client';
 import { toBookId, toScopeKey } from '@/modules/kernel/testing';
 import { userQueries } from '@/modules/user/client';
-import { RouteError } from '@/platform/components/errors/route-error';
-
 import { Route as AppBooksIndexRoute } from '@/routes/app/books/index';
 import { Route as LoginRoute } from '@/routes/login/route';
 import { Route as LoginVerifyRoute } from '@/routes/login/verify.index';
@@ -377,19 +377,19 @@ describe('route integration behavior', () => {
     expect(isForbiddenRouteContext(forbiddenContext)).toBe(true);
 
     expect(
-      routeOptions(ManagerUsersIndexRoute).loader({
+      await routeOptions(ManagerUsersIndexRoute).loader({
         context: forbiddenContext,
         deps: { searchTerm: 'admin' },
       })
     ).toBeUndefined();
     expect(
-      routeOptions(ManagerUsersIdRoute).loader({
+      await routeOptions(ManagerUsersIdRoute).loader({
         context: forbiddenContext,
         params: { id: 'admin-1' },
       })
     ).toBeUndefined();
     expect(
-      routeOptions(ManagerUsersUpdateRoute).loader({
+      await routeOptions(ManagerUsersUpdateRoute).loader({
         context: forbiddenContext,
         params: { id: 'admin-1' },
       })

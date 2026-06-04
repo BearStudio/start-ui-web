@@ -56,7 +56,8 @@ Local development and agent work should usually run:
 ```bash
 pnpm format:changed
 pnpm check
-pnpm test:affected # Vitest --changed against origin/main
+pnpm test:affected:list # Show affected Vitest tests for changed files
+pnpm test:affected      # Run affected Vitest tests for changed files
 ```
 
 CodeQL is intentionally opt-in locally because the CLI is not a Node dependency. Use `pnpm codeql:test`, `pnpm codeql:db`, and `pnpm codeql:analyze` when changing `.github/codeql/**` or when investigating semantic security/data-flow behavior. These commands call the CodeQL CLI directly, install the local query pack dependencies first, and write outputs under `test-results/codeql/`.

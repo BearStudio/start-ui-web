@@ -1,4 +1,6 @@
 import { Result } from '@swan-io/boxed';
+import { createAuthenticatedContext } from '@tests/server/test-utils';
+import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -6,9 +8,6 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel/domain/ids';
-import { createAuthenticatedContext } from '@tests/server/test-utils';
-import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
-
 import {
   createUserHandlers,
   zGetAllInput,

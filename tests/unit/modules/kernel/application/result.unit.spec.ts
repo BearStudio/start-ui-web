@@ -1,8 +1,8 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 describe('application result contract', () => {
   it('uses Boxed results for domain-tagged outcomes and app errors', () => {

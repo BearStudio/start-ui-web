@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { observeHttpRequest } from '@/composition/telemetry/request-observability';
 import {
   createNoOpTelemetry,
   setTelemetry,
   type TelemetryAdapter,
 } from '@/platform/telemetry';
-import { observeHttpRequest } from '@/composition/telemetry/request-observability';
 
 afterEach(() => {
   setTelemetry(createNoOpTelemetry());

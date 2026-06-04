@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import type { RuntimeConfigSource } from '@/platform/runtime-config';
-
 import {
   __resetRuntimeConfigService,
   getRuntimeConfigUseCases,

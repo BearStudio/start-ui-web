@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
+import { describe, expect, it } from 'vitest';
 
 import {
   internalRedirectFromLocation,

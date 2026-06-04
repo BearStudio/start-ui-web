@@ -8,6 +8,16 @@ vi.mock('@/platform/env/client', () => ({
   envClient: envClientMock,
 }));
 
+function getFirstConsoleInfoPayload() {
+  const consoleInfoCall = vi.mocked(console.info).mock.calls.at(0);
+  if (!consoleInfoCall) {
+    throw new Error('Expected console.info to be called.');
+  }
+
+  const [, serializedPayload] = consoleInfoCall;
+  return JSON.parse(String(serializedPayload));
+}
+
 describe('authE2eDebug', () => {
   beforeEach(() => {
     envClientMock.VITE_ENV_NAME = 'tests';
@@ -33,8 +43,7 @@ describe('authE2eDebug', () => {
       },
     });
 
-    const [, serializedPayload] = vi.mocked(console.info).mock.calls[0] ?? [];
-    const payload = JSON.parse(String(serializedPayload));
+    const payload = getFirstConsoleInfoPayload();
 
     expect(payload).toEqual(
       expect.objectContaining({
@@ -58,8 +67,7 @@ describe('authE2eDebug', () => {
 
     expect(() => authE2eDebug('login.email_otp.error', fields)).not.toThrow();
 
-    const [, serializedPayload] = vi.mocked(console.info).mock.calls[0] ?? [];
-    const payload = JSON.parse(String(serializedPayload));
+    const payload = getFirstConsoleInfoPayload();
 
     expect(payload.self).toBe('[Circular]');
     expect(console.warn).not.toHaveBeenCalled();
@@ -77,8 +85,7 @@ describe('authE2eDebug', () => {
       second: shared,
     });
 
-    const [, serializedPayload] = vi.mocked(console.info).mock.calls[0] ?? [];
-    const payload = JSON.parse(String(serializedPayload));
+    const payload = getFirstConsoleInfoPayload();
 
     expect(payload).toEqual(
       expect.objectContaining({

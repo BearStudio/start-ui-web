@@ -1,7 +1,14 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
+import {
+  type AuthEmailPort,
+  type AuthorizationGateway,
+  type AuthSession,
+  createAuthUseCases,
+  type SessionGateway,
+  type UserAdminGateway,
+} from '@/modules/auth/testing';
 import {
   toEmailAddress,
   toLanguageCode,
@@ -9,15 +16,7 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel';
-
-import {
-  type AuthEmailPort,
-  type AuthSession,
-  type AuthorizationGateway,
-  createAuthUseCases,
-  type SessionGateway,
-  type UserAdminGateway,
-} from '@/modules/auth/testing';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const session: AuthSession = {
   user: {

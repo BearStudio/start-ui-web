@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { bookQueries } from '@/modules/book/client';
 import {
-  createBookQueries,
   type BookQueryFacade,
+  createBookQueries,
 } from '@/modules/book/presentation/queries';
 import { toBookId, toScopeKey } from '@/modules/kernel/domain/ids';
 

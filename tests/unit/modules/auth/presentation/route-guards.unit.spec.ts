@@ -1,8 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { type CurrentSession, scopeKeyFromScope } from '@/modules/auth';
-import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
-
 import { parseSafeRedirectPath } from '@/modules/auth/presentation/redirects';
 import {
   ForbiddenRouteError,
@@ -12,6 +10,7 @@ import {
   requireAuthenticatedRouteOrForbidden,
   requireOnboardingRoute,
 } from '@/modules/auth/presentation/route-guards';
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 
 const location = {
   href: '/manager/books?searchTerm=du',

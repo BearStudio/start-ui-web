@@ -1,7 +1,6 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
 import type {
   Logger,
   PermissionChecker,
@@ -13,7 +12,7 @@ import {
   toSessionId,
   toUserId,
 } from '@/modules/kernel';
-
+import type { ApplicationResult } from '@/modules/kernel/testing';
 import {
   createUserUseCases,
   type User,

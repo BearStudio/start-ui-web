@@ -1,16 +1,15 @@
+import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
+import { createPgliteTestDatabase } from '@tests/server/pglite';
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
+import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import {
   book as bookTable,
   genre as genreTable,
 } from '@/modules/kernel/infrastructure/db/schema';
-import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
-import { createPgliteTestDatabase } from '@tests/server/pglite';
-
-import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 function getOk<TOutcome extends { type: string }>(
   result: ApplicationResult<TOutcome>
@@ -110,8 +109,9 @@ describe('BookRepositoryDrizzle integration', () => {
       })
     );
     expect(updated.type).toBe('book_updated');
-    if (updated.type !== 'book_updated') return;
-    expect(updated.book.genre).toMatchObject({ id: 'genre-2', name: 'Two' });
+    expect(updated).toMatchObject({
+      book: { genre: { id: 'genre-2', name: 'Two' } },
+    });
 
     const persisted = await database.db.query.book.findFirst({
       where: eq(bookTable.id, 'book-a'),

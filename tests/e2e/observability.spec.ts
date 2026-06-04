@@ -1,3 +1,5 @@
+/* oxlint-disable vitest/no-conditional-in-test -- Request capture branches are the browser behavior under test. */
+
 import { expect, test } from '@tests/e2e/utils';
 
 const vendorHostPattern =

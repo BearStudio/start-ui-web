@@ -1,14 +1,13 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { PermissionChecker } from '@/modules/kernel';
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import { toBookId, toGeneratedId, toGenreId, toUserId } from '@/modules/kernel';
-
-import type { BookUseCaseDeps } from '@/modules/book/application/use-cases/types';
 import type { BookRepository } from '@/modules/book/application/ports/book-repository';
+import type { BookUseCaseDeps } from '@/modules/book/application/use-cases/types';
 import type { Book } from '@/modules/book/domain/book';
 import { createBookUseCases } from '@/modules/book/factory';
+import type { PermissionChecker } from '@/modules/kernel';
+import { toBookId, toGeneratedId, toGenreId, toUserId } from '@/modules/kernel';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
 const book: Book = {

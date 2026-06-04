@@ -1,10 +1,9 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { Database } from '@/modules/kernel/infrastructure/db/client';
-
 import { normalizeCreateAuthInput } from '@/modules/auth/infrastructure/better-auth/create-auth-options';
 import type { AuthEmailPort } from '@/modules/auth/testing';
+import type { Database } from '@/modules/kernel/infrastructure/db/client';
 
 const database = {
   select: () => undefined,

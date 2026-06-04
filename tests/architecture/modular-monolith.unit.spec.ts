@@ -1,3 +1,5 @@
+/* oxlint-disable vitest/no-conditional-in-test -- Architecture guardrails branch over discovered files to produce precise violation lists. */
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';

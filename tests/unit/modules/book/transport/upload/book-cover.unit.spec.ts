@@ -1,17 +1,16 @@
 import { RejectUpload } from '@better-upload/server';
 import { Result } from '@swan-io/boxed';
+import { mockSession, mockUser } from '@tests/server/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
-import { mockSession, mockUser } from '@tests/server/test-utils';
-
-import {
-  bookCoverUploadConstraints,
-  handleBookCoverBeforeUpload,
-} from '@/modules/book/transport/upload/book-cover';
 import {
   bookCoverAcceptedFileTypes,
   bookCoverMaxFileSizeBytes,
 } from '@/modules/book/domain/book-policy';
+import {
+  bookCoverUploadConstraints,
+  handleBookCoverBeforeUpload,
+} from '@/modules/book/transport/upload/book-cover';
 import { toBookCoverObjectKey } from '@/modules/kernel/testing';
 
 const headers = new Headers();

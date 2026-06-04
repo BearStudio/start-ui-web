@@ -1,3 +1,4 @@
+import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { ConfigurationError } from '@/modules/kernel/domain/errors/configuration-error';
@@ -5,7 +6,6 @@ import type {
   Database,
   DbTransaction,
 } from '@/modules/kernel/infrastructure/db/client';
-import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
 
 vi.unmock('@/modules/kernel/infrastructure/db/client');
 

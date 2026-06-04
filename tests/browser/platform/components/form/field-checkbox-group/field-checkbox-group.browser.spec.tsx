@@ -1,7 +1,6 @@
+import { FAILED_CLICK_TIMEOUT_MS, page, render, setupUser } from '@tests/utils';
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
-
-import { FAILED_CLICK_TIMEOUT_MS, page, render, setupUser } from '@tests/utils';
 
 import { FormField, FormFieldLabel } from '@/platform/components/form';
 import { FormMocked } from '@/platform/components/form/form-test-utils';
@@ -228,11 +227,10 @@ test('disabled option', async () => {
   const disabledCb = page.getByRole('checkbox', { name: 'Mae Jemibear' });
   await expect.element(disabledCb).toBeDisabled();
 
-  try {
-    await user.click(disabledCb, { timeout: FAILED_CLICK_TIMEOUT_MS });
-  } catch {
-    expect(disabledCb).not.toBeChecked();
-  }
+  await user
+    .click(disabledCb, { timeout: FAILED_CLICK_TIMEOUT_MS })
+    .catch(() => undefined);
+  await expect.element(disabledCb).not.toBeChecked();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bears: [] });

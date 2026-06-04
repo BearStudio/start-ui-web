@@ -55,9 +55,11 @@ test('updates the active request without temporarily releasing nav state', async
 
 test('keeps the active request when release action identity changes', async () => {
   const originalRelease = useShouldShowNavStore.getState().release;
-  const nextRelease: typeof originalRelease = (requestId) => {
-    originalRelease(requestId);
-  };
+  const nextRelease = vi.fn(
+    (requestId: Parameters<typeof originalRelease>[0]) => {
+      originalRelease(requestId);
+    }
+  );
 
   try {
     const view = await renderHook<
@@ -77,6 +79,11 @@ test('keeps the active request when release action identity changes', async () =
 
     expect(view.result.current.mode).toBe('desktop-only');
     expect(useShouldShowNavStore.getState().mode).toBe('desktop-only');
+
+    view.unmount();
+
+    expect(nextRelease).toHaveBeenCalledTimes(1);
+    expect(useShouldShowNavStore.getState().mode).toBe('all');
   } finally {
     useShouldShowNavStore.setState({ release: originalRelease });
   }

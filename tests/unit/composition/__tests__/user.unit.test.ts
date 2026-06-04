@@ -1,6 +1,8 @@
 import { Result } from '@swan-io/boxed';
+import { makeTestKernel, now } from '@tests/unit/composition/helpers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { __resetUserComposition, getUserUseCases } from '@/composition/user';
 import {
   toEmailAddress,
   toSessionId,
@@ -8,9 +10,6 @@ import {
 } from '@/modules/kernel/domain/ids';
 import type { ApplicationResult } from '@/modules/kernel/testing';
 import type { UserAuthGateway, UserRepository } from '@/modules/user';
-
-import { makeTestKernel, now } from '@tests/unit/composition/helpers';
-import { __resetUserComposition, getUserUseCases } from '@/composition/user';
 
 const user = {
   id: toUserId('user-1'),

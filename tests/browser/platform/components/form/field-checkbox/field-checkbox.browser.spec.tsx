@@ -1,7 +1,6 @@
+import { FAILED_CLICK_TIMEOUT_MS, page, render, setupUser } from '@tests/utils';
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
-
-import { FAILED_CLICK_TIMEOUT_MS, page, render, setupUser } from '@tests/utils';
 
 import { FormField } from '@/platform/components/form';
 import { FormMocked } from '@/platform/components/form/form-test-utils';
@@ -128,14 +127,13 @@ test('disabled', async () => {
   await expect.element(checkbox).toBeDisabled();
   await expect.element(checkbox).not.toBeChecked();
 
-  try {
-    await user.click(checkbox, {
+  await user
+    .click(checkbox, {
       trial: true,
       timeout: FAILED_CLICK_TIMEOUT_MS,
-    });
-  } catch {
-    await expect.element(checkbox).not.toBeChecked();
-  }
+    })
+    .catch(() => undefined);
+  await expect.element(checkbox).not.toBeChecked();
   await user.click(page.getByRole('button', { name: 'Submit' }));
   // TanStack Form preserves disabled-field values; default false stays.
   expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: false });

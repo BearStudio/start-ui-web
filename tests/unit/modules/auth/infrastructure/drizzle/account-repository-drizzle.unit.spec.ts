@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ApplicationResult } from '@/modules/kernel/testing';
+import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
 import { toUserId } from '@/modules/kernel/domain/ids';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
-
-import { createAccountRepository } from '@/modules/auth/infrastructure/drizzle/account-repository-drizzle';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 function makeThrowingDb(error: unknown): DbLike {
   return {

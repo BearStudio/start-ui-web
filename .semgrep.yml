@@ -98,6 +98,20 @@ rules:
         - '**/*.unit.spec.ts'
         - '**/*.test.ts'
 
+  - id: no-detached-start-auth-getsession
+    message: Call Start auth session methods on the auth object so the method this binding is preserved.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - src/modules/auth/transport/tanstack/**/*.ts
+    pattern-either:
+      - pattern: |
+          const $GET_SESSION = getStartRequestContext()?.auth?.getSession;
+      - pattern: |
+          const $GET_SESSION = $CONTEXT.auth?.getSession;
+
   - id: no-auth-token-document-cookie
     message: Do not write auth, session, JWT, or token cookies from client code; auth cookies are provider/server owned.
     severity: ERROR
@@ -129,6 +143,18 @@ rules:
         - '**/*.test.ts'
         - src/routes/api/**/*.ts
         - src/routes/api/**/*.tsx
+
+  - id: no-unawaited-route-loader-undefined-assertion
+    message: Await async route loader calls before asserting on their resolved result.
+    severity: ERROR
+    languages:
+      - typescript
+    paths:
+      include:
+        - tests/integration/routes/**/*.ts
+        - tests/integration/routes/**/*.tsx
+    pattern: |
+      expect(routeOptions($ROUTE).loader($ARGS)).toBeUndefined()
 
   - id: no-committed-better-auth-session-token
     message: Do not commit Playwright storage state containing better-auth.session_token; generate auth state during e2e setup.

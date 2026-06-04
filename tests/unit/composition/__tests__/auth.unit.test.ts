@@ -1,6 +1,12 @@
 import { Result } from '@swan-io/boxed';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import {
+  __resetAuthComposition,
+  type AuthOverrides,
+  getAuthHttpGateway,
+  getAuthUseCases,
+} from '@/composition/auth';
 import type {
   AuthEmailPort,
   AuthorizationGateway,
@@ -8,13 +14,6 @@ import type {
   UserAdminGateway,
 } from '@/modules/auth';
 import { toUserId } from '@/modules/kernel/domain/ids';
-
-import {
-  __resetAuthComposition,
-  type AuthOverrides,
-  getAuthHttpGateway,
-  getAuthUseCases,
-} from '@/composition/auth';
 
 const makeAuthOverrides = (): Required<AuthOverrides> => ({
   sessionGateway: {

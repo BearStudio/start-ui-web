@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
-
 import {
   sanitizeCurrentSession,
   scopeFromUser,
   scopeKeyFromScope,
   scopeKeyFromSession,
 } from '@/modules/auth/domain/request-scope';
+import { toEmailAddress, toSessionId, toUserId } from '@/modules/kernel';
 
 const authSession = {
   user: {

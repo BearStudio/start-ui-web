@@ -1,5 +1,5 @@
-import { createHash } from 'node:crypto';
 import { Result } from '@swan-io/boxed';
+import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { EmailGateway } from '@/modules/email';

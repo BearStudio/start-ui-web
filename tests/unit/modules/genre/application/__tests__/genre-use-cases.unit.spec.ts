@@ -1,13 +1,12 @@
 import { Result } from '@swan-io/boxed';
 import { describe, expect, it } from 'vitest';
 
-import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
-
 import type { GenreRepository } from '@/modules/genre/application/ports/genre-repository';
 import type { Genre } from '@/modules/genre/domain/genre';
 import { createGenreUseCases } from '@/modules/genre/factory';
+import type { PermissionChecker } from '@/modules/kernel/application/ports/permission-checker';
+import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const now = new Date('2026-01-01T00:00:00.000Z');
 const genre: Genre = {

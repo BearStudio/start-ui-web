@@ -1,3 +1,5 @@
+/* oxlint-disable vitest/no-conditional-in-test -- E2E retry logic handles browser navigation aborts while preserving assertions. */
+
 import { expect, test } from '@tests/e2e/utils';
 import { ADMIN_EMAIL, ADMIN_FILE } from '@tests/e2e/utils/constants';
 

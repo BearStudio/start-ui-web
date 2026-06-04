@@ -1,5 +1,7 @@
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { makeGenreRow } from '@tests/server/db-fixtures';
+import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 import {
   afterAll,
   beforeAll,
@@ -18,11 +20,8 @@ import {
   createMigrationDbClient,
   migrateDatabase,
 } from '@/modules/kernel/infrastructure/db/migrate';
-import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
-import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
-import { makeGenreRow } from '@tests/server/db-fixtures';
-
 import { tryAcquirePostgresAdvisoryLock } from '@/modules/kernel/infrastructure/db/postgres-advisory-lock';
+import { genre as genreTable } from '@/modules/kernel/infrastructure/db/schema';
 
 type TableRow = {
   schemaname: string;
@@ -44,6 +43,11 @@ async function truncateDatabase(db: Database) {
   await db.$client.query(
     `TRUNCATE TABLE ${tableNames.join(', ')} RESTART IDENTITY CASCADE`
   );
+}
+
+function getInitializedDb(db: Database | undefined) {
+  if (!db) throw new Error('PostgreSQL test database was not initialized.');
+  return db;
 }
 
 describe('PostgreSQL database integration', () => {
@@ -82,26 +86,26 @@ describe('PostgreSQL database integration', () => {
   });
 
   it('applies migrations and commits transactions', async () => {
-    if (!db) throw new Error('PostgreSQL test database was not initialized.');
+    const initializedDb = getInitializedDb(db);
 
-    await db.transaction(async (tx) => {
+    await initializedDb.transaction(async (tx) => {
       await tx
         .insert(genreTable)
         .values(makeGenreRow({ id: 'genre-commit', name: 'Committed' }));
     });
 
     await expect(
-      db.query.genre.findFirst({
+      initializedDb.query.genre.findFirst({
         where: (genre, { eq }) => eq(genre.id, 'genre-commit'),
       })
     ).resolves.toMatchObject({ id: 'genre-commit' });
   });
 
   it('rolls back failed transactions', async () => {
-    if (!db) throw new Error('PostgreSQL test database was not initialized.');
+    const initializedDb = getInitializedDb(db);
 
     await expect(
-      db.transaction(async (tx) => {
+      initializedDb.transaction(async (tx) => {
         await tx
           .insert(genreTable)
           .values(makeGenreRow({ id: 'genre-rollback', name: 'Rolled Back' }));
@@ -110,7 +114,7 @@ describe('PostgreSQL database integration', () => {
     ).rejects.toThrow('rollback requested');
 
     await expect(
-      db.query.genre.findFirst({
+      initializedDb.query.genre.findFirst({
         where: (genre, { eq }) => eq(genre.id, 'genre-rollback'),
       })
     ).resolves.toBeUndefined();

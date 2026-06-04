@@ -1,6 +1,5 @@
-import { expect, test } from 'vitest';
-
 import { page, render, setupUser } from '@tests/utils';
+import { expect, test } from 'vitest';
 
 import { Form } from '@/platform/components/form/form';
 import { FormField } from '@/platform/components/form/form-field';

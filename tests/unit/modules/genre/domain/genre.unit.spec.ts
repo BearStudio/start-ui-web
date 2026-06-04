@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
+import { describe, expect, it } from 'vitest';
 
 import { normalizeGenreSearchTerm } from '@/modules/genre/domain/genre';
 import { isValidGenreColor } from '@/modules/genre/domain/genre-policy';

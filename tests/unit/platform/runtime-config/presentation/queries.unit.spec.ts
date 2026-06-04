@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { configQueries } from '@/platform/runtime-config/client';
 import {
-  createConfigQueries,
   type ConfigQueryFacade,
+  createConfigQueries,
 } from '@/platform/runtime-config/presentation/queries';
 
 describe('runtime config query keys', () => {

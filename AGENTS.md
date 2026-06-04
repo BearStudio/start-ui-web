@@ -14,6 +14,7 @@ Use these commands instead of invoking underlying tools directly.
 | `pnpm dev` | Start the local dev server. |
 | `pnpm check` | Static checks: format, lint, typecheck, depcruise, semgrep, audit. |
 | `pnpm test` | Vitest unit and browser projects. |
+| `pnpm test:affected:list` | List tests associated with changed files. |
 | `pnpm test:affected` | Run tests associated with changed files. |
 | `pnpm test:e2e:visual` | Local Chromium visual regression check for stable critical screens. |
 | `pnpm test:e2e:visual:auth` | Local Chromium visual regression check for login and verification screens. |
@@ -24,6 +25,7 @@ Use these commands instead of invoking underlying tools directly.
 | `pnpm verify` | Full pre-merge gate: `check` + `test` + `build`. |
 | `pnpm verify:task` | Task-level verification runner with timestamped logs under `test-results/task-verification/`. |
 | `pnpm format:changed` | Format changed files only. |
+| `pnpm check:migrations` | Guard against invalid manual migration edits. |
 
 After code changes, run `pnpm format:changed && pnpm check && pnpm test:affected`. Before merge, run `pnpm verify`.
 
@@ -65,6 +67,14 @@ Do not deep-import another module's `domain/`, `application/`, `infrastructure/`
 
 `domain/` is pure TypeScript. `application/` depends on ports, not adapters. `infrastructure/` owns SDKs and provider/database adapters. `transport/` maps protocol inputs to use cases. `presentation/` owns React UI, query options, and form schemas.
 
+Keep route and transport handlers thin: validate and normalize input, call the relevant public module gate or use case, then map tagged outcomes or `AppError` values to the framework response.
+
+Parse external input once at the boundary with the appropriate schema mechanism: TanStack `validateSearch`, form schemas, HTTP DTO schemas, upload/webhook validators, or focused Zod schemas. Pass typed, normalized values inward rather than re-parsing inside domain or application code.
+
+Business and application time must come from an injected `Clock` port. Direct `new Date()` calls belong only in clock adapters, schema/database defaults, tests, scripts, and external/framework boundary mapping.
+
+Keep files named by concrete concern. Avoid catch-all `utils.ts`, broad `service.ts`, or multi-purpose files; prefer scoped names such as `query-helpers.ts`, `cache-control.ts`, or `book-repository-drizzle.ts`.
+
 ## Result and Outcome Policy
 
 - Expected business outcomes must be domain-tagged `Result.Ok` variants from `@swan-io/boxed`, such as `{ type: 'book_found'; book: Book }` or `{ type: 'book_not_found' }`.
@@ -94,6 +104,7 @@ Do not deep-import another module's `domain/`, `application/`, `infrastructure/`
 - Provider-specific auth tokens stay server-side and do not cross client/public boundaries.
 - Legacy roots `src/components`, `src/hooks`, `src/lib`, `src/layout`, `src/features`, and `src/emails` are forbidden; use `src/platform` or `src/modules/<capability>`.
 - Route loaders that read search params must declare `validateSearch` and `loaderDeps`, and query keys must include the same normalized values.
+- Existing SQL migration files under `drizzle/migrations` are immutable. Change Drizzle schema files and run `pnpm db:generate` for new migrations; run `pnpm check:migrations` when migration or schema files are touched.
 
 ## Auth Boundary
 
@@ -120,3 +131,5 @@ Use the cheapest test that proves the behavior:
 | Fixtures/support | `tests/support`, `tests/server`, nearest `*.fixture.tsx` when useful |
 
 When a regression class is likely to repeat, add a guardrail through depcruise, Semgrep, or an architecture test.
+
+When touching Drizzle repositories, raw `sql`, `db.execute`, schema serialization, or migrations, prefer an integration test against the local database driver in addition to focused unit coverage. Mocked DB unit tests do not prove SQL serialization or migration behavior.

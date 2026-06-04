@@ -1,7 +1,10 @@
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
+import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
+import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 import { toBookId, toGenreId } from '@/modules/kernel/domain/ids';
 import {
   createDbClient,
@@ -16,10 +19,6 @@ import {
   genre as genreTable,
 } from '@/modules/kernel/infrastructure/db/schema';
 import type { DbLike } from '@/modules/kernel/infrastructure/db/types';
-import { POSTGRES_TESTCONTAINER_IMAGE } from '@tests/server/docker-images';
-import { makeBookRow, makeGenreRow } from '@tests/server/db-fixtures';
-
-import { createBookRepository } from '@/modules/book/infrastructure/drizzle/book-repository-drizzle';
 
 type TableRow = {
   schemaname: string;
@@ -41,6 +40,11 @@ async function truncateDatabase(db: Database) {
   await db.$client.query(
     `TRUNCATE TABLE ${tableNames.join(', ')} RESTART IDENTITY CASCADE`
   );
+}
+
+function getInitializedDb(db: Database | undefined) {
+  if (!db) throw new Error('PostgreSQL test database was not initialized.');
+  return db;
 }
 
 describe('BookRepositoryDrizzle PostgreSQL integration', () => {
@@ -78,12 +82,12 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
   });
 
   it('keeps repository work inside an existing transaction', async () => {
-    if (!db) throw new Error('PostgreSQL test database was not initialized.');
+    const initializedDb = getInitializedDb(db);
 
-    await db
+    await initializedDb
       .insert(genreTable)
       .values(makeGenreRow({ id: 'genre-1', name: 'Original Genre' }));
-    await db.insert(bookTable).values(
+    await initializedDb.insert(bookTable).values(
       makeBookRow({
         id: 'book-1',
         title: 'Original Title',
@@ -93,7 +97,7 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
     );
 
     await expect(
-      db.transaction(async (tx) => {
+      initializedDb.transaction(async (tx) => {
         const repository = createBookRepository({ db: tx as DbLike });
         await repository.update(toBookId('book-1'), {
           title: 'Updated Title',
@@ -107,7 +111,7 @@ describe('BookRepositoryDrizzle PostgreSQL integration', () => {
     ).rejects.toThrow('rollback repository update');
 
     await expect(
-      db.query.book.findFirst({
+      initializedDb.query.book.findFirst({
         where: (book, { eq }) => eq(book.id, 'book-1'),
       })
     ).resolves.toMatchObject({

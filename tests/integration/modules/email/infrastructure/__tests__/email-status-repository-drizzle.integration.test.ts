@@ -1,20 +1,19 @@
+import { createPgliteTestDatabase } from '@tests/server/pglite';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { createEmailUseCases } from '@/modules/email';
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import {
-  emailStatus as emailStatusTable,
-  type NewEmailStatus,
-} from '@/modules/kernel/infrastructure/db/schema';
+import { createEmailStatusRepository } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
 import {
   toEmailIdempotencyKey,
   toEmailProviderMessageId,
   toEmailRecipientList,
   toEmailWebhookEventId,
 } from '@/modules/kernel/domain/ids';
-import { createPgliteTestDatabase } from '@tests/server/pglite';
-
-import { createEmailStatusRepository } from '@/modules/email/infrastructure/drizzle/email-status-repository-drizzle';
+import {
+  emailStatus as emailStatusTable,
+  type NewEmailStatus,
+} from '@/modules/kernel/infrastructure/db/schema';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const recipient = toEmailRecipientList('user@example.com');
 const otherRecipient = toEmailRecipientList('other@example.com');

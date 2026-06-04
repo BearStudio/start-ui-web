@@ -1,12 +1,11 @@
 import { Result } from '@swan-io/boxed';
+import { makeTestKernel, now } from '@tests/unit/composition/helpers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { GenreRepository } from '@/modules/genre';
-import type { ApplicationResult } from '@/modules/kernel/testing';
-import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
-
-import { makeTestKernel, now } from '@tests/unit/composition/helpers';
 import { __resetGenreComposition, getGenreUseCases } from '@/composition/genre';
+import type { GenreRepository } from '@/modules/genre';
+import { toGenreId, toUserId } from '@/modules/kernel/domain/ids';
+import type { ApplicationResult } from '@/modules/kernel/testing';
 
 const genre = {
   id: toGenreId('genre-1'),

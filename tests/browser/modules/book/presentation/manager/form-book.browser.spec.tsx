@@ -1,9 +1,8 @@
+import { page, render, setupUser } from '@tests/utils';
 import { expect, test, vi } from 'vitest';
 
 import { FormField, FormFieldLabel } from '@/platform/components/form';
 import { FormMocked } from '@/platform/components/form/form-test-utils';
-
-import { page, render, setupUser } from '@tests/utils';
 
 import { zFormFieldsBook } from '@/modules/book/presentation/schema';
 

@@ -1,20 +1,19 @@
+import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import { ZodError } from 'zod';
-
-import { fc, PROPERTY_DEFAULTS, test } from '@tests/support/property-testing';
 
 import { IdValidationError } from '@/modules/kernel/domain/errors/id-validation-error';
 import {
   type BookId,
   type EmailAddress,
   type ScopeKey,
-  type UserId,
   toBookId,
   toEmailAddress,
   toGenreId,
   toScopeKey,
   toSessionId,
   toUserId,
+  type UserId,
   zBookId,
   zEmailAddress,
   zGenreId,
@@ -33,6 +32,16 @@ const whitespaceOnlyString = fc
     maxLength: 32,
   })
   .map((characters) => characters.join(''));
+
+function captureThrown(fn: () => unknown) {
+  try {
+    fn();
+  } catch (error) {
+    return error;
+  }
+
+  throw new Error('Expected function to throw.');
+}
 
 describe('kernel domain ids', () => {
   it('parses branded IDs from trimmed strings', () => {
@@ -74,34 +83,27 @@ describe('kernel domain ids', () => {
   it('throws first-class ID validation errors for blank IDs', () => {
     expect(() => toUserId('  ')).toThrow(IdValidationError);
 
-    try {
-      toUserId('  ');
-    } catch (error) {
-      expect(error).toMatchObject({
-        name: 'IdValidationError',
-        code: 'INVALID_ID',
-        details: {
-          typeName: 'UserId',
-          value: '<blank>',
-        },
-      });
-    }
+    const error = captureThrown(() => toUserId('  '));
+    expect(error).toMatchObject({
+      name: 'IdValidationError',
+      code: 'INVALID_ID',
+      details: {
+        typeName: 'UserId',
+        value: '<blank>',
+      },
+    });
   });
 
   it('truncates long invalid ID values in error details', () => {
-    expect.assertions(1);
     const invalidValue = 'x'.repeat(80);
 
-    try {
-      toEmailAddress(invalidValue);
-    } catch (error) {
-      expect(error).toMatchObject({
-        details: {
-          typeName: 'EmailAddress',
-          value: 'xxxxxxxxxxxxxxxxxxxxxxxx...<truncated:80>',
-        },
-      });
-    }
+    const error = captureThrown(() => toEmailAddress(invalidValue));
+    expect(error).toMatchObject({
+      details: {
+        typeName: 'EmailAddress',
+        value: 'xxxxxxxxxxxxxxxxxxxxxxxx...<truncated:80>',
+      },
+    });
   });
 
   test.prop([nonBlankString], PROPERTY_DEFAULTS)(

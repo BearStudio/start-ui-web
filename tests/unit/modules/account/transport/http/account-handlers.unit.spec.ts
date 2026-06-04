@@ -1,7 +1,6 @@
 import { Result } from '@swan-io/boxed';
-import { describe, expect, it, vi } from 'vitest';
-
 import { createAuthenticatedContext } from '@tests/server/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   createAccountHandlers,
