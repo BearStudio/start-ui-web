@@ -19,6 +19,7 @@ import { Card, CardContent } from '@/platform/components/ui/card';
 import { useIsUploadingFiles } from '@/platform/components/upload/utils';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
+import { bookQueries } from '@/modules/book/client';
 import { isServerFnError } from '@/modules/kernel/client';
 
 import {
@@ -27,7 +28,6 @@ import {
   formBookValidators,
 } from './form-book';
 import { FormBookCover } from './form-book-cover';
-import { bookQueries } from '../queries';
 
 export const PageBookNew = (props: { onDemoUploadBlocked?: () => void }) => {
   const { t } = useTranslation(['book']);

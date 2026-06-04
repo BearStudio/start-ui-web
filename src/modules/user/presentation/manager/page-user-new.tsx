@@ -19,13 +19,13 @@ import { Card, CardContent } from '@/platform/components/ui/card';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
+import { userQueries } from '@/modules/user/client';
 
 import {
   FormUser,
   formUserDefaultValues,
   formUserValidators,
 } from './form-user';
-import { userQueries } from '../queries';
 
 export const PageUserNew = () => {
   const { t } = useTranslation(['user']);

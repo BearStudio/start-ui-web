@@ -14,18 +14,20 @@ vi.mock('@sentry/tanstackstart-react', () => ({
 }));
 
 describe('TanStack Start instance', () => {
-  it('adds Sentry, telemetry, security headers, browser mutation guard, and server-function CSRF middleware', async () => {
+  it('adds Sentry, telemetry, security headers, auth context, browser mutation guard, and server-function CSRF middleware', async () => {
     const { startInstance } = await import('@/start');
     const options = (startInstance as ExplicitAny).options;
     const telemetry = options.requestMiddleware[1] as ExplicitAny;
     const securityHeaders = options.requestMiddleware[2] as ExplicitAny;
-    const browserMutationGuard = options.requestMiddleware[3] as ExplicitAny;
-    const csrf = options.requestMiddleware[4] as ExplicitAny;
+    const authContext = options.requestMiddleware[3] as ExplicitAny;
+    const browserMutationGuard = options.requestMiddleware[4] as ExplicitAny;
+    const csrf = options.requestMiddleware[5] as ExplicitAny;
 
     expect(options.requestMiddleware[0]).toBe(sentryMiddleware.request);
     expect(options.functionMiddleware).toEqual([sentryMiddleware.function]);
     expect(telemetry.type).toBe('request');
     expect(securityHeaders.type).toBe('request');
+    expect(authContext.type).toBe('request');
     expect(browserMutationGuard.type).toBe('request');
     expect(csrf.type).toBe('csrf');
     expect(csrf.options.filter({ handlerType: 'serverFn' })).toBe(true);
@@ -121,7 +123,7 @@ describe('TanStack Start instance', () => {
 
   it('applies security headers to successful responses', async () => {
     const { securityHeadersMiddleware } = await import('@/start');
-    type NextOptions = { context: { cspNonce: string } };
+    type NextOptions = { context: { cspNonce: string; requestId: string } };
     const next = vi.fn(async (_options: NextOptions) => ({
       response: new Response(
         `<meta property="csp-nonce" content="${CSP_NONCE_PLACEHOLDER}" nonce="${CSP_NONCE_PLACEHOLDER}"><script nonce="${CSP_NONCE_PLACEHOLDER}">window.__nonce__="${CSP_NONCE_PLACEHOLDER}"</script>`,
@@ -134,12 +136,14 @@ describe('TanStack Start instance', () => {
     }));
 
     const result = await (securityHeadersMiddleware as ExplicitAny).handler({
+      context: { requestId: 'request-1' },
       next,
     });
     const nextOptions = next.mock.calls[0]?.[0];
     const cspNonce = nextOptions?.context.cspNonce;
 
     expect(cspNonce).toEqual(expect.any(String));
+    expect(nextOptions?.context.requestId).toBe('request-1');
     expect(result.response.headers.get('X-Content-Type-Options')).toBe(
       'nosniff'
     );

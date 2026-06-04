@@ -29,13 +29,13 @@ import {
 } from '@/modules/auth/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import { toUserId } from '@/modules/kernel/domain/ids';
+import { userQueries } from '@/modules/user/client';
 
 import {
   FormUser,
   formUserDefaultValues,
   formUserValidators,
 } from './form-user';
-import { userQueries } from '../queries';
 
 const isNotFoundError = (error: unknown) =>
   isServerFnError(error) && error.code === 'NOT_FOUND';

@@ -18,11 +18,11 @@ import { Skeleton } from '@/platform/components/ui/skeleton';
 import { Spinner } from '@/platform/components/ui/spinner';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
+import { bookQueries } from '@/modules/book/client';
 import { isServerFnError } from '@/modules/kernel/client';
 import { toBookId } from '@/modules/kernel/domain/ids';
 
 import { BookCover } from '../book-cover';
-import { bookQueries } from '../queries';
 
 const isNotFoundError = (error: unknown) =>
   isServerFnError(error) && error.code === 'NOT_FOUND';

@@ -61,8 +61,7 @@ import {
   toUserId,
   type UserId,
 } from '@/modules/kernel/domain/ids';
-
-import { userQueries } from '../queries';
+import { userQueries } from '@/modules/user/client';
 
 const isNotFoundError = (error: unknown) =>
   isServerFnError(error) && error.code === 'NOT_FOUND';

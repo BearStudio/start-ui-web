@@ -58,3 +58,5 @@ export const currentSession = createServerFn({ method: 'GET' }).handler(
 export const authServerFunctions = {
   currentSession,
 };
+
+export type AuthServerFunctions = typeof authServerFunctions;

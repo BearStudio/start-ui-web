@@ -1,3 +1,8 @@
+import { createUseAuthSession } from './presentation/client';
+import { createAuthQueryHooks } from './presentation/queries';
+import { authQueries } from './presentation/wired-queries';
+import { createWithPermissions } from './presentation/with-permissions';
+
 export {
   type AuthClientResult,
   authErrorCodes,
@@ -7,7 +12,6 @@ export {
   startSignIn,
   type StartSignInInput,
   type StartSignInResult,
-  useAuthSession,
   verifyEmailOtp,
 } from './presentation/client';
 export {
@@ -17,10 +21,10 @@ export {
 } from './presentation/config';
 export { ConfirmSignOut } from './presentation/confirm-signout';
 export {
-  authQueries,
+  type AuthQueryFacade,
   clearAllQueryStateForAuthBoundary,
-  useCurrentScopeKey,
-  useCurrentSessionQuery,
+  createAuthQueries,
+  createAuthQueryHooks,
 } from './presentation/queries';
 export type {
   FormFieldsLogin,
@@ -32,4 +36,11 @@ export {
   zFormFieldsLoginVerify,
   zFormFieldsOnboarding,
 } from './presentation/schema';
-export { WithPermissions } from './presentation/with-permissions';
+export { authQueries } from './presentation/wired-queries';
+
+const authQueryHooks = createAuthQueryHooks(authQueries);
+
+export const useCurrentSessionQuery = authQueryHooks.useCurrentSessionQuery;
+export const useCurrentScopeKey = authQueryHooks.useCurrentScopeKey;
+export const useAuthSession = createUseAuthSession(useCurrentSessionQuery);
+export const WithPermissions = createWithPermissions(useAuthSession);

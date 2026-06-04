@@ -1,6 +1,7 @@
 import { Result } from '@swan-io/boxed';
+import { getGlobalStartContext } from '@tanstack/react-start';
 import { setResponseHeader } from '@tanstack/react-start/server';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createServerContextTools,
@@ -17,6 +18,12 @@ import {
   mockSession,
   mockUser,
 } from '@tests/server/test-utils';
+
+const getGlobalStartContextMock = vi.mocked(getGlobalStartContext);
+
+beforeEach(() => {
+  getGlobalStartContextMock.mockReturnValue(undefined as never);
+});
 
 describe('server function middleware', () => {
   it('finalizes server timing on handled error paths', async () => {
@@ -99,6 +106,37 @@ describe('server function middleware', () => {
       email: 'user@example.com',
       role: 'user',
     });
+  });
+
+  it('uses Start request auth context and request id when available', async () => {
+    const getSession = vi.fn(async () => ({
+      session: mockSession,
+      user: mockUser,
+    }));
+    const getCurrentSession = vi.fn();
+    getGlobalStartContextMock.mockReturnValue({
+      auth: { getSession },
+      requestId: 'request-1',
+    } as never);
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession,
+          checkPermission: vi.fn(),
+        }) as ExplicitAny,
+      logger: mockLogger,
+    });
+
+    await expect(tools.withPublicContext(async () => 'ok')).resolves.toBe('ok');
+
+    expect(getSession).toHaveBeenCalledOnce();
+    expect(getCurrentSession).not.toHaveBeenCalled();
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'server_fn.request.finish',
+        requestId: 'request-1',
+      })
+    );
   });
 
   it('fails closed for unexpected permission outcomes', async () => {

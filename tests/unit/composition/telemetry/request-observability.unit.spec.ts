@@ -28,6 +28,7 @@ describe('request observability', () => {
       {
         handlerType: 'router',
         pathname: '/manager/books/c12345678901234567890',
+        requestId: 'request-1',
         request: new Request(
           'https://app.example/manager/books/c12345678901234567890',
           { method: 'GET' }
@@ -42,6 +43,7 @@ describe('request observability', () => {
         attributes: expect.objectContaining({
           'http.request.method': 'GET',
           'http.route': '/manager/books/$id',
+          'app.request_id': 'request-1',
           'tanstack.handler_type': 'router',
         }),
         name: 'http.request GET /manager/books/$id',
@@ -55,6 +57,7 @@ describe('request observability', () => {
           'http.response.status_class': '2xx',
           'http.response.status_code': 200,
           'http.route': '/manager/books/$id',
+          'app.request_id': 'request-1',
           status: 'success',
         }),
         name: 'app.http.request.duration',

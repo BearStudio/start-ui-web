@@ -14,9 +14,9 @@ import {
 import { Button } from '@/platform/components/ui/button';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
+import { bookQueries } from '@/modules/book/client';
 
 import { BookCover } from '../book-cover';
-import { bookQueries } from '../queries';
 
 export const PageBooks = () => {
   const { t } = useTranslation(['book']);

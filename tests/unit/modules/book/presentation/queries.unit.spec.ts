@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import { bookQueries } from '@/modules/book/client';
+import {
+  createBookQueries,
+  type BookQueryFacade,
+} from '@/modules/book/presentation/queries';
 import { toBookId, toScopeKey } from '@/modules/kernel/domain/ids';
-import { bookQueries } from '@/modules/book/presentation/queries';
 
 describe('book query keys', () => {
   it('partitions protected read keys by scope', () => {
@@ -36,5 +40,36 @@ describe('book query keys', () => {
       'v1',
       'deleteById',
     ]);
+  });
+
+  it('calls injected facade functions with server function data payloads', async () => {
+    const facade = {
+      bookCreate: vi.fn(async () => ({ type: 'created' })),
+      bookDeleteById: vi.fn(async () => ({ type: 'deleted' })),
+      bookGetAll: vi.fn(async () => ({ items: [], total: 0 })),
+      bookGetById: vi.fn(async () => ({ id: 'book-1' })),
+      bookUpdateById: vi.fn(async () => ({ type: 'updated' })),
+    } as unknown as BookQueryFacade;
+    const queries = createBookQueries(facade);
+    const scopeKey = toScopeKey('scope-a');
+    const id = toBookId('book-1');
+
+    await (
+      queries.getAllList({ scopeKey }).queryFn as () => Promise<unknown>
+    )();
+    await (
+      queries.getById({ id, scopeKey }).queryFn as () => Promise<unknown>
+    )();
+    await (
+      queries.create().mutationFn as (data: {
+        title: string;
+      }) => Promise<unknown>
+    )({ title: 'Dune' });
+
+    expect(facade.bookGetAll).toHaveBeenCalledWith({ data: {} });
+    expect(facade.bookGetById).toHaveBeenCalledWith({ data: { id } });
+    expect(facade.bookCreate).toHaveBeenCalledWith({
+      data: { title: 'Dune' },
+    });
   });
 });

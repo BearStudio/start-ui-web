@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { toScopeKey, toUserId } from '@/modules/kernel/domain/ids';
-import { userQueries } from '@/modules/user/presentation/queries';
+import { userQueries } from '@/modules/user/client';
+import {
+  createUserQueries,
+  type UserQueryFacade,
+} from '@/modules/user/presentation/queries';
 
 describe('user query keys', () => {
   it('partitions protected read keys by scope', () => {
@@ -49,5 +53,48 @@ describe('user query keys', () => {
       'v1',
       'revokeUserSession',
     ]);
+  });
+
+  it('calls injected facade functions with server function data payloads', async () => {
+    const facade = {
+      userCreate: vi.fn(async () => ({ type: 'created' })),
+      userDeleteById: vi.fn(async () => ({ type: 'deleted' })),
+      userGetAll: vi.fn(async () => ({ items: [], total: 0 })),
+      userGetById: vi.fn(async () => ({ id: 'user-1' })),
+      userGetUserSessions: vi.fn(async () => ({ items: [], total: 0 })),
+      userRevokeUserSession: vi.fn(async () => ({ type: 'revoked' })),
+      userRevokeUserSessions: vi.fn(async () => ({ type: 'revoked' })),
+      userUpdateById: vi.fn(async () => ({ type: 'updated' })),
+    } as unknown as UserQueryFacade;
+    const queries = createUserQueries(facade);
+    const scopeKey = toScopeKey('scope-a');
+    const userId = toUserId('user-1');
+
+    await (
+      queries.getAllList({ scopeKey }).queryFn as () => Promise<unknown>
+    )();
+    await (
+      queries.getById({ id: userId, scopeKey })
+        .queryFn as () => Promise<unknown>
+    )();
+    await (
+      queries.getUserSessionsInfinite({ userId, scopeKey }).queryFn as (ctx: {
+        pageParam: string;
+      }) => Promise<unknown>
+    )({ pageParam: 'session-1' });
+    await (
+      queries.updateById().mutationFn as (data: {
+        id: string;
+      }) => Promise<unknown>
+    )({ id: 'user-1' });
+
+    expect(facade.userGetAll).toHaveBeenCalledWith({ data: {} });
+    expect(facade.userGetById).toHaveBeenCalledWith({ data: { id: userId } });
+    expect(facade.userGetUserSessions).toHaveBeenCalledWith({
+      data: { cursor: 'session-1', limit: 20, userId },
+    });
+    expect(facade.userUpdateById).toHaveBeenCalledWith({
+      data: { id: 'user-1' },
+    });
   });
 });

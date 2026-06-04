@@ -21,9 +21,9 @@ import {
   ResponsiveDrawerTrigger,
 } from '@/platform/components/ui/responsive-drawer';
 
+import { accountQueries } from '@/modules/account/client';
 import { useAuthSession } from '@/modules/auth/client';
 
-import { accountQueries } from './queries';
 import { zFormFieldsAccountUpdateName } from './schema';
 
 export const ChangeNameDrawer = (props: { children: ReactElement }) => {

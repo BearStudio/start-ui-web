@@ -1,1 +1,5 @@
-export { accountQueries } from './presentation/queries';
+export {
+  type AccountQueryFacade,
+  createAccountQueries,
+} from './presentation/queries';
+export { accountQueries } from './presentation/wired-queries';

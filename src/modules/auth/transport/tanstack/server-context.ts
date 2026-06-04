@@ -1,4 +1,5 @@
 import { Result } from '@swan-io/boxed';
+import { getGlobalStartContext } from '@tanstack/react-start';
 import {
   getRequestHeaders,
   setResponseHeader,
@@ -10,6 +11,7 @@ import { match, P } from 'ts-pattern';
 import type {
   AuthenticatedSession,
   AuthenticatedUser,
+  AuthSession,
   AuthUseCases,
   Permission,
   RequestScope,
@@ -53,6 +55,13 @@ type ServerContextDeps = {
   getAuthUseCases: () => AuthUseCases;
   logger?: Logger;
   telemetry?: TelemetryAdapter;
+};
+
+type AppStartRequestContextLike = {
+  requestId?: unknown;
+  auth?: {
+    getSession?: () => Promise<AuthSession | null>;
+  };
 };
 
 const noOpLogger: Logger = {
@@ -179,6 +188,23 @@ const assertNotDemoMode = () => {
   }
 };
 
+const getStartRequestContext = (): AppStartRequestContextLike | undefined => {
+  try {
+    const context = getGlobalStartContext();
+    return typeof context === 'object' ? context : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const getStartRequestId = () => {
+  const requestId = getStartRequestContext()?.requestId;
+  return typeof requestId === 'string' ? requestId : undefined;
+};
+
+const getStartAuthSession = () =>
+  getStartRequestContext()?.auth?.getSession?.();
+
 export const createServerContextTools = ({
   getAuthUseCases,
   logger = noOpLogger,
@@ -186,6 +212,12 @@ export const createServerContextTools = ({
 }: ServerContextDeps) => {
   const getSession = async (timings: ServerTimingEntry[]) => {
     const authStart = performance.now();
+    const startSession = await getStartAuthSession();
+    if (startSession !== undefined) {
+      timings.push({ name: 'auth', durationMs: performance.now() - authStart });
+      return startSession;
+    }
+
     const result = await getAuthUseCases().getCurrentSession({
       headers: getRequestHeaders(),
     });
@@ -206,7 +238,7 @@ export const createServerContextTools = ({
     fn: (ctx: PublicContext) => Promise<T>
   ): Promise<T> => {
     const start = performance.now();
-    const requestId = toRequestId(randomUUID());
+    const requestId = toRequestId(getStartRequestId() ?? randomUUID());
     const timings: ServerTimingEntry[] = [];
     let procedureLogger = createRequestLogger({ logger, requestId });
     procedureLogger.info({

@@ -11,6 +11,7 @@ type RequestObservationInput = {
   request: Request;
   pathname: string;
   handlerType: string;
+  requestId?: string;
 };
 
 const TELEMETRY_ROUTE_PREFIX = '/api/telemetry/';
@@ -103,7 +104,7 @@ const recordRequestMetric = (input: TelemetryMetricInput) => {
 };
 
 export function observeHttpRequest<T>(
-  { request, pathname, handlerType }: RequestObservationInput,
+  { request, pathname, handlerType, requestId }: RequestObservationInput,
   next: () => T
 ): T {
   if (pathname.startsWith(TELEMETRY_ROUTE_PREFIX)) return next();
@@ -115,6 +116,7 @@ export function observeHttpRequest<T>(
     'http.route': routeTemplate,
     'server.address': url.hostname,
     'tanstack.handler_type': handlerType,
+    ...(requestId ? { 'app.request_id': requestId } : {}),
     'url.scheme': url.protocol.replace(/:$/, ''),
   } satisfies TelemetryAttributes;
   const startedAt = performance.now();

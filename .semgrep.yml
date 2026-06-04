@@ -17,6 +17,17 @@ rules:
         - src/**/*.ts
         - src/**/*.tsx
 
+  - id: no-unnormalized-glob-star-regexp
+    message: Collapse consecutive '*' before converting glob strings to RegExp; raw split('*').join('.*') can create adjacent wildcards and backtracking risk.
+    severity: ERROR
+    languages:
+      - typescript
+    pattern-regex: '\b[A-Za-z_$][A-Za-z0-9_$]*\.split\(\s*[''"]\*[''"]\s*\)\s*\.map\([^)]*\)\s*\.join\(\s*[''"]\.\*[''"]\s*\)'
+    paths:
+      include:
+        - tests/e2e/**/*.ts
+        - tests/e2e/**/*.tsx
+
   - id: no-session-token-in-client-features
     message: Do not expose or pass raw session tokens through client-facing feature code; use session IDs and resolve tokens server-side.
     severity: ERROR

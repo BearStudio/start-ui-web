@@ -18,6 +18,7 @@ export const Route = createFileRoute('/manager')({
         context,
         location,
         permissionApps: ['manager'],
+        requireFresh: true,
       })
     ),
   component: RouteComponent,

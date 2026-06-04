@@ -17,7 +17,9 @@ type PermissionApps = [PermissionApp, ...PermissionApp[]];
 
 type AuthRouteContext = {
   auth: {
-    getSession: () => Promise<CurrentSessionLike | null>;
+    getSession: (options?: {
+      requireFresh?: boolean;
+    }) => Promise<CurrentSessionLike | null>;
   };
 };
 
@@ -55,8 +57,13 @@ export const isForbiddenRouteContext = (
   'forbiddenRoute' in context &&
   context.forbiddenRoute === true;
 
-const getCurrentSession = (context: AuthRouteContext) =>
-  context.auth.getSession();
+const getCurrentSession = (
+  context: AuthRouteContext,
+  options?: { requireFresh?: boolean }
+) => context.auth.getSession(options);
+
+const sessionOptions = (requireFresh: boolean | undefined) =>
+  requireFresh === undefined ? undefined : { requireFresh };
 
 const redirectToSafePath = (input: string | null | undefined) => {
   const safeRedirect = parseSafeRedirectPath(input);
@@ -76,8 +83,12 @@ export async function requireAuthenticatedRoute(input: {
   context: AuthRouteContext;
   location: RouteLocation;
   permissionApps?: PermissionApps;
+  requireFresh?: boolean;
 }) {
-  const currentSession = await getCurrentSession(input.context);
+  const currentSession = await getCurrentSession(
+    input.context,
+    sessionOptions(input.requireFresh)
+  );
 
   if (!currentSession) {
     throw redirect({
@@ -115,6 +126,7 @@ export async function requireAuthenticatedRouteOrForbidden(input: {
   context: AuthRouteContext;
   location: RouteLocation;
   permissionApps?: PermissionApps;
+  requireFresh?: boolean;
 }) {
   try {
     return await requireAuthenticatedRoute(input);
@@ -131,8 +143,12 @@ export async function requireOnboardingRoute(input: {
   context: AuthRouteContext;
   location: RouteLocation;
   redirect?: string;
+  requireFresh?: boolean;
 }) {
-  const currentSession = await getCurrentSession(input.context);
+  const currentSession = await getCurrentSession(
+    input.context,
+    sessionOptions(input.requireFresh)
+  );
 
   if (!currentSession) {
     throw redirect({
@@ -161,8 +177,12 @@ export async function requireOnboardingRoute(input: {
 export async function redirectAuthenticatedRoute(input: {
   context: AuthRouteContext;
   redirect?: string;
+  requireFresh?: boolean;
 }) {
-  const currentSession = await getCurrentSession(input.context);
+  const currentSession = await getCurrentSession(
+    input.context,
+    sessionOptions(input.requireFresh)
+  );
 
   if (!currentSession) return;
 

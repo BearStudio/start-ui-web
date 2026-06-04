@@ -35,7 +35,7 @@ export const FieldSelect = <TItem extends Item>(
   const { containerProps, inputProps, children, placeholder, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useTfField<TItem['value']>();
+  const { field, fieldState } = useTfField<TItem['value'] | null>();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -44,9 +44,7 @@ export const FieldSelect = <TItem extends Item>(
         disabled={rest.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
-          if (value !== null) {
-            field.onChange(value);
-          }
+          field.onChange(value);
           rest.onValueChange?.(value, event);
         }}
       >
@@ -64,7 +62,7 @@ export const FieldSelect = <TItem extends Item>(
               {rest.items.map((item) => (
                 <SelectItem
                   value={item.value}
-                  key={item.value}
+                  key={String(item.value)}
                   disabled={item.disabled}
                 >
                   {item.label}

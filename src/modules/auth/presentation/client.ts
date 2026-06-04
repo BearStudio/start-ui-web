@@ -13,7 +13,6 @@ import {
   betterAuthBrowserClient,
   type BetterAuthSocialProvider,
 } from './better-auth-client';
-import { useCurrentSessionQuery } from './queries';
 
 type AuthProviderError = {
   code?: string | null;
@@ -116,10 +115,16 @@ const useRouteCurrentSession = () =>
     structuralSharing: false,
   });
 
-export const useAuthSession = () => {
-  const routeSession = useRouteCurrentSession();
-  return useCurrentSessionQuery(routeSession);
-};
+export const createUseAuthSession =
+  <TQueryResult>(
+    useCurrentSessionQuery: (
+      initialData?: CurrentSession | null
+    ) => TQueryResult
+  ) =>
+  () => {
+    const routeSession = useRouteCurrentSession();
+    return useCurrentSessionQuery(routeSession);
+  };
 
 export const startSignIn = async (
   input: StartSignInInput

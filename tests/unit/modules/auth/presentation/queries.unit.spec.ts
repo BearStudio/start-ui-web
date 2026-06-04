@@ -1,9 +1,10 @@
 import { QueryClient, queryOptions } from '@tanstack/react-query';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import { authQueries } from '@/modules/auth/client';
 import {
-  authQueries,
   clearAllQueryStateForAuthBoundary,
+  createAuthQueries,
 } from '@/modules/auth/presentation/queries';
 
 describe('clearAllQueryStateForAuthBoundary', () => {
@@ -14,6 +15,17 @@ describe('clearAllQueryStateForAuthBoundary', () => {
       'v1',
       'currentSession',
     ]);
+  });
+
+  it('calls the injected facade for the current session query', async () => {
+    const facade = {
+      currentSession: vi.fn(async () => null),
+    };
+    const queries = createAuthQueries(facade);
+
+    await (queries.currentSession().queryFn as () => Promise<unknown>)();
+
+    expect(facade.currentSession).toHaveBeenCalledWith();
   });
 
   it('clears all query and mutation state after an auth boundary changes', () => {

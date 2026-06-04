@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-start';
 
 import { observeHttpRequest } from '@/composition/telemetry/request-observability';
+import type { AuthSession } from '@/modules/auth';
 import type { Logger } from '@/modules/kernel';
 import { envClient } from '@/platform/env/client';
 import {
@@ -21,6 +22,22 @@ import { createCspNonce } from '@/platform/http/csp-nonce-server';
 import { applySecurityHeaders } from '@/platform/http/security-headers';
 import { createNoOpTelemetry } from '@/platform/telemetry';
 
+export type AppStartRequestContext = {
+  requestId: string;
+  cspNonce?: string;
+  auth?: {
+    getSession: () => Promise<AuthSession | null>;
+  };
+};
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    server: {
+      requestContext: AppStartRequestContext;
+    };
+  }
+}
+
 let browserMutationGuardLogger: Pick<Logger, 'warn'> | undefined;
 let browserMutationGuardLoggerPromise:
   | Promise<Pick<Logger, 'warn'>>
@@ -30,12 +47,31 @@ type RequestContextWithCspNonce = {
   cspNonce?: unknown;
 };
 
+type RequestContextWithRequestId = {
+  requestId?: unknown;
+};
+
 const getCspNonceFromContext = (context: unknown) => {
   if (typeof context !== 'object' || context === null) return undefined;
 
   const { cspNonce } = context as RequestContextWithCspNonce;
   return typeof cspNonce === 'string' ? cspNonce : undefined;
 };
+
+const getRequestIdFromContext = (context: unknown) => {
+  if (typeof context !== 'object' || context === null) return undefined;
+
+  const { requestId } = context as RequestContextWithRequestId;
+  return typeof requestId === 'string' ? requestId : undefined;
+};
+
+const mergeRequestContext = (
+  context: unknown,
+  overrides: Partial<AppStartRequestContext>
+) => ({
+  ...(typeof context === 'object' && context !== null ? context : {}),
+  ...overrides,
+});
 
 const getSecurityHeaderOptions = (context?: unknown) => {
   const isTestRuntime = envClient.VITE_ENV_NAME === 'tests';
@@ -79,15 +115,48 @@ const getBrowserMutationGuardLogger = async () => {
   return browserMutationGuardLoggerPromise;
 };
 
+const createTrustedAuthSessionAccessor = (request: Request) => {
+  let sessionPromise: Promise<AuthSession | null> | undefined;
+
+  return () => {
+    sessionPromise ??= import('@/composition/auth').then(
+      async ({ getAuthUseCases }) => {
+        const result = await getAuthUseCases().getCurrentSession({
+          headers: request.headers,
+        });
+
+        if (result.isError()) throw result.getError();
+
+        const outcome = result.get();
+        return outcome.type === 'auth_session_found' ? outcome.session : null;
+      }
+    );
+
+    return sessionPromise;
+  };
+};
+
+export const authRequestContextMiddleware = createMiddleware({
+  type: 'request',
+}).server(({ context, request, next }) =>
+  next({
+    context: mergeRequestContext(context, {
+      auth: {
+        getSession: createTrustedAuthSessionAccessor(request),
+      },
+    }),
+  })
+);
+
 export const securityHeadersMiddleware = createMiddleware({
   type: 'request',
-}).server(async ({ next }) => {
+}).server(async ({ context, next }) => {
   const cspNonce = createCspNonce();
-  const context = { cspNonce };
-  const result = await next({ context });
+  const nextContext = mergeRequestContext(context, { cspNonce });
+  const result = await next({ context: nextContext });
   const response = applyAppSecurityHeaders(
     await replaceCspNoncePlaceholderInHtmlResponse(result.response, cspNonce),
-    context
+    nextContext
   );
 
   return {
@@ -139,8 +208,16 @@ export const browserMutationGuardMiddleware = createMiddleware({
 
 export const telemetryRequestMiddleware = createMiddleware({
   type: 'request',
-}).server(({ request, pathname, handlerType, next }) =>
-  observeHttpRequest({ handlerType, pathname, request }, () => next())
+}).server(({ context, request, pathname, handlerType, next }) =>
+  observeHttpRequest(
+    {
+      handlerType,
+      pathname,
+      request,
+      requestId: getRequestIdFromContext(context),
+    },
+    () => next()
+  )
 );
 
 const csrfMiddleware = createCsrfMiddleware({
@@ -154,6 +231,7 @@ export const startInstance = createStart(() => ({
     sentryGlobalRequestMiddleware,
     telemetryRequestMiddleware,
     securityHeadersMiddleware,
+    authRequestContextMiddleware,
     browserMutationGuardMiddleware,
     csrfMiddleware,
   ],

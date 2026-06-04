@@ -27,9 +27,9 @@ import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
+import { bookQueries } from '@/modules/book/client';
 
 import { BookCover } from '../book-cover';
-import { bookQueries } from '../queries';
 
 export const PageBooks = (props: { search: { searchTerm?: string } }) => {
   const router = useRouter();

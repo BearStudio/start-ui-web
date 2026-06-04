@@ -66,6 +66,21 @@ function findImportViolations(files: string[], pattern: RegExp) {
   });
 }
 
+function findRuntimeImportViolations(files: string[], pattern: RegExp) {
+  return files.flatMap((file) =>
+    fs
+      .readFileSync(file, 'utf8')
+      .split('\n')
+      .flatMap((line, index) => {
+        pattern.lastIndex = 0;
+        const isTypeOnlyImport = line.trimStart().startsWith('import type');
+        return !isTypeOnlyImport && pattern.test(line)
+          ? [`${path.relative(root, file)}:${index + 1}`]
+          : [];
+      })
+  );
+}
+
 function readSource(file: string) {
   return fs.readFileSync(file, 'utf8');
 }
@@ -399,6 +414,29 @@ describe('strict modular monolith layout', () => {
 
   it('keeps protected route beforeLoad guards provider-neutral', () => {
     expect(findProtectedRouteGuardViolations()).toEqual([]);
+  });
+
+  it('keeps query factories injected instead of wired to concrete server facades', () => {
+    const queryFactoryFiles = [
+      ...listSourceFiles(path.join(root, 'src', 'modules')).filter((file) =>
+        /[/\\]presentation[/\\]queries\.ts$/.test(file)
+      ),
+      path.join(
+        root,
+        'src',
+        'platform',
+        'runtime-config',
+        'presentation',
+        'queries.ts'
+      ),
+    ];
+
+    expect(
+      findRuntimeImportViolations(
+        queryFactoryFiles,
+        /(?:from\s+['"](?:\.\.?\/server|@\/composition(?:\/[^'"]*)?)['"]|import\s*\(\s*['"]@\/composition(?:\/[^'"]*)?['"]\s*\))/g
+      )
+    ).toEqual([]);
   });
 
   it('keeps logout as a POST-only side effect', () => {

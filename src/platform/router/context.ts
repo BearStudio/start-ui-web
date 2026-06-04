@@ -5,8 +5,9 @@ import type { TelemetryAdapter } from '@/platform/telemetry';
 
 /**
  * Single typed contract every route loader and `beforeLoad` reads from. The
- * concrete instance is built once in `src/router.tsx` (the only place that
- * imports the composition layer).
+ * concrete route instance is built once in `src/router.tsx`; root route,
+ * server entry, and API/server transport entrypoints are the other wiring
+ * surfaces that may cross into composition.
  *
  * Module/feature code MUST read these via `context` rather than importing
  * `@/composition` directly so the composition root remains the only wiring
@@ -21,7 +22,10 @@ export type RouterContext = {
    * a single navigation.
    */
   auth: {
-    getSession: () => Promise<CurrentSessionLike | null>;
+    getSession: (options?: {
+      requireFresh?: boolean;
+    }) => Promise<CurrentSessionLike | null>;
+    getSessionSnapshot: () => CurrentSessionLike | null | undefined;
   };
   /** Telemetry/error reporting (Sentry-backed in production). */
   telemetry: TelemetryAdapter;

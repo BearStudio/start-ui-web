@@ -17,18 +17,14 @@ vi.mock('@/modules/auth/presentation/better-auth-client', () => ({
   betterAuthBrowserClient: mocks.betterAuthBrowserClient,
 }));
 
-vi.mock('@/modules/auth/presentation/queries', () => ({
-  useCurrentSessionQuery: mocks.useCurrentSessionQuery,
-}));
-
 vi.mock('@tanstack/react-router', () => ({
   useMatches: mocks.useMatches,
 }));
 
 import {
+  createUseAuthSession,
   signOut,
   startSignIn,
-  useAuthSession,
   verifyEmailOtp,
 } from '@/modules/auth/presentation/client';
 
@@ -154,6 +150,7 @@ describe('auth client facade', () => {
 
   it('uses the sanitized current-session query for session reads', () => {
     const query = { data: null, isPending: false };
+    const useAuthSession = createUseAuthSession(mocks.useCurrentSessionQuery);
     mocks.useCurrentSessionQuery.mockReturnValue(query);
 
     expect(useAuthSession()).toBe(query);
@@ -163,6 +160,7 @@ describe('auth client facade', () => {
   it('seeds session reads from protected route context during hydration', () => {
     const routeSession = { user: { id: 'user-1' } };
     const query = { data: routeSession, isPending: false };
+    const useAuthSession = createUseAuthSession(mocks.useCurrentSessionQuery);
     mocks.useMatches.mockReturnValue(routeSession);
     mocks.useCurrentSessionQuery.mockReturnValue(query);
 

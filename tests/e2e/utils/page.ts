@@ -102,8 +102,10 @@ const isPostAuthRouteUrl = (url: URL, route: PostAuthRoute) =>
 const escapeRegExp = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const globToRegExp = (glob: string) =>
-  new RegExp(`^${glob.split('*').map(escapeRegExp).join('.*')}$`);
+export const globToRegExp = (glob: string) =>
+  new RegExp(
+    `^${glob.replace(/\*+/g, '*').split('*').map(escapeRegExp).join('.*')}$`
+  );
 
 const isCurrentUrlMatch = (
   currentUrl: string,

@@ -175,6 +175,7 @@ const makeRouteContext = (input?: {
   return {
     auth: {
       getSession: vi.fn(async () => session),
+      getSessionSnapshot: vi.fn(() => session),
     },
     queryClient: input?.queryClient ?? createTestQueryClient(),
     scope: session?.scope,
@@ -295,9 +296,10 @@ describe('route integration behavior', () => {
       searchStr: '?searchTerm=Hobbit',
     };
 
+    const loggedOutContext = makeRouteContext({ session: null });
     const loginRedirect = await getThrown(() =>
       routeOptions(ManagerRoute).beforeLoad({
-        context: makeRouteContext({ session: null }),
+        context: loggedOutContext,
         location,
       })
     );
@@ -308,10 +310,14 @@ describe('route integration behavior', () => {
       search: { redirect: '/manager/books?searchTerm=Hobbit#book-results' },
       to: '/login',
     });
+    expect(loggedOutContext.auth.getSession).toHaveBeenCalledWith({
+      requireFresh: true,
+    });
 
+    const loginContext = makeRouteContext();
     const returnRedirect = await getThrown(() =>
       routeOptions(LoginRoute).beforeLoad({
-        context: makeRouteContext(),
+        context: loginContext,
         search: { redirect: '/manager/books?searchTerm=Hobbit#book-results' },
       })
     );
@@ -323,11 +329,13 @@ describe('route integration behavior', () => {
       search: { searchTerm: 'Hobbit' },
       to: '/manager/books',
     });
+    expect(loginContext.auth.getSession).toHaveBeenCalledWith(undefined);
   });
 
   it('maps authorization failures to forbidden route context', async () => {
+    const routeContext = makeRouteContext({ session: makeSession('user') });
     const forbiddenContext = await routeOptions(ManagerRoute).beforeLoad({
-      context: makeRouteContext({ session: makeSession('user') }),
+      context: routeContext,
       location: {
         hash: '',
         href: '/manager/users',
@@ -343,6 +351,9 @@ describe('route integration behavior', () => {
     });
 
     expect(isForbiddenRouteContext(forbiddenContext)).toBe(true);
+    expect(routeContext.auth.getSession).toHaveBeenCalledWith({
+      requireFresh: true,
+    });
     expect(isValidElement<{ type: string }>(genericErrorElement)).toBe(true);
     expect(isValidElement<{ type: string }>(forbiddenErrorElement)).toBe(true);
     expect(genericErrorElement.type).toBe(RouteError);

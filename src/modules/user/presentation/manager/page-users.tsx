@@ -36,8 +36,7 @@ import { SearchButton } from '@/platform/components/ui/search-button';
 import { SearchInput } from '@/platform/components/ui/search-input';
 
 import { useCurrentScopeKey } from '@/modules/auth/client';
-
-import { userQueries } from '../queries';
+import { userQueries } from '@/modules/user/client';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
   const { t } = useTranslation(['user']);

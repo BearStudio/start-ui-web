@@ -1,6 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { accountQueries } from '@/modules/account/presentation/queries';
+import { accountQueries } from '@/modules/account/client';
+import {
+  createAccountQueries,
+  type AccountQueryFacade,
+} from '@/modules/account/presentation/queries';
 
 describe('account mutation keys', () => {
   it('uses versioned mutation keys', () => {
@@ -14,5 +18,31 @@ describe('account mutation keys', () => {
       'v1',
       'updateInfo',
     ]);
+  });
+
+  it('calls injected facade functions with server function data payloads', async () => {
+    const facade = {
+      accountSubmitOnboarding: vi.fn(async () => ({ type: 'submitted' })),
+      accountUpdateInfo: vi.fn(async () => ({ type: 'updated' })),
+    } as unknown as AccountQueryFacade;
+    const queries = createAccountQueries(facade);
+
+    await (
+      queries.submitOnboarding().mutationFn as (data: {
+        name: string;
+      }) => Promise<unknown>
+    )({ name: 'Ada' });
+    await (
+      queries.updateInfo().mutationFn as (data: {
+        name: string;
+      }) => Promise<unknown>
+    )({ name: 'Grace' });
+
+    expect(facade.accountSubmitOnboarding).toHaveBeenCalledWith({
+      data: { name: 'Ada' },
+    });
+    expect(facade.accountUpdateInfo).toHaveBeenCalledWith({
+      data: { name: 'Grace' },
+    });
   });
 });
