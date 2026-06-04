@@ -104,6 +104,8 @@ import { Route as LoginVerifyRoute } from '@/routes/login/verify.index';
 import { Route as ManagerBooksIdRoute } from '@/routes/manager/books/$id.index';
 import { Route as ManagerBooksIndexRoute } from '@/routes/manager/books/index';
 import { Route as ManagerRoute } from '@/routes/manager/route';
+import { Route as ManagerUsersIdRoute } from '@/routes/manager/users/$id.index';
+import { Route as ManagerUsersUpdateRoute } from '@/routes/manager/users/$id.update.index';
 import { Route as ManagerUsersIndexRoute } from '@/routes/manager/users/index';
 
 const scopeKey = toScopeKey('user:admin-1:admin');
@@ -358,6 +360,42 @@ describe('route integration behavior', () => {
     expect(isValidElement<{ type: string }>(forbiddenErrorElement)).toBe(true);
     expect(genericErrorElement.type).toBe(RouteError);
     expect(forbiddenErrorElement.props.type).toBe('403');
+  });
+
+  it('does not run manager user loaders for forbidden route context', async () => {
+    const routeContext = makeRouteContext({ session: makeSession('user') });
+    const forbiddenContext = await routeOptions(ManagerRoute).beforeLoad({
+      context: routeContext,
+      location: {
+        hash: '',
+        href: '/manager/users',
+        pathname: '/manager/users',
+        searchStr: '',
+      },
+    });
+
+    expect(isForbiddenRouteContext(forbiddenContext)).toBe(true);
+
+    expect(
+      routeOptions(ManagerUsersIndexRoute).loader({
+        context: forbiddenContext,
+        deps: { searchTerm: 'admin' },
+      })
+    ).toBeUndefined();
+    expect(
+      routeOptions(ManagerUsersIdRoute).loader({
+        context: forbiddenContext,
+        params: { id: 'admin-1' },
+      })
+    ).toBeUndefined();
+    expect(
+      routeOptions(ManagerUsersUpdateRoute).loader({
+        context: forbiddenContext,
+        params: { id: 'admin-1' },
+      })
+    ).toBeUndefined();
+    expect(mocks.userGetAll).not.toHaveBeenCalled();
+    expect(mocks.userGetById).not.toHaveBeenCalled();
   });
 
   it('seeds the app book loader cache without manager search params', async () => {

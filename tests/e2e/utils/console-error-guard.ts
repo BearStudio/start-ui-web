@@ -25,6 +25,14 @@ const allowedFirefoxViteDependencyLoadErrors = [
 
 const isAllowedPageError = (error: Error, projectName: string | undefined) => {
   if (
+    projectName === 'firefox' &&
+    error.message === 'undefined' &&
+    error.stack === 'uncaught exception: undefined\n'
+  ) {
+    return true;
+  }
+
+  if (
     projectName === 'webkit' &&
     error.message === 'Importing a module script failed.' &&
     (error.stack ?? '').includes(

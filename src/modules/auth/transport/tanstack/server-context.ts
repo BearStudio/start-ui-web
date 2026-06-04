@@ -191,7 +191,9 @@ const assertNotDemoMode = () => {
 const getStartRequestContext = (): AppStartRequestContextLike | undefined => {
   try {
     const context = getGlobalStartContext();
-    return typeof context === 'object' ? context : undefined;
+    return context !== null && typeof context === 'object'
+      ? context
+      : undefined;
   } catch {
     return undefined;
   }
@@ -199,11 +201,19 @@ const getStartRequestContext = (): AppStartRequestContextLike | undefined => {
 
 const getStartRequestId = () => {
   const requestId = getStartRequestContext()?.requestId;
-  return typeof requestId === 'string' ? requestId : undefined;
+  if (typeof requestId !== 'string') return undefined;
+
+  try {
+    return toRequestId(requestId);
+  } catch {
+    return undefined;
+  }
 };
 
-const getStartAuthSession = () =>
-  getStartRequestContext()?.auth?.getSession?.();
+const getStartAuthSession = () => {
+  const getSession = getStartRequestContext()?.auth?.getSession;
+  return typeof getSession === 'function' ? getSession() : undefined;
+};
 
 export const createServerContextTools = ({
   getAuthUseCases,
@@ -238,7 +248,7 @@ export const createServerContextTools = ({
     fn: (ctx: PublicContext) => Promise<T>
   ): Promise<T> => {
     const start = performance.now();
-    const requestId = toRequestId(getStartRequestId() ?? randomUUID());
+    const requestId = getStartRequestId() ?? toRequestId(randomUUID());
     const timings: ServerTimingEntry[] = [];
     let procedureLogger = createRequestLogger({ logger, requestId });
     procedureLogger.info({

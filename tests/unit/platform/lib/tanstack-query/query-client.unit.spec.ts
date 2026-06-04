@@ -63,6 +63,54 @@ describe('createAppQueryClient', () => {
       })
     );
   });
+
+  it('keeps broad cache operations compatible with versioned query keys', async () => {
+    const client = createAppQueryClient();
+    const userListKey = [
+      'user',
+      'v1',
+      { scopeKey: 'scope-a' },
+      'getAll',
+    ] as const;
+    const userDetailKey = [
+      'user',
+      'v1',
+      { scopeKey: 'scope-a' },
+      'getById',
+      { id: 'user-1' },
+    ] as const;
+    const bookListKey = [
+      'book',
+      'v1',
+      { scopeKey: 'scope-a' },
+      'getAll',
+    ] as const;
+
+    client.setQueryData(userListKey, ['user-list']);
+    client.setQueryData(userDetailKey, { id: 'user-1' });
+    client.setQueryData(bookListKey, ['book-list']);
+
+    await client.invalidateQueries({ queryKey: ['user'] });
+
+    expect(
+      client.getQueryCache().find({ queryKey: userListKey })?.state
+        .isInvalidated
+    ).toBe(true);
+    expect(
+      client.getQueryCache().find({ queryKey: userDetailKey })?.state
+        .isInvalidated
+    ).toBe(true);
+    expect(
+      client.getQueryCache().find({ queryKey: bookListKey })?.state
+        .isInvalidated
+    ).toBe(false);
+
+    client.removeQueries({ queryKey: ['user'] });
+
+    expect(client.getQueryData(userListKey)).toBeUndefined();
+    expect(client.getQueryData(userDetailKey)).toBeUndefined();
+    expect(client.getQueryData(bookListKey)).toEqual(['book-list']);
+  });
 });
 
 describe('shouldRetryQuery', () => {

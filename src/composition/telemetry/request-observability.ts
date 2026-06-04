@@ -111,20 +111,23 @@ export function observeHttpRequest<T>(
 
   const routeTemplate = routeTemplateFromPathname(pathname);
   const url = new URL(request.url);
-  const attributes = {
+  const metricAttributes = {
     'http.request.method': request.method,
     'http.route': routeTemplate,
     'server.address': url.hostname,
     'tanstack.handler_type': handlerType,
-    ...(requestId ? { 'app.request_id': requestId } : {}),
     'url.scheme': url.protocol.replace(/:$/, ''),
+  } satisfies TelemetryAttributes;
+  const spanAttributes = {
+    ...metricAttributes,
+    ...(requestId ? { 'app.request_id': requestId } : {}),
   } satisfies TelemetryAttributes;
   const startedAt = performance.now();
 
   const finish = <TValue>(value: TValue): TValue => {
     const durationMs = performance.now() - startedAt;
     recordRequestMetric({
-      attributes: requestMetricAttributes(attributes, value, 'success'),
+      attributes: requestMetricAttributes(metricAttributes, value, 'success'),
       name: 'app.http.request.duration',
       type: 'histogram',
       unit: 'ms',
@@ -137,7 +140,7 @@ export function observeHttpRequest<T>(
   const fail = (error: unknown): never => {
     const durationMs = performance.now() - startedAt;
     recordRequestMetric({
-      attributes: requestMetricAttributes(attributes, error, 'error'),
+      attributes: requestMetricAttributes(metricAttributes, error, 'error'),
       name: 'app.http.request.duration',
       type: 'histogram',
       unit: 'ms',
@@ -155,7 +158,7 @@ export function observeHttpRequest<T>(
   return context.with(extractedContext, () =>
     getTelemetry().startSpan(
       {
-        attributes,
+        attributes: spanAttributes,
         name: `http.request ${request.method} ${routeTemplate}`,
         op: 'http.server',
       },

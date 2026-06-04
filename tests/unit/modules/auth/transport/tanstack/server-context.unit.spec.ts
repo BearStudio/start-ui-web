@@ -139,6 +139,61 @@ describe('server function middleware', () => {
     );
   });
 
+  it('treats null Start request context as absent', async () => {
+    const getCurrentSession = vi.fn(async () =>
+      Result.Ok({ type: 'auth_session_missing' as const })
+    );
+    getGlobalStartContextMock.mockReturnValue(null as never);
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession,
+          checkPermission: vi.fn(),
+        }) as ExplicitAny,
+      logger: mockLogger,
+    });
+
+    await expect(
+      tools.withPublicContext(async (ctx) => ctx.session)
+    ).resolves.toBeNull();
+
+    expect(getCurrentSession).toHaveBeenCalledOnce();
+  });
+
+  it('treats malformed Start context values as absent', async () => {
+    const getCurrentSession = vi.fn(async () =>
+      Result.Ok({
+        type: 'auth_session_found' as const,
+        session: {
+          session: mockSession,
+          user: mockUser,
+        },
+      })
+    );
+    getGlobalStartContextMock.mockReturnValue({
+      auth: { getSession: 'not-callable' },
+      requestId: '  ',
+    } as never);
+    const tools = createServerContextTools({
+      getAuthUseCases: () =>
+        ({
+          getCurrentSession,
+          checkPermission: vi.fn(),
+        }) as ExplicitAny,
+      logger: mockLogger,
+    });
+
+    await expect(tools.withPublicContext(async () => 'ok')).resolves.toBe('ok');
+
+    expect(getCurrentSession).toHaveBeenCalledOnce();
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'server_fn.request.finish',
+        requestId: expect.stringMatching(/\S/),
+      })
+    );
+  });
+
   it('fails closed for unexpected permission outcomes', async () => {
     const checkPermission = vi.fn(async () =>
       Result.Ok({ type: 'auth_permission_unknown' as const })

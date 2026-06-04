@@ -171,4 +171,23 @@ describe('RouteError', () => {
       )
     );
   });
+
+  it('logs non-error retry failures with the fallback message', async () => {
+    const failure = 'retry failed';
+    routeErrorMocks.router.invalidate = vi.fn(async () => {
+      throw failure;
+    });
+
+    expect(() => renderAndClickRetry()).not.toThrow();
+
+    await vi.waitFor(() =>
+      expect(routeErrorMocks.loggerError).toHaveBeenCalledWith(
+        'route.error_retry_failed',
+        expect.objectContaining({
+          error: failure,
+          message: 'Route error retry failed',
+        })
+      )
+    );
+  });
 });

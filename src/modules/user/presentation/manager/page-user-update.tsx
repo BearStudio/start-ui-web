@@ -48,10 +48,13 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   const router = useRouter();
   const scopeKey = useCurrentScopeKey();
   const userId = toUserId(props.params.id);
-  const userQuery = useQuery(userQueries.getById({ id: userId, scopeKey }));
+  const userDetailQuery = userQueries.getById({ id: userId, scopeKey });
+  const userQuery = useQuery(userDetailQuery);
   const userUpdate = useMutation({
     ...userQueries.updateById(),
     onSuccess: async (data) => {
+      queryClient.setQueryData(userDetailQuery.queryKey, data);
+
       // Update session if user is the connected user
       if (data.id === session.data?.user.id) {
         await session.refetch();
@@ -64,7 +67,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
       await Promise.all([
         // Invalidate User
         queryClient.invalidateQueries({
-          queryKey: userQueries.getById({ id: userId, scopeKey }).queryKey,
+          queryKey: userDetailQuery.queryKey,
         }),
         // Invalidate Users list
         queryClient.invalidateQueries({
@@ -124,7 +127,7 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   return (
     <>
       <PreventNavigation shouldBlock={isDirty} />
-      <Form form={form}>
+      <Form form={form} data-testid="manager-user-update-form">
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}

@@ -351,6 +351,50 @@ describe('security headers', () => {
     );
   });
 
+  it('nonces uppercase style opening tags split across streamed chunks', async () => {
+    const response = new Response(
+      streamTextChunks(['<ST', 'YLE data-test="x"', '>.a{color:red}</STYLE>']),
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    await expect(replaced.text()).resolves.toBe(
+      '<style nonce="request-nonce" data-test="x">.a{color:red}</STYLE>'
+    );
+  });
+
+  it('preserves an existing style nonce when its opening tag is split across streamed chunks', async () => {
+    const response = new Response(
+      streamTextChunks([
+        '<sty',
+        'le nonce="existing-nonce" data-test="x"',
+        '>.a{color:red}</style>',
+      ]),
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      }
+    );
+
+    const replaced = await replaceCspNoncePlaceholderInHtmlResponse(
+      response,
+      'request-nonce'
+    );
+
+    await expect(replaced.text()).resolves.toBe(
+      '<style nonce="existing-nonce" data-test="x">.a{color:red}</style>'
+    );
+  });
+
   it('does not buffer a complete client entry script while waiting for response close', async () => {
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();

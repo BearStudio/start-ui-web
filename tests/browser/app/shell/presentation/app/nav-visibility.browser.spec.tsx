@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from 'vitest';
+import { afterEach, expect, test, vi } from 'vitest';
 import { renderHook } from 'vitest-browser-react';
 
 import {
@@ -11,6 +11,14 @@ type ShouldShowNavMode = Parameters<typeof useShouldShowNav>[0];
 const useObservedNavMode = (shouldShowNav: ShouldShowNavMode) => {
   useShouldShowNav(shouldShowNav);
   return useShouldShowNavStore((s) => s.mode);
+};
+
+const useObservedNavSnapshot = (shouldShowNav: ShouldShowNavMode) => {
+  useShouldShowNav(shouldShowNav);
+  const mode = useShouldShowNavStore((s) => s.mode);
+  const release = useShouldShowNavStore((s) => s.release);
+
+  return { mode, release };
 };
 
 afterEach(() => {
@@ -42,5 +50,34 @@ test('updates the active request without temporarily releasing nav state', async
     expect(observedModes).toEqual(['none']);
   } finally {
     unsubscribe();
+  }
+});
+
+test('keeps the active request when release action identity changes', async () => {
+  const originalRelease = useShouldShowNavStore.getState().release;
+  const nextRelease: typeof originalRelease = (requestId) => {
+    originalRelease(requestId);
+  };
+
+  try {
+    const view = await renderHook<
+      { shouldShowNav: ShouldShowNavMode },
+      ReturnType<typeof useObservedNavSnapshot>
+    >((props) => useObservedNavSnapshot(props!.shouldShowNav), {
+      initialProps: { shouldShowNav: 'desktop-only' as ShouldShowNavMode },
+    });
+
+    expect(view.result.current.mode).toBe('desktop-only');
+
+    useShouldShowNavStore.setState({ release: nextRelease });
+
+    await vi.waitFor(() => {
+      expect(view.result.current.release).toBe(nextRelease);
+    });
+
+    expect(view.result.current.mode).toBe('desktop-only');
+    expect(useShouldShowNavStore.getState().mode).toBe('desktop-only');
+  } finally {
+    useShouldShowNavStore.setState({ release: originalRelease });
   }
 });

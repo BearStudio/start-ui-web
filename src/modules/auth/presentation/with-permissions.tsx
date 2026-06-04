@@ -27,10 +27,10 @@ export const createWithPermissions =
     if (
       !userRole ||
       props.permissions.every(
-        (permissions) =>
+        (permission) =>
           !checkRolePermission({
             role: userRole,
-            permissions,
+            permissions: permission,
           })
       )
     ) {

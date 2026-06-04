@@ -56,6 +56,11 @@ export const useShouldShowNav = (shouldShowNav: ShouldShowNavMode) => {
   requestIdRef.current ??= Symbol('should-show-nav');
   const release = useShouldShowNavStore((s) => s.release);
   const request = useShouldShowNavStore((s) => s.request);
+  const releaseRef = useRef(release);
+
+  useLayoutEffect(() => {
+    releaseRef.current = release;
+  }, [release]);
 
   useLayoutEffect(() => {
     const requestId = requestIdRef.current;
@@ -69,8 +74,8 @@ export const useShouldShowNav = (shouldShowNav: ShouldShowNavMode) => {
 
     return () => {
       if (requestId) {
-        release(requestId);
+        releaseRef.current(requestId);
       }
     };
-  }, [release]);
+  }, []);
 };

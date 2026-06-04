@@ -60,12 +60,20 @@ test.describe('User management as manager', () => {
     await page
       .getByRole('link', { name: t.user.manager.detail.editUser })
       .click();
+    await expect(page).toHaveURL(/\/manager\/users\/[^/]+\/update\/?$/);
+    await expect(page.getByTestId('manager-user-update-form')).toHaveAttribute(
+      'data-hydrated',
+      'true'
+    );
 
     const randomId = randomString(8);
     const newAdminName = `Admin ${randomId}`;
-    await page.getByLabel(t.user.common.name.label).fill(newAdminName);
+    const nameInput = page.getByLabel(t.user.common.name.label);
+    await nameInput.fill(newAdminName);
+    await expect(nameInput).toHaveValue(newAdminName);
     await page.getByText(t.user.manager.update.updateButton.label).click();
 
+    await expect(page).toHaveURL(/\/manager\/users\/[^/]+\/?$/);
     await expect(
       page.locator('main').getByText(newAdminName).first()
     ).toBeVisible();
@@ -79,16 +87,25 @@ test.describe('User management as manager', () => {
       .first()
       .click({ force: true });
 
-    await page
-      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
-      .click();
+    const confirmDeleteDescription = page.getByText(
+      t.user.manager.detail.confirmDeleteDescription
+    );
+    await expect(async () => {
+      await page
+        .getByRole('button', {
+          exact: true,
+          name: t.user.manager.detail.deleteButton.label,
+        })
+        .click();
+      await expect(confirmDeleteDescription).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10_000 });
 
-    await expect(
-      page.getByText(t.user.manager.detail.confirmDeleteDescription)
-    ).toBeVisible();
-
     await page
-      .getByRole('button', { name: t.user.manager.detail.deleteButton.label })
+      .getByRole('dialog')
+      .getByRole('button', {
+        exact: true,
+        name: t.user.manager.detail.deleteButton.label,
+      })
       .click();
 
     await expect(

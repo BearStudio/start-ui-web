@@ -57,13 +57,15 @@ describe('request observability', () => {
           'http.response.status_class': '2xx',
           'http.response.status_code': 200,
           'http.route': '/manager/books/$id',
-          'app.request_id': 'request-1',
           status: 'success',
         }),
         name: 'app.http.request.duration',
         value: 25,
       })
     );
+    expect(
+      vi.mocked(telemetry.recordMetric).mock.calls[0]?.[0].attributes
+    ).not.toHaveProperty('app.request_id');
   });
 
   it('does not wrap telemetry export requests', async () => {

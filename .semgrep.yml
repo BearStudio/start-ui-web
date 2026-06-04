@@ -22,7 +22,7 @@ rules:
     severity: ERROR
     languages:
       - typescript
-    pattern-regex: '\b[A-Za-z_$][A-Za-z0-9_$]*\.split\(\s*[''"]\*[''"]\s*\)\s*\.map\([^)]*\)\s*\.join\(\s*[''"]\.\*[''"]\s*\)'
+    pattern-regex: '\b[A-Za-z_$][A-Za-z0-9_$]*\.split\(\s*[''"]\*[''"]\s*\)(?:\s*\.map\([^)]*\))?\s*\.join\(\s*[''"]\.\*[''"]\s*\)'
     paths:
       include:
         - tests/e2e/**/*.ts
