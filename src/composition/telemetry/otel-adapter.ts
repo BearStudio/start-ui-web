@@ -32,6 +32,13 @@ const severityByLevel = {
   warn: SeverityNumber.WARN,
 } as const satisfies Record<TelemetryLogLevel, SeverityNumber>;
 
+const severityTextByLevel = {
+  debug: 'DEBUG',
+  error: 'ERROR',
+  info: 'INFO',
+  warn: 'WARN',
+} as const satisfies Record<TelemetryLogLevel, string>;
+
 const captureSeverityByLevel = {
   debug: SeverityNumber.DEBUG,
   error: SeverityNumber.ERROR,
@@ -41,6 +48,17 @@ const captureSeverityByLevel = {
 } as const satisfies Record<
   NonNullable<TelemetryCaptureContext['level']>,
   SeverityNumber
+>;
+
+const captureSeverityTextByLevel = {
+  debug: 'DEBUG',
+  error: 'ERROR',
+  fatal: 'FATAL',
+  info: 'INFO',
+  warning: 'WARN',
+} as const satisfies Record<
+  NonNullable<TelemetryCaptureContext['level']>,
+  string
 >;
 
 const statusCodeByStatus = {
@@ -56,11 +74,27 @@ const isPromiseLike = <T>(value: T): value is T & Promise<Awaited<T>> =>
   'then' in value &&
   typeof (value as { then?: unknown }).then === 'function';
 
-const toOtelException = (error: unknown) =>
-  error instanceof Error ? error : String(error);
+const hasStringMessage = (value: unknown): value is { message: string } =>
+  value !== null &&
+  typeof value === 'object' &&
+  'message' in value &&
+  typeof value.message === 'string';
 
-const errorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : String(error);
+const errorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  if (hasStringMessage(error)) return error.message;
+  return String(error);
+};
+
+const toOtelException = (error: unknown) =>
+  error instanceof Error ? error : errorMessage(error);
+
+const isResultError = (value: unknown): value is { error: unknown } =>
+  value !== null &&
+  typeof value === 'object' &&
+  'tag' in value &&
+  value.tag === 'Error' &&
+  'error' in value;
 
 const safeJson = (value: unknown) => {
   try {
@@ -162,6 +196,23 @@ const manualSpanHandle = (
   },
 });
 
+const completeSpanForResult = (
+  span: ReturnType<typeof tracer.startSpan>,
+  value: unknown
+) => {
+  if (isResultError(value)) {
+    const message = errorMessage(value.error);
+    span.recordException(toOtelException(value.error));
+    span.setStatus({
+      code: SpanStatusCode.ERROR,
+      ...(message ? { message } : {}),
+    });
+    return;
+  }
+
+  span.setStatus({ code: SpanStatusCode.OK });
+};
+
 export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
   let activeUser: TelemetryUser | null = null;
 
@@ -174,10 +225,6 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
       const level = captureContext?.level ?? 'error';
 
       activeSpan?.recordException(exception);
-      activeSpan?.setStatus({
-        code: SpanStatusCode.ERROR,
-        ...(message ? { message } : {}),
-      });
 
       otelLogger.emit({
         attributes: captureAttributes(captureContext, spanContext, activeUser),
@@ -188,7 +235,7 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
             : 'exception.captured',
         exception,
         severityNumber: captureSeverityByLevel[level],
-        severityText: level,
+        severityText: captureSeverityTextByLevel[level],
         context: context.active(),
       });
     },
@@ -221,7 +268,7 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
         eventName: record.event,
         exception: record.exception,
         severityNumber: severityByLevel[record.level],
-        severityText: record.level,
+        severityText: severityTextByLevel[record.level],
         timestamp: record.timestamp,
         context: context.active(),
       });
@@ -257,21 +304,21 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
           try {
             const result = fn();
             if (!isPromiseLike(result)) {
-              span.setStatus({ code: SpanStatusCode.OK });
+              completeSpanForResult(span, result);
               span.end();
               return result;
             }
 
             return result
               .then((value) => {
-                span.setStatus({ code: SpanStatusCode.OK });
+                completeSpanForResult(span, value);
                 return value;
               })
               .catch((error: unknown) => {
                 span.recordException(toOtelException(error));
                 span.setStatus({
                   code: SpanStatusCode.ERROR,
-                  message: error instanceof Error ? error.message : undefined,
+                  message: errorMessage(error),
                 });
                 throw error;
               })
@@ -282,7 +329,7 @@ export const createOpenTelemetryAdapter = (): TelemetryAdapter => {
             span.recordException(toOtelException(error));
             span.setStatus({
               code: SpanStatusCode.ERROR,
-              message: error instanceof Error ? error.message : undefined,
+              message: errorMessage(error),
             });
             span.end();
             throw error;

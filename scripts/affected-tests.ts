@@ -6,10 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DEPENDENCY_CRUISE_ROOT_CANDIDATES = ['src', 'tests', 'scripts'] as const;
-const GIT_COMMAND =
-  process.platform === 'win32'
-    ? String.raw`C:\Program Files\Git\cmd\git.exe`
-    : '/usr/bin/git';
+const GIT_COMMAND = 'git';
 
 const GLOBAL_CONFIG_FILES = new Set([
   'vitest.config.ts',

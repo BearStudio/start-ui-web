@@ -1,14 +1,21 @@
 import type { Resend } from 'resend';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const testState = vi.hoisted(() => ({
-  emailConfig: {
-    resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
-    resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
+const testState = vi.hoisted(() => {
+  const makeSecret = (label: string) =>
+    `${label}-${globalThis.crypto.randomUUID()}`;
+  const makeEmailConfig = () => ({
+    resendApiKey: makeSecret('resend-api-key'),
+    resendWebhookSecret: makeSecret('resend-webhook'),
     from: 'Start UI <noreply@example.com>',
     deliveryDisabled: false,
-  },
-}));
+  });
+
+  return {
+    emailConfig: makeEmailConfig(),
+    makeEmailConfig,
+  };
+});
 
 vi.mock('@/modules/kernel/infrastructure/config/email', () => ({
   getEmailConfig: () => testState.emailConfig,
@@ -17,8 +24,7 @@ vi.mock('@/modules/kernel/infrastructure/config/email', () => ({
 describe('ResendWebhookVerifier', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    testState.emailConfig.resendWebhookSecret =
-      'resend_webhook_secret_placeholder'; // pragma: allowlist secret
+    Object.assign(testState.emailConfig, testState.makeEmailConfig());
   });
 
   it('verifies the raw payload with the configured webhook secret', async () => {
@@ -54,7 +60,7 @@ describe('ResendWebhookVerifier', () => {
         timestamp: '1704067200',
         signature: 'sig_1',
       },
-      webhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
+      webhookSecret: testState.emailConfig.resendWebhookSecret,
     });
   });
 

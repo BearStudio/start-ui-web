@@ -71,7 +71,7 @@ describe('createTelemetryLogger', () => {
     expect(telemetry.captureException).not.toHaveBeenCalled();
   });
 
-  it('captures provided exceptions once with sanitized telemetry context and trace correlation', () => {
+  it('emits structured context and captures provided exceptions once', () => {
     const telemetry = makeTelemetry({ spanId: 'span-1', traceId: 'trace-1' });
     const logger = createTelemetryLogger({
       telemetry,
@@ -101,7 +101,8 @@ describe('createTelemetryLogger', () => {
       },
     });
 
-    expect(telemetry.emitLog).toHaveBeenCalledWith(
+    const emittedLog = vi.mocked(telemetry.emitLog).mock.calls[0]?.[0];
+    expect(emittedLog).toEqual(
       expect.objectContaining({
         attributes: expect.objectContaining({
           correlationId: 'correlation-1',
@@ -111,9 +112,9 @@ describe('createTelemetryLogger', () => {
         }),
         error: 'Provider rejected [REDACTED]',
         event: 'email.send.failed',
-        exception,
       })
     );
+    expect(emittedLog).not.toHaveProperty('exception');
     expect(telemetry.captureException).toHaveBeenCalledTimes(1);
     expect(telemetry.captureException).toHaveBeenCalledWith(exception, {
       tags: {
@@ -189,6 +190,52 @@ describe('createTelemetryLogger', () => {
     expect(warnSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('treats LOGGER_LEVEL=fatal as an error-only threshold', () => {
+    const telemetry = makeTelemetry();
+    const errorSpy = vi
+      .spyOn(globalThis.console, 'error')
+      .mockImplementation(() => undefined);
+    const logger = createTelemetryLogger({
+      telemetry,
+      consoleMirror: true,
+      level: 'fatal',
+    });
+    const exception = new Error('provider failed');
+
+    logger.error({
+      event: 'provider.failed',
+      exception,
+      telemetryTags: { provider: 'better-auth' },
+    });
+
+    const emittedLog = vi.mocked(telemetry.emitLog).mock.calls[0]?.[0];
+    expect(emittedLog).toEqual(
+      expect.objectContaining({
+        event: 'provider.failed',
+        level: 'error',
+      })
+    );
+    expect(emittedLog).not.toHaveProperty('exception');
+    expect(errorSpy).toHaveBeenCalledTimes(1);
+    expect(telemetry.captureException).toHaveBeenCalledTimes(1);
+    expect(telemetry.captureException).toHaveBeenCalledWith(exception, {
+      tags: {
+        event: 'provider.failed',
+        provider: 'better-auth',
+      },
+      extra: {
+        log: expect.objectContaining({
+          event: 'provider.failed',
+          exception: expect.objectContaining({
+            message: 'provider failed',
+            type: 'Error',
+          }),
+        }),
+      },
+      level: 'error',
+    });
+  });
+
   it('mirrors sanitized structured logs to the console when enabled', () => {
     const telemetry = makeTelemetry();
     const infoSpy = vi
@@ -206,9 +253,8 @@ describe('createTelemetryLogger', () => {
     });
 
     expect(infoSpy).toHaveBeenCalledTimes(1);
-    expect(JSON.parse(String(infoSpy.mock.calls[0]?.[0]))).toEqual({
+    expect(infoSpy).toHaveBeenCalledWith('profile.loaded', {
       level: 'info',
-      message: 'profile.loaded',
       event: 'profile.loaded',
       details: { email: '[REDACTED]' },
     });

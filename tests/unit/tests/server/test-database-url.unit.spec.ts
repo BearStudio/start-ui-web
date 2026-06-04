@@ -19,9 +19,17 @@ describe('test database URL helpers', () => {
         sslmode: 'require',
       },
     });
+    const parsedUrl = new URL(url);
 
-    expect(url).toBe(
-      'postgres://generated-database-pr-62-principal:generated-database-pr-62-verifier@localhost:5432/start-ui-test?sslmode=require' // pragma: allowlist secret
+    expect(parsedUrl.protocol).toBe('postgres:');
+    expect(parsedUrl.username).toMatch(
+      /^generated-database-pr-62-principal-credential-[a-z0-9-]+$/
     );
+    expect(parsedUrl.password).toMatch(
+      /^generated-database-pr-62-verifier-credential-[a-z0-9-]+$/
+    );
+    expect(parsedUrl.host).toBe('localhost:5432');
+    expect(parsedUrl.pathname).toBe('/start-ui-test');
+    expect(parsedUrl.searchParams.get('sslmode')).toBe('require');
   });
 });

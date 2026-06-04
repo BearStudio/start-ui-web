@@ -1,3 +1,5 @@
+import { makeTestSecret } from '../support/test-secrets';
+
 type TestDatabaseUrlOptions = {
   credentialLabel?: string;
   databaseName?: string;
@@ -35,6 +37,9 @@ export function makeTestCredential(...parts: string[]) {
     .join('-');
 }
 
+const makeRandomizedTestCredential = (...parts: string[]) =>
+  makeTestCredential(...parts, makeTestSecret('credential', 8));
+
 export function makeTestDatabaseUrl({
   credentialLabel = 'default',
   databaseName = 'app',
@@ -47,8 +52,16 @@ export function makeTestDatabaseUrl({
   const hostAndPort = resolvedPort === null ? host : `${host}:${resolvedPort}`;
   const url = new URL(`${protocol}://${hostAndPort}/${databaseName}`);
 
-  url.username = makeTestCredential('database', credentialLabel, 'principal');
-  url.password = makeTestCredential('database', credentialLabel, 'verifier');
+  url.username = makeRandomizedTestCredential(
+    'database',
+    credentialLabel,
+    'principal'
+  );
+  url.password = makeRandomizedTestCredential(
+    'database',
+    credentialLabel,
+    'verifier'
+  );
 
   for (const [name, value] of Object.entries(searchParams)) {
     url.searchParams.set(name, value);

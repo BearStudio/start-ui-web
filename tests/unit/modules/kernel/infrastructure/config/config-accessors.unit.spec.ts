@@ -1,4 +1,9 @@
 import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
+import {
+  makeShortTestSecret,
+  makeStrongTestSecret,
+  makeTestSecret,
+} from '@tests/support/test-secrets';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('server config accessors', () => {
@@ -182,7 +187,7 @@ describe('server config accessors', () => {
 
   it('rejects short AUTH_SECRET values without exposing the value', async () => {
     expect.assertions(3);
-    const weakAuthValue = ['too', 'short', 'fixture'].join('-');
+    const weakAuthValue = makeShortTestSecret('auth');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
     vi.stubEnv('AUTH_SECRET', weakAuthValue);
     const { getBetterAuthConfig } =
@@ -214,16 +219,17 @@ describe('server config accessors', () => {
   });
 
   it('accepts strong AUTH_SECRET values', async () => {
+    const authValue = makeStrongTestSecret('auth');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
-    vi.stubEnv('AUTH_SECRET', 'a'.repeat(32));
+    vi.stubEnv('AUTH_SECRET', authValue);
     const { getBetterAuthConfig } =
       await import('@/modules/kernel/infrastructure/config/auth');
 
-    expect(getBetterAuthConfig().secret).toBe('a'.repeat(32));
+    expect(getBetterAuthConfig().secret).toBe(authValue);
   });
 
   it('allows weak AUTH_SECRET values only when env validation is skipped', async () => {
-    const weakAuthValue = ['too', 'short', 'fixture'].join('-');
+    const weakAuthValue = makeShortTestSecret('auth');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
     vi.stubEnv('AUTH_SECRET', weakAuthValue);
     vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
@@ -262,26 +268,45 @@ describe('server config accessors', () => {
   });
 
   it('returns Redis config when both required values are present', async () => {
+    const redisToken = makeTestSecret('redis');
     vi.stubEnv('UPSTASH_REDIS_REST_URL', 'https://redis.example.com');
-    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', 'valid-token-value');
+    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', redisToken);
     const { getRedisConfig } =
       await import('@/modules/kernel/infrastructure/config/redis');
 
     expect(getRedisConfig()).toEqual({
       restUrl: 'https://redis.example.com',
-      restToken: 'valid-token-value',
+      restToken: redisToken,
     });
   });
 
   it('throws ConfigurationError for malformed Redis config', async () => {
     vi.stubEnv('UPSTASH_REDIS_REST_URL', 'not-a-url');
-    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', 'token-value');
+    vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', makeTestSecret('redis'));
     const { getRedisConfig } =
       await import('@/modules/kernel/infrastructure/config/redis');
     const { ConfigurationError } =
       await import('@/modules/kernel/domain/errors/configuration-error');
 
     expect(() => getRedisConfig()).toThrow(ConfigurationError);
+  });
+
+  it('accepts LOGGER_PRETTY as a legacy console mirror alias', async () => {
+    vi.stubEnv('LOGGER_CONSOLE_MIRROR', undefined);
+    vi.stubEnv('LOGGER_PRETTY', 'false');
+    const { getLoggerConfig } =
+      await import('@/modules/kernel/infrastructure/config/logger');
+
+    expect(getLoggerConfig().consoleMirror).toBe(false);
+  });
+
+  it('prefers LOGGER_CONSOLE_MIRROR over legacy LOGGER_PRETTY', async () => {
+    vi.stubEnv('LOGGER_CONSOLE_MIRROR', 'true');
+    vi.stubEnv('LOGGER_PRETTY', 'false');
+    const { getLoggerConfig } =
+      await import('@/modules/kernel/infrastructure/config/logger');
+
+    expect(getLoggerConfig().consoleMirror).toBe(true);
   });
 
   it('requires an OpenTelemetry Collector URL in production', async () => {

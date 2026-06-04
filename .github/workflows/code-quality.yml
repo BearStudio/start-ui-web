@@ -125,8 +125,14 @@ jobs:
         with:
           node-version: 24
 
+      - name: Install Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
       - name: Run dependency-cruiser
         run: pnpm depcruise
+
+      - name: Check module dependency graph
+        run: pnpm architecture:graph:check
 
       - name: Generate dependency graphs
         if: always()

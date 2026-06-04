@@ -18,6 +18,9 @@ const directiveValue = (policy: string, directiveName: string) =>
     .split('; ')
     .find((directive) => directive.startsWith(`${directiveName} `));
 
+const cspHashSources = (directive: string | undefined) =>
+  directive?.match(/'sha256-[^']+'/g) ?? [];
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
@@ -82,15 +85,12 @@ describe('security headers', () => {
       isProduction: true,
     });
 
-    expect(directiveValue(testPolicy, 'style-src')).toContain(
-      "'sha256-7kYjkz6pduUs3kVL/X05CBZQltL/7ngRDDedeYMKnCY='" // pragma: allowlist secret
-    );
-    expect(directiveValue(testPolicy, 'style-src')).toContain(
-      "'sha256-usAZqtYVSsNUHiWQ9dUUoz3b/VIjZb4D3aBYhD6zD5o='" // pragma: allowlist secret
-    );
-    expect(directiveValue(productionPolicy, 'style-src')).not.toContain(
-      'sha256-7kYjkz6pduUs3kVL' // pragma: allowlist secret
-    );
+    expect(
+      cspHashSources(directiveValue(testPolicy, 'style-src'))
+    ).toHaveLength(2);
+    expect(
+      cspHashSources(directiveValue(productionPolicy, 'style-src'))
+    ).toHaveLength(0);
   });
 
   it('can relax script and style sources for the local test dev server only', () => {

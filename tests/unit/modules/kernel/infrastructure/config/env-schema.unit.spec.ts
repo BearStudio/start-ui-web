@@ -1,4 +1,5 @@
 import { makeTestDatabaseUrl } from '@tests/server/test-database-url';
+import { makeShortTestSecret } from '@tests/support/test-secrets';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -47,7 +48,7 @@ describe('server env parser', () => {
       SECRET_TOKEN: z.string().min(32),
       SERVICE_URL: z.url(),
     });
-    const secret = 'short-secret-value'; // pragma: allowlist secret
+    const secret = makeShortTestSecret('env');
 
     const error = captureThrown(() =>
       parseEnv(schema, {

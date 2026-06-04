@@ -165,6 +165,37 @@ rules:
       include:
         - tests/e2e/**/*.json
 
+  - id: no-test-secret-allowlist-pragmas
+    message: Test secret-like values should be generated at runtime instead of committed with detect-secrets allowlist pragmas.
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: 'pragma:\s*allowlist secret'
+    paths:
+      include:
+        - tests/**
+
+  - id: no-known-vulnerable-tooling-transitives
+    message: Do not reintroduce known vulnerable or flagged tooling transitives; keep package overrides or update the parent dependency.
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: '(?:shell-quote(?:@|:\s*)1\.8\.3|svgo(?:@|:\s*)3\.(?:[0-2]\.[0-9]+|3\.[0-3]))'
+    paths:
+      include:
+        - package.json
+        - pnpm-lock.yaml
+
+  - id: no-hardcoded-git-binary-path
+    message: Use git from PATH in scripts instead of hard-coded platform-specific Git binary paths.
+    severity: ERROR
+    languages:
+      - typescript
+      - javascript
+    pattern-regex: '(?:C:\\Program Files\\Git\\cmd\\git\.exe|/usr/bin/git|/opt/homebrew/bin/git|/usr/local/bin/git)'
+    paths:
+      include:
+        - scripts/**/*.ts
+        - scripts/**/*.js
+
   - id: no-silent-session-revocation-noop
     message: Session revocation must not silently return false when a provider token is missing; make the token contract explicit or throw.
     severity: ERROR

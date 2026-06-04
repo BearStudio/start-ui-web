@@ -9,6 +9,14 @@ const otelMocks = vi.hoisted(() => {
           spanContext: ReturnType<typeof vi.fn>;
         }
       | undefined,
+    startedSpan: undefined as
+      | {
+          end: ReturnType<typeof vi.fn>;
+          recordException: ReturnType<typeof vi.fn>;
+          setStatus: ReturnType<typeof vi.fn>;
+          spanContext: ReturnType<typeof vi.fn>;
+        }
+      | undefined,
   };
 
   return {
@@ -37,8 +45,8 @@ vi.mock('@opentelemetry/api', () => ({
   trace: {
     getActiveSpan: otelMocks.getActiveSpan,
     getTracer: vi.fn(() => ({
-      startActiveSpan: vi.fn((_name, _options, fn) =>
-        fn({
+      startActiveSpan: vi.fn((_name, _options, fn) => {
+        const span = {
           end: vi.fn(),
           recordException: vi.fn(),
           setStatus: vi.fn(),
@@ -47,8 +55,10 @@ vi.mock('@opentelemetry/api', () => ({
             traceFlags: 1,
             traceId: 'started-trace',
           })),
-        })
-      ),
+        };
+        otelMocks.state.startedSpan = span;
+        return fn(span);
+      }),
       startSpan: vi.fn(() => ({
         addEvent: vi.fn(),
         end: vi.fn(),
@@ -82,6 +92,7 @@ describe('createOpenTelemetryAdapter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     otelMocks.state.activeSpan = undefined;
+    otelMocks.state.startedSpan = undefined;
   });
 
   it('records captured exceptions on the active span and emits an OTel log event', async () => {
@@ -108,10 +119,7 @@ describe('createOpenTelemetryAdapter', () => {
     });
 
     expect(activeSpan.recordException).toHaveBeenCalledWith(error);
-    expect(activeSpan.setStatus).toHaveBeenCalledWith({
-      code: 'ERROR',
-      message: 'provider failed',
-    });
+    expect(activeSpan.setStatus).not.toHaveBeenCalled();
     expect(otelMocks.emit).toHaveBeenCalledWith(
       expect.objectContaining({
         attributes: expect.objectContaining({
@@ -128,9 +136,66 @@ describe('createOpenTelemetryAdapter', () => {
         eventName: 'auth.failure',
         exception: error,
         severityNumber: 13,
-        severityText: 'warning',
+        severityText: 'WARN',
       })
     );
+  });
+
+  it('normalizes structured log severity text to OTel labels', async () => {
+    const { createOpenTelemetryAdapter } =
+      await import('@/composition/telemetry/otel-adapter');
+    const adapter = createOpenTelemetryAdapter();
+
+    adapter.emitLog({ event: 'quota.near_limit', level: 'warn' });
+
+    expect(otelMocks.emit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventName: 'quota.near_limit',
+        severityNumber: 13,
+        severityText: 'WARN',
+      })
+    );
+  });
+
+  it('uses message properties from plain captured error objects', async () => {
+    const { createOpenTelemetryAdapter } =
+      await import('@/composition/telemetry/otel-adapter');
+    const adapter = createOpenTelemetryAdapter();
+
+    adapter.captureException({ message: 'provider payload failed' });
+
+    expect(otelMocks.emit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        body: 'provider payload failed',
+        eventName: 'exception.captured',
+        exception: 'provider payload failed',
+        severityNumber: 17,
+        severityText: 'ERROR',
+      })
+    );
+  });
+
+  it('marks Boxed Result.Error span returns as failed operations', async () => {
+    const { Result } = await import('@swan-io/boxed');
+    const { createOpenTelemetryAdapter } =
+      await import('@/composition/telemetry/otel-adapter');
+    const adapter = createOpenTelemetryAdapter();
+    const error = new Error('provider failed');
+
+    const result = await adapter.startSpan(
+      { name: 'auth.userHasPermission', op: 'auth.provider' },
+      async () => Result.Error(error)
+    );
+
+    expect(result.isError()).toBe(true);
+    expect(otelMocks.state.startedSpan?.recordException).toHaveBeenCalledWith(
+      error
+    );
+    expect(otelMocks.state.startedSpan?.setStatus).toHaveBeenCalledWith({
+      code: 'ERROR',
+      message: 'provider failed',
+    });
+    expect(otelMocks.state.startedSpan?.end).toHaveBeenCalledTimes(1);
   });
 
   it('emits captured exceptions as OTel logs when no span is active', async () => {
@@ -146,7 +211,7 @@ describe('createOpenTelemetryAdapter', () => {
         eventName: 'exception.captured',
         exception: 'string failure',
         severityNumber: 17,
-        severityText: 'error',
+        severityText: 'ERROR',
       })
     );
   });

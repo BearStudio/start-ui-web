@@ -47,7 +47,8 @@ const CONFIG_LEVEL_RANK = {
   info: 2,
   warn: 3,
   error: 4,
-  fatal: 5,
+  // The public Logger has no fatal method, so fatal is an error-only threshold.
+  fatal: 4,
 } as const satisfies Record<LoggerConfig['level'], number>;
 
 const CONSOLE_METHOD_BY_LOG_LEVEL = {
@@ -163,14 +164,10 @@ const writeConsoleMirror = ({
   const method = consoleLike?.[CONSOLE_METHOD_BY_LOG_LEVEL[level]];
   if (typeof method !== 'function') return;
 
-  method.call(
-    consoleLike,
-    JSON.stringify({
-      level,
-      message,
-      ...sanitizedLogRecord,
-    })
-  );
+  method.call(consoleLike, message, {
+    level,
+    ...sanitizedLogRecord,
+  });
 };
 
 export function createTelemetryLogger({
@@ -198,10 +195,11 @@ export function createTelemetryLogger({
       typeof sanitizedLogRecord.event === 'string'
         ? sanitizedLogRecord.event
         : fields.event;
+    const shouldEmit = shouldEmitLog(logLevel, configuredLevel);
+    const shouldCaptureException =
+      logLevel === 'error' && Object.hasOwn(mergedFields, 'exception');
 
-    if (!shouldEmitLog(logLevel, configuredLevel)) return;
-
-    if (shouldMirrorToConsole) {
+    if (shouldEmit && shouldMirrorToConsole) {
       writeConsoleMirror({
         level: logLevel,
         message,
@@ -209,40 +207,44 @@ export function createTelemetryLogger({
       });
     }
 
-    telemetry.emitLog({
-      attributes: {
-        ...(mergedFields.correlationId
-          ? { correlationId: mergedFields.correlationId }
+    if (shouldEmit) {
+      telemetry.emitLog({
+        attributes: {
+          ...(mergedFields.correlationId
+            ? { correlationId: mergedFields.correlationId }
+            : {}),
+          ...(mergedFields.requestId
+            ? { requestId: mergedFields.requestId }
+            : {}),
+          ...(mergedFields.scopeKey ? { scopeKey: mergedFields.scopeKey } : {}),
+          ...(mergedFields.sessionId
+            ? { sessionId: mergedFields.sessionId }
+            : {}),
+          ...(mergedFields.spanId ? { spanId: mergedFields.spanId } : {}),
+          ...(mergedFields.traceId ? { traceId: mergedFields.traceId } : {}),
+          ...(mergedFields.userId ? { userId: mergedFields.userId } : {}),
+        },
+        details:
+          sanitizedLogRecord.details &&
+          typeof sanitizedLogRecord.details === 'object' &&
+          !Array.isArray(sanitizedLogRecord.details)
+            ? (sanitizedLogRecord.details as Record<string, unknown>)
+            : undefined,
+        direction: mergedFields.direction,
+        error:
+          typeof sanitizedLogRecord.error === 'string'
+            ? sanitizedLogRecord.error
+            : undefined,
+        event: message,
+        level: logLevel,
+        message,
+        ...(!shouldCaptureException && Object.hasOwn(mergedFields, 'exception')
+          ? { exception: mergedFields.exception }
           : {}),
-        ...(mergedFields.requestId
-          ? { requestId: mergedFields.requestId }
-          : {}),
-        ...(mergedFields.scopeKey ? { scopeKey: mergedFields.scopeKey } : {}),
-        ...(mergedFields.sessionId
-          ? { sessionId: mergedFields.sessionId }
-          : {}),
-        ...(mergedFields.spanId ? { spanId: mergedFields.spanId } : {}),
-        ...(mergedFields.traceId ? { traceId: mergedFields.traceId } : {}),
-        ...(mergedFields.userId ? { userId: mergedFields.userId } : {}),
-      },
-      details:
-        sanitizedLogRecord.details &&
-        typeof sanitizedLogRecord.details === 'object' &&
-        !Array.isArray(sanitizedLogRecord.details)
-          ? (sanitizedLogRecord.details as Record<string, unknown>)
-          : undefined,
-      direction: mergedFields.direction,
-      error:
-        typeof sanitizedLogRecord.error === 'string'
-          ? sanitizedLogRecord.error
-          : undefined,
-      event: message,
-      exception: mergedFields.exception,
-      level: logLevel,
-      message,
-    });
+      });
+    }
 
-    if (logLevel === 'error' && Object.hasOwn(mergedFields, 'exception')) {
+    if (shouldCaptureException) {
       telemetry.captureException(
         mergedFields.exception,
         buildTelemetryCaptureContext({

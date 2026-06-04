@@ -1,0 +1,185 @@
+digraph ModuleLayerDependencies {
+  graph [rankdir="LR", compound="true", fontname="Helvetica", fontsize="10", nodesep="0.35", ranksep="0.55"];
+  node [shape="box", style="rounded,filled", fontname="Helvetica", fontsize="10", color="#374151", fontcolor="#111827"];
+  edge [arrowsize="0.7", color="#4b5563", fontname="Helvetica", fontsize="9"];
+
+  subgraph cluster_account {
+    label="account";
+    color="#d1d5db";
+    style="rounded";
+    "account/public" [label="public", fillcolor="#f3f4f6"];
+    "account/application" [label="application", fillcolor="#dbeafe"];
+    "account/domain" [label="domain", fillcolor="#dcfce7"];
+    "account/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "account/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_auth {
+    label="auth";
+    color="#d1d5db";
+    style="rounded";
+    "auth/public" [label="public", fillcolor="#f3f4f6"];
+    "auth/application" [label="application", fillcolor="#dbeafe"];
+    "auth/domain" [label="domain", fillcolor="#dcfce7"];
+    "auth/infrastructure" [label="infrastructure", fillcolor="#ffedd5"];
+    "auth/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "auth/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_book {
+    label="book";
+    color="#d1d5db";
+    style="rounded";
+    "book/public" [label="public", fillcolor="#f3f4f6"];
+    "book/application" [label="application", fillcolor="#dbeafe"];
+    "book/domain" [label="domain", fillcolor="#dcfce7"];
+    "book/infrastructure" [label="infrastructure", fillcolor="#ffedd5"];
+    "book/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "book/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_email {
+    label="email";
+    color="#d1d5db";
+    style="rounded";
+    "email/public" [label="public", fillcolor="#f3f4f6"];
+    "email/application" [label="application", fillcolor="#dbeafe"];
+    "email/domain" [label="domain", fillcolor="#dcfce7"];
+    "email/infrastructure" [label="infrastructure", fillcolor="#ffedd5"];
+    "email/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "email/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_genre {
+    label="genre";
+    color="#d1d5db";
+    style="rounded";
+    "genre/public" [label="public", fillcolor="#f3f4f6"];
+    "genre/application" [label="application", fillcolor="#dbeafe"];
+    "genre/domain" [label="domain", fillcolor="#dcfce7"];
+    "genre/infrastructure" [label="infrastructure", fillcolor="#ffedd5"];
+    "genre/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "genre/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_kernel {
+    label="kernel";
+    color="#d1d5db";
+    style="rounded";
+    "kernel/public" [label="public", fillcolor="#f3f4f6"];
+    "kernel/application" [label="application", fillcolor="#dbeafe"];
+    "kernel/domain" [label="domain", fillcolor="#dcfce7"];
+    "kernel/infrastructure" [label="infrastructure", fillcolor="#ffedd5"];
+    "kernel/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  subgraph cluster_user {
+    label="user";
+    color="#d1d5db";
+    style="rounded";
+    "user/public" [label="public", fillcolor="#f3f4f6"];
+    "user/application" [label="application", fillcolor="#dbeafe"];
+    "user/domain" [label="domain", fillcolor="#dcfce7"];
+    "user/presentation" [label="presentation", fillcolor="#fef9c3"];
+    "user/transport" [label="transport", fillcolor="#ede9fe"];
+  }
+
+  "account/application" -> "account/domain" [style="solid"];
+  "account/presentation" -> "account/public" [style="solid"];
+  "account/presentation" -> "auth/public" [style="solid"];
+  "account/public" -> "account/application" [style="solid"];
+  "account/public" -> "account/domain" [style="dotted"];
+  "account/public" -> "account/presentation" [style="dotted"];
+  "account/public" -> "account/transport" [style="dotted"];
+  "account/transport" -> "auth/public" [style="dashed"];
+  "account/transport" -> "kernel/transport" [style="solid"];
+  "auth/domain" -> "kernel/domain" [style="solid"];
+  "auth/infrastructure" -> "auth/domain" [style="solid"];
+  "auth/infrastructure" -> "auth/public" [style="solid"];
+  "auth/infrastructure" -> "kernel/domain" [style="solid"];
+  "auth/infrastructure" -> "kernel/infrastructure" [style="solid"];
+  "auth/infrastructure" -> "kernel/transport" [style="solid"];
+  "auth/presentation" -> "account/public" [style="solid"];
+  "auth/presentation" -> "auth/public" [style="solid"];
+  "auth/presentation" -> "kernel/domain" [style="solid"];
+  "auth/public" -> "auth/application" [style="solid"];
+  "auth/public" -> "auth/domain" [style="dotted"];
+  "auth/public" -> "auth/infrastructure" [style="solid"];
+  "auth/public" -> "auth/presentation" [style="solid"];
+  "auth/public" -> "auth/transport" [style="solid"];
+  "auth/transport" -> "auth/domain" [style="solid"];
+  "auth/transport" -> "auth/public" [style="solid"];
+  "auth/transport" -> "kernel/domain" [style="solid"];
+  "auth/transport" -> "kernel/public" [style="solid"];
+  "auth/transport" -> "kernel/transport" [style="solid"];
+  "book/application" -> "book/domain" [style="solid"];
+  "book/application" -> "kernel/domain" [style="solid"];
+  "book/domain" -> "kernel/domain" [style="solid"];
+  "book/infrastructure" -> "genre/infrastructure" [style="solid"];
+  "book/infrastructure" -> "kernel/domain" [style="solid"];
+  "book/infrastructure" -> "kernel/infrastructure" [style="solid"];
+  "book/presentation" -> "auth/public" [style="solid"];
+  "book/presentation" -> "book/public" [style="solid"];
+  "book/presentation" -> "genre/public" [style="solid"];
+  "book/presentation" -> "kernel/domain" [style="solid"];
+  "book/presentation" -> "kernel/public" [style="solid"];
+  "book/public" -> "book/application" [style="solid"];
+  "book/public" -> "book/domain" [style="dotted"];
+  "book/public" -> "book/infrastructure" [style="solid"];
+  "book/public" -> "book/presentation" [style="dotted"];
+  "book/public" -> "book/transport" [style="dotted"];
+  "book/transport" -> "auth/public" [style="dashed"];
+  "book/transport" -> "book/domain" [style="solid"];
+  "book/transport" -> "kernel/domain" [style="solid"];
+  "book/transport" -> "kernel/transport" [style="solid"];
+  "email/application" -> "email/domain" [style="solid"];
+  "email/application" -> "kernel/domain" [style="solid"];
+  "email/infrastructure" -> "email/public" [style="solid"];
+  "email/infrastructure" -> "kernel/domain" [style="solid"];
+  "email/infrastructure" -> "kernel/infrastructure" [style="solid"];
+  "email/presentation" -> "auth/public" [style="solid"];
+  "email/public" -> "email/application" [style="solid"];
+  "email/public" -> "email/domain" [style="dotted"];
+  "email/public" -> "email/infrastructure" [style="solid"];
+  "email/public" -> "email/presentation" [style="dotted"];
+  "email/public" -> "email/transport" [style="solid"];
+  "email/public" -> "kernel/transport" [style="solid"];
+  "email/transport" -> "email/public" [style="solid"];
+  "email/transport" -> "kernel/domain" [style="solid"];
+  "genre/application" -> "genre/domain" [style="solid"];
+  "genre/infrastructure" -> "kernel/domain" [style="solid"];
+  "genre/infrastructure" -> "kernel/infrastructure" [style="solid"];
+  "genre/presentation" -> "genre/public" [style="solid"];
+  "genre/presentation" -> "kernel/domain" [style="solid"];
+  "genre/public" -> "genre/application" [style="solid"];
+  "genre/public" -> "genre/domain" [style="dotted"];
+  "genre/public" -> "genre/infrastructure" [style="solid"];
+  "genre/public" -> "genre/presentation" [style="dotted"];
+  "genre/public" -> "genre/transport" [style="dotted"];
+  "genre/transport" -> "auth/public" [style="dashed"];
+  "genre/transport" -> "kernel/domain" [style="solid"];
+  "genre/transport" -> "kernel/transport" [style="solid"];
+  "kernel/infrastructure" -> "auth/infrastructure" [style="solid"];
+  "kernel/infrastructure" -> "book/infrastructure" [style="solid"];
+  "kernel/infrastructure" -> "email/infrastructure" [style="dotted"];
+  "kernel/infrastructure" -> "genre/infrastructure" [style="solid"];
+  "kernel/infrastructure" -> "kernel/domain" [style="solid"];
+  "kernel/infrastructure" -> "kernel/transport" [style="solid"];
+  "kernel/public" -> "kernel/application" [style="dotted"];
+  "kernel/public" -> "kernel/domain" [style="dotted"];
+  "kernel/public" -> "kernel/infrastructure" [style="solid"];
+  "kernel/public" -> "kernel/transport" [style="dashed"];
+  "kernel/transport" -> "kernel/domain" [style="solid"];
+  "user/application" -> "user/domain" [style="solid"];
+  "user/presentation" -> "auth/public" [style="solid"];
+  "user/presentation" -> "kernel/domain" [style="solid"];
+  "user/presentation" -> "kernel/public" [style="solid"];
+  "user/presentation" -> "user/public" [style="solid"];
+  "user/public" -> "user/application" [style="solid"];
+  "user/public" -> "user/domain" [style="dotted"];
+  "user/public" -> "user/presentation" [style="dotted"];
+  "user/public" -> "user/transport" [style="dotted"];
+  "user/transport" -> "auth/public" [style="dashed"];
+  "user/transport" -> "kernel/domain" [style="solid"];
+  "user/transport" -> "kernel/transport" [style="solid"];
+}

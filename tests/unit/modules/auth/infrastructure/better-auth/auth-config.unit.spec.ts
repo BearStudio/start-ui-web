@@ -35,7 +35,7 @@ vi.mock('@/modules/kernel/infrastructure/config/auth', () => ({
     allowedHosts: ['preview.example'],
     githubClientId: undefined,
     githubClientSecret: undefined,
-    secret: 'test-auth-key', // pragma: allowlist secret
+    secret: globalThis.crypto.randomUUID(),
     sessionExpirationInSeconds: 2_592_000,
     sessionUpdateAgeInSeconds: 86_400,
     trustedOrigins: ['https://app.example'],

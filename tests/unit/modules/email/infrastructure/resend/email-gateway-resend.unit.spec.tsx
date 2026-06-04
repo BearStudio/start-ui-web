@@ -16,18 +16,25 @@ import {
   toEmailStatusId,
 } from '@/modules/kernel/domain/ids';
 
-const testState = vi.hoisted(() => ({
-  emailConfig: {
-    resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
-    resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
+const testState = vi.hoisted(() => {
+  const makeSecret = (label: string) =>
+    `${label}-${globalThis.crypto.randomUUID()}`;
+  const makeEmailConfig = () => ({
+    resendApiKey: makeSecret('resend-api-key'),
+    resendWebhookSecret: makeSecret('resend-webhook'),
     from: 'Start UI <noreply@example.com>',
     deliveryDisabled: false,
-  },
-  envClient: {
-    VITE_IS_DEMO: false,
-  },
-  render: vi.fn(),
-}));
+  });
+
+  return {
+    emailConfig: makeEmailConfig(),
+    makeEmailConfig,
+    envClient: {
+      VITE_IS_DEMO: false,
+    },
+    render: vi.fn(),
+  };
+});
 
 vi.mock('@/modules/kernel/infrastructure/config/email', () => ({
   getEmailConfig: () => testState.emailConfig,
@@ -117,12 +124,7 @@ function getError<TOutcome extends { type: string }>(
 describe('EmailGatewayResend', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    Object.assign(testState.emailConfig, {
-      resendApiKey: 'resend_api_key_placeholder', // pragma: allowlist secret
-      resendWebhookSecret: 'resend_webhook_secret_placeholder', // pragma: allowlist secret
-      from: 'Start UI <noreply@example.com>',
-      deliveryDisabled: false,
-    });
+    Object.assign(testState.emailConfig, testState.makeEmailConfig());
     Object.assign(testState.envClient, {
       VITE_IS_DEMO: false,
     });

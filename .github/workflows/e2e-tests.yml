@@ -29,39 +29,16 @@ jobs:
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_ENV_NAME: tests
-      DATABASE_URL: postgres://startui:startui@localhost:5432/startui
       VITE_IS_DEMO: false
-      AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
-      EMAIL_SERVER: smtp://username:password@localhost:1025
       EMAIL_FROM: Start UI <noreply@example.com>
       EMAIL_DELIVERY_DISABLED: true
-      RESEND_API_KEY: re_e2e_disabled
       S3_HOST: localhost:9000
       S3_BUCKET_NAME: default
-      S3_ACCESS_KEY_ID: startui-access-key
-      S3_SECRET_ACCESS_KEY: startui-secret-key
       S3_SECURE: false
       S3_FORCE_PATH_STYLE: true
-      DOCKER_MINIO_USERNAME: minioadmin
-      DOCKER_MINIO_PASSWORD: minioadmin
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:9000/default
+
     services:
-      postgres:
-        image: postgres:16.1@sha256:09f23e02d76670d3b346a3c00aa33a27cf57aab8341eedfcdaed41459d14f5c4
-
-        env:
-          POSTGRES_PASSWORD: startui
-          POSTGRES_USER: startui
-          POSTGRES_DB: startui
-
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
       maildev:
         image: maildev/maildev:2.2.1@sha256:180ef51f65eefebb0e7122d8308813c1fd7bff164bc440ce5a3c2feee167a810
         options: >-
@@ -78,6 +55,24 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Generate test secrets
+        shell: bash
+        run: |
+          postgres_password="$(openssl rand -hex 16)"
+
+          {
+            printf '%s=%s\n' 'AUTH_SECRET' "$(openssl rand -base64 32)"
+            printf '%s=%s\n' 'DATABASE_URL' "postgres://startui:${postgres_password}@localhost:5432/startui"
+            printf '%s=%s\n' 'POSTGRES_DB' 'startui'
+            printf '%s=%s\n' 'POSTGRES_USER' 'startui'
+            printf '%s=%s\n' 'POSTGRES_PASSWORD' "${postgres_password}"
+            printf '%s=%s\n' 'RESEND_API_KEY' "re_$(openssl rand -hex 16)"
+            printf '%s=%s\n' 'S3_ACCESS_KEY_ID' "startui-$(openssl rand -hex 8)"
+            printf '%s=%s\n' 'S3_SECRET_ACCESS_KEY' "$(openssl rand -hex 24)"
+            printf '%s=%s\n' 'DOCKER_MINIO_USERNAME' "minio-$(openssl rand -hex 8)"
+            printf '%s=%s\n' 'DOCKER_MINIO_PASSWORD' "$(openssl rand -hex 24)"
+          } >> "$GITHUB_ENV"
+
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
@@ -88,14 +83,30 @@ jobs:
         with:
           browsers: chromium ${{ matrix.browser }}
 
+      - name: Start PostgreSQL
+        run: |
+          docker run -d \
+            --name postgres \
+            -p 5432:5432 \
+            -e POSTGRES_PASSWORD="$POSTGRES_PASSWORD" \
+            -e POSTGRES_USER="$POSTGRES_USER" \
+            -e POSTGRES_DB="$POSTGRES_DB" \
+            postgres:16.1@sha256:09f23e02d76670d3b346a3c00aa33a27cf57aab8341eedfcdaed41459d14f5c4
+
+          until docker exec postgres pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready"
+
       - name: Start MinIO server
         run: |
           docker run -d \
             --name minio \
             -p 9000:9000 \
             -p 9001:9001 \
-            -e MINIO_ROOT_USER=minioadmin \
-            -e MINIO_ROOT_PASSWORD=minioadmin \
+            -e MINIO_ROOT_USER="$DOCKER_MINIO_USERNAME" \
+            -e MINIO_ROOT_PASSWORD="$DOCKER_MINIO_PASSWORD" \
             minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1@sha256:7330be2e7320a7a699b36f72bd06a94d8a21ec9f6f397345d9c38fc6751141f5 \
             server /data --console-address :9001
 
@@ -115,15 +126,15 @@ jobs:
           sudo mv "$RUNNER_TEMP/mc" /usr/local/bin/mc
 
           # Configure MinIO client
-          mc alias set minio http://localhost:9000 minioadmin minioadmin
+          mc alias set minio http://localhost:9000 "$DOCKER_MINIO_USERNAME" "$DOCKER_MINIO_PASSWORD"
 
           # Create user with access key
-          mc admin user add minio $S3_ACCESS_KEY_ID $S3_SECRET_ACCESS_KEY
-          mc admin policy attach minio readwrite --user $S3_ACCESS_KEY_ID
+          mc admin user add minio "$S3_ACCESS_KEY_ID" "$S3_SECRET_ACCESS_KEY"
+          mc admin policy attach minio readwrite --user "$S3_ACCESS_KEY_ID"
 
           # Create bucket and set permissions
-          mc mb --ignore-existing minio/$S3_BUCKET_NAME
-          mc anonymous set download minio/$S3_BUCKET_NAME
+          mc mb --ignore-existing "minio/$S3_BUCKET_NAME"
+          mc anonymous set download "minio/$S3_BUCKET_NAME"
 
       - name: Migrate database
         run: pnpm db:push

@@ -30,6 +30,9 @@ module.exports = {
   typescript: true,
   replaceAttrValues: { '#000': 'currentColor' },
   template,
+  svgoConfig: {
+    plugins: [{ name: 'preset-default' }, 'prefixIds'],
+  },
 
   // See https://github.com/gregberge/svgr/issues/893 for details on the underlying issue
   prettier: false,
