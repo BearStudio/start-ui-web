@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  // Seeds run through `node ./run-jiti`, which knip cannot trace from scripts.
+  "entry": ["drizzle/seed/index.ts", "drizzle/seed/**/*.ts"],
+  "stryker": {
+    // Per-module Stryker configs do not match knip's default stryker.config.* pattern.
+    "config": ["stryker.*.config.mjs"],
+  },
+  "ignoreDependencies": [
+    // Manual copy-paste detection; configured via the "jscpd" key in package.json.
+    "jscpd",
+  ],
+}

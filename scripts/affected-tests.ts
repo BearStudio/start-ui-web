@@ -5,6 +5,8 @@ import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { resolveTrustedTool } from './trusted-tool';
+
 const DEPENDENCY_CRUISE_ROOT_CANDIDATES = ['src', 'tests', 'scripts'] as const;
 const GIT_COMMAND = 'git';
 
@@ -204,7 +206,7 @@ export const parseNullDelimitedPaths = (output: string) =>
 const runGitStrict =
   (cwd: string): GitRunner =>
   (args, description) => {
-    const result = spawnSync(GIT_COMMAND, args, {
+    const result = spawnSync(resolveTrustedTool(GIT_COMMAND), args, {
       cwd,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],

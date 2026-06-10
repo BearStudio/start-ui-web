@@ -192,5 +192,5 @@ linkStyle 95 stroke-dasharray: 6 4
 ## Edge Styles
 
 - Solid edges are static runtime imports.
-- Dashed edges are dynamic imports or type-only-only dependencies.
+- Dashed edges are dynamic imports or type-only dependencies.
 - Dotted edges are re-export-only dependencies.

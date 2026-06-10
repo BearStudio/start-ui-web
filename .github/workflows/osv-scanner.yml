@@ -1,0 +1,47 @@
+name: OSV Scanner
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  schedule:
+    # Weekly full scan so newly published OSV advisories surface without a code change.
+    - cron: '30 5 * * 1'
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  scan-pr:
+    name: Scan PR Diff
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@9a498708959aeaef5ef730655706c5a1df1edbc2 # v2.3.8
+    permissions:
+      contents: read
+      # Required to read the Actions run for SARIF correlation.
+      actions: read
+      # Required to upload SARIF results to the Security tab.
+      security-events: write
+    with:
+      scan-args: |-
+        --lockfile=pnpm-lock.yaml
+
+  scan-full:
+    name: Full Scan
+    if: github.event_name != 'pull_request'
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@9a498708959aeaef5ef730655706c5a1df1edbc2 # v2.3.8
+    permissions:
+      contents: read
+      # Required to read the Actions run for SARIF correlation.
+      actions: read
+      # Required to upload SARIF results to the Security tab.
+      security-events: write
+    with:
+      scan-args: |-
+        --lockfile=pnpm-lock.yaml

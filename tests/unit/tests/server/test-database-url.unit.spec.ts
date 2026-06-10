@@ -23,10 +23,10 @@ describe('test database URL helpers', () => {
 
     expect(parsedUrl.protocol).toBe('postgres:');
     expect(parsedUrl.username).toMatch(
-      /^generated-database-pr-62-principal-credential-[a-z0-9-]+$/
+      /^generated-database-pr-62-principal-credential-[A-Za-z0-9_-]+$/
     );
     expect(parsedUrl.password).toMatch(
-      /^generated-database-pr-62-verifier-credential-[a-z0-9-]+$/
+      /^generated-database-pr-62-verifier-credential-[A-Za-z0-9_-]+$/
     );
     expect(parsedUrl.host).toBe('localhost:5432');
     expect(parsedUrl.pathname).toBe('/start-ui-test');

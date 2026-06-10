@@ -75,6 +75,10 @@ app.config.timestamp_*.js
 reviews_triage/
 triage_decisions.db
 docs
+!docs/
+docs/*
+!docs/architecture/
+!docs/architecture/**
 *.pptx
 *.zip
 audio_docs/

@@ -196,6 +196,16 @@ rules:
         - scripts/**/*.ts
         - scripts/**/*.js
 
+  - id: no-unbounded-postgres-readiness-loop
+    message: Bound GitHub Actions PostgreSQL readiness loops so failed containers do not burn the full job timeout.
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: 'until\s+docker\s+exec\s+postgres\s+pg_isready\b'
+    paths:
+      include:
+        - .github/workflows/*.yml
+        - .github/workflows/*.yaml
+
   - id: no-silent-session-revocation-noop
     message: Session revocation must not silently return false when a provider token is missing; make the token contract explicit or throw.
     severity: ERROR

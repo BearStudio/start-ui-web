@@ -1,9 +1,15 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import {
+  ARTIFACT_FILENAMES,
   buildModuleLayerGraph,
+  compareArtifactDirectories,
   type DependencyCruiserReport,
   formatDot,
+  formatMarkdown,
   formatMermaid,
   getDependencyStyle,
   groupModulePath,
@@ -189,5 +195,46 @@ describe('module dependency graph builder', () => {
     expect(formatDot(graph)).toContain(
       '"book/presentation" -> "genre/public" [style="dotted"]'
     );
+  });
+
+  it('documents dashed edges as dynamic imports or type-only dependencies', () => {
+    expect(formatMarkdown('graph TD\n')).toContain(
+      '- Dashed edges are dynamic imports or type-only dependencies.'
+    );
+    expect(formatMarkdown('graph TD\n')).not.toContain('type-only-only');
+  });
+});
+
+describe('module dependency graph artifact checks', () => {
+  it('normalizes line endings before comparing generated artifacts', () => {
+    const actualDir = mkdtempSync(
+      path.join(os.tmpdir(), 'module-graph-actual-')
+    );
+    const expectedDir = mkdtempSync(
+      path.join(os.tmpdir(), 'module-graph-expected-')
+    );
+
+    try {
+      for (const fileName of Object.values(ARTIFACT_FILENAMES)) {
+        writeFileSync(path.join(actualDir, fileName), 'line 1\r\nline 2\r\n');
+        writeFileSync(path.join(expectedDir, fileName), 'line 1\nline 2\n');
+      }
+
+      expect(compareArtifactDirectories({ actualDir, expectedDir })).toEqual(
+        []
+      );
+
+      writeFileSync(
+        path.join(expectedDir, ARTIFACT_FILENAMES.markdown),
+        'line 1\nchanged\n'
+      );
+
+      expect(compareArtifactDirectories({ actualDir, expectedDir })).toEqual([
+        ARTIFACT_FILENAMES.markdown,
+      ]);
+    } finally {
+      rmSync(actualDir, { force: true, recursive: true });
+      rmSync(expectedDir, { force: true, recursive: true });
+    }
   });
 });

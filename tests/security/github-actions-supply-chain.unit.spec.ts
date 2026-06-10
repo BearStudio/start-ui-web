@@ -14,6 +14,7 @@ const allowedWritePermissions = new Set([
   '.github/workflows/codeql.yml:security-events',
   '.github/workflows/cosmos-pages.yml:id-token',
   '.github/workflows/cosmos-pages.yml:pages',
+  '.github/workflows/osv-scanner.yml:security-events',
   '.github/workflows/supply-chain.yml:attestations',
   '.github/workflows/supply-chain.yml:id-token',
 ]);
@@ -361,24 +362,55 @@ function collectDockerComposeImages() {
 
 describe('GitHub Actions supply-chain policy', () => {
   it('requires SHA-pinned third-party actions', () => {
-    const violations = workflowEntries().flatMap(({ projectPath, workflow }) =>
-      stepEntries(projectPath, workflow).flatMap(({ jobName, index, step }) => {
-        if (typeof step.uses !== 'string' || step.uses.startsWith('./')) {
-          return [];
-        }
+    const violations = workflowEntries().flatMap(
+      ({ projectPath, workflow }) => {
+        const stepViolations = stepEntries(projectPath, workflow).flatMap(
+          ({ jobName, index, step }) => {
+            if (typeof step.uses !== 'string' || step.uses.startsWith('./')) {
+              return [];
+            }
 
-        if (step.uses.startsWith('docker://')) {
-          return digestPattern.test(step.uses)
-            ? []
-            : [
-                `${projectPath}:jobs.${jobName}.steps.${index} uses ${step.uses}`,
-              ];
-        }
+            if (step.uses.startsWith('docker://')) {
+              return digestPattern.test(step.uses)
+                ? []
+                : [
+                    `${projectPath}:jobs.${jobName}.steps.${index} uses ${step.uses}`,
+                  ];
+            }
 
-        return pinnedActionPattern.test(step.uses)
-          ? []
-          : [`${projectPath}:jobs.${jobName}.steps.${index} uses ${step.uses}`];
-      })
+            return pinnedActionPattern.test(step.uses)
+              ? []
+              : [
+                  `${projectPath}:jobs.${jobName}.steps.${index} uses ${step.uses}`,
+                ];
+          }
+        );
+
+        const reusableWorkflowViolations = jobEntries(workflow).flatMap(
+          ({ jobName, job }) => {
+            if (typeof job.uses !== 'string' || job.uses.startsWith('./')) {
+              return [];
+            }
+
+            return pinnedActionPattern.test(job.uses)
+              ? []
+              : [`${projectPath}:jobs.${jobName} uses ${job.uses}`];
+          }
+        );
+
+        return [...stepViolations, ...reusableWorkflowViolations];
+      }
+    );
+
+    expect(violations).toEqual([]);
+  });
+
+  it('forbids pull_request_target triggers', () => {
+    const pullRequestTargetPattern = /^\s*pull_request_target\s*:/m;
+    const violations = workflowPaths().flatMap((projectPath) =>
+      pullRequestTargetPattern.test(readProjectFile(projectPath))
+        ? [`${projectPath} uses pull_request_target`]
+        : []
     );
 
     expect(violations).toEqual([]);
@@ -465,6 +497,23 @@ describe('GitHub Actions supply-chain policy', () => {
 
     const violations = images.flatMap(({ context, image }) =>
       digestPattern.test(image) ? [] : [`${context} uses ${image}`]
+    );
+
+    expect(violations).toEqual([]);
+  });
+
+  it('requires PostgreSQL readiness checks to use bounded retries', () => {
+    const unboundedPostgresReadinessPattern =
+      /until\s+docker\s+exec\s+postgres\s+pg_isready\b/;
+    const violations = workflowEntries().flatMap(({ projectPath, workflow }) =>
+      stepEntries(projectPath, workflow).flatMap(({ jobName, index, step }) =>
+        typeof step.run === 'string' &&
+        unboundedPostgresReadinessPattern.test(step.run)
+          ? [
+              `${projectPath}:jobs.${jobName}.steps.${index} uses an unbounded PostgreSQL readiness loop`,
+            ]
+          : []
+      )
     );
 
     expect(violations).toEqual([]);

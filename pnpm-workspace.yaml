@@ -1,5 +1,8 @@
 engineStrict: true
 sideEffectsCache: false
+# Refuse npm versions published less than 24h ago — the window in which most
+# compromised releases (e.g. Shai-Hulud-style worms) are detected and unpublished.
+minimumReleaseAge: 1440
 
 overrides:
   '@esbuild-kit/core-utils>esbuild': 0.25.0
@@ -19,7 +22,6 @@ overrides:
 
 peerDependencyRules:
   allowedVersions:
-    '@tailwindcss/typography>tailwindcss': '4'
     '@tanstack/zod-adapter>zod': '4'
 
 allowBuilds:

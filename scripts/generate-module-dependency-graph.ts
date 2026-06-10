@@ -13,6 +13,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { resolveTrustedTool } from './trusted-tool';
+
 const MODULES_ROOT = 'src/modules';
 const DEFAULT_OUTPUT_DIR = 'docs/architecture';
 const DEPCRUISE_CONFIG_FILE = '.dependency-cruiser.cjs';
@@ -99,6 +101,8 @@ const normalizePath = (filePath: string) =>
 
 const compareText = (left: string, right: string) =>
   left.localeCompare(right, 'en');
+
+const normalizeLineEndings = (value: string) => value.replace(/\r\n/g, '\n');
 
 const layerOrderIndex = (layerName: ModuleLayerName) => {
   const index = LAYER_ORDER.indexOf(layerName);
@@ -365,7 +369,7 @@ ${mermaid.trimEnd()}
 ## Edge Styles
 
 - Solid edges are static runtime imports.
-- Dashed edges are dynamic imports or type-only-only dependencies.
+- Dashed edges are dynamic imports or type-only dependencies.
 - Dotted edges are re-export-only dependencies.
 `;
 
@@ -384,7 +388,7 @@ export const createGraphArtifacts = (
 };
 
 export const renderSvgFromDot = (dot: string) => {
-  const result = spawnSync('dot', ['-Tsvg'], {
+  const result = spawnSync(resolveTrustedTool('dot'), ['-Tsvg'], {
     encoding: 'utf8',
     input: dot,
     maxBuffer: MAX_GRAPHVIZ_OUTPUT_BYTES,
@@ -435,9 +439,14 @@ export const compareArtifactDirectories = ({
       continue;
     }
 
-    if (
-      readFileSync(actualPath, 'utf8') !== readFileSync(expectedPath, 'utf8')
-    ) {
+    const actualContent = normalizeLineEndings(
+      readFileSync(actualPath, 'utf8')
+    );
+    const expectedContent = normalizeLineEndings(
+      readFileSync(expectedPath, 'utf8')
+    );
+
+    if (actualContent !== expectedContent) {
       staleFiles.push(fileName);
     }
   }
