@@ -128,7 +128,7 @@
     "@tailwindcss/postcss": "4.1.18",
     "@tanstack/eslint-plugin-query": "5.91.4",
     "@tanstack/eslint-plugin-router": "1.161.4",
-    "@types/nodemailer": "7.0.9",
+    "@types/nodemailer": "8.0.1",
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
