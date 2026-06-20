@@ -71,18 +71,18 @@ function srcJsonImportPlugin(): Plugin {
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
-  const privateEnv = loadEnv(mode, process.cwd(), '');
+  const sentryEnv = loadEnv(mode, process.cwd(), 'SENTRY_');
   const envName = env.VITE_ENV_NAME?.toLowerCase();
   const isTestRuntime = envName === 'test' || envName === 'tests';
   const sentryPlugins =
     env.VITE_SENTRY_DSN &&
-    privateEnv.SENTRY_ORG &&
-    privateEnv.SENTRY_PROJECT &&
-    privateEnv.SENTRY_AUTH_TOKEN
+    sentryEnv.SENTRY_ORG &&
+    sentryEnv.SENTRY_PROJECT &&
+    sentryEnv.SENTRY_AUTH_TOKEN
       ? sentryTanstackStart({
-          org: privateEnv.SENTRY_ORG,
-          project: privateEnv.SENTRY_PROJECT,
-          authToken: privateEnv.SENTRY_AUTH_TOKEN,
+          org: sentryEnv.SENTRY_ORG,
+          project: sentryEnv.SENTRY_PROJECT,
+          authToken: sentryEnv.SENTRY_AUTH_TOKEN,
         })
       : [];
 

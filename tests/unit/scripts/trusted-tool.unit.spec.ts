@@ -10,6 +10,11 @@ describe('trusted tool resolution', () => {
     expect(() => resolveTrustedTool('../git')).toThrow(TrustedToolError);
   });
 
+  it('rejects dot-only tool names before path resolution', () => {
+    expect(() => resolveTrustedTool('.')).toThrow(TrustedToolError);
+    expect(() => resolveTrustedTool('..')).toThrow(TrustedToolError);
+  });
+
   it('resolves git from the fixed trusted directory allowlist', () => {
     expect(resolveTrustedTool('git')).toMatch(/git(?:\.exe)?$/);
   });

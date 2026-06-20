@@ -36,7 +36,11 @@ const executableNamesForPlatform = (toolName: string) =>
     : [toolName];
 
 export const resolveTrustedTool = (toolName: string) => {
-  if (!TOOL_NAME_PATTERN.test(toolName)) {
+  if (
+    !TOOL_NAME_PATTERN.test(toolName) ||
+    toolName === '.' ||
+    toolName === '..'
+  ) {
     throw new TrustedToolError(`Invalid trusted tool name: ${toolName}`);
   }
 
