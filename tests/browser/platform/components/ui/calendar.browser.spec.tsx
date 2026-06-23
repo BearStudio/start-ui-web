@@ -1,7 +1,13 @@
 import { page, render } from '@tests/utils';
-import dayjs from 'dayjs';
 import * as module from 'react-i18next';
 import { describe, expect, it, vi } from 'vitest';
+
+import {
+  addDaysToDate,
+  formatCurrentDate,
+  parseStringToDate,
+  withDayOfMonth,
+} from '@/platform/lib/temporal/date-time';
 
 import { Calendar } from '@/platform/components/ui/calendar';
 
@@ -13,6 +19,13 @@ vi.mocked(module.useTranslation).mockImplementation(
       t: (key: string) => key,
     }) as ReturnType<typeof module.useTranslation>
 );
+
+const formatCalendarAriaDate = (date: Date) =>
+  new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'long',
+    weekday: 'long',
+  }).format(date);
 
 describe('Calendar', () => {
   it('should render with previous and next button by default', async () => {
@@ -59,15 +72,14 @@ describe('Calendar', () => {
         mode="single"
         selected={new Date()}
         onSelect={(v) => {
-          // Start of day is easier to expect
-          onSelect(dayjs(v).startOf('day').toDate());
+          onSelect(v);
         }}
       />
     );
 
     // 12 always exist in a month
-    const targetDate = dayjs().set('date', 12);
-    const ariaLabel = targetDate.format('dddd, MMMM D');
+    const targetDate = withDayOfMonth(new Date(), 12);
+    const ariaLabel = formatCalendarAriaDate(targetDate);
 
     // exact false because we don't provide the end of the aria-label (the year mostly)
     const button = page.getByLabelText(ariaLabel, { exact: false });
@@ -75,7 +87,7 @@ describe('Calendar', () => {
 
     await button.click();
 
-    expect(onSelect).toHaveBeenCalledWith(targetDate.startOf('day').toDate());
+    expect(onSelect).toHaveBeenCalledWith(targetDate);
   });
 
   it('should be able to select today using aria-label', async () => {
@@ -84,16 +96,15 @@ describe('Calendar', () => {
     render(
       <Calendar
         mode="single"
-        selected={dayjs().add(2, 'days').toDate()} // just to make sure that today will be selected
+        selected={addDaysToDate(new Date(), 2)} // just to make sure that today will be selected
         onSelect={(v) => {
-          // Start of day is easier to expect
-          onSelect(dayjs(v).startOf('day').toDate());
+          onSelect(v);
         }}
       />
     );
 
     // today
-    const targetDate = dayjs();
+    const targetDate = parseStringToDate(formatCurrentDate());
 
     // exact false because we don't provide the end of the aria-label
     const button = page.getByLabelText('Today', { exact: false });
@@ -101,6 +112,6 @@ describe('Calendar', () => {
 
     await button.click();
 
-    expect(onSelect).toHaveBeenCalledWith(targetDate.startOf('day').toDate());
+    expect(onSelect).toHaveBeenCalledWith(targetDate);
   });
 });

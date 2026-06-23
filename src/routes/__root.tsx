@@ -11,7 +11,7 @@ import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getPageTitle } from '@/platform/lib/get-page-title';
-import i18n, { syncLanguage } from '@/platform/lib/i18n';
+import i18n from '@/platform/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/platform/lib/i18n/constants';
 
 import { PageError } from '@/platform/components/errors/page-error';
@@ -113,7 +113,6 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
-  syncLanguage(i18n.language);
 
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language

@@ -1,12 +1,12 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { match, P } from 'ts-pattern';
 
 import { cn } from '@/platform/lib/tailwind/utils';
+import { formatRelativeDate } from '@/platform/lib/temporal/date-time';
 
 import {
   ManagerPageLayout as PageLayout,
@@ -39,7 +39,7 @@ import { useCurrentScopeKey } from '@/modules/auth/client';
 import { userQueries } from '@/modules/user/client';
 
 export const PageUsers = (props: { search: { searchTerm?: string } }) => {
-  const { t } = useTranslation(['user']);
+  const { i18n, t } = useTranslation(['user']);
   const router = useRouter();
   const scopeKey = useCurrentScopeKey();
 
@@ -183,7 +183,9 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                         {item.onboardedAt ? (
                           <>
                             {t('user:common.onboardingStatus.onboardedAt', {
-                              time: dayjs(item.onboardedAt).fromNow(),
+                              time: formatRelativeDate(item.onboardedAt, {
+                                locale: i18n.language,
+                              }),
                             })}
                           </>
                         ) : (

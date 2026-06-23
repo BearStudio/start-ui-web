@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import type { ComponentProps } from 'react';
 
 import { useDatePickerInputManagement } from '@/platform/components/ui/date-input-management';
@@ -35,9 +34,7 @@ export const DateInput = ({
         onKeyDown?.(e);
       }}
       onChange={datePickerInputManagement.handleInputChange}
-      value={
-        datePickerInputManagement.inputValue ?? dayjs(value).format(format)
-      }
+      value={datePickerInputManagement.inputValue}
       placeholder={format}
       {...props}
     />

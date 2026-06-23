@@ -12,13 +12,15 @@ overrides:
   # PR #40, 2026-05-27: keep toolchain consumers on a known-good current glob 13 release.
   # Re-evaluate after the next dependency compatibility pass confirms the override is no longer needed.
   glob: 13.0.6
+  http-proxy-middleware: 3.0.7
   # better-auth 1.6.13 advertises kysely 0.29 support, but its kysely adapter
   # still imports root migration constants removed at runtime in kysely 0.29.
   kysely: 0.28.17
   qs: 6.15.2
-  'react-cosmos>ws': 8.20.1
+  'react-cosmos>ws': 8.21.0
   shell-quote: 1.8.4
   svgo: 4.0.1
+  'testcontainers>undici': 7.28.0
 
 peerDependencyRules:
   allowedVersions:

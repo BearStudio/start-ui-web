@@ -1,6 +1,10 @@
-import dayjs from 'dayjs';
 import childProcess from 'node:child_process';
 import fs from 'node:fs';
+
+import {
+  formatCurrentDate,
+  formatCurrentLocalIsoDateTime,
+} from '@/platform/lib/temporal/date-time';
 
 import { AppError } from '@/modules/kernel/domain/errors/app-error';
 
@@ -29,10 +33,10 @@ const getContent = () => {
   };
 
   return {
-    display: getCommitHashShort() ?? dayjs().format('YYYY-MM-DD'),
-    version: `${getCommitHashShort() ?? 'No commit'} - ${dayjs().format()}`,
+    display: getCommitHashShort() ?? formatCurrentDate('YYYY-MM-DD'),
+    version: `${getCommitHashShort() ?? 'No commit'} - ${formatCurrentLocalIsoDateTime()}`,
     commit: getCommitHash() ?? 'No commit',
-    date: dayjs().format(),
+    date: formatCurrentLocalIsoDateTime(),
   };
 };
 

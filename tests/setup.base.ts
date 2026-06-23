@@ -1,1 +1,1 @@
-import '@/platform/lib/dayjs/config';
+import '@/platform/lib/temporal/polyfill';

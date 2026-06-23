@@ -1,5 +1,12 @@
-import dayjs from 'dayjs';
 import { useState } from 'react';
+
+import {
+  addMonthsToDate,
+  endOfTodayYearDate,
+  formatDate,
+  startOfTodayYearDate,
+  withDayOfMonth,
+} from '@/platform/lib/temporal/date-time';
 
 import { Calendar } from '@/platform/components/ui/calendar';
 const Default = () => {
@@ -20,9 +27,7 @@ const Controlled = () => {
       }}
       footer={
         <div className="mt-4 text-sm">
-          {selected
-            ? `Selected: ${dayjs(selected).format('DD/MM/YYYY')}`
-            : 'Pick a day'}
+          {selected ? `Selected: ${formatDate(selected)}` : 'Pick a day'}
         </div>
       }
     />
@@ -32,8 +37,8 @@ const Controlled = () => {
 const WithStartAndEndMonths = () => {
   return (
     <Calendar
-      startMonth={dayjs().startOf('year').subtract(2, 'months').toDate()}
-      endMonth={dayjs().endOf('year').add(2, 'months').toDate()}
+      startMonth={addMonthsToDate(startOfTodayYearDate(), -2)}
+      endMonth={addMonthsToDate(endOfTodayYearDate(), 2)}
     />
   );
 };
@@ -47,7 +52,7 @@ const Dropdowns = () => {
 };
 
 const DisabledSelected = () => {
-  const date = dayjs().set('date', 8).toDate();
+  const date = withDayOfMonth(new Date(), 8);
 
   return <Calendar mode="single" selected={date} disabled={date} />;
 };

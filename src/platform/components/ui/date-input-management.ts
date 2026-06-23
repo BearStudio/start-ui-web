@@ -1,7 +1,11 @@
-import dayjs from 'dayjs';
 import { type ChangeEvent, type ChangeEventHandler, useState } from 'react';
 
-import { parseStringToDate } from '@/platform/lib/dayjs/parse-string-to-date';
+import {
+  formatDate,
+  isSameDate,
+  parseDateByFormat,
+  parseStringToDate,
+} from '@/platform/lib/temporal/date-time';
 
 type UseDayPickerInputManagement = {
   inputValue: string;
@@ -21,7 +25,7 @@ export const useDatePickerInputManagement = (
 ): UseDayPickerInputManagement => {
   const { dateValue, dateFormat, onChange } = params;
   const [inputValue, setInputValue] = useState<string>(
-    dateValue ? dayjs(dateValue).format(dateFormat) : ''
+    formatDate(dateValue, dateFormat)
   );
 
   // Update the state if the value or the format changes (adjusting state during render)
@@ -30,45 +34,41 @@ export const useDatePickerInputManagement = (
   if (dateValue !== prevDateValue || dateFormat !== prevDateFormat) {
     setPrevDateValue(dateValue);
     setPrevDateFormat(dateFormat);
-    setInputValue(dateValue ? dayjs(dateValue).format(dateFormat) : '');
+    setInputValue(formatDate(dateValue, dateFormat));
   }
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.currentTarget.value);
-    const date = dayjs(e.currentTarget.value, dateFormat, true);
-    if (date.isValid()) {
-      const dateValue = date.startOf('day').toDate();
-      onChange(dateValue);
+    const date = parseDateByFormat(e.currentTarget.value, dateFormat);
+    if (!Number.isNaN(date.getTime())) {
+      onChange(date);
     }
   };
 
   const handleInputBlur = (inputValue: string) => {
-    const date = dayjs(parseStringToDate(inputValue));
+    const date = parseStringToDate(inputValue);
 
-    if (!date.isValid()) {
+    if (Number.isNaN(date.getTime())) {
       if (!inputValue) {
         onChange(null);
         return;
       }
 
-      const dateValueAsDayjs = dayjs(dateValue);
-      setInputValue(
-        dateValueAsDayjs.isValid() ? dateValueAsDayjs.format(dateFormat) : ''
-      );
+      setInputValue(formatDate(dateValue, dateFormat));
       return;
     }
 
-    const isNewValue = !date.isSame(dateValue, 'date');
+    const isNewValue = !isSameDate(date, dateValue);
     if (!isNewValue) {
-      setInputValue(date.format(dateFormat));
+      setInputValue(formatDate(date, dateFormat));
       // To avoid the issue of non-selection when:
       // * The input is focused with an already selected value
       // * A new date is clicked directly
       return;
     }
 
-    onChange(date.toDate());
-    setInputValue(date.format(dateFormat));
+    onChange(date);
+    setInputValue(formatDate(date, dateFormat));
   };
 
   return { inputValue, setInputValue, handleInputChange, handleInputBlur };

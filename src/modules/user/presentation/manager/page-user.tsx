@@ -6,12 +6,15 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { match, P } from 'ts-pattern';
 
+import {
+  formatDate,
+  formatRelativeDate,
+} from '@/platform/lib/temporal/date-time';
 import { useNavigateBack } from '@/platform/hooks/use-navigate-back';
 
 import { BackButton } from '@/platform/components/back-button';
@@ -218,7 +221,8 @@ export const PageUser = (props: { params: { id: string } }) => {
                       {user.onboardedAt ? (
                         <>
                           {t('user:common.onboardingStatus.onboardedAt', {
-                            time: dayjs(user.onboardedAt).format(
+                            time: formatDate(
+                              user.onboardedAt,
                               'DD/MM/YYYY [at] HH:mm'
                             ),
                           })}
@@ -245,7 +249,7 @@ export const PageUser = (props: { params: { id: string } }) => {
 };
 
 const UserSessions = (props: { userId: UserId }) => {
-  const { t } = useTranslation(['user']);
+  const { i18n, t } = useTranslation(['user']);
   const scopeKey = useCurrentScopeKey();
   const sessionsQuery = useInfiniteQuery(
     userQueries.getUserSessionsInfinite({
@@ -308,14 +312,18 @@ const UserSessions = (props: { userId: UserId }) => {
                   <DataListCell>
                     <DataListText className="text-muted-foreground">
                       {t('user:manager.detail.sessionUpdated', {
-                        time: dayjs(item.updatedAt).fromNow(),
+                        time: formatRelativeDate(item.updatedAt, {
+                          locale: i18n.language,
+                        }),
                       })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>
                     <DataListText className="text-muted-foreground">
                       {t('user:manager.detail.sessionExpires', {
-                        time: dayjs().to(item.expiresAt),
+                        time: formatRelativeDate(item.expiresAt, {
+                          locale: i18n.language,
+                        }),
                       })}
                     </DataListText>
                   </DataListCell>

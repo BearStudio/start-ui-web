@@ -1,5 +1,3 @@
-import 'dayjs/locale/en.js';
-
 import account from './account.json' with { type: 'json' };
 import auth from './auth.json' with { type: 'json' };
 import book from './book.json' with { type: 'json' };

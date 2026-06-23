@@ -10,11 +10,15 @@ import {
   type Auth,
   createAuth,
 } from '@/modules/auth/infrastructure/better-auth/auth';
+import { isBlockedBetterAuthHttpPath } from '@/modules/auth/infrastructure/better-auth/auth-http-exposure';
 import { AuthorizationGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/authorization-gateway-better-auth';
 import { SessionGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/session-gateway-better-auth';
 import { UserAdminGatewayBetterAuth } from '@/modules/auth/infrastructure/better-auth/user-admin-gateway-better-auth';
 import { ConfigurationError } from '@/modules/kernel/domain/errors/configuration-error';
-import { getAuthProviderConfig } from '@/modules/kernel/infrastructure/config/auth';
+import {
+  getAuthProviderConfig,
+  getBetterAuthConfig,
+} from '@/modules/kernel/infrastructure/config/auth';
 
 import { AuthEmailPortEmailGateway } from './auth-email-port';
 import { getEmailGateway } from './email';
@@ -72,9 +76,21 @@ const buildAuthHttpGateway = (
 ): AuthHttpGateway => {
   if (overrides?.authHttpGateway) return overrides.authHttpGateway;
   const authInstance = getAuth(overrides);
+  const { adminEndpointsEnabled, openApiEnabled } = getBetterAuthConfig();
 
   return {
-    handle: (request) => authInstance.handler(request),
+    handle: (request) => {
+      const { pathname } = new URL(request.url);
+      if (
+        isBlockedBetterAuthHttpPath(pathname, {
+          adminEndpointsEnabled,
+          openApiEnabled,
+        })
+      ) {
+        return new Response('Not Found', { status: 404 });
+      }
+      return authInstance.handler(request);
+    },
   };
 };
 
