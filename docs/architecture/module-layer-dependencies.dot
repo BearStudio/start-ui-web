@@ -143,7 +143,7 @@ digraph ModuleLayerDependencies {
   "email/public" -> "email/infrastructure" [style="solid"];
   "email/public" -> "email/presentation" [style="dotted"];
   "email/public" -> "email/transport" [style="solid"];
-  "email/public" -> "kernel/infrastructure" [style="dashed"];
+  "email/public" -> "kernel/public" [style="dashed"];
   "email/public" -> "kernel/transport" [style="solid"];
   "email/transport" -> "email/public" [style="solid"];
   "email/transport" -> "kernel/domain" [style="solid"];

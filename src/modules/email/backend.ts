@@ -20,7 +20,7 @@ const getDeps = createServerOnlyFn(
     ] = await Promise.all([
       import('@/composition/email'),
       import('@/composition/kernel'),
-      import('@/modules/kernel/infrastructure/config/email'),
+      import('@/modules/kernel/backend'),
     ]);
 
     return {

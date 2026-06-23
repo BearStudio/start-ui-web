@@ -20,6 +20,16 @@ type UseDayPickerInputManagementParams = {
   onChange: (newDate: Date | null) => void;
 };
 
+const INPUT_SEPARATOR_PATTERN = /[ ./\-_]+/g;
+
+const getBlurDateFormats = (dateFormat: string) => {
+  const compactFormat = dateFormat.replace(INPUT_SEPARATOR_PATTERN, '');
+
+  return compactFormat === dateFormat
+    ? [dateFormat]
+    : [dateFormat, compactFormat];
+};
+
 export const useDatePickerInputManagement = (
   params: UseDayPickerInputManagementParams
 ): UseDayPickerInputManagement => {
@@ -46,7 +56,9 @@ export const useDatePickerInputManagement = (
   };
 
   const handleInputBlur = (inputValue: string) => {
-    const date = parseStringToDate(inputValue, [dateFormat]);
+    const date = parseStringToDate(inputValue, getBlurDateFormats(dateFormat), {
+      includeDefaultFormats: false,
+    });
 
     if (Number.isNaN(date.getTime())) {
       if (!inputValue) {

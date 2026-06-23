@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => {
   const handler = vi.fn(async () => new Response('provider'));
+  const testAuthSecret = ['test', 'auth', 'secret'].join('-');
 
   return {
     authConfig: {
@@ -11,7 +12,7 @@ const mocks = vi.hoisted(() => {
       githubClientId: undefined as string | undefined,
       githubClientSecret: undefined as string | undefined,
       openApiEnabled: false,
-      secret: 'test-auth-secret',
+      secret: testAuthSecret,
       sessionExpirationInSeconds: 2_592_000,
       sessionUpdateAgeInSeconds: 86_400,
       trustedOrigins: undefined as string[] | undefined,

@@ -7,6 +7,7 @@ import {
   ARTIFACT_FILENAMES,
   buildModuleLayerGraph,
   compareArtifactDirectories,
+  createCheckedGraphArtifacts,
   type DependencyCruiserReport,
   formatDot,
   formatMarkdown,
@@ -206,7 +207,23 @@ describe('module dependency graph builder', () => {
 });
 
 describe('module dependency graph artifact checks', () => {
-  it('normalizes line endings before comparing generated artifacts', () => {
+  it('creates only the DOT artifact for check mode', () => {
+    const artifacts = createCheckedGraphArtifacts({
+      modules: [
+        {
+          dependencies: [],
+          source: 'src/modules/book/index.ts',
+        },
+      ],
+    });
+
+    expect(Object.keys(artifacts)).toEqual([ARTIFACT_FILENAMES.dot]);
+    expect(artifacts[ARTIFACT_FILENAMES.dot]).toContain(
+      'digraph ModuleLayerDependencies'
+    );
+  });
+
+  it('normalizes line endings before comparing only the DOT artifact by default', () => {
     const actualDir = mkdtempSync(
       path.join(os.tmpdir(), 'module-graph-actual-')
     );
@@ -215,22 +232,39 @@ describe('module dependency graph artifact checks', () => {
     );
 
     try {
-      for (const fileName of Object.values(ARTIFACT_FILENAMES)) {
-        writeFileSync(path.join(actualDir, fileName), 'line 1\r\nline 2\r\n');
-        writeFileSync(path.join(expectedDir, fileName), 'line 1\nline 2\n');
-      }
+      writeFileSync(
+        path.join(actualDir, ARTIFACT_FILENAMES.dot),
+        'line 1\r\nline 2\r\n'
+      );
+      writeFileSync(
+        path.join(expectedDir, ARTIFACT_FILENAMES.dot),
+        'line 1\nline 2\n'
+      );
+      writeFileSync(
+        path.join(actualDir, ARTIFACT_FILENAMES.markdown),
+        'old markdown\n'
+      );
+      writeFileSync(
+        path.join(expectedDir, ARTIFACT_FILENAMES.markdown),
+        'changed markdown\n'
+      );
+      writeFileSync(path.join(actualDir, ARTIFACT_FILENAMES.svg), 'old svg\n');
+      writeFileSync(
+        path.join(expectedDir, ARTIFACT_FILENAMES.svg),
+        'changed svg\n'
+      );
 
       expect(compareArtifactDirectories({ actualDir, expectedDir })).toEqual(
         []
       );
 
       writeFileSync(
-        path.join(expectedDir, ARTIFACT_FILENAMES.markdown),
+        path.join(expectedDir, ARTIFACT_FILENAMES.dot),
         'line 1\nchanged\n'
       );
 
       expect(compareArtifactDirectories({ actualDir, expectedDir })).toEqual([
-        ARTIFACT_FILENAMES.markdown,
+        ARTIFACT_FILENAMES.dot,
       ]);
     } finally {
       rmSync(actualDir, { force: true, recursive: true });

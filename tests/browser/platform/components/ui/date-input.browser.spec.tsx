@@ -33,18 +33,27 @@ const ManagedDateInput = (props: {
 describe('DateInput', () => {
   it('keeps blur parsing aligned with the configured format', async () => {
     const user = setupUser();
-    const onChange = vi.fn();
 
-    render(<ManagedDateInput format="MM/DD" onChange={onChange} />);
+    const expectBlurParsedAsMayTenth = async (inputValue: string) => {
+      const onChange = vi.fn();
+      const view = await render(
+        <ManagedDateInput format="MM/DD" onChange={onChange} />
+      );
 
-    const input = page.getByLabelText('Date');
-    await expect.element(input).toBeInTheDocument();
+      const input = page.getByLabelText('Date');
+      await expect.element(input).toBeInTheDocument();
 
-    await user.type(input.element() as HTMLInputElement, '05/10');
-    await user.click(page.getByRole('button', { name: 'Blur target' }));
+      await user.type(input.element() as HTMLInputElement, inputValue);
+      await user.click(page.getByRole('button', { name: 'Blur target' }));
 
-    const lastDate = onChange.mock.lastCall?.[0];
-    expect(lastDate).toBeInstanceOf(Date);
-    expect(formatDate(lastDate, 'DD/MM')).toBe('10/05');
+      const lastDate = onChange.mock.lastCall?.[0];
+      expect(lastDate).toBeInstanceOf(Date);
+      expect(formatDate(lastDate, 'DD/MM')).toBe('10/05');
+
+      await view.unmount();
+    };
+
+    await expectBlurParsedAsMayTenth('05/10');
+    await expectBlurParsedAsMayTenth('0510');
   });
 });

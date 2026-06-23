@@ -96,6 +96,22 @@ describe('parseStringToDate', () => {
 
     expect(formatDate(parsed)).toBe('10/05/2026');
   });
+
+  it('can parse only supplied formats without default fallback', () => {
+    const parsed = parseStringToDate('0510', ['MM/DD', 'MMDD'], {
+      includeDefaultFormats: false,
+    });
+
+    expect(formatDate(parsed)).toBe('10/05/2026');
+  });
+
+  it('returns invalid date when supplied formats do not match and defaults are disabled', () => {
+    const parsed = parseStringToDate('1005', ['MM/DD'], {
+      includeDefaultFormats: false,
+    });
+
+    expect(parsed.getTime()).toBeNaN();
+  });
 });
 
 describe('formatRelativeDate', () => {

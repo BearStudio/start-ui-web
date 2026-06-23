@@ -35,6 +35,10 @@ type CompiledDateFormat = {
   tokens: Array<DateToken>;
 };
 
+type ParseStringToDateOptions = {
+  includeDefaultFormats?: boolean;
+};
+
 type RelativeDateUnit = Intl.RelativeTimeFormatUnit;
 
 const compiledDateFormatsCache = new Map<string, CompiledDateFormat>();
@@ -256,10 +260,14 @@ const getRelativeDateUnit = (
 
 export const parseStringToDate = (
   input: string,
-  extraFormats: Array<string> = []
+  extraFormats: Array<string> = [],
+  options: ParseStringToDateOptions = {}
 ) => {
   const currentDate = getCurrentPlainDate();
-  const formats = [...extraFormats, ...DEFAULT_DATE_INPUT_FORMATS];
+  const formats =
+    options.includeDefaultFormats === false
+      ? extraFormats
+      : [...extraFormats, ...DEFAULT_DATE_INPUT_FORMATS];
 
   for (const format of formats) {
     const parts = parseDateParts(input, format, currentDate);

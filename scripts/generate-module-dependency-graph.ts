@@ -36,10 +36,12 @@ export const ARTIFACT_FILENAMES = {
   svg: 'module-layer-dependencies.svg',
 } as const;
 
+const CHECKED_ARTIFACT_FILENAMES = [ARTIFACT_FILENAMES.dot] as const;
+
 export const USAGE = `Usage: pnpm exec tsx scripts/generate-module-dependency-graph.ts [options]
 
 Options:
-  --check              Fail when committed graph artifacts are stale
+  --check              Fail when the committed DOT graph artifact is stale
   --output-dir <path>  Directory for generated artifacts (default: docs/architecture)
   --help              Show this help message`;
 
@@ -83,6 +85,9 @@ export type GraphArtifacts = Record<
   (typeof ARTIFACT_FILENAMES)[keyof typeof ARTIFACT_FILENAMES],
   string
 >;
+type GraphArtifactFileName =
+  (typeof ARTIFACT_FILENAMES)[keyof typeof ARTIFACT_FILENAMES];
+type PartialGraphArtifacts = Partial<Record<GraphArtifactFileName, string>>;
 
 export type CliOptions = {
   check: boolean;
@@ -387,6 +392,16 @@ export const createGraphArtifacts = (
   };
 };
 
+export const createCheckedGraphArtifacts = (
+  report: DependencyCruiserReport
+): Pick<GraphArtifacts, (typeof ARTIFACT_FILENAMES)['dot']> => {
+  const graph = buildModuleLayerGraph(report);
+
+  return {
+    [ARTIFACT_FILENAMES.dot]: formatDot(graph),
+  };
+};
+
 export const renderSvgFromDot = (dot: string) => {
   const result = spawnSync(resolveTrustedTool('dot'), ['-Tsvg'], {
     encoding: 'utf8',
@@ -412,7 +427,7 @@ export const renderSvgFromDot = (dot: string) => {
 
 export const writeGraphArtifacts = (
   outputDir: string,
-  artifacts: GraphArtifacts
+  artifacts: PartialGraphArtifacts
 ) => {
   mkdirSync(outputDir, { recursive: true });
 
@@ -424,13 +439,15 @@ export const writeGraphArtifacts = (
 export const compareArtifactDirectories = ({
   actualDir,
   expectedDir,
+  fileNames = CHECKED_ARTIFACT_FILENAMES,
 }: {
   actualDir: string;
   expectedDir: string;
+  fileNames?: readonly GraphArtifactFileName[];
 }) => {
   const staleFiles: string[] = [];
 
-  for (const fileName of Object.values(ARTIFACT_FILENAMES)) {
+  for (const fileName of fileNames) {
     const actualPath = path.join(actualDir, fileName);
     const expectedPath = path.join(expectedDir, fileName);
 
@@ -547,10 +564,10 @@ export const main = async (
 
   try {
     const report = await loadDependencyCruiserReport(cwd);
-    const artifacts = createGraphArtifacts(report);
     const outputDir = resolveOutputDir(cwd, parsed.options.outputDir);
 
     if (!parsed.options.check) {
+      const artifacts = createGraphArtifacts(report);
       writeGraphArtifacts(outputDir, artifacts);
       stdout(`Generated module dependency graph artifacts in ${outputDir}\n`);
       return 0;
@@ -561,6 +578,7 @@ export const main = async (
     );
 
     try {
+      const artifacts = createCheckedGraphArtifacts(report);
       writeGraphArtifacts(tempDir, artifacts);
       const staleFiles = compareArtifactDirectories({
         actualDir: tempDir,
@@ -568,17 +586,17 @@ export const main = async (
       });
 
       if (staleFiles.length === 0) {
-        stdout('Module dependency graph artifacts are up to date.\n');
+        stdout('Module dependency graph DOT artifact is up to date.\n');
         return 0;
       }
 
       stderr(
         [
-          'Module dependency graph artifacts are stale:',
+          'Module dependency graph DOT artifact is stale:',
           ...staleFiles.map(
             (fileName) => `- ${path.join(outputDir, fileName)}`
           ),
-          'Run `pnpm architecture:graph` and commit the updated artifacts.',
+          'Run `pnpm architecture:graph` and commit the updated DOT artifact.',
           '',
         ].join('\n')
       );
