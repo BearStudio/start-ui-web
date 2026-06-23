@@ -21,6 +21,22 @@ const makeRequest = (body = 'raw-body', headers?: HeadersInit) =>
     },
   });
 
+const makeStreamingRequest = (
+  body: ReadableStream<Uint8Array>,
+  headers?: HeadersInit
+) =>
+  new Request('https://example.test/api/webhooks/resend', {
+    method: 'POST',
+    body,
+    headers: {
+      'svix-id': 'evt_1',
+      'svix-timestamp': '1704067200',
+      'svix-signature': 'sig_1',
+      ...headers,
+    },
+    duplex: 'half',
+  } as RequestInit & { duplex: 'half' });
+
 const makeEmailEvent = (type = 'email.delivered') =>
   ({
     type,
@@ -62,24 +78,75 @@ describe('Resend webhook HTTP handlers', () => {
     });
   });
 
-  it('rejects requests missing Svix signature headers', async () => {
+  it('rejects requests missing Svix signature headers before reading the body', async () => {
+    const request = new Request('https://example.test/api/webhooks/resend', {
+      method: 'POST',
+      body: 'raw-body',
+    });
+    const getReader = vi.spyOn(request.body!, 'getReader');
     const handlers = createResendWebhookHandlers({
       getUseCases: () => ({ processStatusEvent: vi.fn() }),
       verifier: { verify: vi.fn() },
     });
 
-    await expect(
-      handlers.receive(
-        new Request('https://example.test/api/webhooks/resend', {
-          method: 'POST',
-          body: 'raw-body',
-        })
-      )
-    ).rejects.toMatchObject({
+    await expect(handlers.receive(request)).rejects.toMatchObject({
       code: 'EMAIL_WEBHOOK_MISSING_HEADER',
       status: 400,
       details: { header: 'svix-id' },
     });
+    expect(getReader).not.toHaveBeenCalled();
+  });
+
+  it('rejects requests whose Content-Length is over the webhook byte limit', async () => {
+    const verifier = { verify: vi.fn() };
+    const handlers = createResendWebhookHandlers({
+      getUseCases: () => ({ processStatusEvent: vi.fn() }),
+      maxBodyBytes: 3,
+      verifier,
+    });
+
+    await expect(
+      handlers.receive(makeRequest('raw-body', { 'Content-Length': '4' }))
+    ).rejects.toMatchObject({
+      code: 'EMAIL_WEBHOOK_PAYLOAD_TOO_LARGE',
+      status: 413,
+      details: { maxBytes: 3 },
+    });
+    expect(verifier.verify).not.toHaveBeenCalled();
+  });
+
+  it('rejects streamed webhook bodies as soon as the byte limit is exceeded', async () => {
+    let canceled = false;
+    let chunkCount = 0;
+    const verifier = { verify: vi.fn() };
+    const body = new ReadableStream<Uint8Array>({
+      cancel() {
+        canceled = true;
+      },
+      pull(controller) {
+        chunkCount += 1;
+        controller.enqueue(new Uint8Array([chunkCount, chunkCount]));
+      },
+    });
+    const handlers = createResendWebhookHandlers({
+      getUseCases: () => ({ processStatusEvent: vi.fn() }),
+      maxBodyBytes: 3,
+      verifier,
+    });
+
+    await expect(
+      handlers.receive(
+        makeStreamingRequest(body, {
+          'Content-Length': '1',
+        })
+      )
+    ).rejects.toMatchObject({
+      code: 'EMAIL_WEBHOOK_PAYLOAD_TOO_LARGE',
+      status: 413,
+      details: { maxBytes: 3 },
+    });
+    expect(verifier.verify).not.toHaveBeenCalled();
+    expect(canceled).toBe(true);
   });
 
   it('surfaces invalid signature errors from the verifier', async () => {

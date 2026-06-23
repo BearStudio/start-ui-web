@@ -22,6 +22,7 @@ const testState = vi.hoisted(() => {
   const makeEmailConfig = () => ({
     resendApiKey: makeSecret('resend-api-key'),
     resendWebhookSecret: makeSecret('resend-webhook'),
+    resendWebhookMaxBytes: 1_000_000,
     from: 'Start UI <noreply@example.com>',
     deliveryDisabled: false,
   });

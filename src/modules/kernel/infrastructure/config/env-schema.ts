@@ -25,7 +25,7 @@ export const isDevRuntimeEnvironment = (source?: RuntimeEnv) => {
 
 export const shouldSkipEnvValidation = (source?: RuntimeEnv) => {
   const env = source ?? runtimeEnv();
-  return isTruthy(env.SKIP_ENV_VALIDATION);
+  return isTruthy(env.SKIP_ENV_VALIDATION) && !isProdRuntimeEnvironment(env);
 };
 
 export const zNonEmptyEnvString = () => z.string().trim().min(1);

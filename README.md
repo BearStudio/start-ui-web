@@ -226,7 +226,7 @@ Wrangler can detect TanStack Start and generate the Worker configuration for `.o
 For Workers Builds from the Cloudflare dashboard:
 
 * Deploy command: `pnpm dlx wrangler deploy`
-* Build variables: set `NODE_VERSION=24` and `PNPM_VERSION=11.1.3`
+* Build variables: set `NODE_VERSION=24` and `PNPM_VERSION=11.9.0`
 * Secrets and environment variables: add the production values from `.env.example`
 
 For source-controlled Worker configuration, install Wrangler and the Cloudflare Vite plugin, then follow Cloudflare's existing-app setup for `vite.config.ts` and `wrangler.jsonc`.

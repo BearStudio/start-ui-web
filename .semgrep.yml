@@ -1,4 +1,24 @@
 rules:
+  - id: no-vite-empty-env-prefix
+    message: Do not use an empty Vite env prefix; it can expose unprefixed secrets to client bundles.
+    severity: ERROR
+    languages:
+      - typescript
+      - javascript
+    pattern-either:
+      - pattern: loadEnv($MODE, $DIR, '')
+      - pattern: loadEnv($MODE, $DIR, "")
+      - pattern: |
+          envPrefix: ''
+      - pattern: |
+          envPrefix: ""
+    paths:
+      include:
+        - vite.config.ts
+        - vite.*.ts
+        - vite.config.js
+        - vite.*.js
+
   - id: no-react-hook-form-imports
     message: Use TanStack Form via src/platform/components/form/use-app-form.ts; do not add React Hook Form back.
     severity: ERROR

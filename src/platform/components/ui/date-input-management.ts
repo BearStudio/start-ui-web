@@ -46,7 +46,7 @@ export const useDatePickerInputManagement = (
   };
 
   const handleInputBlur = (inputValue: string) => {
-    const date = parseStringToDate(inputValue);
+    const date = parseStringToDate(inputValue, [dateFormat]);
 
     if (Number.isNaN(date.getTime())) {
       if (!inputValue) {

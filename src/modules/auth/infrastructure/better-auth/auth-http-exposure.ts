@@ -18,11 +18,30 @@ export type AuthHttpExposureFlags = {
   basePath?: string;
   /** Expose Better Auth's `/admin/*` HTTP endpoints. */
   adminEndpointsEnabled: boolean;
+  /** Demo deployments must keep provider-direct admin mutations unreachable. */
+  isDemo?: boolean;
   /** Expose `/open-api/generate-schema` and the `/reference` page. */
   openApiEnabled: boolean;
 };
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
+const normalizePathname = (value: string) => {
+  let normalized = '';
+  let previousWasSlash = false;
+
+  for (const char of value) {
+    if (char === '/') {
+      if (!previousWasSlash) normalized += char;
+      previousWasSlash = true;
+      continue;
+    }
+
+    normalized += char;
+    previousWasSlash = false;
+  }
+
+  return normalized;
+};
 
 /**
  * True when `pathname` is exactly `prefix` or sits directly beneath it
@@ -36,21 +55,24 @@ export const isBlockedBetterAuthHttpPath = (
   pathname: string,
   flags: AuthHttpExposureFlags
 ): boolean => {
+  const normalizedPathname = normalizePathname(pathname);
   const basePath = trimTrailingSlash(
     flags.basePath ?? DEFAULT_BETTER_AUTH_BASE_PATH
   );
+  const adminEndpointsEnabled =
+    flags.adminEndpointsEnabled && flags.isDemo !== true;
 
   if (
-    !flags.adminEndpointsEnabled &&
-    isUnderPrefix(pathname, `${basePath}/admin`)
+    !adminEndpointsEnabled &&
+    isUnderPrefix(normalizedPathname, `${basePath}/admin`)
   ) {
     return true;
   }
 
   if (
     !flags.openApiEnabled &&
-    (isUnderPrefix(pathname, `${basePath}/open-api`) ||
-      isUnderPrefix(pathname, `${basePath}/reference`))
+    (isUnderPrefix(normalizedPathname, `${basePath}/open-api`) ||
+      isUnderPrefix(normalizedPathname, `${basePath}/reference`))
   ) {
     return true;
   }

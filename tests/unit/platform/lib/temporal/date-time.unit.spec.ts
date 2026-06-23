@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   formatDate,
+  formatRelativeDate,
   parseStringToDate,
 } from '@/platform/lib/temporal/date-time';
 
@@ -94,5 +95,27 @@ describe('parseStringToDate', () => {
     const parsed = parseStringToDate('05/10', ['MM/DD']);
 
     expect(formatDate(parsed)).toBe('10/05/2026');
+  });
+});
+
+describe('formatRelativeDate', () => {
+  const SYSTEM_TIME = new Date(2026, 4, 15, 12);
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(SYSTEM_TIME);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('falls back to now when baseDate is invalid', () => {
+    const formatted = formatRelativeDate(new Date(2026, 4, 16, 12), {
+      baseDate: new Date(Number.NaN),
+      locale: 'en',
+    });
+
+    expect(formatted).toBe('tomorrow');
   });
 });

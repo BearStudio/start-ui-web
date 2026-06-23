@@ -11,6 +11,7 @@ const emailEnvSchema = baseEnvSchema
   .extend({
     RESEND_API_KEY: zNonEmptyEnvString(),
     RESEND_WEBHOOK_SECRET: z.string().trim().optional(),
+    RESEND_WEBHOOK_MAX_BYTES: z.coerce.number().int().positive().optional(),
     EMAIL_FROM: zNonEmptyEnvString(),
     EMAIL_DELIVERY_DISABLED: z.stringbool().default(false),
   })
@@ -27,6 +28,7 @@ const emailEnvSchema = baseEnvSchema
 export type EmailConfig = {
   resendApiKey: string;
   resendWebhookSecret?: string;
+  resendWebhookMaxBytes: number;
   from: string;
   deliveryDisabled: boolean;
 };
@@ -40,6 +42,7 @@ export function getEmailConfig(): EmailConfig {
   cachedEmailConfig = {
     resendApiKey: env.RESEND_API_KEY,
     resendWebhookSecret: env.RESEND_WEBHOOK_SECRET,
+    resendWebhookMaxBytes: env.RESEND_WEBHOOK_MAX_BYTES ?? 1_000_000,
     from: env.EMAIL_FROM,
     deliveryDisabled: env.EMAIL_DELIVERY_DISABLED,
   };

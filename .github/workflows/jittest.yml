@@ -1,0 +1,140 @@
+name: JiTTest
+
+on:
+  workflow_dispatch:
+    inputs:
+      base-ref:
+        description: Git ref to use as the parent revision.
+        required: true
+        default: origin/main
+      head-ref:
+        description: Git ref to use as the child revision.
+        required: true
+        default: HEAD
+      llm-model:
+        description: Optional Vercel AI Gateway model override. Blank uses jittest.config.json.
+        required: false
+        default: ''
+      pr-title:
+        description: Optional PR title for intent-aware analysis.
+        required: false
+        default: ''
+      pr-body:
+        description: Optional PR body for intent-aware analysis.
+        required: false
+        default: ''
+      context-file:
+        description: Optional local context file path for intent-aware analysis.
+        required: false
+        default: ''
+      fail-on:
+        description: Optional verdict floor that should fail the workflow.
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  jittest:
+    name: Catching JiTTest
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24
+          pnpm-version: 11.9.0
+
+      - name: Cache JiTTest LLM responses
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: .jittest/cache
+          key: ${{ runner.os }}-jittest-${{ hashFiles('pnpm-lock.yaml', 'jittest.config.json') }}
+          restore-keys: |
+            ${{ runner.os }}-jittest-
+
+      - name: Run JiTTest
+        env:
+          LLM_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+          LLM_MODEL: ${{ inputs['llm-model'] }}
+          BASE_REF: ${{ inputs['base-ref'] }}
+          HEAD_REF: ${{ inputs['head-ref'] }}
+          PR_TITLE: ${{ inputs['pr-title'] }}
+          PR_BODY: ${{ inputs['pr-body'] }}
+          CONTEXT_FILE: ${{ inputs['context-file'] }}
+          FAIL_ON: ${{ inputs['fail-on'] }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${LLM_API_KEY}" ]; then
+            echo "AI_GATEWAY_API_KEY secret is required to run JiTTest." >&2
+            exit 1
+          fi
+
+          mkdir -p .jittest
+
+          args=(
+            --output console
+            --base "${BASE_REF}"
+            --head "${HEAD_REF}"
+            --json-file .jittest/report.json
+            --summary-file "${GITHUB_STEP_SUMMARY}"
+            --comment-file .jittest/comment.md
+          )
+
+          if [ -n "${PR_TITLE}" ]; then
+            args+=(--pr-title "${PR_TITLE}")
+          fi
+
+          if [ -n "${PR_BODY}" ]; then
+            args+=(--pr-body "${PR_BODY}")
+          fi
+
+          if [ -n "${CONTEXT_FILE}" ]; then
+            args+=(--context-file "${CONTEXT_FILE}")
+          fi
+
+          if [ -n "${FAIL_ON}" ]; then
+            args+=(--fail-on "${FAIL_ON}")
+          fi
+
+          set +e
+          pnpm test:jittest -- "${args[@]}"
+          exit_code=$?
+          set -e
+
+          if [ "${exit_code}" -eq 3 ]; then
+            {
+              echo "## JiTTest"
+              echo
+              echo "Base and head resolved to the same commit; nothing to analyze."
+            } >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+
+          exit "${exit_code}"
+
+      - name: Upload JiTTest artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jittest-report
+          path: |
+            .jittest/report.json
+            .jittest/comment.md
+            .jittest/assessment-records.jsonl
+          if-no-files-found: warn
+          retention-days: 30

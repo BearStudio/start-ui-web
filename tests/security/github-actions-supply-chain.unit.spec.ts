@@ -444,6 +444,61 @@ describe('GitHub Actions supply-chain policy', () => {
     expect(violations).toEqual([]);
   });
 
+  it('requires migration integrity checks in default gates and CI', () => {
+    const scripts = (
+      JSON.parse(readProjectFile('package.json')) as {
+        scripts: Record<string, string>;
+      }
+    ).scripts;
+    const workflowPath = '.github/workflows/code-quality.yml';
+    const workflow = parseYamlProjectFile(workflowPath);
+    const migrationJobs = jobEntries(workflow).filter(({ job }) => {
+      const steps = Array.isArray(job.steps) ? job.steps : [];
+      return steps.some((step) => {
+        const stepRecord = asRecord(step);
+        return (
+          typeof stepRecord?.run === 'string' &&
+          stepRecord.run.includes('pnpm check:migrations')
+        );
+      });
+    });
+    const violations: string[] = [];
+
+    if (!scripts.check?.includes('check:migrations')) {
+      violations.push('package.json:scripts.check omits check:migrations');
+    }
+    if (!scripts['check:ci']?.includes('check:migrations')) {
+      violations.push('package.json:scripts.check:ci omits check:migrations');
+    }
+    if (!scripts.verify?.includes('pnpm check')) {
+      violations.push(
+        'package.json:scripts.verify does not inherit pnpm check'
+      );
+    }
+    if (migrationJobs.length === 0) {
+      violations.push(`${workflowPath} omits pnpm check:migrations`);
+    }
+
+    for (const { jobName, job } of migrationJobs) {
+      const steps = Array.isArray(job.steps) ? job.steps : [];
+      const checkoutStep = steps.map(asRecord).find((step) => {
+        return (
+          typeof step?.uses === 'string' &&
+          step.uses.startsWith('actions/checkout@')
+        );
+      });
+      const fetchDepth = asRecord(checkoutStep?.with)?.['fetch-depth'];
+
+      if (fetchDepth !== 0 && fetchDepth !== '0') {
+        violations.push(
+          `${workflowPath}:jobs.${jobName} must checkout with fetch-depth: 0 for migration comparisons`
+        );
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
   it('keeps write permissions limited to deployment and security upload scopes', () => {
     const violations: string[] = [];
 

@@ -37,6 +37,8 @@ type CompiledDateFormat = {
 
 type RelativeDateUnit = Intl.RelativeTimeFormatUnit;
 
+const compiledDateFormatsCache = new Map<string, CompiledDateFormat>();
+
 const escapeRegExp = (value: string) =>
   value.replace(REGEX_SPECIAL_CHARS, '\\$&');
 
@@ -72,6 +74,9 @@ const resolveTwoDigitYear = (year: number) =>
   year <= 68 ? 2000 + year : 1900 + year;
 
 const compileDateFormat = (format: string): CompiledDateFormat => {
+  const cached = compiledDateFormatsCache.get(format);
+  if (cached) return cached;
+
   const tokens: Array<DateToken> = [];
   let pattern = '^';
   let cursor = 0;
@@ -86,22 +91,22 @@ const compileDateFormat = (format: string): CompiledDateFormat => {
       pattern += escapeRegExp(token.slice(1, -1));
     } else if (token === 'D') {
       tokens.push('day');
-      pattern += '(\\d{1,2})';
+      pattern += String.raw`(\d{1,2})`;
     } else if (token === 'DD') {
       tokens.push('day');
-      pattern += '(\\d{2})';
+      pattern += String.raw`(\d{2})`;
     } else if (token === 'M') {
       tokens.push('month');
-      pattern += '(\\d{1,2})';
+      pattern += String.raw`(\d{1,2})`;
     } else if (token === 'MM') {
       tokens.push('month');
-      pattern += '(\\d{2})';
+      pattern += String.raw`(\d{2})`;
     } else if (token === 'YY') {
       tokens.push('yearTwoDigit');
-      pattern += '(\\d{2})';
+      pattern += String.raw`(\d{2})`;
     } else if (token === 'YYYY') {
       tokens.push('year');
-      pattern += '(\\d{4})';
+      pattern += String.raw`(\d{4})`;
     } else {
       pattern += escapeRegExp(token);
     }
@@ -112,7 +117,9 @@ const compileDateFormat = (format: string): CompiledDateFormat => {
   pattern += escapeRegExp(format.slice(cursor));
   pattern += '$';
 
-  return { regex: new RegExp(pattern), tokens };
+  const compiled = { regex: new RegExp(pattern), tokens };
+  compiledDateFormatsCache.set(format, compiled);
+  return compiled;
 };
 
 const buildDefaultDateInputFormats = () => {
@@ -328,9 +335,10 @@ export const formatRelativeDate = (
   if (!isValidDate(date)) return '';
 
   const target = instantFromDate(date);
-  const base = options.baseDate
-    ? instantFromDate(options.baseDate)
-    : Temporal.Now.instant();
+  const base =
+    options.baseDate && isValidDate(options.baseDate)
+      ? instantFromDate(options.baseDate)
+      : Temporal.Now.instant();
   const { value, unit } = getRelativeDateUnit(base, target);
 
   return new Intl.RelativeTimeFormat(options.locale, {

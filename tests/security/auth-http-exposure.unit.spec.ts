@@ -1,8 +1,13 @@
+import {
+  AUTH_HTTP_ALL_DISABLED_FLAGS,
+  CORE_AUTH_HTTP_PATHS,
+  SENSITIVE_AUTH_HTTP_PATHS,
+} from '@tests/support/auth-http-exposure-fixtures';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { isBlockedBetterAuthHttpPath } from '@/modules/auth/infrastructure/better-auth/auth-http-exposure';
+import { isBlockedBetterAuthHttpPath } from '@/modules/auth/testing';
 
 const root = process.cwd();
 
@@ -11,37 +16,11 @@ const root = process.cwd();
  * `z.stringbool().default(false)`), so the Better Auth `admin` HTTP endpoints
  * and the OpenAPI schema/reference are NOT exposed unless explicitly enabled.
  */
-const PRODUCTION_DEFAULT_FLAGS = {
-  adminEndpointsEnabled: false,
-  openApiEnabled: false,
-} as const;
-
-const SENSITIVE_AUTH_HTTP_PATHS = [
-  '/api/auth/admin/list-users',
-  '/api/auth/admin/set-role',
-  '/api/auth/admin/remove-user',
-  '/api/auth/admin/ban-user',
-  '/api/auth/admin/impersonate-user',
-  '/api/auth/admin/revoke-user-session',
-  '/api/auth/admin/revoke-user-sessions',
-  '/api/auth/admin/has-permission',
-  '/api/auth/open-api/generate-schema',
-  '/api/auth/reference',
-] as const;
-
-const CORE_AUTH_HTTP_PATHS = [
-  '/api/auth/sign-in/email-otp',
-  '/api/auth/email-otp/send-verification-otp',
-  '/api/auth/get-session',
-  '/api/auth/sign-out',
-  '/api/auth/callback/github',
-] as const;
-
 describe('Better Auth HTTP exposure (default-off posture)', () => {
   it('blocks admin and OpenAPI endpoints under the shipped default config', () => {
     for (const pathname of SENSITIVE_AUTH_HTTP_PATHS) {
       expect(
-        isBlockedBetterAuthHttpPath(pathname, PRODUCTION_DEFAULT_FLAGS)
+        isBlockedBetterAuthHttpPath(pathname, AUTH_HTTP_ALL_DISABLED_FLAGS)
       ).toBe(true);
     }
   });
@@ -49,9 +28,19 @@ describe('Better Auth HTTP exposure (default-off posture)', () => {
   it('keeps core authentication endpoints reachable under the default config', () => {
     for (const pathname of CORE_AUTH_HTTP_PATHS) {
       expect(
-        isBlockedBetterAuthHttpPath(pathname, PRODUCTION_DEFAULT_FLAGS)
+        isBlockedBetterAuthHttpPath(pathname, AUTH_HTTP_ALL_DISABLED_FLAGS)
       ).toBe(false);
     }
+  });
+
+  it('forces Better Auth admin HTTP endpoints closed in demo mode', () => {
+    expect(
+      isBlockedBetterAuthHttpPath('/api/auth/admin/remove-user', {
+        adminEndpointsEnabled: true,
+        isDemo: true,
+        openApiEnabled: true,
+      })
+    ).toBe(true);
   });
 
   it('ships both exposure flags disabled by default in config/auth.ts', () => {

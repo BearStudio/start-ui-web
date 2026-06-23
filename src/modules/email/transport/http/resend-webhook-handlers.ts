@@ -45,8 +45,11 @@ type ResendWebhookVerifier = {
 type ResendWebhookHandlerDeps = {
   getUseCases: () => EmailUseCases;
   logger?: Pick<Logger, 'warn'>;
+  maxBodyBytes?: number;
   verifier: ResendWebhookVerifier;
 };
+
+const DEFAULT_RESEND_WEBHOOK_MAX_BYTES = 1_000_000;
 
 const resendEmailStatusByEventType = {
   'email.sent': 'sent',
@@ -76,6 +79,85 @@ const requiredHeader = (headers: Headers, name: string) => {
   });
 };
 
+const payloadTooLargeError = (maxBodyBytes: number) =>
+  new AppError({
+    code: 'EMAIL_WEBHOOK_PAYLOAD_TOO_LARGE',
+    category: 'bad_request',
+    status: 413,
+    message: 'Email webhook payload is too large',
+    details: { maxBytes: maxBodyBytes },
+    exposeDetails: true,
+  });
+
+const invalidBodyError = (cause: unknown) =>
+  new AppError({
+    code: 'EMAIL_WEBHOOK_INVALID_BODY',
+    category: 'bad_request',
+    status: 400,
+    message: 'Invalid email webhook request body',
+    cause,
+  });
+
+const normalizeMaxBodyBytes = (maxBodyBytes?: number) =>
+  Number.isFinite(maxBodyBytes) &&
+  maxBodyBytes !== undefined &&
+  maxBodyBytes > 0
+    ? maxBodyBytes
+    : DEFAULT_RESEND_WEBHOOK_MAX_BYTES;
+
+const decodeChunks = (chunks: Uint8Array[], totalBytes: number) => {
+  const payloadBytes = new Uint8Array(totalBytes);
+  let offset = 0;
+
+  for (const chunk of chunks) {
+    payloadBytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  return new TextDecoder().decode(payloadBytes);
+};
+
+const readBoundedTextBody = async (request: Request, maxBodyBytes: number) => {
+  const contentLengthHeader = request.headers.get('Content-Length');
+  if (contentLengthHeader !== null) {
+    const contentLength = Number(contentLengthHeader);
+    if (Number.isFinite(contentLength) && contentLength > maxBodyBytes) {
+      throw payloadTooLargeError(maxBodyBytes);
+    }
+  }
+
+  if (!request.body) return '';
+
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+
+  try {
+    reader = request.body.getReader();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+
+      totalBytes += value.byteLength;
+      if (totalBytes > maxBodyBytes) {
+        await reader.cancel();
+        throw payloadTooLargeError(maxBodyBytes);
+      }
+
+      chunks.push(value);
+    }
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw invalidBodyError(error);
+  } finally {
+    reader?.releaseLock();
+  }
+
+  return decodeChunks(chunks, totalBytes);
+};
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -96,10 +178,12 @@ const recipientFromEvent = (event: TrackedResendEmailEvent) =>
 export const createResendWebhookHandlers = ({
   getUseCases,
   logger,
+  maxBodyBytes,
   verifier,
 }: ResendWebhookHandlerDeps) => {
+  const boundedMaxBodyBytes = normalizeMaxBodyBytes(maxBodyBytes);
+
   const receive = async (request: Request) => {
-    const payload = await request.text();
     let resendSdkHeaders: VerifyResendWebhookInput['headers'];
     let event: ResendWebhookEvent;
 
@@ -109,6 +193,20 @@ export const createResendWebhookHandlers = ({
         timestamp: requiredHeader(request.headers, 'svix-timestamp'),
         signature: requiredHeader(request.headers, 'svix-signature'),
       };
+    } catch (error) {
+      logger?.warn({
+        details: {
+          provider: EMAIL_PROVIDER_RESEND,
+          reason: error instanceof Error ? error.message : 'unknown',
+        },
+        event: 'security.webhook_signature_rejected',
+      });
+      throw error;
+    }
+
+    const payload = await readBoundedTextBody(request, boundedMaxBodyBytes);
+
+    try {
       event = verifier.verify({ payload, headers: resendSdkHeaders });
     } catch (error) {
       logger?.warn({

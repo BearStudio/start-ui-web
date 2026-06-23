@@ -228,7 +228,7 @@ describe('server config accessors', () => {
     expect(getBetterAuthConfig().secret).toBe(authValue);
   });
 
-  it('allows weak AUTH_SECRET values only when env validation is skipped', async () => {
+  it('allows weak AUTH_SECRET values only when non-production env validation is skipped', async () => {
     const weakAuthValue = makeShortTestSecret('auth');
     vi.stubEnv('AUTH_PROVIDER', 'better-auth');
     vi.stubEnv('AUTH_SECRET', weakAuthValue);
@@ -239,7 +239,36 @@ describe('server config accessors', () => {
     expect(getBetterAuthConfig().secret).toBe(weakAuthValue);
   });
 
-  it('skips server config validation when SKIP_ENV_VALIDATION is true', async () => {
+  it('rejects weak AUTH_SECRET values in production even when env validation is skipped', async () => {
+    const weakAuthValue = makeShortTestSecret('auth');
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', weakAuthValue);
+    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    expect(() => getBetterAuthConfig()).toThrow(ConfigurationError);
+    expect(() => getBetterAuthConfig()).toThrow('AUTH_SECRET');
+  });
+
+  it('rejects placeholder AUTH_SECRET values in production even when env validation is skipped', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('AUTH_PROVIDER', 'better-auth');
+    vi.stubEnv('AUTH_SECRET', 'replace me');
+    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
+    const { getBetterAuthConfig } =
+      await import('@/modules/kernel/infrastructure/config/auth');
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    expect(() => getBetterAuthConfig()).toThrow(ConfigurationError);
+    expect(() => getBetterAuthConfig()).toThrow('AUTH_SECRET');
+  });
+
+  it('skips server config validation outside production when SKIP_ENV_VALIDATION is true', async () => {
     vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
     vi.stubEnv('AUTH_SECRET', undefined);
     vi.stubEnv('DATABASE_URL', undefined);
@@ -247,6 +276,19 @@ describe('server config accessors', () => {
     await expect(
       import('@/modules/kernel/infrastructure/config/server')
     ).resolves.toHaveProperty('validateServerConfig');
+  });
+
+  it('runs server config validation in production even when SKIP_ENV_VALIDATION is true', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
+    vi.stubEnv('AUTH_SECRET', undefined);
+    vi.stubEnv('DATABASE_URL', undefined);
+    const { ConfigurationError } =
+      await import('@/modules/kernel/domain/errors/configuration-error');
+
+    await expect(
+      import('@/modules/kernel/infrastructure/config/server')
+    ).rejects.toThrow(ConfigurationError);
   });
 
   it('returns null for absent optional Redis config', async () => {
@@ -330,5 +372,25 @@ describe('server config accessors', () => {
     expect(getTelemetryConfig().collectorUrl).toBe(
       'https://collector.example/v1'
     );
+  });
+
+  it('defaults the Resend webhook body limit to one megabyte', async () => {
+    vi.stubEnv('RESEND_API_KEY', makeTestSecret('resend-api-key'));
+    vi.stubEnv('EMAIL_FROM', 'Start UI <noreply@example.com>');
+    vi.stubEnv('RESEND_WEBHOOK_MAX_BYTES', undefined);
+    const { getEmailConfig } =
+      await import('@/modules/kernel/infrastructure/config/email');
+
+    expect(getEmailConfig().resendWebhookMaxBytes).toBe(1_000_000);
+  });
+
+  it('parses an explicit Resend webhook body limit', async () => {
+    vi.stubEnv('RESEND_API_KEY', makeTestSecret('resend-api-key'));
+    vi.stubEnv('EMAIL_FROM', 'Start UI <noreply@example.com>');
+    vi.stubEnv('RESEND_WEBHOOK_MAX_BYTES', '4096');
+    const { getEmailConfig } =
+      await import('@/modules/kernel/infrastructure/config/email');
+
+    expect(getEmailConfig().resendWebhookMaxBytes).toBe(4096);
   });
 });

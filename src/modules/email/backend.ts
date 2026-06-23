@@ -13,16 +13,21 @@ type EmailServerRuntimeDeps = {
 
 const getDeps = createServerOnlyFn(
   async (): Promise<EmailServerRuntimeDeps> => {
-    const [{ getEmailUseCases, getResendWebhookVerifier }, { getKernel }] =
-      await Promise.all([
-        import('@/composition/email'),
-        import('@/composition/kernel'),
-      ]);
+    const [
+      { getEmailUseCases, getResendWebhookVerifier },
+      { getKernel },
+      { getEmailConfig },
+    ] = await Promise.all([
+      import('@/composition/email'),
+      import('@/composition/kernel'),
+      import('@/modules/kernel/infrastructure/config/email'),
+    ]);
 
     return {
       handlers: createResendWebhookHandlers({
         getUseCases: getEmailUseCases,
         logger: getKernel().logger,
+        maxBodyBytes: getEmailConfig().resendWebhookMaxBytes,
         verifier: getResendWebhookVerifier(),
       }),
     };
