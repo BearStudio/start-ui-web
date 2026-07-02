@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -6,6 +5,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useFormContext,
 } from '@/components/form';
 
 import { authClient } from '@/features/auth/client';
@@ -22,22 +22,17 @@ export const FormUser = (props: { userId?: string }) => {
     <div className="flex flex-col gap-4">
       <FormField>
         <FormFieldLabel>{t('user:common.name.label')}</FormFieldLabel>
-        <FormFieldController
-          type="text"
-          control={form.control}
-          name="name"
-          autoFocus
-        />
+        <FormFieldController type="text" form={form} name="name" autoFocus />
       </FormField>
       <FormField>
         <FormFieldLabel>{t('user:common.email.label')}</FormFieldLabel>
-        <FormFieldController type="email" control={form.control} name="email" />
+        <FormFieldController type="email" form={form} name="email" />
       </FormField>
       <FormField>
         <FormFieldLabel>{t('user:common.role.label')}</FormFieldLabel>
         <FormFieldController
           type="select"
-          control={form.control}
+          form={form}
           name="role"
           disabled={isCurrentUser}
           items={rolesNames.map((role) => ({

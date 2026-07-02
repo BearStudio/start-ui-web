@@ -1,39 +1,29 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ReactNode } from 'react';
-import {
-  FieldValues,
-  SubmitHandler,
-  useForm,
-  UseFormProps,
-  UseFormReturn,
-} from 'react-hook-form';
-import { z, ZodType } from 'zod';
+import { z } from 'zod';
 
 import { Form } from '@/components/form';
+import { FormInstance } from '@/components/form/types';
+import { useForm } from '@/components/form/use-form';
 
-export const FormMocked = <T extends ZodType<FieldValues>>({
+export const FormMocked = <T extends z.ZodType>({
   children,
   schema,
   useFormOptions,
   onSubmit,
 }: {
-  children(options: { form: UseFormReturn<z.infer<T>> }): ReactNode;
+  children(options: { form: FormInstance<z.input<T>> }): ReactNode;
   schema: T;
-  useFormOptions?: UseFormProps<z.infer<T>>;
-  onSubmit?: SubmitHandler<z.infer<T>>;
+  useFormOptions?: { defaultValues?: z.input<T> };
+  onSubmit?: (values: z.output<T>) => void;
 }) => {
   const form = useForm({
-    mode: 'onBlur',
-    resolver: zodResolver(schema as TODO),
-    ...useFormOptions,
+    schema,
+    mode: 'blur',
+    defaultValues: useFormOptions?.defaultValues as z.input<T>,
+    onSubmit,
   });
   return (
-    <Form
-      {...form}
-      onSubmit={
-        onSubmit ? form.handleSubmit((values) => onSubmit(values)) : undefined
-      }
-    >
+    <Form form={form}>
       {children({ form })}
       <button type="submit">Submit</button>
     </Form>

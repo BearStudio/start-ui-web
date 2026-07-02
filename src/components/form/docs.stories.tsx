@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react-vite';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -12,6 +10,7 @@ import {
   FormFieldError,
   FormFieldHelper,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -34,26 +33,27 @@ const zFormSchema = () =>
 
 export const Default = () => {
   const form = useForm({
-    mode: 'onBlur',
-    resolver: zodResolver(zFormSchema()),
+    schema: zFormSchema(),
+    mode: 'blur',
     defaultValues: {
       name: '',
       other: '',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField size="lg">
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController control={form.control} type="text" name="name" />
+          <FormFieldController form={form} type="text" name="name" />
           <FormFieldHelper>This is an helper text</FormFieldHelper>
         </FormField>
         <FormField>
           <FormFieldLabel>Other (Custom)</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="other"
             type="custom"
             render={({ field, fieldState }) => (
@@ -63,9 +63,11 @@ export const Default = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                   />
                 </InputGroup>
                 <FormFieldError />
@@ -83,31 +85,35 @@ export const Default = () => {
 
 export const NoHtmlForm = () => {
   const form = useForm({
-    mode: 'onBlur',
-    resolver: zodResolver(zFormSchema()),
+    schema: zFormSchema(),
+    mode: 'blur',
     defaultValues: {
       name: '',
       other: '',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} noHtmlForm>
-      <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+    <Form form={form} noHtmlForm>
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+      >
         <div className="flex flex-col gap-4">
           <FormField size="lg">
             <FormFieldLabel>Name</FormFieldLabel>
-            <FormFieldController
-              control={form.control}
-              type="text"
-              name="name"
-            />
+            <FormFieldController form={form} type="text" name="name" />
             <FormFieldHelper>This is an helper text</FormFieldHelper>
           </FormField>
           <FormField>
             <FormFieldLabel>Other (Custom)</FormFieldLabel>
             <FormFieldController
-              control={form.control}
+              form={form}
               name="other"
               type="custom"
               render={({ field, fieldState }) => (
@@ -117,9 +123,11 @@ export const NoHtmlForm = () => {
                       <InputGroupText>https://</InputGroupText>
                     </InputGroupAddon>
                     <InputGroupInput
-                      {...field}
-                      aria-invalid={fieldState.invalid ? true : undefined}
-                      value={field.value ?? ''}
+                      name={field.name}
+                      value={fieldState.value ?? ''}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      aria-invalid={!fieldState.meta.isValid ? true : undefined}
                     />
                   </InputGroup>
                   <FormFieldError />

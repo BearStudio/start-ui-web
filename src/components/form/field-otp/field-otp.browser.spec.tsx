@@ -26,7 +26,7 @@ test('update value', async () => {
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
           />
@@ -63,7 +63,7 @@ test('default value', async () => {
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
           />
@@ -90,7 +90,7 @@ test('auto submit', async () => {
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
             autoSubmit
@@ -122,7 +122,7 @@ test('disabled', async () => {
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
             disabled
@@ -143,5 +143,5 @@ test('disabled', async () => {
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
 
-  expect(mockedSubmit).toHaveBeenCalledWith({ code: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ code: '000000' });
 });

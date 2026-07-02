@@ -17,21 +17,22 @@ export const FieldDate = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
       <DatePicker
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
-        {...field}
-        onChange={(e) => {
-          field.onChange(e);
-          rest.onChange?.(e);
+        name={field.name}
+        value={fieldState.value ?? null}
+        onChange={(date) => {
+          field.handleChange(date);
+          rest.onChange?.(date);
         }}
         onBlur={(e) => {
-          field.onBlur();
+          field.handleBlur();
           rest.onBlur?.(e);
         }}
       />

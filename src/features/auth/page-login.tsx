@@ -1,7 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -10,6 +9,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
@@ -17,7 +17,7 @@ import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
-import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
+import { zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
@@ -60,51 +60,52 @@ export default function PageLogin({
   });
 
   const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsLogin()),
+    schema: zFormFieldsLogin(),
     defaultValues: {
       email: '',
     },
+    onSubmit: async ({ email }) => {
+      let result;
+      try {
+        result = await authClient.emailOtp.sendVerificationOtp({
+          email,
+          type: 'sign-in',
+        });
+      } catch {
+        toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
+        return;
+      }
+
+      if (result.error) {
+        const errorMessage = result.error.code
+          ? t(
+              `auth:errorCode.${result.error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+            )
+          : (typeof result.error.message === 'string' &&
+              result.error.message) ||
+            t('auth:errorCode.UNKNOWN_ERROR');
+        toast.error(errorMessage);
+        return;
+      }
+
+      router.navigate({
+        replace: true,
+        to: '/login/verify',
+        search: {
+          redirect: search.redirect,
+          email,
+        },
+      });
+    },
   });
 
-  const { isValid, isSubmitted } = form.formState;
-  useMascot({ isError: !isValid && isSubmitted });
+  const isError = useStore(form.store, (s) => !s.isValid && s.isSubmitted);
+  useMascot({ isError });
 
-  const submitHandler: SubmitHandler<FormFieldsLogin> = async ({ email }) => {
-    let result;
-    try {
-      result = await authClient.emailOtp.sendVerificationOtp({
-        email,
-        type: 'sign-in',
-      });
-    } catch {
-      toast.error(t('auth:errorCode.UNKNOWN_ERROR'));
-      return;
-    }
-
-    if (result.error) {
-      const errorMessage = result.error.code
-        ? t(
-            `auth:errorCode.${result.error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
-          )
-        : (typeof result.error.message === 'string' && result.error.message) ||
-          t('auth:errorCode.UNKNOWN_ERROR');
-      toast.error(errorMessage);
-      return;
-    }
-
-    router.navigate({
-      replace: true,
-      to: '/login/verify',
-      search: {
-        redirect: search.redirect,
-        email,
-      },
-    });
-  };
+  const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
 
   return (
-    <Form {...form} onSubmit={submitHandler} className="flex flex-col gap-6">
+    <Form form={form} className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
@@ -121,14 +122,14 @@ export default function PageLogin({
             </FormFieldLabel>
             <FormFieldController
               type="email"
-              control={form.control}
+              form={form}
               name="email"
               size="lg"
               placeholder={t('auth:common.email.label')}
             />
           </FormField>
           <Button
-            loading={form.formState.isSubmitting}
+            loading={isSubmitting}
             type="submit"
             size="lg"
             className="w-full"

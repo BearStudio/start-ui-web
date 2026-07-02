@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -10,6 +8,7 @@ import {
   FormFieldController,
   FormFieldError,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -30,8 +29,8 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     website: '',
   },
@@ -42,15 +41,15 @@ const formOptions = {
  * FormFieldError automatically accesses the FormFieldController context.
  */
 export const CustomField = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website (Custom Field)</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="website"
             type="custom"
             render={({ field, fieldState }) => (
@@ -60,9 +59,11 @@ export const CustomField = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                   />
                 </InputGroup>
                 <FormFieldError />
@@ -80,25 +81,25 @@ export const CustomField = () => {
 
 /**
  * Standalone usage outside of FormFieldController render function.
- * Pass `control` and `name` props directly to FormFieldError.
+ * Pass `form` and `name` props directly to FormFieldError.
  */
 export const Standalone = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="website"
             type="text"
             displayError={false}
           />
         </FormField>
         {/* Error displayed outside of FormFieldController */}
-        <FormFieldError control={form.control} name="website" />
+        <FormFieldError form={form} name="website" />
         <div>
           <Button type="submit">Submit</Button>
         </div>

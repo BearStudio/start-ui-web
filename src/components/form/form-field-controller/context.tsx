@@ -1,21 +1,13 @@
+import { AnyFieldApi } from '@tanstack/react-form';
 import { createContext, use } from 'react';
-import {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from 'react-hook-form';
 
 import { FieldType } from '@/components/form/_fields';
 
-export type NonGenericFormFieldControllerContextValue =
-  FormFieldControllerContextValue<FieldValues>;
-
-export type FormFieldControllerContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-> = {
-  type: FieldType;
-  field: ControllerRenderProps<TFieldValues>;
-  fieldState: ControllerFieldState;
+export type FormFieldControllerContextValue = {
+  type: FieldType | 'custom';
+  field: AnyFieldApi;
+  fieldState: AnyFieldApi['state'];
+  isInvalid: boolean;
   displayError?: boolean;
 };
 

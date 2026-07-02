@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -11,6 +9,7 @@ import {
   FormFieldError,
   FormFieldHelper,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -31,23 +30,23 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     url: '',
   },
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website URL</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="url"
             type="custom"
             render={({ field, fieldState }) => (
@@ -57,9 +56,11 @@ export const Default = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                     placeholder="example.com"
                   />
                 </InputGroup>
@@ -83,15 +84,16 @@ export const DefaultValue = () => {
     defaultValues: {
       url: 'example.com',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website URL</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="url"
             type="custom"
             render={({ field, fieldState }) => (
@@ -101,9 +103,11 @@ export const DefaultValue = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                     placeholder="example.com"
                   />
                 </InputGroup>
@@ -127,15 +131,16 @@ export const Disabled = () => {
     defaultValues: {
       url: 'example.com',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website URL</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="url"
             type="custom"
             disabled
@@ -146,9 +151,11 @@ export const Disabled = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                     placeholder="example.com"
                     disabled
                   />
@@ -173,15 +180,16 @@ export const ReadOnly = () => {
     defaultValues: {
       url: 'example.com',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Website URL</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             name="url"
             type="custom"
             render={({ field, fieldState }) => (
@@ -191,9 +199,11 @@ export const ReadOnly = () => {
                     <InputGroupText>https://</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
-                    {...field}
-                    aria-invalid={fieldState.invalid ? true : undefined}
-                    value={field.value ?? ''}
+                    name={field.name}
+                    value={fieldState.value ?? ''}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={!fieldState.meta.isValid ? true : undefined}
                     placeholder="example.com"
                     readOnly
                   />

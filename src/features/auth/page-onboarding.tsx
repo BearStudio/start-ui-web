@@ -1,7 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
 import { LogOutIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -12,6 +11,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 
@@ -40,15 +40,17 @@ export const PageOnboarding = () => {
   );
 
   const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsOnboarding()),
-    values: {
+    schema: zFormFieldsOnboarding(),
+    defaultValues: {
       name: session.data?.user.name ?? '',
+    },
+    onSubmit: (values) => {
+      submitOnboarding.mutate(values);
     },
   });
 
-  const { isValid, isSubmitted } = form.formState;
-  useMascot({ isError: !isValid && isSubmitted });
+  const isError = useStore(form.store, (s) => !s.isValid && s.isSubmitted);
+  useMascot({ isError });
 
   return (
     <LayoutLogin
@@ -68,13 +70,7 @@ export const PageOnboarding = () => {
         </div>
       }
     >
-      <Form
-        {...form}
-        onSubmit={(values) => {
-          submitOnboarding.mutate(values);
-        }}
-        className="flex flex-col gap-4 pb-12"
-      >
+      <Form form={form} className="flex flex-col gap-4 pb-12">
         <div className="flex flex-col gap-1">
           <h1 className="text-lg font-bold text-balance">
             {t('auth:pageOnboarding.title')}
@@ -88,12 +84,7 @@ export const PageOnboarding = () => {
           <FormFieldLabel>
             {t('auth:common.name.onboardingLabel')}
           </FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            size="lg"
-          />
+          <FormFieldController type="text" form={form} name="name" size="lg" />
         </FormField>
         <Button
           type="submit"
