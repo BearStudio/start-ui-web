@@ -12,6 +12,7 @@ export const ConfirmSignOut = (props: {
   const navigate = useNavigate();
   return (
     <ConfirmResponsiveDrawer
+      forceRenderOverlay
       onConfirm={() => {
         navigate({
           to: '/logout',
