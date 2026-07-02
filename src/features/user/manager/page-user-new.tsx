@@ -8,7 +8,7 @@ import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
-import { Form, useForm } from '@/components/form';
+import { Form, setFormFieldError, useForm } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,12 +45,11 @@ export const PageUserNew = () => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('email')
         ) {
-          form.setErrorMap({
-            onDynamic: {
-              fields: { email: t('user:manager.form.emailAlreadyExist') },
-              form: undefined,
-            },
-          } as ExplicitAny);
+          setFormFieldError(
+            form,
+            'email',
+            t('user:manager.form.emailAlreadyExist')
+          );
           return;
         }
 

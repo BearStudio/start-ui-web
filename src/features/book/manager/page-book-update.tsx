@@ -8,7 +8,7 @@ import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
-import { Form, useForm } from '@/components/form';
+import { Form, setFormFieldError, useForm } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -52,12 +52,11 @@ export const PageBookUpdate = (props: { params: { id: string } }) => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('title')
         ) {
-          form.setErrorMap({
-            onDynamic: {
-              fields: { title: t('book:manager.form.titleAlreadyExist') },
-              form: undefined,
-            },
-          } as ExplicitAny);
+          setFormFieldError(
+            form,
+            'title',
+            t('book:manager.form.titleAlreadyExist')
+          );
           return;
         }
 

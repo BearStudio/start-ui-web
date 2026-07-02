@@ -1,9 +1,12 @@
 import {
+  DeepKeys,
   revalidateLogic,
   StandardSchemaV1,
   useForm as useTanStackForm,
 } from '@tanstack/react-form';
 import { z } from 'zod';
+
+import { FormInstance } from '@/components/form/types';
 
 type UseFormOptions<TSchema extends z.ZodType> = {
   schema: TSchema;
@@ -36,4 +39,21 @@ export function useForm<TSchema extends z.ZodType>({
       await onSubmit?.(schema.parse(value));
     },
   });
+}
+
+/**
+ * Set a field error from outside validation (like a server error). The error
+ * clears on the next revalidation, like react-hook-form's setError.
+ */
+export function setFormFieldError<TFormData>(
+  form: FormInstance<TFormData>,
+  name: DeepKeys<TFormData>,
+  message: string
+) {
+  form.setErrorMap({
+    onDynamic: {
+      fields: { [name]: message },
+      form: undefined,
+    },
+  } as ExplicitAny);
 }

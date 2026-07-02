@@ -9,6 +9,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  setFormFieldError,
   useForm,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
@@ -54,12 +55,7 @@ export default function PageLoginVerify({
               )
             : error.message || t('auth:errorCode.UNKNOWN_ERROR')
         );
-        form.setErrorMap({
-          onDynamic: {
-            fields: { otp: t('auth:common.otp.invalid') },
-            form: undefined,
-          },
-        });
+        setFormFieldError(form, 'otp', t('auth:common.otp.invalid'));
         return;
       }
 
