@@ -1,8 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { FormFieldController } from '@/components/form';
+import { FormFieldController, useForm } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -18,24 +16,24 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     date: null as unknown as Date,
   },
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Date</FormFieldLabel>
           <FormFieldController
             type="date"
-            control={form.control}
+            form={form}
             name="date"
             placeholder="DD/MM/YYYY"
           />
@@ -50,16 +48,16 @@ export const Default = () => {
 };
 
 export const CalendarCustomization = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Date</FormFieldLabel>
           <FormFieldController
             type="date"
-            control={form.control}
+            form={form}
             name="date"
             placeholder="DD/MM/YYYY"
             calendarProps={{

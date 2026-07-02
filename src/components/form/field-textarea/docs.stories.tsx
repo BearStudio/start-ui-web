@@ -1,10 +1,8 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
 
-import { FormFieldController } from '@/components/form';
+import { FormFieldController, useForm } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -20,24 +18,24 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     description: '',
   },
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
             type="textarea"
-            control={form.control}
+            form={form}
             name="description"
             placeholder="Buzz Pawdrin"
           />
@@ -57,15 +55,16 @@ export const DefaultValue = () => {
     defaultValues: {
       description: 'Default description',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="textarea"
             name="description"
             placeholder="Buzz Pawdrin"
@@ -86,15 +85,16 @@ export const Disabled = () => {
     defaultValues: {
       description: 'Default Value',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="textarea"
             name="description"
             placeholder="Buzz Pawdrin"
@@ -116,15 +116,16 @@ export const ReadOnly = () => {
     defaultValues: {
       description: 'Default Value',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Description</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="textarea"
             name="description"
             placeholder="Buzz Pawdrin"

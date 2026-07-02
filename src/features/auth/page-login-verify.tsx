@@ -1,6 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useStore } from '@tanstack/react-form';
 import { ArrowLeftIcon } from 'lucide-react';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -10,6 +9,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { ButtonLink } from '@/components/ui/button-link';
@@ -20,10 +20,7 @@ import {
   AUTH_SIGNUP_ENABLED,
 } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
-import {
-  FormFieldsLoginVerify,
-  zFormFieldsLoginVerify,
-} from '@/features/auth/schema';
+import { zFormFieldsLoginVerify } from '@/features/auth/schema';
 import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
@@ -39,47 +36,45 @@ export default function PageLoginVerify({
   const session = authClient.useSession();
 
   const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormFieldsLoginVerify()),
+    schema: zFormFieldsLoginVerify(),
     defaultValues: {
       otp: '',
     },
-  });
-  const { isValid, isSubmitted } = form.formState;
-  useMascot({ isError: !isValid && isSubmitted });
-
-  const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
-    otp,
-  }) => {
-    const { error } = await authClient.signIn.emailOtp({
-      email: search.email,
-      otp,
-    });
-
-    if (error) {
-      toast.error(
-        error.code
-          ? t(
-              `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
-            )
-          : error.message || t('auth:errorCode.UNKNOWN_ERROR')
-      );
-      form.setError('otp', {
-        message: t('auth:common.otp.invalid'),
+    onSubmit: async ({ otp }) => {
+      const { error } = await authClient.signIn.emailOtp({
+        email: search.email,
+        otp,
       });
-      return;
-    }
 
-    // Refetch session to update guards and redirect
-    session.refetch();
-  };
+      if (error) {
+        toast.error(
+          error.code
+            ? t(
+                `auth:errorCode.${error.code as unknown as keyof typeof authClient.$ERROR_CODES}`
+              )
+            : error.message || t('auth:errorCode.UNKNOWN_ERROR')
+        );
+        form.setErrorMap({
+          onDynamic: {
+            fields: { otp: t('auth:common.otp.invalid') },
+            form: undefined,
+          },
+        });
+        return;
+      }
+
+      // Refetch session to update guards and redirect
+      session.refetch();
+    },
+  });
+
+  const isError = useStore(form.store, (s) => !s.isValid && s.isSubmitted);
+  useMascot({ isError });
+
+  const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
 
   return (
-    <Form
-      {...form}
-      onSubmit={submitHandler}
-      className="flex flex-col gap-4 pb-12"
-    >
+    <Form form={form} className="flex flex-col gap-4 pb-12">
       <div className="flex flex-col gap-1">
         <ButtonLink variant="link" to="/login">
           <ArrowLeftIcon />
@@ -106,7 +101,7 @@ export default function PageLoginVerify({
           <FormFieldLabel>{t('auth:common.otp.label')}</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="otp"
             size="lg"
             maxLength={6}
@@ -119,7 +114,7 @@ export default function PageLoginVerify({
             })}
           </FormFieldHelper>
         </FormField>
-        <Button loading={form.formState.isSubmitting} type="submit" size="lg">
+        <Button loading={isSubmitting} type="submit" size="lg">
           {t(`${I18N_KEY_PAGE_PREFIX}.confirm`)}
         </Button>
         <LoginEmailOtpHint />

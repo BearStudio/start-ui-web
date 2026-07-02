@@ -22,20 +22,25 @@ export const FieldRadioGroup = (
 ) => {
   const { containerProps, options, renderOption, ...rest } = props;
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
       <RadioGroup
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
+        aria-invalid={isInvalid ? true : undefined}
         aria-labelledby={ctx.labelId}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
-        value={value}
-        onValueChange={onChange}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
+        name={field.name}
+        value={fieldState.value}
+        onValueChange={(value, eventDetails) => {
+          field.handleChange(value);
+          rest.onValueChange?.(value, eventDetails);
+        }}
+        onBlur={(e) => {
+          field.handleBlur();
+          rest.onBlur?.(e);
+        }}
       >
         {options.map(({ label, ...option }) => {
           const radioId = `${ctx.id}-${option.value}`;
@@ -45,9 +50,8 @@ export const FieldRadioGroup = (
               <Fragment key={radioId}>
                 {renderOption({
                   label,
-                  'aria-invalid': fieldState.invalid,
+                  'aria-invalid': isInvalid,
                   size: ctx.size,
-                  ...field,
                   ...option,
                 })}
               </Fragment>
@@ -57,9 +61,8 @@ export const FieldRadioGroup = (
           return (
             <Radio
               key={radioId}
-              aria-invalid={fieldState.invalid ? true : undefined}
+              aria-invalid={isInvalid ? true : undefined}
               size={ctx.size}
-              {...field}
               {...option}
             >
               {label}

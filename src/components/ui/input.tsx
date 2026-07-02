@@ -12,6 +12,7 @@ type InputProps = Pick<
   | 'className'
   | 'placeholder'
   | 'id'
+  | 'name'
   | 'value'
   | 'defaultValue'
   | 'disabled'

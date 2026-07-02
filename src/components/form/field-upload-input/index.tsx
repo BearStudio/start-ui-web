@@ -19,7 +19,7 @@ export const FieldUploadInput = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   const getFieldUrl = (raw: unknown): string | undefined => {
     if (typeof raw !== 'string' || !raw) return undefined;
@@ -27,31 +27,30 @@ export const FieldUploadInput = (
     return `${envClient.VITE_S3_BUCKET_PUBLIC_URL}/${raw}`;
   };
 
-  const value = getFieldUrl(field.value);
+  const value = getFieldUrl(fieldState.value);
 
   return (
     <FormFieldContainer {...containerProps}>
       <UploadInput
         {...rest}
-        disabled={field.disabled ?? rest.disabled}
         defaultValue={
           value
             ? { name: value.split('/').at(-1) ?? value, url: value }
             : undefined
         }
         onSuccess={(file) => {
-          field.onChange(file.objectInfo.key);
+          field.handleChange(file.objectInfo.key);
           rest.onSuccess?.(file);
         }}
         onClear={() => {
-          field.onChange(null);
+          field.handleChange(null);
           rest.onClear?.();
         }}
         onError={(error) => {
           rest.onError?.(error);
         }}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
       />
       <FormFieldError />
     </FormFieldContainer>

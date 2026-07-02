@@ -17,23 +17,22 @@ export const FieldTextarea = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Textarea
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
-        {...field}
-        value={field.value ?? ''}
+        value={fieldState.value ?? ''}
         onChange={(e) => {
-          field.onChange(e);
+          field.handleChange(e.target.value);
           rest.onChange?.(e);
         }}
         onBlur={(e) => {
-          field.onBlur();
+          field.handleBlur();
           rest.onBlur?.(e);
         }}
       />

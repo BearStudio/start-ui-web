@@ -46,7 +46,7 @@ test('should select radio on button click', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />
@@ -80,7 +80,7 @@ test('should select radio on label click', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />
@@ -117,7 +117,7 @@ test('should handle keyboard navigation', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />
@@ -167,7 +167,7 @@ test('default value', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />
@@ -201,7 +201,7 @@ test('disabled', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             disabled
             options={options}
@@ -215,7 +215,7 @@ test('disabled', async () => {
   await expect.element(radio).toBeDisabled();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bear: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'pawdrin' });
 });
 
 test('disabled option', async () => {
@@ -236,7 +236,7 @@ test('disabled option', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />

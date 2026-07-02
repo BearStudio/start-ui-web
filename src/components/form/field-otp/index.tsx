@@ -1,5 +1,5 @@
+import { useStore } from '@tanstack/react-form';
 import { useRef } from 'react';
-import { useFormState } from 'react-hook-form';
 
 import { useFormField } from '@/components/form/form-field';
 import { FormFieldContainer } from '@/components/form/form-field-container';
@@ -25,18 +25,18 @@ export const FieldOtp = (
 
   const containerRef = useRef<React.ComponentRef<'div'>>(null);
   const ctx = useFormField();
-  const formState = useFormState();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
+  const isSubmitted = useStore(field.form.store, (state) => state.isSubmitted);
   return (
     <FormFieldContainer {...containerProps} ref={containerRef}>
       <InputOTP
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         onComplete={(v) => {
           rest.onComplete?.(v);
           // Only auto submit on first try
-          if (!formState.isSubmitted && autoSubmit) {
+          if (!isSubmitted && autoSubmit) {
             const button = document.createElement('button');
             button.type = 'submit';
             button.style.display = 'none';
@@ -46,13 +46,14 @@ export const FieldOtp = (
           }
         }}
         {...rest}
-        {...field}
-        onChange={(e) => {
-          field.onChange(e);
-          rest.onChange?.(e);
+        name={field.name}
+        value={fieldState.value ?? ''}
+        onChange={(value) => {
+          field.handleChange(value);
+          rest.onChange?.(value);
         }}
         onBlur={(e) => {
-          field.onBlur();
+          field.handleBlur();
           rest.onBlur?.(e);
         }}
       >

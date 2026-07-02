@@ -1,7 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -9,7 +8,7 @@ import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
-import { Form } from '@/components/form';
+import { Form, useForm } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,14 +26,6 @@ export const PageUserNew = () => {
   const { t } = useTranslation(['user']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
-      name: '',
-      email: '',
-      role: 'user',
-    },
-  });
 
   const userCreate = useMutation(
     orpc.user.create.mutationOptions({
@@ -54,9 +45,12 @@ export const PageUserNew = () => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('email')
         ) {
-          form.setError('email', {
-            message: t('user:manager.form.emailAlreadyExist'),
-          });
+          form.setErrorMap({
+            onDynamic: {
+              fields: { email: t('user:manager.form.emailAlreadyExist') },
+              form: undefined,
+            },
+          } as ExplicitAny);
           return;
         }
 
@@ -65,15 +59,24 @@ export const PageUserNew = () => {
     })
   );
 
+  const form = useForm({
+    schema: zFormFieldsUser(),
+    defaultValues: {
+      name: '',
+      email: '',
+      role: 'user',
+    },
+    onSubmit: async (values) => {
+      userCreate.mutate(values);
+    },
+  });
+
+  const isDefaultValue = useStore(form.store, (s) => s.isDefaultValue);
+
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={async (values) => {
-          userCreate.mutate(values);
-        }}
-      >
+      <PreventNavigation shouldBlock={!isDefaultValue} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}

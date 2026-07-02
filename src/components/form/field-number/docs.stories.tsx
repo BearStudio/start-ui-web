@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react-vite';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import {
@@ -9,6 +7,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { FieldNumber } from '@/components/form/field-number';
@@ -24,21 +23,24 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
+  defaultValues: {
+    balance: null as unknown as number,
+  },
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
             type="number"
-            control={form.control}
+            form={form}
             name="balance"
             placeholder="Bearcoin"
           />
@@ -58,16 +60,17 @@ export const DefaultValue = () => {
     defaultValues: {
       balance: 30,
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
             type="number"
-            control={form.control}
+            form={form}
             name="balance"
             placeholder="Bearcoin"
           />
@@ -82,16 +85,16 @@ export const DefaultValue = () => {
 };
 
 export const Currency = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
             type="number"
-            control={form.control}
+            form={form}
             name="balance"
             placeholder="Bearcoin"
             format={{
@@ -111,17 +114,21 @@ export const Currency = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
+  const form = useForm({
+    ...formOptions,
+    defaultValues: { balance: 42 },
+    onSubmit,
+  });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
             disabled
             type="number"
-            control={form.control}
+            form={form}
             name="balance"
             placeholder="Bearcoin"
           />
@@ -136,17 +143,21 @@ export const Disabled = () => {
 };
 
 export const ReadOnly = () => {
-  const form = useForm({ ...formOptions, defaultValues: { balance: 42 } });
+  const form = useForm({
+    ...formOptions,
+    defaultValues: { balance: 42 },
+    onSubmit,
+  });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Balance</FormFieldLabel>
           <FormFieldController
             readOnly
             type="number"
-            control={form.control}
+            form={form}
             name="balance"
             placeholder="Bearcoin"
           />

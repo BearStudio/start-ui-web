@@ -1,8 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { FormFieldController } from '@/components/form';
+import { FormFieldController, useForm } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 
@@ -20,8 +18,8 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     bears: [],
   } as z.infer<ReturnType<typeof zFormSchema>>,
@@ -34,17 +32,17 @@ const options = [
 ];
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
             type="checkbox-group"
-            control={form.control}
+            form={form}
             name="bears"
             options={options}
           />
@@ -63,16 +61,17 @@ export const DefaultValue = () => {
     defaultValues: {
       bears: ['pawdrin'],
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="checkbox-group"
             name="bears"
             options={options}
@@ -92,16 +91,17 @@ export const Disabled = () => {
     defaultValues: {
       bears: ['pawdrin'],
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="checkbox-group"
             name="bears"
             options={options}
@@ -117,16 +117,16 @@ export const Disabled = () => {
 };
 
 export const Row = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="checkbox-group"
             name="bears"
             options={options}
@@ -142,7 +142,7 @@ export const Row = () => {
 };
 
 export const WithDisabledOption = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   const optionsWithDisabled = [
     { value: 'bearstrong', label: 'Bearstrong' },
@@ -151,13 +151,13 @@ export const WithDisabledOption = () => {
   ];
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="checkbox-group"
             name="bears"
             options={optionsWithDisabled}

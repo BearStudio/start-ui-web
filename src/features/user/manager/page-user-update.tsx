@@ -1,9 +1,8 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -11,7 +10,7 @@ import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
-import { Form } from '@/components/form';
+import { Form, useForm } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -66,9 +65,12 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('email')
         ) {
-          form.setError('email', {
-            message: t('user:manager.form.emailAlreadyExist'),
-          });
+          form.setErrorMap({
+            onDynamic: {
+              fields: { email: t('user:manager.form.emailAlreadyExist') },
+              form: undefined,
+            },
+          } as ExplicitAny);
           return;
         }
 
@@ -78,13 +80,18 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
   );
 
   const form = useForm({
-    resolver: zodResolver(zFormFieldsUser()),
-    values: {
+    schema: zFormFieldsUser(),
+    defaultValues: {
       name: userQuery.data?.name ?? '',
       email: userQuery.data?.email ?? '',
       role: userQuery.data?.role ?? 'user',
     },
+    onSubmit: (values) => {
+      userUpdate.mutate({ id: props.params.id, ...values });
+    },
   });
+
+  const isDefaultValue = useStore(form.store, (s) => s.isDefaultValue);
 
   const ui = getUiState((set) => {
     if (userQuery.status === 'pending') return set('pending');
@@ -101,13 +108,8 @@ export const PageUserUpdate = (props: { params: { id: string } }) => {
 
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={(values) => {
-          userUpdate.mutate({ id: props.params.id, ...values });
-        }}
-      >
+      <PreventNavigation shouldBlock={!isDefaultValue} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}
