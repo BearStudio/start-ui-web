@@ -12,7 +12,7 @@ const InputOTPContext = React.createContext<
 
 const inputOTPVariants = cva(
   cn(
-    'relative flex items-center justify-center border-y border-e border-input text-base shadow-xs transition-all outline-none first:rounded-s-md first:border-s last:rounded-e-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 md:text-sm dark:data-[active=true]:aria-invalid:ring-destructive/40'
+    'relative flex items-center justify-center border-y border-e border-input bg-white text-base shadow-xs transition-all outline-none first:rounded-s-md first:border-s last:rounded-e-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40'
   ),
   {
     variants: {

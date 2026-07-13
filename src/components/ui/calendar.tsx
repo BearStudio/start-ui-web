@@ -61,8 +61,7 @@ export function Calendar({
   );
   const buttonNavClassName = buttonVariants({
     variant: 'secondary',
-    className:
-      'absolute h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+    className: 'absolute h-7 w-7 p-0',
   });
   const _buttonNextClassName = cn(
     buttonNavClassName,
@@ -203,7 +202,7 @@ function Nav({ className }: NavProps) {
     <nav className={cn('flex items-center', className)}>
       <Button
         variant="secondary"
-        className="absolute left-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
+        className="absolute left-0 h-7 w-7 p-0"
         tabIndex={isPreviousDisabled ? undefined : -1}
         disabled={isPreviousDisabled}
         aria-label={labelPrevious(previousMonth)}
@@ -214,7 +213,7 @@ function Nav({ className }: NavProps) {
 
       <Button
         variant="secondary"
-        className="absolute right-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
+        className="absolute right-0 h-7 w-7 p-0"
         tabIndex={isNextDisabled ? undefined : -1}
         disabled={isNextDisabled}
         aria-label={labelNext(nextMonth)}
