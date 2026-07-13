@@ -46,7 +46,7 @@ export function Calendar({
 
   const _monthsClassName = cn('relative flex', props.classNames?.months);
   const _monthCaptionClassName = cn(
-    'relative mx-10 flex h-7 items-center justify-center',
+    'relative mx-10 flex h-8 items-center justify-center',
     props.classNames?.month_caption
   );
   const _weekdaysClassName = cn('flex flex-row', props.classNames?.weekdays);
@@ -61,7 +61,8 @@ export function Calendar({
   );
   const buttonNavClassName = buttonVariants({
     variant: 'secondary',
-    className: 'absolute h-7 w-7 p-0',
+    size: 'icon-sm',
+    className: 'absolute',
   });
   const _buttonNextClassName = cn(
     buttonNavClassName,
@@ -202,7 +203,8 @@ function Nav({ className }: NavProps) {
     <nav className={cn('flex items-center', className)}>
       <Button
         variant="secondary"
-        className="absolute left-0 h-7 w-7 p-0"
+        size="icon-sm"
+        className="absolute left-0"
         tabIndex={isPreviousDisabled ? undefined : -1}
         disabled={isPreviousDisabled}
         aria-label={labelPrevious(previousMonth)}
@@ -213,7 +215,8 @@ function Nav({ className }: NavProps) {
 
       <Button
         variant="secondary"
-        className="absolute right-0 h-7 w-7 p-0"
+        size="icon-sm"
+        className="absolute right-0"
         tabIndex={isNextDisabled ? undefined : -1}
         disabled={isNextDisabled}
         aria-label={labelNext(nextMonth)}
