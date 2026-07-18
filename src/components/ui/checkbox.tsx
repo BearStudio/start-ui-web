@@ -22,7 +22,7 @@ const labelVariants = cva(
 );
 
 const checkboxVariants = cva(
-  'flex flex-none cursor-pointer items-center justify-center rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-disabled:opacity-20 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:bg-muted-foreground data-indeterminate:border data-unchecked:border aria-invalid:data-unchecked:border-destructive',
+  'flex flex-none cursor-pointer items-center justify-center rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-disabled:opacity-20 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:bg-muted-foreground data-indeterminate:border data-indeterminate:bg-white data-unchecked:border data-unchecked:bg-white aria-invalid:data-unchecked:border-destructive dark:data-indeterminate:bg-input/30 dark:data-unchecked:bg-input/30',
   {
     variants: {
       size: {

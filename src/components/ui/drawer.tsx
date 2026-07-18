@@ -27,7 +27,7 @@ function DrawerOverlay({
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-black/80 supports-backdrop-filter:backdrop-blur-xs',
+        'fixed inset-0 z-50 bg-black/30 supports-backdrop-filter:backdrop-blur-xs',
         'opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)]',
         'data-ending-style:opacity-0 data-starting-style:opacity-0',
         'data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*400ms)]',

@@ -14,7 +14,7 @@ export const DataList = ({
   return (
     <div
       className={cn(
-        'relative flex w-full flex-col overflow-x-auto overflow-y-hidden rounded-sm border bg-white dark:bg-neutral-900',
+        'relative flex w-full flex-col overflow-x-auto overflow-y-hidden rounded-lg border bg-white dark:bg-neutral-900',
         className
       )}
       {...props}

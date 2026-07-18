@@ -1,5 +1,10 @@
 import { Meta } from '@storybook/react-vite';
-import { AlertCircleIcon, TerminalIcon } from 'lucide-react';
+import {
+  AlertCircleIcon,
+  CheckCircleIcon,
+  TerminalIcon,
+  TriangleAlertIcon,
+} from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -19,14 +24,37 @@ export const Default = () => {
   );
 };
 
-export const Destructive = () => {
+export const Variants = () => {
   return (
-    <Alert variant="destructive">
-      <AlertCircleIcon className="size-4" />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        Your session has expired. Please log in again.
-      </AlertDescription>
-    </Alert>
+    <div className="flex flex-col gap-4">
+      <Alert>
+        <TerminalIcon className="size-4" />
+        <AlertTitle>Default</AlertTitle>
+        <AlertDescription>
+          You can add components to your app using the cli.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="destructive">
+        <AlertCircleIcon className="size-4" />
+        <AlertTitle>Destructive</AlertTitle>
+        <AlertDescription>
+          Your session has expired. Please log in again.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="warning">
+        <TriangleAlertIcon className="size-4" />
+        <AlertTitle>Warning</AlertTitle>
+        <AlertDescription>
+          Your subscription is about to expire.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="positive">
+        <CheckCircleIcon className="size-4" />
+        <AlertTitle>Positive</AlertTitle>
+        <AlertDescription>
+          Your changes have been saved successfully.
+        </AlertDescription>
+      </Alert>
+    </div>
   );
 };

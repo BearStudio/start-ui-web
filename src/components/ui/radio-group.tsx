@@ -23,7 +23,7 @@ const labelVariants = cva(
 );
 
 const radioVariants = cva(
-  'flex flex-none cursor-pointer items-center justify-center rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:bg-muted-foreground data-disabled:opacity-40 data-indeterminate:border data-unchecked:border aria-invalid:data-unchecked:border-destructive',
+  'flex flex-none cursor-pointer items-center justify-center rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:bg-muted-foreground data-disabled:opacity-40 data-indeterminate:border data-indeterminate:bg-white data-unchecked:border data-unchecked:bg-white aria-invalid:data-unchecked:border-destructive dark:data-indeterminate:bg-input/30 dark:data-unchecked:bg-input/30',
   {
     variants: {
       size: {
