@@ -29,12 +29,12 @@ import {
   FormFieldsAccountUpdateName,
   zFormFieldsAccountUpdateName,
 } from '@/features/account/schema';
-import { authClient } from '@/features/auth/client';
+import { useSession } from '@/features/auth/use-session';
 
 export const ChangeNameDrawer = (props: { children: ReactElement }) => {
   const { t } = useTranslation(['account']);
   const [open, setOpen] = useState(false);
-  const session = authClient.useSession();
+  const session = useSession();
   const form = useForm<FormFieldsAccountUpdateName>({
     resolver: zodResolver(zFormFieldsAccountUpdateName()),
     values: {

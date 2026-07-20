@@ -17,10 +17,11 @@ import {
 
 import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
+import { useSession } from '@/features/auth/use-session';
 
 export const DemoAppSwitch = () => {
   const { t } = useTranslation(['demo']);
-  const session = authClient.useSession();
+  const session = useSession();
   const userRole = session.data?.user.role;
   const matchRoute = useMatchRoute();
   const currentApp = matchRoute({ to: '/manager', fuzzy: true })

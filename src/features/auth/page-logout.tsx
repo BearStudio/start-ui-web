@@ -6,10 +6,11 @@ import { PageError } from '@/components/errors/page-error';
 import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
+import { useSession } from '@/features/auth/use-session';
 
 export const PageLogout = () => {
   const navigate = useNavigate();
-  const session = authClient.useSession();
+  const session = useSession();
   const { mutate, error } = useMutation({
     mutationFn: async () => {
       const response = await authClient.signOut();
@@ -20,7 +21,7 @@ export const PageLogout = () => {
     },
     onSuccess: () => {
       navigate({
-        to: '/',
+        to: '/login',
       });
     },
   });

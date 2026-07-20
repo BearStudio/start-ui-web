@@ -1,5 +1,5 @@
 import { useRouter } from '@tanstack/react-router';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { PageError } from '@/components/errors/page-error';
 import { Spinner } from '@/components/ui/spinner';
@@ -7,6 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { authClient } from '@/features/auth/client';
 import { PageOnboarding } from '@/features/auth/page-onboarding';
 import { Permission, Role } from '@/features/auth/permissions';
+import { useSession } from '@/features/auth/use-session';
 
 export const GuardAuthenticated = ({
   children,
@@ -15,8 +16,25 @@ export const GuardAuthenticated = ({
   children?: ReactNode;
   permissionApps?: Permission['apps'];
 }) => {
-  const session = authClient.useSession();
+  const session = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (
+      session.isPending ||
+      (session.error && session.error.status > 0) ||
+      session.data?.user
+    )
+      return;
+
+    router.navigate({
+      to: '/login',
+      replace: true,
+      search: {
+        redirect: location.href,
+      },
+    });
+  }, [router, session.isPending, session.data?.user, session.error]);
 
   if (session.isPending) {
     return <Spinner full className="opacity-60" />;
@@ -27,22 +45,13 @@ export const GuardAuthenticated = ({
   }
 
   if (!session.data?.user) {
-    router.navigate({
-      to: '/login',
-      replace: true,
-      search: {
-        redirect: location.href,
-      },
-    });
     return null;
   }
 
-  // Check if onboarding is done
   if (!session.data.user.onboardedAt) {
     return <PageOnboarding />;
   }
 
-  // Unauthorized if the user permission do not match
   if (
     permissionApps &&
     !authClient.admin.checkRolePermission({
