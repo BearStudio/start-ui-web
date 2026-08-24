@@ -39,12 +39,23 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
       ComboboxProps<TItem, true>,
-      'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
+      | 'items'
+      | 'value'
+      | 'multiple'
+      | 'defaultValue'
+      | 'children'
+      | 'onValueChange'
     > & {
         items: TItem[];
         showClear?: boolean;
         children?: (item: TItem) => ReactElement;
         emptyContent?: ReactNode;
+        onValueChange?: (
+          value: Array<TItem['value']>,
+          eventDetails: Parameters<
+            NonNullable<ComboboxProps<TItem, true>['onValueChange']>
+          >[1]
+        ) => void;
       } & Pick<ComponentProps<typeof ComboboxChipsInput>, 'placeholder'>
   >
 ) => {

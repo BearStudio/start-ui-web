@@ -29,11 +29,17 @@ export const FieldCombobox = <TItem extends Item>(
       inputProps?: ComponentProps<typeof ComboboxInput>;
     } & Omit<
       ComboboxProps<TItem>,
-      'items' | 'value' | 'multiple' | 'children'
+      'items' | 'value' | 'multiple' | 'children' | 'onValueChange'
     > & {
         items: TItem[];
         emptyContent?: ReactNode;
         children?: (item: TItem) => ReactElement;
+        onValueChange?: (
+          value: TItem['value'] | null,
+          eventDetails: Parameters<
+            NonNullable<ComboboxProps<TItem>['onValueChange']>
+          >[1]
+        ) => void;
       } & Pick<
         ComponentProps<typeof ComboboxInput>,
         'placeholder' | 'showClear'
@@ -69,7 +75,7 @@ export const FieldCombobox = <TItem extends Item>(
         itemToStringValue={(item: TItem) => item.value}
         onValueChange={(item: TItem | null, event) => {
           field.onChange(item?.value ?? null, event);
-          rest.onValueChange?.(item ?? null, event);
+          rest.onValueChange?.(item?.value ?? null, event);
         }}
         inputRef={field.ref}
       >
