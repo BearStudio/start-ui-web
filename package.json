@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@base-ui/react": "1.2.0",
-    "@bearstudio/ui-state": "1.1.0",
+    "@bearstudio/ui-state": "2.0.0",
     "@better-auth/expo": "1.5.2",
     "@better-upload/client": "3.0.12",
     "@better-upload/server": "3.0.12",
