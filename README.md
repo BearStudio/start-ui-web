@@ -40,6 +40,18 @@ cp .vscode/settings.example.json .vscode/settings.json
 cp .zed/settings.example.json .zed/settings.json
 ```
 
+### TypeScript 7
+
+This project uses [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-native-previews/), the native compiler. It ships a `tsc` binary but no `tsserver`, so editors need the native language server to typecheck exactly like `pnpm lint:ts` does.
+
+- VS Code: install the [TypeScript 7](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) extension (`TypeScriptTeam.native-preview`). The example settings already enable it:
+```jsonc
+"js/ts.experimental.useTsgo": true,
+"js/ts.tsdk.path": "./node_modules/typescript"
+```
+
+Without it, your editor falls back to its bundled TypeScript 5 and may report different errors than CI.
+
 ## Installation
 
 ```bash

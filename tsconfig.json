@@ -8,17 +8,10 @@
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitAny": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "e2e/*": ["./e2e/*"]
     },
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "plugins": [
-      {
-        "name": "ts-plugin-sort-import-suggestions",
-        "moveUpPatterns": ["@/", "\\.{1,2}/"],
-        "moveDownPatterns": ["lucide-react", "@react-email"]
-      }
-    ]
+    "typeRoots": ["node_modules/@types", "src/types"]
   }
 }
