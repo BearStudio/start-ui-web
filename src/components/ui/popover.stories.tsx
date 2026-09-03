@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { Meta } from '@storybook/react-vite';
-import { useForm } from 'react-hook-form';
 import { useDisclosure } from 'react-use-disclosure';
 import { z } from 'zod';
 
@@ -12,6 +10,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -65,14 +64,18 @@ const zFormSchema = () =>
   });
 
 export const WithForm = () => {
+  const popover = useDisclosure();
   const form = useForm({
-    mode: 'onSubmit',
-    resolver: zodResolver(zFormSchema()),
+    schema: zFormSchema(),
     defaultValues: {
       name: '',
     },
+    onSubmit: (values) => {
+      onSubmit(values);
+      popover.close();
+      form.reset();
+    },
   });
-  const popover = useDisclosure();
 
   return (
     <Popover
@@ -91,20 +94,13 @@ export const WithForm = () => {
     >
       <PopoverTrigger render={<Button />}>Info</PopoverTrigger>
       <PopoverContent>
-        <Form
-          {...form}
-          onSubmit={(values) => {
-            onSubmit(values);
-            popover.close();
-            form.reset();
-          }}
-        >
+        <Form form={form}>
           <div className="flex flex-col gap-4">
             <FormField>
               <FormFieldLabel>Name</FormFieldLabel>
               <FormFieldController
                 type="text"
-                control={form.control}
+                form={form}
                 name="name"
                 placeholder="Buzz Pawdrin"
               />

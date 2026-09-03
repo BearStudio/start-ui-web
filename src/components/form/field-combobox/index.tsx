@@ -52,34 +52,32 @@ export const FieldCombobox = <TItem extends Item>(
 
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Combobox
         {...rest}
         items={items}
-        disabled={field.disabled}
-        value={items.find((item) => item.value === field.value) ?? null}
+        value={items.find((item) => item.value === fieldState.value) ?? null}
         isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
           item.value === selectedValue.value
         }
         itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
         itemToStringValue={(item: TItem) => item.value}
         onValueChange={(item: TItem, event) => {
-          field.onChange(item?.value ?? null, event);
+          field.handleChange(item?.value ?? null);
           rest.onValueChange?.(item?.value ?? null, event);
         }}
-        inputRef={field.ref}
       >
         <ComboboxInput
           {...inputProps}
-          disabled={field.disabled}
-          onBlur={field.onBlur}
+          disabled={rest.disabled}
+          onBlur={field.handleBlur}
           placeholder={placeholder}
           id={ctx.id}
-          aria-invalid={fieldState.invalid ? true : undefined}
-          aria-describedby={ctx.describedBy(fieldState.invalid)}
+          aria-invalid={isInvalid ? true : undefined}
+          aria-describedby={ctx.describedBy(isInvalid)}
           showClear={showClear}
         />
         <ComboboxContent>

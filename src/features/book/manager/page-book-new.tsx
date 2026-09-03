@@ -1,7 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
+import { useStore } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -9,7 +8,7 @@ import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
-import { Form } from '@/components/form';
+import { Form, setFormFieldError, useForm } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,16 +28,6 @@ export const PageBookNew = () => {
   const { t } = useTranslation(['book']);
   const { navigateBack } = useNavigateBack();
   const queryClient = useQueryClient();
-  const form = useForm({
-    resolver: zodResolver(zFormFieldsBook()),
-    values: {
-      title: '',
-      author: '',
-      genreId: '',
-      publisher: '',
-      coverId: '',
-    },
-  });
 
   const isUploadingFiles = useIsUploadingFiles('bookCover');
 
@@ -60,9 +49,11 @@ export const PageBookNew = () => {
           error.code === 'CONFLICT' &&
           error.data?.target?.includes('title')
         ) {
-          form.setError('title', {
-            message: t('book:manager.form.titleAlreadyExist'),
-          });
+          setFormFieldError(
+            form,
+            'title',
+            t('book:manager.form.titleAlreadyExist')
+          );
           return;
         }
 
@@ -71,15 +62,26 @@ export const PageBookNew = () => {
     })
   );
 
+  const form = useForm({
+    schema: zFormFieldsBook(),
+    defaultValues: {
+      title: '',
+      author: '',
+      genreId: '',
+      publisher: '',
+      coverId: '',
+    },
+    onSubmit: async (values) => {
+      bookCreate.mutate(values);
+    },
+  });
+
+  const isDefaultValue = useStore(form.store, (s) => s.isDefaultValue);
+
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
-      <Form
-        {...form}
-        onSubmit={async (values) => {
-          bookCreate.mutate(values);
-        }}
-      >
+      <PreventNavigation shouldBlock={!isDefaultValue} />
+      <Form form={form}>
         <PageLayout>
           <PageLayoutTopBar
             startActions={<BackButton />}

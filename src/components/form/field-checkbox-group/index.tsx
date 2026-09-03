@@ -21,30 +21,28 @@ export const FieldCheckboxGroup = (
 ) => {
   const { containerProps, options, ...rest } = props;
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
   return (
     <FormFieldContainer {...containerProps}>
       <CheckboxGroup
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
+        aria-invalid={isInvalid ? true : undefined}
         aria-labelledby={ctx.labelId}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
-        value={value}
+        aria-describedby={ctx.describedBy(isInvalid)}
+        {...rest}
+        value={fieldState.value}
         onValueChange={(value, event) => {
-          onChange?.(value);
+          field.handleChange(value);
           rest.onValueChange?.(value, event);
         }}
-        {...rest}
       >
         {options.map(({ label, ...option }) => (
           <Checkbox
             key={`${ctx.id}-${option.value}`}
-            aria-invalid={fieldState.invalid ? true : undefined}
+            aria-invalid={isInvalid ? true : undefined}
             size={ctx.size}
-            {...field}
+            name={field.name}
+            onBlur={() => field.handleBlur()}
             {...option}
           >
             {label}

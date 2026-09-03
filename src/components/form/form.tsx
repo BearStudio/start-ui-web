@@ -1,54 +1,69 @@
-import {
-  FieldValues,
-  FormProvider,
-  FormProviderProps,
-  SubmitHandler,
-} from 'react-hook-form';
+import { createContext, ReactNode, use } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-type FormProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TContext = ExplicitAny,
-  TTransformedValues = TFieldValues,
-> = StrictUnion<
-  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
+import { FormInstance } from '@/components/form/types';
+
+const FormContext = createContext<FormInstance | null>(null);
+
+export function useFormContext<TFormData = ExplicitAny>() {
+  const form = use(FormContext);
+
+  if (!form) {
+    throw new Error('useFormContext must be used within a <Form />');
+  }
+
+  return form as FormInstance<TFormData>;
+}
+
+type FormProps<TFormData> = {
+  form: FormInstance<TFormData>;
+  children?: ReactNode;
+} & StrictUnion<
+  | {
       noHtmlForm?: false;
-      onSubmit?: SubmitHandler<TTransformedValues>;
       className?: string;
-    })
-  | (FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
+    }
+  | {
       noHtmlForm: true;
-    })
+    }
 >;
 
-export const Form = <TFieldValues extends FieldValues>({
+export const Form = <TFormData,>({
+  form,
   noHtmlForm = false,
-  className,
+  children,
   ...props
-}: FormProps<TFieldValues>) => {
+}: FormProps<TFormData>) => {
   if (noHtmlForm) {
-    return <FormProvider {...props} />;
+    return <FormContext value={form}>{children}</FormContext>;
   }
 
   return (
-    <FormProvider {...props}>
+    <FormContext value={form}>
       <form
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
 
-          if (props.onSubmit) {
-            props.handleSubmit(props.onSubmit)(e);
-          } else {
-            console.warn('Missing onSubmit method on <Form>');
-          }
+          const htmlForm = e.currentTarget;
+          form.handleSubmit().then(() => {
+            // Focus the first invalid field, like react-hook-form did
+            if (!form.state.isValid) {
+              htmlForm
+                .querySelector<HTMLElement>('[aria-invalid="true"]')
+                ?.focus();
+            }
+          });
         }}
-        className={cn('flex flex-1 flex-col', className)}
+        className={cn(
+          'flex flex-1 flex-col',
+          'className' in props ? props.className : undefined
+        )}
       >
-        {props.children}
+        {children}
       </form>
-    </FormProvider>
+    </FormContext>
   );
 };

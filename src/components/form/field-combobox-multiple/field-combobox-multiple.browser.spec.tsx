@@ -33,7 +33,7 @@ test('should select item on click', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="combobox-multiple"
-            control={form.control}
+            form={form}
             name="bears"
             items={options}
           />
@@ -69,7 +69,7 @@ test('should allow selecting multiple items', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="combobox-multiple"
-            control={form.control}
+            form={form}
             name="bears"
             items={options}
           />
@@ -107,7 +107,7 @@ test('default values', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="combobox-multiple"
-            control={form.control}
+            form={form}
             name="bears"
             items={options}
           />
@@ -137,7 +137,7 @@ test('disabled', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="combobox-multiple"
-            control={form.control}
+            form={form}
             name="bears"
             disabled
             items={options}
@@ -151,7 +151,7 @@ test('disabled', async () => {
   await expect.element(input).toBeDisabled();
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ bears: ['pawdrin'] });
 });
 
 test('disabled option', async () => {
@@ -169,7 +169,7 @@ test('disabled option', async () => {
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
             type="combobox-multiple"
-            control={form.control}
+            form={form}
             name="bears"
             items={options}
           />

@@ -18,7 +18,7 @@ export const FieldNumber = (
   const { containerProps, inCents, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
   const formatValue = (
     value: number | undefined | null,
     type: 'to-cents' | 'from-cents'
@@ -30,22 +30,21 @@ export const FieldNumber = (
     return null;
   };
 
-  const { onChange, value, ...fieldProps } = field;
   return (
     <FormFieldContainer {...containerProps}>
       <NumberInput
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
-        {...fieldProps}
-        value={formatValue(value, 'from-cents')}
+        name={field.name}
+        value={formatValue(fieldState.value, 'from-cents')}
         onValueChange={(value, event) => {
-          onChange(formatValue(value, 'to-cents'));
+          field.handleChange(formatValue(value, 'to-cents'));
           rest.onValueChange?.(value, event);
         }}
         onBlur={(e) => {
-          field.onBlur();
+          field.handleBlur();
           rest.onBlur?.(e);
         }}
       />

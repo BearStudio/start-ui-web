@@ -30,11 +30,7 @@ test('should select checkbox on button click', async () => {
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
+          <FormFieldController type="checkbox" form={form} name="lovesBears">
             I love bears
           </FormFieldController>
         </FormField>
@@ -65,11 +61,7 @@ test('should select checkbox on label click', async () => {
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
+          <FormFieldController type="checkbox" form={form} name="lovesBears">
             I love bears
           </FormFieldController>
         </FormField>
@@ -101,11 +93,7 @@ test('default value', async () => {
     >
       {({ form }) => (
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
+          <FormFieldController type="checkbox" form={form} name="lovesBears">
             I love bears
           </FormFieldController>
         </FormField>
@@ -133,7 +121,7 @@ test('disabled', async () => {
         <FormField>
           <FormFieldController
             type="checkbox"
-            control={form.control}
+            form={form}
             name="lovesBears"
             disabled
           >
@@ -157,5 +145,5 @@ test('disabled', async () => {
     await expect.element(checkbox).not.toBeChecked();
   }
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ lovesBears: false });
 });

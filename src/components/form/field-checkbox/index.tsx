@@ -17,21 +17,25 @@ export const FieldCheckbox = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const {
-    field: { value, onChange, ...field },
-    fieldState,
-  } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Checkbox
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
-        checked={value}
-        onCheckedChange={onChange}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
-        {...field}
+        name={field.name}
+        checked={fieldState.value}
+        onCheckedChange={(checked, eventDetails) => {
+          field.handleChange(checked);
+          rest.onCheckedChange?.(checked, eventDetails);
+        }}
+        onBlur={(e) => {
+          field.handleBlur();
+          rest.onBlur?.(e);
+        }}
       />
       <FormFieldError />
     </FormFieldContainer>

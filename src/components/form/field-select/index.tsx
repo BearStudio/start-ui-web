@@ -33,23 +33,22 @@ export const FieldSelect = <TItem extends Item>(
   const { containerProps, inputProps, children, placeholder, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Select
         {...rest}
-        inputRef={field.ref}
-        disabled={field.disabled}
-        value={field.value ?? null}
+        name={field.name}
+        value={fieldState.value ?? null}
         onValueChange={(value, event) => {
-          field.onChange(value, event);
+          field.handleChange(value);
           rest.onValueChange?.(value, event);
         }}
       >
         <SelectTrigger
-          aria-invalid={fieldState.invalid ? true : undefined}
-          aria-describedby={ctx.describedBy(fieldState.invalid)}
+          aria-invalid={isInvalid ? true : undefined}
+          aria-describedby={ctx.describedBy(isInvalid)}
           id={ctx.id}
         >
           <SelectValue {...inputProps} placeholder={placeholder} />

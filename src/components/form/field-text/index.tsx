@@ -17,23 +17,24 @@ export const FieldText = (
   const { containerProps, ...rest } = props;
 
   const ctx = useFormField();
-  const { field, fieldState, type } = useFormFieldController();
+  const { field, fieldState, isInvalid, type } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
       <Input
         type={type}
         id={ctx.id}
-        aria-invalid={fieldState.invalid ? true : undefined}
-        aria-describedby={ctx.describedBy(fieldState.invalid)}
+        aria-invalid={isInvalid ? true : undefined}
+        aria-describedby={ctx.describedBy(isInvalid)}
         {...rest}
-        {...field}
+        name={field.name}
+        value={fieldState.value ?? ''}
         onChange={(e) => {
-          field.onChange(e);
+          field.handleChange(e.target.value);
           rest.onChange?.(e);
         }}
         onBlur={(e) => {
-          field.onBlur();
+          field.handleBlur();
           rest.onBlur?.(e);
         }}
       />

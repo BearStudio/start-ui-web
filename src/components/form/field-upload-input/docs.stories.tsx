@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -8,6 +6,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -22,23 +21,23 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur' as const,
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur' as const,
   defaultValues: {
     file: null!,
   },
 };
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>File</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="upload-input"
             name="file"
             uploadRoute="bookCover"
@@ -57,15 +56,16 @@ export const DefaultValue = () => {
     defaultValues: {
       file: 'https://picsum.photos/seed/storybook/200/200',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>File</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="upload-input"
             name="file"
             uploadRoute="bookCover"
@@ -84,15 +84,16 @@ export const Disabled = () => {
     defaultValues: {
       file: 'https://picsum.photos/seed/storybook/200/200',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>File</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="upload-input"
             name="file"
             uploadRoute="bookCover"

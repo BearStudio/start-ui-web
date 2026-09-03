@@ -20,11 +20,7 @@ test('update value', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="textarea"
-            control={form.control}
-            name="name"
-          />
+          <FormFieldController type="textarea" form={form} name="name" />
         </FormField>
       )}
     </FormMocked>
@@ -53,11 +49,7 @@ test('default value', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="textarea"
-            control={form.control}
-            name="name"
-          />
+          <FormFieldController type="textarea" form={form} name="name" />
         </FormField>
       )}
     </FormMocked>
@@ -83,7 +75,7 @@ test('disabled', async () => {
           <FormFieldLabel>Name</FormFieldLabel>
           <FormFieldController
             type="textarea"
-            control={form.control}
+            form={form}
             name="name"
             disabled
           />
@@ -98,7 +90,7 @@ test('disabled', async () => {
     // Expected to fail since input is disabled
   }
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });
 
 test('readOnly', async () => {
@@ -116,7 +108,7 @@ test('readOnly', async () => {
           <FormFieldLabel>Name</FormFieldLabel>
           <FormFieldController
             type="textarea"
-            control={form.control}
+            form={form}
             name="name"
             readOnly
           />

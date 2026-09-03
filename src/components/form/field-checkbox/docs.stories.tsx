@@ -1,7 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Meta } from '@storybook/react-vite';
 import { CheckIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -11,6 +9,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldHelper,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { FieldCheckbox } from '@/components/form/field-checkbox';
@@ -29,25 +28,21 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     lovesBears: false,
   },
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
+          <FormFieldController type="checkbox" form={form} name="lovesBears">
             I love bears
           </FormFieldController>
           <FormFieldHelper>There is only one possible answer.</FormFieldHelper>
@@ -66,17 +61,14 @@ export const DefaultValue = () => {
     defaultValues: {
       lovesBears: true,
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
-          <FormFieldController
-            type="checkbox"
-            control={form.control}
-            name="lovesBears"
-          >
+          <FormFieldController type="checkbox" form={form} name="lovesBears">
             I love bears
           </FormFieldController>
           <FormFieldHelper>There is only one possible answer.</FormFieldHelper>
@@ -95,15 +87,16 @@ export const Disabled = () => {
     defaultValues: {
       lovesBears: true,
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldController
             type="checkbox"
-            control={form.control}
+            form={form}
             name="lovesBears"
             disabled
           >
@@ -120,16 +113,16 @@ export const Disabled = () => {
 };
 
 export const CustomCheckbox = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldController
             type="checkbox"
             name="lovesBears"
-            control={form.control}
+            form={form}
             labelProps={{
               className:
                 'relative flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border p-4 transition-colors outline-none focus-within:ring-[3px] focus-within:ring-ring/50 hover:bg-muted/50 has-[:checked]:border-transparent has-[:checked]:bg-primary has-[:checked]:text-primary-foreground',

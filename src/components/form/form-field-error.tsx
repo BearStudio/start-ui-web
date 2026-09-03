@@ -1,84 +1,102 @@
+import { DeepKeys, useStore } from '@tanstack/react-form';
 import { AlertCircleIcon } from 'lucide-react';
 import { ComponentProps, ReactNode, use } from 'react';
-import {
-  ControllerProps,
-  FieldError,
-  FieldErrors,
-  FieldPath,
-  FieldValues,
-  get,
-  useFormState,
-} from 'react-hook-form';
 
 import { cn } from '@/lib/tailwind/utils';
 
 import { useFormFieldUnsafe } from '@/components/form/form-field';
+import { FormFieldControllerContext } from '@/components/form/form-field-controller/context';
+import { FormInstance } from '@/components/form/types';
 
-import {
-  FormFieldControllerContext,
-  FormFieldControllerContextValue,
-} from './form-field-controller/context';
+export type FieldError = { message?: string };
 
-type FormFieldErrorProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = Omit<ComponentProps<'div'>, 'children'> & {
+const getErrorMessage = (error: unknown): string | undefined => {
+  if (!error) return undefined;
+  if (typeof error === 'string') return error;
+  if (typeof error === 'object' && 'message' in error) {
+    return typeof error.message === 'string' ? error.message : undefined;
+  }
+  return undefined;
+};
+
+type FormFieldErrorDisplayProps = Omit<ComponentProps<'div'>, 'children'> & {
   children?: (params: { error?: FieldError }) => ReactNode;
-} & (
-    | Required<Pick<ControllerProps<TFieldValues, TName>, 'control' | 'name'>>
+};
+
+type FormFieldErrorProps<TFormData = ExplicitAny> = FormFieldErrorDisplayProps &
+  (
+    | {
+        form: FormInstance<TFormData>;
+        name: DeepKeys<TFormData>;
+      }
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     | {}
   );
 
-export const FormFieldError = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  className,
-  children,
+export const FormFieldError = <TFormData = ExplicitAny>(
+  props: FormFieldErrorProps<TFormData>
+) => {
+  if ('form' in props && 'name' in props) {
+    return <FormFieldErrorStandalone {...props} />;
+  }
 
-  ...props
-}: FormFieldErrorProps<TFieldValues, TName>) => {
-  const fieldCtx = useFormFieldUnsafe();
-  const controllerCtx =
-    use<FormFieldControllerContextValue<TFieldValues> | null>(
-      FormFieldControllerContext as ExplicitAny
-    );
-  const { errors } = useFormState<TFieldValues>();
-  const control = 'control' in props ? props.control : null;
-  const name = 'name' in props ? props.name : null;
-  const controlled = !!(control && name);
+  return <FormFieldErrorFromController {...props} />;
+};
 
-  if (!controlled && !controllerCtx) {
+const FormFieldErrorFromController = (props: FormFieldErrorDisplayProps) => {
+  const controllerCtx = use(FormFieldControllerContext);
+
+  if (!controllerCtx) {
     throw new Error(
-      'Missing <FormFieldController /> parent component or "control" and "name" props on <FormFieldError />'
+      'Missing <FormFieldController /> parent component or "form" and "name" props on <FormFieldError />'
     );
   }
 
-  const error = controlled
-    ? get<FieldErrors<TFieldValues>>(errors, name)
-    : controllerCtx?.fieldState.error;
-  const errorMessage = error?.root?.message ?? error?.message;
+  if (controllerCtx.displayError === false) {
+    return null;
+  }
+
+  return (
+    <FormFieldErrorDisplay
+      errorMessage={getErrorMessage(controllerCtx.fieldState.meta.errors[0])}
+      {...props}
+    />
+  );
+};
+
+const FormFieldErrorStandalone = <TFormData,>({
+  form,
+  name,
+  ...props
+}: FormFieldErrorDisplayProps & {
+  form: FormInstance<TFormData>;
+  name: DeepKeys<TFormData>;
+}) => {
+  const error = useStore(
+    form.store,
+    (state) => state.fieldMeta[name]?.errors[0]
+  );
+
+  return (
+    <FormFieldErrorDisplay errorMessage={getErrorMessage(error)} {...props} />
+  );
+};
+
+const FormFieldErrorDisplay = ({
+  errorMessage,
+  className,
+  children,
+  ...rest
+}: FormFieldErrorDisplayProps & { errorMessage?: string }) => {
+  const fieldCtx = useFormFieldUnsafe();
 
   if (!errorMessage) {
     return null;
   }
 
-  if (controllerCtx?.displayError === false) {
-    return null;
-  }
-
   if (children) {
-    return children({ error });
+    return children({ error: { message: errorMessage } });
   }
-
-  const {
-    control: _,
-    name: __,
-    ...rest
-  } = 'control' in props
-    ? props
-    : { ...props, control: undefined, name: undefined };
 
   return (
     <div

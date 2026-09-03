@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { zu } from '@/lib/zod/zod-utils';
@@ -9,6 +7,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
@@ -32,21 +31,22 @@ const zFormSchema = (options: { length?: number } = {}) => {
 };
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
+  defaultValues: {} as z.input<ReturnType<typeof zFormSchema>>,
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
           />
@@ -65,16 +65,17 @@ export const DefaultValue = () => {
     defaultValues: {
       code: '927342',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
           />
@@ -88,16 +89,16 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
             disabled
@@ -114,17 +115,18 @@ export const Disabled = () => {
 export const CustomLength = () => {
   const form = useForm({
     ...formOptions,
-    resolver: zodResolver(zFormSchema({ length: 4 })),
+    schema: zFormSchema({ length: 4 }),
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={4}
           />
@@ -138,16 +140,16 @@ export const CustomLength = () => {
 };
 
 export const AutoSubmit = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex max-w-sm flex-col gap-4">
         <FormField>
           <FormFieldLabel>Code</FormFieldLabel>
           <FormFieldController
             type="otp"
-            control={form.control}
+            form={form}
             name="code"
             maxLength={6}
             autoSubmit

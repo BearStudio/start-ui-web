@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { join } from 'remeda';
 import { toast } from 'sonner';
@@ -11,6 +10,7 @@ import {
   FormFieldController,
   FormFieldHelper,
   FormFieldLabel,
+  useFormContext,
 } from '@/components/form';
 
 import { envClient } from '@/env/client';
@@ -30,23 +30,18 @@ export const FormBook = () => {
     <div className="flex flex-col gap-4">
       <FormField>
         <FormFieldLabel>{t('book:common.title.label')}</FormFieldLabel>
-        <FormFieldController
-          type="text"
-          control={form.control}
-          name="title"
-          autoFocus
-        />
+        <FormFieldController type="text" form={form} name="title" autoFocus />
       </FormField>
       <FormField>
         <FormFieldLabel>{t('book:common.author.label')}</FormFieldLabel>
-        <FormFieldController type="text" control={form.control} name="author" />
+        <FormFieldController type="text" form={form} name="author" />
       </FormField>
 
       <FormField>
         <FormFieldLabel>{t('book:common.genre.label')}</FormFieldLabel>
         <FormFieldController
           type="combobox"
-          control={form.control}
+          form={form}
           name="genreId"
           items={(genresQuery.data?.items ?? []).map((genre) => ({
             value: genre.id,
@@ -57,18 +52,14 @@ export const FormBook = () => {
 
       <FormField>
         <FormFieldLabel>{t('book:common.publisher.label')}</FormFieldLabel>
-        <FormFieldController
-          type="text"
-          control={form.control}
-          name="publisher"
-        />
+        <FormFieldController type="text" form={form} name="publisher" />
       </FormField>
 
       <FormField>
         <FormFieldLabel>{t('book:common.uploadCover.label')}</FormFieldLabel>
         <FormFieldController
           type="upload-input"
-          control={form.control}
+          form={form}
           name="coverId"
           uploadRoute="bookCover"
           inputProps={{

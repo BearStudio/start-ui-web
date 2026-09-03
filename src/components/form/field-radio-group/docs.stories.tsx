@@ -1,12 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { cn } from '@/lib/tailwind/utils';
 import { zu } from '@/lib/zod/zod-utils';
 
-import { FormFieldController } from '@/components/form';
+import { FormFieldController, useForm } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
 import { Radio } from '@/components/ui/radio-group';
@@ -25,8 +23,8 @@ const zFormSchema = () =>
   });
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
   defaultValues: {
     bear: '',
   },
@@ -39,17 +37,17 @@ const options = [
 ];
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
             type="radio-group"
-            control={form.control}
+            form={form}
             name="bear"
             options={options}
           />
@@ -68,16 +66,17 @@ export const DefaultValue = () => {
     defaultValues: {
       bear: 'pawdrin',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="radio-group"
             name="bear"
             options={options}
@@ -97,16 +96,17 @@ export const Disabled = () => {
     defaultValues: {
       bear: 'pawdrin',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="radio-group"
             name="bear"
             options={options}
@@ -122,16 +122,16 @@ export const Disabled = () => {
 };
 
 export const Row = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="radio-group"
             name="bear"
             options={options}
@@ -147,7 +147,7 @@ export const Row = () => {
 };
 
 export const WithDisabledOption = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   const optionsWithDisabled = [
     { value: 'bearstrong', label: 'Bearstrong' },
@@ -156,13 +156,13 @@ export const WithDisabledOption = () => {
   ];
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="radio-group"
             name="bear"
             options={optionsWithDisabled}
@@ -177,16 +177,16 @@ export const WithDisabledOption = () => {
 };
 
 export const WithCustomRadio = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldHelper>Select your favorite bearstronaut</FormFieldHelper>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="radio-group"
             name="bear"
             options={options}

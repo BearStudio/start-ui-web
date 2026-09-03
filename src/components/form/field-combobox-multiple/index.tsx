@@ -61,7 +61,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
 
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
-  const { field, fieldState } = useFormFieldController();
+  const { field, fieldState, isInvalid } = useFormFieldController();
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -69,18 +69,18 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         {...rest}
         multiple
         items={items}
-        disabled={field.disabled}
-        value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
+        value={
+          items?.filter((item) => fieldState.value?.includes(item.value)) ?? []
+        }
         isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
           item.value === selectedValue.value
         }
         itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
         itemToStringValue={(item: TItem) => item.value}
         onValueChange={(items: TItem[], event) => {
-          field.onChange(items?.map((i) => i.value) ?? [], event);
+          field.handleChange(items?.map((i) => i.value) ?? []);
           rest.onValueChange?.(items?.map((i) => i.value) ?? [], event);
         }}
-        inputRef={field.ref}
       >
         <ComboboxChips ref={anchor}>
           <ComboboxValue>
@@ -91,9 +91,9 @@ export const FieldComboboxMultiple = <TItem extends Item>(
                 ))}
                 <ComboboxChipsInput
                   id={ctx.id}
-                  onBlur={field.onBlur}
-                  aria-invalid={fieldState.invalid ? true : undefined}
-                  aria-describedby={ctx.describedBy(fieldState.invalid)}
+                  onBlur={field.handleBlur}
+                  aria-invalid={isInvalid ? true : undefined}
+                  aria-describedby={ctx.describedBy(isInvalid)}
                   placeholder={placeholder}
                   {...inputProps}
                 />

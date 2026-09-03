@@ -20,7 +20,7 @@ test('update value', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
+          <FormFieldController type="text" form={form} name="name" />
         </FormField>
       )}
     </FormMocked>
@@ -49,7 +49,7 @@ test('default value', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController type="text" control={form.control} name="name" />
+          <FormFieldController type="text" form={form} name="name" />
         </FormField>
       )}
     </FormMocked>
@@ -73,12 +73,7 @@ test('disabled', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            disabled
-          />
+          <FormFieldController type="text" form={form} name="name" disabled />
         </FormField>
       )}
     </FormMocked>
@@ -90,7 +85,7 @@ test('disabled', async () => {
     // Expected to fail since input is disabled
   }
   await user.click(page.getByRole('button', { name: 'Submit' }));
-  expect(mockedSubmit).toHaveBeenCalledWith({ name: undefined });
+  expect(mockedSubmit).toHaveBeenCalledWith({ name: 'new value' });
 });
 
 test('readOnly', async () => {
@@ -106,12 +101,7 @@ test('readOnly', async () => {
       {({ form }) => (
         <FormField>
           <FormFieldLabel>Name</FormFieldLabel>
-          <FormFieldController
-            type="text"
-            control={form.control}
-            name="name"
-            readOnly
-          />
+          <FormFieldController type="text" form={form} name="name" readOnly />
         </FormField>
       )}
     </FormMocked>

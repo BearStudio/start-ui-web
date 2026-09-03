@@ -1,5 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import {
@@ -7,6 +5,7 @@ import {
   FormField,
   FormFieldController,
   FormFieldLabel,
+  useForm,
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -55,20 +54,21 @@ const options = [
 }[];
 
 const formOptions = {
-  mode: 'onBlur',
-  resolver: zodResolver(zFormSchema()),
+  schema: zFormSchema(),
+  mode: 'blur',
+  defaultValues: {} as z.input<ReturnType<typeof zFormSchema>>,
 } as const;
 
 export const Default = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="select"
             name="bear"
             placeholder="Placeholder"
@@ -86,15 +86,15 @@ export const Default = () => {
 };
 
 export const CustomOptions = () => {
-  const form = useForm(formOptions);
+  const form = useForm({ ...formOptions, onSubmit });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="select"
             name="bear"
             placeholder="Placeholder"
@@ -127,20 +127,21 @@ export const CustomOptions = () => {
 };
 
 export const DefaultValue = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+  const form = useForm({
     ...formOptions,
     defaultValues: {
       bear: '1',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="select"
             name="bear"
             placeholder="Placeholder"
@@ -159,20 +160,21 @@ export const DefaultValue = () => {
 };
 
 export const Disabled = () => {
-  const form = useForm<z.infer<ReturnType<typeof zFormSchema>>>({
+  const form = useForm({
     ...formOptions,
     defaultValues: {
       bear: '1',
     },
+    onSubmit,
   });
 
   return (
-    <Form {...form} onSubmit={onSubmit}>
+    <Form form={form}>
       <div className="flex flex-col gap-4">
         <FormField>
           <FormFieldLabel>Bearstronaut</FormFieldLabel>
           <FormFieldController
-            control={form.control}
+            form={form}
             type="select"
             name="bear"
             placeholder="Placeholder"
