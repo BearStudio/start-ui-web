@@ -24,6 +24,7 @@ import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
 } from '@/features/auth/schema';
+import { useSession } from '@/features/auth/use-session';
 import { LoginEmailOtpHint } from '@/features/devtools/login-hint';
 
 const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
@@ -36,7 +37,7 @@ export default function PageLoginVerify({
   search: { redirect?: string; email: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
-  const session = authClient.useSession();
+  const session = useSession();
 
   const form = useForm({
     mode: 'onSubmit',
