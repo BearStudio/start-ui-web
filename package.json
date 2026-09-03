@@ -120,7 +120,7 @@
     "zustand": "5.0.10"
   },
   "devDependencies": {
-    "@faker-js/faker": "10.2.0",
+    "@faker-js/faker": "10.5.0",
     "@playwright/test": "1.60.0",
     "@storybook/addon-a11y": "10.2.14",
     "@storybook/addon-docs": "10.2.14",
