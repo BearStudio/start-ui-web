@@ -5,17 +5,3 @@ allowBuilds:
   esbuild: true
   lefthook: true
   prisma: true
-# TypeScript 7 (native) no longer ships the JS compiler API. eslint-plugin-sonarjs
-# requires `typescript` at runtime, so pin its copy to 6.x — the root typescript
-# stays on 7 for tsc. sonarjs also requires ts-api-utils without declaring it, so
-# declare it here to make it resolve against that same TypeScript 6.
-# The other oxlint JS plugins reach TypeScript only through
-# @typescript-eslint/typescript-estree, where `typescript` is a peer dependency
-# and therefore not pinnable from here — pin it on each plugin instead
-# (`'@tanstack/eslint-plugin-query>typescript'`, …) if they ever need it.
-overrides:
-  'eslint-plugin-sonarjs>typescript': 6.0.2
-packageExtensions:
-  eslint-plugin-sonarjs:
-    dependencies:
-      ts-api-utils: 2.4.0
