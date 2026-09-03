@@ -14,8 +14,15 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 
+type ComboboxProps<
+  Value,
+  Multiple extends boolean | undefined = false,
+> = ComboboxPrimitive.Root.Props<Value, Multiple>;
+
+type ComboboxChangeEventDetails = ComboboxPrimitive.Root.ChangeEventDetails;
+
 function Combobox<Value, Multiple extends boolean | undefined = false>(
-  props: ComboboxPrimitive.Root.Props<Value, Multiple>
+  props: ComboboxProps<Value, Multiple>
 ): React.JSX.Element {
   return <ComboboxPrimitive.Root autoHighlight {...props} />;
 }
@@ -322,6 +329,7 @@ function useComboboxAnchor() {
 
 export {
   Combobox,
+  type ComboboxChangeEventDetails,
   ComboboxChip,
   ComboboxChips,
   ComboboxChipsInput,
@@ -334,6 +342,7 @@ export {
   ComboboxItem,
   ComboboxLabel,
   ComboboxList,
+  type ComboboxProps,
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,

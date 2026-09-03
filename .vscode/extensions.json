@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "TypeScriptTeam.native-preview",
     "lokalise.i18n-ally",
     "dbaeumer.vscode-eslint",
     "oxc.oxc-vscode",
