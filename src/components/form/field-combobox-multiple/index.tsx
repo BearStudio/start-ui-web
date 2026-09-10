@@ -13,6 +13,7 @@ import { FormFieldError } from '@/components/form/form-field-error';
 import type { FieldProps } from '@/components/form/types';
 import {
   Combobox,
+  type ComboboxChangeEventDetails,
   ComboboxChip,
   ComboboxChips,
   ComboboxChipsInput,
@@ -21,6 +22,7 @@ import {
   ComboboxEmpty,
   ComboboxItem,
   ComboboxList,
+  type ComboboxProps,
   ComboboxValue,
   useComboboxAnchor,
 } from '@/components/ui/combobox';
@@ -37,13 +39,22 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
-      'items' | 'value' | 'multiple' | 'defaultValue' | 'children'
+      ComboboxProps<TItem, true>,
+      | 'items'
+      | 'value'
+      | 'multiple'
+      | 'defaultValue'
+      | 'children'
+      | 'onValueChange'
     > & {
         items: TItem[];
         showClear?: boolean;
         children?: (item: TItem) => ReactElement;
         emptyContent?: ReactNode;
+        onValueChange?: (
+          value: Array<TItem['value']>,
+          eventDetails: ComboboxChangeEventDetails
+        ) => void;
       } & Pick<ComponentProps<typeof ComboboxChipsInput>, 'placeholder'>
   >
 ) => {
@@ -71,14 +82,15 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         items={items}
         disabled={field.disabled}
         value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
-        isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
+        isItemEqualToValue={(item, selectedValue) =>
           item.value === selectedValue.value
         }
-        itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
-        itemToStringValue={(item: TItem) => item.value}
-        onValueChange={(items: TItem[], event) => {
-          field.onChange(items?.map((i) => i.value) ?? [], event);
-          rest.onValueChange?.(items?.map((i) => i.value) ?? [], event);
+        itemToStringLabel={(item) => item.label?.toString() ?? ''}
+        itemToStringValue={(item) => item.value}
+        onValueChange={(items, event) => {
+          const values = items?.map((item) => item.value) ?? [];
+          field.onChange(values, event);
+          rest.onValueChange?.(values, event);
         }}
         inputRef={field.ref}
       >

@@ -8,11 +8,13 @@ import { FormFieldError } from '@/components/form/form-field-error';
 import type { FieldProps } from '@/components/form/types';
 import {
   Combobox,
+  type ComboboxChangeEventDetails,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  type ComboboxProps,
 } from '@/components/ui/combobox';
 
 type Item = {
@@ -27,12 +29,21 @@ export const FieldCombobox = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxInput>;
     } & Omit<
-      ComponentProps<typeof Combobox>,
-      'items' | 'value' | 'multiple' | 'children'
+      ComboboxProps<TItem>,
+      | 'items'
+      | 'value'
+      | 'multiple'
+      | 'defaultValue'
+      | 'children'
+      | 'onValueChange'
     > & {
         items: TItem[];
         emptyContent?: ReactNode;
         children?: (item: TItem) => ReactElement;
+        onValueChange?: (
+          value: TItem['value'] | null,
+          eventDetails: ComboboxChangeEventDetails
+        ) => void;
       } & Pick<
         ComponentProps<typeof ComboboxInput>,
         'placeholder' | 'showClear'
@@ -61,12 +72,12 @@ export const FieldCombobox = <TItem extends Item>(
         items={items}
         disabled={field.disabled}
         value={items.find((item) => item.value === field.value) ?? null}
-        isItemEqualToValue={(item: TItem, selectedValue: TItem) =>
+        isItemEqualToValue={(item, selectedValue) =>
           item.value === selectedValue.value
         }
-        itemToStringLabel={(item: TItem) => item.label?.toString() ?? ''}
-        itemToStringValue={(item: TItem) => item.value}
-        onValueChange={(item: TItem, event) => {
+        itemToStringLabel={(item) => item.label?.toString() ?? ''}
+        itemToStringValue={(item) => item.value}
+        onValueChange={(item, event) => {
           field.onChange(item?.value ?? null, event);
           rest.onValueChange?.(item?.value ?? null, event);
         }}
