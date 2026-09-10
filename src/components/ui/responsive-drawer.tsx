@@ -1,4 +1,4 @@
-import { type ComponentProps } from 'react';
+import { type ComponentProps, type CSSProperties } from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -83,6 +83,7 @@ export const ResponsiveDrawerContent = ({
   // `className` and `render` types are not compatible
   render?: React.ReactElement;
   className?: string;
+  style?: CSSProperties;
   // Only for DialogContent
   hideCloseButton?: boolean;
 }) =>
