@@ -1,4 +1,4 @@
-import { type ComponentProps } from 'react';
+import { type ComponentProps, type CSSProperties } from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -38,7 +38,8 @@ export const ResponsiveDrawer = ({
 
 export const ResponsiveDrawerTrigger = ({
   ...props
-}: ComponentProps<typeof DrawerTrigger | typeof DialogTrigger>) =>
+}: Omit<ComponentProps<typeof DrawerTrigger>, 'handle'> &
+  Omit<ComponentProps<typeof DialogTrigger>, 'handle'>) =>
   useIsMobile(BREAKPOINT) ? (
     <DrawerTrigger {...props} />
   ) : (
@@ -77,11 +78,12 @@ export const ResponsiveDrawerContent = ({
   ...props
 }: Omit<
   ComponentProps<typeof DialogContent | typeof DrawerContent>,
-  'render' | 'className'
+  'render' | 'className' | 'style'
 > & {
   // `className` and `render` types are not compatible
   render?: React.ReactElement;
   className?: string;
+  style?: CSSProperties;
   // Only for DialogContent
   hideCloseButton?: boolean;
 }) =>
