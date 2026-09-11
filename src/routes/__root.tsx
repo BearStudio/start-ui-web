@@ -40,8 +40,15 @@ export const Route = createRootRouteWithContext<{
     if (!import.meta.env.SSR) {
       return { authSession: null };
     }
-    const { authSession } = await initAuthSsr();
-    return { authSession };
+    try {
+      const { authSession } = await initAuthSsr();
+      return { authSession };
+    } catch (error) {
+      // Do not break the app shell if the session cannot be resolved on the
+      // server; the client will re-fetch the session via authClient.useSession()
+      console.error('Failed to init auth session during SSR', error);
+      return { authSession: null };
+    }
   },
   loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
