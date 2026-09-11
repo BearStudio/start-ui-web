@@ -65,7 +65,18 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
   };
 
-  page.to = page.goto;
+  page.to = async function to(url, options) {
+    const response = await page.goto(url, options);
+    // The app is server-rendered: the HTML is complete before React hydrates,
+    // so a click could hit the browser's native behavior instead of a React
+    // handler. Wait until React has attached itself to the DOM before going on.
+    await page.waitForFunction(() =>
+      Object.keys(document.documentElement).some((key) =>
+        key.startsWith('__reactFiber$')
+      )
+    );
+    return response;
+  };
 
   await apply(page);
 };

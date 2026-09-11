@@ -4,6 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
+  getRouteApi,
   HeadContent,
   Outlet,
   Scripts,
@@ -20,6 +21,7 @@ import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 import { PageError } from '@/components/errors/page-error';
 
 import { MailDevDevtoolPanel } from '@/devtools/maildev';
+import { type AuthSession, initAuthSsr } from '@/features/auth/session';
 import { EnvHint } from '@/features/devtools/env-hint';
 import { Providers } from '@/providers';
 import { getUserLanguage } from '@/server/utils';
@@ -34,6 +36,20 @@ const initSsrApp = createServerFn({ method: 'GET' }).handler(() => {
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  beforeLoad: async (): Promise<{ authSession: AuthSession | null }> => {
+    if (!import.meta.env.SSR) {
+      return { authSession: null };
+    }
+    try {
+      const { authSession } = await initAuthSsr();
+      return { authSession };
+    } catch (error) {
+      // Do not break the app shell if the session cannot be resolved on the
+      // server; the client will re-fetch the session via authClient.useSession()
+      console.error('Failed to init auth session during SSR', error);
+      return { authSession: null };
+    }
+  },
   loader: async () => {
     // Setup language and theme in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
@@ -98,6 +114,8 @@ export const Route = createRootRouteWithContext<{
   }),
 });
 
+export const RootRouteApi = getRouteApi('__root__');
+
 function RootComponent() {
   return (
     <RootDocument>
@@ -143,7 +161,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           : undefined,
       }}
     >
-      <head>
+      <head suppressHydrationWarning>
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">

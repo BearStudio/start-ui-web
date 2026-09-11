@@ -34,7 +34,7 @@ test.describe('User management as manager', () => {
     const uniqueEmail = `new-user-${randomId}@user.com`;
 
     // Fill the form
-    await page.waitForURL('/manager/users/new');
+    await expect(page).toHaveURL('/manager/users/new');
     await page.getByLabel(t.user.common.name.label).fill('New user');
     await page.getByLabel(t.user.common.email.label).fill(uniqueEmail);
     await page.getByText(t.user.manager.new.createButton.label).click();
