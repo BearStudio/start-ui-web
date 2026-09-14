@@ -73,6 +73,7 @@ describe('genre router', () => {
       await call(genreRouter.getAll, {});
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { genre: ['read'] },

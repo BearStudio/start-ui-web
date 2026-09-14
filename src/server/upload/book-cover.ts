@@ -9,7 +9,7 @@ export const bookCover = route({
   fileTypes: bookCoverAcceptedFileTypes,
   maxFileSize: 1024 * 1024 * 100, // 100Mb
   onBeforeUpload: async ({ req, file }) => {
-    const session = await auth.api.getSession(req);
+    const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user) {
       throw new RejectUpload(
         i18n.t('book:manager.uploadErrors.NOT_AUTHENTICATED')
@@ -18,6 +18,7 @@ export const bookCover = route({
 
     // Only admins should be able to update book covers
     const canUpdateBookCover = await auth.api.userHasPermission({
+      headers: req.headers,
       body: {
         userId: session.user.id,
         permissions: {
