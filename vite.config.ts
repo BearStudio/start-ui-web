@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   return {
     server: {
+      host: true,
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
       strictPort: true,
     },
