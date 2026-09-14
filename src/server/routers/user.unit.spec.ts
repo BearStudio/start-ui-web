@@ -107,6 +107,7 @@ describe('user router', () => {
       await call(userRouter.getAll, {});
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { user: ['list'] },
@@ -161,6 +162,7 @@ describe('user router', () => {
       await call(userRouter.getById, { id: 'target-user-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { user: ['list'] },
@@ -238,6 +240,7 @@ describe('user router', () => {
       await call(userRouter.create, createInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { user: ['create'] },
@@ -366,6 +369,7 @@ describe('user router', () => {
       await call(userRouter.updateById, updateInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { user: ['set-role'] },
@@ -430,6 +434,7 @@ describe('user router', () => {
       await call(userRouter.deleteById, { id: 'target-user-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { user: ['delete'] },
@@ -502,6 +507,7 @@ describe('user router', () => {
       await call(userRouter.getUserSessions, { userId: 'target-user-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { session: ['list'] },
@@ -566,6 +572,7 @@ describe('user router', () => {
       await call(userRouter.revokeUserSessions, { id: 'target-user-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { session: ['revoke'] },
@@ -650,6 +657,7 @@ describe('user router', () => {
       });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { session: ['revoke'] },

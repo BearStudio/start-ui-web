@@ -90,6 +90,7 @@ describe('book router', () => {
       await call(bookRouter.getAll, {});
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { book: ['read'] },
@@ -144,6 +145,7 @@ describe('book router', () => {
       await call(bookRouter.getById, { id: 'book-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { book: ['read'] },
@@ -227,6 +229,7 @@ describe('book router', () => {
       await call(bookRouter.create, createInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { book: ['create'] },
@@ -328,6 +331,7 @@ describe('book router', () => {
       await call(bookRouter.updateById, updateInput);
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { book: ['update'] },
@@ -399,6 +403,7 @@ describe('book router', () => {
       await call(bookRouter.deleteById, { id: 'book-1' });
 
       expect(mockUserHasPermission).toHaveBeenCalledWith({
+        headers: expect.any(Headers),
         body: {
           userId: mockUser.id,
           permissions: { book: ['delete'] },
